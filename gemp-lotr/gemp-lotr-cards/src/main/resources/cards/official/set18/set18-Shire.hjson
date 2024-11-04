@@ -3,7 +3,6 @@
 	18_106: {
 		cardInfo: {
 			imagePath: decipher/LOTR18106.jpg
-			javaClass: true
 			//parentId: 18_106
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -26,29 +25,29 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: hobbit
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: discard
-		            select: choose(tale)
-		        }
-		        effect: {
-		            type: exert
-		            player: shadow
-		            select: choose(minion)
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: hobbit
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: discard
+					select: choose(tale)
+				}
+				effect: {
+					type: exert
+					player: shadow
+					select: choose(minion)
+				}
+			}
 		]
 		gametext: <b>Tale</b>. To play, spot a Hobbit.<br><b>Maneuver:</b> Discard a tale from play to choose a Shadow player who must exert one of his or her minions.
-		lore: If you're referring to the incident with the dragon, I was barely involved. All I did was give your uncle a little nudge out of the door.
+		lore: "If you're referring to the incident with the dragon, I was barely involved. All I did was give your uncle a little nudge out of the door."
 		promotext: ""
 		alts: {
 			promos: {
@@ -61,7 +60,6 @@
 	18_107: {
 		cardInfo: {
 			imagePath: decipher/LOTR18107.jpg
-			javaClass: true
 			//parentId: 18_107
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -85,28 +83,28 @@
 		vitality: 3
 		resistance: 7
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: [
-                        {
-                            type: location
-                            filter: regionNumber(1)
-                        }
-                        {
-                            type: canSpot
-                            filter: other,culture(shire),companion
-                            count: 2
-                        }
-                    ]
-                    filter: self
-                    amount: 3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: [
+						{
+							type: location
+							filter: regionNumber(1)
+						}
+						{
+							type: canSpot
+							filter: other,culture(shire),companion
+							count: 2
+						}
+					]
+					filter: self
+					amount: 3
+				}
+			}
 		]
 		gametext: While the fellowship is in region 1 and you can spot 2 other [shire] companions, Fredegar Bolger is strength +3.
-		lore: You'll wish you were back here with me before this time tomorrow.'
+		lore: "'You'll wish you were back here with me before this time tomorrow.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -119,7 +117,6 @@
 	18_108: {
 		cardInfo: {
 			imagePath: decipher/LOTR18108.jpg
-			javaClass: true
 			//parentId: 18_108
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -140,34 +137,34 @@
 		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: culture(shire),companion
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: shire
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: RemoveCultureTokens
-		            culture: shire
-		            select: self
-		        }
-		        effect: {
-		            type: removeBurdens
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: culture(shire),companion
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: shire
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: RemoveCultureTokens
+					culture: shire
+					select: self
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
 		]
 		gametext: Each time a [shire] companion wins a skirmish, you may add a [shire] token here.<br><b>Fellowship:</b> Remove a [shire] token here to remove a burden.
-		lore: The best beer in the Eastfarthing, or used to be: it is a long time since I tasted it.'
+		lore: "'The best beer in the Eastfarthing, or used to be: it is a long time since I tasted it.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -180,7 +177,6 @@
 	18_109: {
 		cardInfo: {
 			imagePath: decipher/LOTR18109.jpg
-			javaClass: true
 			//parentId: 18_109
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -198,23 +194,23 @@
 		culture: Shire
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
-			    type: removeTokensCumulative
-			    culture: shire
-			    count: 2
+				type: removeTokensCumulative
+				culture: shire
+				count: 2
 			}
 			effect: [
 				{
-				    type: cancelSkirmish
-				    filter: unbound,hobbit
+					type: cancelSkirmish
+					filter: unbound,hobbit
 				}
 			]
 		}
 		gametext: Remove 2 [shire] tokens to cancel a skirmish involving an unbound Hobbit.
-		lore: As soon as he saw the dark shapes creep from the garden he knew that he must run for it, or perish. And run he did, out of the back door, through the garden, and over the fields.
+		lore: As soon as he saw the dark shapes creep from the garden he knew that he must run for it, or perish. And run he did, out of the back door, through the garden, 'and over the fields.
 		promotext: ""
 		alts: {
 			promos: {
@@ -227,7 +223,6 @@
 	18_110: {
 		cardInfo: {
 			imagePath: decipher/LOTR18110.jpg
-			javaClass: true
 			//parentId: 18_110
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -247,37 +242,37 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfTurn
-		        }
-		        cost: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(culture(shire),companion)
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: addThreats
-		        }
-		        effect: {
-		            type: removeKeyword
-		            select: choose(minion)
-		            keyword: fierce
-		            until: regroup
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfTurn
+				}
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+				effect: {
+					type: heal
+					select: choose(culture(shire),companion)
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: removeKeyword
+					select: choose(minion)
+					keyword: fierce
+					until: regroup
+				}
+			}
 		]
 		gametext: At the start of each turn, you may add (2) to heal a [shire] companion.<br><b>Maneuver:</b> Add a threat to spot a minion. That minion loses <b>fierce</b> and cannot gain fierce until the regroup phase.
-		lore: We are sitting on the field of victory, enjoying a few well-earned comforts.
+		lore: "We are sitting on the field of victory, enjoying a few well-earned comforts."
 		promotext: ""
 		alts: {
 			promos: {
@@ -290,7 +285,6 @@
 	18_111: {
 		cardInfo: {
 			imagePath: decipher/LOTR18111.jpg
-			javaClass: true
 			//parentId: 18_111
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -311,35 +305,35 @@
 		type: Follower
 		resistance: 1
 		effects: [
-		    {
-		        type: aidCost
-		        cost: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: transferred
-		            filter: self
-		            to: culture(shire),companion
-		        }
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            count: any
-		            memorize: discardedCards
-		        }
-		        effect: {
-		            type: drawCards
-		            count: {
-		                type: forEachInMemory
-		                memory: discardedCards
-		            }
-		        }
-		    }
+			{
+				type: aidCost
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: transferred
+					filter: self
+					to: culture(shire),companion
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: any
+					memorize: discardedCards
+				}
+				effect: {
+					type: drawCards
+					count: {
+						type: forEachInMemory
+						memory: discardedCards
+					}
+				}
+			}
 		]
 		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper><br>Each time you attach this follower to a [shire] companion, you may discard X cards from hand to draw X cards.
 		lore: ""
@@ -355,7 +349,6 @@
 	18_112: {
 		cardInfo: {
 			imagePath: decipher/LOTR18112.jpg
-			javaClass: true
 			//parentId: 18_112
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -378,39 +371,39 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: constantlyCheck
-		        }
-		        requires: {
-		            type: canSpotCultureTokens
-		            filter: self
-		            culture: shire
-		            amount: 4
-		        }
-		        effect: {
-		            type: discard
-		            select: self
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToDiscard
-		            filter: culture(shire),or(condition,possession)
-		            source: side(shadow)
-		        }
-		        cost: {
-		            type: AddCultureTokens
-		            culture: shire
-		            select: self
-		        }
-		        effect: {
-		            type: preventDiscard
-		            select: choose(culture(shire),or(condition,possession))
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+				}
+				requires: {
+					type: canSpotCultureTokens
+					filter: self
+					culture: shire
+					amount: 4
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToDiscard
+					filter: culture(shire),or(condition,possession)
+					source: side(shadow)
+				}
+				cost: {
+					type: AddCultureTokens
+					culture: shire
+					select: self
+				}
+				effect: {
+					type: preventDiscard
+					select: choose(culture(shire),or(condition,possession))
+				}
+			}
 		]
 		gametext: <b>Tale</b>.<br>When there are 4 [shire] tokens here, discard this condition from play.<br><b>Response:</b> If a [shire] condition or [shire] possession is about to be discarded from play by a Shadow card, add a [shire] token here to prevent that.
 		lore: ""
@@ -426,7 +419,6 @@
 	18_113: {
 		cardInfo: {
 			imagePath: decipher/LOTR18113.jpg
-			javaClass: true
 			//parentId: 18_113
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -451,20 +443,20 @@
 		itemclass: Hand weapon
 		target: or(name(Bilbo),name(Frodo))
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: removeThreats
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: removeThreats
+				}
+			}
 		]
 		gametext: Bearer must be Bilbo or Frodo.<br><b>Regroup:</b> Exert bearer to remove a threat.
-		lore: My old sword, Sting! Here! Take it, take it!
+		lore: "My old sword, Sting! Here! Take it, take it!"
 		promotext: ""
 		alts: {
 			promos: {

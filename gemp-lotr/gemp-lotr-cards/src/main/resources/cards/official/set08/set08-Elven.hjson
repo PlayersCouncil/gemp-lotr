@@ -3,7 +3,6 @@
 	8_9: {
 		cardInfo: {
 			imagePath: decipher/LOTR08009.jpg
-			javaClass: true
 			//parentId: 8_9
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,55 +20,55 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: elf,companion
+				type: canSpot
+				filter: elf,companion
 			}
 			cost: [
-                {
-                    type: chooseANumber
-                    text: Choose X (reduce fellowship archery total)
-                    from: 0
-                    to: {
-                        type: archeryTotal
-                        side: free people
-                    }
-                    memorize: x
-                }
-                {
-                    type: modifyArcheryTotal
-                    side: free people
-                    amount: {
-                        type: fromMemory
-                        memory: x
-                        multiplier: -1
-                    }
-                }
-            ]
-			effect: [
 				{
-				    type: heal
-				    select: choose(unbound,companion)
-				    count: {
-				        type: fromMemory
-				        memory: x
-				    }
+					type: chooseANumber
+					text: Choose X (reduce fellowship archery total)
+					from: 0
+					to: {
+						type: archeryTotal
+						side: free people
+					}
+					memorize: x
 				}
 				{
-				    type: addModifier
-				    modifier: {
-				        type: CantUseSpecialAbilities
-				        player: you
-				        phase: archery
-				    }
+					type: modifyArcheryTotal
+					side: free people
+					amount: {
+						type: fromMemory
+						memory: x
+						multiplier: -1
+					}
+				}
+			]
+			effect: [
+				{
+					type: heal
+					select: choose(unbound,companion)
+					count: {
+						type: fromMemory
+						memory: x
+					}
+				}
+				{
+					type: addModifier
+					modifier: {
+						type: CantUseSpecialAbilities
+						player: you
+						phase: archery
+					}
 				}
 			]
 		}
 		gametext: Spot an Elf companion and make the fellowship archery total -X (to a minimum of 0) to heal X unbound companions. You cannot use archery special abilities.
-		lore: ...full of ghosts.'
+		lore: "'...full of ghosts.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -82,7 +81,6 @@
 	8_10: {
 		cardInfo: {
 			imagePath: decipher/LOTR08010.jpg
-			javaClass: true
 			//parentId: 8_10
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -108,22 +106,22 @@
 		resistance: 6
 		keywords: Archer
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: wounded,minion
-		                count: 3
-		            }
-		            filter: minion,inSkirmishAgainst(self)
-		            amount: -3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: wounded,minion
+						count: 3
+					}
+					filter: minion,inSkirmishAgainst(self)
+					amount: -3
+				}
+			}
 		]
 		gametext: <b>Archer</b>.<br>While you can spot 3 wounded minions, each minion skirmishing Legolas is strength -3.
-		lore: ...Legolas of the Elves, for whom the ghosts of Men have no terror.
+		lore: "...Legolas of the Elves, for whom the ghosts of Men have no terror."
 		promotext: ""
 		alts: {
 			promos: {
@@ -136,7 +134,6 @@
 	8_11: {
 		cardInfo: {
 			imagePath: decipher/LOTR08011.jpg
-			javaClass: true
 			//parentId: 8_11
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -154,13 +151,13 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: elf
-			    count: 2
+				type: canSpot
+				filter: elf
+				count: 2
 			}
 			cost: {
 				type: discard
@@ -168,13 +165,13 @@
 			}
 			effect: [
 				{
-				    type: drawCards
-				    count: 3
+					type: drawCards
+					count: 3
 				}
 			]
 		}
 		gametext: To play, spot 2 Elves.<br>Discard an Elf to draw 3 cards.
-		lore: Your hands are cold....'
+		lore: "'Your hands are cold....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -187,7 +184,6 @@
 	8_12: {
 		cardInfo: {
 			imagePath: decipher/LOTR08012.jpg
-			javaClass: true
 			//parentId: 8_12
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -205,55 +201,55 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			cost: [
-			    {
-			        type: exert
-			        select: choose(elf,companion)
-			    }
-                {
-                    type: chooseANumber
-                    text: Choose X (reduce fellowship archery total)
-                    from: 0
-                    to: {
-                        type: archeryTotal
-                        side: free people
-                    }
-                    memorize: x
-                }
-                {
-                    type: modifyArcheryTotal
-                    side: free people
-                    amount: {
-                        type: fromMemory
-                        memory: x
-                        multiplier: -1
-                    }
-                }
+				{
+					type: exert
+					select: choose(elf,companion)
+				}
+				{
+					type: chooseANumber
+					text: Choose X (reduce fellowship archery total)
+					from: 0
+					to: {
+						type: archeryTotal
+						side: free people
+					}
+					memorize: x
+				}
+				{
+					type: modifyArcheryTotal
+					side: free people
+					amount: {
+						type: fromMemory
+						memory: x
+						multiplier: -1
+					}
+				}
 			],
 			effect: [
 				{
-				    type: wound
-				    select: choose(minion)
-				    times: {
-				        type: fromMemory
-				        memory: x
-				    }
+					type: wound
+					select: choose(minion)
+					times: {
+						type: fromMemory
+						memory: x
+					}
 				}
 				{
-				    type: addModifier
-				    modifier: {
-				        type: CantUseSpecialAbilities
-				        player: you
-				        phase: archery
-				    }
+					type: addModifier
+					modifier: {
+						type: CantUseSpecialAbilities
+						player: you
+						phase: archery
+					}
 				}
 			]
 		}
 		gametext: Exert an Elf companion and make the fellowship archery total -X (to a minimum of 0) to wound a minion X times. You cannot use archery special abilities.
-		lore: ...driving them like leaves....'
+		lore: "'...driving them like leaves....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -266,7 +262,6 @@
 	8_13: {
 		cardInfo: {
 			imagePath: decipher/LOTR08013.jpg
-			javaClass: true
 			//parentId: 8_13
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -286,43 +281,43 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: [
-                    {
-                        type: exert
-                        select: choose(elf,companion)
-                    }
-                    {
-                        type: exert
-                        select: choose(or(culture(gandalf),culture(dwarven)),companion)
-                    }
-		        ]
-		        effect: {
-		            type: AddCultureTokens
-		            culture: elven
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: archery
-		        cost: {
-		            type: RemoveCultureTokens
-		            culture: elven
-		            select: self
-		        }
-		        effect: {
-		            type: modifyArcheryTotal
-		            side: free people
-		            amount: 1
-		        }
-		        limitPerPhase: 2
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: exert
+						select: choose(elf,companion)
+					}
+					{
+						type: exert
+						select: choose(or(culture(gandalf),culture(dwarven)),companion)
+					}
+				]
+				effect: {
+					type: AddCultureTokens
+					culture: elven
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: RemoveCultureTokens
+					culture: elven
+					select: self
+				}
+				effect: {
+					type: modifyArcheryTotal
+					side: free people
+					amount: 1
+				}
+				limitPerPhase: 2
+			}
 		]
 		gametext: <b>Fellowship:</b> Exert an Elf companion and either a [gandalf] companion or a [dwarven] companion to add an [elven] token here.<br><b>Archery:</b> Remove an [elven] token here to make the fellowship archery total +1 (limit +2).
-		lore: Speak and be comforted....'
+		lore: "'Speak and be comforted....'"
 		promotext: ""
 		alts: {
 			promos: {

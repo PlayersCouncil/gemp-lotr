@@ -3,7 +3,6 @@
 	15_39: {
 		cardInfo: {
 			imagePath: decipher/LOTR15039.jpg
-			javaClass: true
 			//parentId: 15_39
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -23,33 +22,33 @@
 		type: Condition
 		target: title(Sméagol)
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: usesSpecialAbility
-		            filter: side(shadow)
-		            phase: skirmish
-		        }
-		        requires: [
-                    {
-                        type: canSpot
-                        filter: ringBound,hobbit
-                        count: 2
-                    }
-                    {
-                        type: canSpot
-                        filter: or(name(Gollum),name(Sméagol)),inSkirmish
-                    }
-                ]
-                effect: {
-                    type: wound
-                    select: choose(minion)
-                }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: usesSpecialAbility
+					filter: side(shadow)
+					phase: skirmish
+				}
+				requires: [
+					{
+						type: canSpot
+						filter: ringBound,hobbit
+						count: 2
+					}
+					{
+						type: canSpot
+						filter: or(name(Gollum),name(Sméagol)),inSkirmish
+					}
+				]
+				effect: {
+					type: wound
+					select: choose(minion)
+				}
+			}
 		]
 		gametext: Bearer must be Sméagol.<br>While you can spot 2 Ring-bound Hobbits, each time an opponent uses a skirmish special ability in a skirmish involving Gollum or Sméagol, you may wound a minion.
-		lore: It won't be long now. He will soon be ready.
+		lore: "It won't be long now. He will soon be ready."
 		promotext: ""
 		alts: {
 			promos: {
@@ -62,7 +61,6 @@
 	15_40: {
 		cardInfo: {
 			imagePath: decipher/LOTR15040.jpg
-			javaClass: true
 			//parentId: 15_40
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -82,43 +80,43 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: name(Sméagol)
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            requires: {
-		                type: canSpot
-		                filter: ringBound,hobbit
-		                count: 2
-		            }
-		            filter: side(shadow),event
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: all(ringBound,companion)
-		            amount: 1
-		            until: regroup
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Sméagol)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: {
+						type: canSpot
+						filter: ringBound,hobbit
+						count: 2
+					}
+					filter: side(shadow),event
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: all(ringBound,companion)
+					amount: 1
+					until: regroup
+				}
+			}
 		]
-		gametext: To play, spot c.<br>While you can spot 2 Ring-bound Hobbits, each Shadow event is twilight cost +1.<br><b>Skirmish:</b> Discard this condition to make each Ring-bound companion strength +1 until the regroup phase.
-		lore: Thief, thief! Baggins! We hates it for ever!
+		gametext: To play, spot Sméagol.<br>While you can spot 2 Ring-bound Hobbits, each Shadow event is twilight cost +1.<br><b>Skirmish:</b> Discard this condition to make each Ring-bound companion strength +1 until the regroup phase.
+		lore: "Thief, thief! Baggins! We hates it for ever!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -131,7 +129,6 @@
 	15_41: {
 		cardInfo: {
 			imagePath: decipher/LOTR15041.jpg
-			javaClass: true
 			//parentId: 15_41
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -151,26 +148,26 @@
 		type: Condition
 		target: title(Gollum)
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: name(Gollum),notAssignedToSkirmish
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: replaceInSkirmish
-		            filter: minion,inSkirmishAgainst(companion)
-		            with: choose(name(Gollum))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: name(Gollum),notAssignedToSkirmish
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: replaceInSkirmish
+					filter: minion,inSkirmishAgainst(companion)
+					with: choose(name(Gollum))
+				}
+			}
 		]
 		gametext: Bearer must be Gollum.<br><b>Skirmish:</b> If Gollum is not assigned to a skirmish, discard this condition to have him replace a minion skirmishing a companion.
-		lore: Gollum's appetite for the One Ring could not be quenched.
+		lore: "Gollum's appetite for the One Ring could not be quenched."
 		promotext: ""
 		alts: {
 			promos: {
@@ -183,7 +180,6 @@
 	15_42: {
 		cardInfo: {
 			imagePath: decipher/LOTR15042.jpg
-			javaClass: true
 			//parentId: 15_42
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -201,35 +197,35 @@
 		culture: Gollum
 		twilight: 3
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			cost: {
-			    type: discard
-			    select: choose(culture(gollum),minion)
+				type: discard
+				select: choose(culture(gollum),minion)
 			}
 			effect: [
 				{
-				    type: preventable
-				    player: free people
-				    text: Would you like to make move limit -1 this turn to prevent discarding a companion?
-				    cost: {
-				        type: addModifier
-				        modifier: {
-				            type: modifyMoveLimit
-				            amount: -1
-				        }
-				        until: endOfTurn
-				    }
-				    effect: {
-				        type: discard
-				        select: choose(companion)
-				    }
+					type: preventable
+					player: free people
+					text: Would you like to make move limit -1 this turn to prevent discarding a companion?
+					cost: {
+						type: addModifier
+						modifier: {
+							type: modifyMoveLimit
+							amount: -1
+						}
+						until: endOfTurn
+					}
+					effect: {
+						type: discard
+						select: choose(companion)
+					}
 				}
 			]
 		}
 		gametext: Discard a [gollum] minion from play to discard a companion. The Free Peoples player may make the move limit -1 this turn to prevent that.
-		lore: He leaped into the waters, but the Ring slipped from his finger as he swam....'
+		lore: "'He leaped into the waters, but the Ring slipped from his finger as he swam....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -242,7 +238,6 @@
 	15_43: {
 		cardInfo: {
 			imagePath: decipher/LOTR15043.jpg
-			javaClass: true
 			//parentId: 15_43
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -264,24 +259,24 @@
 		vitality: 4
 		site: 3
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfSkirmishInvolving
-		            filter: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: {
-		                type: forEachStrength
-		                filter: ringBearer
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: startOfSkirmishInvolving
+					filter: self
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: {
+						type: forEachStrength
+						filter: ringBearer
+					}
+				}
+			}
 		]
 		gametext: At the start of each skirmish involving Gollum, he is strength +X until the end of that skirmish, where X is the Ring-bearer's strength.
-		lore: Give it to us raw and wriggling!
+		lore: "Give it to us raw and wriggling!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -294,7 +289,6 @@
 	15_44: {
 		cardInfo: {
 			imagePath: decipher/LOTR15044.jpg
-			javaClass: true
 			//parentId: 15_44
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -314,46 +308,46 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyResistance
-		            requires: {
-		                type: canSpot
-		                filter: name(Frodo)
-		            }
-		            filter: name(Sméagol)
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: name(Sam)
-		            }
-		            filter: name(Sméagol)
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: name(Bilbo)
-		            }
-		            filter: name(Sméagol)
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					requires: {
+						type: canSpot
+						filter: name(Frodo)
+					}
+					filter: name(Sméagol)
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: name(Sam)
+					}
+					filter: name(Sméagol)
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: name(Bilbo)
+					}
+					filter: name(Sméagol)
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: While you can spot Frodo, Sméagol is resistance +1.<br>While you can spot Sam, Sméagol is strength +1.<br>While you can spot Bilbo, Sméagol is <b>damage +1</b>.
-		lore: Eat them, Eat them!'
+		lore: "'Eat them, Eat them!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -366,7 +360,6 @@
 	15_45: {
 		cardInfo: {
 			imagePath: decipher/LOTR15045.jpg
-			javaClass: true
 			//parentId: 15_45
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -384,22 +377,22 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(name(Sméagol))
-				    amount: {
-				        type: forEachYouCanSpot
-				        filter: ringBound,hobbit
-				    }
+					type: modifyStrength
+					select: choose(name(Sméagol))
+					amount: {
+						type: forEachYouCanSpot
+						filter: ringBound,hobbit
+					}
 				}
 			]
 		}
 		gametext: Make Sméagol strength +1 for each Ring- bound Hobbit you can spot.
-		lore: Very lucky we find you.
+		lore: "Very lucky we find you."
 		promotext: ""
 		alts: {
 			promos: {
@@ -412,7 +405,6 @@
 	15_46: {
 		cardInfo: {
 			imagePath: decipher/LOTR15046.jpg
-			javaClass: true
 			//parentId: 15_46
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -432,42 +424,42 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: winsSkirmish
-		            filter: name(Sméagol)
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: gollum
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        effect: [
-		            {
-		                type: repeat
-		                times: {
-		                    type: ForEachCultureToken
-		                    filter: self
-		                }
-		                effect: {
-		                    type: heal
-		                    select: choose(ringBound,companion)
-		                }
-		            }
-		            {
-		                type: discard
-		                select: self
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: name(Sméagol)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: gollum
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				effect: [
+					{
+						type: repeat
+						times: {
+							type: ForEachCultureToken
+							filter: self
+						}
+						effect: {
+							type: heal
+							select: choose(ringBound,companion)
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
 		]
 		gametext: Each time Sméagol wins a skirmish, place a [gollum] token here.<br><b>Regroup:</b> Heal a Ring-bound companion for each token here. Discard this condition.
-		lore: Bring fish with you. Come!'
+		lore: "'Bring fish with you. Come!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -480,7 +472,6 @@
 	15_47: {
 		cardInfo: {
 			imagePath: decipher/LOTR15047.jpg
-			javaClass: true
 			//parentId: 15_47
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -500,26 +491,26 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: [
-		            {
-		                type: exert
-		                select: choose(name(Gollum))
-		            }
-		            {
-		                type: removeThreats
-		            }
-		        ]
-		        effect: {
-		            type: wound
-		            select: choose(companion,inSkirmishAgainst(name(Gollum)))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: exert
+						select: choose(name(Gollum))
+					}
+					{
+						type: removeThreats
+					}
+				]
+				effect: {
+					type: wound
+					select: choose(companion,inSkirmishAgainst(name(Gollum)))
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Exert Gollum and remove a threat to wound a companion Gollum is skirmishing.
-		lore: Got away, did it, Precious!
+		lore: "Got away, did it, Precious!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -532,7 +523,6 @@
 	15_48: {
 		cardInfo: {
 			imagePath: decipher/LOTR15048.jpg
-			javaClass: true
 			//parentId: 15_48
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -550,33 +540,42 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: [
-            {
-                type: event
-                requires: {
-                    type: canSpot
-                    filter: name(Sméagol)
-                }
-                effect: [
-                    {
-                        type: alterOverwhelmMultiplier
-                        select: choose(ringBound,hobbit)
-                        multiplier: 3
-                    }
-                ]
-            }
-            {
-                type: modifierInDiscard
-                modifier: {
-                    type: modifyResistance
-                    filter: name(Sméagol)
-                    amount: 1
-                }
-            }
-        ]
+			{
+				type: event
+				requires: {
+					type: canSpot
+					filter: name(Sméagol)
+				}
+				effect: [
+					{
+						type: alterOverwhelmMultiplier
+						select: choose(ringBound,hobbit)
+						multiplier: 3
+					}
+				]
+			}
+			{
+				type: modifierInDiscard
+				modifier: {
+					type: modifyResistance
+					filter: name(Sméagol)
+					amount: 1
+				}
+			}
+		]
 		gametext: Spot Sméagol to prevent a Ring-bound Hobbit from being overwhelmed unless his or her strength is tripled.<br>While this card is in your discard pile, Sméagol is resistance +1.
 		lore: If you let them go, your life will be forfeit.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+		gametext: Spot Sméagol to prevent a Ring-bound Hobbit from being overwhelmed unless his or her strength is tripled.<br>While this card is in your discard pile, Sméagol is resistance +1.
+		lore: "If you let them go, your life will be forfeit."
 		promotext: ""
 		alts: {
 			promos: {
@@ -589,7 +588,6 @@
 	15_49: {
 		cardInfo: {
 			imagePath: decipher/LOTR15049.jpg
-			javaClass: true
 			//parentId: 15_49
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -613,44 +611,44 @@
 		resistance: 5
 		keywords: Ring-bound
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: addBurdens
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyResistance
-		            filter: ringBound,companion
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: choose(ringBound,hobbit)
-		            count: 2
-		        }
-		        effect: [
-                    {
-                        type: modifyStrength
-                        select: self
-                        amount: 1
-                    }
-                    {
-                        type: alterOverwhelmMultiplier
-                        select: self
-                        multiplier: 3
-                    }
-                ]
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: addBurdens
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: ringBound,companion
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(ringBound,hobbit)
+					count: 2
+				}
+				effect: [
+					{
+						type: modifyStrength
+						select: self
+						amount: 1
+					}
+					{
+						type: alterOverwhelmMultiplier
+						select: self
+						multiplier: 3
+					}
+				]
+			}
 		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br>Each Ring-bound companion is resistance +1.<br><b>Skirmish:</b> Exert 2 Ring-bound Hobbits to make Sméagol strength +1 and prevent him from being overwhelmed unless his strength is tripled.
-		lore: <span style="word-spacing:-0.01em;font-size:97%">"'...this creature is in some way bound up with my errand.'"</span>
+		lore: "'...this creature is in some way bound up with my errand.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -663,7 +661,6 @@
 	15_50: {
 		cardInfo: {
 			imagePath: decipher/LOTR15050.jpg
-			javaClass: true
 			//parentId: 15_50
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -681,42 +678,42 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Sméagol)
+				type: canSpot
+				filter: name(Sméagol)
 			}
 			effect: [
 				{
-				    type: playCardFromDrawDeck
-				    select: choose(condition)
-				    memorize: playedCondition
-                    showAll: true
-                    shuffle: true
+					type: playCardFromDrawDeck
+					select: choose(condition)
+					memorize: playedCondition
+					showAll: true
+					shuffle: true
 				}
 				{
-				    type: If
-				    check: {
-				        type: memoryMatches
-				        memory: playedCondition
-				        filter: culture(gollum),condition
-				    }
-				    true: {
-				        type: optional
-				        text: Would you like to make an opponent place a random card from hand beneath draw deck?
-				        effect: {
-				            type: putCardsFromHandOnBottomOfDeck
-				            player: shadow
-				            select: random(1)
-				        }
-				    }
+					type: If
+					check: {
+						type: memoryMatches
+						memory: playedCondition
+						filter: culture(gollum),condition
+					}
+					true: {
+						type: optional
+						text: Would you like to make an opponent place a random card from hand beneath draw deck?
+						effect: {
+							type: putCardsFromHandOnBottomOfDeck
+							player: shadow
+							select: random(1)
+						}
+					}
 				}
 			]
 		}
 		gametext: Spot Sméagol to play a condition from your draw deck. If that condition was a [gollum] condition, you may make an opponent place a random card from his or her hand beneath his or her draw deck.
-		lore: What he was chewing, they did not ask or like to think.
+		lore: "What he was chewing, they did not ask or like to think."
 		promotext: ""
 		alts: {
 			promos: {
@@ -729,7 +726,6 @@
 	15_51: {
 		cardInfo: {
 			imagePath: decipher/LOTR15051.jpg
-			javaClass: true
 			//parentId: 15_51
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -747,39 +743,39 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: or(name(Gollum),name(Sméagol))
+				type: canSpot
+				filter: or(name(Gollum),name(Sméagol))
 			}
 			effect: [
 				{
-				    type: playCardFromDrawDeck
-				    select: choose(minion)
-				    memorize: playedMinion
-                    showAll: true
-                    shuffle: true
+					type: playCardFromDrawDeck
+					select: choose(minion)
+					memorize: playedMinion
+					showAll: true
+					shuffle: true
 				}
 				{
-				    type: If
-				    check: {
-				        type: memoryMatches
-				        memory: playedMinion
-				        filter: culture(gollum),minion
-				    }
-				    true: {
-				        type: playCardFromDrawDeck
-				        select: choose(or(possession,condition))
-                        showAll: true
-                        shuffle: true
-				    }
+					type: If
+					check: {
+						type: memoryMatches
+						memory: playedMinion
+						filter: culture(gollum),minion
+					}
+					true: {
+						type: playCardFromDrawDeck
+						select: choose(or(possession,condition))
+						showAll: true
+						shuffle: true
+					}
 				}
 			]
 		}
 		gametext: Spot Gollum or Sméagol to play a minion from your draw deck. If that minion is a [gollum] minion, you may also play a Shadow possession or Shadow condition from your draw deck. Shuffle your draw deck.
-		lore: ...she drove her huge bulk down on him again.
+		lore: "...she drove her huge bulk down on him again."
 		promotext: ""
 		alts: {
 			promos: {
@@ -792,7 +788,6 @@
 	15_52: {
 		cardInfo: {
 			imagePath: decipher/LOTR15052.jpg
-			javaClass: true
 			//parentId: 15_52
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -810,39 +805,39 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: [
-                {
-                    type: canSpot
-                    filter: name(Frodo)
-                }
-                {
-                    type: canSpot
-                    filter: name(Sméagol)
-                }
-            ]
+				{
+					type: canSpot
+					filter: name(Frodo)
+				}
+				{
+					type: canSpot
+					filter: name(Sméagol)
+				}
+			]
 			effect: [
 				{
-				    type: preventable
-				    player: free people
-				    text: Would you like to make each minion strength -2 to prevent discarding minion?
-				    cost: {
-				        type: modifyStrength
-				        select: all(minion)
-				        amount: -2
-				        until: endOfTurn
-				    }
-				    effect: {
-				        type: discard
-				        select: choose(minion)
-				    }
+					type: preventable
+					player: free people
+					text: Would you like to make each minion strength -2 to prevent discarding minion?
+					cost: {
+						type: modifyStrength
+						select: all(minion)
+						amount: -2
+						until: endOfTurn
+					}
+					effect: {
+						type: discard
+						select: choose(minion)
+					}
 				}
 			]
 		}
 		gametext: Spot Frodo and Sméagol to discard a minion. That minion's owner may make each minion strength -2 until the end of the turn to prevent that.
-		lore: I will serve the master of the Precious.'
+		lore: "'I will serve the master of the Precious.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -855,7 +850,6 @@
 	15_53: {
 		cardInfo: {
 			imagePath: decipher/LOTR15053.jpg
-			javaClass: true
 			//parentId: 15_53
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -873,22 +867,22 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			cost: {
-			    type: discard
-			    select: choose(culture(gollum),minion)
+				type: discard
+				select: choose(culture(gollum),minion)
 			}
 			effect: [
 				{
-				    type: wound
-				    select: all(companion,minStrength(8))
+					type: wound
+					select: all(companion,minStrength(8))
 				}
 			]
 		}
 		gametext: Discard a [gollum] minion from play to wound each companion with strength 8 or more.
-		lore: ...all the while he hissed, but spoke no words.
+		lore: "...all the while he hissed, but spoke no words."
 		promotext: ""
 		alts: {
 			promos: {

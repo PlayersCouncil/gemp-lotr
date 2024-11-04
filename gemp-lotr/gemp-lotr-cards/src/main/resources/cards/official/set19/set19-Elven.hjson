@@ -1,0 +1,196 @@
+{
+
+	19_5: {
+		cardInfo: {
+			imagePath: decipher/LOTR19005.jpg
+			//parentId: 19_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 19P5
+			rarity: P
+			setNum: "19"
+			cardNum: 5
+			style: Standard
+		}
+		title: Army Long Trained
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Condition
+		strength: 1
+		target: culture(elven),companion
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: transfer
+					select: self
+					where: choose(culture(elven),companion)
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: archery
+				}
+				effect: {
+					type: choice
+					texts: [
+						Exert bearer
+						Return this condition to hand
+					]
+					effects: [
+						{
+							type: exert
+							select: bearer
+						}
+						{
+							type: returnToHand
+							select: self
+						}
+					]
+				}
+			}
+		]
+		gametext: Bearer must be an [elven] companion.<br>Each time bearer wins a skirmish, you may transfer this condition to another [elven] companion.<br>At the start of the archery phase, you must exert bearer or return this condition to hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_6: {
+		cardInfo: {
+			imagePath: decipher/LOTR19006.jpg
+			//parentId: 19_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 19P6
+			rarity: P
+			setNum: "19"
+			cardNum: 6
+			style: Standard
+		}
+		title: Arwen
+		subtitle: Royal Maiden
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Ranger
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						count: 2
+						filter: culture(elven),follower
+					}
+					filter: minion,inSkirmishAgainst(name(Arwen))
+					amount: -2
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: addThreats
+					amount: 3
+				}
+				effect: {
+					type: reconcileHand
+				}
+			}
+		]
+		gametext: <b>Ranger</b>.<br>While you can spot 2 [elven] followers, each minion skirmishing Arwen is strength -2.<br><b>Maneuver:</b> Add 3 threats to reconcile your hand.
+		lore: "I would rather share one lifetime with you than face all the ages of this world alone."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_7: {
+		cardInfo: {
+			imagePath: decipher/LOTR19007.jpg
+			//parentId: 19_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 19P7
+			rarity: P
+			setNum: "19"
+			cardNum: 7
+			style: Standard
+		}
+		title: Legolas
+		subtitle: Skeptical Guide
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 7
+		keywords: [
+			Fellowship
+			Archer
+		]
+		effects: {
+			type: activated
+			phase: archery
+			cost: {
+				type: addThreats
+				amount: 2
+			}
+			effect: [
+				{
+					type: wound
+					select: choose(minion)
+				}
+				{
+					type: disableArcheryTotalContribution
+					select: self
+				}
+			]
+		}
+		gametext: <b>Fellowship</b>. <b>Archer</b>.<br><b>Archery:</b> Add two threats to wound a minion; Legolas does not add to the fellowship archery total.
+		lore: "Have you heard nothing Lord Elrond has said? The Ring must be destroyed!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

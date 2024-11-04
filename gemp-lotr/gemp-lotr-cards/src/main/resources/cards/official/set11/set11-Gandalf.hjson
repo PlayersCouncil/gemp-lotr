@@ -3,7 +3,6 @@
 	11_28: {
 		cardInfo: {
 			imagePath: decipher/LOTR11028.jpg
-			javaClass: true
 			//parentId: 11_28
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -24,38 +23,38 @@
 		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(gandalf),wizard
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        effect: {
-		            type: stackCardsFromHand
-		            select: choose(spell)
-		            where: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            select: choose(culture(gandalf))
-		        }
-		        effect: {
-		            type: putStackedCardsIntoHand
-		            on: self
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gandalf),wizard
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				effect: {
+					type: stackCardsFromHand
+					select: choose(spell)
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(culture(gandalf))
+				}
+				effect: {
+					type: putStackedCardsIntoHand
+					on: self
+				}
+			}
 		]
 		gametext: To play, spot a [gandalf] Wizard.<br><b>Regroup:</b> Stack a spell from hand here.<br><b>Fellowship:</b> Discard a [gandalf] card from hand to take a card stacked here into hand.
-		lore: The fireworks were by Gandalf: they were not only brought by him, but designed and made by him....
+		lore: "The fireworks were by Gandalf: they were not only brought by him, but designed and made by him...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -68,7 +67,6 @@
 	11_29: {
 		cardInfo: {
 			imagePath: decipher/LOTR11029.jpg
-			javaClass: true
 			//parentId: 11_29
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -86,30 +84,30 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			cost: {
-			    type: exert
-			    select: choose(culture(gandalf),wizard)
+				type: exert
+				select: choose(culture(gandalf),wizard)
 			},
 			effect: [
-			    {
-			        type: removeBurdens
-			        amount: {
-			            type: Conditional
-			            requires: {
-			                type: location
-			                filter: dwelling
-			            }
-			            true: 2
-			            false: 1
-			        }
-			    }
+				{
+					type: removeBurdens
+					amount: {
+						type: Conditional
+						requires: {
+							type: location
+							filter: dwelling
+						}
+						true: 2
+						false: 1
+					}
+				}
 			]
 		}
 		gametext: Exert a [gandalf] Wizard to remove a burden (or 2 burdens if the fellowship is at a dwelling site).
-		lore: Bilbo was meant to find the Ring. In which case, you also were meant to have it. And that is an encouraging thought.'
+		lore: "'Bilbo was meant to find the Ring. In which case, you also were meant to have it. And that is an encouraging thought.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -122,7 +120,6 @@
 	11_30: {
 		cardInfo: {
 			imagePath: decipher/LOTR11030.jpg
-			javaClass: true
 			//parentId: 11_30
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -146,28 +143,28 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(gandalf),companion
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-                    type: exert
-                    select: self
-		        }
-		        effect: {
-		            type: putCardsFromDiscardIntoHand
-		            select: choose(culture(gandalf),timeword(skirmish),event)
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gandalf),companion
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(gandalf),timeword(skirmish),event)
+				}
+			}
 		]
 		gametext: To play, spot a [gandalf] companion.<br><b>Skirmish:</b> Exert Erland to take a [gandalf] skirmish event from your discard pile into hand.
-		lore: They are valiant men and keep open the High Pass and the Ford of Carrock.'
+		lore: "'They are valiant men and keep open the High Pass and the Ford of Carrock.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -180,7 +177,6 @@
 	11_31: {
 		cardInfo: {
 			imagePath: decipher/LOTR11031.jpg
-			javaClass: true
 			//parentId: 11_31
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -198,33 +194,33 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			cost: [
-                {
-                    type: exert
-                    select: choose(culture(gandalf),wizard)
-                }
-                {
-                    type: discardFromHand
-                    forced: false
-                    count: 2
-                }
-            ]
+				{
+					type: exert
+					select: choose(culture(gandalf),wizard)
+				}
+				{
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+			]
 			effect: [
-			    {
-			        type: putCardsFromDiscardIntoHand
-			        select: choose(side(free people))
-			    }
-			    {
-			        type: putCardsFromDiscardIntoHand
-			        select: choose(side(shadow))
-			    }
+				{
+					type: putCardsFromDiscardIntoHand
+					select: choose(side(free people))
+				}
+				{
+					type: putCardsFromDiscardIntoHand
+					select: choose(side(shadow))
+				}
 			]
 		}
 		gametext: To play, exert a [gandalf] Wizard.<br>Discard 2 cards from hand to take a Free Peoples card and a Shadow card from your discard pile into hand.
-		lore: Gandalf lifted it carefully, but the leaves crackled and broke as he laid it on the slab.
+		lore: "Gandalf lifted it carefully, but the leaves crackled and broke as he laid it on the slab."
 		promotext: ""
 		alts: {
 			promos: {
@@ -237,7 +233,6 @@
 	11_32: {
 		cardInfo: {
 			imagePath: decipher/LOTR11032.jpg
-			javaClass: true
 			//parentId: 11_32
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -257,21 +252,21 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: culture(gandalf),wizard
-		            }
-		            filter: companion,minResistance(6)
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: culture(gandalf),wizard
+					}
+					filter: companion,minResistance(6)
+					amount: 1
+				}
+			}
 		]
 		gametext: While you can spot a [gandalf] Wizard, each companion who has resistance 6 or more is strength +1.
-		lore: To them he was just one of the 'attractions' at the party. Hence the excitement of the hobbit-children.
+		lore: "To them he was just one of the 'attractions' at the party. Hence the excitement of the hobbit-children."
 		promotext: ""
 		alts: {
 			promos: {
@@ -284,7 +279,6 @@
 	11_33: {
 		cardInfo: {
 			imagePath: decipher/LOTR11033.jpg
-			javaClass: true
 			//parentId: 11_33
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -308,45 +302,45 @@
 		vitality: 4
 		resistance: 7
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: location
-		                filter: regionNumber(1)
-		            }
-		            filter: other,companion
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: location
-		                filter: regionNumber(2)
-		            }
-		            filter: companion
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: location
-		                filter: regionNumber(3)
-		            }
-		            filter: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: regionNumber(1)
+					}
+					filter: other,companion
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: regionNumber(2)
+					}
+					filter: companion
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: regionNumber(3)
+					}
+					filter: self
+					amount: 2
+				}
+			}
 		]
 		gametext: While Gandalf is in region 1, each other companion is strength +2.<br>While Gandalf is in region 2, each companion is strength +1.<br>While Gandalf is in region 3, he is strength +2.
-		lore: I will help you bear this burden, Frodo Baggins....'
+		lore: "'I will help you bear this burden, Frodo Baggins....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -359,7 +353,6 @@
 	11_34: {
 		cardInfo: {
 			imagePath: decipher/LOTR11034.jpg
-			javaClass: true
 			//parentId: 11_34
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -382,26 +375,26 @@
 		itemclass: Staff
 		target: wizard
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer,name(Gandalf)
-		            keyword: muster
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: winsSkirmish
-		            filter: bearer
-		        }
-		        effect: {
-		            type: wound
-		            player: shadow
-		            select: choose(minion)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,name(Gandalf)
+					keyword: muster
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: wound
+					player: shadow
+					select: choose(minion)
+				}
+			}
 		]
 		gametext: Bearer must be a Wizard.<br>If bearer is Gandalf, he gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>Each time bearer wins a skirmish, choose a Shadow player who must wound a minion.
 		lore: ""
@@ -417,7 +410,6 @@
 	11_35: {
 		cardInfo: {
 			imagePath: decipher/LOTR11035.jpg
-			javaClass: true
 			//parentId: 11_35
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -440,20 +432,20 @@
 		itemclass: Hand weapon
 		target: title(Gandalf)
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: bearer
-		        }
-		        effect: {
-		            type: removeBurdens
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
 		]
 		gametext: Bearer must be Gandalf.<br>Each time Gandalf wins a skirmish, you may remove a burden.
-		lore: There was a ringing clash and a stab of white fire.
+		lore: "There was a ringing clash and a stab of white fire."
 		promotext: ""
 		alts: {
 			promos: {
@@ -466,7 +458,6 @@
 	11_36: {
 		cardInfo: {
 			imagePath: decipher/LOTR11036.jpg
-			javaClass: true
 			//parentId: 11_36
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -484,40 +475,40 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(gandalf),wizard
+				type: canSpot
+				filter: culture(gandalf),wizard
 			}
 			effect: [
-			    {
-			        type: revealHand
-			        memorize: revealedCards
-			    }
-			    {
-			        type: modifyStrength
-			        select: choose(minion)
-			        amount: {
-			            type: forEachInMemory
-			            memory: revealedCards
-			            filter: companion
-			            multiplier: {
-			                type: Conditional
-			                requires: {
-			                    type: location
-			                    filter: battleground
-			                }
-			                true: -4
-			                false: -3
-			            }
-			        }
-			    }
+				{
+					type: revealHand
+					memorize: revealedCards
+				}
+				{
+					type: modifyStrength
+					select: choose(minion)
+					amount: {
+						type: forEachInMemory
+						memory: revealedCards
+						filter: companion
+						multiplier: {
+							type: Conditional
+							requires: {
+								type: location
+								filter: battleground
+							}
+							true: -4
+							false: -3
+						}
+					}
+				}
 			]
 		}
 		gametext: Spot a [gandalf] Wizard to reveal your hand and make a minion strength -3 for each companion in your hand (or -4 for each if the fellowship is at a battleground site).
-		lore: Through his own strength, Gandalf spurred all the Free Peoples of Middle-earth to stand against the coming darkness.
+		lore: "Through his own strength, Gandalf spurred all the Free Peoples of Middle-earth to stand against the coming darkness."
 		promotext: ""
 		alts: {
 			promos: {
@@ -530,7 +521,6 @@
 	11_37: {
 		cardInfo: {
 			imagePath: decipher/LOTR11037.jpg
-			javaClass: true
 			//parentId: 11_37
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -550,42 +540,42 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(gandalf),wizard
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: addsBurden
-		            filter: side(shadow)
-		        }
-		        effect: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-                    type: usesSpecialAbility
-                    filter: minion
-                }
-                cost: {
-                    type: discard
-                    select: self
-                }
-                effect: {
-                    type: cancelSpecialAbility
-                }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gandalf),wizard
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: addsBurden
+					filter: side(shadow)
+				}
+				effect: {
+					type: removeTwilight
+					amount: 3
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: usesSpecialAbility
+					filter: minion
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: cancelSpecialAbility
+				}
+			}
 		]
 		gametext: To play, spot a [gandalf] Wizard.<br>Each time a Shadow card adds a burden, you may remove (3).<br><b>Response:</b> If a minion uses its special ability, discard this condition to cancel the effect of that special ability.
-		lore: Prepare for battle!'
+		lore: "'Prepare for battle!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -598,7 +588,6 @@
 	11_38: {
 		cardInfo: {
 			imagePath: decipher/LOTR11038.jpg
-			javaClass: true
 			//parentId: 11_38
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -616,7 +605,7 @@
 		culture: Gandalf
 		twilight: 6
 		type: Event
-		timeword: Fellowship
+		timewords: Fellowship
 		keywords: [
 			Spell
 			Toil 2
@@ -624,19 +613,19 @@
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(gandalf),wizard
+				type: canSpot
+				filter: culture(gandalf),wizard
 			}
 			effect: [
-			    {
-			        type: discard
-			        select: choose(condition)
-			        count: 2
-			    }
+				{
+					type: discard
+					select: choose(condition)
+					count: 2
+				}
 			]
 		}
 		gametext: <b>Spell</b>. <b>Toil 2</b>. <helper>(For each [gandalf] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a [gandalf] Wizard to discard 2 conditions from play.
-		lore: Too long have you sat in shadows and trusted to twisted tales and crooked promptings.'
+		lore: "'Too long have you sat in shadows and trusted to twisted tales and crooked promptings.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -649,7 +638,6 @@
 	11_39: {
 		cardInfo: {
 			imagePath: decipher/LOTR11039.jpg
-			javaClass: true
 			//parentId: 11_39
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -667,29 +655,29 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
-			    type: exert
-			    select: choose(culture(gandalf),wizard)
-			    memorize: exertedWizard
+				type: exert
+				select: choose(culture(gandalf),wizard)
+				memorize: exertedWizard
 			}
 			requires: {
-			    type: canSpot
-			    filter: companion,minResistance(7)
-			    count: 2
+				type: canSpot
+				filter: companion,minResistance(7)
+				count: 2
 			}
 			effect: [
-			    {
-			        type: wound
-			        select: choose(minion,inSkirmishAgainst(memory(exertedWizard)))
-			        times: 2
-			    }
+				{
+					type: wound
+					select: choose(minion,inSkirmishAgainst(memory(exertedWizard)))
+					times: 2
+				}
 			]
 		}
 		gametext: Exert a [gandalf] Wizard and spot 2 companions who each have resistance 7 or more to wound a minion that Wizard is skirmishing twice.
-		lore: We fought far under the living earth, where time is not counted.'
+		lore: "'We fought far under the living earth, where time is not counted.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -702,7 +690,6 @@
 	11_40: {
 		cardInfo: {
 			imagePath: decipher/LOTR11040.jpg
-			javaClass: true
 			//parentId: 11_40
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -725,24 +712,24 @@
 		itemclass: Mount
 		target: title(Gandalf)
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: name(Gandalf)
-		        }
-		        cost: {
-		            type: addBurdens
-		        }
-		        effect: {
-		            type: preventWound
-		            select: choose(name(Gandalf))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: aboutToTakeWound
+					filter: name(Gandalf)
+				}
+				cost: {
+					type: addBurdens
+				}
+				effect: {
+					type: preventWound
+					select: choose(name(Gandalf))
+				}
+			}
 		]
 		gametext: Bearer must be Gandalf.<br>Each time Gandalf is about to take a wound, you may add a burden to prevent that.
-		lore: He has come for me: the horse of the White Rider. We are going to battle together.'
+		lore: "'He has come for me: the horse of the White Rider. We are going to battle together.'"
 		promotext: ""
 		alts: {
 			promos: {

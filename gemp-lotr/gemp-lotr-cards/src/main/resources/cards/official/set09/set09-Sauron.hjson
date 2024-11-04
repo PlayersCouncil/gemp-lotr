@@ -1,0 +1,134 @@
+{
+
+	9_47: {
+		cardInfo: {
+			imagePath: decipher/LOTR09047.jpg
+			//parentId: 9_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R+47
+			rarity: R+
+			setNum: "9"
+			cardNum: 47
+			style: Standard
+		}
+		title: Ithil Stone
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Artifact
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(or(culture(wraith),culture(sauron)),minion)
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: shadow
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: PlayCardFromHand
+					select: choose(culture(sauron),minion)
+					discount: -3
+				}
+			}
+		]
+		gametext: To play, exert a [wraith] or [sauron] minion.<br>At the start of each of your Shadow phases, you may draw a card.<br><b>Shadow:</b> Discard this artifact to play a [sauron] minion. Its twilight cost is -3.
+		lore: "'...and in it there was a stone like the Moon....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_48: {
+		cardInfo: {
+			imagePath: decipher/LOTR09048.jpg
+			//parentId: 9_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R+48
+			rarity: R+
+			setNum: "9"
+			cardNum: 48
+			style: Standard
+		}
+		title: Sauron
+		subtitle: The Lord of the Rings
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 18
+		type: Minion
+		race: Maia
+		strength: 24
+		vitality: 5
+		site: 6
+		keywords: [
+			Damage+2
+			Enduring
+			Fierce
+		]
+		effects: [
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachBurden
+					multiplier: -1
+				}
+			}
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachThreat
+					multiplier: -1
+				}
+			}
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: controlledSite
+					multiplier: -1
+				}
+			}
+		]
+		gametext: <b>Damage +2</b>. <b>Enduring</b>. <b>Fierce</b>.<br>For each burden you spot, threat you spot, and site you control, Sauron's twilight cost is -1.
+		lore: "One for the Dark Lord on his dark throne / In the Land of Mordor where the Shadows lie."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

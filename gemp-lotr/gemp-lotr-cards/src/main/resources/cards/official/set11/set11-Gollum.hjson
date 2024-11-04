@@ -3,7 +3,6 @@
 	11_41: {
 		cardInfo: {
 			imagePath: decipher/LOTR11041.jpg
-			javaClass: true
 			//parentId: 11_41
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,29 +20,29 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			requires: [
-                {
-                    type: canSpot
-                    filter: minion,inSkirmishAgainst(side(free people),character,maxResistance(2))
-                }
-                {
-                    type: canSpot
-                    filter: name(Gollum)
-                }
-            ]
+				{
+					type: canSpot
+					filter: minion,inSkirmishAgainst(side(free people),character,maxResistance(2))
+				}
+				{
+					type: canSpot
+					filter: name(Gollum)
+				}
+			]
 			effect: [
 				{
-				    type: wound
-				    select: choose(side(free people),character,maxResistance(2),inSkirmishAgainst(minion))
-				    times: 2
+					type: wound
+					select: choose(side(free people),character,maxResistance(2),inSkirmishAgainst(minion))
+					times: 2
 				}
 			]
 		}
 		gametext: If a minion is skirmishing a Free Peoples character who has resistance 2 or less, spot Gollum to wound that character twice.
-		lore: He musstn't hurt Preciouss. Give it to Sméagol, yess, give it to us! Give it to uss!'
+		lore: "'He musstn't hurt Preciouss. Give it to Sméagol, yess, give it to us! Give it to uss!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -56,7 +55,6 @@
 	11_42: {
 		cardInfo: {
 			imagePath: decipher/LOTR11042.jpg
-			javaClass: true
 			//parentId: 11_42
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -80,23 +78,23 @@
 		site: 3
 		keywords: Lurker
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		            times: 2
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(another,minion)
-		            amount: 2
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+					times: 2
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(another,minion)
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Skirmish:</b> Exert Gollum twice to make another minion strength +2.
-		lore: O yes, Shelob will get him, not Sméagol: he promised; he won't hurt Master at all.'
+		lore: "'O yes, Shelob will get him, not Sméagol: he promised; he won't hurt Master at all.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -109,7 +107,6 @@
 	11_43: {
 		cardInfo: {
 			imagePath: decipher/LOTR11043.jpg
-			javaClass: true
 			//parentId: 11_43
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -127,22 +124,22 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			cost: {
-			    type: discard
-			    select: choose(name(Gollum))
+				type: discard
+				select: choose(name(Gollum))
 			}
 			effect: [
 				{
-				    type: wound
-				    select: choose(unbound,companion,maxResistance(6))
+					type: wound
+					select: choose(unbound,companion,maxResistance(6))
 				}
 			]
 		}
 		gametext: Discard Gollum from play to wound an unbound companion who has resistance 6 or less.
-		lore: Gollum hissed and spat, but he did not let go.
+		lore: "Gollum hissed and spat, but he did not let go."
 		promotext: ""
 		alts: {
 			promos: {
@@ -155,7 +152,6 @@
 	11_44: {
 		cardInfo: {
 			imagePath: decipher/LOTR11044.jpg
-			javaClass: true
 			//parentId: 11_44
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -175,25 +171,25 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: losesSkirmish
-		            filter: companion
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(name(Gollum))
-		        }
-		        effect: {
-                    type: putCardsFromDiscardIntoHand
-                    select: choose(culture(gollum))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: losesSkirmish
+					filter: companion
+				}
+				cost: {
+					type: exert
+					select: choose(name(Gollum))
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(gollum))
+				}
+			}
 		]
 		gametext: Each time a companion loses a skirmish, you may exert Gollum to take a [gollum] card into hand from your discard pile.
-		lore: He's much more dangerous than he looks.'
+		lore: "'He's much more dangerous than he looks.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -206,7 +202,6 @@
 	11_45: {
 		cardInfo: {
 			imagePath: decipher/LOTR11045.jpg
-			javaClass: true
 			//parentId: 11_45
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -224,43 +219,43 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Gollum)
+				type: canSpot
+				filter: name(Gollum)
 			}
 			effect: [
 				{
-				    type: addTwilight
-				    amount: 3
+					type: addTwilight
+					amount: 3
 				}
 				{
-				    type: chooseActiveCards
-				    text: Choose our site to replace
-				    select: choose(your,site,zone(adventure path))
-				    memorize: chosenSite
+					type: chooseActiveCards
+					text: Choose our site to replace
+					select: choose(your,site,zone(adventure path))
+					memorize: chosenSite
 				}
 				{
-				    type: If
-				    check: {
-				        type: memoryMatches
-				        memory: chosenSite
-				        filter: any
-				    }
-				    true: {
-                        type: playSite
-                        number: {
-                            type: siteNumberInMemory
-                            memory: chosenSite
-                        }
-				    }
+					type: If
+					check: {
+						type: memoryMatches
+						memory: chosenSite
+						filter: any
+					}
+					true: {
+						type: playSite
+						number: {
+							type: siteNumberInMemory
+							memory: chosenSite
+						}
+					}
 				}
 			]
 		}
 		gametext: Spot Gollum to add (3) and exchange one of your sites on the adventure path with another site from your adventure deck.
-		lore: So far Gollum's plot had succeeded.
+		lore: "So far Gollum's plot had succeeded."
 		promotext: ""
 		alts: {
 			promos: {
@@ -273,7 +268,6 @@
 	11_46: {
 		cardInfo: {
 			imagePath: decipher/LOTR11046.jpg
-			javaClass: true
 			//parentId: 11_46
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -291,22 +285,22 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(name(Sméagol))
-				    amount: {
-				        type: forEachYouCanSpot
-				        filter: companion,minResistance(5)
-				    }
+					type: modifyStrength
+					select: choose(name(Sméagol))
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion,minResistance(5)
+					}
 				}
 			]
 		}
 		gametext: Make Sméagol strength +1 for each companion who has resistance 5 or more.
-		lore: It's not sense to try and get into Mordor at all. But if master says I must go or I will go, then he must try some way.'
+		lore: "'It's not sense to try and get into Mordor at all. But if master says I must go or I will go, then he must try some way.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -319,7 +313,6 @@
 	11_47: {
 		cardInfo: {
 			imagePath: decipher/LOTR11047.jpg
-			javaClass: true
 			//parentId: 11_47
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -337,32 +330,32 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
-			    type: exert
-			    select: choose(name(Gollum))
-			    memorize: gollum
+				type: exert
+				select: choose(name(Gollum))
+				memorize: gollum
 			},
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(not(memory(gollum)),minion)
-				    amount: {
-				        type: Conditional
-				        requires: {
-				            type: location
-				            filter: mountain
-				        }
-				        true: 3
-				        false: 2
-				    }
+					type: modifyStrength
+					select: choose(not(memory(gollum)),minion)
+					amount: {
+						type: Conditional
+						requires: {
+							type: location
+							filter: mountain
+						}
+						true: 3
+						false: 2
+					}
 				}
 			]
 		}
 		gametext: Exert Gollum to make another minion strength +2 (or +3 if Gollum is at a mountain site).
-		lore: ...a fear was growing on him, a menace which he could not see....
+		lore: "...a fear was growing on him, a menace which he could not see...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -375,7 +368,6 @@
 	11_48: {
 		cardInfo: {
 			imagePath: decipher/LOTR11048.jpg
-			javaClass: true
 			//parentId: 11_48
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -395,27 +387,27 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: losesSkirmish
-		            filter: companion
-		        }
-		        requires: {
-		            type: fierceSkirmish
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(name(Gollum))
-		        }
-		        effect: {
-		            type: addBurdens
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: losesSkirmish
+					filter: companion
+				}
+				requires: {
+					type: fierceSkirmish
+				}
+				cost: {
+					type: exert
+					select: choose(name(Gollum))
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
 		]
 		gametext: Each time a companion loses a fierce skirmish, you may exert Gollum to add a burden.
-		lore: A sudden weight smote him and he crashed forward, tearing the backs of his hands that still clasped his master's.
+		lore: "A sudden weight smote him and he crashed forward, tearing the backs of his hands that still clasped his master's."
 		promotext: ""
 		alts: {
 			promos: {
@@ -428,7 +420,6 @@
 	11_49: {
 		cardInfo: {
 			imagePath: decipher/LOTR11049.jpg
-			javaClass: true
 			//parentId: 11_49
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -453,30 +444,30 @@
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Sméagol)
+				type: canSpot
+				filter: name(Sméagol)
 			}
 			effect: [
 				{
-				    type: playNextSite
+					type: playNextSite
 				}
 				{
-				    type: optional
-				    text: Do you want to return it to hand?
-				    effect: {
-				        type: costToEffect
-				        cost: {
-				            type: addBurdens
-				        }
-				        effect: {
-				            type: putPlayedEventIntoHand
-				        }
-				    }
+					type: optional
+					text: Do you want to return it to hand?
+					effect: {
+						type: costToEffect
+						cost: {
+							type: addBurdens
+						}
+						effect: {
+							type: putPlayedEventIntoHand
+						}
+					}
 				}
 			]
 		}
 		gametext: Spot Sméagol to play the fellowship's next site. Then you may add a burden to take this card back into hand.
-		lore: Nice hobbits! We will come with them. Find them safe paths in the dark, yes we will.'
+		lore: "'Nice hobbits! We will come with them. Find them safe paths in the dark, yes we will.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -489,7 +480,6 @@
 	11_50: {
 		cardInfo: {
 			imagePath: decipher/LOTR11050.jpg
-			javaClass: true
 			//parentId: 11_50
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -509,51 +499,51 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: [
-                    {
-                        type: chooseAKeyword
-                        keywords: [
-                        	forest
-                        	mountain
-                        	plains
-                        	river
-                        ]
-                        memorize: chosenKeyword
-                    }
-                    {
-                        type: storeKeyword
-                        memory: chosenKeyword
-                    }
-                ]
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: storedKeyword
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(or(name(Gollum),name(Sméagol)))
-		        }
-		        effect: {
-		            type: removeTwilight
-		            amount: 4
-		        }
-		    }
-		    {
-		        type: displayableInformation
-		        text: Selected keyword is {stored}
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: [
+					{
+						type: chooseAKeyword
+						keywords: [
+							forest
+							mountain
+							plains
+							river
+						]
+						memorize: chosenKeyword
+					}
+					{
+						type: storeKeyword
+						memory: chosenKeyword
+					}
+				]
+			}
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: storedKeyword
+				}
+				cost: {
+					type: exert
+					select: choose(or(name(Gollum),name(Sméagol)))
+				}
+				effect: {
+					type: removeTwilight
+					amount: 4
+				}
+			}
+			{
+				type: displayableInformation
+				text: Selected keyword is {stored}
+			}
 		]
 		gametext: When you play this condition, name forest, mountain, plains, or river.<br>Each time the fellowship moves to a site that has the named keyword, you may exert Gollum or Sméagol to remove (4).
-		lore: Here! We can get down here. Sméagol went this way once: I went this way, hiding from Orcs.'
+		lore: "'Here! We can get down here. Sméagol went this way once: I went this way, hiding from Orcs.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -566,7 +556,6 @@
 	11_51: {
 		cardInfo: {
 			imagePath: decipher/LOTR11051.jpg
-			javaClass: true
 			//parentId: 11_51
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -590,42 +579,42 @@
 		resistance: 5
 		keywords: Ring-bound
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: addBurdens
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: playNextSite
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: location
-		            filter: marsh
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: cancelSkirmish
-		            filter: self
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: addBurdens
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: playNextSite
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: location
+					filter: marsh
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: cancelSkirmish
+					filter: self
+				}
+			}
 		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br>Each time Sméagol wins a skirmish, you may play the fellowship's next site.<br><b>Skirmish:</b> If Sméagol is at a marsh, exert him to cancel a skirmish involving him.
-		lore: They would have foundered in the Dead Marshes but for Gollum.
+		lore: "They would have foundered in the Dead Marshes but for Gollum."
 		promotext: ""
 		alts: {
 			promos: {
@@ -638,7 +627,6 @@
 	11_52: {
 		cardInfo: {
 			imagePath: decipher/LOTR11052.jpg
-			javaClass: true
 			//parentId: 11_52
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -656,28 +644,28 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			requires: [
-                {
-                    type: canSpot
-                    filter: culture(gollum),minion
-                }
-                {
-                    type: location
-                    filter: mountain
-                }
-            ]
+				{
+					type: canSpot
+					filter: culture(gollum),minion
+				}
+				{
+					type: location
+					filter: mountain
+				}
+			]
 			effect: [
 				{
-				    type: playCardFromDiscard
-				    select: choose(minion)
+					type: playCardFromDiscard
+					select: choose(minion)
 				}
 			]
 		}
 		gametext: Spot a [gollum] minion at a mountain site to play a minion from your discard pile.
-		lore: Gollum on the edge of the abyss was fighting like a mad thing with an unseen foe.
+		lore: "Gollum on the edge of the abyss was fighting like a mad thing with an unseen foe."
 		promotext: ""
 		alts: {
 			promos: {

@@ -3,7 +3,10 @@
 	4_88: {
 		cardInfo: {
 			imagePath: decipher/LOTR04088.jpg
-			javaClass: true
+			//parentId: 4_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U88
 			rarity: U
@@ -17,43 +20,43 @@
 		culture: Gandalf
 		twilight: 2
 		type: Condition
-		keyword: support area
+		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: name(Gandalf)
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: gandalf
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        effect: [
-		            {
-		                type: wound
-		                select: choose(minion,inSkirmishAgainst(name(Gandalf)))
-		                times: {
-		                    type: ForEachCultureToken
-		                    filter: self
-		                    culture: gandalf
-		                }
-		            }
-		            {
-		                type: discard
-		                select: self
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: name(Gandalf)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: gandalf
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				effect: [
+					{
+						type: wound
+						select: choose(minion,inSkirmishAgainst(name(Gandalf)))
+						times: {
+							type: ForEachCultureToken
+							filter: self
+							culture: gandalf
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
 		]
 		gametext: Plays to your support area.<br>Each time Gandalf wins a skirmish, you may place a [gandalf] token here.<br><b>Skirmish:</b> Wound a minion skirmishing Gandalf for each [gandalf] token here. Discard this condition.
-		lore: Gandalf is come again.'
+		lore: "'Gandalf is come again.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -66,7 +69,10 @@
 	4_89: {
 		cardInfo: {
 			imagePath: decipher/LOTR04089.jpg
-			javaClass: true
+			//parentId: 4_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R89
 			rarity: R
@@ -87,25 +93,25 @@
 		signet: Theoden
 		resistance: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        requires: {
-		            type: twilightPoolLessThan
-		            amount: 2
-		        }
-		        cost: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(side(free),character)
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: twilightPoolLessThan
+					amount: 2
+				}
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(side(free),character)
+				}
+			}
 		]
 		gametext: <b>Fellowship:</b> If the twilight pool has fewer than 2 twilight tokens, add (2) to play a character from your discard pile.
-		lore: Dangerous!... And so am I, very dangerous; more dangerous than anything you will ever meet....'
+		lore: "'Dangerous!... And so am I, very dangerous; more dangerous than anything you will ever meet....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -118,7 +124,10 @@
 	4_90: {
 		cardInfo: {
 			imagePath: decipher/LOTR04090.jpg
-			javaClass: true
+			//parentId: 4_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C90
 			rarity: C
@@ -139,21 +148,21 @@
 		signet: Gandalf
 		resistance: 6
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyStrength
-                    requires: {
-                        type: canSpotTwilight
-                        amount: 3
-                    }
-                    filter: self
-                    amount: 3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotTwilight
+						amount: 3
+					}
+					filter: self
+					amount: 3
+				}
+			}
 		]
 		gametext: While you can spot 3 twilight tokens, Gandalf is strength +3.
-		lore: Behold, I am not Gandalf the Grey, whom you betrayed. I am Gandalf the White, who has returned from death.'
+		lore: "'Behold, I am not Gandalf the Grey, whom you betrayed. I am Gandalf the White, who has returned from death.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -166,7 +175,10 @@
 	4_91: {
 		cardInfo: {
 			imagePath: decipher/LOTR04091.jpg
-			javaClass: true
+			//parentId: 4_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R91
 			rarity: R
@@ -185,22 +197,22 @@
 		itemclass: Staff
 		target: name(Gandalf)
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotTwilight
-		                amount: 2
-		            }
-		            filter: bearer
-		            keyword: damage
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotTwilight
+						amount: 2
+					}
+					filter: bearer
+					keyword: damage
+					amount: 2
+				}
+			}
 		]
 		gametext: Bearer must be Gandalf.<br>While you can spot 2 twilight tokens, Gandalf is <b>damage +2</b>.
-		lore: The staff in the hand of a Wizard may be more than a prop for age....'
+		lore: "'The staff in the hand of a Wizard may be more than a prop for age....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -213,7 +225,10 @@
 	4_92: {
 		cardInfo: {
 			imagePath: decipher/LOTR04092.jpg
-			javaClass: true
+			//parentId: 4_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R92
 			rarity: R
@@ -227,15 +242,13 @@
 		culture: Gandalf
 		twilight: 5
 		type: Event
-		timeword: fellowship
-		keyword: [
-		    spell
-		]
+		timewords: Fellowship
+		keywords: Spell
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Gandalf)
+				type: canSpot
+				filter: name(Gandalf)
 			}
 			effect: [
 				{
@@ -245,7 +258,7 @@
 			]
 		}
 		gametext: <b>Spell</b>.<br><b>Fellowship:</b> Spot Gandalf to discard all conditions.
-		lore: His hood and grey rags were flung away. His white garments shone.
+		lore: "His hood and grey rags were flung away. His white garments shone."
 		promotext: ""
 		alts: {
 			promos: {
@@ -258,7 +271,10 @@
 	4_93: {
 		cardInfo: {
 			imagePath: decipher/LOTR04093.jpg
-			javaClass: true
+			//parentId: 4_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C93
 			rarity: C
@@ -272,12 +288,12 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Gandalf)
+				type: canSpot
+				filter: name(Gandalf)
 			}
 			effect: [
 				{
@@ -288,7 +304,7 @@
 			]
 		}
 		gametext: <b>Fellowship:</b> Spot Gandalf to heal an unbound companion twice.
-		lore: Go where you must go, and hope!'
+		lore: "'Go where you must go, and hope!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -301,7 +317,10 @@
 	4_94: {
 		cardInfo: {
 			imagePath: decipher/LOTR04094.jpg
-			javaClass: true
+			//parentId: 4_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R94
 			rarity: R
@@ -318,37 +337,37 @@
 		strength: 2
 		vitality: 1
 		target: name(Théoden)
-		keyword: spell
+		keywords: Spell
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: name(Gandalf)
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: discard
-		            select: all(side(shadow),condition,attachedTo(bearer))
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantPlayCardsOn
-		            filter: side(shadow),condition
-		            on: bearer
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: all(side(shadow),condition,attachedTo(bearer))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantPlayCardsOn
+					filter: side(shadow),condition
+					on: bearer
+				}
+			}
 		]
 		gametext: <b>Spell</b>. To play, spot Gandalf. Bearer must be Théoden.<br>Discard all Shadow conditions on Théoden. Shadow conditions may not be played on Théoden.
-		lore: Not all is dark. Take courage, Lord of the Mark; for better help you will not find.'
+		lore: "'Not all is dark. Take courage, Lord of the Mark; for better help you will not find.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -361,7 +380,10 @@
 	4_95: {
 		cardInfo: {
 			imagePath: decipher/LOTR04095.jpg
-			javaClass: true
+			//parentId: 4_95
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R95
 			rarity: R
@@ -375,15 +397,13 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: response
-		keyword: [
-		    spell
-		]
+		timewords: Response
+		keywords: Spell
 		effects: {
 			type: responseEvent
 			trigger: {
-			    type: played
-			    filter: culture(gandalf),event
+				type: played
+				filter: culture(gandalf),event
 			}
 			cost: {
 				type: exert
@@ -398,7 +418,7 @@
 			]
 		}
 		gametext: <b>Spell</b>.<br><b>Response:</b> If you play a [gandalf] event, exert Gandalf twice to place that event in your hand instead of your discard pile.
-		lore: Even Sauron knows them not. They are older than he. Now I have walked there, but I will bring no report to darken the light of day.'
+		lore: "'Even Sauron knows them not. They are older than he. Now I have walked there, but I will bring no report to darken the light of day.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -411,7 +431,10 @@
 	4_96: {
 		cardInfo: {
 			imagePath: decipher/LOTR04096.jpg
-			javaClass: true
+			//parentId: 4_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U96
 			rarity: U
@@ -425,19 +448,19 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			requires: [
-                {
-                    type: canSpot
-                    filter: name(Gandalf)
-                }
-                {
-                    type: canSpotTwilight
-                    amount: 3
-                }
-            ]
+				{
+					type: canSpot
+					filter: name(Gandalf)
+				}
+				{
+					type: canSpotTwilight
+					amount: 3
+				}
+			]
 			effect: [
 				{
 					type: preventAllWounds
@@ -446,7 +469,7 @@
 			]
 		}
 		gametext: <b>Skirmish:</b> Spot Gandalf and 3 twilight tokens to prevent all wounds to a companion who has the Gandalf signet.
-		lore: A witless worm you have become.'
+		lore: "'A witless worm you have become.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -459,7 +482,10 @@
 	4_97: {
 		cardInfo: {
 			imagePath: decipher/LOTR04097.jpg
-			javaClass: true
+			//parentId: 4_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C97
 			rarity: C
@@ -473,35 +499,33 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		timeword: skirmish
-		keyword: [
-		    spell
-		]
+		timewords: Skirmish
+		keywords: Spell
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Gandalf)
+				type: canSpot
+				filter: name(Gandalf)
 			}
 			effect: [
 				{
-    				type: preventable
-    				text: Would you like to make FP player wound a minion to prevent Gandalf from not receiving wounds?
-    				player: shadow
-    				cost: {
-    				    type: wound
-    				    player: fp
-    				    select: choose(minion)
-    				}
-    				effect: {
-                        type: preventAllWounds
-                        select: all(name(Gandalf))
-    				}
+					type: preventable
+					text: Would you like to make FP player wound a minion to prevent Gandalf from not receiving wounds?
+					player: shadow
+					cost: {
+						type: wound
+						player: fp
+						select: choose(minion)
+					}
+					effect: {
+						type: preventAllWounds
+						select: all(name(Gandalf))
+					}
 				}
 			]
 		}
 		gametext: <b>Spell</b>.<br><b>Skirmish:</b> Spot Gandalf to prevent all wounds to him. Any Shadow player may make you wound a minion to prevent this.
-		lore: His fire was about me. I was burned.'
+		lore: "'His fire was about me. I was burned.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -514,7 +538,10 @@
 	4_98: {
 		cardInfo: {
 			imagePath: decipher/LOTR04098.jpg
-			javaClass: true
+			//parentId: 4_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C98
 			rarity: C
@@ -528,10 +555,8 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: maneuver
-		keyword: [
-		    spell
-		]
+		timewords: Maneuver
+		keywords: Spell
 		effects: {
 			type: event
 			cost: {
@@ -546,7 +571,7 @@
 			]
 		}
 		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Exert Gandalf to wound each minion who has strength of 6 or less.
-		lore: The wild men fell on their faces before him.
+		lore: "The wild men fell on their faces before him."
 		promotext: ""
 		alts: {
 			promos: {
@@ -559,7 +584,10 @@
 	4_99: {
 		cardInfo: {
 			imagePath: decipher/LOTR04099.jpg
-			javaClass: true
+			//parentId: 4_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U99
 			rarity: U
@@ -573,15 +601,12 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: [
-		    fellowship
-		    maneuver
-		]
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Gandalf)
+				type: canSpot
+				filter: name(Gandalf)
 			}
 			effect: [
 				{
@@ -591,7 +616,7 @@
 			]
 		}
 		gametext: <b>Fellowship</b> <i>or</i> <b>Maneuver:</b> Spot Gandalf to discard a Shadow possession or Shadow artifact.
-		lore: I have not passed through fire and death to bandy crooked words with a serving-man till the lightning falls.'
+		lore: "'I have not passed through fire and death to bandy crooked words with a serving-man till the lightning falls.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -604,7 +629,10 @@
 	4_100: {
 		cardInfo: {
 			imagePath: decipher/LOTR04100.jpg
-			javaClass: true
+			//parentId: 4_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R100
 			rarity: R
@@ -622,43 +650,43 @@
 		itemclass: Mount
 		target: name(Gandalf)
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: discard
-		            select: all(hand weapon,attachedTo(bearer))
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantBear
-		            filter: bearer
-		            cardFilter: hand weapon
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: skirmish
-		        }
-                requires: {
-                    type: canSpot
-                    filter: bearer,inSkirmish
-                }
-                effect: {
-                    type: exert
-                    select: all(minion,inSkirmishAgainst(bearer))
-                }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: all(hand weapon,attachedTo(bearer))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBear
+					filter: bearer
+					cardFilter: hand weapon
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				effect: {
+					type: exert
+					select: all(minion,inSkirmishAgainst(bearer))
+				}
+			}
 		]
 		gametext: Bearer must be Gandalf. Discard any hand weapon he bears. Gandalf may not bear a hand weapon.<br>At the start of each skirmish involving Gandalf, each minion skirmishing him must exert.
-		lore: He is the chief of the Mearas, lords of horses....'
+		lore: "'He is the chief of the Mearas, lords of horses....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -671,7 +699,10 @@
 	4_101: {
 		cardInfo: {
 			imagePath: decipher/LOTR04101.jpg
-			javaClass: true
+			//parentId: 4_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U101
 			rarity: U
@@ -685,19 +716,19 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: [
-			    {
-			        type: canSpot
-			        filter: culture(isengard),minion
-			    }
-                {
-                    type: canSpot
-                    filter: ent,ally
-                }
-            ]
+				{
+					type: canSpot
+					filter: culture(isengard),minion
+				}
+				{
+					type: canSpot
+					filter: ent,ally
+				}
+			]
 			effect: [
 				{
 					type: addKeyword
@@ -708,14 +739,14 @@
 					until: regroup
 				}
 				{
-				    type: enableParticipationInArcheryFireAndSkirmishes
-				    select: memory(chosenEnt)
+					type: enableParticipationInArcheryFireAndSkirmishes
+					select: memory(chosenEnt)
 					until: regroup
 				}
 			]
 		}
 		gametext: <b>Maneuver:</b> Spot an [isengard] minion and an Ent ally. Until the regroup phase, that ally is <b>damage +2</b> and participates in archery fire and skirmishes.
-		lore: Many of those trees were my friends... many had voices of their own that are lost for ever now.'
+		lore: "'Many of those trees were my friends... many had voices of their own that are lost for ever now.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -728,7 +759,10 @@
 	4_102: {
 		cardInfo: {
 			imagePath: decipher/LOTR04102.jpg
-			javaClass: true
+			//parentId: 4_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C102
 			rarity: C
@@ -742,10 +776,8 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: regroup
-		keyword: [
-		    spell
-		]
+		timewords: Regroup
+		keywords: Spell
 		effects: {
 			type: event
 			cost: {
@@ -761,7 +793,7 @@
 			]
 		}
 		gametext: <b>Spell</b>.<br><b>Regroup:</b> Exert Gandalf to discard up to 2 wounded minions.
-		lore: Naked I was sent back – for a brief time, until my task is done. And naked I lay upon the mountain-top.'
+		lore: "'Naked I was sent back – for a brief time, until my task is done. And naked I lay upon the mountain-top.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -774,7 +806,10 @@
 	4_103: {
 		cardInfo: {
 			imagePath: decipher/LOTR04103.jpg
-			javaClass: true
+			//parentId: 4_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R103
 			rarity: R
@@ -790,48 +825,48 @@
 		twilight: 4
 		type: Ally
 		allyHome: [
-			2T
-			8T
+			2T 
+			 8T
 		]
 		race: Ent
 		strength: 12
 		vitality: 4
-		keyword: unhasty
+		keywords: Unhasty
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-                    type: aboutToDiscard
-                    filter: unbound,hobbit
-                }
-                effect: {
-                    type: StackCardsFromPlay
-                    select: choose(unbound,hobbit,gettingDiscarded)
-                    where: self
-                }
-		    }
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: [
-                    {
-                        type: exert
-                        select: self
-                    }
-                    {
-                        type: addTwilight
-                        amount: 1
-                    }
-                ]
-                effect: {
-                    type: playCardFromStacked
-                    select: choose(unbound,hobbit)
-                    on: self
-                }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: aboutToDiscard
+					filter: unbound,hobbit
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: choose(unbound,hobbit,gettingDiscarded)
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: addTwilight
+						amount: 1
+					}
+				]
+				effect: {
+					type: playCardFromStacked
+					select: choose(unbound,hobbit)
+					on: self
+				}
+			}
 		]
 		gametext: <b>Unhasty</b>.<br><b>Response:</b> If an unbound Hobbit is about to be discarded, stack him here instead.<br><b>Fellowship:</b> Exert Treebeard and add (1) to play an unbound Hobbit stacked here.
-		lore: Do not be hasty, that is my motto.'
+		lore: "'Do not be hasty, that is my motto.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -844,7 +879,10 @@
 	4_104: {
 		cardInfo: {
 			imagePath: decipher/LOTR04104.jpg
-			javaClass: true
+			//parentId: 4_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C104
 			rarity: C
@@ -860,36 +898,36 @@
 		twilight: 4
 		type: Ally
 		allyHome: [
-			2T
-			8T
+			2T 
+			 8T
 		]
 		race: Ent
 		strength: 12
 		vitality: 4
-		keyword: unhasty
+		keywords: Unhasty
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: [
-                    {
-                        type: exert
-                        select: self
-                    }
-                    {
-                        type: discardFromHand
-                        forced: false
-                        select: choose(unbound,companion)
-                    }
-                ]
-                effect: {
-                    type: heal
-                    select: choose(unbound,companion)
-                }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: discardFromHand
+						forced: false
+						select: choose(unbound,companion)
+					}
+				]
+				effect: {
+					type: heal
+					select: choose(unbound,companion)
+				}
+			}
 		]
 		gametext: <b>Unhasty</b>.<br><b>Fellowship:</b> Exert Treebeard and discard an unbound companion from hand to heal an unbound companion.
-		lore: No, I am not tired. I do not easily get tired. And I do not sit down. I am not very, hm, bendable.'
+		lore: "'No, I am not tired. I do not easily get tired. And I do not sit down. I am not very, hm, bendable.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -902,7 +940,10 @@
 	4_105: {
 		cardInfo: {
 			imagePath: decipher/LOTR04105.jpg
-			javaClass: true
+			//parentId: 4_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C105
 			rarity: C
@@ -916,27 +957,27 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
-			    {
-			        type: chooseHowManyTwilightTokensToSpot
-			        memorize: twilightCount
-			    }
+				{
+					type: chooseHowManyTwilightTokensToSpot
+					memorize: twilightCount
+				}
 				{
 					type: modifyStrength
 					select: choose(name(Gandalf))
 					amount: {
-					    type: fromMemory
-					    memory: twilightCount
-					    limit: 5
+						type: fromMemory
+						memory: twilightCount
+						limit: 5
 					}
 				}
 			]
 		}
 		gametext: <b>Skirmish:</b> Make Gandalf strength +1 for each twilight token you spot (limit +5).
-		lore: Thither I came at last, to the uttermost foundations of stone. He was with me still.'
+		lore: "'Thither I came at last, to the uttermost foundations of stone. He was with me still.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -949,7 +990,10 @@
 	4_106: {
 		cardInfo: {
 			imagePath: decipher/LOTR04106.jpg
-			javaClass: true
+			//parentId: 4_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R106
 			rarity: R
@@ -963,22 +1007,22 @@
 		culture: Gandalf
 		twilight: 5
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			requires: [
-			    {
-			        type: canSpot
-			        filter: elf
-			    }
-			    {
-			        type: canSpot
-			        filter: culture(gondor),man
-			    }
-			    {
-			        type: canSpot
-			        filter: dwarf
-			    }
+				{
+					type: canSpot
+					filter: elf
+				}
+				{
+					type: canSpot
+					filter: culture(gondor),man
+				}
+				{
+					type: canSpot
+					filter: dwarf
+				}
 			]
 			effect: [
 				{
@@ -988,7 +1032,7 @@
 			]
 		}
 		gametext: <b>Fellowship:</b> Spot an Elf, a [gondor] Man, and a Dwarf to play Gandalf from your dead pile.
-		lore: And what may you be doing in these parts? An Elf, a Man, and a Dwarf, all clad in elvish fashion.'
+		lore: "'And what may you be doing in these parts? An Elf, a Man, and a Dwarf, all clad in elvish fashion.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1001,7 +1045,10 @@
 	4_107: {
 		cardInfo: {
 			imagePath: decipher/LOTR04107.jpg
-			javaClass: true
+			//parentId: 4_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R107
 			rarity: R
@@ -1017,46 +1064,46 @@
 		type: Condition
 		target: ent,canExert
 		effects: [
-		    {
-                type: exertTargetExtraCost
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: killed
-		            filter: culture(isengard),minion
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: [
-                    {
-                        type: revealTopCardsOfDrawDeck
-                        deck: shadow
-                        count: 10
-                        memorize: revealedCards
-                    }
-                    {
-                        type: discardCardsFromDrawDeck
-                        deck: shadow
-                        select: choose(side(shadow),memory(revealedCards))
-                        showAll: false
-                        shuffle: false
-                    }
-                    {
-                        type: discardCardsFromDrawDeck
-                        deck: shadow
-                        select: choose(side(free),memory(revealedCards))
-                        showAll: false
-                        shuffle: false
-                    }
-                    {
-                        type: shuffleDeck
-                        deck: shadow
-                    }
-                ]
-		    }
+			{
+				type: exertTargetExtraCost
+			}
+			{
+				type: Response
+				trigger: {
+					type: killed
+					filter: culture(isengard),minion
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						deck: shadow
+						count: 10
+						memorize: revealedCards
+					}
+					{
+						type: discardCardsFromDrawDeck
+						deck: shadow
+						select: choose(side(shadow),memory(revealedCards))
+						showAll: false
+						shuffle: false
+					}
+					{
+						type: discardCardsFromDrawDeck
+						deck: shadow
+						select: choose(side(free),memory(revealedCards))
+						showAll: false
+						shuffle: false
+					}
+					{
+						type: shuffleDeck
+						deck: shadow
+					}
+				]
+			}
 		]
 		gametext: To play, exert an Ent. Plays on that Ent.<br><b>Response:</b> If an [isengard] minion is killed, discard this condition to reveal the top 10 cards of an opponent's draw deck. Discard 1 Shadow card and 1 Free Peoples card revealed. Your opponent reshuffles that deck.
 		lore: ""
@@ -1072,7 +1119,10 @@
 	4_108: {
 		cardInfo: {
 			imagePath: decipher/LOTR04108.jpg
-			javaClass: true
+			//parentId: 4_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U108
 			rarity: U
@@ -1086,19 +1136,19 @@
 		culture: Gandalf
 		twilight: 4
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
-			    type: isGreaterThan
-			    firstNumber: {
-			        type: forEachYouCanSpot
-			        filter: minion
-			    }
-			    secondNumber: {
-			        type: forEachYouCanSpot
-			        filter: companion
-			    }
+				type: isGreaterThan
+				firstNumber: {
+					type: forEachYouCanSpot
+					filter: minion
+				}
+				secondNumber: {
+					type: forEachYouCanSpot
+					filter: companion
+				}
 			}
 			cost: {
 				type: exert
@@ -1113,7 +1163,7 @@
 			]
 		}
 		gametext: <b>Maneuver:</b> If you can spot more minions than companions, exert Gandalf to make an opponent discard a minion.
-		lore: The hosts of Isengard roared, swaying this way and that, turning from fear to fear.
+		lore: "The hosts of Isengard roared, swaying this way and that, turning from fear to fear."
 		promotext: ""
 		alts: {
 			promos: {

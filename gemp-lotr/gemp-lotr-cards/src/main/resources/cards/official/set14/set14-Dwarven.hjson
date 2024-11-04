@@ -1,0 +1,65 @@
+{
+
+	14_1: {
+		cardInfo: {
+			imagePath: decipher/LOTR14001.jpg
+			//parentId: 14_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 14R1
+			rarity: R
+			setNum: "14"
+			cardNum: 1
+			style: Standard
+		}
+		title: Dáin Ironfoot
+		subtitle: King Under the Mountain
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 3
+		type: Companion
+		race: Dwarf
+		strength: 7
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: another,or(dwarf,and(culture(gandalf),man))
+					amount: -1
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				cost: {
+					type: discard
+					select: choose(or(culture(dwarven),culture(gandalf)),condition)
+				}
+				effect: {
+					type: discard
+					select: choose(minion)
+				}
+			}
+		]
+		gametext: Each of your other Dwarves and [gandalf] Men is twilight cost -1.<br>At the start of the regroup phase, you may discard a [dwarven] or [gandalf] condition from play to discard a minion from play.
+		lore: "'The time of my thought is my own to spend.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

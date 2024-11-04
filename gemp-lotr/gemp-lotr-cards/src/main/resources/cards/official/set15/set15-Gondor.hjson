@@ -3,7 +3,6 @@
 	15_54: {
 		cardInfo: {
 			imagePath: decipher/LOTR15054.jpg
-			javaClass: true
 			//parentId: 15_54
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -31,22 +30,22 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(hunter,companion)
-		            amount: 1
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(hunter,companion)
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Skirmish:</b> Exert Aragorn to make a hunter companion strength +1.
-		lore: Ride out with me. Ride out and meet them.
+		lore: "Ride out with me. Ride out and meet them."
 		promotext: ""
 		alts: {
 			promos: {
@@ -59,7 +58,6 @@
 	15_55: {
 		cardInfo: {
 			imagePath: decipher/LOTR15055.jpg
-			javaClass: true
 			//parentId: 15_55
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -87,34 +85,34 @@
 			Hunter 2
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: addThreats
-		        }
-		        effect: [
-		            {
-		                type: memorizeNumber
-		                memory: aragornStrength
-		                amount: {
-		                    type: Subtract
-		                    firstNumber: {
-                                type: forEachStrength
-                                filter: self
-                            }
-                            secondNumber: 1
-		                }
-		            }
-                    {
-                        type: exert
-                        select: choose(not(hunter),minion,MaxStrength(memory(aragornStrength)))
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: addThreats
+				}
+				effect: [
+					{
+						type: memorizeNumber
+						memory: aragornStrength
+						amount: {
+							type: Subtract
+							firstNumber: {
+								type: forEachStrength
+								filter: self
+							}
+							secondNumber: 1
+						}
+					}
+					{
+						type: exert
+						select: choose(not(hunter),minion,MaxStrength(memory(aragornStrength)))
+					}
+				]
+			}
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 2</b>. <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper><br><b>Maneuver:</b> Add a threat to exert a non- hunter minion with strength less than Aragorn.
-		lore: I will follow the Orcs....'
+		lore: "'I will follow the Orcs....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -127,7 +125,6 @@
 	15_56: {
 		cardInfo: {
 			imagePath: decipher/LOTR15056.jpg
-			javaClass: true
 			//parentId: 15_56
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -149,28 +146,28 @@
 		itemclass: Ranged weapon
 		target: title(Aragorn)
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: archer
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: archery
-		        cost: {
-		            type: addThreats
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(minion,lowestStrength(minion))
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: archer
+				}
+			}
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: wound
+					select: choose(minion,lowestStrength(minion))
+				}
+			}
 		]
 		gametext: Bearer must be Aragorn.<br>He is an <b>archer</b>.<br><b>Archery:</b> Add a threat to wound a minion with the lowest strength.
-		lore: The bow can reach what the sword cannot.
+		lore: "The bow can reach what the sword cannot."
 		promotext: ""
 		alts: {
 			promos: {
@@ -183,7 +180,6 @@
 	15_57: {
 		cardInfo: {
 			imagePath: decipher/LOTR15057.jpg
-			javaClass: true
 			//parentId: 15_57
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -211,24 +207,24 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: fellowship
-		        }
-		        cost: {
-		            type: addTwilight
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(ranger)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: addTwilight
+				}
+				effect: {
+					type: heal
+					select: choose(ranger)
+				}
+			}
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>At the start of each fellowship phase, you may add (1) to heal a ranger.
-		lore: Curse the Southrons!'
+		lore: "'Curse the Southrons!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -241,7 +237,6 @@
 	15_58: {
 		cardInfo: {
 			imagePath: decipher/LOTR15058.jpg
-			javaClass: true
 			//parentId: 15_58
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -266,32 +261,32 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        amount: {
-		            type: forEachYouCanSpot
-		            filter: culture(gondor),ranger
-		            multiplier: -1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: choose(culture(gondor),man)
-		            count: 2
-		        }
-		        effect: {
-		            type: transfer
-		            fromSupport: true
-		            select: self
-		            where: choose(minion,inSkirmishAgainst(culture(gondor),man))
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: culture(gondor),ranger
+					multiplier: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(culture(gondor),man)
+					count: 2
+				}
+				effect: {
+					type: transfer
+					fromSupport: true
+					select: self
+					where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+				}
+			}
 		]
 		gametext: <b>Fortification</b>. This condition is twilight cost -1 for each [gondor] ranger you spot.<br><b>Skirmish:</b> Exert 2 [gondor] Men to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
-		lore: In times of war, the beauty of the walls matters little.
+		lore: "In times of war, the beauty of the walls matters little."
 		promotext: ""
 		alts: {
 			promos: {
@@ -304,7 +299,6 @@
 	15_59: {
 		cardInfo: {
 			imagePath: decipher/LOTR15059.jpg
-			javaClass: true
 			//parentId: 15_59
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -331,138 +325,23 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(gondor),ranger)
-		            amount: 2
-		            until: regroup
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(gondor),ranger)
+					amount: 2
+					until: regroup
+				}
+			}
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>Each time this companion wins a skirmish, you may make a [gondor] ranger strength +2 until the regroup phase.
-		lore: We come to ambush the Men of Harad.'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	15_206: {
-		cardInfo: {
-			imagePath: decipher/LOTR15060.jpg
-			javaClass: true
-			//parentId: 15_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 15C60
-			rarity: C
-			setNum: "15"
-			cardNum: 60
-			style: Standard
-		}
-		title: Forth the Three Hunters!
-		subtitle: Gondor Version
-		unique: false
-		side: Free Peoples
-		culture: Gondor
-		twilight: 2
-		type: Condition
-		keywords: Support Area
-		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        cost: [
-                    {
-                        type: exert
-                        select: choose(name(Legolas))
-                    }
-                    {
-                        type: exert
-                        select: choose(name(Aragorn))
-                    }
-                ]
-                effect: {
-                    type: wound
-                    select: choose(minion)
-                }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: choose(name(Aragorn))
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: name(Gimli)
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(minion)
-		            amount: {
-		                type: Conditional
-		                requires: [
-                            {
-                                type: canSpot
-                                filter: name(Aragorn),hunter
-                            }
-                            {
-                                type: canSpot
-                                filter: name(Gimli),hunter
-                            }
-                        ]
-                        true: -3
-                        false: -1
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: choose(name(Gimli))
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: name(Legolas)
-		        }
-		        effect: {
-		            type: drawCards
-		            count: {
-		                type: Conditional
-		                requires: [
-                            {
-                                type: canSpot
-                                filter: name(Gimli),hunter
-                            }
-                            {
-                                type: canSpot
-                                filter: name(Legolas),hunter
-                            }
-                        ]
-                        true: 2
-                        false: 1
-		            }
-		        }
-		    }
-		]
-		gametext: <b>Archery:</b> Exert Legolas and exert Aragorn to wound a minion.<br><b>Skirmish:</b> Exert Aragorn and spot Gimli to make a minion strength -1 (or -3 if Aragorn and Gimli are hunters).<br><b>Regroup:</b> Exert Gimli and spot Legolas to draw a card (or 2 cards if Gimli and Legolas are hunters).
-		lore: ""
+		lore: "'We come to ambush the Men of Harad.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -475,7 +354,6 @@
 	15_61: {
 		cardInfo: {
 			imagePath: decipher/LOTR15061.jpg
-			javaClass: true
 			//parentId: 15_61
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -502,44 +380,44 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: {
-		            type: phase
-		            phase: play starting fellowship
-		        }
-		        amount: -1
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: choice
-		            texts: [
-		                Remove a {gondor} token
-		                Exert a {gondor} Man
-		            ]
-		            effects: [
-		                {
-		                    type: RemoveCultureTokens
-		                    culture: gondor
-		                    select: choose(any)
-		                }
-		                {
-		                    type: exert
-		                    select: choose(culture(gondor),man)
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: modifySiteNumber
-		            select: choose(minion)
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: phase
+					phase: play starting fellowship
+				}
+				amount: -1
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Remove a {gondor} token
+						Exert a {gondor} Man
+					]
+					effects: [
+						{
+							type: RemoveCultureTokens
+							culture: gondor
+							select: choose(any)
+						}
+						{
+							type: exert
+							select: choose(culture(gondor),man)
+						}
+					]
+				}
+				effect: {
+					type: modifySiteNumber
+					select: choose(minion)
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>.<br>When this companion is in your starting fellowship, he is twilight cost -1.<br><b>Skirmish:</b> Remove a [gondor] token or exert a [gondor] Man to make the site number of a minion +2.
-		lore: Rangers use all five senses to hunt their prey.
+		lore: "Rangers use all five senses to hunt their prey."
 		promotext: ""
 		alts: {
 			promos: {
@@ -552,7 +430,6 @@
 	15_62: {
 		cardInfo: {
 			imagePath: decipher/LOTR15062.jpg
-			javaClass: true
 			//parentId: 15_62
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -574,34 +451,34 @@
 		itemclass: Hand weapon
 		target: culture(gondor),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: roaming,minion
-		            }
-		            filter: bearer
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: bearer
-		            times: 2
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(roaming,minion)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: roaming,minion
+					}
+					filter: bearer
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: bearer
+					times: 2
+				}
+				effect: {
+					type: discard
+					select: choose(roaming,minion)
+				}
+			}
 		]
 		gametext: Bearer must be a [gondor] Man.<br>While you can spot a roaming minion, bearer is strength +1.<br><b>Maneuver:</b> Exert bearer twice to discard a roaming minion.
-		lore: Most Rangers of Ithilien carried spears, bows, and swords while marching.
+		lore: "Most Rangers of Ithilien carried spears, bows, and swords while marching."
 		promotext: ""
 		alts: {
 			promos: {
@@ -614,7 +491,6 @@
 	15_63: {
 		cardInfo: {
 			imagePath: decipher/LOTR15063.jpg
-			javaClass: true
 			//parentId: 15_63
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -642,25 +518,25 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,inSkirmishAgainst(roaming,minion)
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(roaming,minion,inSkirmishAgainst(self))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,inSkirmishAgainst(roaming,minion)
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: wound
+					select: choose(roaming,minion,inSkirmishAgainst(self))
+				}
+			}
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Skirmish:</b> Exert Mablung to wound a roaming minion he is skirmishing.
-		lore: We come to teach them another lesson.'
+		lore: "'We come to teach them another lesson.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -673,7 +549,6 @@
 	15_64: {
 		cardInfo: {
 			imagePath: decipher/LOTR15064.jpg
-			javaClass: true
 			//parentId: 15_64
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -701,33 +576,33 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: {
-		            type: canSpot
-		            filter: culture(gondor),ranger
-		            count: 2
-		        }
-		        amount: -2
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: maneuver
-		        }
-		        effect: {
-		            type: modifySiteNumber
-		            select: all(minion)
-		            amount: {
-		                type: forEachThreat
-		            }
-		            until: regroup
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: culture(gondor),ranger
+					count: 2
+				}
+				amount: -2
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				effect: {
+					type: modifySiteNumber
+					select: all(minion)
+					amount: {
+						type: forEachThreat
+					}
+					until: regroup
+				}
+			}
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>.<br>While you can spot 2 [gondor] rangers, Madril is twilight cost -2.<br>At the start of the maneuver phase, each minion is site number +1 for each threat you can spot until the start of the regroup phase.
-		lore: For that is the ruin of Osgiliath....'
+		lore: "'For that is the ruin of Osgiliath....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -740,7 +615,6 @@
 	15_65: {
 		cardInfo: {
 			imagePath: decipher/LOTR15065.jpg
-			javaClass: true
 			//parentId: 15_65
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -760,36 +634,36 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: name(Aragorn)
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(hunter,or(culture(dwarven),culture(elven)),companion)
-		            amount: 1
-		            until: regroup
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(gondor),man)
-		            amount: 2
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: name(Aragorn)
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(hunter,or(culture(dwarven),culture(elven)),companion)
+					amount: 1
+					until: regroup
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(gondor),man)
+					amount: 2
+				}
+			}
 		]
 		gametext: Each time Aragorn wins a skirmish, you may make a hunter [dwarven] companion or hunter [elven] companion strength +1 until the regroup phase.<br><b>Skirmish:</b> Discard this condition to make a [gondor] Man strength +2.
-		lore: ...we no longer need any trail to tell us which way....'
+		lore: "'...we no longer need any trail to tell us which way....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -802,7 +676,6 @@
 	15_66: {
 		cardInfo: {
 			imagePath: decipher/LOTR15066.jpg
-			javaClass: true
 			//parentId: 15_66
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -820,33 +693,33 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
-			    type: exert
-			    select: choose(culture(gondor),man)
+				type: exert
+				select: choose(culture(gondor),man)
 			}
 			effect: [
 				{
-				    type: wound
-				    select: choose(minion)
-				    memorize: chosenMinion
-				    times: {
-				        type: Conditional
-				        requires: {
-				            type: memoryMatches
-				            memory: chosenMinion
-				            filter: hunter
-				        }
-				        true: 2
-				        false: 1
-				    }
+					type: wound
+					select: choose(minion)
+					memorize: chosenMinion
+					times: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenMinion
+							filter: hunter
+						}
+						true: 2
+						false: 1
+					}
 				}
 			]
 		}
 		gametext: Exert a [gondor] Man to wound a minion (or wound that minion twice if it is a hunter).
-		lore: ...only the servants of the Dark Tower, or of the White.'
+		lore: "'...only the servants of the Dark Tower, or of the White.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -859,7 +732,6 @@
 	15_67: {
 		cardInfo: {
 			imagePath: decipher/LOTR15067.jpg
-			javaClass: true
 			//parentId: 15_67
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -884,45 +756,45 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        amount: {
-		            type: forEachYouCanSpot
-		            filter: culture(gondor),ranger
-		            multiplier: -1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert a {gondor} Man
-		                Spot 2 rangers
-		            ]
-		            effects: [
-		                {
-		                    type: exert
-		                    select: choose(culture(gondor),man)
-		                }
-		                {
-		                    type: spot
-		                    filter: ranger
-		                    count: 2
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: transfer
-		            fromSupport: true
-		            select: self
-		            where: choose(minion,inSkirmishAgainst(culture(gondor),man))
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: culture(gondor),ranger
+					multiplier: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Exert a {gondor} Man
+						Spot 2 rangers
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(culture(gondor),man)
+						}
+						{
+							type: spot
+							filter: ranger
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: transfer
+					fromSupport: true
+					select: self
+					where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+				}
+			}
 		]
 		gametext: <b>Fortification</b>. The twilight cost of this condition is -1 for each [gondor] ranger you spot.<br><b>Skirmish:</b> Exert a [gondor] Man or spot 2 rangers to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
-		lore: The doors of Minas Tirith were meant to keep out more than Orcs.
+		lore: "The doors of Minas Tirith were meant to keep out more than Orcs."
 		promotext: ""
 		alts: {
 			promos: {
@@ -935,7 +807,6 @@
 	15_68: {
 		cardInfo: {
 			imagePath: decipher/LOTR15068.jpg
-			javaClass: true
 			//parentId: 15_68
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -958,52 +829,52 @@
 		itemclass: Cloak
 		target: culture(gondor),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifySiteNumber
-		            requires: {
-		                type: or
-		                requires: [
-		                    {
-		                        type: canSpot
-		                        filter: bearer,ranger
-		                    }
-		                    {
-		                        type: location
-		                        filter: forest
-		                    }
-		                ]
-		            }
-		            filter: minion,inSkirmishAgainst(bearer)
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: choice
-		            texts: [
-		                Add a threat
-		                Exert bearer
-		            ]
-		            effects: [
-		                {
-		                    type: addThreats
-		                }
-		                {
-		                    type: exert
-		                    select: bearer
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: modifySiteNumber
-		            select: choose(minion,inSkirmishAgainst(culture(gondor),man))
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					requires: {
+						type: or
+						requires: [
+							{
+								type: canSpot
+								filter: bearer,ranger
+							}
+							{
+								type: location
+								filter: forest
+							}
+						]
+					}
+					filter: minion,inSkirmishAgainst(bearer)
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Add a threat
+						Exert bearer
+					]
+					effects: [
+						{
+							type: addThreats
+						}
+						{
+							type: exert
+							select: bearer
+						}
+					]
+				}
+				effect: {
+					type: modifySiteNumber
+					select: choose(minion,inSkirmishAgainst(culture(gondor),man))
+					amount: 2
+				}
+			}
 		]
 		gametext: Bearer must be a [gondor] Man.<br>While bearer is a ranger or at a forest site, each minion skirmishing bearer is site number +2.<br><b>Skirmish:</b> Add a threat or exert bearer to make a minion skirmishing a [gondor] Man site number +2.
 		lore: ""
@@ -1019,7 +890,6 @@
 	15_69: {
 		cardInfo: {
 			imagePath: decipher/LOTR15069.jpg
-			javaClass: true
 			//parentId: 15_69
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1046,22 +916,22 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfSkirmishInvolving
-		            filter: self
-		            against: roaming,minion
-		        }
-		        effect: {
-		            type: reinforceTokens
-		            culture: gondor
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfSkirmishInvolving
+					filter: self
+					against: roaming,minion
+				}
+				effect: {
+					type: reinforceTokens
+					culture: gondor
+				}
+			}
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>At the start of each skirmish involving this companion and a roaming minion, you may reinforce a [gondor] token.
-		lore: We have not found what we sought....'
+		lore: "'We have not found what we sought....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1074,7 +944,6 @@
 	15_70: {
 		cardInfo: {
 			imagePath: decipher/LOTR15070.jpg
-			javaClass: true
 			//parentId: 15_70
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1097,41 +966,41 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWoundsFromLosingSkirmish
-		            filter: character,inSkirmishAgainst(bearer)
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-                cost: {
-                    type: choice
-                    texts: [
-                        Exert a {gondor} Man
-                        Spot 3 rangers
-                    ]
-                    effects: [
-                        {
-                            type: exert
-                            select: choose(culture(gondor),man)
-                        }
-                        {
-                            type: spot
-                            filter: ranger
-                            count: 3
-                        }
-                    ]
-                }
-                effect: {
-                    type: transfer
-                    fromSupport: true
-                    select: self
-                    where: choose(minion,inSkirmishAgainst(culture(gondor),man))
-                }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWoundsFromLosingSkirmish
+					filter: character,inSkirmishAgainst(bearer)
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Exert a {gondor} Man
+						Spot 3 rangers
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(culture(gondor),man)
+						}
+						{
+							type: spot
+							filter: ranger
+							count: 3
+						}
+					]
+				}
+				effect: {
+					type: transfer
+					fromSupport: true
+					select: self
+					where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+				}
+			}
 		]
 		gametext: <b>Fortification</b>. Characters skirmishing bearer cannot take wounds from losing a skirmish involving bearer.<br><b>Skirmish:</b> Exert a [gondor] Man or spot 3 rangers to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
 		lore: ""
@@ -1147,7 +1016,6 @@
 	15_71: {
 		cardInfo: {
 			imagePath: decipher/LOTR15071.jpg
-			javaClass: true
 			//parentId: 15_71
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1174,20 +1042,20 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: roaming,minion
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: roaming,minion
+					}
+				}
+			}
 		]
 		gametext: <b>Ranger</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>This companion is strength +1 for each roaming minion you can spot.
-		lore: Their faces were hooded and masked with green, except for their eyes....
+		lore: "Their faces were hooded and masked with green, except for their eyes...."
 		promotext: ""
 		alts: {
 			promos: {

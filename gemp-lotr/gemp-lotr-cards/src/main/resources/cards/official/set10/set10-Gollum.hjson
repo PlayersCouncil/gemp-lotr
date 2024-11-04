@@ -3,7 +3,6 @@
 	10_19: {
 		cardInfo: {
 			imagePath: decipher/LOTR10019.jpg
-			javaClass: true
 			//parentId: 10_19
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,7 +20,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -31,36 +30,36 @@
 				memorize: playedPossession
 			}
 			cost: {
-			    type: choice
-			    texts: [
-			        Play Gollum from discard
-			        Play Gollum from hand
-			    ]
-			    effects: [
-			        {
-			            type: playCardFromDiscard
-			            select: choose(name(Gollum))
-			            discount: -2
-			            memorize: playedGollum
-			        }
-			        {
-			            type: PlayCardFromHand
-			            select: choose(name(Gollum))
-			            discount: -2
-			            memorize: playedGollum
-			        }
-			    ]
+				type: choice
+				texts: [
+					Play Gollum from discard
+					Play Gollum from hand
+				]
+				effects: [
+					{
+						type: playCardFromDiscard
+						select: choose(name(Gollum))
+						discount: -2
+						memorize: playedGollum
+					}
+					{
+						type: PlayCardFromHand
+						select: choose(name(Gollum))
+						discount: -2
+						memorize: playedGollum
+					}
+				]
 			}
 			effect: [
 				{
-				    type: startSkirmish
-				    fpCharacter: choose(hasAttached(memory(playedPossession)))
-				    against: memory(playedGollum)
+					type: startSkirmish
+					fpCharacter: choose(hasAttached(memory(playedPossession)))
+					against: memory(playedGollum)
 				}
 			]
 		}
 		gametext: If an opponent plays a possession on a companion, play Gollum at twilight cost -2 from your discard pile or hand to suspend the current phase. Begin a skirmish phase involving Gollum and that companion. When it ends, resume the suspended phase.
-		lore: Something struck Sam violently in the back....
+		lore: "Something struck Sam violently in the back...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -73,7 +72,6 @@
 	10_20: {
 		cardInfo: {
 			imagePath: decipher/LOTR10020.jpg
-			javaClass: true
 			//parentId: 10_20
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -93,51 +91,51 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: siteNumber(9)
-		            keyword: mountain
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: location
-		            filter: siteNumber(9)
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(name(Gollum))
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: [
-                    {
-                        type: usesSpecialAbility
-                        filter: side(free people)
-                        phase: maneuver
-                    }
-                    {
-                        type: usesSpecialAbility
-                        filter: side(free people)
-                        phase: archery
-                    }
-                ]
-                cost: {
-                    type: exert
-                    select: choose(name(Gollum))
-                }
-                effect: {
-                    type: cancelSpecialAbility
-                }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: siteNumber(9)
+					keyword: mountain
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: location
+					filter: siteNumber(9)
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(name(Gollum))
+				}
+			}
+			{
+				type: Response
+				trigger: [
+					{
+						type: usesSpecialAbility
+						filter: side(free people)
+						phase: maneuver
+					}
+					{
+						type: usesSpecialAbility
+						filter: side(free people)
+						phase: archery
+					}
+				]
+				cost: {
+					type: exert
+					select: choose(name(Gollum))
+				}
+				effect: {
+					type: cancelSpecialAbility
+				}
+			}
 		]
 		gametext: Any site 9 is a <b>mountain</b>.<br><b>Shadow:</b> If the fellowship is at any site 9, play Gollum from your discard pile.<br><b>Response:</b> If the Free Peoples player uses a maneuver or archery special ability, exert Gollum to cancel its effect.
-		lore: The fires below awoke in anger....
+		lore: "The fires below awoke in anger...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -150,7 +148,6 @@
 	10_21: {
 		cardInfo: {
 			imagePath: decipher/LOTR10021.jpg
-			javaClass: true
 			//parentId: 10_21
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -173,37 +170,37 @@
 		vitality: 4
 		site: 3
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: assignedToSkirmish
-		            side: free people
-		            filter: self
-		        }
-		        effect: {
-		            type: choice
-		            player: free people
-		            texts: [
-		                Make Gollum strength +3
-		                Add a burden
-		            ]
-		            effects: [
-		                {
-		                    type: modifyStrength
-		                    select: self
-		                    amount: 3
-		                    until: regroup
-		                }
-		                {
-		                    type: addBurdens
-		                    player: free people
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: assignedToSkirmish
+					side: free people
+					filter: self
+				}
+				effect: {
+					type: choice
+					player: free people
+					texts: [
+						Make Gollum strength +3
+						Add a burden
+					]
+					effects: [
+						{
+							type: modifyStrength
+							select: self
+							amount: 3
+							until: regroup
+						}
+						{
+							type: addBurdens
+							player: free people
+						}
+					]
+				}
+			}
 		]
 		gametext: To assign Gollum to a skirmish, the Free Peoples player must make Gollum strength +3 until the regroup phase or add a burden.
-		lore: ...swiftly but warily, creeping on behind, a slinking shadow among the stones.
+		lore: "...swiftly but warily, creeping on behind, a slinking shadow among the stones."
 		promotext: ""
 		alts: {
 			promos: {
@@ -216,7 +213,6 @@
 	10_22: {
 		cardInfo: {
 			imagePath: decipher/LOTR10022.jpg
-			javaClass: true
 			//parentId: 10_22
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -236,49 +232,49 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: assignment
-		        effect: {
-		            type: assignFpCharacterToSkirmish
-		            fpCharacter: choose(companion,hasAttached(artifact))
-		            minion: choose(name(Gollum))
-		            memorizeFPCharacter: chosenCompanion
-		            memorizeMinion: gollum
-		            preventText: Would you like to add a burden and assign Gollum to prevent assigning {chosenCompanion} to {gollum}?
-		            preventCost: {
-		                type: addBurdens
-		            }
-		            insteadEffect: {
-                        type: assignFpCharacterToSkirmish
-                        player: free people
-                        fpCharacter: choose(any)
-                        minion: choose(name(Gollum))
-                    }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: choose(name(Gollum))
-		            times: 2
-		        }
-		        effect: [
-		            {
-		                type: discard
-		                select: choose(possession)
-		            }
-		            {
-		                type: discard
-		                select: self
-		            }
-		        ]
-		    }
+			{
+				type: activated
+				phase: assignment
+				effect: {
+					type: assignFpCharacterToSkirmish
+					fpCharacter: choose(companion,hasAttached(artifact))
+					minion: choose(name(Gollum))
+					memorizeFPCharacter: chosenCompanion
+					memorizeMinion: gollum
+					preventText: Would you like to add a burden and assign Gollum to prevent assigning {chosenCompanion} to {gollum}?
+					preventCost: {
+						type: addBurdens
+					}
+					insteadEffect: {
+						type: assignFpCharacterToSkirmish
+						player: free people
+						fpCharacter: choose(any)
+						minion: choose(name(Gollum))
+					}
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: choose(name(Gollum))
+					times: 2
+				}
+				effect: [
+					{
+						type: discard
+						select: choose(possession)
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
 		]
 		gametext: <b>Assignment:</b> Assign Gollum to a companion bearing an artifact. The Free Peoples player may add a burden to prevent this and assign Gollum.<br><b>Regroup:</b> Exert Gollum twice to discard a possession. Discard this condition.
-		lore: ...white fangs gleamed, and then snapped as they bit.
+		lore: "...white fangs gleamed, and then snapped as they bit."
 		promotext: ""
 		alts: {
 			promos: {
@@ -291,7 +287,6 @@
 	10_23: {
 		cardInfo: {
 			imagePath: decipher/LOTR10023.jpg
-			javaClass: true
 			//parentId: 10_23
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -319,28 +314,28 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: name(Gollum)
-		        }
-		        effect: [
-		            {
-        		        type: disableSkirmishAssignment
-		                select: choose(companion)
-		                until: endOfTurn
-                    }
-                ]
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: name(Gollum)
+				}
+				effect: [
+					{
+						type: disableSkirmishAssignment
+						select: choose(companion)
+						until: endOfTurn
+					}
+				]
+			}
 		]
 		gametext: <b>Enduring</b>. <b>Fierce</b>.<br>When you play Shelob, if you can spot Gollum, you may spot a companion. That companion cannot be assigned to a skirmish until the end of the turn.
-		lore: ...she served none but herself, drinking the blood of Elves and Men....
+		lore: "...she served none but herself, drinking the blood of Elves and Men...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -353,7 +348,6 @@
 	10_24: {
 		cardInfo: {
 			imagePath: decipher/LOTR10024.jpg
-			javaClass: true
 			//parentId: 10_24
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -373,37 +367,37 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: haveInitiative
-		                side: shadow
-		            }
-		            filter: culture(gollum),minion
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(gollum),minion)
-		            amount: {
-		                type: forEachCulture
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: culture(gollum),minion
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(gollum),minion)
+					amount: {
+						type: forEachCulture
+					}
+				}
+			}
 		]
 		gametext: While you have initiative, each [gollum] minion is <b>damage +1</b>.<br><b>Skirmish:</b> Discard this condition to make a [gollum] minion strength +1 for each culture you can spot.
-		lore: ...she lusted for sweeter meat. And Gollum had brought it to her.
+		lore: "...she lusted for sweeter meat. And Gollum had brought it to her."
 		promotext: ""
 		alts: {
 			promos: {

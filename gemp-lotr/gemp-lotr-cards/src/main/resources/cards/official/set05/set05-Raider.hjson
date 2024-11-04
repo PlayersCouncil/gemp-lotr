@@ -3,7 +3,6 @@
 	5_70: {
 		cardInfo: {
 			imagePath: decipher/LOTR05070.jpg
-			javaClass: true
 			//parentId: 5_70
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -27,22 +26,22 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            removedTwilight: 3
-		            select: choose(culture(raider),mount)
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: playCardFromDiscard
+					removedTwilight: 3
+					select: choose(culture(raider),mount)
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br><b>Skirmish:</b> Remove (3) to play a [raider] mount from your discard pile.
-		lore: The desert lords of Harad support their huge forces with mammoth war beasts.
+		lore: "The desert lords of Harad support their huge forces with mammoth war beasts."
 		promotext: ""
 		alts: {
 			promos: {
@@ -55,7 +54,6 @@
 	5_71: {
 		cardInfo: {
 			imagePath: decipher/LOTR05071.jpg
-			javaClass: true
 			//parentId: 5_71
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -79,29 +77,29 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: removeTwilight
-		            amount: 9
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: another,southron
-		        }
-		        effect: {
-		            type: addModifier
-		            modifier: {
-                        type: modifyMoveLimit
-                        amount: -1
-		            }
-		            until: endOfTurn
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: removeTwilight
+					amount: 9
+				}
+				requires: {
+					type: canSpot
+					filter: another,southron
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: -1
+					}
+					until: endOfTurn
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br><b>Regroup:</b> Remove (9) and spot another Southron to make the move limit -1 for this turn (to a minimum of 1).
-		lore: The quick movements of Southron soldiers cut off all paths of retreat.
+		lore: "The quick movements of Southron soldiers cut off all paths of retreat."
 		promotext: ""
 		alts: {
 			promos: {
@@ -114,7 +112,6 @@
 	5_72: {
 		cardInfo: {
 			imagePath: decipher/LOTR05072.jpg
-			javaClass: true
 			//parentId: 5_72
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -141,25 +138,25 @@
 			Ambush 2
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        requires: {
-		            type: canSpotFPCultures
-		            amount: 4
-		        }
-		        effect: {
-		            type: exert
-		            select: all(companion)
-		        }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				requires: {
+					type: canSpotFPCultures
+					amount: 4
+				}
+				effect: {
+					type: exert
+					select: all(companion)
+				}
+			}
 		]
 		gametext: <b>Southron</b>. <b>Ambush (2)</b>.<br><b>Maneuver:</b> Exert this minion and spot 4 Free Peoples cultures to exert every companion.
-		lore: They strike only when their prey is haggard and tired.
+		lore: "They strike only when their prey is haggard and tired."
 		promotext: ""
 		alts: {
 			promos: {
@@ -172,7 +169,6 @@
 	5_73: {
 		cardInfo: {
 			imagePath: decipher/LOTR05073.jpg
-			javaClass: true
 			//parentId: 5_73
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -194,29 +190,29 @@
 		itemclass: Mount
 		target: southron
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: bearer
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: fierce
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
 		]
 		gametext: Bearer must be a Southron.<br>Bearer is <b>fierce</b>.<br>Each time bearer wins a skirmish, you may add (2).
-		lore: Sam saw a vast shape crash out of the trees and come careening down the slope.
+		lore: "Sam saw a vast shape crash out of the trees and come careening down the slope."
 		promotext: ""
 		alts: {
 			promos: {
@@ -229,7 +225,6 @@
 	5_74: {
 		cardInfo: {
 			imagePath: decipher/LOTR05074.jpg
-			javaClass: true
 			//parentId: 5_74
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -256,17 +251,17 @@
 			Ambush 2
 		]
 		effects: [
-		    {
-                type: modifyOwnCost
-                requires: {
-                    type: canSpot
-                    filter: southron
-                }
-                amount: -2
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: southron
+				}
+				amount: -2
+			}
 		]
 		gametext: <b>Southron</b>. <b>Ambush (2)</b>.<br>While you can spot a Southron, this minion's twilight cost is -2.
-		lore: Hardy desert warriors needed little rest.
+		lore: "Hardy desert warriors needed little rest."
 		promotext: ""
 		alts: {
 			promos: {
@@ -279,7 +274,6 @@
 	5_75: {
 		cardInfo: {
 			imagePath: decipher/LOTR05075.jpg
-			javaClass: true
 			//parentId: 5_75
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -306,17 +300,17 @@
 			Ambush 2
 		]
 		effects: [
-		    {
-                type: modifyOwnCost
-                requires: {
-                    type: canSpot
-                    filter: southron
-                }
-                amount: -2
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: southron
+				}
+				amount: -2
+			}
 		]
 		gametext: <b>Southron</b>. <b>Ambush (2)</b>.<br>While you can spot a Southron, this minion's twilight cost is -2.
-		lore: Swift scouts track enemy movements to set up surprise attacks.
+		lore: "Swift scouts track enemy movements to set up surprise attacks."
 		promotext: ""
 		alts: {
 			promos: {
@@ -329,7 +323,6 @@
 	5_76: {
 		cardInfo: {
 			imagePath: decipher/LOTR05076.jpg
-			javaClass: true
 			//parentId: 5_76
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -356,24 +349,24 @@
 			Ambush 2
 		]
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: southron
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: preventWound
-		            select: choose(southron)
-		        }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: southron
+				}
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: preventWound
+					select: choose(southron)
+				}
+			}
 		]
 		gametext: <b>Southron</b>. <b>Ambush (2)</b>.<br><b>Response:</b> If a Southron is about to take a wound, remove (3) to prevent that wound.
-		lore: Men of Harad were used to long journeys.
+		lore: "Men of Harad were used to long journeys."
 		promotext: ""
 		alts: {
 			promos: {
@@ -386,7 +379,6 @@
 	5_77: {
 		cardInfo: {
 			imagePath: decipher/LOTR05077.jpg
-			javaClass: true
 			//parentId: 5_77
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -406,39 +398,39 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: southron
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: [
-                    {
-                        type: chooseHowManyToSpot
-                        text: How many Men with ambush to spot?
-                        filter: man,ambush
-                        memorize: spotCount
-                    }
-                    {
-                        type: addTwilight
-                        amount: {
-                            type: fromMemory
-                            memory: spotCount
-                        }
-                    }
-                ]
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: southron
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						text: How many Men with ambush to spot?
+						filter: man,ambush
+						memorize: spotCount
+					}
+					{
+						type: addTwilight
+						amount: {
+							type: fromMemory
+							memory: spotCount
+						}
+					}
+				]
+			}
 		]
 		gametext: To play, spot a Southron. Plays to your support area.<br><b>Maneuver:</b> Discard this condition to add (1) for each Man with ambush you spot.
-		lore: Lacking arms and armor, the Haradrim use swift movements to outnumber their opponents.
+		lore: "Lacking arms and armor, the Haradrim use swift movements to outnumber their opponents."
 		promotext: ""
 		alts: {
 			promos: {
@@ -451,7 +443,6 @@
 	5_78: {
 		cardInfo: {
 			imagePath: decipher/LOTR05078.jpg
-			javaClass: true
 			//parentId: 5_78
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -473,31 +464,31 @@
 		itemclass: Mount
 		target: southron
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: losesSkirmish
-		            filter: character
-		            against: bearer
-		            overwhelm: true
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: 5
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: fierce
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: losesSkirmish
+					filter: character
+					against: bearer
+					overwhelm: true
+				}
+				effect: {
+					type: addTwilight
+					amount: 5
+				}
+			}
 		]
 		gametext: Bearer must be a Southron.<br>Bearer is <b>fierce</b>.<br>Each time bearer overwhelms a character, you may add (5).
-		lore: Big as a house, much bigger than a house, it looked to him, a grey-clad moving hill.'
+		lore: "'Big as a house, much bigger than a house, it looked to him, a grey-clad moving hill.'"
 		promotext: ""
 		alts: {
 			promos: {

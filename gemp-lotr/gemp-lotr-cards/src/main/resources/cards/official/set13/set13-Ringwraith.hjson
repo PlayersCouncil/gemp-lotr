@@ -3,7 +3,6 @@
 	13_178: {
 		cardInfo: {
 			imagePath: decipher/LOTR13178.jpg
-			javaClass: true
 			//parentId: 13_178
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,64 +20,64 @@
 		culture: Wraith
 		twilight: 3
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			cost: [
-                {
-                    type: exert
-                    select: choose(your,nazgul)
-                    times: 2
-                }
-                {
-                    type: spot
-                    select: choose(exhausted,companion)
-                    memorize: exhaustedCompanion
-                }
-            ]
+				{
+					type: exert
+					select: choose(your,nazgul)
+					times: 2
+				}
+				{
+					type: spot
+					select: choose(exhausted,companion)
+					memorize: exhaustedCompanion
+				}
+			]
 			effect: [
-                {
-                    type: if
-                    check: {
-                        type: location
-                        filter: regionNumber(1)
-                    }
-                    true: {
-                        type: costToEffect
-                        cost: {
-                            type: heal
-                            select: memory(exhaustedCompanion)
-                        }
-                        effect: {
-                            type: addBurdens
-                        }
-                    }
-                    false: {
-                        type: repeat
-                        times: {
-                            type: forEachWound
-                            filter: memory(exhaustedCompanion)
-                        }
-                        effect: {
-                            type: optional
-                            text: Would you like to heal {exhaustedCompanion} to add a burden?
-                            effect: {
-                                type: costToEffect
-                                cost: {
-                                    type: heal
-                                    select: memory(exhaustedCompanion)
-                                }
-                                effect: {
-                                    type: addBurdens
-                                }
-                            }
-                        }
-                    }
-                }
+				{
+					type: if
+					check: {
+						type: location
+						filter: regionNumber(1)
+					}
+					true: {
+						type: costToEffect
+						cost: {
+							type: heal
+							select: memory(exhaustedCompanion)
+						}
+						effect: {
+							type: addBurdens
+						}
+					}
+					false: {
+						type: repeat
+						times: {
+							type: forEachWound
+							filter: memory(exhaustedCompanion)
+						}
+						effect: {
+							type: optional
+							text: Would you like to heal {exhaustedCompanion} to add a burden?
+							effect: {
+								type: costToEffect
+								cost: {
+									type: heal
+									select: memory(exhaustedCompanion)
+								}
+								effect: {
+									type: addBurdens
+								}
+							}
+						}
+					}
+				}
 			]
 		}
 		gametext: To play, exert your Nazgûl twice and spot an exhausted companion.<br>Heal that companion to add a burden. If the fellowship is not in region 1, you may repeat this for each other wound on that companion.
-		lore: Men cast from the saddle lay grovelling on the ground.
+		lore: "Men cast from the saddle lay grovelling on the ground."
 		promotext: ""
 		alts: {
 			promos: {
@@ -91,7 +90,6 @@
 	13_179: {
 		cardInfo: {
 			imagePath: decipher/LOTR13179.jpg
-			javaClass: true
 			//parentId: 13_179
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -109,27 +107,27 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: [
-		    {
-		        type: discount
-		        discount: {
-		            type: ifRemoveFromDiscard
-		            filter: culture(wraith)
-		            count: 4
-		        }
-		    }
-            {
-                type: event
-                effect: [
-                    {
-                        type: modifyStrength
-                        select: choose(nazgul,inFierceSkirmish)
-                        amount: 2
-                    }
-                ]
-            }
-        ]
+			{
+				type: discount
+				discount: {
+					type: ifRemoveFromDiscard
+					filter: culture(wraith)
+					count: 4
+				}
+			}
+			{
+				type: event
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(nazgul,inFierceSkirmish)
+						amount: 2
+					}
+				]
+			}
+		]
 		gametext: You may remove from the game 4 [wraith] cards in your discard pile instead of paying the twilight cost for this card.<br>Make your Nazgûl in a fierce skirmish strength +2.
 		lore: Down, down it came, and then, folding its fingered webs, it gave a croaking cry....
 		promotext: ""
@@ -144,7 +142,6 @@
 	13_180: {
 		cardInfo: {
 			imagePath: decipher/LOTR13180.jpg
-			javaClass: true
 			//parentId: 13_180
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -162,47 +159,45 @@
 		culture: Wraith
 		twilight: 4
 		type: Event
-		timeword: Shadow
-		keywords: [
-			Toil 1
-		]
+		timewords: Shadow
+		keywords: Toil 1
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(wraith),your,zone(support)
+				type: canSpot
+				filter: culture(wraith),your,zone(support)
 			}
 			cost: {
-			    type: spot
-			    select: choose(companion)
-			    memorize: spottedCompanion
+				type: spot
+				select: choose(companion)
+				memorize: spottedCompanion
 			}
 			effect: [
 				{
-				    type: drawCards
-				    count: {
-				        type: sum
-				        source: [
-				            {
-				                type: forEachWound
-				                filter: memory(spottedCompanion)
-				            }
-				            {
-				                type: Conditional
-				                requires: {
-				                    type: canSpot
-				                    filter: nazgul
-				                }
-				                true: 1
-				                false: 0
-				            }
-				        ]
-				    }
+					type: drawCards
+					count: {
+						type: sum
+						source: [
+							{
+								type: forEachWound
+								filter: memory(spottedCompanion)
+							}
+							{
+								type: Conditional
+								requires: {
+									type: canSpot
+									filter: nazgul
+								}
+								true: 1
+								false: 0
+							}
+						]
+					}
 				}
 			]
 		}
 		gametext: <b>Toil 1</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -1.)</helper><br>To play, spot a [wraith] card in your support area.<br>Spot a companion to draw a card for each wound on that companion (and draw an additional card if you can spot a Nazgûl).
-		lore: ...it is called Minas Morgul, the Tower of Sorcery.'
+		lore: "'...it is called Minas Morgul, the Tower of Sorcery.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -215,7 +210,6 @@
 	13_181: {
 		cardInfo: {
 			imagePath: decipher/LOTR13181.jpg
-			javaClass: true
 			//parentId: 13_181
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -235,55 +229,55 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: wraith
-		            select: self
-		            count: {
-		                type: forEachYouCanSpot
-		                filter: culture(wraith),your,zone(support)
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: choice
-		            texts: [
-		                Discard this from play
-		                Remove 2 tokens from here
-		            ]
-		            effects: [
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		                {
-		                    type: RemoveCultureTokens
-		                    select: self
-		                    count: 2
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(culture(wraith),mount)
-		            on: your,culture(wraith),minion
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: wraith
+					select: self
+					count: {
+						type: forEachYouCanSpot
+						filter: culture(wraith),your,zone(support)
+					}
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: choice
+					texts: [
+						Discard this from play
+						Remove 2 tokens from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							select: self
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(culture(wraith),mount)
+					on: your,culture(wraith),minion
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: When you play this, you may add a [wraith] token here for each [wraith] card in your support area.<br><b>Shadow:</b> Discard this from play or remove 2 tokens from here to play a [wraith] mount from your draw deck on your [wraith] minion.
-		lore: That is the worst news that has come to Bree....'
+		lore: "'That is the worst news that has come to Bree....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -296,7 +290,6 @@
 	13_182: {
 		cardInfo: {
 			imagePath: decipher/LOTR13182.jpg
-			javaClass: true
 			//parentId: 13_182
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -321,39 +314,39 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: other,nazgul
-		            count: 2
-		        }
-		        effect: {
-		            type: if
-		            check: {
-		                type: canSpot
-		                filter: companion
-		                count: 6
-		            }
-		            true: {
-		                type: exert
-		                select: all(companion)
-		            }
-		            false: {
-		                type: exert
-		                select: choose(unbound,companion)
-		                count: 2
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: other,nazgul
+					count: 2
+				}
+				effect: {
+					type: if
+					check: {
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+					true: {
+						type: exert
+						select: all(companion)
+					}
+					false: {
+						type: exert
+						select: choose(unbound,companion)
+						count: 2
+					}
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>When you play Úlairë Enquëa, if you can spot 2 other Nazgûl, you may exert 2 unbound companions (or exert each companion if you can spot 6 companions).
-		lore: It is many a year since the Nine walked abroad.'
+		lore: "'It is many a year since the Nine walked abroad.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -366,7 +359,6 @@
 	13_183: {
 		cardInfo: {
 			imagePath: decipher/LOTR13183.jpg
-			javaClass: true
 			//parentId: 13_183
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -391,28 +383,28 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: [
-                    {
-                        type: exert
-                        select: self
-                    }
-                    {
-                        type: discardFromHand
-                        forced: false
-                        select: choose(nazgul)
-                    }
-               ]
-               effect: {
-                    type: discard
-                    select: choose(condition)
-               }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: discardFromHand
+						forced: false
+						select: choose(nazgul)
+					}
+			   ]
+			   effect: {
+					type: discard
+					select: choose(condition)
+			   }
+			}
 		]
 		gametext: <b>Fierce</b>.<br><b>Shadow:</b> Exert Úlairë Lemenya and discard a Nazgûl from your hand to discard a condition from play.
-		lore: As the Shadow grows once more, they too may walk again.'
+		lore: "'As the Shadow grows once more, they too may walk again.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -425,7 +417,6 @@
 	13_184: {
 		cardInfo: {
 			imagePath: decipher/LOTR13184.jpg
-			javaClass: true
 			//parentId: 13_184
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -450,17 +441,17 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: {
-		            type: canSpot
-		            filter: companion,maxResistance(3)
-		        }
-		        amount: -2
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: companion,maxResistance(3)
+				}
+				amount: -2
+			}
 		]
 		gametext: <b>Fierce</b>.<br>While you can spot a companion who has resistance 3 or less, Úlairë Nertëa is twilight cost -2.
-		lore: From inside the hood came a noise as of someone sniffling to catch an elusive scent....
+		lore: "From inside the hood came a noise as of someone sniffling to catch an elusive scent...."
 		promotext: ""
 		alts: {
 			promos: {

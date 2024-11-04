@@ -3,7 +3,6 @@
 	11_227: {
 		cardInfo: {
 			imagePath: decipher/LOTR11227.jpg
-			javaClass: true
 			//parentId: 11_227
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -23,19 +22,19 @@
 		direction: Left
 		keywords: River
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            side: shadow
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: companion
-		                over: 4
-		                multiplier: 2
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+						multiplier: 2
+					}
+				}
+			}
 		]
 		gametext: <b>River</b>. The minion archery total is +2 for each companion in the fellowship over 4.
 		lore: ""
@@ -51,7 +50,6 @@
 	11_228: {
 		cardInfo: {
 			imagePath: decipher/LOTR11228.jpg
-			javaClass: true
 			//parentId: 11_228
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -71,17 +69,17 @@
 		direction: Right
 		keywords: River
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        effect: {
-		            type: discard
-		            select: all(ally)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: all(ally)
+				}
+			}
 		]
 		gametext: <b>River</b>. When the fellowship moves to this site, discard each ally from play.
 		lore: ""
@@ -97,7 +95,6 @@
 	11_229: {
 		cardInfo: {
 			imagePath: decipher/LOTR11229.jpg
-			javaClass: true
 			//parentId: 11_229
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -117,24 +114,24 @@
 		direction: Right
 		keywords: Mountain
 		effects: [
-		    {
-		        type: trigger
-		        player: free people
-		        trigger: {
-		            type: startOfPhase
-		            phase: fellowship
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(dwarf)
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(culture(dwarven),possession)
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: trigger
+				player: free people
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: exert
+					select: choose(dwarf)
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(culture(dwarven),possession)
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Mountain</b>. At the start of your fellowship phase, you may exert a Dwarf to play a [dwarven] possession from your draw deck.
 		lore: ""
@@ -150,7 +147,6 @@
 	11_230: {
 		cardInfo: {
 			imagePath: decipher/LOTR11230.jpg
-			javaClass: true
 			//parentId: 11_230
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -170,19 +166,19 @@
 		direction: Left
 		keywords: Dwelling
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: PlayCardFromHand
-		            select: choose(nazgul)
-		        }
-		        effect:
-		        {
-		            type: discard
-		            select: choose(condition)
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: PlayCardFromHand
+					select: choose(nazgul)
+				}
+				effect:
+				{
+					type: discard
+					select: choose(condition)
+				}
+			}
 		]
 		gametext: <b>Dwelling</b>. <b>Shadow:</b> Play a Nazgûl to discard a condition from play.
 		lore: ""
@@ -198,7 +194,6 @@
 	11_231: {
 		cardInfo: {
 			imagePath: decipher/LOTR11231.jpg
-			javaClass: true
 			//parentId: 11_231
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -218,12 +213,12 @@
 		direction: Left
 		keywords: Forest
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: noMoreThanOneMinionMayBeAssignedToEachSkirmish
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: noMoreThanOneMinionMayBeAssignedToEachSkirmish
+				}
+			}
 		]
 		gametext: <b>Forest</b>. No more than 1 minion can be assigned to each skirmish.
 		lore: ""
@@ -239,7 +234,6 @@
 	11_232: {
 		cardInfo: {
 			imagePath: decipher/LOTR11232.jpg
-			javaClass: true
 			//parentId: 11_232
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -259,13 +253,13 @@
 		direction: Right
 		keywords: Underground
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: CantUseSpecialAbilities
-		            phase: skirmish
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: CantUseSpecialAbilities
+					phase: skirmish
+				}
+			}
 		]
 		gametext: <b>Underground</b>. Skirmish special abilities cannot be used.
 		lore: ""
@@ -281,7 +275,6 @@
 	11_233: {
 		cardInfo: {
 			imagePath: decipher/LOTR11233.jpg
-			javaClass: true
 			//parentId: 11_233
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -301,12 +294,12 @@
 		direction: Right
 		keywords: Underground
 		effects: [
-            {
-                type: modifier
-                modifier: {
-                    type: transferForFree
-                }
-            }
+			{
+				type: modifier
+				modifier: {
+					type: transferForFree
+				}
+			}
 		]
 		gametext: <b>Underground</b>. The Free Peoples player may transfer Free Peoples artifacts and possessions at no twilight cost.
 		lore: ""
@@ -322,7 +315,6 @@
 	11_234: {
 		cardInfo: {
 			imagePath: decipher/LOTR11234.jpg
-			javaClass: true
 			//parentId: 11_234
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -342,21 +334,21 @@
 		direction: Left
 		keywords: Mountain
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesFrom
-		            filter: self,regionNumber(2)
-		        }
-		        requires: {
-		            type: phase
-		            phase: regroup
-		        }
-		        effect: {
-		            type: wound
-		            select: all(companion)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self,regionNumber(2)
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: wound
+					select: all(companion)
+				}
+			}
 		]
 		gametext: <b>Mountain</b>. If this site is in region 2 when the fellowship moves from it during the regroup phase, wound each companion.
 		lore: ""
@@ -372,7 +364,6 @@
 	11_235: {
 		cardInfo: {
 			imagePath: decipher/LOTR11235.jpg
-			javaClass: true
 			//parentId: 11_235
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -399,11 +390,11 @@
 			}
 			optional: true
 			effect: {
-                type: playCardFromDrawDeck
-                select: choose(culture(gollum),side(free peoples))
-                showAll: true
-                shuffle: true
-		    }
+				type: playCardFromDrawDeck
+				select: choose(culture(gollum),side(free peoples))
+				showAll: true
+				shuffle: true
+			}
 		}
 		gametext: <b>Marsh</b>. At the start of your fellowship phase, you may play a [gollum] Free Peoples card from your draw deck.
 		lore: ""
@@ -419,7 +410,6 @@
 	11_236: {
 		cardInfo: {
 			imagePath: decipher/LOTR11236.jpg
-			javaClass: true
 			//parentId: 11_236
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -439,14 +429,14 @@
 		direction: Left
 		keywords: Forest
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            filter: companion
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: companion
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Forest</b>. Each companion is twilight cost +2.
 		lore: ""
@@ -462,7 +452,6 @@
 	11_237: {
 		cardInfo: {
 			imagePath: decipher/LOTR11237.jpg
-			javaClass: true
 			//parentId: 11_237
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -482,20 +471,20 @@
 		direction: Left
 		keywords: Plains
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: choose(your,character,not(enduring))
-		            memorize: exertedCharacter
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: memory(exertedCharacter)
-		            amount: 2
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(your,character,not(enduring))
+					memorize: exertedCharacter
+				}
+				effect: {
+					type: modifyStrength
+					select: memory(exertedCharacter)
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Plains</b>. <b>Skirmish:</b> Exert your character (except an enduring character), to make it strength +2.
 		lore: ""
@@ -511,7 +500,6 @@
 	11_238: {
 		cardInfo: {
 			imagePath: decipher/LOTR11238.jpg
-			javaClass: true
 			//parentId: 11_238
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -531,29 +519,29 @@
 		direction: Right
 		keywords: Marsh
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-                requires: {
-                    type: isLessThanOrEqual
-                    firstNumber: {
-                        type: sum
-                        source: [
-                            {
-                                type: forEachYouCanSpot
-                                filter: minion
-                            }
-                            twilightCount
-                        ]
-                    }
-                    secondNumber: 3
-                }
-                effect: {
-                    type: PlayCardFromHand
-                    select: choose(minion)
-                    discount: -3
-                }
-		    }
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: isLessThanOrEqual
+					firstNumber: {
+						type: sum
+						source: [
+							{
+								type: forEachYouCanSpot
+								filter: minion
+							}
+							twilightCount
+						]
+					}
+					secondNumber: 3
+				}
+				effect: {
+					type: PlayCardFromHand
+					select: choose(minion)
+					discount: -3
+				}
+			}
 		]
 		gametext: <b>Marsh</b>. <b>Shadow:</b> If the total number of minions and twilight tokens is 3 or fewer, play a minion at twilight cost -3.
 		lore: ""
@@ -569,7 +557,6 @@
 	11_239: {
 		cardInfo: {
 			imagePath: decipher/LOTR11239.jpg
-			javaClass: true
 			//parentId: 11_239
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -589,20 +576,20 @@
 		direction: Right
 		keywords: Forest
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: side(free people),weapon
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachYouCanSpot
+						filter: side(free people),weapon
+					}
+				}
+			}
 		]
 		gametext: <b>Forest</b>. When the fellowship moves to this site, add (1) for each Free Peoples weapon.
 		lore: ""
@@ -618,7 +605,6 @@
 	11_240: {
 		cardInfo: {
 			imagePath: decipher/LOTR11240.jpg
-			javaClass: true
 			//parentId: 11_240
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -638,14 +624,14 @@
 		direction: Left
 		keywords: Plains
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyStrength
-                    filter: unbound,companion,inSkirmishAgainstAtLeast(2,minion)
-                    amount: 3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: unbound,companion,inSkirmishAgainstAtLeast(2,minion)
+					amount: 3
+				}
+			}
 		]
 		gametext: <b>Plains</b>. Each unbound companion skirmishing more than 1 minion is strength +3.
 		lore: ""
@@ -661,7 +647,6 @@
 	11_241: {
 		cardInfo: {
 			imagePath: decipher/LOTR11241.jpg
-			javaClass: true
 			//parentId: 11_241
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -681,22 +666,22 @@
 		direction: Left
 		keywords: Battleground
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: companion
-		                over: 5
-		                multiplier: 2
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 5
+						multiplier: 2
+					}
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. When the fellowship moves to this site, add (2) for each companion over 5.
 		lore: ""
@@ -712,7 +697,6 @@
 	11_242: {
 		cardInfo: {
 			imagePath: decipher/LOTR11242.jpg
-			javaClass: true
 			//parentId: 11_242
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -732,25 +716,25 @@
 		direction: Right
 		keywords: Dwelling
 		effects: [
-		    {
-		        type: trigger
-		        player: free people
-		        trigger: {
-		            type: startOfPhase
-		            phase: fellowship
-		        }
-                cost: {
-                    type: exert
-                    select: choose(hobbit)
-                    count: 2
-                }
-                effect: {
-                    type: playCardFromDrawDeck
-                    select: choose(hobbit)
-                    showAll: true
-                    shuffle: true
-                }
-		    }
+			{
+				type: trigger
+				player: free people
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: exert
+					select: choose(hobbit)
+					count: 2
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(hobbit)
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Dwelling</b>. At the start of your fellowship phase, you may exert 2 Hobbits to play a Hobbit from your draw deck.
 		lore: ""
@@ -766,7 +750,6 @@
 	11_243: {
 		cardInfo: {
 			imagePath: decipher/LOTR11243.jpg
-			javaClass: true
 			//parentId: 11_243
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -786,40 +769,40 @@
 		direction: Right
 		keywords: Plains
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: constantlyCheck
-		        }
-		        requires: {
-		            type: not
-		            requires: {
-		                type: phase
-		                phase: regroup
-		            }
-		        }
-		        effect: {
-		            type: addTrigger
-		            trigger: {
-		                type: constantlyCheck
-		            }
-		            requires: {
-		                type: canSpot
-		                filter: minion,fierce,inSkirmishAgainst(culture(rohan),companion)
-		            }
-		            effect: {
-		                type: addModifier
-		                modifier: {
-		                    type: removeKeyword
-		                    filter: minion,fierce,inSkirmishAgainst(culture(rohan),companion)
-		                    keyword: fierce
-		                }
-		                until: regroup
-		            }
-		            until: regroup
-		        }
-		        limitPerTurn: 1
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+				}
+				requires: {
+					type: not
+					requires: {
+						type: phase
+						phase: regroup
+					}
+				}
+				effect: {
+					type: addTrigger
+					trigger: {
+						type: constantlyCheck
+					}
+					requires: {
+						type: canSpot
+						filter: minion,fierce,inSkirmishAgainst(culture(rohan),companion)
+					}
+					effect: {
+						type: addModifier
+						modifier: {
+							type: removeKeyword
+							filter: minion,fierce,inSkirmishAgainst(culture(rohan),companion)
+							keyword: fierce
+						}
+						until: regroup
+					}
+					until: regroup
+				}
+				limitPerTurn: 1
+			}
 		]
 		gametext: <b>Plains</b>. Until the regroup phase, each minion skirmishing a [rohan] companion loses <b>fierce</b> and cannot gain fierce.
 		lore: ""
@@ -835,7 +818,6 @@
 	11_244: {
 		cardInfo: {
 			imagePath: decipher/LOTR11244.jpg
-			javaClass: true
 			//parentId: 11_244
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -855,20 +837,20 @@
 		direction: Right
 		keywords: Battleground
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        player: free people
-		        trigger: {
-		            type: winsSkirmish
-		            filter: culture(gandalf),companion
-		        }
-		        effect:
-		        {
-		            type: discard
-		            select: choose(condition)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				player: free people
+				trigger: {
+					type: winsSkirmish
+					filter: culture(gandalf),companion
+				}
+				effect:
+				{
+					type: discard
+					select: choose(condition)
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. Each time a [gandalf] companion wins a skirmish, the Free Peoples player may discard a condition from play.
 		lore: ""
@@ -884,7 +866,6 @@
 	11_245: {
 		cardInfo: {
 			imagePath: decipher/LOTR11245.jpg
-			javaClass: true
 			//parentId: 11_245
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -904,14 +885,14 @@
 		direction: Left
 		keywords: Battleground
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: character,hasAttached(hand weapon)
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: character,hasAttached(hand weapon)
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. Each character bearing a hand weapon is strength +2.
 		lore: ""
@@ -927,7 +908,6 @@
 	11_246: {
 		cardInfo: {
 			imagePath: decipher/LOTR11246.jpg
-			javaClass: true
 			//parentId: 11_246
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -947,17 +927,17 @@
 		direction: Left
 		keywords: Marsh
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: choose(your,or(name(Gollum),name(Sméagol)))
-		        }
-		        effect: {
-		            type: playNextSite
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: choose(your,or(name(Gollum),name(Sméagol)))
+				}
+				effect: {
+					type: playNextSite
+				}
+			}
 		]
 		gametext: <b>Marsh</b>. <b>Regroup:</b> Exert your Gollum or your Sméagol to play the fellowship's next site.
 		lore: ""
@@ -973,7 +953,6 @@
 	11_247: {
 		cardInfo: {
 			imagePath: decipher/LOTR11247.jpg
-			javaClass: true
 			//parentId: 11_247
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -993,23 +972,23 @@
 		direction: Left
 		keywords: Underground
 		effects: [
-		    {
-		        type: trigger
-		        player: free people
-		        optional: true
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: dwarf
-		        }
-		        effect: {
-		            type: drawCards
-		            count: 2
-		        }
-		    }
+			{
+				type: trigger
+				player: free people
+				optional: true
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: dwarf
+				}
+				effect: {
+					type: drawCards
+					count: 2
+				}
+			}
 		]
 		gametext: <b>Underground</b>. When your fellowship moves from this site, you may spot a Dwarf to draw 2 cards.
 		lore: ""
@@ -1025,7 +1004,6 @@
 	11_248: {
 		cardInfo: {
 			imagePath: decipher/LOTR11248.jpg
-			javaClass: true
 			//parentId: 11_248
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1045,15 +1023,15 @@
 		direction: Left
 		keywords: Underground
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: character,hasAttached(hand weapon)
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: character,hasAttached(hand weapon)
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Underground</b>. Each character bearing a hand weapon is <b>damage +1</b>.
 		lore: ""
@@ -1069,7 +1047,6 @@
 	11_249: {
 		cardInfo: {
 			imagePath: decipher/LOTR11249.jpg
-			javaClass: true
 			//parentId: 11_249
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1089,23 +1066,23 @@
 		direction: Left
 		keywords: Marsh
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        effect: [
-		            {
-		                type: heal
-		                select: all(character,minResistance(5))
-		            }
-		            {
-		                type: exert
-		                select: all(character,maxResistance(4))
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: [
+					{
+						type: heal
+						select: all(character,minResistance(5))
+					}
+					{
+						type: exert
+						select: all(character,maxResistance(4))
+					}
+				]
+			}
 		]
 		gametext: <b>Marsh</b>. When the fellowship moves to here, heal each character who has resistance 5 or more and exert each other character.
 		lore: ""
@@ -1121,7 +1098,6 @@
 	11_250: {
 		cardInfo: {
 			imagePath: decipher/LOTR11250.jpg
-			javaClass: true
 			//parentId: 11_250
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1141,14 +1117,14 @@
 		direction: Right
 		keywords: River
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            side: shadow
-		            amount: -3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: -3
+				}
+			}
 		]
 		gametext: <b>River</b>. The minion archery total is -3.
 		lore: ""
@@ -1164,7 +1140,6 @@
 	11_251: {
 		cardInfo: {
 			imagePath: decipher/LOTR11251.jpg
-			javaClass: true
 			//parentId: 11_251
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1184,20 +1159,20 @@
 		direction: Right
 		keywords: Forest
 		effects: [
-		    {
-		        type: trigger
-		        player: free people
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: fellowship
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(elf)
-		            count: 2
-		        }
-		    }
+			{
+				type: trigger
+				player: free people
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				effect: {
+					type: heal
+					select: choose(elf)
+					count: 2
+				}
+			}
 		]
 		gametext: <b>Forest</b>. At the start of your fellowship phase, you may heal 2 Elves.
 		lore: ""
@@ -1213,7 +1188,6 @@
 	11_252: {
 		cardInfo: {
 			imagePath: decipher/LOTR11252.jpg
-			javaClass: true
 			//parentId: 11_252
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1233,22 +1207,22 @@
 		direction: Right
 		keywords: Battleground
 		effects: [
-		    {
-		        type: trigger
-		        player: free people
-		        optional: true
-		        trigger: {
-		            type: movesFrom
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpotBurdens
-		            amount: 3
-		        }
-		        effect: {
-		            type: removeBurdens
-		        }
-		    }
+			{
+				type: trigger
+				player: free people
+				optional: true
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				requires: {
+					type: canSpotBurdens
+					amount: 3
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. When the fellowship moves from this site, the Free Peoples player may spot 3 burdens to remove a burden.
 		lore: ""
@@ -1264,7 +1238,6 @@
 	11_253: {
 		cardInfo: {
 			imagePath: decipher/LOTR11253.jpg
-			javaClass: true
 			//parentId: 11_253
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1284,15 +1257,15 @@
 		direction: Left
 		keywords: Plains
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: addKeyword
-                    filter: culture(men),minion
-                    keyword: ambush
-                    amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: culture(men),minion
+					keyword: ambush
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Plains</b>. Each [men] minion gains <b>ambush</b> (1).
 		lore: ""
@@ -1308,7 +1281,6 @@
 	11_254: {
 		cardInfo: {
 			imagePath: decipher/LOTR11254.jpg
-			javaClass: true
 			//parentId: 11_254
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1328,31 +1300,31 @@
 		direction: Right
 		keywords: Plains
 		effects: [
-		    {
-		        type: trigger
-		        player: free people
-		        trigger: {
-		            type: startOfPhase
-		            phase: maneuver
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Add a burden
-		                Discard 3 cards from hand
-		            ]
-		            effects: [
-		                {
-		                    type: addBurdens
-		                }
-		                {
-		                    type: discardFromHand
-		                    forced: false
-		                    count: 3
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: trigger
+				player: free people
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add a burden
+						Discard 3 cards from hand
+					]
+					effects: [
+						{
+							type: addBurdens
+						}
+						{
+							type: discardFromHand
+							forced: false
+							count: 3
+						}
+					]
+				}
+			}
 		]
 		gametext: <b>Plains</b>. At the start of the maneuver phase, the Free Peoples player must add a burden or discard 3 cards from hand.
 		lore: ""
@@ -1368,7 +1340,6 @@
 	11_255: {
 		cardInfo: {
 			imagePath: decipher/LOTR11255.jpg
-			javaClass: true
 			//parentId: 11_255
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1388,24 +1359,24 @@
 		direction: Right
 		keywords: Mountain
 		effects: [
-		    {
-		        type: trigger
-		        player: free people
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: fellowship
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(companion)
-		            count: 3
-		        }
-		        effect: {
-		            type: playCardFromDeadPile
-		            select: choose(wizard)
-		        }
-		    }
+			{
+				type: trigger
+				player: free people
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: exert
+					select: choose(companion)
+					count: 3
+				}
+				effect: {
+					type: playCardFromDeadPile
+					select: choose(wizard)
+				}
+			}
 		]
 		gametext: <b>Mountain</b>. At the start of your fellowship phase, you may exert 3 companions to play a Wizard from your dead pile.
 		lore: ""
@@ -1421,7 +1392,6 @@
 	11_256: {
 		cardInfo: {
 			imagePath: decipher/LOTR11256.jpg
-			javaClass: true
 			//parentId: 11_256
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1441,24 +1411,24 @@
 		direction: Right
 		keywords: Dwelling
 		effects: [
-		    {
-		        type: trigger
-		        player: free people
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: fellowship
-		        }
-		        cost: {
-		            type: addBurdens
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(ranger)
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: trigger
+				player: free people
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: addBurdens
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(ranger)
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Dwelling</b>. At the start of your fellowship phase, you may add a burden to play a ranger from your draw deck.
 		lore: ""
@@ -1474,7 +1444,6 @@
 	11_257: {
 		cardInfo: {
 			imagePath: decipher/LOTR11257.jpg
-			javaClass: true
 			//parentId: 11_257
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1494,17 +1463,17 @@
 		direction: Right
 		keywords: Plains
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: cantTakeWounds
-                    requires: {
-                        type: phase
-                        phase: archery
-                    }
-                    filter: culture(uruk-hai),minion
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: phase
+						phase: archery
+					}
+					filter: culture(uruk-hai),minion
+				}
+			}
 		]
 		gametext: <b>Plains</b>. During the archery phase, [uruk-hai] minions cannot take wounds.
 		lore: ""
@@ -1520,7 +1489,6 @@
 	11_258: {
 		cardInfo: {
 			imagePath: decipher/LOTR11258.jpg
-			javaClass: true
 			//parentId: 11_258
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1540,16 +1508,16 @@
 		direction: Right
 		keywords: Battleground
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-                    type: killed
-                    filter: companion
-		        }
-		        effect: {
-		            type: addBurdens
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: killed
+					filter: companion
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
 		]
 		gametext: <b>Battleground</b>. Each time a companion is killed, add a burden.
 		lore: ""
@@ -1565,7 +1533,6 @@
 	11_259: {
 		cardInfo: {
 			imagePath: decipher/LOTR11259.jpg
-			javaClass: true
 			//parentId: 11_259
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1584,25 +1551,25 @@
 		block: Shadows
 		direction: Left
 		effects: [
-		    {
-		        type: trigger
-		        player: free people
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: fellowship
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(culture(rohan),man)
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(culture(rohan),mount)
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: trigger
+				player: free people
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: exert
+					select: choose(culture(rohan),man)
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(culture(rohan),mount)
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: At the start of your fellowship phase, you may exert a [rohan] Man to play a [rohan] mount from your draw deck.
 		lore: ""
@@ -1618,7 +1585,6 @@
 	11_260: {
 		cardInfo: {
 			imagePath: decipher/LOTR11260.jpg
-			javaClass: true
 			//parentId: 11_260
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1638,19 +1604,19 @@
 		direction: Left
 		keywords: Forest
 		effects: [
-		    {
-		        type: trigger
-		        player: free people
-		        optional: true
-		        trigger: {
-                    type: played
-                    filter: or(artifact,possession)
-                    on: your,companion
-		        }
-		        effect: {
-                    type: drawCards
-		        }
-		    }
+			{
+				type: trigger
+				player: free people
+				optional: true
+				trigger: {
+					type: played
+					filter: or(artifact,possession)
+					on: your,companion
+				}
+				effect: {
+					type: drawCards
+				}
+			}
 		]
 		gametext: <b>Forest</b>. Each time you play an artifact or possession on your companion, you may draw a card.
 		lore: ""
@@ -1666,7 +1632,6 @@
 	11_261: {
 		cardInfo: {
 			imagePath: decipher/LOTR11261.jpg
-			javaClass: true
 			//parentId: 11_261
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1689,18 +1654,18 @@
 			River
 		]
 		effects: [
-		    {
-		        type: trigger
-		        player: free people
-		        trigger: {
-                    type: movesTo
-                    filter: self
-		        }
-		        effect: {
-		            type: heal
-		            select: all(hobbit,companion)
-		        }
-		    }
+			{
+				type: trigger
+				player: free people
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: heal
+					select: all(hobbit,companion)
+				}
+			}
 		]
 		gametext: <b>Dwelling</b>. <b>River</b>. When your fellowship moves to this site, you may heal each Hobbit companion.
 		lore: ""
@@ -1716,7 +1681,6 @@
 	11_262: {
 		cardInfo: {
 			imagePath: decipher/LOTR11262.jpg
-			javaClass: true
 			//parentId: 11_262
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1736,19 +1700,19 @@
 		direction: Right
 		keywords: Mountain
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-                    type: exert
-                    select: choose(your,culture(orc),minion)
-		        }
-		        effect: {
-		            type: discardCardAtRandomFromHand
-		            forced: true
-		            hand: free people
-		        }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: choose(your,culture(orc),minion)
+				}
+				effect: {
+					type: discardCardAtRandomFromHand
+					forced: true
+					hand: free people
+				}
+			}
 		]
 		gametext: <b>Mountain</b>. <b>Maneuver:</b> Exert your [orc] minion to discard a card at random from the Free Peoples player's hand.
 		lore: ""
@@ -1764,7 +1728,6 @@
 	11_263: {
 		cardInfo: {
 			imagePath: decipher/LOTR11263.jpg
-			javaClass: true
 			//parentId: 11_263
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1784,17 +1747,17 @@
 		direction: Right
 		keywords: Underground
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesFrom
-		            filter: self
-		        }
-		        effect: {
-		            type: removeTwilight
-		            amount: 2
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				effect: {
+					type: removeTwilight
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Underground</b>. When the fellowship moves from this site, remove (2).
 		lore: ""
@@ -1810,7 +1773,6 @@
 	11_264: {
 		cardInfo: {
 			imagePath: decipher/LOTR11264.jpg
-			javaClass: true
 			//parentId: 11_264
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1830,25 +1792,25 @@
 		direction: Left
 		keywords: Dwelling
 		effects: [
-		    {
-		        type: trigger
-		        player: free people
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        effect: {
-		            type: repeat
-		            times: {
-		                type: forEachYouCanSpot
-		                filter: ally
-		            }
-		            effect: {
-		                type: wound
-		                select: choose(companion)
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				player: free people
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: ally
+					}
+					effect: {
+						type: wound
+						select: choose(companion)
+					}
+				}
+			}
 		]
 		gametext: <b>Dwelling</b>. When the fellowship moves to this site, the Free Peoples player wounds a companion for each ally.
 		lore: ""
@@ -1864,7 +1826,6 @@
 	11_265: {
 		cardInfo: {
 			imagePath: decipher/LOTR11265.jpg
-			javaClass: true
 			//parentId: 11_265
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1884,15 +1845,15 @@
 		direction: Left
 		keywords: Underground
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: unwounded,culture(gondor),man
-		            keyword: defender
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: unwounded,culture(gondor),man
+					keyword: defender
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Underground</b>. Each unwounded [gondor] Man is <b>defender +1</b>.
 		lore: ""
@@ -1908,7 +1869,6 @@
 	11_266: {
 		cardInfo: {
 			imagePath: decipher/LOTR11266.jpg
-			javaClass: true
 			//parentId: 11_266
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1928,17 +1888,17 @@
 		direction: Left
 		keywords: Forest
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: removeBurdens
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(nazgul)
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeBurdens
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(nazgul)
+				}
+			}
 		]
 		gametext: <b>Forest</b>. <b>Shadow:</b> Remove a burden to play a Nazgûl from your discard pile.
 		lore: ""

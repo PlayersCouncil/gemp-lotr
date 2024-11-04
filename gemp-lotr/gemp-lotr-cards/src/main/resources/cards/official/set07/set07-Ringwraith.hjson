@@ -3,7 +3,6 @@
 	7_174: {
 		cardInfo: {
 			imagePath: decipher/LOTR07174.jpg
-			javaClass: true
 			//parentId: 7_174
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -23,34 +22,34 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: assignment
-		        cost: {
-		            type: removeThreats
-		            amount: 5
-		        }
-		        effect: [
-                    {
-                        type: assignFPCharacterToSkirmish
-                        fpCharacter: choose(companion,not(ringBearer))
-                        minion: choose(nazgul)
-                        memorizeFPCharacter: assignedCompanion
-                    }
-                    {
-                        type: optional
-                        player: fp
-                        text: Would you like to discard {assignedCompanion}?
-                        effect: {
-                            type: discard
-                            select: memory(assignedCompanion)
-                        }
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: removeThreats
+					amount: 5
+				}
+				effect: [
+					{
+						type: assignFPCharacterToSkirmish
+						fpCharacter: choose(companion,not(ringBearer))
+						minion: choose(nazgul)
+						memorizeFPCharacter: assignedCompanion
+					}
+					{
+						type: optional
+						player: fp
+						text: Would you like to discard {assignedCompanion}?
+						effect: {
+							type: discard
+							select: memory(assignedCompanion)
+						}
+					}
+				]
+			}
 		]
 		gametext: <b>Assignment:</b> Remove 5 threats to assign a Nazgûl to a companion (except the Ring-bearer). The Free Peoples player may discard that companion.
-		lore: ...sensing some other power within his valley.
+		lore: "...sensing some other power within his valley."
 		promotext: ""
 		alts: {
 			promos: {
@@ -63,7 +62,6 @@
 	7_175: {
 		cardInfo: {
 			imagePath: decipher/LOTR07175.jpg
-			javaClass: true
 			//parentId: 7_175
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -81,7 +79,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -90,17 +88,17 @@
 					memorize: spotCount
 				}
 				{
-				    type: modifyStrength
-				    select: choose(nazgul)
-				    amount: {
-				        type: fromMemory
-				        memory: spotCount
-				    }
+					type: modifyStrength
+					select: choose(nazgul)
+					amount: {
+						type: fromMemory
+						memory: spotCount
+					}
 				}
 			]
 		}
 		gametext: Make a Nazgûl strength +1 for each Free Peoples culture you spot.
-		lore: Figures stood there at its head, carven with cunning in forms human and bestial, but all corrupt and loathsome.
+		lore: "Figures stood there at its head, carven with cunning in forms human and bestial, but all corrupt and loathsome."
 		promotext: ""
 		alts: {
 			promos: {
@@ -113,7 +111,6 @@
 	7_176: {
 		cardInfo: {
 			imagePath: decipher/LOTR07176.jpg
-			javaClass: true
 			//parentId: 7_176
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -131,7 +128,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			requires: {
@@ -146,26 +143,26 @@
 					memorize: shadowDiscardedCards
 				}
 				{
-				    type: discardFromHand
-				    forced: false
-				    hand: fp
-				    player: fp
-				    count: any
-				    memorize: freeDiscardedCards
+					type: discardFromHand
+					forced: false
+					hand: fp
+					player: fp
+					count: any
+					memorize: freeDiscardedCards
 				}
 				{
-				    type: addThreats
-				    amount: {
-				        type: subtract
-				        firstNumber: {
-				            type: forEachInMemory
-				            memory: shadowDiscardedCards
-				        }
-				        secondNumber: {
-				            type: forEachInMemory
-				            memory: freeDiscardedCards
-				        }
-				    }
+					type: addThreats
+					amount: {
+						type: subtract
+						firstNumber: {
+							type: forEachInMemory
+							memory: shadowDiscardedCards
+						}
+						secondNumber: {
+							type: forEachInMemory
+							memory: freeDiscardedCards
+						}
+					}
 				}
 			]
 		}
@@ -183,7 +180,6 @@
 	7_177: {
 		cardInfo: {
 			imagePath: decipher/LOTR07177.jpg
-			javaClass: true
 			//parentId: 7_177
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -203,44 +199,44 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        effect: [
-		            {
-		                type: transfer
-		                select: self
-		                fromSupport: true
-		                where: choose(character,inSkirmishAgainst(nazgul))
-		            }
-		            {
-		                type: memorizeNumber
-		                memory: turnNumber
-		                amount: {
-		                    type: turnNumber
-		                }
-		            }
-		            {
-		                type: storeWhileInZone
-                        memory: turnNumber
-		            }
-		        ]
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: shadowHasInitiative
-		            requires: {
-		                type: isEqual
-		                firstNumber: {
-		                    type: turnNumber
-		                }
-		                secondNumber: {
-		                    type: whileInZone
-		                }
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				effect: [
+					{
+						type: transfer
+						select: self
+						fromSupport: true
+						where: choose(character,inSkirmishAgainst(nazgul))
+					}
+					{
+						type: memorizeNumber
+						memory: turnNumber
+						amount: {
+							type: turnNumber
+						}
+					}
+					{
+						type: storeWhileInZone
+						memory: turnNumber
+					}
+				]
+			}
+			{
+				type: modifier
+				modifier: {
+					type: shadowHasInitiative
+					requires: {
+						type: isEqual
+						firstNumber: {
+							type: turnNumber
+						}
+						secondNumber: {
+							type: whileInZone
+						}
+					}
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Transfer this condition from your support area to a character skirmishing a Nazgûl.<br>During the turn this card is transferred, the Shadow has initiative, regardless of the Free Peoples player's hand.
 		lore: ""
@@ -256,7 +252,6 @@
 	7_178: {
 		cardInfo: {
 			imagePath: decipher/LOTR07178.jpg
-			javaClass: true
 			//parentId: 7_178
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -274,7 +269,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
@@ -291,7 +286,7 @@
 			]
 		}
 		gametext: Discard 3 cards from hand to make a Nazgûl strength +3.
-		lore: Ah! there one of the foul things is stooping on him.'
+		lore: "'Ah! there one of the foul things is stooping on him.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -304,7 +299,6 @@
 	7_179: {
 		cardInfo: {
 			imagePath: decipher/LOTR07179.jpg
-			javaClass: true
 			//parentId: 7_179
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -324,25 +318,25 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		        cost: {
-		            type: removeThreats
-		        }
-		        effect: {
-		            type: PlayCardFromHand
-		            select: choose(nazgul)
-		            discount: -2
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: PlayCardFromHand
+					select: choose(nazgul)
+					discount: -2
+				}
+			}
 		]
 		gametext: <b>Shadow:</b> Spot a Nazgûl and remove a threat to play a Nazgûl. Its twilight cost is -2.
-		lore: And out of the gate an army came.
+		lore: "And out of the gate an army came."
 		promotext: ""
 		alts: {
 			promos: {
@@ -355,7 +349,6 @@
 	7_180: {
 		cardInfo: {
 			imagePath: decipher/LOTR07180.jpg
-			javaClass: true
 			//parentId: 7_180
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -379,34 +372,34 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: nazgul
-		            }
-		            filter: self
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: nazgul
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: nazgul
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: nazgul
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: While you can spot a Nazgûl, Gorbag is strength +2 and <b>damage +1</b>.
-		lore: If there's any game, me and my lads must be in it.'
+		lore: "'If there's any game, me and my lads must be in it.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -419,7 +412,6 @@
 	7_181: {
 		cardInfo: {
 			imagePath: decipher/LOTR07181.jpg
-			javaClass: true
 			//parentId: 7_181
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -439,57 +431,57 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-                    type: canSpot
-                    filter: nazgul
-                    count: 2
-                }
-		    }
-		    {
-		        type: extraCost
-		        skipValidate: true
-		        cost: [
-                    {
-                        type: addThreats
-                        amount: 0-3
-                    }
-                ]
-		    }
-            {
-                type: trigger
-                optional: true
-                trigger: {
-                    type: aboutToBeKilled
-                    filter: companion
-                }
-                cost: {
-                    type: removeThreats
-                }
-                effect: {
-                    type: discard
-                    select: choose(possession)
-                    count: 0-2
-                }
-            }
-            {
-                type: trigger
-                trigger: {
-                    type: startOfPhase
-                    phase: regroup
-                }
-                effect: [
-                    {
-                        type: discard
-                        select: self
-                    }
-                    {
-                        type: removeThreats
-                        amount: 3
-                    }
-                ]
-            }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: nazgul
+					count: 2
+				}
+			}
+			{
+				type: extraCost
+				skipValidate: true
+				cost: [
+					{
+						type: addThreats
+						amount: 0-3
+					}
+				]
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: aboutToBeKilled
+					filter: companion
+				}
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: discard
+					select: choose(possession)
+					count: 0-2
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: [
+					{
+						type: discard
+						select: self
+					}
+					{
+						type: removeThreats
+						amount: 3
+					}
+				]
+			}
 		]
 		gametext: To play, spot 2 Nazgûl and add up to 3 threats.<br>Each time a companion is about to be killed, you may remove a threat to discard up to 2 possessions.<br>Discard this condition and remove 3 threats during the regroup phase.
 		lore: ""
@@ -505,7 +497,6 @@
 	7_182: {
 		cardInfo: {
 			imagePath: decipher/LOTR07182.jpg
-			javaClass: true
 			//parentId: 7_182
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -523,7 +514,7 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -538,7 +529,7 @@
 			]
 		}
 		gametext: If a skirmish that involved a Nazgûl is about to end, discard a possession borne by a companion in that skirmish.
-		lore: Frodo felt his senses reeling and his mind darkening.
+		lore: "Frodo felt his senses reeling and his mind darkening."
 		promotext: ""
 		alts: {
 			promos: {
@@ -551,7 +542,6 @@
 	7_183: {
 		cardInfo: {
 			imagePath: decipher/LOTR07183.jpg
-			javaClass: true
 			//parentId: 7_183
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -569,7 +559,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -585,7 +575,7 @@
 			]
 		}
 		gametext: If a Nazgûl kills a character, wound each character bearing a [wraith] condition.
-		lore: Weariness and more than weariness oppressed him....
+		lore: "Weariness and more than weariness oppressed him...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -598,7 +588,6 @@
 	7_184: {
 		cardInfo: {
 			imagePath: decipher/LOTR07184.jpg
-			javaClass: true
 			//parentId: 7_184
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -618,38 +607,38 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: choose(nazgul)
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: wraith
-		            select: self
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: shadowHasInitiative
-		            requires: {
-		                type: canSpotCultureTokens
-		                culture: wraith
-		                filter: self
-		                amount: 3
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: choose(nazgul)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: wraith
+					select: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: shadowHasInitiative
+					requires: {
+						type: canSpotCultureTokens
+						culture: wraith
+						filter: self
+						amount: 3
+					}
+				}
+			}
 		]
 		gametext: To play, spot a Nazgûl.<br><b>Regroup:</b> Discard a Nazgûl to place a [wraith] token on this card.<br>While there are 3 [wraith] tokens on this card, the Shadow has initiative, regardless of the Free Peoples player's hand.
 		lore: ""
@@ -665,7 +654,6 @@
 	7_185: {
 		cardInfo: {
 			imagePath: decipher/LOTR07185.jpg
-			javaClass: true
 			//parentId: 7_185
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -685,33 +673,33 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		            count: 3
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(or(possession,condition),attachedTo(companion,inSkirmishAgainst(nazgul)))
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: nazgul
+					count: 3
+				}
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: discard
+					select: choose(or(possession,condition),attachedTo(companion,inSkirmishAgainst(nazgul)))
+				}
+			}
 		]
 		gametext: To play, spot a Nazgûl.<br><b>Skirmish:</b> Remove (3) and spot 3 Nazgûl to discard a possession or condition borne by a companion a Nazgûl is skirmishing.
-		lore: There was a flare of livid lightnings....
+		lore: "There was a flare of livid lightnings...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -724,7 +712,6 @@
 	7_186: {
 		cardInfo: {
 			imagePath: decipher/LOTR07186.jpg
-			javaClass: true
 			//parentId: 7_186
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -746,23 +733,23 @@
 		itemclass: Hand weapon
 		target: culture(wraith),orc
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotWounds
-		                filter: ringBearer
-		                amount: 2
-		            }
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotWounds
+						filter: ringBearer
+						amount: 2
+					}
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: Bearer must a [wraith] Orc.<br>While you can spot 2 wounds on the Ring-bearer, bearer is <b>damage +1</b>.
-		lore: ...marching swiftly and silently, passing outwards in an endless stream.
+		lore: "...marching swiftly and silently, passing outwards in an endless stream."
 		promotext: ""
 		alts: {
 			promos: {
@@ -775,7 +762,6 @@
 	7_187: {
 		cardInfo: {
 			imagePath: decipher/LOTR07187.jpg
-			javaClass: true
 			//parentId: 7_187
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -798,43 +784,43 @@
 		vitality: 1
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: ringBearer,exhausted
-		            }
-		            filter: self
-		            amount: 3
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: ringBearer,exhausted
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: ringBearer,exhausted
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: ringBearer,exhausted
+					}
+					filter: self
+					amount: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: ringBearer,exhausted
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: ringBearer,exhausted
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: While the Ring-bearer is exhausted, this minion is strength +3, <b>fierce</b> and <b>damage +1</b>.
 		lore: ""
@@ -850,7 +836,6 @@
 	7_188: {
 		cardInfo: {
 			imagePath: decipher/LOTR07188.jpg
-			javaClass: true
 			//parentId: 7_188
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -873,42 +858,42 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		        effect: {
-		            type: preventable
-		            player: fp
-		            text: Would you like to wound the Ring-bearer to prevent adding a burden?
-		            cost: {
-		                type: wound
-		                select: choose(ringBearer)
-		            }
-		            effect: {
-		                type: addBurdens
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: removeBurdens
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: 3
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+				effect: {
+					type: preventable
+					player: fp
+					text: Would you like to wound the Ring-bearer to prevent adding a burden?
+					cost: {
+						type: wound
+						select: choose(ringBearer)
+					}
+					effect: {
+						type: addBurdens
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeBurdens
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 3
+				}
+			}
 		]
 		gametext: When you play this minion, you may spot a Nazgûl to add a burden. The Free Peoples player may wound the Ring-bearer to prevent this.<br><b>Skirmish:</b> Remove a burden to make this minion strength +3.
 		lore: ""
@@ -924,7 +909,6 @@
 	7_189: {
 		cardInfo: {
 			imagePath: decipher/LOTR07189.jpg
-			javaClass: true
 			//parentId: 7_189
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -947,21 +931,21 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: nazgul
-		            }
-		            filter: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: nazgul
+					}
+					filter: self
+					amount: 2
+				}
+			}
 		]
 		gametext: While you can spot a Nazgûl, this minion is strength +2.
-		lore: They swarmed across like beetles.'
+		lore: "'They swarmed across like beetles.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -974,7 +958,6 @@
 	7_190: {
 		cardInfo: {
 			imagePath: decipher/LOTR07190.jpg
-			javaClass: true
 			//parentId: 7_190
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -997,43 +980,43 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		        effect: {
-		            type: preventable
-		            player: fp
-		            text: Would you like to wound the Ring-bearer to prevent adding 2 threats?
-		            cost: {
-		                type: wound
-		                select: choose(ringBearer)
-		            }
-		            effect: {
-		                type: addThreats
-		                amount: 2
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: removeThreats
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: 3
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+				effect: {
+					type: preventable
+					player: fp
+					text: Would you like to wound the Ring-bearer to prevent adding 2 threats?
+					cost: {
+						type: wound
+						select: choose(ringBearer)
+					}
+					effect: {
+						type: addThreats
+						amount: 2
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 3
+				}
+			}
 		]
 		gametext: When you play this minion, you may spot a Nazgûl to add 2 threats. The Free Peoples player may wound the Ring-bearer to prevent this.<br><b>Skirmish:</b> Remove a threat to make this minion strength +3.
 		lore: ""
@@ -1049,7 +1032,6 @@
 	7_191: {
 		cardInfo: {
 			imagePath: decipher/LOTR07191.jpg
-			javaClass: true
 			//parentId: 7_191
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1072,34 +1054,34 @@
 		vitality: 4
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: nazgul
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: nazgul
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: nazgul
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: nazgul
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: While you can spot a Nazgûl, this minion is <b>fierce</b> and <b>damage +1</b>.
-		lore: His own folk quail at him, and they would slay themselves at his bidding.'
+		lore: "'His own folk quail at him, and they would slay themselves at his bidding.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1112,7 +1094,6 @@
 	7_192: {
 		cardInfo: {
 			imagePath: decipher/LOTR07192.jpg
-			javaClass: true
 			//parentId: 7_192
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1135,35 +1116,35 @@
 		vitality: 2
 		site: 4
 		effects: [
-    		{
-    		    type: modifier
-    		    modifier: {
-    		        type: modifyStrength
-    		        requires: {
-    		            type: canSpotWounds
-    		            filter: ringBearer
-    		            amount: 2
-    		        }
-    		        filter: self
-    		        amount: 4
-    		    }
-    		}
-    		{
-    		    type: modifier
-    		    modifier: {
-    		        type: addKeyword
-    		        requires: {
-    		            type: canSpotWounds
-    		            filter: ringBearer
-    		            amount: 2
-    		        }
-    		        filter: self
-    		        keyword: fierce
-    		    }
-    		}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotWounds
+						filter: ringBearer
+						amount: 2
+					}
+					filter: self
+					amount: 4
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotWounds
+						filter: ringBearer
+						amount: 2
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
 		]
 		gametext: While you can spot 2 wounds on the Ring-bearer, this minion is strength +4 and <b>fierce</b>.
-		lore: All that host was clad in sable, dark as the night.
+		lore: "All that host was clad in sable, dark as the night."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1176,7 +1157,6 @@
 	7_193: {
 		cardInfo: {
 			imagePath: decipher/LOTR07193.jpg
-			javaClass: true
 			//parentId: 7_193
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1199,22 +1179,22 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(or(nazgul,and(culture(wraith),orc)))
-		            amount: 1
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(or(nazgul,and(culture(wraith),orc)))
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Exert this minion to make a Nazgûl or [wraith] Orc strength +1.
-		lore: He uses others as his weapons.'
+		lore: "'He uses others as his weapons.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1227,7 +1207,6 @@
 	7_194: {
 		cardInfo: {
 			imagePath: decipher/LOTR07194.jpg
-			javaClass: true
 			//parentId: 7_194
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1250,36 +1229,36 @@
 		vitality: 2
 		site: 4
 		effects: [
-    		{
-    		    type: modifier
-    		    modifier: {
-    		        type: addKeyword
-    		        requires: {
-    		            type: canSpotWounds
-    		            filter: ringBearer
-    		            amount: 3
-    		        }
-    		        filter: self
-    		        keyword: fierce
-    		    }
-    		}
-    		{
-    		    type: modifier
-    		    modifier: {
-    		        type: addKeyword
-    		        requires: {
-    		            type: canSpotWounds
-    		            filter: ringBearer
-    		            amount: 3
-    		        }
-    		        filter: self
-    		        keyword: damage
-    		        amount: 1
-    		    }
-    		}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotWounds
+						filter: ringBearer
+						amount: 3
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotWounds
+						filter: ringBearer
+						amount: 3
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: While you can spot 3 wounds on the Ring-bearer, this minion is <b>fierce</b> and <b>damage +1</b>.
-		lore: The old wound throbbed with pain and a great chill spread towards Frodo's heart.
+		lore: "The old wound throbbed with pain and a great chill spread towards Frodo's heart."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1292,7 +1271,6 @@
 	7_195: {
 		cardInfo: {
 			imagePath: decipher/LOTR07195.jpg
-			javaClass: true
 			//parentId: 7_195
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1312,47 +1290,47 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: playerDrawsCard
-		            player: fp
-		        }
-		        requires: {
-		            type: not
-		            requires: {
-		                type: phase
-		                phase: regroup
-		            }
-		        }
-		        effect: {
-		            type: addThreats
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: [
-                    {
-                        type: discard
-                        select: choose(nazgul)
-                    }
-                    {
-                        type: discard
-                        select: self
-                    }
-                ]
-                effect: {
-                    type: addThreats
-                }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: playerDrawsCard
+					player: fp
+				}
+				requires: {
+					type: not
+					requires: {
+						type: phase
+						phase: regroup
+					}
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: discard
+						select: choose(nazgul)
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: addThreats
+				}
+			}
 		]
 		gametext: To play, spot a Nazgûl.<br>Each time the Free Peoples player draws a card (except during the regroup phase), add a threat.<br><b>Regroup:</b> Discard a Nazgûl and this condition to add a threat.
 		lore: ""
@@ -1368,7 +1346,6 @@
 	7_196: {
 		cardInfo: {
 			imagePath: decipher/LOTR07196.jpg
-			javaClass: true
 			//parentId: 7_196
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1391,22 +1368,22 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(or(nazgul,and(culture(wraith),orc)))
-		            amount: 1
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(or(nazgul,and(culture(wraith),orc)))
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Exert this minion to make a Nazgûl or [wraith] Orc strength +1.
-		lore: ...driving his slaves in madness on before.'
+		lore: "'...driving his slaves in madness on before.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1419,7 +1396,6 @@
 	7_197: {
 		cardInfo: {
 			imagePath: decipher/LOTR07197.jpg
-			javaClass: true
 			//parentId: 7_197
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1442,42 +1418,42 @@
 		vitality: 4
 		site: 4
 		effects: [
-		    {
-		        type: assignmentCost
-		        text: Would you like to exert a companion for each Nazgûl you can spot to be able to assign Morgul Regiment to skirmish?
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		        cost: {
-                    type: repeat
-                    times: {
-                        type: forEachYouCanSpot
-                        filter: nazgul
-                    }
-                    effect: {
-                        type: exert
-                        player: fp
-                        select: choose(companion)
-                    }
-                }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(or(nazgul,and(culture(wraith),orc)))
-		            amount: 1
-		        }
-		    }
+			{
+				type: assignmentCost
+				text: Would you like to exert a companion for each Nazgûl you can spot to be able to assign Morgul Regiment to skirmish?
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+				cost: {
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: nazgul
+					}
+					effect: {
+						type: exert
+						player: fp
+						select: choose(companion)
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(or(nazgul,and(culture(wraith),orc)))
+					amount: 1
+				}
+			}
 		]
 		gametext: For each Nazgûl you can spot, the Free Peoples player must exert a companion to assign this minion to a skirmish.<br><b>Skirmish:</b> Exert this minion to make a Nazgûl or [wraith] Orc strength +1.
-		lore: ...a host had issued from Minas Morgul....
+		lore: "...a host had issued from Minas Morgul...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1490,7 +1466,6 @@
 	7_198: {
 		cardInfo: {
 			imagePath: decipher/LOTR07198.jpg
-			javaClass: true
 			//parentId: 7_198
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1513,29 +1488,29 @@
 		vitality: 1
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: [
-		                {
-		                    type: canSpot
-		                    filter: nazgul
-		                }
-		                {
-		                    type: not
-		                    requires: {
-		                        type: phase
-		                        phase: skirmish
-		                    }
-		                }
-		            ]
-		            filter: self
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: [
+						{
+							type: canSpot
+							filter: nazgul
+						}
+						{
+							type: not
+							requires: {
+								type: phase
+								phase: skirmish
+							}
+						}
+					]
+					filter: self
+				}
+			}
 		]
 		gametext: While you can spot a Nazgûl, this minion may only take wounds during skirmish phases.
-		lore: ...while the less stout-hearted quailed and wept.
+		lore: "...while the less stout-hearted quailed and wept."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1548,7 +1523,6 @@
 	7_199: {
 		cardInfo: {
 			imagePath: decipher/LOTR07199.jpg
-			javaClass: true
 			//parentId: 7_199
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1571,17 +1545,17 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: nazgul
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: nazgul
+					amount: 1
+				}
+			}
 		]
 		gametext: Nazgûl are strength +1.
-		lore: ...ever and anon, high above the city, a faint cry would come....
+		lore: "...ever and anon, high above the city, a faint cry would come...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1594,7 +1568,6 @@
 	7_200: {
 		cardInfo: {
 			imagePath: decipher/LOTR07200.jpg
-			javaClass: true
 			//parentId: 7_200
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1617,22 +1590,22 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: assignmentCost
-		        text: Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		        cost: {
-                    type: exert
-                    player: fp
-                    select: choose(companion)
-                }
-		    }
+			{
+				type: assignmentCost
+				text: Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+				cost: {
+					type: exert
+					player: fp
+					select: choose(companion)
+				}
+			}
 		]
 		gametext: While you can spot a Nazgûl, the Free Peoples player must exert a companion to assign this minion to a skirmish.
-		lore: ...the fear of him has passed before him over the River.'
+		lore: "'...the fear of him has passed before him over the River.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1645,7 +1618,6 @@
 	7_201: {
 		cardInfo: {
 			imagePath: decipher/LOTR07201.jpg
-			javaClass: true
 			//parentId: 7_201
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1668,22 +1640,22 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: assignmentCost
-		        text: Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		        cost: {
-                    type: exert
-                    player: fp
-                    select: choose(companion)
-                }
-		    }
+			{
+				type: assignmentCost
+				text: Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+				cost: {
+					type: exert
+					player: fp
+					select: choose(companion)
+				}
+			}
 		]
 		gametext: While you can spot a Nazgûl, the Free Peoples player must exert a companion to assign this minion to a skirmish.
-		lore: And we have learned... that the Black Captain leads them once again....'
+		lore: "'And we have learned... that the Black Captain leads them once again....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1696,7 +1668,6 @@
 	7_202: {
 		cardInfo: {
 			imagePath: decipher/LOTR07202.jpg
-			javaClass: true
 			//parentId: 7_202
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1719,18 +1690,18 @@
 		vitality: 1
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpotWounds
-		                filter: ringBearer
-		            }
-		            filter: self
-		            amount: 6
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotWounds
+						filter: ringBearer
+					}
+					filter: self
+					amount: 6
+				}
+			}
 		]
 		gametext: While you can spot a wound on the Ring-bearer, this minion is strength +6.
 		lore: ""
@@ -1746,7 +1717,6 @@
 	7_203: {
 		cardInfo: {
 			imagePath: decipher/LOTR07203.jpg
-			javaClass: true
 			//parentId: 7_203
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1768,22 +1738,22 @@
 		itemclass: Hand weapon
 		target: culture(wraith),minion
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotThreats
-		                amount: 5
-		            }
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 5
+					}
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: Bearer must be a [wraith] minion.<br>While you can spot 5 threats, bearer is <b>damage +1</b>.
-		lore: ...small black figures in rank upon rank....
+		lore: "...small black figures in rank upon rank...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1796,7 +1766,6 @@
 	7_204: {
 		cardInfo: {
 			imagePath: decipher/LOTR07204.jpg
-			javaClass: true
 			//parentId: 7_204
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1816,41 +1785,41 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: companion
-		        }
-		        effect: {
-		            type: exert
-		            player: fp
-		            select: choose(companion)
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(nazgul)
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: companion
+				}
+				effect: {
+					type: exert
+					player: fp
+					select: choose(companion)
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(nazgul)
+				}
+			}
 		]
 		gametext: To play, spot a Nazgûl.<br>Each time a companion is played, the Free Peoples player must exert a companion.<br><b>Shadow:</b> Spot a Nazgûl and discard this condition to play a Nazgûl from your discard pile.
 		lore: ""
@@ -1866,7 +1835,6 @@
 	7_205: {
 		cardInfo: {
 			imagePath: decipher/LOTR07205.jpg
-			javaClass: true
 			//parentId: 7_205
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1886,46 +1854,46 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: [
-		            {
-		                type: haveInitiative
-		                side: shadow
-		            }
-		            {
-		                type: hasCardInDeadPile
-		                filter: character
-		                count: 3
-		            }
-		            {
-		                type: canSpotBurdens
-		                amount: 3
-		            }
-		            {
-		                type: canSpotThreats
-		                amount: 3
-		            }
-		            {
-		                type: canSpot
-		                filter: nazgul
-		            }
-		        ]
-		        effect: {
-		            type: corruptRingBearer
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				requires: [
+					{
+						type: haveInitiative
+						side: shadow
+					}
+					{
+						type: hasCardInDeadPile
+						filter: character
+						count: 3
+					}
+					{
+						type: canSpotBurdens
+						amount: 3
+					}
+					{
+						type: canSpotThreats
+						amount: 3
+					}
+					{
+						type: canSpot
+						filter: nazgul
+					}
+				]
+				effect: {
+					type: corruptRingBearer
+				}
+			}
 		]
 		gametext: To play, spot a Nazgûl.<br><b>Shadow:</b> If you have initiative and there are 3 characters in the dead pile, spot 3 burdens, 3 threats and a Nazgûl to corrupt the Ring-bearer.
-		lore: ...so their voices, which uttered only his will and malice, were filled with evil and horror.
+		lore: "...so their voices, which uttered only his will and malice, were filled with evil and horror."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1938,7 +1906,6 @@
 	7_206: {
 		cardInfo: {
 			imagePath: decipher/LOTR07206.jpg
-			javaClass: true
 			//parentId: 7_206
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1958,50 +1925,50 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: winsSkirmish
-		            filter: your,culture(wraith),minion
-		        }
-		        requires: {
-		            type: perPhaseLimit
-		            phase: regroup
-		            limit: 1
-		        }
-		        effect: [
-		            {
-		                type: incrementPerPhaseLimit
-		                phase: regroup
-		                limit: 1
-		            }
-		            {
-		                type: AddCultureTokens
-		                culture: wraith
-		                select: self
-		            }
-		        ]
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: canSpotCultureTokens
-		            culture: wraith
-		            filter: self
-		            amount: 3
-		        }
-		        effect: [
-		            {
-		                type: exhaust
-		                select: choose(ringBearer)
-		            }
-		            {
-		                type: discard
-		                select: self
-		            }
-		        ]
-		    }
+			{
+				type: Response
+				trigger: {
+					type: winsSkirmish
+					filter: your,culture(wraith),minion
+				}
+				requires: {
+					type: perPhaseLimit
+					phase: regroup
+					limit: 1
+				}
+				effect: [
+					{
+						type: incrementPerPhaseLimit
+						phase: regroup
+						limit: 1
+					}
+					{
+						type: AddCultureTokens
+						culture: wraith
+						select: self
+					}
+				]
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpotCultureTokens
+					culture: wraith
+					filter: self
+					amount: 3
+				}
+				effect: [
+					{
+						type: exhaust
+						select: choose(ringBearer)
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
 		]
 		gametext: <b>Response:</b> If your [wraith] minion wins a skirmish, place a [wraith] token here (limit 1 per site).<br><b>Regroup:</b> Spot 3 [wraith] tokens here to exhaust the Ring-bearer. Discard this condition.
 		lore: ""
@@ -2017,7 +1984,6 @@
 	7_207: {
 		cardInfo: {
 			imagePath: decipher/LOTR07207.jpg
-			javaClass: true
 			//parentId: 7_207
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2035,7 +2001,7 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
@@ -2063,7 +2029,6 @@
 	7_208: {
 		cardInfo: {
 			imagePath: decipher/LOTR07208.jpg
-			javaClass: true
 			//parentId: 7_208
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2081,7 +2046,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			requires: {
@@ -2092,19 +2057,19 @@
 				{
 					type: addThreats
 					amount: {
-					    type: Conditional
-					    requires: {
-					        type: haveInitiative
-					        side: shadow
-					    }
-					    true: 3
-					    false: 1
+						type: Conditional
+						requires: {
+							type: haveInitiative
+							side: shadow
+						}
+						true: 3
+						false: 1
 					}
 				}
 			]
 		}
 		gametext: Spot a Nazgûl to add a threat (or 3 threats if you have initiative).
-		lore: Mingled with harsh high voices as of birds of prey....
+		lore: "Mingled with harsh high voices as of birds of prey...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2117,7 +2082,6 @@
 	7_209: {
 		cardInfo: {
 			imagePath: decipher/LOTR07209.jpg
-			javaClass: true
 			//parentId: 7_209
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2137,29 +2101,29 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        effect: {
-		            type: transfer
-		            select: self
-                    fromSupport: true
-		            where: choose(character,inSkirmishAgainst(nazgul))
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: exerted
-		            filter: bearer
-		        }
-		        effect: {
-		            type: addTwilight
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(character,inSkirmishAgainst(nazgul))
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: exerted
+					filter: bearer
+				}
+				effect: {
+					type: addTwilight
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Transfer this condition from your support area to a character skirmishing a Nazgûl.<br>Each time bearer exerts, add (1).
-		lore: At that moment the rock quivered and trembled beneath them.
+		lore: "At that moment the rock quivered and trembled beneath them."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2172,7 +2136,6 @@
 	7_210: {
 		cardInfo: {
 			imagePath: decipher/LOTR07210.jpg
-			javaClass: true
 			//parentId: 7_210
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2197,30 +2160,30 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: [
-                    {
-                        type: haveInitiative
-                        side: shadow
-                    }
-                    {
-                        type: canSpot
-                        filter: another,culture(wraith),minion
-                    }
-                ]
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: addBurdens
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				requires: [
+					{
+						type: haveInitiative
+						side: shadow
+					}
+					{
+						type: canSpot
+						filter: another,culture(wraith),minion
+					}
+				]
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br><b>Shadow:</b> If you have initiative, exert Úlairë Attëa and spot another [wraith] minion to add a burden.
-		lore: ...faint, but heart-quelling, cruel and cold.
+		lore: "...faint, but heart-quelling, cruel and cold."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2233,7 +2196,6 @@
 	7_211: {
 		cardInfo: {
 			imagePath: decipher/LOTR07211.jpg
-			javaClass: true
 			//parentId: 7_211
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2258,40 +2220,40 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: addThreats
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: companion
-		                over: 4
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(wraith),minion
-		        }
-		        cost: {
-		            type: removeThreats
-		            amount: 2
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(possession)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: addThreats
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+					}
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: another,culture(wraith),minion
+				}
+				cost: {
+					type: removeThreats
+					amount: 2
+				}
+				effect: {
+					type: discard
+					select: choose(possession)
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>When you play Úlairë Cantëa, add a threat for each companion over 4.<br><b>Maneuver:</b> Remove 2 threats and spot another [wraith] minion to discard a possession.
-		lore: ...and of the winged terror, the Nazgûl.
+		lore: "...and of the winged terror, the Nazgûl."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2304,7 +2266,6 @@
 	7_212: {
 		cardInfo: {
 			imagePath: decipher/LOTR07212.jpg
-			javaClass: true
 			//parentId: 7_212
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2329,36 +2290,36 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: companion
-		                count: 6
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: killed
-		            filter: companion
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(ringBearer)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: companion
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: exert
+					select: choose(ringBearer)
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>While you can spot 6 companions, Úlairë Enquëa is <b>damage +1</b>.<br>Each time a companion is killed, you may exert Úlairë Enquëa to exert the Ring-bearer.
 		lore: ""
@@ -2374,7 +2335,6 @@
 	7_213: {
 		cardInfo: {
 			imagePath: decipher/LOTR07213.jpg
-			javaClass: true
 			//parentId: 7_213
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2398,44 +2358,44 @@
 		vitality: 2
 		site: 3
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: other,culture(wraith),minion
-		            }
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: culture(wraith),minion
-		                count: 3
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: culture(wraith),minion
-		                count: 4
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: other,culture(wraith),minion
+					}
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: culture(wraith),minion
+						count: 3
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: culture(wraith),minion
+						count: 4
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: Úlairë Lemenya is strength +1 for each other [wraith] minion you can spot.<br>While you can spot 3 [wraith] minions Úlairë Lemenya is <b>fierce</b>.<br>While you can spot 4 [wraith] minions Úlairë Lemenya is <b>damage +1</b>.
 		lore: ""
@@ -2451,7 +2411,6 @@
 	7_214: {
 		cardInfo: {
 			imagePath: decipher/LOTR07214.jpg
-			javaClass: true
 			//parentId: 7_214
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2475,25 +2434,25 @@
 		vitality: 2
 		site: 3
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: haveInitiative
-		            side: shadow
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(possession)
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: haveInitiative
+					side: shadow
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(possession)
+				}
+			}
 		]
 		gametext: <b>Regroup:</b> If you have initiative, discard Úlairë Lemenya to discard a possession.
-		lore: And even at that moment the sun for a second faltered and was obscured, as though a dark wing had passed across it.
+		lore: "And even at that moment the sun for a second faltered and was obscured, as though a dark wing had passed across it."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2506,7 +2465,6 @@
 	7_215: {
 		cardInfo: {
 			imagePath: decipher/LOTR07215.jpg
-			javaClass: true
 			//parentId: 7_215
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2531,22 +2489,22 @@
 		site: 2
 		keywords: Fierce
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: choose(culture(wraith),minion)
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: choose(culture(wraith),minion)
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br><b>Skirmish:</b> Discard a [wraith] minion to make Úlairë Nelya strength +2.
-		lore: He shuddered, and hope seemed to wither.
+		lore: "He shuddered, and hope seemed to wither."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2559,7 +2517,6 @@
 	7_216: {
 		cardInfo: {
 			imagePath: decipher/LOTR07216.jpg
-			javaClass: true
 			//parentId: 7_216
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2584,25 +2541,25 @@
 		site: 2
 		keywords: Fierce
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: haveInitiative
-		            side: shadow
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: exert
-		            select: all(ringBound,companion)
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: haveInitiative
+					side: shadow
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: exert
+					select: all(ringBound,companion)
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br><b>Regroup:</b> If you have initiative, discard Úlairë Nelya to exert each Ring-bound companion.
-		lore: It is the sign of our fall, and the shadow of doom, a Fell Rider of the air.'
+		lore: "'It is the sign of our fall, and the shadow of doom, a Fell Rider of the air.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -2615,7 +2572,6 @@
 	7_217: {
 		cardInfo: {
 			imagePath: decipher/LOTR07217.jpg
-			javaClass: true
 			//parentId: 7_217
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2639,24 +2595,24 @@
 		vitality: 2
 		site: 3
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: haveInitiative
-		            side: shadow
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: addBurdens
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: haveInitiative
+					side: shadow
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
 		]
 		gametext: <b>Regroup:</b> If you have initiative, discard Úlairë Nertëa to add a burden.
-		lore: I fear that Minas Tirith shall fall. Night comes. The very warmth of my blood seems stolen away.'
+		lore: "'I fear that Minas Tirith shall fall. Night comes. The very warmth of my blood seems stolen away.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -2669,7 +2625,6 @@
 	7_218: {
 		cardInfo: {
 			imagePath: decipher/LOTR07218.jpg
-			javaClass: true
 			//parentId: 7_218
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2693,41 +2648,41 @@
 		vitality: 3
 		site: 3
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: haveInitiative
-		            side: shadow
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: choice
-		            player: fp
-		            texts: [
-		                Exert a Ring-bound companion twice
-		                Return an unbound companion to your hand
-		            ]
-		            effects: [
-		                {
-		                    type: exert
-		                    player: fp
-		                    select: choose(ringBound,companion)
-		                    times: 2
-		                }
-		                {
-		                    type: returnToHand
-		                    select: choose(unbound,companion)
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: haveInitiative
+					side: shadow
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: choice
+					player: fp
+					texts: [
+						Exert a Ring-bound companion twice
+						Return an unbound companion to your hand
+					]
+					effects: [
+						{
+							type: exert
+							player: fp
+							select: choose(ringBound,companion)
+							times: 2
+						}
+						{
+							type: returnToHand
+							select: choose(unbound,companion)
+						}
+					]
+				}
+			}
 		]
 		gametext: <b>Regroup:</b> If you have initiative, discard Úlairë Otsëa to make the Free Peoples player exert a Ring-bound companion twice or return an unbound companion to his or her hand.
-		lore: ...horrible as carrion-fowl yet greater than eagles, cruel as death.
+		lore: "...horrible as carrion-fowl yet greater than eagles, cruel as death."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2740,7 +2695,6 @@
 	7_219: {
 		cardInfo: {
 			imagePath: decipher/LOTR07219.jpg
-			javaClass: true
 			//parentId: 7_219
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2765,23 +2719,23 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: [
-                    {
-                        type: haveInitiative
-                        side: shadow
-                    }
-                    {
-                        type: canSpot
-                        filter: nazgul
-                    }
-                ]
-                amount: -6
-		    }
+			{
+				type: modifyOwnCost
+				requires: [
+					{
+						type: haveInitiative
+						side: shadow
+					}
+					{
+						type: canSpot
+						filter: nazgul
+					}
+				]
+				amount: -6
+			}
 		]
 		gametext: <b>Fierce</b>.<br>While you have initiative and can spot a Nazgûl, Úlairë Toldëa's twilight cost is -6.
-		lore: Almost beyond hearing he thought he caught, high and far up in the heavens, a cry....
+		lore: "Almost beyond hearing he thought he caught, high and far up in the heavens, a cry...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2794,7 +2748,6 @@
 	7_220: {
 		cardInfo: {
 			imagePath: decipher/LOTR07220.jpg
-			javaClass: true
 			//parentId: 7_220
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2812,7 +2765,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -2820,20 +2773,20 @@
 					type: modifyStrength
 					select: choose(culture(wraith),orc)
 					amount: {
-					    type: Conditional
-					    requires: {
-					        type: canSpotWounds
-					        filter: ringBearer
-					        amount: 2
-					    }
-					    true: 4
-					    false: 2
+						type: Conditional
+						requires: {
+							type: canSpotWounds
+							filter: ringBearer
+							amount: 2
+						}
+						true: 4
+						false: 2
 					}
 				}
 			]
 		}
 		gametext: Make a [wraith] Orc strength +2 (or +4 if you spot 2 wounds on the Ring-bearer).
-		lore: Through many ages Sauron has hated the West....'
+		lore: "'Through many ages Sauron has hated the West....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -2846,7 +2799,6 @@
 	7_221: {
 		cardInfo: {
 			imagePath: decipher/LOTR07221.jpg
-			javaClass: true
 			//parentId: 7_221
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2871,27 +2823,27 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        cost: {
-		            type: removeThreats
-		        }
-		        effect: {
-		            type: putCardsFromDiscardIntoHand
-		            select: choose(culture(wraith))
-		        }
-		    }
-		    {
-                type: modifier
-                modifier: {
-                    type: ringBearerCantTakeThreatWounds
-                }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(wraith))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: ringBearerCantTakeThreatWounds
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>When you play The Witch-king, you may remove a threat to take a [wraith] card into hand from your discard pile.<br>The Ring-bearer cannot take threat wounds.
 		lore: ""

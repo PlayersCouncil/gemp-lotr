@@ -3,7 +3,6 @@
 	11_53: {
 		cardInfo: {
 			imagePath: decipher/LOTR11053.jpg
-			javaClass: true
 			//parentId: 11_53
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -28,25 +27,25 @@
 		resistance: 8
 		keywords: Ranger
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: side(free people),timeword(skirmish),event
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(minion,inSkirmishAgainst(self))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: side(free people),timeword(skirmish),event
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: wound
+					select: choose(minion,inSkirmishAgainst(self))
+				}
+			}
 		]
 		gametext: <b>Ranger</b>.<br>Each time a Free Peoples skirmish event is played, you may exert Aragorn to wound a minion he is skirmishing.
-		lore: ...I know all the lands between the Shire and the Misty Mountains, for I have wandered over them for many years.'
+		lore: "'...I know all the lands between the Shire and the Misty Mountains, for I have wandered over them for many years.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -59,7 +58,6 @@
 	11_54: {
 		cardInfo: {
 			imagePath: decipher/LOTR11054.jpg
-			javaClass: true
 			//parentId: 11_54
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -84,19 +82,19 @@
 		resistance: 8
 		keywords: Ranger
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: moves
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: 1
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: addTwilight
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Ranger</b>.<br>Each time the fellowship moves, add (1).
-		lore: ...in spite of the heat of the room he wore a hood that overshadowed his face; but the gleam of his eyes could be seen as he watched the hobbits.
+		lore: "...in spite of the heat of the room he wore a hood that overshadowed his face; but the gleam of his eyes could be seen as he watched the hobbits."
 		promotext: ""
 		alts: {
 			promos: {
@@ -109,7 +107,6 @@
 	11_55: {
 		cardInfo: {
 			imagePath: decipher/LOTR11055.jpg
-			javaClass: true
 			//parentId: 11_55
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -130,30 +127,30 @@
 		itemclass: Armor
 		target: culture(gondor),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: removeKeyword
-		            filter: minion,inSkirmishAgainst(bearer)
-		            keyword: damage
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer,unwounded
-                    requires: {
-                        type: location
-                        filter: battleground
-                    }
-                    keyword: defender
-                    amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: removeKeyword
+					filter: minion,inSkirmishAgainst(bearer)
+					keyword: damage
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,unwounded
+					requires: {
+						type: location
+						filter: battleground
+					}
+					keyword: defender
+					amount: 1
+				}
+			}
 		]
 		gametext: Bearer must be a [gondor] Man.<br>Each minion skirmishing bearer loses all <b>damage</b> bonuses.<br>While bearer is at a battleground site and unwounded, he or she is <b>defender +1</b>.
-		lore: Upon the black surcoats were embroidered in white a tree blossoming like snow....
+		lore: "Upon the black surcoats were embroidered in white a tree blossoming like snow...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -166,7 +163,6 @@
 	11_56: {
 		cardInfo: {
 			imagePath: decipher/LOTR11056.jpg
-			javaClass: true
 			//parentId: 11_56
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -184,28 +180,28 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(ranger)
-				    memorize: chosenRanger
-				    amount: {
-				        type: Conditional
-				        requires: {
-				            type: canSpot
-				            filter: memory(chosenRanger),inSkirmishAgainst(minion,damage)
-				        }
-				        true: 3
-				        false: 2
-				    }
+					type: modifyStrength
+					select: choose(ranger)
+					memorize: chosenRanger
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: memory(chosenRanger),inSkirmishAgainst(minion,damage)
+						}
+						true: 3
+						false: 2
+					}
 				}
 			]
 		}
 		gametext: Make a ranger strength +2 (or +3 if he or she is skirmishing a minion who has a damage bonus).
-		lore: ...men were yelling and screaming, and one clear loud voice was calling 'Gondor! Gondor!'
+		lore: "'...men were yelling and screaming, and one clear loud voice was calling 'Gondor! Gondor!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -218,7 +214,6 @@
 	11_57: {
 		cardInfo: {
 			imagePath: decipher/LOTR11057.jpg
-			javaClass: true
 			//parentId: 11_57
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -243,21 +238,21 @@
 		resistance: 5
 		keywords: Knight
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(culture(gondor),companion)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: heal
+					select: choose(culture(gondor),companion)
+				}
+			}
 		]
 		gametext: <b>Knight</b>.<br>Each time Boromir wins a skirmish, you may heal a [gondor] companion.
-		lore: Let the armies of Mordor know this: never again will the land of my people fall into enemy hands!'
+		lore: "'Let the armies of Mordor know this: never again will the land of my people fall into enemy hands!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -270,7 +265,6 @@
 	11_58: {
 		cardInfo: {
 			imagePath: decipher/LOTR11058.jpg
-			javaClass: true
 			//parentId: 11_58
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -292,30 +286,30 @@
 		itemclass: Ranged weapon
 		target: culture(gondor),man
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: archery
-		        }
-		        requires: {
-		            type: location
-		            filter: battleground
-		        }
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: modifyArcheryTotal
-		            side: free people
-		            amount: 1
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: archery
+				}
+				requires: {
+					type: location
+					filter: battleground
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: modifyArcheryTotal
+					side: free people
+					amount: 1
+				}
+			}
 		]
 		gametext: Bearer must be a [gondor] Man.<br>At the start of the archery phase, if bearer is at a battleground site, you may exert him or her to make the fellowship archery total +1.
-		lore: From the ramparts of the Gondorian fortress, death rained down upon the servants of Sauron.
+		lore: "From the ramparts of the Gondorian fortress, death rained down upon the servants of Sauron."
 		promotext: ""
 		alts: {
 			promos: {
@@ -328,7 +322,6 @@
 	11_59: {
 		cardInfo: {
 			imagePath: decipher/LOTR11059.jpg
-			javaClass: true
 			//parentId: 11_59
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -350,31 +343,31 @@
 		itemclass: Hand weapon
 		target: culture(gondor),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: or
-		                requires: [
-		                    {
-		                        type: canSpot
-		                        filter: bearer,ranger
-		                    }
-		                    {
-                                type: location
-                                filter: river
-		                    }
-		                ]
-		            }
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: or
+						requires: [
+							{
+								type: canSpot
+								filter: bearer,ranger
+							}
+							{
+								type: location
+								filter: river
+							}
+						]
+					}
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: Bearer must be a [gondor] Man.<br>While bearer is a ranger or at a river site, he or she is <b>damage +1</b>.
-		lore: While many knights of Gondor favor hand-and-a-half swords, lighter weapons are often preferred by the rangers who patrol Ithilien.
+		lore: "While many knights of Gondor favor hand-and-a-half swords, lighter weapons are often preferred by the rangers who patrol Ithilien."
 		promotext: ""
 		alts: {
 			promos: {
@@ -387,7 +380,6 @@
 	11_60: {
 		cardInfo: {
 			imagePath: decipher/LOTR11060.jpg
-			javaClass: true
 			//parentId: 11_60
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -405,55 +397,55 @@
 		culture: Gondor
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			requires: {
-			    type: isGreaterThanOrEqual
-			    firstNumber: {
-    			    type: forEachResistance
-    			    filter: culture(gondor),companion,canExert
-			    }
-			    secondNumber: 12
+				type: isGreaterThanOrEqual
+				firstNumber: {
+					type: forEachResistance
+					filter: culture(gondor),companion,canExert
+				}
+				secondNumber: 12
 			}
 			cost: [
-                {
-                    type: doWhile
-                    check: {
-                        type: isLessThan
-                        firstNumber: {
-                            type: forEachResistance
-                            filter: memory(chosenCompanions)
-                        }
-                        secondNumber: 12
-                    }
-                    effect: {
-                        type: chooseActiveCards
-                        text: Choose companions to exert with total resistance 12 or more
-                        select: choose(culture(gondor),companion,canExert)
-                        count: any
-                        memorize: chosenCompanions
-                    }
-                }
-                {
-                    type: exert
-                    select: memory(chosenCompanions)
-                }
-            ]
+				{
+					type: doWhile
+					check: {
+						type: isLessThan
+						firstNumber: {
+							type: forEachResistance
+							filter: memory(chosenCompanions)
+						}
+						secondNumber: 12
+					}
+					effect: {
+						type: chooseActiveCards
+						text: Choose companions to exert with total resistance 12 or more
+						select: choose(culture(gondor),companion,canExert)
+						count: any
+						memorize: chosenCompanions
+					}
+				}
+				{
+					type: exert
+					select: memory(chosenCompanions)
+				}
+			]
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(minion,inSkirmishAgainst(culture(gondor),companion))
-				    amount: {
-				        type: forEachInMemory
-				        memory: chosenCompanion
-				        multiplier: -3
-				    }
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(culture(gondor),companion))
+					amount: {
+						type: forEachInMemory
+						memory: chosenCompanion
+						multiplier: -3
+					}
 				}
 			]
 		}
 		gametext: Exert any number of [gondor] companions who have total resistance 12 or more to make a minion skirmishing a [gondor] companion strength -3 for each companion exerted this way.
-		lore: Captain Faramir, you have shown your quality, sir. The very highest.'
+		lore: "'Captain Faramir, you have shown your quality, sir. The very highest.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -466,7 +458,6 @@
 	11_61: {
 		cardInfo: {
 			imagePath: decipher/LOTR11061.jpg
-			javaClass: true
 			//parentId: 11_61
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -486,58 +477,58 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: culture(gondor),man
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: gondor
-		            select: self
-		            count: 3
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: [
-		            {
-		                type: addTwilight
-		                amount: 2
-		            }
-		            {
-		                type: choice
-		                texts: [
-		                    Discard this condition
-		                    Remove a {gondor} token here
-		                ]
-		                effects: [
-		                    {
-		                        type: discard
-		                        select: self
-		                    }
-		                    {
-		                        type: RemoveCultureTokens
-		                        culture: gondor
-		                        select: self
-		                    }
-		                ]
-		            }
-		        ]
-		        effect: {
-		            type: heal
-		            select: choose(culture(gondor),man)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: culture(gondor),man
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: gondor
+					select: self
+					count: 3
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: addTwilight
+						amount: 2
+					}
+					{
+						type: choice
+						texts: [
+							Discard this condition
+							Remove a {gondor} token here
+						]
+						effects: [
+							{
+								type: discard
+								select: self
+							}
+							{
+								type: RemoveCultureTokens
+								culture: gondor
+								select: self
+							}
+						]
+					}
+				]
+				effect: {
+					type: heal
+					select: choose(culture(gondor),man)
+				}
+			}
 		]
 		gametext: When you play this condition, spot a [gondor] Man to add 3 [gondor] tokens here.<br><b>Fellowship:</b> Add (2) and either discard this condition or remove a [gondor] token from here to heal a [gondor] Man.
-		lore: ...the king was indeed come among them, and after war he brought healing....
+		lore: "...the king was indeed come among them, and after war he brought healing...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -550,7 +541,6 @@
 	11_62: {
 		cardInfo: {
 			imagePath: decipher/LOTR11062.jpg
-			javaClass: true
 			//parentId: 11_62
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -575,24 +565,24 @@
 		resistance: 7
 		keywords: Ranger
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        requires: {
-		            type: location
-		            filter: forest
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: playNextSite
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: location
+					filter: forest
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: playNextSite
+				}
+			}
 		]
 		gametext: <b>Ranger</b>.<br><b>Fellowship:</b> If Madril is at a forest site, exert him to play the fellowship's next site.
-		lore: ...we must look to our own borders. Faramir, Orcs are on the move.'
+		lore: "'...we must look to our own borders. Faramir, Orcs are on the move.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -605,7 +595,6 @@
 	11_63: {
 		cardInfo: {
 			imagePath: decipher/LOTR11063.jpg
-			javaClass: true
 			//parentId: 11_63
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -623,18 +612,18 @@
 		culture: Gondor
 		twilight: 3
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: heal
-				    select: all(culture(gondor),companion,minResistance(5))
+					type: heal
+					select: all(culture(gondor),companion,minResistance(5))
 				}
 			]
 		}
 		gametext: Heal each [gondor] companion who has resistance 5 or more.
-		lore: A guest-house shall be made ready: there you shall sleep, when you have eaten.'
+		lore: "'A guest-house shall be made ready: there you shall sleep, when you have eaten.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -647,7 +636,6 @@
 	11_64: {
 		cardInfo: {
 			imagePath: decipher/LOTR11064.jpg
-			javaClass: true
 			//parentId: 11_64
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -665,28 +653,28 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(culture(gondor),companion)
-				    memorize: chosenCompanion
-				    amount: {
-				        type: Conditional
-				        requires: {
-				            type: canSpot
-				            filter: memory(chosenCompanion),minResistance(4)
-				        }
-				        true: 3
-				        false: 2
-				    }
+					type: modifyStrength
+					select: choose(culture(gondor),companion)
+					memorize: chosenCompanion
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: memory(chosenCompanion),minResistance(4)
+						}
+						true: 3
+						false: 2
+					}
 				}
 			]
 		}
 		gametext: Make a [gondor] companion strength +2 (or +3 if he or she has resistance 4 or more).
-		lore: I ask leave once again to be your companion, Frodo.'
+		lore: "'I ask leave once again to be your companion, Frodo.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -699,7 +687,6 @@
 	11_65: {
 		cardInfo: {
 			imagePath: decipher/LOTR11065.jpg
-			javaClass: true
 			//parentId: 11_65
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -723,20 +710,20 @@
 		resistance: 6
 		keywords: Ranger
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: playNextSite
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: playNextSite
+				}
+			}
 		]
 		gametext: <b>Ranger</b>.<br>When you play this companion, you may play the fellowship's next site.
-		lore: The road may pass, but they shall not!
+		lore: "The road may pass, but they shall not!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -749,7 +736,6 @@
 	11_66: {
 		cardInfo: {
 			imagePath: decipher/LOTR11066.jpg
-			javaClass: true
 			//parentId: 11_66
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -775,38 +761,38 @@
 			type: event
 			requiresRanger: true
 			cost: {
-			    type: exert
-			    select: choose(ranger)
+				type: exert
+				select: choose(ranger)
 			},
 			effect: [
 				{
-				    type: if
-				    check: {
-				        type: location
-				        filter: regionNumber(1)
-				    }
-				    true: [
-                        {
-                            type: playSite
-                            number: {
-                                type: nextSiteNumber
-                            }
-                        }
-                        {
-                            type: playSite
-                            number: {
-                                type: siteNumberAfterNext
-                            }
-                        }
-                    ]
-                    false: {
-                        type: playNextSite
-                    }
+					type: if
+					check: {
+						type: location
+						filter: regionNumber(1)
+					}
+					true: [
+						{
+							type: playSite
+							number: {
+								type: nextSiteNumber
+							}
+						}
+						{
+							type: playSite
+							number: {
+								type: siteNumberAfterNext
+							}
+						}
+					]
+					false: {
+						type: playNextSite
+					}
 				}
 			]
 		}
 		gametext: To play, exert a  ranger.<br>If the fellowship is in region 1, play the fellowship's next 2 sites.<br>Otherwise, play the fellowship's next site.
-		lore: With a great many years' experience in the wilds of Middle-earth, Aragorn's skills as guide and tracker were unmatched.
+		lore: "With a great many years' experience in the wilds of Middle-earth, Aragorn's skills as guide and tracker were unmatched."
 		promotext: ""
 		alts: {
 			promos: {

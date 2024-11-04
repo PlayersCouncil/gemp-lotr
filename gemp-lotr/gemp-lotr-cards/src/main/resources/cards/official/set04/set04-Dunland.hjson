@@ -3,7 +3,10 @@
 	4_3: {
 		cardInfo: {
 			imagePath: decipher/LOTR04003.jpg
-			javaClass: true
+			//parentId: 4_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C3
 			rarity: C
@@ -17,7 +20,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			requires: {
@@ -43,7 +46,7 @@
 			]
 		}
 		gametext: <b>Skirmish:</b> Spot 3 [dunland] minions or a site you control to make a [dunland] Man <b>fierce</b> until the regroup phase.
-		lore: Rage filled the hearts of the Dunlending attackers.
+		lore: "Rage filled the hearts of the Dunlending attackers."
 		promotext: ""
 		alts: {
 			promos: {
@@ -53,10 +56,13 @@
 		}
 	}
 
-		4_4: {
+	4_4: {
 		cardInfo: {
 			imagePath: decipher/LOTR04004.jpg
-			javaClass: true
+			//parentId: 4_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C4
 			rarity: C
@@ -91,7 +97,7 @@
 			}
 		]
 		gametext: Each time this minion wins a skirmish, you may make it <b>fierce</b> until the regroup phase.
-		lore: The Wild Men of Dunland have no love for Théoden of Rohan since he took their land.'
+		lore: "'The Wild Men of Dunland have no love for Théoden of Rohan since he took their land.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -104,7 +110,10 @@
 	4_5: {
 		cardInfo: {
 			imagePath: decipher/LOTR04005.jpg
-			javaClass: true
+			//parentId: 4_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C5
 			rarity: C
@@ -118,7 +127,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -137,7 +146,7 @@
 			]
 		}
 		gametext: <b>Skirmish:</b> Make a [dunland] Man strength +2 (or +4 if you control a site).
-		lore: Take your rabble through the Westemnet; take back the lands they stole from you.'
+		lore: "'Take your rabble through the Westemnet; take back the lands they stole from you.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -150,7 +159,10 @@
 	4_6: {
 		cardInfo: {
 			imagePath: decipher/LOTR04006.jpg
-			javaClass: true
+			//parentId: 4_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R6
 			rarity: R
@@ -164,7 +176,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Condition
-		keyword: support area
+		keywords: Support Area
 		effects: [
 			{
 				type: activated
@@ -185,7 +197,7 @@
 			}
 		]
 		gametext: Plays to your support area.<br><b>Shadow:</b> If the fellowship has moved more than once this turn, remove (2) to play a [dunland] Man from your discard pile.
-		lore: The men of Dunland have hated the Rohirrim for many years.
+		lore: "The men of Dunland have hated the Rohirrim for many years."
 		promotext: ""
 		alts: {
 			promos: {
@@ -198,7 +210,10 @@
 	4_7: {
 		cardInfo: {
 			imagePath: decipher/LOTR04007.jpg
-			javaClass: true
+			//parentId: 4_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C7
 			rarity: C
@@ -212,7 +227,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -232,7 +247,7 @@
 			]
 		}
 		gametext: <b>Skirmish:</b> Make a [dunland] Man strength +2 (or +4 if at a sanctuary).
-		lore: Dunland and Dunlendings are the names that the Rohirrim gave to them, because they were swarthy and dark-haired....
+		lore: "Dunland and Dunlendings are the names that the Rohirrim gave to them, because they were swarthy and dark-haired...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -245,7 +260,10 @@
 	4_8: {
 		cardInfo: {
 			imagePath: decipher/LOTR04008.jpg
-			javaClass: true
+			//parentId: 4_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U8
 			rarity: U
@@ -259,7 +277,7 @@
 		culture: Dunland
 		twilight: 3
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -274,7 +292,7 @@
 			]
 		}
 		gametext: <b>Skirmish:</b> Make a [dunland] Man strength +1 for each companion you spot.
-		lore: The dark Dunlendings called their fair-haired enemies from Rohan "Strawheads."
+		lore: "The dark Dunlendings called their fair-haired enemies from Rohan \"Strawheads.\""
 		promotext: ""
 		alts: {
 			promos: {
@@ -287,7 +305,10 @@
 	4_9: {
 		cardInfo: {
 			imagePath: decipher/LOTR04009.jpg
-			javaClass: true
+			//parentId: 4_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U9
 			rarity: U
@@ -337,7 +358,7 @@
 			}
 		]
 		gametext: Each time this minion wins a skirmish, you may play a [dunland] Man from hand; his twilight cost is -2. That Man is <b>fierce</b> and <b>damage +1</b> until the regroup phase.
-		lore: They bring fire... and they are burning as they come, rick, cot, and tree.'
+		lore: "'They bring fire... and they are burning as they come, rick, cot, and tree.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -350,7 +371,10 @@
 	4_10: {
 		cardInfo: {
 			imagePath: decipher/LOTR04010.jpg
-			javaClass: true
+			//parentId: 4_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C10
 			rarity: C
@@ -368,8 +392,8 @@
 		strength: 8
 		vitality: 1
 		site: 3
-		gametext: &nbsp; &nbsp;
-		lore: This was a rich vale and had many homesteads. Alas for my folk!'
+		gametext: ""
+		lore: "'This was a rich vale and had many homesteads. Alas for my folk!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -382,7 +406,10 @@
 	4_11: {
 		cardInfo: {
 			imagePath: decipher/LOTR04011.jpg
-			javaClass: true
+			//parentId: 4_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U11
 			rarity: U
@@ -427,7 +454,7 @@
 			}
 		]
 		gametext: When this minion wins a skirmish, you may stack him on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. His twilight cost is -2.
-		lore: ...the Dunlendings raided often over the Isen.
+		lore: "...the Dunlendings raided often over the Isen."
 		promotext: ""
 		alts: {
 			promos: {
@@ -440,7 +467,10 @@
 	4_12: {
 		cardInfo: {
 			imagePath: decipher/LOTR04012.jpg
-			javaClass: true
+			//parentId: 4_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C12
 			rarity: C
@@ -483,7 +513,7 @@
 			}
 		]
 		gametext: Each time this minion wins a skirmish, you may make him strength +2 and <b>fierce</b> until the regroup phase.
-		lore: They hate us, and they are glad; for our doom seems certain to them.'
+		lore: "'They hate us, and they are glad; for our doom seems certain to them.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -496,7 +526,10 @@
 	4_13: {
 		cardInfo: {
 			imagePath: decipher/LOTR04013.jpg
-			javaClass: true
+			//parentId: 4_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U13
 			rarity: U
@@ -539,7 +572,7 @@
 			}
 		]
 		gametext: Each time this minion wins a skirmish, you may discard a Free Peoples possession (or 2 possessions if you spot 6 companions).
-		lore: Not in half a thousand years have they forgotten their grievance that the lords of Gondor gave the Mark to Eorl the Young and made alliance with him.'
+		lore: "'Not in half a thousand years have they forgotten their grievance that the lords of Gondor gave the Mark to Eorl the Young and made alliance with him.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -552,7 +585,10 @@
 	4_14: {
 		cardInfo: {
 			imagePath: decipher/LOTR04014.jpg
-			javaClass: true
+			//parentId: 4_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C14
 			rarity: C
@@ -588,7 +624,7 @@
 			}
 		]
 		gametext: Each time this minion wins a skirmish, you may spot another [dunland] Man to take control of a site.
-		lore: Yet there are many that cry in the Dunland tongue.'
+		lore: "'Yet there are many that cry in the Dunland tongue.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -601,7 +637,10 @@
 	4_15: {
 		cardInfo: {
 			imagePath: decipher/LOTR04015.jpg
-			javaClass: true
+			//parentId: 4_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C15
 			rarity: C
@@ -650,7 +689,7 @@
 			}
 		]
 		gametext: While skirmishing a [rohan] Man, this minion is strength +2.<br><b>Assignment:</b> Spot an ally to make that ally participate in skirmishes and assign this minion to skirmish that ally.
-		lore: They will not give way now for dusk or dawn, until Théoden is taken, or they themselves are slain.'
+		lore: "'They will not give way now for dusk or dawn, until Théoden is taken, or they themselves are slain.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -663,7 +702,10 @@
 	4_16: {
 		cardInfo: {
 			imagePath: decipher/LOTR04016.jpg
-			javaClass: true
+			//parentId: 4_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C16
 			rarity: C
@@ -706,7 +748,7 @@
 			}
 		]
 		gametext: Each time this minion wins a skirmish, you may make him strength +2 and <b>fierce</b> until the regroup phase.
-		lore: We will fight....'
+		lore: "'We will fight....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -719,7 +761,10 @@
 	4_17: {
 		cardInfo: {
 			imagePath: decipher/LOTR04017.jpg
-			javaClass: true
+			//parentId: 4_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C17
 			rarity: C
@@ -737,8 +782,8 @@
 		strength: 11
 		vitality: 1
 		site: 3
-		gametext: &nbsp; &nbsp;
-		lore: The Dunlendings' fury could only end in the death of the king of Rohan.
+		gametext: ""
+		lore: "The Dunlendings' fury could only end in the death of the king of Rohan."
 		promotext: ""
 		alts: {
 			promos: {
@@ -751,7 +796,10 @@
 	4_18: {
 		cardInfo: {
 			imagePath: decipher/LOTR04018.jpg
-			javaClass: true
+			//parentId: 4_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C18
 			rarity: C
@@ -792,7 +840,7 @@
 			}
 		]
 		gametext: <b>Assignment:</b> Spot an ally to make that ally participate in skirmishes and assign this minion to skirmish that ally.
-		lore: These were a remnant of the peoples that had dwelt in the vales of the White Mountains in ages past.
+		lore: "These were a remnant of the peoples that had dwelt in the vales of the White Mountains in ages past."
 		promotext: ""
 		alts: {
 			promos: {
@@ -805,7 +853,10 @@
 	4_19: {
 		cardInfo: {
 			imagePath: decipher/LOTR04019.jpg
-			javaClass: true
+			//parentId: 4_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R19
 			rarity: R
@@ -819,7 +870,8 @@
 		culture: Dunland
 		twilight: 1
 		type: Possession
-		keyword: support area
+		#target: 
+		keywords: Support Area
 		effects: [
 				{
 						type: trigger
@@ -863,7 +915,7 @@
 				}
 		]
 		gametext: Plays to your support area. When you play this possession, you may draw a card.<br><b>Response:</b> If a [dunland] Man is about to take a wound, remove (2) or discard this possession to prevent that wound.
-		lore: Only heavy animal skins armored the Dunlendings.
+		lore: "Only heavy animal skins armored the Dunlendings."
 		promotext: ""
 		alts: {
 			promos: {
@@ -876,7 +928,10 @@
 	4_20: {
 		cardInfo: {
 			imagePath: decipher/LOTR04020.jpg
-			javaClass: true
+			//parentId: 4_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R20
 			rarity: R
@@ -913,7 +968,7 @@
 				}
 		]
 		gametext: <b>Shadow:</b> Spot a site you control and exert Hill Chief to draw 3 cards.
-		lore: ...Saruman has armed the wild hillmen and herdfolk of Dunland beyond the rivers, and these also he loosed upon us.'
+		lore: "'...Saruman has armed the wild hillmen and herdfolk of Dunland beyond the rivers, and these also he loosed upon us.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -926,7 +981,10 @@
 	4_21: {
 		cardInfo: {
 			imagePath: decipher/LOTR04021.jpg
-			javaClass: true
+			//parentId: 4_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C21
 			rarity: C
@@ -961,7 +1019,7 @@
 				}
 		]
 		gametext: Each time the fellowship moves, you may spot another [dunland] Man to take control of a site.
-		lore: As in years past, the Dunlendings marched in force to the west.
+		lore: "As in years past, the Dunlendings marched in force to the west."
 		promotext: ""
 		alts: {
 			promos: {
@@ -974,7 +1032,10 @@
 	4_22: {
 		cardInfo: {
 			imagePath: decipher/LOTR04022.jpg
-			javaClass: true
+			//parentId: 4_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R22
 			rarity: R
@@ -1034,7 +1095,7 @@
 				}
 		]
 		gametext: While you control 2 sites, skip the archery phase.<br>While you control 3 sites, each of your [dunland] Men is <b>fierce</b>.<br>While you control 4 sites, each of your [dunland] Men is <b>damage +1</b>.
-		lore: They are fierce folk when roused.'
+		lore: "'They are fierce folk when roused.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1047,7 +1108,10 @@
 	4_23: {
 		cardInfo: {
 			imagePath: decipher/LOTR04023.jpg
-			javaClass: true
+			//parentId: 4_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R23
 			rarity: R
@@ -1097,7 +1161,7 @@
 				}
 		]
 		gametext: Each time this minion wins a skirmish, you may play a [dunland] Man from hand; his twilight cost is -2. That Man is <b>fierce</b> and <b>damage +1</b> until the regroup phase.
-		lore: That old hatred Saruman has inflamed.'
+		lore: "'That old hatred Saruman has inflamed.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1110,7 +1174,10 @@
 	4_24: {
 		cardInfo: {
 			imagePath: decipher/LOTR04024.jpg
-			javaClass: true
+			//parentId: 4_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U24
 			rarity: U
@@ -1155,7 +1222,7 @@
 			}
 		]
 		gametext: Each time this minion wins a skirmish, you may stack it on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -2.
-		lore: The relentless fury of the Dunlendings consumed one village after another.
+		lore: "The relentless fury of the Dunlendings consumed one village after another."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1168,7 +1235,10 @@
 	4_25: {
 		cardInfo: {
 			imagePath: decipher/LOTR04025.jpg
-			javaClass: true
+			//parentId: 4_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C25
 			rarity: C
@@ -1204,7 +1274,7 @@
 			}
 		]
 		gametext: Each time this minion wins a skirmish, you may spot another [dunland] minion to take control of a site.
-		lore: They will not quail at the sun... the wild men of the hills.'
+		lore: "'They will not quail at the sun... the wild men of the hills.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1217,7 +1287,10 @@
 	4_26: {
 		cardInfo: {
 			imagePath: decipher/LOTR04026.jpg
-			javaClass: true
+			//parentId: 4_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C26
 			rarity: C
@@ -1234,8 +1307,9 @@
 		strength: 3
 		itemclass: Hand weapon
 		target: culture(dunland),man
+
 		gametext: Bearer must be a [dunland] Man.
-		lore: Saruman armed the Dunlendings with weapons forged by his Orcs in Isengard.
+		lore: "Saruman armed the Dunlendings with weapons forged by his Orcs in Isengard."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1248,7 +1322,10 @@
 	4_27: {
 		cardInfo: {
 			imagePath: decipher/LOTR04027.jpg
-			javaClass: true
+			//parentId: 4_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U27
 			rarity: U
@@ -1262,7 +1339,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Condition
-		keyword: support area
+		keywords: Support Area
 		effects: [
 				{
 						type: trigger
@@ -1290,7 +1367,7 @@
 				}
 		]
 		gametext: Plays to your support area.<br>Each time a [dunland] Man wins a skirmish involving a [rohan] Man, you may make that minion strength +2 and <b>fierce</b> until the regroup phase.
-		lore: The Horsemen took your land; they drove your people into the hills to scratch living off rock.'
+		lore: "'The Horsemen took your land; they drove your people into the hills to scratch living off rock.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1303,7 +1380,10 @@
 	4_28: {
 		cardInfo: {
 			imagePath: decipher/LOTR04028.jpg
-			javaClass: true
+			//parentId: 4_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U28
 			rarity: U
@@ -1317,7 +1397,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Condition
-		keyword: support area
+		keywords: Support Area
 		effects: [
 				{
 						type: activated
@@ -1372,7 +1452,10 @@
 	4_29: {
 		cardInfo: {
 			imagePath: decipher/LOTR04029.jpg
-			javaClass: true
+			//parentId: 4_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R29
 			rarity: R
@@ -1386,7 +1469,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Condition
-		keyword: support area
+		keywords: Support Area
 		effects: [
 				{
 						type: modifier
@@ -1403,7 +1486,7 @@
 				}
 		]
 		gametext: Plays to your support area.<br>While a [dunland] Man is stacked on a site, the Shadow number of each site is +5.
-		lore: As their homes were ravaged by the wild men, refugees fled to the safety of Helm's Deep.
+		lore: "As their homes were ravaged by the wild men, refugees fled to the safety of Helm's Deep."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1416,7 +1499,10 @@
 	4_30: {
 		cardInfo: {
 			imagePath: decipher/LOTR04030.jpg
-			javaClass: true
+			//parentId: 4_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R30
 			rarity: R
@@ -1453,7 +1539,7 @@
 				}
 		]
 		gametext: Plays on a site you control.<br><b>Regroup:</b> Spot 2 [dunland] Men and discard this condition to make the Free Peoples player choose to move again this turn (if the move limit allows).
-		lore: Hordes from Dunland laid waste to villages as their numbers grew.
+		lore: "Hordes from Dunland laid waste to villages as their numbers grew."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1466,7 +1552,10 @@
 	4_31: {
 		cardInfo: {
 			imagePath: decipher/LOTR04031.jpg
-			javaClass: true
+			//parentId: 4_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U31
 			rarity: U
@@ -1480,7 +1569,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Condition
-		keyword: support area
+		keywords: Support Area
 		effects: [
 				{
 						type: activated
@@ -1501,7 +1590,7 @@
 				}
 		]
 		gametext: Plays to your support area.<br><b>Assignment:</b> Spot a site you control and remove (2) to assign a [dunland] Man to an unbound companion.
-		lore: Like their ancestors years before, the Dunlendings came down from Isengard.
+		lore: "Like their ancestors years before, the Dunlendings came down from Isengard."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1514,7 +1603,10 @@
 	4_32: {
 		cardInfo: {
 			imagePath: decipher/LOTR04032.jpg
-			javaClass: true
+			//parentId: 4_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R32
 			rarity: R
@@ -1528,7 +1620,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -1544,7 +1636,7 @@
 			]
 		}
 		gametext: <b>Response:</b> If your [dunland] Man wins a skirmish, discard all Free Peoples cards borne by the companion or ally he was skirmishing.
-		lore: What the Dunlendings cannot steal, they destroy.
+		lore: "What the Dunlendings cannot steal, they destroy."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1557,7 +1649,10 @@
 	4_33: {
 		cardInfo: {
 			imagePath: decipher/LOTR04033.jpg
-			javaClass: true
+			//parentId: 4_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R33
 			rarity: R
@@ -1630,7 +1725,10 @@
 	4_34: {
 		cardInfo: {
 			imagePath: decipher/LOTR04034.jpg
-			javaClass: true
+			//parentId: 4_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U34
 			rarity: U
@@ -1644,7 +1742,7 @@
 		culture: Dunland
 		twilight: 2
 		type: Condition
-		keyword: support area
+		keywords: Support Area
 		effects: [
 				{
 						type: trigger
@@ -1695,7 +1793,10 @@
 	4_35: {
 		cardInfo: {
 			imagePath: decipher/LOTR04035.jpg
-			javaClass: true
+			//parentId: 4_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R35
 			rarity: R
@@ -1709,7 +1810,7 @@
 		culture: Dunland
 		twilight: 0
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
@@ -1727,7 +1828,7 @@
 			]
 		}
 		gametext: <b>Maneuver:</b> Spot 2 sites you control to make each of your [dunland] Men <b>fierce</b> until the regroup phase.
-		lore: The anger of the wild men increased with every home they pillaged.
+		lore: "The anger of the wild men increased with every home they pillaged."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1740,7 +1841,10 @@
 	4_36: {
 		cardInfo: {
 			imagePath: decipher/LOTR04036.jpg
-			javaClass: true
+			//parentId: 4_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U36
 			rarity: U
@@ -1773,7 +1877,7 @@
 				}
 		]
 		gametext: Bearer must be a [dunland] Man.<br>Each time bearer wins a skirmish, you may discard 2 Free Peoples possessions.
-		lore: The wooden weapons of the wild men slew scores of unarmed villagers.
+		lore: "The wooden weapons of the wild men slew scores of unarmed villagers."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1786,7 +1890,10 @@
 	4_37: {
 		cardInfo: {
 			imagePath: decipher/LOTR04037.jpg
-			javaClass: true
+			//parentId: 4_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C37
 			rarity: C
@@ -1800,7 +1907,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -1825,7 +1932,7 @@
 			]
 		}
 		gametext: <b>Response:</b> If a [dunland] Man wins a skirmish, make him <b>fierce</b> and strength +4 until the regroup phase.
-		lore: Death to the Forgoil!'
+		lore: "'Death to the Forgoil!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1838,7 +1945,10 @@
 	4_38: {
 		cardInfo: {
 			imagePath: decipher/LOTR04038.jpg
-			javaClass: true
+			//parentId: 4_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4U38
 			rarity: U
@@ -1888,7 +1998,7 @@
 				}
 		]
 		gametext: Each time this minion wins a skirmish, you may play a [dunland] Man from hand; his twilight cost is -2. That Man is <b>fierce</b> and <b>damage +1</b> until the regroup phase.
-		lore: By our blood... we swear to fight for you....'
+		lore: "'By our blood... we swear to fight for you....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1901,7 +2011,10 @@
 	4_39: {
 		cardInfo: {
 			imagePath: decipher/LOTR04039.jpg
-			javaClass: true
+			//parentId: 4_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R39
 			rarity: R
@@ -1915,7 +2028,7 @@
 		culture: Dunland
 		twilight: 1
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
@@ -1931,7 +2044,7 @@
 			]
 		}
 		gametext: <b>Maneuver:</b> Spot 3 [dunland] Men to discard a Free Peoples possession or condition.
-		lore: Not even the smallest of trinkets was safe from the destruction of the Dunlendings.
+		lore: "Not even the smallest of trinkets was safe from the destruction of the Dunlendings."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1944,7 +2057,10 @@
 	4_40: {
 		cardInfo: {
 			imagePath: decipher/LOTR04040.jpg
-			javaClass: true
+			//parentId: 4_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R40
 			rarity: R
@@ -1963,7 +2079,7 @@
 		strength: 10
 		vitality: 2
 		site: 3
-		keyword: fierce
+		keywords: Fierce
 		effects: [
 			{
 				type: Response
@@ -1981,7 +2097,7 @@
 			}
 		]
 		gametext: <b>Fierce</b>.<br><b>Response:</b> If another [dunland] Man wins a skirmish, exert Wulf to take control of a site.
-		lore: Do you not hear their voices?'
+		lore: "'Do you not hear their voices?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1990,5 +2106,5 @@
 			}
 		}
 	}
-	
+
 }

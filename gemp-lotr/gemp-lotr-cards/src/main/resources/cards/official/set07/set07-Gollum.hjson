@@ -3,7 +3,6 @@
 	7_53: {
 		cardInfo: {
 			imagePath: decipher/LOTR07053.jpg
-			javaClass: true
 			//parentId: 7_53
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,30 +20,30 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			requires: {
-			    type: cantSpot
-			    filter: name(Gollum)
+				type: cantSpot
+				filter: name(Gollum)
 			}
 			cost: {
 				type: choice
 				texts: [
-				    Play Gollum from your draw deck
-				    Play Gollum from discard pile
+					Play Gollum from your draw deck
+					Play Gollum from discard pile
 				]
 				effects: [
-				    {
-				        type: playCardFromDrawDeck
-				        select: choose(name(Gollum))
-                        showAll: true
-                        shuffle: true
-				    }
-				    {
-				        type: playCardFromDiscard
-				        select: choose(name(Gollum))
-				    }
+					{
+						type: playCardFromDrawDeck
+						select: choose(name(Gollum))
+						showAll: true
+						shuffle: true
+					}
+					{
+						type: playCardFromDiscard
+						select: choose(name(Gollum))
+					}
 				]
 			},
 			effect: [
@@ -54,7 +53,7 @@
 			]
 		}
 		gametext: Play Gollum from your draw deck or discard pile to add a threat.
-		lore: Give us that....'
+		lore: "'Give us that....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -67,7 +66,6 @@
 	7_54: {
 		cardInfo: {
 			imagePath: decipher/LOTR07054.jpg
-			javaClass: true
 			//parentId: 7_54
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -85,7 +83,7 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -96,28 +94,28 @@
 					memorize: discardedCards
 				}
 				{
-				    type: modifyStrength
-				    select: choose(name(Sméagol))
-				    amount: {
-				        type: forEachInMemory
-				        memory: discardedCards
-				        multiplier: 3
-				    }
-				    memorize: chosenSmeagol
+					type: modifyStrength
+					select: choose(name(Sméagol))
+					amount: {
+						type: forEachInMemory
+						memory: discardedCards
+						multiplier: 3
+					}
+					memorize: chosenSmeagol
 				}
 				{
-				    type: addKeyword
-				    select: memory(chosenSmeagol)
-				    keyword: damage
-				    amount: {
-				        type: forEachInMemory
-				        memory: discardedCards
-				    }
+					type: addKeyword
+					select: memory(chosenSmeagol)
+					keyword: damage
+					amount: {
+						type: forEachInMemory
+						memory: discardedCards
+					}
 				}
 			]
 		}
 		gametext: Discard any number of [gollum] conditions. For each condition discarded, make Sméagol strength +3 and <b>damage +1</b>.
-		lore: Clever hobbits to climb so high, very clever hobbits!'
+		lore: "'Clever hobbits to climb so high, very clever hobbits!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -130,7 +128,6 @@
 	7_55: {
 		cardInfo: {
 			imagePath: decipher/LOTR07055.jpg
-			javaClass: true
 			//parentId: 7_55
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -150,22 +147,22 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            count: 3
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(name(Sméagol))
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 3
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(name(Sméagol))
+				}
+			}
 		]
 		gametext: <b>Fellowship:</b> Discard 3 cards from hand to play Sméagol from your discard pile.
-		lore: Come on, we must go, no time to lose!'
+		lore: "'Come on, we must go, no time to lose!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -178,7 +175,6 @@
 	7_56: {
 		cardInfo: {
 			imagePath: decipher/LOTR07056.jpg
-			javaClass: true
 			//parentId: 7_56
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -196,27 +192,27 @@
 		culture: Gollum
 		twilight: 3
 		type: Condition
-		keywords: Stealth
 		target: title(Sméagol)
+		keywords: Stealth
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: aboutToBeKilled
-		            filter: name(Sméagol)
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: name(Sméagol),inSkirmish
-		        }
-		        effect: {
-		            type: discard
-		            select: bearer
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: aboutToBeKilled
+					filter: name(Sméagol)
+				}
+				requires: {
+					type: canSpot
+					filter: name(Sméagol),inSkirmish
+				}
+				effect: {
+					type: discard
+					select: bearer
+				}
+			}
 		]
 		gametext: <b>Stealth</b>.<br>Bearer must be Sméagol.<br>If Sméagol is about to be killed in a skirmish, he is discarded instead.
-		lore: Not that way!'
+		lore: "'Not that way!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -229,7 +225,6 @@
 	7_57: {
 		cardInfo: {
 			imagePath: decipher/LOTR07057.jpg
-			javaClass: true
 			//parentId: 7_57
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -249,28 +244,28 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: or(name(Gollum),name(Sméagol))
-		        }
-		        effect: {
-		            type: addThreats
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: returnToHand
-		            select: choose(name(Gollum))
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: or(name(Gollum),name(Sméagol))
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: returnToHand
+					select: choose(name(Gollum))
+				}
+			}
 		]
 		gametext: Each time Gollum or Sméagol is played, add a threat.<br><b>Regroup:</b> Discard this condition to return Gollum to his owner's hand.
 		lore: ""
@@ -286,7 +281,6 @@
 	7_58: {
 		cardInfo: {
 			imagePath: decipher/LOTR07058.jpg
-			javaClass: true
 			//parentId: 7_58
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -309,26 +303,26 @@
 		vitality: 4
 		site: 3
 		effects: [
-		    {
-		        type: activatedInDiscard
-		        phase: shadow
-		        requires: [
-                    {
-                        type: haveInitiative
-                        side: shadow
-                    }
-                    {
-                        type: canSelfBePlayed
-                    }
-                ]
-		        effect: {
-		            type: playCardFromDiscard
-		            select: self
-		        }
-		    }
+			{
+				type: activatedInDiscard
+				phase: shadow
+				requires: [
+					{
+						type: haveInitiative
+						side: shadow
+					}
+					{
+						type: canSelfBePlayed
+					}
+				]
+				effect: {
+					type: playCardFromDiscard
+					select: self
+				}
+			}
 		]
 		gametext: If you have initiative during the Shadow phase, you may play this minion from your discard pile.
-		lore: Let Her deal with them... she must eat. All She gets is filthy Orcses.'
+		lore: "'Let Her deal with them... she must eat. All She gets is filthy Orcses.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -341,7 +335,6 @@
 	7_59: {
 		cardInfo: {
 			imagePath: decipher/LOTR07059.jpg
-			javaClass: true
 			//parentId: 7_59
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -364,35 +357,35 @@
 		vitality: 4
 		site: 3
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert Gollum twice
-		                Remove a threat
-		            ]
-		            effects: [
-		                {
-                            type: exert
-                            select: self
-                            times: 2
-		                }
-		                {
-		                    type: removeThreats
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Exert Gollum twice
+						Remove a threat
+					]
+					effects: [
+						{
+							type: exert
+							select: self
+							times: 2
+						}
+						{
+							type: removeThreats
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Exert Gollum twice or remove a threat to make him strength +2.
-		lore: When they come to the bridge they will see us. Come away! Climb, climb!
+		lore: "When they come to the bridge they will see us. Come away! Climb, climb!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -405,7 +398,6 @@
 	7_60: {
 		cardInfo: {
 			imagePath: decipher/LOTR07060.jpg
-			javaClass: true
 			//parentId: 7_60
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -425,25 +417,25 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: [
-                    {
-                        type: discard
-                        select: choose(name(Gollum))
-                    }
-                    {
-                        type: removeThreats
-                    }
-                ]
-                effect: {
-                    type: addBurdens
-                }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: discard
+						select: choose(name(Gollum))
+					}
+					{
+						type: removeThreats
+					}
+				]
+				effect: {
+					type: addBurdens
+				}
+			}
 		]
 		gametext: <b>Regroup:</b> Discard Gollum and remove a threat to add a burden.
-		lore: Sméagol knows... Sméagol carried burden many years.'
+		lore: "'Sméagol knows... Sméagol carried burden many years.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -456,7 +448,6 @@
 	7_61: {
 		cardInfo: {
 			imagePath: decipher/LOTR07061.jpg
-			javaClass: true
 			//parentId: 7_61
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -474,43 +465,43 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: [
-            {
-                type: event
-                requires: {
-                    type: canSpot
-                    filter: or(name(Gollum),name(Sméagol))
-                }
-                effect: [
-                    {
-                        type: modifyStrength
-                        select: choose(or(nazgul,and(culture(sauron),minion),and(culture(gollum),minion)))
-                        amount: 2
-                    }
-                ]
-            }
-		    {
-		        type: activatedInDiscard
-		        phase: shadow
-		        requires: [
-                    {
-                        type: haveInitiative
-                        side: shadow
-                    }
-                    {
-                        type: canSelfBePlayed
-                    }
-                ]
-		        effect: {
-		            type: playCardFromDiscard
-		            select: self
-		            extraEffects: {
-		                type: putPlayedEventOnBottomOfDrawDeck
-		            }
-		        }
-		    }
-        ]
+			{
+				type: event
+				requires: {
+					type: canSpot
+					filter: or(name(Gollum),name(Sméagol))
+				}
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(or(nazgul,and(culture(sauron),minion),and(culture(gollum),minion)))
+						amount: 2
+					}
+				]
+			}
+			{
+				type: activatedInDiscard
+				phase: shadow
+				requires: [
+					{
+						type: haveInitiative
+						side: shadow
+					}
+					{
+						type: canSelfBePlayed
+					}
+				]
+				effect: {
+					type: playCardFromDiscard
+					select: self
+					extraEffects: {
+						type: putPlayedEventOnBottomOfDrawDeck
+					}
+				}
+			}
+		]
 		gametext: Spot Gollum or Sméagol to make a Nazgûl, [sauron] minion, or [gollum] minion strength +2.<br>If you have initiative, you may play this event from your discard pile; place it under your draw deck instead of discarding it.
 		lore: ""
 		promotext: ""
@@ -525,7 +516,6 @@
 	7_62: {
 		cardInfo: {
 			imagePath: decipher/LOTR07062.jpg
-			javaClass: true
 			//parentId: 7_62
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -545,41 +535,41 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: [
-		            {
-		                type: removeTwilight
-		            }
-		            {
-		                type: exert
-		                select: choose(name(Gollum))
-		            }
-		        ]
-		        effect: [
-                    {
-                        type: discardTopCardsFromDeck
-                        forced: false
-                        memorize: discardedCard
-                    }
-                    {
-                        type: If
-                        check: {
-                            type: memoryMatches
-                            memory: discardedCard
-                            filter: or(culture(gollum),culture(wraith))
-                        }
-                        true: {
-                            type: putCardsFromDiscardIntoHand
-                            select: memory(discardedCard)
-                        }
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: removeTwilight
+					}
+					{
+						type: exert
+						select: choose(name(Gollum))
+					}
+				]
+				effect: [
+					{
+						type: discardTopCardsFromDeck
+						forced: false
+						memorize: discardedCard
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: discardedCard
+							filter: or(culture(gollum),culture(wraith))
+						}
+						true: {
+							type: putCardsFromDiscardIntoHand
+							select: memory(discardedCard)
+						}
+					}
+				]
+			}
 		]
 		gametext: <b>Shadow:</b> Remove (1) and exert Gollum to discard the top card of your draw deck. If that card is a [gollum] or [wraith] card, take it into hand.
-		lore: See! See! He wants it for himself.'
+		lore: "'See! See! He wants it for himself.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -592,7 +582,6 @@
 	7_63: {
 		cardInfo: {
 			imagePath: decipher/LOTR07063.jpg
-			javaClass: true
 			//parentId: 7_63
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -612,39 +601,39 @@
 		type: Condition
 		target: minion,not(hasAttached(name(Let Her Deal With Them)))
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: or(name(Gollum),name(Sméagol))
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: activatedInDiscard
-		        phase: shadow
-		        requires: [
-                    {
-                        type: haveInitiative
-                        side: shadow
-                    }
-                    {
-                        type: canSelfBePlayed
-                    }
-                ]
-		        effect: {
-		            type: playCardFromDiscard
-		            select: self
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: or(name(Gollum),name(Sméagol))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: activatedInDiscard
+				phase: shadow
+				requires: [
+					{
+						type: haveInitiative
+						side: shadow
+					}
+					{
+						type: canSelfBePlayed
+					}
+				]
+				effect: {
+					type: playCardFromDiscard
+					select: self
+				}
+			}
 		]
 		gametext: To play, spot Gollum or Sméagol. Bearer must be a minion. Limit 1 per bearer.<br>Bearer is <b>damage +1</b>.<br>If you have initiative during the Shadow phase, you may play this condition from your discard pile.
 		lore: ""
@@ -660,7 +649,6 @@
 	7_64: {
 		cardInfo: {
 			imagePath: decipher/LOTR07064.jpg
-			javaClass: true
 			//parentId: 7_64
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -678,7 +666,7 @@
 		culture: Gollum
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -689,17 +677,17 @@
 					memorize: spotCount
 				}
 				{
-				    type: modifyStrength
-				    select: choose(name(Sméagol))
-				    amount: {
-				        type: fromMemory
-				        memory: spotCount
-				    }
+					type: modifyStrength
+					select: choose(name(Sméagol))
+					amount: {
+						type: fromMemory
+						memory: spotCount
+					}
 				}
 			]
 		}
 		gametext: Make Sméagol strength +1 for each [gollum] card you spot.
-		lore: He's a fat, horrid Hobbit, who hates Sméagol, who makes up nasty lies.'
+		lore: "'He's a fat, horrid Hobbit, who hates Sméagol, who makes up nasty lies.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -712,7 +700,6 @@
 	7_65: {
 		cardInfo: {
 			imagePath: decipher/LOTR07065.jpg
-			javaClass: true
 			//parentId: 7_65
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -732,28 +719,28 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: name(Sméagol)
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: choose(name(Sméagol))
-		        }
-		        effect: {
-		            type: removeThreats
-		            amount: 2
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Sméagol)
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: choose(name(Sméagol))
+				}
+				effect: {
+					type: removeThreats
+					amount: 2
+				}
+			}
 		]
 		gametext: To play, spot Sméagol.<br><b>Regroup:</b> Discard Sméagol to remove 2 threats.
-		lore: Sméagol wouldn't hurt a fly!'
+		lore: "'Sméagol wouldn't hurt a fly!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -766,7 +753,6 @@
 	7_66: {
 		cardInfo: {
 			imagePath: decipher/LOTR07066.jpg
-			javaClass: true
 			//parentId: 7_66
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -784,12 +770,12 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			cost: {
-    		    type: exert
-    		    select: choose(name(Sméagol))
+				type: exert
+				select: choose(name(Sméagol))
 			},
 			effect: [
 				{
@@ -798,19 +784,19 @@
 					memorize: revealedCards
 				}
 				{
-				    type: discardFromHand
-				    forced: true
-				    player: shadow
-				    hand: shadow
-				    count: {
-				        type: forEachCultureInMemory
-				        memory: revealedCards
-				    }
+					type: discardFromHand
+					forced: true
+					player: shadow
+					hand: shadow
+					count: {
+						type: forEachCultureInMemory
+						memory: revealedCards
+					}
 				}
 			]
 		}
 		gametext: Exert Sméagol to reveal an opponent's hand. That opponent must discard a card from hand for each culture revealed.
-		lore: ...they are watching... eyes will see us.'
+		lore: "'...they are watching... eyes will see us.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -823,7 +809,6 @@
 	7_67: {
 		cardInfo: {
 			imagePath: decipher/LOTR07067.jpg
-			javaClass: true
 			//parentId: 7_67
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -843,51 +828,51 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-                    type: canSpot
-                    filter: name(Gollum)
-                }
-		    }
-		    {
-		        type: extraCost
-		        skipValidate: true
-		        cost: [
-                    {
-                        type: addThreats
-                        amount: any
-                    }
-                ]
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: name(Gollum)
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: regroup
-		        }
-		        effect: [
-		            {
-		                type: discard
-		                select: self
-		            }
-		            {
-		                type: removeThreats
-		                amount: 9
-		            }
-		        ]
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gollum)
+				}
+			}
+			{
+				type: extraCost
+				skipValidate: true
+				cost: [
+					{
+						type: addThreats
+						amount: any
+					}
+				]
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: name(Gollum)
+					amount: 2
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: [
+					{
+						type: discard
+						select: self
+					}
+					{
+						type: removeThreats
+						amount: 9
+					}
+				]
+			}
 		]
 		gametext: To play, spot Gollum and add up to 9 threats.<br>Gollum is strength +2.<br>Discard this condition and remove 9 threats at the start of the regroup phase.
-		lore: We shall see... Oh yes, we shall see!'
+		lore: "'We shall see... Oh yes, we shall see!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -900,7 +885,6 @@
 	7_68: {
 		cardInfo: {
 			imagePath: decipher/LOTR07068.jpg
-			javaClass: true
 			//parentId: 7_68
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -920,58 +904,58 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: name(Sméagol)
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: moves
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Add a threat
-		                Discard this condition
-		            ]
-		            effects: [
-		                {
-		                    type: addThreats
-		                }
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		            ]
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: discard
-		            select: choose(name(Sméagol))
-		        }
-		        effect: {
-		            type: preventable
-		            text: Would you like to exert a minion twice to prevent Free People player discarding a minion?
-		            player: shadow
-		            cost: {
-		                type: exert
-		                player: shadow
-		                select: choose(minion)
-		                times: 2
-		            }
-		            effect: {
-		                type: discard
-		                select: choose(minion)
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Sméagol)
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add a threat
+						Discard this condition
+					]
+					effects: [
+						{
+							type: addThreats
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: discard
+					select: choose(name(Sméagol))
+				}
+				effect: {
+					type: preventable
+					text: Would you like to exert a minion twice to prevent Free People player discarding a minion?
+					player: shadow
+					cost: {
+						type: exert
+						player: shadow
+						select: choose(minion)
+						times: 2
+					}
+					effect: {
+						type: discard
+						select: choose(minion)
+					}
+				}
+			}
 		]
 		gametext: To play, spot Sméagol.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Maneuver:</b> Discard Sméagol to discard a minion. An opponent may exert a minion twice to prevent this.
 		lore: ""
@@ -987,7 +971,6 @@
 	7_69: {
 		cardInfo: {
 			imagePath: decipher/LOTR07069.jpg
-			javaClass: true
 			//parentId: 7_69
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1007,40 +990,40 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: name(Sméagol)
-		        }
-		    }
-		    {
-		        type: extraCost
-		        cost: {
-		            type: addThreats
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyMoveLimit
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: endOfTurn
-		        }
-		        effect: {
-		            type: discard
-		            select: self
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Sméagol)
+				}
+			}
+			{
+				type: extraCost
+				cost: {
+					type: addThreats
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyMoveLimit
+					amount: 1
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: endOfTurn
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
 		]
 		gametext: To play, spot Sméagol and add 2 threats.<br>The move limit for this turn is +1.<br>Discard this condition at the end of the turn.
-		lore: Not that way! No, not that way!'
+		lore: "'Not that way! No, not that way!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1053,7 +1036,6 @@
 	7_70: {
 		cardInfo: {
 			imagePath: decipher/LOTR07070.jpg
-			javaClass: true
 			//parentId: 7_70
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1071,7 +1053,7 @@
 		culture: Gollum
 		twilight: 3
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			cost: {
@@ -1086,7 +1068,7 @@
 			]
 		}
 		gametext: Discard Sméagol to play a companion from your discard pile.
-		lore: Sméagol look after Master. Sméagol serve Master well!'
+		lore: "'Sméagol look after Master. Sméagol serve Master well!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1099,7 +1081,6 @@
 	7_71: {
 		cardInfo: {
 			imagePath: decipher/LOTR07071.jpg
-			javaClass: true
 			//parentId: 7_71
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1124,35 +1105,35 @@
 		resistance: 6
 		keywords: Ring-bound
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: addBurdens
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: assignment
-		        cost: [
-		            {
-		                type: assignFPCharacterToSkirmish
-		                fpCharacter: self
-		                minion: choose(minion)
-		                memorizeMinion: assignedMinion
-		            }
-		            {
-		                type: addThreats
-		                amount: 2
-		            }
-		        ]
-		        effect: {
-		            type: exhaust
-		            select: memory(assignedMinion)
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: addBurdens
+				}
+			}
+			{
+				type: activated
+				phase: assignment
+				cost: [
+					{
+						type: assignFPCharacterToSkirmish
+						fpCharacter: self
+						minion: choose(minion)
+						memorizeMinion: assignedMinion
+					}
+					{
+						type: addThreats
+						amount: 2
+					}
+				]
+				effect: {
+					type: exhaust
+					select: memory(assignedMinion)
+				}
+			}
 		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br><b>Assignment:</b> Assign a minion to Sméagol and add 2 threats to exhaust that minion.
-		lore: Yes, yes! Sméagol helps, always helps.'
+		lore: "'Yes, yes! Sméagol helps, always helps.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1165,7 +1146,6 @@
 	7_72: {
 		cardInfo: {
 			imagePath: decipher/LOTR07072.jpg
-			javaClass: true
 			//parentId: 7_72
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1190,33 +1170,33 @@
 		resistance: 6
 		keywords: Ring-bound
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: addBurdens
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: haveInitiative
-		            side: free people
-		        }
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            count: 2
-		        }
-		        effect: {
-		            type: alterOverwhelmMultiplier
-		            select: self
-		            multiplier: 3
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: addBurdens
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: haveInitiative
+					side: free people
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: alterOverwhelmMultiplier
+					select: self
+					multiplier: 3
+				}
+			}
 		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br><b>Skirmish:</b> If you have initiative, discard 2 cards from your hand. Sméagol cannot be overwhelmed unless his strength is tripled.
-		lore: Wake up! Wake up! Wake up, sleepies! We must go, yes, we must go at once!'
+		lore: "'Wake up! Wake up! Wake up, sleepies! We must go, yes, we must go at once!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1229,7 +1209,6 @@
 	7_73: {
 		cardInfo: {
 			imagePath: decipher/LOTR07073.jpg
-			javaClass: true
 			//parentId: 7_73
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1247,39 +1226,37 @@
 		culture: Gollum
 		twilight: 2
 		type: Event
-		timeword: Skirmish
-		keywords: [
-			Stealth
-		]
+		timewords: Skirmish
+		keywords: Stealth
 		effects: {
 			type: event
 			effect: [
 				{
 					type: if
 					check: {
-					    type: isGreaterThan
-					    firstNumber: {
-					        type: forEachVitality
-					        filter: name(Sméagol),inSkirmish
-					    }
-					    secondNumber: {
-					        type: forEachVitality
-					        filter: minion,inSkirmishAgainst(name(Sméagol))
-					    }
+						type: isGreaterThan
+						firstNumber: {
+							type: forEachVitality
+							filter: name(Sméagol),inSkirmish
+						}
+						secondNumber: {
+							type: forEachVitality
+							filter: minion,inSkirmishAgainst(name(Sméagol))
+						}
 					}
 					false: {
-					    type: heal
-					    select: choose(name(Sméagol))
+						type: heal
+						select: choose(name(Sméagol))
 					}
 					true: {
-					    type: cancelSkirmish
-					    filter: name(Sméagol)
+						type: cancelSkirmish
+						filter: name(Sméagol)
 					}
 				}
 			]
 		}
 		gametext: <b>Stealth</b>.<br>Heal Sméagol (or cancel Sméagol's skirmish if he has more vitality than the minion or minions he is skirmishing).
-		lore: What were you doing?'
+		lore: "'What were you doing?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1292,7 +1269,6 @@
 	7_74: {
 		cardInfo: {
 			imagePath: decipher/LOTR07074.jpg
-			javaClass: true
 			//parentId: 7_74
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1310,7 +1286,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			cost: {
@@ -1323,16 +1299,16 @@
 					memorize: spotCount
 				}
 				{
-				    type: addTwilight
-				    amount: {
-				        type: fromMemory
-				        memory: spotCount
-				    }
+					type: addTwilight
+					amount: {
+						type: fromMemory
+						memory: spotCount
+					}
 				}
 			]
 		}
 		gametext: Play Gollum from your discard pile to add (1) for each threat you spot.
-		lore: Sméagol shows them secret ways that nobody else could find and they say, 'Sneak!''
+		lore: "'Sméagol shows them secret ways that nobody else could find and they say, 'Sneak!''"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1345,7 +1321,6 @@
 	7_75: {
 		cardInfo: {
 			imagePath: decipher/LOTR07075.jpg
-			javaClass: true
 			//parentId: 7_75
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1363,7 +1338,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -1382,7 +1357,7 @@
 			]
 		}
 		gametext: If a minion is about to take a wound, spot Gollum to prevent that wound.
-		lore: It may well be, oh yes, it may very well be, that when She throws away the bones and the empty clothes... we shall find It!'
+		lore: "'It may well be, oh yes, it may very well be, that when She throws away the bones and the empty clothes... we shall find It!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1395,7 +1370,6 @@
 	7_76: {
 		cardInfo: {
 			imagePath: decipher/LOTR07076.jpg
-			javaClass: true
 			//parentId: 7_76
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1413,7 +1387,7 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			cost: {
@@ -1424,7 +1398,7 @@
 				{
 					type: playNextSite
 				}
-                {
+				{
 					type: memorizeNumber
 					amount: {
 						type: nextSiteNumber
@@ -1446,7 +1420,7 @@
 			]
 		}
 		gametext: Play Sméagol from your discard pile to play the fellowship's next site (replacing an opponent's site if necessary). If you do not move again this turn, discard your hand.
-		lore: He hurts us... hurts poor Sméagol!'
+		lore: "'He hurts us... hurts poor Sméagol!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1459,7 +1433,6 @@
 	7_77: {
 		cardInfo: {
 			imagePath: decipher/LOTR07077.jpg
-			javaClass: true
 			//parentId: 7_77
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1527,7 +1500,6 @@
 	7_78: {
 		cardInfo: {
 			imagePath: decipher/LOTR07078.jpg
-			javaClass: true
 			//parentId: 7_78
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1545,12 +1517,12 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			requires: {
-			    type: haveInitiative
-			    side: free people
+				type: haveInitiative
+				side: free people
 			}
 			cost: {
 				type: discardFromHand
@@ -1566,7 +1538,7 @@
 			]
 		}
 		gametext: If you have initiative, discard 2 cards from hand to wound a minion Sméagol is skirmishing twice.
-		lore: If you scare him off, we are lost.'
+		lore: "'If you scare him off, we are lost.'"
 		promotext: ""
 		alts: {
 			promos: {

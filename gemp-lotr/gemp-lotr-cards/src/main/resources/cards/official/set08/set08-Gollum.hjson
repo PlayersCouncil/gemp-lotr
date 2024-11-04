@@ -3,7 +3,6 @@
 	8_22: {
 		cardInfo: {
 			imagePath: decipher/LOTR08022.jpg
-			javaClass: true
 			//parentId: 8_22
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -23,40 +22,40 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: name(Gollum)
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: canSpot
-		            filter: companion
-		            count: 6
-		        }
-		        effect: [
-		            {
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: name(Gollum)
+					keyword: fierce
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: companion
+					count: 6
+				}
+				effect: [
+					{
 									type: playCardFromDiscard
 									select: choose(name(Gollum))
-		            }
-		            {
+					}
+					{
 									type: exert
 									select: choose(companion)
-		            }
-		            {
+					}
+					{
 									type: putCardsFromPlayOnTopOfDeck
 									select: self
-		            }
-		        ]
-		    }
+					}
+				]
+			}
 		]
 		gametext: Gollum is <b>fierce</b>.<br><b>Shadow:</b> Spot 6 companions to play Gollum from your discard pile and exert a companion. Place this condition on top of your draw deck.
-		lore: ...even when he had come to her again and had bowed low....
+		lore: "...even when he had come to her again and had bowed low...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -69,7 +68,6 @@
 	8_23: {
 		cardInfo: {
 			imagePath: decipher/LOTR08023.jpg
-			javaClass: true
 			//parentId: 8_23
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -87,47 +85,48 @@
 		culture: Gollum
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(gollum),minion
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            select: choose(orc)
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: gollum
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: RemoveCultureTokens
-		            culture: gollum
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(name(Shelob))
-		            amount: 3
-		            limitPerCardThisPhase: 6
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gollum),minion
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(orc)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: gollum
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					culture: gollum
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(name(Shelob))
+					amount: 3
+					limitPerCardThisPhase: 6
+				}
+			}
 		]
 		gametext: To play, spot a [gollum] minion.<br><b>Regroup:</b> Discard an Orc from hand to add a [gollum] token here.<br><b>Skirmish:</b> Remove a [gollum] token here to make Shelob strength +3 (limit +6).
-		lore: When she binds with cords, she's after meat.'
+		lore: "'When she binds with cords, she's after meat.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -140,7 +139,6 @@
 	8_24: {
 		cardInfo: {
 			imagePath: decipher/LOTR08024.jpg
-			javaClass: true
 			//parentId: 8_24
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -160,24 +158,24 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: takesWound
-		            filter: companion
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: culture(gollum),minion,inSkirmish
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(companion)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: takesWound
+					filter: companion
+				}
+				requires: {
+					type: canSpot
+					filter: culture(gollum),minion,inSkirmish
+				}
+				effect: {
+					type: exert
+					select: choose(companion)
+				}
+			}
 		]
 		gametext: Each time a companion takes a wound during a skirmish that involves a [gollum] minion, exert a companion.
-		lore: And we'll save the Precious, as we promised.... Then we'll pay everyone back!'
+		lore: "'And we'll save the Precious, as we promised.... Then we'll pay everyone back!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -190,7 +188,6 @@
 	8_25: {
 		cardInfo: {
 			imagePath: decipher/LOTR08025.jpg
-			javaClass: true
 			//parentId: 8_25
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -215,36 +212,36 @@
 		site: 8
 		keywords: Fierce
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(culture(gollum),possession)
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachStacked
-		                filter: minion
-		                on: culture(gollum),possession
-		                multiplier: 3
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(culture(gollum),possession)
+					showAll: true
+					shuffle: true
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachStacked
+						filter: minion
+						on: culture(gollum),possession
+						multiplier: 3
+					}
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>When you play Shelob, you may play a [gollum] possession from your draw deck.<br>Shelob is strength +3 for each minion stacked on a [gollum] possession.
-		lore: ...who only desired death for all others....
+		lore: "...who only desired death for all others...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -257,7 +254,6 @@
 	8_26: {
 		cardInfo: {
 			imagePath: decipher/LOTR08026.jpg
-			javaClass: true
 			//parentId: 8_26
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -285,22 +281,22 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: self,inFierceSkirmish
-		            }
-		            filter: self
-                    keyword: damage
-                    amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: self,inFierceSkirmish
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Enduring</b>. <b>Fierce</b>.<br>While in a fierce skirmish, Shelob is <b>damage +1</b>.
-		lore: ...for all living things were her food, and her vomit darkness.
+		lore: "...for all living things were her food, and her vomit darkness."
 		promotext: ""
 		alts: {
 			promos: {
@@ -313,7 +309,6 @@
 	8_27: {
 		cardInfo: {
 			imagePath: decipher/LOTR08027.jpg
-			javaClass: true
 			//parentId: 8_27
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -338,39 +333,39 @@
 		resistance: 6
 		keywords: Ring-bound
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: addBurdens
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: addThreats
-		            amount: {
-		                type: forEachVitality
-		                filter: minion,inSkirmishAgainst(self)
-		            }
-		        }
-		        effect: {
-		            type: discard
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: putCardsFromDiscardIntoHand
-		            select: choose(culture(gollum),minion)
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: addBurdens
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: addThreats
+					amount: {
+						type: forEachVitality
+						filter: minion,inSkirmishAgainst(self)
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(gollum),minion)
+				}
+			}
 		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br><b>Skirmish:</b> Add threats equal to the total vitality of the minions Sméagol is skirmishing to discard Sméagol.<br><b>Regroup:</b> Discard Sméagol to take a [gollum] minion from your discard pile into hand.
 		lore: ""
@@ -386,7 +381,6 @@
 	8_28: {
 		cardInfo: {
 			imagePath: decipher/LOTR08028.jpg
-			javaClass: true
 			//parentId: 8_28
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -404,46 +398,47 @@
 		culture: Gollum
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: choice
-		            texts: [
-		                Remove a threat
-		                Remove a burden
-		            ]
-		            effects: [
-		                {
-		                    type: removeThreats
-		                }
-		                {
-		                    type: removeBurdens
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: transfer
-		            select: self
-		            where: choose(companion,inSkirmishAgainst(name(Shelob)))
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: assignedToSkirmish
-		            filter: bearer
-		        }
-		        effect: {
-		            type: exert
-		            select: bearer
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Remove a threat
+						Remove a burden
+					]
+					effects: [
+						{
+							type: removeThreats
+						}
+						{
+							type: removeBurdens
+						}
+					]
+				}
+				effect: {
+					type: transfer
+					select: self
+					where: choose(companion,inSkirmishAgainst(name(Shelob)))
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: assignedToSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: exert
+					select: bearer
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Remove a threat or a burden to transfer this possession to a companion skirmishing Shelob.<br>Each time bearer is assigned to a skirmish, bearer must exert.
-		lore: He lay now pale, and heard no voice, and did not move.
+		lore: "He lay now pale, and heard no voice, and did not move."
 		promotext: ""
 		alts: {
 			promos: {
@@ -456,7 +451,6 @@
 	8_29: {
 		cardInfo: {
 			imagePath: decipher/LOTR08029.jpg
-			javaClass: true
 			//parentId: 8_29
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -481,8 +475,8 @@
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Sméagol)
+				type: canSpot
+				filter: name(Sméagol)
 			}
 			effect: [
 				{
@@ -490,18 +484,18 @@
 					memorize: playedSite
 				}
 				{
-				    type: addModifier
-				    modifier: {
-				        type: modifyCost
-				        filter: memory(playedSite)
-				        amount: -1
-				    }
-				    until: endOfTurn
+					type: addModifier
+					modifier: {
+						type: modifyCost
+						filter: memory(playedSite)
+						amount: -1
+					}
+					until: endOfTurn
 				}
 			]
 		}
 		gametext: Spot Sméagol to play the fellowship's next site (replacing opponent's site if necessary). The Shadow number of the fellowship's next site is -1 until the end of the turn.
-		lore: ...the very crown of this bitter road.
+		lore: "...the very crown of this bitter road."
 		promotext: ""
 		alts: {
 			promos: {
@@ -514,7 +508,6 @@
 	8_30: {
 		cardInfo: {
 			imagePath: decipher/LOTR08030.jpg
-			javaClass: true
 			//parentId: 8_30
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -532,44 +525,45 @@
 		culture: Gollum
 		twilight: 1
 		type: Possession
+		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: [
-		            {
-		                type: not
-		                requires: {
-		                    type: hasCardStacked
-		                    filter: any
-		                    on: self
-		                    count: 3
-		                }
-		            }
-		            {
-		                type: canSpot
-		                filter: your,or(orc,and(culture(gollum),minion))
-		            }
-		        ]
-		        effect: {
-		            type: StackCardsFromPlay
-		            select: choose(your,or(orc,and(culture(gollum),minion)))
-		            where: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: playCardFromStacked
-		            select: choose(culture(gollum),minion)
-		            on: self
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				requires: [
+					{
+						type: not
+						requires: {
+							type: hasCardStacked
+							filter: any
+							on: self
+							count: 3
+						}
+					}
+					{
+						type: canSpot
+						filter: your,or(orc,and(culture(gollum),minion))
+					}
+				]
+				effect: {
+					type: StackCardsFromPlay
+					select: choose(your,or(orc,and(culture(gollum),minion)))
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: playCardFromStacked
+					select: choose(culture(gollum),minion)
+					on: self
+				}
+			}
 		]
 		gametext: <b>Regroup:</b> If there are fewer than 3 cards stacked here, spot your Orc or [gollum] minion to stack that minion here.<br><b>Shadow:</b> Play a [gollum] minion stacked here as if played from hand.
-		lore: Caught in a web. Soon he'll be eaten!'
+		lore: "'Caught in a web. Soon he'll be eaten!'"
 		promotext: ""
 		alts: {
 			promos: {

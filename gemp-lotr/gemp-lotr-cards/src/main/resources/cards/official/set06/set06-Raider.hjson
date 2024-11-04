@@ -3,7 +3,6 @@
 	6_78: {
 		cardInfo: {
 			imagePath: decipher/LOTR06078.jpg
-			javaClass: true
 			//parentId: 6_78
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -99,7 +98,6 @@
 	6_79: {
 		cardInfo: {
 			imagePath: decipher/LOTR06079.jpg
-			javaClass: true
 			//parentId: 6_79
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -147,7 +145,7 @@
 				}
 		]
 		gametext: Bearer must be an Easterling.<br>While you can spot 2 burdens, bearer cannot take wounds.<br>While you can spot 5 burdens, bearer is <b>damage +1</b>.
-		lore: ...and the tips of their spears....'
+		lore: "'...and the tips of their spears....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -160,7 +158,6 @@
 	6_80: {
 		cardInfo: {
 			imagePath: decipher/LOTR06080.jpg
-			javaClass: true
 			//parentId: 6_80
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -207,7 +204,7 @@
 				}
 		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Remove (3) to add 1 to the minion archery total for each companion over 4 (limit +4).
-		lore: But I've heard tales of the big folk down away in the Sunlands.'
+		lore: "'But I've heard tales of the big folk down away in the Sunlands.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -220,7 +217,6 @@
 	6_81: {
 		cardInfo: {
 			imagePath: decipher/LOTR06081.jpg
-			javaClass: true
 			//parentId: 6_81
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -265,7 +261,7 @@
 				}
 		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>When you play this minion, you may spot another Southron to play a minion with ambush from your discard pile.
-		lore: So when you said Men out of the South, all in red and gold," I said "were there any oliphaunts?" For if there was, I was going to take a look....'"
+		lore: "'So when you said \"Men out of the South, all in red and gold,\" I said \"were there any oliphaunts?\" For if there was, I was going to take a look....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -278,7 +274,6 @@
 	6_82: {
 		cardInfo: {
 			imagePath: decipher/LOTR06082.jpg
-			javaClass: true
 			//parentId: 6_82
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -296,7 +291,7 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
@@ -320,7 +315,7 @@
 			]
 		}
 		gametext: <b>Maneuver:</b> Spot a mounted [raider] Man to discard a companion (except the Ring-bearer). The Free Peoples player may add (4) to prevent this.
-		lore: ...I stomp round and round, / Never lie on the ground, / Not even to die. / Oliphaunt am I....'
+		lore: "'...I stomp round and round, / Never lie on the ground, / Not even to die. / Oliphaunt am I....'"
 		promotext: ""
 		alts: {
 			promos: {

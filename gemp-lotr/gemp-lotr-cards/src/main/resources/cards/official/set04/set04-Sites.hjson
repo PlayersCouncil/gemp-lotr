@@ -3,7 +3,6 @@
 	4_323: {
 		cardInfo: {
 			imagePath: decipher/LOTR04323.jpg
-			javaClass: true
 			//parentId: 4_323
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -49,7 +48,6 @@
 	4_324: {
 		cardInfo: {
 			imagePath: decipher/LOTR04324.jpg
-			javaClass: true
 			//parentId: 4_324
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -101,7 +99,6 @@
 	4_325: {
 		cardInfo: {
 			imagePath: decipher/LOTR04325.jpg
-			javaClass: true
 			//parentId: 4_325
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -151,7 +148,6 @@
 	4_326: {
 		cardInfo: {
 			imagePath: decipher/LOTR04326.jpg
-			javaClass: true
 			//parentId: 4_326
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -217,7 +213,6 @@
 	4_327: {
 		cardInfo: {
 			imagePath: decipher/LOTR04327.jpg
-			javaClass: true
 			//parentId: 4_327
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -268,7 +263,6 @@
 	4_328: {
 		cardInfo: {
 			imagePath: decipher/LOTR04328.jpg
-			javaClass: true
 			//parentId: 4_328
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -319,7 +313,6 @@
 	4_329: {
 		cardInfo: {
 			imagePath: decipher/LOTR04329.jpg
-			javaClass: true
 			//parentId: 4_329
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -365,7 +358,6 @@
 	4_330: {
 		cardInfo: {
 			imagePath: decipher/LOTR04330.jpg
-			javaClass: true
 			//parentId: 4_330
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -431,7 +423,6 @@
 	4_331: {
 		cardInfo: {
 			imagePath: decipher/LOTR04331.jpg
-			javaClass: true
 			//parentId: 4_331
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -482,7 +473,6 @@
 	4_332: {
 		cardInfo: {
 			imagePath: decipher/LOTR04332.jpg
-			javaClass: true
 			//parentId: 4_332
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -532,7 +522,6 @@
 	4_333: {
 		cardInfo: {
 			imagePath: decipher/LOTR04333.jpg
-			javaClass: true
 			//parentId: 4_333
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -585,7 +574,6 @@
 	4_334: {
 		cardInfo: {
 			imagePath: decipher/LOTR04334.jpg
-			javaClass: true
 			//parentId: 4_334
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -631,7 +619,6 @@
 	4_335: {
 		cardInfo: {
 			imagePath: decipher/LOTR04335.jpg
-			javaClass: true
 			//parentId: 4_335
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -682,7 +669,6 @@
 	4_336: {
 		cardInfo: {
 			imagePath: decipher/LOTR04336.jpg
-			javaClass: true
 			//parentId: 4_336
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -729,7 +715,6 @@
 	4_337: {
 		cardInfo: {
 			imagePath: decipher/LOTR04337.jpg
-			javaClass: true
 			//parentId: 4_337
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -786,7 +771,6 @@
 	4_338: {
 		cardInfo: {
 			imagePath: decipher/LOTR04338.jpg
-			javaClass: true
 			//parentId: 4_338
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -833,7 +817,6 @@
 	4_339: {
 		cardInfo: {
 			imagePath: decipher/LOTR04339.jpg
-			javaClass: true
 			//parentId: 4_339
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -893,7 +876,6 @@
 	4_340: {
 		cardInfo: {
 			imagePath: decipher/LOTR04340.jpg
-			javaClass: true
 			//parentId: 4_340
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -936,7 +918,6 @@
 	4_341: {
 		cardInfo: {
 			imagePath: decipher/LOTR04341.jpg
-			javaClass: true
 			//parentId: 4_341
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -986,7 +967,6 @@
 	4_342: {
 		cardInfo: {
 			imagePath: decipher/LOTR04342.jpg
-			javaClass: true
 			//parentId: 4_342
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1036,7 +1016,6 @@
 	4_343: {
 		cardInfo: {
 			imagePath: decipher/LOTR04343.jpg
-			javaClass: true
 			//parentId: 4_343
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1080,7 +1059,6 @@
 	4_344: {
 		cardInfo: {
 			imagePath: decipher/LOTR04344.jpg
-			javaClass: true
 			//parentId: 4_344
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1127,7 +1105,6 @@
 	4_345: {
 		cardInfo: {
 			imagePath: decipher/LOTR04345.jpg
-			javaClass: true
 			//parentId: 4_345
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1189,7 +1166,6 @@
 	4_346: {
 		cardInfo: {
 			imagePath: decipher/LOTR04346.jpg
-			javaClass: true
 			//parentId: 4_346
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1236,7 +1212,6 @@
 	4_347: {
 		cardInfo: {
 			imagePath: decipher/LOTR04347.jpg
-			javaClass: true
 			//parentId: 4_347
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1290,7 +1265,6 @@
 	4_348: {
 		cardInfo: {
 			imagePath: decipher/LOTR04348.jpg
-			javaClass: true
 			//parentId: 4_348
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1340,7 +1314,6 @@
 	4_349: {
 		cardInfo: {
 			imagePath: decipher/LOTR04349.jpg
-			javaClass: true
 			//parentId: 4_349
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1384,7 +1357,6 @@
 	4_350: {
 		cardInfo: {
 			imagePath: decipher/LOTR04350.jpg
-			javaClass: true
 			//parentId: 4_350
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1432,7 +1404,6 @@
 	4_351: {
 		cardInfo: {
 			imagePath: decipher/LOTR04351.jpg
-			javaClass: true
 			//parentId: 4_351
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1484,7 +1455,6 @@
 	4_352: {
 		cardInfo: {
 			imagePath: decipher/LOTR04352.jpg
-			javaClass: true
 			//parentId: 4_352
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1542,7 +1512,6 @@
 	4_353: {
 		cardInfo: {
 			imagePath: decipher/LOTR04353.jpg
-			javaClass: true
 			//parentId: 4_353
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1588,7 +1557,6 @@
 	4_354: {
 		cardInfo: {
 			imagePath: decipher/LOTR04354.jpg
-			javaClass: true
 			//parentId: 4_354
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1635,7 +1603,6 @@
 	4_355: {
 		cardInfo: {
 			imagePath: decipher/LOTR04355.jpg
-			javaClass: true
 			//parentId: 4_355
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1678,7 +1645,6 @@
 	4_356: {
 		cardInfo: {
 			imagePath: decipher/LOTR04356.jpg
-			javaClass: true
 			//parentId: 4_356
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1727,7 +1693,6 @@
 	4_357: {
 		cardInfo: {
 			imagePath: decipher/LOTR04357.jpg
-			javaClass: true
 			//parentId: 4_357
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1777,7 +1742,6 @@
 	4_358: {
 		cardInfo: {
 			imagePath: decipher/LOTR04358.jpg
-			javaClass: true
 			//parentId: 4_358
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1823,7 +1787,6 @@
 	4_359: {
 		cardInfo: {
 			imagePath: decipher/LOTR04359.jpg
-			javaClass: true
 			//parentId: 4_359
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1885,7 +1848,6 @@
 	4_360: {
 		cardInfo: {
 			imagePath: decipher/LOTR04360.jpg
-			javaClass: true
 			//parentId: 4_360
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1934,7 +1896,6 @@
 	4_361: {
 		cardInfo: {
 			imagePath: decipher/LOTR04361.jpg
-			javaClass: true
 			//parentId: 4_361
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1983,7 +1944,6 @@
 	4_362: {
 		cardInfo: {
 			imagePath: decipher/LOTR04362.jpg
-			javaClass: true
 			//parentId: 4_362
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2035,7 +1995,6 @@
 	4_363: {
 		cardInfo: {
 			imagePath: decipher/LOTR04363.jpg
-			javaClass: true
 			//parentId: 4_363
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant

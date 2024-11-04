@@ -3,7 +3,6 @@
 	15_155: {
 		cardInfo: {
 			imagePath: decipher/LOTR15155.jpg
-			javaClass: true
 			//parentId: 15_155
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -27,20 +26,20 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: controlledSite
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: controlledSite
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>This minion is strength +1 for each site you control.
-		lore: To war!
+		lore: "To war!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -53,7 +52,6 @@
 	15_156: {
 		cardInfo: {
 			imagePath: decipher/LOTR15156.jpg
-			javaClass: true
 			//parentId: 15_156
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -77,26 +75,26 @@
 		site: 5
 		keywords: Fierce
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inFierceSkirmish
-		            amount: 3
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,inFierceSkirmish
-		            keyword: hunter
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inFierceSkirmish
+					amount: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,inFierceSkirmish
+					keyword: hunter
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>During a fierce skirmish involving this minion, it is strength +3 and gains <b>hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper>
-		lore: They kept no order... yet their speed was very great.
+		lore: "They kept no order... yet their speed was very great."
 		promotext: ""
 		alts: {
 			promos: {
@@ -109,7 +107,6 @@
 	15_157: {
 		cardInfo: {
 			imagePath: decipher/LOTR15157.jpg
-			javaClass: true
 			//parentId: 15_157
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -136,34 +133,34 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        requires: {
-		            type: or
-		            requires: [
-		                {
-		                    type: canSpot
-		                    filter: hunter
-		                    count: 4
-		                }
-		                {
-		                    type: canSpot
-		                    filter: name(Uglúk)
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: takeControlOfSite
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				requires: {
+					type: or
+					requires: [
+						{
+							type: canSpot
+							filter: hunter
+							count: 4
+						}
+						{
+							type: canSpot
+							filter: name(Uglúk)
+						}
+					]
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
 		]
 		gametext: <b>Fierce</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>Each time this minion wins a skirmish, you may spot 4 hunters (or Uglúk) to control a site.
-		lore: But why not kill them quick, kill them now?'
+		lore: "'But why not kill them quick, kill them now?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -176,7 +173,6 @@
 	15_158: {
 		cardInfo: {
 			imagePath: decipher/LOTR15158.jpg
-			javaClass: true
 			//parentId: 15_158
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -200,20 +196,20 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: possession
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: possession
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>This minion is strength +1 for each possession you can spot.
-		lore: The Uruk-hai pillage the remains of the fallen merely to satisfy their bloodlust.
+		lore: "The Uruk-hai pillage the remains of the fallen merely to satisfy their bloodlust."
 		promotext: ""
 		alts: {
 			promos: {
@@ -226,7 +222,6 @@
 	15_159: {
 		cardInfo: {
 			imagePath: decipher/LOTR15159.jpg
-			javaClass: true
 			//parentId: 15_159
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -246,44 +241,44 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantReplaceSite
-		            requires: {
-		                type: canSpot
-		                filter: culture(uruk-hai),minion
-		            }
-		            player: free people
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-                    type: startOfPhase
-                    phase: skirmish
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(culture(uruk-hai),minion)
-		            times: {
-		                type: Conditional
-		                requires: {
-		                    type: controlsSite
-		                }
-		                true: 2
-		                false: 1
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantReplaceSite
+					requires: {
+						type: canSpot
+						filter: culture(uruk-hai),minion
+					}
+					player: free people
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: heal
+					select: choose(culture(uruk-hai),minion)
+					times: {
+						type: Conditional
+						requires: {
+							type: controlsSite
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
 		]
 		gametext: While you can spot an [uruk-hai] minion, the Free Peoples player cannot replace a site.<br>At the start of each skirmish, you may remove (3) to heal an [uruk-hai] minion (or heal an [uruk-hai] minion twice if you control a site).
-		lore: Though the arrows rained down, the Uruk formation did not break.
+		lore: "Though the arrows rained down, the Uruk formation did not break."
 		promotext: ""
 		alts: {
 			promos: {
@@ -296,7 +291,6 @@
 	15_160: {
 		cardInfo: {
 			imagePath: decipher/LOTR15160.jpg
-			javaClass: true
 			//parentId: 15_160
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -323,21 +317,21 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(companion,notAssignedToSkirmish)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: exert
+					select: choose(companion,notAssignedToSkirmish)
+				}
+			}
 		]
 		gametext: <b>Fierce</b>. <b>Hunter 1</b>.<br>Each time this minion wins a skirmish, you may exert a companion not assigned to a skirmish.
-		lore: The hobbits were left with the Isengarders: a grim dark band... of large, swart, slant-eyed Orcs with great bows and short broad-bladed swords.
+		lore: "The hobbits were left with the Isengarders: a grim dark band... of large, swart, slant-eyed Orcs with great bows and short broad-bladed swords."
 		promotext: ""
 		alts: {
 			promos: {
@@ -350,7 +344,6 @@
 	15_161: {
 		cardInfo: {
 			imagePath: decipher/LOTR15161.jpg
-			javaClass: true
 			//parentId: 15_161
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -373,22 +366,22 @@
 		vitality: 2
 		site: 5
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: location
-		                filter: battleground
-		            }
-		            filter: self
-		            keyword: hunter
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: battleground
+					}
+					filter: self
+					keyword: hunter
+					amount: 1
+				}
+			}
 		]
 		gametext: While this minion is at a battleground site, it gains <b>hunter 1</b>  <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper>.
-		lore: They're taking the Hobbits to Isengard!
+		lore: "They're taking the Hobbits to Isengard!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -401,7 +394,6 @@
 	15_162: {
 		cardInfo: {
 			imagePath: decipher/LOTR15162.jpg
-			javaClass: true
 			//parentId: 15_162
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -426,24 +418,24 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: exert
-		            player: free people
-		            select: choose(companion)
-		            count: {
-		                type: regionNumber
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: exert
+					player: free people
+					select: choose(companion)
+					count: {
+						type: regionNumber
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>Each time Lurtz wins a skirmish, the Free People's player must exert X companions, where X is the current region number.
-		lore: You will taste man-flesh!
+		lore: "You will taste man-flesh!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -456,7 +448,6 @@
 	15_163: {
 		cardInfo: {
 			imagePath: decipher/LOTR15163.jpg
-			javaClass: true
 			//parentId: 15_163
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -479,26 +470,26 @@
 		itemclass: Hand weapon
 		target: culture(uruk-hai),urukHai
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: hunter
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer,name(Lurtz)
-		            keyword: fierce
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: hunter
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,name(Lurtz)
+					keyword: fierce
+				}
+			}
 		]
 		gametext: Bearer must be an [uruk-hai] Uruk-hai.<br>Bearer gains <b>hunter 1</b>  <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper>.<br>If bearer is Lurtz, he is <b>fierce</b>.
-		lore: Defeating an Uruk with a broad-bladed sword is not easily done.
+		lore: "Defeating an Uruk with a broad-bladed sword is not easily done."
 		promotext: ""
 		alts: {
 			promos: {
@@ -511,7 +502,6 @@
 	15_164: {
 		cardInfo: {
 			imagePath: decipher/LOTR15164.jpg
-			javaClass: true
 			//parentId: 15_164
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -539,19 +529,19 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: assignment
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: assignFpCharacterToSkirmish
-		            fpCharacter: choose(not(hunter),character,not(ringBearer))
-		            minion: self
-		        }
-		    }
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: assignFpCharacterToSkirmish
+					fpCharacter: choose(not(hunter),character,not(ringBearer))
+					minion: self
+				}
+			}
 		]
 		gametext: <b>Fierce</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Assignment:</b> Exert Mauhúr to assign him to a non-hunter character (except the Ring-bearer).
 		lore: ""
@@ -567,7 +557,6 @@
 	15_165: {
 		cardInfo: {
 			imagePath: decipher/LOTR15165.jpg
-			javaClass: true
 			//parentId: 15_165
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -591,40 +580,40 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: [
-		            {
-		                type: chooseHowManyFPCulturesToSpot
-		                memorize: spotCount
-		            }
-		            {
-		                type: exert
-		                select: choose(companion)
-		                count: {
-		                    type: fromMemory
-		                    memory: spotCount
-		                    over: 2
-		                }
-		            }
-		            {
-		                type: addThreats
-		                amount: {
-		                    type: fromMemory
-		                    memory: spotCount
-		                    over: 2
-		                }
-		            }
-		        ]
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: chooseHowManyFPCulturesToSpot
+						memorize: spotCount
+					}
+					{
+						type: exert
+						select: choose(companion)
+						count: {
+							type: fromMemory
+							memory: spotCount
+							over: 2
+						}
+					}
+					{
+						type: addThreats
+						amount: {
+							type: fromMemory
+							memory: spotCount
+							over: 2
+						}
+					}
+				]
+			}
 		]
 		gametext: <b>Damage +1</b>.<br><b>Shadow:</b> Exert this minion to exert X companions and add X threats, where X is the number of Free Peoples cultures you spot over 2.
-		lore: These are Uruk-hai. Their armor is thick and their shields broad.
+		lore: "These are Uruk-hai. Their armor is thick and their shields broad."
 		promotext: ""
 		alts: {
 			promos: {
@@ -637,7 +626,6 @@
 	15_166: {
 		cardInfo: {
 			imagePath: decipher/LOTR15166.jpg
-			javaClass: true
 			//parentId: 15_166
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -657,35 +645,35 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: losesSkirmish
-		            filter: companion
-		            against: culture(uruk-hai),minion
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: uruk-hai
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: RemoveCultureTokens
-		            culture: uruk-hai
-		            count: 2
-		            select: self
-		        }
-		        effect: {
-		            type: takeControlOfSite
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: losesSkirmish
+					filter: companion
+					against: culture(uruk-hai),minion
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: uruk-hai
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					culture: uruk-hai
+					count: 2
+					select: self
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
 		]
 		gametext: Each time a companion loses a skirmish involving an [uruk-hai] minion, place an [uruk-hai] token here.<br><b>Skirmish:</b> Remove 2 [uruk-hai] tokens from here to take control of a site.
-		lore: Over the wall... the last assault came sweeping like a dark wave upon a hill of sand.
+		lore: "Over the wall... the last assault came sweeping like a dark wave upon a hill of sand."
 		promotext: ""
 		alts: {
 			promos: {
@@ -698,7 +686,6 @@
 	15_167: {
 		cardInfo: {
 			imagePath: decipher/LOTR15167.jpg
-			javaClass: true
 			//parentId: 15_167
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -722,18 +709,18 @@
 		site: 5
 		keywords: Fierce
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,inFierceSkirmish
-		            keyword: hunter
-		            amount: 4
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,inFierceSkirmish
+					keyword: hunter
+					amount: 4
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>During a fierce skirmish involving this minion, it gains <b>hunter 4</b>.
-		lore: I wish to kill, and then go back north.'
+		lore: "'I wish to kill, and then go back north.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -746,7 +733,6 @@
 	15_168: {
 		cardInfo: {
 			imagePath: decipher/LOTR15168.jpg
-			javaClass: true
 			//parentId: 15_168
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -773,20 +759,20 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: other,culture(uruk-hai),hunter
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: other,culture(uruk-hai),hunter
+					}
+				}
+			}
 		]
 		gametext: <b>Fierce</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>Searching Uruk is strength +1 for each other [uruk-hai] hunter you can spot.
-		lore: ...we must stick together....'
+		lore: "'...we must stick together....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -799,7 +785,6 @@
 	15_169: {
 		cardInfo: {
 			imagePath: decipher/LOTR15169.jpg
-			javaClass: true
 			//parentId: 15_169
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -826,20 +811,20 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inFierceSkirmish
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: hunter
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inFierceSkirmish
+					amount: {
+						type: forEachYouCanSpot
+						filter: hunter
+					}
+				}
+			}
 		]
 		gametext: <b>Fierce</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non- hunter character, this character is strength +1.)</helper><br>During a fierce skirmish involving this minion, it is strength +1 for each hunter you can spot.
-		lore: Rest while you can! We'll find a use for your legs before long.'
+		lore: "'Rest while you can! We'll find a use for your legs before long.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -852,7 +837,6 @@
 	15_170: {
 		cardInfo: {
 			imagePath: decipher/LOTR15170.jpg
-			javaClass: true
 			//parentId: 15_170
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -875,51 +859,51 @@
 		vitality: 3
 		site: 5
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(uruk-hai),minion
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: fierce,minion
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: hunter
-		            }
-		            filter: self
-		            keyword: hunter
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: character,damage
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(uruk-hai),minion
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: fierce,minion
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: hunter
+					}
+					filter: self
+					keyword: hunter
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: character,damage
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: To play, spot an [uruk-hai] minion.<br>While you can spot a fierce minion, this minion is <b>fierce</b>.<br>While you can spot a hunter, this minion gains <b>hunter 1</b>.<br>While you can spot a character that is damage +1, this minion is <b>damage +1</b>.
 		lore: ""
@@ -935,7 +919,6 @@
 	15_171: {
 		cardInfo: {
 			imagePath: decipher/LOTR15171.jpg
-			javaClass: true
 			//parentId: 15_171
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -958,8 +941,9 @@
 		vitality: 3
 		site: 5
 		keywords: Hunter 1
+
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper>
-		lore: We are servants of Saruman the Wise, the White Hand: the Hand that gives us man's-flesh to eat.'
+		lore: "'We are servants of Saruman the Wise, the White Hand: the Hand that gives us man's-flesh to eat.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -972,7 +956,6 @@
 	15_172: {
 		cardInfo: {
 			imagePath: decipher/LOTR15172.jpg
-			javaClass: true
 			//parentId: 15_172
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1000,20 +983,20 @@
 			Hunter 3
 		]
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfSkirmishInvolving
-		            filter: self
-		        }
-		        effect: {
-		            type: exert
-		            select: all(not(hunter),character,inSkirmishAgainst(self))
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: startOfSkirmishInvolving
+					filter: self
+				}
+				effect: {
+					type: exert
+					select: all(not(hunter),character,inSkirmishAgainst(self))
+				}
+			}
 		]
 		gametext: <b>Fierce</b>. <b>Hunter 3</b>. <helper>(While skirmishing a non-hunter character, this character is strength +3.)</helper><br>At the start of each skirmish involving Uglúk, each non-hunter skirmishing Uglúk must exert.
-		lore: ...let's have no more nonsense!'
+		lore: "'...let's have no more nonsense!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1026,7 +1009,6 @@
 	15_173: {
 		cardInfo: {
 			imagePath: decipher/LOTR15173.jpg
-			javaClass: true
 			//parentId: 15_173
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1049,39 +1031,39 @@
 		itemclass: Hand weapon
 		target: culture(uruk-hai),urukHai
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: [
-                        {
-                            type: canSpot
-                            filter: controlledSite
-                            count: 2
-                        }
-                        {
-                            type: not
-                            requires: {
-                                type: phase
-                                phase: skirmish
-                            }
-                        }
-                    ]
-		            filter: bearer
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer,name(Uglúk)
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: [
+						{
+							type: canSpot
+							filter: controlledSite
+							count: 2
+						}
+						{
+							type: not
+							requires: {
+								type: phase
+								phase: skirmish
+							}
+						}
+					]
+					filter: bearer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,name(Uglúk)
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: Bearer must be an [uruk-hai] Uruk-hai.<br>While you control 2 or more sites, bearer can not take wounds (except during skirmish phases).<br>If bearer is Uglúk, he is <b>damage +1</b>.
-		lore: I don't trust you little swine.'
+		lore: "'I don't trust you little swine.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1094,7 +1076,6 @@
 	15_174: {
 		cardInfo: {
 			imagePath: decipher/LOTR15174.jpg
-			javaClass: true
 			//parentId: 15_174
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1118,30 +1099,30 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: [
-		            {
-		                type: spot
-		                select: choose(not(your),site,zone(adventure path))
-		                memorize: spottedSite
-		            }
-		            {
-		                type: exert
-		                select: self
-		                times: 2
-		            }
-		        ]
-		        effect: {
-		            type: exchangeSite
-		            site1: memory(spottedSite)
-		            site2: choose(controlledSite)
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: spot
+						select: choose(not(your),site,zone(adventure path))
+						memorize: spottedSite
+					}
+					{
+						type: exert
+						select: self
+						times: 2
+					}
+				]
+				effect: {
+					type: exchangeSite
+					site1: memory(spottedSite)
+					site2: choose(controlledSite)
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Spot a Free Peoples player's site on the adventure path and exert this minion twice to exchange the spotted site with a site you control. You now control the spotted site.
-		lore: Get them into the caves.
+		lore: "Get them into the caves."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1154,7 +1135,6 @@
 	15_175: {
 		cardInfo: {
 			imagePath: decipher/LOTR15175.jpg
-			javaClass: true
 			//parentId: 15_175
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1178,47 +1158,47 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: companion,minStrength(10)
-		            }
-		            filter: self
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert 4 {uruk-hai} minion
-		                Discard 3 {uruk-hai} minions
-		            ]
-		            effects: [
-		                {
-		                    type: exert
-		                    select: choose(culture(uruk-hai),minion)
-		                    count: 4
-		                }
-		                {
-		                    type: discard
-		                    select: choose(culture(uruk-hai),minion)
-		                    count: 3
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: takeControlOfSite
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: companion,minStrength(10)
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: choice
+					texts: [
+						Exert 4 {uruk-hai} minion
+						Discard 3 {uruk-hai} minions
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(culture(uruk-hai),minion)
+							count: 4
+						}
+						{
+							type: discard
+							select: choose(culture(uruk-hai),minion)
+							count: 3
+						}
+					]
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While you can spot a companion of strength 10 or more, this minion is strength +2.<br><b>Regroup:</b> Exert 4 [uruk-hai] minions (or discard 3 [uruk-hai] minions) to take control of a site.
-		lore: March to Helm's Deep! Leave none alive!
+		lore: "March to Helm's Deep! Leave none alive!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1231,7 +1211,6 @@
 	15_176: {
 		cardInfo: {
 			imagePath: decipher/LOTR15176.jpg
-			javaClass: true
 			//parentId: 15_176
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1255,42 +1234,42 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: maneuver
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(uruk-hai),minion
-		        }
-		        cost: {
-		            type: removeTokensCumulative
-		            culture: uruk-hai
-		            count: 3
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Take control of a site
-		                Discard a follower
-		            ]
-		            effects: [
-		                {
-		                    type: takeControlOfSite
-		                }
-		                {
-		                    type: discard
-		                    select: choose(follower)
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(uruk-hai),minion
+				}
+				cost: {
+					type: removeTokensCumulative
+					culture: uruk-hai
+					count: 3
+				}
+				effect: {
+					type: choice
+					texts: [
+						Take control of a site
+						Discard a follower
+					]
+					effects: [
+						{
+							type: takeControlOfSite
+						}
+						{
+							type: discard
+							select: choose(follower)
+						}
+					]
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>At the start of the maneuver phase, you may spot another [uruk-hai] minion and remove 3 [uruk-hai] tokens to take control of a site or discard a follower.
-		lore: Rohan, my Lord, is ready to fall.
+		lore: "Rohan, my Lord, is ready to fall."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1303,7 +1282,6 @@
 	15_177: {
 		cardInfo: {
 			imagePath: decipher/LOTR15177.jpg
-			javaClass: true
 			//parentId: 15_177
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1327,38 +1305,38 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: takeControlOfSite
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: [
-		                {
-		                    type: controlsSite
-		                }
-		                {
-		                    type: not
-		                    requires: {
-		                        type: phase
-		                        phase: skirmish
-		                    }
-		                }
-		            ]
-		            filter: self
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: [
+						{
+							type: controlsSite
+						}
+						{
+							type: not
+							requires: {
+								type: phase
+								phase: skirmish
+							}
+						}
+					]
+					filter: self
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>Each time this minion wins a skirmish, take control of a site.<br>While you control a site, this minion cannot take wounds (except during the skirmish phase).
-		lore: They come to destroy its people.
+		lore: "They come to destroy its people."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1371,7 +1349,6 @@
 	15_178: {
 		cardInfo: {
 			imagePath: decipher/LOTR15178.jpg
-			javaClass: true
 			//parentId: 15_178
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1395,36 +1372,36 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: companion,minStrength(12)
-		            }
-		            filter: self
-		            amount: 4
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: killed
-		            filter: or(companion,ally)
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: culture(uruk-hai),minion,inSkirmish
-		        }
-		        effect: {
-		            type: takeControlOfSite
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: companion,minStrength(12)
+					}
+					filter: self
+					amount: 4
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: or(companion,ally)
+				}
+				requires: {
+					type: canSpot
+					filter: culture(uruk-hai),minion,inSkirmish
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While you can spot a companion of strength 12 or more, this minion is strength +4.<br>Each time a companion or ally is killed during a skirmish involving an [uruk-hai] minion, you may take control of a site.
-		lore: Saruman's hordes will pillage and burn....
+		lore: "Saruman's hordes will pillage and burn...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1437,7 +1414,6 @@
 	15_179: {
 		cardInfo: {
 			imagePath: decipher/LOTR15179.jpg
-			javaClass: true
 			//parentId: 15_179
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1455,34 +1431,34 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(culture(uruk-hai),minion)
-				    amount: 2
-				    memorize: chosenMinion
+					type: modifyStrength
+					select: choose(culture(uruk-hai),minion)
+					amount: 2
+					memorize: chosenMinion
 				}
 				{
-				    type: If
-				    check: {
-				        type: memoryMatches
-				        memory: chosenMinion
-				        filter: hunter
-				    }
-				    true: {
-				        type: addKeyword
-				        select: memory(chosenMinion)
-				        keyword: damage
-				        amount: 1
-				    }
+					type: If
+					check: {
+						type: memoryMatches
+						memory: chosenMinion
+						filter: hunter
+					}
+					true: {
+						type: addKeyword
+						select: memory(chosenMinion)
+						keyword: damage
+						amount: 1
+					}
 				}
 			]
 		}
 		gametext: Make an [uruk-hai] minion strength +2 (and <b>damage +1</b> if that minion is a hunter).
-		lore: Uruk-hai weaponry was built to be used offensively and defensively, depending on the situation.
+		lore: "Uruk-hai weaponry was built to be used offensively and defensively, depending on the situation."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1495,7 +1471,6 @@
 	15_180: {
 		cardInfo: {
 			imagePath: decipher/LOTR15180.jpg
-			javaClass: true
 			//parentId: 15_180
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1515,37 +1490,37 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: unwounded,hunter,culture(uruk-hai),minion
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: your,hunter,minion
-		            memorize: woundedMinion
-		        }
-		        requires: {
-		            type: phase
-		            phase: skirmish
-		        }
-		        cost: {
-		            type: discard
-		            select: choose(memory(woundedMinion),your,hunter,minion)
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(not(hunter),companion)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: unwounded,hunter,culture(uruk-hai),minion
+					amount: 1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: your,hunter,minion
+					memorize: woundedMinion
+				}
+				requires: {
+					type: phase
+					phase: skirmish
+				}
+				cost: {
+					type: discard
+					select: choose(memory(woundedMinion),your,hunter,minion)
+				}
+				effect: {
+					type: exert
+					select: choose(not(hunter),companion)
+				}
+			}
 		]
 		gametext: Each unwounded hunter [uruk-hai] minion is strength +1.<br><b>Response:</b> If your hunter minion is about to take a wound during a skirmish, discard that minion to exert a non-hunter companion.
-		lore: <span style="word-spacing:-0.01em;font-size:97%">"They seemed to have left winter clinging to the hills behind."</span>
+		lore: "'They seemed to have left winter clinging to the hills behind.'"
 		promotext: ""
 		alts: {
 			promos: {

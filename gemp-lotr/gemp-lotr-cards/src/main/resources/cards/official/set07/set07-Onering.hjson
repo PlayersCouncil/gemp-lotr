@@ -3,7 +3,6 @@
 	7_1: {
 		cardInfo: {
 			imagePath: decipher/LOTR07001.jpg
-			javaClass: true
 			//parentId: 7_1
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -80,7 +79,7 @@
 			}
 		]
 		gametext: <b>Response:</b> If bearer is about to take a wound in a skirmish, he wears The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound during a skirmish, add a burden instead.
-		lore: One Ring to rule them all....
+		lore: "One Ring to rule them all...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -93,7 +92,6 @@
 	7_2: {
 		cardInfo: {
 			imagePath: decipher/LOTR07002.jpg
-			javaClass: true
 			//parentId: 7_2
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -151,7 +149,7 @@
 			}
 		]
 		gametext: <b>Maneuver:</b> Add a burden to wear The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound, add a burden instead.
-		lore: ...One Ring to find them....
+		lore: "...One Ring to find them...."
 		promotext: ""
 		alts: {
 			promos: {

@@ -3,7 +3,6 @@
 	18_1: {
 		cardInfo: {
 			imagePath: decipher/LOTR18001.jpg
-			javaClass: true
 			//parentId: 18_1
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -31,32 +30,32 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        cost: {
-		            type: addThreats
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(minion)
-		            memorize: chosenMinion
-		            times: {
-		                type: Conditional
-		                requires: {
-		                    type: memoryMatches
-		                    memory: chosenMinion
-		                    filter: hunter,minion
-		                }
-		                true: 2
-		                false: 1
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: wound
+					select: choose(minion)
+					memorize: chosenMinion
+					times: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenMinion
+							filter: hunter,minion
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>Each time Gimli wins a skirmish, you may add a threat to wound a minion (or wound a hunter minion twice).
 		lore: ""
@@ -72,7 +71,6 @@
 	18_2: {
 		cardInfo: {
 			imagePath: decipher/LOTR18002.jpg
-			javaClass: true
 			//parentId: 18_2
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -92,50 +90,50 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            player: you
-		            filter: self
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: dwarven
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: choice
-		            texts: [
-		                Discard this condition
-		                Remove a {dwarven} token here
-		            ]
-                    effects: [
-                        {
-                            type: discard
-                            select: self
-                        }
-                        {
-                            type: RemoveCultureTokens
-                            culture: dwarven
-                            select: self
-                        }
-                    ]
-		        }
-		        effect: {
-		            type: addKeyword
-		            select: choose(culture(dwarven),companion)
-		            keyword: hunter
-		            amount: 1
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					player: you
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: dwarven
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Remove a {dwarven} token here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: dwarven
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: addKeyword
+					select: choose(culture(dwarven),companion)
+					keyword: hunter
+					amount: 1
+				}
+			}
 		]
 		gametext: When you play this condition, place a [dwarven] token here.<br><b>Skirmish:</b> Discard this condition from play or remove a [dwarven] token from here to make a [dwarven] companion gain <b>hunter 1</b>.
-		lore: Let us hunt some Orc!
+		lore: "Let us hunt some Orc!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -148,7 +146,6 @@
 	18_3: {
 		cardInfo: {
 			imagePath: decipher/LOTR18003.jpg
-			javaClass: true
 			//parentId: 18_3
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -171,20 +168,20 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: choose(culture(dwarven),companion)
-		        }
-		        effect: {
-		            type: addKeyword
-		            select: choose(currentSite)
-		            keyword: mountain
-		            until: regroup
-		        }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: choose(culture(dwarven),companion)
+				}
+				effect: {
+					type: addKeyword
+					select: choose(currentSite)
+					keyword: mountain
+					until: regroup
+				}
+			}
 		]
 		gametext: <b>Tale</b>.<br><b>Maneuver:</b> Exert a [dwarven] companion to make the fellowship's current site gain <b>mountain</b> until the regroup phase.
 		lore: ""

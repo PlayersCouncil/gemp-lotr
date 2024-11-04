@@ -3,7 +3,6 @@
 	17_105: {
 		cardInfo: {
 			imagePath: decipher/LOTR17105.jpg
-			javaClass: true
 			//parentId: 17_105
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -24,42 +23,42 @@
 		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: minion
-		            count: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-                        type: canSpot
-                        filter: name(Sauron)
-		            }
-		            filter: minion,not(name(Sauron))
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyResistance
-		            requires: {
-		                type: canSpot
-		                filter: siteInCurrentRegion,name(Mount Doom)
-		            }
-		            filter: companion
-		            amount: -2
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: minion
+					count: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: name(Sauron)
+					}
+					filter: minion,not(name(Sauron))
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					requires: {
+						type: canSpot
+						filter: siteInCurrentRegion,name(Mount Doom)
+					}
+					filter: companion
+					amount: -2
+				}
+			}
 		]
 		gametext: To play, spot 2 minions.<br>While you can spot Sauron, each other minion is <b>damage +1</b>.<br>While the fellowship is in the same region as Mount Doom, each companion is resistance -2.
-		lore: One for the Dark Lord on his dark throne.
+		lore: "One for the Dark Lord on his dark throne."
 		promotext: ""
 		alts: {
 			promos: {

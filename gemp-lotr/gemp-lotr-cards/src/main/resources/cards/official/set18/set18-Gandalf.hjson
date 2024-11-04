@@ -3,7 +3,6 @@
 	18_18: {
 		cardInfo: {
 			imagePath: decipher/LOTR18018.jpg
-			javaClass: true
 			//parentId: 18_18
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -26,21 +25,21 @@
 		itemclass: Hand weapon
 		target: culture(gandalf),man
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: bearer,name(Grimbeorn)
-		        }
-		        effect: {
-		            type: putCardsFromDiscardIntoHand
-		            select: choose(culture(gandalf))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer,name(Grimbeorn)
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(gandalf))
+				}
+			}
 		]
 		gametext: Bearer must be a [gandalf] Man.<br>While Grimbeorn is bearing this possession, each time he wins a skirmish, you may take a [gandalf] card from your discard pile into hand.
-		lore: No Orc or wolf dared enter the land of the Beornings.
+		lore: "No Orc or wolf dared enter the land of the Beornings."
 		promotext: ""
 		alts: {
 			promos: {
@@ -53,7 +52,6 @@
 	18_19: {
 		cardInfo: {
 			imagePath: decipher/LOTR18019.jpg
-			javaClass: true
 			//parentId: 18_19
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -71,35 +69,33 @@
 		culture: Gandalf
 		twilight: 0
 		type: Event
-		timeword: Skirmish
-		keywords: [
-			Spell
-		]
+		timewords: Skirmish
+		keywords: Spell
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(gandalf),wizard
+				type: canSpot
+				filter: culture(gandalf),wizard
 			}
 			effect: [
 				{
-				    type: chooseActiveCards
-				    select: choose(minion)
-				    text: Choose minion to lose all strength bonuses from possessions
-				    memorize: chosenMinion
+					type: chooseActiveCards
+					select: choose(minion)
+					text: Choose minion to lose all strength bonuses from possessions
+					memorize: chosenMinion
 				}
 				{
-				    type: addModifier
-				    modifier: {
-                        type: cancelStrengthBonus
-                        filter: memory(chosenMinion)
-                        from: possession
-				    }
+					type: addModifier
+					modifier: {
+						type: cancelStrengthBonus
+						filter: memory(chosenMinion)
+						from: possession
+					}
 				}
 			]
 		}
 		gametext: <b>Spell</b>.<br>Spot a [gandalf] Wizard to make a minion lose all strength bonuses from possessions.
-		lore: I am not trying to rob you. I'm trying to help you.
+		lore: "I am not trying to rob you. I'm trying to help you."
 		promotext: ""
 		alts: {
 			promos: {
@@ -112,7 +108,6 @@
 	18_20: {
 		cardInfo: {
 			imagePath: decipher/LOTR18020.jpg
-			javaClass: true
 			//parentId: 18_20
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -130,70 +125,70 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
-			    type: choice
-			    texts: [
-			        Exert 2 Ents
-			        Spot a {gandalf} companion
-			    ]
-			    effects: [
-			        {
-			            type: If
-			            check: {
-			                type: location
-			                filter: or(regionNumber(1),regionNumber(2))
-			            }
-			            true: {
-			                type: exert
-			                select: choose(ent)
-			                count: 2
-			            }
-			        }
-			        {
-			            type: If
-			            check: {
-			                type: location
-			                filter: regionNumber(3)
-			            }
-			            true: {
-			                type: spot
-			                filter: culture(gandalf),companion
-			            }
-			        }
-			    ]
+				type: choice
+				texts: [
+					Exert 2 Ents
+					Spot a {gandalf} companion
+				]
+				effects: [
+					{
+						type: If
+						check: {
+							type: location
+							filter: or(regionNumber(1),regionNumber(2))
+						}
+						true: {
+							type: exert
+							select: choose(ent)
+							count: 2
+						}
+					}
+					{
+						type: If
+						check: {
+							type: location
+							filter: regionNumber(3)
+						}
+						true: {
+							type: spot
+							filter: culture(gandalf),companion
+						}
+					}
+				]
 			},
 			effect: [
 				{
-				    type: If
-                    check: {
-                        type: location
-                        filter: or(regionNumber(1),regionNumber(2))
-                    }
-                    true: {
-                        type: addKeyword
-                        select: choose(ent)
-                        keyword: defender
-                        amount: 1
-                        until: regroup
-                    }
+					type: If
+					check: {
+						type: location
+						filter: or(regionNumber(1),regionNumber(2))
+					}
+					true: {
+						type: addKeyword
+						select: choose(ent)
+						keyword: defender
+						amount: 1
+						until: regroup
+					}
 				}
 				{
-                    type: If
-                    check: {
-                        type: location
-                        filter: regionNumber(3)
-                    }
-                    true: {
-                        type: drawCards
-                    }
+					type: If
+					check: {
+						type: location
+						filter: regionNumber(3)
+					}
+					true: {
+						type: drawCards
+					}
 				}
 			]
 		}
 		gametext: If the fellowship is in region 1 or region 2, exert 2 Ents to make an Ent <b>defender</b> <b>+1</b> until the regroup phase.<br>If the fellowship is in region 3, spot a [gandalf] companion to draw a card.
-		lore: The old that is strong does not wither; Deep roots are not reached by the frost.
+		lore: "The old that is strong does not wither; Deep roots are not reached by the frost."
 		promotext: ""
 		alts: {
 			promos: {
@@ -206,7 +201,6 @@
 	18_21: {
 		cardInfo: {
 			imagePath: decipher/LOTR18021.jpg
-			javaClass: true
 			//parentId: 18_21
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -226,38 +220,38 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: exert
-		            select: choose(culture(gandalf),man)
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            count: 2
-		            culture: gandalf
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: RemoveCultureTokens
-		            count: 3
-		            culture: gandalf
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(companion)
-		            amount: 3
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: choose(culture(gandalf),man)
+				}
+				effect: {
+					type: AddCultureTokens
+					count: 2
+					culture: gandalf
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					count: 3
+					culture: gandalf
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(companion)
+					amount: 3
+				}
+			}
 		]
 		gametext: <b>Fellowship:</b> Exert a [gandalf] Man to add 2 [gandalf] tokens here.<br><b>Skirmish:</b> Remove 3 [gandalf] tokens from here to make a companion strength +3.
-		lore: To give his people time to escape, Brand stood against the Mordor army until he was slain. His friend, the dwarf Dáin Ironfoot, stood over him until he too was slain.
+		lore: To give his people time to escape, Brand stood against the Mordor army until he was slain. His friend, the dwarf Dáin Ironfoot, stood over him until he too was 'slain.
 		promotext: ""
 		alts: {
 			promos: {
@@ -270,7 +264,6 @@
 	18_22: {
 		cardInfo: {
 			imagePath: decipher/LOTR18022.jpg
-			javaClass: true
 			//parentId: 18_22
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -294,46 +287,46 @@
 		vitality: 3
 		resistance: 5
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyStrength
-                    requires: {
-                        type: canSpotCultureTokens
-                        culture: gandalf
-                        amount: 2
-                    }
-                    filter: your,culture(gandalf),man
-                    amount: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-                    type: discard
-                    select: choose(follower)
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Draw a card
-		                Take a {gandalf} skirmish event from discard to hand
-		            ]
-		            effects: [
-		                {
-		                    type: drawCards
-		                }
-                        {
-                            type: putCardsFromDiscardIntoHand
-                            select: choose(culture(gandalf),timeword(skirmish),event)
-                        }
-		            ]
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotCultureTokens
+						culture: gandalf
+						amount: 2
+					}
+					filter: your,culture(gandalf),man
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: choose(follower)
+				}
+				effect: {
+					type: choice
+					texts: [
+						Draw a card
+						Take a {gandalf} skirmish event from discard to hand
+					]
+					effects: [
+						{
+							type: drawCards
+						}
+						{
+							type: putCardsFromDiscardIntoHand
+							select: choose(culture(gandalf),timeword(skirmish),event)
+						}
+					]
+				}
+			}
 		]
 		gametext: While you can spot 2 [gandalf] tokens, each of your [gandalf] Men is strength +2.<br><b>Regroup:</b> Discard a follower from play to choose one: draw a card; or take a [gandalf] skirmish event from your discard pile into hand.
-		lore: A guide through books and scrolls from floor to ceiling.
+		lore: "A guide through books and scrolls from floor to ceiling."
 		promotext: ""
 		alts: {
 			promos: {
@@ -346,7 +339,6 @@
 	18_23: {
 		cardInfo: {
 			imagePath: decipher/LOTR18023.jpg
-			javaClass: true
 			//parentId: 18_23
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -364,29 +356,27 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		timeword: Maneuver
-		keywords: [
-			Spell
-		]
+		timewords: Maneuver
+		keywords: Spell
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: pipeweed
-			    count: 2
+				type: canSpot
+				filter: pipeweed
+				count: 2
 			}
 			effect: [
 				{
-				    type: removeBurdens
-				    amount: {
-				        type: forEachYouCanSpot
-				        filter: culture(gandalf),wizard
-				    }
+					type: removeBurdens
+					amount: {
+						type: forEachYouCanSpot
+						filter: culture(gandalf),wizard
+					}
 				}
 			]
 		}
 		gametext: <b>Spell</b>.<br>Spot 2 pipeweed cards to remove a burden for each [gandalf] Wizard you can spot.
-		lore: Gandalf regarded the smoke ring for a moment, sucked his cheeks in, and blew out a majestic, full-rigged ship that sailed right through the ring.
+		lore: "Gandalf regarded the smoke ring for a moment, sucked his cheeks in, and blew out a majestic, full-rigged ship that sailed right through the ring."
 		promotext: ""
 		alts: {
 			promos: {
@@ -399,7 +389,6 @@
 	18_24: {
 		cardInfo: {
 			imagePath: decipher/LOTR18024.jpg
-			javaClass: true
 			//parentId: 18_24
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -422,45 +411,45 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: exert
-		            select: choose(name(Gandalf))
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-                    type: played
-                    player: you
-                    filter: self
-		        }
-		        effect: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: maneuver
-		        }
-		        effect: [
-		            {
-		                type: addTwilight
-		                amount: 4
-		            }
-		            {
-		                type: removeFromTheGame
-		                select: self
-		            }
-		        ]
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(name(Gandalf))
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					player: you
+					filter: self
+				}
+				effect: {
+					type: removeTwilight
+					amount: 3
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				effect: [
+					{
+						type: addTwilight
+						amount: 4
+					}
+					{
+						type: removeFromTheGame
+						select: self
+					}
+				]
+			}
 		]
 		gametext: <b>Spell</b>. To play, exert Gandalf.<br>When you play this condition, remove (3).<br>At the start of the maneuver phase, add (4) and remove this condition from the game.
-		lore: All we have to decide is what to do with the time that is given to us.
+		lore: "All we have to decide is what to do with the time that is given to us."
 		promotext: ""
 		alts: {
 			promos: {
@@ -473,7 +462,6 @@
 	18_25: {
 		cardInfo: {
 			imagePath: decipher/LOTR18025.jpg
-			javaClass: true
 			//parentId: 18_25
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -493,36 +481,36 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: [
-                    {
-                        type: addThreats
-                        amount: 2
-                    }
-                    {
-                        type: spot
-                        select: choose(minion)
-                        memorize: spottedMinion
-                    }
-                ]
-		        requires: {
-		            type: canSpot
-		            filter: wizard
-		        }
-		        effect: {
-		            type: addModifier
-		            modifier: {
-                        type: CantUseSpecialAbilities
-                        filter: memory(spottedMinion)
-                    }
-                    until: regroup
-		        }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: [
+					{
+						type: addThreats
+						amount: 2
+					}
+					{
+						type: spot
+						select: choose(minion)
+						memorize: spottedMinion
+					}
+				]
+				requires: {
+					type: canSpot
+					filter: wizard
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: CantUseSpecialAbilities
+						filter: memory(spottedMinion)
+					}
+					until: regroup
+				}
+			}
 		]
 		gametext: <b>Maneuver:</b> Add 2 threats and spot a Wizard to spot a minion in play. That minion cannot use special abilities until the regroup phase.
-		lore: Hobbits really are amazing creatures! You can learn all that there is to know about their ways in a month, and yet after a hundred years, they can still surprise you.
+		lore: Hobbits really are amazing creatures! You can learn all that there is to know about their ways in a month, and yet after a hundred years, they can still 'surprise you.
 		promotext: ""
 		alts: {
 			promos: {
@@ -535,7 +523,6 @@
 	18_26: {
 		cardInfo: {
 			imagePath: decipher/LOTR18026.jpg
-			javaClass: true
 			//parentId: 18_26
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -557,26 +544,26 @@
 		resistance: 2
 		target: culture(gandalf),wizard
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            player: you
-		            filter: culture(gandalf),spell
-		        }
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(minion)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					player: you
+					filter: culture(gandalf),spell
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: wound
+					select: choose(minion)
+				}
+			}
 		]
 		gametext: Bearer must be a [gandalf] Wizard.<br>Each time you play a [gandalf] spell, you may exert bearer to wound a minion.
-		lore: The tools of a master of herb and beast-lore were often confined to the simplest of places.
+		lore: "The tools of a master of herb and beast-lore were often confined to the simplest of places."
 		promotext: ""
 		alts: {
 			promos: {
@@ -589,7 +576,6 @@
 	18_27: {
 		cardInfo: {
 			imagePath: decipher/LOTR18027.jpg
-			javaClass: true
 			//parentId: 18_27
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -612,42 +598,42 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            player: you
-		            filter: pipeweed
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: name(Gandalf)
-		        }
-		        effect: [
-		            {
-		                type: revealTopCardsOfDrawDeck
-		                count: 3
-		                memorize: revealedCards
-		            }
-		            {
-		                type: putCardsFromDeckIntoHand
-		                select: all(memory(revealedCards),side(free people))
-                        reveal: true
-                        shuffle: false
-                        showAll: false
-		            }
-		            {
-		                type: discardCardsFromDrawDeck
-		                select: all(memory(revealedCards),not(side(free people)))
-                        showAll: false
-                        shuffle: false
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					player: you
+					filter: pipeweed
+				}
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						count: 3
+						memorize: revealedCards
+					}
+					{
+						type: putCardsFromDeckIntoHand
+						select: all(memory(revealedCards),side(free people))
+						reveal: true
+						shuffle: false
+						showAll: false
+					}
+					{
+						type: discardCardsFromDrawDeck
+						select: all(memory(revealedCards),not(side(free people)))
+						showAll: false
+						shuffle: false
+					}
+				]
+			}
 		]
 		gametext: <b>Pipeweed</b>.<br>Each time you play a pipeweed card, you may spot Gandalf to reveal the top 3 cards of your draw deck. Take all Free Peoples cards revealed into hand and discard the remaining cards.
-		lore: Old Toby. The finest weed in the Southfarthing.
+		lore: "Old Toby. The finest weed in the Southfarthing."
 		promotext: ""
 		alts: {
 			promos: {

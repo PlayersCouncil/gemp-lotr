@@ -3,7 +3,6 @@
 	6_83: {
 		cardInfo: {
 			imagePath: decipher/LOTR06083.jpg
-			javaClass: true
 			//parentId: 6_83
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -25,25 +24,25 @@
 		itemclass: Mount
 		target: nazgul
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            count: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: fierce
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: fierce
+				}
+			}
 		]
 		gametext: To play, discard 2 cards from hand. Bearer must be a Nazgûl.<br>Bearer is <b>fierce</b>.
-		lore: And these winged creatures that they ride on now, they can probably see more than any other creature. They are like great carrion birds.'
+		lore: "'And these winged creatures that they ride on now, they can probably see more than any other creature. They are like great carrion birds.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -56,7 +55,6 @@
 	6_84: {
 		cardInfo: {
 			imagePath: decipher/LOTR06084.jpg
-			javaClass: true
 			//parentId: 6_84
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -76,30 +74,30 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: choose(nazgul)
-		            times: 2
-		        }
-		        effect: [
-		            {
-		                type: PlayCardFromHand
-		                select: choose(or(culture(wraith),culture(sauron)),minion)
-		                discount: -8
-		                memorize: playedMinion
-		            }
-		            {
-		                type: exhaust
-		                select: memory(playedMinion)
-		            }
-		        ]
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: choose(nazgul)
+					times: 2
+				}
+				effect: [
+					{
+						type: PlayCardFromHand
+						select: choose(or(culture(wraith),culture(sauron)),minion)
+						discount: -8
+						memorize: playedMinion
+					}
+					{
+						type: exhaust
+						select: memory(playedMinion)
+					}
+				]
+			}
 		]
 		gametext: Plays to your support area.<br><b>Regroup:</b> Exert a Nazgûl twice to play a [wraith] or [sauron] minion. That minion's twilight cost is -8 and it comes into play exhausted.
-		lore: It leaped into all of their minds that the Black Wings had spied them and had sent armed soldiers to seize them....
+		lore: "It leaped into all of their minds that the Black Wings had spied them and had sent armed soldiers to seize them...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -112,7 +110,6 @@
 	6_85: {
 		cardInfo: {
 			imagePath: decipher/LOTR06085.jpg
-			javaClass: true
 			//parentId: 6_85
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -134,25 +131,25 @@
 		itemclass: Hand weapon
 		target: nazgul
 		effects: [
-		    {
-		        type: trigger
-		        requires: {
-		            type: canSpot
-		            filter: bearer,name(Úlairë Toldëa)
-		        }
-		        trigger: {
-		            type: winsSkirmish
-		            filter: bearer
-		        }
-		        effect: {
-		            type: discard
-		            player: fp
-		            select: choose(side(free),or(possession,condition))
-		        }
-		    }
+			{
+				type: trigger
+				requires: {
+					type: canSpot
+					filter: bearer,name(Úlairë Toldëa)
+				}
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: discard
+					player: fp
+					select: choose(side(free),or(possession,condition))
+				}
+			}
 		]
 		gametext: Bearer must be a Nazgûl.<br>While bearer is Úlairë Toldëa, each time he wins a skirmish the Free Peoples player must discard a Free Peoples possession or a Free Peoples condition.
-		lore: The weapons of the Nine are wrought with sorcery.
+		lore: "The weapons of the Nine are wrought with sorcery."
 		promotext: ""
 		alts: {
 			promos: {
@@ -165,7 +162,6 @@
 	6_86: {
 		cardInfo: {
 			imagePath: decipher/LOTR06086.jpg
-			javaClass: true
 			//parentId: 6_86
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -189,28 +185,28 @@
 		vitality: 2
 		site: 3
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: [
-		            {
-		                type: exert
-		                select: self
-		            }
-		            {
-		                type: discardFromHand
-		                forced: false
-		                count: 3
-		            }
-		        ]
-		        effect: {
-		            type: returnToHand
-		            select: choose(companion,not(ringBearer))
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: discardFromHand
+						forced: false
+						count: 3
+					}
+				]
+				effect: {
+					type: returnToHand
+					select: choose(companion,not(ringBearer))
+				}
+			}
 		]
 		gametext: <b>Regroup:</b> Exert Úlairë Lemenya and discard 3 cards from hand to return a companion (except the Ring-bearer) to owner's hand.
-		lore: ...the helpless horror that had come with the cry in the wind and the shadow on the moon....
+		lore: "...the helpless horror that had come with the cry in the wind and the shadow on the moon...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -223,7 +219,6 @@
 	6_87: {
 		cardInfo: {
 			imagePath: decipher/LOTR06087.jpg
-			javaClass: true
 			//parentId: 6_87
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -247,29 +242,29 @@
 		vitality: 2
 		site: 3
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: another,nazgul
-		        }
-		        effect: {
-		            type: exert
-		            player: fp
-		            select: choose(ringBound,companion)
-		            count: {
-		                type: forEachFPCulture
-		                over: 2
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,nazgul
+				}
+				effect: {
+					type: exert
+					player: fp
+					select: choose(ringBound,companion)
+					count: {
+						type: forEachFPCulture
+						over: 2
+					}
+				}
+			}
 		]
 		gametext: When you play Úlairë Nertëa, spot another Nazgûl to make the Free Peoples player exert a Ring-bound companion for each Free Peoples culture you can spot over 2.
-		lore: A vast winged shape passed over the moon like a black cloud... The stars fainted before it....
+		lore: "A vast winged shape passed over the moon like a black cloud... The stars fainted before it...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -282,7 +277,6 @@
 	6_88: {
 		cardInfo: {
 			imagePath: decipher/LOTR06088.jpg
-			javaClass: true
 			//parentId: 6_88
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -307,35 +301,35 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: choice
-		            player: fp
-		            texts: [
-		                Exert a companion
-		                Add a burden
-		            ]
-		            effects: [
-		                {
-		                    type: exert
-		                    player: fp
-		                    select: choose(companion)
-		                }
-		                {
-		                    type: addBurdens
-		                    player: fp
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: choice
+					player: fp
+					texts: [
+						Exert a companion
+						Add a burden
+					]
+					effects: [
+						{
+							type: exert
+							player: fp
+							select: choose(companion)
+						}
+						{
+							type: addBurdens
+							player: fp
+						}
+					]
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>Each time Úlairë Toldëa wins a skirmish, the Free Peoples player must exert a companion or add a burden.
-		lore: They are calling for it. Calling for the precious.'
+		lore: "'They are calling for it. Calling for the precious.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -348,7 +342,6 @@
 	6_89: {
 		cardInfo: {
 			imagePath: decipher/LOTR06089.jpg
-			javaClass: true
 			//parentId: 6_89
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -368,36 +361,36 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: choose(nazgul)
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: wraith
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: RemoveCultureTokens
-		            culture: wraith
-		            count: 3
-		            select: self
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: choose(nazgul)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: wraith
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: RemoveCultureTokens
+					culture: wraith
+					count: 3
+					select: self
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
 		]
 		gametext: Plays to your support area.<br><b>Regroup:</b> Exert a Nazgûl to place a [wraith] token on this card.<br><b>Shadow:</b> Remove 3 [wraith] tokens from here to add (2).
-		lore: It scudded across the moon... outrunning the wind in its fell speed.
+		lore: "It scudded across the moon... outrunning the wind in its fell speed."
 		promotext: ""
 		alts: {
 			promos: {
@@ -410,7 +403,6 @@
 	6_122: {
 		cardInfo: {
 			imagePath: decipher/LOTR06122.jpg
-			javaClass: true
 			//parentId: 6_122
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -435,44 +427,44 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: killed
-		            filter: companion
-		        }
-                requires: [
-                    {
-                        type: phase
-                        phase: skirmish
-                    }
-                    {
-                        type: canSpot
-                        filter: nazgul,inSkirmish
-                    }
-                ]
-		        effect: {
-		            type: choice
-		            texts: [
-		                Wound an ally twice
-		                Exert a companion
-		            ]
-		            effects: [
-		                {
-		                    type: wound
-		                    select: choose(ally)
-		                    times: 2
-		                }
-		                {
-		                    type: exert
-		                    select: choose(companion)
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: killed
+					filter: companion
+				}
+				requires: [
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: canSpot
+						filter: nazgul,inSkirmish
+					}
+				]
+				effect: {
+					type: choice
+					texts: [
+						Wound an ally twice
+						Exert a companion
+					]
+					effects: [
+						{
+							type: wound
+							select: choose(ally)
+							times: 2
+						}
+						{
+							type: exert
+							select: choose(companion)
+						}
+					]
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>Each time a companion is killed in a skirmish involving a Nazgûl, wound an ally twice or exert a companion.
-		lore: Dead? No, you cannot kill them.'
+		lore: "'Dead? No, you cannot kill them.'"
 		promotext: ""
 		alts: {
 			promos: {

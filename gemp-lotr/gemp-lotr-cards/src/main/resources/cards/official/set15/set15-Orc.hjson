@@ -3,7 +3,6 @@
 	15_95: {
 		cardInfo: {
 			imagePath: decipher/LOTR15095.jpg
-			javaClass: true
 			//parentId: 15_95
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -26,22 +25,22 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(minion)
-		            amount: 2
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion)
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Discard this minion to make a minion strength +2.
-		lore: Grond! Grond! Grond!
+		lore: "Grond! Grond! Grond!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -54,7 +53,6 @@
 	15_96: {
 		cardInfo: {
 			imagePath: decipher/LOTR15096.jpg
-			javaClass: true
 			//parentId: 15_96
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -77,22 +75,22 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(minion)
-		            amount: 1
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion)
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Discard this minion to make a minion strength +1.
-		lore: Though he had seen it many times before, Grond's destructive power never ceased to amaze.
+		lore: "Though he had seen it many times before, Grond's destructive power never ceased to amaze."
 		promotext: ""
 		alts: {
 			promos: {
@@ -105,7 +103,6 @@
 	15_97: {
 		cardInfo: {
 			imagePath: decipher/LOTR15097.jpg
-			javaClass: true
 			//parentId: 15_97
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -125,43 +122,43 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),minion
-		            count: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: shadow
-		        }
-		        cost: {
-		            type: discard
-		            select: choose(culture(orc),condition)
-		        }
-		        effect: {
-		            type: PlayCardFromHand
-		            select: choose(culture(orc),minion)
-		            discount: {
-		                type: Conditional
-		                requires: {
-		                    type: canSpot
-		                    filter: companion
-		                    count: 6
-		                }
-		                true: -4
-		                false: -2
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+					count: 2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: shadow
+				}
+				cost: {
+					type: discard
+					select: choose(culture(orc),condition)
+				}
+				effect: {
+					type: PlayCardFromHand
+					select: choose(culture(orc),minion)
+					discount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: companion
+							count: 6
+						}
+						true: -4
+						false: -2
+					}
+				}
+			}
 		]
 		gametext: To play, spot 2 [orc] minions.<br>At the start of your Shadow phase, you may discard an [orc] condition from play to play an [orc] minion. It is twilight cost -2 (or -4 if you can spot 6 or more companions).
-		lore: ...some great beast...would go mad and spread stamping ruin....
+		lore: "...some great beast...would go mad and spread stamping ruin...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -174,7 +171,6 @@
 	15_98: {
 		cardInfo: {
 			imagePath: decipher/LOTR15098.jpg
-			javaClass: true
 			//parentId: 15_98
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -197,21 +193,21 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(companion,inSkirmishAgainst(self))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: wound
+					select: choose(companion,inSkirmishAgainst(self))
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Exert this minion to wound a companion it is skirmishing.
-		lore: Very few tried to sneak into Mordor. Even fewer succeeded.
+		lore: "Very few tried to sneak into Mordor. Even fewer succeeded."
 		promotext: ""
 		alts: {
 			promos: {
@@ -224,7 +220,6 @@
 	15_99: {
 		cardInfo: {
 			imagePath: decipher/LOTR15099.jpg
-			javaClass: true
 			//parentId: 15_99
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -247,31 +242,31 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),minion
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: addThreats
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: side(free people),or(possession,artifact)
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: addThreats
+					amount: {
+						type: forEachYouCanSpot
+						filter: side(free people),or(possession,artifact)
+					}
+				}
+			}
 		]
 		gametext: To play, spot an [orc] minion.<br>When you play Black Land Chieftain, you may add a threat for each Free Peoples possession and each Free Peoples artifact you can spot.
-		lore: Orcs frequently used the weapons of their fallen enemies as their own.
+		lore: "Orcs frequently used the weapons of their fallen enemies as their own."
 		promotext: ""
 		alts: {
 			promos: {
@@ -284,7 +279,6 @@
 	15_100: {
 		cardInfo: {
 			imagePath: decipher/LOTR15100.jpg
-			javaClass: true
 			//parentId: 15_100
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -307,34 +301,34 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: companion,minStrength(12)
-		            }
-		            filter: self
-		            amount: 5
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: removeThreats
-		            amount: 2
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(character,inSkirmishAgainst(self))
-		            amount: -2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: companion,minStrength(12)
+					}
+					filter: self
+					amount: 5
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeThreats
+					amount: 2
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(character,inSkirmishAgainst(self))
+					amount: -2
+				}
+			}
 		]
 		gametext: While you can spot a companion of strength 12 or more, this minion is strength +5.<br><b>Skirmish:</b> Remove 2 threats to make a character skirmishing this minion strength -2.
-		lore: ...do they just live on foul air and poison?'
+		lore: "'...do they just live on foul air and poison?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -347,7 +341,6 @@
 	15_101: {
 		cardInfo: {
 			imagePath: decipher/LOTR15101.jpg
-			javaClass: true
 			//parentId: 15_101
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -370,36 +363,36 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),condition
-		        }
-		        effect: {
-		            type: addThreats
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: companion,minStrength(10)
-		            }
-		            filter: self
-		            amount: 3
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: culture(orc),condition
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: companion,minStrength(10)
+					}
+					filter: self
+					amount: 3
+				}
+			}
 		]
 		gametext: When you play this minion, you may spot an [orc] condition to add a threat.<br>While you can spot a companion of strength 10 or more, this minion is strength +3.
-		lore: Orcs must always watch for attacks from their enemies... and from their own.
+		lore: "Orcs must always watch for attacks from their enemies... and from their own."
 		promotext: ""
 		alts: {
 			promos: {
@@ -412,7 +405,6 @@
 	15_102: {
 		cardInfo: {
 			imagePath: decipher/LOTR15102.jpg
-			javaClass: true
 			//parentId: 15_102
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -435,24 +427,24 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: removeThreats
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(orc),minion
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(unbound,companion)
-		        }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: removeThreats
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(orc),minion
+				}
+				effect: {
+					type: exert
+					select: choose(unbound,companion)
+				}
+			}
 		]
 		gametext: <b>Maneuver:</b> Remove a threat and spot another [orc] minion to exert an unbound companion.
-		lore: Move on! To the Gate!
+		lore: "Move on! To the Gate!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -465,7 +457,6 @@
 	15_103: {
 		cardInfo: {
 			imagePath: decipher/LOTR15103.jpg
-			javaClass: true
 			//parentId: 15_103
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -488,35 +479,35 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),orc
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: isGreaterThan
-		                firstNumber: {
-		                    type: forEachYouCanSpot
-		                    filter: site,zone(adventure path)
-		                }
-		                secondNumber: {
-		                    type: forEachYouCanSpot
-		                    filter: minion
-		                }
-		            }
-		            filter: self
-		            amount: 5
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),orc
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: isGreaterThan
+						firstNumber: {
+							type: forEachYouCanSpot
+							filter: site,zone(adventure path)
+						}
+						secondNumber: {
+							type: forEachYouCanSpot
+							filter: minion
+						}
+					}
+					filter: self
+					amount: 5
+				}
+			}
 		]
 		gametext: To play, spot an [orc] Orc.<br>While you can spot more sites on the adventure path than minions, this minion is strength +5.
-		lore: When commanded to, Orcs could travel great distances with great speed.
+		lore: "When commanded to, Orcs could travel great distances with great speed."
 		promotext: ""
 		alts: {
 			promos: {
@@ -529,7 +520,6 @@
 	15_104: {
 		cardInfo: {
 			imagePath: decipher/LOTR15104.jpg
-			javaClass: true
 			//parentId: 15_104
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -552,23 +542,23 @@
 		vitality: 4
 		site: 4
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),condition
-		        }
-		    }
-		    {
-		        type: modifyOwnCost
-		        amount: {
-		            type: forEachThreat
-		            multiplier: -1
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),condition
+				}
+			}
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachThreat
+					multiplier: -1
+				}
+			}
 		]
 		gametext: To play, spot an [orc] condition.<br>Black Land Shrieker is twilight cost -1 for each threat you spot.
-		lore: No sound from an Orc was more frightening.
+		lore: "No sound from an Orc was more frightening."
 		promotext: ""
 		alts: {
 			promos: {
@@ -581,7 +571,6 @@
 	15_105: {
 		cardInfo: {
 			imagePath: decipher/LOTR15105.jpg
-			javaClass: true
 			//parentId: 15_105
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -604,36 +593,36 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),possession
-		        }
-		        effect: {
-		            type: addThreats
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: companion,minStrength(13)
-		            }
-		            filter: self
-		            amount: 7
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: culture(orc),possession
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: companion,minStrength(13)
+					}
+					filter: self
+					amount: 7
+				}
+			}
 		]
 		gametext: When you play this minion, you may spot an [orc] possession to add a threat.<br>While you can spot a companion of strength 13 or more, this minion is strength +7.
-		lore: Frodo's quest could be undone with one glance.
+		lore: "Frodo's quest could be undone with one glance."
 		promotext: ""
 		alts: {
 			promos: {
@@ -646,7 +635,6 @@
 	15_106: {
 		cardInfo: {
 			imagePath: decipher/LOTR15106.jpg
-			javaClass: true
 			//parentId: 15_106
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -666,28 +654,28 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),minion
-		            count: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-                    type: played
-                    filter: side(free people),possession
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+					count: 2
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: side(free people),possession
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
 		]
 		gametext: To play, spot 2 [orc] minions.<br>Each time the Free Peoples player plays a possession, add (2).
-		lore: Breaking a Gondorian fortification is not easily done.
+		lore: "Breaking a Gondorian fortification is not easily done."
 		promotext: ""
 		alts: {
 			promos: {
@@ -700,7 +688,6 @@
 	15_107: {
 		cardInfo: {
 			imagePath: decipher/LOTR15107.jpg
-			javaClass: true
 			//parentId: 15_107
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -723,33 +710,33 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: choice
-		            texts: [
-		                Spot 3 Free Peoples cultures
-		                Discard 2 {orc} conditions
-		            ]
-		            effects: [
-		                {
-		                    type: If
-		                    check: {
-		                        type: canSpotFPCultures
-		                        amount: 3
-		                    }
-		                }
-		                {
-		                    type: discard
-		                    select: choose(culture(orc),condition)
-		                    count: 2
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: choice
+					texts: [
+						Spot 3 Free Peoples cultures
+						Discard 2 {orc} conditions
+					]
+					effects: [
+						{
+							type: If
+							check: {
+								type: canSpotFPCultures
+								amount: 3
+							}
+						}
+						{
+							type: discard
+							select: choose(culture(orc),condition)
+							count: 2
+						}
+					]
+				}
+			}
 		]
 		gametext: To play, spot 3 Free Peoples cultures or discard 2 [orc] conditions from play.
-		lore: Neither Man nor beast can withstand the fury of the Orcs.
+		lore: "Neither Man nor beast can withstand the fury of the Orcs."
 		promotext: ""
 		alts: {
 			promos: {
@@ -762,7 +749,6 @@
 	15_108: {
 		cardInfo: {
 			imagePath: decipher/LOTR15108.jpg
-			javaClass: true
 			//parentId: 15_108
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -785,25 +771,25 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(fortification)
-		            count: {
-		                type: forEachYouCanSpot
-		                filter: culture(orc),or(possession,artifact)
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: choose(fortification)
+					count: {
+						type: forEachYouCanSpot
+						filter: culture(orc),or(possession,artifact)
+					}
+				}
+			}
 		]
 		gametext: When you play Destructive Orc, you may discard a fortification for each [orc] possession and each [orc] artifact you can spot.
-		lore: At Minas Tirith, some Orcs chose to attack the city before its inhabitants.
+		lore: "At Minas Tirith, some Orcs chose to attack the city before its inhabitants."
 		promotext: ""
 		alts: {
 			promos: {
@@ -816,7 +802,6 @@
 	15_109: {
 		cardInfo: {
 			imagePath: decipher/LOTR15109.jpg
-			javaClass: true
 			//parentId: 15_109
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -841,26 +826,26 @@
 		site: 4
 		keywords: Hunter 3
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: discardTopCardsFromDeck
-		            forced: true
-		            deck: free people
-		            count: {
-		                type: forEachYouCanSpot
-		                filter: hunter,character
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: discardTopCardsFromDeck
+					forced: true
+					deck: free people
+					count: {
+						type: forEachYouCanSpot
+						filter: hunter,character
+					}
+				}
+			}
 		]
 		gametext: <b>Hunter 3</b>. <helper>(While skirmishing a non-hunter character, this character is strength +3.)</helper><br>When you play Gorbag, you may discard a card from the top of the Free Peoples player's deck for each hunter character you can spot.
-		lore: I'm gonna bleed you... like a stuck pig!
+		lore: "I'm gonna bleed you... like a stuck pig!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -873,7 +858,6 @@
 	15_110: {
 		cardInfo: {
 			imagePath: decipher/LOTR15110.jpg
-			javaClass: true
 			//parentId: 15_110
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -896,30 +880,30 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            count: 3
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: other,culture(orc),minion
-		                count: 2
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: other,culture(orc),minion
+						count: 2
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
 		]
 		gametext: To play, discard 3 cards from your hand.<br>While you can spot 2 other [orc] minions, this minion is <b>fierce</b>.
-		lore: Wargs and riders sent by Saruman disrupted the villagers' retreat to Helm's Deep.
+		lore: "Wargs and riders sent by Saruman disrupted the villagers' retreat to Helm's Deep."
 		promotext: ""
 		alts: {
 			promos: {
@@ -932,7 +916,6 @@
 	15_111: {
 		cardInfo: {
 			imagePath: decipher/LOTR15111.jpg
-			javaClass: true
 			//parentId: 15_111
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -955,37 +938,37 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: [
-		            {
-		                type: shuffleDeck
-		                deck: free people
-		            }
-		            {
-		                type: revealTopCardsOfDrawDeck
-		                deck: free people
-		                count: 1
-		                memorize: revealedCard
-		            }
-		            {
-		                type: modifyStrength
-		                select: self
-		                amount: {
-		                    type: twilightCostInMemory
-		                    memory: revealedCard
-		                }
-		            }
-		        ]
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: shuffleDeck
+						deck: free people
+					}
+					{
+						type: revealTopCardsOfDrawDeck
+						deck: free people
+						count: 1
+						memorize: revealedCard
+					}
+					{
+						type: modifyStrength
+						select: self
+						amount: {
+							type: twilightCostInMemory
+							memory: revealedCard
+						}
+					}
+				]
+			}
 		]
 		gametext: <b>Skirmish:</b> Exert this minion to make the Free Peoples player shuffle his or her draw deck and reveal the top card of that draw deck. Make this minion strength +X, where X is the twilight cost of the revealed card.
-		lore: Orcs attacked in sunlight only when absolutely necessary.
+		lore: "Orcs attacked in sunlight only when absolutely necessary."
 		promotext: ""
 		alts: {
 			promos: {
@@ -998,7 +981,6 @@
 	15_112: {
 		cardInfo: {
 			imagePath: decipher/LOTR15112.jpg
-			javaClass: true
 			//parentId: 15_112
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1072,7 +1054,7 @@
 			}
 		]
 		gametext: When you play this minion, you may discard 5 [orc] minions from play to make it twilight cost -10 and <b>fierce</b>.<br><b>Shadow:</b> Remove (3) to play an [orc] Orc from your discard pile. Its twilight cost is -2.
-		lore: Thrice the great ram boomed. And suddenly on the last stroke the Gate of Gondor broke.
+		lore: "Thrice the great ram boomed. And suddenly on the last stroke the Gate of Gondor broke."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1085,7 +1067,6 @@
 	15_113: {
 		cardInfo: {
 			imagePath: decipher/LOTR15113.jpg
-			javaClass: true
 			//parentId: 15_113
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1105,59 +1086,59 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantReplaceSite
-		            requires: {
-		                type: canSpot
-		                filter: culture(orc),orc
-		            }
-		            player: free people
-		            filter: currentSite
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: [
-                    {
-                        type: exert
-                        select: choose(culture(orc),minion)
-                    }
-                    {
-                        type: removeTwilight
-                        amount: 2
-                    }
-                ]
-                effect: [
-                    {
-                        type: revealBottomCardsOfDrawDeck
-                        memorize: revealedCard
-                    }
-                    {
-                        type: if
-                        check: {
-                            type: memoryMatches
-                            memory: revealedCard
-                            filter: culture(orc),orc
-                        }
-                        true: {
-                            type: putCardsFromDeckIntoHand
-                            select: memory(revealedCard)
-                            reveal: true
-                            shuffle: false
-                            showAll: false
-                        }
-                        false: {
-                            type: discardCardsFromDrawDeck
-                            select: memory(revealedCard)
-                            showAll: false
-                            shuffle: false
-                        }
-                    }
-                ]
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantReplaceSite
+					requires: {
+						type: canSpot
+						filter: culture(orc),orc
+					}
+					player: free people
+					filter: currentSite
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: exert
+						select: choose(culture(orc),minion)
+					}
+					{
+						type: removeTwilight
+						amount: 2
+					}
+				]
+				effect: [
+					{
+						type: revealBottomCardsOfDrawDeck
+						memorize: revealedCard
+					}
+					{
+						type: if
+						check: {
+							type: memoryMatches
+							memory: revealedCard
+							filter: culture(orc),orc
+						}
+						true: {
+							type: putCardsFromDeckIntoHand
+							select: memory(revealedCard)
+							reveal: true
+							shuffle: false
+							showAll: false
+						}
+						false: {
+							type: discardCardsFromDrawDeck
+							select: memory(revealedCard)
+							showAll: false
+							shuffle: false
+						}
+					}
+				]
+			}
 		]
 		gametext: While you can spot an [orc] Orc, the Free Peoples player cannot replace the fellowship's current site.<br><b>Shadow:</b> Exert an [orc] minion and remove (2) to reveal the bottom card of your draw deck. If it is an [orc] Orc, take it into hand. Otherwise, discard it.
 		lore: ""
@@ -1173,7 +1154,6 @@
 	15_114: {
 		cardInfo: {
 			imagePath: decipher/LOTR15114.jpg
-			javaClass: true
 			//parentId: 15_114
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1195,20 +1175,20 @@
 		itemclass: Hand weapon
 		target: culture(orc),orc
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self
-		            keyword: hunter
-		            amount: {
-		                type: forEachFPCulture
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self
+					keyword: hunter
+					amount: {
+						type: forEachFPCulture
+					}
+				}
+			}
 		]
 		gametext: Bearer must be an [orc] Orc.<br>Bearer gains <b>hunter X</b> <helper>(While skirmishing a non-hunter character, this character is strength +X.)</helper>, where X is the number of Free Peoples cultures you can spot.
-		lore: Orcs hunt for Men, ponies, and their own kind.
+		lore: "Orcs hunt for Men, ponies, and their own kind."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1221,7 +1201,6 @@
 	15_115: {
 		cardInfo: {
 			imagePath: decipher/LOTR15115.jpg
-			javaClass: true
 			//parentId: 15_115
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1241,35 +1220,35 @@
 		type: Condition
 		target: currentSite
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: exert
-		            select: choose(culture(orc),minion)
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantReplaceSite
-		            filter: bearer
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: location
-		                filter: bearer
-		            }
-		            filter: troll
-		            amount: 1
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(orc),minion)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantReplaceSite
+					filter: bearer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: bearer
+					}
+					filter: troll
+					amount: 1
+				}
+			}
 		]
 		gametext: To play, exert an [orc] minion. Plays on the fellowship's current site.<br>This site cannot be replaced. While the fellowship is at this site, each Troll is strength +1.
-		lore: Where battering rams failed, Trolls did not.
+		lore: "Where battering rams failed, Trolls did not."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1282,7 +1261,6 @@
 	15_116: {
 		cardInfo: {
 			imagePath: decipher/LOTR15116.jpg
-			javaClass: true
 			//parentId: 15_116
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1305,21 +1283,21 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(companion,inSkirmishAgainst(self))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: wound
+					select: choose(companion,inSkirmishAgainst(self))
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Exert this minion to wound a companion it is skirmishing.
-		lore: ...it was of a small breed... with wide and snuffling nostrils: evidently a tracker of some kind.
+		lore: "...it was of a small breed... with wide and snuffling nostrils: evidently a tracker of some kind."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1332,7 +1310,6 @@
 	15_117: {
 		cardInfo: {
 			imagePath: decipher/LOTR15117.jpg
-			javaClass: true
 			//parentId: 15_117
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1355,52 +1332,52 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self
-		            keyword: damage
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: companion
-		                over: 5
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: assignment
-		        cost: {
-		            type: exert
-		            select: self
-		            times: 2
-		        }
-		        effect: {
-		            type: if
-		            check: {
-		                type: cantSpot
-		                filter: companion
-		                count: 6
-		            }
-		            true: {
-		                type: assignFPCharacterToSkirmish
-		                fpCharacter: choose(companion,not(ringBearer))
-		                minion: self
-		                memorizeFPCharacter: chosenCompanion
-		                preventText: Would you like to exert a companion to prevent assigning {chosenCompanion} to skirmish {self}?
-		                preventCost: {
-		                    type: exert
-		                    select: choose(companion)
-		                }
-		            }
-		            false: {
-		                type: assignFPCharacterToSkirmish
-		                fpCharacter: choose(companion,not(ringBearer))
-		                minion: self
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self
+					keyword: damage
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 5
+					}
+				}
+			}
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: exert
+					select: self
+					times: 2
+				}
+				effect: {
+					type: if
+					check: {
+						type: cantSpot
+						filter: companion
+						count: 6
+					}
+					true: {
+						type: assignFPCharacterToSkirmish
+						fpCharacter: choose(companion,not(ringBearer))
+						minion: self
+						memorizeFPCharacter: chosenCompanion
+						preventText: Would you like to exert a companion to prevent assigning {chosenCompanion} to skirmish {self}?
+						preventCost: {
+							type: exert
+							select: choose(companion)
+						}
+					}
+					false: {
+						type: assignFPCharacterToSkirmish
+						fpCharacter: choose(companion,not(ringBearer))
+						minion: self
+					}
+				}
+			}
 		]
 		gametext: For each companion over 5, this minion is <b>damage +1</b>.<br><b>Assignment:</b> Exert this minion twice to assign it to a companion (except the Ring-bearer). If you cannot spot 6 companions, the Free Peoples player may exert a companion to prevent this.
 		lore: ""
@@ -1416,7 +1393,6 @@
 	15_118: {
 		cardInfo: {
 			imagePath: decipher/LOTR15118.jpg
-			javaClass: true
 			//parentId: 15_118
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1436,43 +1412,43 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifySiteNumber
-		            requires: {
-		                type: canSpotThreats
-		            }
-		            filter: culture(orc),orc
-		            amount: -1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: [
-		            {
-		                type: removeThreats
-		                amount: 3
-		            }
-		            {
-		                type: discard
-		                select: choose(culture(orc),orc)
-		                count: 3
-		            }
-		        ]
-		        effect: [
-		            {
-		                type: kill
-		                player: free people
-		                select: choose(companion)
-		            }
-		            {
-		                type: discard
-		                select: self
-		            }
-		        ]
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					requires: {
+						type: canSpotThreats
+					}
+					filter: culture(orc),orc
+					amount: -1
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: removeThreats
+						amount: 3
+					}
+					{
+						type: discard
+						select: choose(culture(orc),orc)
+						count: 3
+					}
+				]
+				effect: [
+					{
+						type: kill
+						player: free people
+						select: choose(companion)
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
 		]
 		gametext: While you can spot a threat, the site number of each [orc] Orc is -1.<br><b>Regroup:</b> Remove 3 threats and discard 3 [orc] Orcs from play to make the Free Peoples player spot a companion and place that companion in the dead pile. Discard this condition.
 		lore: ""
@@ -1488,7 +1464,6 @@
 	15_119: {
 		cardInfo: {
 			imagePath: decipher/LOTR15119.jpg
-			javaClass: true
 			//parentId: 15_119
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1506,36 +1481,36 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(orc),minion
-			    count: 2
+				type: canSpot
+				filter: culture(orc),minion
+				count: 2
 			}
 			effect: [
 				{
-				    type: preventable
-				    player: free people
-				    text: Would you like to add (2) for each Free Peoples condition to prevent discarding of condition?
-				    cost: {
-				        type: addTwilight
-				        amount: {
-				            type: forEachYouCanSpot
-				            filter: side(free people),condition
-				            multiplier: 2
-				        }
-				    }
-				    effect: {
-				        type: discard
-				        select: choose(side(free people),condition)
-				    }
+					type: preventable
+					player: free people
+					text: Would you like to add (2) for each Free Peoples condition to prevent discarding of condition?
+					cost: {
+						type: addTwilight
+						amount: {
+							type: forEachYouCanSpot
+							filter: side(free people),condition
+							multiplier: 2
+						}
+					}
+					effect: {
+						type: discard
+						select: choose(side(free people),condition)
+					}
 				}
 			]
 		}
 		gametext: Spot 2 [orc] minions to discard a Free Peoples condition. The Free Peoples player may add (2) for each Free Peoples condition you can spot to prevent that.
-		lore: An attacking swarm of Orcs leaves few desirable options.
+		lore: "An attacking swarm of Orcs leaves few desirable options."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1548,7 +1523,6 @@
 	15_120: {
 		cardInfo: {
 			imagePath: decipher/LOTR15120.jpg
-			javaClass: true
 			//parentId: 15_120
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1571,21 +1545,21 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(companion,inSkirmishAgainst(self))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: wound
+					select: choose(companion,inSkirmishAgainst(self))
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Exert this minion to wound a companion it is skirmishing.
-		lore: ...I'll stick you, if you don't shut it down, see?'
+		lore: "'...I'll stick you, if you don't shut it down, see?'"
 		promotext: ""
 		alts: {
 			promos: {

@@ -3,7 +3,6 @@
 	5_118: {
 		cardInfo: {
 			imagePath: decipher/LOTR05118.jpg
-			javaClass: true
 			//parentId: 5_118
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -23,24 +22,24 @@
 		block: Towers
 		direction: Right
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: canSpot
-		            filter: your,minion
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 9
-		        }
-		        effect: {
-		            type: addModifier
-		            modifier: {
-		                type: hasToMoveIfAble
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: your,minion
+				}
+				cost: {
+					type: removeTwilight
+					amount: 9
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: hasToMoveIfAble
+					}
+				}
+			}
 		]
 		gametext: <b>Regroup:</b> Spot your minion and remove (9) to make the fellowship move again this turn (if the move limit allows).
 		lore: ""
@@ -56,7 +55,6 @@
 	5_119: {
 		cardInfo: {
 			imagePath: decipher/LOTR05119.jpg
-			javaClass: true
 			//parentId: 5_119
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -77,21 +75,21 @@
 		direction: Left
 		keywords: Plains
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: your,mounted,minion
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 2
-		        }
-		        effect: {
-		            type: preventWound
-		            select: choose(your,mounted,minion)
-		        }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: your,mounted,minion
+				}
+				cost: {
+					type: removeTwilight
+					amount: 2
+				}
+				effect: {
+					type: preventWound
+					select: choose(your,mounted,minion)
+				}
+			}
 		]
 		gametext: <b>Plains</b>. <b>Response:</b> If your mounted minion is about to take a wound, remove (2) to prevent that wound.
 		lore: ""
@@ -107,7 +105,6 @@
 	5_120: {
 		cardInfo: {
 			imagePath: decipher/LOTR05120.jpg
-			javaClass: true
 			//parentId: 5_120
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -128,12 +125,12 @@
 		direction: Right
 		keywords: Underground
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: winsAfterReconcile
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: winsAfterReconcile
+				}
+			}
 		]
 		gametext: <b>Underground</b>. The Free Peoples player wins the game only if the Ring-bearer survives until Shadow players reconcile.
 		lore: ""

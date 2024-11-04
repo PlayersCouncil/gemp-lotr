@@ -1,0 +1,311 @@
+{
+
+	3_1: {
+		cardInfo: {
+			imagePath: decipher/LOTR03001.jpg
+			//parentId: 3_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3R1
+			rarity: R
+			setNum: "3"
+			cardNum: 1
+			style: Standard
+		}
+		title: Book of Mazarbul
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Possession
+		target: dwarf
+		keywords: Tale
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: startOfPhase
+				phase: fellowship
+			}
+			requires: {
+				type: location
+				filter: siteNumber(4-100)
+			}
+			effect: {
+				type: drawCards
+				count: {
+					type: forEachYouCanSpot
+					filter: dwarf,companion
+				}
+			}
+		}
+		gametext: <b>Tale</b>. Bearer must be a Dwarf.<br>At the start of each fellowship phase when the fellowship is at site 4 or higher, you may draw a card for each Dwarf companion.
+		lore: "'It seems to be a record of the fortunes of Balin's folk....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_2: {
+		cardInfo: {
+			imagePath: decipher/LOTR03002.jpg
+			//parentId: 3_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3U2
+			rarity: U
+			setNum: "3"
+			cardNum: 2
+			style: Standard
+		}
+		title: Gimli's Pipe
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Possession
+		itemclass: Pipe
+		target: name(Gimli)
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: choose(name(Gimli))
+			}
+			effect: {
+				type: addModifier
+				modifier: {
+					type: itemClassSpot
+					class: Pipe
+				}
+			}
+		}
+		gametext: Bearer must be Gimli.<br><b>Fellowship:</b> Exert Gimli to add 1 to the number of pipes you can spot.
+		lore: "'And certainly it was from Bree that the art of smoking the genuine weed spread in the recent centuries among Dwarves and such other folk....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_3: {
+		cardInfo: {
+			imagePath: decipher/LOTR03003.jpg
+			//parentId: 3_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3R3
+			rarity: R
+			setNum: "3"
+			cardNum: 3
+			style: Standard
+		}
+		title: Mines of Khazad-Dûm
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: culture(dwarven),tale
+			}
+			effect: {
+				type: heal
+				select: choose(dwarf,companion)
+			}
+		}
+		gametext: Plays to your support area.<br>Each time you play a [dwarven] tale, you may heal a Dwarf companion.
+		lore: "'Moria! Moria! Wonder of the Northern world!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_4: {
+		cardInfo: {
+			imagePath: decipher/LOTR03004.jpg
+			//parentId: 3_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3U4
+			rarity: U
+			setNum: "3"
+			cardNum: 4
+			style: Standard
+		}
+		title: A Royal Welcome
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: regroup
+			cost: {
+				type: exert
+				select: choose(dwarf, ally)
+			}
+			effect: {
+				type: heal
+				select: choose(dwarf,companion)
+			}
+		}
+		gametext: Plays to your support area.<br><b>Regroup:</b> Exert a Dwarf ally to heal a Dwarf companion.
+		lore: "'There is even a chance that Dwarves are there, and that in some deep hall of his fathers, Balin son of Fundin may be found.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_5: {
+		cardInfo: {
+			imagePath: decipher/LOTR03005.jpg
+			//parentId: 3_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3U5
+			rarity: U
+			setNum: "3"
+			cardNum: 5
+			style: Standard
+		}
+		title: Song of Durin
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Condition
+		keywords: [
+			Tale
+			Support Area
+		]
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(dwarf)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: culture(moria),weapon
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(culture(moria),condition)
+					count: 0-2
+				}
+			}
+		]
+		gametext: <b>Tale</b>. To play, exert a Dwarf. Plays to your support area.<br>The twilight cost of each [moria] weapon is +2.<br><b>Fellowship:</b> Discard this condition to discard up to 2 [moria] conditions.
+		lore: "No harp is wrung, no hammer falls: / The darkness dwells in Durin's halls...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_6: {
+		cardInfo: {
+			imagePath: decipher/LOTR03006.jpg
+			//parentId: 3_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3C6
+			rarity: C
+			setNum: "3"
+			cardNum: 6
+			style: Standard
+		}
+		title: Storm of Argument
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			effect: [
+				{
+					type: revealCardsFromHand
+					hand: shadow
+					select: random(1)
+					memorize: revealedCard
+				}
+				{
+					type: shuffleCardsFromDiscardIntoDrawDeck
+					select: choose(culture(dwarven))
+					count: {
+						type: range
+						from: 0
+						to: {
+							type: twilightCostInMemory
+							memory: revealedCard
+						}
+					}
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Reveal a card at random from an opponent's hand. Shuffle up to X [dwarven] cards from your discard pile into your draw deck, where X is the twilight cost of the card revealed.
+		lore: "'I will be dead before I see the Ring in the hands of an Elf!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

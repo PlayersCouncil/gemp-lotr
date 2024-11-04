@@ -3,7 +3,6 @@
 	6_9: {
 		cardInfo: {
 			imagePath: decipher/LOTR06009.jpg
-			javaClass: true
 			//parentId: 6_9
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,7 +20,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
@@ -45,7 +44,7 @@
 			]
 		}
 		gametext: <b>Maneuver:</b> Exert Gimli twice to make him and each Elf companion strength +3 until the regroup phase.
-		lore: He hewed a two-handed stroke and laid the last Orc before his feet. 'Now my count passes Master Legolas again.'
+		lore: "'He hewed a two-handed stroke and laid the last Orc before his feet. 'Now my count passes Master Legolas again.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -58,7 +57,6 @@
 	6_10: {
 		cardInfo: {
 			imagePath: decipher/LOTR06010.jpg
-			javaClass: true
 			//parentId: 6_10
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -78,51 +76,51 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: dwarf
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: dwarven
-		            select: self
-		            count: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: choice
-		            texts: [
-		                Discard this condition
-		                Remove a {dwarven} token from here
-		            ]
-		            effects: [
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		                {
-		                    type: RemoveCultureTokens
-		                    select: self
-		                    culture: dwarven
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: stackTopCardsOfDrawDeck
-		            where: choose(culture(dwarven),condition,hasStacked(any))
-		            count: 1
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: dwarf
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: dwarven
+					select: self
+					count: 2
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Remove a {dwarven} token from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							select: self
+							culture: dwarven
+						}
+					]
+				}
+				effect: {
+					type: stackTopCardsOfDrawDeck
+					where: choose(culture(dwarven),condition,hasStacked(any))
+					count: 1
+				}
+			}
 		]
 		gametext: Plays to your support area. When you play this condition, you may spot a Dwarf to place 2 [dwarven] tokens here.<br><b>Fellowship:</b> Discard this condition or remove a [dwarven] token from here to stack the top card of your draw deck on a [dwarven] condition that has a card stacked on it.
 		lore: ""
@@ -138,7 +136,6 @@
 	6_11: {
 		cardInfo: {
 			imagePath: decipher/LOTR06011.jpg
-			javaClass: true
 			//parentId: 6_11
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -156,66 +153,75 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: [
-		    {
-		        type: stackedOnModifier
-		        on: culture(dwarven),condition
-		        modifier: {
-		            type: modifyStrength
-		            filter: name(Gimli)
-		            amount: 1
-		        }
-		    }
-            {
-                type: event
-                effect: [
-                    {
-                        type: choice
-                        texts: [
-                            Place this card on top of or beneath your draw deck
-                            Place another {dwarven} card from hand on top or beneath your draw deck
-                        ]
-                        effects: [
-                            {
-                                type: choice
-                                texts: [
-                                    Place this card on top of your draw deck
-                                    Place this card beneath your draw deck
-                                ]
-                                effects: [
-                                    {
-                                        type: putPlayedEventOnTopOfDrawDeck
-                                    }
-                                    {
-                                        type: putPlayedEventOnBottomOfDrawDeck
-                                    }
-                                ]
-                            }
-                            {
-                                type: choice
-                                texts: [
-                                    Place that card on top of your draw deck
-                                    Place that card beneath your draw deck
-                                ]
-                                effects: [
-                                    {
-                                        type: putCardsFromHandOnTopOfDeck
-                                        select: choose(culture(dwarven))
-                                    }
-                                    {
-                                        type: putCardsFromhandOnBottomOfDeck
-                                        select: choose(culture(dwarven))
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
+			{
+				type: stackedOnModifier
+				on: culture(dwarven),condition
+				modifier: {
+					type: modifyStrength
+					filter: name(Gimli)
+					amount: 1
+				}
+			}
+			{
+				type: event
+				effect: [
+					{
+						type: choice
+						texts: [
+							Place this card on top of or beneath your draw deck
+							Place another {dwarven} card from hand on top or beneath your draw deck
+						]
+						effects: [
+							{
+								type: choice
+								texts: [
+									Place this card on top of your draw deck
+									Place this card beneath your draw deck
+								]
+								effects: [
+									{
+										type: putPlayedEventOnTopOfDrawDeck
+									}
+									{
+										type: putPlayedEventOnBottomOfDrawDeck
+									}
+								]
+							}
+							{
+								type: choice
+								texts: [
+									Place that card on top of your draw deck
+									Place that card beneath your draw deck
+								]
+								effects: [
+									{
+										type: putCardsFromHandOnTopOfDeck
+										select: choose(culture(dwarven))
+									}
+									{
+										type: putCardsFromhandOnBottomOfDeck
+										select: choose(culture(dwarven))
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
 		gametext: While this card is stacked on a [dwarven] condition, Gimli is strength +1.<br><b>Fellowship:</b> Place this card or another [dwarven] card from hand on top of or beneath your draw deck.
 		lore: Don't tell the Elf.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+		gametext: While this card is stacked on a [dwarven] condition, Gimli is strength +1.<br><b>Fellowship:</b> Place this card or another [dwarven] card from hand on top of or beneath your draw deck.
+		lore: "'Don't tell the Elf.'"
 		promotext: ""
 		alts: {
 			promos: {

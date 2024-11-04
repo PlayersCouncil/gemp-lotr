@@ -3,7 +3,6 @@
 	5_5: {
 		cardInfo: {
 			imagePath: decipher/LOTR05005.jpg
-			javaClass: true
 			//parentId: 5_5
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,7 +20,7 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
@@ -29,17 +28,17 @@
 				select: choose(dwarf)
 			},
 			effect: [
-			    {
-			        type: wound
-			        select: choose(minion)
-			    }
-			    {
-			        type: canPlayNextAction
-			    }
+				{
+					type: wound
+					select: choose(minion)
+				}
+				{
+					type: canPlayNextAction
+				}
 			]
 		}
 		gametext: <b>Maneuver:</b> Exert a Dwarf to wound a minion. You may take the next maneuver action.
-		lore: ...a small dark figure that none had observed sprang out of the shadows and gave a hoarse shout....
+		lore: "...a small dark figure that none had observed sprang out of the shadows and gave a hoarse shout...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -52,7 +51,6 @@
 	5_6: {
 		cardInfo: {
 			imagePath: decipher/LOTR05006.jpg
-			javaClass: true
 			//parentId: 5_6
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -70,34 +68,34 @@
 		culture: Dwarven
 		twilight: 0
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: dwarf
+				type: canSpot
+				filter: dwarf
 			}
 			effect: [
-			    {
-			        type: choice
-			        texts: [
-			            Draw a card
-			            Play a {dwarven} condition from your discard pile
-			        ]
-			        effects: [
-			            {
-			                type: drawCards
-			            }
-			            {
-			                type: playCardFromDiscard
-			                select: choose(culture(dwarven),condition)
-			            }
-			        ]
-			    }
+				{
+					type: choice
+					texts: [
+						Draw a card
+						Play a {dwarven} condition from your discard pile
+					]
+					effects: [
+						{
+							type: drawCards
+						}
+						{
+							type: playCardFromDiscard
+							select: choose(culture(dwarven),condition)
+						}
+					]
+				}
 			]
 		}
 		gametext: <b>Fellowship:</b> Spot a Dwarf to draw a card or play a [dwarven] condition from your discard pile.
-		lore: I have fought many wars, master Dwarf. I know how to defend my own Keep.'
+		lore: "'I have fought many wars, master Dwarf. I know how to defend my own Keep.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -110,7 +108,6 @@
 	5_7: {
 		cardInfo: {
 			imagePath: decipher/LOTR05007.jpg
-			javaClass: true
 			//parentId: 5_7
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -148,7 +145,7 @@
 			}
 		}
 		gametext: <b>Damage +1</b>.<br>Each time Gimli wins a skirmish, you may wound a minion assigned to skirmish an unbound companion.
-		lore: Despite Théoden's preparations, Gimli found it necessary to warn him of the advancing Uruk army.
+		lore: "Despite Théoden's preparations, Gimli found it necessary to warn him of the advancing Uruk army."
 		promotext: ""
 		alts: {
 			promos: {
@@ -161,7 +158,6 @@
 	5_8: {
 		cardInfo: {
 			imagePath: decipher/LOTR05008.jpg
-			javaClass: true
 			//parentId: 5_8
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -179,32 +175,33 @@
 		culture: Dwarven
 		twilight: 2
 		type: Possession
+		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: choose(dwarf,companion)
-		        }
-		        effect: {
-		            type: addModifier
-		            modifier: {
-		                type: removeKeyword
-		                filter: minion
-		                requires: {
-		                    type: location
-		                    filter: battleground
-		                }
-		                keyword: damage
-		            }
-		            until: regroup
-		        }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: choose(dwarf,companion)
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: removeKeyword
+						filter: minion
+						requires: {
+							type: location
+							filter: battleground
+						}
+						keyword: damage
+					}
+					until: regroup
+				}
+			}
 		]
 		gametext: Plays to your support area.<br><b>Maneuver:</b> Exert a Dwarf companion to make each minion at a battleground lose all <b>damage</b> bonuses until the regroup phase.
-		lore: ...sudden and terrible, from the tower above, the sound of the great horn of Helm rang out.
+		lore: "...sudden and terrible, from the tower above, the sound of the great horn of Helm rang out."
 		promotext: ""
 		alts: {
 			promos: {
@@ -217,7 +214,6 @@
 	5_9: {
 		cardInfo: {
 			imagePath: decipher/LOTR05009.jpg
-			javaClass: true
 			//parentId: 5_9
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -237,37 +233,37 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        text: Stack top card from draw deck
-		        limitPerPhase: 1
-		        effect: {
-		            type: stackTopCardsOfDrawDeck
-		            where: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        text: Take a Free Peoples card stacked here into hand
-		        requires: {
-		            type: canSpot
-		            filter: dwarf
-		        }
-		        cost: {
-		            type: discardStackedCards
-		            on: culture(dwarven),condition
-		        }
-		        effect: {
-		            type: putStackedCardsIntoHand
-		            select: choose(side(free people))
-		            on: self
-		        }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				text: Stack top card from draw deck
+				limitPerPhase: 1
+				effect: {
+					type: stackTopCardsOfDrawDeck
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				text: Take a Free Peoples card stacked here into hand
+				requires: {
+					type: canSpot
+					filter: dwarf
+				}
+				cost: {
+					type: discardStackedCards
+					on: culture(dwarven),condition
+				}
+				effect: {
+					type: putStackedCardsIntoHand
+					select: choose(side(free people))
+					on: self
+				}
+			}
 		]
 		gametext: Plays to your support area.<br><b>Maneuver:</b> Stack the top card from your draw deck here (limit once per phase).<br><b>Maneuver:</b> Spot a Dwarf and discard a card stacked on a [dwarven] condition to take a Free Peoples card stacked here into hand.
-		lore: This country has tough bones.'
+		lore: "'This country has tough bones.'"
 		promotext: ""
 		alts: {
 			promos: {

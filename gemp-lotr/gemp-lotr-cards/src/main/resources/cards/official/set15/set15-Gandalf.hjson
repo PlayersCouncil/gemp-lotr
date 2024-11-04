@@ -3,7 +3,6 @@
 	15_27: {
 		cardInfo: {
 			imagePath: decipher/LOTR15027.jpg
-			javaClass: true
 			//parentId: 15_27
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,53 +20,51 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		timeword: Maneuver
-		keywords: [
-			Spell
-		]
+		timewords: Maneuver
+		keywords: Spell
 		effects: {
 			type: event
 			cost: [
-                {
-                    type: chooseActiveCards
-                    select: choose(your,culture(gandalf),companion,canExert)
-                    text: Choose card to exert
-                    memorize: chosenCompanion
-                }
-                {
-                    type: chooseANumber
-                    text: Choose how many times to exert your companion
-                    from: 0
-                    to: {
-                        type: subtract
-                        firstNumber: {
-                            type: forEachVitality
-                            filter: memory(chosenCompanion)
-                        }
-                        secondNumber: 1
-                    }
-                    memorize: exertCount
-                }
-                {
-                    type: exert
-                    select: memory(chosenCompanion)
-                    times: memory(exertCount)
-                }
+				{
+					type: chooseActiveCards
+					select: choose(your,culture(gandalf),companion,canExert)
+					text: Choose card to exert
+					memorize: chosenCompanion
+				}
+				{
+					type: chooseANumber
+					text: Choose how many times to exert your companion
+					from: 0
+					to: {
+						type: subtract
+						firstNumber: {
+							type: forEachVitality
+							filter: memory(chosenCompanion)
+						}
+						secondNumber: 1
+					}
+					memorize: exertCount
+				}
+				{
+					type: exert
+					select: memory(chosenCompanion)
+					times: memory(exertCount)
+				}
 			]
 			effect: [
 				{
-				    type: repeat
-				    times: memory(exertCount)
-				    effect: {
-				        type: modifyStrength
-				        select: choose(minion)
-				        amount: -2
-				    }
+					type: repeat
+					times: memory(exertCount)
+					effect: {
+						type: modifyStrength
+						select: choose(minion)
+						amount: -2
+					}
 				}
 			]
 		}
 		gametext: <b>Spell</b>. Exert your [gandalf] companion X times to make a minion strength -2 until the regroup phase, for each time that [gandalf] companion exerted.
-		lore: You did not kill me, you will not kill him!
+		lore: "You did not kill me, you will not kill him!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -80,7 +77,6 @@
 	15_28: {
 		cardInfo: {
 			imagePath: decipher/LOTR15028.jpg
-			javaClass: true
 			//parentId: 15_28
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -103,22 +99,22 @@
 		vitality: 4
 		resistance: 6
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: ent
-		                count: 3
-		            }
-		            filter: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: ent
+						count: 3
+					}
+					filter: self
+					amount: 2
+				}
+			}
 		]
 		gametext: While you can spot 3 Ents, this companion is strength +2.
-		lore: As they drew near the flash and flicker of their eyes could be seen.
+		lore: "As they drew near the flash and flicker of their eyes could be seen."
 		promotext: ""
 		alts: {
 			promos: {
@@ -131,7 +127,6 @@
 	15_29: {
 		cardInfo: {
 			imagePath: decipher/LOTR15029.jpg
-			javaClass: true
 			//parentId: 15_29
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -155,49 +150,49 @@
 		vitality: 4
 		resistance: 7
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: hobbit
-		            count: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: your,spell
-		        }
-		        cost: {
-		            type: addBurdens
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(minion)
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfSkirmishInvolving
-		            filter: self
-		        }
-		        effect: [
-		            {
-		                type: drawCards
-		            }
-		            {
-		                type: discardFromHand
-		                forced: false
-		            }
-		        ]
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: hobbit
+					count: 2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: your,spell
+				}
+				cost: {
+					type: addBurdens
+				}
+				effect: {
+					type: wound
+					select: choose(minion)
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfSkirmishInvolving
+					filter: self
+				}
+				effect: [
+					{
+						type: drawCards
+					}
+					{
+						type: discardFromHand
+						forced: false
+					}
+				]
+			}
 		]
 		gametext: To play, spot 2 Hobbits.<br>Each time you play a spell, you may add a burden to wound a minion.<br>At the start of each skirmish involving Gandalf, you may draw a card and then discard a card from your hand.
-		lore: Let the Ring-bearer decide.
+		lore: "Let the Ring-bearer decide."
 		promotext: ""
 		alts: {
 			promos: {
@@ -210,7 +205,6 @@
 	15_30: {
 		cardInfo: {
 			imagePath: decipher/LOTR15030.jpg
-			javaClass: true
 			//parentId: 15_30
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -234,30 +228,30 @@
 		vitality: 4
 		resistance: 6
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        amount: {
-		            type: forEachYouCanSpot
-		            filter: ent
-		            multiplier: -1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: other,ent
-		                count: 4
-		            }
-		            filter: self
-		            amount: 4
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: ent
+					multiplier: -1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: other,ent
+						count: 4
+					}
+					filter: self
+					amount: 4
+				}
+			}
 		]
 		gametext: Leaflock's twilight cost is -1 for each Ent you can spot.<br>While you can spot 4 other Ents, Leaflock is strength +4.
-		lore: When roused to action, little could stop the destructive power of the Ents.
+		lore: "When roused to action, little could stop the destructive power of the Ents."
 		promotext: ""
 		alts: {
 			promos: {
@@ -270,7 +264,6 @@
 	15_31: {
 		cardInfo: {
 			imagePath: decipher/LOTR15031.jpg
-			javaClass: true
 			//parentId: 15_31
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -290,57 +283,57 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(gandalf),companion
-		            count: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: maneuver
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: [
-                    {
-                        type: discardFromHand
-                        hand: free people
-                        forced: false
-                        select: all(any)
-                        memorize: fpDiscardedCards
-                    }
-                    {
-                        type: drawCards
-                        player: free people
-                        count: {
-                            type: forEachInMemory
-                            memory: fpDiscardedCards
-                        }
-                    }
-                    {
-                        type: discardFromHand
-                        hand: shadow
-                        forced: true
-                        select: all(any)
-                        memorize: shadowDiscardedCards
-                    }
-                    {
-                        type: drawCards
-                        player: shadow
-                        count: {
-                            type: forEachInMemory
-                            memory: shadowDiscardedCards
-                        }
-                    }
-                ]
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gandalf),companion
+					count: 2
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: discardFromHand
+						hand: free people
+						forced: false
+						select: all(any)
+						memorize: fpDiscardedCards
+					}
+					{
+						type: drawCards
+						player: free people
+						count: {
+							type: forEachInMemory
+							memory: fpDiscardedCards
+						}
+					}
+					{
+						type: discardFromHand
+						hand: shadow
+						forced: true
+						select: all(any)
+						memorize: shadowDiscardedCards
+					}
+					{
+						type: drawCards
+						player: shadow
+						count: {
+							type: forEachInMemory
+							memory: shadowDiscardedCards
+						}
+					}
+				]
+			}
 		]
 		gametext: To play, spot 2 [gandalf] companions.<br>At the start of the maneuver phase, discard this condition to make each player count the number of cards in his or her hand, discard each of them and draw the same number of cards from the top of his or her draw deck.
 		lore: ""
@@ -356,7 +349,6 @@
 	15_32: {
 		cardInfo: {
 			imagePath: decipher/LOTR15032.jpg
-			javaClass: true
 			//parentId: 15_32
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -374,79 +366,79 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			cost: {
-			    type: choice
-			    texts: [
-			        Take a {gandalf} companion into hand
-			        Take a {gandalf} companion and {gandalf} condition into hand
-			    ]
-			    effects: [
-			        {
-			            type: If
-			            check: {
-			                type: canSpot
-			                filter: ent
-			            }
-			            true: {
-			                type: MemorizeInfo
-			                memory: effect
-			                info: first
-			            }
-			        }
-			        {
-			            type: If
-			            check: {
-			                type: canSpot
-			                filter: ent
-			                count: 2
-			            }
-			            true: {
-			                type: MemorizeInfo
-			                memory: effect
-			                info: second
-			            }
-			        }
-			    ]
+				type: choice
+				texts: [
+					Take a {gandalf} companion into hand
+					Take a {gandalf} companion and {gandalf} condition into hand
+				]
+				effects: [
+					{
+						type: If
+						check: {
+							type: canSpot
+							filter: ent
+						}
+						true: {
+							type: MemorizeInfo
+							memory: effect
+							info: first
+						}
+					}
+					{
+						type: If
+						check: {
+							type: canSpot
+							filter: ent
+							count: 2
+						}
+						true: {
+							type: MemorizeInfo
+							memory: effect
+							info: second
+						}
+					}
+				]
 			}
 			effect: [
 				{
-				    type: if
-				    check: {
-				        type: memoryIs
-				        memory: effect
-				        value: first
-				    }
-				    true: {
-				        type: putCardsFromDeckIntoHand
-				        select: choose(culture(gandalf),companion)
-                        reveal: true
-                        shuffle: true
-                        showAll: true
-				    }
-				    false: [
-                        {
-                            type: putCardsFromDeckIntoHand
-                            select: choose(culture(gandalf),companion)
-                            reveal: true
-                            shuffle: true
-                            showAll: true
-                        }
-                        {
-                            type: putCardsFromDeckIntoHand
-                            select: choose(culture(gandalf),condition)
-                            reveal: true
-                            shuffle: true
-                            showAll: true
-                        }
-                    ]
+					type: if
+					check: {
+						type: memoryIs
+						memory: effect
+						value: first
+					}
+					true: {
+						type: putCardsFromDeckIntoHand
+						select: choose(culture(gandalf),companion)
+						reveal: true
+						shuffle: true
+						showAll: true
+					}
+					false: [
+						{
+							type: putCardsFromDeckIntoHand
+							select: choose(culture(gandalf),companion)
+							reveal: true
+							shuffle: true
+							showAll: true
+						}
+						{
+							type: putCardsFromDeckIntoHand
+							select: choose(culture(gandalf),condition)
+							reveal: true
+							shuffle: true
+							showAll: true
+						}
+					]
 				}
 			]
 		}
 		gametext: Choose one: spot an Ent to take a [gandalf] companion into hand from your draw deck; or spot 2 Ents to take a [gandalf] companion and a [gandalf] condition into hand from your draw deck. Shuffle your draw deck.
-		lore: ...I have managed to make a fair number promise to come.'
+		lore: "'...I have managed to make a fair number promise to come.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -459,7 +451,6 @@
 	15_33: {
 		cardInfo: {
 			imagePath: decipher/LOTR15033.jpg
-			javaClass: true
 			//parentId: 15_33
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -477,34 +468,32 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		timeword: Skirmish
-		keywords: [
-			Spell
-		]
+		timewords: Skirmish
+		keywords: Spell
 		effects: {
 			type: event
 			requires: [
-                {
-                    type: canSpot
-                    filter: name(Gandalf)
-                }
-                {
-                    type: canSpot
-                    filter: unbound,companion,inSkirmishAgainst(minion)
-                }
-            ]
+				{
+					type: canSpot
+					filter: name(Gandalf)
+				}
+				{
+					type: canSpot
+					filter: unbound,companion,inSkirmishAgainst(minion)
+				}
+			]
 			effect: [
 				{
-                    type: setFPStrengthOverride
-                    amount: {
-                        type: forEachResistance
-                        filter: name(Gandalf)
-                    }
+					type: setFPStrengthOverride
+					amount: {
+						type: forEachResistance
+						filter: name(Gandalf)
+					}
 				}
 			]
 		}
 		gametext: <b>Spell</b>. Spot Gandalf and an unbound companion skirmishing a minion to use Gandalf's resistance to resolve that skirmish instead of that companion's strength.
-		lore: The dragon passed like an express train... and burst over Bywater with a deafening explosion.
+		lore: "The dragon passed like an express train... and burst over Bywater with a deafening explosion."
 		promotext: ""
 		alts: {
 			promos: {
@@ -517,7 +506,6 @@
 	15_34: {
 		cardInfo: {
 			imagePath: decipher/LOTR15034.jpg
-			javaClass: true
 			//parentId: 15_34
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -541,35 +529,35 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        amount: {
-		            type: forEachYouCanSpot
-		            filter: ent
-		            multiplier: -1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: [
-                    {
-                        type: putCardsFromDiscardOnBottomOfDeck
-                        select: choose(another,culture(gandalf),companion)
-                    }
-                    {
-                        type: reinforceTokens
-                        culture: gandalf
-                    }
-                ]
-		    }
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: ent
+					multiplier: -1
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: putCardsFromDiscardOnBottomOfDeck
+						select: choose(another,culture(gandalf),companion)
+					}
+					{
+						type: reinforceTokens
+						culture: gandalf
+					}
+				]
+			}
 		]
 		gametext: Quickbeam is twilight cost -1 for each Ent you can spot.<br><b>Maneuver:</b> Discard this companion to place another [gandalf] companion from your discard pile on the bottom of your draw deck and reinforce a [gandalf] token.
-		lore: A punch from an Ent-fist crumples up iron....'
+		lore: "'A punch from an Ent-fist crumples up iron....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -582,7 +570,6 @@
 	15_35: {
 		cardInfo: {
 			imagePath: decipher/LOTR15035.jpg
-			javaClass: true
 			//parentId: 15_35
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -605,29 +592,29 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        amount: {
-		            type: forEachYouCanSpot
-		            filter: culture(gandalf),companion
-		            multiplier: -1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: kill
-		            select: self
-		        }
-		        effect: {
-		            type: removeTwilight
-		            amount: 5
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: culture(gandalf),companion
+					multiplier: -1
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: kill
+					select: self
+				}
+				effect: {
+					type: removeTwilight
+					amount: 5
+				}
+			}
 		]
 		gametext: This companion is twilight cost -1 for each [gandalf] companion you can spot.<br><b>Fellowship:</b> Place this companion in the dead pile to remove (5).
-		lore: Treebeard's call to the Ent Moot could not be refused.
+		lore: "Treebeard's call to the Ent Moot could not be refused."
 		promotext: ""
 		alts: {
 			promos: {
@@ -640,7 +627,6 @@
 	15_36: {
 		cardInfo: {
 			imagePath: decipher/LOTR15036.jpg
-			javaClass: true
 			//parentId: 15_36
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -663,54 +649,54 @@
 		vitality: 4
 		resistance: 6
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: ent
-		                count: 4
-		            }
-		            filter: self
-		            amount: 3
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: [
-                    {
-                        type: revealBottomCardsOfDrawDeck
-                        memorize: revealedCard
-                    }
-                    {
-                        type: If
-                        check: {
-                            type: memoryMatches
-                            memory: revealedCard
-                            filter: culture(gandalf),character
-                        }
-                        true: {
-                            type: optional
-                            text: Would you like to play {revealedCard}?
-                            effect: {
-                                type: playCardFromDrawDeck
-                                select: memory(revealedCard)
-                                showAll: false
-                                shuffle: false
-                            }
-                        }
-                    }
-                ]
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: ent
+						count: 4
+					}
+					filter: self
+					amount: 3
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: revealBottomCardsOfDrawDeck
+						memorize: revealedCard
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: revealedCard
+							filter: culture(gandalf),character
+						}
+						true: {
+							type: optional
+							text: Would you like to play {revealedCard}?
+							effect: {
+								type: playCardFromDrawDeck
+								select: memory(revealedCard)
+								showAll: false
+								shuffle: false
+							}
+						}
+					}
+				]
+			}
 		]
 		gametext: While you can spot 4 Ents, this companion is strength +3.<br><b>Maneuver:</b> Exert this companion to reveal the bottom card of your draw deck. If it is a [gandalf] character, you may play it.
-		lore: Ents rarely interacted with Men, but Saruman's devilry demanded action.
+		lore: "Ents rarely interacted with Men, but Saruman's devilry demanded action."
 		promotext: ""
 		alts: {
 			promos: {
@@ -723,7 +709,6 @@
 	15_37: {
 		cardInfo: {
 			imagePath: decipher/LOTR15037.jpg
-			javaClass: true
 			//parentId: 15_37
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -747,29 +732,29 @@
 		vitality: 4
 		resistance: 6
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        amount: {
-		            type: forEachYouCanSpot
-		            filter: culture(gandalf),condition
-		            multiplier: -1
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: putCardsFromDiscardOnBottomOfDeck
-		            select: choose(culture(gandalf))
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: culture(gandalf),condition
+					multiplier: -1
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: putCardsFromDiscardOnBottomOfDeck
+					select: choose(culture(gandalf))
+				}
+			}
 		]
 		gametext: Skinbark is twilight cost -1 for each [gandalf] condition you can spot.<br>Each time Skinbark wins a skirmish, you may place a [gandalf] card from your discard pile beneath your draw deck.
-		lore: ...a man that hacks once at an Ent never gets the chance of a second blow.'
+		lore: "'...a man that hacks once at an Ent never gets the chance of a second blow.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -782,7 +767,6 @@
 	15_38: {
 		cardInfo: {
 			imagePath: decipher/LOTR15038.jpg
-			javaClass: true
 			//parentId: 15_38
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -806,41 +790,41 @@
 		vitality: 4
 		resistance: 6
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(gandalf),companion
-		            count: 3
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		            memorizeLoser: losers
-		        }
-		        effect: {
-		            type: exert
-		            player: shadow
-		            select: choose(minion)
-		            count: {
-		                type: subtract
-		                firstNumber: {
-		                    type: forEachStrength
-		                    filter: self
-		                }
-		                secondNumber: {
-		                    type: forEachStrength
-		                    filter: memory(losers)
-		                }
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gandalf),companion
+					count: 3
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: self
+					memorizeLoser: losers
+				}
+				effect: {
+					type: exert
+					player: shadow
+					select: choose(minion)
+					count: {
+						type: subtract
+						firstNumber: {
+							type: forEachStrength
+							filter: self
+						}
+						secondNumber: {
+							type: forEachStrength
+							filter: memory(losers)
+						}
+					}
+				}
+			}
 		]
 		gametext: To play, spot 3 [gandalf] companions.<br>Each time Treebeard wins a skirmish, the first Shadow player must exert X minions, where X is the difference between Treebeard's strength and the losing character's strength.
-		lore: My business is with Isengard tonight.
+		lore: "My business is with Isengard tonight."
 		promotext: ""
 		alts: {
 			promos: {

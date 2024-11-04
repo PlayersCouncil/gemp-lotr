@@ -3,7 +3,6 @@
 	8_14: {
 		cardInfo: {
 			imagePath: decipher/LOTR08014.jpg
-			javaClass: true
 			//parentId: 8_14
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,30 +20,30 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
 					type: if
 					check: {
-					    type: location
-					    filter: siteBlock(king),siteNumber(1-5)
+						type: location
+						filter: siteBlock(king),siteNumber(1-5)
 					}
 					true: {
-					    type: heal
-					    select: choose(name(Gandalf))
+						type: heal
+						select: choose(name(Gandalf))
 					}
 					false: {
-    					type: alterOverwhelmMultiplier
-    					select: choose(hobbit)
-    					multiplier: 3
+						type: alterOverwhelmMultiplier
+						select: choose(hobbit)
+						multiplier: 3
 					}
 				}
 			]
 		}
 		gametext: At sites 1[K] to 5[K], heal Gandalf. At any other site, prevent a Hobbit from being overwhelmed unless his or her strength is tripled.
-		lore: ...but an honest fool he remains.'
+		lore: "'...but an honest fool he remains.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -57,7 +56,6 @@
 	8_15: {
 		cardInfo: {
 			imagePath: decipher/LOTR08015.jpg
-			javaClass: true
 			//parentId: 8_15
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -82,17 +80,17 @@
 		signet: Aragorn
 		resistance: 6
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: {
-		            type: phase
-		            phase: play starting fellowship
-		        }
-		        amount: -2
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: phase
+					phase: play starting fellowship
+				}
+				amount: -2
+			}
 		]
 		gametext: When Gandalf is in your starting fellowship, his twilight cost is -2.
-		lore: ...the rule of no realm is mine, neither of Gondor nor any other, great or small.'
+		lore: "'...the rule of no realm is mine, neither of Gondor nor any other, great or small.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -105,7 +103,6 @@
 	8_16: {
 		cardInfo: {
 			imagePath: decipher/LOTR08016.jpg
-			javaClass: true
 			//parentId: 8_16
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -123,32 +120,32 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
-			    type: exert
-			    select: choose(name(Gandalf))
+				type: exert
+				select: choose(name(Gandalf))
 			},
 			effect: [
-			    {
-			        type: chooseHowManyToSpot
-			        filter: signet(gandalf)
-			        memorize: spotCount
-			    }
+				{
+					type: chooseHowManyToSpot
+					filter: signet(gandalf)
+					memorize: spotCount
+				}
 				{
 					type: modifyStrength
 					select: choose(minion,inSkirmishAgainst(unbound,companion))
 					amount: {
-					    type: fromMemory
-					    memory: spotCount
-					    multiplier: -1
+						type: fromMemory
+						memory: spotCount
+						multiplier: -1
 					}
 				}
 			]
 		}
 		gametext: Exert Gandalf to make a minion skirmishing an unbound companion strength -1 for each Gandalf signet you spot.
-		lore: There is much to say and to do, and you are weary.'
+		lore: "'There is much to say and to do, and you are weary.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -161,7 +158,6 @@
 	8_17: {
 		cardInfo: {
 			imagePath: decipher/LOTR08017.jpg
-			javaClass: true
 			//parentId: 8_17
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -179,40 +175,40 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			requires: {
-                type: canSpot
-                filter: name(Gandalf),notAssignedToSkirmish
-            }
+				type: canSpot
+				filter: name(Gandalf),notAssignedToSkirmish
+			}
 			cost: {
-			    type: choice
-			    texts: [
-			        Spot Shadowfax
-			        Exert Gandalf
-			    ]
-			    effects: [
-			        {
-			            type: spot
-			            filter: name(Shadowfax)
-			        }
-			        {
-			            type: exert
-			            select: choose(name(Gandalf))
-			        }
-			    ]
+				type: choice
+				texts: [
+					Spot Shadowfax
+					Exert Gandalf
+				]
+				effects: [
+					{
+						type: spot
+						filter: name(Shadowfax)
+					}
+					{
+						type: exert
+						select: choose(name(Gandalf))
+					}
+				]
 			},
 			effect: [
 				{
-				    type: replaceInSkirmish
-				    filter: unbound,companion,not(name(Gandalf))
-				    with: choose(name(Gandalf))
+					type: replaceInSkirmish
+					filter: unbound,companion,not(name(Gandalf))
+					with: choose(name(Gandalf))
 				}
 			]
 		}
 		gametext: If Gandalf is not assigned to a skirmish, spot Shadowfax or exert Gandalf to have Gandalf replace an unbound companion in a skirmish.
-		lore: He always turns up when things are darkest. Go on! Go on, White Rider! Gandalf! Gandalf!'
+		lore: "'He always turns up when things are darkest. Go on! Go on, White Rider! Gandalf! Gandalf!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -225,7 +221,6 @@
 	8_18: {
 		cardInfo: {
 			imagePath: decipher/LOTR08018.jpg
-			javaClass: true
 			//parentId: 8_18
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -245,39 +240,39 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: [
-		            {
-		                type: exert
-		                select: choose(name(Gandalf))
-		            }
-		            {
-		                type: exert
-		                select: choose(or(culture(elven),culture(shire)),companion)
-		            }
-		        ]
-		        effect: {
-		            type: AddCultureTokens
-		            culture: gandalf
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: RemoveCultureTokens
-		            culture: gandalf
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(minion,inSkirmishAgainst(unbound,companion))
-		            amount: -2
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: exert
+						select: choose(name(Gandalf))
+					}
+					{
+						type: exert
+						select: choose(or(culture(elven),culture(shire)),companion)
+					}
+				]
+				effect: {
+					type: AddCultureTokens
+					culture: gandalf
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					culture: gandalf
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(unbound,companion))
+					amount: -2
+				}
+			}
 		]
 		gametext: <b>Fellowship:</b> Exert Gandalf and either an [elven] companion or a [shire] companion to add a [gandalf] token here.<br><b>Skirmish:</b> Remove a [gandalf] token here to make a minion skirmishing an unbound companion strength -2.
 		lore: ""
@@ -293,7 +288,6 @@
 	8_19: {
 		cardInfo: {
 			imagePath: decipher/LOTR08019.jpg
-			javaClass: true
 			//parentId: 8_19
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -311,12 +305,12 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Gandalf)
+				type: canSpot
+				filter: name(Gandalf)
 			}
 			cost: {
 				type: exert
@@ -331,7 +325,7 @@
 			]
 		}
 		gametext: Spot Gandalf and exert a companion to place a card of that companion's culture from your discard pile on top of your draw deck.
-		lore: Lord Denethor is a Steward only.'
+		lore: "'Lord Denethor is a Steward only.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -344,7 +338,6 @@
 	8_20: {
 		cardInfo: {
 			imagePath: decipher/LOTR08020.jpg
-			javaClass: true
 			//parentId: 8_20
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -362,12 +355,12 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Gandalf)
+				type: canSpot
+				filter: name(Gandalf)
 			}
 			cost: {
 				type: kill
@@ -376,20 +369,20 @@
 			},
 			effect: [
 				{
-				    type: putCardsFromDeckIntoHand
-				    select: choose(cultureFromMemory(killedCompanion))
-				    count: 0-3
+					type: putCardsFromDeckIntoHand
+					select: choose(cultureFromMemory(killedCompanion))
+					count: 0-3
 					reveal: true
 					shuffle: true
 					showAll: true
 				}
 				{
-				    type: shuffleDeck
+					type: shuffleDeck
 				}
 			]
 		}
 		gametext: Spot Gandalf and place a companion (except the Ring-bearer) in the dead pile to take up to 3 cards from that companion's culture into hand from your draw deck. Shuffle your draw deck.
-		lore: ...we will bear Faramir, Steward of Gondor, to a place where he can sleep in peace....'
+		lore: "'...we will bear Faramir, Steward of Gondor, to a place where he can sleep in peace....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -402,7 +395,6 @@
 	8_21: {
 		cardInfo: {
 			imagePath: decipher/LOTR08021.jpg
-			javaClass: true
 			//parentId: 8_21
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -424,33 +416,33 @@
 		itemclass: Mount
 		target: title(Gandalf)
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: skirmish
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: bearer,inSkirmish
-		        }
-		        effect: {
-		            type: exert
-		            select: all(minion,inSkirmishAgainst(bearer))
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: addThreats
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: bearer
-		            amount: 1
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				effect: {
+					type: exert
+					select: all(minion,inSkirmishAgainst(bearer))
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: modifyStrength
+					select: bearer
+					amount: 1
+				}
+			}
 		]
 		gametext: Bearer must be Gandalf.<br>At the start of each skirmish involving Gandalf, each minion skirmishing Gandalf must exert.<br><b>Skirmish:</b> Add a threat to make Gandalf strength +1.
 		lore: ""

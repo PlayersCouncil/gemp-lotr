@@ -3,7 +3,6 @@
 	5_44: {
 		cardInfo: {
 			imagePath: decipher/LOTR05044.jpg
-			javaClass: true
 			//parentId: 5_44
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -26,36 +25,36 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: [
-                    {
-                        type: canSpot
-                        filter: companion
-                        count: 5
-                    }
-                    {
-                        type: canSpot
-                        filter: self,HasCultureToken(isengard)
-                    }
-                ]
-                effect: [
-                    {
-                        type: addKeyword
-                        select: choose(urukHai)
-                        keyword: damage
-                        amount: 1
-                    }
-                    {
-                        type: discard
-                        select: self
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: [
+					{
+						type: canSpot
+						filter: companion
+						count: 5
+					}
+					{
+						type: canSpot
+						filter: self,HasCultureToken(isengard)
+					}
+				]
+				effect: [
+					{
+						type: addKeyword
+						select: choose(urukHai)
+						keyword: damage
+						amount: 1
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
 		]
 		gametext: <b>Machine</b>. Plays to your support area.<br><b>Shadow:</b> Exert an Uruk-hai to place an [isengard] token on this card.<br><b>Skirmish:</b> Spot 5 companions and an [isengard] token here to make an Uruk-hai <b>damage</b> <b>+1</b>. Discard this condition.
-		lore: The trees... smote the timbers with a rending boom.
+		lore: "The trees... smote the timbers with a rending boom."
 		promotext: ""
 		alts: {
 			promos: {
@@ -68,7 +67,6 @@
 	5_45: {
 		cardInfo: {
 			imagePath: decipher/LOTR05045.jpg
-			javaClass: true
 			//parentId: 5_45
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -92,42 +90,42 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inSkirmish
-		            amount: {
-		                type: forEachWound
-		                filter: character,inSkirmish
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: [
-                    {
-                        type: RemoveCultureTokens
-                        select: choose(machine)
-                        culture: isengard
-                        count: 3
-                    }
-                    {
-                        type: exert
-                        select: self
-                        times: 2
-                    }
-                ]
-                effect: {
-                    type: wound
-                    select: all(ally)
-                    times: 2
-                }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmish
+					amount: {
+						type: forEachWound
+						filter: character,inSkirmish
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: RemoveCultureTokens
+						select: choose(machine)
+						culture: isengard
+						count: 3
+					}
+					{
+						type: exert
+						select: self
+						times: 2
+					}
+				]
+				effect: {
+					type: wound
+					select: all(ally)
+					times: 2
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>Berserk Rager is strength +1 for each wound on a character in its skirmish.<br><b>Skirmish:</b> Remove 3 [isengard] tokens from a machine and exert Berserk Rager twice to wound every ally twice.
-		lore: Their mission at Helm's Deep was to clear the walls.
+		lore: "Their mission at Helm's Deep was to clear the walls."
 		promotext: ""
 		alts: {
 			promos: {
@@ -140,7 +138,6 @@
 	5_46: {
 		cardInfo: {
 			imagePath: decipher/LOTR05046.jpg
-			javaClass: true
 			//parentId: 5_46
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -164,42 +161,42 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inSkirmish
-		            amount: {
-		                type: forEachWound
-		                filter: character,inSkirmish
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: [
-                    {
-                        type: RemoveCultureTokens
-                        select: choose(machine)
-                        culture: isengard
-                        count: 4
-                    }
-                    {
-                        type: exert
-                        select: self
-                        times: 2
-                    }
-                ]
-                effect: {
-                    type: modifyStrength
-                    select: self
-                    amount: 8
-                }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmish
+					amount: {
+						type: forEachWound
+						filter: character,inSkirmish
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: RemoveCultureTokens
+						select: choose(machine)
+						culture: isengard
+						count: 4
+					}
+					{
+						type: exert
+						select: self
+						times: 2
+					}
+				]
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 8
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>Berserk Savage is strength +1 for each wound on a character in its skirmish.<br><b>Skirmish:</b> Remove 4 [isengard] tokens from a machine and exert Berserk Savage twice to make it strength +8.
-		lore: Skull-like helmets are distinctive to the Berserkers.
+		lore: "Skull-like helmets are distinctive to the Berserkers."
 		promotext: ""
 		alts: {
 			promos: {
@@ -212,7 +209,6 @@
 	5_47: {
 		cardInfo: {
 			imagePath: decipher/LOTR05047.jpg
-			javaClass: true
 			//parentId: 5_47
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -236,42 +232,42 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inSkirmish
-		            amount: {
-		                type: forEachWound
-		                filter: character,inSkirmish
-		                multiplier: 2
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: [
-                    {
-                        type: RemoveCultureTokens
-                        select: choose(machine)
-                        culture: isengard
-                        count: 5
-                    }
-                    {
-                        type: exert
-                        select: self
-                        times: 2
-                    }
-                ]
-                effect: {
-                    type: wound
-                    select: all(companion)
-                }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmish
+					amount: {
+						type: forEachWound
+						filter: character,inSkirmish
+						multiplier: 2
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: RemoveCultureTokens
+						select: choose(machine)
+						culture: isengard
+						count: 5
+					}
+					{
+						type: exert
+						select: self
+						times: 2
+					}
+				]
+				effect: {
+					type: wound
+					select: all(companion)
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>Berserk Slayer is strength +2 for each wound on a character in its skirmish.<br><b>Skirmish:</b> Remove 5 [isengard] tokens from a machine and exert Berserk Slayer twice to wound every companion.
-		lore: Berserkers are the first wave of Uruks sent to battle.
+		lore: "Berserkers are the first wave of Uruks sent to battle."
 		promotext: ""
 		alts: {
 			promos: {
@@ -284,7 +280,6 @@
 	5_48: {
 		cardInfo: {
 			imagePath: decipher/LOTR05048.jpg
-			javaClass: true
 			//parentId: 5_48
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -302,7 +297,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
@@ -315,31 +310,31 @@
 				{
 					type: repeat
 					times: {
-					    type: fromMemory
-					    memory: spotCount
+						type: fromMemory
+						memory: spotCount
 					}
 					effect: {
-					    type: wound
-					    player: fp
-					    select: choose(minion)
-					    count: 0-1
+						type: wound
+						player: fp
+						select: choose(minion)
+						count: 0-1
 					}
 				}
 				{
-				    type: repeat
+					type: repeat
 					times: {
-					    type: fromMemory
-					    memory: spotCount
+						type: fromMemory
+						memory: spotCount
 					}
 					effect: {
-					    type: playCardFromDiscard
-					    select: choose(culture(isengard),weapon)
+						type: playCardFromDiscard
+						select: choose(culture(isengard),weapon)
 					}
 				}
 			]
 		}
 		gametext: <b>Maneuver:</b> Spot X Uruk-hai. The Free Peoples player may assign X wounds to your minions. Play X [isengard] weapons from your discard pile.
-		lore: Some were squat and broad, some were tall and grim, with high helms and sable shields.
+		lore: "Some were squat and broad, some were tall and grim, with high helms and sable shields."
 		promotext: ""
 		alts: {
 			promos: {
@@ -352,7 +347,6 @@
 	5_49: {
 		cardInfo: {
 			imagePath: decipher/LOTR05049.jpg
-			javaClass: true
 			//parentId: 5_49
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -375,40 +369,40 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: exert
-		            select: choose(urukHai)
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: isengard
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: self,HasCultureTokenCount(5,isengard)
-		        }
-		        effect: [
-		            {
-		                type: exert
-		                select: all(character)
-		            }
-		            {
-		                type: discard
-		                select: self
-		            }
-		        ]
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: choose(urukHai)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: isengard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: self,HasCultureTokenCount(5,isengard)
+				}
+				effect: [
+					{
+						type: exert
+						select: all(character)
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
 		]
 		gametext: <b>Machine</b>. Plays to your support area.<br><b>Shadow:</b> Exert an Uruk-hai to place an [isengard] token on this card.<br><b>Maneuver:</b> Spot 8 [isengard] tokens here to exert every character. Discard this condition.
-		lore: They have a blasting fire, and... they took the Wall.'
+		lore: "'They have a blasting fire, and... they took the Wall.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -421,7 +415,6 @@
 	5_50: {
 		cardInfo: {
 			imagePath: decipher/LOTR05050.jpg
-			javaClass: true
 			//parentId: 5_50
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -445,32 +438,32 @@
 		site: 4
 		keywords: Warg-rider
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,not(exhausted)
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,minVitality(3)
-		            keyword: ambush
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,minVitality(4)
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,not(exhausted)
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,minVitality(3)
+					keyword: ambush
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,minVitality(4)
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Warg-rider</b>.<br>While Foul Horde is not exhausted, it is <b>fierce</b>.<br>While Foul Horde has at least 3 vitality, it is <b>ambush</b> (1).<br>While Foul Horde has at least 4 vitality, it is <b>damage +1</b>.
 		lore: ""
@@ -486,7 +479,6 @@
 	5_51: {
 		cardInfo: {
 			imagePath: decipher/LOTR05051.jpg
-			javaClass: true
 			//parentId: 5_51
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -510,33 +502,33 @@
 		vitality: 3
 		site: 3
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: canSpotFPCultures
-		            amount: 4
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: [
-                    {
-                        type: chooseActiveCards
-                        select: choose(unbound,companion,canBeReturnedToHand)
-                        text: Choose unbound companion to return to hand
-                        memorize: chosenCompanion
-                    }
-                    {
-                        type: returnToHand
-                        select: all(or(memory(chosenCompanion),attachedTo(memory(chosenCompanion))))
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpotFPCultures
+					amount: 4
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: chooseActiveCards
+						select: choose(unbound,companion,canBeReturnedToHand)
+						text: Choose unbound companion to return to hand
+						memorize: chosenCompanion
+					}
+					{
+						type: returnToHand
+						select: all(or(memory(chosenCompanion),attachedTo(memory(chosenCompanion))))
+					}
+				]
+			}
 		]
 		gametext: <b>Maneuver:</b> Spot 4 Free Peoples cultures and exert Gríma to return an unbound companion, and all cards on him or her, to their owners' hands.
-		lore: I care for you and yours as best I may.... Let others deal with these irksome guests.'
+		lore: "'I care for you and yours as best I may.... Let others deal with these irksome guests.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -549,7 +541,6 @@
 	5_52: {
 		cardInfo: {
 			imagePath: decipher/LOTR05052.jpg
-			javaClass: true
 			//parentId: 5_52
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -573,17 +564,17 @@
 		site: 4
 		keywords: Warg-rider
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,not(exhausted)
-		            keyword: fierce
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,not(exhausted)
+					keyword: fierce
+				}
+			}
 		]
 		gametext: <b>Warg-rider</b>.<br>While this minion is not exhausted, he is <b>fierce</b>.
-		lore: Sharku used his warg-riders to scout and defend.
+		lore: "Sharku used his warg-riders to scout and defend."
 		promotext: ""
 		alts: {
 			promos: {
@@ -596,7 +587,6 @@
 	5_53: {
 		cardInfo: {
 			imagePath: decipher/LOTR05053.jpg
-			javaClass: true
 			//parentId: 5_53
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -620,17 +610,17 @@
 		site: 4
 		keywords: Warg-rider
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,not(exhausted)
-		            keyword: fierce
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,not(exhausted)
+					keyword: fierce
+				}
+			}
 		]
 		gametext: <b>Warg-rider</b>.<br>While this minion is not exhausted, he is <b>fierce</b>.
-		lore: He has taken Orcs into his service, and Wolf-riders, and evil Men....'
+		lore: "'He has taken Orcs into his service, and Wolf-riders, and evil Men....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -643,7 +633,6 @@
 	5_54: {
 		cardInfo: {
 			imagePath: decipher/LOTR05054.jpg
-			javaClass: true
 			//parentId: 5_54
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -665,24 +654,24 @@
 		itemclass: Hand weapon
 		target: culture(isengard),orc
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: controlledSite
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachYouCanSpot
+						filter: controlledSite
+					}
+				}
+			}
 		]
 		gametext: Bearer must be an [isengard] Orc.<br>When you play this weapon, you may add (1) for each site you control.
-		lore: Orcs from Isengard favor a short, curved sword when mounted.
+		lore: "Orcs from Isengard favor a short, curved sword when mounted."
 		promotext: ""
 		alts: {
 			promos: {
@@ -695,7 +684,6 @@
 	5_55: {
 		cardInfo: {
 			imagePath: decipher/LOTR05055.jpg
-			javaClass: true
 			//parentId: 5_55
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -719,32 +707,32 @@
 		site: 4
 		keywords: Warg-rider
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,not(exhausted)
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: culture(isengard),orc
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: takeControlOfSite
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,not(exhausted)
+					keyword: fierce
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: culture(isengard),orc
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
 		]
 		gametext: <b>Warg-rider</b>.<br>While this minion is not exhausted, it is <b>fierce</b>.<br>Each time an [isengard] Orc wins a skirmish, you may exert this minion to control a site.
-		lore: ...where the warg howls, there also the orc prowls.'
+		lore: "'...where the warg howls, there also the orc prowls.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -757,7 +745,6 @@
 	5_56: {
 		cardInfo: {
 			imagePath: decipher/LOTR05056.jpg
-			javaClass: true
 			//parentId: 5_56
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -781,56 +768,56 @@
 		vitality: 4
 		site: 4
 		effects: [
-            {
-                type: modifier
-                modifier: {
-                    type: cantTakeWounds
-                    requires: [
-                        {
-                            type: sarumanFirstSentenceActive
-                        }
-                        {
-                            type: phase
-                            phase: archery
-                        }
-                    ]
-                    filter: self
-                }
-            }
-            {
-                type: modifier
-                modifier: {
-                    type: cantBeAssignedToSkirmish
-                    requires: {
-                        type: sarumanFirstSentenceActive
-                    }
-                    filter: self
-                }
-            }
-            {
-                type: trigger
-                optional: true
-                trigger: {
-                    type: moves
-                }
-                effect: {
-                    type: heal
-                    select: all(culture(isengard),orc)
-                    times: 2
-                }
-            }
-            {
-                type: activated
-                phase: shadow
-                cost: {
-                    type: exert
-                    select: self
-                }
-                effect: {
-                    type: playCardFromDiscard
-                    select: choose(culture(isengard),possession)
-                }
-            }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: [
+						{
+							type: sarumanFirstSentenceActive
+						}
+						{
+							type: phase
+							phase: archery
+						}
+					]
+					filter: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBeAssignedToSkirmish
+					requires: {
+						type: sarumanFirstSentenceActive
+					}
+					filter: self
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: heal
+					select: all(culture(isengard),orc)
+					times: 2
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(isengard),possession)
+				}
+			}
 		]
 		gametext: Saruman may not take wounds during the archery phase and may not be assigned to a skirmish.<br>Each time the fellowship moves, you may heal each [isengard] Orc twice.<br><b>Shadow:</b> Exert Saruman to play an [isengard] possession from your discard pile.
 		lore: ""
@@ -846,7 +833,6 @@
 	5_57: {
 		cardInfo: {
 			imagePath: decipher/LOTR05057.jpg
-			javaClass: true
 			//parentId: 5_57
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -869,40 +855,40 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: exert
-		            select: choose(urukHai)
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: isengard
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,HasCultureToken(isengard)
-		        }
-		        effect: [
-                    {
-                        type: heal
-                        select: choose(urukHai)
-                    }
-                    {
-                        type: discard
-                        select: self
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: choose(urukHai)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: isengard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,HasCultureToken(isengard)
+				}
+				effect: [
+					{
+						type: heal
+						select: choose(urukHai)
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
 		]
 		gametext: <b>Machine</b>. Plays to your support area.<br><b>Shadow:</b> Exert an Uruk-hai to place an [isengard] token on this card.<br><b>Skirmish:</b> Spot an [isengard] token here to heal an Uruk-hai. Discard this condition.
-		lore: Hundreds of long ladders were lifted up. Many were cast down in ruin, but many more replaced them....
+		lore: "Hundreds of long ladders were lifted up. Many were cast down in ruin, but many more replaced them...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -915,7 +901,6 @@
 	5_58: {
 		cardInfo: {
 			imagePath: decipher/LOTR05058.jpg
-			javaClass: true
 			//parentId: 5_58
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -940,30 +925,30 @@
 		site: 4
 		keywords: Warg-rider
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,not(exhausted)
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: culture(isengard),mount
-		        }
-		        effect: {
-		            type: exert
-		            player: fp
-		            select: choose(companion,not(hobbit))
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,not(exhausted)
+					keyword: fierce
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: culture(isengard),mount
+				}
+				effect: {
+					type: exert
+					player: fp
+					select: choose(companion,not(hobbit))
+				}
+			}
 		]
 		gametext: <b>Warg-rider</b>.<br>While Sharku is not exhausted, he is <b>fierce</b>.<br>Each time you play an [isengard] mount, you may make the Free Peoples player exert a companion (except a Hobbit).
-		lore: Only Sharku commanded enough respect to control Saruman's warg-riders.
+		lore: "Only Sharku commanded enough respect to control Saruman's warg-riders."
 		promotext: ""
 		alts: {
 			promos: {
@@ -976,7 +961,6 @@
 	5_59: {
 		cardInfo: {
 			imagePath: decipher/LOTR05059.jpg
-			javaClass: true
 			//parentId: 5_59
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -999,36 +983,36 @@
 		itemclass: Mount
 		target: warg-rider
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer,name(Sharku)
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: usesSpecialAbility
-		            phase: skirmish
-		        }
-                requires: {
-                    type: canSpot
-                    filter: bearer,inSkirmish
-                }
-                cost: {
-                    type: exert
-                    select: bearer
-                }
-                effect: {
-                    type: cancelSpecialAbility
-                }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,name(Sharku)
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: usesSpecialAbility
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: cancelSpecialAbility
+				}
+			}
 		]
 		gametext: Bearer must be a warg-rider.<br>If bearer is Sharku, he is <b>damage +1</b>.<br><b>Response:</b> If a skirmish special ability is used in a skirmish involving bearer, exert bearer to cancel that action.
-		lore: The warg-captain picked the fastest and strongest mount.
+		lore: "The warg-captain picked the fastest and strongest mount."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1041,7 +1025,6 @@
 	5_60: {
 		cardInfo: {
 			imagePath: decipher/LOTR05060.jpg
-			javaClass: true
 			//parentId: 5_60
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1064,38 +1047,38 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: PlayCardFromHand
-		            select: choose(urukHai)
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: isengard
-		            select: self
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToDiscard
-		            opponent: true
-		            filter: machine
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: preventDiscard
-		            select: choose(machine)
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: PlayCardFromHand
+					select: choose(urukHai)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: isengard
+					select: self
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToDiscard
+					opponent: true
+					filter: machine
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: preventDiscard
+					select: choose(machine)
+				}
+			}
 		]
 		gametext: <b>Machine</b>. Plays to your support area.<br><b>Shadow:</b> Play an Uruk-hai to place an [isengard] token on a machine.<br><b>Response:</b> If one or more machines are about to be discarded by an opponent, discard this condition to prevent that.
-		lore: Ropes... were hurled over the parapet....
+		lore: "Ropes... were hurled over the parapet...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1108,7 +1091,6 @@
 	5_61: {
 		cardInfo: {
 			imagePath: decipher/LOTR05061.jpg
-			javaClass: true
 			//parentId: 5_61
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1132,22 +1114,22 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            select: choose(machine)
-		            culture: isengard
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					select: choose(machine)
+					culture: isengard
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>When you play this minion, you may place an [isengard] token on a machine.
-		lore: Trained Uruk-hai operated Saruman's siege engines at Helm's Deep.
+		lore: "Trained Uruk-hai operated Saruman's siege engines at Helm's Deep."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1160,7 +1142,6 @@
 	5_62: {
 		cardInfo: {
 			imagePath: decipher/LOTR05062.jpg
-			javaClass: true
 			//parentId: 5_62
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1184,22 +1165,22 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            select: choose(machine)
-		            culture: isengard
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					select: choose(machine)
+					culture: isengard
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>When you play this minion, you may place an [isengard] token on a machine.
-		lore: The destruction of the Hornburg fortifications was the task of Saruman's engineer troops.
+		lore: "The destruction of the Hornburg fortifications was the task of Saruman's engineer troops."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1212,7 +1193,6 @@
 	5_63: {
 		cardInfo: {
 			imagePath: decipher/LOTR05063.jpg
-			javaClass: true
 			//parentId: 5_63
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1236,20 +1216,20 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inSkirmish
-		            amount: {
-		                type: forEachWound
-		                filter: character,inSkirmish
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmish
+					amount: {
+						type: forEachWound
+						filter: character,inSkirmish
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>This minion is strength +1 for each wound on a character in its skirmish.
-		lore: Goatskins full of blood poured upon berserkers before battle instill their bloodlust.
+		lore: "Goatskins full of blood poured upon berserkers before battle instill their bloodlust."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1262,7 +1242,6 @@
 	5_64: {
 		cardInfo: {
 			imagePath: decipher/LOTR05064.jpg
-			javaClass: true
 			//parentId: 5_64
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1285,27 +1264,27 @@
 		itemclass: Mount
 		target: warg-rider
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: usesSpecialAbility
-		            phase: skirmish
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: bearer,inSkirmish
-		        }
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: cancelSpecialAbility
-		        }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: usesSpecialAbility
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: cancelSpecialAbility
+				}
+			}
 		]
 		gametext: Bearer must be a warg-rider.<br><b>Response:</b> If a skirmish special ability is used in a skirmish involving bearer, exert bearer to cancel that action.
-		lore: Bigger and stronger wargs were ridden into battle.
+		lore: "Bigger and stronger wargs were ridden into battle."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1318,7 +1297,6 @@
 	5_65: {
 		cardInfo: {
 			imagePath: decipher/LOTR05065.jpg
-			javaClass: true
 			//parentId: 5_65
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1341,27 +1319,27 @@
 		itemclass: Mount
 		target: warg-rider
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: usesSpecialAbility
-		            phase: skirmish
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: bearer,inSkirmish
-		        }
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: cancelSpecialAbility
-		        }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: usesSpecialAbility
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: cancelSpecialAbility
+				}
+			}
 		]
 		gametext: Bearer must be a warg-rider.<br><b>Response:</b> If a skirmish special ability is used in a skirmish involving bearer, exert bearer to cancel that action.
-		lore: Tell him there is no hope ahead. He should return to Edoras before the wolves of Isengard come there.'
+		lore: "'Tell him there is no hope ahead. He should return to Edoras before the wolves of Isengard come there.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1374,7 +1352,6 @@
 	5_66: {
 		cardInfo: {
 			imagePath: decipher/LOTR05066.jpg
-			javaClass: true
 			//parentId: 5_66
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1398,29 +1375,29 @@
 		site: 4
 		keywords: Warg-rider
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(culture(isengard),mount)
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,not(exhausted)
-		            keyword: fierce
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(isengard),mount)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,not(exhausted)
+					keyword: fierce
+				}
+			}
 		]
 		gametext: <b>Warg-rider</b>. When you play this minion, you may play an [isengard] mount from your discard pile.<br>While this minion is not exhausted, he is <b>fierce</b>.
-		lore: ...yet I feared that wolf-riders and plunderers might ride nonetheless to Meduseld, while it was undefended.'
+		lore: "'...yet I feared that wolf-riders and plunderers might ride nonetheless to Meduseld, while it was undefended.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1433,7 +1410,6 @@
 	5_67: {
 		cardInfo: {
 			imagePath: decipher/LOTR05067.jpg
-			javaClass: true
 			//parentId: 5_67
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1457,17 +1433,17 @@
 		site: 4
 		keywords: Warg-rider
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,not(exhausted)
-		            keyword: fierce
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,not(exhausted)
+					keyword: fierce
+				}
+			}
 		]
 		gametext: <b>Warg-rider</b>.<br>While this minion is not exhausted, he is <b>fierce</b>.
-		lore: Swiftly a scout rode back and reported that wolf-riders were abroad in the valley....
+		lore: "Swiftly a scout rode back and reported that wolf-riders were abroad in the valley...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1480,7 +1456,6 @@
 	5_68: {
 		cardInfo: {
 			imagePath: decipher/LOTR05068.jpg
-			javaClass: true
 			//parentId: 5_68
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1498,7 +1473,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -1509,21 +1484,21 @@
 					memorize: chosenOrc
 				}
 				{
-				    type: If
-				    check: {
-				        type: memoryMatches
-				        memory: chosenOrc
-				        filter: mounted
-				    }
-				    true: {
-				        type: heal
-				        select: memory(chosenOrc)
-				    }
+					type: If
+					check: {
+						type: memoryMatches
+						memory: chosenOrc
+						filter: mounted
+					}
+					true: {
+						type: heal
+						select: memory(chosenOrc)
+					}
 				}
 			]
 		}
 		gametext: <b>Skirmish:</b> Make an [isengard] Orc strength +2 (and heal it if mounted).
-		lore: ...these howls freeze my blood.'
+		lore: "'...these howls freeze my blood.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1536,7 +1511,6 @@
 	5_69: {
 		cardInfo: {
 			imagePath: decipher/LOTR05069.jpg
-			javaClass: true
 			//parentId: 5_69
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1556,22 +1530,22 @@
 		type: Condition
 		target: controlledSite,plains
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: choose(culture(isengard),orc)
-		        }
-		        effect: {
-		            type: wound
-		            player: fp
-		            select: choose(companion)
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: choose(culture(isengard),orc)
+				}
+				effect: {
+					type: wound
+					player: fp
+					select: choose(companion)
+				}
+			}
 		]
 		gametext: Plays on a plains site you control.<br><b>Regroup:</b> Exert an [isengard] Orc to make the Free Peoples player wound a companion.
-		lore: Saruman's warg-riders traveled the plains faster than even the Riders of Rohan.
+		lore: "Saruman's warg-riders traveled the plains faster than even the Riders of Rohan."
 		promotext: ""
 		alts: {
 			promos: {

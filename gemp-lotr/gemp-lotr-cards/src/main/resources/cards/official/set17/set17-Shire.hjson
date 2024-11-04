@@ -3,7 +3,6 @@
 	17_106: {
 		cardInfo: {
 			imagePath: decipher/LOTR17106.jpg
-			javaClass: true
 			//parentId: 17_106
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -26,28 +25,28 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: hobbit
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: choose(pipeweed)
-		        }
-		        effect: {
-		            type: cancelSkirmish
-		            filter: unbound,hobbit
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: hobbit
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: choose(pipeweed)
+				}
+				effect: {
+					type: cancelSkirmish
+					filter: unbound,hobbit
+				}
+			}
 		]
 		gametext: <b>Pipeweed</b>. To play, spot a Hobbit.<br><b>Skirmish:</b> Discard a pipeweed from play to cancel a skirmish involving an unbound Hobbit.
-		lore: It feels good, and it smells good.'
+		lore: "'It feels good, and it smells good.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -60,7 +59,6 @@
 	17_107: {
 		cardInfo: {
 			imagePath: decipher/LOTR17107.jpg
-			javaClass: true
 			//parentId: 17_107
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -84,28 +82,28 @@
 		vitality: 4
 		resistance: 8
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyRaceSpotCount
-		            race: ent
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: putCardsFromDiscardOnBottomOfDeck
-		            select: choose(pipeweed)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyRaceSpotCount
+					race: ent
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: putCardsFromDiscardOnBottomOfDeck
+					select: choose(pipeweed)
+				}
+			}
 		]
 		gametext: Add 1 to the number of Ents you can spot.<br><b>Regroup:</b> Exert Merry to place a pipeweed from your discard pile beneath your draw deck.
-		lore: I think we may have made a mistake leaving the Shire, Pippin.'
+		lore: "'I think we may have made a mistake leaving the Shire, Pippin.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -118,7 +116,6 @@
 	17_108: {
 		cardInfo: {
 			imagePath: decipher/LOTR17108.jpg
-			javaClass: true
 			//parentId: 17_108
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -141,41 +138,41 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: unbound,hobbit
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        text: Remove a threat
-		        cost: {
-		            type: discard
-		            select: choose(pipeweed)
-		        }
-		        effect: {
-		            type: removeThreats
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        text: Discard a minion
-		        cost: {
-		            type: discard
-		            select: choose(pipeweed)
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(minion)
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: unbound,hobbit
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				text: Remove a threat
+				cost: {
+					type: discard
+					select: choose(pipeweed)
+				}
+				effect: {
+					type: removeThreats
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				text: Discard a minion
+				cost: {
+					type: discard
+					select: choose(pipeweed)
+				}
+				effect: {
+					type: discard
+					select: choose(minion)
+				}
+			}
 		]
 		gametext: <b>Pipeweed</b>. To play, spot an unbound Hobbit.<br><b>Regroup:</b> Discard a pipeweed from play to remove a threat.<br><b>Regroup:</b> Discard a pipeweed from play to discard a minion.
-		lore: These are the Hornblower brandmarks....'
+		lore: "'These are the Hornblower brandmarks....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -188,7 +185,6 @@
 	17_109: {
 		cardInfo: {
 			imagePath: decipher/LOTR17109.jpg
-			javaClass: true
 			//parentId: 17_109
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -212,28 +208,28 @@
 		vitality: 4
 		resistance: 8
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyRaceSpotCount
-                    race: ent
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: discard
-		            select: choose(pipeweed)
-		            count: 2
-		        }
-		        effect: {
-		            type: removeBurdens
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyRaceSpotCount
+					race: ent
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: discard
+					select: choose(pipeweed)
+					count: 2
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
 		]
 		gametext: Add 1 to the number of Ents you can spot.<br><b>Maneuver:</b> Discard 2 pipeweed cards from play to remove a burden.
-		lore: Ents are – well Ents are all different for one thing.
+		lore: "Ents are – well Ents are all different for one thing."
 		promotext: ""
 		alts: {
 			promos: {
@@ -246,7 +242,6 @@
 	17_110: {
 		cardInfo: {
 			imagePath: decipher/LOTR17110.jpg
-			javaClass: true
 			//parentId: 17_110
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -269,40 +264,40 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: unbound,hobbit
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: choose(pipeweed)
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(unbound,hobbit)
-		            amount: 2
-		        }
-            }
-            {
-                type: activated
-                phase: regroup
-                cost: {
-                    type: discard
-                    select: self
-                }
-                effect: {
-                    type: playCardFromDrawDeck
-                    select: choose(pipeweed)
-                    showAll: true
-                    shuffle: true
-                }
-            }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: unbound,hobbit
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: choose(pipeweed)
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(unbound,hobbit)
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(pipeweed)
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Pipeweed</b>. To play, spot an unbound Hobbit.<br><b>Skirmish:</b> Discard a pipeweed from play to make an unbound Hobbit strength +2.<br><b>Regroup:</b> Discard this pipeweed from play to play a pipeweed from your draw deck. Reshuffle your draw deck.
 		lore: ""
@@ -318,7 +313,6 @@
 	17_111: {
 		cardInfo: {
 			imagePath: decipher/LOTR17111.jpg
-			javaClass: true
 			//parentId: 17_111
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -341,29 +335,29 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: hobbit
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: choose(pipeweed)
-		        }
-		        effect: {
-		            type: alterOverwhelmMultiplier
-		            select: choose(unbound,hobbit)
-		            multiplier: 3
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: hobbit
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: choose(pipeweed)
+				}
+				effect: {
+					type: alterOverwhelmMultiplier
+					select: choose(unbound,hobbit)
+					multiplier: 3
+				}
+			}
 		]
 		gametext: <b>Pipeweed</b>. To play, spot a Hobbit.<br><b>Skirmish:</b> Discard a pipeweed from play to prevent an unbound Hobbit from being overwhelmed unless that Hobbit's strength is tripled.
-		lore: How it came here, I can't imagine. For Saruman's private use, I fancy.'
+		lore: "'How it came here, I can't imagine. For Saruman's private use, I fancy.'"
 		promotext: ""
 		alts: {
 			promos: {

@@ -1,0 +1,125 @@
+{
+
+	19_22: {
+		cardInfo: {
+			imagePath: decipher/LOTR19022.jpg
+			//parentId: 19_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 19P22
+			rarity: P
+			setNum: "19"
+			cardNum: 22
+			style: Standard
+		}
+		title: Pit Troll
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 7
+		type: Minion
+		race: Troll
+		strength: 13
+		vitality: 4
+		site: 4
+		keywords: Hunter 2
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),orc
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: preventable
+					player: fp
+					text: Would you like to exert the Ring-bearer to prevent adding 2 threats?
+					cost: {
+						type: exert
+						select: choose(ring bearer)
+					}
+					effect: {
+						type: addThreats
+						amount: 2
+					}
+				}
+			}
+		]
+		gametext: <b>Hunter 2</b>. <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper><br>To play, spot an [orc] Orc.<br>When you play this minion, add 2 threats. The Free Peoples player may exert the Ring-bearer to prevent this.
+		lore: "Black blood. Flat feet. Scaly skin."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_23: {
+		cardInfo: {
+			imagePath: decipher/LOTR19023.jpg
+			//parentId: 19_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 19P23
+			rarity: P
+			setNum: "19"
+			cardNum: 23
+			style: Standard
+		}
+		title: Troll of the Deep
+		subtitle: Cave Troll
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 6
+		type: Minion
+		race: Troll
+		strength: 13
+		vitality: 3
+		site: 4
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(orc),orc
+                }
+		    }
+            {
+                type: activated
+                phase: skirmish
+                cost: {
+                    type: removeThreats
+                }
+                effect: {
+                    type: modifyStrength
+                    select: choose(culture(orc),minion)
+                    amount: 2
+                }
+            }
+        ]
+		gametext: To play, spot an [orc] Orc.<br><b>Skirmish:</b> Remove a threat to make an [orc] minion strength +2.
+		lore: "Stones to move. Bridges to be rebuilt."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

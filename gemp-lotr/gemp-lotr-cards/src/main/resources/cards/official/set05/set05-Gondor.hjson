@@ -3,7 +3,6 @@
 	5_31: {
 		cardInfo: {
 			imagePath: decipher/LOTR05031.jpg
-			javaClass: true
 			//parentId: 5_31
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -28,34 +27,34 @@
 		resistance: 6
 		keywords: Knight
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            filter: another,knight
-		            requires: {
-		                type: phase
-		                phase: play starting fellowship
-		            }
-		            amount: -1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: assignment
-		        cost: {
-		            type: assignFpCharacterToSkirmish
-		            fpCharacter: self
-		            minion: choose(minion,hasAttached(culture(gondor),fortification))
-		        }
-		        effect: {
-		            type: heal
-		            select: self
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: another,knight
+					requires: {
+						type: phase
+						phase: play starting fellowship
+					}
+					amount: -1
+				}
+			}
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: assignFpCharacterToSkirmish
+					fpCharacter: self
+					minion: choose(minion,hasAttached(culture(gondor),fortification))
+				}
+				effect: {
+					type: heal
+					select: self
+				}
+			}
 		]
 		gametext: <b>Knight</b>. The twilight cost of each other knight in your starting fellowship is -1.<br><b>Assignment:</b> Assign Alcarin to a minion bearing a [gondor] fortification to heal Alcarin.
-		lore: Named for a mighty king, Alcarin is determined to prove himself in battle.
+		lore: "Named for a mighty king, Alcarin is determined to prove himself in battle."
 		promotext: ""
 		alts: {
 			promos: {
@@ -68,7 +67,6 @@
 	5_32: {
 		cardInfo: {
 			imagePath: decipher/LOTR05032.jpg
-			javaClass: true
 			//parentId: 5_32
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -93,37 +91,37 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert a {gondor} man
-		                Spot 3 knights
-		            ]
-		            effects: [
-		                {
-		                    type: exert
-		                    select: choose(culture(gondor),man)
-		                }
-		                {
-		                    type: spot
-		                    filter: knight
-		                    count: 3
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: transfer
-		            select: self
-		            fromSupport: true
-		            where: choose(minion,inSkirmishAgainst(culture(gondor),man))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Exert a {gondor} man
+						Spot 3 knights
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(culture(gondor),man)
+						}
+						{
+							type: spot
+							filter: knight
+							count: 3
+						}
+					]
+				}
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+				}
+			}
 		]
 		gametext: <b>Fortification</b>. Plays to your support area.<br><b>Skirmish:</b> Exert a [gondor] Man or spot 3 knights to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
-		lore: The city of Osgiliath was the first capital of Gondor.
+		lore: "The city of Osgiliath was the first capital of Gondor."
 		promotext: ""
 		alts: {
 			promos: {
@@ -136,7 +134,6 @@
 	5_33: {
 		cardInfo: {
 			imagePath: decipher/LOTR05033.jpg
-			javaClass: true
 			//parentId: 5_33
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -160,37 +157,37 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert a {gondor} man
-		                Spot 3 knights
-		            ]
-		            effects: [
-		                {
-		                    type: exert
-		                    select: choose(culture(gondor),man)
-		                }
-		                {
-		                    type: spot
-		                    filter: knight
-		                    count: 3
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: transfer
-		            select: self
-		            fromSupport: true
-		            where: choose(minion,inSkirmishAgainst(culture(gondor),man))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Exert a {gondor} man
+						Spot 3 knights
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(culture(gondor),man)
+						}
+						{
+							type: spot
+							filter: knight
+							count: 3
+						}
+					]
+				}
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+				}
+			}
 		]
 		gametext: <b>Fortification</b>. Plays to your support area.<br><b>Skirmish:</b> Exert a [gondor] Man or spot 3 knights to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
-		lore: The war-weary defenses of Osgiliath still protected the Men of Gondor.
+		lore: "The war-weary defenses of Osgiliath still protected the Men of Gondor."
 		promotext: ""
 		alts: {
 			promos: {
@@ -203,7 +200,6 @@
 	5_34: {
 		cardInfo: {
 			imagePath: decipher/LOTR05034.jpg
-			javaClass: true
 			//parentId: 5_34
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -221,16 +217,16 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
-			    {
-			        type: chooseActiveCards
-			        text: Choose a minion bearing a {gondor} fortification
-			        select: choose(minion,hasAttached(culture(gondor),fortification))
-			        memorize: chosenMinion
-			    }
+				{
+					type: chooseActiveCards
+					text: Choose a minion bearing a {gondor} fortification
+					select: choose(minion,hasAttached(culture(gondor),fortification))
+					memorize: chosenMinion
+				}
 				{
 					type: discard
 					select: all(side(shadow),attachedTo(memory(chosenMinion)))
@@ -238,7 +234,7 @@
 			]
 		}
 		gametext: <b>Skirmish:</b> Discard all Shadow cards borne by a minion bearing a [gondor] fortification.
-		lore: Osgiliath's defenses protected the Gondorian troops.
+		lore: "Osgiliath's defenses protected the Gondorian troops."
 		promotext: ""
 		alts: {
 			promos: {
@@ -251,7 +247,6 @@
 	5_35: {
 		cardInfo: {
 			imagePath: decipher/LOTR05035.jpg
-			javaClass: true
 			//parentId: 5_35
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -274,8 +269,9 @@
 		vitality: 3
 		resistance: 6
 		keywords: Knight
+
 		gametext: <b>Knight</b>.
-		lore: Soldiers of Gondor share a long heritage of defending their borders against Sauron's attackers.
+		lore: "Soldiers of Gondor share a long heritage of defending their borders against Sauron's attackers."
 		promotext: ""
 		alts: {
 			promos: {
@@ -288,7 +284,6 @@
 	5_36: {
 		cardInfo: {
 			imagePath: decipher/LOTR05036.jpg
-			javaClass: true
 			//parentId: 5_36
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -312,21 +307,21 @@
 		resistance: 6
 		keywords: Knight
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: discard
-		            select: choose(culture(gondor),condition)
-		        }
-		        effect: {
-		            type: heal
-		            select: self
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discard
+					select: choose(culture(gondor),condition)
+				}
+				effect: {
+					type: heal
+					select: self
+				}
+			}
 		]
 		gametext: <b>Knight</b>.<br><b>Fellowship:</b> Discard a [gondor] condition to heal this companion.
-		lore: The brave men of Gondor's army were well-armed and armored.
+		lore: "The brave men of Gondor's army were well-armed and armored."
 		promotext: ""
 		alts: {
 			promos: {
@@ -339,7 +334,6 @@
 	5_37: {
 		cardInfo: {
 			imagePath: decipher/LOTR05037.jpg
-			javaClass: true
 			//parentId: 5_37
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -357,7 +351,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -368,7 +362,7 @@
 			]
 		}
 		gametext: <b>Skirmish:</b> Wound a minion bearing a [gondor] fortification.
-		lore: ...I do not love the bright sword for its sharpness, nor the arrow for its swiftness, nor the warrior for his glory....'
+		lore: "'...I do not love the bright sword for its sharpness, nor the arrow for its swiftness, nor the warrior for his glory....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -381,7 +375,6 @@
 	5_38: {
 		cardInfo: {
 			imagePath: decipher/LOTR05038.jpg
-			javaClass: true
 			//parentId: 5_38
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -401,21 +394,21 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: choose(knight)
-		        }
-		        effect: {
-		            type: transferToSupport
-		            select: choose(culture(gondor),fortification,attachedTo(minion))
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: choose(knight)
+				}
+				effect: {
+					type: transferToSupport
+					select: choose(culture(gondor),fortification,attachedTo(minion))
+				}
+			}
 		]
 		gametext: Plays to your support area.<br><b>Regroup:</b> Exert a knight to transfer a [gondor] fortification borne by a minion to your support area.
-		lore: A strategic fallback helps Gondorian knights to plan their counterattack.
+		lore: "A strategic fallback helps Gondorian knights to plan their counterattack."
 		promotext: ""
 		alts: {
 			promos: {
@@ -428,7 +421,6 @@
 	5_39: {
 		cardInfo: {
 			imagePath: decipher/LOTR05039.jpg
-			javaClass: true
 			//parentId: 5_39
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -452,24 +444,24 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: choose(culture(gondor),man)
-		            count: 2
-		        }
-		        effect: {
-		            type: transfer
-		            select: self
-		            fromSupport: true
-		            where: choose(minion,inSkirmishAgainst(culture(gondor),man))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(culture(gondor),man)
+					count: 2
+				}
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+				}
+			}
 		]
 		gametext: <b>Fortification</b>. Plays to your support area.<br><b>Skirmish:</b> Exert 2 [gondor] Men to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
-		lore: The battlements of Osgiliath provided some defense against Sauron's attackers.
+		lore: "The battlements of Osgiliath provided some defense against Sauron's attackers."
 		promotext: ""
 		alts: {
 			promos: {
@@ -482,7 +474,6 @@
 	5_40: {
 		cardInfo: {
 			imagePath: decipher/LOTR05040.jpg
-			javaClass: true
 			//parentId: 5_40
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -500,7 +491,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			cost: {
@@ -515,7 +506,7 @@
 			]
 		}
 		gametext: <b>Fellowship:</b> Exert a knight to play a [gondor] fortification from your discard pile.
-		lore: Gondor forces at Osgiliath were too few to fight the advancing armies in the field.
+		lore: "Gondor forces at Osgiliath were too few to fight the advancing armies in the field."
 		promotext: ""
 		alts: {
 			promos: {
@@ -528,7 +519,6 @@
 	5_41: {
 		cardInfo: {
 			imagePath: decipher/LOTR05041.jpg
-			javaClass: true
 			//parentId: 5_41
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -546,7 +536,7 @@
 		culture: Gondor
 		twilight: 3
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			cost: {
@@ -558,22 +548,22 @@
 				{
 					type: doWhile
 					effect: {
-                        type: playCardFromDiscard
-                        optional: true
-                        select: choose(possession)
-                        on: companion,signet(Aragorn)
-                        memorize: playedCard
+						type: playCardFromDiscard
+						optional: true
+						select: choose(possession)
+						on: companion,signet(Aragorn)
+						memorize: playedCard
 					}
 					check: {
-                        type: memoryMatches
-                        memory: playedCard
-                        filter: possession
-                    }
+						type: memoryMatches
+						memory: playedCard
+						filter: possession
+					}
 				}
 			]
 		}
 		gametext: <b>Fellowship:</b> Exert Aragorn twice to play any number of possessions from your discard pile onto companions with the Aragorn signet.
-		lore: ...I will die as one of them.'
+		lore: "'...I will die as one of them.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -586,7 +576,6 @@
 	5_42: {
 		cardInfo: {
 			imagePath: decipher/LOTR05042.jpg
-			javaClass: true
 			//parentId: 5_42
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -611,28 +600,28 @@
 		resistance: 6
 		keywords: Knight
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: knight
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(minion,hasAttached(culture(gondor),fortification))
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: knight
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: wound
+					select: choose(minion,hasAttached(culture(gondor),fortification))
+				}
+			}
 		]
 		gametext: <b>Knight</b>. To play, spot a knight.<br><b>Maneuver:</b> Exert Turgon to wound a minion bearing a [gondor] fortification.
-		lore: He hopes to someday become one of the knights of Dol Amroth.
+		lore: "He hopes to someday become one of the knights of Dol Amroth."
 		promotext: ""
 		alts: {
 			promos: {
@@ -645,7 +634,6 @@
 	5_43: {
 		cardInfo: {
 			imagePath: decipher/LOTR05043.jpg
-			javaClass: true
 			//parentId: 5_43
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -663,7 +651,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -672,19 +660,19 @@
 					select: choose(culture(gondor),man)
 					memorize: chosenMan
 					amount: {
-					    type: Conditional
-					    requires: {
-					        type: canSpot
-					        filter: memory(chosenMan),inSkirmishAgainst(minion,hasAttached(culture(gondor),fortification))
-					    }
-                        true: 4
-                        false: 2
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: memory(chosenMan),inSkirmishAgainst(minion,hasAttached(culture(gondor),fortification))
+						}
+						true: 4
+						false: 2
 					}
 				}
 			]
 		}
 		gametext: <b>Skirmish:</b> Make a [gondor] Man strength +2 (or +4 if skirmishing a minion bearing a [gondor] fortification).
-		lore: ...we defend ourselves against a destroyer who would devour all....'
+		lore: "'...we defend ourselves against a destroyer who would devour all....'"
 		promotext: ""
 		alts: {
 			promos: {

@@ -3,7 +3,6 @@
 	15_181: {
 		cardInfo: {
 			imagePath: decipher/LOTR15181.jpg
-			javaClass: true
 			//parentId: 15_181
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,31 +20,31 @@
 		culture: Wraith
 		twilight: 0
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			cost: {
-			    type: removeThreats
-			    amount: 2
+				type: removeThreats
+				amount: 2
 			}
 			effect: [
 				{
-				    type: PlayCardFromHand
-				    select: choose(nazgul)
-				    discount: -2
-				    memorize: playedNazgul
+					type: PlayCardFromHand
+					select: choose(nazgul)
+					discount: -2
+					memorize: playedNazgul
 				}
 				{
-				    type: addKeyword
-				    select: memory(playedNazgul)
-				    keyword: hunter
-				    amount: 2
-				    until: regroup
+					type: addKeyword
+					select: memory(playedNazgul)
+					keyword: hunter
+					amount: 2
+					until: regroup
 				}
 			]
 		}
 		gametext: Remove 2 threats to play a Nazgûl. That Nazgûl is twilight cost -2 and gains <b>hunter 2</b> <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper> until the start of the regroup phase.
-		lore: The Nine have left Minas Morgul.
+		lore: "The Nine have left Minas Morgul."
 		promotext: ""
 		alts: {
 			promos: {
@@ -58,7 +57,6 @@
 	15_182: {
 		cardInfo: {
 			imagePath: decipher/LOTR15182.jpg
-			javaClass: true
 			//parentId: 15_182
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -78,56 +76,56 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: nazgul
-		        }
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert 2 Nazgul
-		                Exert a Nazgul twice
-		            ]
-		            effects: [
-		                {
-		                    type: exert
-		                    select: choose(nazgul)
-		                    count: 2
-		                }
-		                {
-		                    type: exert
-		                    select: choose(nazgul)
-		                    times: 2
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: addThreats
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: assignment
-		        requires: {
-		            type: canSpot
-		            filter: nazgul
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 4
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(nazgul)
-		            removedTwilight: 4
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: nazgul
+				}
+				cost: {
+					type: choice
+					texts: [
+						Exert 2 Nazgul
+						Exert a Nazgul twice
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(nazgul)
+							count: 2
+						}
+						{
+							type: exert
+							select: choose(nazgul)
+							times: 2
+						}
+					]
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+			{
+				type: activated
+				phase: assignment
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+				cost: {
+					type: removeTwilight
+					amount: 4
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(nazgul)
+					removedTwilight: 4
+				}
+			}
 		]
 		gametext: Each time a Nazgûl wins a skirmish, you may exert 2 Nazgûl (or a Nazgûl twice) to add a threat.<br><b>Assignment:</b> Spot a Nazgûl and remove (4) to play a Nazgûl from your discard pile.
-		lore: ...a blind fear and a deadly cold fell on them. Cowering they looked up.
+		lore: "...a blind fear and a deadly cold fell on them. Cowering they looked up."
 		promotext: ""
 		alts: {
 			promos: {
@@ -140,7 +138,6 @@
 	15_183: {
 		cardInfo: {
 			imagePath: decipher/LOTR15183.jpg
-			javaClass: true
 			//parentId: 15_183
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -160,23 +157,23 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: nazgul
-		        }
-		        cost: {
-		            type: removeThreats
-		        }
-		        effect: {
-		            type: preventWound
-		            select: choose(nazgul)
-		        }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: nazgul
+				}
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: preventWound
+					select: choose(nazgul)
+				}
+			}
 		]
 		gametext: <b>Response:</b> If a Nazgûl is about to take a wound, remove a threat to prevent that wound.
-		lore: Three times is a threat. They feel us here....'
+		lore: "'Three times is a threat. They feel us here....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -189,7 +186,6 @@
 	15_184: {
 		cardInfo: {
 			imagePath: decipher/LOTR15184.jpg
-			javaClass: true
 			//parentId: 15_184
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -214,20 +210,20 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachTwilight
-		                divider: 3
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachTwilight
+						divider: 3
+					}
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>Úlairë Attëa is strength +1 for every 3 twilight tokens you can spot.
-		lore: The Nazgûl were strongest, and most terrifying, at night.
+		lore: "The Nazgûl were strongest, and most terrifying, at night."
 		promotext: ""
 		alts: {
 			promos: {
@@ -240,7 +236,6 @@
 	15_185: {
 		cardInfo: {
 			imagePath: decipher/LOTR15185.jpg
-			javaClass: true
 			//parentId: 15_185
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -265,26 +260,26 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        cost: {
-		            type: removeTwilight
-		        }
-		        effect: {
-		            type: addThreats
-		            amount: {
-		                type: forEachFPCulture
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				cost: {
+					type: removeTwilight
+				}
+				effect: {
+					type: addThreats
+					amount: {
+						type: forEachFPCulture
+					}
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>When you play Úlairë Lemenya, you may remove (1) to add a threat for each Free Peoples culture you can spot.
-		lore: Soon there could be no doubt: three or four tall black figures were standing on the slope, looking down on them.
+		lore: "Soon there could be no doubt: three or four tall black figures were standing on the slope, looking down on them."
 		promotext: ""
 		alts: {
 			promos: {
@@ -297,7 +292,6 @@
 	15_186: {
 		cardInfo: {
 			imagePath: decipher/LOTR15186.jpg
-			javaClass: true
 			//parentId: 15_186
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -322,44 +316,44 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: [
-		                {
-		                    type: canSpot
-		                    filter: companion
-		                    count: 6
-		                }
-		                {
-		                    type: not
-		                    requires: {
-		                        type: phase
-		                        phase: skirmish
-		                    }
-		                }
-		            ]
-		            filter: culture(wraith),minion
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,mounted
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		            times: 2
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(companion,hasAttached(culture(wraith),condition))
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: [
+						{
+							type: canSpot
+							filter: companion
+							count: 6
+						}
+						{
+							type: not
+							requires: {
+								type: phase
+								phase: skirmish
+							}
+						}
+					]
+					filter: culture(wraith),minion
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,mounted
+				}
+				cost: {
+					type: exert
+					select: self
+					times: 2
+				}
+				effect: {
+					type: wound
+					select: choose(companion,hasAttached(culture(wraith),condition))
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>While you can spot 6 companions, [wraith] minions cannot take wounds (except during skirmish phases).<br><b>Skirmish:</b> If this minion is mounted, exert him twice to wound a companion bearing a [wraith] condition.
 		lore: ""

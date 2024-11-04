@@ -3,7 +3,6 @@
 	5_111: {
 		cardInfo: {
 			imagePath: decipher/LOTR05111.jpg
-			javaClass: true
 			//parentId: 5_111
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -29,21 +28,21 @@
 		resistance: 10
 		canStartWithRing: true
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: addBurdens
-		            amount: 1
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(name(Sméagol))
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: addBurdens
+					amount: 1
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(name(Sméagol))
+				}
+			}
 		]
 		gametext: <b>Ring-bearer (resistance 10).</b><br><b>Fellowship:</b> Add a burden to play Sméagol from your discard pile.
-		lore: We promises, yes I promise!... Good master, good Sméagol, gollum, gollum!'
+		lore: "'We promises, yes I promise!... Good master, good Sméagol, gollum, gollum!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -56,7 +55,6 @@
 	5_112: {
 		cardInfo: {
 			imagePath: decipher/LOTR05112.jpg
-			javaClass: true
 			//parentId: 5_112
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -74,12 +72,12 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Sam)
+				type: canSpot
+				filter: name(Sam)
 			}
 			cost: {
 				type: discard
@@ -93,7 +91,7 @@
 			]
 		}
 		gametext: <b>Regroup:</b> Spot Sam and discard Sméagol or Gollum to remove 3 burdens.
-		lore: ...he'll come back, you'll see. The promise will hold yet a while. And he won't leave his Precious, anyway.'
+		lore: "'...he'll come back, you'll see. The promise will hold yet a while. And he won't leave his Precious, anyway.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -106,7 +104,6 @@
 	5_113: {
 		cardInfo: {
 			imagePath: decipher/LOTR05113.jpg
-			javaClass: true
 			//parentId: 5_113
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -124,7 +121,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
@@ -140,7 +137,7 @@
 			]
 		}
 		gametext: <b>Skirmish:</b> Add 3 burdens to wound a minion skirmishing a companion who has the Frodo signet twice.
-		lore: Don't take the Precious to Him!... Keep it, nice master, and be kind to Sméagol.'
+		lore: "'Don't take the Precious to Him!... Keep it, nice master, and be kind to Sméagol.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -153,7 +150,6 @@
 	5_114: {
 		cardInfo: {
 			imagePath: decipher/LOTR05114.jpg
-			javaClass: true
 			//parentId: 5_114
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -174,23 +170,23 @@
 		vitality: 1
 		target: name(Sam)
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: usesSpecialAbility
-		            phase: regroup
-		        }
-		        cost: {
-		            type: discard
-		            select: choose(or(name(Sméagol),name(Gollum)))
-		        }
-		        effect: {
-		            type: cancelSpecialAbility
-		        }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: usesSpecialAbility
+					phase: regroup
+				}
+				cost: {
+					type: discard
+					select: choose(or(name(Sméagol),name(Gollum)))
+				}
+				effect: {
+					type: cancelSpecialAbility
+				}
+			}
 		]
 		gametext: Plays on Sam.<br><b>Response:</b> If a regroup special ability is used, discard Sméagol or Gollum to cancel that action.
-		lore: What a hobbit needs with coney... is some herbs and roots, especially taters – not to mention bread.'
+		lore: "'What a hobbit needs with coney... is some herbs and roots, especially taters – not to mention bread.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -203,7 +199,6 @@
 	5_115: {
 		cardInfo: {
 			imagePath: decipher/LOTR05115.jpg
-			javaClass: true
 			//parentId: 5_115
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -229,24 +224,24 @@
 		resistance: 5
 		keywords: Ring-bound
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantBeOverwhelmedMultiplier
-		            requires: [
-                        {
-                            type: canSpot
-                            filter: name(Frodo)
-                        }
-                        {
-                            type: canSpot
-                            filter: name(Sméagol)
-                        }
-                    ]
-		            filter: self
-		            multiplier: 3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantBeOverwhelmedMultiplier
+					requires: [
+						{
+							type: canSpot
+							filter: name(Frodo)
+						}
+						{
+							type: canSpot
+							filter: name(Sméagol)
+						}
+					]
+					filter: self
+					multiplier: 3
+				}
+			}
 			{
 				type: Response
 				trigger: {
@@ -259,7 +254,7 @@
 			}
 		]
 		gametext: <b>Ring-bound</b>.<br>While you can spot Frodo and Sméagol, Sam may not be overwhelmed unless his strength is tripled.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
-		lore: Trust Sméagol now? Very, very good.'
+		lore: "'Trust Sméagol now? Very, very good.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -272,7 +267,6 @@
 	5_116: {
 		cardInfo: {
 			imagePath: decipher/LOTR05116.jpg
-			javaClass: true
 			//parentId: 5_116
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -295,36 +289,36 @@
 		itemclass: Hand weapon
 		target: title(Frodo)
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Make Sméagol strength +2
-		                Make Gollum strength -2
-		            ]
-		            effects: [
-		                {
-		                    type: modifyStrength
-		                    select: choose(name(Sméagol))
-		                    amount: 2
-		                }
-		                {
-		                    type: modifyStrength
-		                    select: choose(name(Gollum))
-		                    amount: -2
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: choice
+					texts: [
+						Make Sméagol strength +2
+						Make Gollum strength -2
+					]
+					effects: [
+						{
+							type: modifyStrength
+							select: choose(name(Sméagol))
+							amount: 2
+						}
+						{
+							type: modifyStrength
+							select: choose(name(Gollum))
+							amount: -2
+						}
+					]
+				}
+			}
 		]
 		gametext: Bearer must be Frodo.<br><b>Skirmish:</b> Exert Frodo to make Sméagol strength +2 or Gollum strength -2.
-		lore: This is Sting. You have seen it before once upon a time.'
+		lore: "'This is Sting. You have seen it before once upon a time.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -337,7 +331,6 @@
 	5_117: {
 		cardInfo: {
 			imagePath: decipher/LOTR05117.jpg
-			javaClass: true
 			//parentId: 5_117
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -355,7 +348,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			cost: {
@@ -371,7 +364,7 @@
 			]
 		}
 		gametext: <b>Fellowship:</b> Play Sméagol from your discard pile to heal each Ring-bound Hobbit twice.
-		lore: You will have to come with us, that's all, while we keep an eye on you.'
+		lore: "'You will have to come with us, that's all, while we keep an eye on you.'"
 		promotext: ""
 		alts: {
 			promos: {

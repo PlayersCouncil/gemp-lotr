@@ -3,7 +3,6 @@
 	10_14: {
 		cardInfo: {
 			imagePath: decipher/LOTR10014.jpg
-			javaClass: true
 			//parentId: 10_14
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,12 +20,12 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: your,wizard
+				type: canSpot
+				filter: your,wizard
 			}
 			effect: [
 				{
@@ -51,7 +50,7 @@
 			]
 		}
 		gametext: Spot your Wizard to exchange a companion in hand with a companion in your dead pile or discard pile.
-		lore: ...the wanderers were lifted up and borne far away out of the darkness and the fire.
+		lore: "...the wanderers were lifted up and borne far away out of the darkness and the fire."
 		promotext: ""
 		alts: {
 			promos: {
@@ -64,7 +63,6 @@
 	10_15: {
 		cardInfo: {
 			imagePath: decipher/LOTR10015.jpg
-			javaClass: true
 			//parentId: 10_15
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -84,26 +82,26 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: losesInitiative
-		            side: free people
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: culture(gandalf),companion
-		        }
-		        effect: {
-		            type: discard
-		            player: shadow
-		            select: choose(side(shadow),condition)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: losesInitiative
+					side: free people
+				}
+				requires: {
+					type: canSpot
+					filter: culture(gandalf),companion
+				}
+				effect: {
+					type: discard
+					player: shadow
+					select: choose(side(shadow),condition)
+				}
+			}
 		]
 		gametext: Each time you lose initiative (except during the fellowship phase), you may spot a [gandalf] companion to choose an opponent who must discard one of his or her conditions.
-		lore: ...tomorrow will be certain to bring worse than today, for many days to come.'
+		lore: "'...tomorrow will be certain to bring worse than today, for many days to come.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -116,7 +114,6 @@
 	10_16: {
 		cardInfo: {
 			imagePath: decipher/LOTR10016.jpg
-			javaClass: true
 			//parentId: 10_16
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -134,7 +131,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
@@ -143,21 +140,21 @@
 			},
 			effect: [
 				{
-				    type: chooseANumber
-				    text: Choose a minion cost
-				    from: 0
+					type: chooseANumber
+					text: Choose a minion cost
+					from: 0
 					memorize: chosenNumber
 				}
 				{
-				    type: modifyStrength
-				    select: all(minion,printedTwilightCostFromMemory(chosenNumber))
-				    amount: -2
-				    until: regroup
+					type: modifyStrength
+					select: all(minion,printedTwilightCostFromMemory(chosenNumber))
+					amount: -2
+					until: regroup
 				}
 			]
 		}
 		gametext: Exert your Wizard to choose a number. Make each minion with that twilight cost strength -2 until the regroup phase.
-		lore: ...the rush of their wide wings as they passed over was like a gale.
+		lore: "...the rush of their wide wings as they passed over was like a gale."
 		promotext: ""
 		alts: {
 			promos: {
@@ -170,7 +167,6 @@
 	10_17: {
 		cardInfo: {
 			imagePath: decipher/LOTR10017.jpg
-			javaClass: true
 			//parentId: 10_17
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -188,15 +184,15 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
 				type: moves
 			}
 			requires: {
-			    type: phase
-			    phase: regroup
+				type: phase
+				phase: regroup
 			}
 			cost: {
 				type: exert
@@ -210,7 +206,7 @@
 			]
 		}
 		gametext: If the fellowship moves during the regroup phase, exert your Wizard to discard each minion.
-		lore: ...the Nazgûl turned and fled, and vanished into Mordor's shadows....
+		lore: "...the Nazgûl turned and fled, and vanished into Mordor's shadows...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -223,7 +219,6 @@
 	10_18: {
 		cardInfo: {
 			imagePath: decipher/LOTR10018.jpg
-			javaClass: true
 			//parentId: 10_18
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -247,37 +242,37 @@
 		vitality: 4
 		resistance: 6
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(gandalf),companion
-		            count: 3
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: self
-		            times: 2
-		        }
-		        effect: [
-		            {
-		                type: playCardFromDiscard
-		                select: choose(culture(gandalf),condition)
-		            }
-		            {
-		                type: discard
-		                player: shadow
-		                select: choose(side(shadow),condition)
-		            }
-		        ]
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gandalf),companion
+					count: 3
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: self
+					times: 2
+				}
+				effect: [
+					{
+						type: playCardFromDiscard
+						select: choose(culture(gandalf),condition)
+					}
+					{
+						type: discard
+						player: shadow
+						select: choose(side(shadow),condition)
+					}
+				]
+			}
 		]
 		gametext: To play, spot 3 [gandalf] companions.<br><b>Regroup:</b> Exert Treebeard twice to play a [gandalf] condition from your discard pile and make an opponent discard one of his or her conditions.
-		lore: Leave it to the Ents!... Trees are coming back to live here, old trees, wild trees.'
+		lore: "'Leave it to the Ents!... Trees are coming back to live here, old trees, wild trees.'"
 		promotext: ""
 		alts: {
 			promos: {

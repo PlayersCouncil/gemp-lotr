@@ -3,7 +3,6 @@
 	7_15: {
 		cardInfo: {
 			imagePath: decipher/LOTR07015.jpg
-			javaClass: true
 			//parentId: 7_15
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -23,37 +22,37 @@
 		type: Condition
 		target: culture(elven),companion
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addActivated
-		            filter: minion
-		            phase: assignment
-		            text: Assign this minion to bearer of Reckless Pride.
-		            effect: {
-		                type: assignFpCharacterToSkirmish
-		                fpCharacter: choose(hasAttached(name(Reckless Pride)))
-		                minion: self
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: [
-		            {
-		                type: discard
-		                select: choose(minion)
-		            }
-		            {
-		                type: reconcileHand
-		            }
-		        ]
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addActivated
+					filter: minion
+					phase: assignment
+					text: Assign this minion to bearer of Reckless Pride.
+					effect: {
+						type: assignFpCharacterToSkirmish
+						fpCharacter: choose(hasAttached(name(Reckless Pride)))
+						minion: self
+					}
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: discard
+						select: choose(minion)
+					}
+					{
+						type: reconcileHand
+					}
+				]
+			}
 		]
 		gametext: Bearer must be an [elven] companion.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to bearer of Ancient Blade."<br><b>Regroup:</b> Discard this condition to discard a minion and reconcile your hand.
 		lore: ""
@@ -69,7 +68,6 @@
 	7_16: {
 		cardInfo: {
 			imagePath: decipher/LOTR07016.jpg
-			javaClass: true
 			//parentId: 7_16
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -94,17 +92,17 @@
 		signet: Gandalf
 		resistance: 6
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inSkirmishAgainst(fierce,minion)
-    		        amount: 3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmishAgainst(fierce,minion)
+					amount: 3
+				}
+			}
 		]
 		gametext: While skirmishing a fierce minion, Arwen is strength +3.
-		lore: But she also sends word to you... Fair well, Elfstone!'
+		lore: "'But she also sends word to you... Fair well, Elfstone!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -117,7 +115,6 @@
 	7_17: {
 		cardInfo: {
 			imagePath: decipher/LOTR07017.jpg
-			javaClass: true
 			//parentId: 7_17
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -140,23 +137,23 @@
 		itemclass: Mount
 		target: elf
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: bearer,name(Arwen)
-		        }
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(minion,inSkirmishAgainst(bearer))
-		            amount: -2
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: bearer,name(Arwen)
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(bearer))
+					amount: -2
+				}
+			}
 		]
 		gametext: Bearer must be an Elf.<br><b>Skirmish:</b> If bearer is Arwen, exert her to make each minion skirmishing her strength -2.
 		lore: ""
@@ -172,7 +169,6 @@
 	7_18: {
 		cardInfo: {
 			imagePath: decipher/LOTR07018.jpg
-			javaClass: true
 			//parentId: 7_18
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -195,22 +191,22 @@
 		itemclass: Ranged weapon
 		target: name(Legolas)
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: culture(elven),timeword(skirmish),event
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: bearer,inSkirmish
-		        }
-		        effect: {
-		            type: heal
-		            select: bearer
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: culture(elven),timeword(skirmish),event
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				effect: {
+					type: heal
+					select: bearer
+				}
+			}
 		]
 		gametext: Bearer must be Legolas.<br>Each time you play an [elven] skirmish event during a skirmish involving Legolas, you may heal him.
 		lore: ""
@@ -226,7 +222,6 @@
 	7_19: {
 		cardInfo: {
 			imagePath: decipher/LOTR07019.jpg
-			javaClass: true
 			//parentId: 7_19
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -244,12 +239,12 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: elf
+				type: canSpot
+				filter: elf
 			}
 			cost: {
 				type: discardFromHand
@@ -263,7 +258,7 @@
 			]
 		}
 		gametext: Spot an Elf and discard 3 cards from hand to reconcile your hand.
-		lore: If thou art in haste, remember the Paths of the Dead.'
+		lore: "'If thou art in haste, remember the Paths of the Dead.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -276,7 +271,6 @@
 	7_20: {
 		cardInfo: {
 			imagePath: decipher/LOTR07020.jpg
-			javaClass: true
 			//parentId: 7_20
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -294,7 +288,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -303,14 +297,14 @@
 					select: choose(elf)
 					memorize: chosenElf
 					amount: {
-					    type: Conditional
-					    requires: {
-					        type: memoryMatches
-					        memory: chosenElf
-					        filter: inSkirmishAgainst(nazgul)
-					    }
-					    true: 4
-					    false: 2
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenElf
+							filter: inSkirmishAgainst(nazgul)
+						}
+						true: 4
+						false: 2
 					}
 				}
 			]
@@ -329,7 +323,6 @@
 	7_21: {
 		cardInfo: {
 			imagePath: decipher/LOTR07021.jpg
-			javaClass: true
 			//parentId: 7_21
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -353,31 +346,31 @@
 		vitality: 4
 		resistance: 6
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: or(name(Aragorn),elf)
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfTurn
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(character,hasAttached(artifact))
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: or(name(Aragorn),elf)
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfTurn
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(character,hasAttached(artifact))
+				}
+			}
 		]
 		gametext: To play, spot Aragorn or an Elf.<br>At the start of each turn, you may exert Elrond to heal a character bearing an artifact.
-		lore: Onen i-estel Edain.'
+		lore: "'Onen i-estel Edain.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -390,7 +383,6 @@
 	7_22: {
 		cardInfo: {
 			imagePath: decipher/LOTR07022.jpg
-			javaClass: true
 			//parentId: 7_22
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -410,32 +402,32 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: elf
-		            count: 2
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: played
-		            filter: culture(elven),timeword(skirmish),event
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: drawCards
-		            count: 3
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+					count: 2
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: played
+					filter: culture(elven),timeword(skirmish),event
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: drawCards
+					count: 3
+				}
+			}
 		]
 		gametext: To play, spot 2 Elves.<br><b>Response:</b> If an [elven] skirmish event is played, discard this condition to draw 3 cards.
-		lore: Either our hope cometh, or all hopes end.'
+		lore: "'Either our hope cometh, or all hopes end.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -448,7 +440,6 @@
 	7_23: {
 		cardInfo: {
 			imagePath: decipher/LOTR07023.jpg
-			javaClass: true
 			//parentId: 7_23
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -468,41 +459,41 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: choose(elf)
-		        }
-		        effect: [
-                    {
-                        type: revealTopCardsOfDrawDeck
-                        count: 1
-                        memorize: revealedCard
-                    }
-                    {
-                        type: If
-                        check: {
-                            type: memoryMatches
-                            memory: revealedCard
-                            filter: culture(elven)
-                        }
-                        true: {
-                            type: removeThreats
-                            amount: 3
-                        }
-                    }
-                    {
-                        type: putCardsFromDeckOnBottomOfDeck
-                        select: memory(revealedCard)
-                        reveal: true
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: choose(elf)
+				}
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						count: 1
+						memorize: revealedCard
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: revealedCard
+							filter: culture(elven)
+						}
+						true: {
+							type: removeThreats
+							amount: 3
+						}
+					}
+					{
+						type: putCardsFromDeckOnBottomOfDeck
+						select: memory(revealedCard)
+						reveal: true
+					}
+				]
+			}
 		]
 		gametext: <b>Regroup:</b> Exert an Elf to reveal the top card of your draw deck. If it is an [elven] card, remove 3 threats. Place the revealed card beneath your draw deck.
-		lore: The days are now short.'
+		lore: "'The days are now short.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -515,7 +506,6 @@
 	7_24: {
 		cardInfo: {
 			imagePath: decipher/LOTR07024.jpg
-			javaClass: true
 			//parentId: 7_24
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -535,65 +525,65 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: elf
-		            count: 3
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: moves
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Add a threat
-		                Discard this condition
-		            ]
-		            effects: [
-		                {
-		                    type: addThreats
-		                    amount: 1
-		                }
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		            ]
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Discard a condition
-		                Draw 2 cards
-		            ]
-		            effects: [
-		                {
-		                    type: discard
-		                    select: choose(condition)
-		                }
-		                {
-		                    type: drawCards
-		                    count: 2
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+					count: 3
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add a threat
+						Discard this condition
+					]
+					effects: [
+						{
+							type: addThreats
+							amount: 1
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: choice
+					texts: [
+						Discard a condition
+						Draw 2 cards
+					]
+					effects: [
+						{
+							type: discard
+							select: choose(condition)
+						}
+						{
+							type: drawCards
+							count: 2
+						}
+					]
+				}
+			}
 		]
 		gametext: To play, spot 3 Elves.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition to discard a condition or draw 2 cards.
-		lore: Then I thought in my heart that we drew near to the sea....'
+		lore: "'Then I thought in my heart that we drew near to the sea....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -606,7 +596,6 @@
 	7_25: {
 		cardInfo: {
 			imagePath: decipher/LOTR07025.jpg
-			javaClass: true
 			//parentId: 7_25
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -632,26 +621,26 @@
 		resistance: 6
 		keywords: Archer
 		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        requires: {
-		            type: haveInitiative
-		            side: free people
-		        }
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            count: 4
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(minion)
-		        }
-		    }
+			{
+				type: activated
+				phase: archery
+				requires: {
+					type: haveInitiative
+					side: free people
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 4
+				}
+				effect: {
+					type: wound
+					select: choose(minion)
+				}
+			}
 		]
 		gametext: <b>Archer</b>.<br><b>Archery:</b> If you have initiative, discard 4 cards from hand to wound a minion.
-		lore: I also will come... for I do not fear the Dead.'
+		lore: "'I also will come... for I do not fear the Dead.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -664,7 +653,6 @@
 	7_26: {
 		cardInfo: {
 			imagePath: decipher/LOTR07026.jpg
-			javaClass: true
 			//parentId: 7_26
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -690,28 +678,28 @@
 		resistance: 6
 		keywords: Archer
 		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        requires: {
-		            type: not
-		            requires: {
-		                type: canSpotThreats
-		            }
-		        }
-		        cost: {
-		            type: addThreats
-		            amount: 1
-		        }
-		        effect: {
-		            type: modifyArcheryTotal
-		            side: free people
-		            amount: 1
-		        }
-		    }
+			{
+				type: activated
+				phase: archery
+				requires: {
+					type: not
+					requires: {
+						type: canSpotThreats
+					}
+				}
+				cost: {
+					type: addThreats
+					amount: 1
+				}
+				effect: {
+					type: modifyArcheryTotal
+					side: free people
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Archer</b>.<br><b>Archery:</b> If you cannot spot a threat, add a threat to make the fellowship archery total +1.
-		lore: Alas for the wailing of the gulls! Did not the Lady tell me to beware of them?'
+		lore: "'Alas for the wailing of the gulls! Did not the Lady tell me to beware of them?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -724,7 +712,6 @@
 	7_27: {
 		cardInfo: {
 			imagePath: decipher/LOTR07027.jpg
-			javaClass: true
 			//parentId: 7_27
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -742,7 +729,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			cost: {
@@ -758,18 +745,18 @@
 					memorize: discardedCards
 				}
 				{
-				    type: modifyArcheryTotal
-				    side: free people
-				    amount: {
-				        type: forEachInMemory
-				        memory: discardedCards
-				        filter: culture(elven)
-				    }
+					type: modifyArcheryTotal
+					side: free people
+					amount: {
+						type: forEachInMemory
+						memory: discardedCards
+						filter: culture(elven)
+					}
 				}
 			]
 		}
 		gametext: Exert 2 [elven] companions to discard the top 3 cards of your draw deck. Make the fellowship archery total +1 for each [elven] card discarded.
-		lore: Thus we passed over Gilrain, driving the allies of Mordor in rout before us....'
+		lore: "'Thus we passed over Gilrain, driving the allies of Mordor in rout before us....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -782,7 +769,6 @@
 	7_28: {
 		cardInfo: {
 			imagePath: decipher/LOTR07028.jpg
-			javaClass: true
 			//parentId: 7_28
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -802,45 +788,45 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: elf
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: regroup
-		        }
-		        cost: {
-		            type: choice
-		            texts: [
-		                Discard this condition
-		                Discard a card from hand
-		            ]
-		            effects: [
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		                {
-		                    type: discardFromHand
-		                    forced: false
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(elf)
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Discard a card from hand
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: discardFromHand
+							forced: false
+						}
+					]
+				}
+				effect: {
+					type: heal
+					select: choose(elf)
+				}
+			}
 		]
 		gametext: To play, spot an Elf.<br>At the start of your regroup phase, you may discard this condition or a card from hand to heal an Elf.
-		lore: But did I not also fortell that you shall neither have wife, nor bind any woman to you....'
+		lore: "'But did I not also fortell that you shall neither have wife, nor bind any woman to you....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -853,7 +839,6 @@
 	7_29: {
 		cardInfo: {
 			imagePath: decipher/LOTR07029.jpg
-			javaClass: true
 			//parentId: 7_29
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -871,7 +856,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -881,16 +866,16 @@
 					amount: 2
 				}
 				{
-				    type: optional
-				    text: Would you like to put this event on top of your draw deck?
-				    effect: {
-				        type: putPlayedEventOnTopOfDrawDeck
-				    }
+					type: optional
+					text: Would you like to put this event on top of your draw deck?
+					effect: {
+						type: putPlayedEventOnTopOfDrawDeck
+					}
 				}
 			]
 		}
 		gametext: Make an Elf strength +2. You may place this event on top of your draw deck.
-		lore: You must not go to the Havens Legolas. There will always be some folk... who need you.'
+		lore: "'You must not go to the Havens Legolas. There will always be some folk... who need you.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -903,7 +888,6 @@
 	7_30: {
 		cardInfo: {
 			imagePath: decipher/LOTR07030.jpg
-			javaClass: true
 			//parentId: 7_30
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -921,7 +905,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -931,16 +915,16 @@
 					amount: 2
 				}
 				{
-				    type: optional
-				    text: Would you like to shuffle your draw deck?
-				    effect: {
-				        type: shuffleDeck
-				    }
+					type: optional
+					text: Would you like to shuffle your draw deck?
+					effect: {
+						type: shuffleDeck
+					}
 				}
 			]
 		}
 		gametext: Make an Elf strength +2 and you may shuffle your draw deck.
-		lore: But defenders and foes alike gave up the battle....'
+		lore: "'But defenders and foes alike gave up the battle....'"
 		promotext: ""
 		alts: {
 			promos: {

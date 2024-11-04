@@ -1,0 +1,2039 @@
+{
+
+	1_203: {
+		cardInfo: {
+			imagePath: decipher/LOTR01203.jpg
+			//parentId: 1_203
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U203
+			rarity: U
+			setNum: "1"
+			cardNum: 203
+			style: Standard
+		}
+		title: All Blades Perish
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: aboutToTakeWound
+				filter: nazgul
+			}
+			effect: {
+				type: preventWound
+				select: choose(nazgul)
+			}
+		}
+		gametext: <b>Response:</b> If a Nazgûl is about to take a wound, prevent that wound.
+		lore: "'...all blades perish that pierce that dreadful King. More deadly to him was the name of Elbereth.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_204: {
+		cardInfo: {
+			imagePath: decipher/LOTR01204.jpg
+			//parentId: 1_204
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R204
+			rarity: R
+			setNum: "1"
+			cardNum: 204
+			style: Standard
+		}
+		title: All Veils Removed
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: {
+				type: modifyStrength
+				select: choose(nazgul)
+				amount: {
+					type: Conditional
+					requires: {
+						type: ringIsOn
+					}
+					true: 5
+					false: 2
+				}
+			}
+		}
+		gametext: <b>Skirmish:</b> Make a Nazgûl strength +2 (or +5 if the Ring-bearer wears The One Ring).
+		lore: "'Give up the Halfling...!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_205: {
+		cardInfo: {
+			imagePath: decipher/LOTR01205.jpg
+			//parentId: 1_205
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R205
+			rarity: R
+			setNum: "1"
+			cardNum: 205
+			style: Standard
+		}
+		title: Beauty Is Fading
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(nazgul)
+			}
+			effect: {
+				type: choice
+				texts: [
+					Discard a Free Peoples possession or condition
+					Discard an ally or companion (except the Ring-bearer)
+				]
+				effects: [
+					{
+						type: If
+						check: {
+							type: canSpot
+							filter: side(free people),or(possession,condition)
+						}
+						true: {
+							type: discard
+							select: choose(side(free people),or(possession,condition))
+						}
+					}
+					{
+						type: If
+						check: {
+							type: cantSpot
+							filter: side(free people),or(possession,condition)
+						}
+						true: {
+							type: discard
+							select: choose(or(ally,companion),not(ring bearer))
+						}
+					}
+				]
+			}
+		}
+		gametext: <b>Maneuver:</b> Exert a Nazgûl to discard a Free Peoples possession or Free Peoples condition. If you can spot no such card, discard an ally or companion (except the Ring-bearer) instead.
+		lore: "'...the Three will fail, and many fair things will fade and be forgotten.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_206: {
+		cardInfo: {
+			imagePath: decipher/LOTR01206.jpg
+			//parentId: 1_206
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R206
+			rarity: R
+			setNum: "1"
+			cardNum: 206
+			style: Standard
+		}
+		title: Bent on Discovery
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: shadow
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: endOfPhase
+					phase: shadow
+				}
+				effect: {
+					type: choice
+					texts: [
+						Exert a Nazgul
+						Discard this condition
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(nazgul)
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+			}
+		]
+		gametext: <b>Search</b>. Plays to your support area.<br>At the beginning of each of your Shadow phases, draw 1 card.<br>At the end of each of your Shadow phases, exert a Nazgûl or discard this condition.
+		lore: "The riding figure sat quite still.... From inside the hood came a noise as of someone sniffing...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_207: {
+		cardInfo: {
+			imagePath: decipher/LOTR01207.jpg
+			//parentId: 1_207
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U207
+			rarity: U
+			setNum: "1"
+			cardNum: 207
+			style: Standard
+		}
+		title: Black Breath
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(character,inSkirmishAgainst(nazgul))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantRemoveBurdens
+					requires: {
+						type: canSpot
+						filter: self,attachedTo(ring bearer)
+					}
+					filter: any
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantHeal
+					filter: hasAttached(self)
+				}
+			}
+		]
+		gametext: Plays to your support area.<br><b>Skirmish:</b> Transfer this condition from your support area to a character skirmishing a Nazgûl. Burdens and wounds may not be removed from bearer.
+		lore: "Vile breath infects the living with Shadow."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_208: {
+		cardInfo: {
+			imagePath: decipher/LOTR01208.jpg
+			//parentId: 1_208
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R208
+			rarity: R
+			setNum: "1"
+			cardNum: 208
+			style: Standard
+		}
+		title: Black Steed
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Mount
+		target: nazgul
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer
+					requires: {
+						type: location
+						filter: plains
+					}
+					amount: 2
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: location
+						filter: underground
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: Bearer must be a Nazgûl.<br>While at a plains site, bearer is strength +2. Discard this possession when at an underground site.
+		lore: "'...these horses are born and bred to the service of the Dark Lord in Mordor.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_209: {
+		cardInfo: {
+			imagePath: decipher/LOTR01209.jpg
+			//parentId: 1_209
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U209
+			rarity: U
+			setNum: "1"
+			cardNum: 209
+			style: Standard
+		}
+		title: Blade Tip
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: winsSkirmish
+					filter: nazgul
+					memorize: winner
+				}
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(character,inSkirmishAgainst(memory(winner)),not(hasAttached(name(Blade Tip))))
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				requires: {
+					type: canSpot
+					filter: self,attachedTo(any)
+				}
+				effect: [
+					{
+						type: wound
+						select: all(hasAttached(self),not(ring bearer))
+					}
+					{
+						type: If
+						check: {
+							type: canSpot
+							filter: hasAttached(self),ring bearer
+						}
+						true: {
+							type: addBurdens
+						}
+					}
+				]
+			}
+		]
+		gametext: Plays to your support area.<br><b>Response:</b> If your Nazgûl wins a skirmish, transfer this condition from your support area to the losing character. Limit 1 per character. Wound bearer at the start of each fellowship phase. (If bearer is the Ring-bearer, add a burden instead.)
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_210: {
+		cardInfo: {
+			imagePath: decipher/LOTR01210.jpg
+			//parentId: 1_210
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R210
+			rarity: R
+			setNum: "1"
+			cardNum: 210
+			style: Standard
+		}
+		title: Dark Whispers
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: canSpotBurdens
+				amount: 3
+			}
+			effect: {
+				type: choice
+				texts: [
+					Make a Nazgul strength +1 and damage +1
+					Make a Nazgul strength +3 and damage +2
+				]
+				effects: [
+					{
+						type: If
+						check: {
+							type: canSpotBurdens
+							amount: 3
+						}
+						true: [
+							{
+								type: modifyStrength
+								select: choose(nazgul)
+								amount: 1
+								memorize: chosenNazgul
+							}
+							{
+								type: addKeyword
+								select: memory(chosenNazgul)
+								keyword: damage+1
+							}
+						]
+					}
+					{
+						type: If
+						check: {
+							type: canSpotBurdens
+							amount: 6
+						}
+						true: [
+							{
+								type: modifyStrength
+								select: choose(nazgul)
+								amount: 3
+								memorize: chosenNazgul
+							}
+							{
+								type: addKeyword
+								select: memory(chosenNazgul)
+								keyword: damage+2
+							}
+						]
+					}
+				]
+			}
+		}
+		gametext: <b>Skirmish:</b> Spot 3 burdens to make a Nazgûl strength +1 and <b>damage +1</b>, or spot 6 burdens to make a Nazgûl strength +3 and <b>damage +2</b>.
+		lore: "'The Ring... The Ring... The Ring....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_211: {
+		cardInfo: {
+			imagePath: decipher/LOTR01211.jpg
+			//parentId: 1_211
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U211
+			rarity: U
+			setNum: "1"
+			cardNum: 211
+			style: Standard
+		}
+		title: Drawn to Its Power
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: trigger
+			trigger: {
+				type: killed
+				filter: companion
+			}
+			requires: {
+				type: canSpot
+				filter: nazgul,inSkirmish
+			}
+			effect: {
+				type: addBurdens
+			}
+		}
+		gametext: Plays to your support area.<br>Each time a companion is killed in a skirmish involving a Nazgûl, add a burden.
+		lore: "'And also the Ring drew them.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_212: {
+		cardInfo: {
+			imagePath: decipher/LOTR01212.jpg
+			//parentId: 1_212
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R212
+			rarity: R
+			setNum: "1"
+			cardNum: 212
+			style: Standard
+		}
+		title: Fear
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		keywords: Search
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(your,nazgul)
+			}
+			effect: {
+				type: discard
+				select: choose(ally)
+			}
+		}
+		gametext: <b>Search</b>.<br><b>Maneuver:</b> Exert your Nazgûl to discard an ally.
+		lore: "'Never has such a thing happened in my time!... Guests unable to sleep in their beds, and good bolsters ruined and all! What are we coming to?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_213: {
+		cardInfo: {
+			imagePath: decipher/LOTR01213.jpg
+			//parentId: 1_213
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U213
+			rarity: U
+			setNum: "1"
+			cardNum: 213
+			style: Standard
+		}
+		title: Frozen by Fear
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: {
+				type: modifyStrength
+				select: choose(nazgul)
+				amount: {
+					type: Conditional
+					requires: {
+						type: canSpot
+						filter: ring bearer,notassignedtoskirmish
+					}
+					true: 2
+					false: 3
+				}
+			}
+		}
+		gametext: <b>Skirmish:</b> Make a Nazgûl strength +2 (or +3 if the Ring-bearer is assigned to a skirmish that has not resolved).
+		lore: "...he was quaking as if he was bitter cold, but his terror was swallowed up in a sudden temptation to put on the Ring."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_214: {
+		cardInfo: {
+			imagePath: decipher/LOTR01214.jpg
+			//parentId: 1_214
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R214
+			rarity: R
+			setNum: "1"
+			cardNum: 214
+			style: Standard
+		}
+		title: In the Ringwraith's Wake
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: nazgul
+			}
+			effect: {
+				type: choice
+				player: fp
+				texts: [
+					Exert the Ring-bearer
+					Add a burden
+				]
+				effects: [
+					{
+						type: exert
+						select: choose(ring bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+		}
+		gametext: <b>Response:</b> If a Nazgûl wins a skirmish, the Free Peoples player chooses to either exert the Ring-bearer or add a burden.
+		lore: "'He is fading.... We must get him to my father.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_215: {
+		cardInfo: {
+			imagePath: decipher/LOTR01215.jpg
+			//parentId: 1_215
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U215
+			rarity: U
+			setNum: "1"
+			cardNum: 215
+			style: Standard
+		}
+		title: The Master's Will
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Event
+		timewords: Shadow
+		keywords: Search
+		effects: {
+			type: event
+			cost: {
+				type: chooseHowManyToSpot
+				filter: nazgul
+				memorize: spottedNazguls
+			}
+			effect: [
+				{
+					type: revealTopCardsOfDrawDeck
+					count: {
+						type: fromMemory
+						memory: spottedNazguls
+					}
+					memorize: revealedCards
+				}
+				{
+					type: putCardsFromDeckIntoHand
+					select: all(memory(revealedCards),culture(wraith))
+					reveal: true
+					shuffle: false
+					showAll: false
+				}
+				{
+					type: discardCardsFromDrawDeck
+					select: all(memory(revealedCards),not(culture(wraith)))
+					showAll: false
+					shuffle: false
+				}
+			]
+		}
+		gametext: <b>Search</b>.<br><b>Shadow:</b> Spot X Nazgûl to reveal the top X cards of your draw deck. Take into your hand all [wraith] cards revealed and discard the rest.
+		lore: "...something seemed to be compelling him to disregard all warnings, and he longed to yield."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_216: {
+		cardInfo: {
+			imagePath: decipher/LOTR01216.jpg
+			//parentId: 1_216
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R216
+			rarity: R
+			setNum: "1"
+			cardNum: 216
+			style: Standard
+		}
+		title: Morgul Blade
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		target: nazgul
+		effects: [
+			{
+				type: extraPossessionClass
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: memorize
+						filter: bearer
+						memory: bearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: choice
+					texts: [
+						Transfer Blade Tip from your support area to a companion bearer is skirmishing
+						Transfer Blade Tip from your discard pile to a companion bearer is skirmishing
+					]
+					effects: [
+						{
+							type: transfer
+							select: choose(name(Blade Tip),zone(support))
+							where: choose(companion,inSkirmishAgainst(memory(bearer)),not(hasAttached(name(Blade Tip))))
+							fromSupport: true
+						}
+						{
+							type: transferFromDiscard
+							select: choose(name(Blade Tip))
+							where: choose(companion,inSkirmishAgainst(memory(bearer)),not(hasAttached(name(Blade Tip))))
+						}
+					]
+				}
+			}
+		]
+		gametext: Bearer must be a Nazgûl.<br>This weapon may be borne in addition to 1 other hand weapon.<br><b>Skirmish:</b> Discard this possession to transfer Blade Tip from your support area or discard pile to a companion bearer is skirmishing.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_217: {
+		cardInfo: {
+			imagePath: decipher/LOTR01217.jpg
+			//parentId: 1_217
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R217
+			rarity: R
+			setNum: "1"
+			cardNum: 217
+			style: Standard
+		}
+		title: Morgul Gates
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			effect: {
+				type: PlayCardFromHand
+				select: choose(nazgul)
+				discount: -2
+			}
+		}
+		gametext: <b>Shadow:</b> Play a Nazgûl. His twilight cost is -2.
+		lore: "The gates of Minas Morgul issued Nine Riders into the free lands, a blasphemy to ancient kings."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_218: {
+		cardInfo: {
+			imagePath: decipher/LOTR01218.jpg
+			//parentId: 1_218
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U218
+			rarity: U
+			setNum: "1"
+			cardNum: 218
+			style: Standard
+		}
+		title: Nazgûl Sword
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: nazgul
+		effects: {
+			type: modifier
+			modifier: {
+				type: addKeyword
+				filter: bearer
+				keyword: damage+1
+				requires: {
+					type: canSpotBurdens
+					amount: 3
+				}
+			}
+		}
+		gametext: Bearer must be a Nazgûl.<br>While you can spot 3 burdens, bearer is <b>damage +1</b>.
+		lore: "The weapons of the Nine are wielded by unseen hands willed by Sauron's hate."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_219: {
+		cardInfo: {
+			imagePath: decipher/LOTR01219.jpg
+			//parentId: 1_219
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U219
+			rarity: U
+			setNum: "1"
+			cardNum: 219
+			style: Standard
+		}
+		title: The Nine Servants of Sauron
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: your,nazgul
+			}
+			effect: {
+				type: exert
+				select: choose(hobbit,not(ring bearer))
+			}
+		}
+		gametext: <b>Search</b>. Plays to your support area.<br>Each time you play a Nazgûl, you may exert a Hobbit (except the Ring-bearer).
+		lore: "'That Black Rider was looking for something... or someone – Frodo?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_220: {
+		cardInfo: {
+			imagePath: decipher/LOTR01220.jpg
+			//parentId: 1_220
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U220
+			rarity: U
+			setNum: "1"
+			cardNum: 220
+			style: Standard
+		}
+		title: Not Easily Destroyed
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: [
+				maneuver
+				skirmish
+			]
+			cost: {
+				type: removeTwilight
+				amount: 3
+			}
+			effect: {
+				type: heal
+				select: choose(nazgul)
+			}
+		}
+		gametext: Plays to your support area.<br><b>Maneuver</b> <i>or</i> <b>Skirmish:</b> Remove (3) to heal a Nazgûl.
+		lore: "'They were Kings... great Kings of Men. Sauron gave to them Nine Rings of Power and with them the promise of eternal rule... unending life.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_221: {
+		cardInfo: {
+			imagePath: decipher/LOTR01221.jpg
+			//parentId: 1_221
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R221
+			rarity: R
+			setNum: "1"
+			cardNum: 221
+			style: Standard
+		}
+		title: The Pale Blade
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Possession
+		strength: 3
+		itemclass: Hand weapon
+		target: name(The Witch-king)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					keyword: damage+1
+					filter: bearer
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: discard
+					select: choose(side(free people),condition)
+				}
+			}
+		]
+		gametext: Bearer must be The Witch-king.<br>He is <b>damage +1</b>.<br><b>Response:</b> If The Witch-king wins a skirmish, exert him to discard a Free Peoples condition.
+		lore: "In his wretched grip, the Captain raised a Pale Sword."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_222: {
+		cardInfo: {
+			imagePath: decipher/LOTR01222.jpg
+			//parentId: 1_222
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U222
+			rarity: U
+			setNum: "1"
+			cardNum: 222
+			style: Standard
+		}
+		title: Paths Seldom Trodden
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: playSite
+					block: fellowship
+					number: {
+						type: currentSiteNumber
+					}
+				}
+			}
+		]
+		gametext: <b>Search</b>. To play, spot a Nazgûl. Plays to your support area.<br><b>Shadow:</b> Remove (3) to replace the fellowship's site with your version of the same site.
+		lore: "'You will have to leave the open road after tonight; for the horsemen will watch it night and day.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_223: {
+		cardInfo: {
+			imagePath: decipher/LOTR01223.jpg
+			//parentId: 1_223
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U223
+			rarity: U
+			setNum: "1"
+			cardNum: 223
+			style: Standard
+		}
+		title: Relentless Charge
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(nazgul)
+			}
+			effect: {
+				type: wound
+				select: all(archer,companion)
+			}
+		}
+		gametext: <b>Maneuver:</b> Exert a Nazgûl to wound every archer companion.
+		lore: "Even the fastest arrows are of no avail against the Black Steeds of the Nine Riders."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_224: {
+		cardInfo: {
+			imagePath: decipher/LOTR01224.jpg
+			//parentId: 1_224
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R224
+			rarity: R
+			setNum: "1"
+			cardNum: 224
+			style: Standard
+		}
+		title: Return to Its Master
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			requires: {
+				type: ringIsOn
+			}
+			trigger: {
+				type: endOfPhase
+				phase: skirmish
+			}
+			effect: [
+				{
+					type: cancelAllAssignments
+				}
+				{
+					type: assignFpCharacterToSkirmish
+					fpCharacter: choose(ring bearer)
+					minion: choose(nazgul)
+				}
+				{
+					type: addTrigger
+					trigger: {
+						type: startOfPhase
+						phase: skirmish
+					}
+					effect: {
+						type: addModifier
+						modifier: {
+							type: ringTextIsInactive
+						}
+					}
+					until: start(skirmish)
+				}
+			]
+		}
+		gametext: <b>Response:</b> If the Ring-bearer wears The One Ring at the end of a skirmish phase, cancel all remaining assignments and assign a Nazgûl to skirmish the Ring-bearer; The One Ring's game text does not apply during this skirmish.
+		lore: "'The Riders made straight for you....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_225: {
+		cardInfo: {
+			imagePath: decipher/LOTR01225.jpg
+			//parentId: 1_225
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U225
+			rarity: U
+			setNum: "1"
+			cardNum: 225
+			style: Standard
+		}
+		title: Sword of Minas Morgul
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: name(Úlairë Lemenya)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage+1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: discard
+					select: choose(possession,attachedTo(character,inSkirmishAgainst(bearer)))
+				}
+			}
+		]
+		gametext: Bearer must be Úlairë Lemenya.<br>He is <b>damage +1</b>.<br><b>Skirmish:</b> Exert Úlairë Lemenya to discard a possession borne by a character he is skirmishing.
+		lore: "The Morgul hilt seared the flesh that would touch it, but the pierce was painless."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_226: {
+		cardInfo: {
+			imagePath: decipher/LOTR01226.jpg
+			//parentId: 1_226
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U226
+			rarity: U
+			setNum: "1"
+			cardNum: 226
+			style: Standard
+		}
+		title: Their Power Is in Terror
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(nazgul)
+			}
+			effect: {
+				type: wound
+				select: all(ally)
+			}
+		}
+		gametext: <b>Maneuver:</b> Exert a Nazgûl to wound every ally.
+		lore: "'In dark and loneliness they are strongest... and already some in Bree are in their clutch.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_227: {
+		cardInfo: {
+			imagePath: decipher/LOTR01227.jpg
+			//parentId: 1_227
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U227
+			rarity: U
+			setNum: "1"
+			cardNum: 227
+			style: Standard
+		}
+		title: Threshold of Shadow
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: {
+				type: modifyStrength
+				select: choose(nazgul)
+				amount: {
+					type: Conditional
+					requires: {
+						type: canSpotBurdens
+						amount: 5
+					}
+					true: 4
+					false: 2
+				}
+			}
+		}
+		gametext: <b>Skirmish:</b> Make a Nazgûl strength +2 (or +4 if you spot 5 burdens).
+		lore: "'They did not need the guidance of their horses any longer: you had become visible to them....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_228: {
+		cardInfo: {
+			imagePath: decipher/LOTR01228.jpg
+			//parentId: 1_228
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R228
+			rarity: R
+			setNum: "1"
+			cardNum: 228
+			style: Standard
+		}
+		title: The Twilight World
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: putsOnRing
+			}
+			cost: {
+				type: exert
+				select: choose(nazgul)
+			}
+			effect: {
+				type: addBurdens
+				amount: 2
+			}
+		}
+		gametext: <b>Response:</b> If the Ring-bearer puts on The One Ring, exert a Nazgûl to add 2 burdens.
+		lore: "Immediately, though everything else remained as before, dim and dark, the shapes became terribly clear. He was able to see beneath their black wrappings."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_229: {
+		cardInfo: {
+			imagePath: decipher/LOTR01229.jpg
+			//parentId: 1_229
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R229
+			rarity: R
+			setNum: "1"
+			cardNum: 229
+			style: Standard
+		}
+		title: Úlairë Attëa
+		subtitle: Keeper of Dol Guldur
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgul
+		strength: 12
+		vitality: 3
+		site: 3
+		keywords: Fierce
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: removeTwilight
+			}
+			effect: {
+				type: If
+				check: {
+					type: perPhaseLimit
+					limit: 5
+				}
+				true: [
+					{
+						type: incrementPerPhaseLimit
+						limit: 5
+					}
+					{
+						type: modifyStrength
+						select: self
+						amount: 1
+					}
+				]
+			}
+		}
+		gametext: <b>Fierce</b>.<br><b>Skirmish:</b> Remove (1) to make Úlairë Attëa strength +1 (limit +5).
+		lore: "Those that knew the most power as kings were placed in particular ways for the Will of Sauron."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_230: {
+		cardInfo: {
+			imagePath: decipher/LOTR01230.jpg
+			//parentId: 1_230
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R230
+			rarity: R
+			setNum: "1"
+			cardNum: 230
+			style: Standard
+		}
+		title: Úlairë Cantëa
+		subtitle: Lieutenant of Dol Guldur
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgul
+		strength: 10
+		vitality: 3
+		site: 3
+		keywords: Fierce
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: discard
+				select: choose(weapon,attachedTo(character,inSkirmishAgainst(self)))
+			}
+		}
+		gametext: <b>Fierce</b>.<br><b>Skirmish:</b> Exert Úlairë Cantëa to discard a weapon borne by a character he is skirmishing.
+		lore: "The Ringwraith has no semblance to the Man, its being passed into twilight, life spirit into void."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_231: {
+		cardInfo: {
+			imagePath: decipher/LOTR01231.jpg
+			//parentId: 1_231
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U231
+			rarity: U
+			setNum: "1"
+			cardNum: 231
+			style: Standard
+		}
+		title: Úlairë Enquëa
+		subtitle: Lieutenant of Morgul
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgul
+		strength: 11
+		vitality: 4
+		site: 3
+		keywords: Fierce
+		effects: {
+			type: activated
+			phase: maneuver
+			requires: {
+				type: or
+				requires: [
+					{
+						type: canSpot
+						count: 6
+						filter: companion
+					}
+					{
+						type: canSpotBurdens
+						amount: 5
+					}
+				]
+			}
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: wound
+				select: choose(companion,not(ring bearer))
+			}
+		}
+		gametext: <b>Fierce</b>.<br><b>Maneuver:</b> Spot 6 companions (or 5 burdens) and exert Úlairë Enquëa to wound a companion (except the Ring-bearer).
+		lore: "The Nine Riders were embodiments of Sauron's will, searching all of Middle-earth for his prize."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_232: {
+		cardInfo: {
+			imagePath: decipher/LOTR01232.jpg
+			//parentId: 1_232
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U232
+			rarity: U
+			setNum: "1"
+			cardNum: 232
+			style: Standard
+		}
+		title: Úlairë Lemenya
+		subtitle: Lieutenant of Morgul
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgul
+		strength: 9
+		vitality: 2
+		site: 3
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: or(companion,ally),hasAttached(culture(wraith),condition)
+				amount: -2
+			}
+		}
+		gametext: Each companion or ally who bears a [wraith] condition is strength -2.
+		lore: "'Do you wish them to find you? They are terrible!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_233: {
+		cardInfo: {
+			imagePath: decipher/LOTR01233.jpg
+			//parentId: 1_233
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U233
+			rarity: U
+			setNum: "1"
+			cardNum: 233
+			style: Standard
+		}
+		title: Úlairë Nelya
+		subtitle: Lieutenant of Morgul
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgul
+		strength: 10
+		vitality: 3
+		site: 2
+		keywords: Fierce
+		effects: {
+			type: activated
+			phase: shadow
+			cost: [
+				{
+					type: exert
+					select: self
+				}
+				{
+					type: spot
+					select: choose(not(your),site)
+					memorize: spottedSite
+				}
+			]
+			effect: {
+				type: playSite
+				block: fellowship
+				number: {
+					type: siteNumberInMemory
+					memory: spottedSite
+				}
+			}
+		}
+		gametext: <b>Fierce</b>.<br><b>Shadow:</b> Exert Úlairë Nelya and spot an opponent's site to replace it with your site of the same number.
+		lore: "Many of the Nine were princes of majesty and power."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_234: {
+		cardInfo: {
+			imagePath: decipher/LOTR01234.jpg
+			//parentId: 1_234
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U234
+			rarity: U
+			setNum: "1"
+			cardNum: 234
+			style: Standard
+		}
+		title: Úlairë Nertëa
+		subtitle: Messenger of Dol Guldur
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgul
+		strength: 9
+		vitality: 2
+		site: 3
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: self
+			}
+			requires: [
+				{
+					type: CanSpot
+					filter: companion
+					count: 5
+				}
+				{
+					type: PlayableFromDiscard
+					filter: minion
+				}
+			]
+			effect: [
+				{
+					type: MemorizeInfo
+					memory: choice
+					info: yes
+				}
+				{
+					type: Repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+					}
+					effect: {
+						type: if
+						check: [
+							{
+								type: MemoryIs
+								memory: choice
+								value: yes
+							}
+							{
+								type: HasCardInDiscard
+								filter: playable,minion
+							}
+						]
+						true: [
+							{
+								type: chooseYesOrNo
+								player: you
+								text: Would you like to play a minion from your discard?
+								memorize: choice
+							}
+							{
+								type: if
+								check: [
+									{
+										type: MemoryIs
+										memory: choice
+										value: yes
+									}
+								]
+								true: {
+									type: playCardFromDiscard
+									select: choose(minion)
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+		gametext: When you play Úlairë Nertëa, for each companion over 4, you may play 1 minion from your discard pile.
+		lore: "Some accepted Sauron's gift for glory and a notion of great deeds."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_235: {
+		cardInfo: {
+			imagePath: decipher/LOTR01235.jpg
+			//parentId: 1_235
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U235
+			rarity: U
+			setNum: "1"
+			cardNum: 235
+			style: Standard
+		}
+		title: Úlairë Otsëa
+		subtitle: Lieutenant of Morgul
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgul
+		strength: 9
+		vitality: 3
+		site: 3
+		effects: {
+			type: activated
+			phase: shadow
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: addKeyword
+				select: choose(culture(wraith),minion)
+				keyword: fierce
+				until: start(regroup)
+			}
+		}
+		gametext: <b>Shadow:</b> Exert Úlairë Otsëa to make a [wraith] minion <b>fierce</b> until the regroup phase.
+		lore: "...under their mantles were long grey robes; upon their grey hairs were helms of silver; in their haggard hands were swords of steel."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_236: {
+		cardInfo: {
+			imagePath: decipher/LOTR01236.jpg
+			//parentId: 1_236
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R236
+			rarity: R
+			setNum: "1"
+			cardNum: 236
+			style: Standard
+		}
+		title: Úlairë Toldëa
+		subtitle: Messenger of Morgul
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgul
+		strength: 12
+		vitality: 3
+		site: 3
+		keywords: Fierce
+		effects: {
+			type: activated
+			phase: assignment
+			requires: {
+				type: canSpotBurdens
+				amount: 4
+			}
+			effect: {
+				type: assignFpCharacterToSkirmish
+				fpCharacter: choose(companion,not(ring bearer))
+				minion: self
+			}
+		}
+		gametext: <b>Fierce</b>.<br><b>Assignment:</b> Spot 4 burdens to assign a companion (except the Ring-bearer) to skirmish Úlairë Toldëa.
+		lore: "Open, in the name of Mordor!' said a voice thin and menacing."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_237: {
+		cardInfo: {
+			imagePath: decipher/LOTR01237.jpg
+			//parentId: 1_237
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R237
+			rarity: R
+			setNum: "1"
+			cardNum: 237
+			style: Standard
+		}
+		title: The Witch-king
+		subtitle: Lord of Angmar
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 8
+		type: Minion
+		race: Nazgul
+		strength: 14
+		vitality: 4
+		site: 3
+		keywords: Fierce
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: self
+				amount: {
+					type: forEachYouCanSpot
+					filter: another,nazgul
+					multiplier: 2
+				}
+			}
+		}
+		gametext: <b>Fierce</b>.<br>For each other Nazgûl you can spot, The Witch-king is strength +2.
+		lore: "...his hair was long and gleaming and on his helm was a crown."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_238: {
+		cardInfo: {
+			imagePath: decipher/LOTR01238.jpg
+			//parentId: 1_238
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U238
+			rarity: U
+			setNum: "1"
+			cardNum: 238
+			style: Standard
+		}
+		title: Wreathed in Shadow
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+			}
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: removeTwilight
+				}
+				effect: {
+					type: modifyArcheryTotal
+					side: free people
+					amount: -1
+				}
+			}
+		]
+		gametext: To play, spot a Nazgûl. Plays to your support area.<br><b>Archery:</b> Remove (1) to make the fellowship archery total -1.
+		lore: "They are beings in twilight, without form to catch the points of weapons."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

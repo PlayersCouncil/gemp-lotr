@@ -3,7 +3,6 @@
 	10_75: {
 		cardInfo: {
 			imagePath: decipher/LOTR10075.jpg
-			javaClass: true
 			//parentId: 10_75
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -26,18 +25,18 @@
 		vitality: 3
 		site: 6
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: addKeyword
-                    filter: roaming,culture(sauron),minion
-                    keyword: damage
-                    amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: roaming,culture(sauron),minion
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: Each roaming [sauron] minion is <b>damage +1</b>.
-		lore: The foe who gave him his scar soon after gave him the adornment for his helm.
+		lore: "The foe who gave him his scar soon after gave him the adornment for his helm."
 		promotext: ""
 		alts: {
 			promos: {
@@ -50,7 +49,6 @@
 	10_76: {
 		cardInfo: {
 			imagePath: decipher/LOTR10076.jpg
-			javaClass: true
 			//parentId: 10_76
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -73,22 +71,22 @@
 		vitality: 3
 		site: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(roaming,culture(sauron),minion)
-		            amount: 3
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(roaming,culture(sauron),minion)
+					amount: 3
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Exert this minion to make a roaming [sauron] minion strength +3.
-		lore: The sun gleamed red....
+		lore: "The sun gleamed red...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -101,7 +99,6 @@
 	10_77: {
 		cardInfo: {
 			imagePath: decipher/LOTR10077.jpg
-			javaClass: true
 			//parentId: 10_77
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -124,17 +121,17 @@
 		vitality: 3
 		site: 6
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: addKeyword
-                    filter: roaming,culture(sauron),minion
-                    keyword: fierce
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: roaming,culture(sauron),minion
+					keyword: fierce
+				}
+			}
 		]
 		gametext: Each roaming [sauron] minion is <b>fierce</b>.
-		lore: In vain men shook their fists at the pitiless foes that swarmed before the Gate.
+		lore: "In vain men shook their fists at the pitiless foes that swarmed before the Gate."
 		promotext: ""
 		alts: {
 			promos: {
@@ -147,7 +144,6 @@
 	10_78: {
 		cardInfo: {
 			imagePath: decipher/LOTR10078.jpg
-			javaClass: true
 			//parentId: 10_78
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -170,37 +166,37 @@
 		vitality: 2
 		site: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-                    type: choice
-                    texts: [
-                        Exert this minion
-                        Discard this minion
-                    ]
-                    effects: [
-                        {
-                            type: exert
-                            select: self
-                        }
-                        {
-                            type: discard
-                            select: self
-                        }
-                    ]
-		        }
-		        effect: {
-		            type: addKeyword
-		            select: choose(culture(sauron),minion)
-		            count: any
-		            keyword: roaming
-		            until: regroup
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: choice
+					texts: [
+						Exert this minion
+						Discard this minion
+					]
+					effects: [
+						{
+							type: exert
+							select: self
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: addKeyword
+					select: choose(culture(sauron),minion)
+					count: any
+					keyword: roaming
+					until: regroup
+				}
+			}
 		]
 		gametext: <b>Shadow:</b> Exert or discard this minion to make each [sauron] minion you spot roaming until the regroup phase.
-		lore: The lines of fire became flowing torrents, file upon file of Orcs bearing flames....
+		lore: "The lines of fire became flowing torrents, file upon file of Orcs bearing flames...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -213,7 +209,6 @@
 	10_79: {
 		cardInfo: {
 			imagePath: decipher/LOTR10079.jpg
-			javaClass: true
 			//parentId: 10_79
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -233,40 +228,40 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(sauron),minion
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: siteNumber(8-9)
-		        }
-		        effect: {
-		            type: exert
-		            select: all(ringBound,companion)
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: PlayCardFromHand
-		            select: choose(culture(sauron),minion)
-		            discount: -2
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(sauron),minion
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: siteNumber(8-9)
+				}
+				effect: {
+					type: exert
+					select: all(ringBound,companion)
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: PlayCardFromHand
+					select: choose(culture(sauron),minion)
+					discount: -2
+				}
+			}
 		]
 		gametext: To play, spot a [sauron] minion.<br>Each time the fellowship moves to any site 8 or 9, exert each Ring-bound companion.<br><b>Shadow:</b> Discard this condition to play a [sauron] minion. Its twilight cost is -2.
-		lore: There the last living things gave up their struggle....
+		lore: "There the last living things gave up their struggle...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -279,7 +274,6 @@
 	10_80: {
 		cardInfo: {
 			imagePath: decipher/LOTR10080.jpg
-			javaClass: true
 			//parentId: 10_80
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -297,37 +291,37 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(culture(sauron),minion)
-				    amount: {
-				        type: forEachYouCanSpot
-				        filter: controlledSite
-				        multiplier: 2
-				    }
-				    memorize: chosenMinion
+					type: modifyStrength
+					select: choose(culture(sauron),minion)
+					amount: {
+						type: forEachYouCanSpot
+						filter: controlledSite
+						multiplier: 2
+					}
+					memorize: chosenMinion
 				}
 				{
-				    type: If
-				    check: {
-				        type: haveInitiative
-				        side: shadow
-				    }
-				    true: {
-				        type: addKeyword
-				        select: memory(chosenMinion)
-				        keyword: fierce
-				        until: regroup
-				    }
+					type: If
+					check: {
+						type: haveInitiative
+						side: shadow
+					}
+					true: {
+						type: addKeyword
+						select: memory(chosenMinion)
+						keyword: fierce
+						until: regroup
+					}
 				}
 			]
 		}
 		gametext: Make a [sauron] minion strength +2 for each site you control. If you have initiative, that minion is <b>fierce</b> until the regroup phase.
-		lore: The Rammas was broken, and all the Pelennor abandoned to the Enemy.
+		lore: "The Rammas was broken, and all the Pelennor abandoned to the Enemy."
 		promotext: ""
 		alts: {
 			promos: {
@@ -340,7 +334,6 @@
 	10_81: {
 		cardInfo: {
 			imagePath: decipher/LOTR10081.jpg
-			javaClass: true
 			//parentId: 10_81
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -363,8 +356,9 @@
 		vitality: 2
 		site: 6
 		keywords: Damage+1
+
 		gametext: <b>Damage +1</b>.
-		lore: ...this stronghold had been built not to keep enemies out of Mordor, but to keep them in.
+		lore: "...this stronghold had been built not to keep enemies out of Mordor, but to keep them in."
 		promotext: ""
 		alts: {
 			promos: {
@@ -377,7 +371,6 @@
 	10_82: {
 		cardInfo: {
 			imagePath: decipher/LOTR10082.jpg
-			javaClass: true
 			//parentId: 10_82
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -401,22 +394,22 @@
 		site: 6
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: possession
-		                count: 3
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: possession
+						count: 3
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While you can spot 3 possessions, this minion is <b>fierce</b>.
-		lore: A message came: Nazgûl uneasy. Spies feared on stairs. Double vigilance. Patrol to head of Stairs."'"
+		lore: "'A message came: Nazgûl uneasy. Spies feared on stairs. Double vigilance. Patrol to head of Stairs.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -429,7 +422,6 @@
 	10_83: {
 		cardInfo: {
 			imagePath: decipher/LOTR10083.jpg
-			javaClass: true
 			//parentId: 10_83
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -453,21 +445,21 @@
 		site: 6
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(sauron),urukHai
-		        }
-		        amount: {
-		            type: forEachYouCanSpot
-		            filter: possession
-		            multiplier: -1
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: another,culture(sauron),urukHai
+				}
+				amount: {
+					type: forEachYouCanSpot
+					filter: possession
+					multiplier: -1
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>If you can spot another [sauron] Uruk-hai, this minion is twilight cost -1 for each possession you can spot.
-		lore: Any trespasser found by the guard is to be held at the tower.'
+		lore: "'Any trespasser found by the guard is to be held at the tower.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -480,7 +472,6 @@
 	10_84: {
 		cardInfo: {
 			imagePath: decipher/LOTR10084.jpg
-			javaClass: true
 			//parentId: 10_84
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -503,8 +494,9 @@
 		vitality: 2
 		site: 6
 		keywords: Damage+1
+
 		gametext: <b>Damage +1</b>.
-		lore: ...treachery had yielded up the Tower to the Lord of the Ringwraiths, and now for long years it had been held by evil things.
+		lore: "...treachery had yielded up the Tower to the Lord of the Ringwraiths, and now for long years it had been held by evil things."
 		promotext: ""
 		alts: {
 			promos: {
@@ -517,7 +509,6 @@
 	10_85: {
 		cardInfo: {
 			imagePath: decipher/LOTR10085.jpg
-			javaClass: true
 			//parentId: 10_85
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -537,44 +528,44 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-            {
-                type: modifier
-                modifier: {
-                    type: modifyStrength
-                    requires: {
-                        type: haveInitiative
-                        side: shadow
-                    }
-                    filter: your,culture(sauron),minion
-                    amount: 2
-                }
-            }
-            {
-                type: activated
-                phase: skirmish
-                cost: {
-                    type: discard
-                    select: self
-                }
-                effect: {
-                    type: modifyStrength
-                    select: choose(culture(sauron),minion)
-                    memorize: chosenMinion
-                    amount: {
-                        type: Conditional
-                        requires: {
-                            type: memoryMatches
-                            memory: chosenMinion
-                            filter: roaming
-                        }
-                        true: 4
-                        false: 2
-                    }
-                }
-            }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: your,culture(sauron),minion
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(sauron),minion)
+					memorize: chosenMinion
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenMinion
+							filter: roaming
+						}
+						true: 4
+						false: 2
+					}
+				}
+			}
 		]
 		gametext: While you have initiative, each of your [sauron] minions is strength +2.<br><b>Skirmish:</b> Discard this condition to make a [sauron] minion strength +2 (or +4 if it is roaming).
-		lore: Soon there was great peril of fire behind the wall....
+		lore: "Soon there was great peril of fire behind the wall...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -587,7 +578,6 @@
 	10_86: {
 		cardInfo: {
 			imagePath: decipher/LOTR10086.jpg
-			javaClass: true
 			//parentId: 10_86
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -611,25 +601,25 @@
 		site: 5
 		keywords: Besieger
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: {
-		            type: controlsSite
-		        }
-		        amount: -2
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        effect: {
-		            type: StackCardsFromPlay
-		            select: self
-		            where: choose(controlledSite)
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: controlsSite
+				}
+				amount: -2
+			}
+			{
+				type: activated
+				phase: regroup
+				effect: {
+					type: StackCardsFromPlay
+					select: self
+					where: choose(controlledSite)
+				}
+			}
 		]
 		gametext: <b>Besieger</b>.<br>While you control a site, this minion's twilight cost is -2.<br><b>Regroup:</b> Stack this minion on a site you control.
-		lore: ...new foes came swirling behind....
+		lore: "...new foes came swirling behind...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -642,7 +632,6 @@
 	10_87: {
 		cardInfo: {
 			imagePath: decipher/LOTR10087.jpg
-			javaClass: true
 			//parentId: 10_87
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -666,37 +655,37 @@
 		site: 5
 		keywords: Besieger
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: [
-                    {
-                        type: canSpot
-                        filter: companion
-                        count: 6
-                    }
-                    {
-                        type: canSpot
-                        filter: another,besieger
-                    }
-                ]
-                effect: [
-                    {
-                        type: playCardFromDiscard
-                        select: choose(besieger)
-                    }
-                    {
-                        type: takeControlOfSite
-                    }
-                ]
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: [
+					{
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+					{
+						type: canSpot
+						filter: another,besieger
+					}
+				]
+				effect: [
+					{
+						type: playCardFromDiscard
+						select: choose(besieger)
+					}
+					{
+						type: takeControlOfSite
+					}
+				]
+			}
 		]
 		gametext: <b>Besieger</b>.<br>When you play this minion, you may spot 6 companions and another besieger to play a besieger from your discard pile and control a site.
-		lore: File after file passed....
+		lore: "File after file passed...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -709,7 +698,6 @@
 	10_88: {
 		cardInfo: {
 			imagePath: decipher/LOTR10088.jpg
-			javaClass: true
 			//parentId: 10_88
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -734,36 +722,36 @@
 		site: 4
 		keywords: Besieger
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: wound
-		            player: free people
-		            select: choose(companion)
-		            count: {
-		                type: forEachYouCanSpot
-		                filter: SiteYouControl
-		            }
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: controlsSite
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: wound
+					player: free people
+					select: choose(companion)
+					count: {
+						type: forEachYouCanSpot
+						filter: SiteYouControl
+					}
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: controlsSite
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
 		]
 		gametext: <b>Besieger</b>.<br>When you play Gothmog, the Free Peoples player must wound a companion for each site you control.<br>While you control a site, Gothmog is <b>fierce</b>.
-		lore: Move into the City. Kill all in your path.'
+		lore: "'Move into the City. Kill all in your path.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -776,7 +764,6 @@
 	10_89: {
 		cardInfo: {
 			imagePath: decipher/LOTR10089.jpg
-			javaClass: true
 			//parentId: 10_89
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -799,32 +786,32 @@
 		itemclass: Mount
 		target: culture(sauron),orc
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyStrength
-                    filter: bearer
-                    amount: {
-                        type: Conditional
-                        requires: {
-                            type: canSpot
-                            filter: bearer,name(Gothmog)
-                        }
-                        true: {
-                            type: forEachYouCanSpot
-                            filter: controlledSite
-                            multiplier: 2
-                        }
-                        false: {
-                            type: forEachYouCanSpot
-                            filter: controlledSite
-                        }
-                    }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: bearer,name(Gothmog)
+						}
+						true: {
+							type: forEachYouCanSpot
+							filter: controlledSite
+							multiplier: 2
+						}
+						false: {
+							type: forEachYouCanSpot
+							filter: controlledSite
+						}
+					}
+				}
+			}
 		]
 		gametext: Bearer must be a [sauron] Orc.<br>For each site you control, bearer is strength +1 (or +2 if bearer is Gothmog).
-		lore: Form ranks, you maggots! Form ranks!'
+		lore: "'Form ranks, you maggots! Form ranks!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -837,7 +824,6 @@
 	10_90: {
 		cardInfo: {
 			imagePath: decipher/LOTR10090.jpg
-			javaClass: true
 			//parentId: 10_90
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -860,23 +846,23 @@
 		vitality: 3
 		site: 6
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: cantTakeWounds
-                    requires: {
-                        type: not
-                        requires: {
-                            type: phase
-                            phase: skirmish
-                        }
-                    }
-                    filter: culture(sauron),orc,hasAttached(possession)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: not
+						requires: {
+							type: phase
+							phase: skirmish
+						}
+					}
+					filter: culture(sauron),orc,hasAttached(possession)
+				}
+			}
 		]
 		gametext: Each [sauron] Orc bearing a possession cannot take wounds (except during skirmish phases).
-		lore: There came a long rolling of great drums like thunder in the mountains....
+		lore: "There came a long rolling of great drums like thunder in the mountains...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -889,7 +875,6 @@
 	10_91: {
 		cardInfo: {
 			imagePath: decipher/LOTR10091.jpg
-			javaClass: true
 			//parentId: 10_91
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -912,35 +897,35 @@
 		vitality: 3
 		site: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: [
-                    {
-                        type: cantSpot
-                        filter: another,minion
-                    }
-                    {
-                        type: twilightPoolLessThan
-                        amount: 4
-                    }
-                ]
-                effect: {
-                    type: addTwilight
-                    amount: {
-                        type: Conditional
-                        requires: {
-                            type: canSpot
-                            filter: self,roaming
-                        }
-                        true: 5
-                        false: 3
-                    }
-                }
-		    }
+			{
+				type: activated
+				phase: shadow
+				requires: [
+					{
+						type: cantSpot
+						filter: another,minion
+					}
+					{
+						type: twilightPoolLessThan
+						amount: 4
+					}
+				]
+				effect: {
+					type: addTwilight
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: self,roaming
+						}
+						true: 5
+						false: 3
+					}
+				}
+			}
 		]
 		gametext: <b>Shadow:</b> If you cannot spot another minion and there are 3 or fewer twilight tokens, add (3) (or (5) if this minion is roaming).
-		lore: The onslaught of Mordor broke like a wave on the beleaguered hills....
+		lore: "The onslaught of Mordor broke like a wave on the beleaguered hills...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -953,7 +938,6 @@
 	10_92: {
 		cardInfo: {
 			imagePath: decipher/LOTR10092.jpg
-			javaClass: true
 			//parentId: 10_92
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -980,40 +964,40 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(sauron),minion
-		        }
-		        effect: {
-		            type: if
-		            check: {
-		                type: cantSpotFPCultures
-		                amount: 3
-		            }
-		            true: {
-		                type: preventable
-		                player: free people
-		                text: Would you like to exert a companion to prevent taking control of site?
-		                cost: {
-		                    type: exert
-		                    select: choose(companion)
-		                }
-		                effect: {
-		                    type: takeControlOfSite
-		                }
-		            }
-		            false: {
-	                    type: takeControlOfSite
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(sauron),minion
+				}
+				effect: {
+					type: if
+					check: {
+						type: cantSpotFPCultures
+						amount: 3
+					}
+					true: {
+						type: preventable
+						player: free people
+						text: Would you like to exert a companion to prevent taking control of site?
+						cost: {
+							type: exert
+							select: choose(companion)
+						}
+						effect: {
+							type: takeControlOfSite
+						}
+					}
+					false: {
+						type: takeControlOfSite
+					}
+				}
+			}
 		]
 		gametext: <b>Besieger</b>. <b>Fierce</b>.<br><b>Shadow:</b> Exert this minion and spot another [sauron] minion to control a site. If you cannot spot 3 Free Peoples cultures, the Free Peoples player may exert a companion to prevent this.
 		lore: ""
@@ -1029,7 +1013,6 @@
 	10_93: {
 		cardInfo: {
 			imagePath: decipher/LOTR10093.jpg
-			javaClass: true
 			//parentId: 10_93
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1052,31 +1035,31 @@
 		vitality: 3
 		site: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: canSpotFPCultures
-		            amount: 4
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(another,culture(sauron),minion)
-		            times: 2
-		        }
-		        effect: [
-		            {
-		                type: addTwilight
-		                amount: 3
-		            }
-		            {
-		                type: drawCards
-		            }
-		        ]
-		    }
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpotFPCultures
+					amount: 4
+				}
+				cost: {
+					type: exert
+					select: choose(another,culture(sauron),minion)
+					times: 2
+				}
+				effect: [
+					{
+						type: addTwilight
+						amount: 3
+					}
+					{
+						type: drawCards
+					}
+				]
+			}
 		]
 		gametext: <b>Shadow:</b> Spot 4 Free Peoples cultures and exert another [sauron] minion twice to add (3) and draw a card.
-		lore: ...a braying of horns... shook the very stones and stunned men's ears.
+		lore: "...a braying of horns... shook the very stones and stunned men's ears."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1089,7 +1072,6 @@
 	10_94: {
 		cardInfo: {
 			imagePath: decipher/LOTR10094.jpg
-			javaClass: true
 			//parentId: 10_94
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1112,28 +1094,28 @@
 		vitality: 3
 		site: 6
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(sauron),minion
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: removeThreats
-		            amount: 2
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(condition)
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(sauron),minion
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeThreats
+					amount: 2
+				}
+				effect: {
+					type: discard
+					select: choose(condition)
+				}
+			}
 		]
 		gametext: To play, spot a [sauron] minion.<br><b>Shadow:</b> Remove 2 threats to discard a condition.
-		lore: The Captains of the West were foundering in a gathering sea.
+		lore: "The Captains of the West were foundering in a gathering sea."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1146,7 +1128,6 @@
 	10_95: {
 		cardInfo: {
 			imagePath: decipher/LOTR10095.jpg
-			javaClass: true
 			//parentId: 10_95
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1170,21 +1151,21 @@
 		site: 6
 		keywords: Enduring
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachWound
-		                filter: self
-		                multiplier: 2
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachWound
+						filter: self
+						multiplier: 2
+					}
+				}
+			}
 		]
 		gametext: <b>Enduring</b>.<br>For each wound on this minion, it is strength +2.
-		lore: All about the hills the hosts of Mordor raged.
+		lore: "All about the hills the hosts of Mordor raged."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1197,7 +1178,6 @@
 	10_96: {
 		cardInfo: {
 			imagePath: decipher/LOTR10096.jpg
-			javaClass: true
 			//parentId: 10_96
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1217,62 +1197,62 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-                    type: takesWound
-                    filter: roaming,culture(sauron),minion
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: sauron
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert an Uruk-hai
-		                Discard a {sauron} minion
-		            ]
-		            effects: [
-		                {
-		                    type: exert
-		                    select: choose(urukHai)
-		                }
-		                {
-		                    type: discard
-		                    select: choose(culture(sauron),minion)
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: sauron
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: RemoveCultureTokens
-		            select: self
-		            count: 2
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(sauron),minion)
-		            amount: 2
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: takesWound
+					filter: roaming,culture(sauron),minion
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: sauron
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: choice
+					texts: [
+						Exert an Uruk-hai
+						Discard a {sauron} minion
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(urukHai)
+						}
+						{
+							type: discard
+							select: choose(culture(sauron),minion)
+						}
+					]
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: sauron
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					select: self
+					count: 2
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(sauron),minion)
+					amount: 2
+				}
+			}
 		]
 		gametext: Each time a roaming [sauron] minion takes a wound, you may add a [sauron] token here.<br><b>Regroup:</b> Exert an Uruk-hai or discard a [sauron] minion to add a [sauron] token here.<br><b>Skirmish:</b> Remove 2 [sauron] tokens from here to make a [sauron] minion strength +2.
-		lore: ...even fear by night had scarcely over-counted them.
+		lore: "...even fear by night had scarcely over-counted them."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1285,7 +1265,6 @@
 	10_97: {
 		cardInfo: {
 			imagePath: decipher/LOTR10097.jpg
-			javaClass: true
 			//parentId: 10_97
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1303,24 +1282,24 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
 				type: addsBurden
 			}
 			requires: {
-			    type: canSpot
-			    filter: culture(sauron),minion
+				type: canSpot
+				filter: culture(sauron),minion
 			}
 			effect: [
 				{
-				    type: addBurdens
+					type: addBurdens
 				}
 			]
 		}
 		gametext: If a burden is added, spot a [sauron] minion to add an additional burden.
-		lore: ...I do not choose now to do what I came to do. I will not do this deed.'
+		lore: "'...I do not choose now to do what I came to do. I will not do this deed.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1333,7 +1312,6 @@
 	10_98: {
 		cardInfo: {
 			imagePath: decipher/LOTR10098.jpg
-			javaClass: true
 			//parentId: 10_98
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1351,7 +1329,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -1359,22 +1337,22 @@
 				filter: side(free people),possession
 			}
 			cost: {
-			    type: discardFromHand
-			    forced: false
-			    select: choose(culture(sauron),minion)
+				type: discardFromHand
+				forced: false
+				select: choose(culture(sauron),minion)
 			}
 			effect: [
 				{
-				    type: addModifier
-				    modifier: {
-				        type: cantPlayCards
-				        filter: side(free people)
-				    }
+					type: addModifier
+					modifier: {
+						type: cantPlayCards
+						filter: side(free people)
+					}
 				}
 			]
 		}
 		gametext: If the Free Peoples player plays a possession, discard a [sauron] minion from hand to prevent him or her from playing any more cards until the end of this phase.
-		lore: ...they began to throw missiles marvelously high, so that they passed right above the battlement and fell thudding within the first circle of the City....
+		lore: "...they began to throw missiles marvelously high, so that they passed right above the battlement and fell thudding within the first circle of the City...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1387,7 +1365,6 @@
 	10_99: {
 		cardInfo: {
 			imagePath: decipher/LOTR10099.jpg
-			javaClass: true
 			//parentId: 10_99
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1412,21 +1389,21 @@
 		site: 6
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: losesSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(character)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: losesSkirmish
+					filter: self
+				}
+				effect: {
+					type: exert
+					select: choose(character)
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>Each time Shagrat loses a skirmish, you may exert a character.
-		lore: If you think I'm so damaged that it's safe to flout me, you're mistaken.'
+		lore: "'If you think I'm so damaged that it's safe to flout me, you're mistaken.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1439,7 +1416,6 @@
 	10_100: {
 		cardInfo: {
 			imagePath: decipher/LOTR10100.jpg
-			javaClass: true
 			//parentId: 10_100
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1457,36 +1433,36 @@
 		culture: Sauron
 		twilight: 1
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			cost: {
-			    type: exert
-			    select: choose(culture(sauron),minion)
+				type: exert
+				select: choose(culture(sauron),minion)
 			},
 			effect: [
 				{
-				    type: choice
-				    texts: [
-				        Return a condition
-				        Return 2 {shire} conditions
-				    ]
-				    effects: [
-				        {
-				            type: returnToHand
-				            select: choose(side(free people),condition)
-				        }
-				        {
-				            type: returnToHand
-				            select: choose(side(free people),condition,culture(shire))
-				            count: 2
-				        }
-				    ]
+					type: choice
+					texts: [
+						Return a condition
+						Return 2 {shire} conditions
+					]
+					effects: [
+						{
+							type: returnToHand
+							select: choose(side(free people),condition)
+						}
+						{
+							type: returnToHand
+							select: choose(side(free people),condition,culture(shire))
+							count: 2
+						}
+					]
 				}
 			]
 		}
 		gametext: Exert a [sauron] minion to return a Free Peoples condition to its owner's hand (or 2 if both are [shire] conditions).
-		lore: Go slow! Bring no fire to this place while Faramir lives! Do nothing until Gandalf comes!'
+		lore: "'Go slow! Bring no fire to this place while Faramir lives! Do nothing until Gandalf comes!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1499,7 +1475,6 @@
 	10_101: {
 		cardInfo: {
 			imagePath: decipher/LOTR10101.jpg
-			javaClass: true
 			//parentId: 10_101
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1526,27 +1501,27 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(sauron),minion
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: possession
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(sauron),minion
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: possession
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>. <b>Fierce</b>. To play, spot a [sauron] minion.<br>This minion is strength +1 for each possession you can spot.
-		lore: ...these fell creatures would bite the throats of those that they threw down.
+		lore: "...these fell creatures would bite the throats of those that they threw down."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1559,7 +1534,6 @@
 	10_102: {
 		cardInfo: {
 			imagePath: decipher/LOTR10102.jpg
-			javaClass: true
 			//parentId: 10_102
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1581,17 +1555,17 @@
 		itemclass: Hand weapon
 		target: culture(sauron),minion
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: bearer,urukHai
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer,urukHai
+					amount: 2
+				}
+			}
 		]
 		gametext: Bearer must be a [sauron] minion.<br>If bearer is an Uruk-hai, it is strength +2.
-		lore: A sharp edge for the sharp-natured.
+		lore: "A sharp edge for the sharp-natured."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1604,7 +1578,6 @@
 	10_103: {
 		cardInfo: {
 			imagePath: decipher/LOTR10103.jpg
-			javaClass: true
 			//parentId: 10_103
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1624,34 +1597,34 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(sauron),minion
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: moves
-		        }
-		        requires: {
-		            type: phase
-		            phase: regroup
-		        }
-		        cost: {
-		            type: removeThreats
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(unbound,companion)
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(sauron),minion
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: wound
+					select: choose(unbound,companion)
+				}
+			}
 		]
 		gametext: To play, spot a [sauron] minion.<br>Each time the fellowship moves during the regroup phase, you may remove a threat to wound an unbound companion.
-		lore: ...as from some great window immeasurably high there stabbed northward a flame of red, the flicker of a piercing Eye....
+		lore: "...as from some great window immeasurably high there stabbed northward a flame of red, the flicker of a piercing Eye...."
 		promotext: ""
 		alts: {
 			promos: {

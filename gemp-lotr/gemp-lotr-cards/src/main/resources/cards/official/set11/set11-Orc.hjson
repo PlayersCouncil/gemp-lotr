@@ -3,7 +3,6 @@
 	11_106: {
 		cardInfo: {
 			imagePath: decipher/LOTR11106.jpg
-			javaClass: true
 			//parentId: 11_106
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,50 +20,50 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			requires: [
-                {
-                    type: canSpot
-                    filter: your,culture(orc),minion
-                }
-            ]
+				{
+					type: canSpot
+					filter: your,culture(orc),minion
+				}
+			]
 			effect: [
 				{
-				    type: if
-				    check: {
-				        type: location
-				        filter: battleground
-				    }
-				    true: {
-				        type: choice
-				        texts: [
-				            Play from discard pile
-				            Play from draw deck
-				        ]
-				        effects: [
-				            {
-				                type: playCardFromDiscard
-				                select: choose(culture(orc),possession)
-				            }
-				            {
-				                type: playCardFromDrawDeck
-				                select: choose(culture(orc),possession)
-                                showAll: true
-                                shuffle: true
-				            }
-				        ]
-				    }
-				    false: {
-                        type: playCardFromDiscard
-                        select: choose(culture(orc),possession)
-				    }
+					type: if
+					check: {
+						type: location
+						filter: battleground
+					}
+					true: {
+						type: choice
+						texts: [
+							Play from discard pile
+							Play from draw deck
+						]
+						effects: [
+							{
+								type: playCardFromDiscard
+								select: choose(culture(orc),possession)
+							}
+							{
+								type: playCardFromDrawDeck
+								select: choose(culture(orc),possession)
+								showAll: true
+								shuffle: true
+							}
+						]
+					}
+					false: {
+						type: playCardFromDiscard
+						select: choose(culture(orc),possession)
+					}
 				}
 			]
 		}
 		gametext: Spot your [orc] minion to play an [orc] possession from your discard pile (or, if that minion is at a battleground site, from your draw deck or discard pile).
-		lore: Fashioned by the hands of Orcs, or plundered from the hands of defeated enemies, the weaponry of Mordor is bounteous.
+		lore: "Fashioned by the hands of Orcs, or plundered from the hands of defeated enemies, the weaponry of Mordor is bounteous."
 		promotext: ""
 		alts: {
 			promos: {
@@ -77,7 +76,6 @@
 	11_107: {
 		cardInfo: {
 			imagePath: decipher/LOTR11107.jpg
-			javaClass: true
 			//parentId: 11_107
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -100,30 +98,30 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: choose(another,culture(orc),minion)
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: {
-		                type: Conditional
-		                requires: {
-		                    type: canSpot
-		                    filter: self,inSkirmishAgainst(companion,maxResistance(4))
-		                }
-		                true: 4
-		                false: 2
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(another,culture(orc),minion)
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: self,inSkirmishAgainst(companion,maxResistance(4))
+						}
+						true: 4
+						false: 2
+					}
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Exert another [orc] minion to make this minion strength +2 (or +4 if this minion is skirmishing a companion who has resistance 4 or less).
-		lore: Fiercely tribal, rival Orc bands unite only against a more hated enemy.
+		lore: "Fiercely tribal, rival Orc bands unite only against a more hated enemy."
 		promotext: ""
 		alts: {
 			promos: {
@@ -136,7 +134,6 @@
 	11_108: {
 		cardInfo: {
 			imagePath: decipher/LOTR11108.jpg
-			javaClass: true
 			//parentId: 11_108
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -163,35 +160,35 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),minion
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: assignment
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: assignFpCharacterToSkirmish
-		            fpCharacter: choose(companion,hasAttached(artifact))
-		            minion: self
-		            memorizeFPCharacter: chosenCompanion
-		            preventText: Would you like to discard an artifact to prevent the assignment of {chosenCompanion} to {self}?
-		            preventCost: {
-		                type: discard
-		                select: choose(artifact)
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+				}
+			}
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: assignFpCharacterToSkirmish
+					fpCharacter: choose(companion,hasAttached(artifact))
+					minion: self
+					memorizeFPCharacter: chosenCompanion
+					preventText: Would you like to discard an artifact to prevent the assignment of {chosenCompanion} to {self}?
+					preventCost: {
+						type: discard
+						select: choose(artifact)
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>. <b>Fierce</b>. To play, spot an [orc] minion.<br><b>Assignment:</b> Exert this minion to assign it to a companion bearing an artifact. The Free Peoples player may discard an artifact from play to prevent this.
-		lore: Some held that they were not Trolls, but giant Orcs....
+		lore: "Some held that they were not Trolls, but giant Orcs...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -204,7 +201,6 @@
 	11_109: {
 		cardInfo: {
 			imagePath: decipher/LOTR11109.jpg
-			javaClass: true
 			//parentId: 11_109
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -225,30 +221,30 @@
 		itemclass: Armor
 		target: culture(orc),minion
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: lurker
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(orc),minion)
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: lurker
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(orc),minion)
+					amount: 2
+				}
+			}
 		]
 		gametext: Bearer must be an [orc] minion.<br>Bearer is a <b>lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Skirmish:</b> Exert bearer to make an [orc] minion strength +2.
-		lore: One cannot easily discern Orc armor from weapon.
+		lore: "One cannot easily discern Orc armor from weapon."
 		promotext: ""
 		alts: {
 			promos: {
@@ -261,7 +257,6 @@
 	11_110: {
 		cardInfo: {
 			imagePath: decipher/LOTR11110.jpg
-			javaClass: true
 			//parentId: 11_110
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -279,43 +274,43 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(orc),minion
+				type: canSpot
+				filter: culture(orc),minion
 			}
 			effect: [
 				{
-				    type: revealHand
-				    hand: free people
-				    memorize: revealedCards
+					type: revealHand
+					hand: free people
+					memorize: revealedCards
 				}
 				{
-				    type: choice
-				    player: free people
-				    texts: [
-				        Discard a Free Peoples event
-				        Add a burden
-				    ]
-				    effects: [
-				        {
-				            type: discardFromHand
-				            forced: false
-				            hand: free people
-				            player: free people
-				            select: choose(memory(revealedCards),side(free people),event)
-				        }
-				        {
-				            type: addBurdens
-				        }
-				    ]
+					type: choice
+					player: free people
+					texts: [
+						Discard a Free Peoples event
+						Add a burden
+					]
+					effects: [
+						{
+							type: discardFromHand
+							forced: false
+							hand: free people
+							player: free people
+							select: choose(memory(revealedCards),side(free people),event)
+						}
+						{
+							type: addBurdens
+						}
+					]
 				}
 			]
 		}
 		gametext: Spot an [orc] minion to reveal the Free Peoples player's hand. The Free Peoples player chooses to either discard a revealed Free Peoples event or add a burden.
-		lore: Now it comes to it, I don't like parting with it at all, I may say.'
+		lore: "'Now it comes to it, I don't like parting with it at all, I may say.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -328,7 +323,6 @@
 	11_111: {
 		cardInfo: {
 			imagePath: decipher/LOTR11111.jpg
-			javaClass: true
 			//parentId: 11_111
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -351,8 +345,9 @@
 		vitality: 2
 		site: 4
 		keywords: Toil 2
+
 		gametext: <b>Toil 2</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -2.)</helper>
-		lore: A few Orcs are veterans of single combats to settle disputes in the mountain tribes.
+		lore: "A few Orcs are veterans of single combats to settle disputes in the mountain tribes."
 		promotext: ""
 		alts: {
 			promos: {
@@ -365,7 +360,6 @@
 	11_112: {
 		cardInfo: {
 			imagePath: decipher/LOTR11112.jpg
-			javaClass: true
 			//parentId: 11_112
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -383,22 +377,22 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(culture(orc),minion)
-				    amount: {
-				        type: forEachYouCanSpot
-				        filter: underground,site
-				    }
+					type: modifyStrength
+					select: choose(culture(orc),minion)
+					amount: {
+						type: forEachYouCanSpot
+						filter: underground,site
+					}
 				}
 			]
 		}
 		gametext: Make an [orc] minion strength +1 for each underground site you can spot.
-		lore: They brandished spears and scimitars which shone red as blood in the firelight.
+		lore: "They brandished spears and scimitars which shone red as blood in the firelight."
 		promotext: ""
 		alts: {
 			promos: {
@@ -411,7 +405,6 @@
 	11_113: {
 		cardInfo: {
 			imagePath: decipher/LOTR11113.jpg
-			javaClass: true
 			//parentId: 11_113
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -434,20 +427,20 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyStrength
-                    filter: self
-                    amount: {
-                        type: forEachYouCanSpot
-                        filter: companion,maxResistance(5)
-                    }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion,maxResistance(5)
+					}
+				}
+			}
 		]
 		gametext: This minion is strength +1 for each companion who has resistance 5 or less.
-		lore: The smell of human flesh is often enough to frenzy an Orc warrior.
+		lore: "The smell of human flesh is often enough to frenzy an Orc warrior."
 		promotext: ""
 		alts: {
 			promos: {
@@ -460,7 +453,6 @@
 	11_114: {
 		cardInfo: {
 			imagePath: decipher/LOTR11114.jpg
-			javaClass: true
 			//parentId: 11_114
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -480,37 +472,37 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),minion
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: exerted
-		            filter: companion
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: {
-		                type: Conditional
-		                requires: {
-		                    type: canSpot
-		                    filter: companion
-		                    count: 6
-		                }
-		                true: 2
-		                false: 1
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: exerted
+					filter: companion
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: companion
+							count: 6
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
 		]
 		gametext: To play, spot an [orc] minion.<br>Each time a companion exerts, you may add (1) (or (2) if you can spot 6 companions).
-		lore: But soon there were few left in Minas Tirith who had the heart to stand up and defy the hosts of Mordor.
+		lore: "But soon there were few left in Minas Tirith who had the heart to stand up and defy the hosts of Mordor."
 		promotext: ""
 		alts: {
 			promos: {
@@ -523,7 +515,6 @@
 	11_115: {
 		cardInfo: {
 			imagePath: decipher/LOTR11115.jpg
-			javaClass: true
 			//parentId: 11_115
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -546,21 +537,21 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyStrength
-                    requires: {
-                        type: location
-                        filter: underground
-                    }
-                    filter: self
-                    amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: underground
+					}
+					filter: self
+					amount: 2
+				}
+			}
 		]
 		gametext: While this minion is at an underground site, it is strength +2.
-		lore: The spiny helms forged by the Orcs of Moria can inflict as much damage as their scimitars.
+		lore: "The spiny helms forged by the Orcs of Moria can inflict as much damage as their scimitars."
 		promotext: ""
 		alts: {
 			promos: {
@@ -573,7 +564,6 @@
 	11_116: {
 		cardInfo: {
 			imagePath: decipher/LOTR11116.jpg
-			javaClass: true
 			//parentId: 11_116
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -596,21 +586,21 @@
 		vitality: 1
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyStrength
-                    requires: {
-                        type: location
-                        filter: underground
-                    }
-                    filter: self
-                    amount: 3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: underground
+					}
+					filter: self
+					amount: 3
+				}
+			}
 		]
 		gametext: While this minion is at an underground site, it is strength +3.
-		lore: The vast tunnels of Khazad-dûm are the veins through which a foul Orc ichor can flow unchecked.
+		lore: "The vast tunnels of Khazad-dûm are the veins through which a foul Orc ichor can flow unchecked."
 		promotext: ""
 		alts: {
 			promos: {
@@ -623,7 +613,6 @@
 	11_117: {
 		cardInfo: {
 			imagePath: decipher/LOTR11117.jpg
-			javaClass: true
 			//parentId: 11_117
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -646,21 +635,21 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyStrength
-                    requires: {
-                        type: location
-                        filter: underground
-                    }
-                    filter: self
-                    amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: underground
+					}
+					filter: self
+					amount: 2
+				}
+			}
 		]
 		gametext: While this minion is at an underground site, it is strength +2.
-		lore: The great Dwarf mansion of Khazad-dûm is now more commonly known by other, darker names.
+		lore: "The great Dwarf mansion of Khazad-dûm is now more commonly known by other, darker names."
 		promotext: ""
 		alts: {
 			promos: {
@@ -673,7 +662,6 @@
 	11_118: {
 		cardInfo: {
 			imagePath: decipher/LOTR11118.jpg
-			javaClass: true
 			//parentId: 11_118
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -691,34 +679,34 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(orc),minion
-			    count: 2
+				type: canSpot
+				filter: culture(orc),minion
+				count: 2
 			}
 			effect: [
 				{
-				    type: preventable
-				    player: free people
-				    text: Would you like to discard the top 6 cards of your draw deck to prevent discarding a condition?
-				    cost: {
-				        type: discardTopCardsFromDeck
-				        forced: false
-				        deck: free people
-				        count: 6
-				    }
-				    effect: {
-				        type: discard
-				        select: choose(condition)
-				    }
+					type: preventable
+					player: free people
+					text: Would you like to discard the top 6 cards of your draw deck to prevent discarding a condition?
+					cost: {
+						type: discardTopCardsFromDeck
+						forced: false
+						deck: free people
+						count: 6
+					}
+					effect: {
+						type: discard
+						select: choose(condition)
+					}
 				}
 			]
 		}
 		gametext: Spot 2 [orc] minions to discard a condition from play. The Free Peoples player may discard the top 6 cards of his or her draw deck to prevent this.
-		lore: ...yet another weapon, swifter than hunger, the Lord of the Dark Tower had....
+		lore: "...yet another weapon, swifter than hunger, the Lord of the Dark Tower had...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -731,7 +719,6 @@
 	11_119: {
 		cardInfo: {
 			imagePath: decipher/LOTR11119.jpg
-			javaClass: true
 			//parentId: 11_119
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -755,20 +742,20 @@
 		site: 4
 		keywords: Lurker
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: companion,notAssignedToSkirmish
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion,notAssignedToSkirmish
+					}
+				}
+			}
 		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>This minion is strength +1 for each companion who is not assigned to a skirmish.
-		lore: Orcs are seldom intimidated, and often goaded, by superior forces.
+		lore: "Orcs are seldom intimidated, and often goaded, by superior forces."
 		promotext: ""
 		alts: {
 			promos: {
@@ -781,7 +768,6 @@
 	11_120: {
 		cardInfo: {
 			imagePath: decipher/LOTR11120.jpg
-			javaClass: true
 			//parentId: 11_120
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -804,18 +790,18 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: assignment
-		        effect: {
-		            type: assignFpCharacterToSkirmish
-		            fpCharacter: choose(unbound,companion,maxResistance(4))
-		            minion: self
-		        }
-		    }
+			{
+				type: activated
+				phase: assignment
+				effect: {
+					type: assignFpCharacterToSkirmish
+					fpCharacter: choose(unbound,companion,maxResistance(4))
+					minion: self
+				}
+			}
 		]
 		gametext: <b>Assignment:</b> Assign this minion to an unbound companion who has resistance 4 or less.
-		lore: Orcs relish the kill more than the fight itself, and will often rush to engage a weakened foe.
+		lore: "Orcs relish the kill more than the fight itself, and will often rush to engage a weakened foe."
 		promotext: ""
 		alts: {
 			promos: {
@@ -828,7 +814,6 @@
 	11_121: {
 		cardInfo: {
 			imagePath: decipher/LOTR11121.jpg
-			javaClass: true
 			//parentId: 11_121
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -851,31 +836,31 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-                    type: played
-                    filter: self
-		        }
-		        requires: [
-		            {
-		                type: canSpot
-		                filter: another,culture(orc),minion
-		            }
-		            {
-		                type: canSpot
-		                filter: companion,maxResistance(3)
-		            }
-		        ]
-		        effect: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: [
+					{
+						type: canSpot
+						filter: another,culture(orc),minion
+					}
+					{
+						type: canSpot
+						filter: companion,maxResistance(3)
+					}
+				]
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
 		]
 		gametext: When you play this minion, you may spot another [orc] minion and a companion who has resistance 3 or less to add (2).
-		lore: Though most Orcs are small in stature, seldom can one be found without another nearby.
+		lore: "Though most Orcs are small in stature, seldom can one be found without another nearby."
 		promotext: ""
 		alts: {
 			promos: {
@@ -888,7 +873,6 @@
 	11_122: {
 		cardInfo: {
 			imagePath: decipher/LOTR11122.jpg
-			javaClass: true
 			//parentId: 11_122
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -911,34 +895,34 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: location
-		                filter: underground
-		            }
-		            filter: character,inSkirmishAgainst(self)
-		            amount: -2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: companion
-		                count: 6
-		            }
-		            filter: character,inSkirmishAgainst(culture(orc),minion)
-		            amount: -2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: underground
+					}
+					filter: character,inSkirmishAgainst(self)
+					amount: -2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+					filter: character,inSkirmishAgainst(culture(orc),minion)
+					amount: -2
+				}
+			}
 		]
 		gametext: While this minion is at an underground site, each character skirmishing it is strength -2.<br>While you can spot 6 companions, each character skirmishing an [orc] minion is strength -2.
-		lore: More enemies seem only to further fuel their rage.
+		lore: "More enemies seem only to further fuel their rage."
 		promotext: ""
 		alts: {
 			promos: {
@@ -951,7 +935,6 @@
 	11_123: {
 		cardInfo: {
 			imagePath: decipher/LOTR11123.jpg
-			javaClass: true
 			//parentId: 11_123
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -971,28 +954,28 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-                    type: canSpot
-                    filter: culture(orc),minion
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: movesFrom
-		            filter: underground
-		        }
-		        effect: {
-		            type: putCardsFromDiscardIntoHand
-		            select: choose(culture(orc),minion)
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: movesFrom
+					filter: underground
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(orc),minion)
+				}
+			}
 		]
 		gametext: To play, spot an [orc] minion.<br>Each time the fellowship moves from an underground site, you may take an [orc] minion from your discard pile into hand.
-		lore: ...he saw swarming black figures: there seemed to be hundreds of orcs.
+		lore: "...he saw swarming black figures: there seemed to be hundreds of orcs."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1005,7 +988,6 @@
 	11_124: {
 		cardInfo: {
 			imagePath: decipher/LOTR11124.jpg
-			javaClass: true
 			//parentId: 11_124
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1028,21 +1010,21 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        cost: {
-		            type: exert
-		            select: all(companion,maxResistance(4))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				cost: {
+					type: exert
+					select: all(companion,maxResistance(4))
+				}
+			}
 		]
 		gametext: Each time this minion wins a skirmish, you may exert each companion who has resistance 4 or less.
-		lore: The foul Orcs who slaughtered the last of Balin's followers still thrive in the halls of Khazad-dûm and the surrounding countryside.
+		lore: "The foul Orcs who slaughtered the last of Balin's followers still thrive in the halls of Khazad-dûm and the surrounding countryside."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1055,7 +1037,6 @@
 	11_125: {
 		cardInfo: {
 			imagePath: decipher/LOTR11125.jpg
-			javaClass: true
 			//parentId: 11_125
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1078,21 +1059,21 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: putCardsFromDiscardIntoHand
-		            select: choose(culture(orc),minion)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(orc),minion)
+				}
+			}
 		]
 		gametext: When you play this minion, you may take an [orc] event from your discard pile into hand.
-		lore: Saruman's workers would exploit any resource to prepare for the coming battle.
+		lore: "Saruman's workers would exploit any resource to prepare for the coming battle."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1105,7 +1086,6 @@
 	11_126: {
 		cardInfo: {
 			imagePath: decipher/LOTR11126.jpg
-			javaClass: true
 			//parentId: 11_126
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1128,23 +1108,23 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: constantlyCheck
-		        }
-		        requires: {
-		            type: cantSpot
-		            filter: another,culture(orc),minion
-		        }
-		        effect: {
-		            type: discard
-		            select: self
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+				}
+				requires: {
+					type: cantSpot
+					filter: another,culture(orc),minion
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
 		]
 		gametext: When you cannot spot another [orc] minion, discard this minion from play.
-		lore: Orcs that would only seek out violence at random on their own were brought together to serve Sauron's purpose.
+		lore: "Orcs that would only seek out violence at random on their own were brought together to serve Sauron's purpose."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1157,7 +1137,6 @@
 	11_127: {
 		cardInfo: {
 			imagePath: decipher/LOTR11127.jpg
-			javaClass: true
 			//parentId: 11_127
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1180,31 +1159,31 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: preventable
-		            player: free people
-		            text: Would you like to discard Free Peoples event from hand to prevent adding burden?
-		            cost: {
-		                type: discardFromHand
-		                forced: false
-		                player: free people
-		                hand: free people
-		                select: choose(side(free people),event)
-		            }
-		            effect: {
-		                type: addBurdens
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: preventable
+					player: free people
+					text: Would you like to discard Free Peoples event from hand to prevent adding burden?
+					cost: {
+						type: discardFromHand
+						forced: false
+						player: free people
+						hand: free people
+						select: choose(side(free people),event)
+					}
+					effect: {
+						type: addBurdens
+					}
+				}
+			}
 		]
 		gametext: Each time this minion wins a skirmish, add a burden unless the Free Peoples player discards a Free Peoples event from hand.
-		lore: There was a rush of hoarse laughter, like the fall of sliding stones into a pit....
+		lore: "There was a rush of hoarse laughter, like the fall of sliding stones into a pit...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1217,7 +1196,6 @@
 	11_128: {
 		cardInfo: {
 			imagePath: decipher/LOTR11128.jpg
-			javaClass: true
 			//parentId: 11_128
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1239,23 +1217,23 @@
 		itemclass: Hand weapon
 		target: culture(orc),minion
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: assignedAgainst
-		            filter: self
-		            against: companion
-		            memorizeAgainst: companion
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(memory(companion),companion)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: assignedAgainst
+					filter: self
+					against: companion
+					memorizeAgainst: companion
+				}
+				effect: {
+					type: exert
+					select: choose(memory(companion),companion)
+				}
+			}
 		]
 		gametext: Bearer must be an [orc] minion.<br>Each time bearer is assigned to skirmish a companion, you may exert that companion.
-		lore: Though Orcs will employ a wide variety of weaponry, they tend to favor long, curved blades.
+		lore: "Though Orcs will employ a wide variety of weaponry, they tend to favor long, curved blades."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1268,7 +1246,6 @@
 	11_129: {
 		cardInfo: {
 			imagePath: decipher/LOTR11129.jpg
-			javaClass: true
 			//parentId: 11_129
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1291,23 +1268,23 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: assignedAgainst
-		            filter: self
-		            against: companion,maxResistance(5)
-		            memorizeAgainst: companion
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(memory(companion),companion,maxResistance(5))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: assignedAgainst
+					filter: self
+					against: companion,maxResistance(5)
+					memorizeAgainst: companion
+				}
+				effect: {
+					type: exert
+					select: choose(memory(companion),companion,maxResistance(5))
+				}
+			}
 		]
 		gametext: Each time this minion is assigned to skirmish a companion who has resistance 5 or less, exert that companion.
-		lore: Larger Orcs are strong enough to run for many miles, and can tire out their prey before attacking.
+		lore: "Larger Orcs are strong enough to run for many miles, and can tire out their prey before attacking."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1320,7 +1297,6 @@
 	11_130: {
 		cardInfo: {
 			imagePath: decipher/LOTR11130.jpg
-			javaClass: true
 			//parentId: 11_130
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1342,21 +1318,21 @@
 		itemclass: Hand weapon
 		target: culture(orc),minion
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(companion)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: exert
+					select: choose(companion)
+				}
+			}
 		]
 		gametext: Bearer must be an [orc] Orc.<br>When you play this possession, you may exert a companion.
-		lore: The strongest members of an Orc tribe often wield hammers rather than blades.
+		lore: "The strongest members of an Orc tribe often wield hammers rather than blades."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1369,7 +1345,6 @@
 	11_131: {
 		cardInfo: {
 			imagePath: decipher/LOTR11131.jpg
-			javaClass: true
 			//parentId: 11_131
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1392,27 +1367,27 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),minion
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: addBurdens
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
 		]
 		gametext: To play, spot an [orc] minion.<br><b>Regroup:</b> Exert this minion to add a burden.
-		lore: Some of the trees they just cut down and leave to rot – orc-mischief that....'
+		lore: "'Some of the trees they just cut down and leave to rot – orc-mischief that....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1425,7 +1400,6 @@
 	11_132: {
 		cardInfo: {
 			imagePath: decipher/LOTR11132.jpg
-			javaClass: true
 			//parentId: 11_132
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1448,21 +1422,21 @@
 		vitality: 1
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: putCardsFromDiscardIntoHand
-		            select: choose(culture(orc),condition)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(orc),condition)
+				}
+			}
 		]
 		gametext: When you play this minion, you may take an [orc] condition from your discard pile into hand.
-		lore: There is always a smoke rising from Isengard these days.'
+		lore: "'There is always a smoke rising from Isengard these days.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1475,7 +1449,6 @@
 	11_133: {
 		cardInfo: {
 			imagePath: decipher/LOTR11133.jpg
-			javaClass: true
 			//parentId: 11_133
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1498,43 +1471,43 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-                    type: played
-                    filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(orc),minion
-		        }
-		        effect: [
-		            {
-		                type: revealTopCardsOfDrawDeck
-		                deck: free people
-		                memorize: revealedCard
-		            }
-		            {
-		                type: If
-		                check: {
-		                    type: memoryMatches
-		                    memory: revealedCard
-		                    filter: side(shadow)
-		                }
-		                true: {
-		                    type: addTwilight
-		                    amount: {
-		                        type: twilightCostInMemory
-		                        memory: revealedCard
-		                    }
-		                }
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(orc),minion
+				}
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						deck: free people
+						memorize: revealedCard
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: revealedCard
+							filter: side(shadow)
+						}
+						true: {
+							type: addTwilight
+							amount: {
+								type: twilightCostInMemory
+								memory: revealedCard
+							}
+						}
+					}
+				]
+			}
 		]
 		gametext: When you play this minion, you may spot another [orc] minion to reveal the top card of the Free Peoples player's deck. If it is a Shadow card, add (X), where X is its twilight cost.
-		lore: Saruman's Orcs labor day and night to provide him with the resources he needs to wage war.
+		lore: "Saruman's Orcs labor day and night to provide him with the resources he needs to wage war."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1547,7 +1520,6 @@
 	11_134: {
 		cardInfo: {
 			imagePath: decipher/LOTR11134.jpg
-			javaClass: true
 			//parentId: 11_134
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1570,31 +1542,31 @@
 		vitality: 1
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: [
-		            {
-		                type: aboutToBeKilled
-		                filter: self
-		            }
-		            {
-		                type: aboutToDiscard
-		                filter: self
-		            }
-		        ]
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(orc)
-		        }
-		        effect: {
-		            type: putCardsFromPlayOnTopOfDeck
-		            select: self
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: [
+					{
+						type: aboutToBeKilled
+						filter: self
+					}
+					{
+						type: aboutToDiscard
+						filter: self
+					}
+				]
+				requires: {
+					type: canSpot
+					filter: another,culture(orc)
+				}
+				effect: {
+					type: putCardsFromPlayOnTopOfDeck
+					select: self
+				}
+			}
 		]
 		gametext: Each time this minion is about to be killed or discarded from play, you may spot another [orc] card to place this minion on top of your draw deck instead.
-		lore: An enemy can do little worse to an Orc than what it would willingly have done to itself.
+		lore: "An enemy can do little worse to an Orc than what it would willingly have done to itself."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1607,7 +1579,6 @@
 	11_135: {
 		cardInfo: {
 			imagePath: decipher/LOTR11135.jpg
-			javaClass: true
 			//parentId: 11_135
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1634,36 +1605,36 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),minion
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: preventable
-		            player: free people
-		            text: Would you like to reveal Free Peoples event from hand to prevent adding burden?
-		            cost: {
-		                type: revealCardsFromHand
-		                hand: free people
-		                select: choose(side(free people),event)
-		            }
-		            effect: {
-		                type: addBurdens
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: preventable
+					player: free people
+					text: Would you like to reveal Free Peoples event from hand to prevent adding burden?
+					cost: {
+						type: revealCardsFromHand
+						hand: free people
+						select: choose(side(free people),event)
+					}
+					effect: {
+						type: addBurdens
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>. <b>Fierce</b>. To play, spot an [orc] minion.<br>When you play this minion, add a burden unless the Free Peoples player reveals a Free Peoples event from his or her hand.
-		lore: The mammoth battering ram Grond required equally mammoth strength to wield it.
+		lore: "The mammoth battering ram Grond required equally mammoth strength to wield it."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1676,7 +1647,6 @@
 	11_136: {
 		cardInfo: {
 			imagePath: decipher/LOTR11136.jpg
-			javaClass: true
 			//parentId: 11_136
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1700,22 +1670,22 @@
 		site: 4
 		keywords: Lurker
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: removeTwilight
-		            amount: 2
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(orc),minion)
-		            amount: 1
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeTwilight
+					amount: 2
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(orc),minion)
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Skirmish:</b> Remove (2) to make an [orc] minion strength +1.
-		lore: Orcs use numbers to fell a powerful foe, though it would be generous to think of it as working together.
+		lore: "Orcs use numbers to fell a powerful foe, though it would be generous to think of it as working together."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1728,7 +1698,6 @@
 	11_137: {
 		cardInfo: {
 			imagePath: decipher/LOTR11137.jpg
-			javaClass: true
 			//parentId: 11_137
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1751,31 +1720,31 @@
 		vitality: 1
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: [
-		            {
-		                type: location
-		                filter: underground
-		            }
-		            {
-		                type: canSpot
-		                filter: another,culture(orc),minion
-		            }
-		        ]
-		        effect: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: [
+					{
+						type: location
+						filter: underground
+					}
+					{
+						type: canSpot
+						filter: another,culture(orc),minion
+					}
+				]
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
 		]
 		gametext: When you play this minion at an underground site, you may spot another [orc] minion to add (2).
-		lore: But it was not an echo, for when they halted it pattered on for a little all by itself, and then grew still.
+		lore: "But it was not an echo, for when they halted it pattered on for a little all by itself, and then grew still."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1788,7 +1757,6 @@
 	11_138: {
 		cardInfo: {
 			imagePath: decipher/LOTR11138.jpg
-			javaClass: true
 			//parentId: 11_138
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1811,17 +1779,17 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: currentSite
-		            keyword: underground
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: currentSite
+					keyword: underground
+				}
+			}
 		]
 		gametext: The fellowship's current site gains <b>underground</b>.
-		lore: It is a mark of evil things that came in the Great Darkness that they cannot abide the Sun....'
+		lore: "'It is a mark of evil things that came in the Great Darkness that they cannot abide the Sun....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1834,7 +1802,6 @@
 	11_139: {
 		cardInfo: {
 			imagePath: decipher/LOTR11139.jpg
-			javaClass: true
 			//parentId: 11_139
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1854,27 +1821,27 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: exert
-		            select: choose(culture(orc),minion)
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: shadow
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: 1
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(orc),minion)
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: shadow
+				}
+				effect: {
+					type: addTwilight
+					amount: 1
+				}
+			}
 		]
 		gametext: To play, exert an [orc] minion.<br>At the start of the Shadow phase, add (1).
-		lore: Even victory does not long slake the Orkish thirst for blood. It merely drives them onward to a new confrontation.
+		lore: "Even victory does not long slake the Orkish thirst for blood. It merely drives them onward to a new confrontation."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1887,7 +1854,6 @@
 	11_140: {
 		cardInfo: {
 			imagePath: decipher/LOTR11140.jpg
-			javaClass: true
 			//parentId: 11_140
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1905,29 +1871,29 @@
 		culture: Orc
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(culture(orc),minion)
-				    memorize: chosenMinion
-				    amount: {
-				        type: Conditional
-				        requires: {
-				            type: memoryMatches
-				            memory: chosenMinion
-				            filter: lurker
-				        }
-				        true: 4
-				        false: 2
-				    }
+					type: modifyStrength
+					select: choose(culture(orc),minion)
+					memorize: chosenMinion
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenMinion
+							filter: lurker
+						}
+						true: 4
+						false: 2
+					}
 				}
 			]
 		}
 		gametext: Make an [orc] minion strength +2 (or +4 if it is a lurker).
-		lore: Weakened by the Sun, Orcs thrive in darkness and shadow.
+		lore: "Weakened by the Sun, Orcs thrive in darkness and shadow."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1940,7 +1906,6 @@
 	11_141: {
 		cardInfo: {
 			imagePath: decipher/LOTR11141.jpg
-			javaClass: true
 			//parentId: 11_141
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1958,22 +1923,20 @@
 		culture: Orc
 		twilight: 8
 		type: Event
-		timeword: Assignment
-		keywords: [
-			Toil 3
-		]
+		timewords: Assignment
+		keywords: Toil 3
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: assignFpCharacterToSkirmish
-				    fpCharacter: choose(companion,not(ringBearer))
-				    minion: choose(culture(orc),minion)
+					type: assignFpCharacterToSkirmish
+					fpCharacter: choose(companion,not(ringBearer))
+					minion: choose(culture(orc),minion)
 				}
 			]
 		}
 		gametext: <b>Toil 3</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -3.)</helper><br>Assign an [orc] minion to a companion (except the Ring-bearer).
-		lore: Easily caught by the heat of battle, Orc soldiers often break formation and attack where their bloodlust takes them.
+		lore: "Easily caught by the heat of battle, Orc soldiers often break formation and attack where their bloodlust takes them."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1986,7 +1949,6 @@
 	11_142: {
 		cardInfo: {
 			imagePath: decipher/LOTR11142.jpg
-			javaClass: true
 			//parentId: 11_142
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2009,25 +1971,25 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: location
-		            filter: underground
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(companion,inSkirmishAgainst(self))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: location
+					filter: underground
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: exert
+					select: choose(companion,inSkirmishAgainst(self))
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> If this minion is at an underground site, exert it to exert a companion it is skirmishing.
-		lore: In the rush of battle, some Orcs can carry on heedless of their own wounds until their enemy is vanquished.
+		lore: "In the rush of battle, some Orcs can carry on heedless of their own wounds until their enemy is vanquished."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2040,7 +2002,6 @@
 	11_143: {
 		cardInfo: {
 			imagePath: decipher/LOTR11143.jpg
-			javaClass: true
 			//parentId: 11_143
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2063,28 +2024,28 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(orc),minion
-		        }
-		        effect: {
-		            type: playSite
-		            number: {
-		                type: currentSiteNumber
-		            }
-		            filter: underground
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(orc),minion
+				}
+				effect: {
+					type: playSite
+					number: {
+						type: currentSiteNumber
+					}
+					filter: underground
+				}
+			}
 		]
 		gametext: When you play this minion, you may spot another [orc] minion to replace the fellowship's current site with an underground site from your adventure deck.
-		lore: Some Orcs have learned basic tracking skills.
+		lore: "Some Orcs have learned basic tracking skills."
 		promotext: ""
 		alts: {
 			promos: {
