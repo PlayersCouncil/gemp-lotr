@@ -85,6 +85,7 @@
 		strength: 10
 		vitality: 3
 		site: 5
+		keywords: Damage+1
 		effects: [
 			{
 				type: modifier
@@ -929,7 +930,10 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		keywords: Support Area
+		keywords: [
+			Search
+			Support Area
+		]
 		effects: [
 			{
 				type: Modifier

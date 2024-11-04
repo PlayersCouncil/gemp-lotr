@@ -28,45 +28,39 @@ public class Card_V2_062_Tests
 	}
 
 	@Test
-	public void LugburzSpotterStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NoOnesGoingtoSaveYouNowStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Lugburz Spotter
+		 * Name: No One's Going to Save You Now
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Sauron
-		 * Twilight Cost: 2
-		 * Type: Minion
-		 * Subtype: Orc
-		 * Strength: 6
-		 * Vitality: 2
-		 * Site Number: 6
-		 * Game Text: Tracker. 
-		* 	If this minion's site number is 1 or less, it is strength +5. 
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Skirmish
+		 * Game Text: Search.
+		* 	Make a [Sauron] tracker strength +1 for each search card you can spot (limit +5).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Lugburz Spotter", card.getBlueprint().getTitle());
+		assertEquals("No One's Going to Save You Now", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getSiteNumber());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
+		assertTrue(scn.hasKeyword(card, Keyword.SEARCH));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void LugburzSpotterTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NoOnesGoingtoSaveYouNowTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -76,6 +70,6 @@ public class Card_V2_062_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

@@ -28,39 +28,46 @@ public class Card_V2_059_Tests
 	}
 
 	@Test
-	public void NoOnesGoingToSaveYouNowStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GrishnakhStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: No One's Going To Save You Now
-		 * Unique: False
+		 * Name: Grishnakh, Servant of Lugburz
+		 * Unique: True
 		 * Side: Shadow
 		 * Culture: Sauron
-		 * Twilight Cost: 1
-		 * Type: Event
-		 * Subtype: Skirmish
-		 * Game Text: Search.
-		* 	Make a [Sauron] tracker strength +1 for each search card you can spot (limit +5).
+		 * Twilight Cost: 4
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 11
+		 * Vitality: 3
+		 * Site Number: 6
+		 * Game Text: Tracker.
+		* 	The site number of each [sauron] orc is -3. 
+		* 	Skirmish: Exert Grishnakh to make a skirmishing [sauron] Orc with a site number of 1 or less damage +1.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("No One's Going To Save You Now", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals("Grishnakh", card.getBlueprint().getTitle());
+		assertEquals("Servant of Lugburz", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
-		assertTrue(scn.hasKeyword(card, Keyword.SEARCH));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.ORC, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
+		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(11, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void NoOnesGoingToSaveYouNowTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GrishnakhTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -70,6 +77,6 @@ public class Card_V2_059_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(4, scn.GetTwilight());
 	}
 }

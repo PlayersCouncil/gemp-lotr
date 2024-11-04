@@ -28,48 +28,37 @@ public class Card_V2_043_Tests
 	}
 
 	@Test
-	public void TheodenStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AllHopeofSecrecyLostStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Theoden, Last of his House
-		 * Unique: True
-		 * Side: Free Peoples
-		 * Culture: Rohan
-		 * Twilight Cost: 3
-		 * Type: Companion
-		 * Subtype: Man
-		 * Strength: 6
-		 * Vitality: 3
-		 * Resistance: 6
-		 * Signet: Theoden
-		 * Game Text: Valiant.
-		 * While 2 other valiant companions assigned to skirmishes, Theoden is strength +1.
-		 * Regroup: Exert Theoden and spot 2 other valiant companions to liberate a site.
+		 * Name: All Hope of Secrecy Lost
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Raider
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Response
+		 * Game Text: At the start of the Shadow phase, spot 25 twilight tokens and remove 10 to make the minion archery total +6 until the regroup phase, then remove this from the game. This event may be played from your draw deck or discard pile.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Theoden", card.getBlueprint().getTitle());
-		assertEquals("Last of His House", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.VALIANT));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
+		assertEquals("All Hope of Secrecy Lost", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TheodenTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AllHopeofSecrecyLostTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -79,6 +68,6 @@ public class Card_V2_043_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

@@ -28,47 +28,37 @@ public class Card_V2_014_Tests
 	}
 
 	@Test
-	public void GandalfStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RememberYourOldStrengthStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Gandalf, Lathspell
-		 * Unique: True
+		 * Name: Remember Your Old Strength
+		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Gandalf
-		 * Twilight Cost: 4
-		 * Type: Companion
-		 * Subtype: Wizard
-		 * Strength: 7
-		 * Vitality: 4
-		 * Resistance: 6
-		 * Signet: Theoden
-		 * Game Text: Each mounted companion gains <b>valiant</b>.
-		 * 	Response: If a minion's special ability is used (except during a skirmish), spot 2 valiant companions
-		 * 	and exert Gandalf to prevent that and wound that minion.
+		 * Twilight Cost: 2
+		 * Type: Event
+		 * Subtype: Maneuver
+		 * Game Text: Exert Gandalf to make Theoden and each valiant companion strength +1 until the regroup phase (or strength +2 if every unbound companion is valiant).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Gandalf", card.getBlueprint().getTitle());
-		assertEquals("Lathspell", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertEquals("Remember Your Old Strength", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.WIZARD, card.getBlueprint().getRace());
-		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(7, card.getBlueprint().getStrength());
-		assertEquals(4, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void GandalfTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RememberYourOldStrengthTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -78,6 +68,6 @@ public class Card_V2_014_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

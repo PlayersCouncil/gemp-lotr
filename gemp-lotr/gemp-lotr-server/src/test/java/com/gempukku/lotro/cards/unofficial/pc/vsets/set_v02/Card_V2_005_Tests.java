@@ -28,46 +28,37 @@ public class Card_V2_005_Tests
 	}
 
 	@Test
-	public void HaldirStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NoMoreShallWeWaitStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Haldir, Naith Commander
-		 * Unique: True
-		 * Side: Free Peoples
-		 * Culture: Elven
-		 * Twilight Cost: 2
-		 * Type: Companion
-		 * Subtype: Elf
-		 * Strength: 6
-		 * Vitality: 3
-		 * Resistance: 6
-		 * Game Text: Valiant. 
-		* 	While Haldir bears a ranged weapon, each valiant Elf is strength +1 and does not add to the fellowship archery total.
-		* 	Each time an [elven] possession is about to be discarded by a card effect, you may exert Haldir to prevent that.
+		 * Name: No More Shall We Wait
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Dunland
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Response
+		 * Game Text: At the start of the Shadow phase, spot 25 twilight tokens and remove 10 to take control of 3 sites, then remove this from the game. This event may be played from your draw deck or discard pile.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Haldir", card.getBlueprint().getTitle());
-		assertEquals("Naith Commander", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.ELF, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.VALIANT));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals("No More Shall We Wait", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.DUNLAND, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void HaldirTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NoMoreShallWeWaitTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -77,6 +68,6 @@ public class Card_V2_005_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

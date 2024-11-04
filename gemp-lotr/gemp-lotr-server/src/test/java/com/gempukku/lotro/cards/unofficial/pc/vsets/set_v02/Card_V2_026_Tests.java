@@ -28,42 +28,43 @@ public class Card_V2_026_Tests
 	}
 
 	@Test
-	public void HoundofIsengardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsengardGruntStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Hound of Isengard
+		 * Name: Isengard Grunt
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Isengard
 		 * Twilight Cost: 2
-		 * Type: Possession
-		 * Subtype: Mount
-		 * Strength: 1
-		 * Vitality: 1
-		 * Game Text: Bearer must be a Warg-rider.
-		 * When you play this possession from hand, you may take an [isengard] skirmish event into hand from your discard pile.
+		 * Type: Minion
+		 * Subtype: Orc
+		 * Strength: 5
+		 * Vitality: 3
+		 * Site Number: 4
+		 * Game Text: Skirmish: Exert this minion to prevent an [isengard] Orc from being overwhelmed unless its strength is tripled.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Hound of Isengard", card.getBlueprint().getTitle());
+		assertEquals("Isengard Grunt", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MOUNT));
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.ORC, card.getBlueprint().getRace());
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(1, card.getBlueprint().getStrength());
-		assertEquals(1, card.getBlueprint().getVitality());
+		assertEquals(5, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void HoundofIsengardTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsengardGruntTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

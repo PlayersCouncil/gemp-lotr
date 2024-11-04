@@ -28,39 +28,38 @@ public class Card_V2_072_Tests
 	}
 
 	@Test
-	public void PalantirofOrthancStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesolationofSarumanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Palantir of Orthanc, Corrupted Relic
+		 * Name: Desolation of Saruman
 		 * Unique: False
-		 * Side: Shadow
-		 * Culture: Isengard
-		 * Twilight Cost: 0
-		 * Type: Artifact
-		 * Subtype: Palantir
-		 * Game Text: Shadow: Discard two [isengard] cards from hand to play this card from your draw deck.
-		* 	Each time the Fellowship moves you may draw a card for companion you can spot over 5.
-		* 	Each time the fellowship moves, if you can spot more than (15), each [isengard] minion is strength +2.
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 8
+		 * Type: Site
+		 * Subtype: 
+		 * Site Number: 8T
+		 * Game Text: When the fellowship moves to this site, each player may discard a card from their opponent's support area. 
 		*/
 
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(8);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Palantir of Orthanc", card.getBlueprint().getTitle());
-		assertEquals("Corrupted Relic", card.getBlueprint().getSubtitle());
+		assertEquals("Desolation of Saruman", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PALANTIR));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertEquals(8, card.getBlueprint().getTwilightCost());
+		assertEquals(8, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void PalantirofOrthancTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesolationofSarumanTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -70,6 +69,6 @@ public class Card_V2_072_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(8, scn.GetTwilight());
 	}
 }

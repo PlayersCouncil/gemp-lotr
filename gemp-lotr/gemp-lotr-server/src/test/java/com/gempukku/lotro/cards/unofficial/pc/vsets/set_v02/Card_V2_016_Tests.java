@@ -38,7 +38,7 @@ public class Card_V2_016_Tests
 
 		/**
 		 * Set: V2
-		 * Name: Aragorn, Last Hope Of Men
+		 * Name: Aragorn, Last Hope of Men
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Gondor
@@ -48,10 +48,10 @@ public class Card_V2_016_Tests
 		 * Strength: 7
 		 * Vitality: 4
 		 * Resistance: 6
-		 * Signet: Theoden
+		 * Signet: Gandalf
 		 * Game Text: Valiant.
 		* 	At the start of each turn you may spot another valiant companion to draw a card.
-		* 	Skirmish: Exert Aragorn to make a valiant companion strength +2.
+		* 	Skirmish: Exert Aragorn to make a skirmishing valiant companion strength +2.
 		*/
 
 		var scn = GetScenario();
@@ -70,7 +70,7 @@ public class Card_V2_016_Tests
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
 	@Test

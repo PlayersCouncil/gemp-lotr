@@ -28,37 +28,37 @@ public class Card_V2_041_Tests
 	}
 
 	@Test
-	public void ThroughFireandWaterStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ToHighestPeakStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Through Fire and Water
+		 * Name: To Highest Peak
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Moria
-		 * Twilight Cost: 0
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Each time a unique [moria] minion wins a skirmish, you may remove a threat to exert a companion.
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Regroup
+		 * Game Text: Discard X [Moria] minions to add X threats. The Free Peoples player may exert X companions to prevent this.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Through Fire and Water", card.getBlueprint().getTitle());
+		assertEquals("To Highest Peak", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasTimeword(card, Timeword.REGROUP));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void ThroughFireandWaterTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ToHighestPeakTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -68,6 +68,6 @@ public class Card_V2_041_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

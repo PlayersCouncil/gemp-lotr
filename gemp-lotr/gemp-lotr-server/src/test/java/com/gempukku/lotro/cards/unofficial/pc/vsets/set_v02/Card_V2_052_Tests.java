@@ -28,40 +28,38 @@ public class Card_V2_052_Tests
 	}
 
 	@Test
-	public void DoNotTrusttoHopeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NowforRuinStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Do Not Trust to Hope
-		 * Unique: False
+		 * Name: Now for Ruin
+		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Rohan
 		 * Twilight Cost: 1
 		 * Type: Condition
-		 * Subtype: 
-		 * Strength: 2
-		 * Game Text: Bearer must be a [rohan] companion.
-		* 	 Bearer is <b>valiant</b>.
-		* 	At the start of the regroup phase, wound bearer or discard this condition.
+		 * Subtype: Support area
+		 * Game Text: Each time a minion is killed, spot 2 valiant companions to add a [rohan] token here.
+		* 	Each time there are 3 [rohan] tokens here, remove all tokens here to play a [rohan] condition or event from your discard pile. The Shadow player may then play a minion from their discard pile. 
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Do Not Trust to Hope", card.getBlueprint().getTitle());
+		assertEquals("Now for Ruin", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DoNotTrusttoHopeTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NowforRuinTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

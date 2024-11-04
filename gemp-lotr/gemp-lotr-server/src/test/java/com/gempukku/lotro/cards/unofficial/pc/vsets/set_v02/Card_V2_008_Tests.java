@@ -28,45 +28,46 @@ public class Card_V2_008_Tests
 	}
 
 	@Test
-	public void ArwenStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HaldirStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Arwen, Lady of Rivendell
+		 * Name: Haldir, Naith Commander
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Elven
 		 * Twilight Cost: 2
-		 * Type: Ally
+		 * Type: Companion
 		 * Subtype: Elf
 		 * Strength: 6
 		 * Vitality: 3
-		 * Site Number: 3F
-		 * Game Text: Aragorn is strength +1.
-		* 	If Aragorn is about to be killed you may exert Arwen to heal Aragorn.
-		* 	While Arwen is exhausted, Aragorn is defender +1.
+		 * Resistance: 6
+		 * Game Text: Valiant. 
+		* 	While Haldir bears a ranged weapon, each valiant Elf is strength +1 and does not add to the fellowship archery total.
+		* 	Each time an [elven] possession is about to be discarded by a card effect, you may exert Haldir to prevent that.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Arwen", card.getBlueprint().getTitle());
-		assertEquals("Lady of Rivendell", card.getBlueprint().getSubtitle());
+		assertEquals("Haldir", card.getBlueprint().getTitle());
+		assertEquals("Naith Commander", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
-		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.ELF, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.VALIANT));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
-		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void ArwenTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HaldirTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

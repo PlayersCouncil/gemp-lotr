@@ -28,39 +28,39 @@ public class Card_V2_068_Tests
 	}
 
 	@Test
-	public void HelmsTowerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheodredsTombStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Helm's Tower
+		 * Name: Theodred's Tomb
 		 * Unique: False
 		 * Side: 
 		 * Culture: 
-		 * Shadow Number: 6
-		 * Type: Site
+		 * Shadow Number: 0
+		 * Type: Sanctuary
 		 * Subtype: 
-		 * Site Number: 7T
-		 * Game Text: Battleground. While you can spot 6 companions, each character is damage +1. 
+		 * Site Number: 3T
+		 * Game Text: Sanctuary. Fellowship: Play a valiant character to draw a card.
 		*/
 
 		var scn = GetScenario();
 
 		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(7);
+		//var card = scn.GetFreepsSite(3);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Helm's Tower", card.getBlueprint().getTitle());
+		assertEquals("Theodred's Tomb", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.BATTLEGROUND));
-		assertEquals(6, card.getBlueprint().getTwilightCost());
-		assertEquals(7, card.getBlueprint().getSiteNumber());
+		assertTrue(scn.hasKeyword(card, Keyword.SANCTUARY));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void HelmsTowerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheodredsTombTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -70,6 +70,6 @@ public class Card_V2_068_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(6, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

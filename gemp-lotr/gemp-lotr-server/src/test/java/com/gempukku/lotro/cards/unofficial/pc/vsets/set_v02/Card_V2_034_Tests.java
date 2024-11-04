@@ -28,45 +28,47 @@ public class Card_V2_034_Tests
 	}
 
 	@Test
-	public void SarumanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UrukOccupierStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Saruman, Mind of Metal and Wheels
-		 * Unique: True
+		 * Name: Uruk Occupier
+		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Isengard
-		 * Twilight Cost: 4
+		 * Twilight Cost: 3
 		 * Type: Minion
-		 * Subtype: Wizard
+		 * Subtype: Uruk-hai
 		 * Strength: 8
-		 * Vitality: 4
-		 * Site Number: 4
-		 * Game Text: Saruman may not be assigned to a skirmish.
-		* 	Companions skirmishing [Isengard] orcs lose all damage bonuses.
-		* 	If an [isengard] orc is about to take a wound, you may exert Saruman to prevent this. 
+		 * Vitality: 3
+		 * Site Number: 5
+		 * Game Text: Damage +1.
+		* 	This minion is strength +1 for each battleground you control.
+		* 	Shadow: If you control 3 battlegrounds, discard a card from hand to play this minion from your discard pile.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Saruman", card.getBlueprint().getTitle());
-		assertEquals("Mind of Metal and Wheels", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertEquals("Uruk Occupier", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.WIZARD, card.getBlueprint().getRace());
-		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
-		assertEquals(4, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void SarumanTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UrukOccupierTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -76,6 +78,6 @@ public class Card_V2_034_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(3, scn.GetTwilight());
 	}
 }

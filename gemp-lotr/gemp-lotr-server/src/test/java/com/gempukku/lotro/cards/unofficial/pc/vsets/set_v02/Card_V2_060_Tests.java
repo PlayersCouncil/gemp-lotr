@@ -28,46 +28,45 @@ public class Card_V2_060_Tests
 	}
 
 	@Test
-	public void GrishnakhStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void LugburzSpotterStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Grishnakh, Servant of Lugburz
-		 * Unique: True
+		 * Name: Lugburz Spotter
+		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Sauron
-		 * Twilight Cost: 4
+		 * Twilight Cost: 2
 		 * Type: Minion
 		 * Subtype: Orc
-		 * Strength: 11
-		 * Vitality: 3
+		 * Strength: 6
+		 * Vitality: 2
 		 * Site Number: 6
-		 * Game Text: Tracker.
-		 *  The site number of each [sauron] orc is -3.
-		 *  Skirmish: Exert Grishnakh to make a [sauron] Orc with a site number of 1 or less damage +1.
+		 * Game Text: Tracker. 
+		* 	If this minion's site number is 1 or less, it is strength +5. 
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Grishnakh", card.getBlueprint().getTitle());
-		assertEquals("Servant of Lugburz", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertEquals("Lugburz Spotter", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
 		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
-		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(11, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void GrishnakhTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void LugburzSpotterTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -77,6 +76,6 @@ public class Card_V2_060_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

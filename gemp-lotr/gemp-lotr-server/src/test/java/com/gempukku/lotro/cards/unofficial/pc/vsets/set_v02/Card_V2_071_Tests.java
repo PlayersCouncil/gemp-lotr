@@ -28,40 +28,39 @@ public class Card_V2_071_Tests
 	}
 
 	@Test
-	public void FriendshipofTheThreeKindredsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HelmsTowerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Friendship of The Three Kindreds
+		 * Name: Helm's Tower
 		 * Unique: False
-		 * Side: Free Peoples
-		 * Culture: Elven
-		 * Twilight Cost: 0
-		 * Type: Condition
+		 * Side: 
+		 * Culture: 
+		 * Shadow Number: 6
+		 * Type: Site
 		 * Subtype: 
-		 * Resistance: 2
-		 * Game Text: Bearer must be an [elven], [dwarven] or [gondor] ringbearer.
-		* 	While you can spot an [elven], [dwarven] or [gondor] ringbearer, of a different culture to bearer, bearer is resistance +2.
-		* 	At the end of each turn add a threat or discard this condition. 
+		 * Site Number: 7T
+		 * Game Text: Battleground. While you can spot 6 companions, each character is damage +1. 
 		*/
 
 		var scn = GetScenario();
 
+		//Use this once you have set the deck up properly
+		//var card = scn.GetFreepsSite(7);
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Friendship of The Three Kindreds", card.getBlueprint().getTitle());
+		assertEquals("Helm's Tower", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertEquals(0, card.getBlueprint().getTwilightCost());
-		assertEquals(2, card.getBlueprint().getResistance());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.BATTLEGROUND));
+		assertEquals(6, card.getBlueprint().getTwilightCost());
+		assertEquals(7, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void FriendshipofTheThreeKindredsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void HelmsTowerTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -71,6 +70,6 @@ public class Card_V2_071_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(6, scn.GetTwilight());
 	}
 }

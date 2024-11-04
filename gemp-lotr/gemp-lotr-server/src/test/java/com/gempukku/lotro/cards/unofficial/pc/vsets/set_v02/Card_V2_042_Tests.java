@@ -28,38 +28,37 @@ public class Card_V2_042_Tests
 	}
 
 	@Test
-	public void AncientEvilStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ValiantbutFoolishStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Ancient Evil
+		 * Name: Valiant but Foolish
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Moria
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Each time a [moria] minion wins a skirmish, you may stack it here.
-		* 	Shadow: Play a unique minion stacked here, it is twilight cost -1 for each other card stacked here. Discard this condition.
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Response
+		 * Game Text: At the start of the Shadow phase, spot 25 twilight tokens and remove 10 to take up to 4 Shadow conditions into hand from your draw deck or discard pile, then remove this from the game. This event may be played from your draw deck or discard pile.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Ancient Evil", card.getBlueprint().getTitle());
+		assertEquals("Valiant but Foolish", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void AncientEvilTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ValiantbutFoolishTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -69,6 +68,6 @@ public class Card_V2_042_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

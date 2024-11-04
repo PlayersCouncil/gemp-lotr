@@ -28,47 +28,45 @@ public class Card_V2_029_Tests
 	}
 
 	@Test
-	public void BerserkFanaticStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SarumanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Berserk Fanatic
-		 * Unique: False
+		 * Name: Saruman, Mind of Metal and Wheels
+		 * Unique: True
 		 * Side: Shadow
 		 * Culture: Isengard
-		 * Twilight Cost: 3
+		 * Twilight Cost: 4
 		 * Type: Minion
-		 * Subtype: Uruk-hai
+		 * Subtype: Wizard
 		 * Strength: 8
-		 * Vitality: 3
-		 * Site Number: 5
-		 * Game Text: Damage +1. 
-		* 	The minion is strength+1 for each wound on each character in its skirmish.
-		* 	When this minion dies in a skirmish, you may remove 2 [isengard] tokens from a machine to wound a character it was skirmishing. 
+		 * Vitality: 4
+		 * Site Number: 4
+		 * Game Text: Saruman may not be assigned to a skirmish.
+		* 	Companions skirmishing [Isengard] Orcs lose all <b>damage</b> bonuses.
+		* 	Response: If an [isengard] Orc is about to take a wound, exert Saruman to prevent that wound. 
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Berserk Fanatic", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals("Saruman", card.getBlueprint().getTitle());
+		assertEquals("Mind of Metal and Wheels", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(Race.WIZARD, card.getBlueprint().getRace());
+		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void BerserkFanaticTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SarumanTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -78,6 +76,6 @@ public class Card_V2_029_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(4, scn.GetTwilight());
 	}
 }

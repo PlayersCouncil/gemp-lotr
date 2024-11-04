@@ -28,47 +28,39 @@ public class Card_V2_028_Tests
 	}
 
 	@Test
-	public void BerserkDeathseekerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MachineryofWarStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Berserk Deathseeker
-		 * Unique: True
+		 * Name: Machinery of War
+		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Isengard
-		 * Twilight Cost: 5
-		 * Type: Minion
-		 * Subtype: Uruk-hai
-		 * Strength: 10
-		 * Vitality: 3
-		 * Site Number: 5
-		 * Game Text: Damage +1.
-		* 	This minion is strength +1 for each wound on each character in its skirmish.
-		* 	When this minion is killed, add 3 [isengard] tokens to an [isengard] machine.
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: When you play this condition, spot a Wizard to add 2 [isengard] tokens here.
+		* 	Each time an [isengard] Orc loses a skirmish, add an [isengard] token here.
+		* 	Skirmish: Discard this condition (or remove 2 [isengard] tokens here) to cancel a skirmish involving an [isengard] Orc.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Berserk Deathseeker", card.getBlueprint().getTitle());
+		assertEquals("Machinery of War", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertEquals(5, card.getBlueprint().getTwilightCost());
-		assertEquals(10, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void BerserkDeathseekerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MachineryofWarTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -78,6 +70,6 @@ public class Card_V2_028_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(5, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

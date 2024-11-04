@@ -28,26 +28,25 @@ public class Card_V2_011_Tests
 	}
 
 	@Test
-	public void ToHonorThatAllegianceStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ToHonourThatAllegianceStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: To Honor That Allegiance
+		 * Name: To Honour That Allegiance
 		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Elven
 		 * Twilight Cost: 1
 		 * Type: Event
 		 * Subtype: Fellowship
-		 * Game Text: Exert a valiant companion (or spot 2 valiant Elves) to take a valiant [elven] companion
-		 * or [elven] possession into hand from your draw deck.
+		 * Game Text: Exert a valiant companion (or spot 2 valiant Elves) to take a valiant [elven] companion or [elven] possession into hand from your draw deck.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("To Honor That Allegiance", card.getBlueprint().getTitle());
+		assertEquals("To Honour That Allegiance", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
@@ -59,7 +58,7 @@ public class Card_V2_011_Tests
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void ToHonorThatAllegianceTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ToHonourThatAllegianceTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

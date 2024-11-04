@@ -28,44 +28,38 @@ public class Card_V2_018_Tests
 	}
 
 	@Test
-	public void DenethorStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BackontheMenuStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Denethor, Formidable Father
-		 * Unique: True
-		 * Side: Free Peoples
-		 * Culture: Gondor
-		 * Twilight Cost: 3
-		 * Type: Ally
-		 * Subtype: Man
-		 * Strength: 5
-		 * Vitality: 3
-		 * Site Number: 3K
-		 * Game Text: While you can spot the same number of threats as companions, each [gondor] companion is strength -2.
-		* 	At the start of the maneuver phase, you may add 2 threats to make a [gondor] companion defender +1 and strength +2 until the regroup phase (or add 1 threat if that companion is Boromir).
+		 * Name: Back on the Menu
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 0
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Skirmish: Discard a [Sauron] tracker to make an [Isengard] tracker strength +2.
+		* 	Skirmish: Exert an [isengard] tracker to make a [sauron] tracker <b>fierce</b> until the regroup phase. 
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Denethor", card.getBlueprint().getTitle());
-		assertEquals("Formidable Father", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(5, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.KING, 3)));
+		assertEquals("Back on the Menu", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void DenethorTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BackontheMenuTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -75,6 +69,6 @@ public class Card_V2_018_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

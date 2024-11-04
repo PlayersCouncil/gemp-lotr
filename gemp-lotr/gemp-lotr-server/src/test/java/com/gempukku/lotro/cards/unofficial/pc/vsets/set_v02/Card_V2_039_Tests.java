@@ -51,7 +51,7 @@ public class Card_V2_039_Tests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Each time the fellowship moves, you may reveal The Balrog from your hand to add a threat.
-		* 	Shadow: Remove X threats to play the Balrog from your discard pile, its twilight cost is -1 for each threat removed. 
+		* 	Shadow: Remove X threats.  Play The Balrog from your discard pile; its twilight cost is -X.
 		*/
 
 		var scn = GetScenario();

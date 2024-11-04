@@ -28,47 +28,38 @@ public class Card_V2_031_Tests
 	}
 
 	@Test
-	public void UrukOccupierStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TrailofSavageryStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Uruk Occupier
-		 * Unique: False
+		 * Name: Trail of Savagery
+		 * Unique: True
 		 * Side: Shadow
 		 * Culture: Isengard
-		 * Twilight Cost: 3
-		 * Type: Minion
-		 * Subtype: Uruk-hai
-		 * Strength: 8
-		 * Vitality: 3
-		 * Site Number: 5
-		 * Game Text: Damage +1.
-		* 	This minion is strength +1 for each battleground you control.
-		* 	Shadow: If you control 3 battlegrounds, you may discard a card from hand to play this minion from your discard pile.
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Each site you control gains <b>battleground</b>.
+		* 	Skirmish: Remove 2 [isengard] tokens from a machine to cancel a skirmish involving an Uruk-hai.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Uruk Occupier", card.getBlueprint().getTitle());
+		assertEquals("Trail of Savagery", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void UrukOccupierTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TrailofSavageryTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -78,6 +69,6 @@ public class Card_V2_031_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

@@ -28,39 +28,46 @@ public class Card_V2_013_Tests
 	}
 
 	@Test
-	public void SarumansHospitalityStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GandalfStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Saruman's Hospitality
-		 * Unique: False
+		 * Name: Gandalf, Lathspell
+		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Gandalf
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: 
-		 * Strength: 1
-		 * Game Text: Bearer must be a Hobbit companion. Limit one per bearer. 
-		* 	Each time the fellowship moves, spot 3 pipes of different cultures to make the number of Free Peoples cultures that can be counted -1 until the regroup phase. 
+		 * Twilight Cost: 4
+		 * Type: Companion
+		 * Subtype: Wizard
+		 * Strength: 7
+		 * Vitality: 4
+		 * Resistance: 6
+		 * Signet: Theoden
+		 * Game Text: Each mounted companion gains <b>valiant</b>.
+		* 	Response: If a minion's special ability is used (except during a skirmish), spot 2 valiant companions and exert Gandalf to prevent that and wound that minion. 
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Saruman's Hospitality", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals("Gandalf", card.getBlueprint().getTitle());
+		assertEquals("Lathspell", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(1, card.getBlueprint().getStrength());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.WIZARD, card.getBlueprint().getRace());
+		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(7, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void SarumansHospitalityTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GandalfTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -70,6 +77,6 @@ public class Card_V2_013_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(4, scn.GetTwilight());
 	}
 }

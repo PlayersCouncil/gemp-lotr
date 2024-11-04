@@ -28,46 +28,37 @@ public class Card_V2_044_Tests
 	}
 
 	@Test
-	public void ErkenbrandStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ThreatsonAllSidesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Erkenbrand, Kinsman of the House of Eorl
-		 * Unique: True
-		 * Side: Free Peoples
-		 * Culture: Rohan
-		 * Twilight Cost: 5
-		 * Type: Companion
-		 * Subtype: Man
-		 * Strength: 7
-		 * Vitality: 3
-		 * Resistance: 6
-		 * Signet: Gandalf
-		 * Game Text: When you play Erkenbrand, remove up to 3 non-unique [rohan] companions in the dead pile from the game. 
-		* 	Each exhausted companion gains <b>valiant</b>.
+		 * Name: Threats on All Sides
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Wraith
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Response
+		 * Game Text: At the start of the Shadow phase, spot 25 twilight tokens and remove 10 to add up to 9 threats, then remove this from the game. This event may be played from your draw deck or discard pile.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Erkenbrand", card.getBlueprint().getTitle());
-		assertEquals("Kinsman of the House of Eorl", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertEquals(5, card.getBlueprint().getTwilightCost());
-		assertEquals(7, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
+		assertEquals("Threats on All Sides", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void ErkenbrandTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ThreatsonAllSidesTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -77,6 +68,6 @@ public class Card_V2_044_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(5, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

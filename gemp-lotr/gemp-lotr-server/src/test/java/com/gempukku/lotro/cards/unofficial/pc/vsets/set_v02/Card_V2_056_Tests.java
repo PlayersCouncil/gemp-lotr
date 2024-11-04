@@ -28,29 +28,29 @@ public class Card_V2_056_Tests
 	}
 
 	@Test
-	public void TrappedinitsGazeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TotheKingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Trapped in its Gaze
+		 * Name: To the King!
 		 * Unique: False
-		 * Side: Shadow
-		 * Culture: Sauron
+		 * Side: Free Peoples
+		 * Culture: Rohan
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Skirmish
-		 * Game Text: Exert a Wraith to make a twilight minion strength +2. If that minion wins its skirmish you may exert it to add a burden.
+		 * Game Text: Spot an unassigned valiant companion to have them replace an unbound companion in a skirmish (and make them damage +1 if that unbound companion is Theoden). 
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Trapped in its Gaze", card.getBlueprint().getTitle());
+		assertEquals("To the King!", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
@@ -58,7 +58,7 @@ public class Card_V2_056_Tests
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TrappedinitsGazeTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TotheKingTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

@@ -203,6 +203,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
+		keywords: valiant
 		effects: [
 			{
 				type: modifier

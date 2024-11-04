@@ -28,40 +28,38 @@ public class Card_V2_037_Tests
 	}
 
 	@Test
-	public void UneasyAllianceStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AncientEvilStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Uneasy Alliance
+		 * Name: Ancient Evil
 		 * Unique: False
 		 * Side: Shadow
-		 * Culture: Isengard
+		 * Culture: Moria
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Search.
-		* 	While you can spot an [Isengard] tracker and a [Sauron] tracker, trackers are strength +1.
-		* 	Shadow: Discard a [sauron] tracker from hand to play an [isengard] tracker from your discard pile. Discard this condition.
+		 * Game Text: Each time a [moria] minion wins a skirmish, you may stack it here.
+		* 	Shadow: Play a unique minion stacked here, it is twilight cost -1 for each other card stacked here. Discard this condition.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Uneasy Alliance", card.getBlueprint().getTitle());
+		assertEquals("Ancient Evil", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SEARCH));
 		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void UneasyAllianceTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AncientEvilTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

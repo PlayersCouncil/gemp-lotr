@@ -18,106 +18,56 @@ public class Card_V2_066_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("haldir", "4_71");
-					put("hillman", "15_82");
-					put("mob", "4_205");
+					put("card", "102_66");
+					// put other cards in here as needed for the test case
 				}},
-				new HashMap<>() {{
-					put("site1", "1_319");
-					put("site2", "1_327");
-					put("site3", "1_337");
-					put("site4", "1_343");
-					put("site5", "102_66");
-					put("site6", "1_351");
-					put("site7", "1_353");
-					put("site8", "1_356");
-					put("site9", "1_360");
-				}},
+				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing
 		);
 	}
 
 	@Test
-	public void BreachedWallStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TrappedinitsGazeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Breached Wall
+		 * Name: Trapped in its Gaze
 		 * Unique: False
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 6
-		 * Type: Site
-		 * Subtype: 
-		 * Site Number: 5T
-		 * Game Text: Battleground. The count of sites the shadow player controls is +1.
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Skirmish
+		 * Game Text: Exert a Wraith to make a twilight minion strength +2. If that minion wins its skirmish you may exert it to add a burden.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsSite(5);
+		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Breached Wall", card.getBlueprint().getTitle());
+		assertEquals("Trapped in its Gaze", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.BATTLEGROUND));
-		assertEquals(6, card.getBlueprint().getTwilightCost());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	@Test
-	public void BreachedWallBonusAffectsAllSiteControlMechanics() throws DecisionResultInvalidException, CardNotFoundException {
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void TrappedinitsGazeTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var wall = scn.GetShadowSite(5);
-		var haldir = scn.GetFreepsCard("haldir");
-		scn.FreepsMoveCharToTable(haldir);
-
-		var hillman = scn.GetShadowCard("hillman");
-		var mob = scn.GetShadowCard("mob");
-		scn.ShadowMoveCardToHand(hillman, mob);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-		scn.SkipToSite(3);
-		scn.SetTwilight(12);
-		scn.FreepsPassCurrentPhaseAction(); // we're now on 4, not quite Breached Wall
-
-		//No opponent controls a site, so Haldir is strength +2
-		assertEquals(7, scn.getStrength(haldir));
-
-		assertEquals(15, scn.GetTwilight());
-		scn.ShadowMoveCharToTable(hillman);
-		//Is base 9 strength, not boosted or fierce from controlling a site
-		assertEquals(9, scn.getStrength(hillman));
-		assertFalse(scn.hasKeyword(hillman, Keyword.FIERCE));
-
-		scn.ShadowPlayCard(mob);
-		//15 - full undiscounted 5 -2 for roaming = 8
-		assertEquals(8, scn.GetTwilight());
-
-		scn.ShadowMoveCardToHand(hillman, mob);
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-
-		assertEquals(wall, scn.GetCurrentSite());
-
-		//Opponent site control count is +1, so Haldir loses bonus
-		assertEquals(5, scn.getStrength(haldir));
-
-		assertEquals(16, scn.GetTwilight());
-		scn.ShadowMoveCharToTable(hillman);
-		//Is base 9 strength +3 and fierce from controlling a site
-		assertEquals(12, scn.getStrength(hillman));
-		assertTrue(scn.hasKeyword(hillman, Keyword.FIERCE));
-
-		scn.ShadowPlayCard(mob);
-		//16 - 5 full cost + 1 discount for controlling 1 site = 12
-		assertEquals(12, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

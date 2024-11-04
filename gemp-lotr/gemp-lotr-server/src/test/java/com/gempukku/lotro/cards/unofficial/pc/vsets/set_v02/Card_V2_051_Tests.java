@@ -28,37 +28,38 @@ public class Card_V2_051_Tests
 	}
 
 	@Test
-	public void TotheKingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NowforWrathStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: To the King
-		 * Unique: False
+		 * Name: Now for Wrath
+		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Rohan
-		 * Twilight Cost: 0
-		 * Type: Event
-		 * Subtype: Skirmish
-		 * Game Text: Spot a valiant companion to have them replace an unbound companion in a skirmish (and make them damage +1 if that unbound companion is Theoden).
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support area
+		 * Game Text: Each time a [rohan] item or [rohan] ally is discarded or killed, add a [rohan] token here.
+		* 	Each time a minion is exerted by a Free Peoples card, you may remove a [rohan] token here and exert a valiant companion to wound that minion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("To the King", card.getBlueprint().getTitle());
+		assertEquals("Now for Wrath", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TotheKingTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NowforWrathTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -68,6 +69,6 @@ public class Card_V2_051_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

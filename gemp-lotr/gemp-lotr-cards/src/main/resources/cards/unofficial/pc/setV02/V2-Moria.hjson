@@ -114,6 +114,10 @@
 		strength: 17
 		vitality: 5
 		site: 4
+		keywords: [
+			Fierce
+			Damage+1
+		]
 		effects: [
 			{
 				type: Trigger

@@ -28,39 +28,37 @@ public class Card_V2_021_Tests
 	}
 
 	@Test
-	public void MachineryofWarStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BreachingShotStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Machinery of War
+		 * Name: Breaching Shot
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Isengard
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: When you play this condition, spot a Wizard to add 2 [isengard] tokens here.
-		* 	Each time an [isengard] Orc is defeated in a skirmish, add an [isengard] token here.
-		* 	Skirmish: Discard this condition (or remove two [isengard] tokens here) to cancel a skirmish involving an [isengard] Orc.
+		 * Twilight Cost: 2
+		 * Type: Event
+		 * Subtype: Assignment
+		 * Game Text: Remove X tokens from machines to assign an Uruk-hai costing X or less to an ally or unbound companion. 
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Machinery of War", card.getBlueprint().getTitle());
+		assertEquals("Breaching Shot", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasTimeword(card, Timeword.ASSIGNMENT));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void MachineryofWarTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BreachingShotTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -70,6 +68,6 @@ public class Card_V2_021_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }
