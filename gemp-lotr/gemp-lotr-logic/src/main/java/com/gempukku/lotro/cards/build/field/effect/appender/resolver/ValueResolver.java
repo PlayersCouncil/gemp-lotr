@@ -474,7 +474,14 @@ public class ValueResolver {
                 return new SmartValueSource(environment, object,
                         actionContext -> {
                             String performingPlayer = actionContext.getPerformingPlayer();
-                            return (game, cardAffected) -> GameUtils.getSpottableControlledSitesCount(game, performingPlayer);
+                            return (game, cardAffected) -> GameUtils.getControlledSitesCountByPlayer(game, performingPlayer);
+                        });
+            } else if (type.equalsIgnoreCase("forEachSiteOpponentControls")) {
+                FieldUtils.validateAllowedFields(object, "over", "limit", "multiplier", "divider");
+                return new SmartValueSource(environment, object,
+                        actionContext -> {
+                            String performingPlayer = actionContext.getPerformingPlayer();
+                            return (game, cardAffected) -> GameUtils.getControlledSitesCountOfOpponents(game, performingPlayer);
                         });
             } else if (type.equalsIgnoreCase("forEachStacked")) {
                 FieldUtils.validateAllowedFields(object, "on", "filter", "over", "limit", "multiplier", "divider");

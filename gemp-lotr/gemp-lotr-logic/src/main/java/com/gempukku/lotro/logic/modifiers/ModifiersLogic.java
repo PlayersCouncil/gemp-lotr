@@ -1026,7 +1026,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public int getNumberOfSpottableControlledSites(LotroGame game, String playerId) {
-        int result = Filters.filterActive(game, Filters.siteControlled(playerId)).size();
+        int result = Filters.filterActive(game, Filters.siteControlledByPlayer(playerId)).size();
 
         for (Modifier modifier : getModifiers(game, ModifierEffect.SPOT_MODIFIER)) {
             result += modifier.getSiteControlledSpotCountModifier(game, playerId);

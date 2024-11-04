@@ -32,8 +32,7 @@
 					type: modifyStrength
 					filter: self
 					amount: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: ForEachSiteYouControl
 					}
 				}
 			}
@@ -1037,8 +1036,7 @@
 					type: cantTakeWounds
 					requires: [
 						{
-							type: canSpot
-							filter: controlledSite
+							type: ControlsSite
 							count: 2
 						}
 						{

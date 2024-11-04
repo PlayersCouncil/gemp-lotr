@@ -114,8 +114,7 @@
 			{
 				type: modifyOwnCost
 				amount: {
-					type: forEachYouCanSpot
-					filter: controlledSite
+					type: ForEachSiteYouControl
 					multiplier: -1
 				}
 			}

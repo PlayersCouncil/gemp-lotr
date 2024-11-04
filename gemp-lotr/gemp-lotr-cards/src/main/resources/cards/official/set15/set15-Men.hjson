@@ -48,8 +48,7 @@
 					times: 2
 				}
 				requires: {
-					type: canSpot
-					filter: controlledSite
+					type: ControlsSite
 				}
 				effect: {
 					type: addTwilight
@@ -161,8 +160,7 @@
 				text: Make a {men} Man strength +2
 				phase: skirmish
 				requires: {
-					type: canSpot
-					filter: controlledSite
+					type: ControlsSite
 				}
 				cost: {
 					type: removeTwilight
@@ -179,8 +177,7 @@
 				text: Make a {men} Man strength +3
 				phase: skirmish
 				requires: {
-					type: canSpot
-					filter: controlledSite
+					type: ControlsSite
 					count: 2
 				}
 				cost: {
@@ -198,8 +195,7 @@
 				text: Make a {men} Man strength +4
 				phase: skirmish
 				requires: {
-					type: canSpot
-					filter: controlledSite
+					type: ControlsSite
 					count: 3
 				}
 				cost: {

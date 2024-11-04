@@ -119,8 +119,7 @@
 						type: modifyStrength
 						filter: memory(chosenMinion)
 						amount: {
-							type: forEachYouCanSpot
-							filter: controlledSite
+							type: ForEachSiteYouControl
 						}
 					}
 					until: start(regroup)

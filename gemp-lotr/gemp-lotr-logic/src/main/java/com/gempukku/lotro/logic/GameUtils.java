@@ -324,7 +324,16 @@ public class GameUtils {
         return game.getModifiersQuerying().getNumberOfSpottableShadowCultures(game, playerId);
     }
 
-    public static int getSpottableControlledSitesCount(LotroGame game, String playerId) {
+    public static int getControlledSitesCountByPlayer(LotroGame game, String playerId) {
         return game.getModifiersQuerying().getNumberOfSpottableControlledSites(game, playerId);
+    }
+
+    public static int getControlledSitesCountOfOpponents(LotroGame game, String playerId) {
+        int total = 0;
+
+        for(var opponent : getOpponents(game, playerId)) {
+            total += getControlledSitesCountByPlayer(game, opponent);
+        }
+        return total;
     }
 }

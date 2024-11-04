@@ -1784,8 +1784,7 @@
 					}
 					side: shadow
 					amount: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: ForEachSiteYouControl
 					}
 				}
 			}
@@ -2228,8 +2227,7 @@
 				effect: {
 					type: addTwilight
 					amount: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: ForEachSiteYouControl
 						multiplier: 2
 					}
 				}

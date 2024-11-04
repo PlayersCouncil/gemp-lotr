@@ -575,7 +575,7 @@ public class Filters {
         return (game, physicalCard) -> physicalCard.getBlueprint().getCardType() == CardType.SITE && physicalCard.getCardController() != null && !physicalCard.getCardController().equals(thisPlayer);
     }
 
-    public static Filter siteControlled(final String playerId) {
+    public static Filter siteControlledByPlayer(final String playerId) {
         return (game, physicalCard) -> physicalCard.getBlueprint().getCardType() == CardType.SITE && playerId.equals(physicalCard.getCardController());
     }
 

@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.logic.GameUtils;
 import org.json.simple.JSONObject;
 
 public class OpponentDoesNotControlSite implements RequirementProducer {
@@ -17,7 +18,6 @@ public class OpponentDoesNotControlSite implements RequirementProducer {
         final String player = FieldUtils.getString(object.get("player"), "player", "you");
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
-        return (actionContext) ->
-                Filters.countActive(actionContext.getGame(), Filters.siteControlledByOtherPlayer(playerSource.getPlayer(actionContext))) == 0;
+        return (actionContext) -> GameUtils.getControlledSitesCountOfOpponents(actionContext.getGame(), playerSource.getPlayer(actionContext)) <= 0;
     }
 }

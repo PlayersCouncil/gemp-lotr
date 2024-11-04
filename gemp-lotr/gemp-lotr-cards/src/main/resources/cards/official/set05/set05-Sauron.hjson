@@ -552,8 +552,7 @@
 				effect: {
 					type: drawCards
 					count: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: ForEachSiteYouControl
 						limit: 3
 					}
 				}

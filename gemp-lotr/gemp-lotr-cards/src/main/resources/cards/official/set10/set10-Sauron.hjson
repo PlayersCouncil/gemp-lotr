@@ -299,8 +299,7 @@
 					type: modifyStrength
 					select: choose(culture(sauron),minion)
 					amount: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: ForEachSiteYouControl
 						multiplier: 2
 					}
 					memorize: chosenMinion
@@ -733,8 +732,7 @@
 					player: free people
 					select: choose(companion)
 					count: {
-						type: forEachYouCanSpot
-						filter: SiteYouControl
+						type: ForEachSiteYouControl
 					}
 				}
 			}
@@ -798,13 +796,11 @@
 							filter: bearer,name(Gothmog)
 						}
 						true: {
-							type: forEachYouCanSpot
-							filter: controlledSite
+							type: ForEachSiteYouControl
 							multiplier: 2
 						}
 						false: {
-							type: forEachYouCanSpot
-							filter: controlledSite
+							type: ForEachSiteYouControl
 						}
 					}
 				}

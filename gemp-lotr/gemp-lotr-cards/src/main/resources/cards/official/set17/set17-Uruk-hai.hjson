@@ -29,8 +29,7 @@
 				modifier: {
 					type: addKeyword
 					requires: {
-						type: canSpot
-						filter: controlledSite
+						type: ControlsSite
 						count: 2
 					}
 					filter: bearer
@@ -43,8 +42,7 @@
 				modifier: {
 					type: addKeyword
 					requires: {
-						type: canSpot
-						filter: controlledSite
+						type: ControlsSite
 						count: 4
 					}
 					filter: bearer
@@ -158,8 +156,7 @@
 					amount: {
 						type: Conditional
 						requires: {
-							type: canSpot
-							filter: controlledSite
+							type: ControlsSite
 						}
 						true: 3
 						false: 2
@@ -722,8 +719,7 @@
 					filter: self
 					keyword: hunter
 					amount: {
-						type: forEachYouCanSpot
-						filter: siteYouControl
+						type: forEachSiteYouControl
 						multiplier: 3
 					}
 				}
@@ -941,8 +937,7 @@
 				effect: {
 					type: repeat
 					times: {
-						type: forEachYouCanSpot
-						filter: siteYouControl
+						type: ForEachSiteYouControl
 					}
 					effect: {
 						type: exert
