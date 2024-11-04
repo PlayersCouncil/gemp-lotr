@@ -75,6 +75,7 @@
 			}
 		]
 	}
+
 	9_29: {
 		title: Slippery as Fishes
 		side: shadow
@@ -126,6 +127,7 @@
 			}
 		]
 	}
+
 	9_30: {
 		title: Sméagol
 		subtitle: Bearer of Great Secrets
@@ -176,6 +178,7 @@
 			}
 		]
 	}
+
 	9_31: {
 		title: Boromir
 		subtitle: Bearer of Council
@@ -231,6 +234,7 @@
 			}
 		]
 	}
+
 	9_32: {
 		title: Elendil
 		subtitle: The Tall
@@ -281,6 +285,7 @@
 			}
 		]
 	}
+
 	9_33: {
 		title: Isildur
 		subtitle: Bearer of Heirlooms
@@ -337,6 +342,7 @@
 			}
 		]
 	}
+
 	9_34: {
 		title: Narsil
 		subtitle: Blade of the Faithful
@@ -378,6 +384,7 @@
 			}
 		]
 	}
+
 	9_35: {
 		title: Sapling of the White Tree
 		culture: gondor
@@ -409,6 +416,7 @@
             }
         ]
 	}
+
 	9_36: {
 		title: Scroll of Isildur
 		unique: true
@@ -453,6 +461,7 @@
 			}
 		]
 	}
+
 	9_37: {
 		title: Seeing Stone of Minas Anor
 		unique: true
@@ -525,6 +534,7 @@
 			}
 		]
 	}
+
 	9_38: {
 		title: Seeing Stone of Orthanc
 		unique: true
@@ -601,6 +611,7 @@
 			}
 		]
 	}
+
 	9_39: {
 		title: Library of Orthanc
 		unique: true
@@ -654,6 +665,7 @@
 			}
 		]
 	}
+
 	9_40: {
 		title: Sack of the Shire
 		culture: isengard
@@ -698,6 +710,7 @@
 			]
 		}
 	}
+
 	9_41: {
 		title: Host of Moria
 		subtitle: Legion of the Underdeeps
@@ -722,6 +735,7 @@
 			}
 		}
 	}
+
 	9_42: {
 		title: Ring of Asperity
 		unique: true
@@ -756,6 +770,7 @@
 			}
 		]
 	}
+
 	9_43: {
 		title: Ring of Ire
 		unique: true
@@ -792,6 +807,7 @@
 			}
 		]
 	}
+
 	9_44: {
 		title: Ring of Rancor
 		unique: true
@@ -825,6 +841,7 @@
 			}
 		]
 	}
+
 	9_45: {
 		title: Horn of the Mark
 		unique: true
@@ -860,6 +877,7 @@
 			}
 		]
 	}
+
 	9_46: {
 		title: The Red Arrow
 		unique: true
@@ -903,6 +921,7 @@
 			]
 		}
 	}
+
 	9_47: {
 		title: Ithil Stone
 		unique: true
@@ -944,6 +963,7 @@
 			}
 		]
 	}
+
 	9_48: {
 		title: Sauron
 		subtitle: The Lord of the Rings
@@ -985,6 +1005,7 @@
 			}
 		]
 	}
+
 	9_49: {
 		title: Bilbo
 		subtitle: Bearer of Things Burgled
@@ -1044,6 +1065,7 @@
 			}
 		]
 	}
+
 	9_50: {
 		title: Everyone Knows
 		culture: shire
@@ -1081,6 +1103,7 @@
 			}
 		]
 	}
+
 	9_51: {
 		title: Goldberry
 		subtitle: River-daughter
@@ -1122,6 +1145,7 @@
 			}
 		]
 	}
+
 	9_52: {
 		title: Tom Bombadil
 		subtitle: The Master

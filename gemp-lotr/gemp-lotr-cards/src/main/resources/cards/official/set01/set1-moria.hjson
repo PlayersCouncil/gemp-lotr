@@ -21,6 +21,7 @@
 			}
 		}
 	}
+
 	1_164: {
 		title: Bitter Hatred
 		culture: moria
@@ -39,6 +40,7 @@
 			}
 		}
 	}
+
 	1_165: {
 		title: Cave Troll of Moria
 		subtitle: Scourge of the Black Pit
@@ -72,6 +74,7 @@
             }
         ]
 	}
+
 	1_166: {
 		title: Cave Troll's Hammer
 		unique: true
@@ -90,6 +93,7 @@
 			}
 		}
 	}
+
 	1_167: {
 		title: Denizens Enraged
 		culture: moria
@@ -110,6 +114,7 @@
 			}
 		}
 	}
+
 	1_168: {
 		title: Drums in the Deep
 		culture: moria
@@ -134,6 +139,7 @@
 			}
 		}
 	}
+
 	1_169: {
 		title: The End Comes
 		culture: moria
@@ -155,6 +161,7 @@
 			}
 		}
 	}
+
 	1_170: {
 		title: Fool of a Took!
 		culture: moria
@@ -197,6 +204,7 @@
 			]
 		}
 	}
+
 	1_171: {
 		title: Frenzy
 		culture: moria
@@ -212,6 +220,7 @@
 			}
 		}
 	}
+
 	1_172: {
 		title: Goblin Archer
 		culture: moria
@@ -235,6 +244,7 @@
 			}
 		}
 	}
+
 	1_173: {
 		title: Goblin Armory
 		culture: moria
@@ -269,6 +279,7 @@
 			}
 		]
 	}
+
 	1_174: {
 		title: Goblin Backstabber
 		culture: moria
@@ -291,6 +302,7 @@
 			}
 		}
 	}
+
 	1_175: {
 		title: Goblin Domain
 		culture: moria
@@ -326,6 +338,7 @@
             }
         ]
 	}
+
 	1_176: {
 		title: Goblin Marksman
 		culture: moria
@@ -337,6 +350,7 @@
 		site: 4
 		keyword: archer
 	}
+
 	1_177: {
 		title: Goblin Patrol Troop
 		culture: moria
@@ -347,6 +361,7 @@
 		vitality: 3
 		site: 4
 	}
+
 	1_178: {
 		title: Goblin Runner
 		culture: moria
@@ -368,6 +383,7 @@
 			}
 		}
 	}
+
 	1_179: {
 		title: Goblin Scavengers
 		culture: moria
@@ -391,6 +407,7 @@
 			}
 		}
 	}
+
 	1_180: {
 		title: Goblin Scimitar
 		culture: moria
@@ -411,6 +428,7 @@
 			}
 		}
 	}
+
 	1_181: {
 		title: Goblin Sneak
 		culture: moria
@@ -433,6 +451,7 @@
 			}
 		}
 	}
+
 	1_182: {
 		title: Goblin Spear
 		culture: moria
@@ -467,6 +486,7 @@
 			}
 		}
 	}
+
 	1_183: {
 		title: Goblin Swarms
 		culture: moria
@@ -515,6 +535,7 @@
 			}
 		]
 	}
+
 	1_184: {
 		title: Goblin Wallcrawler
 		culture: moria
@@ -551,6 +572,7 @@
 			}
 		]
 	}
+
 	1_185: {
 		title: Goblin Warrior
 		culture: moria
@@ -573,6 +595,7 @@
 			}
 		}
 	}
+
 	1_186: {
 		title: Guard Commander
 		unique: true
@@ -597,6 +620,7 @@
 			}
 		}
 	}
+
 	1_187: {
 		title: Host of Thousands
 		culture: moria
@@ -611,6 +635,7 @@
 			}
 		}
 	}
+
 	1_188: {
 		title: The Long Dark
 		unique: true
@@ -649,6 +674,7 @@
 			}
 		]
 	}
+
 	1_189: {
 		title: Lost to the Goblins
 		culture: moria
@@ -694,6 +720,7 @@
 			]
 		}
 	}
+
 	1_190: {
 		title: Moria Axe
 		culture: moria
@@ -726,6 +753,7 @@
 			}
 		]
 	}
+
 	1_191: {
 		title: Moria Scout
 		culture: moria
@@ -751,6 +779,7 @@
 			}
 		}
 	}
+
 	1_192: {
 		title: Pinned Down
 		culture: moria
@@ -770,6 +799,7 @@
 			}
 		}
 	}
+
 	1_193: {
 		title: Plundered Armories
 		culture: moria
@@ -790,6 +820,7 @@
 			}
 		}
 	}
+
 	1_194: {
 		title: Relentless
 		culture: moria
@@ -815,6 +846,7 @@
 			}
 		}
 	}
+
 	1_195: {
 		title: Relics of Moria
 		culture: moria
@@ -835,6 +867,7 @@
 			}
 		}
 	}
+
 	1_196: {
 		title: They Are Coming
 		culture: moria
@@ -856,6 +889,7 @@
 			}
 		}
 	}
+
 	1_197: {
 		title: Threat of the Unknown
 		culture: moria
@@ -874,6 +908,7 @@
 			}
 		}
 	}
+
 	1_198: {
 		title: Through the Misty Mountains
 		culture: moria
@@ -910,6 +945,7 @@
 			}
 		]
 	}
+
 	1_199: {
 		title: Troll's Keyward
 		unique: true
@@ -929,6 +965,7 @@
 			}
 		}
 	}
+
 	1_200: {
 		title: The Underdeeps of Moria
 		culture: moria
@@ -963,6 +1000,7 @@
 			]
 		}
 	}
+
 	1_201: {
 		title: Unfamiliar Territory
 		culture: moria
@@ -988,6 +1026,7 @@
 			}
 		}
 	}
+
 	1_202: {
 		title: What Is This New Devilry?
 		culture: moria
@@ -1019,4 +1058,5 @@
 			}
 		]
 	}
+	
 }

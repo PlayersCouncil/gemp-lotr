@@ -18,6 +18,7 @@
 			}
 		}
 	}
+
 	1_89: {
 		title: Aragorn
 		subtitle: Ranger of the North
@@ -46,6 +47,7 @@
 			}
 		}
 	}
+
 	1_90: {
 		title: Aragorn's Bow
 		unique: true
@@ -83,6 +85,7 @@
 			}
 		]
 	}
+
 	1_91: {
 		title: Aragorn's Pipe
 		unique: true
@@ -115,6 +118,7 @@
 			}
 		}
 	}
+
 	1_92: {
 		title: Armor
 		culture: gondor
@@ -132,6 +136,7 @@
 			}
 		}
 	}
+
 	1_93: {
 		title: Arwen's Fate
 		culture: gondor
@@ -175,6 +180,7 @@
 			}
 		}
 	}
+
 	1_94: {
 		title: Athelas
 		culture: gondor
@@ -207,6 +213,7 @@
 			}
 		}
 	}
+
 	1_95: {
 		title: Blade of Gondor
 		unique: true
@@ -239,6 +246,7 @@
 			}
 		]
 	}
+
 	1_96: {
 		title: Boromir
 		subtitle: Lord of Gondor
@@ -260,6 +268,7 @@
 			}
 		}
 	}
+
 	1_97: {
 		title: Boromir
 		subtitle: Son of Denethor
@@ -286,6 +295,7 @@
 			}
 		}
 	}
+
 	1_98: {
 		title: Boromir's Cloak
 		unique: true
@@ -307,6 +317,7 @@
 			}
 		}
 	}
+
 	1_99: {
 		title: Change of Plans
 		culture: gondor
@@ -333,6 +344,7 @@
 			]
 		}
 	}
+
 	1_100: {
 		title: The Choice of Lúthien
 		unique: true
@@ -379,6 +391,7 @@
 			}
 		}
 	}
+
 	1_101: {
 		title: Coat of Mail
 		culture: gondor
@@ -394,6 +407,7 @@
 			}
 		}
 	}
+
 	1_102: {
 		title: Dagger Strike
 		culture: gondor
@@ -417,6 +431,7 @@
 			]
 		}
 	}
+
 	1_103: {
 		title: Elendil's Valor
 		culture: gondor
@@ -433,6 +448,7 @@
 			}
 		}
 	}
+
 	1_104: {
 		title: Eregion's Trails
 		culture: gondor
@@ -454,6 +470,7 @@
 			}
 		}
 	}
+
 	1_105: {
 		title: Foes of Mordor
 		culture: gondor
@@ -473,6 +490,7 @@
 			}
 		}
 	}
+
 	1_106: {
 		title: Gondor's Vengeance
 		culture: gondor
@@ -492,6 +510,7 @@
 			}
 		}
 	}
+
 	1_107: {
 		title: Great Shield
 		culture: gondor
@@ -508,6 +527,7 @@
 			}
 		}
 	}
+
 	1_108: {
 		title: No Stranger to the Shadows
 		culture: gondor
@@ -523,6 +543,7 @@
 			}
 		}
 	}
+
 	1_109: {
 		title: One Whom Men Would Follow
 		culture: gondor
@@ -551,6 +572,7 @@
 			]
 		}
 	}
+
 	1_110: {
 		title: Pathfinder
 		culture: gondor
@@ -572,6 +594,7 @@
 			}
 		}
 	}
+
 	1_111: {
 		title: Pursuit Just Behind
 		culture: gondor
@@ -591,6 +614,7 @@
 			}
 		}
 	}
+
 	1_112: {
 		title: Ranger's Sword
 		unique: true
@@ -609,6 +633,7 @@
 			}
 		}
 	}
+
 	1_113: {
 		title: A Ranger's Versatility
 		culture: gondor
@@ -632,6 +657,7 @@
 			}
 		}
 	}
+
 	1_114: {
 		title: The Saga of Elendil
 		unique: true
@@ -662,6 +688,7 @@
 			}
 		}
 	}
+
 	1_115: {
 		title: Strength of Kings
 		culture: gondor
@@ -683,6 +710,7 @@
 			}
 		}
 	}
+
 	1_116: {
 		title: Swordarm of the White Tower
 		culture: gondor
@@ -707,6 +735,7 @@
 			}
 		}
 	}
+
 	1_117: {
 		title: Swordsman of the Northern Kingdom
 		culture: gondor
@@ -731,6 +760,7 @@
 			}
 		}
 	}
+
 	1_118: {
 		title: Valiant Man of the West
 		culture: gondor
@@ -756,6 +786,7 @@
 			]
 		}
 	}
+
 	1_119: {
 		title: What Are They?
 		culture: gondor
@@ -775,6 +806,7 @@
 			}
 		}
 	}
+
 	1_365: {
 		title: Aragorn
 		subtitle: King in Exile
@@ -800,4 +832,5 @@
 			}
 		}
 	}
+	
 }

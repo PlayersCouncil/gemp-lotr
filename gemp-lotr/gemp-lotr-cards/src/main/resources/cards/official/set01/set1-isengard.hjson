@@ -52,6 +52,7 @@
 			}
 		]
 	}
+
 	1_121: {
 		title: Bred for Battle
 		culture: isengard
@@ -72,6 +73,7 @@
 			}
 		}
 	}
+
 	1_122: {
 		title: Breeding Pit
 		culture: isengard
@@ -91,6 +93,7 @@
 			}
 		}
 	}
+
 	1_123: {
 		title: Caradhras Has Not Forgiven Us
 		culture: isengard
@@ -118,6 +121,7 @@
 			}
 		}
 	}
+
 	1_124: {
 		title: Cruel Caradhras
 		culture: isengard
@@ -153,6 +157,7 @@
 			}
 		}
 	}
+
 	1_125: {
 		title: Greed
 		culture: isengard
@@ -186,6 +191,7 @@
             }
         ]
 	}
+
 	1_126: {
 		title: Hunt Them Down!
 		culture: isengard
@@ -202,6 +208,7 @@
 			}
 		}
 	}
+
 	1_127: {
 		title: Lurtz
 		subtitle: Servant of Isengard
@@ -232,6 +239,7 @@
 			}
 		}
 	}
+
 	1_128: {
 		title: Lurtz's Battle Cry
 		culture: isengard
@@ -255,6 +263,7 @@
 			]
 		}
 	}
+
 	1_129: {
 		title: The Misadventure of Mr. Underhill
 		culture: isengard
@@ -283,6 +292,7 @@
 			}
 		]
 	}
+
 	1_130: {
 		title: No Ordinary Storm
 		culture: isengard
@@ -301,6 +311,7 @@
 			}
 		}
 	}
+
 	1_131: {
 		title: Orthanc Assassin
 		unique: true
@@ -316,6 +327,7 @@
 			damage+1
 		]
 	}
+
 	1_132: {
 		title: Parry
 		culture: isengard
@@ -347,6 +359,7 @@
 			]
 		}
 	}
+
 	1_133: {
 		title: Saruman's Ambition
 		culture: isengard
@@ -377,6 +390,7 @@
 			}
 		]
 	}
+
 	1_134: {
 		title: Saruman's Chill
 		culture: isengard
@@ -418,6 +432,7 @@
 			}
 		]
 	}
+
 	1_135: {
 		title: Saruman's Frost
 		culture: isengard
@@ -460,6 +475,7 @@
 			}
 		]
 	}
+
 	1_136: {
 		title: Saruman's Power
 		culture: isengard
@@ -481,6 +497,7 @@
 			}
 		}
 	}
+
 	1_137: {
 		title: Saruman's Reach
 		culture: isengard
@@ -516,6 +533,7 @@
 			}
 		}
 	}
+
 	1_138: {
 		title: Saruman's Snows
 		culture: isengard
@@ -557,6 +575,7 @@
 			}
 		]
 	}
+
 	1_139: {
 		title: Savagery to Match Their Numbers
 		culture: isengard
@@ -604,6 +623,7 @@
 			}
 		}
 	}
+
 	1_140: {
 		title: Spies of Saruman
 		culture: isengard
@@ -641,6 +661,7 @@
 			}
 		]
 	}
+
 	1_141: {
 		title: Their Arrows Enrage
 		culture: isengard
@@ -665,6 +686,7 @@
             }
         ]
 	}
+
 	1_142: {
 		title: Traitor's Voice
 		culture: isengard
@@ -723,6 +745,7 @@
             }
         ]
 	}
+
 	1_143: {
 		title: Troop of Uruk-hai
 		culture: isengard
@@ -742,6 +765,7 @@
 			}
 		}
 	}
+
 	1_144: {
 		title: Uruk Bloodlust
 		culture: isengard
@@ -764,6 +788,7 @@
 			}
 		}
 	}
+
 	1_145: {
 		title: Uruk Brood
 		culture: isengard
@@ -798,6 +823,7 @@
 			]
 		}
 	}
+
 	1_146: {
 		title: Uruk Fighter
 		culture: isengard
@@ -824,6 +850,7 @@
 			}
 		}
 	}
+
 	1_147: {
 		title: Uruk Guard
 		culture: isengard
@@ -860,6 +887,7 @@
 			]
 		}
 	}
+
 	1_148: {
 		title: Uruk Lieutenant
 		culture: isengard
@@ -882,6 +910,7 @@
 			}
 		}
 	}
+
 	1_149: {
 		title: Uruk Messenger
 		culture: isengard
@@ -905,6 +934,7 @@
 			}
 		}
 	}
+
 	1_150: {
 		title: Uruk Rager
 		culture: isengard
@@ -929,6 +959,7 @@
 			}
 		}
 	}
+
 	1_151: {
 		title: Uruk Savage
 		culture: isengard
@@ -940,6 +971,7 @@
 		site: 5
 		keyword: damage+1
 	}
+
 	1_152: {
 		title: Uruk Shaman
 		culture: isengard
@@ -963,6 +995,7 @@
 			}
 		}
 	}
+
 	1_153: {
 		title: Uruk Slayer
 		culture: isengard
@@ -991,6 +1024,7 @@
 			}
 		}
 	}
+
 	1_154: {
 		title: Uruk Soldier
 		culture: isengard
@@ -1016,6 +1050,7 @@
 			}
 		}
 	}
+
 	1_155: {
 		title: Uruk Spy
 		culture: isengard
@@ -1060,6 +1095,7 @@
 			]
 		}
 	}
+
 	1_156: {
 		title: Uruk Warrior
 		culture: isengard
@@ -1086,6 +1122,7 @@
 			}
 		}
 	}
+
 	1_157: {
 		title: Uruk-hai Armory
 		culture: isengard
@@ -1105,6 +1142,7 @@
 			}
 		}
 	}
+
 	1_158: {
 		title: Uruk-hai Raiding Party
 		culture: isengard
@@ -1116,6 +1154,7 @@
 		site: 5
 		keyword: damage+1
 	}
+
 	1_159: {
 		title: Uruk-hai Rampage
 		culture: isengard
@@ -1150,6 +1189,7 @@
             }
         ]
 	}
+
 	1_160: {
 		title: Uruk-hai Sword
 		culture: isengard
@@ -1172,6 +1212,7 @@
 			}
 		}
 	}
+
 	1_161: {
 		title: Wariness
 		culture: isengard
@@ -1209,6 +1250,7 @@
 			}
 		}
 	}
+
 	1_162: {
 		title: Worry
 		unique: true
@@ -1251,4 +1293,5 @@
 			}
 		]
 	}
+	
 }

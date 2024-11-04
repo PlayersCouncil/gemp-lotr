@@ -40,6 +40,7 @@
 			]
 		}
 	}
+
 	2_40: {
 		side: shadow
 		twilight: 1
@@ -48,26 +49,27 @@
 		type: condition
 		keyword: Support Area
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: culture(isengard),minion
-                }
-		    }
-            {
-                type: trigger
-                trigger: {
-                    type: exerted
-                    filter: culture(shire),ally
-                }
-                effect: {
-                    type: addTwilight
-                    amount: 1
-                }
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(isengard),minion
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: exerted
+					filter: culture(shire),ally
+				}
+				effect: {
+					type: addTwilight
+					amount: 1
+				}
+			}
+		]
 	}
+
 	2_41: {
 		side: shadow
 		twilight: 0
@@ -97,6 +99,7 @@
 			}
 		}
 	}
+
 	2_42: {
 		side: shadow
 		site: 2
@@ -136,6 +139,7 @@
 			}
 		]
 	}
+
 	2_43: {
 		side: shadow
 		twilight: 1
@@ -170,6 +174,7 @@
 			}
 		]
 	}
+
 	2_44: {
 		side: shadow
 		twilight: 0
@@ -178,23 +183,24 @@
 		type: condition
 		keyword: Support Area
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: culture(isengard),minion
-                }
-		    }
-            {
-                type: modifier
-                modifier: {
-                    type: cantLookOrRevealHand
-                    player: fp
-                    hand: shadowPlayer
-                }
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(isengard),minion
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantLookOrRevealHand
+					player: fp
+					hand: shadowPlayer
+				}
+			}
+		]
 	}
+
 	2_45: {
 		side: shadow
 		twilight: 1
@@ -204,10 +210,10 @@
 		timeword: response
 		effects: {
 			type: responseEvent
-            requires: {
-                type: canSpot
-                filter: culture(isengard),minion
-            }
+			requires: {
+				type: canSpot
+				filter: culture(isengard),minion
+			}
 			trigger: {
 				type: putsOnRing
 			}
@@ -219,6 +225,7 @@
 			}
 		}
 	}
+
 	2_46: {
 		side: shadow
 		site: 5
@@ -250,6 +257,7 @@
 			}
 		}
 	}
+
 	2_47: {
 		side: shadow
 		site: 5
@@ -290,6 +298,7 @@
 			}
 		]
 	}
+
 	2_48: {
 		side: shadow
 		twilight: 2
@@ -332,4 +341,5 @@
 			}
 		]
 	}
+	
 }

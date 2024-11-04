@@ -1,144 +1,149 @@
 {
-    3_76: {
-        title: Dangerous Gamble
-        side: shadow
-        culture: Moria
-        twilight: 2
-        type: event
-        timeword: shadow
-        effects: {
-            type: event
-            requires: {
-                type: canSpot
-                filter: culture(moria),minion
-            }
-            effect: [
-                {
-                    type: revealRandomCardsFromHand
-                    forced: true
-                    hand: fp
-                    memorize: revealedCard
-                }
-                {
-                    type: addTwilight
-                    amount: {
-                        type: twilightCostInMemory
-                        memory: revealedCard
-                    }
-                }
-            ]
-        }
-    }
-    3_77: {
-        title: Depths of Moria
-        side: shadow
-        culture: Moria
-        twilight: 1
-        type: condition
-        keyword: Support Area
-        effects: [
-            {
-                type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: culture(moria),orc
-                }
-            }
-            {
-                type: trigger
-                trigger: {
-                    type: moves
-                }
-                requires: {
-                    type: phase
-                    phase: regroup
-                }
-                effect: {
-                    type: addTwilight
-                    amount: 2
-                }
-            }
-        ]
-    }
-    3_78: {
-        title: Hide and Seek
-        side: shadow
-        culture: Moria
-        twilight: 1
-        type: event
-        timeword: Skirmish
-        keyword:
-        [
-            Search
-        ]
-        effects: {
-            type: event
-            requires: {
-                type: canSpot
-                count: 2
-                filter: culture(shire),companion
-            }
-            effect: {
-                type: addKeyword
-                select: choose(culture(moria),minion)
-                keyword: damage
-                amount: 1
-            }
-        }
-    }
-    3_79: {
-        title: Malice
-        side: shadow
-        culture: Moria
-        twilight: 0
-        type: event
-        timeword: archery
-        effects: {
-            type: event
-            requires: [
-                {
-                    type: canSpot
-                    filter: culture(moria),orc
-                }
-                {
-                    type: canSpot
-                    filter: culture(sauron),orc
-                }
-            ]
-            effect: {
-                type: wound
-                select: choose(archer)
-            }
-        }
-    }
-    3_80: {
-        title: Such a Little Thing
-        side: shadow
-        culture: Moria
-        twilight: 0
-        type: event
-        timeword: maneuver
-        effects: {
-            type: event
-            requires: {
-                type: canSpot
-                filter: culture(moria),minion
-            }
-            effect: {
-                type: preventable
-                text: Would you like to discard 2 FP possession to prevent wounding Boromir 3 times?
-                player: fp
-                cost: {
-                    type: discard
-                    select: choose(side(free),possession)
-                    count: 2
-                }
-                effect: {
-                    type: wound
-                    select: choose(name(Boromir))
-                    times: 3
-                }
-            }
-        }
-    }
+	3_76: {
+		title: Dangerous Gamble
+		side: shadow
+		culture: Moria
+		twilight: 2
+		type: event
+		timeword: shadow
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(moria),minion
+			}
+			effect: [
+				{
+					type: revealRandomCardsFromHand
+					forced: true
+					hand: fp
+					memorize: revealedCard
+				}
+				{
+					type: addTwilight
+					amount: {
+						type: twilightCostInMemory
+						memory: revealedCard
+					}
+				}
+			]
+		}
+	}
+
+	3_77: {
+		title: Depths of Moria
+		side: shadow
+		culture: Moria
+		twilight: 1
+		type: condition
+		keyword: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(moria),orc
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+		]
+	}
+
+	3_78: {
+		title: Hide and Seek
+		side: shadow
+		culture: Moria
+		twilight: 1
+		type: event
+		timeword: Skirmish
+		keyword:
+		[
+			Search
+		]
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				count: 2
+				filter: culture(shire),companion
+			}
+			effect: {
+				type: addKeyword
+				select: choose(culture(moria),minion)
+				keyword: damage
+				amount: 1
+			}
+		}
+	}
+
+	3_79: {
+		title: Malice
+		side: shadow
+		culture: Moria
+		twilight: 0
+		type: event
+		timeword: archery
+		effects: {
+			type: event
+			requires: [
+				{
+					type: canSpot
+					filter: culture(moria),orc
+				}
+				{
+					type: canSpot
+					filter: culture(sauron),orc
+				}
+			]
+			effect: {
+				type: wound
+				select: choose(archer)
+			}
+		}
+	}
+
+	3_80: {
+		title: Such a Little Thing
+		side: shadow
+		culture: Moria
+		twilight: 0
+		type: event
+		timeword: maneuver
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(moria),minion
+			}
+			effect: {
+				type: preventable
+				text: Would you like to discard 2 FP possession to prevent wounding Boromir 3 times?
+				player: fp
+				cost: {
+					type: discard
+					select: choose(side(free),possession)
+					count: 2
+				}
+				effect: {
+					type: wound
+					select: choose(name(Boromir))
+					times: 3
+				}
+			}
+		}
+	}
+    
 }

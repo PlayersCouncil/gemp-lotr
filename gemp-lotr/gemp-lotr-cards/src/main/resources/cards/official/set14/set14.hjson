@@ -37,6 +37,7 @@
 			}
 		]
 	}
+
 	14_2: {
 		title: Elladan
 		subtitle: Son of Elrond
@@ -71,6 +72,7 @@
 			}
 		]
 	}
+
 	14_3: {
 		title: Elrohir
 		subtitle: Son of Elrond
@@ -109,6 +111,7 @@
 			}
 		]
 	}
+
 	14_4: {
 		title: Gildor Inglorion
 		subtitle: Of the House of Finrod
@@ -144,6 +147,7 @@
 			}
 		}
 	}
+
 	14_5: {
 		title: Brand
 		subtitle: King of Dale
@@ -195,6 +199,7 @@
 			}
 		]
 	}
+
 	14_6: {
 		title: Grimbeorn
 		subtitle: Beorning Chieftain
@@ -249,6 +254,7 @@
 			}
 		]
 	}
+
 	14_7: {
 		title: Duilin
 		subtitle: Ranger From Blackroot Vale
@@ -274,6 +280,7 @@
 			}
 		}
 	}
+
 	14_8: {
 		title: Duinhir
 		subtitle: Tall Man of Blackroot Vale
@@ -327,6 +334,7 @@
 			}
 		]
 	}
+
 	14_9: {
 		title: Halbarad
 		subtitle: Ranger of the North
@@ -367,6 +375,7 @@
 			}
 		]
 	}
+
 	14_10: {
 		title: Furious Hillman
 		culture: men
@@ -395,6 +404,7 @@
 			}
 		}
 	}
+
 	14_11: {
 		title: Swarming Hillman
 		culture: men
@@ -431,6 +441,7 @@
 			}
 		}
 	}
+
 	14_12: {
 		title: Half-troll of Far Harad
 		culture: orc
@@ -469,6 +480,7 @@
 			}
 		}
 	}
+
 	14_13: {
 		title: Horror of Harad
 		unique: true
@@ -488,6 +500,7 @@
 			toil+2
 		]
 	}
+
 	14_14: {
 		title: Uruk-hai Healer
 		culture: uruk-hai
@@ -519,6 +532,7 @@
 			}
 		}
 	}
+
 	14_15: {
 		title: Uruk-hai Scout
 		culture: uruk-hai

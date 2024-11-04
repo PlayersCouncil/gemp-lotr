@@ -46,6 +46,7 @@
 			}
 		]
 	}
+
 	2_32: {
 		side: free_people
 		twilight: 0
@@ -77,6 +78,7 @@
 			}
 		]
 	}
+
 	2_33: {
 		side: free_people
 		twilight: 0
@@ -113,6 +115,7 @@
 			]
 		}
 	}
+
 	2_34: {
 		side: free_people
 		twilight: 0
@@ -136,6 +139,7 @@
 			}
 		}
 	}
+
 	2_35: {
 		side: free_people
 		twilight: 1
@@ -144,27 +148,28 @@
 		type: condition
 		keyword: Support Area
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: ranger
-                }
-		    }
-            {
-                type: modifier
-                modifier: {
-                    type: modifyArcheryTotal
-                    requires: {
-                        type: location
-                        filter: forest
-                    }
-                    side: shadow
-                    amount: -2
-                }
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: ranger
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					requires: {
+						type: location
+						filter: forest
+					}
+					side: shadow
+					amount: -2
+				}
+			}
+		]
 	}
+
 	2_36: {
 		side: free_people
 		twilight: 0
@@ -195,6 +200,7 @@
 			}
 		}
 	}
+
 	2_37: {
 		side: free_people
 		twilight: 0
@@ -219,6 +225,7 @@
 			}
 		}
 	}
+
 	2_38: {
 		side: free_people
 		twilight: 1
@@ -247,4 +254,5 @@
 			}
 		]
 	}
+	
 }

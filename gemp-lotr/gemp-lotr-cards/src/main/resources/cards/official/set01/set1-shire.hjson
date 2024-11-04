@@ -23,6 +23,7 @@
 			}
 		}
 	}
+
 	1_285: {
 		title: Bilbo's Pipe
 		unique: true
@@ -55,6 +56,7 @@
 			}
 		}
 	}
+
 	1_286: {
 		title: Bounder
 		culture: shire
@@ -77,6 +79,7 @@
 			}
 		}
 	}
+
 	1_287: {
 		title: Extraordinary Resilience
 		culture: shire
@@ -98,6 +101,7 @@
 			}
 		}
 	}
+
 	1_288: {
 		title: Farmer Maggot
 		subtitle: Chaser of Rascals
@@ -122,6 +126,7 @@
 			}
 		}
 	}
+
 	1_289: {
 		title: Frodo
 		subtitle: Old Bilbo's Heir
@@ -147,6 +152,7 @@
 			}
 		}
 	}
+
 	1_290: {
 		title: Frodo
 		subtitle: Son of Drogo
@@ -173,6 +179,7 @@
 			}
 		}
 	}
+
 	1_291: {
 		title: The Gaffer
 		subtitle: Sam's Father
@@ -197,6 +204,7 @@
 			}
 		}
 	}
+
 	1_292: {
 		title: The Gaffer's Pipe
 		unique: true
@@ -228,6 +236,7 @@
 			}
 		}
 	}
+
 	1_293: {
 		title: Halfling Deftness
 		culture: shire
@@ -248,6 +257,7 @@
 			}
 		}
 	}
+
 	1_294: {
 		title: Hobbit Appetite
 		culture: shire
@@ -273,6 +283,7 @@
 			}
 		}
 	}
+
 	1_295: {
 		title: Hobbit Farmer
 		culture: shire
@@ -306,6 +317,7 @@
 			}
 		]
 	}
+
 	1_296: {
 		title: Hobbit Intuition
 		culture: shire
@@ -344,6 +356,7 @@
 			]
 		}
 	}
+
 	1_297: {
 		title: Hobbit Party Guest
 		culture: shire
@@ -378,6 +391,7 @@
 			}
 		]
 	}
+
 	1_298: {
 		title: Hobbit Stealth
 		culture: shire
@@ -416,6 +430,7 @@
 			]
 		}
 	}
+
 	1_299: {
 		title: Hobbit Sword
 		culture: shire
@@ -425,6 +440,7 @@
 		strength: 2
 		target: hobbit
 	}
+
 	1_300: {
 		title: Longbottom Leaf
 		culture: shire
@@ -448,6 +464,7 @@
 			}
 		}
 	}
+
 	1_301: {
 		title: Master Proudfoot
 		subtitle: Distant Relative of Bilbo
@@ -492,6 +509,7 @@
 			]
 		}
 	}
+
 	1_302: {
 		title: Merry
 		subtitle: Friend to Sam
@@ -526,6 +544,7 @@
 			}
 		}
 	}
+
 	1_303: {
 		title: Merry
 		subtitle: From O'er the Brandywine
@@ -547,6 +566,7 @@
 			}
 		}
 	}
+
 	1_304: {
 		title: Noble Intentions
 		culture: shire
@@ -566,6 +586,7 @@
 			}
 		}
 	}
+
 	1_305: {
 		title: Old Toby
 		culture: shire
@@ -588,6 +609,7 @@
 			}
 		}
 	}
+
 	1_306: {
 		title: Pippin
 		subtitle: Friend to Frodo
@@ -609,6 +631,7 @@
 			}
 		}
 	}
+
 	1_307: {
 		title: Pippin
 		subtitle: Hobbit of Some Intelligence
@@ -646,6 +669,7 @@
 			}
 		}
 	}
+
 	1_308: {
 		title: Power According to His Stature
 		culture: shire
@@ -664,6 +688,7 @@
 			}
 		}
 	}
+
 	1_309: {
 		title: Rosie Cotton
 		subtitle: Hobbiton Lass
@@ -698,6 +723,7 @@
 			}
 		]
 	}
+
 	1_310: {
 		title: Sam
 		subtitle: Faithful Companion
@@ -733,6 +759,7 @@
 			}
 		]
 	}
+
 	1_311: {
 		title: Sam
 		subtitle: Son of Hamfast
@@ -770,6 +797,7 @@
 			}
 		]
 	}
+
 	1_312: {
 		title: Sorry About Everything
 		culture: shire
@@ -788,6 +816,7 @@
 			}
 		}
 	}
+
 	1_313: {
 		title: Sting
 		unique: true
@@ -829,6 +858,7 @@
 			]
 		}
 	}
+
 	1_314: {
 		title: Stone Trolls
 		culture: shire
@@ -854,6 +884,7 @@
             }
         ]
 	}
+
 	1_315: {
 		title: Stout and Sturdy
 		culture: shire
@@ -871,6 +902,7 @@
 			}
 		}
 	}
+
 	1_316: {
 		title: A Talent for Not Being Seen
 		unique: true
@@ -917,6 +949,7 @@
 			}
 		]
 	}
+
 	1_317: {
 		title: There and Back Again
 		unique: true
@@ -940,6 +973,7 @@
 			}
 		}
 	}
+
 	1_318: {
 		title: Thrór's Map
 		unique: true
@@ -969,4 +1003,5 @@
 			}
 		}
 	}
+	
 }

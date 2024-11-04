@@ -58,6 +58,7 @@
 			}
 		]
 	}
+
 	1_2: {
 		title: The One Ring
 		subtitle: The Ruling Ring
@@ -124,6 +125,7 @@
 			}
 		]
 	}
+
 	1_319: {
 		title: Bag End
 		type: site
@@ -146,6 +148,7 @@
 			}
 		}
 	}
+
 	1_320: {
 		title: East Road
 		type: site
@@ -162,6 +165,7 @@
 			}
 		}
 	}
+
 	1_321: {
 		title: Farmer Maggot's Fields
 		type: site
@@ -184,6 +188,7 @@
 			}
 		}
 	}
+
 	1_322: {
 		title: Green Dragon Inn
 		type: site
@@ -206,6 +211,7 @@
 			}
 		}
 	}
+
 	1_323: {
 		title: Green Hill Country
 		type: site
@@ -222,6 +228,7 @@
 			}
 		}
 	}
+
 	1_324: {
 		title: The Prancing Pony
 		type: site
@@ -243,6 +250,7 @@
 			}
 		}
 	}
+
 	1_325: {
 		title: Shire Lookout Point
 		type: site
@@ -265,6 +273,7 @@
 			}
 		}
 	}
+
 	1_326: {
 		title: Westfarthing
 		type: site
@@ -286,6 +295,7 @@
 			}
 		}
 	}
+
 	1_327: {
 		title: Bree Gate
 		twilight: 2
@@ -322,6 +332,7 @@
 			]
 		}
 	}
+
 	1_328: {
 		title: Bree Streets
 		twilight: 1
@@ -338,6 +349,7 @@
 			}
 		}
 	}
+
 	1_329: {
 		title: Breeland Forest
 		twilight: 1
@@ -354,6 +366,7 @@
 			}
 		}
 	}
+
 	1_330: {
 		title: Buckleberry Ferry
 		twilight: 1
@@ -387,6 +400,7 @@
 			}
 		]
 	}
+
 	1_331: {
 		title: Ettenmoors
 		twilight: 2
@@ -410,6 +424,7 @@
 			}
 		}
 	}
+
 	1_332: {
 		title: Midgewater Marshes
 		twilight: 1
@@ -434,6 +449,7 @@
 			}
 		}
 	}
+
 	1_333: {
 		title: Midgewater Moors
 		twilight: 1
@@ -457,6 +473,7 @@
 			}
 		}
 	}
+
 	1_334: {
 		title: Trollshaw Forest
 		twilight: 1
@@ -479,6 +496,7 @@
 			}
 		}
 	}
+
 	1_335: {
 		title: Weatherhills
 		twilight: 3
@@ -495,6 +513,7 @@
 			}
 		}
 	}
+
 	1_336: {
 		title: Weathertop
 		twilight: 3
@@ -511,6 +530,7 @@
 			}
 		}
 	}
+
 	1_337: {
 		title: Council Courtyard
 		twilight: 0
@@ -531,6 +551,7 @@
 			}
 		}
 	}
+
 	1_338: {
 		title: Ford of Bruinen
 		twilight: 0
@@ -568,6 +589,7 @@
 			}
 		]
 	}
+
 	1_339: {
 		title: Frodo's Bedroom
 		twilight: 0
@@ -589,6 +611,7 @@
 			}
 		}
 	}
+
 	1_340: {
 		title: Rivendell Terrace
 		twilight: 0
@@ -610,6 +633,7 @@
 			}
 		}
 	}
+
 	1_341: {
 		title: Rivendell Valley
 		twilight: 0
@@ -631,6 +655,7 @@
 			}
 		}
 	}
+
 	1_342: {
 		title: Rivendell Waterfall
 		twilight: 0
@@ -671,6 +696,7 @@
 			]
 		}
 	}
+
 	1_343: {
 		title: Balin's Tomb
 		twilight: 3
@@ -706,6 +732,7 @@
 			}
 		}
 	}
+
 	1_344: {
 		title: Dwarrowdelf Chamber
 		twilight: 2
@@ -741,6 +768,7 @@
 			}
 		}
 	}
+
 	1_345: {
 		title: Mithril Mine
 		twilight: 3
@@ -762,6 +790,7 @@
 			}
 		}
 	}
+
 	1_346: {
 		title: Moria Lake
 		twilight: 3
@@ -797,6 +826,7 @@
 			}
 		}
 	}
+
 	1_347: {
 		title: Moria Stairway
 		twilight: 2
@@ -814,6 +844,7 @@
 			}
 		}
 	}
+
 	1_348: {
 		title: Pass of Caradhras
 		twilight: 2
@@ -849,6 +880,7 @@
 			]
 		}
 	}
+
 	1_349: {
 		title: The Bridge of Khazad-dûm
 		twilight: 6
@@ -883,6 +915,7 @@
 			}
 		}
 	}
+
 	1_350: {
 		title: Dimrill Dale
 		twilight: 3
@@ -917,6 +950,7 @@
 			}
 		]
 	}
+
 	1_351: {
 		title: Galadriel's Glade
 		twilight: 3
@@ -938,6 +972,7 @@
 			}
 		}
 	}
+
 	1_352: {
 		title: Lothlórien Woods
 		twilight: 3
@@ -958,6 +993,7 @@
 			}
 		}
 	}
+
 	1_353: {
 		title: Anduin Confluence
 		twilight: 6
@@ -978,6 +1014,7 @@
 			}
 		}
 	}
+
 	1_354: {
 		title: Anduin Wilderland
 		twilight: 6
@@ -997,6 +1034,7 @@
 			}
 		}
 	}
+
 	1_355: {
 		title: Silverlode Banks
 		twilight: 6
@@ -1021,6 +1059,7 @@
 			}
 		}
 	}
+
 	1_356: {
 		title: Anduin Banks
 		twilight: 6
@@ -1043,6 +1082,7 @@
 			}
 		}
 	}
+
 	1_357: {
 		title: Brown Lands
 		twilight: 6
@@ -1064,6 +1104,7 @@
 			}
 		}
 	}
+
 	1_358: {
 		title: Pillars of the Kings
 		twilight: 6
@@ -1086,6 +1127,7 @@
 			}
 		}
 	}
+
 	1_359: {
 		title: Shores of Nen Hithoel
 		twilight: 9
@@ -1111,6 +1153,7 @@
 			}
 		}
 	}
+
 	1_360: {
 		title: Emyn Muil
 		twilight: 9
@@ -1133,6 +1176,7 @@
 			}
 		}
 	}
+
 	1_361: {
 		title: Slopes of Amon Hen
 		twilight: 9
@@ -1148,6 +1192,7 @@
 			}
 		}
 	}
+
 	1_362: {
 		title: Summit of Amon Hen
 		twilight: 8
@@ -1173,6 +1218,7 @@
 			}
 		}
 	}
+
 	1_363: {
 		title: Tol Brandir
 		twilight: 9
@@ -1299,4 +1345,5 @@
 			*/
 		}
 	}
+	
 }

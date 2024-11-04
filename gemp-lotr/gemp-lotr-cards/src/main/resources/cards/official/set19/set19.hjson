@@ -57,6 +57,7 @@
 			}
 		]
 	}
+
 	19_2: {
 		title: Gimli
 		subtitle: Opinionated Guide
@@ -84,6 +85,7 @@
 			}
 		}
 	}
+
 	19_3: {
 		title: Still Twitching
 		culture: dwarven
@@ -131,6 +133,7 @@
 			}
 		]
 	}
+
 	19_4: {
 		title: That's Two!
 		culture: dwarven
@@ -154,6 +157,7 @@
 			}
 		}
 	}
+
 	19_5: {
 		title: Army Long Trained
 		culture: elven
@@ -201,6 +205,7 @@
 			}
 		]
 	}
+
 	19_6: {
 		title: Arwen
 		subtitle: Royal Maiden
@@ -240,6 +245,7 @@
 			}
 		]
 	}
+
 	19_7: {
 		title: Legolas
 		subtitle: Skeptical Guide
@@ -274,6 +280,7 @@
 			]
 		}
 	}
+
 	19_8: {
 		title: Gandalf
 		subtitle: Wise Guide
@@ -302,6 +309,7 @@
 			}
 		}
 	}
+
 	19_9: {
 		title: Stern Words
 		culture: gandalf
@@ -342,6 +350,7 @@
 			}
 		]
 	}
+
 	19_10: {
 		title: Gollum
 		subtitle: Threatening Guide
@@ -377,6 +386,7 @@
 			}
 		]
 	}
+
 	19_11: {
 		title: Sméagol
 		subtitle: Pitiable Guide
@@ -424,6 +434,7 @@
 			}
 		]
 	}
+
 	19_12: {
 		title: Aragorn
 		subtitle: Well-traveled Guide
@@ -478,6 +489,7 @@
 			}
 		]
 	}
+
 	19_13: {
 		title: Boromir
 		subtitle: Destined Guide
@@ -521,6 +533,7 @@
 			}
 		]
 	}
+
 	19_14: {
 		title: Not Bound to His Fate
 		culture: gondor
@@ -558,6 +571,7 @@
 			}
 		]
 	}
+
 	19_15: {
 		title: Strength in My Blood
 		culture: gondor
@@ -578,6 +592,7 @@
 			}
 		}
 	}
+
 	19_16: {
 		title: Gríma
 		subtitle: Servant of Another Master
@@ -638,6 +653,7 @@
 			}
 		]
 	}
+
 	19_17: {
 		title: Urgency
 		culture: isengard
@@ -677,6 +693,7 @@
 			}
 		]
 	}
+
 	19_18: {
 		title: The Balrog
 		subtitle: Demon of Might
@@ -729,6 +746,7 @@
 			}
 		]
 	}
+
 	19_19: {
 		title: Reaching Tentacle
 		culture: moria
@@ -775,6 +793,7 @@
 			}
 		]
 	}
+
 	19_20: {
 		title: Strong Tentacle
 		culture: moria
@@ -821,6 +840,7 @@
 			}
 		]
 	}
+
 	19_21: {
 		title: Watcher in the Water
 		subtitle: Many-tentacled Creature
@@ -873,6 +893,7 @@
 			}
 		]
 	}
+
 	19_22: {
 		title: Pit Troll
 		culture: orc
@@ -913,6 +934,7 @@
 			}
 		]
 	}
+
 	19_23: {
 		title: Troll of the Deep
 		subtitle: Cave Troll
@@ -946,6 +968,7 @@
             }
         ]
 	}
+
 	19_24: {
 		title: Brought Down from Inside
 		culture: rohan
@@ -986,6 +1009,7 @@
 			}
 		]
 	}
+
 	19_25: {
 		title: Éomer
 		subtitle: Éored Captain
@@ -1011,6 +1035,7 @@
 			}
 		}
 	}
+
 	19_26: {
 		title: Éowyn
 		subtitle: Lady of the Mark
@@ -1033,6 +1058,7 @@
 			}
 		}
 	}
+
 	19_27: {
 		title: Sauron's Might
 		culture: sauron
@@ -1065,6 +1091,7 @@
 			]
 		}
 	}
+
 	19_28: {
 		title: Frodo
 		subtitle: Little Master
@@ -1095,6 +1122,7 @@
 			}
 		}
 	}
+
 	19_29: {
 		title: Merry
 		subtitle: Resolute Friend
@@ -1126,6 +1154,7 @@
 			}
 		}
 	}
+
 	19_30: {
 		title: Pippin
 		subtitle: Steadfast Friend
@@ -1150,6 +1179,7 @@
 			}
 		}
 	}
+
 	19_31: {
 		title: Rabbit Stew
 		culture: shire
@@ -1184,6 +1214,7 @@
 			}
 		]
 	}
+
 	19_32: {
 		title: Sam
 		subtitle: Loyal Friend
@@ -1230,6 +1261,7 @@
 			}
 		]
 	}
+
 	19_33: {
 		title: Lurtz
 		subtitle: Resilient Captain
@@ -1304,6 +1336,7 @@
 			}
 		]
 	}
+
 	19_34: {
 		title: In Twilight
 		culture: wraith
@@ -1338,6 +1371,7 @@
 			}
 		]
 	}
+
 	19_35: {
 		title: Úlairë Attëa
 		subtitle: Dark Predator
@@ -1369,6 +1403,7 @@
 			}
 		}
 	}
+
 	19_36: {
 		title: Úlairë Enquëa
 		subtitle: Dark Threat
@@ -1400,6 +1435,7 @@
 			}
 		}
 	}
+
 	19_37: {
 		title: Úlairë Lemenya
 		subtitle: Dark Enemy
@@ -1424,6 +1460,7 @@
 			}
 		}
 	}
+
 	19_38: {
 		title: Úlairë Nertëa
 		subtitle: Dark Horseman
@@ -1465,6 +1502,7 @@
 			}
 		]
 	}
+
 	19_39: {
 		title: Úlairë Toldëa
 		subtitle: Dark Shadow
@@ -1503,6 +1541,7 @@
 			}
 		]
 	}
+
 	19_40: {
 		title: The Witch-king
 		subtitle: Dark Lord

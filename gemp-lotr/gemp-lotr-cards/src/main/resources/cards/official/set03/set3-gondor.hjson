@@ -1,392 +1,405 @@
 {
-    3_37: {
-        title: Answering the Cries
-        side: free_people
-        culture: Gondor
-        twilight: 0
-        type: condition
-        keyword: Support Area
-        effects: {
-            type: activated
-            phase: skirmish
-            cost: {
-                type: discardFromHand
-                forced: false
-                select: choose(culture(gondor),tale)
-            }
-            effect: {
-                type: modifyStrength
-                select: choose(culture(gondor),companion)
-                amount: 2
-            }
-        }
-    }
-    3_38: {
-        title: Aragorn
-        subtitle: Heir to the White City
-        unique: true
-        side: free_people
-        culture: Gondor
-        twilight: 4
-        type: companion
-        race: Man
-        signet: frodo
-        strength: 8
-        vitality: 4
-        resistance: 6
-        keyword: Ranger
-        effects: {
-            type: trigger
-            trigger: {
-                type: moves
-            }
-            requires: {
-                type: phase
-                phase: fellowship
-            }
-            effect: {
-                type: removeTwilight
-                amount: 2
-            }
-        }
-    }
-    3_39: {
-        title: Banner of the White Tree
-        side: free_people
-        culture: Gondor
-        twilight: 0
-        type: event
-        timeword: Maneuver
-        keyword:
-        [
-            Tale
-        ]
-        effects: {
-            type: event
-            cost: {
-                type: exert
-                select: choose(culture(gondor),companion)
-                memorize: exertedCompanion
-            }
-            effect: [
-                {
-                    type: modifyStrength
-                    select: memory(exertedCompanion)
-                    amount: 3
-                    until: start(regroup)
-                }
-                {
-                    type: addKeyword
-                    select: memory(exertedCompanion)
-                    keyword: defender
-                    amount: 1
-                    until: start(regroup)
-                }
-            ]
-        }
-    }
-    3_40: {
-        title: Citadel of Minas Tirith
-        side: free_people
-        culture: Gondor
-        twilight: 1
-        type: condition
-        keyword: Support Area
-        effects: {
-            type: trigger
-            optional: true
-            trigger: {
-                type: endOfTurn
-            }
-            requires: {
-                type: not
-                requires: {
-                    type: lostSkirmishThisTurn
-                    filter: or(companion,ally)
-                }
-            }
-            effect: {
-                type: heal
-                select: choose(companion)
-            }
-        }
-    }
-    3_41: {
-        title: Gondor Bowmen
-        side: free_people
-        culture: Gondor
-        twilight: 0
-        type: condition
-        keyword:
-        [
-            Support Area
-            Tale
-        ]
-        effects: {
-            type: activated
-            phase: archery
-            cost: [
-                {
-                    type: exert
-                    select: choose(culture(gondor),companion)
-                }
-                {
-                    type: discard
-                    select: self
-                }
-            ]
-            effect: {
-                type: modifyArcheryTotal
-                side: free
-                amount: 2
-            }
-        }
-    }
-    3_42: {
-        title: Horn of Boromir
-        unique: true
-        side: free_people
-        culture: Gondor
-        twilight: 0
-        type: possession
-        target: name(Boromir)
-        effects: {
-            type: activated
-            phase: maneuver
-            cost: {
-                type: exert
-                select: bearer
-            }
-            effect: [
-                {
-                    type: chooseActiveCards
-                    select: choose(ally)
-                    text: Choose ally to have it participate in archery and skirmishes
-                    memorize: chosenAlly
-                }
-                {
-                    type: modifyStrength
-                    select: memory(chosenAlly)
-                    amount: 3
-                    until: start(regroup)
-                }
-                {
-                    type: enableParticipationInArcheryFireAndSkirmishes
-                    select: memory(chosenAlly)
-                    until: regroup
-                }
-            ]
+	3_37: {
+		title: Answering the Cries
+		side: free_people
+		culture: Gondor
+		twilight: 0
+		type: condition
+		keyword: Support Area
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: discardFromHand
+				forced: false
+				select: choose(culture(gondor),tale)
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(culture(gondor),companion)
+				amount: 2
+			}
+		}
+	}
 
-        }
-    }
-    3_43: {
-        title: Might of Númenor
-        side: free_people
-        culture: Gondor
-        twilight: 1
-        type: event
-        timeword: Maneuver
-        keyword:
-        [
-            Tale
-        ]
-        effects: {
-            type: event
-            requires: {
-                type: canSpot
-                filter: culture(gondor),companion
-            }
-            effect: [
-                {
-                    type: revealRandomCardsFromHand
-                    forced: true
-                    hand: shadow
-                    memorize: revealedCard
-                }
-                {
-                    type: heal
-                    select: choose(companion)
-                    count: {
-                        type: twilightCostInMemory
-                        memory: revealedCard
-                    }
-                }
-            ]
-        }
-    }
-    3_44: {
-        title: The Shards of Narsil
-        unique: true
-        side: free_people
-        culture: Gondor
-        twilight: 1
-        type: artifact
-        keyword: Support Area
-        effects: [
-            {
-                type: activated
-                phase: fellowship
-                text: Stack a GONDOR card from hand here
-                effect: {
-                    type: stackCardsFromHand
-                    select: choose(culture(gondor))
-                    where: self
-                }
-            }
-            {
-                type: activated
-                phase: fellowship
-                text: Add (1) to take a card from here
-                cost: {
-                    type: addTwilight
-                    amount: 1
-                }
-                effect: {
-                    type: putStackedCardsIntoHand
-                    on: self
-                }
-            }
-        ]
-    }
-    3_45: {
-        title: Some Who Resisted
-        side: free_people
-        culture: Gondor
-        twilight: 0
-        type: event
-        timeword: Maneuver
-        keyword:
-        [
-            Tale
-        ]
-        effects: {
-            type: event
-            requires: {
-                type: canSpot
-                filter: culture(gondor),companion
-            }
-            effect: {
-                type: addModifier
-                modifier: {
-                    type: modifyCost
-                    filter: timeword(maneuver),event
-                    amount: 2
-                }
-            }
-        }
-    }
-    3_46: {
-        title: Still Sharp
-        side: free_people
-        culture: Gondor
-        twilight: 0
-        type: event
-        timeword: skirmish
-        effects: {
-            type: event
-            requires: {
-                type: canSpot
-                filter: name(The Shards of Narsil)
-            }
-            effect: [
-                {
-                    type: chooseActiveCards
-                    select: choose(culture(gondor),companion)
-                    text: Choose GONDOR companion to strengthen
-                    memorize: chosenCompanion
-                }
-                {
-                    type: modifyStrength
-                    select: memory(chosenCompanion)
-                    amount: 3
-                }
-                {
-                    type: addKeyword
-                    select: memory(chosenCompanion)
-                    keyword: damage
-                    amount: 1
-                }
-            ]
-        }
-    }
-    3_47: {
-        title: Voice of Rauros
-        side: free_people
-        culture: Gondor
-        twilight: 0
-        type: event
-        timeword: maneuver
-        effects: {
-            type: event
-            cost: {
-                type: exert
-                select: choose(name(Aragorn))
-            }
-            effect: {
-                type: addKeyword
-                select: all(companion,signet(Aragorn))
-                keyword: damage
-                amount: 1
-                until: start(regroup)
-            }
-        }
-    }
-    3_48: {
-        title: We Must Go Warily
-        side: free_people
-        culture: Gondor
-        twilight: 0
-        type: event
-        timeword: response
-        effects: {
-            type: responseEvent
-            trigger: {
-                type: moves
-            }
-            requires: {
-                type: phase
-                phase: regroup
-            }
-            cost: {
-                type: exert
-                select: choose(culture(gondor),companion)
-            }
-            effect: {
-                type: addModifier
-                modifier: {
-                    type: modifyCost
-                    filter: minion
-                    amount: 1
-                }
-                until: start(regroup)
-            }
-        }
-    }
-    3_122: {
-        title: Boromir
-        subtitle: Defender of Minas Tirith
-        unique: true
-        side: free_people
-        culture: Gondor
-        twilight: 3
-        type: companion
-        race: Man
-        signet: gandalf
-        strength: 7
-        vitality: 3
-        resistance: 6
-        keyword: Ranger
-        effects: {
-            type: activated
-            phase: fellowship
-            cost: {
-                type: addTwilight
-                amount: 2
-            }
-            effect: {
-                type: heal
-                select: self
-            }
-        }
-    }
+	3_38: {
+		title: Aragorn
+		subtitle: Heir to the White City
+		unique: true
+		side: free_people
+		culture: Gondor
+		twilight: 4
+		type: companion
+		race: Man
+		signet: frodo
+		strength: 8
+		vitality: 4
+		resistance: 6
+		keyword: Ranger
+		effects: {
+			type: trigger
+			trigger: {
+				type: moves
+			}
+			requires: {
+				type: phase
+				phase: fellowship
+			}
+			effect: {
+				type: removeTwilight
+				amount: 2
+			}
+		}
+	}
+
+	3_39: {
+		title: Banner of the White Tree
+		side: free_people
+		culture: Gondor
+		twilight: 0
+		type: event
+		timeword: Maneuver
+		keyword:
+		[
+			Tale
+		]
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(culture(gondor),companion)
+				memorize: exertedCompanion
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: memory(exertedCompanion)
+					amount: 3
+					until: start(regroup)
+				}
+				{
+					type: addKeyword
+					select: memory(exertedCompanion)
+					keyword: defender
+					amount: 1
+					until: start(regroup)
+				}
+			]
+		}
+	}
+
+	3_40: {
+		title: Citadel of Minas Tirith
+		side: free_people
+		culture: Gondor
+		twilight: 1
+		type: condition
+		keyword: Support Area
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: endOfTurn
+			}
+			requires: {
+				type: not
+				requires: {
+					type: lostSkirmishThisTurn
+					filter: or(companion,ally)
+				}
+			}
+			effect: {
+				type: heal
+				select: choose(companion)
+			}
+		}
+	}
+
+	3_41: {
+		title: Gondor Bowmen
+		side: free_people
+		culture: Gondor
+		twilight: 0
+		type: condition
+		keyword:
+		[
+			Support Area
+			Tale
+		]
+		effects: {
+			type: activated
+			phase: archery
+			cost: [
+				{
+					type: exert
+					select: choose(culture(gondor),companion)
+				}
+				{
+					type: discard
+					select: self
+				}
+			]
+			effect: {
+				type: modifyArcheryTotal
+				side: free
+				amount: 2
+			}
+		}
+	}
+
+	3_42: {
+		title: Horn of Boromir
+		unique: true
+		side: free_people
+		culture: Gondor
+		twilight: 0
+		type: possession
+		target: name(Boromir)
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: exert
+				select: bearer
+			}
+			effect: [
+				{
+					type: chooseActiveCards
+					select: choose(ally)
+					text: Choose ally to have it participate in archery and skirmishes
+					memorize: chosenAlly
+				}
+				{
+					type: modifyStrength
+					select: memory(chosenAlly)
+					amount: 3
+					until: start(regroup)
+				}
+				{
+					type: enableParticipationInArcheryFireAndSkirmishes
+					select: memory(chosenAlly)
+					until: regroup
+				}
+			]
+
+		}
+	}
+
+	3_43: {
+		title: Might of Númenor
+		side: free_people
+		culture: Gondor
+		twilight: 1
+		type: event
+		timeword: Maneuver
+		keyword:
+		[
+			Tale
+		]
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(gondor),companion
+			}
+			effect: [
+				{
+					type: revealRandomCardsFromHand
+					forced: true
+					hand: shadow
+					memorize: revealedCard
+				}
+				{
+					type: heal
+					select: choose(companion)
+					count: {
+						type: twilightCostInMemory
+						memory: revealedCard
+					}
+				}
+			]
+		}
+	}
+
+	3_44: {
+		title: The Shards of Narsil
+		unique: true
+		side: free_people
+		culture: Gondor
+		twilight: 1
+		type: artifact
+		keyword: Support Area
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				text: Stack a GONDOR card from hand here
+				effect: {
+					type: stackCardsFromHand
+					select: choose(culture(gondor))
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				text: Add (1) to take a card from here
+				cost: {
+					type: addTwilight
+					amount: 1
+				}
+				effect: {
+					type: putStackedCardsIntoHand
+					on: self
+				}
+			}
+		]
+	}
+
+	3_45: {
+		title: Some Who Resisted
+		side: free_people
+		culture: Gondor
+		twilight: 0
+		type: event
+		timeword: Maneuver
+		keyword:
+		[
+			Tale
+		]
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(gondor),companion
+			}
+			effect: {
+				type: addModifier
+				modifier: {
+					type: modifyCost
+					filter: timeword(maneuver),event
+					amount: 2
+				}
+			}
+		}
+	}
+
+	3_46: {
+		title: Still Sharp
+		side: free_people
+		culture: Gondor
+		twilight: 0
+		type: event
+		timeword: skirmish
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(The Shards of Narsil)
+			}
+			effect: [
+				{
+					type: chooseActiveCards
+					select: choose(culture(gondor),companion)
+					text: Choose GONDOR companion to strengthen
+					memorize: chosenCompanion
+				}
+				{
+					type: modifyStrength
+					select: memory(chosenCompanion)
+					amount: 3
+				}
+				{
+					type: addKeyword
+					select: memory(chosenCompanion)
+					keyword: damage
+					amount: 1
+				}
+			]
+		}
+	}
+
+	3_47: {
+		title: Voice of Rauros
+		side: free_people
+		culture: Gondor
+		twilight: 0
+		type: event
+		timeword: maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(name(Aragorn))
+			}
+			effect: {
+				type: addKeyword
+				select: all(companion,signet(Aragorn))
+				keyword: damage
+				amount: 1
+				until: start(regroup)
+			}
+		}
+	}
+
+	3_48: {
+		title: We Must Go Warily
+		side: free_people
+		culture: Gondor
+		twilight: 0
+		type: event
+		timeword: response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: moves
+			}
+			requires: {
+				type: phase
+				phase: regroup
+			}
+			cost: {
+				type: exert
+				select: choose(culture(gondor),companion)
+			}
+			effect: {
+				type: addModifier
+				modifier: {
+					type: modifyCost
+					filter: minion
+					amount: 1
+				}
+				until: start(regroup)
+			}
+		}
+	}
+
+	3_122: {
+		title: Boromir
+		subtitle: Defender of Minas Tirith
+		unique: true
+		side: free_people
+		culture: Gondor
+		twilight: 3
+		type: companion
+		race: Man
+		signet: gandalf
+		strength: 7
+		vitality: 3
+		resistance: 6
+		keyword: Ranger
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: addTwilight
+				amount: 2
+			}
+			effect: {
+				type: heal
+				select: self
+			}
+		}
+	}
+    
 }

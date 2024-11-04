@@ -32,6 +32,7 @@
             }
         ]
 	}
+
 	1_70: {
 		title: Barliman Butterbur
 		subtitle: Prancing Pony Proprietor
@@ -56,6 +57,7 @@
 			}
 		}
 	}
+
 	1_71: {
 		title: Durin's Secret
 		culture: gandalf
@@ -88,6 +90,7 @@
 			}
 		}
 	}
+
 	1_72: {
 		title: Gandalf
 		subtitle: Friend of the Shirefolk
@@ -149,6 +152,7 @@
 			}
 		}
 	}
+
 	1_73: {
 		title: Gandalf's Cart
 		unique: true
@@ -226,6 +230,7 @@
 			}
 		}
 	}
+
 	1_74: {
 		title: Gandalf's Pipe
 		unique: true
@@ -257,6 +262,7 @@
 			}
 		}
 	}
+
 	1_75: {
 		title: Glamdring
 		unique: true
@@ -303,6 +309,7 @@
 			}
 		]
 	}
+
 	1_76: {
 		title: Intimidate
 		culture: gandalf
@@ -328,6 +335,7 @@
 			}
 		}
 	}
+
 	1_77: {
 		title: Let Folly Be Our Cloak
 		culture: gandalf
@@ -351,6 +359,7 @@
 			}
 		}
 	}
+
 	1_78: {
 		title: Mysterious Wizard
 		culture: gandalf
@@ -377,6 +386,7 @@
 			}
 		}
 	}
+
 	1_79: {
 		title: The Nine Walkers
 		culture: gandalf
@@ -401,6 +411,7 @@
             }
         ]
 	}
+
 	1_80: {
 		title: Ottar
 		subtitle: Man of Laketown
@@ -445,6 +456,7 @@
             }
         ]
 	}
+
 	1_81: {
 		title: Questions That Need Answering
 		culture: gandalf
@@ -489,6 +501,7 @@
 			]
 		}
 	}
+
 	1_82: {
 		title: Risk a Little Light
 		culture: gandalf
@@ -533,6 +546,7 @@
 			]
 		}
 	}
+
 	1_83: {
 		title: Servant of the Secret Fire
 		culture: gandalf
@@ -555,6 +569,7 @@
 			}
 		}
 	}
+
 	1_84: {
 		title: Sleep, Caradhras
 		culture: gandalf
@@ -576,6 +591,7 @@
 			}
 		}
 	}
+
 	1_85: {
 		title: Strength of Spirit
 		culture: gandalf
@@ -601,6 +617,7 @@
 			}
 		}
 	}
+
 	1_86: {
 		title: Treachery Deeper Than You Know
 		culture: gandalf
@@ -622,6 +639,7 @@
 			}
 		}
 	}
+
 	1_87: {
 		title: A Wizard Is Never Late
 		culture: gandalf
@@ -638,6 +656,7 @@
 			}
 		}
 	}
+
 	1_364: {
 		title: Gandalf
 		subtitle: The Grey Wizard
@@ -664,4 +683,5 @@
 			}
 		}
 	}
+	
 }

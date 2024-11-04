@@ -36,6 +36,7 @@
 			}
 		}
 	}
+
 	1_240: {
 		title: Band of the Eye
 		culture: sauron
@@ -62,6 +63,7 @@
 			}
 		}
 	}
+
 	1_241: {
 		title: Curse From Mordor
 		culture: sauron
@@ -80,6 +82,7 @@
 			}
 		}
 	}
+
 	1_242: {
 		title: The Dark Lord's Summons
 		culture: sauron
@@ -140,6 +143,7 @@
             }
         ]
 	}
+
 	1_243: {
 		title: Despair
 		culture: sauron
@@ -175,6 +179,7 @@
 			}
 		}
 	}
+
 	1_244: {
 		title: Desperate Defense of the Ring
 		culture: sauron
@@ -216,6 +221,7 @@
 			}
 		]
 	}
+
 	1_245: {
 		title: Desperate Measures
 		culture: sauron
@@ -239,6 +245,7 @@
 			}
 		}
 	}
+
 	1_246: {
 		title: Enduring Evil
 		culture: sauron
@@ -262,6 +269,7 @@
 			}
 		}
 	}
+
 	1_247: {
 		title: Enheartened Foe
 		culture: sauron
@@ -283,6 +291,7 @@
 			}
 		}
 	}
+
 	1_248: {
 		title: Forces of Mordor
 		culture: sauron
@@ -305,6 +314,7 @@
 			}
 		}
 	}
+
 	1_249: {
 		title: Gleaming Spires Will Crumble
 		culture: sauron
@@ -333,6 +343,7 @@
 			}
 		]
 	}
+
 	1_250: {
 		title: Hate
 		culture: sauron
@@ -351,6 +362,7 @@
 			}
 		}
 	}
+
 	1_251: {
 		title: A Host Avails Little
 		culture: sauron
@@ -387,6 +399,7 @@
 			}
 		}
 	}
+
 	1_252: {
 		title: The Irresistible Shadow
 		culture: sauron
@@ -423,6 +436,7 @@
 			}
 		]
 	}
+
 	1_253: {
 		title: Journey Into Danger
 		culture: sauron
@@ -455,6 +469,7 @@
 			}
 		]
 	}
+
 	1_254: {
 		title: Mordor Enraged
 		culture: sauron
@@ -477,6 +492,7 @@
 			}
 		}
 	}
+
 	1_255: {
 		title: Mordor's Strength
 		culture: sauron
@@ -496,6 +512,7 @@
 			}
 		}
 	}
+
 	1_256: {
 		title: Morgul Hunter
 		culture: sauron
@@ -517,6 +534,7 @@
 			}
 		}
 	}
+
 	1_257: {
 		title: Morgul Skirmisher
 		culture: sauron
@@ -539,6 +557,7 @@
 			}
 		}
 	}
+
 	1_258: {
 		title: Morgul Skulker
 		culture: sauron
@@ -562,6 +581,7 @@
 			}
 		}
 	}
+
 	1_259: {
 		title: Morgul Warden
 		unique: true
@@ -584,6 +604,7 @@
 			}
 		}
 	}
+
 	1_260: {
 		title: The Number Must Be Few
 		culture: sauron
@@ -625,6 +646,7 @@
 			]
 		}
 	}
+
 	1_261: {
 		title: Orc Ambusher
 		culture: sauron
@@ -664,6 +686,7 @@
 			}
 		]
 	}
+
 	1_262: {
 		title: Orc Assassin
 		culture: sauron
@@ -706,6 +729,7 @@
 			}
 		]
 	}
+
 	1_263: {
 		title: Orc Banner
 		culture: sauron
@@ -727,6 +751,7 @@
 			}
 		}
 	}
+
 	1_264: {
 		title: Orc Bowmen
 		culture: sauron
@@ -746,6 +771,7 @@
 			}
 		}
 	}
+
 	1_265: {
 		title: Orc Butchery
 		culture: sauron
@@ -773,6 +799,7 @@
 			}
 		}
 	}
+
 	1_266: {
 		title: Orc Chieftain
 		culture: sauron
@@ -805,6 +832,7 @@
 			]
 		}
 	}
+
 	1_267: {
 		title: Orc Hunters
 		culture: sauron
@@ -827,6 +855,7 @@
 			}
 		}
 	}
+
 	1_268: {
 		title: Orc Inquisitor
 		culture: sauron
@@ -850,6 +879,7 @@
 			}
 		}
 	}
+
 	1_269: {
 		title: Orc Scimitar
 		culture: sauron
@@ -881,6 +911,7 @@
 			]
 		}
 	}
+
 	1_270: {
 		title: Orc Scouting Band
 		culture: sauron
@@ -914,6 +945,7 @@
 			}
 		]
 	}
+
 	1_271: {
 		title: Orc Soldier
 		culture: sauron
@@ -936,6 +968,7 @@
 			}
 		}
 	}
+
 	1_272: {
 		title: Orc War Band
 		culture: sauron
@@ -958,6 +991,7 @@
 			}
 		}
 	}
+
 	1_273: {
 		title: The Ring's Oppression
 		culture: sauron
@@ -987,6 +1021,7 @@
 			}
 		}
 	}
+
 	1_274: {
 		title: Sauron's Defenses
 		culture: sauron
@@ -1037,6 +1072,7 @@
 			}
 		]
 	}
+
 	1_275: {
 		title: Seeking It Always
 		culture: sauron
@@ -1061,6 +1097,7 @@
 			}
 		}
 	}
+
 	1_276: {
 		title: Seeking Its Master
 		culture: sauron
@@ -1085,6 +1122,7 @@
 			}
 		}
 	}
+
 	1_277: {
 		title: Shadow's Reach
 		culture: sauron
@@ -1103,6 +1141,7 @@
 			}
 		}
 	}
+
 	1_278: {
 		title: Strength Born of Fear
 		culture: sauron
@@ -1123,6 +1162,7 @@
 			}
 		}
 	}
+
 	1_279: {
 		title: Thin and Stretched
 		unique: true
@@ -1163,6 +1203,7 @@
 			}
 		]
 	}
+
 	1_280: {
 		title: Tower Lieutenant
 		unique: true
@@ -1187,6 +1228,7 @@
 			}
 		}
 	}
+
 	1_281: {
 		title: Under the Watching Eye
 		culture: sauron
@@ -1217,6 +1259,7 @@
 			}
 		]
 	}
+
 	1_282: {
 		title: The Weight of a Legacy
 		culture: sauron
@@ -1232,6 +1275,7 @@
 			}
 		}
 	}
+
 	1_283: {
 		title: You Bring Great Evil
 		culture: sauron
@@ -1259,4 +1303,5 @@
             }
         ]
 	}
+	
 }

@@ -39,6 +39,7 @@
 			}
 		]
 	}
+
 	16_2: {
 		title: Candle Corpses
 		culture: wraith
@@ -73,6 +74,7 @@
 			}
 		}
 	}
+
 	16_3: {
 		title: Covetous Wisp
 		unique: true
@@ -106,6 +108,7 @@
 			}
 		}
 	}
+
 	16_4: {
 		title: Dead Faces
 		culture: wraith
@@ -139,6 +142,7 @@
 			}
 		}
 	}
+
 	16_5: {
 		title: Spirit of Dread
 		unique: true
@@ -188,6 +192,7 @@
 			}
 		]
 	}
+
 	16_6: {
 		title: Undead of Angmar
 		unique: true

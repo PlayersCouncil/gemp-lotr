@@ -17,6 +17,7 @@
 			}
 		}
 	}
+
 	1_204: {
 		title: All Veils Removed
 		culture: wraith
@@ -39,6 +40,7 @@
 			}
 		}
 	}
+
 	1_205: {
 		title: Beauty Is Fading
 		culture: wraith
@@ -84,6 +86,7 @@
 			}
 		}
 	}
+
 	1_206: {
 		title: Bent on Discovery
 		culture: wraith
@@ -130,6 +133,7 @@
 			}
 		]
 	}
+
 	1_207: {
 		title: Black Breath
 		culture: wraith
@@ -167,6 +171,7 @@
 			}
 		]
 	}
+
 	1_208: {
 		title: Black Steed
 		culture: wraith
@@ -204,6 +209,7 @@
 			}
 		]
 	}
+
 	1_209: {
 		title: Blade Tip
 		culture: wraith
@@ -254,6 +260,7 @@
 			}
 		]
 	}
+
 	1_210: {
 		title: Dark Whispers
 		culture: wraith
@@ -262,10 +269,10 @@
 		timeword: skirmish
 		effects: {
 			type: event
-            requires: {
-                type: canSpotBurdens
-                amount: 3
-            }
+			requires: {
+				type: canSpotBurdens
+				amount: 3
+			}
 			effect: {
 				type: choice
 				texts: [
@@ -317,6 +324,7 @@
 			}
 		}
 	}
+
 	1_211: {
 		title: Drawn to Its Power
 		culture: wraith
@@ -338,6 +346,7 @@
 			}
 		}
 	}
+
 	1_212: {
 		title: Fear
 		culture: wraith
@@ -359,6 +368,7 @@
 			}
 		}
 	}
+
 	1_213: {
 		title: Frozen by Fear
 		culture: wraith
@@ -382,6 +392,7 @@
 			}
 		}
 	}
+
 	1_214: {
 		title: In the Ringwraith's Wake
 		culture: wraith
@@ -413,6 +424,7 @@
 			}
 		}
 	}
+
 	1_215: {
 		title: The Master's Will
 		culture: wraith
@@ -448,12 +460,13 @@
 				{
 					type: discardCardsFromDrawDeck
 					select: all(memory(revealedCards),not(culture(wraith)))
-                    showAll: false
-                    shuffle: false
+					showAll: false
+					shuffle: false
 				}
 			]
 		}
 	}
+
 	1_216: {
 		title: Morgul Blade
 		culture: wraith
@@ -503,6 +516,7 @@
 			}
 		]
 	}
+
 	1_217: {
 		title: Morgul Gates
 		culture: wraith
@@ -518,6 +532,7 @@
 			}
 		}
 	}
+
 	1_218: {
 		title: Nazgûl Sword
 		culture: wraith
@@ -539,6 +554,7 @@
 			}
 		}
 	}
+
 	1_219: {
 		title: The Nine Servants of Sauron
 		culture: wraith
@@ -561,6 +577,7 @@
 			}
 		}
 	}
+
 	1_220: {
 		title: Not Easily Destroyed
 		culture: wraith
@@ -583,6 +600,7 @@
 			}
 		}
 	}
+
 	1_221: {
 		title: The Pale Blade
 		unique: true
@@ -618,6 +636,7 @@
 			}
 		]
 	}
+
 	1_222: {
 		title: Paths Seldom Trodden
 		culture: wraith
@@ -628,30 +647,31 @@
 			support area
 		]
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: nazgul
-                }
-		    }
-            {
-                type: activated
-                phase: shadow
-                cost: {
-                    type: removeTwilight
-                    amount: 3
-                }
-                effect: {
-                    type: playSite
-                    block: fellowship
-                    number: {
-                        type: currentSiteNumber
-                    }
-                }
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: playSite
+					block: fellowship
+					number: {
+						type: currentSiteNumber
+					}
+				}
+			}
+		]
 	}
+
 	1_223: {
 		title: Relentless Charge
 		culture: wraith
@@ -670,6 +690,7 @@
 			}
 		}
 	}
+
 	1_224: {
 		title: Return to Its Master
 		culture: wraith
@@ -678,9 +699,9 @@
 		timeword: response
 		effects: {
 			type: responseEvent
-            requires: {
-                type: ringIsOn
-            }
+			requires: {
+				type: ringIsOn
+			}
 			trigger: {
 				type: endOfPhase
 				phase: skirmish
@@ -711,6 +732,7 @@
 			]
 		}
 	}
+
 	1_225: {
 		title: Sword of Minas Morgul
 		unique: true
@@ -743,6 +765,7 @@
 			}
 		]
 	}
+
 	1_226: {
 		title: Their Power Is in Terror
 		culture: wraith
@@ -761,6 +784,7 @@
 			}
 		}
 	}
+
 	1_227: {
 		title: Threshold of Shadow
 		culture: wraith
@@ -784,6 +808,7 @@
 			}
 		}
 	}
+
 	1_228: {
 		title: The Twilight World
 		culture: wraith
@@ -805,6 +830,7 @@
 			}
 		}
 	}
+
 	1_229: {
 		title: Úlairë Attëa
 		subtitle: Keeper of Dol Guldur
@@ -843,6 +869,7 @@
 			}
 		}
 	}
+
 	1_230: {
 		title: Úlairë Cantëa
 		subtitle: Lieutenant of Dol Guldur
@@ -868,6 +895,7 @@
 			}
 		}
 	}
+
 	1_231: {
 		title: Úlairë Enquëa
 		subtitle: Lieutenant of Morgul
@@ -907,6 +935,7 @@
 			}
 		}
 	}
+
 	1_232: {
 		title: Úlairë Lemenya
 		subtitle: Lieutenant of Morgul
@@ -927,6 +956,7 @@
 			}
 		}
 	}
+
 	1_233: {
 		title: Úlairë Nelya
 		subtitle: Lieutenant of Morgul
@@ -963,6 +993,7 @@
 			}
 		}
 	}
+
 	1_234: {
 		title: Úlairë Nertëa
 		subtitle: Messenger of Dol Guldur
@@ -1045,6 +1076,7 @@
 			]
 		}
 	}
+
 	1_235: {
 		title: Úlairë Otsëa
 		subtitle: Lieutenant of Morgul
@@ -1071,6 +1103,7 @@
 			}
 		}
 	}
+
 	1_236: {
 		title: Úlairë Toldëa
 		subtitle: Messenger of Morgul
@@ -1097,6 +1130,7 @@
 			}
 		}
 	}
+
 	1_237: {
 		title: The Witch-king
 		subtitle: Lord of Angmar
@@ -1122,6 +1156,7 @@
 			}
 		}
 	}
+
 	1_238: {
 		title: Wreathed in Shadow
 		culture: wraith
@@ -1129,25 +1164,26 @@
 		type: condition
 		keyword: support area
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: nazgul
-                }
-		    }
-            {
-                type: activated
-                phase: archery
-                cost: {
-                    type: removeTwilight
-                }
-                effect: {
-                    type: modifyArcheryTotal
-                    side: free people
-                    amount: -1
-                }
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+			}
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: removeTwilight
+				}
+				effect: {
+					type: modifyArcheryTotal
+					side: free people
+					amount: -1
+				}
+			}
+		]
 	}
+	
 }

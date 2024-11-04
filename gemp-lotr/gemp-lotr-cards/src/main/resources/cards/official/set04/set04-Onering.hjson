@@ -16,65 +16,65 @@
 		twilight: 0
 		vitality: 2
 		type: The One Ring
-        effects: [
-            {
-                type: modifier
-                modifier: {
-                    type: modifyStrength
-                    requires: [
-                        {
-                            type: ringIsOn
-                        }
-                        {
-                            type: ringIsActive
-                        }
-                    ]
-                    filter: bearer
-                    amount: 2
-                }
-            }
-            {
-                type: trigger
-                requires: [
-                    {
-                        type: ringIsOn
-                    }
-                    {
-                        type: ringIsActive
-                    }
-                    {
-                    	type: Phase
-                    	phase: skirmish
-                    }
-                ]
-                trigger: {
-                    type: aboutToTakeWound
-                    filter: bearer
-                }
-                effect: [
-                    {
-                        type: negateWound
-                        select: bearer
-                    }
-                    {
-                        type: addBurdens
-                    }
-                ]
-            }
-            {
-                type: activated
-                phase: skirmish
-                requires: {
-                    type: ringIsActive
-                }
-                cost: {
-                    type: addBurdens
-                }
-                effect: {
-                    type: putOnRing
-                }
-            }
-        ]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: [
+						{
+							type: ringIsOn
+						}
+						{
+							type: ringIsActive
+						}
+					]
+					filter: bearer
+					amount: 2
+				}
+			}
+			{
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: ringIsActive
+					}
+					{
+						type: Phase
+						phase: skirmish
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: bearer
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: ringIsActive
+				}
+				cost: {
+					type: addBurdens
+				}
+				effect: {
+					type: putOnRing
+				}
+			}
+		]
 		gametext: While wearing The One Ring, the Ring-bearer is strength +2, and each time he is about to take a wound in a skirmish, add a burden instead.<br><b>Skirmish:</b> Add a burden to wear The One Ring until the regroup phase.
 		lore: ...thought to have perished from the world.'
 		promotext: ""

@@ -65,6 +65,7 @@
 			}
 		]
 	}
+
 	9_2: {
 		title: Freca
 		subtitle: Hungry Savage
@@ -105,6 +106,7 @@
 			}
 		]
 	}
+
 	9_3: {
 		title: Durin III
 		subtitle: Dwarven Lord
@@ -140,6 +142,7 @@
 			}
 		]
 	}
+
 	9_4: {
 		title: Gimli
 		subtitle: Bearer of Grudges
@@ -198,6 +201,7 @@
 			}
 		]
 	}
+
 	9_5: {
 		title: Linnar
 		subtitle: Dwarven Lord
@@ -242,6 +246,7 @@
 			}
 		]
 	}
+
 	9_6: {
 		title: Ring of Accretion
 		unique: true
@@ -298,6 +303,7 @@
 			}
 		]
 	}
+
 	9_7: {
 		title: Ring of Fury
 		unique: true
@@ -342,6 +348,7 @@
 			}
 		]
 	}
+
 	9_8: {
 		title: Ring of Guile
 		unique: true
@@ -376,6 +383,7 @@
 			}
 		]
 	}
+
 	9_9: {
 		title: Ring of Retribution
 		unique: true
@@ -402,6 +410,7 @@
 			}
 		}
 	}
+
 	9_10: {
 		title: Sindri
 		subtitle: Dwarven Lord
@@ -426,6 +435,7 @@
 			}
 		}
 	}
+
 	9_11: {
 		title: Úri
 		subtitle: Dwarven Lord
@@ -459,6 +469,7 @@
 			}
 		}
 	}
+
 	9_12: {
 		title: Aiglos
 		unique: true
@@ -509,6 +520,7 @@
 			}
 		]
 	}
+
 	9_13: {
 		title: Elven Rope
 		unique: true
@@ -539,6 +551,7 @@
             }
         ]
 	}
+
 	9_14: {
 		title: Galadriel
 		subtitle: Bearer of Wisdom
@@ -563,6 +576,7 @@
 			}
 		}
 	}
+
 	9_15: {
 		title: Gil-galad
 		subtitle: Elven High King
@@ -597,6 +611,7 @@
             }
         ]
 	}
+
 	9_16: {
 		title: Glorfindel
 		subtitle: Revealed in Wrath
@@ -650,6 +665,7 @@
 			}
 		]
 	}
+
 	9_17: {
 		title: Knife of the Galadhrim
 		unique: true
@@ -685,6 +701,7 @@
 			}
 		]
 	}
+
 	9_18: {
 		title: Merry's Dagger
 		unique: true
@@ -730,6 +747,7 @@
 			}
 		}
 	}
+
 	9_19: {
 		title: Narya
 		subtitle: Ring of Fire
@@ -762,6 +780,7 @@
 			]
 		}
 	}
+
 	9_20: {
 		title: Nenya
 		subtitle: Ring of Adamant
@@ -792,6 +811,7 @@
 			]
 		}
 	}
+
 	9_21: {
 		title: Pippin's Dagger
 		unique: true
@@ -837,6 +857,7 @@
 			}
 		}
 	}
+
 	9_22: {
 		title: Strands of Elven Hair
 		unique: true
@@ -915,6 +936,7 @@
 			}
 		]
 	}
+
 	9_23: {
 		title: Vilya
 		subtitle: Ring of Air
@@ -950,6 +972,7 @@
 			]
 		}
 	}
+
 	9_24: {
 		title: Ent Draught
 		culture: gandalf
@@ -981,6 +1004,7 @@
             }
         ]
 	}
+
 	9_25: {
 		title: Huorn
 		culture: gandalf
@@ -1020,6 +1044,7 @@
 			}
 		]
 	}
+
 	9_26: {
 		title: Radagast
 		subtitle: The Brown
@@ -1092,6 +1117,7 @@
 			}
 		]
 	}
+
 	9_27: {
 		title: Sent Back
 		culture: gandalf

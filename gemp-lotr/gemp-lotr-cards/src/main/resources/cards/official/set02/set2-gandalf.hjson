@@ -11,23 +11,24 @@
 		strength: 5
 		vitality: 2
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: name(Gandalf)
-                }
-		    }
-            {
-                type: modifier
-                modifier: {
-                    type: cantLookOrRevealHand
-                    player: shadowPlayer
-                    hand: owner
-                }
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantLookOrRevealHand
+					player: shadowPlayer
+					hand: owner
+				}
+			}
+		]
 	}
+
 	2_22: {
 		title: Gandalf's Staff
 		unique: true
@@ -61,6 +62,7 @@
 			}
 		]
 	}
+
 	2_23: {
 		title: Gandalf's Wisdom
 		culture: gandalf
@@ -77,6 +79,7 @@
 			}
 		}
 	}
+
 	2_24: {
 		title: Hugin
 		subtitle: Emissary from Laketown
@@ -89,39 +92,40 @@
 		strength: 4
 		vitality: 2
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: name(Gandalf)
-                }
-		    }
-            {
-                type: activated
-                phase: fellowship
-                cost: {
-                    type: exert
-                    select: self
-                }
-                effect: [
-                    {
-                        type: chooseCardsFromDiscard
-                        select: choose(side(free people))
-                        memorize: chosenCard
-                        text: Choose card to reveal and put beneath your deck
-                    }
-                    {
-                        type: revealCards
-                        select: memory(chosenCard)
-                    }
-                    {
-                        type: putCardsFromDiscardOnBottomOfDeck
-                        select: memory(chosenCard)
-                    }
-                ]
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: chooseCardsFromDiscard
+						select: choose(side(free people))
+						memorize: chosenCard
+						text: Choose card to reveal and put beneath your deck
+					}
+					{
+						type: revealCards
+						select: memory(chosenCard)
+					}
+					{
+						type: putCardsFromDiscardOnBottomOfDeck
+						select: memory(chosenCard)
+					}
+				]
+			}
+		]
 	}
+
 	2_25: {
 		title: Járnsmid
 		subtitle: Merchant from Dale
@@ -134,23 +138,24 @@
 		strength: 4
 		vitality: 2
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: name(Gandalf)
-                }
-		    }
-            {
-                type: modifier
-                modifier: {
-                    type: modifyCost
-                    amount: -1
-                    filter: your,or(shield,armor,helm,hand weapon)
-                }
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					amount: -1
+					filter: your,or(shield,armor,helm,hand weapon)
+				}
+			}
+		]
 	}
+
 	2_26: {
 		title: "Speak \"Friend\" and Enter"
 		culture: gandalf
@@ -162,10 +167,10 @@
 		]
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: name(Gandalf)
-            }
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
 			effect: [
 				{
 					type: playNextSite
@@ -185,6 +190,7 @@
 			]
 		}
 	}
+
 	2_27: {
 		title: Staff Asunder
 		culture: gandalf
@@ -213,6 +219,7 @@
 			}
 		}
 	}
+
 	2_28: {
 		title: Wielder of the Flame
 		culture: gandalf
@@ -224,10 +231,10 @@
 		]
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: name(Gandalf)
-            }
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
 			effect: {
 				type: preventable
 				text: Remove (3) to prevent giving companion Defender +1
@@ -245,6 +252,7 @@
 			}
 		}
 	}
+
 	2_29: {
 		title: Wizard Staff
 		culture: gandalf
@@ -268,6 +276,7 @@
 			}
 		}
 	}
+
 	2_30: {
 		title: You Cannot Pass!
 		culture: gandalf
@@ -279,10 +288,10 @@
 		]
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: name(Gandalf),hasAttached(staff)
-            }
+			requires: {
+				type: canSpot
+				filter: name(Gandalf),hasAttached(staff)
+			}
 			effect: {
 				type: removeKeyword
 				keyword: fierce
@@ -291,6 +300,7 @@
 			}
 		}
 	}
+
 	2_122: {
 		title: Gandalf
 		subtitle: The Grey Pilgrim
@@ -314,4 +324,5 @@
 			}
 		}
 	}
+	
 }

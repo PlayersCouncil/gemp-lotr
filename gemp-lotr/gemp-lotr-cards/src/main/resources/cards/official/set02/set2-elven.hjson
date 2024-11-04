@@ -6,13 +6,13 @@
 		type: condition
 		keyword: support area
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: elf
-                }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
 			{
 				type: modifier
 				modifier: {
@@ -42,6 +42,7 @@
 			}
 		]
 	}
+
 	2_17: {
 		title: Dismay Our Enemies
 		culture: elven
@@ -70,6 +71,7 @@
 			}
 		}
 	}
+
 	2_18: {
 		title: Hosts of the Last Alliance
 		culture: elven
@@ -109,6 +111,7 @@
 			}
 		]
 	}
+
 	2_19: {
 		title: Release the Angry Flood
 		culture: elven
@@ -136,6 +139,7 @@
 			}
 		}
 	}
+
 	2_20: {
 		title: Secret Sentinels
 		culture: elven
@@ -183,4 +187,5 @@
 			]
 		}
 	}
+	
 }

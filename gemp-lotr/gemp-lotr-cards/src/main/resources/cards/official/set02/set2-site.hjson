@@ -1,131 +1,137 @@
 {
-    2_115: {
-        site: 1
-        block: Fellowship
-        title: Hobbiton Party Field
-        type: site
-        twilight: 0
-        direction: left
-        effects: {
-            type: activated
-            phase: fellowship
-            cost: {
-                type: exert
-                select: choose(hobbit)
-            }
-            effect: {
-                type: playCardFromDrawDeck
-                select: choose(name(Bilbo))
-                showAll: true
-                shuffle: true
-            }
-        }
-    }
-    2_116: {
-        site: 1
-        block: Fellowship
-        title: Hobbiton Woods
-        type: site
-        keyword: Forest
-        twilight: 0
-        direction: left
-        effects: {
-            type: activated
-            phase: fellowship
-            cost: {
-                type: exert
-                select: choose(hobbit)
-            }
-            effect: {
-                type: playNextSite
-            }
-        }
-    }
-    2_117: {
-        site: 1
-        block: Fellowship
-        title: Town Center
-        type: site
-        twilight: 0
-        direction: left
-        effects: {
-            type: activated
-            phase: fellowship
-            cost: {
-                type: PlayCardFromHand
-                select: choose(culture(shire),ally)
-            }
-            effect: {
-                type: drawCards
-                count: 1
-            }
-        }
-    }
-    2_118: {
-        site: 4
-        block: Fellowship
-        title: Great Chasm
-        type: site
-        keyword: Underground
-        twilight: 4
-        direction: right
-        effects: {
-            type: modifier
-            modifier: {
-                type: modifyCost
-                requires: {
-                    type: not
-                    requires: {
-                        type: playedCardThisPhase
-                        filter: culture(moria),archer
-                    }
-                }
-                filter: culture(moria),archer
-                amount: -2
-            }
-        }
-    }
-    2_119: {
-        site: 4
-        block: Fellowship
-        title: Hollin
-        type: site
-        keyword: Plains
-        twilight: 3
-        direction: right
-        effects: {
-            type: modifier
-            modifier: {
-                type: removeKeyword
-                filter: urukHai
-                keyword: roaming
-            }
-        }
-    }
-    2_120: {
-        site: 6
-        block: Fellowship
-        title: Valley of the Silverlode
-        type: site
-        keywords: [
-            River
-            Sanctuary
-        ]
-        twilight: 3
-        direction: left
-        effects: {
-            type: trigger
-            optional: true
-            trigger: {
-                type: movesTo
-                filter: self
-            }
-            effect: {
-                type: heal
-                select: choose(hobbit,companion)
-                count: any
-            }
-            player: fp
-        }
-    }
+	2_115: {
+		site: 1
+		block: Fellowship
+		title: Hobbiton Party Field
+		type: site
+		twilight: 0
+		direction: left
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: choose(hobbit)
+			}
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(name(Bilbo))
+				showAll: true
+				shuffle: true
+			}
+		}
+	}
+
+	2_116: {
+		site: 1
+		block: Fellowship
+		title: Hobbiton Woods
+		type: site
+		keyword: Forest
+		twilight: 0
+		direction: left
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: choose(hobbit)
+			}
+			effect: {
+				type: playNextSite
+			}
+		}
+	}
+
+	2_117: {
+		site: 1
+		block: Fellowship
+		title: Town Center
+		type: site
+		twilight: 0
+		direction: left
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: PlayCardFromHand
+				select: choose(culture(shire),ally)
+			}
+			effect: {
+				type: drawCards
+				count: 1
+			}
+		}
+	}
+
+	2_118: {
+		site: 4
+		block: Fellowship
+		title: Great Chasm
+		type: site
+		keyword: Underground
+		twilight: 4
+		direction: right
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyCost
+				requires: {
+					type: not
+					requires: {
+						type: playedCardThisPhase
+						filter: culture(moria),archer
+					}
+				}
+				filter: culture(moria),archer
+				amount: -2
+			}
+		}
+	}
+
+	2_119: {
+		site: 4
+		block: Fellowship
+		title: Hollin
+		type: site
+		keyword: Plains
+		twilight: 3
+		direction: right
+		effects: {
+			type: modifier
+			modifier: {
+				type: removeKeyword
+				filter: urukHai
+				keyword: roaming
+			}
+		}
+	}
+
+	2_120: {
+		site: 6
+		block: Fellowship
+		title: Valley of the Silverlode
+		type: site
+		keywords: [
+			River
+			Sanctuary
+		]
+		twilight: 3
+		direction: left
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			effect: {
+				type: heal
+				select: choose(hobbit,companion)
+				count: any
+			}
+			player: fp
+		}
+	}
+    
 }
