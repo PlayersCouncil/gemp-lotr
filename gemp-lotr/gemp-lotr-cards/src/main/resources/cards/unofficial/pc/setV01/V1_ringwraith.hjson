@@ -1,11 +1,26 @@
 {
 
 	101_37: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S037.0_card.jpg
+			//parentId: 101_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U37
+			rarity: U
+			setNum: "V1"
+			cardNum: 37
+			style: Standard
+		}
 		title: Fell Voices Call
-		culture: wraith
+		unique: false
+		side: Shadow
+		culture: Wraith
 		twilight: 0
-		type: event
-		timeword: shadow
+		type: Event
+		timewords: Shadow
 		effects: {
 			type: event
 			effect: {
@@ -28,17 +43,39 @@
 				]
 			}
 		}
+		gametext: Play a [ringwraith] item from your draw deck or discard pile.
+		lore: "A breath of deadly cold pierced him like a spear..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
-
 	101_38: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S038.0_card.jpg
+			//parentId: 101_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R38
+			rarity: R
+			setNum: "V1"
+			cardNum: 38
+			style: Standard
+		}
 		title: Harry Goatleaf
-		subtitle: In Thrall To The Nine
+		subtitle: In Thrall to the Nine
 		unique: true
-		culture: wraith
+		side: Shadow
+		culture: Wraith
 		twilight: 1
-		type: minion
-		race: man
+		type: Minion
+		race: Man
 		strength: 3
 		vitality: 1
 		site: 2
@@ -67,17 +104,41 @@
 				}
 			}
 		]
+		gametext: Nazgul are twilight cost -1.<br>Assignment: Make the Free Peoples player assign a companion with 5 strength or more to skirmish this minion.
+		lore: "'But you'll find maybe that more folk than old Harry at the gate will be asking you questions.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
-
 	101_39: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S039.0_card.jpg
+			//parentId: 101_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R39
+			rarity: R
+			setNum: "V1"
+			cardNum: 39
+			style: Standard
+		}
 		title: Pale Crown
-		culture: wraith
+		unique: false
+		side: Shadow
+		culture: Wraith
 		twilight: 1
-		type: artifact
-		itemclass: helm
-		keyword: support area
+		type: Artifact
 		vitality: 1
+		itemclass: Helm
+		#target: 
+		keywords: Support Area
 		effects: [
 			{
 				type: modifier
@@ -120,20 +181,42 @@
 				}
 			}
 		]
+		gametext: Plays to your support area.<br>While bearer is twilight, characters skirmishing bearer do not receive strength or damage bonuses from cards they bear.<br>Skirmish: Remove (1) to transfer this artifact from your support area to a Nazgul.
+		lore: "'They were once men.  Great kings of men.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
-
 	101_40: {
-		title: Ringwraith In Twilight
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S040.0_card.jpg
+			//parentId: 101_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U40
+			rarity: U
+			setNum: "V1"
+			cardNum: 40
+			style: Standard
+		}
+		title: Ringwraith in Twilight
 		unique: false
-		culture: wraith
+		side: Shadow
+		culture: Wraith
 		twilight: 4
-		type: minion
-		race: nazgul
-		keyword: twilight
+		type: Minion
+		race: Nazgul
 		strength: 9
 		vitality: 3
 		site: 3
+		keywords: Twilight
 		effects: [
 			{
 				type: modifier
@@ -175,23 +258,46 @@
 				}
 			}
 		]
+		gametext: Twilight.<br>This minion is strength +1 for each wound on the Ring-bearer.<br>At the start of the maneuver phase, you may exert this minion to make it <b>fierce</b> until the regroup phase. The Free Peoples player may exert the Ring-bearer to prevent this.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
-
 	101_41: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S041.0_card.jpg
+			//parentId: 101_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U41
+			rarity: U
+			setNum: "V1"
+			cardNum: 41
+			style: Standard
+		}
 		title: Their Eyes Fell Upon Him
-		culture: wraith
+		unique: false
+		side: Shadow
+		culture: Wraith
 		twilight: 1
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: twilight,nazgul
-                }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: twilight,nazgul
+				}
+			}
 			{
 				type: trigger
 				trigger: {
@@ -221,16 +327,38 @@
 				]
 			}
 		]
+		gametext: To play, spot a twilight Nazgul.<br>Each time the fellowship moves, you may spot a wound on the Ring-bearer to draw a card (or 2 cards if the Ring-bearer is exhausted).
+		lore: "'...you had become visible to them, being already on the threshold of their world.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
-
 	101_42: {
-		title: Walks In Twilight
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S042.0_card.jpg
+			//parentId: 101_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U42
+			rarity: U
+			setNum: "V1"
+			cardNum: 42
+			style: Standard
+		}
+		title: Walks in Twilight
 		unique: true
-		culture: wraith
+		side: Shadow
+		culture: Wraith
 		twilight: 2
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: trigger
@@ -250,15 +378,38 @@
 				}
 			}
 		]
+		gametext: Each time a twilight Nazgul wins a skirmish, you may exert a twilight Nazgul to shuffle a [ringwraith] card from your discard pile into your draw deck.
+		lore: "The Riders made straight for you, as soon as you fled.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
-
 	101_43: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S043.0_card.jpg
+			//parentId: 101_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U43
+			rarity: U
+			setNum: "V1"
+			cardNum: 43
+			style: Standard
+		}
 		title: White Faces Burned
-		culture: wraith
+		unique: false
+		side: Shadow
+		culture: Wraith
 		twilight: 1
-		type: event
-		timeword: skirmish
+		type: Event
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -287,6 +438,15 @@
 					}
 				}
 			]
+		}
+		gametext: Make a skirmishing twilight Nazgul strength +1 for each wound on the Ring- bearer (and damage +1 if that Nazgul is The Witch-king).
+		lore: "Immediately, though everything else remained as before, dim and dark, the shapes became terribly clear."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
 	}
 

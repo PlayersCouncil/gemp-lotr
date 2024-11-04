@@ -1,19 +1,33 @@
 {
+
 	101_7: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S007.0_card.jpg
+			//parentId: 101_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U7
+			rarity: U
+			setNum: "V1"
+			cardNum: 7
+			style: Standard
+		}
 		title: I Was There
-		culture: elven
+		unique: false
+		side: Free Peoples
+		culture: Elven
 		twilight: 1
-		type: event
-		timeword: skirmish
-		keyword: [
-			tale
-		]
+		type: Event
+		timewords: Skirmish
+		keywords: Tale
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: elf,inskirmish
-            }
+			requires: {
+				type: canSpot
+				filter: elf,inskirmish
+			}
 			cost: {
 				type: discard
 				select: choose(your,culture(elven),tale)
@@ -26,24 +40,46 @@
 				}
 			]
 		}
+		gametext: Tale.<br>Spot a minion skirmishing an Elf and discard your [elven] tale to wound that minion.
+		lore: "'...the day the strength of men failed.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_8: {
-		title: Lament For The Fallen
-		unique: true
-		culture: elven
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S008.0_card.jpg
+			//parentId: 101_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U8
+			rarity: U
+			setNum: "V1"
+			cardNum: 8
+			style: Standard
+		}
+		title: Lament for the Fallen
+		unique: false
+		side: Free Peoples
+		culture: Elven
 		twilight: 1
-		type: condition
-		keyword: support area
+		type: Condition
 		target: companion,unbound
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: HasCardInDeadPile
-                    filter: companion,unique
-                }
-		    }
+			{
+				 type: toPlay
+					requires: {
+						 type: HasCardInDeadPile
+						 filter: companion,unique
+					}
+			}
 			{
 				type: extraCost
 				cost: {
@@ -104,6 +140,15 @@
 				}
 			}
 		]
+		gametext: To play, exert an Elf and spot a unique companion in the dead pile.  Bearer must be an unbound companion.<br>Bearer cannot be exerted, wounded, or assigned to a skirmish.<br>At the start of the regroup phase, discard a condition on bearer (and heal bearer if Gandalf is in the dead pile).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 
@@ -128,24 +173,24 @@
 	# 			phase: archery
 	# 			cost: [
 	# 				{
-    #                   type: chooseANumber
-    #                   text: Choose X (reduce fellowship archery total)
-    #                   from: 0
-    #                   to: {
-    #                       type: archeryTotal
-    #                       side: free peoples
-    #                   }
-    #                   memorize: x
-    #               }
-    #               {
-    #                   type: modifyArcheryTotal
-    #                   side: free peoples
-    #                   amount: {
-    #                       type: fromMemory
-    #                       memory: x
-    #                       multiplier: -1
-    #                   }
-    #               }
+	#						type: chooseANumber
+	#						text: Choose X (reduce fellowship archery total)
+	#						from: 0
+	#						to: {
+	#							 type: archeryTotal
+	#							 side: free peoples
+	#						}
+	#						memorize: x
+	#					}
+	#					{
+	#						type: modifyArcheryTotal
+	#						side: free peoples
+	#						amount: {
+	#							 type: fromMemory
+	#							 memory: x
+	#							 multiplier: -1
+	#						}
+	#					}
 	# 			]
 	# 			effect: [
 	# 				{
@@ -169,7 +214,7 @@
 	# 		}
 	# 	]
 	# }
-	
+
 	101_9: {
 		cardInfo: {
 			imagePath: sets/vset1/LOTR-ENV1S009.1_card.jpg
@@ -181,7 +226,6 @@
 			rarity: R
 			setNum: "V1"
 			cardNum: 9
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Legolas
@@ -196,9 +240,7 @@
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		keyword: [
-			archer
-		]
+		keywords: Archer
 		effects: {
 			type: Trigger
 			optional: false
@@ -228,14 +270,28 @@
 		}
 	}
 
-
 	101_10: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S010.0_card.jpg
+			//parentId: 101_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R10
+			rarity: R
+			setNum: "V1"
+			cardNum: 10
+			style: Standard
+		}
 		title: Let Fly the Darts of Lindon
-		culture: elven
+		unique: false
+		side: Free Peoples
+		culture: Elven
 		twilight: 1
-		type: condition
-		keyword: tale
+		type: Condition
 		target: unique,elf,companion
+		keywords: Tale
 		effects: {
 			type: activated
 			phase: archery
@@ -273,16 +329,38 @@
 				}
 			]
 		}
+		gametext: Tale.<br> Bearer must be a unique [elven] companion.<br>Archery: Exert bearer to make all Free Peoples archers lose <b>archer</b> and gain damage +1 until the regroup phase.
+		lore: "'It recalled to me the glory of the Elder Days and the hosts of Beleriand, so many great princes and captains were assembled.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
-
 	101_11: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S011.0_card.jpg
+			//parentId: 101_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R11
+			rarity: R
+			setNum: "V1"
+			cardNum: 11
+			style: Standard
+		}
 		title: Library of Rivendell
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 3
-		type: artifact
-		keyword: support area
+		type: Artifact
+		keywords: Support Area
 		effects: [
 			{
 				type: activated
@@ -353,14 +431,14 @@
 						}
 					}
 					{
-					    type: repeat
-					    times: memory(stackedCultures)
-					    effect: {
-					        type: heal
-					        select: choose(companion)
-					        count: 0-1
-					    }
-					}
+						type: repeat
+						times: memory(stackedCultures)
+						effect: {
+							 type: heal
+							 select: choose(companion)
+							 count: 0-1
+						}
+				}
 					{
 						type: discard
 						select: self
@@ -368,18 +446,40 @@
 				]
 			}
 		]
+		gametext: Fellowship: Stack your tale or artifact from play or from hand here to draw a card.<br>Regroup: Exert an [elven] ally to draw X cards, exert X minions, and remove up to X wounds from companions, where X is the number of Free Peoples cultures on cards stacked here. Discard this artifact.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
-
 	101_12: {
-		title: Three Rings for the Elven-kings
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S012.0_card.jpg
+			//parentId: 101_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U12
+			rarity: U
+			setNum: "V1"
+			cardNum: 12
+			style: Standard
+		}
+		title: Three for the Elven-Kings
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 1
-		type: condition
-		keyword: [
-			support area
-			tale
+		type: Condition
+		keywords: [
+			Tale
+			Support Area
 		]
 		effects: [
 			{
@@ -424,6 +524,15 @@
 				}
 			}
 		]
+		gametext: Tale.<br>Each time the fellowship moves, you may spot an [elven] or [gandalf] ring to place a card from hand beneath your draw deck and draw a card (and heal a companion if you can spot 3 [elven] or [gandalf] rings).
+		lore: "'The Three, fairest of all, the Elf-lords hid from him, and his hand never touched them or sullied them.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 }

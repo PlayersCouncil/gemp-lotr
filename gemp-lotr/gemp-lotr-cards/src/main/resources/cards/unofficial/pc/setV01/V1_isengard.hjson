@@ -74,7 +74,6 @@
 			rarity: C
 			setNum: "V1"
 			cardNum: 25
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Crebain Flock
@@ -160,7 +159,6 @@
 			}
 		}
 	}
-
 
 	# 101_26: {
 	# 	title: Crows of Isengard
@@ -257,7 +255,6 @@
 			rarity: C
 			setNum: "V1"
 			cardNum: 26
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Crows of Isengard
@@ -364,12 +361,26 @@
 		}
 	}
 
-
 	101_27: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S027.0_card.jpg
+			//parentId: 101_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U27
+			rarity: U
+			setNum: "V1"
+			cardNum: 27
+			style: Standard
+		}
 		title: Frostbite
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 1
-		type: condition
+		type: Condition
 		target: companion,not(hasAttached(name(Frostbite)))
 		effects: [
 			{
@@ -403,6 +414,15 @@
 				}
 			}
 		]
+		gametext: To play, spot a weather condition.  Plays on a companion. Limit 1 per bearer.<br>Each time a weather card is played, add (2). <br>When this condition is discarded by a Free Peoples card, wound bearer.
+		lore: "'Gandalf, we must turn back!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 
@@ -467,7 +487,6 @@
 			rarity: C
 			setNum: "V1"
 			cardNum: 28
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Just a Wisp of Cloud
@@ -476,10 +495,10 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		timeword: shadow
-		keyword: [
-			spell
-			weather
+		timewords: Shadow
+		keywords: [
+			Spell
+			Weather
 		]
 		effects: {
 			type: event
@@ -607,7 +626,6 @@
 			rarity: R
 			setNum: "V1"
 			cardNum: 29
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Murder of Crows
@@ -695,13 +713,27 @@
 	}
 
 	101_30: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S030.0_card.jpg
+			//parentId: 101_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R30
+			rarity: R
+			setNum: "V1"
+			cardNum: 30
+			style: Standard
+		}
 		title: Saruman
 		subtitle: Fell Voice
 		unique: true
-		culture: isengard
+		side: Shadow
+		culture: Isengard
 		twilight: 4
-		type: minion
-		race: wizard
+		type: Minion
+		race: Wizard
 		strength: 6
 		vitality: 4
 		site: 4
@@ -770,7 +802,15 @@
 				}
 			}
 		]
+		gametext: While you cannot spot a weather, Saruman may not take wounds in the archery phase and may not be assigned to a skirmish.<br>While at a site bearing a weather, each [isengard] minion is strength +2.<br>Response: If the fellowship moves from a site bearing a weather, discard this minion to exert each companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 }
-

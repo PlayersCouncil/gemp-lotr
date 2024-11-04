@@ -1,11 +1,26 @@
 {
+
 	101_57: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S057.0_card.jpg
+			//parentId: 101_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U57
+			rarity: U
+			setNum: "V1"
+			cardNum: 57
+			style: Standard
+		}
 		title: Bag End Study
+		unique: false
 		twilight: 0
-		type: site
+		type: Site
 		site: 1
-		block: fellowship
-		direction: left
+		block: Fellowship
+		direction: Left
 		effects: {
 			type: trigger
 			optional: true
@@ -20,18 +35,42 @@
 			effect: {
 				type: playCardFromDrawDeck
 				select: choose(culture(shire),condition)
-                showAll: true
-                shuffle: true
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: When the fellowship moves from here, you may exert a [shire] companion to play a [shire] condition from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	101_58: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S058.0_card.jpg
+			//parentId: 101_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U58
+			rarity: U
+			setNum: "V1"
+			cardNum: 58
+			style: Standard
+		}
 		title: Prancing Pony Spare Room
+		unique: false
 		twilight: 2
-		type: site
+		type: Site
 		site: 2
-		block: fellowship
-		direction: left
+		block: Fellowship
+		direction: Left
 		effects: {
 			type: trigger
 			trigger: {
@@ -56,17 +95,41 @@
 				}
 			}
 		}
+		gametext: Each time a minion of strength 6 or less is played, make it strength +3 until the regroup phase (unless you can spot a [gandalf] card).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	101_59: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S059.0_card.jpg
+			//parentId: 101_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U59
+			rarity: U
+			setNum: "V1"
+			cardNum: 59
+			style: Standard
+		}
 		title: Rivendell Gateway
+		unique: false
 		twilight: 0
-		type: site
+		type: Site
 		site: 3
-		block: fellowship
-		direction: left
-		keyword: [
-			Sanctuary
+		block: Fellowship
+		direction: Right
+		keywords: [
 			Forest
+			Sanctuary
 		]
 		effects: {
 			type: activated
@@ -104,15 +167,39 @@
 				}
 			]
 		}
+		gametext: Forest. Sanctuary. Fellowship: Exert a companion to make one of another culture strength +1 until the end of the turn (limit +6).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	101_60: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S060.0_card.jpg
+			//parentId: 101_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U60
+			rarity: U
+			setNum: "V1"
+			cardNum: 60
+			style: Standard
+		}
 		title: Moria Crossroads
+		unique: false
 		twilight: 3
-		type: site
+		type: Site
 		site: 4
-		block: fellowship
-		keyword: underground
-		direction: left
+		block: Fellowship
+		direction: Right
+		keywords: Underground
 		effects: {
 			type: modifier
 			modifier: {
@@ -127,6 +214,15 @@
 						filter: culture(moria),minion,inSkirmish
 					}
 				]
+			}
+		}
+		gametext: Underground. While you can spot a unique [moria] minion, skirmishes involving [moria] minions may not be canceled.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
@@ -163,7 +259,7 @@
 	# 		}
 	# 	}
 	# }
-	
+
 	101_61: {
 		cardInfo: {
 			imagePath: sets/vset1/LOTR-ENV1E061.1_card.jpg
@@ -232,15 +328,29 @@
 			}
 		}
 	}
-	
+
 	101_62: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S062.0_card.jpg
+			//parentId: 101_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U62
+			rarity: U
+			setNum: "V1"
+			cardNum: 62
+			style: Standard
+		}
 		title: Valley of the Anduin
+		unique: false
 		twilight: 6
-		type: site
+		type: Site
 		site: 7
-		block: fellowship
-		keyword: river
-		direction: left
+		block: Fellowship
+		direction: Right
+		keywords: River
 		effects: {
 			type: trigger
 			optional: false
@@ -253,16 +363,39 @@
 				select: all(character,inSkirmish,unwounded)
 			}
 		}
+		gametext: River. At the start of each skirmish phase, wound each unwounded character in that skirmish.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_63: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S063.0_card.jpg
+			//parentId: 101_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U63
+			rarity: U
+			setNum: "V1"
+			cardNum: 63
+			style: Standard
+		}
 		title: Nen Hithoel
+		unique: false
 		twilight: 7
-		type: site
+		type: Site
 		site: 8
-		block: fellowship
-		keyword: river
-		direction: left
+		block: Fellowship
+		direction: Right
+		keywords: River
 		effects: {
 			type: trigger
 			optional: true
@@ -283,16 +416,39 @@
 				}
 			}
 		}
+		gametext: River. When the fellowship moves to Nen Hithoel, each Shadow player may draw a card for each companion over 4.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_64: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S064.0_card.jpg
+			//parentId: 101_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U64
+			rarity: U
+			setNum: "V1"
+			cardNum: 64
+			style: Standard
+		}
 		title: Amon Hen Ruins
+		unique: false
 		twilight: 9
-		type: site
+		type: Site
 		site: 9
-		block: fellowship
-		keyword: forest
-		direction: left
+		block: Fellowship
+		direction: Left
+		keywords: Forest
 		effects: [
 			{
 				type: modifier
@@ -306,5 +462,15 @@
 				}
 			}
 		]
+		gametext: Forest. Each minion is <b>damage +1</b> for each wound on that minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 }
