@@ -664,8 +664,7 @@
 				effect: {
 					type: addTwilight
 					amount: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: ForEachSiteYouControl
 					}
 				}
 			}

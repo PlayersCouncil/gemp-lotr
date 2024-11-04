@@ -166,8 +166,16 @@
 				type: activated
 				phase: assignment
 				requires: {
-					type: canSpot
-					filter: or(and(culture(sauron),engine),controlledSite)
+					type: Or
+					requires: [
+						{
+							type: ControlsSite
+						}
+						{
+							type: canSpot
+							filter: culture(sauron),engine
+						}
+					]
 				}
 				effect: {
 					type: assignFpCharacterToSkirmish

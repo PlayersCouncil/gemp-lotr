@@ -53,9 +53,9 @@ public class FilterFactory {
         simpleFilters.put("controlledbyshadowplayer",
                 (actionContext -> Filters.siteControlledByOtherPlayer(actionContext.getGame().getGameState().getCurrentPlayerId())));
         simpleFilters.put("controlledsite",
-                (actionContext -> Filters.siteControlled(actionContext.getPerformingPlayer())));
+                (actionContext -> Filters.siteControlledByPlayer(actionContext.getPerformingPlayer())));
         simpleFilters.put("siteyoucontrol",
-                (actionContext -> Filters.siteControlled(actionContext.getPerformingPlayer())));
+                (actionContext -> Filters.siteControlledByPlayer(actionContext.getPerformingPlayer())));
         simpleFilters.put("cultureindeadpile",
                 new FilterableSource() {
                     @Override

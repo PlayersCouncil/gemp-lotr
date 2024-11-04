@@ -113,8 +113,7 @@
 					type: modifyStrength
 					filter: self
 					requires: {
-						type: canSpot
-						filter: controlledSite
+						type: ControlsSite
 						count: 2
 					}
 					amount: 5
@@ -126,8 +125,7 @@
 					type: addKeyword
 					filter: self
 					requires: {
-						type: canSpot
-						filter: controlledSite
+						type: ControlsSite
 						count: 2
 					}
 					keyword: fierce
@@ -139,8 +137,7 @@
 					type: addKeyword
 					filter: self
 					requires: {
-						type: canSpot
-						filter: controlledSite
+						type: ControlsSite
 						count: 2
 					}
 					keyword: damage
@@ -404,8 +401,7 @@
 				type: activated
 				phase: shadow
 				requires: {
-					type: canSpot
-					filter: controlledSite
+					type: ControlsSite
 					count: 2
 				}
 				cost: {

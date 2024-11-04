@@ -389,8 +389,7 @@
 					type: modifyCost
 					filter: your,culture(sauron)
 					amount: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: ForEachSiteYouControl
 						divider: 2
 						multiplier: -1
 					}
@@ -530,8 +529,7 @@
 				effect: {
 					type: addBurdens
 					amount: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: ForEachSiteYouControl
 					}
 				}
 			}
@@ -584,8 +582,7 @@
 					type: modifyStrength
 					select: choose(culture(sauron),minion)
 					amount: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: ForEachSiteYouControl
 						multiplier: {
 							type: Conditional
 							requires: {
@@ -1102,8 +1099,16 @@
 			{
 				type: toPlay
 				requires: {
-					type: canSpot
-					filter: or(besieger,controlledSite)
+					type: Or
+					requires: [
+						{
+							type: ControlsSite
+						}
+						{
+							type: canSpot
+							filter: besieger
+						}
+					]
 				}
 			}
 			{
@@ -3115,8 +3120,7 @@
 					type: modifyStrength
 					filter: besieger
 					amount: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: ForEachSiteYouControl
 					}
 				}
 			}

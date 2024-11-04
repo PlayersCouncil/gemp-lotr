@@ -954,8 +954,7 @@
 						type: activated
 						phase: shadow
 						requires: {
-								type: canSpot
-								filter: controlledSite
+								type: ControlsSite
 						}
 						cost: {
 								type: exert
@@ -1059,8 +1058,7 @@
 						modifier: {
 								type: skipPhase
 								requires: {
-										type: canSpot
-										filter: controlledSite
+										type: ControlsSite
 										count: 2
 								}
 								phase: archery
@@ -1071,8 +1069,7 @@
 						modifier: {
 								type: addKeyword
 								requires: {
-										type: canSpot
-										filter: controlledSite
+										type: ControlsSite
 										count: 3
 								}
 								filter: your,culture(dunland),man
@@ -1084,8 +1081,7 @@
 						modifier: {
 								type: addKeyword
 								requires: {
-										type: canSpot
-										filter: controlledSite
+										type: ControlsSite
 										count: 3
 								}
 								filter: your,culture(dunland),man
@@ -1575,8 +1571,7 @@
 						type: activated
 						phase: assignment
 						requires: {
-								type: canSpot
-								filter: controlledSite
+								type: ControlsSite
 						}
 						cost: {
 								type: removeTwilight
@@ -1814,8 +1809,7 @@
 		effects: {
 			type: event
 			requires: {
-					type: canSpot
-					filter: controlledSite
+					type: ControlsSite
 					count: 2
 			}
 			effect: [

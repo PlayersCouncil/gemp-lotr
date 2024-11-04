@@ -1479,8 +1479,7 @@
 					type: exert
 					select: choose(unbound,companion)
 					count: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: ForEachSiteYouControl
 					}
 				}
 			]
@@ -1768,8 +1767,7 @@
 				type: activated
 				phase: skirmish
 				requires: {
-					type: canSpot
-					filter: controlledSite
+					type: ControlsSite
 				}
 				cost: {
 					type: removeTwilight
@@ -3654,7 +3652,8 @@
 				type: activated
 				phase: regroup
 				requires: {
-					type: controlsSite
+					type: canSpot
+					filter: controlledSite
 				}
 				effect: {
 					type: StackCardsFromPlay
@@ -3784,7 +3783,8 @@
 				type: activated
 				phase: regroup
 				requires: {
-					type: controlsSite
+					type: canSpot
+					filter: controlledSite
 				}
 				effect: {
 					type: StackCardsFromPlay
@@ -3846,8 +3846,7 @@
 					type: modifyStrength
 					filter: self
 					amount: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: ForEachSiteYouControl
 						multiplier: 2
 					}
 				}
@@ -3893,8 +3892,7 @@
 			{
 				type: modifyOwnCost
 				amount: {
-					type: forEachYouCanSpot
-					filter: controlledSite
+					type: ForEachSiteYouControl
 					multiplier: -1
 				}
 			}
@@ -3939,8 +3937,7 @@
 			{
 				type: modifyOwnCost
 				amount: {
-					type: forEachYouCanSpot
-					filter: controlledSite
+					type: ForEachSiteYouControl
 					multiplier: -1
 				}
 			}
@@ -3985,8 +3982,7 @@
 			{
 				type: modifyOwnCost
 				amount: {
-					type: forEachYouCanSpot
-					filter: controlledSite
+					type: ForEachSiteYouControl
 					multiplier: -1
 				}
 			}

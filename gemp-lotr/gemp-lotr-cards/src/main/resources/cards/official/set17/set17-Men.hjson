@@ -246,8 +246,7 @@
 				modifier: {
 					type: addKeyword
 					requires: {
-						type: canSpot
-						filter: controlledSite
+						type: ControlsSite
 						count: 2
 					}
 					filter: self
@@ -259,8 +258,7 @@
 				modifier: {
 					type: modifyStrength
 					requires: {
-						type: canSpot
-						filter: controlledSite
+						type: ControlsSite
 						count: 4
 					}
 					filter: culture(men),minion
@@ -272,8 +270,7 @@
 				modifier: {
 					type: addKeyword
 					requires: {
-						type: canSpot
-						filter: controlledSite
+						type: ControlsSite
 						count: 4
 					}
 					filter: culture(men),minion
@@ -762,8 +759,7 @@
 				effect: {
 					type: repeat
 					times: {
-						type: forEachYouCanSpot
-						filter: controlledSite
+						type: forEachSiteYouControl
 					}
 					effect: {
 						type: exert
@@ -824,8 +820,7 @@
 					filter: self
 				}
 				requires: {
-					type: canSpot
-					filter: controlledSite
+					type: ControlsSite
 				}
 				effect: {
 					type: exhaust
