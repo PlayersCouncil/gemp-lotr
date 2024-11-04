@@ -1,0 +1,1332 @@
+{
+
+	102_18: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S018.0_card.jpg
+			//parentId: 102_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_18
+			rarity: _
+			setNum: V2
+			cardNum: 18
+			style: Standard
+		}
+		title: Back on the Menu
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Discard
+					select: choose(culture(sauron), tracker)
+				}
+				effect: {
+					type: ModifyStrength
+					amount: 2
+					select: choose(culture(isengard), tracker)
+				}
+			}
+			{
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Exert
+					select: choose(culture(isengard), tracker)
+				}
+				effect: {
+					type: AddKeyword
+					keyword: fierce
+					until: start(regroup)
+					select: choose(culture(sauron), tracker)
+				}
+			}
+		]
+		gametext: Skirmish: Discard a [Sauron] tracker to make an [Isengard] tracker strength +2.<br>Skirmish: Exert an [isengard] tracker to make a [sauron] tracker <b>fierce</b> until the regroup phase. 
+		lore: "Five dead Orcs lay there. They had been hewn with many cruel strokes, and two had been beheaded."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_19: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S019.0_card.jpg
+			//parentId: 102_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_19
+			rarity: _
+			setNum: V2
+			cardNum: 19
+			style: Standard
+		}
+		title: Berserk Deathseeker
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 5
+		type: Minion
+		race: Uruk-hai
+		strength: 10
+		vitality: 3
+		site: 5
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmish
+					amount: {
+						type: forEachWound
+						filter: character,inSkirmish
+					}
+				}
+			}
+			{
+				type: KilledTrigger
+				optional: false
+				effect: {
+					type: AddCultureTokens
+					culture: isengard
+					select: choose(culture(isengard), machine)
+					count: 3
+				}
+			}
+		]
+		gametext: Damage +1.<br>This minion is strength +1 for each wound on each character in its skirmish.<br>When this minion is killed, add 3 [isengard] tokens to an [isengard] machine.
+		lore: "The foremost fell with Legolas' last arrow in his throat. but the rest sprang over him."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_20: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S020.0_card.jpg
+			//parentId: 102_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_20
+			rarity: _
+			setNum: V2
+			cardNum: 20
+			style: Standard
+		}
+		title: Berserk Fanatic
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmish
+					amount: {
+						type: forEachWound
+						filter: character,inSkirmish
+					}
+				}
+			}
+			{
+				type: KilledTrigger
+				optional: false
+				requires: {
+					type: CanSpot
+					filter: self,InSkirmish
+				}
+				cost: {
+					type: RemoveCultureTokens
+					culture: isengard
+					count: 2
+					select: choose(culture(isengard), machine)
+				}
+				effect: {
+					type: wound
+					select: choose(companion,inSkirmishAgainst(self))
+				}
+			}
+		]
+		gametext: Damage +1. <br>The minion is strength+1 for each wound on each character in its skirmish.<br>When this minion dies in a skirmish, you may remove 2 [isengard] tokens from a machine to wound a character it was skirmishing. 
+		lore: "Then the Orcs screamed, waving spear and sword, and shooting a cloud of arrows."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_21: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S021.0_card.jpg
+			//parentId: 102_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_21
+			rarity: _
+			setNum: V2
+			cardNum: 21
+			style: Standard
+		}
+		title: Breaching Shot
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		timewords: Assignment
+		effects: {
+			type: event
+			requires: {
+				type: CanSpotCultureTokens
+				culture: isengard
+				filter: machine
+			}
+			cost: [
+				{
+					type: ChooseANumber
+					text: Choose how many tokens to remove from machines
+					from: 1
+					to: {
+						type: ForEachCultureToken
+						filter: machine
+					}
+					memorize: removed
+				}
+				
+			],
+			effect: [
+				{
+					type: CostToEffect
+					cost: {
+						type: RemoveTokensCumulative
+						count: memory(removed)
+						filter: machine
+					}
+					effect: {
+						type: AssignFpCharacterToSkirmish
+						fpCharacter: choose(or(ally,and(unbound,companion)))
+						minion: choose(uruk-hai, MaxTwilight(memory(removed)))
+					}
+				}
+			]
+		}
+		gametext: Remove X tokens from machines to assign an Uruk-hai costing X or less to an ally or unbound companion. 
+		lore: "'They have crept in the culvert again, while we talked, and they have lit the fire of Orthanc beneath our feet.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_22: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S022.0_card.jpg
+			//parentId: 102_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_22
+			rarity: _
+			setNum: V2
+			cardNum: 22
+			style: Standard
+		}
+		title: Fell from Wisdom into Folly
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: [
+			{
+				type: responseEvent
+				trigger: {
+				
+				}
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: At the start of the Shadow phase, spot 25 twilight tokens and remove 10 to exert each character once (or twice if it costs (4) or more), then remove this from the game. This event may be played from your draw deck or discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_23: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S023.0_card.jpg
+			//parentId: 102_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_23
+			rarity: _
+			setNum: V2
+			cardNum: 23
+			style: Standard
+		}
+		title: Fires of Industry
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: self
+				}
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: CanSpot
+							filter: wizard
+						}
+						{
+							type: CanSpot
+							filter: culture(isengard),orc
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: AddCultureTokens
+					count: 2
+					culture: isengard
+					select: self
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: StartOfPhase
+					phase: regroup
+				}
+				cost: {
+					type: If
+					check: {
+						type: CanSpot
+						filter: self,HasAnyCultureTokens(1)
+					}
+					true: {
+						type: RemoveCultureTokens
+						count: 1
+						select: self
+					}
+					false: {
+						type: Discard
+						select: self
+					}
+				}
+				effect: {
+					type: Heal
+					select: choose(culture(isengard), orc)
+				}
+			}
+		]
+		gametext: When you play this condition, spot 2 [Isengard] Orcs or a Wizard to add 2 [isengard] tokens here.<br>At the start of the regroup phase, you may discard this condition (or remove an [isengard] token here), to heal an [Isengard] Orc.
+		lore: "'For bole and bough are burning now, the furnace roars...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_24: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S024.0_card.jpg
+			//parentId: 102_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_24
+			rarity: _
+			setNum: V2
+			cardNum: 24
+			style: Standard
+		}
+		title: Hound of Isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Possession
+		strength: 1
+		vitality: 1
+		itemclass: Mount
+		target: Warg-rider
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: self
+					fromZone: hand
+				}
+				effect: {
+					type: PutCardsFromDiscardIntoHand
+					select: choose(timeword(skirmish),event,culture(isengard))
+				}
+			}
+		]
+		gametext: Bearer must be a warg-rider&nbsp;.<br>When you play this possession from hand, you may take an [isengard] skirmish event into hand from your discard pile.
+		lore: "'He has taken Orcs into his service, and Wolf-riders, and evil Men...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_25: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S025.0_card.jpg
+			//parentId: 102_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_25
+			rarity: _
+			setNum: V2
+			cardNum: 25
+			style: Standard
+		}
+		title: Isengard Foreman
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: Trigger
+				trigger: {
+					type: Played
+					filter: self
+				}
+				requires: {
+					type: CanPlayFromDiscard
+					filter: culture(isengard), Orc
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: choose(culture(isengard), orc)
+					memorize: playedOrc
+					extraEffects: {
+						type: ModifyStrength
+						amount: 1
+						select: memory(playedOrc)
+						until: start(regroup)
+					}
+				}
+			}
+			{
+				type: Activated
+				phase: regroup
+				cost: {
+					type: Discard
+					select: self
+				}
+				effect: {
+					type: AddThreats
+					amount: 2
+				}
+			}
+		]
+		gametext: When you play this minion, you may play an [isengard] orc from your discard pile; it is strength +1 until the regroup phase.<br>Regroup: Discard this minion to add two threats.
+		lore: "'He has taken up with foul folk, with the Orcs.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_26: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S026.0_card.jpg
+			//parentId: 102_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_26
+			rarity: _
+			setNum: V2
+			cardNum: 26
+			style: Standard
+		}
+		title: Isengard Grunt
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 5
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: AlterOverwhelmMultiplier
+					select: choose(InSkirmish, culture(Isengard), Orc)
+					multiplier: 3
+				}
+			}
+		]
+		gametext: Skirmish: Exert this minion to prevent an [isengard] Orc from being overwhelmed unless its strength is tripled.
+		lore: "...Saruman was mustering a great force on his own account, in rivalry of Sauron and not in his service yet."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_27: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S027.0_card.jpg
+			//parentId: 102_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_27
+			rarity: _
+			setNum: V2
+			cardNum: 27
+			style: Standard
+		}
+		title: Legion of Isengard
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 8
+		type: Minion
+		race: Uruk-hai
+		strength: 17
+		vitality: 4
+		site: 5
+		keywords: Damage+1
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: addKeyword
+					keyword: damage+1
+					filter: self
+					requires: {
+						type: CanSpot
+						filter: SiteYouControl, battleground
+					}
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantUseSpecialAbilities
+					filter: any
+					phase: skirmish
+					requires: {
+						type: CanSpot
+						filter: SiteYouControl, battleground
+					}
+				}
+			}
+		]
+		gametext: Damage +1.<br>While you control a battleground, this minion is damage +1.<br>While at a battleground, skirmish special abilities cannot be used during skirmishes involving this minion.
+		lore: "...blazoned upon every helm and shield the ghastly hand of Isengard was seen..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_28: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S028.0_card.jpg
+			//parentId: 102_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_28
+			rarity: _
+			setNum: V2
+			cardNum: 28
+			style: Standard
+		}
+		title: Machinery of War
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: self
+				}
+				requires: {
+					type: CanSpot
+					filter: wizard
+				}
+				effect: {
+					type: AddCultureTokens
+					count: 2
+					culture: isengard
+					select: self
+				}
+			}
+			{
+				type: trigger
+				trigger: [
+					{
+						type: LosesSkirmish
+						filter: culture(isengard), orc
+					}
+				]
+				effect: {
+					type: AddCultureTokens
+					count: 1
+					culture: isengard
+					select: self
+				}
+			}
+			{
+				type: Activated
+				phase: Skirmish
+				requires: {
+					type: CanSpot
+					filter: culture(isengard), orc, InSkirmish
+				}
+				cost: {
+					type: If
+					check: {
+						type: CanSpot
+						filter: self,HasAnyCultureTokens(2)
+					}
+					true: {
+						type: RemoveCultureTokens
+						count: 2
+						select: self
+					}
+					false: {
+						type: Discard
+						select: self
+					}
+				}
+				effect: {
+					type: CancelSkirmish
+					filter: culture(isengard), orc
+				}
+			}
+		]
+		gametext: When you play this condition, spot a Wizard to add 2 [isengard] tokens here.<br>Each time an [isengard] Orc loses a skirmish, add an [isengard] token here.<br>Skirmish: Discard this condition (or remove 2 [isengard] tokens here) to cancel a skirmish involving an [isengard] Orc.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_29: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S029.0_card.jpg
+			//parentId: 102_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_29
+			rarity: _
+			setNum: V2
+			cardNum: 29
+			style: Standard
+		}
+		title: Saruman
+		subtitle: Mind of Metal and Wheels
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Wizard
+		strength: 8
+		vitality: 4
+		site: 4
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeAssignedToSkirmish
+					requires: {
+						type: sarumanFirstSentenceActive
+					}
+					filter: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cancelKeywordBonus
+					filter: companion,inSkirmishAgainst(culture(isengard),orc)
+					keyword: damage
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(isengard),orc
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect:
+				{
+					type: preventWound
+					select: choose(culture(isengard),orc)
+				}
+			}
+		]
+		gametext: Saruman may not be assigned to a skirmish.<br>Companions skirmishing [Isengard] Orcs lose all <b>damage</b> bonuses.<br>Response: If an [isengard] Orc is about to take a wound, exert Saruman to prevent that wound. 
+		lore: "'I think that I now understand what he is up to. He<br>is plotting to become a Power.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_30: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S030.0_card.jpg
+			//parentId: 102_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_30
+			rarity: _
+			setNum: V2
+			cardNum: 30
+			style: Standard
+		}
+		title: Strength of the Pack
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: modifyStrength
+					filter: mounted,culture(isengard),orc
+					amount: 1
+				}
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyCost
+					requires: {
+						type: CanSpot
+						filter: mounted,culture(isengard),orc
+						count: 2
+					}
+					filter: culture(isengard),mount
+					amount: -1
+				}
+			}
+		]
+		gametext: Mounted [Isengard] Orcs are strength +1.<br>While you can spot 2 mounted [isengard] Orcs, your [isengard] mounts are twilight cost -1. 
+		lore: "At a gap in the circle a great dark wolf-shape could be seen halted, gazing at them. A shuddering howl broke from him, as if he were a captain summoning his pack to the assault."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_31: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S031.0_card.jpg
+			//parentId: 102_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_31
+			rarity: _
+			setNum: V2
+			cardNum: 31
+			style: Standard
+		}
+		title: Trail of Savagery
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: battleground
+					filter: SiteYouControl
+				}
+			}
+			{
+				type: Activated
+				phase: Skirmish
+				requires: {
+					type: CanSpot
+					filter: uruk-hai
+				}
+				cost: {
+					type: RemoveCultureTokens
+					culture: isengard
+					count: 2
+					select: choose(machine)
+				}
+				effect: {
+					type: CancelSkirmish
+					filter: uruk-hai
+				}
+			}
+		]
+		gametext: Each site you control gains <b>battleground</b>.<br>Skirmish: Remove 2 [isengard] tokens from a machine to cancel a skirmish involving an Uruk-hai.
+		lore: "'They are burning or despoiling all that is left in the vale.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_32: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S032.0_card.jpg
+			//parentId: 102_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_32
+			rarity: _
+			setNum: V2
+			cardNum: 32
+			style: Standard
+		}
+		title: Uneasy Alliance
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: tracker
+					amount: 1
+					requires: [
+						{
+							type: CanSpot
+							filter: culture(sauron), tracker
+						}
+						{
+							type: CanSpot
+							filter: culture(isengard), tracker
+						}
+					]
+				}
+			}
+			{
+				type: Activated
+				phase: Shadow
+				requires: {
+					type: CanPlayFromDiscard
+					filter: culture(isengard), tracker
+				}
+				cost: {
+					type: DiscardFromHand
+					select: choose(culture(sauron), tracker)
+					forced: false
+				}
+				effect: { 
+					type: PlayCardFromDiscard
+					select: choose(culture(isengard), tracker)
+					extraEffects: {
+						type: Discard
+						select: self
+					}
+				}
+			}
+		]
+		gametext: Search.<br>While you can spot an [Isengard] tracker and a [Sauron] tracker, trackers are strength +1.<br>Shadow: Discard a [sauron] tracker from hand to play an [isengard] tracker from your discard pile. Discard this condition.
+		lore: "...a quarrel seemed on the point of breaking out again between the Northerners and the Isengarders."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_33: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S033.0_card.jpg
+			//parentId: 102_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_33
+			rarity: _
+			setNum: V2
+			cardNum: 33
+			style: Standard
+		}
+		title: Uruk Grumbler
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Uruk-hai
+		strength: 7
+		vitality: 1
+		site: 5
+		keywords: [
+			Tracker
+			Fierce
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: AssignedAgainst
+					filter: self
+					against: companion
+					memorizeAgainst: comp
+				}
+				cost: [
+					{
+						type: Spot
+						filter: culture(Sauron), tracker
+					}
+					{
+						type: Discard
+						select: self
+					}
+				]
+				effect: {
+					type: Wound
+					select: memory(comp)
+				}
+			}
+		]
+		gametext: Tracker. Fierce.<br>Each time this minion is assigned to skirmish a companion, you may spot a [sauron] tracker and discard this minion to wound that companion. 
+		lore: "'We came out of Isengard, and led you here, and we shall lead you back by the way we choose.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_34: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S034.0_card.jpg
+			//parentId: 102_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_34
+			rarity: _
+			setNum: V2
+			cardNum: 34
+			style: Standard
+		}
+		title: Uruk Occupier
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 3
+		site: 5
+		keywords: Damage+1
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: {
+						type: ForEachYouCanSpot
+						filter: SiteYouControl,battleground
+					}
+				}
+			}
+			{
+				type: ActivatedInDiscard
+				phase: Shadow
+				requires: [
+					{
+						type: CanSpot
+						filter: SiteYouControl,battleground
+						count: 3
+					}
+					{
+						type: PlayableFromDiscard
+						filter: self
+					}
+				]
+				cost: {
+					type: DiscardFromHand
+					count: 1
+					forced: false
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: self
+				}
+			}
+		]
+		gametext: Damage +1.<br>This minion is strength +1 for each battleground you control.<br>Shadow: If you control 3 battlegrounds, discard a card from hand to play this minion from your discard pile.
+		lore: "'Our scouts have gained no news of him, and the enemy fills all the valley behind us.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_35: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S035.0_card.jpg
+			//parentId: 102_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_35
+			rarity: _
+			setNum: V2
+			cardNum: 35
+			style: Standard
+		}
+		title: Uruk Shield Wall
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Possession
+		keywords: [
+			Machine
+			Support Area
+		]
+		effects: [
+			{
+				type: Trigger
+				trigger: {
+					type: AboutToTakeWound
+					filter: uruk-hai
+					memorize: woundedUruk
+				}
+				requires: {
+					type: IsEqual
+					firstNumber: {
+						type: TwilightCostInMemory
+						memory: woundedUruk
+					}
+					secondNumber: {
+						type: ForEachCultureToken
+						filter: self
+						culture: isengard
+					}
+				}
+				effect: [
+					{
+						type: negateWound
+						select: memory(woundedUruk)
+					}
+					{
+						type: Exert
+						select: memory(woundedUruk)
+					}
+				]
+			}
+			{
+				type: Activated
+				phase: Maneuver
+				cost: {
+					type: Exert
+					select: choose(uruk-hai)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: isengard
+					select: self
+					count: 1
+				}
+			}
+		]
+		gametext: Machine.<br>While you can spot X [isengard] tokens here, each time an [isengard] Uruk-hai costing X is about to take a wound, exert it instead.<br>Maneuver: Exert an Uruk-hai to add an [isengard] token here.  
+		lore: "They held their great shields above them like a roof..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_36: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S036.0_card.jpg
+			//parentId: 102_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_36
+			rarity: _
+			setNum: V2
+			cardNum: 36
+			style: Standard
+		}
+		title: Wolf Pit
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Possession
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: self
+				}
+				effect: [
+					{
+						type: Choice
+						texts: [
+							Stack an {isengard} mount from your draw deck.
+							Stack an {isengard} mount from your discard pile.
+						]
+						effects: [
+							{
+								type: StackCardsFromDeck
+								select: choose(culture(isengard),mount)
+								count: 0-1
+								where: self
+								shuffle: true
+								showAll: true
+							}
+							{
+								type: StackCardsFromDiscard
+								select: choose(culture(isengard),mount)
+								count: 0-1
+								where: self
+							}
+						]
+					}
+					{
+						type: If
+						check: {
+							type: HasCardStacked
+							filter: any
+							on: self
+						}
+						true: {
+							type: Choice
+							texts: [
+								Stack an {isengard} mount from your draw deck.
+								Stack an {isengard} mount from your discard pile.
+							]
+							effects: [
+								{
+									type: StackCardsFromDeck
+									select: choose(culture(isengard),mount)
+									count: 0-1
+									where: self
+									shuffle: true
+									showAll: true
+								}
+								{
+									type: StackCardsFromDiscard
+									select: choose(culture(isengard),mount)
+									count: 0-1
+									where: self
+								}
+							]
+						}
+					}
+				]
+			}
+			{
+				type: Activated
+				phase: Shadow
+				requires: {
+						type: HasCardStacked
+						filter: playable, culture(isengard), mount
+						on: self
+					}
+				cost: {
+					type: Exert
+					select: choose(culture(isengard), minion)
+					times: 1
+				}
+				effect: [
+					{
+						type: ChooseCardsFromSingleStack
+						select: choose(playable, culture(isengard), mount)
+						count: 1
+						on: self
+						memorize: chosenMount
+						text: Choose an {isengard} mount to play as if from hand.
+					}
+					{
+						type: PlayCardFromStacked
+						select: memory(chosenMount)
+						assumePlayable: true
+						on: self
+					}
+				]
+			}
+		]
+		gametext: When you play this possession, you may stack two [isengard] mounts here from your draw deck or discard pile.<br>Shadow: Exert an [Isengard] minion to play an [Isengard] mount stacked here as if from hand. 
+		lore: "Horsemen were galloping on the grass of Rohan; wolves poured from Isengard."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

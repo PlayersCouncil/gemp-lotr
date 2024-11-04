@@ -1,0 +1,53 @@
+{
+
+	102_44: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S044.0_card.jpg
+			//parentId: 102_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_44
+			rarity: _
+			setNum: V2
+			cardNum: 44
+			style: Standard
+		}
+		title: Threats on All Sides
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: [
+			{
+				type: responseEvent
+				trigger: {
+				
+				}
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: At the start of the Shadow phase, spot 25 twilight tokens and remove 10 to add up to 9 threats, then remove this from the game. This event may be played from your draw deck or discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}
