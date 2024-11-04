@@ -20,26 +20,61 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		timewords: Response
+		timewords: Shadow
 		effects: [
 			{
-				type: responseEvent
-				trigger: {
-				
+				type: event
+				requires: {
+					type: CanSpotTwilight
+					amount: 25
 				}
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: RemoveTwilight
+					amount: 10
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: modifyArcheryTotal
+						side: shadow
+						amount: 6
+						until: regroup
+					}
+					{
+						type: RemoveFromTheGame
+						select: self
 					}
 				]
 			}
+			{
+				type: ActivatedInDiscard
+				phase: Shadow
+				requires: [
+					{
+						type: canSelfBePlayed
+					}
+				]
+				effect: {
+					type: playCardFromDiscard
+					select: self
+				}
+			}
+			{
+				type: ActivatedInDrawDeck
+				phase: Shadow
+				requires: [
+					{
+						type: canSelfBePlayed
+					}
+				]
+				effect: {
+					type: PlayCardFromDrawDeck
+					select: self
+					shuffle: true
+					showAll: true
+				}
+			}
 		]
-		gametext: At the start of the Shadow phase, spot 25 twilight tokens and remove 10 to make the minion archery total +6 until the regroup phase, then remove this from the game. This event may be played from your draw deck or discard pile.
+		gametext: Spot 25 twilight tokens and remove 10 to make the minion archery total +6 until the regroup phase, then remove this from the game. This event may be played from your draw deck or discard pile.
 		lore: ""
 		promotext: ""
 		alts: {
