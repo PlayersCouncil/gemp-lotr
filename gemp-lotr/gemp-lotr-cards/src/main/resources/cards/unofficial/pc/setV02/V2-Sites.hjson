@@ -1,18 +1,17 @@
 {
 
-	102_63: {
+	102_67: {
 		cardInfo: {
-			imagePath: sets/V2/V2_63.jpg
-			javaClass: false
-			//parentId: 102_63
+			imagePath: sets/V2/LOTR-ENV2S067.0_card.jpg
+			//parentId: 102_67
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
 			//parentPath: alts/promo
 			version: 0
-			collInfo: V2U63
-			rarity: U
-			setNum: "V2"
-			cardNum: 63
+			collInfo: V2_67
+			rarity: _
+			setNum: V2
+			cardNum: 67
 			style: Standard
 		}
 		title: Eastemnet Hills
@@ -56,7 +55,7 @@
 				}
 			}
 		]
-		gametext: Mountain. When the Fellowship moves from here during the regroup phase, each player may discard 2 cards to draw 2 cards.
+		gametext: Mountain. When the fellowship moves from here during the regroup phase, each player may discard 2 cards to draw 2 cards.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -67,19 +66,18 @@
 		}
 	}
 
-	102_64: {
+	102_68: {
 		cardInfo: {
-			imagePath: sets/V2/V2_64.jpg
-			javaClass: false
-			//parentId: 102_64
+			imagePath: sets/V2/LOTR-ENV2S068.0_card.jpg
+			//parentId: 102_68
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
 			//parentPath: alts/promo
 			version: 0
-			collInfo: V2U64
-			rarity: U
-			setNum: "V2"
-			cardNum: 64
+			collInfo: V2_68
+			rarity: _
+			setNum: V2
+			cardNum: 68
 			style: Standard
 		}
 		title: Theodred's Tomb
@@ -115,19 +113,18 @@
 		}
 	}
 
-	102_65: {
+	102_69: {
 		cardInfo: {
-			imagePath: sets/V2/V2_65.jpg
-			javaClass: false
-			//parentId: 102_65
+			imagePath: sets/V2/LOTR-ENV2S069.0_card.jpg
+			//parentId: 102_69
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
 			//parentPath: alts/promo
 			version: 0
-			collInfo: V2U65
-			rarity: U
-			setNum: "V2"
-			cardNum: 65
+			collInfo: V2_69
+			rarity: _
+			setNum: V2
+			cardNum: 69
 			style: Standard
 		}
 		title: Westfold Plains
@@ -159,19 +156,18 @@
 		}
 	}
 
-	102_66: {
+	102_70: {
 		cardInfo: {
-			imagePath: sets/V2/V2_66.jpg
-			javaClass: false
-			//parentId: 102_66
+			imagePath: sets/V2/LOTR-ENV2S070.0_card.jpg
+			//parentId: 102_70
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
 			//parentPath: alts/promo
 			version: 0
-			collInfo: V2U66
-			rarity: U
-			setNum: "V2"
-			cardNum: 66
+			collInfo: V2_70
+			rarity: _
+			setNum: V2
+			cardNum: 70
 			style: Standard
 		}
 		title: Breached Wall
@@ -182,12 +178,6 @@
 		block: Towers
 		direction: Left
 		keywords: Battleground
-		# Things that need changed for this to be worth a damn:
-		# - Add ForEachSiteYouControl value
-		# - Add ForEachSiteOpponentControls value
-		# - Alter ControlsSite and OpponentDoesNotControlSite requirements
-		# - Redirect every use of ForEachYouCanSpot with a controlled site filter to use the above
-		# - 
 		effects: [
 			{
 				type: modifier
@@ -197,7 +187,7 @@
 				}
 			}
 		]
-		gametext: Battleground. While at this site, the count of sites the shadow player controls is +1. 
+		gametext: Battleground. The count of sites each Shadow player controls<br> is +1. 
 		lore: ""
 		promotext: ""
 		alts: {
@@ -208,79 +198,18 @@
 		}
 	}
 
-	102_67: {
+	102_71: {
 		cardInfo: {
-			imagePath: sets/V2/V2_67.jpg
-			javaClass: false
-			//parentId: 102_67
+			imagePath: sets/V2/LOTR-ENV2S071.0_card.jpg
+			//parentId: 102_71
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
 			//parentPath: alts/promo
 			version: 0
-			collInfo: V2U67
-			rarity: U
-			setNum: "V2"
-			cardNum: 67
-			style: Standard
-		}
-		title: Isengard Gates
-		unique: false
-		twilight: 3
-		type: Site
-		site: 6
-		block: Towers
-		direction: Left
-		keywords: Sanctuary
-		effects: [
-			{
-				type: Activated
-				phase: Fellowship
-				requires: {
-					type: PerPhaseLimit
-					limit: 1
-				}
-				cost: {
-					type: Exert
-					select: choose(unbound, Hobbit)
-				}
-				effect: [
-					{
-						type: PlayCardFromDrawDeck
-						select: choose(or(pipe,pipeweed))
-						shuffle: true
-						showAll: true
-					}
-					{
-						type: IncrementPerPhaseLimit
-						limit: 1
-					}
-				]
-			}
-		]
-		gametext: Sanctuary. Fellowship: Exert an unbound Hobbit to play a pipe or pipeweed from your draw deck (limit 1).
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
-
-	102_68: {
-		cardInfo: {
-			imagePath: sets/V2/V2_68.jpg
-			javaClass: false
-			//parentId: 102_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: V2U68
-			rarity: U
-			setNum: "V2"
-			cardNum: 68
+			collInfo: V2_71
+			rarity: _
+			setNum: V2
+			cardNum: 71
 			style: Standard
 		}
 		title: Helm's Tower
@@ -317,19 +246,18 @@
 		}
 	}
 
-	102_69: {
+	102_72: {
 		cardInfo: {
-			imagePath: sets/V2/V2_69.jpg
-			javaClass: false
-			//parentId: 102_69
+			imagePath: sets/V2/LOTR-ENV2S072.0_card.jpg
+			//parentId: 102_72
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
 			//parentPath: alts/promo
 			version: 0
-			collInfo: V2U69
-			rarity: U
-			setNum: "V2"
-			cardNum: 69
+			collInfo: V2_72
+			rarity: _
+			setNum: V2
+			cardNum: 72
 			style: Standard
 		}
 		title: Desolation of Saruman
@@ -370,19 +298,18 @@
 		}
 	}
 
-	102_70: {
+	102_73: {
 		cardInfo: {
-			imagePath: sets/V2/V2_70.jpg
-			javaClass: false
-			//parentId: 102_70
+			imagePath: sets/V2/LOTR-ENV2S073.0_card.jpg
+			//parentId: 102_73
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
 			//parentPath: alts/promo
 			version: 0
-			collInfo: V2U70
-			rarity: U
-			setNum: "V2"
-			cardNum: 70
+			collInfo: V2_73
+			rarity: _
+			setNum: V2
+			cardNum: 73
 			style: Standard
 		}
 		title: Isengard Clefts
@@ -416,4 +343,5 @@
 			}
 		}
 	}
+
 }

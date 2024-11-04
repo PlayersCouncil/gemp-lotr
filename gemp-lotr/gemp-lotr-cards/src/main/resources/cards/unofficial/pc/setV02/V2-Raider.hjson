@@ -1,0 +1,53 @@
+{
+
+	102_43: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S043.0_card.jpg
+			//parentId: 102_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_43
+			rarity: _
+			setNum: V2
+			cardNum: 43
+			style: Standard
+		}
+		title: All Hope of Secrecy Lost
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: [
+			{
+				type: responseEvent
+				trigger: {
+				
+				}
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: At the start of the Shadow phase, spot 25 twilight tokens and remove 10 to make the minion archery total +6 until the regroup phase, then remove this from the game. This event may be played from your draw deck or discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

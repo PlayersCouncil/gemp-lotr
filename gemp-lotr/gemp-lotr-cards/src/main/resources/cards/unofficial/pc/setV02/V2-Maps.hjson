@@ -1,0 +1,130 @@
+{
+
+	102_74: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S074.0_card.jpg
+			//parentId: 102_74
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_74
+			rarity: _
+			setNum: V2
+			cardNum: 74
+			style: Standard
+		}
+		title: Path of the Fellowship
+		unique: false
+		twilight: 0
+		type: Map
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: SendMessage
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Before the game begins, place this Map in your support area.<br>Your adventure deck must only contain cards from the Fellowship site path.
+		lore: "'It's a dangerous business, Frodo, going out your door. You step onto the Road, and if you don't keep your feet, there's no knowing where you might be swept off to."'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	102_75: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S075.0_card.jpg
+			//parentId: 102_75
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_75
+			rarity: _
+			setNum: V2
+			cardNum: 75
+			style: Standard
+		}
+		title: Road to the Towers
+		unique: false
+		twilight: 0
+		type: Map
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: SendMessage
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Before the game begins, place this Map in your support area.<br>Your adventure deck must only contain cards from the Towers site path.
+		lore: "'Faithless is he that says farewell when the road darkens.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	
+	102_76: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S076.0_card.jpg
+			//parentId: 102_76
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_76
+			rarity: _
+			setNum: V2
+			cardNum: 76
+			style: Standard
+		}
+		title: Journey of the King
+		unique: false
+		twilight: 0
+		type: Map
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: SendMessage
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Before the game begins, place this Map in your support area.<br>Your adventure deck must only contain cards from the King site path.
+		lore: "'Tall ships and tall kings / Three times three,<br>What brought they from the foundered land /<br>Over the flowing sea?<br>Seven stars and seven stones / And one white tree.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

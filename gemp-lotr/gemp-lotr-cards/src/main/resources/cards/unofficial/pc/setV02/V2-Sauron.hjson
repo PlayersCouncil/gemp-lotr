@@ -1,0 +1,478 @@
+{
+
+	102_57: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S057.0_card.jpg
+			//parentId: 102_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_57
+			rarity: _
+			setNum: V2
+			cardNum: 57
+			style: Standard
+		}
+		title: Attention of the Eye
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: [
+			{
+				type: responseEvent
+				trigger: {
+				
+				}
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: At the start of the Shadow phase, spot 25 twilight tokens to play up to 3 minions from your draw deck costing (5) or more, then remove this from the game. This event may be played from your draw deck or discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_58: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S058.0_card.jpg
+			//parentId: 102_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_58
+			rarity: _
+			setNum: V2
+			cardNum: 58
+			style: Standard
+		}
+		title: Down to Join the Dead Ones
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: SendMessage
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, spot a Wraith.<br>Regroup: Discard two twilight minions to add a burden. The Free Peoples player may wound the Ring-bearer to prevent this.
+		lore: "'They lie in all the pools, pale faces, deep deep under the dark water.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_59: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S059.0_card.jpg
+			//parentId: 102_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_59
+			rarity: _
+			setNum: V2
+			cardNum: 59
+			style: Standard
+		}
+		title: Grishnakh
+		subtitle: Servant of Lugburz
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 11
+		vitality: 3
+		site: 6
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: SendMessage
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Tracker.<br>The site number of each [sauron] orc is -3. <br>Skirmish: Exert Grishnakh to make a skirmishing [sauron] Orc with a site number of 1 or less damage +1.
+		lore: "'My dear little fellows, please believe me when I say that it was not out of kindness: that's not even one of Uglúk's faults.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_60: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S060.0_card.jpg
+			//parentId: 102_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_60
+			rarity: _
+			setNum: V2
+			cardNum: 60
+			style: Standard
+		}
+		title: Lugburz Spotter
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 2
+		site: 6
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: SendMessage
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Tracker. <br>If this minion's site number is 1 or less, it is strength +5. 
+		lore: "'You're as bad as the other rabble: the maggots and the apes of Lugbúrz.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_61: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S061.0_card.jpg
+			//parentId: 102_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_61
+			rarity: _
+			setNum: V2
+			cardNum: 61
+			style: Standard
+		}
+		title: Marsh Wight
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 5
+		type: Minion
+		race: Wraith
+		strength: 9
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: SendMessage
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Twilight.<br>To play, spot a twilight minion.<br>This minion is twilight cost -1 for each burden you can spot.<br>While you can spot 4 burdens, this minion is damage +1.
+		lore: "'The Dead can't be really there! Is it some devilry hatched in the Dark Land?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_62: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S062.0_card.jpg
+			//parentId: 102_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_62
+			rarity: _
+			setNum: V2
+			cardNum: 62
+			style: Standard
+		}
+		title: No One's Going to Save You Now
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Search.<br>Make a [Sauron] tracker strength +1 for each search card you can spot (limit +5).
+		lore: "'You'll wish there was more that you could tell to satisfy the Questioner, indeed you will: quite soon.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_63: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S063.0_card.jpg
+			//parentId: 102_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_63
+			rarity: _
+			setNum: V2
+			cardNum: 63
+			style: Standard
+		}
+		title: Orc of Lugburz
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: SendMessage
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Tracker. <br>Each [sauron] orc with a site number of 1 or less cannot take wounds except during the skirmish phase.
+		lore: "'Is Saruman the master or the Great Eye?' said the evil voice. 'We should go back at once to Lugbúrz.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_64: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S064.0_card.jpg
+			//parentId: 102_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_64
+			rarity: _
+			setNum: V2
+			cardNum: 64
+			style: Standard
+		}
+		title: Orc Searcher
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 6
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: SendMessage
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Tracker.<br>The site number of each [Sauron] orc is -1.<br>Skirmish: Discard this minion to cancel a skirmish involving an [isengard] tracker. 
+		lore: "'We'll find a use for your legs before long. You'll wish you had got none before we get home.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_65: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S065.0_card.jpg
+			//parentId: 102_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_65
+			rarity: _
+			setNum: V2
+			cardNum: 65
+			style: Standard
+		}
+		title: Shapes to See, Not to Touch
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: SendMessage
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, spot a Wraith.<br>While you can spot 3 twilight minions, twilight minions may not take wounds except during skirmishes.<br>When the ringbearer takes off the One Ring, discard this condition. 
+		lore: "'You cannot reach them, you cannot touch them.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_66: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S066.0_card.jpg
+			//parentId: 102_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_66
+			rarity: _
+			setNum: V2
+			cardNum: 66
+			style: Standard
+		}
+		title: Trapped in its Gaze
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Exert a Wraith to make a twilight minion strength +2. If that minion wins its skirmish you may exert it to add a burden.
+		lore: "Very soon it would nail him down, know just exactly where he was."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}
