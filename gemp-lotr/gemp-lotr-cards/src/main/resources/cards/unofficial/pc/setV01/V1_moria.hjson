@@ -31,19 +31,19 @@
 	# 				select: self
 	# 			}
 	# 			effect: [
-	# 			    {
-	# 			        type: assignFPCharacterToSkirmish
-	# 			        fpCharacter: choose(ringBearer)
-	# 			        minion: choose(culture(moria),creature)
-	# 			        memorizeFPCharacter: ringBearer
-	# 			        memorizeMinion: chosenCreature
-	# 			        preventText: Would you like to exert {ringBearer} twice to prevent {chosenCreature} being assigned to them?
-	# 			        preventCost: {
+	# 				{
+	# 					type: assignFPCharacterToSkirmish
+	# 					fpCharacter: choose(ringBearer)
+	# 					minion: choose(culture(moria),creature)
+	# 					memorizeFPCharacter: ringBearer
+	# 					memorizeMinion: chosenCreature
+	# 					preventText: Would you like to exert {ringBearer} twice to prevent {chosenCreature} being assigned to them?
+	# 					preventCost: {
 	# 						type: Exert
 	# 						select: memory(ringBearer)
 	# 						times: 2
-	# 				    }
-	# 			    }
+	# 					}
+	# 				}
 	# 			]
 	# 		}
 	# 	]
@@ -51,12 +51,12 @@
 	
 	101_31: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1E031.2_card.jpg
+			imagePath: sets/vset1/LOTR-ENV1E031.1_card.jpg
 			//parentId: 101_31
 			//One of: Variant, Errata, Reprint
 			//parentType: Errata
 			//parentPath: errata/pc
-			version: 1?
+			version: 1
 			collInfo: V1U31
 			rarity: U
 			setNum: "V1"
@@ -110,14 +110,27 @@
 		}
 	}
 
-
 	101_32: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S032.0_card.jpg
+			//parentId: 101_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C32
+			rarity: C
+			setNum: "V1"
+			cardNum: 32
+			style: Standard
+		}
 		title: Terror at Its Coming
 		unique: true
-		culture: moria
+		side: Shadow
+		culture: Moria
 		twilight: 0
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: trigger
@@ -135,6 +148,15 @@
 				}
 			}
 		]
+		gametext: Each time the fellowship moves, you may reveal The Balrog from your hand to <br>add (2).
+		lore: "The orcs stood still, and a dead silence fell."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 
@@ -186,15 +208,15 @@
 	# 		}
 	# 	]
 	# }
-	
+
 	101_33: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1E033.2_card.jpg
+			imagePath: sets/vset1/LOTR-ENV1E033.1_card.jpg
 			//parentId: 101_33
 			//One of: Variant, Errata, Reprint
 			//parentType: Errata
 			//parentPath: errata/pc
-			version: 2
+			version: 1
 			collInfo: V1C33
 			rarity: C
 			setNum: "V1"
@@ -346,12 +368,12 @@
 	
 	101_34: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1E034.2_card.jpg
+			imagePath: sets/vset1/LOTR-ENV1E034.1_card.jpg
 			//parentId: 101_34
 			//One of: Variant, Errata, Reprint
 			//parentType: Errata
 			//parentPath: errata/pc
-			version: 1?
+			version: 1
 			collInfo: V1R34
 			rarity: R
 			setNum: "V1"
@@ -429,13 +451,27 @@
 		}
 	}
 
-
 	101_35: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S035.0_card.jpg
+			//parentId: 101_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C35
+			rarity: C
+			setNum: "V1"
+			cardNum: 35
+			style: Standard
+		}
 		title: The Darkness Grew
-		culture: moria
+		unique: false
+		side: Shadow
+		culture: Moria
 		twilight: 1
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: activated
@@ -494,19 +530,42 @@
 				}
 			}
 		]
+		gametext: Shadow: Stack a [moria] item from hand here.<br>Shadow: Spot The Balrog to take a [moria] card stacked here into hand.
+		lore: "... he seemed small, and altogether alone: grey and bent, like a wizened tree before the onset of a storm."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
-
 	101_36: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S036.0_card.jpg
+			//parentId: 101_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R36
+			rarity: R
+			setNum: "V1"
+			cardNum: 36
+			style: Standard
+		}
 		title: Vile Tentacle
-		culture: moria
+		unique: false
+		side: Shadow
+		culture: Moria
 		twilight: 2
-		type: minion
-		race: creature
-		keyword: tentacle
+		type: Minion
+		race: Creature
 		strength: 7
 		vitality: 2
 		site: 4
+		keywords: Tentacle
 		effects: [
 			{
 				type: modifier
@@ -545,8 +604,16 @@
 			}
 			
 		]
+		gametext: Tentacle. This minion may not bear possessions and is strength -4 while not at a marsh.<br> Shadow: Discard a [moria] card from hand to make the fellowship's current site gain <b>marsh</b> until the end of the turn.
+		lore: "...it was pale-green and luminous and wet."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
 	
 	101_65: {
 		cardInfo: {

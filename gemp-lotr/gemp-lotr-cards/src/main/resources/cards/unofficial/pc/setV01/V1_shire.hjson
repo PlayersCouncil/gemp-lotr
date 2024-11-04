@@ -1,13 +1,28 @@
 {
+
 	101_50: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S050.0_card.jpg
+			//parentId: 101_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U50
+			rarity: U
+			setNum: "V1"
+			cardNum: 50
+			style: Standard
+		}
 		title: Bilbo
 		subtitle: Of Bag End
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 2
-		type: ally
+		type: Ally
 		allyHome: 3F
-		race: hobbit
+		race: Hobbit
 		strength: 2
 		vitality: 3
 		effects: [
@@ -28,30 +43,53 @@
 						type: playCardFromDrawDeck
 						select: choose(item)
 						on: culture(shire),companion
-                        showAll: true
-                        shuffle: true
+						showAll: true
+						shuffle: true
 					}
 					{
 						type: playCardFromDrawDeck
 						select: choose(item)
 						on: culture(shire),companion
-                        showAll: true
-                        shuffle: true
+						showAll: true
+						shuffle: true
 					}
 				]
 			}
 		]
+		gametext: To play, spot 2 companions with the Frodo signet. <br>Fellowship: If the fellowship is at a sanctuary, exert Bilbo twice to play 2 items from your draw deck on [shire] companions.
+		lore: "'There has always been a Baggins in Bag End, and there always will be.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_51: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S051.0_card.jpg
+			//parentId: 101_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C51
+			rarity: C
+			setNum: "V1"
+			cardNum: 51
+			style: Standard
+		}
 		title: Griffo Boffin
 		subtitle: Uncouth Fellow
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: ally
+		type: Ally
 		allyHome: 1F
-		race: hobbit
+		race: Hobbit
 		strength: 3
 		vitality: 2
 		effects: [
@@ -72,6 +110,15 @@
 				}
 			}
 		]
+		gametext: Each time you play a [shire] ally, you may add (1) to draw a card.
+		lore: "'Neither are they counted amongst the very wise...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 	
 	# 101_52: {
@@ -112,15 +159,15 @@
 	# 					select: memory(chosenMinion)
 	# 				}
 	# 				effect: {
-    #     		        type: disableSkirmishAssignment
-    #                     select: memory(chosenMinion)
+	#	 				type: disableSkirmishAssignment
+	#					 select: memory(chosenMinion)
 	# 					until: regroup
 	# 				}
 	# 			}
 	# 		}
 	# 	]
 	# }
-	
+
 	101_52: {
 		cardInfo: {
 			imagePath: sets/vset1/LOTR-ENV1E052.1_card.jpg
@@ -173,8 +220,8 @@
 						select: memory(chosenMinion)
 					}
 					effect: {
-        		        type: disableSkirmishAssignment
-                        select: memory(chosenMinion)
+						type: disableSkirmishAssignment
+						select: memory(chosenMinion)
 						until: regroup
 					}
 				}
@@ -190,18 +237,32 @@
 			}
 		}
 	}
-	
+
 	101_53: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S053.0_card.jpg
+			//parentId: 101_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R53
+			rarity: R
+			setNum: "V1"
+			cardNum: 53
+			style: Standard
+		}
 		title: Pippin
 		subtitle: Of Tuckborough
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: companion
-		race: hobbit
+		type: Companion
+		race: Hobbit
 		strength: 3
 		vitality: 4
-		signet: frodo
+		signet: Frodo
 		resistance: 6
 		effects: [
 			{
@@ -233,6 +294,15 @@
 				]
 			}
 		]
+		gametext: Skirmish: Exert Pippin to prevent a skirmishing [shire] companion from being overwhelmed unless their strength is tripled (and make them strength +1 if you can spot 3 companions with the Frodo signet).
+		lore: "‘You must go - and therefore we must, too. Merry and I are coming with you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 	
 	# 101_54: {
@@ -291,7 +361,7 @@
 	# 	]
 	# }
 	
-	
+
 	101_54: {
 		cardInfo: {
 			imagePath: sets/vset1/LOTR-ENV1E054.1_card.jpg
@@ -353,13 +423,28 @@
 			}
 		}
 	}
-	
+
 	101_55: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S055.0_card.jpg
+			//parentId: 101_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C55
+			rarity: C
+			setNum: "V1"
+			cardNum: 55
+			style: Standard
+		}
 		title: We May Yet
-		culture: shire
+		unique: false
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: event
-		timeword: skirmish
+		type: Event
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
@@ -377,31 +462,65 @@
 				}
 			}
 		}
+		gametext: Exert a skirmishing companion with the Frodo signet to make that companion strength +1 for each companion with the Frodo signet you can spot (limit +4).
+		lore: "'I don't suppose we'll ever see them again.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_56: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S056.0_card.jpg
+			//parentId: 101_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C56
+			rarity: C
+			setNum: "V1"
+			cardNum: 56
+			style: Standard
+		}
 		title: We're Coming, Too!
-		culture: shire
+		unique: false
+		side: Free Peoples
+		culture: Shire
 		twilight: 2
-		type: event
-		timeword: fellowship
+		type: Event
+		timewords: Fellowship
 		effects: {
 			type: event
-            requires: [
-                {
-                    type: canSpot
-                    filter: name(Merry)
-                }
-                {
-                    type: canSpot
-                    filter: name(Pippin)
-                }
-            ]
+			requires: [
+				{
+					type: canSpot
+					filter: name(Merry)
+				}
+				{
+					type: canSpot
+					filter: name(Pippin)
+			}
+			]
 			effect: {
 				type: heal
 				count: 2
 				select: choose(companion,signet(frodo))
 			}
 		}
+		gametext: Spot Merry and Pippin to heal two companions with the Frodo signet.
+		lore: "'We hobbits ought to stick together, and we will. I shall go, unless they chain me up.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 }
