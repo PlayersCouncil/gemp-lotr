@@ -3,7 +3,6 @@
 	13_1: {
 		cardInfo: {
 			imagePath: decipher/LOTR13001.jpg
-			javaClass: true
 			//parentId: 13_1
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -26,41 +25,41 @@
 		itemclass: Mount
 		target: dwarf
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: reinforceTokens
-		            culture: dwarven
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: bearer
-		        }
-		        requires: {
-		            type: phase
-		            phase: skirmish
-		        }
-		        cost: {
-		            type: removeTokensCumulative
-		            count: 2
-		            culture: dwarven
-		        }
-		        effect: {
-		            type: preventWound
-		            select: choose(bearer)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: reinforceTokens
+					culture: dwarven
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				requires: {
+					type: phase
+					phase: skirmish
+				}
+				cost: {
+					type: removeTokensCumulative
+					count: 2
+					culture: dwarven
+				}
+				effect: {
+					type: preventWound
+					select: choose(bearer)
+				}
+			}
 		]
 		gametext: Bearer must be a Dwarf.<br>When you play Arod, you may reinforce a [dwarven] token.<br><b>Response:</b> If bearer is about to take a wound during a skirmish, remove 2 [dwarven] tokens to prevent that.
-		lore: A smaller and lighter horse, but restive and fiery....
+		lore: "A smaller and lighter horse, but restive and fiery...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -73,7 +72,6 @@
 	13_2: {
 		cardInfo: {
 			imagePath: decipher/LOTR13002.jpg
-			javaClass: true
 			//parentId: 13_2
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -91,41 +89,41 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(dwarf)
-				    memorize: chosenDwarf
-				    amount: {
-				        type: Conditional
-				        requires: {
-				            type: canSpotCultureTokens
-				            culture: dwarven
-				        }
-				        true: 4
-				        false: 3
-				    }
+					type: modifyStrength
+					select: choose(dwarf)
+					memorize: chosenDwarf
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpotCultureTokens
+							culture: dwarven
+						}
+						true: 4
+						false: 3
+					}
 				}
 				{
-				    type: If
-				    check: {
-                        type: canSpotCultureTokens
-                        culture: dwarven
-				    }
-				    true: {
-				        type: addKeyword
-				        select: memory(chosenDwarf)
-				        keyword: damage
-				        amount: 1
-				    }
+					type: If
+					check: {
+						type: canSpotCultureTokens
+						culture: dwarven
+					}
+					true: {
+						type: addKeyword
+						select: memory(chosenDwarf)
+						keyword: damage
+						amount: 1
+					}
 				}
 			]
 		}
 		gametext: Make a Dwarf strength +3 (or +4 and <b>damage +1</b> if you can spot a [dwarven] token).
-		lore: It's a long way.
+		lore: "It's a long way."
 		promotext: ""
 		alts: {
 			promos: {
@@ -138,7 +136,6 @@
 	13_3: {
 		cardInfo: {
 			imagePath: decipher/LOTR13003.jpg
-			javaClass: true
 			//parentId: 13_3
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -158,59 +155,59 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: moves
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: choose(dwarf,notAssignedToSkirmish)
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Wound 2 Orcs
-		                Wound 1 Orc twice
-		            ]
-		            effects: [
-		                {
-		                    type: wound
-		                    select: choose(orc)
-		                    count: 2
-		                }
-		                {
-		                    type: wound
-		                    select: choose(orc)
-		                    times: 2
-		                }
-		            ]
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: constantlyCheck
-		        }
-		        requires: {
-		            type: isAhead
-		        }
-		        effect: {
-		            type: discard
-		            select: self
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(dwarf,notAssignedToSkirmish)
+				}
+				effect: {
+					type: choice
+					texts: [
+						Wound 2 Orcs
+						Wound 1 Orc twice
+					]
+					effects: [
+						{
+							type: wound
+							select: choose(orc)
+							count: 2
+						}
+						{
+							type: wound
+							select: choose(orc)
+							times: 2
+						}
+					]
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+				}
+				requires: {
+					type: isAhead
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
 		]
 		gametext: Each time the fellowship moves, add (2).<br><b>Skirmish:</b> Exert a Dwarf who is not assigned to a skirmish to wound 2 Orcs (or to wound 1 Orc twice).<br>Discard this from play if the fellowship is ahead on the adventure path.
-		lore: ...the War of the Dwarves and the Orcs....
+		lore: "...the War of the Dwarves and the Orcs...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -223,7 +220,6 @@
 	13_4: {
 		cardInfo: {
 			imagePath: decipher/LOTR13004.jpg
-			javaClass: true
 			//parentId: 13_4
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -241,39 +237,39 @@
 		culture: Dwarven
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: [
-            {
-                type: activatedInDiscard
-                phase: skirmish
-                cost: {
-                    type: removeCardsInDiscardFromGame
-                    select: choose(other,culture(dwarven))
-                    count: 4
-                }
-                effect:
-                {
-                   type: playCardFromDiscard
-                   select: self
-                   extraEffects: {
-                       type: removePlayedEventFromTheGame
-                       filter: self
-                   }
-                }
-            }
-            {
-                type: event
-                effect: [
-                    {
-                        type: modifyStrength
-                        select: choose(dwarf,hasAttached(hand weapon))
-                        amount: 3
-                    }
-                ]
-            }
-        ]
+			{
+				type: activatedInDiscard
+				phase: skirmish
+				cost: {
+					type: removeCardsInDiscardFromGame
+					select: choose(other,culture(dwarven))
+					count: 4
+				}
+				effect:
+				{
+				   type: playCardFromDiscard
+				   select: self
+				   extraEffects: {
+					   type: removePlayedEventFromTheGame
+					   filter: self
+				   }
+				}
+			}
+			{
+				type: event
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(dwarf,hasAttached(hand weapon))
+						amount: 3
+					}
+				]
+			}
+		]
 		gametext: You may remove from the game 4 other [dwarven] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Make your Dwarf bearing a hand weapon strength +3.
-		lore: ...Seven for the Dwarf-lords in their halls of stone....
+		lore: "...Seven for the Dwarf-lords in their halls of stone...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -286,7 +282,6 @@
 	13_5: {
 		cardInfo: {
 			imagePath: decipher/LOTR13005.jpg
-			javaClass: true
 			//parentId: 13_5
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -311,41 +306,41 @@
 		resistance: 6
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: minion,assignedToSkirmish(any)
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: assignment
-		        cost: [
-                    {
-                        type: exert
-                        select: self
-                    }
-                    {
-                        type: spot
-                        select: choose(minion,lurker)
-                        memorize: spottedLurker
-                    }
-                ]
-		        effect: {
-		            type: removeKeyword
-		            select: memory(spottedLurker)
-		            keyword: lurker
-		            until: regroup
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: minion,assignedToSkirmish(any)
+					}
+				}
+			}
+			{
+				type: activated
+				phase: assignment
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: spot
+						select: choose(minion,lurker)
+						memorize: spottedLurker
+					}
+				]
+				effect: {
+					type: removeKeyword
+					select: memory(spottedLurker)
+					keyword: lurker
+					until: regroup
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>Gimli is strength +1 for each minion assigned to a skirmish.<br><b>Assignment:</b> Exert Gimli and spot a lurker minion to make that minion lose <b>lurker</b> until the regroup phase.
-		lore: <span style="word-spacing:-0.01em;font-size:97%">"He and his people did great works in Gondor and Rohan."</span>
+		lore: "'He and his people did great works in Gondor and Rohan.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -358,7 +353,6 @@
 	13_6: {
 		cardInfo: {
 			imagePath: decipher/LOTR13006.jpg
-			javaClass: true
 			//parentId: 13_6
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -376,7 +370,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -384,25 +378,25 @@
 				filter: dwarf
 			}
 			requires: {
-			    type: fierceSkirmish
+				type: fierceSkirmish
 			}
 			effect: [
 				{
-				    type: playCardFromDiscard
-				    select: choose(culture(dwarven),possession)
+					type: playCardFromDiscard
+					select: choose(culture(dwarven),possession)
 				}
 				{
-				    type: optional
-				    text: Would you like to reinforce {dwarven} token
-				    effect: {
-				        type: reinforceTokens
-				        culture: dwarven
-				    }
+					type: optional
+					text: Would you like to reinforce {dwarven} token
+					effect: {
+						type: reinforceTokens
+						culture: dwarven
+					}
 				}
 			]
 		}
 		gametext: If a Dwarf wins a fierce skirmish, play a [dwarven] possession from your discard pile and you may reinforce a [dwarven] token.
-		lore: ...but Gimli had to be dragged away by Legolas....
+		lore: "...but Gimli had to be dragged away by Legolas...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -415,7 +409,6 @@
 	13_7: {
 		cardInfo: {
 			imagePath: decipher/LOTR13007.jpg
-			javaClass: true
 			//parentId: 13_7
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -433,23 +426,23 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
-			    type: RemoveCultureTokens
-			    culture: dwarven
-			    select: choose(any)
+				type: RemoveCultureTokens
+				culture: dwarven
+				select: choose(any)
 			},
 			effect: [
 				{
-				    type: heal
-				    select: choose(dwarf)
+					type: heal
+					select: choose(dwarf)
 				}
 			]
 		}
 		gametext: Remove a [dwarven] token to heal a Dwarf.
-		lore: Gimli was saddened by Éowyn's despair.
+		lore: "Gimli was saddened by Éowyn's despair."
 		promotext: ""
 		alts: {
 			promos: {
@@ -462,7 +455,6 @@
 	13_8: {
 		cardInfo: {
 			imagePath: decipher/LOTR13008.jpg
-			javaClass: true
 			//parentId: 13_8
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -482,58 +474,58 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: exert
-		            select: choose(dwarf)
-		            count: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: dwarven
-		            select: self
-		            count: {
-		                type: forEachYouCanSpot
-		                filter: or(mountain,underground),zone(adventure path)
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: choice
-		            texts: [
-		                Discard this from play
-		                Remove 2 tokens from here
-		            ]
-		            effects: [
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		                {
-		                    type: RemoveCultureTokens
-		                    culture: dwarven
-		                    count: 2
-		                    select: self
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: discardTopCardsFromDeck
-		            forced: true
-		            deck: shadow
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(dwarf)
+					count: 2
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: dwarven
+					select: self
+					count: {
+						type: forEachYouCanSpot
+						filter: or(mountain,underground),zone(adventure path)
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Discard this from play
+						Remove 2 tokens from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: dwarven
+							count: 2
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: discardTopCardsFromDeck
+					forced: true
+					deck: shadow
+				}
+			}
 		]
 		gametext: To play, exert 2 Dwarves.<br>When you play this, add a [dwarven] token here for each mountain site and each underground site on the adventure path.<br><b>Skirmish:</b> Discard this from play or remove 2 tokens from here to make a Shadow player discard the top card of his or her draw deck.
 		lore: ""
@@ -545,4 +537,5 @@
 			}
 		}
 	}
+
 }

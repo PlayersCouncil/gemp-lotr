@@ -3,7 +3,6 @@
 	18_94: {
 		cardInfo: {
 			imagePath: decipher/LOTR18094.jpg
-			javaClass: true
 			//parentId: 18_94
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -23,47 +22,47 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            player: you
-		            filter: culture(rohan),possession
-		            fromZone: hand
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: rohan
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: RemoveCultureTokens
-		            count: 3
-		            culture: rohan
-		            select: self
-		        }
-		        effect: [
-                    {
-                        type: modifyStrength
-                        select: choose(culture(rohan),companion)
-                        amount: 1
-                        memorize: chosenCompanion
-                    }
-                    {
-                        type: addKeyword
-                        select: memory(chosenCompanion)
-                        keyword: damage
-                        amount: 1
-                    }
-                ]
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					player: you
+					filter: culture(rohan),possession
+					fromZone: hand
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: rohan
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					count: 3
+					culture: rohan
+					select: self
+				}
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(culture(rohan),companion)
+						amount: 1
+						memorize: chosenCompanion
+					}
+					{
+						type: addKeyword
+						select: memory(chosenCompanion)
+						keyword: damage
+						amount: 1
+					}
+				]
+			}
 		]
 		gametext: Each time you play a [rohan] possession from hand, add a [rohan] token here.<br><b>Skirmish:</b> Remove 3 [rohan] tokens from here to make a [rohan] companion strength +1 and <b>damage +1</b>.
-		lore: Your leechcraft would have had me crawling on all fours like a beast!
+		lore: "Your leechcraft would have had me crawling on all fours like a beast!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -76,7 +75,6 @@
 	18_95: {
 		cardInfo: {
 			imagePath: decipher/LOTR18095.jpg
-			javaClass: true
 			//parentId: 18_95
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -97,34 +95,34 @@
 		itemclass: Ranged weapon
 		target: culture(rohan),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: bearer,mounted
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: archery
-		        requires: {
-		            type: canSpot
-		            filter: bearer,name(Éomer)
-		        }
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: exert
-		            player: shadow
-		            select: choose(minion)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer,mounted
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: archery
+				requires: {
+					type: canSpot
+					filter: bearer,name(Éomer)
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: exert
+					player: shadow
+					select: choose(minion)
+				}
+			}
 		]
 		gametext: Bearer must be a [rohan] Man.<br>If bearer is mounted, he or she is strength +1.<br><b>Archery:</b> If bearer is Éomer, exert him to choose a Shadow player who must exert one of his or her minions.
-		lore: The short bows of Rohan brought down many a foe on the fields of battle.
+		lore: "The short bows of Rohan brought down many a foe on the fields of battle."
 		promotext: ""
 		alts: {
 			promos: {
@@ -137,7 +135,6 @@
 	18_96: {
 		cardInfo: {
 			imagePath: decipher/LOTR18096.jpg
-			javaClass: true
 			//parentId: 18_96
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -157,43 +154,43 @@
 		type: Possession
 		target: culture(rohan),man
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        text: Play follower from your draw deck
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(follower)
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        text: Discard a follower from player to enhance bearer
-		        cost: {
-		            type: discard
-		            select: choose(follower)
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: bearer
-		            amount: {
-		                type: Conditional
-		                requires: {
-		                    type: canSpot
-		                    filter: bearer,name(Erkenbrand)
-		                }
-		                true: 5
-		                false: 4
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				text: Play follower from your draw deck
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(follower)
+					showAll: true
+					shuffle: true
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				text: Discard a follower from player to enhance bearer
+				cost: {
+					type: discard
+					select: choose(follower)
+				}
+				effect: {
+					type: modifyStrength
+					select: bearer
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: bearer,name(Erkenbrand)
+						}
+						true: 5
+						false: 4
+					}
+				}
+			}
 		]
 		gametext: Bearer must be a [rohan] Man.<br><b>Fellowship:</b> Exert bearer to play a follower from your draw deck. Reshuffle your draw deck.<br><b>Skirmish:</b> Discard a follower from play to make bearer strength +4 (if bearer is Erkenbrand, he is strength +5 instead).
 		lore: ""
@@ -209,7 +206,6 @@
 	18_97: {
 		cardInfo: {
 			imagePath: decipher/LOTR18097.jpg
-			javaClass: true
 			//parentId: 18_97
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -230,50 +226,50 @@
 		itemclass: Shield
 		target: culture(rohan),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            side: shadow
-		            amount: -1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: bearer,name(Erkenbrand)
-		        }
-		        cost: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		        effect: {
-		            type: cancelSkirmish
-		            filter: bearer
-		            fierceOnly: true
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: culture(rohan),man
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: name(Gandalf)
-		        }
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: preventWound
-		            select: choose(culture(rohan),man)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: bearer,name(Erkenbrand)
+				}
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+				effect: {
+					type: cancelSkirmish
+					filter: bearer
+					fierceOnly: true
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(rohan),man
+				}
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: preventWound
+					select: choose(culture(rohan),man)
+				}
+			}
 		]
 		gametext: Bearer must be a [rohan] Man.<br>The minion archery total is -1.<br><b>Skirmish:</b> If bearer is Erkenbrand, you may add (2) to cancel a fierce skirmish involving him.<br><b>Response:</b> If a [rohan] Man is about to take a wound, spot Gandalf and exert bearer to prevent that wound.
 		lore: ""
@@ -289,7 +285,6 @@
 	18_98: {
 		cardInfo: {
 			imagePath: decipher/LOTR18098.jpg
-			javaClass: true
 			//parentId: 18_98
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -307,26 +302,26 @@
 		culture: Rohan
 		twilight: 3
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
-			    type: location
-			    filter: plains
+				type: location
+				filter: plains
 			}
 			cost: {
-			    type: exert
-			    select: choose(culture(rohan),companion)
+				type: exert
+				select: choose(culture(rohan),companion)
 			}
 			effect: [
 				{
-				    type: returnToHand
-				    select: choose(minion)
+					type: returnToHand
+					select: choose(minion)
 				}
 			]
 		}
 		gametext: If the fellowship is at a plains site, exert a [rohan] companion to return a minion to its owner's hand.
-		lore: This is not a defeat. We will return.
+		lore: "This is not a defeat. We will return."
 		promotext: ""
 		alts: {
 			promos: {
@@ -339,7 +334,6 @@
 	18_99: {
 		cardInfo: {
 			imagePath: decipher/LOTR18099.jpg
-			javaClass: true
 			//parentId: 18_99
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -364,18 +358,18 @@
 		resistance: 6
 		keywords: Valiant
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        effect: {
-		            type: transfer
-		            select: choose(culture(rohan),possession)
-		            where: self
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				effect: {
+					type: transfer
+					select: choose(culture(rohan),possession)
+					where: self
+				}
+			}
 		]
 		gametext: <b>Valiant</b>.<br><b>Skirmish:</b> Transfer a [rohan] possession that Gamling can bear to him.
-		lore: Summon every able-bodied man to Dunharrow.
+		lore: "Summon every able-bodied man to Dunharrow."
 		promotext: ""
 		alts: {
 			promos: {
@@ -388,7 +382,6 @@
 	18_100: {
 		cardInfo: {
 			imagePath: decipher/LOTR18100.jpg
-			javaClass: true
 			//parentId: 18_100
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -408,45 +401,45 @@
 		type: Possession
 		target: or(and(culture(rohan),man),name(Merry))
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: choose(follower)
-		        }
-		        effect: [
-                    {
-                        type: modifyStrength
-                        select: bearer
-                        amount: 4
-                    }
-                    {
-                        type: If
-                        check: {
-                            type: canSpot
-                            filter: bearer,name(Gamling)
-                        }
-                        true: {
-                            type: costToEffect
-                            cost: {
-                                type: spot
-                                select: choose(not(bearer),companion)
-                                memorize: spottedCompanion
-                            }
-                            effect: {
-                                type: modifyStrength
-                                select: memory(spottedCompanion)
-                                amount: 4
-                                until: regroup
-                            }
-                        }
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: choose(follower)
+				}
+				effect: [
+					{
+						type: modifyStrength
+						select: bearer
+						amount: 4
+					}
+					{
+						type: If
+						check: {
+							type: canSpot
+							filter: bearer,name(Gamling)
+						}
+						true: {
+							type: costToEffect
+							cost: {
+								type: spot
+								select: choose(not(bearer),companion)
+								memorize: spottedCompanion
+							}
+							effect: {
+								type: modifyStrength
+								select: memory(spottedCompanion)
+								amount: 4
+								until: regroup
+							}
+						}
+					}
+				]
+			}
 		]
 		gametext: Bearer must be a [rohan] Man or Merry.<br><b>Skirmish:</b> Discard a follower from play to make bearer strength +4. If bearer is Gamling, you may also spot another companion to make him or her strength +4 until the regroup phase.
-		lore: Sound the charge! Take them head-on!
+		lore: "Sound the charge! Take them head-on!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -459,7 +452,6 @@
 	18_101: {
 		cardInfo: {
 			imagePath: decipher/LOTR18101.jpg
-			javaClass: true
 			//parentId: 18_101
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -477,40 +469,40 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			cost: {
-			    type: discard
-			    select: choose(culture(rohan),possession)
+				type: discard
+				select: choose(culture(rohan),possession)
 			}
 			effect: [
 				{
-				    type: choice
-				    texts: [
-				        Wound an unwounded minion
-				        Exert a minion
-				        Discard a Shadow card the Ring-bearer is bearing
-				    ]
-				    effects: [
-				        {
-				            type: wound
-				            select: choose(unwounded,minion)
-				        }
-				        {
-				            type: exert
-				            select: choose(minion)
-				        }
-				        {
-				            type: discard
-				            select: choose(side(shadow),attachedTo(ringBearer))
-				        }
-				    ]
+					type: choice
+					texts: [
+						Wound an unwounded minion
+						Exert a minion
+						Discard a Shadow card the Ring-bearer is bearing
+					]
+					effects: [
+						{
+							type: wound
+							select: choose(unwounded,minion)
+						}
+						{
+							type: exert
+							select: choose(minion)
+						}
+						{
+							type: discard
+							select: choose(side(shadow),attachedTo(ringBearer))
+						}
+					]
 				}
 			]
 		}
 		gametext: Discard a [rohan] possession from play to choose one: wound an unwounded minion; exert a minion; or discard a Shadow card the Ring-bearer is bearing.
-		lore: Éomer's spear, now thrown, brought down the Haradrim leader.
+		lore: "Éomer's spear, now thrown, brought down the Haradrim leader."
 		promotext: ""
 		alts: {
 			promos: {
@@ -523,7 +515,6 @@
 	18_102: {
 		cardInfo: {
 			imagePath: decipher/LOTR18102.jpg
-			javaClass: true
 			//parentId: 18_102
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -543,37 +534,37 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: name(Théoden)
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: [
-		            {
-		                type: spot
-		                select: choose(culture(rohan),man,hasAttached(possession))
-		                memorize: spottedMan
-		            }
-		            {
-		                type: discardFromHand
-		                forced: false
-		                select: choose(culture(rohan),possession)
-		            }
-		        ]
-		        effect: {
-		            type: modifyStrength
-		            select: memory(spottedMan)
-		            amount: 2
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Théoden)
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: spot
+						select: choose(culture(rohan),man,hasAttached(possession))
+						memorize: spottedMan
+					}
+					{
+						type: discardFromHand
+						forced: false
+						select: choose(culture(rohan),possession)
+					}
+				]
+				effect: {
+					type: modifyStrength
+					select: memory(spottedMan)
+					amount: 2
+				}
+			}
 		]
 		gametext: To play, spot Théoden.<br><b>Skirmish:</b> Spot a [rohan] Man bearing a possession and discard a [rohan] possession from hand to make that Man strength +2.
-		lore: With Gríma's treacherous whispers removed and Saruman's grasp released, none doubted the might and lordship of Théoden, the King of Rohan.
+		lore: "With Gríma's treacherous whispers removed and Saruman's grasp released, none doubted the might and lordship of Théoden, the King of Rohan."
 		promotext: ""
 		alts: {
 			promos: {
@@ -586,7 +577,6 @@
 	18_103: {
 		cardInfo: {
 			imagePath: decipher/LOTR18103.jpg
-			javaClass: true
 			//parentId: 18_103
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -610,21 +600,21 @@
 		resistance: 6
 		keywords: Valiant
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpotCultureTokens
-		                culture: rohan
-		            }
-		            filter: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotCultureTokens
+						culture: rohan
+					}
+					filter: self
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Valiant</b>.<br>While you can spot a [rohan] token, this companion is strength +2.
-		lore: Even the older men of Rohan had talents in the arts of war.
+		lore: "Even the older men of Rohan had talents in the arts of war."
 		promotext: ""
 		alts: {
 			promos: {
@@ -637,7 +627,6 @@
 	18_104: {
 		cardInfo: {
 			imagePath: decipher/LOTR18104.jpg
-			javaClass: true
 			//parentId: 18_104
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -657,38 +646,38 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: moves
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),companion
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(possession,attachedTo(character))
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: addTwilight
-		            amount: 1
-		        }
-		        effect: {
-		            type: transfer
-		            select: choose(culture(rohan),possession,attachedTo(companion))
-		            where: choose(any)
-		            checkTarget: true
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: canSpot
+					filter: culture(rohan),companion
+				}
+				effect: {
+					type: discard
+					select: choose(possession,attachedTo(character))
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: addTwilight
+					amount: 1
+				}
+				effect: {
+					type: transfer
+					select: choose(culture(rohan),possession,attachedTo(companion))
+					where: choose(any)
+					checkTarget: true
+				}
+			}
 		]
 		gametext: Each time the fellowship moves, you may spot a [rohan] companion to discard a possession a character is bearing from play.<br><b>Skirmish:</b> Add (1) to transfer a [rohan] possession borne by a companion to another eligible bearer.
-		lore: I cannot allow you before Théoden-King so armed.
+		lore: "I cannot allow you before Théoden-King so armed."
 		promotext: ""
 		alts: {
 			promos: {
@@ -701,7 +690,6 @@
 	18_105: {
 		cardInfo: {
 			imagePath: decipher/LOTR18105.jpg
-			javaClass: true
 			//parentId: 18_105
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -725,47 +713,47 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyResistance
-		            requires: {
-		                type: canSpot
-		                filter: name(Gandalf)
-		            }
-		            filter: self
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: name(Éomer)
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                count: 3
-		                filter: mounted,culture(rohan),companion
-		            }
-		            filter: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					requires: {
+						type: canSpot
+						filter: name(Gandalf)
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: name(Éomer)
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						count: 3
+						filter: mounted,culture(rohan),companion
+					}
+					filter: self
+					amount: 2
+				}
+			}
 		]
 		gametext: While you can spot Gandalf, Théoden is resistance +2.<br>While you can spot Éomer, Théoden is <b>damage +1</b>.<br>While you can spot 3 mounted [rohan] companions, Théoden is strength +2.
-		lore: Now for wrath! Now for ruin! And a red dawn!
+		lore: "Now for wrath! Now for ruin! And a red dawn!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -774,4 +762,5 @@
 			}
 		}
 	}
+
 }

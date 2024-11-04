@@ -3,7 +3,6 @@
 	6_90: {
 		cardInfo: {
 			imagePath: decipher/LOTR06090.jpg
-			javaClass: true
 			//parentId: 6_90
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -24,37 +23,37 @@
 		itemclass: Hand weapon
 		target: culture(rohan),companion
 		effects: [
-		    {
-		        type: trigger
-		        text: Exert a minion
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: bearer
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(minion)
-		        }
-		    }
-		    {
-		        type: Response
-		        text: Discard to liberate a site
-		        trigger: {
-		            type: winsSkirmish
-		            filter: bearer
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: liberateSite
-		        }
-		    }
+			{
+				type: trigger
+				text: Exert a minion
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: exert
+					select: choose(minion)
+				}
+			}
+			{
+				type: Response
+				text: Discard to liberate a site
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: liberateSite
+				}
+			}
 		]
 		gametext: Bearer must be a [rohan] companion.<br>Each time bearer wins a skirmish, you may exert a minion.<br><b>Response:</b> If bearer wins a skirmish, discard this possession to liberate a site.
-		lore: Fell deeds awake. Now for wrath. Now for ruin, and the red dawn.'
+		lore: "'Fell deeds awake. Now for wrath. Now for ruin, and the red dawn.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -67,7 +66,6 @@
 	6_91: {
 		cardInfo: {
 			imagePath: decipher/LOTR06091.jpg
-			javaClass: true
 			//parentId: 6_91
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -87,35 +85,35 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: [
-		            {
-		                type: chooseActiveCards
-    		            select: choose(mount,attachedTo(culture(rohan),man),canBeDiscarded)
-    		            text: Choose cards to discard
-    		            memorize: chosenMount
-		            }
-		            {
-		                type: memorizeActive
-		                filter: hasAttached(memory(chosenMount))
-		                memory: chosenMan
-		            }
-    		        {
-	    	            type: discard
-	    	            select: memory(chosenMount)
-		            }
-		        ]
-		        effect: {
-		            type: alterOverwhelmMultiplier
-		            select: memory(chosenMan)
-		            multiplier: 3
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: chooseActiveCards
+						select: choose(mount,attachedTo(culture(rohan),man),canBeDiscarded)
+						text: Choose cards to discard
+						memorize: chosenMount
+					}
+					{
+						type: memorizeActive
+						filter: hasAttached(memory(chosenMount))
+						memory: chosenMan
+					}
+					{
+						type: discard
+						select: memory(chosenMount)
+					}
+				]
+				effect: {
+					type: alterOverwhelmMultiplier
+					select: memory(chosenMan)
+					multiplier: 3
+				}
+			}
 		]
 		gametext: Plays to your support area.<br><b>Skirmish:</b> Discard a mount borne by a [rohan] Man to prevent that Man from being overwhelmed unless his or her strength is tripled.
-		lore: They were hemming the Orcs in, preventing them from scattering, and driving them....
+		lore: "They were hemming the Orcs in, preventing them from scattering, and driving them...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -128,7 +126,6 @@
 	6_92: {
 		cardInfo: {
 			imagePath: decipher/LOTR06092.jpg
-			javaClass: true
 			//parentId: 6_92
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -154,36 +151,36 @@
 		resistance: 6
 		keywords: Valiant
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),man
-		        }
-		        amount: -1
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            count: 3
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(rohan),man)
-		            memorize: chosenMan
-		            amount: {
-		                type: forEachWound
-		                filter: minion,inSkirmishAgainst(memory(chosenMan))
-		                multiplier: 2
-		            }
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+				amount: -1
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 3
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(rohan),man)
+					memorize: chosenMan
+					amount: {
+						type: forEachWound
+						filter: minion,inSkirmishAgainst(memory(chosenMan))
+						multiplier: 2
+					}
+				}
+			}
 		]
 		gametext: <b>Valiant</b>. While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br><b>Skirmish:</b> Discard 3 cards from hand to make a [rohan] Man strength +2 for each wound on each minion in his or her skirmish.
-		lore: Gúthwinë for the Mark!'
+		lore: "'Gúthwinë for the Mark!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -196,7 +193,6 @@
 	6_93: {
 		cardInfo: {
 			imagePath: decipher/LOTR06093.jpg
-			javaClass: true
 			//parentId: 6_93
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -214,7 +210,7 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			cost: {
@@ -231,7 +227,7 @@
 			]
 		}
 		gametext: <b>Regroup:</b> Exert 2 mounted [rohan] Men to discard up to 2 wounded minions.
-		lore: Would that day was here and we might ride down upon them like a storm out of the mountains!'
+		lore: "'Would that day was here and we might ride down upon them like a storm out of the mountains!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -244,7 +240,6 @@
 	6_94: {
 		cardInfo: {
 			imagePath: decipher/LOTR06094.jpg
-			javaClass: true
 			//parentId: 6_94
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -268,28 +263,28 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),man
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(possession,attachedTo(minion,inSkirmishAgainst(self)))
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(possession,attachedTo(minion,inSkirmishAgainst(self)))
+				}
+			}
 		]
 		gametext: To play, spot a [rohan] Man.<br><b>Skirmish:</b> Exert Háma to discard a possession borne by a minion he is skirmishing.
-		lore: Yet in doubt a man of worth will trust to his own wisdom. I believe you are friends and folk worthy of honour, who have no evil purpose.'
+		lore: "'Yet in doubt a man of worth will trust to his own wisdom. I believe you are friends and folk worthy of honour, who have no evil purpose.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -302,7 +297,6 @@
 	6_95: {
 		cardInfo: {
 			imagePath: decipher/LOTR06095.jpg
-			javaClass: true
 			//parentId: 6_95
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -326,33 +320,33 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),man
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: heal
-		            select: choose(minion,inSkirmishAgainst(self))
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: {
-		                type: cardPhaseLimit
-		                limit: 3
-		                amount: 3
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: heal
+					select: choose(minion,inSkirmishAgainst(self))
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: {
+						type: cardPhaseLimit
+						limit: 3
+						amount: 3
+					}
+				}
+			}
 		]
 		gametext: To play, spot a [rohan] Man.<br><b>Skirmish:</b> Heal a minion skirmishing Hrethel to make Hrethel strength +3 (limit +3).
-		lore: ...gaining on the Orcs, gaining on them like a tide over the flats on folk straying in a quicksand.
+		lore: "...gaining on the Orcs, gaining on them like a tide over the flats on folk straying in a quicksand."
 		promotext: ""
 		alts: {
 			promos: {
@@ -365,7 +359,6 @@
 	6_96: {
 		cardInfo: {
 			imagePath: decipher/LOTR06096.jpg
-			javaClass: true
 			//parentId: 6_96
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -383,37 +376,37 @@
 		culture: Rohan
 		twilight: 2
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: mounted,culture(rohan),man
-			    count: 3
+				type: canSpot
+				filter: mounted,culture(rohan),man
+				count: 3
 			}
 			effect: [
 				{
 					type: addModifier
 					modifier: {
-					    type: modifyMoveLimit
-					    amount: 2
+						type: modifyMoveLimit
+						amount: 2
 					}
 					until: endOfTurn
 				}
 				{
-				    type: optional
-				    player: shadow
-				    text: Would you like to draw 6 cards?
-				    effect: {
-				        type: drawCards
-				        player: shadow
-				        count: 6
-				    }
+					type: optional
+					player: shadow
+					text: Would you like to draw 6 cards?
+					effect: {
+						type: drawCards
+						player: shadow
+						count: 6
+					}
 				}
 			]
 		}
 		gametext: <b>Fellowship:</b> Spot 3 mounted [rohan] Men to make the move limit for this turn +2. Each Shadow player may draw 6 cards.
-		lore: We are friends of Rohan, and of Théoden, your king.'
+		lore: "'We are friends of Rohan, and of Théoden, your king.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -426,7 +419,6 @@
 	6_97: {
 		cardInfo: {
 			imagePath: decipher/LOTR06097.jpg
-			javaClass: true
 			//parentId: 6_97
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -446,51 +438,51 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),man
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: rohan
-		            select: self
-		            count: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: choice
-		            texts: [
-		                Discard this condition
-		                Remove a {rohan} token from here
-		            ]
-		            effects: [
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		                {
-		                    type: RemoveCultureTokens
-		                    culture: rohan
-		                    select: self
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(rohan),man,inSkirmishAgainst(exhausted,minion))
-		            amount: 2
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: rohan
+					select: self
+					count: 2
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Remove a {rohan} token from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: rohan
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(rohan),man,inSkirmishAgainst(exhausted,minion))
+					amount: 2
+				}
+			}
 		]
 		gametext: Plays to your support area. When you play this condition, you may spot a [rohan] Man to place 2 [rohan] tokens here.<br><b>Skirmish:</b> Discard this condition or remove a [rohan] token from here to make a [rohan] Man skirmishing an exhausted minion strength +2.
 		lore: ""
@@ -502,4 +494,5 @@
 			}
 		}
 	}
+
 }

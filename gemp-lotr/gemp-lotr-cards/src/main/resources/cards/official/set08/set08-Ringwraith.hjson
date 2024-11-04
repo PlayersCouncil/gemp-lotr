@@ -3,7 +3,6 @@
 	8_67: {
 		cardInfo: {
 			imagePath: decipher/LOTR08067.jpg
-			javaClass: true
 			//parentId: 8_67
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,14 +20,14 @@
 		culture: Wraith
 		twilight: 4
 		type: Event
-		timeword: assignment
+		timewords: Assignment
 		effects: {
 			type: event
 			cost: {
-			    type: exert
-			    select: choose(enduring,culture(wraith),minion)
-			    times: 2
-			    memorize: exertedMinion
+				type: exert
+				select: choose(enduring,culture(wraith),minion)
+				times: 2
+				memorize: exertedMinion
 			},
 			effect: [
 				{
@@ -39,7 +38,7 @@
 			]
 		}
 		gametext: Exert an enduring [wraith] minion twice to assign that minion to an unbound companion.
-		lore: ...the Nazgûl Lord like a shadow of despair.
+		lore: "...the Nazgûl Lord like a shadow of despair."
 		promotext: ""
 		alts: {
 			promos: {
@@ -52,7 +51,6 @@
 	8_68: {
 		cardInfo: {
 			imagePath: decipher/LOTR08068.jpg
-			javaClass: true
 			//parentId: 8_68
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -70,7 +68,7 @@
 		culture: Wraith
 		twilight: 3
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
@@ -85,32 +83,32 @@
 					amount: 2
 				}
 				{
-				    type: addKeyword
-				    select: memory(exertedNazgul)
-				    keyword: damage
-				    amount: 1
+					type: addKeyword
+					select: memory(exertedNazgul)
+					keyword: damage
+					amount: 1
 				}
 				{
-				    type: memorizeActive
-				    filter: inSkirmishAgainst(memory(exertedNazgul))
-				    memory: characters
+					type: memorizeActive
+					filter: inSkirmishAgainst(memory(exertedNazgul))
+					memory: characters
 				}
 				{
-				    type: addTrigger
-				    trigger: {
-				        type: killed
-				        filter: memory(characters)
-				    }
-				    effect: {
-				        type: putCardsFromHandOnBottomOfDeck
-				        player: free people
-				        select: all(any)
-				    }
+					type: addTrigger
+					trigger: {
+						type: killed
+						filter: memory(characters)
+					}
+					effect: {
+						type: putCardsFromHandOnBottomOfDeck
+						player: free people
+						select: all(any)
+					}
 				}
 			]
 		}
 		gametext: Exert a Nazgûl to make him strength +2 and <b>damage +1</b>. If the character he is skirmishing is killed, the Free Peoples player must place his or her hand beneath his or her draw deck.
-		lore: ...where thy flesh shall be devoured....'
+		lore: "'...where thy flesh shall be devoured....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -123,7 +121,6 @@
 	8_69: {
 		cardInfo: {
 			imagePath: decipher/LOTR08069.jpg
-			javaClass: true
 			//parentId: 8_69
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -143,34 +140,34 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        requires: {
-		            type: canSpot
-		            filter: your,or(enduring,mounted),nazgul
-		        }
-		        effect: [
-                    {
-                        type: transfer
-                        select: self
-                        fromSupport: true
-                        where: choose(unbound,companion)
-                        memorizeTarget: chosenCompanion
-                    }
-                    {
-                        type: discard
-                        select: choose(mount,attachedTo(memory(chosenCompanion)))
-                    }
-                ]
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantHeal
-		            filter: bearer
-		        }
-		    }
+			{
+				type: activated
+				phase: archery
+				requires: {
+					type: canSpot
+					filter: your,or(enduring,mounted),nazgul
+				}
+				effect: [
+					{
+						type: transfer
+						select: self
+						fromSupport: true
+						where: choose(unbound,companion)
+						memorizeTarget: chosenCompanion
+					}
+					{
+						type: discard
+						select: choose(mount,attachedTo(memory(chosenCompanion)))
+					}
+				]
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantHeal
+					filter: bearer
+				}
+			}
 		]
 		gametext: <b>Archery:</b> Spot your enduring or mounted Nazgûl to transfer this condition from your support area to an unbound companion. Discard a mount borne by that companion.<br>Bearer cannot heal or bear mounts.
 		lore: ""
@@ -186,7 +183,6 @@
 	8_70: {
 		cardInfo: {
 			imagePath: decipher/LOTR08070.jpg
-			javaClass: true
 			//parentId: 8_70
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -208,31 +204,31 @@
 		itemclass: Hand weapon
 		target: nazgul
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: [
-                    {
-                        type: canSpot
-                        filter: bearer,name(The Witch-king)
-                    }
-                    {
-                        type: canSpot
-                        filter: possession,attachedTo(character,inSkirmishAgainst(bearer))
-                    }
-                ]
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(possession,attachedTo(character,inSkirmishAgainst(bearer)))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: [
+					{
+						type: canSpot
+						filter: bearer,name(The Witch-king)
+					}
+					{
+						type: canSpot
+						filter: possession,attachedTo(character,inSkirmishAgainst(bearer))
+					}
+				]
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: discard
+					select: choose(possession,attachedTo(character,inSkirmishAgainst(bearer)))
+				}
+			}
 		]
 		gametext: Bearer must be a Nazgûl.<br><b>Skirmish:</b> If bearer is The Witch-king, exert him and spot a possession borne by a character he is skirmishing to discard that possession.
-		lore: With a cry of hatred that stung the very ears like venom he let fall....
+		lore: "With a cry of hatred that stung the very ears like venom he let fall...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -245,7 +241,6 @@
 	8_71: {
 		cardInfo: {
 			imagePath: decipher/LOTR08071.jpg
-			javaClass: true
 			//parentId: 8_71
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -265,56 +260,56 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: minion
-		            from: self
-		            fromZone: stacked
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(companion)
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: [
-                    {
-                        type: not
-                        requires: {
-                            type: hasCardStacked
-                            filter: minion
-                            on: self
-                        }
-                    }
-                    {
-                        type: canSpot
-                        filter: your,culture(wraith),minion
-                    }
-                ]
-                effect: {
-                    type: StackCardsFromPlay
-                    select: choose(your,culture(wraith),minion)
-                    where: self
-                }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: canSpot
-		            filter: culture(wraith),minion
-		            count: 2
-		        }
-		        effect: {
-		            type: playCardFromStacked
-		            select: choose(culture(wraith),minion)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: minion
+					from: self
+					fromZone: stacked
+				}
+				effect: {
+					type: exert
+					select: choose(companion)
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: [
+					{
+						type: not
+						requires: {
+							type: hasCardStacked
+							filter: minion
+							on: self
+						}
+					}
+					{
+						type: canSpot
+						filter: your,culture(wraith),minion
+					}
+				]
+				effect: {
+					type: StackCardsFromPlay
+					select: choose(your,culture(wraith),minion)
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: culture(wraith),minion
+					count: 2
+				}
+				effect: {
+					type: playCardFromStacked
+					select: choose(culture(wraith),minion)
+				}
+			}
 		]
 		gametext: When you play a minion stacked here, you may exert a companion.<br><b>Regroup:</b> If no minion is stacked here, spot your [wraith] minion to stack it here.<br><b>Shadow:</b> Spot 2 [wraith] minions to play a [wraith] minion stacked here as if played from hand.
 		lore: ""
@@ -330,7 +325,6 @@
 	8_72: {
 		cardInfo: {
 			imagePath: decipher/LOTR08072.jpg
-			javaClass: true
 			//parentId: 8_72
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -354,21 +348,21 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: haveInitiative
-		                side: shadow
-		            }
-		            filter: culture(wraith),minion
-		            keyword: archer
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: culture(wraith),minion
+					keyword: archer
+				}
+			}
 		]
 		gametext: While you have initiative, each [wraith] minion is an <b>archer</b>.
-		lore: The age of Men is over.'
+		lore: "'The age of Men is over.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -381,7 +375,6 @@
 	8_73: {
 		cardInfo: {
 			imagePath: decipher/LOTR08073.jpg
-			javaClass: true
 			//parentId: 8_73
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -399,32 +392,32 @@
 		culture: Wraith
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(nazgul)
-				    amount: 2
-				    memorize: chosenNazgul
+					type: modifyStrength
+					select: choose(nazgul)
+					amount: 2
+					memorize: chosenNazgul
 				}
 				{
-				    type: addTrigger
-				    optional: true
-				    trigger: {
-				        type: winsSkirmish
-				        filter: memory(chosenNazgul)
-				    }
-				    effect: {
-				        type: discard
-				        select: choose(side(free people),mount)
-				    }
+					type: addTrigger
+					optional: true
+					trigger: {
+						type: winsSkirmish
+						filter: memory(chosenNazgul)
+					}
+					effect: {
+						type: discard
+						select: choose(side(free people),mount)
+					}
 				}
 			]
 		}
 		gametext: Make a Nazgûl strength +2. If that Nazgûl wins this skirmish, you may discard a Free Peoples mount.
-		lore: ...then Windfola had thrown them in his terror, and now ran wild upon the plain.
+		lore: "...then Windfola had thrown them in his terror, and now ran wild upon the plain."
 		promotext: ""
 		alts: {
 			promos: {
@@ -437,7 +430,6 @@
 	8_74: {
 		cardInfo: {
 			imagePath: decipher/LOTR08074.jpg
-			javaClass: true
 			//parentId: 8_74
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -460,21 +452,21 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            side: shadow
-		            requires: {
-		                type: canSpotThreats
-		                amount: 3
-		            }
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					requires: {
+						type: canSpotThreats
+						amount: 3
+					}
+					amount: 2
+				}
+			}
 		]
 		gametext: While you can spot 3 threats, the minion archery total is +2.
-		lore: Fear, the City is rank with it.'
+		lore: "'Fear, the City is rank with it.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -487,7 +479,6 @@
 	8_75: {
 		cardInfo: {
 			imagePath: decipher/LOTR08075.jpg
-			javaClass: true
 			//parentId: 8_75
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -510,21 +501,21 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            side: shadow
-		            requires: {
-		                type: canSpotBurdens
-		                amount: 3
-		            }
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					requires: {
+						type: canSpotBurdens
+						amount: 3
+					}
+					amount: 2
+				}
+			}
 		]
 		gametext: While you can spot 3 burdens, the minion archery total is +2.
-		lore: Kill all in your path!'
+		lore: "'Kill all in your path!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -537,7 +528,6 @@
 	8_76: {
 		cardInfo: {
 			imagePath: decipher/LOTR08076.jpg
-			javaClass: true
 			//parentId: 8_76
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -560,21 +550,21 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            side: shadow
-		            requires: {
-		                type: haveInitiative
-		                side: shadow
-		            }
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					amount: 2
+				}
+			}
 		]
 		gametext: While you have initiative, the minion archery total is +2.
-		lore: The time of the Orc has come.'
+		lore: "'The time of the Orc has come.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -587,7 +577,6 @@
 	8_77: {
 		cardInfo: {
 			imagePath: decipher/LOTR08077.jpg
-			javaClass: true
 			//parentId: 8_77
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -610,50 +599,50 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        text: Play {wraith} minion from your discard pile
-		        phase: shadow
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(culture(wraith),minion)
-		        }
-		    }
-		    {
-		        type: activated
-		        text: Play up to two {wraith} minions from draw deck
-		        phase: shadow
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: companion
-		            count: 6
-		        }
-		        effect: [
-                    {
-                        type: playCardFromDrawDeck
-                        select: choose(culture(wraith),minion)
-                        showAll: true
-                        shuffle: false
-                    }
-                    {
-                        type: playCardFromDrawDeck
-                        select: choose(culture(wraith),minion)
-                        showAll: true
-                        shuffle: false
-                    }
-                    {
-                        type: shuffleDeck
-                    }
-                ]
-		    }
+			{
+				type: activated
+				text: Play {wraith} minion from your discard pile
+				phase: shadow
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(wraith),minion)
+				}
+			}
+			{
+				type: activated
+				text: Play up to two {wraith} minions from draw deck
+				phase: shadow
+				cost: {
+					type: discard
+					select: self
+				}
+				requires: {
+					type: canSpot
+					filter: companion
+					count: 6
+				}
+				effect: [
+					{
+						type: playCardFromDrawDeck
+						select: choose(culture(wraith),minion)
+						showAll: true
+						shuffle: false
+					}
+					{
+						type: playCardFromDrawDeck
+						select: choose(culture(wraith),minion)
+						showAll: true
+						shuffle: false
+					}
+					{
+						type: shuffleDeck
+					}
+				]
+			}
 		]
 		gametext: <b>Shadow:</b> Discard this minion to play a [wraith] minion from your discard pile.<br><b>Shadow:</b> Spot 6 companions and discard this minion to play up to 2 [wraith] minions from your draw deck; their twilight costs are each -1.
 		lore: ""
@@ -669,7 +658,6 @@
 	8_78: {
 		cardInfo: {
 			imagePath: decipher/LOTR08078.jpg
-			javaClass: true
 			//parentId: 8_78
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -689,32 +677,32 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyInitiativeHandSize
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: culture(wraith),orc
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(wraith),orc)
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyInitiativeHandSize
+					amount: {
+						type: forEachYouCanSpot
+						filter: culture(wraith),orc
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(wraith),orc)
+					amount: 2
+				}
+			}
 		]
 		gametext: For each [wraith] Orc you can spot, the Free Peoples player must have an additional card in hand to have initiative.<br><b>Skirmish:</b> Discard this condition to make a [wraith] Orc strength +2.
-		lore: They had been mustered....
+		lore: "They had been mustered...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -727,7 +715,6 @@
 	8_79: {
 		cardInfo: {
 			imagePath: decipher/LOTR08079.jpg
-			javaClass: true
 			//parentId: 8_79
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -752,25 +739,25 @@
 		site: 3
 		keywords: Enduring
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: your,culture(wraith),minion
-		        }
-		        effect: {
-		            type: returnToHand
-		            select: choose(your,culture(wraith),minion)
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: self
+				}
+				requires: {
+					type: canSpot
+					filter: your,culture(wraith),minion
+				}
+				effect: {
+					type: returnToHand
+					select: choose(your,culture(wraith),minion)
+				}
+			}
 		]
 		gametext: <b>Enduring</b>.<br><b>Regroup:</b> Exert Úlairë Attëa and spot your [wraith] minion to return that minion to your hand.
-		lore: They are looking for something, surely?'
+		lore: "'They are looking for something, surely?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -783,7 +770,6 @@
 	8_80: {
 		cardInfo: {
 			imagePath: decipher/LOTR08080.jpg
-			javaClass: true
 			//parentId: 8_80
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -811,17 +797,17 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifySiteNumber
-		            filter: culture(wraith),minion
-		            amount: -1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					filter: culture(wraith),minion
+					amount: -1
+				}
+			}
 		]
 		gametext: <b>Enduring</b>. <b>Fierce</b>.<br>The site number of each [wraith] minion is -1.
-		lore: ...into their minds a blackness came, and they thought no more of war, but only of hiding and of crawling, and of death.
+		lore: "...into their minds a blackness came, and they thought no more of war, but only of hiding and of crawling, and of death."
 		promotext: ""
 		alts: {
 			promos: {
@@ -834,7 +820,6 @@
 	8_81: {
 		cardInfo: {
 			imagePath: decipher/LOTR08081.jpg
-			javaClass: true
 			//parentId: 8_81
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -862,23 +847,23 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: {
-		                type: currentSiteNumber
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: currentSiteNumber
+					}
+				}
+			}
 		]
 		gametext: <b>Enduring</b>. <b>Fierce</b>.<br><b>Regroup:</b> Discard Úlairë Otsëa to add (X), where X is the current site number.
-		lore: Another long screech rose and fell, and he threw himself back again from the wall, panting like a hunted animal.
+		lore: "Another long screech rose and fell, and he threw himself back again from the wall, panting like a hunted animal."
 		promotext: ""
 		alts: {
 			promos: {
@@ -891,7 +876,6 @@
 	8_82: {
 		cardInfo: {
 			imagePath: decipher/LOTR08082.jpg
-			javaClass: true
 			//parentId: 8_82
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -909,34 +893,34 @@
 		culture: Wraith
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(nazgul)
-				    amount: 2
-				    memorize: chosenNazgul
+					type: modifyStrength
+					select: choose(nazgul)
+					amount: 2
+					memorize: chosenNazgul
 				}
 				{
-				    type: addTrigger
-				    trigger: {
-				        type: winsSkirmish
-				        filter: memory(chosenNazgul)
-				    }
-				    effect: {
-				        type: addModifier
-				        modifier: {
-				            type: shadowHasInitiative
-				        }
-				        until: endOfTurn
-				    }
+					type: addTrigger
+					trigger: {
+						type: winsSkirmish
+						filter: memory(chosenNazgul)
+					}
+					effect: {
+						type: addModifier
+						modifier: {
+							type: shadowHasInitiative
+						}
+						until: endOfTurn
+					}
 				}
 			]
 		}
 		gametext: Make a Nazgûl strength +2. If that Nazgûl wins this skirmish, the Shadow has initiative until the end of the turn, regardless of the Free Peoples player's hand.
-		lore: No living man may hinder me!'
+		lore: "'No living man may hinder me!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -949,7 +933,6 @@
 	8_83: {
 		cardInfo: {
 			imagePath: decipher/LOTR08083.jpg
-			javaClass: true
 			//parentId: 8_83
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -971,31 +954,31 @@
 		itemclass: Mount
 		target: nazgul
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            count: 2
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: bearer
-		        }
-		        cost: {
-		            type: removeThreats
-		        }
-		        effect: {
-		            type: preventWound
-		            select: choose(bearer)
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: preventWound
+					select: choose(bearer)
+				}
+			}
 		]
 		gametext: To play, discard 2 cards from hand. Bearer must be a Nazgûl.<br><b>Response:</b> If bearer is about to take a wound, remove a threat to prevent that wound.
-		lore: A creature of an older world maybe it was....
+		lore: "A creature of an older world maybe it was...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1008,7 +991,6 @@
 	8_84: {
 		cardInfo: {
 			imagePath: decipher/LOTR08084.jpg
-			javaClass: true
 			//parentId: 8_84
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1033,17 +1015,17 @@
 		site: 3
 		keywords: Enduring
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cancelStrengthBonus
-		            filter: man,inSkirmishAgainst(self)
-		            from: weapon
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cancelStrengthBonus
+					filter: man,inSkirmishAgainst(self)
+					from: weapon
+				}
+			}
 		]
 		gametext: <b>Enduring</b>.<br>Each Man skirmishing The Witch-king loses all strength bonuses from weapons.
-		lore: Do not stop the attack until the City is taken.'
+		lore: "'Do not stop the attack until the City is taken.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1052,4 +1034,5 @@
 			}
 		}
 	}
+
 }

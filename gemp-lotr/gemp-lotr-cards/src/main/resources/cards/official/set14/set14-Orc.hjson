@@ -1,0 +1,110 @@
+{
+
+	14_12: {
+		cardInfo: {
+			imagePath: decipher/LOTR14012.jpg
+			//parentId: 14_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 14R12
+			rarity: R
+			setNum: "14"
+			cardNum: 12
+			style: Standard
+		}
+		title: Half-troll of Far Harad
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Half-troll
+		strength: 8
+		vitality: 2
+		site: 4
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: startOfPhase
+				phase: assignment
+			}
+			requires: {
+				type: isGreaterThan
+				firstNumber: {
+					type: forEachYouCanSpot
+					filter: companion
+				}
+				secondNumber: {
+					type: forEachYouCanSpot
+					filter: minion
+				}
+			}
+			cost: {
+				type: removeTwilight
+				amount: 2
+			}
+			effect: {
+				type: playCardFromDiscard
+				select: choose(culture(orc),orc)
+				removedTwilight: 2
+			}
+		}
+		gametext: At the start of each assignment phase, if you can spot more companions than minions, you may remove (2) to play an [orc] Orc from your discard pile.
+		lore: "...bred for battle in the southern reaches of Haradwaith...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	14_13: {
+		cardInfo: {
+			imagePath: decipher/LOTR14013.jpg
+			//parentId: 14_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 14R13
+			rarity: R
+			setNum: "14"
+			cardNum: 13
+			style: Standard
+		}
+		title: Horror of Harad
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 4
+		type: Minion
+		race: Half-troll
+		strength: 9
+		vitality: 3
+		site: 4
+		keywords: [
+			Ambush 1
+			Damage+1
+			Fierce
+			Lurker
+			Muster
+			Toil 2
+		]
+
+		gametext: <b>Ambush</b> (1). <b>Damage +1</b>. <b>Fierce</b>. <b>Lurker</b>. <b>Muster</b>. <b>Toil 2</b>.
+		lore: "The troll-men sprinted on to the Pelennor to bathe their blades in the blood of the enemy."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -3,7 +3,6 @@
 	4_262: {
 		cardInfo: {
 			imagePath: decipher/LOTR04262.jpg
-			javaClass: true
 			//parentId: 4_262
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -23,33 +22,33 @@
 		twilight: 1
 		type: Ally
 		allyHome: [
-			3T
-			6T
+			3T 
+			 6T
 		]
 		race: Man
 		strength: 3
 		vitality: 2
 		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: villager
-		        }
-		        effect: {
-		            type: modifyArcheryTotal
-		            side: free
-		            amount: 1
-		        }
-		    }
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: exert
+					select: self
+				}
+				requires: {
+					type: canSpot
+					filter: villager
+				}
+				effect: {
+					type: modifyArcheryTotal
+					side: free
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Archery:</b> Exert Aldor and spot a villager to make the fellowship archery total +1.
-		lore: Fighting to defend his people, Aldor found courage to replace his youth.
+		lore: "Fighting to defend his people, Aldor found courage to replace his youth."
 		promotext: ""
 		alts: {
 			promos: {
@@ -62,7 +61,6 @@
 	4_263: {
 		cardInfo: {
 			imagePath: decipher/LOTR04263.jpg
-			javaClass: true
 			//parentId: 4_263
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -83,43 +81,43 @@
 		itemclass: Mount
 		target: or(man,elf,wizard)
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),man
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: heal
-		            select: bearer
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: skirmish
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: bearer,inSkirmish
-		        }
-		        effect: {
-		            type: exert
-		            select: all(minion,inSkirmishAgainst(bearer))
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: heal
+					select: bearer
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				effect: {
+					type: exert
+					select: all(minion,inSkirmishAgainst(bearer))
+				}
+			}
 		]
 		gametext: To play, spot a [rohan] Man. Bearer must be a Man, Elf, or Wizard. When you play Brego, you may heal bearer.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
-		lore: Brego was named for the second King of Rohan.
+		lore: "Brego was named for the second King of Rohan."
 		promotext: ""
 		alts: {
 			promos: {
@@ -132,7 +130,6 @@
 	4_264: {
 		cardInfo: {
 			imagePath: decipher/LOTR04264.jpg
-			javaClass: true
 			//parentId: 4_264
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -156,28 +153,28 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeControlOfSite
-		        }
-		        cost: [
-		            {
-		                type: exert
-		                select: self
-		            }
-		            {
-		                type: exert
-		                select: choose(villager)
-		            }
-		        ]
-		        effect: {
-		            type: preventEffect
-		        }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeControlOfSite
+				}
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: exert
+						select: choose(villager)
+					}
+				]
+				effect: {
+					type: preventEffect
+				}
+			}
 		]
 		gametext: <b>Response:</b> If your opponent is about to take control of a site, exert Ceorl and a villager to prevent this.
-		lore: We were driven back yesterday over the Isen with great loss; many perished at the crossing.'
+		lore: "'We were driven back yesterday over the Isen with great loss; many perished at the crossing.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -190,7 +187,6 @@
 	4_265: {
 		cardInfo: {
 			imagePath: decipher/LOTR04265.jpg
-			javaClass: true
 			//parentId: 4_265
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -213,25 +209,25 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: {
-		            type: phase
-		            phase: play starting fellowship
-		        }
-		        amount: -1
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inSkirmishAgainst(wounded,minion)
-    		        amount: 2
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: phase
+					phase: play starting fellowship
+				}
+				amount: -1
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmishAgainst(wounded,minion)
+					amount: 2
+				}
+			}
 		]
 		gametext: When this companion is in your starting fellowship, his twilight cost is -1.<br>While skirmishing a wounded minion, this companion is strength +2.
-		lore: After him they rode: a long line of mail-clad men, swift, shining, fell and fair to look upon.
+		lore: "After him they rode: a long line of mail-clad men, swift, shining, fell and fair to look upon."
 		promotext: ""
 		alts: {
 			promos: {
@@ -244,7 +240,6 @@
 	4_266: {
 		cardInfo: {
 			imagePath: decipher/LOTR04266.jpg
-			javaClass: true
 			//parentId: 4_266
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -269,28 +264,28 @@
 		signet: Aragorn
 		resistance: 6
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),man
-		        }
-		        amount: -1
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfTurn
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(culture(rohan),ally)
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+				amount: -1
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfTurn
+				}
+				effect: {
+					type: heal
+					select: choose(culture(rohan),ally)
+				}
+			}
 		]
 		gametext: While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br>At the start of each turn, you may heal a [rohan] ally.
-		lore: Now indeed there is hope of victory!'
+		lore: "'Now indeed there is hope of victory!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -303,7 +298,6 @@
 	4_267: {
 		cardInfo: {
 			imagePath: decipher/LOTR04267.jpg
-			javaClass: true
 			//parentId: 4_267
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -328,29 +322,29 @@
 		signet: Theoden
 		resistance: 6
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),man
-		        }
-		        amount: -1
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachWound
-		                multiplier: 2
-		                filter: minion,inSkirmishAgainst(self)
-		            }
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+				amount: -1
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachWound
+						multiplier: 2
+						filter: minion,inSkirmishAgainst(self)
+					}
+				}
+			}
 		]
 		gametext: While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br>Éomer is strength +2 for each wound on each minion he is skirmishing.
-		lore: Then one rode forward, a tall man, taller than the rest; from his helm as a crest a white horsetail flowed.
+		lore: "Then one rode forward, a tall man, taller than the rest; from his helm as a crest a white horsetail flowed."
 		promotext: ""
 		alts: {
 			promos: {
@@ -363,7 +357,6 @@
 	4_268: {
 		cardInfo: {
 			imagePath: decipher/LOTR04268.jpg
-			javaClass: true
 			//parentId: 4_268
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -385,18 +378,18 @@
 		itemclass: Hand weapon
 		target: culture(rohan),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer,name(Éomer),mounted
-		            keyword: damage
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,name(Éomer),mounted
+					keyword: damage
+					amount: 2
+				}
+			}
 		]
 		gametext: Bearer must be a [rohan] Man.<br>If bearer is Éomer and he is mounted, Éomer is <b>damage +2</b>.
-		lore: He advanced until the point of his spear was within a foot of Aragorn's breast.
+		lore: "He advanced until the point of his spear was within a foot of Aragorn's breast."
 		promotext: ""
 		alts: {
 			promos: {
@@ -409,7 +402,6 @@
 	4_269: {
 		cardInfo: {
 			imagePath: decipher/LOTR04269.jpg
-			javaClass: true
 			//parentId: 4_269
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -433,20 +425,20 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: plains
-		        }
-		        effect: {
-		            type: exert
-		            select: all(minion)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: plains
+				}
+				effect: {
+					type: exert
+					select: all(minion)
+				}
+			}
 		]
 		gametext: Each time the fellowship moves to a plains site, each minion must exert.
-		lore: Time is pressing.... We must hasten south, lord.'
+		lore: "'Time is pressing.... We must hasten south, lord.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -459,7 +451,6 @@
 	4_270: {
 		cardInfo: {
 			imagePath: decipher/LOTR04270.jpg
-			javaClass: true
 			//parentId: 4_270
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -485,30 +476,30 @@
 		resistance: 6
 		keywords: Valiant
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: unbound,companion
-		        }
-		        cost: [
-                    {
-                        type: exert
-                        select: self
-                    }
-                    {
-                        type: addTwilight
-                        amount: 1
-                    }
-                ]
-		        effect: {
-		            type: preventWound
-		            select: choose(unbound,companion)
-		        }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: unbound,companion
+				}
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: addTwilight
+						amount: 1
+					}
+				]
+				effect: {
+					type: preventWound
+					select: choose(unbound,companion)
+				}
+			}
 		]
 		gametext: <b>Valiant</b>.<br><b>Response:</b> If an unbound companion is about to take a wound, exert Éowyn and add (1) to prevent that wound.
-		lore: Thus Aragorn... beheld Éowyn... and thought her fair, fair and cold, like a morning of pale spring that is not yet come to womanhood.
+		lore: "Thus Aragorn... beheld Éowyn... and thought her fair, fair and cold, like a morning of pale spring that is not yet come to womanhood."
 		promotext: ""
 		alts: {
 			promos: {
@@ -521,7 +512,6 @@
 	4_271: {
 		cardInfo: {
 			imagePath: decipher/LOTR04271.jpg
-			javaClass: true
 			//parentId: 4_271
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -547,35 +537,35 @@
 		resistance: 6
 		keywords: Valiant
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: self
-		        }
-                requires: [
-                    {
-                        type: phase
-                        phase: skirmish
-                    }
-                    {
-                        type: canSpot
-                        filter: self,exhausted
-                    }
-                ]
-                cost: {
-                    type: discardFromHand
-                    forced: false
-                    count: 2
-                }
-                effect: {
-                    type: preventWound
-                    select: self
-                }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: self
+				}
+				requires: [
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: canSpot
+						filter: self,exhausted
+					}
+				]
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: preventWound
+					select: self
+				}
+			}
 		]
 		gametext: <b>Valiant</b>.<br><b>Response:</b> If Éowyn is exhausted and about to take a wound in a skirmish, discard 2 cards from hand to prevent that wound.
-		lore: Slender and tall she was... but strong she seemed and stern as steel, a daughter of kings.
+		lore: "Slender and tall she was... but strong she seemed and stern as steel, a daughter of kings."
 		promotext: ""
 		alts: {
 			promos: {
@@ -588,7 +578,6 @@
 	4_272: {
 		cardInfo: {
 			imagePath: decipher/LOTR04272.jpg
-			javaClass: true
 			//parentId: 4_272
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -610,22 +599,22 @@
 		itemclass: Hand weapon
 		target: title(Éowyn)
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            requires: {
-		                type: canSpot
-		                filter: villager
-		            }
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					requires: {
+						type: canSpot
+						filter: villager
+					}
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: Bearer must be Éowyn.<br>While you can spot a villager, Éowyn is <b>damage +1</b>.
-		lore: ...the sword was set upright before her, and her hands were laid upon the hilt.
+		lore: "...the sword was set upright before her, and her hands were laid upon the hilt."
 		promotext: ""
 		alts: {
 			promos: {
@@ -638,7 +627,6 @@
 	4_273: {
 		cardInfo: {
 			imagePath: decipher/LOTR04273.jpg
-			javaClass: true
 			//parentId: 4_273
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -656,7 +644,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -664,19 +652,19 @@
 					type: modifyStrength
 					select: choose(culture(rohan),man)
 					amount: {
-					    type: Conditional
-					    requires: {
-					        type: canSpot
-					        filter: villager
-					    }
-					    true: 3
-					    false: 2
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: villager
+						}
+						true: 3
+						false: 2
 					}
 				}
 			]
 		}
 		gametext: <b>Skirmish:</b> Make a [rohan] Man strength +2 (or +3 if you spot a villager).
-		lore: Bar the gates, set a watch on the surrounds, and get the women and children to the caves.'
+		lore: "'Bar the gates, set a watch on the surrounds, and get the women and children to the caves.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -689,7 +677,6 @@
 	4_274: {
 		cardInfo: {
 			imagePath: decipher/LOTR04274.jpg
-			javaClass: true
 			//parentId: 4_274
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -710,33 +697,33 @@
 		itemclass: Mount
 		target: culture(rohan),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer,name(Éomer)
-		            keyword: defender
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: skirmish
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: bearer,inSkirmish
-		        }
-		        effect: {
-		            type: exert
-		            select: all(minion,inSkirmishAgainst(bearer))
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,name(Éomer)
+					keyword: defender
+					amount: 1
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				effect: {
+					type: exert
+					select: all(minion,inSkirmishAgainst(bearer))
+				}
+			}
 		]
 		gametext: Bearer must be a [rohan] Man.<br>If bearer is Éomer, he is <b>defender +1</b>.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
-		lore: Riders of his éored claimed that Éomer's horse had no equal, save Shadowfax.
+		lore: "Riders of his éored claimed that Éomer's horse had no equal, save Shadowfax."
 		promotext: ""
 		alts: {
 			promos: {
@@ -749,7 +736,6 @@
 	4_275: {
 		cardInfo: {
 			imagePath: decipher/LOTR04275.jpg
-			javaClass: true
 			//parentId: 4_275
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -767,7 +753,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
@@ -785,7 +771,7 @@
 			]
 		}
 		gametext: <b>Maneuver:</b> Exert Théoden to make a companion who has the Théoden signet <b>defender +1</b> until the regroup phase.
-		lore: Behind them from the Deep came the stern cries of men issuing from the caves, driving forth the enemy.'
+		lore: "'Behind them from the Deep came the stern cries of men issuing from the caves, driving forth the enemy.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -798,7 +784,6 @@
 	4_276: {
 		cardInfo: {
 			imagePath: decipher/LOTR04276.jpg
-			javaClass: true
 			//parentId: 4_276
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -818,41 +803,41 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: culture(rohan),man
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: rohan
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        effect: [
-		            {
-		                type: discard
-		                select: choose(side(shadow),condition)
-		                count: {
-		                    type: ForEachCultureToken
-		                    filter: self
-		                    culture: rohan
-		                }
-		            }
-		            {
-		                type: discard
-		                select: self
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: culture(rohan),man
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: rohan
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				effect: [
+					{
+						type: discard
+						select: choose(side(shadow),condition)
+						count: {
+							type: ForEachCultureToken
+							filter: self
+							culture: rohan
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
 		]
 		gametext: Plays to your support area.<br>Each time a [rohan] Man wins a skirmish, you may place a [rohan] token on this card.<br><b>Regroup:</b> Discard a Shadow condition for each [rohan] token here. Discard this condition.
-		lore: ...it was the spirit of your people that held it strong.'
+		lore: "'...it was the spirit of your people that held it strong.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -865,7 +850,6 @@
 	4_277: {
 		cardInfo: {
 			imagePath: decipher/LOTR04277.jpg
-			javaClass: true
 			//parentId: 4_277
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -890,35 +874,35 @@
 		vitality: 2
 		keywords: Villager
 		effects: [
-            {
-                type: trigger
-                trigger: {
-                    type: constantlyCheck
-                    requires: {
-                        type: canSpot
-                        filter: site,controlledByOtherPlayer,siteNumber(4),siteBlock(two towers)
-                    }
-                }
-                effect: {
-                    type: discard
-                    select: self
-                }
-            }
-            {
-                type: activated
-                phase: fellowship
-                cost: {
-                    type: exert
-                    select: self
-                }
-                effect: {
-                    type: heal
-                    select: choose(culture(rohan),man)
-                }
-            }
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+					requires: {
+						type: canSpot
+						filter: site,controlledByOtherPlayer,siteNumber(4),siteBlock(two towers)
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(culture(rohan),man)
+				}
+			}
 		]
 		gametext: <b>Villager</b>.<br>Discard Guma if an opponent controls his home site.<br><b>Fellowship:</b> Exert Guma to heal a [rohan] Man.
-		lore: Foodstores swelled as refugees like Guma brought provisions to the Hornburg.
+		lore: "Foodstores swelled as refugees like Guma brought provisions to the Hornburg."
 		promotext: ""
 		alts: {
 			promos: {
@@ -931,7 +915,6 @@
 	4_278: {
 		cardInfo: {
 			imagePath: decipher/LOTR04278.jpg
-			javaClass: true
 			//parentId: 4_278
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -952,17 +935,17 @@
 		itemclass: Armor
 		target: man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantBeOverwhelmedMultiplier
-		            filter: bearer
-		            multiplier: 3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantBeOverwhelmedMultiplier
+					filter: bearer
+					multiplier: 3
+				}
+			}
 		]
 		gametext: Bearer must be a Man.<br>Bearer may not be overwhelmed unless his or her strength is tripled.
-		lore: What Man of an earlier age wore this chain? Was his end worth a song?
+		lore: "What Man of an earlier age wore this chain? Was his end worth a song?"
 		promotext: ""
 		alts: {
 			promos: {
@@ -975,7 +958,6 @@
 	4_279: {
 		cardInfo: {
 			imagePath: decipher/LOTR04279.jpg
-			javaClass: true
 			//parentId: 4_279
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -993,35 +975,35 @@
 		culture: Rohan
 		twilight: 2
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: mounted,culture(rohan),man
-			    count: 2
+				type: canSpot
+				filter: mounted,culture(rohan),man
+				count: 2
 			}
 			effect: [
 				{
 					type: choice
 					texts: [
-					    Liberate a site
-					    Draw 3 cards
+						Liberate a site
+						Draw 3 cards
 					]
 					effects: [
-					    {
-					        type: liberateSite
-					    }
-					    {
-					        type: drawCards
-					        count: 3
-					    }
+						{
+							type: liberateSite
+						}
+						{
+							type: drawCards
+							count: 3
+						}
 					]
 				}
 			]
 		}
 		gametext: <b>Regroup:</b> Spot 2 mounted [rohan] Men to liberate a site or draw 3 cards.
-		lore: And with that shout the king came. His horse was white as snow, golden was his shield, and his spear was long.
+		lore: "And with that shout the king came. His horse was white as snow, golden was his shield, and his spear was long."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1034,7 +1016,6 @@
 	4_280: {
 		cardInfo: {
 			imagePath: decipher/LOTR04280.jpg
-			javaClass: true
 			//parentId: 4_280
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1057,18 +1038,18 @@
 		itemclass: Hand weapon
 		target: title(Théoden)
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: Bearer must be Théoden.<br>He is <b>damage +1</b>.
-		lore: Here, lord, is Herugrim, your ancient blade....'
+		lore: "'Here, lord, is Herugrim, your ancient blade....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1081,7 +1062,6 @@
 	4_281: {
 		cardInfo: {
 			imagePath: decipher/LOTR04281.jpg
-			javaClass: true
 			//parentId: 4_281
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1106,36 +1086,36 @@
 		vitality: 2
 		keywords: Villager
 		effects: [
-            {
-                type: trigger
-                trigger: {
-                    type: constantlyCheck
-                    requires: {
-                        type: canSpot
-                        filter: site,controlledByOtherPlayer,siteNumber(4),siteBlock(two towers)
-                    }
-                }
-                effect: {
-                    type: discard
-                    select: self
-                }
-            }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(rohan),man)
-		            amount: 2
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+					requires: {
+						type: canSpot
+						filter: site,controlledByOtherPlayer,siteNumber(4),siteBlock(two towers)
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(rohan),man)
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Villager</b>.<br>Discard Hlafwine if an opponent controls his home site.<br><b>Skirmish:</b> Exert Hlafwine to make a [rohan] Man strength +2.
-		lore: Too old to fight, Hlafwine prepared meals for the defenders.
+		lore: "Too old to fight, Hlafwine prepared meals for the defenders."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1148,7 +1128,6 @@
 	4_282: {
 		cardInfo: {
 			imagePath: decipher/LOTR04282.jpg
-			javaClass: true
 			//parentId: 4_282
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1166,29 +1145,29 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
-			    {
-                    type: chooseHowManyToSpot
-                    filter: culture(rohan),man
-			        text: Choose how many ROHAN man to spot
-			        memorize: spotCount
-			    }
+				{
+					type: chooseHowManyToSpot
+					filter: culture(rohan),man
+					text: Choose how many ROHAN man to spot
+					memorize: spotCount
+				}
 				{
 					type: modifyStrength
 					select: choose(unbound,companion)
 					amount: {
-					    type: fromMemory
-					    memory: spotCount
-					    limit: 3
+						type: fromMemory
+						memory: spotCount
+						limit: 3
 					}
 				}
 			]
 		}
 		gametext: <b>Skirmish:</b> Make an unbound companion strength +1 for each [rohan] Man you spot (limit +3).
-		lore: A time may come when there will be a need for valour without renown....'
+		lore: "'A time may come when there will be a need for valour without renown....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1201,7 +1180,6 @@
 	4_283: {
 		cardInfo: {
 			imagePath: decipher/LOTR04283.jpg
-			javaClass: true
 			//parentId: 4_283
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1222,31 +1200,31 @@
 		itemclass: Mount
 		target: or(man,elf,wizard)
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),man
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: skirmish
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: bearer,inSkirmish
-		        }
-		        effect: {
-		            type: exert
-		            select: all(minion,inSkirmishAgainst(bearer))
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				effect: {
+					type: exert
+					select: all(minion,inSkirmishAgainst(bearer))
+				}
+			}
 		]
 		gametext: To play, spot a [rohan] Man. Bearer must be a Man, Elf, or Wizard.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
-		lore: Very swift were the horses of Rohan.
+		lore: "Very swift were the horses of Rohan."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1259,7 +1237,6 @@
 	4_284: {
 		cardInfo: {
 			imagePath: decipher/LOTR04284.jpg
-			javaClass: true
 			//parentId: 4_284
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1280,25 +1257,25 @@
 		itemclass: Armor
 		target: culture(rohan),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeMoreWoundsThan
-		            filter: bearer
-		            amount: 1
-		            phase: skirmish
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            filter: bearer,name(Théoden),not(inSkirmish)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeMoreWoundsThan
+					filter: bearer
+					amount: 1
+					phase: skirmish
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					filter: bearer,name(Théoden),not(inSkirmish)
+				}
+			}
 		]
 		gametext: Bearer must be a [rohan] Man.<br>Bearer takes no more than 1 wound during each skirmish phase. If bearer is Théoden, he may not take wounds except during a skirmish involving him.
-		lore: Now men came bearing raiment of war from the king's hoard....
+		lore: "Now men came bearing raiment of war from the king's hoard...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1311,7 +1288,6 @@
 	4_285: {
 		cardInfo: {
 			imagePath: decipher/LOTR04285.jpg
-			javaClass: true
 			//parentId: 4_285
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1336,36 +1312,36 @@
 		vitality: 2
 		keywords: Villager
 		effects: [
-            {
-                type: trigger
-                trigger: {
-                    type: constantlyCheck
-                    requires: {
-                        type: canSpot
-                        filter: site,controlledByOtherPlayer,siteNumber(4),siteBlock(two towers)
-                    }
-                }
-                effect: {
-                    type: discard
-                    select: self
-                }
-            }
-            {
-                type: activated
-                phase: skirmish
-                cost: {
-                    type: exert
-                    select: self
-                }
-                effect: {
-                    type: modifyStrength
-                    select: choose(mounted,companion)
-                    amount: 2
-                }
-            }
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+					requires: {
+						type: canSpot
+						filter: site,controlledByOtherPlayer,siteNumber(4),siteBlock(two towers)
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(mounted,companion)
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Villager</b>.<br>Discard Léod if an opponent controls his home site.<br><b>Skirmish:</b> Exert Léod to make a mounted companion strength +2.
-		lore: Humble Léod was a rancher before he became a soldier at Helm's Deep.
+		lore: "Humble Léod was a rancher before he became a soldier at Helm's Deep."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1378,7 +1354,6 @@
 	4_286: {
 		cardInfo: {
 			imagePath: decipher/LOTR04286.jpg
-			javaClass: true
 			//parentId: 4_286
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1401,25 +1376,25 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,mounted
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(minion,inSkirmishAgainst(unbound,companion))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,mounted
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: exert
+					select: choose(minion,inSkirmishAgainst(unbound,companion))
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> If this companion is mounted, exert him to exert a minion skirmishing an unbound companion.
-		lore: They are proud and wilful, but they are true-hearted, generous in thought and deed....'
+		lore: "'They are proud and wilful, but they are true-hearted, generous in thought and deed....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1432,7 +1407,6 @@
 	4_287: {
 		cardInfo: {
 			imagePath: decipher/LOTR04287.jpg
-			javaClass: true
 			//parentId: 4_287
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1453,24 +1427,24 @@
 		itemclass: Mount
 		target: culture(rohan),man
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: skirmish
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: bearer,inSkirmish
-		        }
-		        effect: {
-		            type: exert
-		            select: all(minion,inSkirmishAgainst(bearer))
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				effect: {
+					type: exert
+					select: all(minion,inSkirmishAgainst(bearer))
+				}
+			}
 		]
 		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
-		lore: Their horses were of great stature, strong and clean-limbed; their grey coats glistened, their long tails flowed in the wind....
+		lore: "Their horses were of great stature, strong and clean-limbed; their grey coats glistened, their long tails flowed in the wind...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1483,7 +1457,6 @@
 	4_288: {
 		cardInfo: {
 			imagePath: decipher/LOTR04288.jpg
-			javaClass: true
 			//parentId: 4_288
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1505,18 +1478,18 @@
 		itemclass: Hand weapon
 		target: culture(rohan),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer,mounted
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,mounted
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: Bearer must be a [rohan] Man.<br>If bearer is mounted, bearer is <b>damage +1</b>.
-		lore: Shafts of the sun flared above the eastern hills and glimmered on their spears.
+		lore: "Shafts of the sun flared above the eastern hills and glimmered on their spears."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1529,7 +1502,6 @@
 	4_289: {
 		cardInfo: {
 			imagePath: decipher/LOTR04289.jpg
-			javaClass: true
 			//parentId: 4_289
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1547,34 +1519,34 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			requires: {
 				type: or
 				requires: [
-				    {
-				        type: canSpot
-				        filter: culture(rohan),man
-				        count: 2
-				    }
-				    {
-				        type: canSpot
-				        filter: valiant,culture(rohan),man
-				    }
+					{
+						type: canSpot
+						filter: culture(rohan),man
+						count: 2
+					}
+					{
+						type: canSpot
+						filter: valiant,culture(rohan),man
+					}
 				]
 			},
 			effect: [
 				{
 					type: playCardFromDrawDeck
 					select: choose(culture(rohan),or(character,possession))
-                    showAll: true
-                    shuffle: true
+					showAll: true
+					shuffle: true
 				}
 			]
 		}
 		gametext: <b>Fellowship:</b> Spot 2 [rohan] Men (or 1 valiant [rohan] Man) to play a [rohan] character or [rohan] possession from your draw deck.
-		lore: How fair are the bright eyes in the grass! Evermind they are called... for they blossom in all seasons of the year, and grow where dead men rest.'
+		lore: "'How fair are the bright eyes in the grass! Evermind they are called... for they blossom in all seasons of the year, and grow where dead men rest.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1587,7 +1559,6 @@
 	4_290: {
 		cardInfo: {
 			imagePath: decipher/LOTR04290.jpg
-			javaClass: true
 			//parentId: 4_290
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1607,27 +1578,27 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: [
-		            {
-		                type: addTwilight
-		                amount: 2
-		            }
-		            {
-		                type: putCardsFromHandOnBottomOfDeck
-		                select: choose(villager)
-		            }
-		        ]
-		        effect: {
-		            type: heal
-		            select: choose(ally)
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: addTwilight
+						amount: 2
+					}
+					{
+						type: putCardsFromHandOnBottomOfDeck
+						select: choose(villager)
+					}
+				]
+				effect: {
+					type: heal
+					select: choose(ally)
+				}
+			}
 		]
 		gametext: Plays to your support area.<br><b>Fellowship:</b> Add (2) and place a villager from hand beneath your draw deck to heal a [rohan] ally.
-		lore: This is all we could save, my Lady.'
+		lore: "'This is all we could save, my Lady.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1640,7 +1611,6 @@
 	4_291: {
 		cardInfo: {
 			imagePath: decipher/LOTR04291.jpg
-			javaClass: true
 			//parentId: 4_291
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1662,18 +1632,18 @@
 		itemclass: Hand weapon
 		target: culture(rohan),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer,inSkirmishAgainst(urukHai)
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,inSkirmishAgainst(urukHai)
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: Bearer must be a [rohan] Man.<br>While bearer is skirmishing an Uruk-hai, bearer is <b>damage +1</b>.
-		lore: This is a good sword, Haleth, son of Háma... there is always hope.'
+		lore: "'This is a good sword, Haleth, son of Háma... there is always hope.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1686,7 +1656,6 @@
 	4_292: {
 		cardInfo: {
 			imagePath: decipher/LOTR04292.jpg
-			javaClass: true
 			//parentId: 4_292
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1711,24 +1680,24 @@
 		signet: Aragorn
 		resistance: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),ally
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: liberateSite
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: culture(rohan),ally
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: liberateSite
+				}
+			}
 		]
 		gametext: <b>Regroup:</b> Spot a [rohan] ally and exert Théoden to liberate a site.
-		lore: I myself will go to war, to fall in the front of the battle, if it must be.'
+		lore: "'I myself will go to war, to fall in the front of the battle, if it must be.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1741,7 +1710,6 @@
 	4_293: {
 		cardInfo: {
 			imagePath: decipher/LOTR04293.jpg
-			javaClass: true
 			//parentId: 4_293
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1761,26 +1729,26 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: roaming,minion
-		            memorize: playedMinion
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: villager
-		        }
-		        effect: {
-		            type: exert
-		            select: memory(playedMinion)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: roaming,minion
+					memorize: playedMinion
+				}
+				requires: {
+					type: canSpot
+					filter: villager
+				}
+				effect: {
+					type: exert
+					select: memory(playedMinion)
+				}
+			}
 		]
 		gametext: Plays to your support area.<br>Each time your opponent plays a roaming minion, you may spot a villager to exert that minion.
-		lore: Where is the hand on the harpstring, and the red fire glowing? / Where is the spring and the harvest and the tall corn growing?'
+		lore: "'Where is the hand on the harpstring, and the red fire glowing? / Where is the spring and the harvest and the tall corn growing?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1793,7 +1761,6 @@
 	4_294: {
 		cardInfo: {
 			imagePath: decipher/LOTR04294.jpg
-			javaClass: true
 			//parentId: 4_294
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1813,21 +1780,21 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: exert
-		            select: choose(culture(rohan),man)
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(hand weapon)
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: choose(culture(rohan),man)
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(hand weapon)
+				}
+			}
 		]
 		gametext: Plays to your support area.<br><b>Fellowship:</b> Exert a [rohan] Man to play a hand weapon from your discard pile.
-		lore: And to you my other guests I will offer such things as may be found in my armoury.'
+		lore: "'And to you my other guests I will offer such things as may be found in my armoury.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1840,7 +1807,6 @@
 	4_295: {
 		cardInfo: {
 			imagePath: decipher/LOTR04295.jpg
-			javaClass: true
 			//parentId: 4_295
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1865,35 +1831,35 @@
 		vitality: 2
 		keywords: Villager
 		effects: [
-            {
-                type: trigger
-                trigger: {
-                    type: constantlyCheck
-                    requires: {
-                        type: canSpot
-                        filter: site,controlledByOtherPlayer,siteNumber(4),siteBlock(two towers)
-                    }
-                }
-                effect: {
-                    type: discard
-                    select: self
-                }
-            }
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(mounted,companion)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+					requires: {
+						type: canSpot
+						filter: site,controlledByOtherPlayer,siteNumber(4),siteBlock(two towers)
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(mounted,companion)
+				}
+			}
 		]
 		gametext: <b>Villager</b>.<br>Discard Weland if an opponent controls his home site.<br><b>Fellowship:</b> Exert Weland to heal a mounted companion.
-		lore: A tender of horses, Weland found much work at Helm's Deep.
+		lore: "A tender of horses, Weland found much work at Helm's Deep."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1906,7 +1872,6 @@
 	4_296: {
 		cardInfo: {
 			imagePath: decipher/LOTR04296.jpg
-			javaClass: true
 			//parentId: 4_296
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1926,21 +1891,21 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: fellowship
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(villager)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				effect: {
+					type: heal
+					select: choose(villager)
+				}
+			}
 		]
 		gametext: Plays to your support area.<br>At the start of each fellowship phase, you may heal a villager.
-		lore: Behind us in the caves of the Deep are... old and young, children and women. But great store of food, and many beasts and their fodder, have also been gathered there.'
+		lore: Behind us in the caves of the Deep are... old and young, children and women. But great store of food, and many beasts and their fodder, have also been gathered 'there.'
 		promotext: ""
 		alts: {
 			promos: {
@@ -1953,7 +1918,6 @@
 	4_297: {
 		cardInfo: {
 			imagePath: decipher/LOTR04297.jpg
-			javaClass: true
 			//parentId: 4_297
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1971,7 +1935,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -1982,23 +1946,23 @@
 					memorize: chosenMan
 				}
 				{
-				    type: If
-				    check: {
-				        type: memoryMatches
-				        memory: chosenMan
-				        filter: mounted
-				    }
-				    true: {
-				        type: addKeyword
-				        select: memory(chosenMan)
-				        keyword: damage
-				        amount: 2
-				    }
+					type: If
+					check: {
+						type: memoryMatches
+						memory: chosenMan
+						filter: mounted
+					}
+					true: {
+						type: addKeyword
+						select: memory(chosenMan)
+						keyword: damage
+						amount: 2
+					}
 				}
 			]
 		}
 		gametext: <b>Skirmish:</b> Make a [rohan] Man strength +2 (and <b>damage +2</b> if mounted).
-		lore: The Orcs are destroyed. We slaughtered them during the night.'
+		lore: "'The Orcs are destroyed. We slaughtered them during the night.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -2011,7 +1975,6 @@
 	4_365: {
 		cardInfo: {
 			imagePath: decipher/LOTR04365.jpg
-			javaClass: true
 			//parentId: 4_365
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2036,24 +1999,24 @@
 		signet: Theoden
 		resistance: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: PlayCardFromHand
-		            select: choose(culture(rohan),possession)
-		            on: culture(rohan),companion
-		            memorize: playedCard
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(hasAttached(memory(playedCard)))
-		        }
-		        limitPerTurn: 1
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: PlayCardFromHand
+					select: choose(culture(rohan),possession)
+					on: culture(rohan),companion
+					memorize: playedCard
+				}
+				effect: {
+					type: heal
+					select: choose(hasAttached(memory(playedCard)))
+				}
+				limitPerTurn: 1
+			}
 		]
 		gametext: <b>Fellowship:</b> Play a [rohan] possession on a [rohan] companion to heal that companion (limit once per turn).
-		lore: Every man and strong lad able to bear arms, all who have horses, let them be ready in the saddle at the gate ere the second hour from noon!'
+		lore: "'Every man and strong lad able to bear arms, all who have horses, let them be ready in the saddle at the gate ere the second hour from noon!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -2062,4 +2025,5 @@
 			}
 		}
 	}
+
 }

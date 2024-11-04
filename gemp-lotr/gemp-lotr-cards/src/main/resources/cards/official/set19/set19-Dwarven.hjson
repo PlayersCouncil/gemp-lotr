@@ -1,0 +1,174 @@
+{
+
+	19_2: {
+		cardInfo: {
+			imagePath: decipher/LOTR19002.jpg
+			//parentId: 19_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 19P2
+			rarity: P
+			setNum: "19"
+			cardNum: 2
+			style: Standard
+		}
+		title: Gimli
+		subtitle: Opinionated Guide
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: [
+			Fellowship
+			Damage+1
+		]
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: your,culture(dwarven),possession
+			}
+			effect: {
+				type: drawCards
+			}
+		}
+		gametext: <b>Fellowship</b>. <b>Damage +1</b>.<br>Each time you play a [dwarven] possession, you may draw a card.
+		lore: "If anyone was to ask for my opinion, which I note they're not, I'd say we were taking the long way round."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_3: {
+		cardInfo: {
+			imagePath: decipher/LOTR19003.jpg
+			//parentId: 19_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 19P3
+			rarity: P
+			setNum: "19"
+			cardNum: 3
+			style: Standard
+		}
+		title: Still Twitching
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		target: culture(dwarven),companion
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: hunter+2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: transfer
+					select: self
+					where: choose(culture(dwarven),companion)
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: endOfTurn
+				}
+				requires: {
+					type: not
+					requires: {
+						type: didWinSkirmish
+						filter: bearer
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: Bearer must be a [dwarven] companion.<br>Bearer gains <b>hunter 2</b>. Each time bearer wins a skirmish, you may transfer this condition to another [dwarven] companion.<br>At the end of each turn, if bearer did not win a skirmish this turn, discard this condition from play.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_4: {
+		cardInfo: {
+			imagePath: decipher/LOTR19004.jpg
+			//parentId: 19_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 19P4
+			rarity: P
+			setNum: "19"
+			cardNum: 4
+			style: Standard
+		}
+		title: That's Two!
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gimli)
+			}
+			cost: {
+				type: exert
+				select: choose(fellowship,companion)
+			}
+			effect: {
+				type: discard
+				player: shadow
+				select: choose(your,side(shadow))
+			}
+		}
+		gametext: Spot Gimli and exert a fellowship companion to have each Shadow player discard one of his or her Shadow cards from play.
+		lore: "Legolas, two already!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

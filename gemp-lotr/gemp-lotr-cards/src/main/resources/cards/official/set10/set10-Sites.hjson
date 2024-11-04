@@ -3,7 +3,6 @@
 	10_117: {
 		cardInfo: {
 			imagePath: decipher/LOTR10117.jpg
-			javaClass: true
 			//parentId: 10_117
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -24,23 +23,23 @@
 		direction: Right
 		keywords: Sanctuary
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        requires: {
-		            type: cantSpotThreats
-		            amount: 2
-		        }
-		        cost: {
-		            type: addThreats
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(fortification)
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: cantSpotThreats
+					amount: 2
+				}
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(fortification)
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 2 threats, add a threat to play a fortification from your draw deck.
 		lore: ""
@@ -56,7 +55,6 @@
 	10_118: {
 		cardInfo: {
 			imagePath: decipher/LOTR10118.jpg
-			javaClass: true
 			//parentId: 10_118
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -77,24 +75,24 @@
 		direction: Right
 		keywords: Plains
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: [
-                    {
-                        type: exert
-                        select: choose(minion)
-                    }
-                    {
-                        type: removeBurdens
-                    }
-                ]
-                effect: {
-                    type: discard
-                    player: free people
-                    select: choose(side(free people),condition)
-                }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: exert
+						select: choose(minion)
+					}
+					{
+						type: removeBurdens
+					}
+				]
+				effect: {
+					type: discard
+					player: free people
+					select: choose(side(free people),condition)
+				}
+			}
 		]
 		gametext: <b>Plains</b>. <b>Shadow:</b> Exert a minion and remove a burden to make the Free Peoples player discard one of his or her conditions.
 		lore: ""
@@ -110,7 +108,6 @@
 	10_119: {
 		cardInfo: {
 			imagePath: decipher/LOTR10119.jpg
-			javaClass: true
 			//parentId: 10_119
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -130,24 +127,24 @@
 		block: King
 		direction: Left
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantHeal
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantPreventWounds
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantRemoveBurdens
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantHeal
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantPreventWounds
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantRemoveBurdens
+				}
+			}
 		]
 		gametext: Wounds cannot be prevented or healed. Burdens cannot be removed.
 		lore: ""
@@ -163,7 +160,6 @@
 	10_120: {
 		cardInfo: {
 			imagePath: decipher/LOTR10120.jpg
-			javaClass: true
 			//parentId: 10_120
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -183,23 +179,23 @@
 		block: King
 		direction: Right
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: your,culture(wraith),orc
-		        }
-		        cost: {
-		            type: removeThreats
-		            amount: 2
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(your,culture(wraith),orc)
-		            amount: 3
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: your,culture(wraith),orc
+				}
+				cost: {
+					type: removeThreats
+					amount: 2
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(your,culture(wraith),orc)
+					amount: 3
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Spot your [wraith] Orc and remove 2 threats to make that [wraith] Orc strength +3.
 		lore: ""
@@ -211,4 +207,5 @@
 			}
 		}
 	}
+
 }

@@ -3,7 +3,6 @@
 	7_317: {
 		cardInfo: {
 			imagePath: decipher/LOTR07317.jpg
-			javaClass: true
 			//parentId: 7_317
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -28,27 +27,25 @@
 		signet: Aragorn
 		resistance: 10
 		canStartWithRing: true
-		keywords: [
-		    Ring-bound
-		]
+		keywords: Ring-bound
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: moves
-		        }
-		        cost: {
-		            type: addTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: removeThreats
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: moves
+				}
+				cost: {
+					type: addTwilight
+					amount: 3
+				}
+				effect: {
+					type: removeThreats
+				}
+			}
 		]
 		gametext: <b>Ring-bearer (resistance 10)</b>. <b>Ring-bound</b>.<br>Each time the fellowship moves, you may add (3) to remove a threat.
-		lore: Aiya Eärendil Elenion Ancalima!'
+		lore: "'Aiya Eärendil Elenion Ancalima!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -61,7 +58,6 @@
 	7_318: {
 		cardInfo: {
 			imagePath: decipher/LOTR07318.jpg
-			javaClass: true
 			//parentId: 7_318
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -86,29 +82,27 @@
 		signet: Gandalf
 		resistance: 10
 		canStartWithRing: true
-		keywords: [
-		    Ring-bound
-		]
+		keywords: Ring-bound
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: location
-		            filter: siteBlock(king),siteNumber(6-8)
-		        }
-		        cost: {
-		            type: addBurdens
-		            amount: 4
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(minion,inSkirmishAgainst(self))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: location
+					filter: siteBlock(king),siteNumber(6-8)
+				}
+				cost: {
+					type: addBurdens
+					amount: 4
+				}
+				effect: {
+					type: wound
+					select: choose(minion,inSkirmishAgainst(self))
+				}
+			}
 		]
 		gametext: <b>Ring-bearer (resistance 10)</b>. <b>Ring-bound</b>.<br><b>Skirmish:</b> At sites 6[K] to 8[K], add 4 burdens to wound a minion skirmishing Frodo.
-		lore: Wicked masster cheats us; cheats Sméagol, gollum.'
+		lore: "'Wicked masster cheats us; cheats Sméagol, gollum.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -121,7 +115,6 @@
 	7_319: {
 		cardInfo: {
 			imagePath: decipher/LOTR07319.jpg
-			javaClass: true
 			//parentId: 7_319
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -142,6 +135,7 @@
 		strength: 2
 		itemclass: Hand weapon
 		target: hobbit
+
 		gametext: Bearer must be a Hobbit.
 		lore: ""
 		promotext: ""
@@ -156,7 +150,6 @@
 	7_320: {
 		cardInfo: {
 			imagePath: decipher/LOTR07320.jpg
-			javaClass: true
 			//parentId: 7_320
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -181,25 +174,25 @@
 		signet: Gandalf
 		resistance: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: cantSpotThreats
-		            amount: 3
-		        }
-		        cost: {
-		            type: addThreats
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: cantSpotThreats
+					amount: 3
+				}
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> If you cannot spot 3 threats, add a threat to make Merry strength +2.
-		lore: I will be ready... even if you bid me ride with you on the Paths of the Dead.'
+		lore: "'I will be ready... even if you bid me ride with you on the Paths of the Dead.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -212,7 +205,6 @@
 	7_321: {
 		cardInfo: {
 			imagePath: decipher/LOTR07321.jpg
-			javaClass: true
 			//parentId: 7_321
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -237,33 +229,33 @@
 		signet: Theoden
 		resistance: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,notAssignedToSkirmish
-		        }
-		        cost: {
-		            type: returnToHand
-		            select: self
-		        }
-		        effect: [
-                    {
-                        type: playCardFromDiscard
-                        select: choose(culture(rohan),possession)
-                        optional: true
-                    }
-                    {
-                        type: playCardFromDiscard
-                        select: choose(culture(rohan),possession)
-                        optional: true
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,notAssignedToSkirmish
+				}
+				cost: {
+					type: returnToHand
+					select: self
+				}
+				effect: [
+					{
+						type: playCardFromDiscard
+						select: choose(culture(rohan),possession)
+						optional: true
+					}
+					{
+						type: playCardFromDiscard
+						select: choose(culture(rohan),possession)
+						optional: true
+					}
+				]
+			}
 		]
 		gametext: <b>Skirmish:</b> If Merry is not assigned to a skirmish, return him to your hand to play up to 2 [rohan] possessions from your discard pile.
-		lore: And I would not have it said of me in song only that I was always left behind!'
+		lore: "'And I would not have it said of me in song only that I was always left behind!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -276,7 +268,6 @@
 	7_322: {
 		cardInfo: {
 			imagePath: decipher/LOTR07322.jpg
-			javaClass: true
 			//parentId: 7_322
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -294,7 +285,7 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
@@ -323,7 +314,6 @@
 	7_323: {
 		cardInfo: {
 			imagePath: decipher/LOTR07323.jpg
-			javaClass: true
 			//parentId: 7_323
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -348,23 +338,23 @@
 		signet: Gandalf
 		resistance: 6
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: cantSpotThreats
-		                amount: 4
-		            }
-		            filter: self
-		            amount: {
-		                type: forEachThreat
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: cantSpotThreats
+						amount: 4
+					}
+					filter: self
+					amount: {
+						type: forEachThreat
+					}
+				}
+			}
 		]
 		gametext: While you cannot spot 4 threats, Pippin is strength +1 for each threat you can spot.
-		lore: I do not know what put it into your head, or your heart, to do that. But it was well done.'
+		lore: "'I do not know what put it into your head, or your heart, to do that. But it was well done.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -377,7 +367,6 @@
 	7_324: {
 		cardInfo: {
 			imagePath: decipher/LOTR07324.jpg
-			javaClass: true
 			//parentId: 7_324
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -402,26 +391,26 @@
 		signet: Aragorn
 		resistance: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,notAssignedToSkirmish
-		        }
-		        cost: {
-		            type: returnToHand
-		            select: self
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(roaming,minion)
-		            times: 2
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,notAssignedToSkirmish
+				}
+				cost: {
+					type: returnToHand
+					select: self
+				}
+				effect: {
+					type: wound
+					select: choose(roaming,minion)
+					times: 2
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> If Pippin is not assigned to a skirmish, return him to your hand to wound a roaming minion twice.
-		lore: And as for orders, I think you have a madman to deal with, not a lord.'
+		lore: "'And as for orders, I think you have a madman to deal with, not a lord.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -434,7 +423,6 @@
 	7_325: {
 		cardInfo: {
 			imagePath: decipher/LOTR07325.jpg
-			javaClass: true
 			//parentId: 7_325
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -454,47 +442,47 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: hobbit
-		            count: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: moves
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Add a threat
-		                Discard this condition
-		            ]
-		            effects: [
-		                {
-		                    type: addThreats
-		                }
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		            ]
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: playNextSite
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: hobbit
+					count: 2
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add a threat
+						Discard this condition
+					]
+					effects: [
+						{
+							type: addThreats
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: playNextSite
+				}
+			}
 		]
 		gametext: To play, spot 2 Hobbits.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition and exert a Hobbit companion to play the fellowship's next site (replacing opponent's site if necessary).
 		lore: ""
@@ -510,7 +498,6 @@
 	7_326: {
 		cardInfo: {
 			imagePath: decipher/LOTR07326.jpg
-			javaClass: true
 			//parentId: 7_326
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -536,17 +523,17 @@
 		resistance: 5
 		keywords: Ring-bound
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: PlayCardFromHand
-		            select: choose(hobbit,companion)
-		        }
-		        effect: {
-		            type: removeBurdens
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: PlayCardFromHand
+					select: choose(hobbit,companion)
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
 			{
 				type: Response
 				trigger: {
@@ -559,7 +546,7 @@
 			}
 		]
 		gametext: <b>Ring-bound</b>.<br><b>Fellowship:</b> Play a Hobbit companion to remove a burden.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
-		lore: ...but where there's life there's hope, as my Gaffer used to say....'
+		lore: "'...but where there's life there's hope, as my Gaffer used to say....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -572,7 +559,6 @@
 	7_327: {
 		cardInfo: {
 			imagePath: decipher/LOTR07327.jpg
-			javaClass: true
 			//parentId: 7_327
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -598,22 +584,22 @@
 		resistance: 5
 		keywords: Ring-bound
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        requires: {
-		            type: haveInitiative
-		            side: free people
-		        }
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		        }
-		        effect: {
-		            type: heal
-		            select: self
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: haveInitiative
+					side: free people
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+				}
+				effect: {
+					type: heal
+					select: self
+				}
+			}
 			{
 				type: Response
 				trigger: {
@@ -626,7 +612,7 @@
 			}
 		]
 		gametext: <b>Ring-bound</b>.<br><b>Fellowship:</b> If you have initiative, discard a card from hand to heal Sam.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
-		lore: The news that his master was still alive roused him....
+		lore: "The news that his master was still alive roused him...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -639,7 +625,6 @@
 	7_328: {
 		cardInfo: {
 			imagePath: decipher/LOTR07328.jpg
-			javaClass: true
 			//parentId: 7_328
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -659,38 +644,38 @@
 		type: Condition
 		target: or(title(Merry),title(Pippin))
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addActivated
-		            filter: minion
-		            phase: assignment
-		            text: Assign this minion to bearer of Reckless Pride.
-		            effect: {
-		                type: assignFpCharacterToSkirmish
-		                fpCharacter: choose(hasAttached(name(Slow-kindled Courage)))
-		                minion: self
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: [
-		            {
-		                type: discard
-		                select: choose(minion)
-		            }
-                    {
-                        type: removeBurdens
-                        amount: 2
-                    }
-                ]
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addActivated
+					filter: minion
+					phase: assignment
+					text: Assign this minion to bearer of Reckless Pride.
+					effect: {
+						type: assignFpCharacterToSkirmish
+						fpCharacter: choose(hasAttached(name(Slow-kindled Courage)))
+						minion: self
+					}
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: discard
+						select: choose(minion)
+					}
+					{
+						type: removeBurdens
+						amount: 2
+					}
+				]
+			}
 		]
 		gametext: Bearer must be Merry or Pippin.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to bearer of Slow-kindled Courage."<br><b>Regroup:</b> Discard this condition to discard a minion and remove 2 burdens.
 		lore: ""
@@ -702,4 +687,5 @@
 			}
 		}
 	}
+
 }

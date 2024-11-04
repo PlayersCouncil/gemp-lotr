@@ -3,7 +3,6 @@
 	12_37: {
 		cardInfo: {
 			imagePath: decipher/LOTR12037.jpg
-			javaClass: true
 			//parentId: 12_37
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -23,44 +22,44 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            requires: {
-		                type: canSpot
-		                filter: name(Sméagol)
-		            }
-		            filter: site
-		            amount: -1
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: moves
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Wound a companion
-		                Discard this condition
-		            ]
-		            effects: [
-		                {
-		                    type: wound
-		                    select: choose(companion)
-		                }
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: {
+						type: canSpot
+						filter: name(Sméagol)
+					}
+					filter: site
+					amount: -1
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: choice
+					texts: [
+						Wound a companion
+						Discard this condition
+					]
+					effects: [
+						{
+							type: wound
+							select: choose(companion)
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+			}
 		]
 		gametext: While you can spot Sméagol, the Shadow number of each site is -1.<br>Each time the fellowship moves, wound a companion or discard this condition.
-		lore: All ways are watched, yes,' said Gollum. 'Of course they are. But hobbits must try some way. This may be least watched.'
+		lore: "'All ways are watched, yes,' said Gollum. 'Of course they are. But hobbits must try some way. This may be least watched.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -73,7 +72,6 @@
 	12_38: {
 		cardInfo: {
 			imagePath: decipher/LOTR12038.jpg
-			javaClass: true
 			//parentId: 12_38
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -91,32 +89,31 @@
 		culture: Gollum
 		twilight: 0
 		type: Event
-		timeword: shadow
-
+		timewords: Shadow
 		effects: {
 			type: event
 			cost: {
-			    type: chooseHowManyToSpot
-			    filter: culture(gollum)
-			    memorize: spotCount
+				type: chooseHowManyToSpot
+				filter: culture(gollum)
+				memorize: spotCount
 			},
 			effect: [
 				{
-				    type: revealTopCardsOfDrawDeck
-				    count: memory(spotCount)
-				    memorize: revealedCards
+					type: revealTopCardsOfDrawDeck
+					count: memory(spotCount)
+					memorize: revealedCards
 				}
 				{
-				    type: playCardFromDrawDeck
-				    select: choose(memory(revealedCards),minion)
-				    discount: -2
-                    showAll: false
-                    shuffle: false
+					type: playCardFromDrawDeck
+					select: choose(memory(revealedCards),minion)
+					discount: -2
+					showAll: false
+					shuffle: false
 				}
 			]
 		}
 		gametext: Spot X [gollum] cards to reveal the top X cards of your draw deck. You may play a revealed minion. Its twilight cost is -2.
-		lore: ...she moved with a horrible speed, now running on her creaking legs, now making a sudden bound.
+		lore: "...she moved with a horrible speed, now running on her creaking legs, now making a sudden bound."
 		promotext: ""
 		alts: {
 			promos: {
@@ -129,7 +126,6 @@
 	12_39: {
 		cardInfo: {
 			imagePath: decipher/LOTR12039.jpg
-			javaClass: true
 			//parentId: 12_39
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -149,26 +145,26 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: movesTo
-		            filter: or(mountain,underground)
-		        }
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            select: choose(culture(gollum),event)
-		        }
-		        effect: {
-		            type: putCardsFromDiscardIntoHand
-		            select: choose(minion)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: movesTo
+					filter: or(mountain,underground)
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(culture(gollum),event)
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(minion)
+				}
+			}
 		]
 		gametext: Each time the fellowship moves to a mountain or underground site, you may discard a [gollum] event from hand to take a minion from your discard pile into hand.
-		lore: Gollum stalked the Ring-bearer over many leagues, awaiting the right opportunity to strike.
+		lore: "Gollum stalked the Ring-bearer over many leagues, awaiting the right opportunity to strike."
 		promotext: ""
 		alts: {
 			promos: {
@@ -181,7 +177,6 @@
 	12_40: {
 		cardInfo: {
 			imagePath: decipher/LOTR12040.jpg
-			javaClass: true
 			//parentId: 12_40
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -201,38 +196,38 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: name(Sméagol)
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: name(Sméagol)
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: playSite
-		            number: {
-		                type: currentSiteNumber
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Sméagol)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: name(Sméagol)
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: playSite
+					number: {
+						type: currentSiteNumber
+					}
+				}
+			}
 		]
 		gametext: To play, spot Sméagol.<br>Sméagol is strength +1.<br><b>Regroup:</b> Discard this condition to replace the fellowship's current site with a site from your adventure deck.
-		lore: Frodo felt a strange certainty that in this matter Gollum was for once not so far from the truth....
+		lore: "Frodo felt a strange certainty that in this matter Gollum was for once not so far from the truth...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -245,7 +240,6 @@
 	12_41: {
 		cardInfo: {
 			imagePath: decipher/LOTR12041.jpg
-			javaClass: true
 			//parentId: 12_41
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -265,27 +259,27 @@
 		type: Condition
 		target: wounded,companion
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(gollum)
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantHeal
-		            requires: {
-		                type: canSpot
-		                filter: culture(gollum),or(character,and(your,zone(support)))
-		            }
-		            filter: bearer
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gollum)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantHeal
+					requires: {
+						type: canSpot
+						filter: culture(gollum),or(character,and(your,zone(support)))
+					}
+					filter: bearer
+				}
+			}
 		]
 		gametext: To play, spot a [gollum] card.<br>Bearer must be a wounded companion.<br>While you can spot a [gollum] character or a [gollum] card in your support area, bearer cannot heal.
-		lore: The Precious will be ours once the Hobbitses are dead!'
+		lore: "'The Precious will be ours once the Hobbitses are dead!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -294,4 +288,5 @@
 			}
 		}
 	}
+
 }

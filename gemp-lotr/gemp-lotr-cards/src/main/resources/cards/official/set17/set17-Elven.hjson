@@ -3,7 +3,6 @@
 	17_7: {
 		cardInfo: {
 			imagePath: decipher/LOTR17007.jpg
-			javaClass: true
 			//parentId: 17_7
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -27,29 +26,29 @@
 		resistance: 6
 		keywords: Hunter 1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inSkirmishAgainst(wounded,minion)
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(another,hunter)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmishAgainst(wounded,minion)
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(another,hunter)
+				}
+			}
 		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>While this companion is skirmishing a wounded minion, he is strength +2.<br><b>Maneuver:</b> Exert this companion to heal another hunter.
-		lore: We are proud to fight alongside men, once more.
+		lore: "We are proud to fight alongside men, once more."
 		promotext: ""
 		alts: {
 			promos: {
@@ -62,7 +61,6 @@
 	17_8: {
 		cardInfo: {
 			imagePath: decipher/LOTR17008.jpg
-			javaClass: true
 			//parentId: 17_8
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -80,45 +78,45 @@
 		culture: Elven
 		twilight: 3
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(elven),hunter
+				type: canSpot
+				filter: culture(elven),hunter
 			}
 			effect: [
 				{
-				    type: choice
-				    texts: [
-				        Draw a card for each hunter
-				        Reinforce an {elven} token for each hunter
-				    ]
-				    effects: [
-				        {
-				            type: drawCards
-				            count: {
-				                type: forEachYouCanSpot
-				                filter: hunter
-				            }
-				        }
-				        {
-				            type: repeat
-				            times: {
-				                type: forEachYouCanSpot
-				                filter: hunter
-				            }
-				            effect: {
-				                type: reinforceTokens
-				                culture: elven
-				            }
-				        }
-				    ]
+					type: choice
+					texts: [
+						Draw a card for each hunter
+						Reinforce an {elven} token for each hunter
+					]
+					effects: [
+						{
+							type: drawCards
+							count: {
+								type: forEachYouCanSpot
+								filter: hunter
+							}
+						}
+						{
+							type: repeat
+							times: {
+								type: forEachYouCanSpot
+								filter: hunter
+							}
+							effect: {
+								type: reinforceTokens
+								culture: elven
+							}
+						}
+					]
 				}
 			]
 		}
 		gametext: Spot an [elven] hunter and choose one: draw a card for each hunter you can spot or reinforce an [elven] token for each hunter you can spot.
-		lore: Until at last our toil be past / our journey done, our errand sped.
+		lore: "Until at last our toil be past / our journey done, our errand sped."
 		promotext: ""
 		alts: {
 			promos: {
@@ -131,7 +129,6 @@
 	17_9: {
 		cardInfo: {
 			imagePath: decipher/LOTR17009.jpg
-			javaClass: true
 			//parentId: 17_9
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -149,51 +146,51 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
-			    type: or
-			    requires: [
-			        {
-			            type: canSpot
-			            filter: elf
-			            count: 2
-			        }
-			        {
-			            type: and
-			            requires: [
-			                {
-			                    type: canSpot
-			                    filter: elf
-			                }
-			                {
-			                    type: canSpot
-			                    filter: culture(elven),follower
-			                }
-			            ]
-			        }
-			    ]
+				type: or
+				requires: [
+					{
+						type: canSpot
+						filter: elf
+						count: 2
+					}
+					{
+						type: and
+						requires: [
+							{
+								type: canSpot
+								filter: elf
+							}
+							{
+								type: canSpot
+								filter: culture(elven),follower
+							}
+						]
+					}
+				]
 			}
 			effect: [
 				{
-				    type: discard
-				    select: choose(condition)
-				    count: {
-				        type: Conditional
-				        requires: {
-				            type: canSpot
-				            filter: side(shadow),condition
-				            count: 4
-				        }
-				        true: 2
-				        false: 1
-				    }
+					type: discard
+					select: choose(condition)
+					count: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: side(shadow),condition
+							count: 4
+						}
+						true: 2
+						false: 1
+					}
 				}
 			]
 		}
 		gametext: Spot 2 Elves (or an Elf and an [elven] follower) to discard a condition (or discard two conditions if you can spot 4 or more Shadow conditions).
-		lore: The road is very dangerous.
+		lore: "The road is very dangerous."
 		promotext: ""
 		alts: {
 			promos: {
@@ -206,7 +203,6 @@
 	17_10: {
 		cardInfo: {
 			imagePath: decipher/LOTR17010.jpg
-			javaClass: true
 			//parentId: 17_10
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -226,54 +222,54 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: elven
-		            select: self
-		            count: {
-		                type: forEachYouCanSpot
-		                filter: hunter
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: culture(elven),hunter
-		        }
-		        cost: {
-		            type: choice
-		            texts: [
-		                Discard this
-		                Remove a token from here
-		            ]
-		            effects: [
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		                {
-		                    type: RemoveCultureTokens
-		                    select: self
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(condition)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: elven
+					select: self
+					count: {
+						type: forEachYouCanSpot
+						filter: hunter
+					}
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: culture(elven),hunter
+				}
+				cost: {
+					type: choice
+					texts: [
+						Discard this
+						Remove a token from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: discard
+					select: choose(condition)
+				}
+			}
 		]
 		gametext: When you play this, add an [elven] token here for each hunter you can spot.<br><b>Maneuver:</b> Discard this or remove a token from here and spot an [elven] hunter to discard a condition.
-		lore: We shall not meet again, Elessar.
+		lore: "We shall not meet again, Elessar."
 		promotext: ""
 		alts: {
 			promos: {
@@ -286,7 +282,6 @@
 	17_11: {
 		cardInfo: {
 			imagePath: decipher/LOTR17011.jpg
-			javaClass: true
 			//parentId: 17_11
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -311,34 +306,34 @@
 		resistance: 6
 		keywords: Hunter 1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inSkirmishAgainst(wounded,minion)
-		            amount: 3
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: archery
-		        cost: [
-                    {
-                        type: exert
-                        select: choose(another,culture(elven),hunter)
-                    }
-                    {
-                        type: addThreats
-                    }
-                ]
-                effect: {
-                    type: wound
-                    select: choose(minion)
-                }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmishAgainst(wounded,minion)
+					amount: 3
+				}
+			}
+			{
+				type: activated
+				phase: archery
+				cost: [
+					{
+						type: exert
+						select: choose(another,culture(elven),hunter)
+					}
+					{
+						type: addThreats
+					}
+				]
+				effect: {
+					type: wound
+					select: choose(minion)
+				}
+			}
 		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>While Orophin is skirmishing a wounded minion, he is strength +3.<br><b>Archery:</b> Exert another [elven] hunter and add a threat to wound a minion.
-		lore: Guardian of the Golden Wood.
+		lore: "Guardian of the Golden Wood."
 		promotext: ""
 		alts: {
 			promos: {
@@ -351,7 +346,6 @@
 	17_12: {
 		cardInfo: {
 			imagePath: decipher/LOTR17012.jpg
-			javaClass: true
 			//parentId: 17_12
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -376,50 +370,50 @@
 		resistance: 6
 		keywords: Hunter 1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: wounded,minion
-		            }
-		            filter: self
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: wounded,minion
-		            }
-		            filter: self
-		            keyword: archer
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: archery
-		        cost: [
-		            {
-		                type: exert
-		                select: choose(another,culture(elven),hunter)
-		            }
-		            {
-		                type: addThreats
-		            }
-		        ]
-		        effect: {
-		            type: wound
-		            select: choose(minion)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: wounded,minion
+					}
+					filter: self
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: wounded,minion
+					}
+					filter: self
+					keyword: archer
+				}
+			}
+			{
+				type: activated
+				phase: archery
+				cost: [
+					{
+						type: exert
+						select: choose(another,culture(elven),hunter)
+					}
+					{
+						type: addThreats
+					}
+				]
+				effect: {
+					type: wound
+					select: choose(minion)
+				}
+			}
 		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>While you can spot a wounded minion, Rúmil is strength +1 and gains <b>archer</b>.<br><b>Archery:</b> Exert another [elven] hunter and add a threat to wound a minion.
-		lore: Guardian of Nimrodel.
+		lore: "Guardian of Nimrodel."
 		promotext: ""
 		alts: {
 			promos: {
@@ -432,7 +426,6 @@
 	17_13: {
 		cardInfo: {
 			imagePath: decipher/LOTR17013.jpg
-			javaClass: true
 			//parentId: 17_13
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -452,44 +445,44 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: self
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: regionNumber(1)
-		        }
-		        effect: {
-		            type: addThreats
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: regionNumber(2)
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(elf)
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: regionNumber(3)
-		        }
-		        effect: {
-		            type: drawCards
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: self
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: regionNumber(1)
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: regionNumber(2)
+				}
+				effect: {
+					type: heal
+					select: choose(elf)
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: regionNumber(3)
+				}
+				effect: {
+					type: drawCards
+				}
+			}
 		]
 		gametext: To play, spot an Elf.<br>Each time the fellowship moves to a region one site, add a threat.<br>Each time the fellowship moves to a region two site, heal an Elf.<br>Each time the fellowship moves to a region three site, draw a card.
 		lore: ""
@@ -505,7 +498,6 @@
 	17_14: {
 		cardInfo: {
 			imagePath: decipher/LOTR17014.jpg
-			javaClass: true
 			//parentId: 17_14
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -523,71 +515,71 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(elven),archer
+				type: canSpot
+				filter: culture(elven),archer
 			}
 			cost: {
-			    type: choice
-			    texts: [
-			        Add a threat to wound a minion
-			        Add three threats to exert three minions
-			    ]
-			    effects: [
-			        {
-			            type: multiple
-			            effects: [
-			                {
-                                type: addThreats
-			                }
-			                {
-			                    type: MemorizeInfo
-			                    memory: played
-			                    info: first
-			                }
-			            ]
-			        }
-			        {
-			            type: multiple
-			            effects: [
-			                {
-                                type: addThreats
-                                amount: 3
-			                }
-			                {
-			                    type: MemorizeInfo
-			                    memory: played
-			                    info: second
-			                }
-			            ]
-			        }
-			    ]
+				type: choice
+				texts: [
+					Add a threat to wound a minion
+					Add three threats to exert three minions
+				]
+				effects: [
+					{
+						type: multiple
+						effects: [
+							{
+								type: addThreats
+							}
+							{
+								type: MemorizeInfo
+								memory: played
+								info: first
+							}
+						]
+					}
+					{
+						type: multiple
+						effects: [
+							{
+								type: addThreats
+								amount: 3
+							}
+							{
+								type: MemorizeInfo
+								memory: played
+								info: second
+							}
+						]
+					}
+				]
 			}
 			effect: [
 				{
-				    type: if
-				    check: {
-				        type: memoryIs
-				        memory: played
-				        value: first
-				    }
-				    true: {
-        				type: wound
-        				select: choose(minion)
-				    }
-				    false: {
-				        type: exert
-				        select: choose(minion)
-				        count: 3
-				    }
+					type: if
+					check: {
+						type: memoryIs
+						memory: played
+						value: first
+					}
+					true: {
+						type: wound
+						select: choose(minion)
+					}
+					false: {
+						type: exert
+						select: choose(minion)
+						count: 3
+					}
 				}
 			]
 		}
 		gametext: Spot an [elven] archer and add a threat to wound a minion (or add three threats to exert three minions).
-		lore: Leithio i philinn!
+		lore: "Leithio i philinn!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -596,4 +588,5 @@
 			}
 		}
 	}
+
 }

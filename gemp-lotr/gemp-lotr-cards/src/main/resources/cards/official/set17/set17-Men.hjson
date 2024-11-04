@@ -3,7 +3,6 @@
 	17_40: {
 		cardInfo: {
 			imagePath: decipher/LOTR17040.jpg
-			javaClass: true
 			//parentId: 17_40
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -25,45 +24,45 @@
 		itemclass: Mount
 		target: culture(men),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotThreats
-		            }
-		            filter: bearer
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotThreats
-		                amount: 3
-		            }
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: activatedInDiscard
-		        phase: shadow
-		        requires: {
-		            type: canSpotThreats
-		            amount: 3
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: self
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+					}
+					filter: bearer
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 3
+					}
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: activatedInDiscard
+				phase: shadow
+				requires: {
+					type: canSpotThreats
+					amount: 3
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: self
+				}
+			}
 		]
 		gametext: Bearer must be a [men] Man.<br>While you can spot a threat, bearer is <b>fierce</b>.<br>While you can spot 3 threats, bearer is <b>damage +1</b>.<br>While you can spot 5 threats, you may play this from your discard pile.
-		lore: ...mûmakil were bellowing as they were goaded to war.
+		lore: "...mûmakil were bellowing as they were goaded to war."
 		promotext: ""
 		alts: {
 			promos: {
@@ -76,7 +75,6 @@
 	17_41: {
 		cardInfo: {
 			imagePath: decipher/LOTR17041.jpg
-			javaClass: true
 			//parentId: 17_41
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -97,57 +95,57 @@
 		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        text: Stack {discardedMinion}
-		        trigger: {
-		            type: discarded
-		            filter: culture(men),minion
-		            memorize: discardedMinion
-		        }
-		        requires: {
-		            type: phase
-		            phase: maneuver
-		        }
-		        effect: {
-		            type: stackCardsFromDiscard
-		            select: choose(memory(discardedMinion))
-		            where: self
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: culture(men),minion
-		        }
-		        cost: {
-		            type: choice
-		            texts: [
-		                Discard a minion stacked here
-		                Discard this
-		            ]
-		            effects: [
-		                {
-                            type: discardStackedCards
-                            select: choose(minion)
-                            on: self
-                        }
-                        {
-                            type: discard
-                            select: self
-                        }
-                    ]
-		        }
-		        effect: {
-		            type: preventWound
-		            select: choose(culture(men),minion)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				text: Stack {discardedMinion}
+				trigger: {
+					type: discarded
+					filter: culture(men),minion
+					memorize: discardedMinion
+				}
+				requires: {
+					type: phase
+					phase: maneuver
+				}
+				effect: {
+					type: stackCardsFromDiscard
+					select: choose(memory(discardedMinion))
+					where: self
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(men),minion
+				}
+				cost: {
+					type: choice
+					texts: [
+						Discard a minion stacked here
+						Discard this
+					]
+					effects: [
+						{
+							type: discardStackedCards
+							select: choose(minion)
+							on: self
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: preventWound
+					select: choose(culture(men),minion)
+				}
+			}
 		]
 		gametext: Each time a [men] minion is discarded during the maneuver phase, you may stack it here.<br><b>Response:</b> Discard a minion stacked here or discard this to prevent a wound to a [men] minion.
-		lore: Scarlet cloaks and bronze armor adorned the marching forces.
+		lore: "Scarlet cloaks and bronze armor adorned the marching forces."
 		promotext: ""
 		alts: {
 			promos: {
@@ -160,7 +158,6 @@
 	17_42: {
 		cardInfo: {
 			imagePath: decipher/LOTR17042.jpg
-			javaClass: true
 			//parentId: 17_42
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -183,33 +180,33 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: other,culture(men),man
-		            count: 2
-		        }
-		        effect: [
-		            {
-		                type: chooseHowManyToSpot
-		                filter: possession
-		                memorize: spotCount
-		            }
-                    {
-                        type: addTwilight
-                        amount: memory(spotCount)
-                    }
-                ]
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: other,culture(men),man
+					count: 2
+				}
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						filter: possession
+						memorize: spotCount
+					}
+					{
+						type: addTwilight
+						amount: memory(spotCount)
+					}
+				]
+			}
 		]
 		gametext: When you play this minion, you may spot 2 other [men] Men to add (1) for each possession you spot.
-		lore: The men of Rhûn's preparation for battle was second to none.
+		lore: "The men of Rhûn's preparation for battle was second to none."
 		promotext: ""
 		alts: {
 			promos: {
@@ -222,7 +219,6 @@
 	17_43: {
 		cardInfo: {
 			imagePath: decipher/LOTR17043.jpg
-			javaClass: true
 			//parentId: 17_43
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -245,48 +241,48 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: addKeyword
-                    requires: {
-                        type: canSpot
-                        filter: controlledSite
-                        count: 2
-                    }
-                    filter: self
-                    keyword: fierce
-                }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyStrength
-                    requires: {
-                        type: canSpot
-                        filter: controlledSite
-                        count: 4
-                    }
-                    filter: culture(men),minion
-                    amount: 1
-                }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-                    type: addKeyword
-                    requires: {
-                        type: canSpot
-                        filter: controlledSite
-                        count: 4
-                    }
-                    filter: culture(men),minion
-                    keyword: fierce
-                }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: controlledSite
+						count: 2
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: controlledSite
+						count: 4
+					}
+					filter: culture(men),minion
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: controlledSite
+						count: 4
+					}
+					filter: culture(men),minion
+					keyword: fierce
+				}
+			}
 		]
 		gametext: While you control 2 sites, Easterling Sneak is <b>fierce</b>.<br>While you control 4 sites, each [men] minion is strength +1 and <b>fierce</b>.
-		lore: The dark is gathering all armies to him.
+		lore: "The dark is gathering all armies to him."
 		promotext: ""
 		alts: {
 			promos: {
@@ -299,7 +295,6 @@
 	17_44: {
 		cardInfo: {
 			imagePath: decipher/LOTR17044.jpg
-			javaClass: true
 			//parentId: 17_44
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -321,34 +316,34 @@
 		itemclass: Hand weapon
 		target: culture(men),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: bearer,name(Gríma)
-		            amount: {
-		                type: forEachFPCulture
-		                over: 2
-		            }
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: played
-		            filter: timeword(skirmish),event
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: cancelEvent
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer,name(Gríma)
+					amount: {
+						type: forEachFPCulture
+						over: 2
+					}
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: played
+					filter: timeword(skirmish),event
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: cancelEvent
+				}
+			}
 		]
 		gametext: Bearer must be a [men] Man.<br>If bearer is Gríma, he is strength +1 for each Free Peoples culture you can spot over 2.<br><b>Response:</b> If a skirmish event is played, discard this possession to cancel that event.
-		lore: The blade of a pathetic creature.
+		lore: "The blade of a pathetic creature."
 		promotext: ""
 		alts: {
 			promos: {
@@ -361,7 +356,6 @@
 	17_45: {
 		cardInfo: {
 			imagePath: decipher/LOTR17045.jpg
-			javaClass: true
 			//parentId: 17_45
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -379,52 +373,52 @@
 		culture: Men
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: [
-                {
-                    type: spot
-                    select: choose(culture(men),possession)
-                    memorize: spottedPossession
-                }
-                {
-                    type: spot
-                    select: choose(culture(men),minion)
-                    memorize: spottedMinion
-                }
-            ]
-			effect: [
 				{
-				    type: modifyStrength
-				    select: memory(spottedMinion)
-				    amount: {
-				        type: forEachStacked
-				        filter: minion
-				        on: memory(spottedPossession)
-				    }
+					type: spot
+					select: choose(culture(men),possession)
+					memorize: spottedPossession
 				}
 				{
-				    type: optional
-				    text: Would you like to discard {spottedPossession} to make {spottedMinion} damage +1?
-				    effect: {
-				        type: costToEffect
-				        cost: {
-				            type: discard
-				            select: memory(spottedPossession)
-				        }
-				        effect: {
-				            type: addKeyword
-				            select: memory(spottedMinion)
-				            keyword: damage
-				            amount: 1
-				        }
-				    }
+					type: spot
+					select: choose(culture(men),minion)
+					memorize: spottedMinion
+				}
+			]
+			effect: [
+				{
+					type: modifyStrength
+					select: memory(spottedMinion)
+					amount: {
+						type: forEachStacked
+						filter: minion
+						on: memory(spottedPossession)
+					}
+				}
+				{
+					type: optional
+					text: Would you like to discard {spottedPossession} to make {spottedMinion} damage +1?
+					effect: {
+						type: costToEffect
+						cost: {
+							type: discard
+							select: memory(spottedPossession)
+						}
+						effect: {
+							type: addKeyword
+							select: memory(spottedMinion)
+							keyword: damage
+							amount: 1
+						}
+					}
 				}
 			]
 		}
 		gametext: Spot a [men] possession in your support area and a [men] minion. Make that minion strength +1 for each minion stacked on that possession. You may discard that possession to make that minion <b>damage</b> <b>+1</b>.
-		lore: Too long have these peasants stood against you.
+		lore: "Too long have these peasants stood against you."
 		promotext: ""
 		alts: {
 			promos: {
@@ -437,7 +431,6 @@
 	17_46: {
 		cardInfo: {
 			imagePath: decipher/LOTR17046.jpg
-			javaClass: true
 			//parentId: 17_46
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -455,19 +448,19 @@
 		culture: Men
 		twilight: 0
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: playCardFromStacked
-				    select: choose(culture(orc),minion)
-				    on: culture(orc),possession
+					type: playCardFromStacked
+					select: choose(culture(orc),minion)
+					on: culture(orc),possession
 				}
 			]
 		}
 		gametext: Play a [men] minion stacked on a [men] possession as if from hand.
-		lore: Few could escape the oncoming pillage of the Dunlending's savage stampede.
+		lore: "Few could escape the oncoming pillage of the Dunlending's savage stampede."
 		promotext: ""
 		alts: {
 			promos: {
@@ -480,7 +473,6 @@
 	17_47: {
 		cardInfo: {
 			imagePath: decipher/LOTR17047.jpg
-			javaClass: true
 			//parentId: 17_47
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -502,31 +494,31 @@
 		itemclass: Hand weapon
 		target: culture(men),minion
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: bearer
-		        }
-		        effect: {
-		            type: costToEffect
-		            cost: {
-		                type: transfer
-		                select: self
-		                where: choose(not(bearer),culture(men),minion)
-		                checkTarget: true
-		            }
-		            effect: {
-		                type: StackCardsFromPlay
-		                select: choose(culture(men),minion)
-		                where: choose(culture(men),possession,zone(support))
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: costToEffect
+					cost: {
+						type: transfer
+						select: self
+						where: choose(not(bearer),culture(men),minion)
+						checkTarget: true
+					}
+					effect: {
+						type: StackCardsFromPlay
+						select: choose(culture(men),minion)
+						where: choose(culture(men),possession,zone(support))
+					}
+				}
+			}
 		]
 		gametext: Bearer must be a [men] minion.<br>Each time bearer wins a skirmish, you may transfer this possession to another [men] minion. If you do, stack a [men] minion from play on a [men] possession in your support area.
-		lore: The men of Dunland took even the most basic of tools to be weapons against Rohan.
+		lore: "The men of Dunland took even the most basic of tools to be weapons against Rohan."
 		promotext: ""
 		alts: {
 			promos: {
@@ -539,7 +531,6 @@
 	17_48: {
 		cardInfo: {
 			imagePath: decipher/LOTR17048.jpg
-			javaClass: true
 			//parentId: 17_48
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -563,32 +554,32 @@
 		vitality: 4
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: sarumanFirstSentenceActive
-		            }
-		            filter: culture(men),minion,hasAttached(possession)
-		            amount: 2
-		        }
-		    }
-            {
-                type: activated
-                phase: skirmish
-                cost: {
-                    type: exert
-                    select: self
-                }
-                effect: {
-                    type: playCardFromDiscard
-                    select: choose(culture(men),possession)
-                }
-            }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: sarumanFirstSentenceActive
+					}
+					filter: culture(men),minion,hasAttached(possession)
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(men),possession)
+				}
+			}
 		]
 		gametext: Each [men] minion bearing a possession is strength +2.<br><b>Skirmish:</b> Exert Saruman to play a [men] possession from your discard pile.
-		lore: Take back the lands they stole from you!
+		lore: "Take back the lands they stole from you!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -601,7 +592,6 @@
 	17_49: {
 		cardInfo: {
 			imagePath: decipher/LOTR17049.jpg
-			javaClass: true
 			//parentId: 17_49
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -628,41 +618,41 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		            fromZone: hand
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Remove (3) and spot another {men} minion
-		                Discard Stampeding Chief
-		            ]
-		            effects: [
-		                {
-		                    type: If
-		                    check: {
-		                        type: canSpot
-		                        filter: another,culture(men),minion
-		                    }
-		                    true: {
-		                        type: removeTwilight
-		                        amount: 3
-		                    }
-		                }
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+					fromZone: hand
+				}
+				effect: {
+					type: choice
+					texts: [
+						Remove (3) and spot another {men} minion
+						Discard Stampeding Chief
+					]
+					effects: [
+						{
+							type: If
+							check: {
+								type: canSpot
+								filter: another,culture(men),minion
+							}
+							true: {
+								type: removeTwilight
+								amount: 3
+							}
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>. <b>Fierce</b>.<br>If you play Stampeding Chief from your hand, remove (3) and spot another [men] minion or discard Stampeding Chief.
-		lore: But no more would Rohan stand against his kind.
+		lore: "But no more would Rohan stand against his kind."
 		promotext: ""
 		alts: {
 			promos: {
@@ -675,7 +665,6 @@
 	17_50: {
 		cardInfo: {
 			imagePath: decipher/LOTR17050.jpg
-			javaClass: true
 			//parentId: 17_50
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -698,29 +687,29 @@
 		vitality: 1
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-                cost: [
-                    {
-                        type: chooseCardsFromDiscard
-                        select: choose(culture(men),minion)
-                        memorize: chosenMinion
-                    }
-                    {
-                        type: discard
-                        select: self
-                    }
-                ]
-                effect: {
-                    type: stackCardsFromDiscard
-                    select: memory(chosenMinion)
-                    where: choose(culture(men),possession,zone(support))
-                }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: chooseCardsFromDiscard
+						select: choose(culture(men),minion)
+						memorize: chosenMinion
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: stackCardsFromDiscard
+					select: memory(chosenMinion)
+					where: choose(culture(men),possession,zone(support))
+				}
+			}
 		]
 		gametext: <b>Regroup:</b> Spot a [men] minion in your discard pile and discard this minion to place that minion on your [men] support area possession.
-		lore: Argh!!
+		lore: "Argh!!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -733,7 +722,6 @@
 	17_51: {
 		cardInfo: {
 			imagePath: decipher/LOTR17051.jpg
-			javaClass: true
 			//parentId: 17_51
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -756,37 +744,37 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(men),man
-		            count: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: repeat
-		            times: {
-		                type: forEachYouCanSpot
-		                filter: controlledSite
-		            }
-		            effect: {
-		                type: exert
-		                player: free people
-		                select: choose(companion)
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(men),man
+					count: 2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: controlledSite
+					}
+					effect: {
+						type: exert
+						player: free people
+						select: choose(companion)
+					}
+				}
+			}
 		]
 		gametext: To play, spot 2 [men] Men.<br>When you play this minion, you may make the Free Peoples player exert a companion for each site you control.
-		lore: Death to the robbers of the North!
+		lore: "Death to the robbers of the North!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -799,7 +787,6 @@
 	17_52: {
 		cardInfo: {
 			imagePath: decipher/LOTR17052.jpg
-			javaClass: true
 			//parentId: 17_52
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -822,32 +809,32 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(men),man
-		            count: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: controlledSite
-		        }
-		        effect: {
-		            type: exhaust
-		            select: choose(unbound,companion)
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(men),man
+					count: 2
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: controlledSite
+				}
+				effect: {
+					type: exhaust
+					select: choose(unbound,companion)
+				}
+			}
 		]
 		gametext: To play, spot 2 [men] Men.<br>Each time this minion wins a skirmish and you can spot a site you control, exhaust an unbound companion.
-		lore: Death to the Forgoil!
+		lore: "Death to the Forgoil!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -860,7 +847,6 @@
 	17_53: {
 		cardInfo: {
 			imagePath: decipher/LOTR17053.jpg
-			javaClass: true
 			//parentId: 17_53
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -883,35 +869,35 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: [
-                    {
-                        type: discard
-                        select: self
-                    }
-                    {
-                        type: discardStackedCards
-                        select: choose(minion)
-                        on: culture(men),possession
-                        count: any
-                        memorize: discardedMinions
-                    }
-                ]
-                effect: {
-                    type: playCardFromDiscard
-                    select: choose(culture(men),minion)
-                    discount: {
-                        type: forEachInMemory
-                        memory: discardedMinions
-                        multiplier: -1
-                    }
-                }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: [
+					{
+						type: discard
+						select: self
+					}
+					{
+						type: discardStackedCards
+						select: choose(minion)
+						on: culture(men),possession
+						count: any
+						memorize: discardedMinions
+					}
+				]
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(men),minion)
+					discount: {
+						type: forEachInMemory
+						memory: discardedMinions
+						multiplier: -1
+					}
+				}
+			}
 		]
 		gametext: <b>Maneuver:</b> Discard this minion and X minions stacked on a [men] possession to play a [men] minion from your discard pile. That minion is twilight cost -X.
-		lore: We will fight for you!
+		lore: "We will fight for you!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -924,7 +910,6 @@
 	17_54: {
 		cardInfo: {
 			imagePath: decipher/LOTR17054.jpg
-			javaClass: true
 			//parentId: 17_54
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -948,30 +933,30 @@
 		site: 4
 		keywords: Fierce
 		effects: [
-            {
-                type: activated
-                phase: maneuver
-                cost: [
-                    {
-                        type: discard
-                        select: self
-                    }
-                    {
-                        type: discard
-                        select: choose(culture(men),minion,maxTwilight(2))
-                    }
-                ]
-                effect: {
-                    type: playCardFromDrawDeck
-                    select: choose(name(Stampeding Chief))
-                    discount: -8
-                    showAll: true
-                    shuffle: true
-                }
-            }
+			{
+				type: activated
+				phase: maneuver
+				cost: [
+					{
+						type: discard
+						select: self
+					}
+					{
+						type: discard
+						select: choose(culture(men),minion,maxTwilight(2))
+					}
+				]
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(name(Stampeding Chief))
+					discount: -8
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br><b>Maneuver:</b> Discard this minion and a [men] minion with a twilight cost 2 or less from play to play Stampeding Chief from your draw deck. It is twilight cost -8.
-		lore: We will die... for Saruman!
+		lore: "We will die... for Saruman!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -984,7 +969,6 @@
 	17_55: {
 		cardInfo: {
 			imagePath: decipher/LOTR17055.jpg
-			javaClass: true
 			//parentId: 17_55
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1007,35 +991,35 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: repeat
-		            times: {
-		                type: Conditional
-		                requires: {
-                            type: canSpot
-                            filter: companion
-                            count: 6
-                        }
-                        true: 2
-                        false: 1
-		            }
-		            effect: {
-		                type: playCardFromStacked
-		                select: choose(culture(men),minion)
-		                on: culture(men),possession
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: repeat
+					times: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: companion
+							count: 6
+						}
+						true: 2
+						false: 1
+					}
+					effect: {
+						type: playCardFromStacked
+						select: choose(culture(men),minion)
+						on: culture(men),possession
+					}
+				}
+			}
 		]
 		gametext: <b>Maneuver:</b> Exert this minion to play a [men] minion (or 2 if you spot 6 companions) from a [men] possession as if from hand.
-		lore: They prepare for the last war.
+		lore: "They prepare for the last war."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1048,7 +1032,6 @@
 	17_56: {
 		cardInfo: {
 			imagePath: decipher/LOTR17056.jpg
-			javaClass: true
 			//parentId: 17_56
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1071,36 +1054,36 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: culture(men),possession,hasStacked(culture(men),minion)
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: culture(men),possession
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(condition)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: culture(men),possession,hasStacked(culture(men),minion)
+					}
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: culture(men),possession
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(condition)
+				}
+			}
 		]
 		gametext: This minion is strength +1 for each [men] possession with a [men] minion stacked on it.<br><b>Maneuver:</b> Spot a [men] possession and discard this minion from play to discard a condition.
-		lore: The Southrons did not march into war blindly.
+		lore: "The Southrons did not march into war blindly."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1113,7 +1096,6 @@
 	17_57: {
 		cardInfo: {
 			imagePath: decipher/LOTR17057.jpg
-			javaClass: true
 			//parentId: 17_57
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1136,34 +1118,34 @@
 		vitality: 1
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachStacked
-		                filter: culture(men),minion
-		                on: culture(men),possession
-		            }
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-                    type: startOfPhase
-                    phase: maneuver
-		        }
-		        effect: {
-		            type: playCardFromStacked
-		            select: choose(minion)
-		            on: culture(men),possession
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachStacked
+						filter: culture(men),minion
+						on: culture(men),possession
+					}
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				effect: {
+					type: playCardFromStacked
+					select: choose(minion)
+					on: culture(men),possession
+				}
+			}
 		]
 		gametext: This minion is strength +1 for each [men] minion stacked on each [men] possession.<br>At the start of your maneuver phase, you may play a minion stacked on a [men] possession as if from hand.
-		lore: Vile servants of Sauron marched to their master.
+		lore: "Vile servants of Sauron marched to their master."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1176,7 +1158,6 @@
 	17_58: {
 		cardInfo: {
 			imagePath: decipher/LOTR17058.jpg
-			javaClass: true
 			//parentId: 17_58
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1199,18 +1180,18 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        amount: {
-		            type: forEachStacked
-		            filter: culture(men),minion
-		            on: culture(men),possession
-		            multiplier: -1
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachStacked
+					filter: culture(men),minion
+					on: culture(men),possession
+					multiplier: -1
+				}
+			}
 		]
 		gametext: This minion is twilight cost -1 for each [men] minion stacked on a [men] possession.
-		lore: Southron men were always ready for war.
+		lore: "Southron men were always ready for war."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1223,7 +1204,6 @@
 	17_59: {
 		cardInfo: {
 			imagePath: decipher/LOTR17059.jpg
-			javaClass: true
 			//parentId: 17_59
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1246,46 +1226,46 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: culture(men),possession,hasStacked(culture(men),minion)
-		                multiplier: 2
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: [
-		            {
-		                type: chooseANumber
-		                from: 0
-		                to: {
-                            type: forEachStacked
-                            filter: culture(men),minion
-                            on: culture(men),possession
-                        }
-		                text: Choose how many {men} minions to spot
-		                memorize: spotCount
-		            }
-		            {
-		                type: discard
-		                select: self
-		            }
-		        ]
-		        effect: {
-		            type: addTwilight
-		            amount: memory(spotCount)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: culture(men),possession,hasStacked(culture(men),minion)
+						multiplier: 2
+					}
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: [
+					{
+						type: chooseANumber
+						from: 0
+						to: {
+							type: forEachStacked
+							filter: culture(men),minion
+							on: culture(men),possession
+						}
+						text: Choose how many {men} minions to spot
+						memorize: spotCount
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: addTwilight
+					amount: memory(spotCount)
+				}
+			}
 		]
 		gametext: This minion is strength +2 for each [men] possession with a [men] minion stacked on it.<br><b>Maneuver:</b> Spot X [men] minions stacked on a [men] possession and discard this minion to add (X).
-		lore: ...legions of Haradrim from the South....
+		lore: "...legions of Haradrim from the South...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1298,7 +1278,6 @@
 	17_60: {
 		cardInfo: {
 			imagePath: decipher/LOTR17060.jpg
-			javaClass: true
 			//parentId: 17_60
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1321,28 +1300,28 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: culture(men),possession
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(men),minion)
-		            count: any
-		            amount: 2
-		            until: regroup
-                }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: culture(men),possession
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(men),minion)
+					count: any
+					amount: 2
+					until: regroup
+				}
+			}
 		]
 		gametext: <b>Maneuver:</b> Spot a [men] possession and discard this minion from play to make each [men] minion you spot strength +2 until the start of the regroup phase.
-		lore: They were wicked men.
+		lore: "They were wicked men."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1355,7 +1334,6 @@
 	17_61: {
 		cardInfo: {
 			imagePath: decipher/LOTR17061.jpg
-			javaClass: true
 			//parentId: 17_61
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1378,28 +1356,28 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: culture(men),man
-                    count: 2
-                }
-            }
-            {
-                type: modifier
-                modifier: {
-                    type: modifyStrength
-                    filter: self,hasAttached(possession)
-                    amount: {
-                        type: forEachFPCulture
-                        multiplier: 2
-                    }
-                }
-            }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(men),man
+					count: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,hasAttached(possession)
+					amount: {
+						type: forEachFPCulture
+						multiplier: 2
+					}
+				}
+			}
 		]
 		gametext: To play, spot 2 [men] Men.<br>While this minion bears a possession, he is strength +2 for each Free Peoples culture you can spot.
-		lore: War will make corpses of us all.
+		lore: "War will make corpses of us all."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1412,7 +1390,6 @@
 	17_62: {
 		cardInfo: {
 			imagePath: decipher/LOTR17062.jpg
-			javaClass: true
 			//parentId: 17_62
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1435,22 +1412,22 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: stackCardsFromDiscard
-		            select: choose(culture(men),minion)
-		            where: choose(culture(men),possession,zone(support))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: stackCardsFromDiscard
+					select: choose(culture(men),minion)
+					where: choose(culture(men),possession,zone(support))
+				}
+			}
 		]
 		gametext: Each time this minion wins a skirmish, you may stack a [men] minion from your discard pile on a [men] possession in your support area.
-		lore: We will take their king.
+		lore: "We will take their king."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1463,7 +1440,6 @@
 	17_63: {
 		cardInfo: {
 			imagePath: decipher/LOTR17063.jpg
-			javaClass: true
 			//parentId: 17_63
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1486,42 +1462,42 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: maneuver
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(men),man
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: [
-		            {
-		                type: addThreats
-		            }
-		            {
-		                type: chooseHowManyToSpot
-		                filter: companion
-		                memorize: spotCount
-		            }
-		            {
-		                type: addThreats
-		                amount: {
-		                    type: fromMemory
-		                    memory: spotCount
-		                    over: 4
-		                }
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(men),man
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: addThreats
+					}
+					{
+						type: chooseHowManyToSpot
+						filter: companion
+						memorize: spotCount
+					}
+					{
+						type: addThreats
+						amount: {
+							type: fromMemory
+							memory: spotCount
+							over: 4
+						}
+					}
+				]
+			}
 		]
 		gametext: At the start of the maneuver phase, spot another [men] Man and exert this minion to add a threat. Then add an additional threat for each companion you spot over 4.
-		lore: The pawns of Saruman are relentless in their tasks.
+		lore: "The pawns of Saruman are relentless in their tasks."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1534,7 +1510,6 @@
 	17_64: {
 		cardInfo: {
 			imagePath: decipher/LOTR17064.jpg
-			javaClass: true
 			//parentId: 17_64
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1557,31 +1532,31 @@
 		vitality: 4
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        trigger: [
-		            {
-		                type: played
-		                filter: self
-		                fromZone: deck
-		            }
-		            {
-		                type: played
-		                filter: self
-		                from: your,culture(men),possession
-		                fromZone: stacked
-		            }
-		        ]
-		        effect: {
-		            type: addKeyword
-		            select: self
-		            keyword: fierce
-		            until: regroup
-		        }
-		    }
+			{
+				type: trigger
+				trigger: [
+					{
+						type: played
+						filter: self
+						fromZone: deck
+					}
+					{
+						type: played
+						filter: self
+						from: your,culture(men),possession
+						fromZone: stacked
+					}
+				]
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: fierce
+					until: regroup
+				}
+			}
 		]
 		gametext: When you play this minion from your draw deck or from your [men] possession, it is <b>fierce</b> until the regroup phase.
-		lore: Murderers!
+		lore: "Murderers!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1594,7 +1569,6 @@
 	17_65: {
 		cardInfo: {
 			imagePath: decipher/LOTR17065.jpg
-			javaClass: true
 			//parentId: 17_65
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1617,38 +1591,38 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: playedInOtherPhase
-		        phase: maneuver
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: phase
-		            phase: maneuver
-		        }
-		        cost: {
-		            type: discard
-		            select: choose(culture(men),minion)
-		            count: any
-		            memorize: discardedMinions
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: {
-		                type: forEachInMemory
-		                memory: discardedMinions
-		            }
-		        }
-		    }
+			{
+				type: playedInOtherPhase
+				phase: maneuver
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: phase
+					phase: maneuver
+				}
+				cost: {
+					type: discard
+					select: choose(culture(men),minion)
+					count: any
+					memorize: discardedMinions
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachInMemory
+						memory: discardedMinions
+					}
+				}
+			}
 		]
 		gametext: You may play this minion any time you could play a maneuver event. When you play this minion in the maneuver phase, you may discard X [men] minions from play to add (X).
-		lore: Incited by Saruman, they created pandemonium in the land of Rohan.
+		lore: "Incited by Saruman, they created pandemonium in the land of Rohan."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1661,7 +1635,6 @@
 	17_66: {
 		cardInfo: {
 			imagePath: decipher/LOTR17066.jpg
-			javaClass: true
 			//parentId: 17_66
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1682,41 +1655,41 @@
 		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        text: Stack {discardedMinion}
-		        trigger: {
-		            type: discarded
-		            filter: culture(men),minion
-		            memorize: discardedMinion
-		        }
-		        requires: {
-		            type: phase
-		            phase: maneuver
-		        }
-		        effect: {
-		            type: stackCardsFromDiscard
-		            select: choose(memory(discardedMinion))
-		            where: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(men),man)
-		            amount: 2
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				text: Stack {discardedMinion}
+				trigger: {
+					type: discarded
+					filter: culture(men),minion
+					memorize: discardedMinion
+				}
+				requires: {
+					type: phase
+					phase: maneuver
+				}
+				effect: {
+					type: stackCardsFromDiscard
+					select: choose(memory(discardedMinion))
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(men),man)
+					amount: 2
+				}
+			}
 		]
 		gametext: Each time a [men] minion is discarded during the maneuver phase, you may stack it here.<br><b>Skirmish:</b> Discard this possession to make a [men] Man strength +2.
-		lore: Take back the lands they stole from you!
+		lore: "Take back the lands they stole from you!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1725,4 +1698,5 @@
 			}
 		}
 	}
+
 }

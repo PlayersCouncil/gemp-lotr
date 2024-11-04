@@ -3,7 +3,6 @@
 	12_107: {
 		cardInfo: {
 			imagePath: decipher/LOTR12107.jpg
-			javaClass: true
 			//parentId: 12_107
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -27,25 +26,25 @@
 		vitality: 3
 		resistance: 5
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: skirmish
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: self,inSkirmish
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(possession,attachedTo(minion,inSkirmishAgainst(self)))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				effect: {
+					type: discard
+					select: choose(possession,attachedTo(minion,inSkirmishAgainst(self)))
+				}
+			}
 		]
 		gametext: At the start of each skirmish involving Aldred, you may discard a possession borne by a minion he is skirmishing.
-		lore: We counted all the slain and despoiled them....'
+		lore: "'We counted all the slain and despoiled them....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -58,7 +57,6 @@
 	12_108: {
 		cardInfo: {
 			imagePath: decipher/LOTR12108.jpg
-			javaClass: true
 			//parentId: 12_108
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -81,40 +79,40 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: activated
-		        text: Exert a minion
-		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),man
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(minion)
-		        }
-		    }
-		    {
-		        type: activated
-		        text: Return exhausted minion to hand
-		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: mounted,culture(rohan),man
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: returnToHand
-		            select: choose(exhausted,minion)
-		        }
-		    }
+			{
+				type: activated
+				text: Exert a minion
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: exert
+					select: choose(minion)
+				}
+			}
+			{
+				type: activated
+				text: Return exhausted minion to hand
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: mounted,culture(rohan),man
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: returnToHand
+					select: choose(exhausted,minion)
+				}
+			}
 		]
 		gametext: <b>Toil 2</b>. <helper>(For each [rohan] character you exert when playing this, its twilight cost is -2.)</helper><br><b>Maneuver:</b> Spot a [rohan] Man and discard this condition to exert a minion.<br><b>Maneuver:</b> Spot a mounted [rohan] Man and discard this condition to return an exhausted minion to its owner's hand.
 		lore: ""
@@ -130,7 +128,6 @@
 	12_109: {
 		cardInfo: {
 			imagePath: decipher/LOTR12109.jpg
-			javaClass: true
 			//parentId: 12_109
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -148,32 +145,32 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(culture(rohan),companion)
-				    memorize: chosenCompanion
-				    amount: {
-				        type: Conditional
-				        requires: {
-				            type: memoryMatches
-				            memory: chosenCompanion
-				            filter: minResistance(5)
-				        }
-				        true: {
-				            type: forEachYouCanSpot
-				            filter: minion
-				        }
-				        false: 2
-				    }
+					type: modifyStrength
+					select: choose(culture(rohan),companion)
+					memorize: chosenCompanion
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenCompanion
+							filter: minResistance(5)
+						}
+						true: {
+							type: forEachYouCanSpot
+							filter: minion
+						}
+						false: 2
+					}
 				}
 			]
 		}
 		gametext: Make a [rohan] companion strength +2 (or +1 for each minion you can spot if that companion has resistance 5 or more).
-		lore: ...we overtook the Orcs at nightfall two days ago, near to the borders of the Entwood. There we surrounded them, and gave battle....'
+		lore: "'...we overtook the Orcs at nightfall two days ago, near to the borders of the Entwood. There we surrounded them, and gave battle....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -186,7 +183,6 @@
 	12_110: {
 		cardInfo: {
 			imagePath: decipher/LOTR12110.jpg
-			javaClass: true
 			//parentId: 12_110
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -206,63 +202,63 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(rohan),companion)
-		            memorize: chosenCompanion
-		            amount: {
-		                type: sum
-		                source: [
-		                    {
-		                        type: Conditional
-		                        requires: {
-		                            type: location
-		                            filter: plains
-		                        }
-		                        true: 1
-		                        false: 0
-		                    }
-		                    {
-		                        type: Conditional
-		                        requires: {
-		                            type: canSpot
-		                            filter: memory(chosenCompanion),minResistance(4)
-		                        }
-		                        true: 1
-		                        false: 0
-		                    }
-		                    {
-		                        type: Conditional
-		                        requires: {
-		                            type: canSpot
-		                            filter: memory(chosenCompanion),hasAttached(armor)
-		                        }
-		                        true: 1
-		                        false: 0
-		                    }
-		                    {
-		                        type: Conditional
-		                        requires: {
-		                            type: canSpot
-		                            filter: memory(chosenCompanion),inSkirmishAgainst(wounded,minion)
-		                        }
-		                        true: 1
-		                        false: 0
-		                    }
-		                ]
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(rohan),companion)
+					memorize: chosenCompanion
+					amount: {
+						type: sum
+						source: [
+							{
+								type: Conditional
+								requires: {
+									type: location
+									filter: plains
+								}
+								true: 1
+								false: 0
+							}
+							{
+								type: Conditional
+								requires: {
+									type: canSpot
+									filter: memory(chosenCompanion),minResistance(4)
+								}
+								true: 1
+								false: 0
+							}
+							{
+								type: Conditional
+								requires: {
+									type: canSpot
+									filter: memory(chosenCompanion),hasAttached(armor)
+								}
+								true: 1
+								false: 0
+							}
+							{
+								type: Conditional
+								requires: {
+									type: canSpot
+									filter: memory(chosenCompanion),inSkirmishAgainst(wounded,minion)
+								}
+								true: 1
+								false: 0
+							}
+						]
+					}
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Discard this condition to make a [rohan] companion strength +1 for each of the following that is true: he or she is at a plains site; he or she has resistance 4 or more; he or she is bearing armor; he or she is skirmishing a wounded minion.
-		lore: Captains and champions fell or fled before them.
+		lore: "Captains and champions fell or fled before them."
 		promotext: ""
 		alts: {
 			promos: {
@@ -275,7 +271,6 @@
 	12_111: {
 		cardInfo: {
 			imagePath: decipher/LOTR12111.jpg
-			javaClass: true
 			//parentId: 12_111
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -297,35 +292,35 @@
 		itemclass: Armor
 		target: culture(rohan),man
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: aboutToAddTwilight
-		            filter: side(shadow)
-		        }
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: preventEffect
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesFrom
-		            filter: forest
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(companion)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: aboutToAddTwilight
+					filter: side(shadow)
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: preventEffect
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: forest
+				}
+				effect: {
+					type: exert
+					select: choose(companion)
+				}
+			}
 		]
 		gametext: Bearer must be a [rohan] Man.<br>Each time a Shadow card adds any number of twilight tokens, you may exert bearer to prevent that.<br>Each time the fellowship moves from a forest site, exert a companion.
-		lore: ...the Hornburg still held fast, like an island in a sea.
+		lore: "...the Hornburg still held fast, like an island in a sea."
 		promotext: ""
 		alts: {
 			promos: {
@@ -338,7 +333,6 @@
 	12_112: {
 		cardInfo: {
 			imagePath: decipher/LOTR12112.jpg
-			javaClass: true
 			//parentId: 12_112
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -362,42 +356,42 @@
 		vitality: 3
 		resistance: 7
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),man
-		        }
-		        amount: -1
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: isGreaterThan
-		            firstNumber: {
-		                type: forEachYouCanSpot
-		                filter: minion
-		            }
-		            secondNumber: {
-		                type: forEachYouCanSpot
-		                filter: companion
-		            }
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(culture(rohan),companion)
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+				amount: -1
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: isGreaterThan
+					firstNumber: {
+						type: forEachYouCanSpot
+						filter: minion
+					}
+					secondNumber: {
+						type: forEachYouCanSpot
+						filter: companion
+					}
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(culture(rohan),companion)
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br><b>Maneuver:</b> If you can spot more minions than companions, exert Éomer to play a [rohan] companion from your draw deck.
-		lore: ...the front of the first éored roared like a breaker foaming to the shore....
+		lore: "...the front of the first éored roared like a breaker foaming to the shore...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -410,7 +404,6 @@
 	12_113: {
 		cardInfo: {
 			imagePath: decipher/LOTR12113.jpg
-			javaClass: true
 			//parentId: 12_113
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -433,21 +426,21 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-                    requires: {
-                        type: location
-                        filter: or(battleground,plains)
-                    }
-		            filter: self
-		            amount: 3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: or(battleground,plains)
+					}
+					filter: self
+					amount: 3
+				}
+			}
 		]
 		gametext: While this companion is at a battleground or plains site, he is strength +3.
-		lore: ...suspecting what I most fear, a league between Orthanc and the Dark Tower, I led forth my éored, men of my own household....'
+		lore: "'...suspecting what I most fear, a league between Orthanc and the Dark Tower, I led forth my éored, men of my own household....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -460,7 +453,6 @@
 	12_114: {
 		cardInfo: {
 			imagePath: decipher/LOTR12114.jpg
-			javaClass: true
 			//parentId: 12_114
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -478,32 +470,32 @@
 		culture: Rohan
 		twilight: 0
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: [
-            {
-                type: event
-                requires: {
-                    type: canSpot
-                    filter: culture(rohan),man
-                }
-                effect: [
-                    {
-                        type: discard
-                        select: choose(possession)
-                    }
-                ]
-            }
-            {
-                type: playedInOtherPhase
-                phase: maneuver
-                cost: {
-                    type: exert
-                    select: choose(culture(rohan),man,minResistance(3))
-                }
-            }
-        ]
+			{
+				type: event
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+				effect: [
+					{
+						type: discard
+						select: choose(possession)
+					}
+				]
+			}
+			{
+				type: playedInOtherPhase
+				phase: maneuver
+				cost: {
+					type: exert
+					select: choose(culture(rohan),man,minResistance(3))
+				}
+			}
+		]
 		gametext: Spot a [rohan] Man to discard a possession from play.<br>You may exert a [rohan] Man who has resistance 3 or more to play this event during the maneuver phase.
-		lore: South strode Éomer and men fled before his face, and they were caught between the hammer and the anvil.
+		lore: "South strode Éomer and men fled before his face, and they were caught between the hammer and the anvil."
 		promotext: ""
 		alts: {
 			promos: {
@@ -516,7 +508,6 @@
 	12_115: {
 		cardInfo: {
 			imagePath: decipher/LOTR12115.jpg
-			javaClass: true
 			//parentId: 12_115
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -536,28 +527,28 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: companion
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),companion
-		        }
-		        cost: {
-		            type: addBurdens
-		            amount: 2
-		        }
-		        effect: {
-		            type: preventWound
-		            select: choose(companion)
-		        }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: companion
+				}
+				requires: {
+					type: canSpot
+					filter: culture(rohan),companion
+				}
+				cost: {
+					type: addBurdens
+					amount: 2
+				}
+				effect: {
+					type: preventWound
+					select: choose(companion)
+				}
+			}
 		]
 		gametext: <b>Response:</b> If a companion is about to take a wound, spot a [rohan] companion and add 2 burdens to prevent that.
-		lore: Dark is the hour, yet maybe we shall return to the Golden Hall.'
+		lore: "'Dark is the hour, yet maybe we shall return to the Golden Hall.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -570,7 +561,6 @@
 	12_116: {
 		cardInfo: {
 			imagePath: decipher/LOTR12116.jpg
-			javaClass: true
 			//parentId: 12_116
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -594,32 +584,32 @@
 		vitality: 3
 		resistance: 5
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: {
-		                type: fierceSkirmish
-		            }
-		            filter: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: fierceSkirmish
+					}
+					filter: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 1
+				}
+			}
 		]
 		gametext: Haethen cannot take wounds during fierce skirmishes.<br><b>Skirmish:</b> Exert Haethen to make him strength +1.
-		lore: His years as a Rider of Rohan were long behind him, but the threat to Helm's Deep demanded this old warrior again take up arms.
+		lore: "His years as a Rider of Rohan were long behind him, but the threat to Helm's Deep demanded this old warrior again take up arms."
 		promotext: ""
 		alts: {
 			promos: {
@@ -632,7 +622,6 @@
 	12_117: {
 		cardInfo: {
 			imagePath: decipher/LOTR12117.jpg
-			javaClass: true
 			//parentId: 12_117
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -656,27 +645,27 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,inSkirmish
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(culture(rohan),timeword(skirmish),event)
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(culture(rohan),timeword(skirmish),event)
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> If Léofric is in a skirmish, exert him to play a [rohan] skirmish event from your draw deck.
-		lore: There is trouble now on all our borders, and we are threatened....'
+		lore: "'There is trouble now on all our borders, and we are threatened....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -685,4 +674,5 @@
 			}
 		}
 	}
+
 }

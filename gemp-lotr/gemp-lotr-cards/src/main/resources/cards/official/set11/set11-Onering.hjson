@@ -3,7 +3,6 @@
 	11_1: {
 		cardInfo: {
 			imagePath: decipher/LOTR11001.jpg
-			javaClass: true
 			//parentId: 11_1
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -78,7 +77,7 @@
 			}
 		]
 		gametext: <b>Response:</b> If the Ring-bearer is about to take a wound, he or she wears The One Ring until the regroup phase.<br>While the Ring-bearer is wearing The One Ring, each time he or she is about to take a wound, add a burden instead.
-		lore: ...ash nazg thrakatulûk agh burzum-ishi krimpatul.'
+		lore: "'...ash nazg thrakatulûk agh burzum-ishi krimpatul.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -91,7 +90,6 @@
 	11_2: {
 		cardInfo: {
 			imagePath: decipher/LOTR11002.jpg
-			javaClass: true
 			//parentId: 11_2
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -168,7 +166,7 @@
 			}
 		]
 		gametext: <b>Response:</b> If the Ring-bearer is about to take a wound in a skirmish, he or she wears The One Ring until the regroup phase.<br>While the Ring-bearer is wearing The One Ring, each time he or she is about to take a wound in a skirmish, add a burden instead.
-		lore: One Ring to rule them all....
+		lore: "One Ring to rule them all...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -177,4 +175,5 @@
 			}
 		}
 	}
+
 }

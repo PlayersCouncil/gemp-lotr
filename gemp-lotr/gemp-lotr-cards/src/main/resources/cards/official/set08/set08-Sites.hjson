@@ -3,7 +3,6 @@
 	8_117: {
 		cardInfo: {
 			imagePath: decipher/LOTR08117.jpg
-			javaClass: true
 			//parentId: 8_117
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -27,20 +26,20 @@
 			Sanctuary
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: addThreats
-		            amount: 3
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(enduring,companion)
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: addThreats
+					amount: 3
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(enduring,companion)
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Underground</b>. <b>Sanctuary</b>. <b>Fellowship:</b> Add 3 threats to play an enduring companion from your draw deck.
 		lore: ""
@@ -56,7 +55,6 @@
 	8_118: {
 		cardInfo: {
 			imagePath: decipher/LOTR08118.jpg
-			javaClass: true
 			//parentId: 8_118
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -77,33 +75,33 @@
 		direction: Right
 		keywords: Underground
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: removeBurdens
-		            amount: 2
-		        }
-		        effect: {
-		            type: choice
-		            texts: [
-		                Play enduring minion from draw deck
-		                Play enduring minion from discard pile
-		            ]
-		            effects: [
-		                {
-		                    type: playCardFromDrawDeck
-		                    select: choose(enduring,minion)
-                            showAll: true
-                            shuffle: true
-		                }
-		                {
-		                    type: playCardFromDiscard
-		                    select: choose(enduring,minion)
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeBurdens
+					amount: 2
+				}
+				effect: {
+					type: choice
+					texts: [
+						Play enduring minion from draw deck
+						Play enduring minion from discard pile
+					]
+					effects: [
+						{
+							type: playCardFromDrawDeck
+							select: choose(enduring,minion)
+							showAll: true
+							shuffle: true
+						}
+						{
+							type: playCardFromDiscard
+							select: choose(enduring,minion)
+						}
+					]
+				}
+			}
 		]
 		gametext: <b>Underground</b>. <b>Shadow:</b> Remove 2 burdens to play an enduring minion from your draw deck or discard pile.
 		lore: ""
@@ -119,7 +117,6 @@
 	8_119: {
 		cardInfo: {
 			imagePath: decipher/LOTR08119.jpg
-			javaClass: true
 			//parentId: 8_119
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -139,31 +136,31 @@
 		block: King
 		direction: Left
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: regroup
-		        }
-		        player: free people
-		        effect: {
-		            type: choice
-		            texts: [
-		                Add 3 threats
-		                Opponent takes control of site
-		            ]
-		            effects: [
-		                {
-		                    type: addThreats
-                            amount: 3
-		                }
-		                {
-		                    type: takeControlOfSite
-		                    player: shadow
-		                }
-		            ]
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				player: free people
+				effect: {
+					type: choice
+					texts: [
+						Add 3 threats
+						Opponent takes control of site
+					]
+					effects: [
+						{
+							type: addThreats
+							amount: 3
+						}
+						{
+							type: takeControlOfSite
+							player: shadow
+						}
+					]
+				}
+			}
 		]
 		gametext: At the start of the regroup phase, the Free Peoples player must add 3 threats or choose an opponent who may take control of a site.
 		lore: ""
@@ -179,7 +176,6 @@
 	8_120: {
 		cardInfo: {
 			imagePath: decipher/LOTR08120.jpg
-			javaClass: true
 			//parentId: 8_120
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -200,27 +196,27 @@
 		direction: Right
 		keywords: River
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: [
-                    {
-                        type: canSpot
-                        filter: your,minion
-                    }
-                    {
-                        type: canSpot
-                        filter: companion
-                        count: 6
-                    }
-                ]
-                effect: {
-                    type: addModifier
-                    modifier: {
-                        type: hasToMoveIfAble
-                    }
-                }
-		    }
+			{
+				type: activated
+				phase: regroup
+				requires: [
+					{
+						type: canSpot
+						filter: your,minion
+					}
+					{
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+				]
+				effect: {
+					type: addModifier
+					modifier: {
+						type: hasToMoveIfAble
+					}
+				}
+			}
 		]
 		gametext: <b>River</b>. <b>Regroup:</b> Spot your minion and 6 companions to make the Free Peoples player choose to move again this turn.
 		lore: ""
@@ -232,4 +228,5 @@
 			}
 		}
 	}
+
 }

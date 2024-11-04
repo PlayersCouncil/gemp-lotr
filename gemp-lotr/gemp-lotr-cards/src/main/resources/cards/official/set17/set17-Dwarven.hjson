@@ -3,7 +3,6 @@
 	17_1: {
 		cardInfo: {
 			imagePath: decipher/LOTR17001.jpg
-			javaClass: true
 			//parentId: 17_1
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -24,34 +23,34 @@
 		itemclass: Armor
 		target: dwarf
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: bearer
-		        }
-		        cost: {
-		            type: addThreats
-		        }
-		        effect: {
-		            type: preventWound
-		            select: bearer
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: putCardsFromDiscardIntoHand
-		            select: choose(other,culture(dwarven),possession)
-		            count: 2
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: preventWound
+					select: bearer
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(other,culture(dwarven),possession)
+					count: 2
+				}
+			}
 		]
 		gametext: Bearer must be a Dwarf.<br>Each time bearer is about to take a wound, you may add a threat to prevent that.<br><b>Regroup:</b> Discard this possession to take up to 2 other [dwarven] possessions into hand from your discard pile.
 		lore: ""
@@ -67,7 +66,6 @@
 	17_2: {
 		cardInfo: {
 			imagePath: decipher/LOTR17002.jpg
-			javaClass: true
 			//parentId: 17_2
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -87,62 +85,62 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: dwarven
-		            select: self
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: extraCostToPlay
-		            requires: [
-		                {
-		                    type: canSpotCultureTokens
-		                    culture: dwarven
-		                    amount: 4
-		                }
-		                {
-		                    type: canSpot
-		                    filter: dwarf
-		                    count: 2
-		                }
-		            ]
-		            filter: culture(orc),orc
-		            cost: {
-		                type: removeCardsInDiscardFromGame
-		                player: shadow
-		                select: choose(culture(orc))
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: repeat
-		            times: {
-		                type: forEachYouCanSpot
-		                filter: dwarf
-		            }
-		            effect: {
-		                type: exert
-		                select: choose(minion)
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: dwarven
+					select: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: extraCostToPlay
+					requires: [
+						{
+							type: canSpotCultureTokens
+							culture: dwarven
+							amount: 4
+						}
+						{
+							type: canSpot
+							filter: dwarf
+							count: 2
+						}
+					]
+					filter: culture(orc),orc
+					cost: {
+						type: removeCardsInDiscardFromGame
+						player: shadow
+						select: choose(culture(orc))
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: dwarf
+					}
+					effect: {
+						type: exert
+						select: choose(minion)
+					}
+				}
+			}
 		]
 		gametext: When you play this condition, you may add a [dwarven] token here. While you can spot 4 [dwarven] tokens and 2 Dwarves, each [orc] Orc gains this text "To play, remove an [orc] card from your discard pile from the game."<br><b>Skirmish:</b> Discard this condition to exert a minion for each Dwarf you can spot.
 		lore: ""
@@ -158,7 +156,6 @@
 	17_3: {
 		cardInfo: {
 			imagePath: decipher/LOTR17003.jpg
-			javaClass: true
 			//parentId: 17_3
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -176,49 +173,49 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: dwarf,hunter
+				type: canSpot
+				filter: dwarf,hunter
 			}
 			effect: [
 				{
-				    type: choice
-				    texts: [
-				        Exert a minion for each hunter you can spot
-				        Reinforce a {dwarven} token for each hunter you can spot
-				    ]
-				    effects: [
-				        {
-				            type: repeat
-				            times: {
-				                type: forEachYouCanSpot
-				                filter: hunter
-				            }
-				            effect: {
-				                type: exert
-				                select: choose(minion)
-				            }
-				        }
-				        {
-				            type: repeat
-				            times: {
-				                type: forEachYouCanSpot
-				                filter: hunter
-				            }
-				            effect: {
-				                type: reinforceTokens
-				                culture: dwarven
-				            }
-				        }
-				    ]
+					type: choice
+					texts: [
+						Exert a minion for each hunter you can spot
+						Reinforce a {dwarven} token for each hunter you can spot
+					]
+					effects: [
+						{
+							type: repeat
+							times: {
+								type: forEachYouCanSpot
+								filter: hunter
+							}
+							effect: {
+								type: exert
+								select: choose(minion)
+							}
+						}
+						{
+							type: repeat
+							times: {
+								type: forEachYouCanSpot
+								filter: hunter
+							}
+							effect: {
+								type: reinforceTokens
+								culture: dwarven
+							}
+						}
+					]
 				}
 			]
 		}
 		gametext: Spot a Dwarf hunter and choose one: exert a minion for each hunter you can spot or reinforce a [dwarven] token for each hunter you can spot.
-		lore: Always well armed, a Dwarf has many options in battle.
+		lore: "Always well armed, a Dwarf has many options in battle."
 		promotext: ""
 		alts: {
 			promos: {
@@ -231,7 +228,6 @@
 	17_4: {
 		cardInfo: {
 			imagePath: decipher/LOTR17004.jpg
-			javaClass: true
 			//parentId: 17_4
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -252,42 +248,42 @@
 		itemclass: Ring
 		target: dwarf
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: bearer
-		            amount: {
-		                type: forEachInDiscard
-		                filter: culture(dwarven),artifact
-		                discard: you
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: putCardsFromDiscardIntoHand
-		            select: choose(not(event),culture(dwarven))
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer
+					amount: {
+						type: forEachInDiscard
+						filter: culture(dwarven),artifact
+						discard: you
+					}
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(not(event),culture(dwarven))
+				}
+			}
 		]
 		gametext: Bearer must be a Dwarf. Bearer is <b>damage +1</b>.<br>Bearer is strength +1 for each [dwarven] artifact in your discard pile.<br><b>Regroup:</b> Discard this to take a non-event [dwarven] card into hand from your discard pile.
-		lore: Beyond the shadow it waits for you still....'
+		lore: "'Beyond the shadow it waits for you still....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -300,7 +296,6 @@
 	17_5: {
 		cardInfo: {
 			imagePath: decipher/LOTR17005.jpg
-			javaClass: true
 			//parentId: 17_5
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -318,29 +313,29 @@
 		culture: Dwarven
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(dwarf)
-				    amount: {
-				        type: Conditional
-				        requires: {
-				            type: cantSpotThreats
-				        }
-				        true: {
-				            type: forEachYouCanSpot
-				            filter: dwarf
-				        }
-				        false: 2
-				    }
+					type: modifyStrength
+					select: choose(dwarf)
+					amount: {
+						type: Conditional
+						requires: {
+							type: cantSpotThreats
+						}
+						true: {
+							type: forEachYouCanSpot
+							filter: dwarf
+						}
+						false: 2
+					}
 				}
 			]
 		}
 		gametext: Make a Dwarf strength +2 (or if you cannot spot a threat, make that Dwarf strength +1 for each Dwarf you can spot).
-		lore: Brave in battle, Dwarven pride and will cannot be broken.
+		lore: "Brave in battle, Dwarven pride and will cannot be broken."
 		promotext: ""
 		alts: {
 			promos: {
@@ -353,7 +348,6 @@
 	17_6: {
 		cardInfo: {
 			imagePath: decipher/LOTR17006.jpg
-			javaClass: true
 			//parentId: 17_6
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -378,22 +372,22 @@
 		resistance: 6
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: losesSkirmish
-		            filter: minion
-		            against: self
-		        }
-		        effect: {
-		            type: discardTopCardsFromDeck
-		            deck: shadow
-		            forced: true
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: losesSkirmish
+					filter: minion
+					against: self
+				}
+				effect: {
+					type: discardTopCardsFromDeck
+					deck: shadow
+					forced: true
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>Each time a minion loses a skirmish involving Thorin III, its owner discards the top card from his or her draw deck.
-		lore: Veteran warrior and keen leader, Stonehelm drove the enemy from the land of Dale.
+		lore: "Veteran warrior and keen leader, Stonehelm drove the enemy from the land of Dale."
 		promotext: ""
 		alts: {
 			promos: {
@@ -402,4 +396,5 @@
 			}
 		}
 	}
+
 }

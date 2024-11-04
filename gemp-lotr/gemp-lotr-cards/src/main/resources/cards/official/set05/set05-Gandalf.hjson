@@ -3,7 +3,6 @@
 	5_15: {
 		cardInfo: {
 			imagePath: decipher/LOTR05015.jpg
-			javaClass: true
 			//parentId: 5_15
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -28,50 +27,50 @@
 		resistance: 6
 		keywords: Unhasty
 		effects: [
-		    {
-		        type: activated
-		        phase: assignment
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert an unbound Hobbit
-		                Discard 2 cards from hand
-		            ]
-		            effects: [
-		                {
-                            type: exert
-                            select: choose(unbound,hobbit)
-                        }
-                        {
-                            type: discardFromHand
-                            forced: false
-                            count: 2
-                        }
-                    ]
-		        }
-		        effect: {
-		            type: addModifier
-		            modifier: {
-                        type: unhastyCompanionCanParticipateInSkirmishes
-                        filter: self
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(unbound,hobbit)
-		        }
-		    }
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: choice
+					texts: [
+						Exert an unbound Hobbit
+						Discard 2 cards from hand
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(unbound,hobbit)
+						}
+						{
+							type: discardFromHand
+							forced: false
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: unhastyCompanionCanParticipateInSkirmishes
+						filter: self
+					}
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(unbound,hobbit)
+				}
+			}
 		]
 		gametext: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow Birchseed to skirmish.<br><b>Fellowship:</b> Exert Birchseed to heal an unbound Hobbit.
-		lore: Slender and royal, he presided over many Entmoots.
+		lore: "Slender and royal, he presided over many Entmoots."
 		promotext: ""
 		alts: {
 			promos: {
@@ -84,7 +83,6 @@
 	5_16: {
 		cardInfo: {
 			imagePath: decipher/LOTR05016.jpg
-			javaClass: true
 			//parentId: 5_16
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -102,10 +100,8 @@
 		culture: Gandalf
 		twilight: 5
 		type: Event
-		timeword: Maneuver
-		keywords: [
-			Spell
-		]
+		timewords: Maneuver
+		keywords: Spell
 		effects: {
 			type: event
 			cost: {
@@ -122,28 +118,28 @@
 					memorize: chosenCompanion
 				}
 				{
-				    type: addKeyword
-				    select: memory(chosenCompanion)
-				    keyword: defender
-				    amount: 1
-				    until: regroup
+					type: addKeyword
+					select: memory(chosenCompanion)
+					keyword: defender
+					amount: 1
+					until: regroup
 				}
 				{
-				    type: addKeyword
-				    select: memory(chosenCompanion)
-				    keyword: damage
-				    amount: 2
-				    until: regroup
+					type: addKeyword
+					select: memory(chosenCompanion)
+					keyword: damage
+					amount: 2
+					until: regroup
 				}
 				{
-				    type: disableWounds
-                    select: memory(chosenCompanion)
-				    until: regroup
+					type: disableWounds
+					select: memory(chosenCompanion)
+					until: regroup
 				}
 			]
 		}
 		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Exert Gandalf 3 times to make an unbound companion with the Gandalf signet strength +5, <b>defender +1</b>, <b>damage +2</b>, and unable to take wounds until the regroup phase.
-		lore: Down leaped Shadowfax, like a deer....
+		lore: "Down leaped Shadowfax, like a deer...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -156,7 +152,6 @@
 	5_17: {
 		cardInfo: {
 			imagePath: decipher/LOTR05017.jpg
-			javaClass: true
 			//parentId: 5_17
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -180,50 +175,50 @@
 		resistance: 6
 		keywords: Unhasty
 		effects: [
-		    {
-		        type: activated
-		        phase: assignment
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert an unbound Hobbit
-		                Discard 2 cards from hand
-		            ]
-		            effects: [
-		                {
-                            type: exert
-                            select: choose(unbound,hobbit)
-                        }
-                        {
-                            type: discardFromHand
-                            forced: false
-                            count: 2
-                        }
-                    ]
-		        }
-		        effect: {
-		            type: addModifier
-		            modifier: {
-                        type: unhastyCompanionCanParticipateInSkirmishes
-                        filter: self
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(unbound,hobbit)
-		        }
-		    }
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: choice
+					texts: [
+						Exert an unbound Hobbit
+						Discard 2 cards from hand
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(unbound,hobbit)
+						}
+						{
+							type: discardFromHand
+							forced: false
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: unhastyCompanionCanParticipateInSkirmishes
+						filter: self
+					}
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(unbound,hobbit)
+				}
+			}
 		]
 		gametext: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow this companion to skirmish.
-		lore: We keep off strangers and the foolhardy; and we train and we teach, we walk and we weed.'
+		lore: "'We keep off strangers and the foolhardy; and we train and we teach, we walk and we weed.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -236,7 +231,6 @@
 	5_18: {
 		cardInfo: {
 			imagePath: decipher/LOTR05018.jpg
-			javaClass: true
 			//parentId: 5_18
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -254,15 +248,13 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: Maneuver
-		keywords: [
-			Spell
-		]
+		timewords: Maneuver
+		keywords: Spell
 		effects: {
 			type: event
 			requires: {
-			    type: canSpotTwilight
-			    amount: 3
+				type: canSpotTwilight
+				amount: 3
 			}
 			cost: {
 				type: exert
@@ -277,7 +269,7 @@
 			]
 		}
 		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Spot 3 twilight tokens and exert Gandalf to wound a minion twice.
-		lore: The White Rider was upon them, and the terror of his coming filled the enemy with madness.
+		lore: "The White Rider was upon them, and the terror of his coming filled the enemy with madness."
 		promotext: ""
 		alts: {
 			promos: {
@@ -290,7 +282,6 @@
 	5_19: {
 		cardInfo: {
 			imagePath: decipher/LOTR05019.jpg
-			javaClass: true
 			//parentId: 5_19
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -315,62 +306,62 @@
 		resistance: 6
 		keywords: Unhasty
 		effects: [
-		    {
-		        type: activated
-		        phase: assignment
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert an unbound Hobbit
-		                Discard 2 cards from hand
-		            ]
-		            effects: [
-		                {
-                            type: exert
-                            select: choose(unbound,hobbit)
-                        }
-                        {
-                            type: discardFromHand
-                            forced: false
-                            count: 2
-                        }
-                    ]
-		        }
-		        effect: {
-		            type: addModifier
-		            modifier: {
-                        type: unhastyCompanionCanParticipateInSkirmishes
-                        filter: self
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(unbound,hobbit)
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(culture(isengard),minion,inSkirmishAgainst(self))
-		        }
-		    }
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: choice
+					texts: [
+						Exert an unbound Hobbit
+						Discard 2 cards from hand
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(unbound,hobbit)
+						}
+						{
+							type: discardFromHand
+							forced: false
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: unhastyCompanionCanParticipateInSkirmishes
+						filter: self
+					}
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(unbound,hobbit)
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: wound
+					select: choose(culture(isengard),minion,inSkirmishAgainst(self))
+				}
+			}
 		]
 		gametext: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow Lindenroot to skirmish.<br><b>Skirmish:</b> Exert Lindenroot to wound an [isengard] minion he is skirmishing.
-		lore: A most well-founded and considerate Ent.
+		lore: "A most well-founded and considerate Ent."
 		promotext: ""
 		alts: {
 			promos: {
@@ -383,7 +374,6 @@
 	5_20: {
 		cardInfo: {
 			imagePath: decipher/LOTR05020.jpg
-			javaClass: true
 			//parentId: 5_20
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -401,10 +391,8 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timeword: Maneuver
-		keywords: [
-			Spell
-		]
+		timewords: Maneuver
+		keywords: Spell
 		effects: {
 			type: event
 			cost: {
@@ -417,20 +405,20 @@
 					player: shadow
 					text: Would you like to discard a minion to prevent Free Player discarding up to 2 shadow possessions?
 					cost: {
-					    type: discard
-					    player: shadow
-					    select: choose(minion)
+						type: discard
+						player: shadow
+						select: choose(minion)
 					}
 					effect: {
-					    type: discard
-					    select: choose(side(shadow),possession)
-					    count: 0-2
+						type: discard
+						select: choose(side(shadow),possession)
+						count: 0-2
 					}
 				}
 			]
 		}
 		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Exert Gandalf to discard up to 2 Shadow possessions. Any Shadow player may discard a minion to prevent this.
-		lore: Indeed my friends, none of you have any weapon that could hurt me.'
+		lore: "'Indeed my friends, none of you have any weapon that could hurt me.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -439,4 +427,5 @@
 			}
 		}
 	}
+
 }

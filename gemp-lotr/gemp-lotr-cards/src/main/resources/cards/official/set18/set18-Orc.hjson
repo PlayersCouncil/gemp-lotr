@@ -3,7 +3,6 @@
 	18_78: {
 		cardInfo: {
 			imagePath: decipher/LOTR18078.jpg
-			javaClass: true
 			//parentId: 18_78
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -23,49 +22,49 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: removeKeyword
-		            requires: [
-		                {
-		                    type: canSpot
-		                    filter: culture(orc),minion
-		                }
-		                {
-		                    type: isLessThan
-		                    firstNumber: {
-		                        type: forEachYouCanSpot
-		                        filter: minion
-		                    }
-		                    secondNumber: {
-		                        type: forEachYouCanSpot
-		                        filter: companion
-		                    }
-		                }
-		            ]
-		            filter: companion
-		            keyword: defender
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),minion
-		            count: 2
-		        }
-		        effect: {
-		            type: addKeyword
-		            select: all(currentSite)
-		            keyword: battleground
-		            until: regroup
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: removeKeyword
+					requires: [
+						{
+							type: canSpot
+							filter: culture(orc),minion
+						}
+						{
+							type: isLessThan
+							firstNumber: {
+								type: forEachYouCanSpot
+								filter: minion
+							}
+							secondNumber: {
+								type: forEachYouCanSpot
+								filter: companion
+							}
+						}
+					]
+					filter: companion
+					keyword: defender
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+					count: 2
+				}
+				effect: {
+					type: addKeyword
+					select: all(currentSite)
+					keyword: battleground
+					until: regroup
+				}
+			}
 		]
 		gametext: While you can spot an [orc] minion and fewer minions than companions, each companion loses all <b>defender</b> bonuses and cannot gain defender bonuses.<br><b>Maneuver:</b> Spot 2 [orc] minions to make the fellowship's current site gain <b>battleground</b> until the regroup phase.
-		lore: They come with fire, they come with axes.
+		lore: "They come with fire, they come with axes."
 		promotext: ""
 		alts: {
 			promos: {
@@ -78,7 +77,6 @@
 	18_79: {
 		cardInfo: {
 			imagePath: decipher/LOTR18079.jpg
-			javaClass: true
 			//parentId: 18_79
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -96,36 +94,36 @@
 		culture: Orc
 		twilight: 2
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(orc),archer,minion
+				type: canSpot
+				filter: culture(orc),archer,minion
 			}
 			effect: [
 				{
-				    type: modifyArcheryTotal
-				    side: shadow
-				    amount: 2
+					type: modifyArcheryTotal
+					side: shadow
+					amount: 2
 				}
 				{
-				    type: optional
-				    text: Would you like to add 2 to minion archery total for each follower you can spot?
-				    effect: {
-				        type: modifyArcheryTotal
-				        side: shadow
-				        amount: {
-				            type: forEachYouCanSpot
-				            filter: follower
-				            multiplier: 2
-				        }
-				    }
+					type: optional
+					text: Would you like to add 2 to minion archery total for each follower you can spot?
+					effect: {
+						type: modifyArcheryTotal
+						side: shadow
+						amount: {
+							type: forEachYouCanSpot
+							filter: follower
+							multiplier: 2
+						}
+					}
 				}
 			]
 		}
 		gametext: Spot an [orc] archer minion to add 2 to the minion archery total. If you do, you may add an additional 2 to the minion archery total for each follower you can spot.
-		lore: The black fletched arrows of Sauron's armies found many targets.
+		lore: "The black fletched arrows of Sauron's armies found many targets."
 		promotext: ""
 		alts: {
 			promos: {
@@ -138,7 +136,6 @@
 	18_80: {
 		cardInfo: {
 			imagePath: decipher/LOTR18080.jpg
-			javaClass: true
 			//parentId: 18_80
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -162,44 +159,44 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            side: free people
-		            amount: 3
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            side: shadow
-		            amount: 3
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: removeTwilight
-		            amount: 2
-		        }
-		        effect: [
-		            {
-		                type: playCardFromDiscard
-		                select: choose(culture(orc),minion)
-		                memorize: playedMinion
-		            }
-		            {
-		                type: exhaust
-		                select: memory(playedMinion)
-		            }
-		        ]
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: free people
+					amount: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: 3
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: removeTwilight
+					amount: 2
+				}
+				effect: [
+					{
+						type: playCardFromDiscard
+						select: choose(culture(orc),minion)
+						memorize: playedMinion
+					}
+					{
+						type: exhaust
+						select: memory(playedMinion)
+					}
+				]
+			}
 		]
 		gametext: Each of the fellowship and minion archery totals is +3.<br><b>Regroup:</b> Remove (2) to play an [orc] minion from your discard pile. That minion comes into play exhausted.
-		lore: Fear. The city is rank with it.
+		lore: "Fear. The city is rank with it."
 		promotext: ""
 		alts: {
 			promos: {
@@ -212,7 +209,6 @@
 	18_81: {
 		cardInfo: {
 			imagePath: decipher/LOTR18081.jpg
-			javaClass: true
 			//parentId: 18_81
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -236,23 +232,23 @@
 		itemclass: Mount
 		target: or(and(culture(orc),orc,maxStrength(9)),name(Gothmog))
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer,name(Gothmog),inFierceSkirmish
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,name(Gothmog),inFierceSkirmish
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: Bearer must be an [orc] Orc with strength 9 or less (or bearer must be Gothmog).<br>Bearer is <b>fierce</b>.<br>While bearer is Gothmog, he is <b>damage +1</b> in fierce skirmishes.
 		lore: ""
@@ -268,7 +264,6 @@
 	18_82: {
 		cardInfo: {
 			imagePath: decipher/LOTR18082.jpg
-			javaClass: true
 			//parentId: 18_82
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -290,39 +285,39 @@
 		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc),minion
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: moves
-		        }
-		        requires: {
-		            type: phase
-		            phase: regroup
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: removeCardsInDeckFromGame
-		            deck: free people
-		            count: 2
-		            select: choose(side(free people))
-		            shuffle: true
-		            showAll: true
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: removeCardsInDeckFromGame
+					deck: free people
+					count: 2
+					select: choose(side(free people))
+					shuffle: true
+					showAll: true
+				}
+			}
 		]
 		gametext: To play, spot an [orc] minion.<br>Each time the fellowship moves in the regroup phase, you may discard this possession to search the Free Peoples player's draw deck and choose 2 Free Peoples cards found there. Remove those cards from the game.
-		lore: Grond! Grond! Grond! Grond! Grond! Grond!
+		lore: "Grond! Grond! Grond! Grond! Grond! Grond!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -335,7 +330,6 @@
 	18_83: {
 		cardInfo: {
 			imagePath: decipher/LOTR18083.jpg
-			javaClass: true
 			//parentId: 18_83
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -353,29 +347,29 @@
 		culture: Orc
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(companion,inSkirmishAgainst(culture(orc),minion))
-				    memorize: chosenCompanion
-				    amount: {
-				        type: Conditional
-				        requires: {
-				            type: memoryMatches
-				            memory: chosenCompanion
-				            filter: archer
-				        }
-				        true: -3
-				        false: -2
-				    }
+					type: modifyStrength
+					select: choose(companion,inSkirmishAgainst(culture(orc),minion))
+					memorize: chosenCompanion
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenCompanion
+							filter: archer
+						}
+						true: -3
+						false: -2
+					}
 				}
 			]
 		}
 		gametext: Make a companion skirmishing an [orc] minion strength -2 (or -3 if he or she is an archer).
-		lore: They dined on the flesh of all that lived and breathed in Middle-earth.
+		lore: "They dined on the flesh of all that lived and breathed in Middle-earth."
 		promotext: ""
 		alts: {
 			promos: {
@@ -388,7 +382,6 @@
 	18_84: {
 		cardInfo: {
 			imagePath: decipher/LOTR18084.jpg
-			javaClass: true
 			//parentId: 18_84
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -410,20 +403,20 @@
 		itemclass: Hand weapon
 		target: culture(orc),orc
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: bearer
-		        }
-		        effect: {
-		            type: addThreats
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: addThreats
+				}
+			}
 		]
 		gametext: Bearer must be an [orc] Orc.<br>Each time bearer wins a skirmish, you may add a threat.
-		lore: Crude blood rusted steel axes were dragged by Orcs from battle to battle.
+		lore: "Crude blood rusted steel axes were dragged by Orcs from battle to battle."
 		promotext: ""
 		alts: {
 			promos: {
@@ -436,7 +429,6 @@
 	18_85: {
 		cardInfo: {
 			imagePath: decipher/LOTR18085.jpg
-			javaClass: true
 			//parentId: 18_85
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -459,21 +451,21 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            requires: {
-		                type: location
-		                filter: battleground
-		            }
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					requires: {
+						type: location
+						filter: battleground
+					}
+					amount: 2
+				}
+			}
 		]
 		gametext: While at a battleground, this minion is strength +2.
-		lore: Enraged by Sauron, the frenzied Orcs streamed to the battlefields.
+		lore: "Enraged by Sauron, the frenzied Orcs streamed to the battlefields."
 		promotext: ""
 		alts: {
 			promos: {
@@ -486,7 +478,6 @@
 	18_86: {
 		cardInfo: {
 			imagePath: decipher/LOTR18086.jpg
-			javaClass: true
 			//parentId: 18_86
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -509,27 +500,27 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(orc)
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            side: shadow
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: hunter,companion
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: {
+						type: forEachYouCanSpot
+						filter: hunter,companion
+					}
+				}
+			}
 		]
 		gametext: To play, spot an [orc] card.<br>The minion archery total is +1 for each hunter companion you can spot.
-		lore: ...the enemy is moving. Sauron's forces are massing in the east....
+		lore: "...the enemy is moving. Sauron's forces are massing in the east...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -542,7 +533,6 @@
 	18_87: {
 		cardInfo: {
 			imagePath: decipher/LOTR18087.jpg
-			javaClass: true
 			//parentId: 18_87
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -566,22 +556,22 @@
 		site: 4
 		keywords: Hunter 1
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: PlayCardFromHand
-		            select: choose(culture(uruk-hai),hunter)
-		            discount: -2
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: PlayCardFromHand
+					select: choose(culture(uruk-hai),hunter)
+					discount: -2
+				}
+			}
 		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Shadow:</b> Exert this minion to play an [uruk-hai] hunter at twilight cost -2.
-		lore: Deep in the Isengard pits, Orcs tended the mud from which the Uruk-hai were pulled from.
+		lore: "Deep in the Isengard pits, Orcs tended the mud from which the Uruk-hai were pulled from."
 		promotext: ""
 		alts: {
 			promos: {
@@ -594,7 +584,6 @@
 	18_88: {
 		cardInfo: {
 			imagePath: decipher/LOTR18088.jpg
-			javaClass: true
 			//parentId: 18_88
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -617,26 +606,26 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: [
-                        {
-                            type: location
-                            filter: or(battleground,underground)
-                        }
-                        {
-                            type: phase
-                            phase: archery
-                        }
-                    ]
-		            filter: self
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: [
+						{
+							type: location
+							filter: or(battleground,underground)
+						}
+						{
+							type: phase
+							phase: archery
+						}
+					]
+					filter: self
+				}
+			}
 		]
 		gametext: While the fellowship is at a battleground or underground site, this minion cannot take wounds in the archery phase.
-		lore: Many Elves and many mighty Men, and many of their friends, had perished in the war.'
+		lore: "'Many Elves and many mighty Men, and many of their friends, had perished in the war.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -649,7 +638,6 @@
 	18_89: {
 		cardInfo: {
 			imagePath: decipher/LOTR18089.jpg
-			javaClass: true
 			//parentId: 18_89
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -673,23 +661,23 @@
 		site: 4
 		keywords: Hunter 1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachInDeadPile
-		                filter: companion
-		                multiplier: 3
-		                # That's because limit is applied before multiplier
-		                limit: 2
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachInDeadPile
+						filter: companion
+						multiplier: 3
+						# That's because limit is applied before multiplier
+						limit: 2
+					}
+				}
+			}
 		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br>This minion is strength +3 for each companion in the dead pile (limit +6).
-		lore: As the free people of Middle-earth fell, Mordor's strength grew.
+		lore: "As the free people of Middle-earth fell, Mordor's strength grew."
 		promotext: ""
 		alts: {
 			promos: {
@@ -702,7 +690,6 @@
 	18_90: {
 		cardInfo: {
 			imagePath: decipher/LOTR18090.jpg
-			javaClass: true
 			//parentId: 18_90
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -725,26 +712,26 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		            times: 2
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(companion)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				cost: {
+					type: exert
+					select: self
+					times: 2
+				}
+				effect: {
+					type: wound
+					select: choose(companion)
+				}
+			}
 		]
 		gametext: Each time this minion wins a skirmish, you may exert him twice to wound a companion.
-		lore: Pain. Pain was part of each Orc's life.
+		lore: "Pain. Pain was part of each Orc's life."
 		promotext: ""
 		alts: {
 			promos: {
@@ -757,7 +744,6 @@
 	18_91: {
 		cardInfo: {
 			imagePath: decipher/LOTR18091.jpg
-			javaClass: true
 			//parentId: 18_91
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -780,55 +766,55 @@
 		vitality: 1
 		site: 4
 		effects: [
-		    {
-		        type: activated
-		        phase: assignment
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(orc),orc
-		        }
-		        effect: [
-                    {
-                        type: assignFPCharacterToSkirmish
-                        fpCharacter: choose(not(culture(shire)),ringBearer)
-                        minion: self
-                    }
-                    {
-                        type: optional
-                        player: free people
-                        text: Would you like to add a burden or exert the Ring-bearer twice to discard Orkish Sneak?
-                        effect: {
-                            type: costToEffect
-                            cost: {
-                                type: choice
-                                player: free people
-                                texts: [
-                                    Add a burden
-                                    Exert the Ring-bearer twice
-                                ]
-                                effects: [
-                                    {
-                                        type: addBurdens
-                                    }
-                                    {
-                                        type: exert
-                                        select: choose(ringBearer)
-                                        times: 2
-                                    }
-                                ]
-                            }
-                            effect: {
-                                type: discard
-                                player: free people
-                                select: self
-                            }
-                        }
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: assignment
+				requires: {
+					type: canSpot
+					filter: another,culture(orc),orc
+				}
+				effect: [
+					{
+						type: assignFPCharacterToSkirmish
+						fpCharacter: choose(not(culture(shire)),ringBearer)
+						minion: self
+					}
+					{
+						type: optional
+						player: free people
+						text: Would you like to add a burden or exert the Ring-bearer twice to discard Orkish Sneak?
+						effect: {
+							type: costToEffect
+							cost: {
+								type: choice
+								player: free people
+								texts: [
+									Add a burden
+									Exert the Ring-bearer twice
+								]
+								effects: [
+									{
+										type: addBurdens
+									}
+									{
+										type: exert
+										select: choose(ringBearer)
+										times: 2
+									}
+								]
+							}
+							effect: {
+								type: discard
+								player: free people
+								select: self
+							}
+						}
+					}
+				]
+			}
 		]
 		gametext: <b>Assignment:</b> Spot another [orc] Orc to assign this minion to skirmish a non-[shire] Ring-bearer. The Free Peoples player may add a burden or exert the Ring-bearer twice to discard this minion.
-		lore: The Orcs attacked the Alliance, rushing across the field that separated the armies.
+		lore: "The Orcs attacked the Alliance, rushing across the field that separated the armies."
 		promotext: ""
 		alts: {
 			promos: {
@@ -841,7 +827,6 @@
 	18_92: {
 		cardInfo: {
 			imagePath: decipher/LOTR18092.jpg
-			javaClass: true
 			//parentId: 18_92
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -859,21 +844,21 @@
 		culture: Orc
 		twilight: 0
 		type: Event
-		timeword: shadow
+		timewords: Shadow
 		effects: {
 			type: event
 			cost: {
-			    type: removeThreats
+				type: removeThreats
 			}
 			effect: [
 				{
-				    type: reinforceTokens
-				    culture: orc
+					type: reinforceTokens
+					culture: orc
 				}
 			]
 		}
 		gametext: Remove a threat to reinforce an [orc] token.
-		lore: The old world will burn in the fires of industry. The forests will fall. A new order will rise. We will drive the machine of war with the sword and the spear and the iron fists of the Orc. We have only to remove those who oppose us.
+		lore: The old world will burn in the fires of industry. The forests will fall. A new order will rise. We will drive the machine of war with the sword and the spear 'and the iron fists of the Orc. We have only to remove those who oppose us.
 		promotext: ""
 		alts: {
 			promos: {
@@ -886,7 +871,6 @@
 	18_93: {
 		cardInfo: {
 			imagePath: decipher/LOTR18093.jpg
-			javaClass: true
 			//parentId: 18_93
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -909,20 +893,20 @@
 		vitality: 2
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: hunter,companion
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: hunter,companion
+					}
+				}
+			}
 		]
 		gametext: This minion is strength +1 for each hunter companion you can spot.
-		lore: War is brewing. The mountains are fair teeming with goblins.
+		lore: "War is brewing. The mountains are fair teeming with goblins."
 		promotext: ""
 		alts: {
 			promos: {
@@ -931,4 +915,5 @@
 			}
 		}
 	}
+
 }

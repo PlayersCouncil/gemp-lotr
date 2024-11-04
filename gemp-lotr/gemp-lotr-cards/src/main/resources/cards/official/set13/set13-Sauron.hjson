@@ -3,7 +3,6 @@
 	13_140: {
 		cardInfo: {
 			imagePath: decipher/LOTR13140.jpg
-			javaClass: true
 			//parentId: 13_140
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -31,19 +30,19 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: discount
-		        discount: {
-		            type: perExert
-		            filter: minion
-		            multiplier: {
-		                type: regionNumber
-		            }
-		        }
-		    }
+			{
+				type: discount
+				discount: {
+					type: perExert
+					filter: minion
+					multiplier: {
+						type: regionNumber
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>. <b>Fierce</b>.<br>When you play Sauron, you may exert any number of minions. For each minion you exert, Sauron is twilight cost -X, where X is the current region number.
-		lore: ...the Shadow grows once more....'
+		lore: "'...the Shadow grows once more....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -56,7 +55,6 @@
 	13_141: {
 		cardInfo: {
 			imagePath: decipher/LOTR13141.jpg
-			javaClass: true
 			//parentId: 13_141
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -79,37 +77,37 @@
 		itemclass: Hand weapon
 		target: title(Sauron)
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: name(Sauron)
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: companion,inSkirmish
-		        }
-		        effect: {
-		            type: repeat
-		            times: {
-		                type: regionNumber
-		            }
-		            effect: {
-		                type: wound
-		                select: choose(companion,not(inSkirmish))
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: name(Sauron)
+				}
+				requires: {
+					type: canSpot
+					filter: companion,inSkirmish
+				}
+				effect: {
+					type: repeat
+					times: {
+						type: regionNumber
+					}
+					effect: {
+						type: wound
+						select: choose(companion,not(inSkirmish))
+					}
+				}
+			}
 		]
 		gametext: Bearer must be Sauron.<br>He is <b>damage +1</b>.<br>Each time Sauron wins a skirmish and the companion he is skirmishing is not killed, you may assign X wounds to other companions, where X is the current region number.
 		lore: ""
@@ -121,4 +119,5 @@
 			}
 		}
 	}
+
 }

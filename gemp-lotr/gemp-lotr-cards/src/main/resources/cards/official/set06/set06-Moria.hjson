@@ -3,7 +3,6 @@
 	6_76: {
 		cardInfo: {
 			imagePath: decipher/LOTR06076.jpg
-			javaClass: true
 			//parentId: 6_76
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -31,22 +30,22 @@
 			{
 				type: modifyOwnCost
 				requires: {
-				    type: canSpot
-				    filter: culture(moria),minion
+					type: canSpot
+					filter: culture(moria),minion
 				}
 				amount: -3
 			}
 			{
 				type: modifier
 				modifier: {
-				    type: cantBeAssignedToSkirmishAgainst
-				    minion: self
-				    fpCharacter: MaxStrength(5)
+					type: cantBeAssignedToSkirmishAgainst
+					minion: self
+					fpCharacter: MaxStrength(5)
 				}
 			}
 		]
 		gametext: <b>Damage +2</b>.<br>The twilight cost of The Balrog is -3 if you can spot a [moria] minion.<br>The Balrog cannot be assigned to skirmish companions or allies of strength less than 6.
-		lore: ...he burst into new flame.'
+		lore: "'...he burst into new flame.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -59,7 +58,6 @@
 	6_77: {
 		cardInfo: {
 			imagePath: decipher/LOTR06077.jpg
-			javaClass: true
 			//parentId: 6_77
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -82,31 +80,31 @@
 			{
 				type: modifier
 				modifier: {
-				    type: modifyCost
-				    requires: {
-				        type: location
-				        filter: siteNumber(2-3),siteBlock(two towers)
-				    }
-				    filter: name(The Balrog)
-				    amount: -3
+					type: modifyCost
+					requires: {
+						type: location
+						filter: siteNumber(2-3),siteBlock(two towers)
+					}
+					filter: name(The Balrog)
+					amount: -3
 				}
 			}
 			{
 				type: activated
 				phase: skirmish
 				cost: {
-				    type: discard
-				    select: self
+					type: discard
+					select: self
 				}
 				effect: {
-				    type: modifyStrength
-				    select: choose(unique,culture(moria),minion)
-				    amount: 3
+					type: modifyStrength
+					select: choose(unique,culture(moria),minion)
+					amount: 3
 				}
 			}
 		]
 		gametext: Plays to your support area. At sites 2[T] and 3[T], The Balrog's twilight cost is -3.<br><b>Skirmish:</b> Discard this condition to make a unique [moria] minion strength +3.
-		lore: ...carved in the living rock of Zirakzigil, the pinnacle of the Silvertine.'
+		lore: "'...carved in the living rock of Zirakzigil, the pinnacle of the Silvertine.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -115,4 +113,5 @@
 			}
 		}
 	}
+
 }

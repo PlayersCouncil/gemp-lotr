@@ -1,8 +1,12 @@
 {
+
 	4_1: {
 		cardInfo: {
 			imagePath: decipher/LOTR04001.jpg
-			javaClass: true
+			//parentId: 4_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4R1
 			rarity: R
@@ -14,69 +18,69 @@
 		subtitle: Answer To All Riddles
 		unique: true
 		twilight: 0
-		vitality: 2
 		type: The One Ring
-        effects: [
-            {
-                type: modifier
-                modifier: {
-                    type: modifyStrength
-                    requires: [
-                        {
-                            type: ringIsOn
-                        }
-                        {
-                            type: ringIsActive
-                        }
-                    ]
-                    filter: bearer
-                    amount: 2
-                }
-            }
-            {
-                type: trigger
-                requires: [
-                    {
-                        type: ringIsOn
-                    }
-                    {
-                        type: ringIsActive
-                    }
-                    {
-                    	type: Phase
-                    	phase: skirmish
-                    }
-                ]
-                trigger: {
-                    type: aboutToTakeWound
-                    filter: bearer
-                }
-                effect: [
-                    {
-                        type: negateWound
-                        select: bearer
-                    }
-                    {
-                        type: addBurdens
-                    }
-                ]
-            }
-            {
-                type: activated
-                phase: skirmish
-                requires: {
-                    type: ringIsActive
-                }
-                cost: {
-                    type: addBurdens
-                }
-                effect: {
-                    type: putOnRing
-                }
-            }
-        ]
+		vitality: 2
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: [
+						{
+							type: ringIsOn
+						}
+						{
+							type: ringIsActive
+						}
+					]
+					filter: bearer
+					amount: 2
+				}
+			}
+			{
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: ringIsActive
+					}
+					{
+						type: Phase
+						phase: skirmish
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: bearer
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: ringIsActive
+				}
+				cost: {
+					type: addBurdens
+				}
+				effect: {
+					type: putOnRing
+				}
+			}
+		]
 		gametext: While wearing The One Ring, the Ring-bearer is strength +2, and each time he is about to take a wound in a skirmish, add a burden instead.<br><b>Skirmish:</b> Add a burden to wear The One Ring until the regroup phase.
-		lore: ...thought to have perished from the world.'
+		lore: "'...thought to have perished from the world.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -89,7 +93,10 @@
 	4_2: {
 		cardInfo: {
 			imagePath: decipher/LOTR04002.jpg
-			javaClass: true
+			//parentId: 4_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
 			version: 0
 			collInfo: 4C2
 			rarity: C
@@ -101,8 +108,8 @@
 		subtitle: The Ruling Ring
 		unique: true
 		twilight: 0
-		strength: 1
 		type: The One Ring
+		strength: 1
 		effects: [
 			{
 				type: trigger
@@ -162,7 +169,7 @@
 			}
 		]
 		gametext: <b>Response:</b> If bearer is about to take a wound in a skirmish, he wears The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound during a skirmish, add a burden instead.
-		lore: One Ring to rule them all....
+		lore: "One Ring to rule them all...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -171,4 +178,5 @@
 			}
 		}
 	}
+
 }

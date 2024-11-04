@@ -3,7 +3,6 @@
 	18_4: {
 		cardInfo: {
 			imagePath: decipher/LOTR18004.jpg
-			javaClass: true
 			//parentId: 18_4
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -25,27 +24,27 @@
 		itemclass: Ranged weapon
 		target: culture(elven),companion
 		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        requires: {
-		            type: canSpot
-		            filter: bearer,name(Arwen)
-		        }
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            select: choose(culture(elven))
-		            count: 2
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(minion)
-		        }
-		    }
+			{
+				type: activated
+				phase: archery
+				requires: {
+					type: canSpot
+					filter: bearer,name(Arwen)
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(culture(elven))
+					count: 2
+				}
+				effect: {
+					type: wound
+					select: choose(minion)
+				}
+			}
 		]
 		gametext: Bearer must be an [elven] companion.<br><b>Archery:</b> If bearer is Arwen, discard 2 [elven] cards from hand to wound a minion.
-		lore: Arwen had skill with a bow matched only by her beauty.
+		lore: "Arwen had skill with a bow matched only by her beauty."
 		promotext: ""
 		alts: {
 			promos: {
@@ -58,7 +57,6 @@
 	18_5: {
 		cardInfo: {
 			imagePath: decipher/LOTR18005.jpg
-			javaClass: true
 			//parentId: 18_5
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -80,28 +78,28 @@
 		itemclass: Hand weapon
 		target: culture(elven),companion
 		effects: [
-		    {
-		        type: extraPossessionClass
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: bearer,name(Arwen)
-		        }
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: drawCards
-		            count: 2
-		        }
-		    }
+			{
+				type: extraPossessionClass
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: bearer,name(Arwen)
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: drawCards
+					count: 2
+				}
+			}
 		]
 		gametext: Bearer must be an [elven] companion.<br>Bearer may bear this hand weapon in addition to 1 other hand weapon.<br><b>Maneuver:</b> If bearer is Arwen, exert her to draw 2 cards.
-		lore: Woe be to any against whom she wielded it.
+		lore: "Woe be to any against whom she wielded it."
 		promotext: ""
 		alts: {
 			promos: {
@@ -114,7 +112,6 @@
 	18_6: {
 		cardInfo: {
 			imagePath: decipher/LOTR18006.jpg
-			javaClass: true
 			//parentId: 18_6
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -132,47 +129,47 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
-			    type: choice
-			    texts: [
-			        Exert an {elven} companion
-			        Spot Arwen
-			    ]
-			    effects: [
-			        {
-			            type: exert
-			            select: choose(culture(elven),companion)
-			        }
-			        {
-			            type: spot
-			            filter: name(Arwen)
-			        }
-			    ]
+				type: choice
+				texts: [
+					Exert an {elven} companion
+					Spot Arwen
+				]
+				effects: [
+					{
+						type: exert
+						select: choose(culture(elven),companion)
+					}
+					{
+						type: spot
+						filter: name(Arwen)
+					}
+				]
 			}
 			effect: [
 				{
-				    type: memorizeTopOfDeck
-				    memory: topCards
-				    count: 5
+					type: memorizeTopOfDeck
+					memory: topCards
+					count: 5
 				}
 				{
-				    type: chooseArbitraryCards
-				    fromMemory: topCards
-				    text: Choose cards to set aside
-				    memorize: setAsideCards
-				    count: 0-5
+					type: chooseArbitraryCards
+					fromMemory: topCards
+					text: Choose cards to set aside
+					memorize: setAsideCards
+					count: 0-5
 				}
 				{
-				    type: shuffleDeck
-				    deck: you
+					type: shuffleDeck
+					deck: you
 				}
 				{
-				    type: putCardsFromDeckOnTopOfDeck
-                    select: memory(setAsideCards)
-                    reveal: true
+					type: putCardsFromDeckOnTopOfDeck
+					select: memory(setAsideCards)
+					reveal: true
 				}
 			]
 		}
@@ -190,7 +187,6 @@
 	18_7: {
 		cardInfo: {
 			imagePath: decipher/LOTR18007.jpg
-			javaClass: true
 			//parentId: 18_7
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -211,38 +207,38 @@
 		type: Follower
 		strength: 2
 		effects: [
-		    {
-		        type: aidCost
-		        cost: {
-		            type: addTwilight
-		        }
-		    }
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(elven),companion
-		            count: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            player: you
-		            filter: self
-		        }
-		        effect: {
-		            type: playCardFromDrawDeck
-		            select: choose(culture(elven),artifact)
-                    showAll: true
-                    shuffle: true
-		        }
-		    }
+			{
+				type: aidCost
+				cost: {
+					type: addTwilight
+				}
+			}
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(elven),companion
+					count: 2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					player: you
+					filter: self
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(culture(elven),artifact)
+					showAll: true
+					shuffle: true
+				}
+			}
 		]
 		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper><br>To play, spot 2 [elven] companions.<br>When you play Celebring, you may play an [elven] artifact from your deck.
-		lore: ...renewed shall be the blade that was broken.
+		lore: "...renewed shall be the blade that was broken."
 		promotext: ""
 		alts: {
 			promos: {
@@ -255,7 +251,6 @@
 	18_8: {
 		cardInfo: {
 			imagePath: decipher/LOTR18008.jpg
-			javaClass: true
 			//parentId: 18_8
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -281,41 +276,41 @@
 		]
 		target: culture(elven),companion,not(hasAttached(possession))
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantBear
-		            filter: bearer
-		            cardFilter: other,possession
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: CantUseSpecialAbilities
-		            requires: {
-		                type: canSpot
-		                filter: bearer,unique,companion
-		            }
-		            player: free people
-		            phase: archery
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyArcheryTotal
-		            requires: {
-		                type: canSpot
-		                filter: bearer,unique,companion
-		            }
-		            side: shadow
-		            amount: -1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantBear
+					filter: bearer
+					cardFilter: other,possession
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: CantUseSpecialAbilities
+					requires: {
+						type: canSpot
+						filter: bearer,unique,companion
+					}
+					player: free people
+					phase: archery
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					requires: {
+						type: canSpot
+						filter: bearer,unique,companion
+					}
+					side: shadow
+					amount: -1
+				}
+			}
 		]
 		gametext: To play, bearer must not be bearing any possessions. Bearer must be an [elven] companion.<br>Bearer cannot bear any other possessions.<br>While a unique companion bears this possession, the Free Peoples player may not use archery special abilities and the minion archery total is -1.
-		lore: Tangado haid!
+		lore: "Tangado haid!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -328,7 +323,6 @@
 	18_9: {
 		cardInfo: {
 			imagePath: decipher/LOTR18009.jpg
-			javaClass: true
 			//parentId: 18_9
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -351,21 +345,21 @@
 		vitality: 3
 		resistance: 7
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpotCultureTokens
-		                culture: elven
-		            }
-		            filter: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotCultureTokens
+						culture: elven
+					}
+					filter: self
+					amount: 2
+				}
+			}
 		]
 		gametext: While you can spot an [elven] token, this companion is strength +2.
-		lore: While they may prefer to avoid conflict, the elves can be ferocious warriors in defense of their ideals.
+		lore: "While they may prefer to avoid conflict, the elves can be ferocious warriors in defense of their ideals."
 		promotext: ""
 		alts: {
 			promos: {
@@ -378,7 +372,6 @@
 	18_10: {
 		cardInfo: {
 			imagePath: decipher/LOTR18010.jpg
-			javaClass: true
 			//parentId: 18_10
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -398,37 +391,37 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: RemoveCultureTokens
-		            select: choose(side(free people))
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: elven
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: RemoveCultureTokens
-		            culture: elven
-		            select: self
-		            count: 2
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(minion,inSkirmishAgainst(culture(elven),companion))
-		            amount: -1
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: RemoveCultureTokens
+					select: choose(side(free people))
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: elven
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					culture: elven
+					select: self
+					count: 2
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(culture(elven),companion))
+					amount: -1
+				}
+			}
 		]
 		gametext: <b>Fellowship:</b> Remove a culture token from a Free Peoples card to add an [elven] token here.<br><b>Skirmish:</b> Remove 2 [elven] tokens from here to make a minion skirmishing an [elven] companion strength -1.
-		lore: By river you have the chance of outrunning the enemy....
+		lore: "By river you have the chance of outrunning the enemy...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -441,7 +434,6 @@
 	18_11: {
 		cardInfo: {
 			imagePath: decipher/LOTR18011.jpg
-			javaClass: true
 			//parentId: 18_11
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -462,45 +454,45 @@
 		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: or(name(Galadriel),name(Celeborn))
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: name(Galadriel),ringBearer
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyResistance
-		            filter: name(Galadriel),ringBearer
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            player: you
-		            filter: culture(elven),timeword(skirmish),event
-		        }
-		        effect: {
-		            type: reinforceTokens
-		            culture: elven
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: or(name(Galadriel),name(Celeborn))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: name(Galadriel),ringBearer
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: name(Galadriel),ringBearer
+					amount: 2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					player: you
+					filter: culture(elven),timeword(skirmish),event
+				}
+				effect: {
+					type: reinforceTokens
+					culture: elven
+				}
+			}
 		]
 		gametext: To play, spot Galadriel or Celeborn.<br>While Galadriel is the Ring-bearer, she is strength +2 and resistance +2.<br>Each time you play an [elven] skirmish event, you may reinforce an [elven] token.
-		lore: Will you look into the mirror?
+		lore: "Will you look into the mirror?"
 		promotext: ""
 		alts: {
 			promos: {
@@ -513,7 +505,6 @@
 	18_12: {
 		cardInfo: {
 			imagePath: decipher/LOTR18012.jpg
-			javaClass: true
 			//parentId: 18_12
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -537,41 +528,41 @@
 		vitality: 4
 		resistance: 7
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(elven),companion
-		            count: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: addThreats
-		        }
-		        effect: {
-		            type: putCardsFromDiscardIntoHand
-		            select: choose(culture(elven),timeword(skirmish),event)
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: RemoveCultureTokens
-		            culture: elven
-		            select: choose(any)
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(culture(elven),condition)
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(elven),companion
+					count: 2
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(elven),timeword(skirmish),event)
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: RemoveCultureTokens
+					culture: elven
+					select: choose(any)
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(elven),condition)
+				}
+			}
 		]
 		gametext: To play, spot 2 [elven] companions.<br><b>Maneuver:</b> Add a threat to take an [elven] skirmish event into hand from your discard pile.<br><b>Regroup:</b> Remove an [elven] token to play an [elven] condition from your discard pile.
-		lore: ...the power of Gil-galad has increased in his absence.'
+		lore: "'...the power of Gil-galad has increased in his absence.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -584,7 +575,6 @@
 	18_13: {
 		cardInfo: {
 			imagePath: decipher/LOTR18013.jpg
-			javaClass: true
 			//parentId: 18_13
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -609,36 +599,36 @@
 		resistance: 7
 		keywords: Ranger
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(elven),companion
-		            count: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cancelStrengthBonus
-		            filter: minion,inSkirmishAgainst(self)
-		            from: possession
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: removeThreats
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(elven),companion
+					count: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cancelStrengthBonus
+					filter: minion,inSkirmishAgainst(self)
+					from: possession
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: removeThreats
+				}
+			}
 		]
 		gametext: <b>Ranger</b>.<br>To play, spot 2 [elven] companions.<br>Minions skirmishing Glorfindel cannot gain strength bonuses from possessions.<br>Each time Glorfindel wins a skirmish, you may remove a threat.
-		lore: Yet oft in lies truth is hidden....'
+		lore: "'Yet oft in lies truth is hidden....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -651,7 +641,6 @@
 	18_14: {
 		cardInfo: {
 			imagePath: decipher/LOTR18014.jpg
-			javaClass: true
 			//parentId: 18_14
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -675,36 +664,36 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert Haldir
-		                Discard an {elven} card from hand
-		            ]
-		            effects: [
-		                {
-		                    type: exert
-		                    select: self
-		                }
-		                {
-		                    type: discardFromHand
-		                    forced: false
-		                    select: choose(culture(elven))
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(minion,inSkirmishAgainst(self))
-		            amount: -2
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Exert Haldir
+						Discard an {elven} card from hand
+					]
+					effects: [
+						{
+							type: exert
+							select: self
+						}
+						{
+							type: discardFromHand
+							forced: false
+							select: choose(culture(elven))
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(self))
+					amount: -2
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Exert Haldir or discard an [elven] card from hand to make a minion skirmishing Haldir strength -2.
-		lore: I bring word from Elrond of Rivendell.
+		lore: "I bring word from Elrond of Rivendell."
 		promotext: ""
 		alts: {
 			promos: {
@@ -717,7 +706,6 @@
 	18_15: {
 		cardInfo: {
 			imagePath: decipher/LOTR18015.jpg
-			javaClass: true
 			//parentId: 18_15
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -737,28 +725,28 @@
 		type: Possession
 		target: companion
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(elven),companion
-		            count: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: reconcileHand
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(elven),companion
+					count: 2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: reconcileHand
+				}
+			}
 		]
 		gametext: To play, spot 2 [elven] companions. Bearer must be a companion.<br><b>Regroup:</b> Discard this possession from play to reconcile your hand.
-		lore: Sam thought that it tasted far better, somehow, than it had for a good while....
+		lore: "Sam thought that it tasted far better, somehow, than it had for a good while...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -771,7 +759,6 @@
 	18_16: {
 		cardInfo: {
 			imagePath: decipher/LOTR18016.jpg
-			javaClass: true
 			//parentId: 18_16
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -789,22 +776,22 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			cost: {
-			    type: addThreats
-			    amount: 2
+				type: addThreats
+				amount: 2
 			}
 			effect: [
 				{
-				    type: heal
-				    select: choose(culture(elven),companion)
+					type: heal
+					select: choose(culture(elven),companion)
 				}
 			]
 		}
 		gametext: Add 2 threats to heal an [elven] companion.
-		lore: The long years have passed like swift draughts of sweet mead in lofty halls beyond the West....
+		lore: "The long years have passed like swift draughts of sweet mead in lofty halls beyond the West...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -817,7 +804,6 @@
 	18_17: {
 		cardInfo: {
 			imagePath: decipher/LOTR18017.jpg
-			javaClass: true
 			//parentId: 18_17
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -838,29 +824,29 @@
 		type: Follower
 		resistance: 1
 		effects: [
-		    {
-		        type: aidCost
-		        cost: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: transferred
-		            filter: self
-		            to: culture(elven),companion
-		        }
-		        effect: {
-		            type: drawCards
-		            count: 3
-		        }
-		    }
+			{
+				type: aidCost
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: transferred
+					filter: self
+					to: culture(elven),companion
+				}
+				effect: {
+					type: drawCards
+					count: 3
+				}
+			}
 		]
 		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper><br>When you transfer this to an [elven] companion, you may draw 3 cards.
-		lore: Go not to the Elves for counsel, for they will say both no and yes.'
+		lore: "'Go not to the Elves for counsel, for they will say both no and yes.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -869,4 +855,5 @@
 			}
 		}
 	}
+
 }

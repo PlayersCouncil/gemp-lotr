@@ -3,7 +3,6 @@
 	11_177: {
 		cardInfo: {
 			imagePath: decipher/LOTR11177.jpg
-			javaClass: true
 			//parentId: 11_177
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -27,16 +26,16 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: doesNotAddToArcheryTotal
-		            filter: side(free people),archer,maxResistance(5)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: doesNotAddToArcheryTotal
+					filter: side(free people),archer,maxResistance(5)
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>Each Free Peoples archer who has resistance 5 or less does not add to the Free Peoples archery total.
-		lore: Volleys of arrows are no defense against the onslaught of Saruman's servants.
+		lore: "Volleys of arrows are no defense against the onslaught of Saruman's servants."
 		promotext: ""
 		alts: {
 			promos: {
@@ -49,7 +48,6 @@
 	11_178: {
 		cardInfo: {
 			imagePath: decipher/LOTR11178.jpg
-			javaClass: true
 			//parentId: 11_178
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -73,21 +71,21 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyStrength
-                    requires: {
-                        type: canSpot
-                        filter: exhausted,companion
-                    }
-                    filter: self
-                    amount: 3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: exhausted,companion
+					}
+					filter: self
+					amount: 3
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While you can spot an exhausted companion, this minion is strength +3.
-		lore: Bred for endurance, the Uruk-hai pursue their foes tirelessly.
+		lore: "Bred for endurance, the Uruk-hai pursue their foes tirelessly."
 		promotext: ""
 		alts: {
 			promos: {
@@ -100,7 +98,6 @@
 	11_179: {
 		cardInfo: {
 			imagePath: decipher/LOTR11179.jpg
-			javaClass: true
 			//parentId: 11_179
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -124,23 +121,23 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: usesSpecialAbility
-		            filter: companion,maxResistance(5)
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: cancelSpecialAbility
-		        }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: usesSpecialAbility
+					filter: companion,maxResistance(5)
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: cancelSpecialAbility
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br><b>Response:</b> If a special ability of a companion who has resistance 5 or less is used, exert this minion to cancel its effect.
-		lore: They are trained to parry the swords of their enemies.
+		lore: "They are trained to parry the swords of their enemies."
 		promotext: ""
 		alts: {
 			promos: {
@@ -153,7 +150,6 @@
 	11_180: {
 		cardInfo: {
 			imagePath: decipher/LOTR11180.jpg
-			javaClass: true
 			//parentId: 11_180
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -171,22 +167,22 @@
 		culture: Uruk-hai
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(culture(uruk-hai),minion)
-				    amount: {
-				        type: forEachYouCanSpot
-				        filter: battleground,site
-				    }
+					type: modifyStrength
+					select: choose(culture(uruk-hai),minion)
+					amount: {
+						type: forEachYouCanSpot
+						filter: battleground,site
+					}
 				}
 			]
 		}
 		gametext: Make an [uruk-hai] minion strength +1 for each battleground site you can spot.
-		lore: Uruks are drawn to the sounds of battle.
+		lore: "Uruks are drawn to the sounds of battle."
 		promotext: ""
 		alts: {
 			promos: {
@@ -199,7 +195,6 @@
 	11_181: {
 		cardInfo: {
 			imagePath: decipher/LOTR11181.jpg
-			javaClass: true
 			//parentId: 11_181
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -222,27 +217,27 @@
 		vitality: 2
 		site: 5
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-                    type: canSpot
-                    filter: culture(uruk-hai),minion
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: exerted
-		            filter: companion
-		        }
-		        effect: {
-		            type: drawCards
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(uruk-hai),minion
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: exerted
+					filter: companion
+				}
+				effect: {
+					type: drawCards
+				}
+			}
 		]
 		gametext: To play, spot an [uruk-hai] minion.<br>Each time a companion exerts, you may draw a card.
-		lore: As their prey grows tired, the Uruks gain the advantage.
+		lore: "As their prey grows tired, the Uruks gain the advantage."
 		promotext: ""
 		alts: {
 			promos: {
@@ -255,7 +250,6 @@
 	11_182: {
 		cardInfo: {
 			imagePath: decipher/LOTR11182.jpg
-			javaClass: true
 			//parentId: 11_182
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -273,7 +267,7 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -282,13 +276,13 @@
 			}
 			effect: [
 				{
-				    type: discard
-				    select: choose(condition)
+					type: discard
+					select: choose(condition)
 				}
 			]
 		}
 		gametext: If your [uruk-hai] minion wins a skirmish, discard a condition from play.
-		lore: The villages hold nothing of value to the Uruk-hai; they are simply things to be destroyed.
+		lore: "The villages hold nothing of value to the Uruk-hai; they are simply things to be destroyed."
 		promotext: ""
 		alts: {
 			promos: {
@@ -301,7 +295,6 @@
 	11_183: {
 		cardInfo: {
 			imagePath: decipher/LOTR11183.jpg
-			javaClass: true
 			//parentId: 11_183
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -324,34 +317,34 @@
 		vitality: 2
 		site: 5
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: location
-		                filter: battleground
-		            }
-		            filter: self
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: location
-		                filter: battleground
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: battleground
+					}
+					filter: self
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: battleground
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: While this minion is at a battleground site, it is strength +1 and <b>damage +1</b>.
-		lore: Only in combat is an Uruk-hai truly fulfilling its purpose.
+		lore: "Only in combat is an Uruk-hai truly fulfilling its purpose."
 		promotext: ""
 		alts: {
 			promos: {
@@ -364,7 +357,6 @@
 	11_184: {
 		cardInfo: {
 			imagePath: decipher/LOTR11184.jpg
-			javaClass: true
 			//parentId: 11_184
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -388,31 +380,31 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: another,culture(uruk-hai)
-		        }
-		        effect: [
-		            {
-		                type: negateWound
-		                select: self
-		            }
-		            {
-		                type: drawCards
-		                player: free people
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: aboutToTakeWound
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(uruk-hai)
+				}
+				effect: [
+					{
+						type: negateWound
+						select: self
+					}
+					{
+						type: drawCards
+						player: free people
+					}
+				]
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>Each time this minion is about to take a wound at a battleground site, you may spot another [uruk-hai] card to make the Free Peoples player draw a card instead.
-		lore: Despite their bloodthirsty nature, Saruman's creations form armies and fight united for him.
+		lore: "Despite their bloodthirsty nature, Saruman's creations form armies and fight united for him."
 		promotext: ""
 		alts: {
 			promos: {
@@ -425,7 +417,6 @@
 	11_185: {
 		cardInfo: {
 			imagePath: decipher/LOTR11185.jpg
-			javaClass: true
 			//parentId: 11_185
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -445,55 +436,55 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: culture(uruk-hai),minion
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: uruk-hai
-		            select: self
-		            count: 3
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: culture(uruk-hai),minion
-		        }
-		        cost: {
-		            type: choice
-		            texts: [
-		                Discard this condition
-		                Remove an {urukHai} token from here
-		            ]
-		            effects: [
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		                {
-		                    type: RemoveCultureTokens
-		                    culture: uruk-hai
-		                    select: self
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: preventWound
-		            select: choose(culture(uruk-hai),minion)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: culture(uruk-hai),minion
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: uruk-hai
+					select: self
+					count: 3
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(uruk-hai),minion
+				}
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Remove an {urukHai} token from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: uruk-hai
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: preventWound
+					select: choose(culture(uruk-hai),minion)
+				}
+			}
 		]
 		gametext: When you play this condition, spot an [uruk-hai] minion to add 3 [uruk-hai] tokens here.<br><b>Response:</b> If an [uruk-hai] minion is about to take a wound, discard this condition or remove an [uruk-hai] token from here to prevent that.
-		lore: Resiliency is bred into the fighting Uruk-hai.
+		lore: "Resiliency is bred into the fighting Uruk-hai."
 		promotext: ""
 		alts: {
 			promos: {
@@ -506,7 +497,6 @@
 	11_186: {
 		cardInfo: {
 			imagePath: decipher/LOTR11186.jpg
-			javaClass: true
 			//parentId: 11_186
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -530,20 +520,20 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantUseSpecialAbilities
-		            requires: {
-		                type: canSpot
-		                filter: self,assignedToSkirmish(any)
-		            }
-		            filter: or(companion,and(side(free people),possession))
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantUseSpecialAbilities
+					requires: {
+						type: canSpot
+						filter: self,assignedToSkirmish(any)
+					}
+					filter: or(companion,and(side(free people),possession))
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While this minion is assigned to a skirmish, each companion and Free Peoples possession loses its special abilities.
-		lore: The Uruk-hai attack with such ferocity that their victims find no way to strike back.
+		lore: "The Uruk-hai attack with such ferocity that their victims find no way to strike back."
 		promotext: ""
 		alts: {
 			promos: {
@@ -556,7 +546,6 @@
 	11_187: {
 		cardInfo: {
 			imagePath: decipher/LOTR11187.jpg
-			javaClass: true
 			//parentId: 11_187
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -574,27 +563,27 @@
 		culture: Uruk-hai
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(culture(uruk-hai),minion)
-				    amount: {
-				        type: Conditional
-				        requires: {
-				            type: canSpot
-				            filter: exhausted,companion
-				        }
-				        true: 3
-				        false: 2
-				    }
+					type: modifyStrength
+					select: choose(culture(uruk-hai),minion)
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: exhausted,companion
+						}
+						true: 3
+						false: 2
+					}
 				}
 			]
 		}
 		gametext: Make an [uruk-hai] minion strength +2 (or +3 if you can spot an exhausted companion).
-		lore: Uruk soldiers have learned to save their rage for the field of battle.
+		lore: "Uruk soldiers have learned to save their rage for the field of battle."
 		promotext: ""
 		alts: {
 			promos: {
@@ -607,7 +596,6 @@
 	11_188: {
 		cardInfo: {
 			imagePath: decipher/LOTR11188.jpg
-			javaClass: true
 			//parentId: 11_188
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -631,21 +619,21 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: exhausted,companion
-		            }
-		            filter: self
-		            amount: 3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: exhausted,companion
+					}
+					filter: self
+					amount: 3
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While you can spot an exhausted companion, this minion is strength +3.
-		lore: An enemy on the move is an enemy unprepared.
+		lore: "An enemy on the move is an enemy unprepared."
 		promotext: ""
 		alts: {
 			promos: {
@@ -658,7 +646,6 @@
 	11_189: {
 		cardInfo: {
 			imagePath: decipher/LOTR11189.jpg
-			javaClass: true
 			//parentId: 11_189
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -682,32 +669,32 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: [
-                    {
-                        type: location
-                        filter: battleground
-                    }
-                    {
-                        type: canSpot
-                        filter: unbound,companion
-                    }
-                ]
-                effect: {
-                    type: modifyResistance
-                    select: choose(unbound,companion)
-                    amount: -2
-                    until: endOfTurn
-                }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: [
+					{
+						type: location
+						filter: battleground
+					}
+					{
+						type: canSpot
+						filter: unbound,companion
+					}
+				]
+				effect: {
+					type: modifyResistance
+					select: choose(unbound,companion)
+					amount: -2
+					until: endOfTurn
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>When you play this minion at a battleground site, spot an unbound companion to make that companion resistance -2 until the end of the turn.
-		lore: In battle, the Uruk-hai inspire terror in even the bravest of their enemies.
+		lore: "In battle, the Uruk-hai inspire terror in even the bravest of their enemies."
 		promotext: ""
 		alts: {
 			promos: {
@@ -720,7 +707,6 @@
 	11_190: {
 		cardInfo: {
 			imagePath: decipher/LOTR11190.jpg
-			javaClass: true
 			//parentId: 11_190
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -744,32 +730,32 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: {
-		                type: location
-		                filter: battleground
-		            }
-		            filter: self
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: {
-		                type: canSpot
-		                filter: companion
-		                count: 6
-		            }
-		            filter: culture(uruk-hai),minion
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: location
+						filter: battleground
+					}
+					filter: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+					filter: culture(uruk-hai),minion
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While this minion is at a battleground site, it cannot take wounds.<br>While you can spot 6 companions, each [uruk-hai] minion cannot take wounds.
-		lore: Like a force of nature, the Uruks are unstoppable.
+		lore: "Like a force of nature, the Uruks are unstoppable."
 		promotext: ""
 		alts: {
 			promos: {
@@ -782,7 +768,6 @@
 	11_191: {
 		cardInfo: {
 			imagePath: decipher/LOTR11191.jpg
-			javaClass: true
 			//parentId: 11_191
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -804,21 +789,21 @@
 		itemclass: Ranged weapon
 		target: culture(uruk-hai),minion
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: location
-		                filter: battleground
-		            }
-		            filter: bearer
-		            keyword: archer
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: battleground
+					}
+					filter: bearer
+					keyword: archer
+				}
+			}
 		]
 		gametext: Bearer must be an [uruk-hai] minion.<br>While bearer is at a battleground site, it is an <b>archer</b>.
-		lore: Saruman's machine works also makes formidable heavy bows for the Uruk-hai.
+		lore: "Saruman's machine works also makes formidable heavy bows for the Uruk-hai."
 		promotext: ""
 		alts: {
 			promos: {
@@ -831,7 +816,6 @@
 	11_192: {
 		cardInfo: {
 			imagePath: decipher/LOTR11192.jpg
-			javaClass: true
 			//parentId: 11_192
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -852,17 +836,17 @@
 		itemclass: Hand weapon
 		target: culture(uruk-hai),minion
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyStrength
-                    filter: character,inSkirmishAgainst(bearer)
-                    amount: -2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: character,inSkirmishAgainst(bearer)
+					amount: -2
+				}
+			}
 		]
 		gametext: Bearer must be an [uruk-hai] minion.<br>Each character skirmishing bearer is strength -2.
-		lore: The heavy-backed Uruk blades hack through armor and flesh alike.
+		lore: "The heavy-backed Uruk blades hack through armor and flesh alike."
 		promotext: ""
 		alts: {
 			promos: {
@@ -875,7 +859,6 @@
 	11_193: {
 		cardInfo: {
 			imagePath: decipher/LOTR11193.jpg
-			javaClass: true
 			//parentId: 11_193
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -899,17 +882,17 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-                modifier: {
-                    type: addKeyword
-                    filter: currentSite
-                    keyword: battleground
-                }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: currentSite
+					keyword: battleground
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>The fellowship's current site gains <b>battleground</b>.
-		lore: Choice of terrain is important when engaging the enemy.
+		lore: "Choice of terrain is important when engaging the enemy."
 		promotext: ""
 		alts: {
 			promos: {
@@ -922,7 +905,6 @@
 	11_194: {
 		cardInfo: {
 			imagePath: decipher/LOTR11194.jpg
-			javaClass: true
 			//parentId: 11_194
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -951,21 +933,21 @@
 			Muster
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: exhausted,companion
-		                multiplier: 3
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: exhausted,companion
+						multiplier: 3
+					}
+				}
+			}
 		]
 		gametext: <b>Archer</b>. <b>Damage +1</b>. <b>Muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>Lurtz is strength +3 for each exhausted companion you can spot.
-		lore: Saruman bred this ruthless commander, whose brutality matched his own ambition, to track the Nine Walkers.
+		lore: "Saruman bred this ruthless commander, whose brutality matched his own ambition, to track the Nine Walkers."
 		promotext: ""
 		alts: {
 			promos: {
@@ -978,7 +960,6 @@
 	11_195: {
 		cardInfo: {
 			imagePath: decipher/LOTR11195.jpg
-			javaClass: true
 			//parentId: 11_195
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1004,8 +985,9 @@
 			Damage+1
 			Muster
 		]
+
 		gametext: <b>Damage +1</b>. <b>Muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
-		lore: Like a machine of Saruman, his minions are created for one purpose – killing.
+		lore: "Like a machine of Saruman, his minions are created for one purpose – killing."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1018,7 +1000,6 @@
 	11_196: {
 		cardInfo: {
 			imagePath: decipher/LOTR11196.jpg
-			javaClass: true
 			//parentId: 11_196
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1040,16 +1021,16 @@
 		resistance: -3
 		target: unbound,companion,not(hasAttached(title(Our Foes Are Weak)))
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(uruk-hai),minion
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(uruk-hai),minion
+				}
+			}
 		]
 		gametext: To play, spot an [uruk-hai] minion. Bearer must be an unbound companion. Limit 1 per bearer.
-		lore: Saruman's Uruk-hai are instilled with his ideas of destiny and supremacy.
+		lore: "Saruman's Uruk-hai are instilled with his ideas of destiny and supremacy."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1062,7 +1043,6 @@
 	11_197: {
 		cardInfo: {
 			imagePath: decipher/LOTR11197.jpg
-			javaClass: true
 			//parentId: 11_197
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1089,17 +1069,17 @@
 			Muster
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inSkirmishAgainst(character,maxResistance(3))
-		            amount: 3
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmishAgainst(character,maxResistance(3))
+					amount: 3
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>. <b>Muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>While this minion is skirmishing a character who has resistance 3 or less, this minion is strength +3.
-		lore: They make short work of the weak.
+		lore: "They make short work of the weak."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1112,7 +1092,6 @@
 	11_198: {
 		cardInfo: {
 			imagePath: decipher/LOTR11198.jpg
-			javaClass: true
 			//parentId: 11_198
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1136,16 +1115,16 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            filter: self,inSkirmishAgainst(side(free people),character,maxResistance(5))
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					filter: self,inSkirmishAgainst(side(free people),character,maxResistance(5))
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While this minion is skirmishing a Free Peoples character who has resistance 5 or less, this minion cannot take wounds.
-		lore: Their toughness comes from both armor and hide.
+		lore: "Their toughness comes from both armor and hide."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1158,7 +1137,6 @@
 	11_199: {
 		cardInfo: {
 			imagePath: decipher/LOTR11199.jpg
-			javaClass: true
 			//parentId: 11_199
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1182,26 +1160,26 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: played
-		            filter: side(free people),event
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: self,inSkirmish
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: -2
-		            until: regroup
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: side(free people),event
+				}
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: -2
+					until: regroup
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>Each time a Free Peoples event is played during a skirmish involving this minion, this minion is strength -2 until the regroup phase.
-		lore: Single-minded in purpose, the Uruk-hai are not easily swayed from their intended path.
+		lore: "Single-minded in purpose, the Uruk-hai are not easily swayed from their intended path."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1214,7 +1192,6 @@
 	11_200: {
 		cardInfo: {
 			imagePath: decipher/LOTR11200.jpg
-			javaClass: true
 			//parentId: 11_200
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1237,27 +1214,27 @@
 		vitality: 2
 		site: 5
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: assignedAgainst
-		            filter: self
-		            against: character,maxResistance(3)
-		            memorizeAgainst: assignedAgainst
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(possession,attachedTo(memory(assignedAgainst)))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: assignedAgainst
+					filter: self
+					against: character,maxResistance(3)
+					memorizeAgainst: assignedAgainst
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(possession,attachedTo(memory(assignedAgainst)))
+				}
+			}
 		]
 		gametext: Each time this minion is assigned to skirmish a character who has resistance 3 or less, you may exert this minion to discard a possession borne by that character.
-		lore: Weapons mean little against the strength of Uruks.
+		lore: "Weapons mean little against the strength of Uruks."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1270,7 +1247,6 @@
 	11_201: {
 		cardInfo: {
 			imagePath: decipher/LOTR11201.jpg
-			javaClass: true
 			//parentId: 11_201
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1297,41 +1273,41 @@
 			Lurker
 		]
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: culture(uruk-hai),minion
-		        }
-		        requires: {
-		            type: phase
-		            phase: skirmish
-		        }
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert this minion
-		                Discard this minion
-		            ]
-		            effects: [
-		                {
-		                    type: exert
-		                    select: self
-		                }
-		                {
-		                    type: discard
-		                    select: self
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: preventWound
-		            select: choose(culture(uruk-hai),minion)
-		        }
-		    }
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(uruk-hai),minion
+				}
+				requires: {
+					type: phase
+					phase: skirmish
+				}
+				cost: {
+					type: choice
+					texts: [
+						Exert this minion
+						Discard this minion
+					]
+					effects: [
+						{
+							type: exert
+							select: self
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: preventWound
+					select: choose(culture(uruk-hai),minion)
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>. <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Response:</b> If an [uruk-hai] minion is about to take a wound in a skirmish, exert or discard this minion to prevent that.
-		lore: Uruks are trained to safeguard their commanders.
+		lore: "Uruks are trained to safeguard their commanders."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1344,7 +1320,6 @@
 	11_202: {
 		cardInfo: {
 			imagePath: decipher/LOTR11202.jpg
-			javaClass: true
 			//parentId: 11_202
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1368,18 +1343,18 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,inSkirmishAgainst(character,maxResistance(4))
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,inSkirmishAgainst(character,maxResistance(4))
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While this minion is skirmishing a character who has resistance 4 or less, this minion is <b>damage +1</b>.
-		lore: Fighting in packs, the Uruk-hai feast on the weak.
+		lore: "Fighting in packs, the Uruk-hai feast on the weak."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1392,7 +1367,6 @@
 	11_203: {
 		cardInfo: {
 			imagePath: decipher/LOTR11203.jpg
-			javaClass: true
 			//parentId: 11_203
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1416,20 +1390,20 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: {
-		                type: canSpot
-		                filter: another,culture(uruk-hai),minion,assignedToSkirmish(any)
-		            }
-		            filter: self
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: canSpot
+						filter: another,culture(uruk-hai),minion,assignedToSkirmish(any)
+					}
+					filter: self
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While you can spot another [uruk-hai] minion assigned to a skirmish, this minion cannot take wounds.
-		lore: Like pack animals, the Uruk-hai find strength in numbers.
+		lore: "Like pack animals, the Uruk-hai find strength in numbers."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1442,7 +1416,6 @@
 	11_204: {
 		cardInfo: {
 			imagePath: decipher/LOTR11204.jpg
-			javaClass: true
 			//parentId: 11_204
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1468,8 +1441,9 @@
 			Damage+1
 			Toil 1
 		]
+
 		gametext: <b>Damage +1</b>. <b>Toil 1</b>. <helper>(For each [uruk-hai] character you exert when playing this, its twilight cost is -1.)</helper>
-		lore: Huge, terrifying Uruks become tribal leaders.
+		lore: "Huge, terrifying Uruks become tribal leaders."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1482,7 +1456,6 @@
 	11_205: {
 		cardInfo: {
 			imagePath: decipher/LOTR11205.jpg
-			javaClass: true
 			//parentId: 11_205
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1509,21 +1482,21 @@
 			Lurker
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: culture(uruk-hai),minion,notAssignedToSkirmish
-		                multiplier: 2
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: culture(uruk-hai),minion,notAssignedToSkirmish
+						multiplier: 2
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>. <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>This minion is strength +2 for each [uruk-hai] minion not assigned to a skirmish.
-		lore: Some of the Uruks watch for stragglers and make certain they don't escape alive.
+		lore: "Some of the Uruks watch for stragglers and make certain they don't escape alive."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1536,7 +1509,6 @@
 	11_206: {
 		cardInfo: {
 			imagePath: decipher/LOTR11206.jpg
-			javaClass: true
 			//parentId: 11_206
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1560,24 +1532,24 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        requires: {
-		            type: location
-		            filter: battleground
-		        }
-		        effect: {
-		            type: drawCards
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: location
+					filter: battleground
+				}
+				effect: {
+					type: drawCards
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>When you play this minion at a battleground site, you may draw a card.
-		lore: Advanced Uruk scouts search for enemy weaknesses.
+		lore: "Advanced Uruk scouts search for enemy weaknesses."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1586,4 +1558,5 @@
 			}
 		}
 	}
+
 }

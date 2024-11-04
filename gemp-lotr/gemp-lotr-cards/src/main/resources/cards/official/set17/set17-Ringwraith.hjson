@@ -3,7 +3,6 @@
 	17_139: {
 		cardInfo: {
 			imagePath: decipher/LOTR17139.jpg
-			javaClass: true
 			//parentId: 17_139
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -28,33 +27,33 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyResistance
-		            filter: unbound,companion
-		            amount: {
-		                type: forEachHasAttached
-		                filter: any
-		                multiplier: -1
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(companion,maxResistance(2))
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: unbound,companion
+					amount: {
+						type: forEachHasAttached
+						filter: any
+						multiplier: -1
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: exert
+					select: choose(companion,maxResistance(2))
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>Each unbound companion is resistance -1 for each card he or she bears.<br><b>Skirmish:</b> Exert Úlairë Cantëa to exert a companion with resistance 2 or less.
-		lore: Drawn to the power of the one. They will never stop hunting you.
+		lore: "Drawn to the power of the one. They will never stop hunting you."
 		promotext: ""
 		alts: {
 			promos: {
@@ -67,7 +66,6 @@
 	17_140: {
 		cardInfo: {
 			imagePath: decipher/LOTR17140.jpg
-			javaClass: true
 			//parentId: 17_140
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -130,7 +128,7 @@
 			}
 		]
 		gametext: <b>Fierce</b>.<br>Each time the Free Peoples player heals a companion, you may add a burden.<br><b>Maneuver:</b> Exert Úlairë Enquëa twice to discard a condition (or two conditions if you can spot 5 Free Peoples player's conditions).
-		lore: At all times they feel the presence of the ring.
+		lore: "At all times they feel the presence of the ring."
 		promotext: ""
 		alts: {
 			promos: {
@@ -143,7 +141,6 @@
 	17_141: {
 		cardInfo: {
 			imagePath: decipher/LOTR17141.jpg
-			javaClass: true
 			//parentId: 17_141
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -168,47 +165,47 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            player: you
-		            filter: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: another,nazgul
-		        }
-		        effect: {
-		            type: drawCards
-		            count: {
-		                type: forEachYouCanSpot
-		                filter: wounded,companion
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: [
-		            {
-		                type: exert
-		                select: self
-		            }
-		            {
-		                type: discardFromHand
-		                forced: false
-		                select: choose(culture(wraith))
-		            }
-		        ]
-		        effect: {
-		            type: addBurdens
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					player: you
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,nazgul
+				}
+				effect: {
+					type: drawCards
+					count: {
+						type: forEachYouCanSpot
+						filter: wounded,companion
+					}
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: discardFromHand
+						forced: false
+						select: choose(culture(wraith))
+					}
+				]
+				effect: {
+					type: addBurdens
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>When you play Úlairë Otsëa, you may spot another Nazgûl to draw a card for each wounded companion you can spot.<br><b>Regroup:</b> Exert Úlairë Otsëa and discard a [wraith] card from hand to add a burden.
-		lore: Blinded by their greed, they took them without question.
+		lore: "Blinded by their greed, they took them without question."
 		promotext: ""
 		alts: {
 			promos: {
@@ -221,7 +218,6 @@
 	17_142: {
 		cardInfo: {
 			imagePath: decipher/LOTR17142.jpg
-			javaClass: true
 			//parentId: 17_142
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -243,42 +239,42 @@
 		itemclass: Ring
 		target: nazgul
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: winsSkirmish
-		            filter: bearer
-		        }
-		        effect: {
-		            type: choice
-		            player: free people
-		            texts: [
-		                Add a burden
-		                Exert a companion
-		            ]
-		            effects: [
-		                {
-		                    type: addBurdens
-		                    player: free people
-		                }
-		                {
-		                    type: exert
-		                    player: free people
-		                    select: choose(companion)
-		                }
-		            ]
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: reconciles
-		        }
-		        effect: {
-		            type: returnToHand
-		            select: bearer
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: choice
+					player: free people
+					texts: [
+						Add a burden
+						Exert a companion
+					]
+					effects: [
+						{
+							type: addBurdens
+							player: free people
+						}
+						{
+							type: exert
+							player: free people
+							select: choose(companion)
+						}
+					]
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: reconciles
+				}
+				effect: {
+					type: returnToHand
+					select: bearer
+				}
+			}
 		]
 		gametext: Bearer must be a Nazgûl.<br>Each time bearer wins a skirmish, the Free Peoples player must either add a burden or exert a companion.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
 		lore: ""
@@ -294,7 +290,6 @@
 	17_143: {
 		cardInfo: {
 			imagePath: decipher/LOTR17143.jpg
-			javaClass: true
 			//parentId: 17_143
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -315,42 +310,42 @@
 		itemclass: Ring
 		target: nazgul
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            player: you
-		            filter: self
-		        }
-		        cost: {
-		            type: removeThreats
-		            amount: 2
-		        }
-		        effect: {
-		            type: putCardsFromDiscardIntoHand
-		            select: choose(culture(wraith))
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: reconciles
-		        }
-		        effect: {
-		            type: returnToHand
-		            select: bearer
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					player: you
+					filter: self
+				}
+				cost: {
+					type: removeThreats
+					amount: 2
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(wraith))
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: reconciles
+				}
+				effect: {
+					type: returnToHand
+					select: bearer
+				}
+			}
 		]
 		gametext: Bearer must be a Nazgûl. Bearer is <b>damage +1</b>.<br>When you play this artifact, you may remove two threats to take a [wraith] card into hand from your discard pile.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
 		lore: ""
@@ -366,7 +361,6 @@
 	17_144: {
 		cardInfo: {
 			imagePath: decipher/LOTR17144.jpg
-			javaClass: true
 			//parentId: 17_144
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -391,26 +385,26 @@
 		site: 3
 		keywords: Fierce
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: repeat
-		            times: {
-                        type: forEachYouCanSpot
-                        filter: companion
-                        over: 4
-		            }
-		            effect: {
-		                type: exert
-		                select: choose(companion)
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+					}
+					effect: {
+						type: exert
+						select: choose(companion)
+					}
+				}
+			}
 		]
 		gametext: <b>Fierce</b>.<br>Each time the Witch-king wins a fierce skirmish, you may exert a companion for each companion you can spot over 4.
 		lore: ""
@@ -422,4 +416,5 @@
 			}
 		}
 	}
+
 }

@@ -3,7 +3,6 @@
 	5_10: {
 		cardInfo: {
 			imagePath: decipher/LOTR05010.jpg
-			javaClass: true
 			//parentId: 5_10
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -27,29 +26,29 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: elf
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeMoreWoundsThan
-		            filter: self
-		            requires: {
-		                type: canSpot
-		                filter: self,inSkirmishAgainst(wounded,minion)
-		            }
-		            amount: 1
-		            phase: skirmish
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeMoreWoundsThan
+					filter: self
+					requires: {
+						type: canSpot
+						filter: self,inSkirmishAgainst(wounded,minion)
+					}
+					amount: 1
+					phase: skirmish
+				}
+			}
 		]
 		gametext: To play, spot an Elf.<br>While skirmishing a wounded minion, Balglin takes no more than 1 wound during each skirmish phase.
-		lore: He is a strong fighter. He asks for no quarter and gives none.
+		lore: "He is a strong fighter. He asks for no quarter and gives none."
 		promotext: ""
 		alts: {
 			promos: {
@@ -62,7 +61,6 @@
 	5_11: {
 		cardInfo: {
 			imagePath: decipher/LOTR05011.jpg
-			javaClass: true
 			//parentId: 5_11
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -80,7 +78,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			cost: {
@@ -97,7 +95,7 @@
 			]
 		}
 		gametext: <b>Archery:</b> Exert 3 Elf companions to make the fellowship archery total +2.
-		lore: A storm of white arrows answered the attacking hand of Isengard.
+		lore: "A storm of white arrows answered the attacking hand of Isengard."
 		promotext: ""
 		alts: {
 			promos: {
@@ -110,7 +108,6 @@
 	5_12: {
 		cardInfo: {
 			imagePath: decipher/LOTR05012.jpg
-			javaClass: true
 			//parentId: 5_12
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -132,24 +129,24 @@
 		itemclass: Hand weapon
 		target: title(Legolas)
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: moves
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: wounded,minion
-		        }
-		        effect: {
-		            type: heal
-		            select: bearer
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: canSpot
+					filter: wounded,minion
+				}
+				effect: {
+					type: heal
+					select: bearer
+				}
+			}
 		]
 		gametext: Bearer must be Legolas.<br>Each time the fellowship moves, you may spot a wounded minion to heal Legolas.
-		lore: Legolas wielded a longsword to strike from horseback.
+		lore: "Legolas wielded a longsword to strike from horseback."
 		promotext: ""
 		alts: {
 			promos: {
@@ -162,7 +159,6 @@
 	5_13: {
 		cardInfo: {
 			imagePath: decipher/LOTR05013.jpg
-			javaClass: true
 			//parentId: 5_13
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -186,39 +182,39 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: elf
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-                    type: modifyCost
-                    requires: {
-                        type: canSpot
-                        filter: self,hasAttached(ranged weapon)
-                    }
-                    filter: side(shadow),possession
-                    amount: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: doesNotAddToArcheryTotal
-		            filter: self
-		            requires: {
-		                type: canSpot
-		                filter: self,hasAttached(ranged weapon)
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: {
+						type: canSpot
+						filter: self,hasAttached(ranged weapon)
+					}
+					filter: side(shadow),possession
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: doesNotAddToArcheryTotal
+					filter: self
+					requires: {
+						type: canSpot
+						filter: self,hasAttached(ranged weapon)
+					}
+				}
+			}
 		]
 		gametext: To play, spot an Elf.<br>While Taurnil bears a ranged weapon, the twilight cost of each Shadow possession is +2, and he does not add to the fellowship archery total.
-		lore: Taurnil's careful aim can disarm his enemies at long range.
+		lore: "Taurnil's careful aim can disarm his enemies at long range."
 		promotext: ""
 		alts: {
 			promos: {
@@ -231,7 +227,6 @@
 	5_14: {
 		cardInfo: {
 			imagePath: decipher/LOTR05014.jpg
-			javaClass: true
 			//parentId: 5_14
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -249,13 +244,13 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: elf,companion
-			    count: 3
+				type: canSpot
+				filter: elf,companion
+				count: 3
 			}
 			effect: [
 				{
@@ -263,12 +258,12 @@
 					select: choose(companion)
 				}
 				{
-				    type: liberateSite
+					type: liberateSite
 				}
 			]
 		}
 		gametext: <b>Regroup:</b> Spot 3 Elf companions to heal a companion and liberate a site.
-		lore: Anxious defenders cheered the welcome sound of Elvish trumpets.
+		lore: "Anxious defenders cheered the welcome sound of Elvish trumpets."
 		promotext: ""
 		alts: {
 			promos: {
@@ -281,7 +276,6 @@
 	5_121: {
 		cardInfo: {
 			imagePath: decipher/LOTR05121.jpg
-			javaClass: true
 			//parentId: 5_121
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -307,21 +301,21 @@
 		resistance: 6
 		keywords: Archer
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(another,or(dwarf,elf),companion)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: heal
+					select: choose(another,or(dwarf,elf),companion)
+				}
+			}
 		]
 		gametext: <b>Archer</b>.<br>Each time Legolas wins a skirmish, you may heal a Dwarf companion or another Elf companion.
-		lore: ...even more would I give for a hundred good archers of Mirkwood. We shall need them.'
+		lore: "'...even more would I give for a hundred good archers of Mirkwood. We shall need them.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -330,4 +324,5 @@
 			}
 		}
 	}
+
 }

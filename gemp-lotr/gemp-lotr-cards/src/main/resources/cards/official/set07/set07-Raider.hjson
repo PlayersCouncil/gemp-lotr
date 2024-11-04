@@ -3,7 +3,6 @@
 	7_129: {
 		cardInfo: {
 			imagePath: decipher/LOTR07129.jpg
-			javaClass: true
 			//parentId: 7_129
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -23,46 +22,46 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(raider),man
-		            count: 2
-		        }
-		    }
-		    {
-		        type: extraCost
-		        cost: {
-		            type: addThreats
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: aboutToBeKilled
-		            filter: companion
-		        }
-		        cost: {
-		            type: removeThreats
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(companion,not(ringBearer))
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: regroup
-		        }
-		        effect: {
-		            type: discard
-		            select: self
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+					count: 2
+				}
+			}
+			{
+				type: extraCost
+				cost: {
+					type: addThreats
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: aboutToBeKilled
+					filter: companion
+				}
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: discard
+					select: choose(companion,not(ringBearer))
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
 		]
 		gametext: To play, spot 2 [raider] Men and add a threat.<br>Each time a companion is about to be killed, you may remove a threat to discard a companion (except the Ring-bearer).<br>Discard this condition at the start of the regroup phase.
 		lore: ""
@@ -78,7 +77,6 @@
 	7_130: {
 		cardInfo: {
 			imagePath: decipher/LOTR07130.jpg
-			javaClass: true
 			//parentId: 7_130
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -98,26 +96,26 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: canSpot
-		            filter: culture(raider),man
-		            count: 2
-		        }
-		        limitPerPhase: 1
-		        cost: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: addThreats
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+					count: 2
+				}
+				limitPerPhase: 1
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: addThreats
+				}
+			}
 		]
 		gametext: <b>Regroup:</b> Spot 2 [raider] Men and remove (3) to add a threat (limit 1).
-		lore: ...yet not all unguessed.'
+		lore: "'...yet not all unguessed.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -130,7 +128,6 @@
 	7_131: {
 		cardInfo: {
 			imagePath: decipher/LOTR07131.jpg
-			javaClass: true
 			//parentId: 7_131
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -154,27 +151,27 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: skirmish
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: self,inSkirmish
-		        }
-		        cost: {
-		            type: removeTwilight
-		        }
-		        effect: {
-    		        type: addThreats
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				cost: {
+					type: removeTwilight
+				}
+				effect: {
+					type: addThreats
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (1) to add a threat.
-		lore: ...the great monsters were unfought....
+		lore: "...the great monsters were unfought...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -187,7 +184,6 @@
 	7_132: {
 		cardInfo: {
 			imagePath: decipher/LOTR07132.jpg
-			javaClass: true
 			//parentId: 7_132
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -211,22 +207,22 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotThreats
-		                amount: 2
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 2
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br>While you can spot 2 threats, this minion is <b>damage +1</b>.
-		lore: In the South the Haradrim are moving....'
+		lore: "'In the South the Haradrim are moving....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -239,7 +235,6 @@
 	7_133: {
 		cardInfo: {
 			imagePath: decipher/LOTR07133.jpg
-			javaClass: true
 			//parentId: 7_133
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -266,26 +261,26 @@
 			Ambush 1
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: assignedToSkirmish
-		            side: free people
-		            filter: self
-		        }
-		        requires: {
-		            type: haveInitiative
-		            side: shadow
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(character,assignedToSkirmish(self))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: assignedToSkirmish
+					side: free people
+					filter: self
+				}
+				requires: {
+					type: haveInitiative
+					side: shadow
+				}
+				effect: {
+					type: wound
+					select: choose(character,assignedToSkirmish(self))
+				}
+			}
 		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
-		lore: New forces of the enemy were hastening up the road from the River....
+		lore: "New forces of the enemy were hastening up the road from the River...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -298,7 +293,6 @@
 	7_134: {
 		cardInfo: {
 			imagePath: decipher/LOTR07134.jpg
-			javaClass: true
 			//parentId: 7_134
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -325,26 +319,26 @@
 			Ambush 1
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: assignedToSkirmish
-		            side: free people
-		            filter: self
-		        }
-		        requires: {
-		            type: haveInitiative
-		            side: shadow
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(character,assignedToSkirmish(self))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: assignedToSkirmish
+					side: free people
+					filter: self
+				}
+				requires: {
+					type: haveInitiative
+					side: shadow
+				}
+				effect: {
+					type: wound
+					select: choose(character,assignedToSkirmish(self))
+				}
+			}
 		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
-		lore: ...and the Haradrim rallied about them.
+		lore: "...and the Haradrim rallied about them."
 		promotext: ""
 		alts: {
 			promos: {
@@ -357,7 +351,6 @@
 	7_135: {
 		cardInfo: {
 			imagePath: decipher/LOTR07135.jpg
-			javaClass: true
 			//parentId: 7_135
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -384,26 +377,26 @@
 			Ambush 1
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: assignedToSkirmish
-		            side: free people
-		            filter: self
-		        }
-		        requires: {
-		            type: haveInitiative
-		            side: shadow
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(character,assignedToSkirmish(self))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: assignedToSkirmish
+					side: free people
+					filter: self
+				}
+				requires: {
+					type: haveInitiative
+					side: shadow
+				}
+				effect: {
+					type: wound
+					select: choose(character,assignedToSkirmish(self))
+				}
+			}
 		]
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
-		lore: ...from the southward fields came the footmen of Harad....
+		lore: "...from the southward fields came the footmen of Harad...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -416,7 +409,6 @@
 	7_136: {
 		cardInfo: {
 			imagePath: decipher/LOTR07136.jpg
-			javaClass: true
 			//parentId: 7_136
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -440,26 +432,26 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: skirmish
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: self,inSkirmish
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(or(companion,ally),inSkirmishAgainst(self))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: wound
+					select: choose(or(companion,ally),inSkirmishAgainst(self))
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (3) to wound a companion or ally he is skirmishing.
 		lore: ""
@@ -475,7 +467,6 @@
 	7_137: {
 		cardInfo: {
 			imagePath: decipher/LOTR07137.jpg
-			javaClass: true
 			//parentId: 7_137
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -499,26 +490,26 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: skirmish
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: self,inSkirmish
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(or(companion,ally),inSkirmishAgainst(self))
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: wound
+					select: choose(or(companion,ally),inSkirmishAgainst(self))
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (3) to wound a companion or ally he is skirmishing.
 		lore: ""
@@ -534,7 +525,6 @@
 	7_138: {
 		cardInfo: {
 			imagePath: decipher/LOTR07138.jpg
-			javaClass: true
 			//parentId: 7_138
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -558,27 +548,27 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: skirmish
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: self,inSkirmish
-		        }
-		        cost: {
-		            type: removeTwilight
-		        }
-		        effect: {
-		            type: addThreats
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				cost: {
+					type: removeTwilight
+				}
+				effect: {
+					type: addThreats
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (1) to add a threat.
-		lore: ...with red banners....
+		lore: "...with red banners...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -591,7 +581,6 @@
 	7_139: {
 		cardInfo: {
 			imagePath: decipher/LOTR07139.jpg
-			javaClass: true
 			//parentId: 7_139
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -615,36 +604,36 @@
 		site: 4
 		keywords: Easterling
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: or
-		            requires: [
-                        {
-                            type: haveInitiative
-                            side: shadow
-                        }
-                        {
-                            type: canSpot
-                            filter: easterling
-                            count: 3
-                        }
-		            ]
-		        }
-		        cost: {
-		            type: discardFromHand
-		            forced: false
-		            count: 2
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(another,easterling)
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: or
+					requires: [
+						{
+							type: haveInitiative
+							side: shadow
+						}
+						{
+							type: canSpot
+							filter: easterling
+							count: 3
+						}
+					]
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: heal
+					select: choose(another,easterling)
+				}
+			}
 		]
 		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> If you have initiative or you spot 3 Easterlings, discard 2 cards from hand to heal another Easterling.
-		lore: ...others held westward to hold off the forces of Gondor....
+		lore: "...others held westward to hold off the forces of Gondor...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -657,7 +646,6 @@
 	7_140: {
 		cardInfo: {
 			imagePath: decipher/LOTR07140.jpg
-			javaClass: true
 			//parentId: 7_140
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -681,35 +669,35 @@
 		site: 4
 		keywords: Easterling
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: [
-		            {
-		                type: removeBurdens
-		            }
-		            {
-		                type: exert
-		                select: self
-		            }
-		        ]
-		        effect: {
-		            type: heal
-		            select: choose(another,easterling)
-		            count: {
-		                type: Conditional
-		                requires: {
-		                    type: haveInitiative
-		                    side: shadow
-		                }
-		                true: 2
-		                false: 1
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: removeBurdens
+					}
+					{
+						type: exert
+						select: self
+					}
+				]
+				effect: {
+					type: heal
+					select: choose(another,easterling)
+					count: {
+						type: Conditional
+						requires: {
+							type: haveInitiative
+							side: shadow
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
 		]
 		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Remove a burden and exert this minion to heal another Easterling (or 2 Easterlings if you have initiative).
-		lore: The new host that we had tidings of has come first....'
+		lore: "'The new host that we had tidings of has come first....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -722,7 +710,6 @@
 	7_141: {
 		cardInfo: {
 			imagePath: decipher/LOTR07141.jpg
-			javaClass: true
 			//parentId: 7_141
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -746,23 +733,23 @@
 		site: 4
 		keywords: Easterling
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: addKeyword
-		            select: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Exert this minion to make him <b>damage +1</b>.
-		lore: Soon there will be battle on the fields.'
+		lore: "'Soon there will be battle on the fields.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -775,7 +762,6 @@
 	7_142: {
 		cardInfo: {
 			imagePath: decipher/LOTR07142.jpg
-			javaClass: true
 			//parentId: 7_142
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -799,23 +785,23 @@
 		site: 4
 		keywords: Easterling
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: addKeyword
-		            select: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Exert this minion to make him <b>damage +1</b>.
-		lore: ...great forces were flowing in from the East.
+		lore: "...great forces were flowing in from the East."
 		promotext: ""
 		alts: {
 			promos: {
@@ -828,7 +814,6 @@
 	7_143: {
 		cardInfo: {
 			imagePath: decipher/LOTR07143.jpg
-			javaClass: true
 			//parentId: 7_143
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -852,33 +837,33 @@
 		site: 4
 		keywords: Easterling
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: [
-                    {
-                        type: not
-                        requires: {
-                            type: canSpotBurdens
-                            amount: 2
-                        }
-                    }
-                    {
-                        type: canSpot
-                        filter: another,easterling
-                    }
-                ]
-                cost: {
-                    type: discardFromHand
-                    forced: false
-                }
-                effect: {
-                    type: addBurdens
-                }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				requires: [
+					{
+						type: not
+						requires: {
+							type: canSpotBurdens
+							amount: 2
+						}
+					}
+					{
+						type: canSpot
+						filter: another,easterling
+					}
+				]
+				cost: {
+					type: discardFromHand
+					forced: false
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
 		]
 		gametext: <b>Easterling</b>.<br><b>Maneuver:</b> If you cannot spot 2 burdens, spot another Easterling and discard a card from hand to add a burden.
-		lore: ...and so have many also in the East.'
+		lore: "'...and so have many also in the East.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -891,7 +876,6 @@
 	7_144: {
 		cardInfo: {
 			imagePath: decipher/LOTR07144.jpg
-			javaClass: true
 			//parentId: 7_144
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -915,23 +899,23 @@
 		site: 4
 		keywords: Easterling
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: addKeyword
-		            select: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Exert this minion to make him <b>damage +1</b>.
-		lore: ...forces ten times, and more than ten times....
+		lore: "...forces ten times, and more than ten times...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -944,7 +928,6 @@
 	7_145: {
 		cardInfo: {
 			imagePath: decipher/LOTR07145.jpg
-			javaClass: true
 			//parentId: 7_145
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -971,23 +954,23 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: {
-		                type: forEachBurden
-		            }
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachBurden
+					}
+				}
+			}
 		]
 		gametext: <b>Easterling</b>. <b>Fierce</b>.<br>Each time Easterling Regiment wins a skirmish, you may add (1) for each burden.
-		lore: ...there marched up an army of Easterlings....
+		lore: "...there marched up an army of Easterlings...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1000,7 +983,6 @@
 	7_146: {
 		cardInfo: {
 			imagePath: decipher/LOTR07146.jpg
-			javaClass: true
 			//parentId: 7_146
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1024,33 +1006,33 @@
 		site: 4
 		keywords: Easterling
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: [
-                    {
-                        type: not
-                        requires: {
-                            type: canSpotBurdens
-                            amount: 1
-                        }
-                    }
-                    {
-                        type: canSpot
-                        filter: another,easterling
-                    }
-                ]
-                cost: {
-                    type: exert
-                    select: self
-                }
-                effect: {
-                    type: addBurdens
-                }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				requires: [
+					{
+						type: not
+						requires: {
+							type: canSpotBurdens
+							amount: 1
+						}
+					}
+					{
+						type: canSpot
+						filter: another,easterling
+					}
+				]
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
 		]
 		gametext: <b>Easterling</b>.<br><b>Maneuver:</b> If you cannot spot a burden, spot another Easterling and exert this minion to add a burden.
-		lore: ...Easterlings with axes....
+		lore: "...Easterlings with axes...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1063,7 +1045,6 @@
 	7_147: {
 		cardInfo: {
 			imagePath: decipher/LOTR07147.jpg
-			javaClass: true
 			//parentId: 7_147
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1087,21 +1068,21 @@
 		site: 4
 		keywords: Easterling
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: removeBurdens
-		            amount: 2
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(another,easterling)
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeBurdens
+					amount: 2
+				}
+				effect: {
+					type: heal
+					select: choose(another,easterling)
+				}
+			}
 		]
 		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Remove 2 burdens to heal another Easterling.
-		lore: ...enclosed in a ring of foes.
+		lore: "...enclosed in a ring of foes."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1114,7 +1095,6 @@
 	7_148: {
 		cardInfo: {
 			imagePath: decipher/LOTR07148.jpg
-			javaClass: true
 			//parentId: 7_148
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1132,7 +1112,7 @@
 		culture: Raider
 		twilight: 7
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			requires: {
@@ -1148,7 +1128,7 @@
 			]
 		}
 		gametext: Spot 2 [raider] Men to discard a companion (except the Ring-bearer).
-		lore: ...displaying his standard, black serpent upon scarlet....
+		lore: "...displaying his standard, black serpent upon scarlet...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1161,7 +1141,6 @@
 	7_149: {
 		cardInfo: {
 			imagePath: decipher/LOTR07149.jpg
-			javaClass: true
 			//parentId: 7_149
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1181,37 +1160,37 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(raider),man
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: canSpot
-		            filter: culture(raider),man
-		            count: 3
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 9
-		        }
-		        effect: {
-		            type: addModifier
-		            modifier: {
-		                type: modifyMoveLimit
-		                amount: -1
-		            }
-		            until: endOfTurn
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+					count: 3
+				}
+				cost: {
+					type: removeTwilight
+					amount: 9
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: -1
+					}
+					until: endOfTurn
+				}
+			}
 		]
 		gametext: To play, spot a [raider] Man.<br><b>Regroup:</b> Remove (9) and spot 3 [raider] Men to make the move limit -1.
-		lore: ...like moving houses in the red and fitful light....
+		lore: "...like moving houses in the red and fitful light...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1224,7 +1203,6 @@
 	7_150: {
 		cardInfo: {
 			imagePath: decipher/LOTR07150.jpg
-			javaClass: true
 			//parentId: 7_150
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1244,42 +1222,42 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(raider),man
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: canSpot
-		            filter: culture(raider),man
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: raider
-		            select: self
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: shadowHasInitiative
-                    requires: {
-                        type: canSpotCultureTokens
-                        culture: raider
-                        filter: self
-                        amount: 3
-                    }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: raider
+					select: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: shadowHasInitiative
+					requires: {
+						type: canSpotCultureTokens
+						culture: raider
+						filter: self
+						amount: 3
+					}
+				}
+			}
 		]
 		gametext: To play, spot a [raider] Man.<br><b>Regroup:</b> Remove (3) and spot a [raider] Man to place a [raider] token here.<br>While there are 3 [raider] tokens here, the Shadow has initiative regardless of the Free Peoples player's hand.
 		lore: ""
@@ -1295,7 +1273,6 @@
 	7_151: {
 		cardInfo: {
 			imagePath: decipher/LOTR07151.jpg
-			javaClass: true
 			//parentId: 7_151
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1313,7 +1290,7 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
@@ -1329,26 +1306,26 @@
 					memorize: shadowDiscardedCards
 				}
 				{
-				    type: discardFromHand
-				    forced: false
-				    hand: fp
-				    player: fp
-				    count: any
-				    memorize: freeDiscardedCards
+					type: discardFromHand
+					forced: false
+					hand: fp
+					player: fp
+					count: any
+					memorize: freeDiscardedCards
 				}
 				{
-				    type: addTwilight
-				    amount: {
-				        type: subtract
-				        firstNumber: {
-				            type: forEachInMemory
-				            memory: shadowDiscardedCards
-				        }
-				        secondNumber: {
-				            type: forEachInMemory
-				            memory: freeDiscardedCards
-				        }
-				    }
+					type: addTwilight
+					amount: {
+						type: subtract
+						firstNumber: {
+							type: forEachInMemory
+							memory: shadowDiscardedCards
+						}
+						secondNumber: {
+							type: forEachInMemory
+							memory: freeDiscardedCards
+						}
+					}
 				}
 			]
 		}
@@ -1366,7 +1343,6 @@
 	7_152: {
 		cardInfo: {
 			imagePath: decipher/LOTR07152.jpg
-			javaClass: true
 			//parentId: 7_152
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1390,31 +1366,31 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(raider),man
-		        }
-		    }
-		    {
-		        type: trigger
-		        requires: {
-		            type: canSpotThreats
-		            amount: 6
-		        }
-		        trigger: {
-		            type: winsSkirmish
-		            filter: self
-		        }
-		        effect: {
-		            type: kill
-		            select: choose(companion,inSkirmishAgainst(self))
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: trigger
+				requires: {
+					type: canSpotThreats
+					amount: 6
+				}
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: kill
+					select: choose(companion,inSkirmishAgainst(self))
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br>To play, spot a [raider] Man.<br>While you can spot 6 threats, each time this minion wins a skirmish, the companion he was skirmishing is killed.
-		lore: Great was the clash of their meeting.
+		lore: "Great was the clash of their meeting."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1427,7 +1403,6 @@
 	7_153: {
 		cardInfo: {
 			imagePath: decipher/LOTR07153.jpg
-			javaClass: true
 			//parentId: 7_153
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1445,7 +1420,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
@@ -1456,14 +1431,14 @@
 				{
 					type: addTwilight
 					amount: {
-					    type: forEachThreat
-					    multiplier: 2
+						type: forEachThreat
+						multiplier: 2
 					}
 				}
 			]
 		}
 		gametext: Spot a [raider] minion to add (2) for each threat.
-		lore: ...dragging through the lanes amid the fires....
+		lore: "...dragging through the lanes amid the fires...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1476,7 +1451,6 @@
 	7_154: {
 		cardInfo: {
 			imagePath: decipher/LOTR07154.jpg
-			javaClass: true
 			//parentId: 7_154
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1494,7 +1468,7 @@
 		culture: Raider
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -1502,19 +1476,19 @@
 					type: modifyStrength
 					select: choose(culture(raider),man)
 					amount: {
-					    type: Conditional
-					    requires: {
-					        type: haveInitiative
-					        side: shadow
-					    }
-					    true: 6
-					    false: 3
+						type: Conditional
+						requires: {
+							type: haveInitiative
+							side: shadow
+						}
+						true: 6
+						false: 3
 					}
 				}
 			]
 		}
 		gametext: Make a [raider] Man strength +3 (or +6 if you have initiative).
-		lore: ...Southrons in scarlet....
+		lore: "...Southrons in scarlet...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1527,7 +1501,6 @@
 	7_155: {
 		cardInfo: {
 			imagePath: decipher/LOTR07155.jpg
-			javaClass: true
 			//parentId: 7_155
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1548,26 +1521,26 @@
 		itemclass: Ranged weapon
 		target: culture(raider),man
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: archer
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: ambush
-		            amount: 5
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: archer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: ambush
+					amount: 5
+				}
+			}
 		]
 		gametext: Bearer must be a [raider] Man.<br>Bearer is an <b>archer</b> and <b>ambush</b> (5).
-		lore: Neither Hirluin the fair would return to Pinnath Gelin, nor Grimbold to Grimslade....
+		lore: "Neither Hirluin the fair would return to Pinnath Gelin, nor Grimbold to Grimslade...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1580,7 +1553,6 @@
 	7_156: {
 		cardInfo: {
 			imagePath: decipher/LOTR07156.jpg
-			javaClass: true
 			//parentId: 7_156
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1602,21 +1574,21 @@
 		itemclass: Hand weapon
 		target: culture(raider),man
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
 		]
 		gametext: Bearer must be a [raider] Man.<br><b>Skirmish:</b> Exert bearer to add (2).
-		lore: ...the drawing of the scimitars of the Southrons was like a glitter of stars.
+		lore: "...the drawing of the scimitars of the Southrons was like a glitter of stars."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1629,7 +1601,6 @@
 	7_157: {
 		cardInfo: {
 			imagePath: decipher/LOTR07157.jpg
-			javaClass: true
 			//parentId: 7_157
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1647,7 +1618,7 @@
 		culture: Raider
 		twilight: 5
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
@@ -1664,7 +1635,7 @@
 			]
 		}
 		gametext: Exert a [raider] Man to wound a companion he is skirmishing twice.
-		lore: ...he came against the white horse and the green with great press of men....
+		lore: "...he came against the white horse and the green with great press of men...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1677,7 +1648,6 @@
 	7_158: {
 		cardInfo: {
 			imagePath: decipher/LOTR07158.jpg
-			javaClass: true
 			//parentId: 7_158
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1697,32 +1667,32 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(raider),man
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: moves
-		        }
-		        requires: {
-		            type: haveInitiative
-		            side: shadow
-		        }
-		        effect: {
-		            type: exert
-		            player: fp
-		            select: choose(companion)
-		            count: 2
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: haveInitiative
+					side: shadow
+				}
+				effect: {
+					type: exert
+					player: fp
+					select: choose(companion)
+					count: 2
+				}
+			}
 		]
 		gametext: To play, spot a [raider] Man.<br>Each time the fellowship moves, the Free Peoples player must exert 2 companions, if you have initiative.
-		lore: Already men were breaking away, flying wild and witless here and there....
+		lore: "Already men were breaking away, flying wild and witless here and there...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1735,7 +1705,6 @@
 	7_159: {
 		cardInfo: {
 			imagePath: decipher/LOTR07159.jpg
-			javaClass: true
 			//parentId: 7_159
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1755,40 +1724,40 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: not
-		            requires: {
-		                type: canSpotBurdens
-		                amount: 2
-		            }
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(easterling)
-		        }
-		        effect: {
-		            type: addBurdens
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(easterling)
-		            amount: 2
-		        }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: not
+					requires: {
+						type: canSpotBurdens
+						amount: 2
+					}
+				}
+				cost: {
+					type: exert
+					select: choose(easterling)
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(easterling)
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Maneuver:</b> If you cannot spot 2 burdens, exert an Easterling to add a burden.<br><b>Skirmish:</b> Discard this condition to make an Easterling strength +2.
-		lore: ...had any now that Faramir could hold the fords for longs.
+		lore: "...had any now that Faramir could hold the fords for longs."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1801,7 +1770,6 @@
 	7_160: {
 		cardInfo: {
 			imagePath: decipher/LOTR07160.jpg
-			javaClass: true
 			//parentId: 7_160
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1825,29 +1793,29 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: preventable
-		            text: Would you like to add a threat to prevent adding (5) twilight?
-		            player: fp
-		            cost: {
-		                type: addThreats
-		            }
-		            effect: {
-		                type: addTwilight
-		                amount: 5
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: preventable
+					text: Would you like to add a threat to prevent adding (5) twilight?
+					player: fp
+					cost: {
+						type: addThreats
+					}
+					effect: {
+						type: addTwilight
+						amount: 5
+					}
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br><b>Maneuver:</b> Exert this minion to add (5). The Free Peoples player may add a threat to prevent this.
-		lore: ...wild Southron men....
+		lore: "...wild Southron men...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1860,7 +1828,6 @@
 	7_161: {
 		cardInfo: {
 			imagePath: decipher/LOTR07161.jpg
-			javaClass: true
 			//parentId: 7_161
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1884,29 +1851,29 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: canSpot
-		            filter: culture(raider),man
-		            count: 3
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 3
-		        }
-		        effect: {
-		            type: addKeyword
-		            select: choose(culture(raider),man)
-		            keyword: damage
-		            amount: 1
-		            until: regroup
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+					count: 3
+				}
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: addKeyword
+					select: choose(culture(raider),man)
+					keyword: damage
+					amount: 1
+					until: regroup
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br><b>Shadow:</b> Remove (3) and spot 3 [raider] Men to make one of those Men <b>damage +1</b> until the regroup phase.
-		lore: ...gathered about the standard of their chieftain.
+		lore: "...gathered about the standard of their chieftain."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1919,7 +1886,6 @@
 	7_162: {
 		cardInfo: {
 			imagePath: decipher/LOTR07162.jpg
-			javaClass: true
 			//parentId: 7_162
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1943,22 +1909,22 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotThreats
-		                amount: 4
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 4
+					}
+					filter: self
+					keyword: damage
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br>While you can spot 4 threats, this minion is <b>damage +2</b>.
-		lore: ...a mounted champion of Harad....
+		lore: "...a mounted champion of Harad...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1971,7 +1937,6 @@
 	7_163: {
 		cardInfo: {
 			imagePath: decipher/LOTR07163.jpg
-			javaClass: true
 			//parentId: 7_163
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1995,31 +1960,31 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(raider),man
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: assignedToSkirmish
-		            filter: self
-		            side: free people
-		        }
-		        effect: {
-		            type: addModifier
-		            modifier: {
-		                type: shadowHasInitiative
-		            }
-		            until: endOfTurn
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: assignedToSkirmish
+					filter: self
+					side: free people
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: shadowHasInitiative
+					}
+					until: endOfTurn
+				}
+			}
 		]
 		gametext: <b>Southron</b>. To play, spot a [raider] Man.<br>Each time the Free Peoples player assigns this minion to a character, the Shadow has initiative until the end of the turn.
-		lore: ...regiments from the South....
+		lore: "...regiments from the South...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2032,7 +1997,6 @@
 	7_164: {
 		cardInfo: {
 			imagePath: decipher/LOTR07164.jpg
-			javaClass: true
 			//parentId: 7_164
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2059,35 +2023,35 @@
 			Archer
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotTwilight
-		                amount: 6
-		            }
-		            filter: other,culture(raider),man
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotTwilight
-		                amount: 9
-		            }
-		            filter: other,culture(raider),man
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotTwilight
+						amount: 6
+					}
+					filter: other,culture(raider),man
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotTwilight
+						amount: 9
+					}
+					filter: other,culture(raider),man
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you can spot 6 twilight tokens, other [raider] Men are <b>damage +1</b>.<br>While you can spot 9 twilight tokens, other [raider] Men are <b>damage +1</b>.
-		lore: ...company upon company of the enemy pressed to the walls.
+		lore: "...company upon company of the enemy pressed to the walls."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2100,7 +2064,6 @@
 	7_165: {
 		cardInfo: {
 			imagePath: decipher/LOTR07165.jpg
-			javaClass: true
 			//parentId: 7_165
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2127,42 +2090,42 @@
 			Archer
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpotTwilight
-		                amount: 3
-		            }
-		            filter: culture(raider),man
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpotTwilight
-		                amount: 6
-		            }
-		            filter: culture(raider),man
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpotTwilight
-		                amount: 9
-		            }
-		            filter: culture(raider),man
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotTwilight
+						amount: 3
+					}
+					filter: culture(raider),man
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotTwilight
+						amount: 6
+					}
+					filter: culture(raider),man
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotTwilight
+						amount: 9
+					}
+					filter: culture(raider),man
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you can spot 3 twilight tokens, all [raider] Men are strength +1.<br>While you can spot 6 twilight tokens, all [raider] Men are strength +1.<br>While you can spot 9 twilight tokens, all [raider] Men are strength +1.
 		lore: ""
@@ -2178,7 +2141,6 @@
 	7_166: {
 		cardInfo: {
 			imagePath: decipher/LOTR07166.jpg
-			javaClass: true
 			//parentId: 7_166
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2202,37 +2164,37 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        requires: {
-		            type: canSpotFPCultures
-		            amount: 4
-		        }
-		        cost: {
-		            type: choice
-		            texts: [
-		                Exert this minion
-		                Remove a threat
-		            ]
-		            effects: [
-		                {
-		                    type: exert
-		                    select: self
-		                }
-		                {
-		                    type: removeThreats
-		                }
-		            ]
-		        }
-		        effect: {
-		            type: wound
-		            select: choose(companion,not(ringBearer))
-		        }
-		    }
+			{
+				type: activated
+				phase: archery
+				requires: {
+					type: canSpotFPCultures
+					amount: 4
+				}
+				cost: {
+					type: choice
+					texts: [
+						Exert this minion
+						Remove a threat
+					]
+					effects: [
+						{
+							type: exert
+							select: self
+						}
+						{
+							type: removeThreats
+						}
+					]
+				}
+				effect: {
+					type: wound
+					select: choose(companion,not(ringBearer))
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br><b>Archery:</b> Spot 4 Free Peoples cultures and either exert this minion or remove a threat to wound a companion (except the Ring-bearer).
-		lore: ...Haradrim, cruel and tall.
+		lore: "...Haradrim, cruel and tall."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2245,7 +2207,6 @@
 	7_167: {
 		cardInfo: {
 			imagePath: decipher/LOTR07167.jpg
-			javaClass: true
 			//parentId: 7_167
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2273,34 +2234,34 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(raider),man
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: archery
-		        cost: [
-                    {
-                        type: exert
-                        select: self
-                    }
-                    {
-                        type: removeThreats
-                    }
-                ]
-                effect: {
-                    type: modifyArcheryTotal
-                    side: shadow
-                    amount: 1
-                }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: activated
+				phase: archery
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: removeThreats
+					}
+				]
+				effect: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Southron</b>. <b>Archer</b>. <b>Fierce</b>. To play, spot a [raider] Man.<br><b>Archery:</b> Exert this minion and remove a threat to make the minion archery total +1.
-		lore: Southward beyond the road lay the main force of the Haradrim....
+		lore: "Southward beyond the road lay the main force of the Haradrim...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2313,7 +2274,6 @@
 	7_168: {
 		cardInfo: {
 			imagePath: decipher/LOTR07168.jpg
-			javaClass: true
 			//parentId: 7_168
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2337,31 +2297,31 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        requires: [
-		            {
-		                type: canSpot
-		                filter: culture(raider),man
-		            }
-		            {
-		                type: canSpot
-		                filter: companion
-		                count: 6
-		            }
-		        ]
-		        cost: {
-		            type: removeThreats
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(companion)
-		        }
-		    }
+			{
+				type: activated
+				phase: archery
+				requires: [
+					{
+						type: canSpot
+						filter: culture(raider),man
+					}
+					{
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+				]
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: exert
+					select: choose(companion)
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br><b>Archery:</b> Spot another [raider] Man, spot 6 companions, and remove a threat to exert a companion.
-		lore: ...the red southland swords that would have hewed him as he lay.
+		lore: "...the red southland swords that would have hewed him as he lay."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2374,7 +2334,6 @@
 	7_169: {
 		cardInfo: {
 			imagePath: decipher/LOTR07169.jpg
-			javaClass: true
 			//parentId: 7_169
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2394,49 +2353,49 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: [
-		            {
-		                type: exert
-		                select: choose(easterling)
-		            }
-		            {
-		                type: discard
-		                select: self
-		            }
-		        ]
-		        effect: {
-		            type: preventable
-		            player: fp
-		            text: Would you like to add 2 burdens to prevent reducing the move limit for this turn by 1?
-		            cost: {
-		                type: addBurdens
-		                amount: 2
-		            }
-		            effect: {
-		                type: addModifier
-		                modifier: {
-		                    type: modifyMoveLimit
-		                    amount: -1
-		                }
-		                until: endOfTurn
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(easterling)
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: exert
+						select: choose(easterling)
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: preventable
+					player: fp
+					text: Would you like to add 2 burdens to prevent reducing the move limit for this turn by 1?
+					cost: {
+						type: addBurdens
+						amount: 2
+					}
+					effect: {
+						type: addModifier
+						modifier: {
+							type: modifyMoveLimit
+							amount: -1
+						}
+						until: endOfTurn
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(easterling)
+				}
+			}
 		]
 		gametext: <b>Regroup:</b> Exert an Easterling and discard this condition to make the move limit -1 for this turn. The Free Peoples player may add 2 burdens to prevent this.<br><b>Skirmish:</b> Discard this condition to heal an Easterling.
 		lore: ""
@@ -2452,7 +2411,6 @@
 	7_170: {
 		cardInfo: {
 			imagePath: decipher/LOTR07170.jpg
-			javaClass: true
 			//parentId: 7_170
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2479,39 +2437,39 @@
 			Archer
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-                    requires: [
-                        {
-                            type: haveInitiative
-                            side: shadow
-                        }
-                        {
-                            type: phase
-                            phase: archery
-                        }
-                    ]
-    		        filter: ringBearer
-		        }
-            }
-            {
-                type: modifier
-                modifier: {
-                    type: addKeyword
-                    requires: {
-                        type: haveInitiative
-                        side: shadow
-                    }
-                    filter: self
-                    keyword: ambush
-                    amount: 8
-                }
-            }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: [
+						{
+							type: haveInitiative
+							side: shadow
+						}
+						{
+							type: phase
+							phase: archery
+						}
+					]
+					filter: ringBearer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: self
+					keyword: ambush
+					amount: 8
+				}
+			}
 		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you have initiative, the Ring-bearer cannot take wounds during the archery phase and this minion is <b>ambush</b> (8).
-		lore: ...there came flying a deadly dart....
+		lore: "...there came flying a deadly dart...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2524,7 +2482,6 @@
 	7_171: {
 		cardInfo: {
 			imagePath: decipher/LOTR07171.jpg
-			javaClass: true
 			//parentId: 7_171
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2542,17 +2499,17 @@
 		culture: Raider
 		twilight: 3
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			requires: {
 				type: canSpotThreats
 			}
 			cost: {
-			    type: chooseHowManyToSpot
-			    filter: culture(raider),man
-			    text: How many {raider} Men would you like to spot?
-			    memorize: spotCount
+				type: chooseHowManyToSpot
+				filter: culture(raider),man
+				text: How many {raider} Men would you like to spot?
+				memorize: spotCount
 			}
 			effect: [
 				{
@@ -2560,15 +2517,15 @@
 					player: fp
 					select: choose(companion)
 					count: {
-					    type: fromMemory
-					    memory: spotCount
-					    limit: 3
+						type: fromMemory
+						memory: spotCount
+						limit: 3
 					}
 				}
 			]
 		}
 		gametext: Spot a threat and X [raider] Men to make the Free Peoples player exert X companions (limit 3).
-		lore: Southward beyond the road lay the main force of the Haradrim....
+		lore: "Southward beyond the road lay the main force of the Haradrim...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2581,7 +2538,6 @@
 	7_172: {
 		cardInfo: {
 			imagePath: decipher/LOTR07172.jpg
-			javaClass: true
 			//parentId: 7_172
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2605,43 +2561,43 @@
 		site: 4
 		keywords: Southron
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotThreats
-		                amount: 2
-		            }
-		            filter: self
-		            keyword: archer
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotThreats
-		                amount: 3
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpotThreats
-		                amount: 4
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 2
+					}
+					filter: self
+					keyword: archer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 3
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 4
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Southron</b>.<br>While you can spot 2 threats, this minion is an <b>archer</b>.<br>While you can spot 3 threats, this minion is <b>fierce</b>.<br>While you can spot 4 threats, this minion is <b>damage +1</b>.
 		lore: ""
@@ -2657,7 +2613,6 @@
 	7_173: {
 		cardInfo: {
 			imagePath: decipher/LOTR07173.jpg
-			javaClass: true
 			//parentId: 7_173
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2675,7 +2630,7 @@
 		culture: Raider
 		twilight: 1
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
@@ -2687,17 +2642,17 @@
 					type: addThreats
 				}
 				{
-				    type: addThreats
-				    amount: {
-				        type: forEachYouCanSpot
-				        filter: companion
-				        over: 4
-				    }
+					type: addThreats
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+					}
 				}
 			]
 		}
 		gametext: Spot a [raider] minion to add a threat. Add an additional threat for each companion over 4.
-		lore: ...behind them rose the huge backs of the mûmakil....
+		lore: "...behind them rose the huge backs of the mûmakil...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2706,4 +2661,5 @@
 			}
 		}
 	}
+
 }

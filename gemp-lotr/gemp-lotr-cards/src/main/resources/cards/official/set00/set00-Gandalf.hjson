@@ -1,0 +1,152 @@
+{
+
+	0_56: {
+		cardInfo: {
+			imagePath: decipher/LOTR00056.jpg
+			//parentId: 0_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 0P56
+			rarity: P
+			setNum: "0"
+			cardNum: 56
+			style: Standard
+		}
+		title: Ghân-buri-Ghân
+		subtitle: Chieftain of the Woses
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 5
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeOverwhelmedMultiplier
+					filter: self
+					requires: {
+						type: canSpot
+						filter: another,man
+						count: 2
+					}
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self
+					requires: {
+						type: location
+						filter: forest
+					}
+					keyword: defender+1
+				}
+			}
+		]
+		gametext: While you can spot 2 other Men, Ghân-buri-Ghân cannot be overwhelmed unless his strength is tripled.<br>While at a forest site, Ghân-buri-Ghân is <b>defender +1</b>.
+		lore: "'Kill gorgûn! Kill orc-folk! No other words please Wild Men....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	0_57: {
+		cardInfo: {
+			imagePath: decipher/LOTR00057.jpg
+			//parentId: 0_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 0P57
+			rarity: P
+			setNum: "0"
+			cardNum: 57
+			style: Standard
+		}
+		title: Radagast's Staff
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Artifact
+		strength: 1
+		vitality: 1
+		itemclass: Staff
+		target: name(Radagast)
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: moves
+			}
+			requires: {
+				type: phase
+				phase: regroup
+			}
+			effect: {
+				type: drawCards
+				count: 2
+			}
+		}
+		gametext: Bearer must be Radagast.<br>Each time the fellowship moves during the regroup phase, you may draw 2 cards.
+		lore: "'It would have been useless in any case to try and win over the honest Radagast to treachery.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	0_64: {
+		cardInfo: {
+			imagePath: decipher/LOTR00064.jpg
+			//parentId: 0_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 0P64
+			rarity: P
+			setNum: "0"
+			cardNum: 64
+			style: Standard
+		}
+		title: Gandalf
+		subtitle: Stormcrow
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 8
+		vitality: 4
+		resistance: 6
+
+		gametext: ""
+		lore: "His real business was far more difficult and dangerous, but the Shire-folk knew nothing about it."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

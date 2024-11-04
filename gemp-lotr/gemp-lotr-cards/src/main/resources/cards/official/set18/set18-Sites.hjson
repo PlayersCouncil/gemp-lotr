@@ -3,7 +3,6 @@
 	18_134: {
 		cardInfo: {
 			imagePath: decipher/LOTR18134.jpg
-			javaClass: true
 			//parentId: 18_134
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -23,27 +22,27 @@
 		direction: Right
 		keywords: Mountain
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        effect: [
-		            {
-		                type: wound
-		                player: free people
-		                select: choose(side(free people),character)
-		                count: 2
-		            }
-		            {
-		                type: wound
-		                player: shadow
-		                select: choose(side(shadow),character)
-		                count: 2
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: [
+					{
+						type: wound
+						player: free people
+						select: choose(side(free people),character)
+						count: 2
+					}
+					{
+						type: wound
+						player: shadow
+						select: choose(side(shadow),character)
+						count: 2
+					}
+				]
+			}
 		]
 		gametext: <b>Mountain</b>. When the fellowship moves to this site, each player wounds two of his or her characters.
 		lore: ""
@@ -59,7 +58,6 @@
 	18_135: {
 		cardInfo: {
 			imagePath: decipher/LOTR18135.jpg
-			javaClass: true
 			//parentId: 18_135
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -79,12 +77,12 @@
 		direction: Left
 		keywords: Mountain
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: removeCardsGoingToDiscard
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: removeCardsGoingToDiscard
+				}
+			}
 		]
 		gametext: <b>Mountain</b>. Each card that is about to be placed into the discard pile is removed from the game instead.
 		lore: ""
@@ -100,7 +98,6 @@
 	18_136: {
 		cardInfo: {
 			imagePath: decipher/LOTR18136.jpg
-			javaClass: true
 			//parentId: 18_136
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -120,25 +117,25 @@
 		direction: Left
 		keywords: River
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        effect: [
-		            {
-		                type: heal
-		                player: free people
-		                select: all(side(free people),character)
-		            }
-		            {
-		                type: heal
-		                player: shadow
-		                select: all(side(shadow),character)
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: [
+					{
+						type: heal
+						player: free people
+						select: all(side(free people),character)
+					}
+					{
+						type: heal
+						player: shadow
+						select: all(side(shadow),character)
+					}
+				]
+			}
 		]
 		gametext: <b>River</b>. When the fellowship moves to this site, each player heals each of his or her characters.
 		lore: ""
@@ -154,7 +151,6 @@
 	18_137: {
 		cardInfo: {
 			imagePath: decipher/LOTR18137.jpg
-			javaClass: true
 			//parentId: 18_137
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -177,33 +173,33 @@
 			Plains
 		]
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesTo
-		            filter: self
-		        }
-		        effect: [
-		            {
-		                type: optional
-		                text: Would you like to reinforce a culture token
-		                player: free people
-		                effect: {
-		                    type: reinforceTokens
-		                    player: free people
-		                }
-		            }
-		            {
-		                type: optional
-		                text: Would you like to reinforce a culture token
-		                player: shadow
-		                effect: {
-		                    type: reinforceTokens
-		                    player: shadow
-		                }
-		            }
-		        ]
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: [
+					{
+						type: optional
+						text: Would you like to reinforce a culture token
+						player: free people
+						effect: {
+							type: reinforceTokens
+							player: free people
+						}
+					}
+					{
+						type: optional
+						text: Would you like to reinforce a culture token
+						player: shadow
+						effect: {
+							type: reinforceTokens
+							player: shadow
+						}
+					}
+				]
+			}
 		]
 		gametext: <b>Battleground</b>. <b>Plains</b>. When the fellowship moves to this site, each player may reinforce a culture token.
 		lore: ""
@@ -219,7 +215,6 @@
 	18_138: {
 		cardInfo: {
 			imagePath: decipher/LOTR18138.jpg
-			javaClass: true
 			//parentId: 18_138
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -252,7 +247,6 @@
 	18_139: {
 		cardInfo: {
 			imagePath: decipher/LOTR18139.jpg
-			javaClass: true
 			//parentId: 18_139
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -271,25 +265,25 @@
 		block: Shadows
 		direction: Right
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantPreventWounds
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantHeal
-		            filter: any
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-                    type: cantRemoveBurdens
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantPreventWounds
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantHeal
+					filter: any
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantRemoveBurdens
+				}
+			}
 		]
 		gametext: Wounds cannot be prevented or healed. Burdens cannot be removed.
 		lore: ""
@@ -305,7 +299,6 @@
 	18_140: {
 		cardInfo: {
 			imagePath: decipher/LOTR18140.jpg
-			javaClass: true
 			//parentId: 18_140
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -325,13 +318,13 @@
 		direction: Left
 		keywords: Dwelling
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantBeTransferred
-		            filter: follower
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantBeTransferred
+					filter: follower
+				}
+			}
 		]
 		gametext: <b>Dwelling</b>. While the fellowship is at this site, followers cannot be transferred to a character.
 		lore: ""
@@ -343,4 +336,5 @@
 			}
 		}
 	}
+
 }

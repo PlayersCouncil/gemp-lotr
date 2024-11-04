@@ -1,0 +1,625 @@
+{
+
+	9_31: {
+		cardInfo: {
+			imagePath: decipher/LOTR09031.jpg
+			//parentId: 9_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R+31
+			rarity: R+
+			setNum: "9"
+			cardNum: 31
+			style: Standard
+		}
+		title: Boromir
+		subtitle: Bearer of Council
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 6
+		canStartWithRing: true
+		effects: [
+			{
+				type: trigger
+				requires: {
+					type: canSpot
+					filter: self,ring bearer,inSkirmish
+				}
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add 3 burdens
+						Wound Boromir twice
+					]
+					effects: [
+						{
+							type: addBurdens
+							amount: 3
+						}
+						{
+							type: wound
+							select: self
+							times: 2
+						}
+					]
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: all(minion,inSkirmish)
+				}
+			}
+		]
+		gametext: While Boromir is the Ring-bearer, at the start of each skirmish involving him, add 3 burdens or wound him twice.<br>Each time Boromir wins a skirmish, discard each minion he is skirmishing.
+		lore: "'True-hearted Men, they will not be corrupted. We of Minas Tirith have been staunch....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_32: {
+		cardInfo: {
+			imagePath: decipher/LOTR09032.jpg
+			//parentId: 9_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R+32
+			rarity: R+
+			setNum: "9"
+			cardNum: 32
+			style: Standard
+		}
+		title: Elendil
+		subtitle: The Tall
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 5
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 5
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					count: 2
+					filter: culture(gondor),man
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: PlayCardFromHand
+					select: choose(artifact)
+					on: self
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: 1
+					}
+					until: endOfTurn
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: choose(culture(gondor),artifact)
+				}
+				effect: {
+					type: liberateSite
+				}
+			}
+		]
+		gametext: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> Play an artifact on Elendil to make the move limit +1 for this turn.<br><b>Regroup:</b> Discard a [gondor] artifact to liberate a site.
+		lore: "...and the North-realm they made in Arnor, and the South-realm in Gondor...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_33: {
+		cardInfo: {
+			imagePath: decipher/LOTR09033.jpg
+			//parentId: 9_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R+33
+			rarity: R+
+			setNum: "9"
+			cardNum: 33
+			style: Standard
+		}
+		title: Isildur
+		subtitle: Bearer of Heirlooms
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 6
+		canStartWithRing: true
+		effects: [
+			{
+				type: trigger
+				requires: {
+					type: canSpot
+					filter: self,ring bearer,inSkirmish
+				}
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add 2 burdens
+						Exert 3 companions
+					]
+					effects: [
+						{
+							type: addBurdens
+							amount: 2
+						}
+						{
+							type: exert
+							count: 3
+							select: choose(companion)
+						}
+					]
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: self,hasAttached(or(name(The One Ring),artifact))
+					}
+					filter: culture(gondor),knight
+					amount: 1
+				}
+			}
+		]
+		gametext: While Isildur is the Ring-bearer, at the start of each skirmish involving him, add 2 burdens or exert 3 companions.<br>While Isildur bears The One Ring or an artifact, each [gondor] knight is strength +1.
+		lore: "But for my part I will risk no hurt to this thing: of all the works of Sauron the only fair."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_34: {
+		cardInfo: {
+			imagePath: decipher/LOTR09034.jpg
+			//parentId: 9_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R+34
+			rarity: R+
+			setNum: "9"
+			cardNum: 34
+			style: Standard
+		}
+		title: Narsil
+		subtitle: Blade of the Faithful
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Artifact
+		vitality: 1
+		itemclass: Hand weapon
+		target: culture(gondor),man
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer,or(name(Elendil),name(Isildur))
+					amount: {
+						type: forEachYouCanSpot
+						limit: 6
+						filter: culture(gondor),artifact
+					}
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				cost: {
+					type: exert
+					count: 2
+					select: choose(culture(gondor),man)
+				}
+				effect: {
+					type: preventWound
+					select: bearer
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] Man.<br>If bearer is Elendil or Isildur, he is strength +1 for each [gondor] artifact you can spot (limit +6).<br><b>Response:</b> If bearer is about to take a wound, exert 2 [gondor] Men to prevent that.
+		lore: "'...Isildur cut the Ring from his hand....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR09035.jpg
+			//parentId: 9_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R35
+			rarity: R
+			setNum: "9"
+			cardNum: 35
+			style: Standard
+		}
+		title: Sapling of the White Tree
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Artifact
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: unbound,culture(gondor),man
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(gondor),man
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: preventWound
+					select: choose(culture(gondor),man)
+				}
+			}
+		]
+		gametext: To play, spot an unbound [gondor] Man.<br><b>Response:</b> If a [gondor] Man is about to take a wound, discard this artifact to prevent that.
+		lore: Verily this is a sapling of the line of Nimloth the fair; and that was a seedling of Galathilion, and that a fruit of Telperion of many names, Eldest of 'Trees.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_36: {
+		cardInfo: {
+			imagePath: decipher/LOTR09036.jpg
+			//parentId: 9_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R36
+			rarity: R
+			setNum: "9"
+			cardNum: 36
+			style: Standard
+		}
+		title: Scroll of Isildur
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Artifact
+		#target: 
+		keywords: [
+			Tale
+			Support Area
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gondor),man
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: ring bearer
+					amount: {
+						type: forEachYouCanSpot
+						filter: culture(gondor),artifact
+						limit: 3
+					}
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(ring)
+				}
+			}
+		]
+		gametext: <b>Tale</b>. To play, spot a [gondor] Man.<br>The Ring-bearer is resistance +1 for each [gondor] artifact you can spot (limit +3).<br><b>Fellowship:</b> Discard this artifact to play a ring from your discard pile.
+		lore: "What evil it saith I do not know; but I trace here a copy of it, lest it fade beyond recall."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_37: {
+		cardInfo: {
+			imagePath: decipher/LOTR09037.jpg
+			//parentId: 9_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R37
+			rarity: R
+			setNum: "9"
+			cardNum: 37
+			style: Standard
+		}
+		title: Seeing Stone of Minas Anor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Artifact
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: choice
+					texts: [
+						Spot a GONDOR Man with 3 or more vitality
+						Spot a GONDOR Man and add 2 threats
+					]
+					effects: [
+						{
+							type: If
+							check: {
+								type: canSpot
+								filter: culture(gondor),man,minVitality(3)
+							}
+						}
+						{
+							type: If
+							check: {
+								type: canSpot
+								filter: culture(gondor),man
+							}
+							true: {
+								type: addThreats
+								amount: 2
+							}
+						}
+					]
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: choice
+					texts: [
+						Exert a GONDOR Man
+						Discard this artifact
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(culture(gondor),man)
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+				effect: [
+					{
+						type: discardFromHand
+						forced: false
+						select: all(any)
+					}
+					{
+						type: drawCards
+						count: 3
+					}
+				]
+			}
+		]
+		gametext: To play, spot a [gondor] Man with 3 or more vitality (or spot a [gondor] Man and add 2 threats).<br><b>Regroup:</b> Exert a [gondor] Man or discard this artifact to discard your hand and draw 3 cards.
+		lore: "'Didst thou think that the eyes of the White Tower were blind?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_38: {
+		cardInfo: {
+			imagePath: decipher/LOTR09038.jpg
+			//parentId: 9_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R38
+			rarity: R
+			setNum: "9"
+			cardNum: 38
+			style: Standard
+		}
+		title: Seeing Stone of Orthanc
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Artifact
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: choice
+					texts: [
+						Spot a GONDOR Man with 3 or more vitality
+						Spot a GONDOR Man and add 2 threats
+					]
+					effects: [
+						{
+							type: If
+							check: {
+								type: canSpot
+								filter: culture(gondor),man,minVitality(3)
+							}
+						}
+						{
+							type: If
+							check: {
+								type: canSpot
+								filter: culture(gondor),man
+							}
+							true: {
+								type: addThreats
+								amount: 2
+							}
+						}
+					]
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: choice
+					texts: [
+						Add a threat
+						Discard this artifact
+					]
+					effects: [
+						{
+							type: addThreats
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: choice
+					texts: [
+						Remove (2)
+						Draw a card
+					]
+					effects: [
+						{
+							type: removeTwilight
+							amount: 2
+						}
+						{
+							type: drawCards
+						}
+					]
+				}
+			}
+		]
+		gametext: To play, spot a [gondor] Man with 3 or more vitality (or spot a [gondor] Man and add 2 threats).<br><b>Regroup:</b> Add a threat or discard this artifact to remove (2) or to draw a card.
+		lore: "'I am the lawful master of the Stone, and I had both the right and the strength to use it, or so I judged.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

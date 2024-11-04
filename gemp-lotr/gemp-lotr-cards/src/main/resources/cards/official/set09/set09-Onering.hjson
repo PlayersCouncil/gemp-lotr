@@ -1,0 +1,92 @@
+{
+
+	9_1: {
+		cardInfo: {
+			imagePath: decipher/LOTR09001.jpg
+			//parentId: 9_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R+1
+			rarity: R+
+			setNum: "9"
+			cardNum: 1
+			style: Standard
+		}
+		title: The One Ring
+		subtitle: The Binding Ring
+		unique: true
+		twilight: 0
+		type: The One Ring
+		strength: 1
+		vitality: 1
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: ringIsActive
+				}
+				cost: {
+					type: addBurdens
+					amount: 2
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(ring)
+					showAll: true
+					shuffle: true
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: ringIsActive
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: putOnRing
+				}
+			}
+			{
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+		]
+		gametext: <b>Fellowship:</b> Add 2 burdens to play a ring from your draw deck.<br><b>Maneuver:</b> Exert bearer to wear The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound, add a burden instead.
+		lore: "One Ring to bring them all...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

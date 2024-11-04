@@ -3,7 +3,6 @@
 	12_118: {
 		cardInfo: {
 			imagePath: decipher/LOTR12118.jpg
-			javaClass: true
 			//parentId: 12_118
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -27,18 +26,18 @@
 		vitality: 3
 		site: 5
 		effects: [
-		    {
-		        type: activated
-		        phase: assignment
-		        effect: {
-		            type: assignFpCharacterToSkirmish
-		            fpCharacter: choose(companion,highestStrength(companion))
-		            minion: self
-		        }
-		    }
+			{
+				type: activated
+				phase: assignment
+				effect: {
+					type: assignFpCharacterToSkirmish
+					fpCharacter: choose(companion,highestStrength(companion))
+					minion: self
+				}
+			}
 		]
 		gametext: <b>Assignment:</b> Assign The Mouth of Sauron to the companion who has the highest strength. (If two or more are tied for highest, choose one.)
-		lore: Is there anyone in this rout with authority to treat with me?' he asked. 'Or indeed with wit to understand me?'
+		lore: "'Is there anyone in this rout with authority to treat with me?' he asked. 'Or indeed with wit to understand me?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -47,4 +46,5 @@
 			}
 		}
 	}
+
 }

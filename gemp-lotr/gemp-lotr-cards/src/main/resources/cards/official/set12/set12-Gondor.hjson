@@ -3,7 +3,6 @@
 	12_42: {
 		cardInfo: {
 			imagePath: decipher/LOTR12042.jpg
-			javaClass: true
 			//parentId: 12_42
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -26,35 +25,35 @@
 		itemclass: Hand weapon
 		target: title(Boromir)
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: name(Boromir),notAssignedToSkirmish
-		        }
-		        cost: {
-		            type: discard
-		            select: choose(culture(gondor),attachedTo(name(Boromir)))
-		        }
-		        effect: {
-		            type: replaceInSkirmish
-		            filter: unbound,hobbit
-		            with: choose(name(Boromir))
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: name(Boromir),notAssignedToSkirmish
+				}
+				cost: {
+					type: discard
+					select: choose(culture(gondor),attachedTo(name(Boromir)))
+				}
+				effect: {
+					type: replaceInSkirmish
+					filter: unbound,hobbit
+					with: choose(name(Boromir))
+				}
+			}
 		]
 		gametext: Bearer must be Boromir.<br>He is <b>damage +1</b>.<br><b>Skirmish:</b> If Boromir is not assigned to a skirmish, discard a [gondor] card borne by him to have him replace an unbound Hobbit skirmishing a minion.
-		lore: Its strength pales next to that of the man wielding it.
+		lore: "Its strength pales next to that of the man wielding it."
 		promotext: ""
 		alts: {
 			promos: {
@@ -67,7 +66,6 @@
 	12_43: {
 		cardInfo: {
 			imagePath: decipher/LOTR12043.jpg
-			javaClass: true
 			//parentId: 12_43
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -92,21 +90,21 @@
 		resistance: 6
 		keywords: Ranger
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        cost: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		        effect: {
-		            type: heal
-		            select: self
-		        }
-		    }
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+				effect: {
+					type: heal
+					select: self
+				}
+			}
 		]
 		gametext: <b>Ranger</b>.<br><b>Fellowship:</b> Add (2) to heal Boromir.
-		lore: ...seated a little apart was a tall man with a fair and noble face... proud and stern of glance.
+		lore: "...seated a little apart was a tall man with a fair and noble face... proud and stern of glance."
 		promotext: ""
 		alts: {
 			promos: {
@@ -119,7 +117,6 @@
 	12_44: {
 		cardInfo: {
 			imagePath: decipher/LOTR12044.jpg
-			javaClass: true
 			//parentId: 12_44
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -137,35 +134,35 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(culture(gondor),man)
-				    amount: 1
-				    memorize: chosenMan
+					type: modifyStrength
+					select: choose(culture(gondor),man)
+					amount: 1
+					memorize: chosenMan
 				}
 				{
-				    type: If
-				    check: {
-				        type: memoryMatches
-				        memory: chosenMan
-				        filter: inSkirmishAgainst(roaming,minion)
-				    }
-				    true: {
-				        type: addModifier
-				        modifier: {
-				            type: cantUseSpecialAbilities
-				            player: shadow
-				        }
-				    }
+					type: If
+					check: {
+						type: memoryMatches
+						memory: chosenMan
+						filter: inSkirmishAgainst(roaming,minion)
+					}
+					true: {
+						type: addModifier
+						modifier: {
+							type: cantUseSpecialAbilities
+							player: shadow
+						}
+					}
 				}
 			]
 		}
 		gametext: Make a [gondor] Man strength +1. If he or she is skirmishing a roaming minion, your opponents cannot use special abilities.
-		lore: ...your refuge is so hidden that perhaps he does not know that Men are concealed here.'
+		lore: "'...your refuge is so hidden that perhaps he does not know that Men are concealed here.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -178,7 +175,6 @@
 	12_45: {
 		cardInfo: {
 			imagePath: decipher/LOTR12045.jpg
-			javaClass: true
 			//parentId: 12_45
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -198,28 +194,28 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: fellowship
-		        requires: {
-		            type: canSpot
-		            filter: culture(gondor),man
-		        }
-		        cost: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: all(unbound,companion)
-		            amount: 1
-		            until: regroup
-		        }
-		        limitPerPhase: 1
-		    }
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: canSpot
+					filter: culture(gondor),man
+				}
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+				effect: {
+					type: modifyStrength
+					select: all(unbound,companion)
+					amount: 1
+					until: regroup
+				}
+				limitPerPhase: 1
+			}
 		]
 		gametext: <b>Fellowship:</b> Spot a [gondor] Man and add (2) to make each unbound companion strength +1 until the regroup phase (limit +1).
-		lore: To know that I lived and walked the earth was a blow to his heart, I deem; for he knew it not till now.'
+		lore: "'To know that I lived and walked the earth was a blow to his heart, I deem; for he knew it not till now.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -232,7 +228,6 @@
 	12_46: {
 		cardInfo: {
 			imagePath: decipher/LOTR12046.jpg
-			javaClass: true
 			//parentId: 12_46
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -250,21 +245,21 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: addKeyword
-				    select: choose(culture(gondor),companion)
-				    keyword: defender
-				    amount: 1
-				    until: regroup
+					type: addKeyword
+					select: choose(culture(gondor),companion)
+					keyword: defender
+					amount: 1
+					until: regroup
 				}
 			]
 		}
 		gametext: Make a [gondor] companion <b>defender +1</b> until the regroup phase.
-		lore: In panoply of ancient kings, / in chainéd rings he armoured him; / his shining shield was scored with runes / to ward all wounds and harm from him....'
+		lore: "'In panoply of ancient kings, / in chainéd rings he armoured him; / his shining shield was scored with runes / to ward all wounds and harm from him....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -277,7 +272,6 @@
 	12_47: {
 		cardInfo: {
 			imagePath: decipher/LOTR12047.jpg
-			javaClass: true
 			//parentId: 12_47
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -302,25 +296,25 @@
 		resistance: 7
 		keywords: Ranger
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: {
-		                type: forEachWound
-		                filter: ringBearer
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: {
+						type: forEachWound
+						filter: ringBearer
+					}
+				}
+			}
 		]
 		gametext: <b>Ranger</b>.<br><b>Skirmish:</b> Exert Faramir to make him strength +1 for each wound on the Ring-bearer.
-		lore: We do not want the escapes of Mirkwood in Ithilien.'
+		lore: "'We do not want the escapes of Mirkwood in Ithilien.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -333,7 +327,6 @@
 	12_48: {
 		cardInfo: {
 			imagePath: decipher/LOTR12048.jpg
-			javaClass: true
 			//parentId: 12_48
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -355,30 +348,30 @@
 		itemclass: Hand weapon
 		target: title(Faramir)
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: minion,inSkirmishAgainst(bearer)
-		            requires: {
-		                type: location
-		                filter: or(battleground,forest)
-		            }
-		            keyword: roaming
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: minion,inSkirmishAgainst(bearer)
+					requires: {
+						type: location
+						filter: or(battleground,forest)
+					}
+					keyword: roaming
+				}
+			}
 		]
 		gametext: Bearer must be Faramir.<br>He is <b>damage +1</b>.<br>Each minion skirmishing Faramir at a battleground or forest site is roaming.
-		lore: There will be hard handstrokes nigh at hand ere the day is full.'
+		lore: "'There will be hard handstrokes nigh at hand ere the day is full.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -391,7 +384,6 @@
 	12_49: {
 		cardInfo: {
 			imagePath: decipher/LOTR12049.jpg
-			javaClass: true
 			//parentId: 12_49
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -414,29 +406,29 @@
 		itemclass: Mount
 		target: knight
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: movesFrom
-		            filter: mountain
-		        }
-		        effect: {
-		            type: addTwilight
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: mountain
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
 		]
 		gametext: Bearer must be a knight.<br>Bearer is <b>damage +1</b>.<br>Each time the fellowship moves from a mountain site, add (2).
-		lore: A skilled cavalry augments Minas Tirith's mighty defenses.
+		lore: "A skilled cavalry augments Minas Tirith's mighty defenses."
 		promotext: ""
 		alts: {
 			promos: {
@@ -449,7 +441,6 @@
 	12_50: {
 		cardInfo: {
 			imagePath: decipher/LOTR12050.jpg
-			javaClass: true
 			//parentId: 12_50
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -472,26 +463,26 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: culture(gondor),companion,notAssignedToSkirmish
-		        }
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: replaceInSkirmish
-		            filter: unbound,companion,inSkirmishAgainst(minion)
-		            with: choose(culture(gondor),companion,notAssignedToSkirmish)
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: culture(gondor),companion,notAssignedToSkirmish
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: replaceInSkirmish
+					filter: unbound,companion,inSkirmishAgainst(minion)
+					with: choose(culture(gondor),companion,notAssignedToSkirmish)
+				}
+			}
 		]
 		gametext: <b>Toil 2</b>. <helper>(For each [gondor] character you exert when playing this, its twilight cost is -2.)</helper><br><b>Skirmish:</b> If a [gondor] companion is not assigned to a skirmish, discard this condition to have him or her replace an unbound companion skirmishing a minion.
-		lore: Boromir wouldn't fail the other Hobbits as he had Frodo.
+		lore: "Boromir wouldn't fail the other Hobbits as he had Frodo."
 		promotext: ""
 		alts: {
 			promos: {
@@ -504,7 +495,6 @@
 	12_51: {
 		cardInfo: {
 			imagePath: decipher/LOTR12051.jpg
-			javaClass: true
 			//parentId: 12_51
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -524,30 +514,30 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-                    type: heal
-                    select: choose(culture(gondor),man)
-                    count: {
-                        type: Conditional
-                        requires: {
-                            type: canSpot
-                            filter: roaming,minion
-                        }
-                        true: 2
-                        false: 1
-                    }
-                }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(culture(gondor),man)
+					count: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: roaming,minion
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Discard this condition to heal a [gondor] Man (or to heal 2 [gondor] Men if you can spot a roaming minion).
-		lore: He sprang down the steps and away, leaping down the path.
+		lore: "He sprang down the steps and away, leaping down the path."
 		promotext: ""
 		alts: {
 			promos: {
@@ -560,7 +550,6 @@
 	12_52: {
 		cardInfo: {
 			imagePath: decipher/LOTR12052.jpg
-			javaClass: true
 			//parentId: 12_52
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -580,66 +569,66 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(gondor),man)
-		            memorize: chosenMan
-		            amount: {
-		                type: sum
-		                source: [
-		                    {
-		                        type: Conditional
-		                        requires: {
-		                            type: location
-		                            filter: battleground
-		                        }
-		                        true: 1
-		                        false: 0
-		                    }
-		                    {
-		                        type: Conditional
-		                        requires: {
-		                            type: memoryMatches
-		                            memory: chosenMan
-		                            filter: minResistance(4)
-		                        }
-		                        true: 1
-		                        false: 0
-		                    }
-		                    {
-		                        type: Conditional
-		                        requires: {
-		                            type: memoryMatches
-		                            memory: chosenMan
-		                            filter: hasAttached(hand weapon)
-		                        }
-		                        true: 1
-		                        false: 0
-		                    }
-		                    {
-		                        type: Conditional
-		                        requires: {
-		                            type: memoryMatches
-		                            memory: chosenMan
-		                            filter: inSkirmishAgainst(roaming,minion)
-		                        }
-		                        true: 1
-		                        false: 0
-		                    }
-		                ]
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(gondor),man)
+					memorize: chosenMan
+					amount: {
+						type: sum
+						source: [
+							{
+								type: Conditional
+								requires: {
+									type: location
+									filter: battleground
+								}
+								true: 1
+								false: 0
+							}
+							{
+								type: Conditional
+								requires: {
+									type: memoryMatches
+									memory: chosenMan
+									filter: minResistance(4)
+								}
+								true: 1
+								false: 0
+							}
+							{
+								type: Conditional
+								requires: {
+									type: memoryMatches
+									memory: chosenMan
+									filter: hasAttached(hand weapon)
+								}
+								true: 1
+								false: 0
+							}
+							{
+								type: Conditional
+								requires: {
+									type: memoryMatches
+									memory: chosenMan
+									filter: inSkirmishAgainst(roaming,minion)
+								}
+								true: 1
+								false: 0
+							}
+						]
+					}
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Discard this condition to make a [gondor] Man strength +1 for each of the following that is true: he or she is at a battleground site; he or she has resistance 4 or more; he or she is bearing a hand weapon; he or she is skirmishing a roaming minion.
-		lore: So long as foes were standing, so too would Aragorn.
+		lore: "So long as foes were standing, so too would Aragorn."
 		promotext: ""
 		alts: {
 			promos: {
@@ -652,7 +641,6 @@
 	12_53: {
 		cardInfo: {
 			imagePath: decipher/LOTR12053.jpg
-			javaClass: true
 			//parentId: 12_53
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -694,7 +682,7 @@
 
 		]
 		gametext: Bearer must be a [gondor] companion. Limit 1 per bearer.<br><b>Skirmish:</b> Discard this condition to discard a possession borne by a minion skirmishing bearer.
-		lore: Before he ever sat the throne, Aragorn had proven himself a great leader to the people of Gondor.
+		lore: "Before he ever sat the throne, Aragorn had proven himself a great leader to the people of Gondor."
 		promotext: ""
 		alts: {
 			promos: {
@@ -703,4 +691,5 @@
 			}
 		}
 	}
+
 }

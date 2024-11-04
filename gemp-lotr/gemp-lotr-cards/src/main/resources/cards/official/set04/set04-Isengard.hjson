@@ -3,7 +3,6 @@
 	4_136: {
 		cardInfo: {
 			imagePath: decipher/LOTR04136.jpg
-			javaClass: true
 			//parentId: 4_136
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -27,32 +26,32 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: location
-		                filter: battleground
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: controlsSite
-		            }
-		            filter: self
-		            amount: 4
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: battleground
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: controlsSite
+					}
+					filter: self
+					amount: 4
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While at a battleground, this minion is <b>fierce</b>.<br>While you control a battleground, this minion is strength +4.
-		lore: This is no rabble of mindless Orcs.'
+		lore: "'This is no rabble of mindless Orcs.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -65,7 +64,6 @@
 	4_137: {
 		cardInfo: {
 			imagePath: decipher/LOTR04137.jpg
-			javaClass: true
 			//parentId: 4_137
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -85,41 +83,41 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: PlayCardFromHand
-		            select: choose(urukHai)
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: isengard
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: [
-                    {
-                        type: RemoveCultureTokens
-                        culture: isengard
-                        select: self
-                        count: 3
-                    }
-                    {
-                        type: discard
-                        select: choose(urukHai)
-                    }
-                ]
-                effect: {
-                    type: takeControlOfSite
-                }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: PlayCardFromHand
+					select: choose(urukHai)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: isengard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: RemoveCultureTokens
+						culture: isengard
+						select: self
+						count: 3
+					}
+					{
+						type: discard
+						select: choose(urukHai)
+					}
+				]
+				effect: {
+					type: takeControlOfSite
+				}
+			}
 		]
 		gametext: Plays to your support area.<br><b>Shadow:</b> Play an Uruk-hai to place an [isengard] token on this card.<br><b>Regroup:</b> Remove 3 [isengard] tokens from this card and discard an Uruk-hai to take control of a site.
-		lore: Ten thousand strong at least....'
+		lore: "'Ten thousand strong at least....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -132,7 +130,6 @@
 	4_138: {
 		cardInfo: {
 			imagePath: decipher/LOTR04138.jpg
-			javaClass: true
 			//parentId: 4_138
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -171,7 +168,7 @@
 			}
 		}
 		gametext: <b>Archer</b>. <b>Damage +1</b>.<br>While you control a site, the minion archery total is +1.
-		lore: Taking the high ground provides a better field of fire.
+		lore: "Taking the high ground provides a better field of fire."
 		promotext: ""
 		alts: {
 			promos: {
@@ -184,7 +181,6 @@
 	4_139: {
 		cardInfo: {
 			imagePath: decipher/LOTR04139.jpg
-			javaClass: true
 			//parentId: 4_139
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -204,27 +200,27 @@
 		type: Condition
 		target: side(free),man
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: exert
-		            select: choose(or(name(Saruman),and(culture(isengard),man)))
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: losesSkirmish
-		            filter: not(bearer),or(ally,companion)
-		        }
-		        effect: {
-		            type: exert
-		            select: bearer
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(or(name(Saruman),and(culture(isengard),man)))
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: losesSkirmish
+					filter: not(bearer),or(ally,companion)
+				}
+				effect: {
+					type: exert
+					select: bearer
+				}
+			}
 		]
 		gametext: To play, exert Saruman or an [isengard] Man. Plays on a Free Peoples Man.<br>Each time another ally or companion loses a skirmish, bearer must exert.
-		lore: Oh, but this is not from me – it comes from the King. He signed it this morning.'
+		lore: "'Oh, but this is not from me – it comes from the King. He signed it this morning.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -237,7 +233,6 @@
 	4_140: {
 		cardInfo: {
 			imagePath: decipher/LOTR04140.jpg
-			javaClass: true
 			//parentId: 4_140
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -255,7 +250,7 @@
 		culture: Isengard
 		twilight: 5
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
@@ -267,13 +262,13 @@
 				{
 					type: addBurdens
 					amount: {
-					    type: forEachInDeadPile
+						type: forEachInDeadPile
 					}
 				}
 			]
 		}
 		gametext: <b>Maneuver:</b> Exert 2 Uruk-hai to add a burden for each card in the dead pile.
-		lore: How shall any tower withstand such numbers and such reckless hate?'
+		lore: "'How shall any tower withstand such numbers and such reckless hate?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -286,7 +281,6 @@
 	4_141: {
 		cardInfo: {
 			imagePath: decipher/LOTR04141.jpg
-			javaClass: true
 			//parentId: 4_141
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -304,37 +298,37 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			text: Play in response to death of {killedCharacter}
 			trigger: {
-			    type: killed
-			    filter: or(companion,ally)
-			    memorize: killedCharacter
+				type: killed
+				filter: or(companion,ally)
+				memorize: killedCharacter
 			}
 			cost: {
-			    type: exert
-			    select: choose(culture(isengard),minion)
+				type: exert
+				select: choose(culture(isengard),minion)
 			}
 			effect: [
 				{
 					type: addBurdens
 					amount: {
-					    type: Conditional
-					    requires: {
-					        type: memoryMatches
-					        memory: killedCharacter
-					        filter: or(name(Aragorn),name(Gandalf),name(Théoden))
-					    }
-					    true: 2
-					    false: 1
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: killedCharacter
+							filter: or(name(Aragorn),name(Gandalf),name(Théoden))
+						}
+						true: 2
+						false: 1
 					}
 				}
 			]
 		}
 		gametext: <b>Response:</b> If a companion or ally is killed, exert an [isengard] minion to add a burden (or 2 burdens if Aragorn, Gandalf, or Théoden is killed).
-		lore: Where now was the Ring-bearer? How thin indeed was the thread upon which doom still hung!
+		lore: "Where now was the Ring-bearer? How thin indeed was the thread upon which doom still hung!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -347,7 +341,6 @@
 	4_142: {
 		cardInfo: {
 			imagePath: decipher/LOTR04142.jpg
-			javaClass: true
 			//parentId: 4_142
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -369,23 +362,23 @@
 		itemclass: Hand weapon
 		target: urukHai
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            filter: bearer
-		            requires: {
-		                type: not
-		                requires: {
-		                    type: phase
-		                    phase: skirmish
-		                }
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					filter: bearer
+					requires: {
+						type: not
+						requires: {
+							type: phase
+							phase: skirmish
+						}
+					}
+				}
+			}
 		]
 		gametext: Bearer must be an Uruk-hai.<br>Bearer may not take wounds (except during skirmish phases).
-		lore: They were armed with short broad-bladed swords, not with the curved scimitars usual with Orcs....
+		lore: "They were armed with short broad-bladed swords, not with the curved scimitars usual with Orcs...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -398,7 +391,6 @@
 	4_143: {
 		cardInfo: {
 			imagePath: decipher/LOTR04143.jpg
-			javaClass: true
 			//parentId: 4_143
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -416,10 +408,8 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-	    timeword: Assignment
-		keywords: [
-			Search
-		]
+		timewords: Assignment
+		keywords: Search
 		effects: {
 			type: event
 			cost: {
@@ -428,19 +418,19 @@
 				memorize: exertedTracker
 			},
 			effect: {
-			    type: assignFPCharacterToSkirmish
-			    fpCharacter: choose(unbound,companion)
-			    minion: memory(exertedTracker)
-			    memorizeFPCharacter: chosenCompanion
-			    preventText: Would you like to exert {chosenCompanion} to prevent {exertedTracker} to be assigned to it?
-			    preventCost: {
-			        type: exert
-			        select: choose(memory(chosenCompanion),not(hobbit))
-			    }
+				type: assignFPCharacterToSkirmish
+				fpCharacter: choose(unbound,companion)
+				minion: memory(exertedTracker)
+				memorizeFPCharacter: chosenCompanion
+				preventText: Would you like to exert {chosenCompanion} to prevent {exertedTracker} to be assigned to it?
+				preventCost: {
+					type: exert
+					select: choose(memory(chosenCompanion),not(hobbit))
+				}
 			}
 		}
 		gametext: <b>Search</b>.<br><b>Assignment:</b> Exert an [isengard] tracker to assign it to an unbound companion. That companion may exert to prevent this (unless that companion is a Hobbit).
-		lore: What are they wanted for?... Why alive? Do they give good sport?'
+		lore: "'What are they wanted for?... Why alive? Do they give good sport?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -453,7 +443,6 @@
 	4_144: {
 		cardInfo: {
 			imagePath: decipher/LOTR04144.jpg
-			javaClass: true
 			//parentId: 4_144
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -473,24 +462,24 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: controlsSite
-		        }
-		        cost: {
-		            type: PlayCardFromHand
-		            select: choose(urukHai)
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(side(free),condition)
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: controlsSite
+				}
+				cost: {
+					type: PlayCardFromHand
+					select: choose(urukHai)
+				}
+				effect: {
+					type: discard
+					select: choose(side(free),condition)
+				}
+			}
 		]
 		gametext: Plays to your support area.<br><b>Shadow:</b> If you control a site, play an Uruk-hai to discard a Free Peoples condition.
-		lore: We have found many of our folk lying slain as they fled....'
+		lore: "'We have found many of our folk lying slain as they fled....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -503,7 +492,6 @@
 	4_145: {
 		cardInfo: {
 			imagePath: decipher/LOTR04145.jpg
-			javaClass: true
 			//parentId: 4_145
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -521,7 +509,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			cost: {
@@ -542,7 +530,7 @@
 			]
 		}
 		gametext: <b>Archery:</b> Exert an [isengard] archer to make the minion archery total +1 and the fellowship archery total -1.
-		lore: Behind them orc-archers crowded, sending a hail of darts against the bowmen on the walls.
+		lore: "Behind them orc-archers crowded, sending a hail of darts against the bowmen on the walls."
 		promotext: ""
 		alts: {
 			promos: {
@@ -555,7 +543,6 @@
 	4_146: {
 		cardInfo: {
 			imagePath: decipher/LOTR04146.jpg
-			javaClass: true
 			//parentId: 4_146
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -575,26 +562,26 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        requires: {
-		            type: canSpot
-		            filter: culture(isengard),archer
-		            count: 2
-		        }
-		        effect: [
-                    {
-                        type: addModifier
-                        modifier: {
-                            type: alliesTakeArcheryFireWoundsInsteadOfCompanions
-                        }
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: archery
+				requires: {
+					type: canSpot
+					filter: culture(isengard),archer
+					count: 2
+				}
+				effect: [
+					{
+						type: addModifier
+						modifier: {
+							type: alliesTakeArcheryFireWoundsInsteadOfCompanions
+						}
+					}
+				]
+			}
 		]
 		gametext: Plays to your support area.<br><b>Archery:</b> Spot 2 [isengard] archers to make allies take wounds from archery fire instead of companions.
-		lore: We are the fighting Uruk-hai.... Bring out your skulking king!'
+		lore: "'We are the fighting Uruk-hai.... Bring out your skulking king!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -607,7 +594,6 @@
 	4_147: {
 		cardInfo: {
 			imagePath: decipher/LOTR04147.jpg
-			javaClass: true
 			//parentId: 4_147
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -627,36 +613,36 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(isengard),archer
-		            count: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantPlayPhaseEventsOrPhaseSpecialAbilities
-		            player: free people
-		            phase: archery
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: startOfPhase
-		            phase: regroup
-		        }
-		        effect: {
-		            type: discard
-		            select: self
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(isengard),archer
+					count: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantPlayPhaseEventsOrPhaseSpecialAbilities
+					player: free people
+					phase: archery
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
 		]
 		gametext: To play, spot 2 [isengard] archers. Plays to your support area.<br>The Free Peoples player may not play archery events or use archery special abilities. Discard this condition during the regroup phase.
-		lore: Archers cowered on the walls, unable to reply.
+		lore: "Archers cowered on the walls, unable to reply."
 		promotext: ""
 		alts: {
 			promos: {
@@ -669,7 +655,6 @@
 	4_148: {
 		cardInfo: {
 			imagePath: decipher/LOTR04148.jpg
-			javaClass: true
 			//parentId: 4_148
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -689,35 +674,35 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: losesSkirmish
-		            filter: or(companion,ally)
-		            against: urukHai
-		        }
-		        effect: {
-    		        type: AddCultureTokens
-    		        culture: isengard
-    		        select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: RemoveCultureTokens
-		            culture: isengard
-		            count: 2
-		            select: self
-		        }
-		        effect: {
-		            type: takeControlOfSite
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: losesSkirmish
+					filter: or(companion,ally)
+					against: urukHai
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: isengard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: RemoveCultureTokens
+					culture: isengard
+					count: 2
+					select: self
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
 		]
 		gametext: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving an Uruk-hai, place an [isengard] token on this card.<br><b>Shadow:</b> Remove 2 [isengard] tokens from this card to take control of a site.
-		lore: The Uruks brought death to the villages of Rohan.
+		lore: "The Uruks brought death to the villages of Rohan."
 		promotext: ""
 		alts: {
 			promos: {
@@ -730,7 +715,6 @@
 	4_149: {
 		cardInfo: {
 			imagePath: decipher/LOTR04149.jpg
-			javaClass: true
 			//parentId: 4_149
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -748,26 +732,26 @@
 		culture: Isengard
 		twilight: 3
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(isengard),archer
-			    count: 2
+				type: canSpot
+				filter: culture(isengard),archer
+				count: 2
 			}
 			effect: [
 				{
 					type: modifyArcheryTotal
 					side: shadow
 					amount: {
-					    type: forEachInDeadPile
+						type: forEachInDeadPile
 					}
 				}
 			]
 		}
 		gametext: <b>Archery:</b> Spot 2 [isengard] archers to make the minion archery total +1 for each card in the dead pile.
-		lore: With each fallen defender, the morale of the attacking army rose.
+		lore: "With each fallen defender, the morale of the attacking army rose."
 		promotext: ""
 		alts: {
 			promos: {
@@ -780,7 +764,6 @@
 	4_150: {
 		cardInfo: {
 			imagePath: decipher/LOTR04150.jpg
-			javaClass: true
 			//parentId: 4_150
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -807,28 +790,28 @@
 			Damage+1
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: [
-		            {
-		                type: wound
-		                player: fp
-		                select: choose(unbound,companion)
-		            }
-		            {
-                        type: disableArcheryTotalContribution
-                        select: self
-		            }
-		        ]
-		    }
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: wound
+						player: fp
+						select: choose(unbound,companion)
+					}
+					{
+						type: disableArcheryTotalContribution
+						select: self
+					}
+				]
+			}
 		]
 		gametext: <b>Archer</b>. <b>Damage +1</b>.<br><b>Archery:</b> Exert Elite Crossbowmen to make the Free Peoples player wound an unbound companion; this minion does not add to the minion archery total.
-		lore: The best archers were held in reserve, awaiting the final assault.
+		lore: "The best archers were held in reserve, awaiting the final assault."
 		promotext: ""
 		alts: {
 			promos: {
@@ -841,7 +824,6 @@
 	4_151: {
 		cardInfo: {
 			imagePath: decipher/LOTR04151.jpg
-			javaClass: true
 			//parentId: 4_151
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -859,7 +841,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		timeword: Skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -867,19 +849,19 @@
 					type: modifyStrength
 					select: choose(urukHai)
 					amount: {
-					    type: Conditional
-					    requires: {
-					        type: location
-					        filter: battleground
-					    }
-					    true: 3
-					    false: 2
+						type: Conditional
+						requires: {
+							type: location
+							filter: battleground
+						}
+						true: 3
+						false: 2
 					}
 				}
 			]
 		}
 		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2 (or +3 if at a battleground).
-		lore: Uruk savagery remained despite their battle training.
+		lore: "Uruk savagery remained despite their battle training."
 		promotext: ""
 		alts: {
 			promos: {
@@ -892,7 +874,6 @@
 	4_152: {
 		cardInfo: {
 			imagePath: decipher/LOTR04152.jpg
-			javaClass: true
 			//parentId: 4_152
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -910,18 +891,18 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		timeword: assignment
+		timewords: Assignment
 		effects: {
 			type: event
 			effect: [
-			    {
-			        type: disableSkirmishAssignment
-			        select: choose(culture(isengard),tracker)
+				{
+					type: disableSkirmishAssignment
+					select: choose(culture(isengard),tracker)
 				}
 			]
 		}
 		gametext: <b>Assignment:</b> Prevent an [isengard] tracker from being assigned to a skirmish by any player.
-		lore: We do not answer to Mordor scum!'
+		lore: "'We do not answer to Mordor scum!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -934,7 +915,6 @@
 	4_153: {
 		cardInfo: {
 			imagePath: decipher/LOTR04153.jpg
-			javaClass: true
 			//parentId: 4_153
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -958,17 +938,17 @@
 		vitality: 3
 		site: 3
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: or(and(unbound,companion),ally),hasAttached(side(shadow),condition)
-		            amount: -1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: or(and(unbound,companion),ally),hasAttached(side(shadow),condition)
+					amount: -1
+				}
+			}
 		]
 		gametext: Each unbound companion (or ally) bearing a Shadow condition is strength -1.
-		lore: Did I not counsel you, lord, to forbid his staff?'
+		lore: "'Did I not counsel you, lord, to forbid his staff?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -981,7 +961,6 @@
 	4_154: {
 		cardInfo: {
 			imagePath: decipher/LOTR04154.jpg
-			javaClass: true
 			//parentId: 4_154
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1005,33 +984,33 @@
 		vitality: 3
 		site: 3
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: unbound,companion,hasAttachedCount(3,any)
-		        }
-		        effect: [
-                    {
-                        type: chooseActiveCards
-                        text: Choose unbound companion to return attached Free Peoples cards to hand
-                        select: choose(unbound,companion,hasAttachedCount(3,any))
-                        memorize: chosenCompanion
-                    }
-                    {
-                        type: returnToHand
-                        select: all(attachedTo(memory(chosenCompanion)),side(free))
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				requires: {
+					type: canSpot
+					filter: unbound,companion,hasAttachedCount(3,any)
+				}
+				effect: [
+					{
+						type: chooseActiveCards
+						text: Choose unbound companion to return attached Free Peoples cards to hand
+						select: choose(unbound,companion,hasAttachedCount(3,any))
+						memorize: chosenCompanion
+					}
+					{
+						type: returnToHand
+						select: all(attachedTo(memory(chosenCompanion)),side(free))
+					}
+				]
+			}
 		]
 		gametext: <b>Maneuver:</b> Exert Gríma and spot an unbound companion bearing 3 or more cards to return each Free Peoples card that companion bears to its owner's hand.
-		lore: I care for you and yours as best I may. But do not weary yourself, or tax too heavily your strength.'
+		lore: "'I care for you and yours as best I may. But do not weary yourself, or tax too heavily your strength.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1044,7 +1023,6 @@
 	4_155: {
 		cardInfo: {
 			imagePath: decipher/LOTR04155.jpg
-			javaClass: true
 			//parentId: 4_155
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1062,12 +1040,12 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
-			    type: usesSpecialAbility
-			    filter: or(ally,and(unbound,companion))
+				type: usesSpecialAbility
+				filter: or(ally,and(unbound,companion))
 			}
 			cost: {
 				type: exert
@@ -1080,7 +1058,7 @@
 			]
 		}
 		gametext: <b>Response:</b> If a special ability of an ally or unbound companion is used, exert Gríma to cancel that action.
-		lore: What was the promised price? When all the men were dead, you were to pick your share of the treasure and take the woman you desire?'
+		lore: "'What was the promised price? When all the men were dead, you were to pick your share of the treasure and take the woman you desire?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1093,7 +1071,6 @@
 	4_156: {
 		cardInfo: {
 			imagePath: decipher/LOTR04156.jpg
-			javaClass: true
 			//parentId: 4_156
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1111,29 +1088,29 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-    			    type: modifyStrength
-    			    select: choose(culture(isengard),tracker)
-    			    memorize: chosenTracker
-    			    amount: {
-    			        type: Conditional
-    			        requires: {
-    			            type: memoryMatches
-    			            memory: chosenTracker
-    			            filter: inSkirmishAgainst(hasAttached(search))
-    			        }
-    			        true: 4
-    			        false: 2
-    			    }
+					type: modifyStrength
+					select: choose(culture(isengard),tracker)
+					memorize: chosenTracker
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenTracker
+							filter: inSkirmishAgainst(hasAttached(search))
+						}
+						true: 4
+						false: 2
+					}
 				}
 			]
 		}
 		gametext: <b>Skirmish:</b> Make an [isengard] tracker strength +2 (or +4 if skirmishing a character bearing a search card).
-		lore: They're a cursed nuisance, and we're in a hurry.'
+		lore: "'They're a cursed nuisance, and we're in a hurry.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1146,7 +1123,6 @@
 	4_157: {
 		cardInfo: {
 			imagePath: decipher/LOTR04157.jpg
-			javaClass: true
 			//parentId: 4_157
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1165,26 +1141,26 @@
 		twilight: 0
 		type: Condition
 		strength: -1
-		keywords: Spell
 		target: side(free),man
+		keywords: Spell
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: exert
-		            select: choose(or(name(Saruman),and(culture(isengard),man)))
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantUseSpecialAbilities
-		            filter: bearer
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(or(name(Saruman),and(culture(isengard),man)))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantUseSpecialAbilities
+					filter: bearer
+				}
+			}
 		]
 		gametext: <b>Spell</b>. To play, exert Saruman or an [isengard] Man. Plays on a Free Peoples Man.<br>Special abilities in bearer's game text may not be used.
-		lore: Your leechcraft ere long would have had me walking on all fours like a beast.'
+		lore: "'Your leechcraft ere long would have had me walking on all fours like a beast.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1197,7 +1173,6 @@
 	4_158: {
 		cardInfo: {
 			imagePath: decipher/LOTR04158.jpg
-			javaClass: true
 			//parentId: 4_158
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1221,23 +1196,23 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: addKeyword
-		            select: choose(another,urukHai)
-		            keyword: fierce
-		            until: regroup
-		        }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: choose(another,urukHai)
+					keyword: fierce
+					until: regroup
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Exert Lieutenant of Orthanc to make another Uruk-hai <b>fierce</b> until the regroup phase.
-		lore: Do you wish to see the greatness of our army? We are the fighting Uruk-hai.'
+		lore: "'Do you wish to see the greatness of our army? We are the fighting Uruk-hai.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1250,7 +1225,6 @@
 	4_159: {
 		cardInfo: {
 			imagePath: decipher/LOTR04159.jpg
-			javaClass: true
 			//parentId: 4_159
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1269,44 +1243,44 @@
 		twilight: 1
 		type: Condition
 		strength: -1
-		keywords: Search
 		target: companion,not(ringBearer)
+		keywords: Search
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: exert
-		            select: choose(culture(isengard),tracker)
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: assignment
-		        cost: [
-                    {
-                        type: exert
-                        select: choose(culture(isengard),tracker)
-                        memorize: chosenTracker
-                    }
-                    {
-                        type: removeTwilight
-                        amount: 2
-                    }
-                ]
-                effect: {
-                    type: assignFPCharacterToSkirmish
-                    fpCharacter: bearer
-                    minion: memory(chosenTracker)
-                    preventText: Would you like to exert bearer of Many Riddles to prevent {chosenTracker} being assigned to it?
-                    preventCost: {
-                        type: exert
-                        select: bearer
-                    }
-                }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(isengard),tracker)
+				}
+			}
+			{
+				type: activated
+				phase: assignment
+				cost: [
+					{
+						type: exert
+						select: choose(culture(isengard),tracker)
+						memorize: chosenTracker
+					}
+					{
+						type: removeTwilight
+						amount: 2
+					}
+				]
+				effect: {
+					type: assignFPCharacterToSkirmish
+					fpCharacter: bearer
+					minion: memory(chosenTracker)
+					preventText: Would you like to exert bearer of Many Riddles to prevent {chosenTracker} being assigned to it?
+					preventCost: {
+						type: exert
+						select: bearer
+					}
+				}
+			}
 		]
 		gametext: <b>Search</b>. To play, exert an [isengard] tracker. Plays on a companion (except the Ring- bearer).<br><b>Assignment:</b> Exert an [isengard] tracker and remove (2) to assign that tracker to bearer. Bearer may exert to prevent this.
-		lore: It will be hard news for Frodo....'
+		lore: "'It will be hard news for Frodo....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1319,7 +1293,6 @@
 	4_160: {
 		cardInfo: {
 			imagePath: decipher/LOTR04160.jpg
-			javaClass: true
 			//parentId: 4_160
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1347,23 +1320,23 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: removeTwilight
-		            amount: 2
-		        }
-		        effect: [
-		            {
-		                type: disableWounds
-		                select: choose(culture(isengard),tracker)
-                    }
-                ]
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeTwilight
+					amount: 2
+				}
+				effect: [
+					{
+						type: disableWounds
+						select: choose(culture(isengard),tracker)
+					}
+				]
+			}
 		]
 		gametext: <b>Tracker</b>. <b>Fierce</b>.<br><b>Skirmish:</b> Remove (2) to prevent an [isengard] tracker from taking wounds.
-		lore: Mauhúr and his lads are in the forest, and they should turn up any time now.'
+		lore: "'Mauhúr and his lads are in the forest, and they should turn up any time now.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1376,7 +1349,6 @@
 	4_161: {
 		cardInfo: {
 			imagePath: decipher/LOTR04161.jpg
-			javaClass: true
 			//parentId: 4_161
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1394,12 +1366,12 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: or(name(Saruman),and(culture(isengard),man))
+				type: canSpot
+				filter: or(name(Saruman),and(culture(isengard),man))
 			}
 			effect: [
 				{
@@ -1410,7 +1382,7 @@
 			]
 		}
 		gametext: <b>Skirmish:</b> Spot Saruman or an [isengard] Man to make an unbound companion strength -2.
-		lore: The Ring of Barahir. So, Gandalf Greyhame thinks he has found Isildur's heir, the Lost King of Gondor... Fool! That line was broken years ago.'
+		lore: "'The Ring of Barahir. So, Gandalf Greyhame thinks he has found Isildur's heir, the Lost King of Gondor... Fool! That line was broken years ago.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1423,7 +1395,6 @@
 	4_162: {
 		cardInfo: {
 			imagePath: decipher/LOTR04162.jpg
-			javaClass: true
 			//parentId: 4_162
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1441,23 +1412,23 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		timeword: regroup
+		timewords: Regroup
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: or(name(Saruman),and(culture(isengard),man))
+				type: canSpot
+				filter: or(name(Saruman),and(culture(isengard),man))
 			}
 			cost: [
-                {
-                    type: revealHand
-                }
-                {
-                    type: discardFromHand
-                    forced: false
-                    select: all(side(free))
-                }
-            ],
+				{
+					type: revealHand
+				}
+				{
+					type: discardFromHand
+					forced: false
+					select: all(side(free))
+				}
+			],
 			effect: [
 				{
 					type: putCardsFromDiscardIntoHand
@@ -1466,7 +1437,7 @@
 			]
 		}
 		gametext: <b>Regroup:</b> Spot Saruman or an [isengard] Man, reveal your hand, and discard all Free Peoples cards revealed to take an [isengard] card into hand from your discard pile.
-		lore: For those who aid the Great Eye there will be rich reward.'
+		lore: "'For those who aid the Great Eye there will be rich reward.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1479,7 +1450,6 @@
 	4_163: {
 		cardInfo: {
 			imagePath: decipher/LOTR04163.jpg
-			javaClass: true
 			//parentId: 4_163
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1497,7 +1467,7 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
@@ -1509,14 +1479,14 @@
 					type: exert
 					select: choose(unbound,companion)
 					count: {
-					    type: forEachYouCanSpot
-					    filter: controlledSite
+						type: forEachYouCanSpot
+						filter: controlledSite
 					}
 				}
 			]
 		}
 		gametext: <b>Maneuver:</b> Exert an Uruk-hai to exert X unbound companions, where X is the number of sites you control.
-		lore: This night, the land will be stained with the blood of Rohan....'
+		lore: "'This night, the land will be stained with the blood of Rohan....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1529,7 +1499,6 @@
 	4_164: {
 		cardInfo: {
 			imagePath: decipher/LOTR04164.jpg
-			javaClass: true
 			//parentId: 4_164
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1553,30 +1522,30 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-            {
-                type: activated
-                phase: assignment
-                cost: [
-                    {
-                        type: exert
-                        select: self
-                    }
-                ]
-                effect: {
-                    type: assignFPCharacterToSkirmish
-                    fpCharacter: choose(unbound,companion,assignableToSkirmishAgainst(self))
-                    minion: self
-                    memorizeFPCharacter: chosenCompanion
-                    preventText: Would you like to exert {chosenCompanion} to prevent {self} being assigned to it?
-                    preventCost: {
-                        type: exert
-                        select: memory(chosenCompanion)
-                    }
-                }
-            }
+			{
+				type: activated
+				phase: assignment
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+				]
+				effect: {
+					type: assignFPCharacterToSkirmish
+					fpCharacter: choose(unbound,companion,assignableToSkirmishAgainst(self))
+					minion: self
+					memorizeFPCharacter: chosenCompanion
+					preventText: Would you like to exert {chosenCompanion} to prevent {self} being assigned to it?
+					preventCost: {
+						type: exert
+						select: memory(chosenCompanion)
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br><b>Assignment:</b> Exert Orthanc Champion to assign it to an unbound companion. That companion may exert to prevent this.
-		lore: A warrior trained in single combat, he tore a swath through the defenders.
+		lore: "A warrior trained in single combat, he tore a swath through the defenders."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1589,7 +1558,6 @@
 	4_165: {
 		cardInfo: {
 			imagePath: decipher/LOTR04165.jpg
-			javaClass: true
 			//parentId: 4_165
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1612,8 +1580,9 @@
 		vitality: 2
 		site: 5
 		keywords: Damage+1
+
 		gametext: <b>Damage +1</b>.
-		lore: The Uruk-hai bred by Saruman are stronger and more fell than Orcs of Mordor.
+		lore: "The Uruk-hai bred by Saruman are stronger and more fell than Orcs of Mordor."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1626,7 +1595,6 @@
 	4_166: {
 		cardInfo: {
 			imagePath: decipher/LOTR04166.jpg
-			javaClass: true
 			//parentId: 4_166
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1645,79 +1613,80 @@
 		culture: Isengard
 		twilight: 0
 		type: Artifact
+		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(isengard),minion
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: canSpot
-		            filter: culture(isengard),minion
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 2
-		        }
-		        effect: [
-                    {
-                        type: choice
-                        texts: [
-                            Reveal card from your deck
-                            Reveal card from opponent's deck
-                        ]
-                        effects: [
-                            {
-                                type: multiple
-                                effects: [
-                                    {
-                                        type: revealTopCardsOfDrawDeck
-                                        deck: shadow
-                                        memorize: revealedCard
-                                    }
-                                    {
-                                        type: optional
-                                        text: Would you like to put {revealedCard} beneath your deck?
-                                        effect: {
-                                            type: putCardsFromDeckOnBottomOfDeck
-                                            select: memory(revealedCard)
-                                            reveal: true
-                                        }
-                                    }
-                                ]
-                            }
-                            {
-                                type: multiple
-                                effects: [
-                                    {
-                                        type: revealTopCardsOfDrawDeck
-                                        deck: fp
-                                        memorize: revealedCard
-                                    }
-                                    {
-                                        type: optional
-                                        text: Would you like to put {revealedCard} beneath their deck?
-                                        effect: {
-                                            type: putCardsFromDeckOnBottomOfDeck
-                                            select: memory(revealedCard)
-                                            reveal: true
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(isengard),minion
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: culture(isengard),minion
+				}
+				cost: {
+					type: removeTwilight
+					amount: 2
+				}
+				effect: [
+					{
+						type: choice
+						texts: [
+							Reveal card from your deck
+							Reveal card from opponent's deck
+						]
+						effects: [
+							{
+								type: multiple
+								effects: [
+									{
+										type: revealTopCardsOfDrawDeck
+										deck: shadow
+										memorize: revealedCard
+									}
+									{
+										type: optional
+										text: Would you like to put {revealedCard} beneath your deck?
+										effect: {
+											type: putCardsFromDeckOnBottomOfDeck
+											select: memory(revealedCard)
+											reveal: true
+										}
+									}
+								]
+							}
+							{
+								type: multiple
+								effects: [
+									{
+										type: revealTopCardsOfDrawDeck
+										deck: fp
+										memorize: revealedCard
+									}
+									{
+										type: optional
+										text: Would you like to put {revealedCard} beneath their deck?
+										effect: {
+											type: putCardsFromDeckOnBottomOfDeck
+											select: memory(revealedCard)
+											reveal: true
+										}
+									}
+								]
+							}
+						]
+					}
+				]
+			}
 		]
 		gametext: To play, spot an [isengard] minion. Plays to your support area.<br><b>Shadow:</b> Spot an [isengard] minion and remove (2) to reveal the top card of any draw deck. You may place that card beneath that draw deck.
-		lore: The name meant that which looks far away.'
+		lore: "'The name meant that which looks far away.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1730,7 +1699,6 @@
 	4_167: {
 		cardInfo: {
 			imagePath: decipher/LOTR04167.jpg
-			javaClass: true
 			//parentId: 4_167
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1750,21 +1718,21 @@
 		type: Condition
 		target: controlledSite
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantPlayPhaseEventsOrPhaseSpecialAbilities
-		            player: free people
-		            phase: skirmish
-		            requires: {
-		                type: canSpot
-		                filter: bearer,hasStacked(urukHai)
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantPlayPhaseEventsOrPhaseSpecialAbilities
+					player: free people
+					phase: skirmish
+					requires: {
+						type: canSpot
+						filter: bearer,hasStacked(urukHai)
+					}
+				}
+			}
 		]
 		gametext: Plays on a site you control.<br>While an Uruk-hai is stacked on this site, the Free Peoples player may not play skirmish events or use skirmish special abilities.
-		lore: Rumor of plunder swelled the ranks of the Isengarders.
+		lore: "Rumor of plunder swelled the ranks of the Isengarders."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1777,7 +1745,6 @@
 	4_168: {
 		cardInfo: {
 			imagePath: decipher/LOTR04168.jpg
-			javaClass: true
 			//parentId: 4_168
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1797,25 +1764,25 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: controlledSite
-		        }
-		        cost: {
-		            type: removeTwilight
-		            amount: 2
-		        }
-		        effect: {
-		            type: cancelSkirmish
-		            filter: urukHai
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: controlledSite
+				}
+				cost: {
+					type: removeTwilight
+					amount: 2
+				}
+				effect: {
+					type: cancelSkirmish
+					filter: urukHai
+				}
+			}
 		]
 		gametext: Plays to your support area.<br><b>Skirmish:</b> Spot a site you control and remove (2) to cancel a skirmish involving an Uruk-hai.
-		lore: But in the meantime, the Uruk-hai of Isengard can do the dirty work as usual.'
+		lore: "'But in the meantime, the Uruk-hai of Isengard can do the dirty work as usual.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1828,7 +1795,6 @@
 	4_169: {
 		cardInfo: {
 			imagePath: decipher/LOTR04169.jpg
-			javaClass: true
 			//parentId: 4_169
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1852,36 +1818,36 @@
 		site: 5
 		keywords: Archer
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            filter: culture(isengard),archer
-		            amount: -1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: archery
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: [
-		            {
-		                type: wound
-		                player: fp
-		                select: choose(unbound,companion)
-		            }
-		            {
-                        type: disableArcheryTotalContribution
-                        select: self
-		            }
-		        ]
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: culture(isengard),archer
+					amount: -1
+				}
+			}
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: wound
+						player: fp
+						select: choose(unbound,companion)
+					}
+					{
+						type: disableArcheryTotalContribution
+						select: self
+					}
+				]
+			}
 		]
 		gametext: <b>Archer</b>.<br>The twilight cost of each [isengard] archer is -1.<br><b>Archery:</b> Exert Ranged Commander to make the Free Peoples player wound an unbound companion; this minion does not add to the minion archery total.
-		lore: Hand-picked Uruks led Saruman's crossbowmen.
+		lore: "Hand-picked Uruks led Saruman's crossbowmen."
 		promotext: ""
 		alts: {
 			promos: {
@@ -1894,7 +1860,6 @@
 	4_170: {
 		cardInfo: {
 			imagePath: decipher/LOTR04170.jpg
-			javaClass: true
 			//parentId: 4_170
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1914,23 +1879,23 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: assignedToSkirmish
-		            side: free people
-		            filter: ally
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(culture(isengard),minion)
-		            discount: -2
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: assignedToSkirmish
+					side: free people
+					filter: ally
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(isengard),minion)
+					discount: -2
+				}
+			}
 		]
 		gametext: Plays to your support area.<br>Each time the Free Peoples player assigns an ally to a skirmish, you may play an [isengard] minion from your discard pile. That minion's twilight cost is -2.
-		lore: All Isengard must be emptied....'
+		lore: "'All Isengard must be emptied....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -1943,7 +1908,6 @@
 	4_171: {
 		cardInfo: {
 			imagePath: decipher/LOTR04171.jpg
-			javaClass: true
 			//parentId: 4_171
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -1961,49 +1925,49 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		keywords: Search
 		target: companion,not(hasAttached(name(Rest While You Can)))
+		keywords: Search
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-    		        filter: culture(isengard),tracker
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-                    type: aboutToBeKilled
-                    filter: bearer
-		        }
-                effect: [
-                    {
-                        type: revealTopCardsOfDrawDeck
-                        deck: fp
-                        count: 10
-                        memorize: revealedCards
-                    }
-                    {
-                        type: discardCardsFromDrawDeck
-                        deck: fp
-                        select: choose(side(shadow),memory(revealedCards))
-                        showAll: false
-                        shuffle: false
-                    }
-                    {
-                        type: discardCardsFromDrawDeck
-                        deck: fp
-                        select: choose(side(free),memory(revealedCards))
-                        showAll: false
-                        shuffle: false
-                    }
-                    {
-                        type: shuffleDeck
-                        deck: fp
-                    }
-                ]
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(isengard),tracker
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: aboutToBeKilled
+					filter: bearer
+				}
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						deck: fp
+						count: 10
+						memorize: revealedCards
+					}
+					{
+						type: discardCardsFromDrawDeck
+						deck: fp
+						select: choose(side(shadow),memory(revealedCards))
+						showAll: false
+						shuffle: false
+					}
+					{
+						type: discardCardsFromDrawDeck
+						deck: fp
+						select: choose(side(free),memory(revealedCards))
+						showAll: false
+						shuffle: false
+					}
+					{
+						type: shuffleDeck
+						deck: fp
+					}
+				]
+			}
 		]
 		gametext: <b>Search</b>. To play, spot an [isengard] tracker. Plays on a companion. Limit 1 per companion.<br>If bearer is killed, reveal the top 10 cards of opponent's draw deck and discard 1 Shadow card and 1 Free Peoples card. Your opponent reshuffles that deck.
 		lore: ""
@@ -2019,7 +1983,6 @@
 	4_172: {
 		cardInfo: {
 			imagePath: decipher/LOTR04172.jpg
-			javaClass: true
 			//parentId: 4_172
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2039,28 +2002,28 @@
 		type: Condition
 		target: side(free),man
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: or(name(Saruman),and(culture(isengard),man))
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: assignedToSkirmish
-		            filter: bearer
-		            side: free people
-		        }
-		        effect: {
-		            type: exert
-		            select: all(ally)
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: or(name(Saruman),and(culture(isengard),man))
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: assignedToSkirmish
+					filter: bearer
+					side: free people
+				}
+				effect: {
+					type: exert
+					select: all(ally)
+				}
+			}
 		]
 		gametext: To play, spot Saruman or an [isengard] Man. Plays on a Free Peoples Man.<br>Each time the Free Peoples player assigns bearer to a skirmish, exert each ally.
-		lore: You have no power here, Gandalf the Grey.'
+		lore: "'You have no power here, Gandalf the Grey.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -2073,7 +2036,6 @@
 	4_173: {
 		cardInfo: {
 			imagePath: decipher/LOTR04173.jpg
-			javaClass: true
 			//parentId: 4_173
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2097,56 +2059,56 @@
 		vitality: 4
 		site: 4
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: [
-                        {
-                            type: sarumanFirstSentenceActive
-                        }
-                        {
-                            type: phase
-                            phase: archery
-                        }
-                    ]
-		            filter: self
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantBeAssignedToSkirmish
-		            requires: {
-		                type: sarumanFirstSentenceActive
-		            }
-		            filter: self
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(condition)
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: playCardFromDiscard
-		            select: choose(name(Saruman's Staff))
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: [
+						{
+							type: sarumanFirstSentenceActive
+						}
+						{
+							type: phase
+							phase: archery
+						}
+					]
+					filter: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBeAssignedToSkirmish
+					requires: {
+						type: sarumanFirstSentenceActive
+					}
+					filter: self
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: choose(condition)
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(name(Saruman's Staff))
+				}
+			}
 		]
 		gametext: Saruman may not take wounds during the archery phase and may not be assigned to a skirmish.<br>When you play Saruman, you may discard a condition.<br><b>Shadow:</b> Exert Saruman to play Saruman's Staff from your discard pile.
 		lore: ""
@@ -2162,7 +2124,6 @@
 	4_174: {
 		cardInfo: {
 			imagePath: decipher/LOTR04174.jpg
-			javaClass: true
 			//parentId: 4_174
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2185,40 +2146,40 @@
 		itemclass: Staff
 		target: title(Saruman)
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-                    type: sarumanFirstSentenceActive
-		        }
-		        effect: {
-		            type: addModifier
-		            modifier: {
-		                type: sarumanFirstSentenceInactive
-		            }
-		            until: regroup
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: sarumanFirstSentenceActive
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: sarumanFirstSentenceInactive
+					}
+					until: regroup
+				}
+			}
 		]
 		gametext: Plays on Saruman.<br>He is <b>fierce</b> and <b>damage +1</b>.<br><b>Maneuver:</b> Make the first sentence of Saruman's game text not apply until the regroup phase.
-		lore: His hand clutched his heavy black staff like a claw.
+		lore: "His hand clutched his heavy black staff like a claw."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2231,7 +2192,6 @@
 	4_175: {
 		cardInfo: {
 			imagePath: decipher/LOTR04175.jpg
-			javaClass: true
 			//parentId: 4_175
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2249,7 +2209,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
@@ -2265,7 +2225,7 @@
 			]
 		}
 		gametext: <b>Skirmish:</b> Exert an Uruk-hai who is not assigned to a skirmish to make another Uruk-hai strength +3.
-		lore: Before the wall's foot the dead and broken were piled like shingle in a storm; ever higher rose the hideous mounds....
+		lore: "Before the wall's foot the dead and broken were piled like shingle in a storm; ever higher rose the hideous mounds...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2278,7 +2238,6 @@
 	4_176: {
 		cardInfo: {
 			imagePath: decipher/LOTR04176.jpg
-			javaClass: true
 			//parentId: 4_176
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2306,41 +2265,41 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyRoamingPenalty
-		            filter: culture(isengard),tracker
-		            amount: -2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: culture(isengard),tracker
-		                count: 2
-		            }
-		            filter: self
-		            amount: 3
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: canSpot
-		                filter: culture(isengard),tracker
-		                count: 3
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyRoamingPenalty
+					filter: culture(isengard),tracker
+					amount: -2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: culture(isengard),tracker
+						count: 2
+					}
+					filter: self
+					amount: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: culture(isengard),tracker
+						count: 3
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>The roaming penalty for each [isengard] tracker you play is -2.<br>While you can spot 2 [isengard] trackers, Uglúk is strength +3.<br>While you can spot 3 [isengard] trackers, Uglúk is <b>damage +1</b>.
 		lore: ""
@@ -2356,7 +2315,6 @@
 	4_177: {
 		cardInfo: {
 			imagePath: decipher/LOTR04177.jpg
-			javaClass: true
 			//parentId: 4_177
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2378,33 +2336,33 @@
 		itemclass: Hand weapon
 		target: urukHai
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        requires: {
-		            type: canSpot
-		            filter: bearer,name(Uglúk)
-		        }
-		        cost: [
-                    {
-                        type: exert
-                        select: bearer
-                    }
-                    {
-                        type: discardFromHand
-                        forced: false
-                        select: choose(minion)
-                    }
-                ]
-                effect: {
-                    type: PlayCardFromHand
-                    select: choose(minion)
-                    discount: -3
-                }
-		    }
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: bearer,name(Uglúk)
+				}
+				cost: [
+					{
+						type: exert
+						select: bearer
+					}
+					{
+						type: discardFromHand
+						forced: false
+						select: choose(minion)
+					}
+				]
+				effect: {
+					type: PlayCardFromHand
+					select: choose(minion)
+					discount: -3
+				}
+			}
 		]
 		gametext: Bearer must be an Uruk-hai.<br><b>Shadow:</b> If bearer is Uglúk, exert it and discard a minion from hand to play a minion. Its twilight cost is -3.
-		lore: I am Uglúk. I command.'
+		lore: "'I am Uglúk. I command.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -2417,7 +2375,6 @@
 	4_178: {
 		cardInfo: {
 			imagePath: decipher/LOTR04178.jpg
-			javaClass: true
 			//parentId: 4_178
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2441,23 +2398,23 @@
 		vitality: 2
 		site: 3
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: assignedAgainst
-		            side: free people
-		            filter: or(companion,ally)
-		            against: culture(isengard),man
-		            memorizeAssigned: assignedCharacter
-		        }
-		        effect: {
-		            type: exert
-		            select: memory(assignedCharacter)
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: assignedAgainst
+					side: free people
+					filter: or(companion,ally)
+					against: culture(isengard),man
+					memorizeAssigned: assignedCharacter
+				}
+				effect: {
+					type: exert
+					select: memory(assignedCharacter)
+				}
+			}
 		]
 		gametext: Each time the Free Peoples player assigns a companion or ally to an [isengard] Man, that companion or ally must exert.
-		lore: Gríma promised him riches when Rohan fell to Saruman.
+		lore: "Gríma promised him riches when Rohan fell to Saruman."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2470,7 +2427,6 @@
 	4_179: {
 		cardInfo: {
 			imagePath: decipher/LOTR04179.jpg
-			javaClass: true
 			//parentId: 4_179
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2494,49 +2450,49 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: urukHai
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: location
-		                filter:battleground
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: controlledSite,battleground
-		            }
-		            filter: self
-		            amount: 6
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: {
-		                type: canSpot
-		                filter: controlledSite,battleground
-		                count: 2
-		            }
-		            filter: self
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: urukHai
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter:battleground
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: controlledSite,battleground
+					}
+					filter: self
+					amount: 6
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: canSpot
+						filter: controlledSite,battleground
+						count: 2
+					}
+					filter: self
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>. To play, spot an Uruk-hai.<br>While at a battleground, this minion is <b>fierce</b>.<br>While you control a battleground, this minion is strength +6.<br>While you control 2 battlegrounds, this minion may not take wounds.
 		lore: ""
@@ -2552,7 +2508,6 @@
 	4_180: {
 		cardInfo: {
 			imagePath: decipher/LOTR04180.jpg
-			javaClass: true
 			//parentId: 4_180
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2576,31 +2531,31 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: controlsSite
-		        }
-		        effect: {
-		            type: StackCardsFromPlay
-		            select: self
-		            where: choose(controlledSite)
-		        }
-		    }
-		    {
-		        type: activatedFromStacked
-		        phase: shadow
-		        stackedOn: controlledSite
-		        effect: {
-		            type: playCardFromStacked
-		            select: self
-		            discount: -1
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: controlsSite
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: self
+					where: choose(controlledSite)
+				}
+			}
+			{
+				type: activatedFromStacked
+				phase: shadow
+				stackedOn: controlledSite
+				effect: {
+					type: playCardFromStacked
+					select: self
+					discount: -1
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br><b>Regroup:</b> Stack this minion on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -1.
-		lore: Fresh troops awaited to attack any weakness.
+		lore: "Fresh troops awaited to attack any weakness."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2613,7 +2568,6 @@
 	4_181: {
 		cardInfo: {
 			imagePath: decipher/LOTR04181.jpg
-			javaClass: true
 			//parentId: 4_181
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2640,26 +2594,26 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: [
-		                {
-		                    type: fierceSkirmish
-		                }
-		                {
-		                    type: canSpot
-		                    filter: self,inSkirmish
-		                }
-		            ]
-		            filter: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: [
+						{
+							type: fierceSkirmish
+						}
+						{
+							type: canSpot
+							filter: self,inSkirmish
+						}
+					]
+					filter: self
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>During a fierce skirmish involving this minion, it is strength +2.
-		lore: Now we'll have to leg it double quick.'
+		lore: "'Now we'll have to leg it double quick.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -2672,7 +2626,6 @@
 	4_182: {
 		cardInfo: {
 			imagePath: decipher/LOTR04182.jpg
-			javaClass: true
 			//parentId: 4_182
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2696,22 +2649,22 @@
 		site: 5
 		keywords: Archer
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: played
-		            filter: self
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: isengard
-		            select: choose(machine)
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: isengard
+					select: choose(machine)
+				}
+			}
 		]
 		gametext: <b>Archer</b>.<br>When you play this minion, you may place an [isengard] token on a machine.
-		lore: Bolts from the Uruk crossbows shattered the shields of the defenders.
+		lore: "Bolts from the Uruk crossbows shattered the shields of the defenders."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2724,7 +2677,6 @@
 	4_183: {
 		cardInfo: {
 			imagePath: decipher/LOTR04183.jpg
-			javaClass: true
 			//parentId: 4_183
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2748,28 +2700,28 @@
 		site: 5
 		keywords: Archer
 		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: [
-		            {
-		                type: wound
-		                player: fp
-		                select: choose(unbound,companion)
-		            }
-		            {
-                        type: disableArcheryTotalContribution
-                        select: self
-		            }
-		        ]
-		    }
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: wound
+						player: fp
+						select: choose(unbound,companion)
+					}
+					{
+						type: disableArcheryTotalContribution
+						select: self
+					}
+				]
+			}
 		]
 		gametext: <b>Archer</b>.<br><b>Archery:</b> Exert this minion to make the Free Peoples player wound an unbound companion; this minion does not add to the minion archery total.
-		lore: Both the weapon and its wielder were foul creations of Saruman.
+		lore: "Both the weapon and its wielder were foul creations of Saruman."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2782,7 +2734,6 @@
 	4_184: {
 		cardInfo: {
 			imagePath: decipher/LOTR04184.jpg
-			javaClass: true
 			//parentId: 4_184
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2806,26 +2757,26 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: location
-		            filter: battleground
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(another,urukHai)
-		            amount: 2
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: location
+					filter: battleground
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(another,urukHai)
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert this minion at a battleground to make another Uruk-hai strength +2.
-		lore: Saruman's Uruk army trained in formation tactics.
+		lore: "Saruman's Uruk army trained in formation tactics."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2838,7 +2789,6 @@
 	4_185: {
 		cardInfo: {
 			imagePath: decipher/LOTR04185.jpg
-			javaClass: true
 			//parentId: 4_185
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2862,21 +2812,21 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: hasCardInDeadPile
-		                count: 3
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: hasCardInDeadPile
+						count: 3
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>If there are at least 3 cards in the dead pile, this minion is <b>fierce</b>.
-		lore: Despite intensive training, the smell of blood still enraged the Uruk warriors.
+		lore: "Despite intensive training, the smell of blood still enraged the Uruk warriors."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2889,7 +2839,6 @@
 	4_186: {
 		cardInfo: {
 			imagePath: decipher/LOTR04186.jpg
-			javaClass: true
 			//parentId: 4_186
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2916,31 +2865,31 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantBeDiscarded
-		            filter: unbound,hobbit
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: killed
-		            filter: unbound,hobbit
-		        }
-                cost: {
-                    type: exert
-                    select: self
-                }
-                effect: {
-                    type: addBurdens
-                    amount: 1
-                }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantBeDiscarded
+					filter: unbound,hobbit
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: killed
+					filter: unbound,hobbit
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addBurdens
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>Unbound Hobbits may not be discarded.<br><b>Response:</b> If an unbound Hobbit is killed, exert this minion to add a burden.
-		lore: But at the moment Uglúk was not engaged in sport. He needed speed and had to humour unwilling followers.
+		lore: "But at the moment Uglúk was not engaged in sport. He needed speed and had to humour unwilling followers."
 		promotext: ""
 		alts: {
 			promos: {
@@ -2953,7 +2902,6 @@
 	4_187: {
 		cardInfo: {
 			imagePath: decipher/LOTR04187.jpg
-			javaClass: true
 			//parentId: 4_187
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -2980,44 +2928,44 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: [
-		                {
-		                    type: fierceSkirmish
-		                }
-		                {
-		                    type: canSpot
-		                    filter: self,inSkirmish
-		                }
-		            ]
-		            filter: self
-		            amount: 3
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: [
-		                {
-		                    type: fierceSkirmish
-		                }
-		                {
-		                    type: canSpot
-		                    filter: self,inSkirmish
-		                }
-		            ]
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: [
+						{
+							type: fierceSkirmish
+						}
+						{
+							type: canSpot
+							filter: self,inSkirmish
+						}
+					]
+					filter: self
+					amount: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: [
+						{
+							type: fierceSkirmish
+						}
+						{
+							type: canSpot
+							filter: self,inSkirmish
+						}
+					]
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>During a fierce skirmish involving this minion, it is strength +3 and <b>damage +1</b>.
-		lore: Evening's coming on, and we ought to get a move on.'
+		lore: "'Evening's coming on, and we ought to get a move on.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -3030,7 +2978,6 @@
 	4_188: {
 		cardInfo: {
 			imagePath: decipher/LOTR04188.jpg
-			javaClass: true
 			//parentId: 4_188
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3057,32 +3004,32 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantBeDiscarded
-		            filter: unbound,hobbit
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: killed
-		            filter: unbound,hobbit
-		        }
-                cost: {
-                    type: exert
-                    select: self
-                    times: 2
-                }
-                effect: {
-                    type: exhaust
-                    select: choose(companion)
-                }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantBeDiscarded
+					filter: unbound,hobbit
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: killed
+					filter: unbound,hobbit
+				}
+				cost: {
+					type: exert
+					select: self
+					times: 2
+				}
+				effect: {
+					type: exhaust
+					select: choose(companion)
+				}
+			}
 		]
 		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>Unbound Hobbits may not be discarded.<br><b>Response:</b> If an unbound Hobbit is killed, exert this minion twice to exhaust a companion.
-		lore: We came out of Isengard, and led you here, and we shall lead you back the way we choose.'
+		lore: "'We came out of Isengard, and led you here, and we shall lead you back the way we choose.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -3095,7 +3042,6 @@
 	4_189: {
 		cardInfo: {
 			imagePath: decipher/LOTR04189.jpg
-			javaClass: true
 			//parentId: 4_189
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3122,44 +3068,44 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: [
-		                {
-		                    type: fierceSkirmish
-		                }
-		                {
-		                    type: canSpot
-		                    filter: self,inSkirmish
-		                }
-		            ]
-		            filter: self
-		            amount: 3
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: [
-		                {
-		                    type: fierceSkirmish
-		                }
-		                {
-		                    type: canSpot
-		                    filter: self,inSkirmish
-		                }
-		            ]
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: [
+						{
+							type: fierceSkirmish
+						}
+						{
+							type: canSpot
+							filter: self,inSkirmish
+						}
+					]
+					filter: self
+					amount: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: [
+						{
+							type: fierceSkirmish
+						}
+						{
+							type: canSpot
+							filter: self,inSkirmish
+						}
+					]
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>During a fierce skirmish involving this minion, it is strength +3 and <b>damage +1</b>.
-		lore: Run! Or you'll never see your beloved holes again!'
+		lore: "'Run! Or you'll never see your beloved holes again!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -3172,7 +3118,6 @@
 	4_190: {
 		cardInfo: {
 			imagePath: decipher/LOTR04190.jpg
-			javaClass: true
 			//parentId: 4_190
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3199,32 +3144,32 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantBeDiscarded
-		            filter: unbound,hobbit
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: killed
-		            filter: unbound,hobbit
-		        }
-                cost: {
-                    type: exert
-                    select: self
-                }
-                effect: {
-                    type: wound
-                    player: fp
-                    select: choose(unbound,companion)
-                }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: cantBeDiscarded
+					filter: unbound,hobbit
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: killed
+					filter: unbound,hobbit
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: wound
+					player: fp
+					select: choose(unbound,companion)
+				}
+			}
 		]
 		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>Unbound Hobbits may not be discarded.<br><b>Response:</b> If an unbound Hobbit is killed, exert this minion to make the Free Peoples player wound an unbound companion.
-		lore: None of that! Hold your tongues.'
+		lore: "'None of that! Hold your tongues.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -3237,7 +3182,6 @@
 	4_191: {
 		cardInfo: {
 			imagePath: decipher/LOTR04191.jpg
-			javaClass: true
 			//parentId: 4_191
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3261,26 +3205,26 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        requires: {
-		            type: location
-		            filter: battleground
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(another,urukHai)
-		            amount: 1
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				requires: {
+					type: location
+					filter: battleground
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(another,urukHai)
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert this minion at a battleground to make another Uruk-hai strength +1.
-		lore: Promised a fair share of plunder, they defended against possible reinforcements.
+		lore: "Promised a fair share of plunder, they defended against possible reinforcements."
 		promotext: ""
 		alts: {
 			promos: {
@@ -3293,7 +3237,6 @@
 	4_192: {
 		cardInfo: {
 			imagePath: decipher/LOTR04192.jpg
-			javaClass: true
 			//parentId: 4_192
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3317,26 +3260,26 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: PlayCardFromHand
-		            select: choose(urukHai)
-		            discount: {
-		                type: forEachYouCanSpot
-		                filter: another,urukHai
-		                multiplier: -1
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: PlayCardFromHand
+					select: choose(urukHai)
+					discount: {
+						type: forEachYouCanSpot
+						filter: another,urukHai
+						multiplier: -1
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br><b>Shadow:</b> Exert this minion to play an Uruk-hai; its twilight cost is -1 for each other Uruk-hai you can spot.
-		lore: We are the Uruk-hai; we do not stop the fight for night or day, for fair weather or for storm.'
+		lore: "'We are the Uruk-hai; we do not stop the fight for night or day, for fair weather or for storm.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -3349,7 +3292,6 @@
 	4_193: {
 		cardInfo: {
 			imagePath: decipher/LOTR04193.jpg
-			javaClass: true
 			//parentId: 4_193
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3376,26 +3318,26 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: [
-		                {
-		                    type: fierceSkirmish
-		                }
-		                {
-		                    type: canSpot
-		                    filter: self,inSkirmish
-		                }
-		            ]
-		            filter: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: [
+						{
+							type: fierceSkirmish
+						}
+						{
+							type: canSpot
+							filter: self,inSkirmish
+						}
+					]
+					filter: self
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>During a fierce skirmish involving this minion, it is strength +2.
-		lore: Run, curse you! Run while night lasts!'
+		lore: "'Run, curse you! Run while night lasts!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -3408,7 +3350,6 @@
 	4_194: {
 		cardInfo: {
 			imagePath: decipher/LOTR04194.jpg
-			javaClass: true
 			//parentId: 4_194
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3435,26 +3376,26 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inSkirmishAgainst(hasAttached(search))
-    		        amount: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,inSkirmishAgainst(hasAttached(search))
-		            keyword: damage
-    		        amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmishAgainst(hasAttached(search))
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,inSkirmishAgainst(hasAttached(search))
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>While skirmishing a character bearing a search card, this minion is strength +2 and <b>damage +1</b>.
-		lore: Why don't we search them and find out?'
+		lore: "'Why don't we search them and find out?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -3467,7 +3408,6 @@
 	4_195: {
 		cardInfo: {
 			imagePath: decipher/LOTR04195.jpg
-			javaClass: true
 			//parentId: 4_195
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3494,26 +3434,26 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inSkirmishAgainst(hasAttached(search))
-    		        amount: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: self,inSkirmishAgainst(hasAttached(search))
-		            keyword: damage
-    		        amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmishAgainst(hasAttached(search))
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,inSkirmishAgainst(hasAttached(search))
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Tracker</b>. <b>Fierce</b>.<br>While skirmishing a character bearing a search card, this minion is strength +2 and <b>damage +1</b>.
-		lore: No crying out, no trying to escape.'
+		lore: "'No crying out, no trying to escape.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -3526,7 +3466,6 @@
 	4_196: {
 		cardInfo: {
 			imagePath: decipher/LOTR04196.jpg
-			javaClass: true
 			//parentId: 4_196
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3548,21 +3487,21 @@
 		itemclass: Hand weapon
 		target: urukHai
 		effects: [
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: discard
-		            select: choose(side(free),mount)
-		        }
-		    }
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: discard
+					select: choose(side(free),mount)
+				}
+			}
 		]
 		gametext: Bearer must be an Uruk-hai.<br><b>Maneuver:</b> Exert bearer to discard a Free Peoples mount.
-		lore: The Uruk-hai braced their long pikes to challenge the oncoming Riders.
+		lore: "The Uruk-hai braced their long pikes to challenge the oncoming Riders."
 		promotext: ""
 		alts: {
 			promos: {
@@ -3575,7 +3514,6 @@
 	4_197: {
 		cardInfo: {
 			imagePath: decipher/LOTR04197.jpg
-			javaClass: true
 			//parentId: 4_197
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3599,33 +3537,33 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: hasCardInDeadPile
-		                filter: ally
-		            }
-		            filter: self
-    		        amount: 3
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: hasCardInDeadPile
-		                filter: ally
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: hasCardInDeadPile
+						filter: ally
+					}
+					filter: self
+					amount: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: hasCardInDeadPile
+						filter: ally
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While an ally is in the dead pile, this minion is strength +3 and <b>fierce</b>.
-		lore: A moment they hesitated, and then on they came.
+		lore: "A moment they hesitated, and then on they came."
 		promotext: ""
 		alts: {
 			promos: {
@@ -3638,7 +3576,6 @@
 	4_198: {
 		cardInfo: {
 			imagePath: decipher/LOTR04198.jpg
-			javaClass: true
 			//parentId: 4_198
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3662,22 +3599,22 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: Killed
-		            filter: or(companion,ally)
-		            killer: urukHai
-		            inSkirmish: true
-		        }
-		        effect: {
-		            type: takeControlOfSite
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: Killed
+					filter: or(companion,ally)
+					killer: urukHai
+					inSkirmish: true
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>Each time a companion or ally is killed during a skirmish involving an Uruk-hai, you may take control of a site.
-		lore: They wavered, broke, and fled back; and then charged again, broke and charged again; and each time, like the incoming sea, they halted at a higher point.
+		lore: "They wavered, broke, and fled back; and then charged again, broke and charged again; and each time, like the incoming sea, they halted at a higher point."
 		promotext: ""
 		alts: {
 			promos: {
@@ -3690,7 +3627,6 @@
 	4_199: {
 		cardInfo: {
 			imagePath: decipher/LOTR04199.jpg
-			javaClass: true
 			//parentId: 4_199
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3714,31 +3650,31 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: controlsSite
-		        }
-		        effect: {
-		            type: StackCardsFromPlay
-		            select: self
-		            where: choose(controlledSite)
-		        }
-		    }
-		    {
-		        type: activatedFromStacked
-		        phase: shadow
-		        stackedOn: controlledSite
-		        effect: {
-		            type: playCardFromStacked
-		            select: self
-		            discount: -1
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: controlsSite
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: self
+					where: choose(controlledSite)
+				}
+			}
+			{
+				type: activatedFromStacked
+				phase: shadow
+				stackedOn: controlledSite
+				effect: {
+					type: playCardFromStacked
+					select: self
+					discount: -1
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br><b>Regroup:</b> Stack this minion on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -1.
-		lore: Thousands of Uruk-hai came to take the Hornburg.
+		lore: "Thousands of Uruk-hai came to take the Hornburg."
 		promotext: ""
 		alts: {
 			promos: {
@@ -3751,7 +3687,6 @@
 	4_200: {
 		cardInfo: {
 			imagePath: decipher/LOTR04200.jpg
-			javaClass: true
 			//parentId: 4_200
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3775,41 +3710,41 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: location
-		                filter: battleground
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: urukHai
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: location
-		                filter: battleground
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: battleground
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: urukHai
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: battleground
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>. To play, spot an Uruk-hai.<br>While at a battleground, this minion is <b>fierce</b> and <b>damage +1</b>.
-		lore: These are Uruk-hai – their armour is thick, their shields broad.'
+		lore: "'These are Uruk-hai – their armour is thick, their shields broad.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -3822,7 +3757,6 @@
 	4_201: {
 		cardInfo: {
 			imagePath: decipher/LOTR04201.jpg
-			javaClass: true
 			//parentId: 4_201
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3846,31 +3780,31 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        requires: {
-		            type: controlsSite
-		        }
-		        effect: {
-		            type: StackCardsFromPlay
-		            select: self
-		            where: choose(controlledSite)
-		        }
-		    }
-		    {
-		        type: activatedFromStacked
-		        phase: shadow
-		        stackedOn: controlledSite
-		        effect: {
-		            type: playCardFromStacked
-		            select: self
-		            discount: -1
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: controlsSite
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: self
+					where: choose(controlledSite)
+				}
+			}
+			{
+				type: activatedFromStacked
+				phase: shadow
+				stackedOn: controlledSite
+				effect: {
+					type: playCardFromStacked
+					select: self
+					discount: -1
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br><b>Regroup:</b> Stack this minion on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -1.
-		lore: We come to kill, by sun or moon.'
+		lore: "'We come to kill, by sun or moon.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -3883,7 +3817,6 @@
 	4_202: {
 		cardInfo: {
 			imagePath: decipher/LOTR04202.jpg
-			javaClass: true
 			//parentId: 4_202
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3907,21 +3840,21 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: controlledSite
-		                multiplier: 2
-		            }
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: controlledSite
+						multiplier: 2
+					}
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>This minion is strength +2 for each site you control.
-		lore: There were four... of greater stature, swart, slant-eyed, with thick legs and broad hands.
+		lore: "There were four... of greater stature, swart, slant-eyed, with thick legs and broad hands."
 		promotext: ""
 		alts: {
 			promos: {
@@ -3934,7 +3867,6 @@
 	4_203: {
 		cardInfo: {
 			imagePath: decipher/LOTR04203.jpg
-			javaClass: true
 			//parentId: 4_203
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -3958,17 +3890,17 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        amount: {
-		            type: forEachYouCanSpot
-		            filter: controlledSite
-		            multiplier: -1
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: controlledSite
+					multiplier: -1
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>The twilight cost of this minion is -1 for each site you control.
-		lore: The rumour of war grew behind them.
+		lore: "The rumour of war grew behind them."
 		promotext: ""
 		alts: {
 			promos: {
@@ -3981,7 +3913,6 @@
 	4_204: {
 		cardInfo: {
 			imagePath: decipher/LOTR04204.jpg
-			javaClass: true
 			//parentId: 4_204
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -4005,17 +3936,17 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        amount: {
-		            type: forEachYouCanSpot
-		            filter: controlledSite
-		            multiplier: -1
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: controlledSite
+					multiplier: -1
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>The twilight cost of this minion is -1 for each site you control.
-		lore: We shall have some fun later.'
+		lore: "'We shall have some fun later.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -4028,7 +3959,6 @@
 	4_205: {
 		cardInfo: {
 			imagePath: decipher/LOTR04205.jpg
-			javaClass: true
 			//parentId: 4_205
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -4052,17 +3982,17 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifyOwnCost
-		        amount: {
-		            type: forEachYouCanSpot
-		            filter: controlledSite
-		            multiplier: -1
-		        }
-		    }
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: controlledSite
+					multiplier: -1
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>The twilight cost of this minion is -1 for each site you control.
-		lore: Let the fighting Uruk-hai do the work, as usual.'
+		lore: "'Let the fighting Uruk-hai do the work, as usual.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -4075,7 +4005,6 @@
 	4_206: {
 		cardInfo: {
 			imagePath: decipher/LOTR04206.jpg
-			javaClass: true
 			//parentId: 4_206
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -4099,21 +4028,21 @@
 		site: 5
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: controlsSite
-		            }
-		            filter: self
-		            keyword: damage
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: controlsSite
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While you control a site, this minion is <b>damage +1</b>.
-		lore: We are the servants of Saruman the Wise....'
+		lore: "'We are the servants of Saruman the Wise....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -4126,7 +4055,6 @@
 	4_207: {
 		cardInfo: {
 			imagePath: decipher/LOTR04207.jpg
-			javaClass: true
 			//parentId: 4_207
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -4152,7 +4080,7 @@
 		effects: [
 		]
 		gametext: <b>Damage +1</b>.
-		lore: Bands of Uruks crossed the plains of Rohan.
+		lore: "Bands of Uruks crossed the plains of Rohan."
 		promotext: ""
 		alts: {
 			promos: {
@@ -4165,7 +4093,6 @@
 	4_208: {
 		cardInfo: {
 			imagePath: decipher/LOTR04208.jpg
-			javaClass: true
 			//parentId: 4_208
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -4183,7 +4110,7 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -4191,15 +4118,15 @@
 					type: modifyStrength
 					select: choose(culture(isengard),tracker)
 					amount: {
-					    type: forEachYouCanSpot
-					    filter: attachedTo(character,inSkirmishAgainst(self))
-					    multiplier: 2
+						type: forEachYouCanSpot
+						filter: attachedTo(character,inSkirmishAgainst(self))
+						multiplier: 2
 					}
 				}
 			]
 		}
 		gametext: <b>Skirmish:</b> Make an [isengard] tracker strength +2 for each card borne by the character it is skirmishing.
-		lore: Saruman instilled a spirit for revenge in his fighting brood.
+		lore: "Saruman instilled a spirit for revenge in his fighting brood."
 		promotext: ""
 		alts: {
 			promos: {
@@ -4212,7 +4139,6 @@
 	4_209: {
 		cardInfo: {
 			imagePath: decipher/LOTR04209.jpg
-			javaClass: true
 			//parentId: 4_209
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -4230,7 +4156,7 @@
 		culture: Isengard
 		twilight: 3
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			cost: {
@@ -4246,7 +4172,7 @@
 			]
 		}
 		gametext: <b>Archery:</b> Discard 2 [isengard] archers to exhaust an unbound companion.
-		lore: Defenders on the walls made perfect targets for the Isengard crossbowmen.
+		lore: "Defenders on the walls made perfect targets for the Isengard crossbowmen."
 		promotext: ""
 		alts: {
 			promos: {
@@ -4259,7 +4185,6 @@
 	4_210: {
 		cardInfo: {
 			imagePath: decipher/LOTR04210.jpg
-			javaClass: true
 			//parentId: 4_210
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -4277,7 +4202,7 @@
 		culture: Isengard
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -4288,21 +4213,21 @@
 					memorize: chosenUrukHai
 				}
 				{
-				    type: If
-				    check: {
-				        type: controlsSite
-				    }
-				    true: {
-				        type: addKeyword
-				        select: memory(chosenUrukHai)
-				        keyword: damage
-				        amount: 1
-				    }
+					type: If
+					check: {
+						type: controlsSite
+					}
+					true: {
+						type: addKeyword
+						select: memory(chosenUrukHai)
+						keyword: damage
+						amount: 1
+					}
 				}
 			]
 		}
 		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2 (and <b>damage +1</b> if you control a site).
-		lore: But for us you'd all have run away.'
+		lore: "'But for us you'd all have run away.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -4315,7 +4240,6 @@
 	4_211: {
 		cardInfo: {
 			imagePath: decipher/LOTR04211.jpg
-			javaClass: true
 			//parentId: 4_211
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -4338,43 +4262,43 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: shadow
-		        cost: {
-		            type: PlayCardFromHand
-		            select: choose(culture(isengard),archer)
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: isengard
-		            select: self
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: archery
-		        cost: {
-		            type: RemoveCultureTokens
-		            culture: isengard
-		            count: 2
-		            select: self
-		        }
-		        effect: [
-		            {
-		                type: modifyArcheryTotal
-		                side: shadow
-		                amount: 2
-		            }
-		            {
-		                type: discard
-		                select: self
-		            }
-		        ]
-		    }
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: PlayCardFromHand
+					select: choose(culture(isengard),archer)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: isengard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: RemoveCultureTokens
+					culture: isengard
+					count: 2
+					select: self
+				}
+				effect: [
+					{
+						type: modifyArcheryTotal
+						side: shadow
+						amount: 2
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
 		]
 		gametext: <b>Machine</b>. Plays to your support area.<br><b>Shadow:</b> Play an [isengard] archer to place an [isengard] token on this card.<br><b>Archery:</b> Remove 2 [isengard] tokens from this card to make the minion archery total +2. Discard this condition.
-		lore: Crossbowmen arrived with munitions from Isengard.
+		lore: "Crossbowmen arrived with munitions from Isengard."
 		promotext: ""
 		alts: {
 			promos: {
@@ -4387,7 +4311,6 @@
 	4_212: {
 		cardInfo: {
 			imagePath: decipher/LOTR04212.jpg
-			javaClass: true
 			//parentId: 4_212
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -4405,25 +4328,25 @@
 		culture: Isengard
 		twilight: 1
 		type: Condition
-		keywords: Search
 		target: or(companion,ally),not(hasAttached(name(Weary)))
+		keywords: Search
 		effects: [
-		    {
-		        type: trigger
-		        trigger: {
-		            type: assignedAgainst
-		            side: free people
-		            filter: bearer
-		            against: culture(isengard),tracker
-		        }
-		        effect: {
-		            type: exert
-		            select: bearer
-		        }
-		    }
+			{
+				type: trigger
+				trigger: {
+					type: assignedAgainst
+					side: free people
+					filter: bearer
+					against: culture(isengard),tracker
+				}
+				effect: {
+					type: exert
+					select: bearer
+				}
+			}
 		]
 		gametext: <b>Search</b>. Plays on a companion or ally. Limit 1 per character.<br>Each time the Free Peoples player assigns bearer to skirmish an [isengard] tracker, bearer must exert.
-		lore: We shall not turn back here.'
+		lore: "'We shall not turn back here.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -4436,7 +4359,6 @@
 	4_213: {
 		cardInfo: {
 			imagePath: decipher/LOTR04213.jpg
-			javaClass: true
 			//parentId: 4_213
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -4459,29 +4381,29 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: moves
-		        }
-                requires: {
-                    type: phase
-                    phase: regroup
-                }
-                cost: {
-                    type: discardFromHand
-                    forced: false
-                    count: 2
-                }
-                effect: {
-                    type: putCardsFromDiscardIntoHand
-                    select: choose(culture(isengard),tracker)
-                }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(isengard),tracker)
+				}
+			}
 		]
 		gametext: <b>Search</b>. Plays to your support area.<br>Each time the fellowship moves during the regroup phase, you may discard 2 cards from hand to take an [isengard] tracker from your discard pile into hand.
-		lore: The scouts have come back at last.'
+		lore: "'The scouts have come back at last.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -4494,7 +4416,6 @@
 	4_214: {
 		cardInfo: {
 			imagePath: decipher/LOTR04214.jpg
-			javaClass: true
 			//parentId: 4_214
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -4512,12 +4433,12 @@
 		culture: Isengard
 		twilight: 2
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Gríma)
+				type: canSpot
+				filter: name(Gríma)
 			}
 			effect: [
 				{
@@ -4527,7 +4448,7 @@
 			]
 		}
 		gametext: <b>Maneuver:</b> Spot Gríma to discard a possession borne by an ally or unbound companion.
-		lore: Loth was he to render up the keys. Many other things are there which men have missed.'
+		lore: "'Loth was he to render up the keys. Many other things are there which men have missed.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -4540,7 +4461,6 @@
 	4_215: {
 		cardInfo: {
 			imagePath: decipher/LOTR04215.jpg
-			javaClass: true
 			//parentId: 4_215
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -4560,34 +4480,34 @@
 		type: Condition
 		target: side(free),man
 		effects: [
-		    {
-		        type: extraCost
-		        cost: {
-		            type: exert
-		            select: choose(culture(isengard),man)
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-	                type: played
-	                filter: self
-		        }
-		        effect: {
-		            type: exert
-		            select: bearer
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantHeal
-		            filter: bearer
-		        }
-		    }
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(isengard),man)
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: exert
+					select: bearer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantHeal
+					filter: bearer
+				}
+			}
 		]
 		gametext: To play, exert an [isengard] Man. Plays on a Free Peoples Man. When you play this condition, exert bearer.<br>Wounds may not be removed from bearer.
-		lore: He's alive!'
+		lore: "'He's alive!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -4596,4 +4516,5 @@
 			}
 		}
 	}
+
 }

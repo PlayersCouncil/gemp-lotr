@@ -3,7 +3,6 @@
 	15_143: {
 		cardInfo: {
 			imagePath: decipher/LOTR15143.jpg
-			javaClass: true
 			//parentId: 15_143
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -21,24 +20,24 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: hobbit
+				type: canSpot
+				filter: hobbit
 			}
 			effect: [
 				{
-				    type: playCardFromDrawDeck
-				    select: choose(culture(shire),follower)
-                    showAll: true
-                    shuffle: true
+					type: playCardFromDrawDeck
+					select: choose(culture(shire),follower)
+					showAll: true
+					shuffle: true
 				}
 			]
 		}
 		gametext: Spot a Hobbit to play a [shire] follower from your draw deck.
-		lore: ...ease and peace had left this people still curiously tough.
+		lore: "...ease and peace had left this people still curiously tough."
 		promotext: ""
 		alts: {
 			promos: {
@@ -51,7 +50,6 @@
 	15_144: {
 		cardInfo: {
 			imagePath: decipher/LOTR15144.jpg
-			javaClass: true
 			//parentId: 15_144
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -76,20 +74,21 @@
 		resistance: 10
 		canStartWithRing: true
 		keywords: [
+			Ring-bearer
 			Ring-bound
 		]
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,inSkirmishAgainst(minion,maxStrength(8))
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmishAgainst(minion,maxStrength(8))
+					amount: 2
+				}
+			}
 		]
 		gametext: <b>Ring-bearer.</b> <b>Ring-bound</b>.<br>While skirmishing a minion of strength 8 or less, Frodo is strength +2.
-		lore: Let's... get out of this cursed place as quick as we can – if we can!'
+		lore: "'Let's... get out of this cursed place as quick as we can – if we can!'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -102,7 +101,6 @@
 	15_145: {
 		cardInfo: {
 			imagePath: decipher/LOTR15145.jpg
-			javaClass: true
 			//parentId: 15_145
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -123,8 +121,9 @@
 		strength: 2
 		itemclass: Hand weapon
 		target: hobbit
+
 		gametext: Bearer must be a Hobbit.
-		lore: These are for you. Keep them close.
+		lore: "These are for you. Keep them close."
 		promotext: ""
 		alts: {
 			promos: {
@@ -137,7 +136,6 @@
 	15_146: {
 		cardInfo: {
 			imagePath: decipher/LOTR15146.jpg
-			javaClass: true
 			//parentId: 15_146
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -158,42 +156,42 @@
 		type: Follower
 		strength: 2
 		effects: [
-		    {
-		        type: aidCost
-		        cost: {
-		            type: addBurdens
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: hobbit
-		        }
-		    }
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToTakeWound
-		            filter: bearer
-		        }
-		        cost: [
-		            {
-		                type: memorizeActive
-		                filter: bearer
-		                memory: bearer
-		            }
-		            {
-		                type: transferToSupport
-		                select: self
-		            }
-		        ]
-		        effect: {
-		            type: preventWound
-		            select: memory(bearer)
-		        }
-		    }
+			{
+				type: aidCost
+				cost: {
+					type: addBurdens
+					amount: 2
+				}
+			}
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: hobbit
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				cost: [
+					{
+						type: memorizeActive
+						filter: bearer
+						memory: bearer
+					}
+					{
+						type: transferToSupport
+						select: self
+					}
+				]
+				effect: {
+					type: preventWound
+					select: memory(bearer)
+				}
+			}
 		]
 		gametext: <b>Aid</b> – Add 2 burdens. <helper>(At the start of the maneuver phase, you may add 2 burdens to transfer this to a companion.)</helper><br>To play, spot a Hobbit.<br><b>Response:</b> If bearer is about to take a wound, transfer Hobbiton Brewer to your support area to prevent that wound.
 		lore: ""
@@ -209,7 +207,6 @@
 	15_147: {
 		cardInfo: {
 			imagePath: decipher/LOTR15147.jpg
-			javaClass: true
 			//parentId: 15_147
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -231,34 +228,34 @@
 		strength: 1
 		resistance: 1
 		effects: [
-		    {
-		        type: aidCost
-		        cost: {
-		            type: addBurdens
-		        }
-		    }
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: hobbit
-		            count: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: bearer
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: fierce,minion
-		            }
-		        }
-		    }
+			{
+				type: aidCost
+				cost: {
+					type: addBurdens
+				}
+			}
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: hobbit
+					count: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer
+					amount: {
+						type: forEachYouCanSpot
+						filter: fierce,minion
+					}
+				}
+			}
 		]
 		gametext: <b>Aid</b> – Add a burden. <helper>(At the start of the maneuver phase, you may add a burden to transfer this to a companion.)</helper><br>To play, spot 2 Hobbits.<br>Bearer is strength +1 for each fierce minion you can spot.
-		lore: ...for ages folk in the Shire smoked various herbs....
+		lore: "...for ages folk in the Shire smoked various herbs...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -271,7 +268,6 @@
 	15_148: {
 		cardInfo: {
 			imagePath: decipher/LOTR15148.jpg
-			javaClass: true
 			//parentId: 15_148
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -291,33 +287,33 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyVitality
-		            filter: hobbit,hasAttached(hand weapon)
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyResistance
-		            filter: hobbit,hasAttached(follower)
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: unwounded,hobbit
-		            amount: 1
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyVitality
+					filter: hobbit,hasAttached(hand weapon)
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: hobbit,hasAttached(follower)
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: unwounded,hobbit
+					amount: 1
+				}
+			}
 		]
 		gametext: Each Hobbit bearing a hand weapon is vitality +1.<br>Each Hobbit bearing a follower is resistance +1.<br>Each unwounded Hobbit is strength +1.
-		lore: ...she is very beautiful, and is going to be beautifuller still.'
+		lore: "'...she is very beautiful, and is going to be beautifuller still.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -330,7 +326,6 @@
 	15_149: {
 		cardInfo: {
 			imagePath: decipher/LOTR15149.jpg
-			javaClass: true
 			//parentId: 15_149
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -354,33 +349,33 @@
 		vitality: 4
 		resistance: 9
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,hasAttached(follower)
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,inSkirmishAgainst(hunter,minion)
-		        }
-		        cost: {
-		            type: addThreats
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,hasAttached(follower)
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,inSkirmishAgainst(hunter,minion)
+				}
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 2
+				}
+			}
 		]
 		gametext: While Merry bears a follower, he is strength +2.<br><b>Skirmish:</b> If Merry is skirmishing a hunter minion, add a threat to make Merry strength +2.
-		lore: Three-foot-eight? You did something!
+		lore: "Three-foot-eight? You did something!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -393,7 +388,6 @@
 	15_150: {
 		cardInfo: {
 			imagePath: decipher/LOTR15150.jpg
-			javaClass: true
 			//parentId: 15_150
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -411,23 +405,23 @@
 		culture: Shire
 		twilight: 2
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
-			    type: transferToSupport
-			    select: choose(follower,attachedTo(hobbit))
-			    memorizeBearer: bearer
+				type: transferToSupport
+				select: choose(follower,attachedTo(hobbit))
+				memorizeBearer: bearer
 			}
 			effect: [
 				{
-                    type: cancelSkirmish
-                    filter: memory(bearer)
+					type: cancelSkirmish
+					filter: memory(bearer)
 				}
 			]
 		}
 		gametext: Transfer a follower from a Hobbit to your support area to cancel a skirmish involving that Hobbit.
-		lore: No thank you!
+		lore: "No thank you!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -440,7 +434,6 @@
 	15_151: {
 		cardInfo: {
 			imagePath: decipher/LOTR15151.jpg
-			javaClass: true
 			//parentId: 15_151
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -464,34 +457,34 @@
 		vitality: 4
 		resistance: 9
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            filter: culture(shire),follower
-		            amount: -1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        requires: {
-		            type: canSpot
-		            filter: self,inSkirmishAgainst(hunter,minion)
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(ringBearer)
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: self
-		            amount: 2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: culture(shire),follower
+					amount: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,inSkirmishAgainst(hunter,minion)
+				}
+				cost: {
+					type: exert
+					select: choose(ringBearer)
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 2
+				}
+			}
 		]
 		gametext: Each [shire] follower is twilight cost -1.<br><b>Skirmish:</b> If Pippin is skirmishing a hunter minion, exert the Ring-bearer to make Pippin strength +2.
-		lore: I've always been taller than you.
+		lore: "I've always been taller than you."
 		promotext: ""
 		alts: {
 			promos: {
@@ -504,7 +497,6 @@
 	15_152: {
 		cardInfo: {
 			imagePath: decipher/LOTR15152.jpg
-			javaClass: true
 			//parentId: 15_152
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -524,36 +516,36 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: Response
-		        trigger: {
-		            type: aboutToAddBurden
-		            filter: side(shadow)
-		            memorize: cardAddingBurdens
-		        }
-		        cost: [
-		            {
-		                type: discard
-		                select: choose(culture(shire),follower)
-		            }
-		            {
-		                type: discard
-		                select: self
-		            }
-		        ]
-		        effect: [
-                    {
-                        type: preventAddingAllBurdens
-                    }
-                    {
-                        type: discard
-                        select: memory(cardAddingBurdens)
-                    }
-                ]
-		    }
+			{
+				type: Response
+				trigger: {
+					type: aboutToAddBurden
+					filter: side(shadow)
+					memorize: cardAddingBurdens
+				}
+				cost: [
+					{
+						type: discard
+						select: choose(culture(shire),follower)
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: [
+					{
+						type: preventAddingAllBurdens
+					}
+					{
+						type: discard
+						select: memory(cardAddingBurdens)
+					}
+				]
+			}
 		]
 		gametext: <b>Response:</b> If a Shadow card is about to add any number of burdens, discard a [shire] follower and this condition from play to prevent that and discard that Shadow card.
-		lore: As for the Hobbits of the Shire... they were a merry folk.
+		lore: "As for the Hobbits of the Shire... they were a merry folk."
 		promotext: ""
 		alts: {
 			promos: {
@@ -566,7 +558,6 @@
 	15_153: {
 		cardInfo: {
 			imagePath: decipher/LOTR15153.jpg
-			javaClass: true
 			//parentId: 15_153
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -591,30 +582,30 @@
 		resistance: 9
 		keywords: Ring-bound
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyResistance
-		            filter: self,ringBearer
-		            amount: -4
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        requires: {
-		            type: canSpot
-		            filter: self,hasAttached(follower)
-		        }
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(another,hobbit)
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: self,ringBearer
+					amount: -4
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: self,hasAttached(follower)
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(another,hobbit)
+				}
+			}
 			{
 				type: Response
 				trigger: {
@@ -640,7 +631,6 @@
 	15_154: {
 		cardInfo: {
 			imagePath: decipher/LOTR15154.jpg
-			javaClass: true
 			//parentId: 15_154
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -658,27 +648,27 @@
 		culture: Shire
 		twilight: 0
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: [
-			    {
-			        type: addThreats
-			    }
-			    {
-			        type: exert
-			        select: choose(ringBearer)
-			    }
+				{
+					type: addThreats
+				}
+				{
+					type: exert
+					select: choose(ringBearer)
+				}
 			]
 			effect: [
 				{
-				    type: wound
-				    select: all(not(hunter),minion,inSkirmishAgainst(your,culture(shire),ringBearer))
+					type: wound
+					select: all(not(hunter),minion,inSkirmishAgainst(your,culture(shire),ringBearer))
 				}
 			]
 		}
 		gametext: Add a threat and exert your Ring-bearer to wound each non-hunter minion skirmishing your [shire] Ring-bearer.
-		lore: Don't think he knows about second breakfast, Pip.
+		lore: "Don't think he knows about second breakfast, Pip."
 		promotext: ""
 		alts: {
 			promos: {
@@ -687,4 +677,5 @@
 			}
 		}
 	}
+
 }

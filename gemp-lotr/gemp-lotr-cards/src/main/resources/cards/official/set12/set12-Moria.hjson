@@ -3,7 +3,6 @@
 	12_79: {
 		cardInfo: {
 			imagePath: decipher/LOTR12079.jpg
-			javaClass: true
 			//parentId: 12_79
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -28,43 +27,43 @@
 		site: 4
 		keywords: Damage+1
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: location
-		                filter: underground
-		            }
-		            filter: self
-		            keyword: fierce
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantTakeWounds
-		            requires: {
-		                type: location
-		                filter: underground
-		            }
-		            filter: self
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: cantBeExerted
-		            requires: {
-		                type: location
-		                filter: underground
-		            }
-		            filter: self
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: underground
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: location
+						filter: underground
+					}
+					filter: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBeExerted
+					requires: {
+						type: location
+						filter: underground
+					}
+					filter: self
+				}
+			}
 		]
 		gametext: <b>Damage +1</b>.<br>While The Balrog is at an underground site, it is <b>fierce</b> and cannot take wounds or be exerted.
-		lore: The fire in it seemed to die, but the darkness grew.
+		lore: "The fire in it seemed to die, but the darkness grew."
 		promotext: ""
 		alts: {
 			promos: {
@@ -77,7 +76,6 @@
 	12_80: {
 		cardInfo: {
 			imagePath: decipher/LOTR12080.jpg
-			javaClass: true
 			//parentId: 12_80
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -100,37 +98,37 @@
 		itemclass: Hand weapon
 		target: title(The Balrog)
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: fierce
-		        }
-		    }
-            {
-                type: trigger
-                trigger: {
-                    type: played
-                    filter: self
-                }
-                effect: [
-                    {
-                        type: revealHand
-                        hand: free people
-                        memorize: revealedCards
-                    }
-                    {
-                        type: discardFromHand
-                        forced: true
-                        hand: free people
-                        select: all(memory(revealedCards),side(free people),maxTwilight(1))
-                    }
-                ]
-            }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: fierce
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: [
+					{
+						type: revealHand
+						hand: free people
+						memorize: revealedCards
+					}
+					{
+						type: discardFromHand
+						forced: true
+						hand: free people
+						select: all(memory(revealedCards),side(free people),maxTwilight(1))
+					}
+				]
+			}
 		]
 		gametext: Bearer must be The Balrog.<br>It is <b>fierce</b>.<br>When you play this artifact, the Free Peoples player reveals his or her hand and discards all Free Peoples cards from hand that have a twilight cost of 1 or less.
-		lore: ...it swung its whip, and the thongs lashed....
+		lore: "...it swung its whip, and the thongs lashed...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -139,4 +137,5 @@
 			}
 		}
 	}
+
 }

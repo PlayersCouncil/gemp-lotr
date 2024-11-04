@@ -3,7 +3,6 @@
 	15_11: {
 		cardInfo: {
 			imagePath: decipher/LOTR15011.jpg
-			javaClass: true
 			//parentId: 15_11
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -27,47 +26,47 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: canSpot
-		                filter: name(Aragorn)
-		            }
-		            filter: self
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyResistance
-		            requires: {
-		                type: canSpot
-		                filter: name(Aragorn)
-		            }
-		            filter: self
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: RemoveCultureTokens
-		            culture: elven
-		            select: choose(any)
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(minion,inSkirmishAgainst(self))
-		            amount: -2
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: name(Aragorn)
+					}
+					filter: self
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					requires: {
+						type: canSpot
+						filter: name(Aragorn)
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					culture: elven
+					select: choose(any)
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(self))
+					amount: -2
+				}
+			}
 		]
 		gametext: While you can spot Aragorn, Arwen is strength +1 and resistance +2.<br><b>Skirmish:</b> Remove an [elven] token to make a minion skirmishing Arwen strength -2.
-		lore: I do not fear them.
+		lore: "I do not fear them."
 		promotext: ""
 		alts: {
 			promos: {
@@ -80,7 +79,6 @@
 	15_12: {
 		cardInfo: {
 			imagePath: decipher/LOTR15012.jpg
-			javaClass: true
 			//parentId: 15_12
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -100,36 +98,36 @@
 		twilight: 2
 		type: Follower
 		effects: [
-		    {
-		        type: aidCost
-		        cost: {
-		            type: addTwilight
-		            amount: 3
-		        }
-		    }
-		    {
-		        type: trigger
-		        trigger: {
-		            type: transferred
-		            filter: self
-		            to: companion,not(culture(elven))
-		        }
-		        effect: {
-		            type: exert
-		            select: bearer
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: archer
-		        }
-		    }
+			{
+				type: aidCost
+				cost: {
+					type: addTwilight
+					amount: 3
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: transferred
+					filter: self
+					to: companion,not(culture(elven))
+				}
+				effect: {
+					type: exert
+					select: bearer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: archer
+				}
+			}
 		]
 		gametext: <b>Aid</b> – (3). <helper>(At the start of the maneuver phase, you may add (3) to transfer this to a companion.)</helper><br>Each time you transfer this to a companion, except an [elven] companion, exert bearer.<br>Bearer is an <b>archer</b>.
-		lore: Elven archers were seldom seen before it was too late.
+		lore: "Elven archers were seldom seen before it was too late."
 		promotext: ""
 		alts: {
 			promos: {
@@ -142,7 +140,6 @@
 	15_13: {
 		cardInfo: {
 			imagePath: decipher/LOTR15013.jpg
-			javaClass: true
 			//parentId: 15_13
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -163,17 +160,17 @@
 		itemclass: Ranged weapon
 		target: elf
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            filter: bearer
-		            keyword: archer
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: archer
+				}
+			}
 		]
 		gametext: Bearer must be an Elf.<br>Bearer is an <b>archer</b>.
-		lore: No finer bows could defend Helm's Deep than those of the Golden Wood.
+		lore: "No finer bows could defend Helm's Deep than those of the Golden Wood."
 		promotext: ""
 		alts: {
 			promos: {
@@ -186,7 +183,6 @@
 	15_14: {
 		cardInfo: {
 			imagePath: decipher/LOTR15014.jpg
-			javaClass: true
 			//parentId: 15_14
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -209,29 +205,29 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: self,hasAttached(possession)
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: maneuver
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: putCardsFromDiscardOnBottomOfDeck
-		            select: choose(culture(elven))
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,hasAttached(possession)
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: putCardsFromDiscardOnBottomOfDeck
+					select: choose(culture(elven))
+				}
+			}
 		]
 		gametext: While this companion is bearing a possession, he is strength +2.<br><b>Maneuver:</b> Exert this companion to place an [elven] card from your discard pile on the bottom of your draw deck.
-		lore: Elven warriors used their strength and wisdom equally in battle.
+		lore: "Elven warriors used their strength and wisdom equally in battle."
 		promotext: ""
 		alts: {
 			promos: {
@@ -244,7 +240,6 @@
 	15_15: {
 		cardInfo: {
 			imagePath: decipher/LOTR15015.jpg
-			javaClass: true
 			//parentId: 15_15
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -264,34 +259,34 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: name(Legolas)
-		        }
-		        effect: {
-		            type: heal
-		            select: choose(hunter,or(and(culture(dwarven),dwarf),and(culture(gondor),man)))
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(elven),elf)
-		            amount: 2
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: name(Legolas)
+				}
+				effect: {
+					type: heal
+					select: choose(hunter,or(and(culture(dwarven),dwarf),and(culture(gondor),man)))
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(elven),elf)
+					amount: 2
+				}
+			}
 		]
 		gametext: Each time Legolas wins a skirmish, you may heal a hunter [dwarven] Dwarf or hunter [gondor] Man.<br><b>Skirmish:</b> Discard this condition to make an [elven] Elf strength +2.
-		lore: ...not even my eyes can see him, my good Legolas....'
+		lore: "'...not even my eyes can see him, my good Legolas....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -304,7 +299,6 @@
 	15_16: {
 		cardInfo: {
 			imagePath: decipher/LOTR15016.jpg
-			javaClass: true
 			//parentId: 15_16
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -326,40 +320,40 @@
 		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: winsSkirmish
-		            filter: elf
-		            memorize: winner
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(or(memory(winner),name(Aragorn)))
-		        }
-		        effect: {
-		            type: AddCultureTokens
-		            culture: elven
-		            select: self
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: startOfPhase
-		            phase: maneuver
-		        }
-		        cost: {
-		            type: RemoveCultureTokens
-		            culture: elven
-		            select: self
-		        }
-		        effect: {
-		            type: drawCards
-		        }
-		    }
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: elf
+					memorize: winner
+				}
+				cost: {
+					type: exert
+					select: choose(or(memory(winner),name(Aragorn)))
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: elven
+					select: self
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				cost: {
+					type: RemoveCultureTokens
+					culture: elven
+					select: self
+				}
+				effect: {
+					type: drawCards
+				}
+			}
 		]
 		gametext: Each time an Elf wins a skirmish, you may exert that Elf or Aragorn to place an [elven] token here.<br>At the start of each maneuver phase, you may remove an [elven] token here to draw a card.
 		lore: ""
@@ -375,7 +369,6 @@
 	15_17: {
 		cardInfo: {
 			imagePath: decipher/LOTR15017.jpg
-			javaClass: true
 			//parentId: 15_17
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -399,40 +392,40 @@
 		vitality: 3
 		resistance: 6
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: elf
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            requires: {
-		                type: location
-		                filter: battleground
-		            }
-		            filter: self
-		            amount: 2
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: addKeyword
-		            requires: {
-		                type: location
-		                filter: forest
-		            }
-		            filter: self
-		            keyword: archer
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: battleground
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: forest
+					}
+					filter: self
+					keyword: archer
+				}
+			}
 		]
 		gametext: To play, spot an Elf.<br>While the fellowship is at a battleground site, Haldir is strength +2.<br>While the fellowship is at a forest site, Haldir is an <b>archer</b>.
-		lore: ...since you come with an Elf of our kindred, we are willing to befriend you, as Elrond asked....'
+		lore: "'...since you come with an Elf of our kindred, we are willing to befriend you, as Elrond asked....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -445,7 +438,6 @@
 	15_18: {
 		cardInfo: {
 			imagePath: decipher/LOTR15018.jpg
-			javaClass: true
 			//parentId: 15_18
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -470,21 +462,21 @@
 		resistance: 6
 		keywords: Hunter 1
 		effects: [
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: choose(hunter,companion)
-		            count: 2
-		        }
-		        effect: {
-		            type: drawCards
-		        }
-		    }
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: choose(hunter,companion)
+					count: 2
+				}
+				effect: {
+					type: drawCards
+				}
+			}
 		]
 		gametext: <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Regroup:</b> Exert 2 hunter companions to draw a card.
-		lore: We have already overtaken some of those that we are hunting....'
+		lore: "'We have already overtaken some of those that we are hunting....'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -497,7 +489,6 @@
 	15_19: {
 		cardInfo: {
 			imagePath: decipher/LOTR15019.jpg
-			javaClass: true
 			//parentId: 15_19
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -525,29 +516,29 @@
 			Hunter 1
 		]
 		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: modifyArcheryTotal
-		            side: free people
-		            amount: {
-		                type: cardPhaseLimit
-		                amount: {
-		                    type: forEachYouCanSpot
-		                    filter: hunter,minion
-		                }
-		                limit: 3
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyArcheryTotal
+					side: free people
+					amount: {
+						type: cardPhaseLimit
+						amount: {
+							type: forEachYouCanSpot
+							filter: hunter,minion
+						}
+						limit: 3
+					}
+				}
+			}
 		]
 		gametext: <b>Archer</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper><br><b>Archery:</b> Exert Legolas to make the fellowship archery total +1 for each hunter minion you can spot (limit +3).
-		lore: You would die before your stroke fell!
+		lore: "You would die before your stroke fell!"
 		promotext: ""
 		alts: {
 			promos: {
@@ -560,7 +551,6 @@
 	15_20: {
 		cardInfo: {
 			imagePath: decipher/LOTR15020.jpg
-			javaClass: true
 			//parentId: 15_20
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -578,23 +568,23 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: culture(elven),follower
+				type: canSpot
+				filter: culture(elven),follower
 			}
 			effect: [
 				{
-				    type: modifyArcheryTotal
-				    side: shadow
-				    amount: -3
+					type: modifyArcheryTotal
+					side: shadow
+					amount: -3
 				}
 			]
 		}
 		gametext: Spot an [elven] follower to make the minion archery total -3.
-		lore: We have drunk the cup of parting...and the shadows fall between us.'
+		lore: "'We have drunk the cup of parting...and the shadows fall between us.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -607,7 +597,6 @@
 	15_21: {
 		cardInfo: {
 			imagePath: decipher/LOTR15021.jpg
-			javaClass: true
 			//parentId: 15_21
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -625,26 +614,26 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: elf
+				type: canSpot
+				filter: elf
 			}
 			effect: [
 				{
-				    type: modifyArcheryTotal
-				    side: free people
-				    amount: {
-				        type: forEachYouCanSpot
-				        filter: minion,maxTwilight(2)
-				    }
+					type: modifyArcheryTotal
+					side: free people
+					amount: {
+						type: forEachYouCanSpot
+						filter: minion,maxTwilight(2)
+					}
 				}
 			]
 		}
 		gametext: Spot an Elf to make the fellowship archery total +1 for each minion with a twilight cost of 2 or less that you can spot.
-		lore: But who can say what it hit?'
+		lore: "'But who can say what it hit?'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -657,7 +646,6 @@
 	15_22: {
 		cardInfo: {
 			imagePath: decipher/LOTR15022.jpg
-			javaClass: true
 			//parentId: 15_22
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -679,55 +667,55 @@
 		#target: 
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: elf
-		            count: 3
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: aboutToDrawCard
-		            player: you
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(elf)
-		        }
-		        effect: [
-		            {
-		                type: preventEffect
-		            }
-		            {
-		                type: memorizeTopOfDeck
-		                count: 3
-		                memory: cards
-		            }
-		            {
-		                type: chooseArbitraryCards
-		                fromMemory: cards
-		                filter: side(free people)
-		                memorize: chosenCard
-		                text: Choose Free Peoples card to put into your hand
-		            }
-		            {
-		                type: putCardsFromDeckIntoHand
-		                select: memory(chosenCard)
-                        reveal: true
-                        shuffle: false
-                        showAll: false
-		            }
-		            {
-		                type: putCardsFromDeckOnBottomOfDeck
-		                select: memory(cards)
-                        reveal: true
-		            }
-		        ]
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+					count: 3
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: aboutToDrawCard
+					player: you
+				}
+				cost: {
+					type: exert
+					select: choose(elf)
+				}
+				effect: [
+					{
+						type: preventEffect
+					}
+					{
+						type: memorizeTopOfDeck
+						count: 3
+						memory: cards
+					}
+					{
+						type: chooseArbitraryCards
+						fromMemory: cards
+						filter: side(free people)
+						memorize: chosenCard
+						text: Choose Free Peoples card to put into your hand
+					}
+					{
+						type: putCardsFromDeckIntoHand
+						select: memory(chosenCard)
+						reveal: true
+						shuffle: false
+						showAll: false
+					}
+					{
+						type: putCardsFromDeckOnBottomOfDeck
+						select: memory(cards)
+						reveal: true
+					}
+				]
+			}
 		]
 		gametext: To play, spot 3 Elves.<br>Each time you are about to draw a card, you may exert an Elf to look at the top three cards of your draw deck instead. Take a Free Peoples card into your hand and place the other cards on the bottom of your draw deck.
 		lore: ""
@@ -743,7 +731,6 @@
 	15_23: {
 		cardInfo: {
 			imagePath: decipher/LOTR15023.jpg
-			javaClass: true
 			//parentId: 15_23
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -761,28 +748,28 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
 				{
-				    type: modifyStrength
-				    select: choose(elf)
-				    amount: {
-				        type: Conditional
-				        requires: {
-				            type: canSpot
-				            filter: archer
-				            count: 3
-				        }
-				        true: 4
-				        false: 2
-				    }
+					type: modifyStrength
+					select: choose(elf)
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: archer
+							count: 3
+						}
+						true: 4
+						false: 2
+					}
 				}
 			]
 		}
 		gametext: Make an Elf strength +2 (or +4 if you can spot 3 archers).
-		lore: How many there were the company could not count.
+		lore: "How many there were the company could not count."
 		promotext: ""
 		alts: {
 			promos: {
@@ -795,7 +782,6 @@
 	15_24: {
 		cardInfo: {
 			imagePath: decipher/LOTR15024.jpg
-			javaClass: true
 			//parentId: 15_24
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -815,42 +801,42 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: elf
-		            count: 3
-		        }
-		    }
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyCost
-		            requires: {
-		                type: canSpot
-		                filter: culture(elven),follower
-		            }
-		            filter: side(shadow),possession
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: discard
-		            select: self
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(culture(elven),companion)
-		            amount: {
-		                type: forEachYouCanSpot
-		                filter: archer,companion
-		            }
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+					count: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: {
+						type: canSpot
+						filter: culture(elven),follower
+					}
+					filter: side(shadow),possession
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(elven),companion)
+					amount: {
+						type: forEachYouCanSpot
+						filter: archer,companion
+					}
+				}
+			}
 		]
 		gametext: To play, spot 3 Elves.<br>While you can spot an [elven] follower, the twilight cost of each Shadow possession is +1.<br><b>Skirmish:</b> Discard this condition to make an [elven] companion strength +1 for each archer companion you can spot.
 		lore: ""
@@ -866,7 +852,6 @@
 	15_25: {
 		cardInfo: {
 			imagePath: decipher/LOTR15025.jpg
-			javaClass: true
 			//parentId: 15_25
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -888,32 +873,32 @@
 		itemclass: Hand weapon
 		target: elf
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-		            type: modifyStrength
-		            filter: minion,inSkirmishAgainst(bearer)
-		            amount: {
-		                type: forEachWound
-		                multiplier: -1
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: bearer
-		        }
-		        effect: {
-		            type: exert
-		            select: choose(minion,inSkirmishAgainst(bearer))
-		        }
-		    }
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: minion,inSkirmishAgainst(bearer)
+					amount: {
+						type: forEachWound
+						multiplier: -1
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: exert
+					select: choose(minion,inSkirmishAgainst(bearer))
+				}
+			}
 		]
 		gametext: Bearer must be an Elf.<br>Each minion skirmishing bearer is strength -1 for each wound on that minion.<br><b>Skirmish:</b> Exert bearer to exert a minion skirmishing bearer.
-		lore: Elven weapons remain in use for centuries.
+		lore: "Elven weapons remain in use for centuries."
 		promotext: ""
 		alts: {
 			promos: {
@@ -926,7 +911,6 @@
 	15_26: {
 		cardInfo: {
 			imagePath: decipher/LOTR15026.jpg
-			javaClass: true
 			//parentId: 15_26
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -947,32 +931,32 @@
 		type: Follower
 		resistance: 1
 		effects: [
-		    {
-		        type: aidCost
-		        cost: {
-		            type: addTwilight
-		            amount: 1
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: transferred
-		            filter: self
-		            to: companion
-		        }
-		        cost: {
-		            type: exert
-		            select: choose(elf)
-		        }
-		        effect: {
-		            type: addKeyword
-		            select: choose(currentSite)
-		            keyword: forest
-		            until: endOfTurn
-		        }
-		    }
+			{
+				type: aidCost
+				cost: {
+					type: addTwilight
+					amount: 1
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: transferred
+					filter: self
+					to: companion
+				}
+				cost: {
+					type: exert
+					select: choose(elf)
+				}
+				effect: {
+					type: addKeyword
+					select: choose(currentSite)
+					keyword: forest
+					until: endOfTurn
+				}
+			}
 		]
 		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, you may add (1) to transfer this to a companion.)</helper><br>Each time you transfer this to a companion, you may exert an Elf to make the fellowship's current site a <b>forest</b> until the end of the turn.
 		lore: ""
@@ -985,118 +969,4 @@
 		}
 	}
 
-	15_205: {
-		cardInfo: {
-			imagePath: decipher/LOTR15060.jpg
-			javaClass: true
-			//parentId: 15_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: 15C60
-			rarity: C
-			setNum: "15"
-			cardNum: 60
-			style: Standard
-		}
-		title: Forth the Three Hunters!
-		subtitle: Elven Version
-		unique: false
-		side: Free Peoples
-		culture: Elven
-		twilight: 2
-		type: Condition
-		keywords: Support Area
-		effects: [
-		    {
-		        type: activated
-		        phase: archery
-		        cost: [
-                    {
-                        type: exert
-                        select: choose(name(Legolas))
-                    }
-                    {
-                        type: exert
-                        select: choose(name(Aragorn))
-                    }
-                ]
-                effect: {
-                    type: wound
-                    select: choose(minion)
-                }
-		    }
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: choose(name(Aragorn))
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: name(Gimli)
-		        }
-		        effect: {
-		            type: modifyStrength
-		            select: choose(minion)
-		            amount: {
-		                type: Conditional
-		                requires: [
-                            {
-                                type: canSpot
-                                filter: name(Aragorn),hunter
-                            }
-                            {
-                                type: canSpot
-                                filter: name(Gimli),hunter
-                            }
-                        ]
-                        true: -3
-                        false: -1
-		            }
-		        }
-		    }
-		    {
-		        type: activated
-		        phase: regroup
-		        cost: {
-		            type: exert
-		            select: choose(name(Gimli))
-		        }
-		        requires: {
-		            type: canSpot
-		            filter: name(Legolas)
-		        }
-		        effect: {
-		            type: drawCards
-		            count: {
-		                type: Conditional
-		                requires: [
-                            {
-                                type: canSpot
-                                filter: name(Gimli),hunter
-                            }
-                            {
-                                type: canSpot
-                                filter: name(Legolas),hunter
-                            }
-                        ]
-                        true: 2
-                        false: 1
-		            }
-		        }
-		    }
-		]
-		gametext: <b>Archery:</b> Exert Legolas and exert Aragorn to wound a minion.<br><b>Skirmish:</b> Exert Aragorn and spot Gimli to make a minion strength -1 (or -3 if Aragorn and Gimli are hunters).<br><b>Regroup:</b> Exert Gimli and spot Legolas to draw a card (or 2 cards if Gimli and Legolas are hunters).
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
 }

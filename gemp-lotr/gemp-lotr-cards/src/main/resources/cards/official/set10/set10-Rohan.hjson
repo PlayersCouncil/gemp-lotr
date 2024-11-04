@@ -3,7 +3,6 @@
 	10_72: {
 		cardInfo: {
 			imagePath: decipher/LOTR10072.jpg
-			javaClass: true
 			//parentId: 10_72
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -28,29 +27,29 @@
 		signet: Gandalf
 		resistance: 6
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: {
-		            type: exert
-		            select: self
-		        }
-		        effect: {
-		            type: repeat
-		            times: {
-		                type: forEachWound
-		                filter: minion,inSkirmishAgainst(self)
-		            }
-		            effect: {
-		                type: wound
-		                player: shadow
-		                select: choose(minion)
-		            }
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: repeat
+					times: {
+						type: forEachWound
+						filter: minion,inSkirmishAgainst(self)
+					}
+					effect: {
+						type: wound
+						player: shadow
+						select: choose(minion)
+					}
+				}
+			}
 		]
 		gametext: <b>Skirmish:</b> Exert Éowyn to choose an opponent. That opponent must wound a minion for each wound on each minion skirmishing Éowyn.
-		lore: Yet now that I have leave to depart, I would remain. For this House has become to me of all dwellings the most blessed.'
+		lore: "'Yet now that I have leave to depart, I would remain. For this House has become to me of all dwellings the most blessed.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -63,7 +62,6 @@
 	10_73: {
 		cardInfo: {
 			imagePath: decipher/LOTR10073.jpg
-			javaClass: true
 			//parentId: 10_73
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -83,27 +81,27 @@
 		type: Condition
 		keywords: Support Area
 		effects: [
-		    {
-		        type: toPlay
-		        requires: {
-		            type: canSpot
-		            filter: culture(rohan),man
-		        }
-		    }
-		    {
-		        type: trigger
-		        optional: true
-		        trigger: {
-		            type: losesInitiative
-		            side: free people
-		        }
-		        effect: {
-		            type: liberateSite
-		        }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: losesInitiative
+					side: free people
+				}
+				effect: {
+					type: liberateSite
+				}
+			}
 		]
 		gametext: To play, spot a [rohan] Man.<br>Each time you lose initiative, you may liberate a site.
-		lore: ...he seized a great horn from Guthláf his banner-bearer, and he blew such a blast upon it that it burst asunder.
+		lore: "...he seized a great horn from Guthláf his banner-bearer, and he blew such a blast upon it that it burst asunder."
 		promotext: ""
 		alts: {
 			promos: {
@@ -116,7 +114,6 @@
 	10_74: {
 		cardInfo: {
 			imagePath: decipher/LOTR10074.jpg
-			javaClass: true
 			//parentId: 10_74
 			//One of: Variant, Errata, Reprint
 			//parentType: Variant
@@ -134,7 +131,7 @@
 		culture: Rohan
 		twilight: 1
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -142,30 +139,30 @@
 				filter: culture(rohan),man
 			}
 			cost: {
-			    type: discard
-			    select: choose(culture(rohan),possession)
+				type: discard
+				select: choose(culture(rohan),possession)
 			}
 			effect: [
 				{
-				    type: choice
-				    texts: [
-				        Wound a minion
-				        Liberate a site
-				    ]
-				    effects: [
-				        {
-				            type: wound
-				            select: choose(minion)
-				        }
-				        {
-				            type: liberateSite
-				        }
-				    ]
+					type: choice
+					texts: [
+						Wound a minion
+						Liberate a site
+					]
+					effects: [
+						{
+							type: wound
+							select: choose(minion)
+						}
+						{
+							type: liberateSite
+						}
+					]
 				}
 			]
 		}
 		gametext: If your [rohan] Man wins a skirmish, discard a [rohan] possession to wound a minion or to liberate a site.
-		lore: ...they gathered and rallied and fought until the day wore away.
+		lore: "...they gathered and rallied and fought until the day wore away."
 		promotext: ""
 		alts: {
 			promos: {
@@ -174,4 +171,5 @@
 			}
 		}
 	}
+
 }
