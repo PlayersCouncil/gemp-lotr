@@ -1409,6 +1409,10 @@
 							multiplier: -1
 						}
 					}
+					{
+						type: Discard
+						select: self
+					}
 				]
 			}
 		]
