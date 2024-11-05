@@ -1,27 +1,29 @@
 package com.gempukku.lotro.at;
 
-import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public abstract class AbstractAtTest {
     public static LotroCardBlueprintLibrary _cardLibrary;
     public static LotroFormatLibrary _formatLibrary;
     public static ProductLibrary _productLibrary;
-    private final int cardId = 100;
 
     static {
         _cardLibrary = new LotroCardBlueprintLibrary();
@@ -36,6 +38,165 @@ public abstract class AbstractAtTest {
 
     public PhysicalCardImpl createCard(String owner, String blueprintId) throws CardNotFoundException {
         return (PhysicalCardImpl) _game.getGameState().createPhysicalCard(owner, _cardLibrary, blueprintId);
+    }
+
+    public void addCultureTokens(PhysicalCard card, Token token, int count) {
+        _game.getGameState().addTokens(card, token, count);
+    }
+
+    public int getArcheryTotal(Side side) {
+        return RuleUtils.calculateArcheryTotal(_game, side);
+    }
+
+    public boolean hasKeyword(PhysicalCard card, Keyword keyword) {
+        return _game.getModifiersQuerying().hasKeyword(_game, card, keyword);
+    }
+
+    public boolean hasSignet(PhysicalCard card, Signet signet) {
+        return _game.getModifiersQuerying().hasSignet(_game, card, signet);
+    }
+
+    public void addModifier(Modifier modifier) {
+        _game.getModifiersEnvironment().addAlwaysOnModifier(modifier);
+    }
+
+    public PhysicalCard getRingBearer(String player) {
+        return _game.getGameState().getRingBearer(player);
+    }
+
+    public PhysicalCard getRing(String player) {
+        return _game.getGameState().getRing(player);
+    }
+
+    public PhysicalCard getSite(int siteNumber) {
+        return _game.getGameState().getSite(siteNumber);
+    }
+
+    public PhysicalCard addToZone(PhysicalCard card, Zone zone) {
+        _game.getGameState().addCardToZone(_game, card, zone);
+        return card;
+    }
+
+    public PhysicalCard attachTo(PhysicalCard card, PhysicalCard toCard) {
+        addToZone(card, Zone.ATTACHED);
+        ((PhysicalCardImpl) card).attachTo((PhysicalCardImpl) toCard);
+        return card;
+    }
+
+    public PhysicalCard stackOn(PhysicalCard card, PhysicalCard toCard) {
+        addToZone(card, Zone.STACKED);
+        ((PhysicalCardImpl) card).stackOn((PhysicalCardImpl) toCard);
+        return card;
+    }
+
+    public PhysicalCard putOnTopOfDeck(PhysicalCard card) {
+        _game.getGameState().putCardOnTopOfDeck(card);
+        return card;
+    }
+
+    public int getCultureTokens(PhysicalCard tomBombadilsHat, Culture culture) {
+        return _game.getGameState().getTokenCount(tomBombadilsHat, Token.findTokenForCulture(culture));
+    }
+
+    public void selectArbitraryCards(String player, String... cardId) throws DecisionResultInvalidException {
+        playerDecided(player, StringUtils.join(cardId, ","));
+    }
+
+    public void selectCardAction(String player, PhysicalCard card) throws DecisionResultInvalidException {
+        playerDecided(player, getCardActionId(player, card.getCardId()));
+    }
+
+    public void hasCardAction(String player, PhysicalCard card) {
+        assertNotNull(getCardActionId(player, card));
+    }
+
+    public void assertNoCardAction(String player, PhysicalCard card) {
+        assertNull(getCardActionId(player, card));
+    }
+
+    public void selectCard(String player, PhysicalCard card) throws DecisionResultInvalidException {
+        playerDecided(player, String.valueOf(card.getCardId()));
+    }
+
+    public void selectYes(String player) throws DecisionResultInvalidException {
+        playerDecided(player, "0");
+    }
+
+    public void selectNo(String player) throws DecisionResultInvalidException {
+        playerDecided(player, "1");
+    }
+
+    public int getWounds(PhysicalCard card) {
+        return _game.getGameState().getWounds(card);
+    }
+
+    public void addWounds(PhysicalCard card, int count) {
+        for (int i = 0; i < count; i++) {
+            _game.getGameState().addWound(card);
+        }
+    }
+
+    public void removeWounds(PhysicalCard card, int count) {
+        for (int i = 0; i < count; i++) {
+            if (getWounds(card) > 0) {
+                _game.getGameState().removeWound(card);
+            }
+        }
+    }
+
+    public void replaceSite(PhysicalCard newSite, int siteNumber) {
+        PhysicalCard oldSite = _game.getGameState().getSite(siteNumber);
+        _game.getGameState().removeCardsFromZone(oldSite.getOwner(), Collections.singleton(oldSite));
+        oldSite.setSiteNumber(null);
+        _game.getGameState().addCardToZone(_game, oldSite, Zone.ADVENTURE_DECK);
+
+        _game.getGameState().removeCardsFromZone(newSite.getOwner(), Collections.singleton(newSite));
+        newSite.setSiteNumber(siteNumber);
+        _game.getGameState().addCardToZone(_game, newSite, Zone.ADVENTURE_PATH);
+    }
+
+    public int getTwilightPool() {
+        return _game.getGameState().getTwilightPool();
+    }
+
+    public void setTwilightPool(int twilightPool) {
+        _game.getGameState().setTwilight(twilightPool);
+    }
+
+    public void addThreats(String player, int threats) {
+        _game.getGameState().addThreats(player, threats);
+    }
+
+    public int getThreats() {
+        return _game.getGameState().getThreats();
+    }
+
+    public int getBurdens() {
+        return _game.getGameState().getBurdens();
+    }
+
+    public void addBurdens(int count) {
+        _game.getGameState().addBurdens(count);
+    }
+
+    public void removeBurdens(int count) {
+        _game.getGameState().removeBurdens(count);
+    }
+
+    public Phase getPhase() {
+        return _game.getGameState().getCurrentPhase();
+    }
+
+    public void pass(String player) throws DecisionResultInvalidException {
+        playerDecided(player, "");
+    }
+
+    public int getStrength(PhysicalCard card) {
+        return _game.getModifiersQuerying().getStrength(_game, card);
+    }
+
+    public int getResistance(PhysicalCard card) {
+        return _game.getModifiersQuerying().getResistance(_game, card);
     }
 
     public void initializeSimplestGame() throws DecisionResultInvalidException {
@@ -78,6 +239,31 @@ public abstract class AbstractAtTest {
         playerDecided(P2, "0");
     }
 
+    public void playerAnswersNo(String player) throws DecisionResultInvalidException {
+        playerDecided(player, "1");
+    }
+
+    public void passUntil(Phase phase) throws DecisionResultInvalidException {
+        while (true) {
+            Phase currentPhase = _game.getGameState().getCurrentPhase();
+            if (currentPhase == phase)
+                break;
+            switch (currentPhase) {
+                case BETWEEN_TURNS -> skipMulligans();
+                case FELLOWSHIP -> pass(P1);
+                case SHADOW -> pass(P2);
+                case MANEUVER, ARCHERY, ASSIGNMENT -> {
+                    pass(P1);
+                    pass(P2);
+                }
+            }
+        }
+    }
+
+    public void assertInZone(PhysicalCard card, Zone zone) {
+        assertEquals(zone, card.getZone());
+    }
+
     public void validateContents(String[] array1, String[] array2) {
         if (array1.length != array2.length)
             fail("Array sizes differ");
@@ -111,6 +297,27 @@ public abstract class AbstractAtTest {
         return null;
     }
 
+    public String getCardActionId(AwaitingDecision awaitingDecision, PhysicalCard card) {
+        String[] cardIds = (String[]) awaitingDecision.getDecisionParameters().get("cardId");
+        for (int i = 0; i < cardIds.length; i++)
+            if (cardIds[i].equals(String.valueOf(card.getCardId())))
+                return ((String[]) awaitingDecision.getDecisionParameters().get("actionId"))[i];
+        return null;
+    }
+
+    public String getCardActionId(String playerId, PhysicalCard carD) {
+        return getCardActionId(playerId, carD.getCardId());
+    }
+
+    public String getCardActionId(String playerId, int cardId) {
+        AwaitingDecision awaitingDecision = _userFeedback.getAwaitingDecision(playerId);
+        String[] cardIds = (String[]) awaitingDecision.getDecisionParameters().get("cardId");
+        for (int i = 0; i < cardIds.length; i++)
+            if (cardIds[i].equals(String.valueOf(cardId)))
+                return ((String[]) awaitingDecision.getDecisionParameters().get("actionId"))[i];
+        return null;
+    }
+
     public String getCardActionId(String playerId, String actionTextStart) {
         return getCardActionId(_userFeedback.getAwaitingDecision(playerId), actionTextStart);
     }
@@ -128,6 +335,15 @@ public abstract class AbstractAtTest {
         for (int i = 0; i < actionTexts.length; i++)
             if (actionTexts[i].equals(result))
                 return String.valueOf(i);
+        return null;
+    }
+
+    public String getArbitraryCardId(String playerId, String blueprintId) {
+        String[] blueprintIds = getAwaitingDecision(playerId).getDecisionParameters().get("blueprintId");
+        for (int i=0; i<blueprintIds.length; i++) {
+            if (blueprintIds[i].equals(blueprintId))
+                return getAwaitingDecision(playerId).getDecisionParameters().get("cardId")[i];
+        }
         return null;
     }
 
@@ -156,6 +372,10 @@ public abstract class AbstractAtTest {
             throw exp;
         }
         _game.carryOutPendingActionsUntilDecisionNeeded();
+    }
+
+    public AwaitingDecision getAwaitingDecision(String player) {
+        return _userFeedback.getAwaitingDecision(player);
     }
 
     public void carryOutEffectInPhaseActionByPlayer(String playerId, Effect effect) throws DecisionResultInvalidException {

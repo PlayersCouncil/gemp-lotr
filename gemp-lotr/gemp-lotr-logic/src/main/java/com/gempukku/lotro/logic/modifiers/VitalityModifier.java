@@ -10,16 +10,20 @@ public class VitalityModifier extends AbstractModifier {
     private final Evaluator _modifier;
     private final boolean _nonCardTextModifier;
 
-    public VitalityModifier(PhysicalCard source, Filterable affectFilter, int modifier) {
-        this(source, affectFilter, modifier, false);
+    public VitalityModifier(PhysicalCard source, Filterable affectFilter, Condition condition, int modifier) {
+        this(source, affectFilter, condition, modifier, false);
     }
 
-    public VitalityModifier(PhysicalCard source, Filterable affectFilter, int modifier, boolean nonCardTextModifier) {
-        this(source, affectFilter, new ConstantEvaluator(modifier), nonCardTextModifier);
+    public VitalityModifier(PhysicalCard source, Filterable affectFilter, Condition condition, Evaluator modifier) {
+        this(source, affectFilter, condition, modifier, false);
     }
 
-    public VitalityModifier(PhysicalCard source, Filterable affectFilter, Evaluator modifier, boolean nonCardTextModifier) {
-        super(source, "Vitality modifier", affectFilter, ModifierEffect.VITALITY_MODIFIER);
+    public VitalityModifier(PhysicalCard source, Filterable affectFilter, Condition condition, int modifier, boolean nonCardTextModifier) {
+        this(source, affectFilter, condition, new ConstantEvaluator(modifier), nonCardTextModifier);
+    }
+
+    public VitalityModifier(PhysicalCard source, Filterable affectFilter, Condition condition, Evaluator modifier, boolean nonCardTextModifier) {
+        super(source, "Vitality modifier", affectFilter, condition, ModifierEffect.VITALITY_MODIFIER);
         _modifier = modifier;
         _nonCardTextModifier = nonCardTextModifier;
     }

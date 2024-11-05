@@ -19,7 +19,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		keyword: Skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
@@ -31,7 +31,7 @@
 				}
 				{
 					type: ModifyStrength
-					filter: choose(minion,InSkirmishAgainst(Elf))
+					select: choose(minion,InSkirmishAgainst(Elf))
 					amount: {
 						type: TwilightCostInMemory
 						memory: revealedCard
@@ -40,18 +40,20 @@
 					memorize: weakenedMinion
 				}
 				{
-					type: Conditional
-					requires: {
+					type: If
+					check: {
 						type: IsLessThanOrEqual
 						firstNumber: {
-							type: StrengthFromMemory
-							memory: weakenedMinion
+							type: ForEachStrength
+							filter: memory(weakenedMinion)
 						}
 						secondNumber: 4
 					}
-					effect: {
+					true: {
 						type: DiscardCardsFromDrawDeck
-						filter: memory(revealedCard)
+						select: memory(revealedCard)
+                        showAll: false
+                        shuffle: false
 					}
 				}
 			]

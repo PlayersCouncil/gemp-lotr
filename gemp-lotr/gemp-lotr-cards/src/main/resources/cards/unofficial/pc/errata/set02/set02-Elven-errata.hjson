@@ -19,23 +19,23 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		keyword: Maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(Elf,ally)
+				select: choose(Elf,ally)
 				memorize: firstAlly
 			}
 			effect: [
 				{
 					type: Discard
 					count: 1
-					filter: choose(condition)
+					select: choose(condition)
 				}
 				{
-					type: conditional
-					requires: [
+					type: If
+					check: [
 						{
 							type: CanSpot
 							filter: Orc
@@ -46,7 +46,7 @@
 							filter: Elf,ally,not(exhausted),not(memory(firstAlly))
 						}
 					]
-					effect: {
+					true: {
 						type: Optional
 						player: you
 						text: Would you like to exert another Elf ally to discard another condition?
@@ -54,12 +54,12 @@
 							type: CostToEffect
 							cost: {
 								type: exert
-								filter: choose(Elf,ally,not(memory(firstAlly)))
+								select: choose(Elf,ally,not(memory(firstAlly)))
 							}
 							effect: {
 								type: Discard
 								count: 1
-								filter: choose(condition)
+								select: choose(condition)
 							}
 						}
 					}

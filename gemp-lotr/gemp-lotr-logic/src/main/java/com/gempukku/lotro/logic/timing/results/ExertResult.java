@@ -4,7 +4,7 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.EffectResult;
 
-public class ExertResult extends EffectResult {
+public class ExertResult extends EffectResult implements ActionSource {
     private final Action _action;
     private final PhysicalCard _card;
     private final boolean _forToil;

@@ -1,0 +1,1016 @@
+{
+
+	11_144: {
+		cardInfo: {
+			imagePath: decipher/LOTR11144.jpg
+			//parentId: 11_144
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U144
+			rarity: U
+			setNum: "11"
+			cardNum: 144
+			style: Standard
+		}
+		title: Border Patrol
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: mounted,culture(rohan),man
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: rohan
+					select: self
+					count: 3
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: played
+					filter: minion
+					memorize: playedMinion
+				}
+				requires: {
+					type: location
+					filter: plains
+				}
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Remove a {rohan} token from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: rohan
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: exert
+					select: memory(playedMinion)
+				}
+			}
+		]
+		gametext: When you play this condition, spot a mounted [rohan] Man to add 3 [rohan] tokens here.<br><b>Response:</b> If a minion is played at a plains site, discard this condition or remove a [rohan] token from here to exert that minion.
+		lore: "'Who are you, and what are you doing in this land?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_145: {
+		cardInfo: {
+			imagePath: decipher/LOTR11145.jpg
+			//parentId: 11_145
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U145
+			rarity: U
+			setNum: "11"
+			cardNum: 145
+			style: Standard
+		}
+		title: Éomer
+		subtitle: Guardian of the Eastmark
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 7
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+				amount: -1
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: moves
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect:
+				{
+					type: returnToHand
+					select: choose(minion)
+				}
+			}
+		]
+		gametext: While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br>Each time the fellowship moves, you may exert Éomer to return a minion to its owner's hand.
+		lore: "'...wanderers in the Riddermark would be wise to be less haughty in these days of doubt.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_146: {
+		cardInfo: {
+			imagePath: decipher/LOTR11146.jpg
+			//parentId: 11_146
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S146
+			rarity: S
+			setNum: "11"
+			cardNum: 146
+			style: Standard
+		}
+		title: Éowyn
+		subtitle: Shieldmaiden of Rohan
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 7
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: modifyStrength
+					select: all(other,culture(rohan),man)
+					amount: 1
+					until: regroup
+				}
+			}
+		]
+		gametext: Each time Éowyn wins a skirmish, each other [rohan] Man is strength +1 until the regroup phase.
+		lore: "'The women of this country learned long ago: those without swords can still die upon them.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_147: {
+		cardInfo: {
+			imagePath: decipher/LOTR11147.jpg
+			//parentId: 11_147
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R147
+			rarity: R
+			setNum: "11"
+			cardNum: 147
+			style: Standard
+		}
+		title: Gamling
+		subtitle: Defender of the Hornburg
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: addTwilight
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(possession)
+					on: self
+					showAll: true
+					shuffle: true
+				}
+			}
+		]
+		gametext: At the start of the fellowship phase, you may add (1) to play a possession on Gamling from your draw deck.
+		lore: "'If they come to bargain for our goods at Helm's Gate, they will pay a high price....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_148: {
+		cardInfo: {
+			imagePath: decipher/LOTR11148.jpg
+			//parentId: 11_148
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11C148
+			rarity: C
+			setNum: "11"
+			cardNum: 148
+			style: Standard
+		}
+		title: Hrothlac
+		subtitle: Man of Rohan
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(rohan),companion,minResistance(4)
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: preventWound
+					select: choose(culture(rohan),companion,minResistance(4))
+				}
+			}
+		]
+		gametext: <b>Response:</b> If a [rohan] companion who has resistance 4 or more is about to take a wound, exert Hrothlac to prevent that.
+		lore: "'...we desire only to be free, and to live as we have lived, keeping our own, and serving no foreign lord, good or evil.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_149: {
+		cardInfo: {
+			imagePath: decipher/LOTR11149.jpg
+			//parentId: 11_149
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U149
+			rarity: U
+			setNum: "11"
+			cardNum: 149
+			style: Standard
+		}
+		title: Protecting the Hall
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 4
+		type: Condition
+		target: culture(rohan),man
+		keywords: Toil 2
+		effects: [
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: bearer
+					keyword: defender
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Toil 2</b>. <helper>(For each [rohan] character you exert when playing this, its twilight cost is -2.)</helper><br>Bearer must be a [rohan] Man.<br><b>Assignment:</b> Discard this condition from play to make bearer <b>defender +1</b>.
+		lore: "'None are welcome here in days of war but our own folk....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_150: {
+		cardInfo: {
+			imagePath: decipher/LOTR11150.jpg
+			//parentId: 11_150
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S150
+			rarity: S
+			setNum: "11"
+			cardNum: 150
+			style: Standard
+		}
+		title: Rally Cry
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(rohan),man,minResistance(4))
+					memorize: chosenMan
+					amount: {
+						type: forEachWound
+						filter: minion,inSkirmishAgainst(memory(chosenMan))
+						multiplier: 2
+					}
+				}
+			]
+		}
+		gametext: Make a [rohan] Man who has resistance 4 or more strength +2 for each wound on each minion he or she is skirmishing.
+		lore: "'...a sword-day, a red day, ere the sun rises!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_151: {
+		cardInfo: {
+			imagePath: decipher/LOTR11151.jpg
+			//parentId: 11_151
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U151
+			rarity: U
+			setNum: "11"
+			cardNum: 151
+			style: Standard
+		}
+		title: Riddermark Javelin
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Ranged weapon
+		target: culture(rohan),man
+		effects: [
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyArcheryTotal
+					side: free people
+					amount: {
+						type: Conditional
+						requires: {
+							type: location
+							filter: plains
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+		]
+		gametext: Bearer must be a [rohan] Man.<br><b>Archery:</b> Discard this possession to make the fellowship archery total +1 (or +2 if the fellowship is at a plains site).
+		lore: "Short-hafted throwing spears are wielded by the Riders of Rohan in addition to their long lances."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_152: {
+		cardInfo: {
+			imagePath: decipher/LOTR11152.jpg
+			//parentId: 11_152
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S152
+			rarity: S
+			setNum: "11"
+			cardNum: 152
+			style: Standard
+		}
+		title: Riddermark Soldier
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: modifyStrength
+					select: all(culture(rohan),companion)
+					amount: 2
+					until: regroup
+				}
+			}
+		]
+		gametext: When you play this companion, each [rohan] companion is strength +2 until the regroup phase.
+		lore: "...their faces were stern and keen."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_153: {
+		cardInfo: {
+			imagePath: decipher/LOTR11153.jpg
+			//parentId: 11_153
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S153
+			rarity: S
+			setNum: "11"
+			cardNum: 153
+			style: Standard
+		}
+		title: Rider's Spear
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(rohan),man
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,mounted
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a [rohan] Man.<br>If bearer is mounted, bearer is <b>damage +1</b>.
+		lore: "Shafts of the sun flared above the eastern hills and glimmered on their spears."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_154: {
+		cardInfo: {
+			imagePath: decipher/LOTR11154.jpg
+			//parentId: 11_154
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R154
+			rarity: R
+			setNum: "11"
+			cardNum: 154
+			style: Standard
+		}
+		title: Riders of the Mark
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 5
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(rohan),companion
+					count: 2
+				}
+			}
+			{
+				type: playedInOtherPhase
+				phase: skirmish
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: exhaust
+					select: choose(minion)
+				}
+			}
+		]
+		gametext: To play, spot 2 [rohan] companions.<br>You may play Riders of the Mark any time you could play a skirmish event.<br>When you play Riders of the Mark, you may exhaust a minion.
+		lore: "With astonishing speed and skill they checked their steeds, wheeled, and came charging round."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_155: {
+		cardInfo: {
+			imagePath: decipher/LOTR11155.jpg
+			//parentId: 11_155
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11C155
+			rarity: C
+			setNum: "11"
+			cardNum: 155
+			style: Standard
+		}
+		title: Riding Like the Wind
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(rohan),man)
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+				}
+				requires: {
+					type: canSpot
+					filter: culture(rohan),mount
+					count: 2
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: 1
+					}
+				}
+				limitPerTurn: 1
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: your,companion,not(mounted)
+					amount: -1
+				}
+			}
+		]
+		gametext: To play, exert a [rohan] Man.<br>While you can spot 2 [rohan] mounts, the move limit is +1.<br>Each of your companions that is not mounted is strength -1.
+		lore: "The horsemen, following the trail, had turned from the river and were drawing near the downs."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_156: {
+		cardInfo: {
+			imagePath: decipher/LOTR11156.jpg
+			//parentId: 11_156
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U156
+			rarity: U
+			setNum: "11"
+			cardNum: 156
+			style: Standard
+		}
+		title: Rohirrim Mount
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		itemclass: Mount
+		target: culture(rohan),man
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				effect: {
+					type: exert
+					select: all(minion,inSkirmish)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: plains
+					}
+					filter: bearer
+					keyword: defender
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.<br>While bearer is at a plains site, he or she is <b>defender +1</b>.
+		lore: "The Eorlingas raise horses both peerless and cherished."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_157: {
+		cardInfo: {
+			imagePath: decipher/LOTR11157.jpg
+			//parentId: 11_157
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11C157
+			rarity: C
+			setNum: "11"
+			cardNum: 157
+			style: Standard
+		}
+		title: Rush of Steeds
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: side(shadow),condition
+				}
+				effect: {
+					type: exert
+					select: choose(minion)
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: exertsForSpecialAbility
+					filter: minion
+					itsOwn: true
+					memorize: exertedMinion
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: preventSpecialAbility
+					}
+					{
+						type: returnToHand
+						select: memory(exertedMinion)
+					}
+				]
+			}
+		]
+		gametext: To play, spot a [rohan] Man.<br>Each time a Shadow condition is played, you may exert a minion.<br><b>Response:</b> If a minion exerts as a cost of its special ability, discard this condition to prevent that and return that minion to its owner's hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_158: {
+		cardInfo: {
+			imagePath: decipher/LOTR11158.jpg
+			//parentId: 11_158
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R158
+			rarity: R
+			setNum: "11"
+			cardNum: 158
+			style: Standard
+		}
+		title: Sword Rack
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: discarded
+					filter: culture(rohan),possession
+					memorize: discardedPossession
+				}
+				requires: {
+					type: not
+					requires: {
+						type: hasCardStacked
+						filter: possession
+						on: self
+						count: 2
+					}
+				}
+				effect: {
+					type: stackCardsFromDiscard
+					select: memory(discardedPossession)
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: addTwilight
+				}
+				effect: {
+					type: playCardFromStacked
+					select: choose(possession)
+					on: self
+				}
+			}
+		]
+		gametext: <b>Response:</b> If a [rohan] possession is discarded from play and no more than one possession is stacked here, stack it here.<br><b>Fellowship:</b> Add (1) to play a possession stacked here as if from hand.
+		lore: "In Rohan, equal craft is brought to the exhibition of a blade as to the forging."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_159: {
+		cardInfo: {
+			imagePath: decipher/LOTR11159.jpg
+			//parentId: 11_159
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U159
+			rarity: U
+			setNum: "11"
+			cardNum: 159
+			style: Standard
+		}
+		title: Théoden
+		subtitle: King of the Eorlingas
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: culture(gandalf),companion
+					}
+					filter: self
+					keyword: muster
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: or(battleground,plains)
+					}
+					filter: culture(rohan),man
+					amount: 1
+				}
+			}
+		]
+		gametext: While you can spot a [gandalf] companion, Théoden gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>While Théoden is at a battleground or plains site each [rohan] Man is strength +1.
+		lore: "'Let all my folk get ready!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_160: {
+		cardInfo: {
+			imagePath: decipher/LOTR11160.jpg
+			//parentId: 11_160
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S160
+			rarity: S
+			setNum: "11"
+			cardNum: 160
+			style: Standard
+		}
+		title: War Now Calls Us
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(culture(rohan),companion)
+				memorize: exertedCompanion
+			},
+			effect: [
+				{
+					type: modifyStrength
+					select: memory(exertedCompanion)
+					amount: 3
+				}
+				{
+					type: If
+					check: {
+						type: memoryMatches
+						memory: exertedCompanion
+						filter: minResistance(5)
+					}
+					true: {
+						type: addKeyword
+						select: memory(exertedCompanion)
+						keyword: damage
+						amount: 1
+					}
+				}
+			]
+		}
+		gametext: Exert a [rohan] companion to make him or her strength +3 (and <b>damage +1</b> if he or she has resistance 5 or more).
+		lore: "'Mourn not overmuch! Mighty was the fallen, / meet was his ending. When his mound is raised, / women then shall weep.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -59,7 +59,7 @@ public class AssignmentPhaseEffect extends AbstractEffect {
 
             if (Filters.notAssignedToSkirmish.accepts(game, fpChar))
                 game.getActionsEnvironment().emitEffectResult(new AssignedToSkirmishResult(fpChar, _playerId));
-            for (PhysicalCard notAssignedMinion : Filters.filter(minions, game, Filters.notAssignedToSkirmish))
+            for (PhysicalCard notAssignedMinion : Filters.filter(game, minions, Filters.notAssignedToSkirmish))
                 game.getActionsEnvironment().emitEffectResult(new AssignedToSkirmishResult(notAssignedMinion, _playerId));
 
             game.getGameState().assignToSkirmishes(fpChar, minions);

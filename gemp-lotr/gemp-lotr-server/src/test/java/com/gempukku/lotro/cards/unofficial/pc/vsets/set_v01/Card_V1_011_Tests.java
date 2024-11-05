@@ -10,9 +10,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_011_Tests
 {
@@ -75,7 +73,7 @@ public class Card_V1_011_Tests
 		PhysicalCardImpl library = scn.GetFreepsCard("library");
 
 		assertTrue(library.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(library, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(library, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(3, library.getBlueprint().getTwilightCost());
 		assertEquals(CardType.ARTIFACT, library.getBlueprint().getCardType());
 		assertEquals(Culture.ELVEN, library.getBlueprint().getCulture());
@@ -295,7 +293,7 @@ public class Card_V1_011_Tests
 		assertEquals(1, scn.GetWoundsOn(scn.GetShadowCardByID(choices[3])));
 		assertEquals(1, scn.GetWoundsOn(scn.GetShadowCardByID(choices[4])));
 
-		assertTrue(scn.FreepsDecisionAvailable("Choose card to heal"));
+		assertTrue(scn.FreepsDecisionAvailable("Choose cards to heal"));
 		scn.FreepsChooseCard(aragorn);
 		scn.FreepsChooseCard(aragorn);
 		scn.FreepsChooseCard(gimli);

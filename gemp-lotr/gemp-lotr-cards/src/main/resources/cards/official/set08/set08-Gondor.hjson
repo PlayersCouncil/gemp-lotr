@@ -1,0 +1,1089 @@
+{
+
+	8_31: {
+		cardInfo: {
+			imagePath: decipher/LOTR08031.jpg
+			//parentId: 8_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C31
+			rarity: C
+			setNum: "8"
+			cardNum: 31
+			style: Standard
+		}
+		title: At His Command
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(name(Aragorn))
+			},
+			effect: [
+				{
+					type: chooseHowManyThreatsToSpot
+					memorize: spotCount
+				}
+				{
+					type: modifyStrength
+					select: choose(unbound,companion,signet(aragorn))
+					amount: {
+						type: fromMemory
+						memory: spotCount
+					}
+				}
+			]
+		}
+		gametext: Exert Aragorn to make an unbound companion with the Aragorn signet strength +1 for each threat you spot.
+		lore: "'Even the shades of Men are obedient to his will....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_32: {
+		cardInfo: {
+			imagePath: decipher/LOTR08032.jpg
+			//parentId: 8_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8R32
+			rarity: R
+			setNum: "8"
+			cardNum: 32
+			style: Standard
+		}
+		title: Catapult
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gondor),knight
+					count: 2
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						deck: shadow
+						memorize: revealedCard
+					}
+					{
+						type: discardFromHand
+						hand: shadow
+						player: shadow
+						forced: true
+						select: choose(side(shadow),printedTwilightCostFromMemory(revealedCard))
+					}
+				]
+			}
+		]
+		gametext: To play, spot 2 [gondor] knights.<br><b>Maneuver:</b> Discard 2 cards from hand to reveal the top card of an opponent's draw deck. Choose an opponent who must discard a Shadow card that has a twilight cost that is the same as the twilight cost of the revealed card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_33: {
+		cardInfo: {
+			imagePath: decipher/LOTR08033.jpg
+			//parentId: 8_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8R33
+			rarity: R
+			setNum: "8"
+			cardNum: 33
+			style: Standard
+		}
+		title: Elessar's Edict
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: aboutToBeKilled
+				filter: culture(gondor),wraith
+				memorize: killedCharacters
+			}
+			requires: {
+				type: canSpot
+				filter: culture(gondor),wraith
+				count: 2
+			}
+			cost: [
+				{
+					type: discard
+					select: choose(memory(killedCharacters),culture(gondor),wraith)
+				}
+				{
+					type: choice
+					texts: [
+						Exhaust another {gondor} wraith
+						Spot another exhausted {gondor} wraith
+					]
+					effects: [
+						{
+							type: exhaust
+							select: choose(culture(gondor),wraith)
+						}
+						{
+							type: spot
+							filter: culture(gondor),wraith
+						}
+					]
+				}
+			]
+		}
+		gametext: If a [gondor] Wraith is about to be killed, discard him and either exhaust another [gondor] Wraith or spot another exhausted [gondor] Wraith to prevent that.
+		lore: "'Yes, the Dead ride behind. They have been summoned....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_34: {
+		cardInfo: {
+			imagePath: decipher/LOTR08034.jpg
+			//parentId: 8_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C34
+			rarity: C
+			setNum: "8"
+			cardNum: 34
+			style: Standard
+		}
+		title: Faramir
+		subtitle: Defender of Osgiliath
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		keywords: Knight
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: not
+					requires: {
+						type: phase
+						phase: play starting fellowship
+					}
+				}
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						count: 10
+						memorize: revealedCards
+					}
+					{
+						type: playCardFromDrawDeck
+						select: choose(memory(revealedCards),knight)
+						showAll: false
+						shuffle: true
+					}
+				]
+			}
+		]
+		gametext: <b>Knight</b>.<br>When you play Faramir (except in your starting fellowship), you may reveal the top 10 cards of your draw deck. You may play a knight revealed. Shuffle your draw deck.
+		lore: "'...I will go and do what I can in his stead – if you command it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR08035.jpg
+			//parentId: 8_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C35
+			rarity: C
+			setNum: "8"
+			cardNum: 35
+			style: Standard
+		}
+		title: Fourth Level
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		strength: -1
+		keywords: [
+			Fortification
+			Support Area
+		]
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Exert 2 {gondor} Men
+						Spot 3 knights
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(culture(gondor),man)
+							count: 2
+						}
+						{
+							type: spot
+							filter: knight
+							count: 3
+						}
+					]
+				}
+				effect: [
+					{
+						type: transfer
+						select: self
+						fromSupport: true
+						where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+						memorizeTarget: chosenMinion
+					}
+					{
+						type: exhaust
+						select: memory(chosenMinion)
+					}
+				]
+			}
+		]
+		gametext: <b>Fortification</b>.<br><b>Skirmish:</b> Exert 2 [gondor] Men or spot 3 knights to transfer this condition from your support area to a minion skirmishing a [gondor] Man. Exhaust that minion.
+		lore: "...about each was set a wall...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_36: {
+		cardInfo: {
+			imagePath: decipher/LOTR08036.jpg
+			//parentId: 8_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8R36
+			rarity: R
+			setNum: "8"
+			cardNum: 36
+			style: Standard
+		}
+		title: Garrison of Gondor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 3
+		resistance: 6
+		keywords: [
+			Knight
+			Archer
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gondor),companion
+					count: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: fortification
+					}
+					filter: self
+					keyword: defender
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Knight</b>. <b>Archer</b>.<br>To play, spot 3 [gondor] companions.<br>While you can spot a fortification, Garrison of Gondor is <b>defender +1</b>.
+		lore: "But about the Gate resistance still was stout...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_37: {
+		cardInfo: {
+			imagePath: decipher/LOTR08037.jpg
+			//parentId: 8_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8R37
+			rarity: R
+			setNum: "8"
+			cardNum: 37
+			style: Standard
+		}
+		title: Imrahil
+		subtitle: Prince of Dol Amroth
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 6
+		keywords: Knight
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: knight
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: exert
+					select: choose(minion)
+					count: 2
+				}
+			}
+		]
+		gametext: <b>Knight</b>. To play, spot a knight.<br>Each time Imrahil wins a skirmish, you may exert 2 minions.
+		lore: "...he was of high blood, and his folk also, tall men and proud with sea-grey eyes."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_38: {
+		cardInfo: {
+			imagePath: decipher/LOTR08038.jpg
+			//parentId: 8_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8R38
+			rarity: R
+			setNum: "8"
+			cardNum: 38
+			style: Standard
+		}
+		title: King of the Dead
+		subtitle: Oathbreaker
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Wraith
+		strength: 7
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		keywords: Enduring
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gondor),wraith
+				}
+			}
+			{
+				type: extraCost
+				cost: {
+					type: addThreats
+					amount: 2
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: name(Aragorn)
+				}
+				requires: {
+					type: phase
+					phase: skirmish
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: preventWound
+					select: choose(name(Aragorn))
+				}
+			}
+		]
+		gametext: <b>Enduring</b>. To play, spot a [gondor] Wraith and add 2 threats.<br><b>Response:</b> If Aragorn is about to take a wound in a skirmish, exert King of the Dead to prevent that wound.
+		lore: "'...crying out that the King of the Dead was upon them.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_39: {
+		cardInfo: {
+			imagePath: decipher/LOTR08039.jpg
+			//parentId: 8_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C39
+			rarity: C
+			setNum: "8"
+			cardNum: 39
+			style: Standard
+		}
+		title: Knight of Dol Amroth
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Knight
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: wound
+					select: choose(minion,inSkirmishAgainst(self))
+				}
+			}
+		]
+		gametext: <b>Knight</b>.<br>Each time this companion wins a skirmish, you may wound a minion he is skirmishing.
+		lore: "Amroth for Gondor!' they cried."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_40: {
+		cardInfo: {
+			imagePath: decipher/LOTR08040.jpg
+			//parentId: 8_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C40
+			rarity: C
+			setNum: "8"
+			cardNum: 40
+			style: Standard
+		}
+		title: Knight's Mount
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Mount
+		target: knight
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: wound
+					select: choose(minion,notAssignedToSkirmish)
+				}
+			}
+		]
+		gametext: Bearer must be a knight.<br>Each time bearer wins a skirmish, you may wound a minion who is not assigned to a skirmish.
+		lore: "Like thunder they broke upon the enemy...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_41: {
+		cardInfo: {
+			imagePath: decipher/LOTR08041.jpg
+			//parentId: 8_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C41
+			rarity: C
+			setNum: "8"
+			cardNum: 41
+			style: Standard
+		}
+		title: Oathbreaker
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Wraith
+		strength: 6
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		keywords: Enduring
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: addThreats
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 3
+				}
+				effect: {
+					type: discard
+					select: choose(possession,attachedTo(minion,inSkirmishAgainst(self)))
+				}
+			}
+		]
+		gametext: <b>Enduring</b>. To play, add a threat.<br><b>Skirmish:</b> Discard 3 cards from hand to discard a possession borne by a minion skirmishing this companion.
+		lore: "at the Stone of Erech they shall stand again / and hear there a horn in the hills ringing."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_42: {
+		cardInfo: {
+			imagePath: decipher/LOTR08042.jpg
+			//parentId: 8_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8U42
+			rarity: U
+			setNum: "8"
+			cardNum: 42
+			style: Standard
+		}
+		title: A Path Appointed
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: exert
+						select: choose(culture(gondor),man)
+					}
+					{
+						type: exert
+						select: choose(or(culture(dwarven),culture(rohan)),companion)
+					}
+				]
+				effect: {
+					type: AddCultureTokens
+					culture: gondor
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: RemoveCultureTokens
+					culture: gondor
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(minion)
+				}
+			}
+		]
+		gametext: <b>Fellowship:</b> Exert a [gondor] Man and either a [dwarven] companion or a [rohan] companion to add a [gondor] token here.<br><b>Regroup:</b> Remove a [gondor] token here to discard a minion.
+		lore: "'...those who follow me do so of their free will....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_43: {
+		cardInfo: {
+			imagePath: decipher/LOTR08043.jpg
+			//parentId: 8_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8R43
+			rarity: R
+			setNum: "8"
+			cardNum: 43
+			style: Standard
+		}
+		title: Shadow Host
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 5
+		type: Companion
+		race: Wraith
+		strength: 9
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		keywords: Enduring
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: exhausted,culture(gondor),wraith
+					count: 2
+				}
+			}
+			{
+				type: extraCost
+				cost: {
+					type: addThreats
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,exhausted
+					keyword: defender
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Enduring</b>. To play, spot 2 exhausted [gondor] Wraiths and add 2 threats.<br>While Shadow Host is exhausted, it is <b>defender +1</b>.
+		lore: "...fear went on before them, until they came to Calembel upon Ciril, and the sun went down like blood behind Pinnath Gelin...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_44: {
+		cardInfo: {
+			imagePath: decipher/LOTR08044.jpg
+			//parentId: 8_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8U44
+			rarity: U
+			setNum: "8"
+			cardNum: 44
+			style: Standard
+		}
+		title: Sixth Level
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		keywords: [
+			Fortification
+			Support Area
+		]
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: choose(culture(gondor),man)
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(gondor),fortification)
+				}
+				limitPerPhase: 1
+			}
+		]
+		gametext: <b>Fortification</b>.<br><b>Regroup:</b> Exert a [gondor] Man to play a [gondor] fortification from your discard pile (limit 1).
+		lore: "...and in each wall was a gate."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_45: {
+		cardInfo: {
+			imagePath: decipher/LOTR08045.jpg
+			//parentId: 8_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8U45
+			rarity: U
+			setNum: "8"
+			cardNum: 45
+			style: Standard
+		}
+		title: Sleepless Dead
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Wraith
+		strength: 7
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		keywords: Enduring
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: addThreats
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(minion,inSkirmishAgainst(self))
+				}
+			}
+		]
+		gametext: <b>Enduring</b>. To play, add a threat.<br>Each time this companion wins a skirmish, you may exert him to discard a minion he is skirmishing.
+		lore: "'...for the Dead needed no longer any weapon but fear. None would withstand them.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_46: {
+		cardInfo: {
+			imagePath: decipher/LOTR08046.jpg
+			//parentId: 8_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8U46
+			rarity: U
+			setNum: "8"
+			cardNum: 46
+			style: Standard
+		}
+		title: Spectral Sword
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		target: culture(gondor),wraith
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 3
+				}
+				effect: {
+					type: heal
+					select: bearer
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] Wraith.<br><b>Skirmish:</b> Discard 3 cards from hand to heal bearer.
+		lore: "'...pale banners like shreds of cloud, and spears like winter-thickets on a misty night.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_47: {
+		cardInfo: {
+			imagePath: decipher/LOTR08047.jpg
+			//parentId: 8_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C47
+			rarity: C
+			setNum: "8"
+			cardNum: 47
+			style: Standard
+		}
+		title: Stronger and More Terrible
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: addThreats
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: your,culture(gondor),wraith
+				}
+				effect: {
+					type: removeThreats
+				}
+			}
+		]
+		gametext: To play, add a threat.<br>Each time your [gondor] Wraith wins a skirmish, you may remove a threat.
+		lore: "'And lo! in the darkness of Mordor my hope rose....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_48: {
+		cardInfo: {
+			imagePath: decipher/LOTR08048.jpg
+			//parentId: 8_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C48
+			rarity: C
+			setNum: "8"
+			cardNum: 48
+			style: Standard
+		}
+		title: Swept Away
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add a threat
+						Discard this condition
+					]
+					effects: [
+						{
+							type: addThreats
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: haveInitiative
+						side: free people
+					}
+					filter: exhausted,culture(gondor),wraith
+				}
+			}
+		]
+		gametext: Each time the fellowship moves, add a threat or discard this condition.<br>While you have initiative, exhausted [gondor] Wraiths cannot take wounds.
+		lore: "'And suddenly the Shadow Host that had hung back at the last came up like a grey tide, sweeping all away before it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

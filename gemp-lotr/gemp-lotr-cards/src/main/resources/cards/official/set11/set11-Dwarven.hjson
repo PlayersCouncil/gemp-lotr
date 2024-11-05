@@ -1,0 +1,654 @@
+{
+
+	11_3: {
+		cardInfo: {
+			imagePath: decipher/LOTR11003.jpg
+			//parentId: 11_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U3
+			rarity: U
+			setNum: "11"
+			cardNum: 3
+			style: Standard
+		}
+		title: Axe of Khazad-dûm
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: dwarf
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: mountain
+					}
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a Dwarf.<br>While bearer is at a mountain site, he is <b>damage +1</b>.
+		lore: "The Dwarves led by Balin to the great Dwarf-hall of old, though ill-prepared, were well-armed."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_4: {
+		cardInfo: {
+			imagePath: decipher/LOTR11004.jpg
+			//parentId: 11_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11C4
+			rarity: C
+			setNum: "11"
+			cardNum: 4
+			style: Standard
+		}
+		title: Battle to the Last
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(dwarf)
+					memorize: chosenDwarf
+					amount: {
+						type: forEachWound
+						filter: memory(chosenDwarf)
+						multiplier: 2
+					}
+				}
+				{
+					type: addKeyword
+					select: memory(chosenDwarf)
+					keyword: damage
+					amount: {
+						type: forEachWound
+						filter: memory(chosenDwarf)
+					}
+				}
+			]
+		}
+		gametext: Spot a Dwarf. For each wound on that Dwarf, make him strength +2 and <b>damage +1</b>.
+		lore: "As had the children of Durin and the followers of Balin before him, Gimli would fight the interlopers in Khazad-dûm with all his strength."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_5: {
+		cardInfo: {
+			imagePath: decipher/LOTR11005.jpg
+			//parentId: 11_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11C5
+			rarity: C
+			setNum: "11"
+			cardNum: 5
+			style: Standard
+		}
+		title: Dwarven Embassy
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires:{
+					type: canSpot
+					filter: dwarf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: companion
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: endOfTurn
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: To play, spot a Dwarf.<br>Each companion is <b>damage +1</b>.<br>Discard this condition at the end of your turn.
+		lore: "Glóin and his countrymen stood as reassurance that the Dwarves would also stand against the will of the Dark Lord."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_6: {
+		cardInfo: {
+			imagePath: decipher/LOTR11006.jpg
+			//parentId: 11_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U6
+			rarity: U
+			setNum: "11"
+			cardNum: 6
+			style: Standard
+		}
+		title: Fallen Lord
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: [
+				{
+					type: exert
+					select: choose(ringBearer)
+				}
+				{
+					type: exert
+					select: choose(dwarf)
+					memorize: exertedDwarf
+				}
+			]
+			effect: [
+				{
+					type: modifyStrength
+					select: memory(exertedDwarf)
+					amount: {
+						type: forEachResistance
+						filter: memory(exertedDwarf)
+					}
+				}
+			]
+		}
+		gametext: Exert the Ring-bearer and a Dwarf to make that Dwarf strength +X, where X equals that Dwarf's resistance.
+		lore: "He is dead then,' said Frodo. 'I feared it was so.' Gimli cast his hood over his face."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_7: {
+		cardInfo: {
+			imagePath: decipher/LOTR11007.jpg
+			//parentId: 11_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11C7
+			rarity: C
+			setNum: "11"
+			cardNum: 7
+			style: Standard
+		}
+		title: Farin
+		subtitle: Emissary of Erebor
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: or(battleground,underground)
+					}
+					filter: self
+					keyword: muster
+				}
+			}
+		]
+		gametext: While Farin is at a battleground or underground site, he gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
+		lore: "'If we make no answer, the Enemy may move Men of his rule to assail King Brand, and Dáin also.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_8: {
+		cardInfo: {
+			imagePath: decipher/LOTR11008.jpg
+			//parentId: 11_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U8
+			rarity: U
+			setNum: "11"
+			cardNum: 8
+			style: Standard
+		}
+		title: Gimli
+		subtitle: Lively Combatant
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		resistance: 7
+		keywords: Damage+1
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>.<br>Each time Gimli wins a skirmish, you may draw a card.
+		lore: "'...I am content. Till now I have hewn naught but wood since I left Moria.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_9: {
+		cardInfo: {
+			imagePath: decipher/LOTR11009.jpg
+			//parentId: 11_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R9
+			rarity: R
+			setNum: "11"
+			cardNum: 9
+			style: Standard
+		}
+		title: Gimli's Battle Axe
+		subtitle: Vicious Weapon
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: dwarf
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: muster
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: location
+					filter: battleground
+				}
+				cost: {
+					type: exert
+					select: choose(bearer,name(Gimli))
+				}
+				effect: {
+					type: wound
+					select: choose(minion,inSkirmishAgainst(bearer))
+				}
+			}
+		]
+		gametext: Bearer must be a Dwarf.<br>Bearer gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br><b>Skirmish:</b> If bearer is Gimli and he is at a battleground site, exert him to wound a minion he is skirmishing.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_10: {
+		cardInfo: {
+			imagePath: decipher/LOTR11010.jpg
+			//parentId: 11_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R10
+			rarity: R
+			setNum: "11"
+			cardNum: 10
+			style: Standard
+		}
+		title: Grimir
+		subtitle: Dwarven Emissary
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 3
+		type: Companion
+		race: Dwarf
+		strength: 7
+		vitality: 3
+		resistance: 7
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(dwarven),companion
+				}
+				requires: {
+					type: phase
+					phase: skirmish
+				}
+				cost: {
+					type: discard
+					select: choose(culture(dwarven),not(character))
+					count: 2
+				}
+				effect: {
+					type: preventWound
+					select: choose(culture(dwarven),companion)
+				}
+			}
+		]
+		gametext: <b>Response:</b> If a [dwarven] companion is about to take a wound in a skirmish, discard 2 [dwarven] cards from play (except characters) to prevent that.
+		lore: "'...we crave the advice of Elrond. For the Shadow grows and draws nearer.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_11: {
+		cardInfo: {
+			imagePath: decipher/LOTR11011.jpg
+			//parentId: 11_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R11
+			rarity: R
+			setNum: "11"
+			cardNum: 11
+			style: Standard
+		}
+		title: Hall of Our Fathers
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: stackTopCardsOfDrawDeck
+					where: self
+					count: 8
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				requires: {
+					type: canSpot
+					filter: dwarf
+				}
+				effect: {
+					type: exchangeCardsInHandWithCardsStacked
+					selectInHand: all(any)
+					selectInStacked: self
+				}
+			}
+		]
+		gametext: When you play this condition, stack the top 8 cards of your draw deck here.<br>At the start of your maneuver phase, you may spot a Dwarf to exchange the cards stacked here with your hand.
+		lore: "'...at last we had the power and numbers to return.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_12: {
+		cardInfo: {
+			imagePath: decipher/LOTR11012.jpg
+			//parentId: 11_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U12
+			rarity: U
+			setNum: "11"
+			cardNum: 12
+			style: Standard
+		}
+		title: Mountain Homestead
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: dwarf,companion
+					count: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: mountain
+					}
+					filter: dwarf
+					amount: 2
+				}
+			}
+		]
+		gametext: To play, spot 2 Dwarf companions.<br>While the fellowship is at a mountain site, each Dwarf is strength +2.
+		lore: "The Dwarves are as hard and stalwart as the lands in which they've made their homes."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_13: {
+		cardInfo: {
+			imagePath: decipher/LOTR11013.jpg
+			//parentId: 11_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11C13
+			rarity: C
+			setNum: "11"
+			cardNum: 13
+			style: Standard
+		}
+		title: On Guard
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: aboutToTakeWound
+				filter: dwarf,minResistance(3)
+			}
+			effect: [
+				{
+					type: preventWound
+					select: choose(dwarf,minResistance(3))
+				}
+			]
+		}
+		gametext: If a Dwarf who has resistance 3 or more is about to take a wound, prevent that.
+		lore: "'Well, here's one Dwarf she won't ensnare so easily.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_14: {
+		cardInfo: {
+			imagePath: decipher/LOTR11014.jpg
+			//parentId: 11_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R14
+			rarity: R
+			setNum: "11"
+			cardNum: 14
+			style: Standard
+		}
+		title: Well-equipped
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: {
+				type: discardFromHand
+				forced: false
+				select: choose(culture(dwarven))
+			},
+			effect: [
+				{
+					type: playCardFromDrawDeck
+					select: choose(culture(dwarven),possession)
+					on: culture(dwarven),companion,minResistance(5)
+					showAll: true
+					shuffle: true
+				}
+			]
+		}
+		gametext: Discard a [dwarven] card from hand to play a [dwarven] possession from your draw deck on a [dwarven] companion who has resistance 5 or more.
+		lore: "Stout and unmindful of the most ample load, Dwarven warriors laden themselves with heavy armor and myriad weaponry."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

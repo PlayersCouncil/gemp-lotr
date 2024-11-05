@@ -1,0 +1,1435 @@
+{
+
+	12_81: {
+		cardInfo: {
+			imagePath: decipher/LOTR12081.jpg
+			//parentId: 12_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12R81
+			rarity: R
+			setNum: "12"
+			cardNum: 81
+			style: Standard
+		}
+		title: Abiding Evil
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: chooseHowManyBurdensToSpot
+					memorize: spotCount
+				}
+				{
+					type: modifyStrength
+					select: choose(character,inSkirmishAgainst(culture(orc),orc))
+					amount: {
+						type: fromMemory
+						memory: spotCount
+						multiplier: -1
+					}
+				}
+			]
+		}
+		gametext: Spot X burdens to make a character skirmishing an [orc] Orc strength -X.
+		lore: "'The Dark Tower was broken, but its foundations were not removed; for they were made with the power of the Ring, and while it remains they will endure.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_82: {
+		cardInfo: {
+			imagePath: decipher/LOTR12082.jpg
+			//parentId: 12_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12R82
+			rarity: R
+			setNum: "12"
+			cardNum: 82
+			style: Standard
+		}
+		title: Barrage
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 5
+		type: Event
+		timewords: Skirmish
+		keywords: Toil 2
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: all(culture(orc),minion)
+					amount: 2
+					until: regroup
+				}
+			]
+		}
+		gametext: <b>Toil 2</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -2.)</helper><br>Make each of your [orc] minions strength +2 until the regroup phase.
+		lore: "Fires now raged unchecked in the first circle of the City...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_83: {
+		cardInfo: {
+			imagePath: decipher/LOTR12083.jpg
+			//parentId: 12_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12R83
+			rarity: R
+			setNum: "12"
+			cardNum: 83
+			style: Standard
+		}
+		title: The Beckoning Shadow
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(orc),minion)
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+				}
+				requires: [
+					{
+						type: canSpotBurdens
+						amount: 5
+					}
+					{
+						type: cardsInDeckCount
+						deck: free people
+						count: 0
+					}
+				]
+				effect: {
+					type: corruptRingBearer
+				}
+			}
+		]
+		gametext: To play, exert an [orc] minion.<br>If you can spot 5 burdens, and the Free Peoples player has no cards in his or her draw deck, the Ring-bearer is corrupted.
+		lore: "Once more the desire to slip on the Ring came over Frodo; but this time it was stronger than before."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_84: {
+		cardInfo: {
+			imagePath: decipher/LOTR12084.jpg
+			//parentId: 12_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C84
+			rarity: C
+			setNum: "12"
+			cardNum: 84
+			style: Standard
+		}
+		title: Bloodstained Field
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Event
+		timewords: Archery
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(orc),lurker
+			}
+			effect: [
+				{
+					type: wound
+					select: choose(elf)
+				}
+			]
+		}
+		gametext: Spot an [orc] lurker to wound an Elf.
+		lore: "Orcs will eagerly spill any blood, but Elven is the sweetest of all."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_85: {
+		cardInfo: {
+			imagePath: decipher/LOTR12085.jpg
+			//parentId: 12_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12R85
+			rarity: R
+			setNum: "12"
+			cardNum: 85
+			style: Standard
+		}
+		title: Cave Troll of Moria
+		subtitle: Savage Menace
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 12
+		type: Minion
+		race: Troll
+		strength: 15
+		vitality: 4
+		site: 4
+		keywords: [
+			Damage+1
+			Fierce
+			Toil 2
+		]
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: culture(orc),lurker
+				}
+				effect: {
+					type: discardTopCardsFromDeck
+					forced: true
+					deck: free people
+					count: 2
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>. <b>Fierce</b>. <b>Toil 2</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -2.)</helper><br>Each time an [orc] lurker wins a skirmish, you may make the Free Peoples player discard the top 2 cards of his or her draw deck.
+		lore: "'There is no hope of escape that way.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_86: {
+		cardInfo: {
+			imagePath: decipher/LOTR12086.jpg
+			//parentId: 12_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12R86
+			rarity: R
+			setNum: "12"
+			cardNum: 86
+			style: Standard
+		}
+		title: Cave Troll's Hammer
+		subtitle: Unwieldy Cudgel
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Possession
+		strength: 3
+		itemclass: Hand weapon
+		target: culture(orc),troll
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						filter: lurker
+						memorize: spotCount
+					}
+					{
+						type: repeat
+						times: memory(spotCount)
+						effect: {
+							type: exert
+							player: free people
+							select: choose(companion)
+						}
+					}
+				]
+			}
+		]
+		gametext: Bearer must be an [orc] Troll.<br>When you play this possession, the Free Peoples player must exert a companion for each lurker you spot.
+		lore: "Its weight is greater than any foe it has felled."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_87: {
+		cardInfo: {
+			imagePath: decipher/LOTR12087.jpg
+			//parentId: 12_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C87
+			rarity: C
+			setNum: "12"
+			cardNum: 87
+			style: Standard
+		}
+		title: Goblin Aggressor
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: self,hasAttached(possession)
+					}
+					filter: culture(orc),minion
+					amount: 1
+				}
+			}
+		]
+		gametext: While this minion is bearing a possession, each [orc] minion is strength +1.
+		lore: "'The road may lead to Moria, but how can we hope that it will lead through Moria....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_88: {
+		cardInfo: {
+			imagePath: decipher/LOTR12088.jpg
+			//parentId: 12_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C88
+			rarity: C
+			setNum: "12"
+			cardNum: 88
+			style: Standard
+		}
+		title: Great Cost
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: [
+					{
+						type: canSpot
+						filter: culture(orc),minion,inSkirmish
+					}
+					{
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+				]
+				effect: {
+					type: exert
+					select: choose(companion,inSkirmish)
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: putCardsFromHandOnTopOfDeck
+					player: free people
+					hand: free people
+				}
+			}
+		]
+		gametext: At the start of each skirmish involving an [orc] minion, you may spot 6 companions to exert a companion in that skirmish.<br><b>Shadow:</b> Discard this condition and spot an [orc] minion to make the Free Peoples player place a card from his or her hand on top of his or her draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_89: {
+		cardInfo: {
+			imagePath: decipher/LOTR12089.jpg
+			//parentId: 12_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U89
+			rarity: U
+			setNum: "12"
+			cardNum: 89
+			style: Standard
+		}
+		title: Mordor Aggressor
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 12
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: self,hasAttached(possession)
+					}
+					filter: culture(orc),minion
+					amount: 2
+				}
+			}
+		]
+		gametext: While this minion is bearing a possession, each [orc] minion is strength +2.
+		lore: "'The enemy,' men murmured. 'The dike is down. Here they come pouring through the breaches!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_90: {
+		cardInfo: {
+			imagePath: decipher/LOTR12090.jpg
+			//parentId: 12_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U90
+			rarity: U
+			setNum: "12"
+			cardNum: 90
+			style: Standard
+		}
+		title: Morgul Tormentor
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: assignedAgainst
+					side: free people
+					filter: self
+					against: unwounded,companion
+				}
+				effect: {
+					type: choice
+					player: free people
+					texts: [
+						Add a burden
+						Discard a card from hand
+					]
+					effects: [
+						{
+							type: addBurdens
+						}
+						{
+							type: discardFromHand
+							forced: false
+							player: free people
+							hand: free people
+						}
+					]
+				}
+			}
+		]
+		gametext: Each time the Free Peoples player assigns this minion to skirmish an unwounded companion, he or she must add a burden or discard a card from hand.
+		lore: "Some Orcs go beyond savagery, taking pleasure in the suffering of their enemies."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_91: {
+		cardInfo: {
+			imagePath: decipher/LOTR12091.jpg
+			//parentId: 12_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12R91
+			rarity: R
+			setNum: "12"
+			cardNum: 91
+			style: Standard
+		}
+		title: Orc Artisan
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 12
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: culture(orc),possession
+					on: culture(orc),orc
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: Conditional
+						requires: {
+							type: location
+							filter: or(battleground,underground)
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+		]
+		gametext: Each time you play an [orc] possession on an [orc] Orc, you may add (1) (or (2) if that Orc is at a battleground or underground site).
+		lore: "Much Orc weaponry is scavenged from fallen foes, but they still have ample need for smiths to outfit their troops."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_92: {
+		cardInfo: {
+			imagePath: decipher/LOTR12092.jpg
+			//parentId: 12_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C92
+			rarity: C
+			setNum: "12"
+			cardNum: 92
+			style: Standard
+		}
+		title: Orc Dreg
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 10
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: assignedToSkirmish
+					filter: self
+				}
+				requires: {
+					type: not
+					requires: {
+						type: location
+						filter: underground
+					}
+				}
+				effect: {
+					type: choice
+					texts: [
+						Remove 2 twilight
+						Discard this minion
+					]
+					effects: [
+						{
+							type: removeTwilight
+							amount: 2
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+			}
+		]
+		gametext: Each time this minion is assigned to a skirmish, if it is not at an underground site, remove (2) or discard this minion.
+		lore: "...their Captain cared not greatly what they did or how many might be slain...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_93: {
+		cardInfo: {
+			imagePath: decipher/LOTR12093.jpg
+			//parentId: 12_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C93
+			rarity: C
+			setNum: "12"
+			cardNum: 93
+			style: Standard
+		}
+		title: Orc Footman
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: discardedFromPlayTrigger
+				optional: true
+				requires: {
+					type: canSpot
+					filter: companion,maxResistance(4)
+				}
+				effect: {
+					type: shuffleCardsFromDiscardIntoDrawDeck
+					select: self
+				}
+			}
+		]
+		gametext: When this minion is discarded from play, you may spot a companion who has resistance 4 or less to shuffle this minion into your draw deck.
+		lore: "On they came, reckless of their loss as they approached...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_94: {
+		cardInfo: {
+			imagePath: decipher/LOTR12094.jpg
+			//parentId: 12_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U94
+			rarity: U
+			setNum: "12"
+			cardNum: 94
+			style: Standard
+		}
+		title: Orc Sapper
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				cost: {
+					type: chooseActiveCards
+					text: Choose companion who won't be able to assign to Orc Sapper
+					select: choose(companion,maxResistance(4))
+					memorize: chosenCompanion
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: cantBeAssignedToSkirmishAgainst
+						fpCharacter: memory(chosenCompanion)
+						minion: self
+					}
+					until: regroup
+				}
+			}
+		]
+		gametext: When you play this minion, you may spot a companion who has resistance 4 or less to prevent that companion from being assigned to this minion until the regroup phase.
+		lore: "...their purpose was only to test the strength of the defence and to keep the men of Gondor busy in many places."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_95: {
+		cardInfo: {
+			imagePath: decipher/LOTR12095.jpg
+			//parentId: 12_95
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C95
+			rarity: C
+			setNum: "12"
+			cardNum: 95
+			style: Standard
+		}
+		title: Orc Skulker
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 5
+		vitality: 2
+		site: 4
+		keywords: Lurker
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: your,timeword(skirmish),event
+					amount: -1
+				}
+			}
+		]
+		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each skirmish event you play is twilight cost -1.
+		lore: "'I have never heard before of Orcs upon Amon Hen. Yet who knows what may happen in these evil days....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_96: {
+		cardInfo: {
+			imagePath: decipher/LOTR12096.jpg
+			//parentId: 12_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C96
+			rarity: C
+			setNum: "12"
+			cardNum: 96
+			style: Standard
+		}
+		title: Orc Spear
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(orc),minion
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+					on: minion,minTwilight(4)
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+		]
+		gametext: Bearer must be an [orc] minion.<br>When you play this possession on a minion that has a twilight cost of 4 or more, add (2).
+		lore: "The flared backs of Orkish spearheads are crafted to inflict more damage as they are pulled out of a victim."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_97: {
+		cardInfo: {
+			imagePath: decipher/LOTR12097.jpg
+			//parentId: 12_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U97
+			rarity: U
+			setNum: "12"
+			cardNum: 97
+			style: Standard
+		}
+		title: Orc Strategist
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 11
+		vitality: 3
+		site: 4
+		keywords: Lurker
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				effect: {
+					type: removeKeyword
+					select: choose(culture(orc),lurker,minion)
+					keyword: lurker
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Maneuver:</b> Make an [orc] lurker minion lose <b>lurker</b> until the regroup phase.
+		lore: "It takes a strong will indeed to command an unruly band of Orcs."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_98: {
+		cardInfo: {
+			imagePath: decipher/LOTR12098.jpg
+			//parentId: 12_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C98
+			rarity: C
+			setNum: "12"
+			cardNum: 98
+			style: Standard
+		}
+		title: Orc Tormentor
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 1
+		site: 4
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: assignedAgainst
+					side: free people
+					filter: self
+					against: unwounded,companion
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add a burden
+						Discard a card from hand
+					]
+					effects: [
+						{
+							type: addBurdens
+						}
+						{
+							type: discardFromHand
+							forced: false
+							player: free people
+							hand: free people
+						}
+					]
+				}
+			}
+		]
+		gametext: Each time the Free Peoples player assigns this minion to skirmish an unwounded companion, he or she must add a burden or discard a card from hand.
+		lore: "...orc-speech sounded at all times full of hate and anger...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_99: {
+		cardInfo: {
+			imagePath: decipher/LOTR12099.jpg
+			//parentId: 12_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U99
+			rarity: U
+			setNum: "12"
+			cardNum: 99
+			style: Standard
+		}
+		title: Pitiless Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+					}
+					effect: {
+						type: exert
+						player: free people
+						select: choose(companion)
+					}
+				}
+			}
+		]
+		gametext: When you play this minion, you may make the Free Peoples player exert a companion for each companion over 4.
+		lore: "Curses they heeded not, nor understood the tongues of western men...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_100: {
+		cardInfo: {
+			imagePath: decipher/LOTR12100.jpg
+			//parentId: 12_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12R100
+			rarity: R
+			setNum: "12"
+			cardNum: 100
+			style: Standard
+		}
+		title: Rallying Orc
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		keywords: Lurker
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: another,culture(orc),lurker
+				}
+				requires: {
+					type: location
+					filter: or(battleground,underground)
+				}
+				effect: {
+					type: exert
+					player: free people
+					select: choose(companion)
+				}
+			}
+		]
+		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time you play another [orc] lurker at a battleground or underground site, you may make the Free Peoples player exert a companion.
+		lore: "Orcs can spring from the shadows in surprising numbers."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_101: {
+		cardInfo: {
+			imagePath: decipher/LOTR12101.jpg
+			//parentId: 12_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12R101
+			rarity: R
+			setNum: "12"
+			cardNum: 101
+			style: Standard
+		}
+		title: Retribution
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: culture(orc),minion,hasAttached(weapon)
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(orc),weapon)
+				}
+			}
+		]
+		gametext: Each time an [orc] minion bearing a weapon wins a skirmish, add a burden.<br><b>Shadow:</b> Discard this condition to play an [orc] weapon from your discard pile.
+		lore: "With his mighty army, the Dark Lord exacted a high price for resisting his will."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_102: {
+		cardInfo: {
+			imagePath: decipher/LOTR12102.jpg
+			//parentId: 12_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C102
+			rarity: C
+			setNum: "12"
+			cardNum: 102
+			style: Standard
+		}
+		title: Scavenging Goblins
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 1
+		site: 4
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(orc),weapon)
+					on: culture(orc),orc
+				}
+			}
+		]
+		gametext: When you play this minion, you may play an [orc] weapon from your discard pile on your [orc] Orc.
+		lore: "'The Orcs have often plundered Moria; there is nothing left in the upper halls.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_103: {
+		cardInfo: {
+			imagePath: decipher/LOTR12103.jpg
+			//parentId: 12_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U103
+			rarity: U
+			setNum: "12"
+			cardNum: 103
+			style: Standard
+		}
+		title: Storming the Ramparts
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Event
+		timewords: Maneuver
+		keywords: Toil 2
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(orc),minion
+			},
+			effect: [
+				{
+					type: discard
+					player: free people
+					select: choose(side(free people),condition)
+				}
+			]
+		}
+		gametext: <b>Toil 2</b>. <helper>(For each [orc] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot an [orc] minion to make the Free Peoples player discard one of his or her conditions from play.
+		lore: "The defenses of Minas Tirith were daunting, but the siegecraft of the Orcs was equal to the challenge."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_104: {
+		cardInfo: {
+			imagePath: decipher/LOTR12104.jpg
+			//parentId: 12_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U104
+			rarity: U
+			setNum: "12"
+			cardNum: 104
+			style: Standard
+		}
+		title: Taunt
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: revealTopCardsOfDrawDeck
+				count: {
+					type: Conditional
+					requires: {
+						type: location
+						filter: battleground
+					}
+					true: 7
+					false: 5
+				}
+				memorize: revealedCards
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(orc),minion)
+					amount: {
+						type: forEachInMemory
+						memory: revealedCards
+						filter: culture(orc)
+					}
+				}
+			]
+		}
+		gametext: Reveal the top 5 cards of your draw deck (or, if the fellowship is at a battleground site, the top 7 cards) to make an [orc] minion strength +1 for each [orc] card revealed.
+		lore: "'Go on. Call for help. Squeal! No one's gonna save you now.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_105: {
+		cardInfo: {
+			imagePath: decipher/LOTR12105.jpg
+			//parentId: 12_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12R105
+			rarity: R
+			setNum: "12"
+			cardNum: 105
+			style: Standard
+		}
+		title: Troll's Keyward
+		subtitle: Keeper of the Beast
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 3
+		site: 4
+		keywords: Lurker
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: revealHand
+						memorize: revealedCards
+					}
+				]
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachInMemory
+						memory: revealedCards
+						filter: culture(orc),troll
+					}
+				}
+			}
+		]
+		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Shadow:</b> Exert Troll's Keyward and reveal your hand to add (1) for each [orc] Troll revealed.
+		lore: "Tending the Cave Troll is a task neither envied or respected within the tribes of Moria."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_106: {
+		cardInfo: {
+			imagePath: decipher/LOTR12106.jpg
+			//parentId: 12_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C106
+			rarity: C
+			setNum: "12"
+			cardNum: 106
+			style: Standard
+		}
+		title: Vile Goblin
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 10
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: assignedAgainst
+					filter: self
+					against: dwarf
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: fierce
+					until: regroup
+				}
+			}
+		]
+		gametext: Each time this minion is assigned to skirmish a Dwarf, this minion is <b>fierce</b> until the regroup phase.
+		lore: "The Orcs infesting Khazad-dûm despoiled and defiled the ancient Dwarven mansion."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

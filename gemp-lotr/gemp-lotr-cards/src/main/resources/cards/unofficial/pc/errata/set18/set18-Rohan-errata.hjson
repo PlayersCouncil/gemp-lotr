@@ -26,12 +26,14 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 					times: 1
 				}
 				effect: {
 					type: playcardfromdrawdeck
-					filter: choose(follower,culture(rohan))
+					select: choose(follower,culture(rohan))
+                    showAll: true
+                    shuffle: true
 				}
 			}
 			{
@@ -39,13 +41,13 @@
 				phase: skirmish
 				cost: {
 					type: discard
-					filter: choose(your,follower)
+					select: choose(your,follower)
 				}
 				effect: {
 					type: modifyStrength
-					filter: bearer
+					select: bearer
 					amount: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: canSpot
 							filter: bearer,title(Erkenbrand)

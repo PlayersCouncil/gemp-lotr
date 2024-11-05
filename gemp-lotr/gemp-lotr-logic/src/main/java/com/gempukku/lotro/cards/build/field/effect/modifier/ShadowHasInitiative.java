@@ -1,6 +1,9 @@
 package com.gempukku.lotro.cards.build.field.effect.modifier;
 
-import com.gempukku.lotro.cards.build.*;
+import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
+import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
+import com.gempukku.lotro.cards.build.ModifierSource;
+import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.logic.modifiers.HasInitiativeModifier;
@@ -13,6 +16,6 @@ public class ShadowHasInitiative implements ModifierSourceProducer {
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
-        return (actionContext) -> new HasInitiativeModifier(actionContext.getSource(), new RequirementCondition(requirements, actionContext), Side.SHADOW);
+        return (actionContext) -> new HasInitiativeModifier(actionContext.getSource(), RequirementCondition.createCondition(requirements, actionContext), Side.SHADOW);
     }
 }

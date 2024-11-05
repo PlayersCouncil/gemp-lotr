@@ -1,0 +1,288 @@
+{
+
+	9_49: {
+		cardInfo: {
+			imagePath: decipher/LOTR09049.jpg
+			//parentId: 9_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R+49
+			rarity: R+
+			setNum: "9"
+			cardNum: 49
+			style: Standard
+		}
+		title: Bilbo
+		subtitle: Bearer of Things Burgled
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 8
+		canStartWithRing: true
+		keywords: Ring-bound
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: not
+					requires: {
+						type: canSpotTwilight
+						amount: 3
+					}
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add 2 burdens
+						Add (3)
+					]
+					effects: [
+						{
+							type: addBurdens
+							amount: 2
+						}
+						{
+							type: addTwilight
+							amount: 3
+						}
+					]
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: addBurdens
+				}
+				effect: {
+					type: PlayCardFromHand
+					select: choose(culture(shire),tale)
+				}
+			}
+		]
+		gametext: <b>Ring-bound</b>.<br>Each time the fellowship moves, if the twilight pool has 2 or fewer twilight tokens, add 2 burdens or add (3).<br><b>Regroup:</b> Add a burden to play a [shire] tale.
+		lore: "'But what has it got in its pocketses, eh?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_50: {
+		cardInfo: {
+			imagePath: decipher/LOTR09050.jpg
+			//parentId: 9_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R50
+			rarity: R
+			setNum: "9"
+			cardNum: 50
+			style: Standard
+		}
+		title: Everyone Knows
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		keywords: [
+			Tale
+			Support Area
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: unbound,hobbit
+					amount: {
+						type: forEachVitality
+						over: 3
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				effect: [
+					{
+						type: AlterOverwhelmMultiplier
+						select: choose(unbound,hobbit)
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: <b>Tale</b>. Each unbound Hobbit is strength +1 for each vitality over 3 he or she has.<br><b>Skirmish:</b> Prevent an unbound Hobbit from being overwhelmed unless his or her strength is tripled. Discard this condition.
+		lore: "'...I'm the tall one, you're the short one.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_51: {
+		cardInfo: {
+			imagePath: decipher/LOTR09051.jpg
+			//parentId: 9_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R+51
+			rarity: R+
+			setNum: "9"
+			cardNum: 51
+			style: Standard
+		}
+		title: Goldberry
+		subtitle: River-daughter
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 3
+		type: Ally
+		allyHome: 2F
+		strength: 4
+		vitality: 6
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: river
+				}
+				effect: {
+					type: heal
+					select: all(or(name(Goldberry),name(Tom Bombadil)))
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: location
+					filter: river
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(companion)
+					amount: 1
+				}
+			}
+		]
+		gametext: Each time the fellowship moves to a river, heal Goldberry and Tom Bombadil.<br><b>Skirmish:</b> If the fellowship is at a river, exert Goldberry to make a companion strength +1.
+		lore: "'Slender as the willow-wand, clearer than the water.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_52: {
+		cardInfo: {
+			imagePath: decipher/LOTR09052.jpg
+			//parentId: 9_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R+52
+			rarity: R+
+			setNum: "9"
+			cardNum: 52
+			style: Standard
+		}
+		title: Tom Bombadil
+		subtitle: The Master
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 5
+		type: Ally
+		allyHome: 2F
+		strength: 14
+		vitality: 9
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: choice
+					texts: [
+						Remove 2 burdens
+						Remove 2 threats
+					]
+					effects: [
+						{
+							type: removeBurdens
+							amount: 2
+						}
+						{
+							type: removeThreats
+							amount: 2
+						}
+					]
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					count: 2
+					filter: culture(shire),companion
+				}
+				cost: {
+					type: exert
+					select: self
+					times: {
+						type: currentSiteNumber
+					}
+				}
+				effect: {
+					type: cancelSkirmish
+					filter: culture(shire),companion
+				}
+			}
+		]
+		gametext: To play, remove 2 burdens or 2 threats.<br><b>Skirmish:</b> Spot 2 [shire] companions and exert Tom Bombadil X times, where X is the fellowship's site number, to cancel a skirmish involving a [shire] companion.
+		lore: "'Hey! Come derry dol! Can you hear me singing?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

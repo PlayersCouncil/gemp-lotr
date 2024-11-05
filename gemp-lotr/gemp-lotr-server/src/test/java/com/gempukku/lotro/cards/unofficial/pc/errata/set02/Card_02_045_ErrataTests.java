@@ -59,7 +59,7 @@ public class Card_02_045_ErrataTests
 		assertEquals(Side.SHADOW, attention.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, attention.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, attention.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(attention, Keyword.RESPONSE));
+        assertTrue(scn.hasTimeword(attention, Timeword.RESPONSE));
 		assertEquals(1, attention.getBlueprint().getTwilightCost());
 	}
 

@@ -7,15 +7,13 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_050_Tests
 {
@@ -70,8 +68,7 @@ public class Card_V1_050_Tests
 		assertEquals(3, bilbo.getBlueprint().getVitality());
 		//assertEquals(, bilbo.getBlueprint().getResistance());
 		//assertEquals(Signet., bilbo.getBlueprint().getSignet());
-		assertEquals(3, bilbo.getBlueprint().getAllyHomeSiteNumbers()[0]); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertTrue(bilbo.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
 	@Test
@@ -93,7 +90,7 @@ public class Card_V1_050_Tests
 		for(int i = 1; i < 8; i++)
 		{
 			PhysicalCardImpl site = scn.GetCurrentSite();
-			if(scn.HasKeyword(site, Keyword.SANCTUARY)) {
+			if(scn.hasKeyword(site, Keyword.SANCTUARY)) {
 				assertTrue(scn.FreepsActionAvailable(bilbo));
 			}
 			else {
@@ -120,7 +117,7 @@ public class Card_V1_050_Tests
 		scn.FreepsMoveCharToTable(sam);
 
 		//Cheat the sanctuary so we don't have to move and swap
-		scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(1), Keyword.SANCTUARY));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(1), null, Keyword.SANCTUARY));
 
 		scn.StartGame();
 
@@ -129,14 +126,14 @@ public class Card_V1_050_Tests
 
 		scn.FreepsUseCardAction(bilbo);
 		assertEquals(2, scn.GetWoundsOn(bilbo));
-		assertTrue(scn.FreepsDecisionAvailable("Choose card from deck"));
+        assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		assertEquals(3, scn.GetFreepsCardChoiceCount()); // coat, sting, and phial
 
 		scn.FreepsChooseCardBPFromSelection(sting);
 		assertEquals(Zone.ATTACHED, sting.getZone());
 		assertEquals(frodo, sting.getAttachedTo());
 
-		assertTrue(scn.FreepsDecisionAvailable("Choose card from deck"));
+        assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		assertEquals(2, scn.GetFreepsCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(phial);
 		assertEquals(Zone.ATTACHED, phial.getZone());

@@ -22,7 +22,7 @@
 		type: Condition
 		keyword: Support Area
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: abouttodiscard
 				source: side(free people)
@@ -34,7 +34,7 @@
 			}
 			effect: {
 				type: preventdiscard
-				filter: choose(your,culture(gollum),another,condition)
+				select: choose(your,culture(gollum),another,condition)
 			}
 		}
 		gametext: <b>Response:</b> If the Free Peoples player is about to discard your other [gollum] condition, remove (2) to prevent that.

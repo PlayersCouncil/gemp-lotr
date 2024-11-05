@@ -10,8 +10,8 @@ import com.gempukku.lotro.game.state.LotroGame;
 public class AllyParticipatesInArcheryFireAndSkirmishesModifier extends AbstractModifier {
     private final PhysicalCard _source;
 
-    public AllyParticipatesInArcheryFireAndSkirmishesModifier(PhysicalCard source, Filterable affectFilter) {
-        super(source, "Can participate in archery and skirmishes", affectFilter, ModifierEffect.PRESENCE_MODIFIER);
+    public AllyParticipatesInArcheryFireAndSkirmishesModifier(PhysicalCard source, Filterable affectFilter, Condition condition) {
+        super(source, "Can participate in archery and skirmishes", affectFilter, condition, ModifierEffect.PRESENCE_MODIFIER);
         _source = source;
     }
 

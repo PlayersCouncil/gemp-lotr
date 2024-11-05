@@ -19,11 +19,14 @@
 		twilight: 2
 		type: artifact
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: or(title(Galadriel),title(Celeborn))
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: or(title(Galadriel),title(Celeborn))
+                }
+		    }
 			{
 				type: modifier
 				modifier: {
@@ -53,17 +56,16 @@
 				optional: true
 				trigger: {
 					type: played
-					filter: your,culture(elven),skirmish,event
+					filter: your,culture(elven),timeword(skirmish),event
 				}
 				cost: {
 					type: exert
 					count: 1
-					filter: choose(title(Galadriel))
+					select: choose(title(Galadriel))
 				}
 				effect: {
 					type: ReinforceTokens
 					culture: elven
-					amount: 1
 				}
 			}
 		]
@@ -104,12 +106,15 @@
 		strength: 9
 		vitality: 4
 		resistance: 7
-		requires: {
-			type: canSpot
-			filter: elf,companion
-			count:2
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf,companion
+                    count:2
+                }
+		    }
 			{
 				type: activated
 				phase: maneuver
@@ -119,7 +124,7 @@
 				}
 				effect: {
 					type: putcardsfromdiscardintohand
-					filter: choose(culture(elven),event,skirmish)
+					select: choose(culture(elven),event,timeword(skirmish))
 					count: 1
 				}
 			}
@@ -127,13 +132,14 @@
 				type: activated
 				phase: regroup
 				cost: {
-					type: removetokens
+					type: RemoveCultureTokens
+					select: choose(any)
 					count: 1
 					culture: elven
 				}
 				effect: {
 					type: putcardsfromdiscardintohand
-					filter: choose(culture(elven),condition)
+					select: choose(culture(elven),condition)
 					count: 1
 				}
 			}

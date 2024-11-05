@@ -1,4 +1,110 @@
 {
+	53_7: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN03E007.1_card.jpg
+			//parentId: 3_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 3U7
+			rarity: U
+			setNum: "3"
+			cardNum: 7
+			style: Standard
+		}
+		title: Arwen
+		subtitle: Elven Rider
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Frodo
+		resistance: 6
+		keywords: Ranger
+		effects: {
+			type: Response
+			trigger: {
+				type: aboutToTakeWound
+				filter: ringBearer
+			}
+			cost: {
+				type: discardFromHand
+				forced: false
+				count: {
+					type: RegionNumber
+				}
+			}
+			effect: {
+				type: preventWound
+				select: choose(ringBearer)
+			}
+		}
+		gametext: <b>Ranger</b>.<br><b>Response:</b> If the Ring-bearer is about to take a wound, discard X cards from hand to prevent that wound, where X is the current region number.
+		lore: "'If I can cross the river, the power of my people will protect him.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	53_8: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN03E008.1_card.jpg
+			//parentId: 3_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 3R8
+			rarity: R
+			setNum: "3"
+			cardNum: 8
+			style: Standard
+		}
+		title: Arwen
+		subtitle: Lady Undomiel
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: minion,inSkirmishAgainst(self)
+				amount: {
+					type: ForEachYouCanSpot
+					filter: culture(elven),ally,allyHome(Fellowship,3)
+					limit: 4
+				}
+			}
+		}
+		gametext: Each minion skirmishing Arwen is strength -1 for each home 3 [elven] ally you can spot (limit -4).
+		lore: "Queenly she looked, and thought and knowledge were in her glance, as of one who has known many things that the years bring."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	
 	53_13: {
 		cardInfo: {
 			imagePath: errata/LOTR-EN03E013.1_card.jpg
@@ -20,7 +126,7 @@
 		culture: Elven
 		twilight: 4
 		type: Ally
-		allyHome: fellowship,3
+		allyHome: 3F
 		race: Elf
 		strength: 8
 		vitality: 4
@@ -34,7 +140,7 @@
 				cost: {
 					type: ChooseActiveCards
 					count: 0-1
-					filter: choose(ally,allyHome(fellowship,3),wounded)
+					select: choose(ally,allyHome(fellowship,3),wounded)
 					memorize: chosenAlly
 					text: Choose a home 3 ally to heal
 				}
@@ -45,11 +151,11 @@
 						from: 0
 						to: {
 							type: Min
-							first: {
+							firstNumber: {
 								type: ForEachWound
 								filter: memory(chosenAlly)
 							}
-							second: 2
+							secondNumber: 2
 						}
 						memorize: heals
 					}
@@ -60,7 +166,7 @@
 							type: FromMemory
 							memory: heals
 						}
-						filter: memory(chosenAlly)
+						select: memory(chosenAlly)
 					}
 					{
 						type: AddTwilight
@@ -77,17 +183,78 @@
 				cost: {
 					type: exert
 					times: 2
-					filter: self
+					select: self
 				}
 				effect: {
 					type: heal
 					count: 1
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			}
 		]
 		gametext: At the start of each of your turns, you may spot an ally whose home is site 3 to heal that ally up to 2 times.  Add (1) per wound healed.<br>Regroup: Exert Elrond twice to heal a companion.
 		lore: “Venerable he seemed as a king crowned with many winters, and yet hale as a tried warrior....”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	53_14: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN03E014.1_card.jpg
+			//parentId: 3_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 3C14
+			rarity: C
+			setNum: "3"
+			cardNum: 14
+			style: Standard
+		}
+		title: Erestor
+		subtitle: Chief Advisor to Elrond
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Ally
+		allyHome: 3F
+		race: Elf
+		strength: 5
+		vitality: 3
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: elf
+					source: or(culture(sauron),culture(ringwraith))
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: preventWound
+					select: choose(elf)
+				}
+			}
+		]
+		gametext: To play, spot an Elf.<br><b>Response:</b> If an Elf is about to take a wound from a [sauron] or [ringwraith] card, exert Erestor to prevent that wound.
+		lore: "'Then there are but two courses... to hide the Ring for ever, or to unmake it.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -118,7 +285,7 @@
 		culture: Elven
 		twilight: 3
 		type: Ally
-		allyHome: fellowship,6
+		allyHome: 6F
 		race: Elf
 		#keyword: damage+1
 		strength: 3
@@ -136,7 +303,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(another,elf)
+					select: choose(another,elf)
 				}
 			}
 			{
@@ -152,7 +319,7 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: playSite
@@ -165,6 +332,85 @@
 		]
 		gametext: At the start of each of your turns, you may heal another Elf.<br><b>Fellowship:</b> Exert Galadriel to play the fellowship's next site if it is a forest (replacing opponent's site if necessary).
 		lore: "'There is in her and in this land no evil, unless a man bring it hither himself. Then let him beware!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	53_20: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN03E020.1_card.jpg
+			//parentId: 3_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 3U20
+			rarity: U
+			setNum: "3"
+			cardNum: 20
+			style: Standard
+		}
+		title: Golradir
+		subtitle: Councilor of Imladris
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Ally
+		allyHome: 3F
+		race: Elf
+		strength: 4
+		vitality: 3
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: ChooseActiveCards
+						text: Choose a minion to debuff
+						select: choose(minion)
+						memorize: chosenMinion
+					}
+					{
+						type: modifyStrength
+						select: memory(chosenMinion)
+						amount: {
+							type: Conditional
+							requires: {
+								type: MemoryMatches
+								memory: chosenMinion
+								filter: Orc
+							}
+							true: {
+								type: ForEachYouCanSpot
+								filter: Elf
+								multiplier: -1
+							}
+							false: -1
+						}
+					}
+				]
+			}
+		]
+		gametext: To play, spot an Elf.<br><b>Skirmish:</b> Exert Golradir to make a minion strength -1 (or -1 for each Elf you can spot if that minion is an Orc).  
+		lore: Their stay at Rivendell provided the Fellowship with counsel from many sources.
 		promotext: ""
 		alts: {
 			promos: {
@@ -200,7 +446,7 @@
 				type: ExtraCost
 				cost: {
 					type: exert
-					filter: choose(Elf)
+					select: choose(Elf)
 				}
 			}
 			{
@@ -214,6 +460,85 @@
 		]
 		gametext: To play, exert an Elf.  Bearer must be the Ring-bearer. <br>Bearer’s resistance is +2.
 		lore: “‘May it be a light to you in dark places, when all other lights go out. Remember Galadriel and her Mirror!'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	53_25: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN03E025.1_card.jpg
+			//parentId: 3_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 3U25
+			rarity: U
+			setNum: "3"
+			cardNum: 25
+			style: Standard
+		}
+		title: Saelbeth
+		subtitle: Elven Councilor
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Ally
+		allyHome: 3F
+		race: Elf
+		strength: 4
+		vitality: 3
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: ChooseActiveCards
+						text: Choose a minion to debuff
+						select: choose(minion)
+						memorize: chosenMinion
+					}
+					{
+						type: modifyStrength
+						select: memory(chosenMinion)
+						amount: {
+							type: Conditional
+							requires: {
+								type: MemoryMatches
+								memory: chosenMinion
+								filter: Uruk-hai
+							}
+							true: {
+								type: ForEachYouCanSpot
+								filter: Elf
+								multiplier: -1
+							}
+							false: -1
+						}
+					}
+				]
+			}
+		]
+		gametext: To play, spot an Elf.<br><b>Skirmish:</b> Exert Saelbeth to make a minion strength -1 (or -1 for each Elf you can spot if that minion is an Uruk-hai).  
+		lore: The wisdom of Saelbeth prepared the Company for the dangers they would face.
 		promotext: ""
 		alts: {
 			promos: {
@@ -257,13 +582,13 @@
 	# 			effect: [
 	# 				{
 	# 					type: ChooseActiveCards
-	# 					filter: choose(condition,side(shadow))
+	# 					select: choose(condition,side(shadow))
 	# 					memorize: chosenShadowCondition
 	# 					text: Choose a Shadow condition to return to its owner's hand.
 	# 				}
 	# 				{
 	# 					type: ReturnToHand
-	# 					filter: memory(chosenShadowCondition)
+	# 					select: memory(chosenShadowCondition)
 	# 				}
 	# 				{
 	# 					type: optional
@@ -329,19 +654,19 @@
 				}
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 					times: 2
 				}
 				effect: [
 					{
 						type: ChooseActiveCards
-						filter: choose(condition,side(shadow))
+						select: choose(condition,side(shadow))
 						memorize: chosenShadowCondition
 						text: Choose a Shadow condition to return to its owner's hand.
 					}
 					{
 						type: ReturnToHand
-						filter: memory(chosenShadowCondition)
+						select: memory(chosenShadowCondition)
 					}
 					{
 						type: optional

@@ -1,0 +1,442 @@
+{
+
+	2_31: {
+		cardInfo: {
+			imagePath: decipher/LOTR02031.jpg
+			//parentId: 2_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 2U31
+			rarity: U
+			setNum: "2"
+			cardNum: 31
+			style: Standard
+		}
+		title: Blood of Númenor
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(gondor),companion)
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: culture(sauron),orc
+					memorize: playedOrc
+				}
+				effect: {
+					type: exhaust
+					select: memory(playedOrc)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: skipPhase
+					phase: archery
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: To play, exert a [gondor] companion. Plays to your support area.<br>Each [sauron] Orc comes into play exhausted.<br>Skip the archery phase. Discard this condition during the regroup phase.
+		lore: "'I do not know what strength is in my blood, but I swear to you – I will not let the White City fall....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_32: {
+		cardInfo: {
+			imagePath: decipher/LOTR02032.jpg
+			//parentId: 2_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 2R32
+			rarity: R
+			setNum: "2"
+			cardNum: 32
+			style: Standard
+		}
+		title: Flaming Brand
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		target: man
+		effects: [
+			{
+				type: extrapossessionclass
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer,inSkirmishAgainst(Nazgul)
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,inSkirmishAgainst(Nazgul)
+					keyword: damage+1
+				}
+			}
+		]
+		gametext: Bearer must be a Man.<br>This weapon may be borne in addition to 1 other hand weapon.<br>Bearer is strength +2 and <b>damage +1</b> while skirmishing a Nazgûl.
+		lore: "...a glimpse of Strider leaping out of the darkness with a flaming brand of wood in either hand."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_33: {
+		cardInfo: {
+			imagePath: decipher/LOTR02033.jpg
+			//parentId: 2_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 2U33
+			rarity: U
+			setNum: "2"
+			cardNum: 33
+			style: Standard
+		}
+		title: Flee in Terror
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: culture(gondor),companion
+			}
+			effect: [
+				{
+					type: chooseActiveCards
+					select: choose(exhausted,orc)
+					memorize: chosenOrc
+					text: Choose exhausted Orc
+				}
+				{
+					type: preventable
+					player: ownerFromMemory(chosenOrc)
+					cost: {
+						type: removeTwilight
+						amount: 3
+					}
+					text: Remove (3) to prevent discarding exhausted {chosenOrc}
+					effect: {
+						type: discard
+						select: memory(chosenOrc)
+					}
+				}
+			]
+		}
+		gametext: <b>Response:</b> If a [gondor] companion wins a skirmish, discard an exhausted Orc. That minion's owner may remove (3) to prevent this.
+		lore: "Aragorn smote to the ground the captain that stood in his path, and the rest fled in terror of his wrath."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_34: {
+		cardInfo: {
+			imagePath: decipher/LOTR02034.jpg
+			//parentId: 2_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 2U34
+			rarity: U
+			setNum: "2"
+			cardNum: 34
+			style: Standard
+		}
+		title: Gondor Will See It Done
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: aboutToTakeWound
+				filter: companion
+			}
+			cost: {
+				type: exert
+				select: choose(culture(gondor),companion)
+			}
+			effect: {
+				type: preventWound
+				select: choose(companion)
+			}
+		}
+		gametext: <b>Response:</b> If a companion is about to take a wound, exert a [gondor] companion to prevent that wound.
+		lore: "'Boromir!... Go after those two young hobbits, and guard them at the least, even if you cannot find Frodo.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR02035.jpg
+			//parentId: 2_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 2C35
+			rarity: C
+			setNum: "2"
+			cardNum: 35
+			style: Standard
+		}
+		title: Natural Cover
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: ranger
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					requires: {
+						type: location
+						filter: forest
+					}
+					side: shadow
+					amount: -2
+				}
+			}
+		]
+		gametext: To play, spot a ranger. Plays to your support area.<br>While the fellowship is at a forest, the minion archery total is -2.
+		lore: "The tree, the bough, the leaf. To a ranger, these are all defenses against the enemy."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_36: {
+		cardInfo: {
+			imagePath: decipher/LOTR02036.jpg
+			//parentId: 2_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 2R36
+			rarity: R
+			setNum: "2"
+			cardNum: 36
+			style: Standard
+		}
+		title: No Mere Ranger
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(name(Aragorn))
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(companion,not(name(Aragorn)))
+				memorize: chosenCompanion
+				amount: {
+					type: Conditional
+					requires: {
+						type: memoryMatches
+						memory: chosenCompanion
+						filter: signet(aragorn)
+					}
+					true: 3
+					false: 2
+				}
+			}
+		}
+		gametext: <b>Skirmish:</b> Exert Aragorn to make another companion strength +2 (or +3 if that companion has the Aragorn signet).
+		lore: "'If by my life or death, I can protect you, I will....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_37: {
+		cardInfo: {
+			imagePath: decipher/LOTR02037.jpg
+			//parentId: 2_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 2C37
+			rarity: C
+			setNum: "2"
+			cardNum: 37
+			style: Standard
+		}
+		title: Sentinels of Númenor
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: {
+				type: modifyStrength
+				select: choose(culture(gondor),companion)
+				memorize: chosenCompanion
+				amount: {
+					type: Conditional
+					requires: {
+						type: fierceSkirmish
+					}
+					true: 4
+					false: 2
+				}
+			}
+		}
+		gametext: <b>Skirmish:</b> Make a [gondor] companion strength +2 (or +4 if in a fierce skirmish).
+		lore: "...they still preserved through the suns and rains of forgotten years the mighty likenesses in which they had been hewn."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_38: {
+		cardInfo: {
+			imagePath: decipher/LOTR02038.jpg
+			//parentId: 2_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 2R38
+			rarity: R
+			setNum: "2"
+			cardNum: 38
+			style: Standard
+		}
+		title: Shield of Boromir
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		itemclass: Shield
+		target: culture(gondor),companion
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: -1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cancelStrengthBonus
+					filter: minion,inSkirmishAgainst(bearer,name(Boromir))
+					from: weapon
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] companion.<br>The minion archery total is -1.<br>If bearer is Boromir, each minion skirmishing him does not gain strength bonuses from weapons.
+		lore: "Boromir bore the heirlooms of the Steward's house with pride."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -42,16 +42,16 @@
 				phase: maneuver
 				requires: {
 					type: CanSpot
-					filter: another,wounded,companion,ResistanceMoreThan(4)
+					filter: another,wounded,companion,minResistance(5)
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: heal
-						filter: choose(another,wounded,companion,ResistanceMoreThan(4))
+						select: choose(another,wounded,companion,minResistance(5))
 					}
 				]
 			}
@@ -102,25 +102,25 @@
 					filter: man
 				}
 				effect: {
-					type: addtokens
-					amount: 1
+					type: AddCultureTokens
+					count: 1
 					culture: gondor
-					filter: self
+					select: self
 				}
 			}
 			{
 				type: activated
 				phase: maneuver
 				cost: {
-					type: removetokens
+					type: RemoveCultureTokens
 					count: 3
 					culture: gondor
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: ChooseActiveCards
-						filter: choose(minion)
+						select: choose(minion)
 						memorize: chosenMinion
 						text: Choose a minion to prevent from skirmishing until the Regroup phase.
 					}
@@ -133,9 +133,9 @@
 							amount: 2
 						}
 						effect: {
-							type: DisableSkirmishAssignment
-							filter: memory(chosenMinion)
-							until: start(regroup)
+                            type: disableSkirmishAssignment
+                            select: memory(chosenMinion)
+							until: regroup
 						}
 					}
 				]

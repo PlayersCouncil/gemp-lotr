@@ -4,15 +4,15 @@
 		culture: gundabad
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(minion)
+				select: choose(minion)
 				memorize: chosenMinion
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: memoryMatches
 						memory: chosenMinion
@@ -41,7 +41,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(orc)
+					select: choose(orc)
 				}
 			}
 			{
@@ -49,11 +49,13 @@
 				phase: shadow
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: playCardFromDrawDeck
-					filter: choose(minion)
+					select: choose(minion)
+                    showAll: true
+                    shuffle: true
 				}
 			}
 		]
@@ -70,12 +72,12 @@
 			cost: {
 				type: discardFromHand
 				forced: false
-				filter: choose(any)
+				select: choose(any)
 				count: 3
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(orc)
+				select: choose(orc)
 			}
 		}
 	}
@@ -84,12 +86,12 @@
 		culture: gundabad
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(orc)
+				select: choose(orc)
 			}
 		}
 	}
@@ -126,7 +128,7 @@
 			}
 			effect: {
 				type: wound
-				filter: choose(ally)
+				select: choose(ally)
 				times: 2
 			}
 		}
@@ -152,7 +154,7 @@
 				}
 				effect: {
 					type: exhaust
-					filter: memory(playedCompanion)
+					select: memory(playedCompanion)
 				}
 			}
 			{
@@ -161,11 +163,11 @@
 				effect: [
 					{
 						type: putCardsFromDiscardOnTopOfDeck
-						filter: choose(side(shadow),not(name(Smaug)))
+						select: choose(side(shadow),not(name(Smaug)))
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}
@@ -195,7 +197,7 @@
 				}
 				effect: {
 					type: exhaust
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 				}
 			}
 			{
@@ -212,7 +214,7 @@
 				}
 				effect: {
 					type: wound
-					filter: choose(companion,not(name(Bilbo)))
+					select: choose(companion,not(name(Bilbo)))
 				}
 			}
 		]
@@ -233,7 +235,7 @@
 				{
 					type: assignFpCharacterToSkirmish
 					fpCharacter: choose(name(Bilbo))
-					against: self
+					minion: self
 				}
 				{
 					type: optional
@@ -247,7 +249,7 @@
 						}
 						effect: {
 							type: discard
-							filter: self
+							select: self
 						}
 					}
 				}
@@ -280,18 +282,23 @@
 				phase: shadow
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: [
 					{
 						type: chooseAKeyword
-						keywords: Battleground,Mountain,Forest,Underground
+						keywords: [
+							Battleground
+							Mountain
+							Forest
+							Underground
+						]
 						memorize: keywordSelected
 					}
 					{
 						type: addKeyword
-						filter: all(site)
+						select: all(site)
 						keyword: fromMemory(keywordSelected)
 						until: endOfTurn
 					}
@@ -320,12 +327,12 @@
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: {
 				type: discard
-				filter: choose(follower)
+				select: choose(follower)
 			}
 		}
 	}
@@ -347,7 +354,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(possession)
+				select: choose(possession)
 				on: minion
 			}
 		}
@@ -379,7 +386,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -396,16 +403,16 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 					}
 					{
 						type: discard
-						filter: choose(another,minion)
+						select: choose(another,minion)
 					}
 				]
 				effect: {
 					type: discard
-					filter: choose(side(free people),not(or(companion,name(Bard),ring)))
+					select: choose(side(free people),not(or(companion,name(Bard),ring)))
 				}
 			}
 		]

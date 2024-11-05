@@ -5,6 +5,7 @@ import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.FilterableSource;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.timing.TriggerConditions;
 import com.gempukku.lotro.logic.timing.results.ActivateCardResult;
@@ -13,10 +14,11 @@ import org.json.simple.JSONObject;
 public class UsesSpecialAbility implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "filter", "memorize");
+        FieldUtils.validateAllowedFields(value, "filter", "memorize", "phase");
 
         String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+        final Timeword timeword = FieldUtils.getEnum(Timeword.class, value.get("phase"), "phase");
 
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");
         return new TriggerChecker() {
@@ -31,6 +33,10 @@ public class UsesSpecialAbility implements TriggerCheckerProducer {
 
                 if (activated) {
                     ActivateCardResult activateCardResult = (ActivateCardResult) actionContext.getEffectResult();
+                    if (timeword != null) {
+                        if (activateCardResult.getActionTimeword() != timeword)
+                            return false;
+                    }
 
                     if (memorize != null) {
                         PhysicalCard playedCard = activateCardResult.getSource();

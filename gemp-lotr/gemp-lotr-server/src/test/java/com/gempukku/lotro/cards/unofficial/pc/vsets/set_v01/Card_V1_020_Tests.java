@@ -115,11 +115,11 @@ public class Card_V1_020_Tests
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
+		assertFalse(scn.hasKeyword(boromir, Keyword.DEFENDER));
 		assertEquals(0, scn.GetWoundsOn(sam));
 
 		scn.FreepsAcceptOptionalTrigger();
-		assertTrue(scn.HasKeyword(boromir, Keyword.DEFENDER));
+		assertTrue(scn.hasKeyword(boromir, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 		assertEquals(1, scn.GetWoundsOn(sam));
 
@@ -129,7 +129,7 @@ public class Card_V1_020_Tests
 		scn.PassCurrentPhaseActions();
 
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
-		assertTrue(scn.HasKeyword(boromir, Keyword.DEFENDER));
+		assertTrue(scn.hasKeyword(boromir, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 	}
 }

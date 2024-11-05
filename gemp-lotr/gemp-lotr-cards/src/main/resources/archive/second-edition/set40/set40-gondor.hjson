@@ -11,11 +11,11 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: choose(culture(gondor),man)
+				select: choose(culture(gondor),man)
 			}
 			effect: {
 				type: modifyStrength
-				filter: bearer
+				select: bearer
 				amount: 2
 			}
 		}
@@ -61,13 +61,13 @@
 			type: activated
 			phase: maneuver
 			cost: {
-				type: play
-				filter: choose(or(artifact,possession))
+				type: PlayCardFromHand
+				select: choose(or(artifact,possession))
 				on: self
 			}
 			effect: {
 				type: heal
-				filter: self
+				select: self
 			}
 		}
 	}
@@ -98,16 +98,16 @@
 				optional: true
 				cost: {
 					type: exert
-					filter: choose(name(Aragorn))
+					select: choose(name(Aragorn))
 				}
 				effect: [
 					{
 						type: wound
-						filter: choose(minion)
+						select: choose(minion)
 					}
 					{
-						type: DisableArcheryTotalContribution
-						filter: choose(name(Aragorn))
+                        type: disableArcheryTotalContribution
+                        select: self
 					}
 				]
 			}
@@ -128,7 +128,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -138,7 +138,7 @@
 			]
 			effect: {
 				type: modifyStrength
-				filter: choose(companion,hasAttached(pipe))
+				select: choose(companion,hasAttached(pipe))
 				amount: {
 					type: fromMemory
 					memory: numberOfPipes
@@ -166,13 +166,13 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				count: 0-100
-				filter: choose(ranger)
+				count: any
+				select: choose(ranger)
 				memorize: exertedRangers
 			}
 			effect: {
@@ -209,11 +209,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: choose(name(Boromir))
+					select: choose(name(Boromir))
 				}
 				effect: {
 					type: wound
-					filter: choose(or(Orc,Uruk-hai),inSkirmishAgainst(not(name(Boromir)),unbound,companion))
+					select: choose(or(Orc,Uruk-hai),inSkirmishAgainst(not(name(Boromir)),unbound,companion))
 				}
 			}
 		]
@@ -258,11 +258,11 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(hobbit)
+				select: choose(hobbit)
 				amount: 3
 			}
 		}
@@ -280,7 +280,7 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: {
 				type: preventable
@@ -322,11 +322,11 @@
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: discard
-					filter: choose(side(shadow),possession)
+					select: choose(side(shadow),possession)
 				}
 			}
 		]
@@ -344,7 +344,7 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: {
 				type: choice
@@ -354,25 +354,25 @@
 				]
 				effects: [
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: not(your)
 						}
-						effect: {
+						true: {
 							type: wound
-							filter: choose(roaming,minion,inSkirmishAgainst(bearer))
+							select: choose(roaming,minion,inSkirmishAgainst(bearer))
 						}
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: your
 						}
-						effect: {
+						true: {
 							type: wound
-							filter: choose(minion,inSkirmishAgainst(bearer))
+							select: choose(minion,inSkirmishAgainst(bearer))
 						}
 					}
 				]
@@ -384,19 +384,19 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(or(culture(gondor),culture(shire)),companion,hasAttached(hand weapon))
+					select: choose(or(culture(gondor),culture(shire)),companion,hasAttached(hand weapon))
 					amount: 2
 					memorize: chosenCompanion
 				}
 				{
 					type: addKeyword
-					filter: memory(chosenCompanion)
+					select: memory(chosenCompanion)
 					keyword: damage+1
 				}
 			]
@@ -454,7 +454,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: winsSkirmish
 					filter: ranger
@@ -463,11 +463,11 @@
 				cost: [
 					{
 						type: exert
-						filter: memory(winner)
+						select: memory(winner)
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 				effect: {
@@ -493,7 +493,7 @@
 				}
 				effect: {
 					type: heal
-					filter: memory(winner)
+					select: memory(winner)
 				}
 			}
 			{
@@ -504,7 +504,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -514,16 +514,16 @@
 		culture: gondor
 		twilight: 1
 		type: event
+		timeword: maneuver
 		keyword: [
-			maneuver
 			tale
 		]
-		requires: {
-			type: canSpot
-			filter: culture(gondor),companion
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: culture(gondor),companion
+            }
 			effect: [
 				{
 					type: revealRandomCardsFromHand
@@ -533,7 +533,7 @@
 				}
 				{
 					type: heal
-					filter: choose(companion)
+					select: choose(companion)
 					count: {
 						type: twilightCostInMemory
 						memory: revealedCard
@@ -547,16 +547,16 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: [
+		timeword: [
 			fellowship
 			regroup
 		]
-		requires: {
-			type: canSpot
-			filter: ranger
-		}
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: ranger
+            }
 			requiresRanger: true
 			effect: {
 				type: playNextSite
@@ -606,7 +606,7 @@
 				]
 				effect: {
 					type: exert
-					filter: all(minion,inSkirmish)
+					select: all(minion,inSkirmish)
 				}
 			}
 		]
@@ -616,13 +616,13 @@
 		culture: gondor
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requiresRanger: true
 			cost: {
 				type: exert
-				filter: choose(culture(gondor),ranger)
+				select: choose(culture(gondor),ranger)
 			}
 			effect: {
 				type: choice
@@ -632,25 +632,25 @@
 				]
 				effects: [
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: not(your)
 						}
-						effect: {
+						true: {
 							type: exhaust
-							filter: choose(roaming,minion)
+							select: choose(roaming,minion)
 						}
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: your
 						}
-						effect: {
+						true: {
 							type: exhaust
-							filter: choose(minion)
+							select: choose(minion)
 						}
 					}
 				]
@@ -662,14 +662,14 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			requiresRanger: true
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(ranger)
+					select: choose(ranger)
 					amount: 1
 					memorize: chosenRanger
 				}
@@ -691,7 +691,7 @@
 							}
 							{
 								type: wound
-								filter: choose(minion)
+								select: choose(minion)
 								times: 2
 							}
 						]
@@ -737,11 +737,11 @@
 				type: discardFromHand
 				forced: false
 				count: 2
-				filter: choose(culture(gondor))
+				select: choose(culture(gondor))
 			}
 			effect: {
 				type: heal
-				filter: choose(unbound,companion)
+				select: choose(unbound,companion)
 			}
 		}
 	}
@@ -765,13 +765,13 @@
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: {
 				type: modifyStrength
 				amount: 2
-				filter: memory(bearer)
+				select: memory(bearer)
 			}
 		}
 	}
@@ -780,15 +780,15 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(culture(gondor),companion)
+				select: choose(culture(gondor),companion)
 				memorize: chosenCompanion
 				amount: {
-					type: requires
+					type: Conditional
 					requires: [
 						{
 							type: fierceSkirmish
@@ -831,15 +831,15 @@
 		culture: gondor
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
       type: event
       effect: {
         type: modifyStrength
-        filter: choose(culture(gondor),companion)
+        select: choose(culture(gondor),companion)
         memorize: chosenCompanion
         amount: {
-          type: requires
+          type: Conditional
           requires: {
             type: canSpot
             filter: memory(chosenCompanion),defender
@@ -857,11 +857,14 @@
     twilight: 1
     type: possession
     target: companion
-    requires: {
-      type: canSpot
-      filter: culture(gondor),man
-    }
     effects: [
+        {
+            type: toPlay
+            requires: {
+              type: canSpot
+              filter: culture(gondor),man
+            }
+        }
       {
         type: trigger
         trigger: {
@@ -871,12 +874,12 @@
         optional: true
         cost: {
           type: discardFromHand
-          filter: choose(side(free people))
+          select: choose(side(free people))
           forced: false
         }
         effect: {
           type: discard
-          filter: choose(side(shadow),condition,attachedTo(bearer))
+          select: choose(side(shadow),condition,attachedTo(bearer))
         }
       }
       {
@@ -893,12 +896,12 @@
           }
           {
             type: discard
-            filter: self
+            select: self
           }
         ]
         effect: {
           type: heal
-          filter: memory(bearer)
+          select: memory(bearer)
         }
       }
     ]

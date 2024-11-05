@@ -1,0 +1,202 @@
+{
+
+	17_37: {
+		cardInfo: {
+			imagePath: decipher/LOTR17037.jpg
+			//parentId: 17_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17R37
+			rarity: R
+			setNum: "17"
+			cardNum: 37
+			style: Standard
+		}
+		title: Saruman
+		subtitle: Instigator of Insurrection
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Wizard
+		strength: 8
+		vitality: 4
+		site: 4
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeAssignedToSkirmish
+					filter: self
+					requires: {
+						type: sarumanFirstSentenceActive
+					}
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+					filter: minion
+					keyword: hunter
+					amount: 2
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: hunter,minion
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: preventWound
+					select: choose(hunter,minion)
+				}
+			}
+		]
+		gametext: Saruman cannot be assigned to a skirmish.<br>While you can spot 6 companions, each minion gains <b>hunter 2</b>.<br><b>Response:</b> If a hunter minion is about to take a wound, exert Saruman to prevent that.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_38: {
+		cardInfo: {
+			imagePath: decipher/LOTR17038.jpg
+			//parentId: 17_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17R38
+			rarity: R
+			setNum: "17"
+			cardNum: 38
+			style: Standard
+		}
+		title: Saruman
+		subtitle: Servant of Sauron
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Follower
+		strength: 2
+		effects: [
+			{
+				type: aidCost
+				cost: {
+					type: addTwilight
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: exert
+					select: choose(companion)
+				}
+			}
+		]
+		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, you may remove (1) to transfer this to a minion.)</helper><br>Each time bearer wins a skirmish, you may exert a companion.
+		lore: "'I gave you the chance of aiding me willingly, but you have elected the way of pain.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_39: {
+		cardInfo: {
+			imagePath: decipher/LOTR17039.jpg
+			//parentId: 17_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 17R39
+			rarity: R
+			setNum: "17"
+			cardNum: 39
+			style: Standard
+		}
+		title: Throne of Isengard
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Artifact
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: name(Saruman)
+				}
+				requires: {
+					type: canSpot
+					filter: minion
+				}
+				effect: {
+					type: addKeyword
+					select: choose(minion)
+					keyword: fierce
+					until: regroup
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: wizard
+					amount: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: wizard
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: Each time you play Saruman, spot a minion. That minion is <b>fierce</b> until the start of the regroup phase.<br>Each Wizard is strength +3 and <b>damage +1</b>.
+		lore: "From the heights of Orthanc, Saruman spied on Middle-earth and plotted his rise to power."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

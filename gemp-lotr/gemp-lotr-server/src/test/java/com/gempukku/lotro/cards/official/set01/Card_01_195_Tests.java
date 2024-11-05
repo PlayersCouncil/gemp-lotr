@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -33,35 +32,36 @@ public class Card_01_195_Tests
 	public void RelicsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Relics of Moria
-		* Unique: false
-		* Side: Shadow
-		* Culture: Moria
-		* Twilight Cost: 1
-		* Type: Condition
-		* Subtype: Support Area
-		* Game Text: Plays to your support area.
-		 * Shadow: Remove (2) to play a [MORIA] possession from your discard pile.
-		*/
+		 * Set: 1
+		 * Name: Relics of Moria
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Moria
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support Area
+		 * Game Text: Plays to your support area.
+		 *  Shadow: Remove (2) to play a [MORIA] possession from your discard pile.
+		 */
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl relics = scn.GetFreepsCard("relics");
+		var card = scn.GetFreepsCard("relics");
 
-		assertFalse(relics.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, relics.getBlueprint().getSide());
-		assertEquals(Culture.MORIA, relics.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, relics.getBlueprint().getCardType());
-		assertEquals(1, relics.getBlueprint().getTwilightCost());
-		assertTrue(scn.HasKeyword(relics, Keyword.SUPPORT_AREA));
+		assertEquals("Relics of Moria", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
 	public void ShadowAbilityRemoves2ToPlayMoriaPossessionFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var relics = scn.GetShadowCard("relics");
 		var runner = scn.GetShadowCard("runner");
@@ -87,7 +87,7 @@ public class Card_01_195_Tests
 	@Test
 	public void ShadowAbilityNotAvailableIfNoPossessionsInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var relics = scn.GetShadowCard("relics");
 		var runner = scn.GetShadowCard("runner");

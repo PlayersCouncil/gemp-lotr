@@ -29,9 +29,9 @@
 					filter: culture(rohan),man
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: rohan
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -42,7 +42,7 @@
 						type: memorizeNumber
 						memory: numberOfTokens
 						amount: {
-							type: forEachToken
+							type: ForEachCultureToken
 							culture: rohan
 							filter: self
 						}
@@ -51,7 +51,7 @@
 				effect: [
 					{
 						type: discard
-						filter: choose(side(shadow),condition)
+						select: choose(side(shadow),condition)
 						count: {
 							type: fromMemory
 							memory: numberOfTokens
@@ -60,7 +60,7 @@
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}

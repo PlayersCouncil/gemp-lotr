@@ -49,7 +49,7 @@ public class Card_V1_006_Tests
 		PhysicalCardImpl bold = scn.GetFreepsCard("bold");
 
 		assertTrue(bold.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(bold, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(bold, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(0, bold.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, bold.getBlueprint().getCardType());
 		assertEquals(Culture.DWARVEN, bold.getBlueprint().getCulture());

@@ -64,8 +64,8 @@ public class Card_15_064_ErrataTests
 		assertEquals(Culture.GONDOR, madril.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, madril.getBlueprint().getCardType());
 		assertEquals(Race.MAN, madril.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(madril, Keyword.RANGER));
-		assertTrue(scn.HasKeyword(madril, Keyword.HUNTER));
+		assertTrue(scn.hasKeyword(madril, Keyword.RANGER));
+		assertTrue(scn.hasKeyword(madril, Keyword.HUNTER));
 		assertEquals(1, scn.GetKeywordCount(madril, Keyword.HUNTER));
 		assertEquals(2, madril.getBlueprint().getTwilightCost());
 		assertEquals(5, madril.getBlueprint().getStrength());

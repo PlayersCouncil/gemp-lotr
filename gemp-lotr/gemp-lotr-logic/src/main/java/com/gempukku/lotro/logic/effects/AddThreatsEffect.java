@@ -8,11 +8,9 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
-import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.results.AddThreatResult;
 
 public class AddThreatsEffect extends AbstractEffect {
-    private Action _action;
     private final String _performingPlayer;
     private final PhysicalCard _source;
     private final Evaluator _count;
@@ -57,7 +55,7 @@ public class AddThreatsEffect extends AbstractEffect {
         int count = evaluateCount(game);
         int toAdd = Math.min(count, getThreatsPossibleToAdd(game));
         if (toAdd > 0) {
-            game.getGameState().sendMessage(GameUtils.getCardLink(_source) + " adds " + GameUtils.formatNumber(toAdd, count) + " threat" + ((toAdd > 1) ? "s" : ""));
+            game.getGameState().sendMessage(_performingPlayer + " adds " + GameUtils.formatNumber(toAdd, count) + " threat" + ((toAdd > 1) ? "s" : "") + " with " + GameUtils.getCardLink(_source));
             game.getGameState().addThreats(game.getGameState().getCurrentPlayerId(), toAdd);
 
             for (int i = 0; i < toAdd; i++)

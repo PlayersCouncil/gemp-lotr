@@ -24,7 +24,7 @@ public class RevealRandomCardsFromHand implements EffectAppenderProducer {
         final String memorized = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         final ValueSource countSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final PlayerSource handSource = PlayerResolver.resolvePlayer(hand, environment);
+        final PlayerSource handSource = PlayerResolver.resolvePlayer(hand);
 
         return new DelayedAppender() {
             @Override

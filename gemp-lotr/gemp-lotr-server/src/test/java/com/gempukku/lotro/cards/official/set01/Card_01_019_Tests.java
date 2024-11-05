@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -33,7 +32,8 @@ public class Card_01_019_Tests
 
         /**
          * Set: 1
-         * Title: Here Lies Balin, Son of Fundin
+         * Name: Here Lies Balin, Son of Fundin
+         * Unique: False
          * Side: Free Peoples
          * Culture: Dwarven
          * Twilight Cost: 0
@@ -43,38 +43,33 @@ public class Card_01_019_Tests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl balin = scn.GetFreepsCard("balin");
+        var card = scn.GetFreepsCard("balin");
 
-        assertFalse(balin.getBlueprint().isUnique());
-        assertEquals(Side.FREE_PEOPLE, balin.getBlueprint().getSide());
-        assertEquals(Culture.DWARVEN, balin.getBlueprint().getCulture());
-        assertEquals(CardType.EVENT, balin.getBlueprint().getCardType());
-        //assertEquals(Race.CREATURE, balin.getBlueprint().getRace());
-        assertTrue(scn.HasKeyword(balin, Keyword.MANEUVER)); // test for keywords as needed
-        assertEquals(0, balin.getBlueprint().getTwilightCost());
-        //assertEquals(, balin.getBlueprint().getStrength());
-        //assertEquals(, balin.getBlueprint().getVitality());
-        //assertEquals(, balin.getBlueprint().getResistance());
-        //assertEquals(Signet., balin.getBlueprint().getSignet());
-        //assertEquals(, balin.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-
+        assertEquals("Here Lies Balin, Son of Fundin", card.getBlueprint().getTitle());
+        assertNull(card.getBlueprint().getSubtitle());
+        assertFalse(card.getBlueprint().isUnique());
+        assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+        assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+        assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+        assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+        assertEquals(0, card.getBlueprint().getTwilightCost());
     }
 
     @Test
     public void BalinCanWound2OrcsOnce() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        PhysicalCardImpl balin = scn.GetFreepsCard("balin");
+        var gimli = scn.GetFreepsCard("gimli");
+        var balin = scn.GetFreepsCard("balin");
         scn.FreepsMoveCharToTable(gimli);
         scn.FreepsMoveCardToHand(balin);
 
-        PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
-        PhysicalCardImpl runner2 = scn.GetShadowCard("runner2");
-        PhysicalCardImpl scout = scn.GetShadowCard("scout");
+        var runner1 = scn.GetShadowCard("runner1");
+        var runner2 = scn.GetShadowCard("runner2");
+        var scout = scn.GetShadowCard("scout");
         scn.ShadowMoveCharToTable(runner1, runner2);
 
         scn.StartGame();
@@ -99,16 +94,16 @@ public class Card_01_019_Tests
     @Test
     public void BalinCanWound1OrcTwice() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        PhysicalCardImpl balin = scn.GetFreepsCard("balin");
+        var gimli = scn.GetFreepsCard("gimli");
+        var balin = scn.GetFreepsCard("balin");
         scn.FreepsMoveCharToTable(gimli);
         scn.FreepsMoveCardToHand(balin);
 
-        PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
-        PhysicalCardImpl runner2 = scn.GetShadowCard("runner2");
-        PhysicalCardImpl scout = scn.GetShadowCard("scout");
+        var runner1 = scn.GetShadowCard("runner1");
+        var runner2 = scn.GetShadowCard("runner2");
+        var scout = scn.GetShadowCard("scout");
         scn.ShadowMoveCharToTable(scout);
 
         scn.StartGame();
@@ -129,16 +124,16 @@ public class Card_01_019_Tests
     @Test
     public void FreepsMustChooseTwoOrcOrOneOrcToWoundTwice() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        PhysicalCardImpl balin = scn.GetFreepsCard("balin");
+        var gimli = scn.GetFreepsCard("gimli");
+        var balin = scn.GetFreepsCard("balin");
         scn.FreepsMoveCharToTable(gimli);
         scn.FreepsMoveCardToHand(balin);
 
-        PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
-        PhysicalCardImpl runner2 = scn.GetShadowCard("runner2");
-        PhysicalCardImpl scout = scn.GetShadowCard("scout");
+        var runner1 = scn.GetShadowCard("runner1");
+        var runner2 = scn.GetShadowCard("runner2");
+        var scout = scn.GetShadowCard("scout");
         scn.ShadowMoveCharToTable(runner1, runner2, scout);
 
         scn.StartGame();
@@ -159,16 +154,16 @@ public class Card_01_019_Tests
     @Test
     public void OneOrcWith1VitalityCanBeHitByHereLiesBalin() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        PhysicalCardImpl balin = scn.GetFreepsCard("balin");
+        var gimli = scn.GetFreepsCard("gimli");
+        var balin = scn.GetFreepsCard("balin");
         scn.FreepsMoveCharToTable(gimli);
         scn.FreepsMoveCardToHand(balin);
 
-        PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
-        PhysicalCardImpl runner2 = scn.GetShadowCard("runner2");
-        PhysicalCardImpl scout = scn.GetShadowCard("scout");
+        var runner1 = scn.GetShadowCard("runner1");
+        var runner2 = scn.GetShadowCard("runner2");
+        var scout = scn.GetShadowCard("scout");
         scn.ShadowMoveCharToTable(runner1);
 
         scn.StartGame();
@@ -190,9 +185,4 @@ public class Card_01_019_Tests
 
         assertEquals(Zone.DISCARD, runner1.getZone());
     }
-
-
-
-
-
 }

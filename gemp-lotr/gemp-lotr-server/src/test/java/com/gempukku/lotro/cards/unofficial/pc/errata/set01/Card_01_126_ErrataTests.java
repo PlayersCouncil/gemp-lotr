@@ -50,7 +50,7 @@ public class Card_01_126_ErrataTests
 		assertEquals(Side.SHADOW, hunt.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, hunt.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, hunt.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(hunt, Keyword.MANEUVER));
+        assertTrue(scn.hasTimeword(hunt, Timeword.MANEUVER));
 		assertEquals(2, hunt.getBlueprint().getTwilightCost());
 	}
 
@@ -70,8 +70,8 @@ public class Card_01_126_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertTrue(scn.ShadowPlayAvailable(hunt));
-		assertFalse(scn.HasKeyword(uruk, Keyword.FIERCE));
+		assertFalse(scn.hasKeyword(uruk, Keyword.FIERCE));
 		scn.ShadowPlayCard(hunt);
-		assertTrue(scn.HasKeyword(uruk, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(uruk, Keyword.FIERCE));
 	}
 }

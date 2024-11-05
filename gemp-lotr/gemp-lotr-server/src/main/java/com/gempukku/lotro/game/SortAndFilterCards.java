@@ -43,6 +43,8 @@ public class SortAndFilterCards {
         var resistance = getStat(params.get("resistance"));
         var resistanceComparator = getSingleton(params.get("resistancecompare"));
         var signets = getEnumFilter(Signet.values(), Signet.class, params.get("signet"), true);
+        
+        var canStartWithRing = getBoolean(params);
 
         List<T> result = new ArrayList<>();
         var cardBPCache = new HashMap<String, LotroCardBlueprint>();
@@ -91,7 +93,6 @@ public class SortAndFilterCards {
                     case "pack" -> {
                         continue;
                     }
-
                 }
             }
 
@@ -169,6 +170,8 @@ public class SortAndFilterCards {
 
             if(!nameWords.isEmpty() && !containsAllWords(GameUtils.getFullSanitizedName(card), nameWords))
                 continue;
+            
+            //&& (canStartWithRing == null || blueprint.canStartWithRing() == canStartWithRing)
 
             //Oops...don't have game text available anywhere yet.
 //            if(!textWords.isEmpty() && !containsAllWords(GameUtils.getFullSanitizedName(card), nameWords))
@@ -236,14 +239,73 @@ public class SortAndFilterCards {
         return result;
     }
 
-    private boolean isInSets(String blueprintId, LotroCardBlueprint card, List<String> setFilters, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
-        for (String set : setFilters) {
+    private Side getSideFilter(String[] filterParams) {
+        for (String filterParam : filterParams) {
+            if (filterParam.startsWith("side:"))
+                return Side.valueOf(filterParam.substring("side:".length()));
+        }
+        return null;
+    }
+
+    private String getTypeFilter(String[] filterParams) {
+        for (String filterParam : filterParams) {
+            if (filterParam.startsWith("type:"))
+                return filterParam.substring("type:".length());
+        }
+        return null;
+    }
+
+    private String[] getRarityFilter(String[] filterParams) {
+        for (String filterParam : filterParams) {
+            if (filterParam.startsWith("rarity:"))
+                return filterParam.substring("rarity:".length()).split(",");
+        }
+        return null;
+    }
+
+    private String[] getSetFilter(String[] filterParams) {
+        String setStr = getSetNumber(filterParams);
+        String[] sets = null;
+        if (setStr != null)
+            sets = setStr.split(",");
+        return sets;
+    }
+
+    private boolean isRarity(String blueprintId, String[] rarity, LotroCardBlueprintLibrary library, Map<String, SetDefinition> rarities) {
+        if (blueprintId.contains("_")) {
+            SetDefinition setRarity = rarities.get(blueprintId.substring(0, blueprintId.indexOf("_")));
+            if (setRarity != null) {
+                String cardRarity = setRarity.getCardRarity(library.stripBlueprintModifiers(blueprintId));
+                if (cardRarity == null) {
+                    //TODO: log that the rarity was not set
+                    //real TODO: put the rarity in the friggin json
+                    return false;
+                }
+                for (String r : rarity) {
+                    if (cardRarity.equals(r))
+                        return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isInSets(String blueprintId, String[] sets, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary, Map<String, LotroCardBlueprint> cardBlueprint) {
+        for (String set : sets) {
             LotroFormat format = formatLibrary.getFormat(set);
 
             if (format != null) {
-                if (card.getCardType() == CardType.SITE) {
-                    String invalid = format.validateSite(blueprintId);
-                    if(!StringUtils.isEmpty(invalid))
+                String valid = format.validateCard(blueprintId);
+                if (valid != null && !valid.isEmpty())
+                    return false;
+
+                final LotroCardBlueprint blueprint = cardBlueprint.get(blueprintId);
+                if (blueprint.getCardType() == CardType.SITE) {
+                    if (blueprint.getSiteBlock() == SitesBlock.FELLOWSHIP) {
+                        if ("fotr_block,pc_fotr_block,test_pc_fotr_block".contains(set)) {
+                            return true;
+                        }
                         return false;
                 }
 
@@ -289,6 +351,15 @@ public class SortAndFilterCards {
         return result;
     }
 
+    private Boolean getBoolean(String[] filterParams) {
+        Boolean result = null;
+        for (String filterParam : filterParams) {
+            if (filterParam.startsWith("canStartWithRing:"))
+                result = Boolean.parseBoolean(filterParam.substring("canStartWithRing:".length()));
+        }
+        return result;
+    }
+
     private Integer getStat(List<String> params) {
         var statStr = getSingleton(params);
         try {
@@ -315,6 +386,9 @@ public class SortAndFilterCards {
     }
 
     private boolean containsAnyClasses(LotroCardBlueprint blueprint, Set<PossessionClass> itemClassFilters) {
+        if (blueprint == null)
+            return false;
+        
         if (blueprint.getPossessionClasses() == null) {
             return itemClassFilters.contains(PossessionClass.CLASSLESS);
         }

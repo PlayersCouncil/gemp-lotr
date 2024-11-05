@@ -1,0 +1,60 @@
+{
+
+	19_27: {
+		cardInfo: {
+			imagePath: decipher/LOTR19027.jpg
+			//parentId: 19_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 19P27
+			rarity: P
+			setNum: "19"
+			cardNum: 27
+			style: Standard
+		}
+		title: Sauron's Might
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			cost: {
+				type: RemoveCultureTokens
+				select: choose(side(free people))
+			}
+			effect: [
+				{
+					type: addThreats
+				}
+				{
+					type: optional
+					text: Would you like to remove (1) to place this event on the bottom of your draw deck?
+					effect: {
+						type: costToEffect
+						cost: {
+							type: removeTwilight
+						}
+						effect: {
+							type: putPlayedEventOnBottomOfDrawDeck
+						}
+					}
+				}
+			]
+		}
+		gametext: Remove a Free Peoples culture token to add a threat. When you play this event, you may remove (1) to place this on the bottom of your draw deck instead of in your discard pile.
+		lore: "One by one, the free lands of Middle-earth fell to the power of the Ring."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

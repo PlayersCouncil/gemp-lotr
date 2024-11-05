@@ -17,7 +17,7 @@
 				effect: [
 					{
 						type: heal
-						filter: choose(or(name(Thorin),name(Dain Ironfoot)))
+						select: choose(or(name(Thorin),name(Dain Ironfoot)))
 					}
 					{
 						type: optional
@@ -38,7 +38,7 @@
 				}
 				effect: {
 					type: EnableParticipationInSkirmishes
-					filter: all(culture(dwarven),ally)
+					select: all(culture(dwarven),ally)
 				}
 			}
 		]
@@ -50,7 +50,7 @@
 		culture: dwarven
 		twilight: 3
 		type: ally
-		allyHome: hobbit,9
+		allyHome: 9H
 		race: dwarf
 		strength: 7
 		vitality: 3
@@ -72,11 +72,11 @@
 				}
 				cost: {
 					type: discard
-					filter: choose(culture(dwarven),follower)
+					select: choose(culture(dwarven),follower)
 				}
 				effect: {
 					type: discard
-					filter: choose(minion,not(name(Smaug)))
+					select: choose(minion,not(name(Smaug)))
 				}
 			}
 		]
@@ -86,17 +86,17 @@
 		culture: dwarven
 		twilight: 3
 		type: event
-		keyword: assignment
+		timeword: assignment
 		effects: {
 			type: event
 			cost: {
 				type: discard
 				count: 2
-				filter: choose(culture(dwarven),not(companion))
+				select: choose(culture(dwarven),not(companion))
 			}
 			effect: {
 				type: discard
-				filter: choose(minion,maxTwilight(4))
+				select: choose(minion,maxTwilight(4))
 			}
 		}
 	}
@@ -123,7 +123,7 @@
 		culture: dwarven
 		twilight: 3
 		type: ally
-		allyHome: hobbit,9
+		allyHome: 9H
 		race: dwarf
 		strength: 9
 		vitality: 3
@@ -145,17 +145,17 @@
 			cost: [
 				{
 					type: exert
-					filter: self
+					select: self
 				}
 				{
 					type: discard
-					filter: choose(culture(dwarven),follower)
+					select: choose(culture(dwarven),follower)
 				}
 			]
 			effect: {
 				type: discard
 				player: shadowPlayer
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 	}
@@ -164,7 +164,7 @@
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -172,7 +172,9 @@
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(culture(dwarven),follower)
+				select: choose(culture(dwarven),follower)
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -204,11 +206,11 @@
 				effect: [
 					{
 						type: putCardsFromDiscardIntoHand
-						filter: choose(culture(dwarven),event)
+						select: choose(culture(dwarven),event)
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}
@@ -228,7 +230,7 @@
 				type: aidCost
 				cost: {
 					type: exert
-					filter: choose(name(Thorin))
+					select: choose(name(Thorin))
 				}
 			}
 			{
@@ -240,7 +242,7 @@
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: choice
@@ -251,11 +253,13 @@
 					effects: [
 						{
 							type: playCardFromDrawDeck
-							filter: choose(culture(dwarven),ally)
+							select: choose(culture(dwarven),ally)
+                            showAll: true
+                            shuffle: true
 						}
 						{
 							type: EnableParticipationInSkirmishes
-							filter: choose(culture(dwarven),ally)
+							select: choose(culture(dwarven),ally)
 							until: start(regroup)
 						}
 					]
@@ -278,7 +282,7 @@
 				cost: [
 					{
 						type: spot
-						filter: choose(name(Gandalf))
+						filter: name(Gandalf)
 					}
 					{
 						type: addTwilight
@@ -295,8 +299,10 @@
 				}
 				effect: {
 					type: playCardFromDrawDeck
-					filter: choose(culture(dwarven),or(possession,artifact))
+					select: choose(culture(dwarven),or(possession,artifact))
 					on: bearer
+                    showAll: true
+                    shuffle: true
 				}
 			}
 		]
@@ -306,12 +312,12 @@
 		culture: dwarven
 		twilight: 3
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf,companion)
+				select: choose(dwarf,companion)
 			}
 			effect: {
 				type: choice
@@ -322,11 +328,13 @@
 				effects: [
 					{
 						type: playCardFromDrawDeck
-						filter: choose(or(name(Thrain),and(culture(dwarven),or(possession,artifact))))
+						select: choose(or(name(Thrain),and(culture(dwarven),or(possession,artifact))))
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: playCardFromDiscard
-						filter: choose(or(name(Thrain),and(culture(dwarven),or(possession,artifact))))
+						select: choose(or(name(Thrain),and(culture(dwarven),or(possession,artifact))))
 					}
 				]
 			}
@@ -367,17 +375,17 @@
 					effects: [
 						{
 							type: exert
-							filter: bearer
+							select: bearer
 						}
 						{
 							type: discard
-							filter: self
+							select: self
 						}
 					]
 				}
 				effect: {
 					type: discard
-					filter: choose(minion)
+					select: choose(minion)
 				}
 			}
 		]
@@ -404,11 +412,11 @@
 				effects: [
 					{
 						type: exert
-						filter: bearer
+						select: bearer
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}
@@ -418,15 +426,15 @@
 					memorize: playedSite
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryMatches
 						memory: playedSite
 						filter: mountain
 					}
-					effect: {
+					true: {
 						type: heal
-						filter: choose(culture(dwarven),companion)
+						select: choose(culture(dwarven),companion)
 					}
 				}
 			]
@@ -439,7 +447,7 @@
 		culture: elven
 		twilight: 3
 		type: ally
-		allyHome: hobbit,3
+		allyHome: 3H
 		race: elf
 		strength: 3
 		vitality: 3
@@ -453,7 +461,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 				}
 			}
 			{
@@ -462,20 +470,20 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 					}
 					{
 						type: discardFromHand
 						forced: false
-						filter: choose(side(shadow))
+						select: choose(side(shadow))
 					}
 				]
 				effect: {
 					type: modifyStrength
-					filter: choose(minion)
+					select: choose(minion)
 					memorize: chosenMinion
 					amount: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: memoryMatches
 							memory: chosenMinion
@@ -506,7 +514,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(wise,ally)
+					select: choose(wise,ally)
 				}
 			}
 			{
@@ -515,7 +523,7 @@
 				cost: [
 					{
 						type: exert
-						filter: bearer
+						select: bearer
 					}
 					{
 						type: addTwilight
@@ -524,7 +532,10 @@
 				]
 				effect: {
 					type: putCardsFromDeckIntoHand
-					filter: choose(culture(gandalf),spell)
+					select: choose(culture(gandalf),spell)
+					reveal: true
+					shuffle: true
+					showAll: true
 				}
 			}
 		]
@@ -536,7 +547,7 @@
 		culture: esgaroth
 		twilight: 2
 		type: ally
-		allyHome: hobbit,6
+		allyHome: 6H
 		race: man
 		strength: 4
 		vitality: 3
@@ -549,7 +560,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(culture(esgaroth),man,not(name(The Master)))
+					select: choose(culture(esgaroth),man,not(name(The Master)))
 				}
 			}
 			{
@@ -557,11 +568,11 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: EnableParticipationInArcheryFireAndSkirmishes
-					filter: choose(name(Bard))
+					select: choose(name(Bard))
 					until: start(regroup)
 				}
 			}
@@ -582,30 +593,30 @@
 			cost: [
 				{
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: [
 				{
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 					times: 2
 					memorize: woundedMinion
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryMatches
 						memory: woundedMinion
 						filter: name(Smaug)
 					}
-					effect: {
+					true: {
 						type: wound
-						filter: memory(woundedMinion)
+						select: memory(woundedMinion)
 					}
 				}
 			]
@@ -617,7 +628,7 @@
 		culture: esgaroth
 		twilight: 3
 		type: ally
-		allyHome: hobbit,6
+		allyHome: 6H
 		race: man
 		strength: 6
 		vitality: 4
@@ -631,11 +642,11 @@
 			}
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: EnableParticipationInArcheryFireAndSkirmishes
-				filter: self
+				select: self
 				until: start(regroup)
 			}
 		}
@@ -657,11 +668,11 @@
 			}
 			cost: {
 				type: discard
-				filter: self
+				select: self
 			}
 			effect: {
 				type: wound
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 	}
@@ -672,7 +683,7 @@
 		culture: esgaroth
 		twilight: 2
 		type: ally
-		allyHome: hobbit,6
+		allyHome: 6H
 		race: man
 		strength: 6
 		vitality: 3
@@ -686,18 +697,18 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: another,culture(esgaroth),ally
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: preventWound
-					filter: choose(another,culture(esgaroth),ally)
+					select: choose(another,culture(esgaroth),ally)
 				}
 			}
 		]
@@ -709,7 +720,7 @@
 		culture: esgaroth
 		twilight: 2
 		type: ally
-		allyHome: hobbit,6
+		allyHome: 6H
 		race: man
 		strength: 5
 		vitality: 3
@@ -726,7 +737,7 @@
 				}
 				effect: {
 					type: heal
-					filter: all(or(name(Bard),name(The Master)))
+					select: all(or(name(Bard),name(The Master)))
 				}
 			}
 			{
@@ -734,7 +745,7 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: [
@@ -760,24 +771,24 @@
     culture: gandalf
     twilight: 1
     type: event
-    keyword: maneuver
+    timeword: maneuver
     effects: {
       type: event
       cost: {
         type: exert
-        filter: choose(wise,ally)
+        select: choose(wise,ally)
         memorize: exertedAlly
       }
       effect: [
         {
           type: modifyStrength
-          filter: memory(exertedAlly)
+          select: memory(exertedAlly)
           amount: 3
           until: start(regroup)
         }
         {
           type: EnableParticipationInArcheryFireAndSkirmishes
-          filter: memory(exertedAlly)
+          select: memory(exertedAlly)
           until: start(regroup)
         }
       ]
@@ -788,9 +799,9 @@
     culture: gandalf
     twilight: 3
     type: event
+    timeword: maneuver
     keyword: [
       spell
-      maneuver
     ]
     effects: {
       type: event
@@ -800,7 +811,7 @@
           type: forEachYouCanSpot
           filter: or(name(Gandalf),name(Elrond),name(Galadriel))
         }
-        filter: choose(minion)
+        select: choose(minion)
         amount: {
           type: forEachYouCanSpot
           filter: or(name(Gandalf),name(Elrond),name(Galadriel))
@@ -829,18 +840,18 @@
         }
       }
       {
-        type: activatedTrigger
+        type: Response
         trigger: {
           type: aboutToDiscard
           filter: bearer
         }
         cost: {
           type: exert
-          filter: bearer
+          select: bearer
         }
         effect: {
           type: preventDiscard
-          filter: bearer
+          select: bearer
         }
       }
     ]
@@ -851,7 +862,7 @@
 		unique: true
     culture: gandalf
     type: ally
-    allyHome: hobbit,3
+    allyHome: 3H
     race: wizard
     twilight: 4
     strength: 8
@@ -871,11 +882,11 @@
         phase: fellowship
         cost: {
           type: discard
-          filter: choose(wise,ally)
+          select: choose(wise,ally)
         }
         effect: {
           type: playCardFromDiscard
-          filter: choose(name(Gandalf))
+          select: choose(name(Gandalf))
         }
       }
       {
@@ -883,11 +894,11 @@
         phase: skirmish
         cost: {
           type: exert
-          filter: self
+          select: self
         }
         effect: {
           type: modifyStrength
-          filter: choose(wise,character)
+          select: choose(wise,character)
           amount: {
             type: cardAffectedLimitPerPhase
             source: 2

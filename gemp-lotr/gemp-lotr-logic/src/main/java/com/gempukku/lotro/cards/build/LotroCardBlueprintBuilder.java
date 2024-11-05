@@ -33,6 +33,8 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
         fieldProcessors.put("itemclass", new PossessionClassFieldProcessor());
         fieldProcessors.put("keyword", new KeywordFieldProcessor());
         fieldProcessors.put("keywords", new KeywordFieldProcessor());
+        fieldProcessors.put("timeword", new TimewordFieldProcessor());
+        fieldProcessors.put("timewords", new TimewordFieldProcessor());
         fieldProcessors.put("twilight", new TwilightCostFieldProcessor());
         fieldProcessors.put("strength", new StrengthFieldProcessor());
         fieldProcessors.put("vitality", new VitalityFieldProcessor());
@@ -43,20 +45,21 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
         fieldProcessors.put("allyhome", new AllyHomeFieldProcessor());
         fieldProcessors.put("direction", new DirectionFieldProcessor());
         fieldProcessors.put("target", new TargetFieldProcessor());
-        fieldProcessors.put("requires", new RequirementFieldProcessor());
         fieldProcessors.put("effects", new EffectFieldProcessor());
+        fieldProcessors.put("canstartwithring", new CanStartWithRing());
 
-        fieldProcessors.put("gametext", new NullProcessor());
-        fieldProcessors.put("lore", new NullProcessor());
-        fieldProcessors.put("promotext", new NullProcessor());
+        fieldProcessors.put("gametext", new GameTextFieldProcessor());
+        fieldProcessors.put("lore", new LoreFieldProcessor());
+        fieldProcessors.put("promotext", new PromoTextFieldProcessor());
 
         //Soon!  But not yet
         fieldProcessors.put("cardinfo", new NullProcessor());
         fieldProcessors.put("alts", new NullProcessor());
     }
 
-    public LotroCardBlueprint buildFromJson(JSONObject json) throws InvalidCardDefinitionException {
+    public LotroCardBlueprint buildFromJson(String cardId, JSONObject json) throws InvalidCardDefinitionException {
         BuiltLotroCardBlueprint result = new BuiltLotroCardBlueprint();
+        result.setId(cardId);
 
         Set<Map.Entry<String, Object>> values = json.entrySet();
         for (Map.Entry<String, Object> value : values) {

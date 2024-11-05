@@ -70,34 +70,36 @@ public class Card_01_295_Tests
 	public void FarmerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Hobbit Farmer
-		* Unique: false
-		* Side: Free Peoples
-		* Culture: Shire
-		* Twilight Cost: 1
-		* Type: Ally
-		* Race: Hobbit
-		* Game Text: While you can spot your site 1, this ally has the game text of that site.
-		 * Fellowship: Exert this ally and spot your opponent's site 1 to replace it with your site 1.
-		*/
+		 * Set: 1
+		 * Name: Hobbit Farmer
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Shire
+		 * Twilight Cost: 1
+		 * Type: Ally
+		 * Race: Hobbit
+		 * Game Text: While you can spot your site 1, this ally has the game text of that site.
+		 *  Fellowship: Exert this ally and spot your opponent's site 1 to replace it with your site 1.
+		 * Strength: 2
+		 * Vitality: 2
+		 * Site Number: 1
+		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var farmer = scn.GetFreepsCard("farmer");
+		var card = scn.GetFreepsCard("farmer");
 
-		assertFalse(farmer.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, farmer.getBlueprint().getSide());
-		assertEquals(Culture.SHIRE, farmer.getBlueprint().getCulture());
-		assertEquals(CardType.ALLY, farmer.getBlueprint().getCardType());
-		assertEquals(Race.HOBBIT, farmer.getBlueprint().getRace());
-		assertEquals(1, farmer.getBlueprint().getTwilightCost());
-		assertEquals(2, farmer.getBlueprint().getStrength());
-		assertEquals(2, farmer.getBlueprint().getVitality());
-		assertEquals(1, farmer.getBlueprint().getAllyHomeSiteNumbers()[0]);
-		assertEquals(SitesBlock.FELLOWSHIP, farmer.getBlueprint().getAllyHomeSiteBlock());
-
+		assertEquals("Hobbit Farmer", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
+		assertEquals(Race.HOBBIT, card.getBlueprint().getRace());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 1)));
 	}
 
 	@Test

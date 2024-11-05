@@ -57,7 +57,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -169,33 +169,77 @@
 	# 	}
 	# }
 	
+	# 52_76: {
+	# 	cardInfo: {
+	# 		imagePath: errata/LOTR-EN02E076.2_card.jpg
+	# 		javaClass: false
+	# 		parent: 2_76
+	# 		parentPath: errata/pc
+	# 		version: 2
+	# 		collInfo: 2U76
+	# 		rarity: U
+	# 		setNum: "2"
+	# 		cardNum: 76
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Helpless
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Wraith
+	# 	twilight: 0
+	# 	type: Condition
+	# 	target: name(Sam)
+	# 	effects: [
+	# 		{
+	# 			type: toPlay
+	# 			requires: [
+	# 				{
+	# 					type: canSpot
+	# 					filter: nazgul
+	# 				}
+	# 			]
+	# 		}
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: cantUseSpecialAbilities
+	# 				filter: bearer
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Bearer's game text does not apply (except keywords).<br>Maneuver: Exert a non-enduring Nazgul to transfer this to a Ring-bound companion.<br>Response: If a burden is removed, spot or reveal a Nazgul from hand to transfer this to a Ring-bound companion.
+	# 	lore: “He heard Frodo's voice...crying out strange words.”
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	52_76: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E076.2_card.jpg
-			javaClass: false
-			parent: 2_76
-			parentPath: errata/pc
-			version: 2
+			imagePath: errata/LOTR-EN02E076.3_card.jpg
+			//parentId: 2_76
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 3
 			collInfo: 2U76
 			rarity: U
 			setNum: "2"
 			cardNum: 76
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Helpless
 		unique: false
 		side: Shadow
 		culture: Wraith
-		twilight: 0
+		twilight: 1
 		type: Condition
-		target: name(Sam)
-		requires: [
-			{
-				type: canSpot
-				filter: nazgul
-			}
-		]
+		keywords: Support Area
 		effects: [
 			{
 				type: modifier
@@ -204,9 +248,23 @@
 					filter: bearer
 				}
 			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: choose(Nazgul)
+				}
+				effect: {
+					type: Transfer
+					select: self
+					fromSupport: true
+					where: choose(companion,ring-bound)
+				}
+			}
 		]
-		gametext: Bearer's game text does not apply (except keywords).<br>Maneuver: Exert a non-enduring Nazgul to transfer this to a Ring-bound companion.<br>Response: If a burden is removed, spot or reveal a Nazgul from hand to transfer this to a Ring-bound companion.
-		lore: “He heard Frodo's voice...crying out strange words.”
+		gametext: Bearer's special abilities cannot be used.<br>Maneuver: Exert a Nazgul to transfer this from your support area to a Ring-bound companion.
+		lore: “He heard Frodo's voice, but it seemed to come from a great distance...crying out strange words.”
 		promotext: ""
 		alts: {
 			promos: {
@@ -215,4 +273,82 @@
 			}
 		}
 	}
+	
+	52_85: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN02E085.1_card.jpg
+			//parentId: 2_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 2R85
+			rarity: R
+			setNum: "2"
+			cardNum: 85
+			style: Standard
+		}
+		title: The Witch-king
+		subtitle: Lord of the Nazgul
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 8
+		type: Minion
+		race: Nazgul
+		strength: 14
+		vitality: 4
+		site: 3
+		keywords: Twilight
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantPlayCards
+					filter: name(Return to Its Master)
+				}
+			}
+			
+			{
+				type: modifier
+				modifier: {
+					type: cantcancelskirmish
+					requires: [
+						{
+							type: canSpot
+							filter: self,inSkirmish
+						}
+					]
+				}
+			}
+			
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: wound
+					select: choose(ringBearer)
+					times: 2
+				}
+			}
+	  ]
+		gametext: <b>Twilight</b>.<br>Return to Its Master cannot be played. Skirmishes involving The Witch-king cannot be canceled.<br>Each time The Witch-king wins a skirmish, you may exert him to wound the Ring-bearer twice.
+		lore: A great king and sorcerer was he of old, and now he wields a deadly fear.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 }

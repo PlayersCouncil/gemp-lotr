@@ -1,0 +1,479 @@
+{
+
+	8_85: {
+		cardInfo: {
+			imagePath: decipher/LOTR08085.jpg
+			//parentId: 8_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8U85
+			rarity: U
+			setNum: "8"
+			cardNum: 85
+			style: Standard
+		}
+		title: Charged Headlong
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: haveInitiative
+				side: free people
+			}
+			cost: {
+				type: discard
+				select: choose(culture(rohan),possession)
+			},
+			effect: [
+				{
+					type: playCardFromDiscard
+					select: choose(culture(rohan),possession)
+				}
+			]
+		}
+		gametext: If you have initiative, discard a [rohan] possession to play a [rohan] possession from your discard pile.
+		lore: "...and the black serpent foundered."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_86: {
+		cardInfo: {
+			imagePath: decipher/LOTR08086.jpg
+			//parentId: 8_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8U86
+			rarity: U
+			setNum: "8"
+			cardNum: 86
+			style: Standard
+		}
+		title: Doom Drove Them
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: exert
+						select: choose(culture(rohan),companion)
+					}
+					{
+						type: exert
+						select: choose(or(and(culture(gondor),man),and(culture(shire),companion)))
+					}
+				]
+				effect: {
+					type: AddCultureTokens
+					culture: rohan
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					culture: rohan
+					select: self
+				}
+				effect: {
+					type: exert
+					select: choose(minion,inSkirmishAgainst(companion))
+				}
+			}
+		]
+		gametext: <b>Fellowship:</b> Exert a [rohan] companion and either a [gondor] Man or a [shire] companion to add a [rohan] token here.<br><b>Skirmish:</b> Remove a [rohan] token here to exert a minion skirmishing a companion.
+		lore: "Sea-kings' city in the South-kingdom / foe- beleaguered, fire-encircled."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_87: {
+		cardInfo: {
+			imagePath: decipher/LOTR08087.jpg
+			//parentId: 8_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C87
+			rarity: C
+			setNum: "8"
+			cardNum: 87
+			style: Standard
+		}
+		title: Éomer
+		subtitle: Keeper of Oaths
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		keywords: Valiant
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: not
+					requires: {
+						type: phase
+						phase: play starting fellowship
+					}
+				}
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						count: 10
+						memorize: revealedCards
+					}
+					{
+						type: playCardFromDrawDeck
+						select: choose(memory(revealedCards),culture(rohan),possession)
+						showAll: false
+						shuffle: false
+					}
+					{
+						type: shuffleDeck
+					}
+				]
+			}
+		]
+		gametext: <b>Valiant</b>.<br>When you play Éomer (except in your starting fellowship), you may reveal the top 10 cards of your draw deck. You may play each [rohan] possession revealed. Shuffle your draw deck.
+		lore: "'Need brooks no delay, yet late is better than never....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_88: {
+		cardInfo: {
+			imagePath: decipher/LOTR08088.jpg
+			//parentId: 8_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8R88
+			rarity: R
+			setNum: "8"
+			cardNum: 88
+			style: Standard
+		}
+		title: Éowyn's Shield
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		itemclass: Shield
+		target: culture(rohan),man
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: bearer,name(Éowyn)
+				}
+				cost: [
+					{
+						type: addThreats
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: discard
+					select: choose(hand weapon,attachedTo(minion,inSkirmishAgainst(name(Éowyn))))
+				}
+			}
+		]
+		gametext: Bearer must be a [rohan] Man.<br>The minion archery total is -1.<br><b>Skirmish:</b> If bearer is Éowyn, add a threat and discard Éowyn's Shield to discard a hand weapon borne by a minion she is skirmishing.
+		lore: "'...spear shall be shaken, shield shall be splintered....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_89: {
+		cardInfo: {
+			imagePath: decipher/LOTR08089.jpg
+			//parentId: 8_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C89
+			rarity: C
+			setNum: "8"
+			cardNum: 89
+			style: Standard
+		}
+		title: Fury of the Northmen
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: exert
+					select: choose(minion,inSkirmishAgainst(mounted,culture(rohan),man))
+				}
+			]
+		}
+		gametext: Exert a minion skirmishing a mounted [rohan] Man.
+		lore: "'Death! Ride, ride to ruin and the world's ending!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_90: {
+		cardInfo: {
+			imagePath: decipher/LOTR08090.jpg
+			//parentId: 8_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C90
+			rarity: C
+			setNum: "8"
+			cardNum: 90
+			style: Standard
+		}
+		title: No Living Man
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(name(Théoden))
+			},
+			effect: [
+				{
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: signet(Théoden)
+					}
+					effect: {
+						type: exert
+						select: choose(minion)
+						count: 0-1
+					}
+				}
+			]
+		}
+		gametext: Exert Théoden to exert a minion for each Théoden signet you spot.
+		lore: "'Begone, foul dwimmerlaik, lord of carrion!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_91: {
+		cardInfo: {
+			imagePath: decipher/LOTR08091.jpg
+			//parentId: 8_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8R91
+			rarity: R
+			setNum: "8"
+			cardNum: 91
+			style: Standard
+		}
+		title: Rohirrim Army
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 5
+		type: Companion
+		race: Man
+		strength: 9
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(rohan),companion
+					count: 3
+				}
+			}
+			{
+				type: playedInOtherPhase
+				phase: regroup
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: choose(minion)
+				}
+			}
+		]
+		gametext: To play, spot 3 [rohan] companions.<br>You may play Rohirrim Army any time you could play a regroup event.<br>When you play Rohirrim Army, you may discard a minion.
+		lore: "...like a storm upon the plain and a thunder in the mountains."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_92: {
+		cardInfo: {
+			imagePath: decipher/LOTR08092.jpg
+			//parentId: 8_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8R92
+			rarity: R
+			setNum: "8"
+			cardNum: 92
+			style: Standard
+		}
+		title: Théoden
+		subtitle: Tall and Proud
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		keywords: Valiant
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+				amount: -1
+			}
+			{
+				type: killedTrigger
+				optional: true
+				effect: {
+					type: choice
+					texts: [
+						Play a {rohan} companion from discard pile
+						Play a {rohan} companion from draw deck
+					]
+					effects: [
+						{
+							type: playCardFromDiscard
+							select: choose(culture(rohan),companion)
+						}
+						{
+							type: playCardFromDrawDeck
+							select: choose(culture(rohan),companion)
+							showAll: true
+							shuffle: true
+						}
+					]
+				}
+			}
+		]
+		gametext: <b>Valiant</b>.<br>While you can spot a [rohan] Man, Théoden's twilight cost is -1.<br>When Théoden is killed, you may play a [rohan] companion from your discard pile or draw deck.
+		lore: "'Up Eorlingas! Fear no darkness!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

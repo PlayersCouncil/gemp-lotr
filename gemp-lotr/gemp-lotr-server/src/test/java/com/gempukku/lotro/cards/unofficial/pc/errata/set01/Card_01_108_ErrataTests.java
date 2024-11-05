@@ -51,7 +51,7 @@ public class Card_01_108_ErrataTests
         assertEquals(Culture.GONDOR, nostranger.getBlueprint().getCulture());
         assertEquals(CardType.CONDITION, nostranger.getBlueprint().getCardType());
         assertEquals(0, nostranger.getBlueprint().getTwilightCost());
-        assertTrue(scn.HasKeyword(nostranger, Keyword.STEALTH));
+        assertTrue(scn.hasKeyword(nostranger, Keyword.STEALTH));
     }
 
     @Test

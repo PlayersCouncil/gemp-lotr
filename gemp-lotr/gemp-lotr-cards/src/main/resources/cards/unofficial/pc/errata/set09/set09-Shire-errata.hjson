@@ -24,8 +24,8 @@
 		strength: 3
 		vitality: 4
 		resistance: 9
+		canStartWithRing: true
 		keyword: [
-			can start with ring
 			ring-bound
 		]
 		effects: [
@@ -66,8 +66,8 @@
 					type: addBurdens
 				}
 				effect: {
-					type: play
-					filter: choose(culture(shire),tale)
+					type: PlayCardFromHand
+					select: choose(culture(shire),tale)
 				}
 			}
 		]

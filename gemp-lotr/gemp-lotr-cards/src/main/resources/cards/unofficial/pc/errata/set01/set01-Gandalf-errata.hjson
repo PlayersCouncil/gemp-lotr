@@ -21,7 +21,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Ally
-		allyHome: fellowship,1
+		allyHome: 1F
 		race: Man
 		strength: 1
 		vitality: 2
@@ -30,11 +30,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: putCardsFromDiscardIntoHand
-				filter: choose(spell)
+				select: choose(spell)
 			}
 		}
 		gametext: <b>Fellowship:</b> Exert Barliman Butterbur to take a spell into hand from your discard pile.
@@ -69,31 +69,36 @@
 		culture: Gandalf
 		twilight: 1
 		type: Ally
-		allyHome: fellowship,3
+		allyHome: 3F
 		race: Man
 		strength: 2
 		vitality: 4
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
-		effects: {
-			type: activated
-			phase: fellowship
-			cost: [
-				{
-					type: exert
-					filter: self
-				}
-				{
-					type: discardFromHand
-					forced: false
-				}
-			]
-			effect: {
-				type: drawCards
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+		    }
+            {
+                type: activated
+                phase: fellowship
+                cost: [
+                    {
+                        type: exert
+                        select: self
+                    }
+                    {
+                        type: discardFromHand
+                        forced: false
+                    }
+                ]
+                effect: {
+                    type: drawCards
+                }
+            }
+        ]
 		gametext: To play, spot Gandalf.<br><b>Fellowship:</b> Exert Ottar and discard a card from hand to draw a card.
 		lore: The Men of Laketown come from the North, where they trade with the Dwarves of the Lonely Mountain.
 		promotext: ""
@@ -125,13 +130,14 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(or(wizard,and(culture(gandalf),ally)))
-				nocheck: true
+				select: choose(or(wizard,and(culture(gandalf),ally)))
+                showAll: true
+                shuffle: true
 			}
 		}
 		gametext: Play a Wizard or [gandalf] ally from your draw deck.

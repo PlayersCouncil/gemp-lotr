@@ -22,7 +22,7 @@ public class ModifyArcheryTotal implements ModifierSourceProducer {
         return (actionContext) -> {
             final Evaluator evaluator = valueSource.getEvaluator(actionContext);
             return new ArcheryTotalModifier(actionContext.getSource(), side,
-                    new RequirementCondition(requirements, actionContext), evaluator);
+                    RequirementCondition.createCondition(requirements, actionContext), evaluator);
         };
     }
 }

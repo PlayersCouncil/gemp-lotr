@@ -19,13 +19,13 @@
 		culture: Orc
 		twilight: 2
 		type: Event
-		keyword: Archery
+		timeword: archery
 		effects: {
 			type: event
 			effect: [
 				{
 					type: addKeyword
-					filter: choose(culture(orc),orc)
+					select: choose(culture(orc),orc)
 					keyword: archer
 					until: start(regroup)
 					count: 2
@@ -74,11 +74,14 @@
 		keyword: [
 			Support Area
 		]
-		requires: {
-			type: CanSpot
-			filter: culture(Orc),minion
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: CanSpot
+                    filter: culture(Orc),minion
+                }
+		    }
 			{
 				type: trigger
 				trigger: {
@@ -91,7 +94,7 @@
 				optional: true
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: [
 					{
@@ -100,17 +103,14 @@
 						player: freeps
 					}
 					{
-						type: LookAtDrawDeck
-						deck: freeps
-					}
-					{
 						type: DiscardCardsFromDrawDeck
-						filter: choose(side(freeps))
+						select: choose(side(freeps))
 						player: you
 						deck: freeps
 						count: 2
+                        showAll: true
+                        shuffle: true
 					}
-
 				]
 			}
 		]

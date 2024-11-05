@@ -1,0 +1,508 @@
+{
+
+	12_16: {
+		cardInfo: {
+			imagePath: decipher/LOTR12016.jpg
+			//parentId: 12_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C16
+			rarity: C
+			setNum: "12"
+			cardNum: 16
+			style: Standard
+		}
+		title: Attunement
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: elf
+			},
+			effect: [
+				{
+					type: memorizeNumber
+					memory: cardCount
+					amount: {
+						type: forEachTopCardOfDeckUntilMatching
+						filter: side(shadow)
+					}
+				}
+				{
+					type: modifyStrength
+					select: choose(elf)
+					amount: {
+						type: fromMemory
+						memory: cardCount
+						multiplier: 2
+					}
+				}
+				{
+					type: memorizeTopOfDeck
+					count: memory(cardCount)
+					memory: topCards
+				}
+				{
+					type: putCardsFromDeckOnBottomOfDeck
+					select: memory(topCards)
+					reveal: true
+				}
+			]
+		}
+		gametext: Spot an Elf to reveal cards from the top of your draw deck until you reveal a Shadow card. Make an Elf strength +2 for each card revealed. Place the revealed cards in any order on the bottom of your draw deck.
+		lore: "With deep focus and heightened senses, Elven archers are able to make seemingly impossible shots."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_17: {
+		cardInfo: {
+			imagePath: decipher/LOTR12017.jpg
+			//parentId: 12_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12R17
+			rarity: R
+			setNum: "12"
+			cardNum: 17
+			style: Standard
+		}
+		title: Elrond
+		subtitle: Witness to History
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 4
+		type: Companion
+		race: Elf
+		strength: 8
+		vitality: 4
+		resistance: 7
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,inSkirmishAgainst(minion)
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: putCardsFromDiscardOnTopOfDeck
+					select: choose(culture(elven))
+				}
+			}
+		]
+		gametext: To play, spot an Elf.<br><b>Skirmish:</b> If Elrond is skirmishing a minion, exert him to place an [elven] card from your discard pile on top of your draw deck.
+		lore: "'I was there the day the strength of Men failed.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_18: {
+		cardInfo: {
+			imagePath: decipher/LOTR12018.jpg
+			//parentId: 12_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12R18
+			rarity: R
+			setNum: "12"
+			cardNum: 18
+			style: Standard
+		}
+		title: Hadafang
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: or(title(Arwen),title(Elrond))
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: discard
+					select: choose(condition)
+				}
+			}
+		]
+		gametext: Bearer must be Arwen or Elrond.<br>Each time bearer wins a skirmish, you may exert him or her to discard a condition from play.
+		lore: "This blade is called Hadafang, a noble defense against the enemy throng for a noble lady."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_19: {
+		cardInfo: {
+			imagePath: decipher/LOTR12019.jpg
+			//parentId: 12_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12R19
+			rarity: R
+			setNum: "12"
+			cardNum: 19
+			style: Standard
+		}
+		title: Long-knives of Legolas
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		target: title(Legolas)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: or(orc,urukHai),inSkirmishAgainst(name(Legolas))
+					amount: -2
+				}
+			}
+		]
+		gametext: Bearer must be Legolas.<br>Each Orc or Uruk-hai skirmishing Legolas is strength -2.
+		lore: "Sharp, bone-handled knives defend the Elves of Mirkwood at close quarters."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_20: {
+		cardInfo: {
+			imagePath: decipher/LOTR12020.jpg
+			//parentId: 12_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C20
+			rarity: C
+			setNum: "12"
+			cardNum: 20
+			style: Standard
+		}
+		title: Orophin
+		subtitle: Brother of Haldir
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: [
+						{
+							type: location
+							filter: forest
+						}
+						{
+							type: canSpot
+							filter: another,elf
+						}
+					]
+					filter: self
+					keyword: archer
+				}
+			}
+		]
+		gametext: While Orophin is at a forest site and you can spot another Elf, Orophin is an <b>archer</b>.
+		lore: "...wolves were howling on the wood's borders: but on the land of Lórien no shadow lay."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_21: {
+		cardInfo: {
+			imagePath: decipher/LOTR12021.jpg
+			//parentId: 12_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U21
+			rarity: U
+			setNum: "12"
+			cardNum: 21
+			style: Standard
+		}
+		title: Refuge
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(companion)
+				}
+				effect: {
+					type: heal
+					select: choose(companion)
+				}
+			}
+		]
+		gametext: To play, spot an Elf.<br><b>Fellowship:</b> Discard a companion from hand to heal a companion.
+		lore: "'Now you shall rest, and we will not speak of your further road for a while.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_22: {
+		cardInfo: {
+			imagePath: decipher/LOTR12022.jpg
+			//parentId: 12_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12C22
+			rarity: C
+			setNum: "12"
+			cardNum: 22
+			style: Standard
+		}
+		title: Rúmil
+		subtitle: Brother of Haldir
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						memorize: revealedCard
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: revealedCard
+							filter: culture(elven)
+						}
+						true: {
+							type: addKeyword
+							select: self
+							keyword: archer
+							until: regroup
+						}
+					}
+				]
+			}
+		]
+		gametext: <b>Maneuver:</b> Reveal the top card of your draw deck. If it is an [elven] card, Rúmil is an <b>archer</b> until the regroup phase.
+		lore: "...the Elves feared and distrusted the world outside...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_23: {
+		cardInfo: {
+			imagePath: decipher/LOTR12023.jpg
+			//parentId: 12_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U23
+			rarity: U
+			setNum: "12"
+			cardNum: 23
+			style: Standard
+		}
+		title: Seclusion
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 3
+		type: Event
+		timewords: Maneuver
+		keywords: Toil 2
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: elf,companion
+			}
+			effect: [
+				{
+					type: discard
+					select: choose(condition)
+				}
+			]
+		}
+		gametext: <b>Toil 2</b>. <helper>(For each [elven] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot an Elf companion to discard a condition from play.
+		lore: "'We allow no strangers to spy out the secrets of the Naith. Few indeed are permitted even to set foot there.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_24: {
+		cardInfo: {
+			imagePath: decipher/LOTR12024.jpg
+			//parentId: 12_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U24
+			rarity: U
+			setNum: "12"
+			cardNum: 24
+			style: Standard
+		}
+		title: Taking the High Ground
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Condition
+		keywords: [
+			Toil 1
+			Support Area
+		]
+		effects: [
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(culture(elven),character)
+				}
+				effect: {
+					type: modifyArcheryTotal
+					side: free people
+					amount: 1
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: underground
+				}
+				effect: {
+					type: returnToHand
+					select: choose(elf)
+				}
+			}
+		]
+		gametext: <b>Toil 1</b>. <helper>(For each [elven] character you exert when playing this, its twilight cost is -1.)</helper><br><b>Archery:</b> Discard an [elven] character from hand to make the fellowship archery total +1.<br>Each time the fellowship moves from an underground site, return your Elf to your hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

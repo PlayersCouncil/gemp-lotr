@@ -52,7 +52,7 @@ public class Card_02_091_ErrataTests
 		assertEquals(Side.SHADOW, spies.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, spies.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, spies.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(spies, Keyword.RESPONSE));
+        assertTrue(scn.hasTimeword(spies, Timeword.RESPONSE));
 		assertEquals(0, spies.getBlueprint().getTwilightCost());
 	}
 

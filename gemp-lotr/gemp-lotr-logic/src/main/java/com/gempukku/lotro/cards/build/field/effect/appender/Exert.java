@@ -23,18 +23,18 @@ import java.util.List;
 public class Exert implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "count", "times", "filter", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "player", "count", "times", "select", "memorize");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final ValueSource timesSource = ValueResolver.resolveEvaluator(effectObject.get("times"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter,
+                CardResolver.resolveCards(select,
                         (actionContext) -> Filters.canExert(actionContext.getSource(), timesSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null)),
                         valueSource, memory, player, "Choose cards to exert", environment));
         result.addEffectAppender(

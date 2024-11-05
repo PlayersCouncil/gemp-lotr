@@ -33,7 +33,7 @@ public class TransferItemRule {
                     public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
                         if (GameUtils.isFP(game, playerId) && game.getGameState().getCurrentPhase() == Phase.FELLOWSHIP) {
                             List<Action> result = new LinkedList<>();
-                            for (PhysicalCard card : Filters.filter(game.getGameState().getInPlay(), game, getTransferableCardsFilter(playerId))) {
+                            for (PhysicalCard card : Filters.filter(game, game.getGameState().getInPlay(), getTransferableCardsFilter(playerId))) {
                                 if (game.getModifiersQuerying().canBeTransferred(game, card)) {
                                     final Filter validTargetFilter = RuleUtils.getFullValidTargetFilter(card.getOwner(), game, card);
                                     if (Filters.countActive(game, validTargetFilter) > 0) {

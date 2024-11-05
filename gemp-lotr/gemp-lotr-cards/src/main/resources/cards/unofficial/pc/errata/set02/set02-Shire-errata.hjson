@@ -20,7 +20,7 @@
 		culture: shire
 		twilight: 1
 		type: ally
-		allyHome: fellowship,1
+		allyHome: 1F
 		race: hobbit
 		strength: 1
 		vitality: 2
@@ -30,7 +30,7 @@
 			cost: [
 				{
 					type: exert
-					filter: choose(hobbit,companion,not(ring bearer),infierceskirmish)
+					select: choose(hobbit,companion,not(ring bearer),infierceskirmish)
 					times: 2
 					memorize: exertedHobbit
 				}
@@ -50,6 +50,59 @@
 			}
 		}
 	}
+	
+	52_104: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN02E104.1_card.jpg
+			//parentId: 2_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 2C104
+			rarity: C
+			setNum: "2"
+			cardNum: 104
+			style: Standard
+		}
+		title: Merry
+		subtitle: Horticulturalist
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: PutCardsFromDeckIntoHand
+				select: choose(culture(shire),ally)
+				reveal: true
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert Merry to take a [shire] ally into hand from your draw deck (limit once per turn).
+		lore: "'Ow... I think I've broken something.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
 	
 	52_107: {
 		cardInfo: {
@@ -71,28 +124,33 @@
 		twilight: 1
 		type: condition
 		keyword: support area
-		requires: {
-			type: CanSpot
-			filter: Hobbit
-			count: 2
-		}
-		effects: {
-			type: activated
-			phase: fellowship
-			cost: {
-				type: discard
-				filter: self
-			}
-			effect: {
-				type: addModifier
-				modifier: {
-					type: ModifyStrength
-					amount: -4
-					filter: Nazgul
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: CanSpot
+					filter: Hobbit
+					count: 2
 				}
-				until: start(regroup)
 			}
-		}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: ModifyStrength
+						amount: -4
+						filter: Nazgul
+					}
+					until: start(regroup)
+				}
+			}
+		]
 		gametext: To play, spot 2 Hobbits.\Fellowship: Discard this condition to make each Nazgûl strength -4 until the regroup phase.
 		lore: "'...our shapes cast shadows in their minds, which only the noon sun destroys....'"
 		promotext: ""
@@ -137,7 +195,7 @@
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: {
@@ -148,12 +206,12 @@
 				]
 				effects: [
 					{ 
-						type: Conditional
-						requires: {
+						type: If
+						check: {
 							type: CanSpot
 							filter: memory(bearer),InSkirmishAgainst(Nazgul)
 						}
-						effect: {
+						true: {
 							type: addmodifier
 							modifier: {
 								type: modifyStrength
@@ -170,6 +228,67 @@
 		}
 		gametext: <b>Tale.</b>  Bearer must be the Ring-bearer.<br><b>Skirmish:</b> Discard this condition to make the Ring-bearer strength +4 if skirmishing a Nazgul or to take off The One Ring.
 		lore: "With a last effort Frodo... slipped the Ring from his finger and closed his right hand tight upon it."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	52_110: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN02E110.1_card.jpg
+			//parentId: 2_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 2C110
+			rarity: C
+			setNum: "2"
+			cardNum: 110
+			style: Standard
+		}
+		title: Pippin
+		subtitle: Mr. Took
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: Played
+				filter: companion
+				memorize: playedCompanion
+			}
+			effect: {
+				type: PlayCardFromDiscard
+				select: choose(item)
+				on: memory(playedCompanion)
+				discount: {
+					type: Conditional
+					requires: {
+						type: MemoryMatches
+						memory: playedCompanion
+						filter: or(name(Aragorn),name(Gandalf))
+					}
+					true: -2
+					false: 0
+				}
+			}
+		}
+		gametext: Each time you play a companion, you may play an item on them from your discard pile (at twilight cost -2 if that companion is Gandalf or Aragorn).
+		lore: Pippin was evidently much enjoying the attention he was getting, and had become quire forgetful of their danger.
 		promotext: ""
 		alts: {
 			promos: {

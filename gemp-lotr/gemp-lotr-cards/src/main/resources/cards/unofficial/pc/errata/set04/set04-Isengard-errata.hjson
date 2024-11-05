@@ -34,13 +34,13 @@
 				effect: [
 					{
 						type: ChooseActiveCards
-						filter: choose(fortification)
+						select: choose(fortification)
 						memorize: targetFort
 						text: Select a fortification to assault
 					}
 					{
 						type: Repeat
-						amount: {
+						times: {
 							type: Sum
 							source: [
 								1
@@ -53,12 +53,12 @@
 						effect: {
 							type: Wound
 							player: freeps
-							filter: choose(culture(isengard),minion)
+							select: choose(culture(isengard),minion)
 						}
 					}
 					{
 						type: Discard
-						filter: memory(targetFort)
+						select: memory(targetFort)
 					}
 				]
 			}
@@ -129,12 +129,12 @@
 			phase: shadow
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
-				type: play
-				filter: choose(uruk-hai)
-				cost: {
+				type: PlayCardFromHand
+				select: choose(uruk-hai)
+				discount: {
 					type: forEachYouCanSpot
 					filter: not(self),uruk-hai
 					limit: 2

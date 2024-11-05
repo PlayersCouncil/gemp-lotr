@@ -26,21 +26,21 @@ public class ChooseYesOrNo implements EffectAppenderProducer {
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
         final String yesAnswer = FieldUtils.getString(effectObject.get("yes"), "yes", "yes");
         final String noAnswer = FieldUtils.getString(effectObject.get("no"), "no", "no");
-        PlayerSource playerSource = PlayerResolver.resolvePlayer(FieldUtils.getString(effectObject.get("player"), "player", "you"), environment);
+        PlayerSource playerSource = PlayerResolver.resolvePlayer(FieldUtils.getString(effectObject.get("player"), "player", "you"));
 
         return new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 return new PlayoutDecisionEffect(playerSource.getPlayer(actionContext),
-                        new YesNoDecision(GameUtils.SubstituteText(text, actionContext)) {
+                        new YesNoDecision(GameUtils.substituteText(text, actionContext)) {
                             @Override
                             protected void yes() {
-                                actionContext.setValueToMemory(memorize, GameUtils.SubstituteText(yesAnswer, actionContext));
+                                actionContext.setValueToMemory(memorize, GameUtils.substituteText(yesAnswer, actionContext));
                             }
 
                             @Override
                             protected void no() {
-                                actionContext.setValueToMemory(memorize, GameUtils.SubstituteText(noAnswer, actionContext));
+                                actionContext.setValueToMemory(memorize, GameUtils.substituteText(noAnswer, actionContext));
                             }
                         });
             }

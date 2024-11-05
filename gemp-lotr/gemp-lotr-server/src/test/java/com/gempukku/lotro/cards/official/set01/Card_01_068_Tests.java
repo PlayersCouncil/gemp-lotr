@@ -34,28 +34,30 @@ public class Card_01_068_Tests
 	public void TheWhiteArrowsofLorienStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: The White Arrows of Lorien
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Elven
-		* Twilight Cost: 1
-		* Type: condition
-		* Subtype: Support Area
-		* Game Text: <b>Tale.</b> Bearer must be an Elf companion. 
-		* 	Archery: If bearer is an archer, exert bearer to make an opponent discard 2 cards at random from hand.
-		*/
+		 * Set: 1
+		 * Name: The White Arrows of Lórien
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support Area
+		 * Game Text: <b>Tale.</b> Bearer must be an Elf companion.
+		 * 	Archery: If bearer is an archer, exert bearer to make an opponent discard 2 cards at random from hand.
+		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var arrows = scn.GetFreepsCard("arrows");
+		var card = scn.GetFreepsCard("arrows");
 
-		assertFalse(arrows.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, arrows.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, arrows.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, arrows.getBlueprint().getCardType());
-		assertEquals(1, arrows.getBlueprint().getTwilightCost());
+		assertEquals("The White Arrows of Lórien", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.TALE));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test

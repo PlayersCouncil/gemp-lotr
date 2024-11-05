@@ -18,6 +18,7 @@ import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -152,7 +153,7 @@ public class LotroGameMediator {
 
                 if (card.getZone() == Zone.HAND)
                     sb.append("<b>Card is in hand - stats are only provisional</b><br><br>");
-                else if (Filters.filterActive(_lotroGame, card).size() == 0)
+                else if (!Filters.hasActive(_lotroGame, card))
                     sb.append("<b>Card is inactive - current stats may be inaccurate</b><br><br>");
 
                 sb.append("<b>Affecting card:</b>");
@@ -207,7 +208,7 @@ public class LotroGameMediator {
                 sb.append("<br><br><b>Effective stats:</b>");
                 try {
                     PhysicalCard target = card.getAttachedTo();
-                    int twilightCost = _lotroGame.getModifiersQuerying().getTwilightCost(_lotroGame, card, target, 0, false);
+                    int twilightCost = _lotroGame.getModifiersQuerying().getTwilightCostToPlay(_lotroGame, card, target, 0, false);
                     sb.append("<br><b>Twilight cost:</b> ")
                             .append(twilightCost);
                 } catch (UnsupportedOperationException ignored) {

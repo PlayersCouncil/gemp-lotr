@@ -1,0 +1,613 @@
+{
+
+	6_48: {
+		cardInfo: {
+			imagePath: decipher/LOTR06048.jpg
+			//parentId: 6_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C48
+			rarity: C
+			setNum: "6"
+			cardNum: 48
+			style: Standard
+		}
+		title: Anborn
+		subtitle: Skilled Huntsman
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: [
+			Ring-bound
+			Ranger
+		]
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: modifySiteNumber
+					select: choose(minion)
+					amount: 3
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Ring-bound</b>. <b>Ranger</b>.<br>Each time Anborn wins a skirmish, you may make a minion's site number +3 until the regroup phase.
+		lore: "'Perhaps under the shadow of the Unnamed some of the beasts of Mirkwood are wandering hither to our woods.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_49: {
+		cardInfo: {
+			imagePath: decipher/LOTR06049.jpg
+			//parentId: 6_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R49
+			rarity: R
+			setNum: "6"
+			cardNum: 49
+			style: Standard
+		}
+		title: Ancient Roads
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					requires: {
+						type: canSpot
+						filter: ranger
+						count: 3
+					}
+					filter: minion,inSkirmishAgainst(ranger)
+					amount: 2
+				}
+			}
+		]
+		gametext: Plays to your support area.<br>While you can spot 3 rangers, the site number of each minion skirmishing a ranger is +2.
+		lore: "'...they go ever more heedlessly, we learn, thinking that the power of their new master is great enough....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_50: {
+		cardInfo: {
+			imagePath: decipher/LOTR06050.jpg
+			//parentId: 6_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R50
+			rarity: R
+			setNum: "6"
+			cardNum: 50
+			style: Standard
+		}
+		title: Aragorn
+		subtitle: Defender of Free Peoples
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		signet: Theoden
+		resistance: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				text: Remove an {elven} token to make minion skirmishing Aragorin strength -3
+				cost: {
+					type: RemoveCultureTokens
+					culture: elven
+					select: choose(any)
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(self))
+					amount: -3
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				text: Remove a {dwarven} token to heal a Dwarf
+				cost: {
+					type: RemoveCultureTokens
+					culture: dwarven
+					select: choose(any)
+				}
+				effect: {
+					type: heal
+					select: choose(dwarf)
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: self,mounted
+				}
+				cost: {
+					type: RemoveCultureTokens
+					culture: rohan
+					select: choose(any)
+				}
+				effect: {
+					type: wound
+					select: choose(minion)
+					times: 2
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Remove an [elven] token to make a minion skirmishing Aragorn strength -3.<br><b>Skirmish:</b> Remove a [dwarven] token to heal a Dwarf.<br><b>Regroup:</b> If Aragorn is mounted, remove a [rohan] token to wound a minion twice.
+		lore: "'...this is the hour when we draw swords together.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_51: {
+		cardInfo: {
+			imagePath: decipher/LOTR06051.jpg
+			//parentId: 6_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U51
+			rarity: U
+			setNum: "6"
+			cardNum: 51
+			style: Standard
+		}
+		title: Banner of Westernesse
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		itemclass: Hand weapon
+		target: culture(gondor),companion
+		effects: [
+			{
+				type: trigger
+				text: Heal another {gondor} companion
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: heal
+					select: choose(not(bearer),culture(gondor),companion)
+				}
+			}
+			{
+				type: Response
+				text: Discard to liberate a site
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: liberateSite
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] companion.<br>Each time bearer wins a skirmish, you may heal another [gondor] companion.<br><b>Response:</b> If bearer wins a skirmish, discard this possession to liberate a site.
+		lore: "'What brought they from the foundered land / Over the flowing sea?... / and one white tree.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_52: {
+		cardInfo: {
+			imagePath: decipher/LOTR06052.jpg
+			//parentId: 6_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C52
+			rarity: C
+			setNum: "6"
+			cardNum: 52
+			style: Standard
+		}
+		title: Garrison of Osgiliath
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		keywords: [
+			Fortification
+			Support Area
+		]
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: culture(gondor),man
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: gondor
+					select: self
+					count: 2
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Remove a {gondor} token from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							select: self
+							culture: gondor
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(gondor),man)
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Fortification</b>. Plays to your support area.<br>When you play this condition, you may spot a [gondor] Man to place 2 [gondor] tokens here.<br><b>Skirmish:</b> Discard this condition or remove a [gondor] token from here to make a [gondor] Man strength +1.
+		lore: "'So ever do we watch the shores nigh Osgiliath....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_53: {
+		cardInfo: {
+			imagePath: decipher/LOTR06053.jpg
+			//parentId: 6_53
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C53
+			rarity: C
+			setNum: "6"
+			cardNum: 53
+			style: Standard
+		}
+		title: Mortal Men
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(gondor),man)
+					amount: 2
+				}
+				{
+					type: If
+					check: {
+						type: canSpotCultureTokens
+						culture: rohan
+					}
+					true: {
+						type: exert
+						select: choose(minion)
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make a [gondor] Man strength +2 (and exert a minion if you spot a [rohan] token).
+		lore: "'I fear neither death nor pain.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_54: {
+		cardInfo: {
+			imagePath: decipher/LOTR06054.jpg
+			//parentId: 6_54
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U54
+			rarity: U
+			setNum: "6"
+			cardNum: 54
+			style: Standard
+		}
+		title: Perilous Ventures
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			requiresRanger: true
+			cost: {
+				type: exert
+				select: choose(ranger)
+				count: 2
+			},
+			effect: [
+				{
+					type: choice
+					texts: [
+						Discard a minion
+						Discard 2 {wraith} minions
+					]
+					effects: [
+						{
+							type: discard
+							select: choose(minion)
+						}
+						{
+							type: discard
+							select: choose(culture(wraith),minion)
+							count: 2
+						}
+					]
+				}
+			]
+		}
+		gametext: <b>Regroup:</b> Exert 2 rangers to discard a minion (or 2 [wraith] minions).
+		lore: "'But still we will not sit idle and let Him do all as He would....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_55: {
+		cardInfo: {
+			imagePath: decipher/LOTR06055.jpg
+			//parentId: 6_55
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R55
+			rarity: R
+			setNum: "6"
+			cardNum: 55
+			style: Standard
+		}
+		title: Ring of Barahir
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Artifact
+		itemclass: Ring
+		target: title(Aragorn)
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfTurn
+				}
+				effect: {
+					type: heal
+					select: choose(companion,cultureWithTokens)
+				}
+			}
+		]
+		gametext: Bearer must be Aragorn.<br>At the start of each of your turns, you may spot a culture token to heal a companion of that culture.
+		lore: "'This is a thing of worth beyond your reckoning. For its ancientry alone. It has no power, save the esteem in which those hold it who love my house.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_56: {
+		cardInfo: {
+			imagePath: decipher/LOTR06056.jpg
+			//parentId: 6_56
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C56
+			rarity: C
+			setNum: "6"
+			cardNum: 56
+			style: Standard
+		}
+		title: Trust
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(gondor),man)
+					amount: 2
+				}
+				{
+					type: If
+					check: {
+						type: canSpotCultureTokens
+						culture: elven
+					}
+					true: {
+						type: heal
+						select: choose(companion)
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make a [gondor] Man strength +2 (and heal a companion if you spot an [elven] token).
+		lore: "'You cannot falter now.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_121: {
+		cardInfo: {
+			imagePath: decipher/LOTR06121.jpg
+			//parentId: 6_121
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6P121
+			rarity: P
+			setNum: "6"
+			cardNum: 121
+			style: Standard
+		}
+		title: Faramir
+		subtitle: Ithilien Ranger
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		keywords: [
+			Ring-bound
+			Ranger
+		]
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: phase
+					phase: play starting fellowship
+				}
+				amount: -1
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: PlayCardFromHand
+					select: choose(ranger)
+				}
+				effect: {
+					type: heal
+					select: choose(ringBound,companion)
+				}
+			}
+		]
+		gametext: <b>Ring-bound</b>. <b>Ranger</b>.<br>If Faramir is in your starting fellowship, his twilight cost is -1.<br><b>Fellowship:</b> Play a ranger to heal a Ring-bound companion.
+		lore: "'Not while Faramir is Captain... his life is charmed, or fate spares him for some other end.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

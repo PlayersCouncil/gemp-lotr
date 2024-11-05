@@ -22,11 +22,12 @@ public class ChooseANumber implements EffectAppenderProducer {
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String displayText = FieldUtils.getString(effectObject.get("text"), "text", "Choose a number");
         final ValueSource fromSource = ValueResolver.resolveEvaluator(effectObject.get("from"), 0, environment);
-        final ValueSource toSource = ValueResolver.resolveEvaluator(effectObject.get("to"), 1, environment);
+        Object to = effectObject.get("to");
+        final ValueSource toSource = to != null ? ValueResolver.resolveEvaluator(to, environment) : null;
 
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         if (memorize == null)
             throw new InvalidCardDefinitionException("ChooseANumber requires a field to memorize the value");
@@ -34,16 +35,16 @@ public class ChooseANumber implements EffectAppenderProducer {
         return new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                int min = fromSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                Integer max = toSource != null ? toSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null) : null;
                 return new PlayoutDecisionEffect(playerSource.getPlayer(actionContext),
-                    new IntegerAwaitingDecision(1, GameUtils.SubstituteText(displayText, actionContext),
-                        fromSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null),
-                        toSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null))
-                {
-                    @Override
-                    public void decisionMade(String result) throws DecisionResultInvalidException {
-                        actionContext.setValueToMemory(memorize, String.valueOf(getValidatedResult(result)));
-                    }
-                });
+                        new IntegerAwaitingDecision(1, GameUtils.substituteText(displayText, actionContext),
+                                min, max) {
+                            @Override
+                            public void decisionMade(String result) throws DecisionResultInvalidException {
+                                actionContext.setValueToMemory(memorize, String.valueOf(getValidatedResult(result)));
+                            }
+                        });
             }
         };
     }

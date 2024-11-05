@@ -1,0 +1,149 @@
+{
+
+	9_39: {
+		cardInfo: {
+			imagePath: decipher/LOTR09039.jpg
+			//parentId: 9_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R+39
+			rarity: R+
+			setNum: "9"
+			cardNum: 39
+			style: Standard
+		}
+		title: Library of Orthanc
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Artifact
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: PlayCardFromHand
+					select: choose(culture(isengard),minion)
+				}
+				effect: {
+					type: stackTopCardsOfDrawDeck
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: removeTwilight
+					}
+					{
+						type: discardStackedCards
+						select: choose(side(free people))
+						on: self
+					}
+				]
+				effect: {
+					type: modifyStrength
+					select: choose(culture(isengard),minion)
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: removeTwilight
+				}
+				effect: {
+					type: putStackedCardsIntoHand
+					select: choose(culture(isengard))
+					on: self
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> Play an [isengard] minion to stack the top card of your draw deck on this card.<br><b>Skirmish:</b> Remove (1) and discard a Free Peoples card stacked here to make an [isengard] minion strength +1.<br><b>Regroup:</b> Remove (1) to take an [isengard] card stacked here into hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_40: {
+		cardInfo: {
+			imagePath: decipher/LOTR09040.jpg
+			//parentId: 9_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R40
+			rarity: R
+			setNum: "9"
+			cardNum: 40
+			style: Standard
+		}
+		title: Sack of the Shire
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: culture(isengard),minion
+				memorize: winners
+			}
+			effect: [
+				{
+					type: chooseActiveCards
+					text: Choose minion to give strength bonus and fierce
+					select: choose(memory(winners),culture(isengard),minion)
+					memorize: chosenMinion
+				}
+				{
+					type: addModifier
+					modifier: {
+						type: modifyStrength
+						filter: memory(chosenMinion)
+						amount: {
+							type: ForEachSiteYouControl
+						}
+					}
+					until: start(regroup)
+				}
+				{
+					type: addModifier
+					modifier: {
+						type: addKeyword
+						filter: memory(chosenMinion)
+						keyword: fierce
+					}
+					until: start(regroup)
+				}
+			]
+		}
+		gametext: If an [isengard] minion wins a skirmish, until the regroup phase, make that minion strength +1 for each site you control and <b>fierce</b>.
+		lore: "'There's some devilry at work in the Shire....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

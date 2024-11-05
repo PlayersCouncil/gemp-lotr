@@ -1,0 +1,838 @@
+{
+
+	10_104: {
+		cardInfo: {
+			imagePath: decipher/LOTR10104.jpg
+			//parentId: 10_104
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10R104
+			rarity: R
+			setNum: "10"
+			cardNum: 104
+			style: Standard
+		}
+		title: Birthday Present
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: addBurdens
+				}
+				effect: [
+					{
+						type: memorizeDiscard
+						filter: culture(shire),event
+						uniqueTitles: true
+						memory: shireEvents
+					}
+					{
+						type: chooseArbitraryCards
+						text: Choose cards to give to opponent to choose
+						fromMemory: shireEvents
+						count: 2
+						memorize: chosenCards
+					}
+					{
+						type: chooseArbitraryCards
+						text: Choose card to return to opponent's hand
+						player: shadow
+						fromMemory: chosenCards
+						memorize: cardToReturn
+					}
+					{
+						type: putCardsFromDiscardIntoHand
+						select: memory(cardToReturn)
+					}
+				]
+			}
+		]
+		gametext: <b>Fellowship:</b> Add a burden to choose 2 [shire] events with different card titles from your discard pile. Choose an opponent and make him or her choose 1 of those cards for you to take into hand.
+		lore: "'...he caught Déagol by the throat and strangled him, because the gold looked so bright and beautiful.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_105: {
+		cardInfo: {
+			imagePath: decipher/LOTR10105.jpg
+			//parentId: 10_105
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U105
+			rarity: U
+			setNum: "10"
+			cardNum: 105
+			style: Standard
+		}
+		title: Brave and Loyal
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(hobbit,companion,notAssignedToSkirmish)
+				memorize: exertedHobbit
+			},
+			effect: [
+				{
+					type: replaceInSkirmish
+					filter: companion,not(ringBearer)
+					with: memory(exertedHobbit)
+				}
+			]
+		}
+		gametext: If a Hobbit companion is not assigned to a skirmish, exert that Hobbit to have him or her replace a companion (except the Ring-bearer) in a skirmish.
+		lore: "'Now come, you filth!' he cried. 'You've hurt my master, you brute, and you'll pay for it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_106: {
+		cardInfo: {
+			imagePath: decipher/LOTR10106.jpg
+			//parentId: 10_106
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C106
+			rarity: C
+			setNum: "10"
+			cardNum: 106
+			style: Standard
+		}
+		title: Chance Observation
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: hasCardInDiscard
+				filter: your,culture(shire)
+				count: 4
+			},
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(hobbit)
+					amount: {
+						type: forEachYouCanSpot
+						filter: hobbit
+					}
+				}
+			]
+		}
+		gametext: If there are 4 or more [shire] cards in your discard pile, make a Hobbit strength +1 for each Hobbit you can spot.
+		lore: "'...he thought he saw something shining in the river-bed; and holding his breath he grabbed at it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_107: {
+		cardInfo: {
+			imagePath: decipher/LOTR10107.jpg
+			//parentId: 10_107
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C107
+			rarity: C
+			setNum: "10"
+			cardNum: 107
+			style: Standard
+		}
+		title: Great Heart
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		vitality: -1
+		target: hobbit
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: phase
+					phase: skirmish
+				}
+			}
+			{
+				type: playedInOtherPhase
+				phase: skirmish
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: wound
+					select: choose(minion,inSkirmishAgainst(bearer))
+				}
+			}
+		]
+		gametext: Play this condition only during a skirmish. Bearer must be a Hobbit.<br>When this condition is played, wound a minion skirmishing bearer.
+		lore: "And there stood Meriadoc the hobbit in the midst of the slain, blinking like an owl in the daylight, for tears blinded him...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_108: {
+		cardInfo: {
+			imagePath: decipher/LOTR10108.jpg
+			//parentId: 10_108
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U108
+			rarity: U
+			setNum: "10"
+			cardNum: 108
+			style: Standard
+		}
+		title: A Light in his Mind
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: losesInitiative
+					side: free people
+				}
+				requires: {
+					type: canSpot
+					filter: culture(shire),companion
+					count: 2
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
+		]
+		gametext: Each time you lose initiative, you may spot 2 [shire] companions to remove a burden.
+		lore: "Far off, as in a little picture drawn by elven-fingers, he saw the Lady Galadriel standing on the grass in Lórien, and gifts were in her hands."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_109: {
+		cardInfo: {
+			imagePath: decipher/LOTR10109.jpg
+			//parentId: 10_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C109
+			rarity: C
+			setNum: "10"
+			cardNum: 109
+			style: Standard
+		}
+		title: Make Haste
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		keywords: Stealth
+		effects: {
+			type: event
+			cost: {
+				type: returnToHand
+				select: choose(culture(shire),companion)
+			},
+			effect: [
+				{
+					type: choice
+					player: shadow
+					texts: [
+						Remove 2 twilight
+						Discard a minion
+					]
+					effects: [
+						{
+							type: removeTwilight
+							amount: 2
+						}
+						{
+							type: discard
+							select: choose(minion)
+						}
+					]
+				}
+			]
+		}
+		gametext: <b>Stealth</b>. Spot a [shire] companion and return him or her to your hand to make a Shadow player choose to remove (2) or discard a minion.
+		lore: There's something still alive in that place, something with eyes, or a seeing mind, if you take me; and the longer we stay in one spot, the sooner it will get 'on to us.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_110: {
+		cardInfo: {
+			imagePath: decipher/LOTR10110.jpg
+			//parentId: 10_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C110
+			rarity: C
+			setNum: "10"
+			cardNum: 110
+			style: Standard
+		}
+		title: A Marvel
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(hobbit)
+				memorize: exertedHobbit
+			},
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(hobbit,not(memory(exertedHobbit)))
+					amount: 3
+				}
+			]
+		}
+		gametext: Exert a Hobbit to make another Hobbit strength +3.
+		lore: "Howling with pain and fear but desperate the orc charged head-down at him."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_111: {
+		cardInfo: {
+			imagePath: decipher/LOTR10111.jpg
+			//parentId: 10_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U111
+			rarity: U
+			setNum: "10"
+			cardNum: 111
+			style: Standard
+		}
+		title: Narrow Escape
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: hobbit,companion
+				count: 2
+			},
+			effect: [
+				{
+					type: discard
+					player: shadow
+					select: choose(minion)
+					count: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: hobbit,companion
+							count: 4
+						}
+						true: 2
+						false: 1
+					}
+				}
+			]
+		}
+		gametext: Spot 2 Hobbit companions to make a Shadow player discard a minion (or spot 4 Hobbit companions to make that player discard 2 minions).
+		lore: "'If those two had seen us, they would have dropped all their quarrel until we were dead.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_112: {
+		cardInfo: {
+			imagePath: decipher/LOTR10112.jpg
+			//parentId: 10_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C112
+			rarity: C
+			setNum: "10"
+			cardNum: 112
+			style: Standard
+		}
+		title: Nine-fingered Frodo and the Ring of Doom
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		keywords: Tale
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(culture(shire),character)
+			}
+			effect: [
+				{
+					type: choice
+					texts: [
+						Remove a burden
+						Remove 2 threats
+					]
+					effects: [
+						{
+							type: removeBurdens
+						}
+						{
+							type: removeThreats
+							amount: 2
+						}
+					]
+				}
+			]
+		}
+		gametext: <b>Tale</b>. Exert a [shire] character to remove a burden or 2 threats.
+		lore: "'What a tale we have been in, Mr. Frodo, haven't we?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_113: {
+		cardInfo: {
+			imagePath: decipher/LOTR10113.jpg
+			//parentId: 10_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C113
+			rarity: C
+			setNum: "10"
+			cardNum: 113
+			style: Standard
+		}
+		title: Orc Armor
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		itemclass: Armor
+		target: hobbit
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: or(orc,urukHai),inSkirmishAgainst(bearer)
+					amount: -1
+				}
+			}
+		]
+		gametext: Bearer must be a Hobbit.<br>Each Orc and each Uruk-hai skirmishing bearer is strength -1.
+		lore: "'Well, there you are, Mr. Frodo. A perfect little orc, if I may make so bold....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_114: {
+		cardInfo: {
+			imagePath: decipher/LOTR10114.jpg
+			//parentId: 10_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U114
+			rarity: U
+			setNum: "10"
+			cardNum: 114
+			style: Standard
+		}
+		title: Shadowplay
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(shire),companion
+					count: 2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: minion
+					memorize: playedMinion
+				}
+				cost: {
+					type: exert
+					select: choose(hobbit,companion)
+				}
+				effect: {
+					type: exert
+					select: memory(playedMinion)
+				}
+				limitPerTurn: 1
+			}
+		]
+		gametext: To play, spot 2 [shire] companions.<br>Each time a minion is played, you may exert a Hobbit companion to exert that minion (limit once per turn).
+		lore: "...it saw a great silent shape, cloaked in a grey shadow, looming against the wavering light behind...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_115: {
+		cardInfo: {
+			imagePath: decipher/LOTR10115.jpg
+			//parentId: 10_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U115
+			rarity: U
+			setNum: "10"
+			cardNum: 115
+			style: Standard
+		}
+		title: Slunk Out of Sight
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		keywords: Stealth
+		effects: {
+			type: event
+			requires: {
+				type: hasCardInDiscard
+				filter: culture(shire)
+				count: 6
+			},
+			effect: [
+				{
+					type: If
+					check: [
+						{
+							type: canSpot
+							filter: minion,not(fierce),inSkirmish
+						}
+						{
+							type: canSpot
+							filter: your,hobbit,inSkirmish
+						}
+					]
+					true: [
+						{
+							type: memorizeActive
+							filter: minion,inSkirmish
+							memory: minionsInSkirmish
+						}
+						{
+							type: cancelSkirmish
+						}
+						{
+							type: addKeyword
+							select: memory(minionsInSkirmish)
+							keyword: fierce
+							until: regroup
+						}
+					]
+				}
+			]
+		}
+		gametext: <b>Stealth</b>. If there are 6 or more [shire] cards in your discard pile, cancel a skirmish involving your Hobbit and a minion who is not fierce. Each minion in that skirmish is <b>fierce</b> until the regroup phase.
+		lore: "...harsh and loud they heard orc-voices."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_116: {
+		cardInfo: {
+			imagePath: decipher/LOTR10116.jpg
+			//parentId: 10_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U116
+			rarity: U
+			setNum: "10"
+			cardNum: 116
+			style: Standard
+		}
+		title: The Tale of the Great Ring
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: [
+			Tale
+			Support Area
+		]
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				effect: [
+					{
+						type: chooseActiveCards
+						select: choose(hobbit)
+						text: Choose a Hobbit
+						memorize: chosenHobbit
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: cantBeOverwhelmed
+							requires: {
+								type: not
+								requires: {
+									type: playedCardThisPhase
+									filter: side(shadow),event
+								}
+							}
+							filter: memory(chosenHobbit)
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: <b>Tale</b>.<br><b>Skirmish:</b> Prevent a Hobbit from being overwhelmed unless a Shadow event is (or was) played during this skirmish. Discard this condition.
+		lore: "'I have quite finished, Sam,' said Frodo. 'The last pages are for you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_121: {
+		cardInfo: {
+			imagePath: decipher/LOTR10121.jpg
+			//parentId: 10_121
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10P121
+			rarity: P
+			setNum: "10"
+			cardNum: 121
+			style: Standard
+		}
+		title: Frodo
+		subtitle: Resolute Hobbit
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Frodo
+		resistance: 12
+		canStartWithRing: true
+
+		gametext: <b>Ring-bearer (resistance 12).</b>
+		lore: "'...if it's the only way, we must take it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_122: {
+		cardInfo: {
+			imagePath: decipher/LOTR10122.jpg
+			//parentId: 10_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10P122
+			rarity: P
+			setNum: "10"
+			cardNum: 122
+			style: Standard
+		}
+		title: Sam
+		subtitle: Great Elf Warrior
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Gandalf
+		resistance: 5
+		keywords: Ring-bound
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: culture(shire),companion
+					}
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
+			}
+		]
+		gametext: <b>Ring-bound</b>.<br>Sam is strength +1 for each [shire] companion you can spot.<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
+		lore: "'...I'd say there's a large warrior on the loose, Elf most likely, with an elf-sword anyway....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

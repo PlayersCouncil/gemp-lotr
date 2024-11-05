@@ -1,0 +1,486 @@
+{
+
+	102_6: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S006.0_card.jpg
+			//parentId: 102_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_6
+			rarity: _
+			setNum: V2
+			cardNum: 6
+			style: Standard
+		}
+		title: Arwen
+		subtitle: Lady of Rivendell
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Ally
+		allyHome: 3F
+		race: Elf
+		strength: 6
+		vitality: 3
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: ModifyStrength
+					filter: name(Aragorn)
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: AddKeyword
+					keyword: defender+1
+					filter: name(Aragorn)
+					requires: {
+						type: CanSpot
+						filter: exhausted,self
+					}
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: AboutToTakeWound
+					filter: name(Aragorn)
+				}
+				cost: {
+					type: Wound
+					select: self
+				}
+				effect: {
+					type: preventWound
+					select: choose(name(Aragorn))
+					memorize: protectedMan
+				}
+			}
+		]
+		gametext: Aragorn is strength +1. While Arwen is exhausted, Aragorn is defender +1.<br>Each time Aragorn is about to take a wound, you may wound Arwen to prevent that wound.
+		lore: "'Dark is the Shadow, and yet my heart rejoices; for you, Estel, shall be among the great whose valour will destroy it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_7: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S007.0_card.jpg
+			//parentId: 102_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_7
+			rarity: _
+			setNum: V2
+			cardNum: 7
+			style: Standard
+		}
+		title: Deadly Contest
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			effect: [
+				{
+					type: Choice
+					texts: [
+						Spot an {elven} companion to reinforce a {dwarven} token.
+						Spot a {dwarven} companion to reinforce an {elven} token.
+					]
+					effects: [
+						{
+							type: CostToEffect
+							requires: {
+								type: CanSpot
+								filter: HasCultureToken(dwarven)
+							}
+							cost: {
+								type: Spot
+								filter: elf, companion
+							}
+							effect: {
+								type: ReinforceTokens
+								culture: dwarven
+								select: choose(HasCultureToken(dwarven))
+							}
+						}
+						{
+							type: CostToEffect
+							requires: {
+								type: CanSpot
+								filter: HasCultureToken(elven)
+							}
+							cost: {
+								type: Spot
+								filter: dwarf, companion
+							}
+							effect: {
+								type: ReinforceTokens
+								culture: elven
+								select: choose(HasCultureToken(elven))
+							}
+						}
+					]
+				}
+				{
+					type: If
+					check: [
+						{
+							type: CanSpot
+							filter: name(Gimli)
+						}
+						{
+							type: CanSpot
+							filter: name(Legolas)
+						}
+					]
+					true: [
+						{
+							type: ReinforceTokens
+							culture: elven
+							select: choose(HasCultureToken(elven))
+						}
+						{
+							type: ReinforceTokens
+							culture: dwarven
+							select: choose(HasCultureToken(dwarven))
+						}
+					]
+				}
+			]
+		}
+		gametext: Spot an [elven] companion to reinforce a [dwarven] token or spot a [dwarven] companion to reinforce an [elven] token.<br>If you can spot both Legolas and Gimli you may reinforce both an [elven] and [dwarven] token an additional time.  
+		lore: "'Good!' said Legolas. 'But my count is now two dozen. It has been knife-work up here.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_8: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S008.0_card.jpg
+			//parentId: 102_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_8
+			rarity: _
+			setNum: V2
+			cardNum: 8
+			style: Standard
+		}
+		title: Haldir
+		subtitle: Naith Commander
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: valiant
+		effects: [
+			{
+				type: modifier
+				modifier:{
+					type: modifyStrength
+					filter: elf, valiant
+					amount: 1
+					requires: {
+						type: CanSpot
+						filter: ranged weapon,attachedTo(self)
+					}
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: DoesNotAddToArcheryTotal
+					filter: Elf,valiant
+					requires: {
+						type: CanSpot
+						filter: ranged weapon,attachedTo(self)
+					}
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: AboutToDiscard
+					filter: culture(elven),rangedWeapon
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: preventDiscard
+					select: choose(culture(elven),rangedWeapon, GettingDiscarded)
+				}
+			}
+		]
+		gametext: Valiant. <br>While Haldir bears a ranged weapon, each valiant Elf is strength +1 and does not add to the fellowship archery total.<br>Each time an [elven] possession is about to be discarded by a card effect, you may exert Haldir to prevent that.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_9: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S009.0_card.jpg
+			//parentId: 102_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_9
+			rarity: _
+			setNum: V2
+			cardNum: 9
+			style: Standard
+		}
+		title: Leithio i Phillin!
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		timewords: Archery
+		effects: {
+			type: event
+			cost: {
+				type: Spot
+				count: 2
+				select: choose(elf, valiant)
+				memorize: spottedElves
+			},
+			effect: [
+				{
+					type: Wound
+					select: choose(minion)
+					times: {
+						type: Conditional
+						requires: {
+							type: CanSpot
+							count: 2
+							filter: elf, valiant, HasAttachedCount(1, ranged weapon)
+						}
+						true: 2
+						false: 1
+					}
+				}
+			]
+		}
+		gametext: Spot 2 valiant elves to wound a minion (or wound a minion twice if each of those elves bears a ranged weapon).
+		lore: "'I must go and seek some arrows,' said Legolas. 'Would that this night would end, and I could have better light for shooting.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_10: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S010.0_card.jpg
+			//parentId: 102_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_10
+			rarity: _
+			setNum: V2
+			cardNum: 10
+			style: Standard
+		}
+		title: Naith Armaments
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Possession
+		strength: 2
+		vitality: 1
+		itemclass: [
+			Hand Weapon
+			Ranged Weapon
+		]
+		target: valiant,Elf
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: WinsSkirmish
+					filter: bearer
+				}
+				requires: {
+					type: CanSpot
+					filter: not(bearer), wounded, valiant, elf
+				}
+				cost: {
+					type: Exert
+					select: bearer
+				}
+				effect: {
+					type: Heal
+					select: choose(not(bearer), valiant, elf)
+				}
+			}
+		]
+		gametext: Bearer must be a valiant Elf.<br>Each time bearer wins a skirmish, you may exert bearer to heal another valiant Elf.
+		lore: "The great bow of Lórien sang..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_11: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S011.0_card.jpg
+			//parentId: 102_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_11
+			rarity: _
+			setNum: V2
+			cardNum: 11
+			style: Standard
+		}
+		title: To Honour That Allegiance
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: {
+				type: If
+				check: {
+					type: CanSpot
+					count: 2
+					filter: valiant, Elf
+				}
+				true: {
+					type: Spot
+					count: 2
+					filter: valiant, Elf
+				}
+				false: {
+					type: Exert
+					select: choose(valiant, companion)
+				}
+			}
+			effect: [
+				{
+					type: PutCardsFromDeckIntoHand
+					select: choose(or(and(valiant,culture(elven),companion), and(culture(elven),possession)))
+					count: 1
+					shuffle: true
+					reveal: true
+					showAll: true
+				}
+			]
+		}
+		gametext: Exert a valiant companion (or spot 2 valiant Elves) to take a valiant [elven] companion or [elven] possession into hand from your draw deck.
+		lore: "'It is told that Elendil stood there watching for the coming of Gil-galad out of the West, in the days of the Last Alliance.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_12: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S012.0_card.jpg
+			//parentId: 102_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_12
+			rarity: _
+			setNum: V2
+			cardNum: 12
+			style: Standard
+		}
+		title: Your Friends Are With You
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				optional: false
+				trigger: {
+					type: WinsSkirmish
+					filter: your,or(man, elf, dwarf)
+					memorize: winner
+				}
+				effect: {
+					type: ModifyStrength
+					amount: 1
+					select: choose(another,or(man, elf, dwarf), not(race(memory(winner))))
+					until: start(regroup)
+				}
+			}
+		]
+		gametext: Each time your Man, Elf, or Dwarf wins a skirmish, make your Man, Elf, or Dwarf of another race strength +1 until the regroup phase.
+		lore: "'With hope or without hope we will follow the trail of our enemies....We will make such a chase as shall be accounted a marvel among the Three Kindreds of Elves. Dwarves, and Men.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

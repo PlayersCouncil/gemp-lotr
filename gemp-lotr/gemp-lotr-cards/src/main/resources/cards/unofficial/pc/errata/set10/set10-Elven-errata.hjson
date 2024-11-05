@@ -24,23 +24,26 @@
 		strength: 7
 		vitality: 4
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: elf
-			count: 2
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf
+                    count: 2
+                }
+		    }
 			{
 				type: activated
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: modifyStrength
-						filter: choose(minion,inSkirmishAgainst(self))
+						select: choose(minion,inSkirmishAgainst(self))
 						memorize: chosenMinion
 						amount: {
 							type: forEachInDiscard
@@ -49,16 +52,16 @@
 						}
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memorymatches
 							memory: chosenMinion
-							filter: strengthLessThan(7)
+							filter: maxStrength(6)
 						}
-						effect: {
+						true: {
 							type: removeCardsInDiscardFromGame
 							count: 3
-							filter: choose(culture(elven),event)
+							select: choose(culture(elven),event)
 						}
 					}
 				]
@@ -119,11 +122,11 @@
 	# 				type: discardFromHand
 	# 				count: 1
 	# 				forced: false
-	# 				filter: choose(culture(elven),event)
+	# 				select: choose(culture(elven),event)
 	# 			}
 	# 			effect: {
 	# 				type: discard
-	# 				filter: choose(side(shadow),or(condition,possession))
+	# 				select: choose(side(shadow),or(condition,possession))
 	# 			}
 	# 		}
 	# 	]
@@ -187,12 +190,12 @@
 	# 					type: discardFromHand
 	# 					count: 1
 	# 					forced: false
-	# 					filter: choose(culture(elven),event)
+	# 					select: choose(culture(elven),event)
 	# 				}
 	# 			]
 	# 			effect: {
 	# 				type: discard
-	# 				filter: choose(side(shadow),or(condition,possession))
+	# 				select: choose(side(shadow),or(condition,possession))
 	# 			}
 	# 		}
 	# 	]
@@ -252,13 +255,13 @@
 						type: discardFromHand
 						count: 1
 						forced: false
-						filter: choose(culture(elven),event)
+						select: choose(culture(elven),event)
 					}
 				]
 				effect: [
 					{
 						type: discard
-						filter: choose(side(shadow),or(condition,possession))
+						select: choose(side(shadow),or(condition,possession))
 					}
 					{
 						type: incrementPerPhaseLimit
@@ -298,34 +301,40 @@
 		twilight: 0
 		type: condition
 		keyword: support area
-		requires: {
-			type: CanSpot
-			filter: Elf
-			count: 2
-		}
-		effects: {
-			type: trigger
-			trigger: {
-				type: losesInitiative
-				side: free peoples
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: CanSpot
+					filter: Elf
+					count: 2
+				}
 			}
-			requires: {
-				type: perTurnLimit
-				limit: 1
-			}
-			effect: [
-				{
-					type: incrementPerTurnLimit
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: losesInitiative
+					side: free peoples
+				}
+				requires: {
+					type: perTurnLimit
 					limit: 1
 				}
-				{
-					type: modifyStrength
-					filter: choose(minion)
-					amount: -3
-					until: start(regroup)
-				}
-			]
-		}
+				effect: [
+					{
+						type: incrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: modifyStrength
+						select: choose(minion)
+						amount: -3
+						until: start(regroup)
+					}
+				]
+			}
+		]
 		gametext: To play, spot 2 Elves. <br>When you lose initiative, you may make a minion strength –3 until the regroup phase (limit once per turn).
 		lore: "'The uttermost choice is before you: to repent and go to the Havens... or else to abide the Doom of Men.'"
 		promotext: ""
@@ -336,6 +345,4 @@
 			}
 		}
 	}
-	
-	
 }

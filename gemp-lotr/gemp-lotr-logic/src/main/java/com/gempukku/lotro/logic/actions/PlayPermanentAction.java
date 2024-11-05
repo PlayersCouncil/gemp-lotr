@@ -27,7 +27,6 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
     private boolean _discountResolved;
     private boolean _discountApplied;
 
-    private boolean _skipShuffling;
     private final Zone _fromZone;
     private final Zone _toZone;
     private PhysicalCard _playedFromCard;
@@ -46,10 +45,6 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
 
         _fromZone = card.getZone();
         _toZone = zone;
-    }
-
-    public void skipShufflingDeck() {
-        _skipShuffling = true;
     }
 
     @Override
@@ -78,17 +73,13 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
                 game.getGameState().addCardToZone(game, _permanentPlayed, Zone.VOID_FROM_HAND);
             else
                 game.getGameState().addCardToZone(game, _permanentPlayed, Zone.VOID);
-            if (playedFromZone == Zone.DECK && !_skipShuffling) {
-                game.getGameState().sendMessage(_permanentPlayed.getOwner() + " shuffles their deck");
-                game.getGameState().shuffleDeck(_permanentPlayed.getOwner());
-            }
         }
 
         if (!_discountResolved) {
             final DiscountEffect discount = getNextPotentialDiscount();
             if (discount != null) {
                 if (_permanentPlayed.getBlueprint().getSide() == Side.SHADOW) {
-                    int twilightCost = game.getModifiersQuerying().getTwilightCost(game, _permanentPlayed, null, _twilightModifier, _ignoreRoamingPenalty);
+                    int twilightCost = game.getModifiersQuerying().getTwilightCostToPlay(game, _permanentPlayed, null, _twilightModifier, _ignoreRoamingPenalty);
                     int requiredDiscount = Math.max(0, twilightCost - game.getGameState().getTwilightPool() - getProcessedDiscount() - getPotentialDiscount(game));
                     discount.setMinimalRequiredDiscount(requiredDiscount);
                 }
@@ -111,7 +102,7 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
 
             if (!_cardPlayed) {
                 _cardPlayed = true;
-                _playCardEffect = new PlayCardEffect(_fromZone, _permanentPlayed, _toZone, _playedFromCard, isPaidToil());
+                _playCardEffect = new PlayCardEffect(_permanentPlayed.getOwner(), _fromZone, _permanentPlayed, _toZone, _playedFromCard, isPaidToil());
                 return _playCardEffect;
             }
 

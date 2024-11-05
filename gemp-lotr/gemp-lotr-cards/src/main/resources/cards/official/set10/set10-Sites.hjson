@@ -1,0 +1,211 @@
+{
+
+	10_117: {
+		cardInfo: {
+			imagePath: decipher/LOTR10117.jpg
+			//parentId: 10_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U117
+			rarity: U
+			setNum: "10"
+			cardNum: 117
+			style: Standard
+		}
+		title: Base of Mindolluin
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: King
+		direction: Right
+		keywords: Sanctuary
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: cantSpotThreats
+					amount: 2
+				}
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(fortification)
+					showAll: true
+					shuffle: true
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 2 threats, add a threat to play a fortification from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_118: {
+		cardInfo: {
+			imagePath: decipher/LOTR10118.jpg
+			//parentId: 10_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U118
+			rarity: U
+			setNum: "10"
+			cardNum: 118
+			style: Standard
+		}
+		title: Pelennor Prairie
+		unique: false
+		twilight: 3
+		type: Site
+		site: 4
+		block: King
+		direction: Right
+		keywords: Plains
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: exert
+						select: choose(minion)
+					}
+					{
+						type: removeBurdens
+					}
+				]
+				effect: {
+					type: discard
+					player: free people
+					select: choose(side(free people),condition)
+				}
+			}
+		]
+		gametext: <b>Plains</b>. <b>Shadow:</b> Exert a minion and remove a burden to make the Free Peoples player discard one of his or her conditions.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_119: {
+		cardInfo: {
+			imagePath: decipher/LOTR10119.jpg
+			//parentId: 10_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U119
+			rarity: U
+			setNum: "10"
+			cardNum: 119
+			style: Standard
+		}
+		title: Steward's Tomb
+		unique: false
+		twilight: 8
+		type: Site
+		site: 5
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantHeal
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantPreventWounds
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantRemoveBurdens
+				}
+			}
+		]
+		gametext: Wounds cannot be prevented or healed. Burdens cannot be removed.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_120: {
+		cardInfo: {
+			imagePath: decipher/LOTR10120.jpg
+			//parentId: 10_120
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U120
+			rarity: U
+			setNum: "10"
+			cardNum: 120
+			style: Standard
+		}
+		title: Watchers of Cirith Ungol
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: King
+		direction: Right
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: your,culture(wraith),orc
+				}
+				cost: {
+					type: removeThreats
+					amount: 2
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(your,culture(wraith),orc)
+					amount: 3
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Spot your [wraith] Orc and remove 2 threats to make that [wraith] Orc strength +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

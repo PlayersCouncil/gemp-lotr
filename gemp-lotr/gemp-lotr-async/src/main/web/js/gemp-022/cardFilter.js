@@ -170,6 +170,7 @@ var CardFilter = Class.extend({
             + "<option value='19'>19 - Ages End</option>"
             + "<option value='69'>19E - Ages End (PC Errata)</option>"
             + "<option value='101,151'>V1 - Shadow of the Past (PC)</option>"
+            + "<option value='102,152'>V2 - King of the Golden Hall (PC)</option>"
             + "<option value='30'>30 - The Hobbit: Main Deck</option>"
             + "<option value='31'>31 - The Hobbit: Expansion 1</option>"
             + "<option value='32'>32 - The Hobbit: Expansion 2</option>"

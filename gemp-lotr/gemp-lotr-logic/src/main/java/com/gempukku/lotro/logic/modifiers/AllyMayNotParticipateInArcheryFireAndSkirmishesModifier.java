@@ -1,12 +1,12 @@
 package com.gempukku.lotro.logic.modifiers;
 
+import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 
 public class AllyMayNotParticipateInArcheryFireAndSkirmishesModifier extends AbstractModifier {
-    public AllyMayNotParticipateInArcheryFireAndSkirmishesModifier(PhysicalCard source, Condition condition, Filter affectFilter) {
+    public AllyMayNotParticipateInArcheryFireAndSkirmishesModifier(PhysicalCard source, Condition condition, Filterable affectFilter) {
         super(source, "May not participate in archery fire and skirmishes", affectFilter, condition, ModifierEffect.PRESENCE_MODIFIER);
     }
 

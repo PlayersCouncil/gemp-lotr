@@ -58,7 +58,7 @@ public class Card_V1_016_Tests
 		assertEquals(Culture.GANDALF, myheart.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, myheart.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, myheart.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(myheart, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(myheart, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, myheart.getBlueprint().getTwilightCost());
 		//assertEquals(, myheart.getBlueprint().getStrength());
 		//assertEquals(, myheart.getBlueprint().getVitality());

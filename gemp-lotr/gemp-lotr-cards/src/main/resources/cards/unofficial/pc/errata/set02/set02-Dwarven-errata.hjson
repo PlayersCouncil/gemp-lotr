@@ -33,7 +33,7 @@
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: choose(culture(dwarven),weapon)
+					select: choose(culture(dwarven),weapon)
 				}
 			}
 			{
@@ -44,7 +44,6 @@
 					{
 						type: chooseANumber
 						from: 0
-						to: 99
 						text: Choose how many times to discard 3 cards from draw deck
 						memorize: chosenNumber
 					}
@@ -52,12 +51,9 @@
 						type: discardTopCardsFromDeck
 						forced: false
 						count: {
-							type: multiply
+                            type: fromMemory
+                            memory: chosenNumber
 							multiplier: 3
-							source: {
-								type: fromMemory
-								memory: chosenNumber
-							}
 						}
 					}
 				]
@@ -96,7 +92,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(dwarf)
+					select: choose(dwarf)
 					memorize: chosenDwarf
 					amount: {
 						type: cardAffectedLimitPerPhase
@@ -106,14 +102,14 @@
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: location
 						filter: underground
 					}
-					effect: {
+					true: {
 						type: addKeyword
-						filter: memory(chosenDwarf)
+						select: memory(chosenDwarf)
 						keyword: damage
 						amount: {
 							type: cardAffectedLimitPerPhase
@@ -130,13 +126,13 @@
 					memorize: choice
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: MemoryIs
 						memory: choice
 						value: yes
 					}
-					effect: {
+					true: {
 						type: discardTopCardsFromDeck
 						count: 3
 						forced: false
@@ -144,15 +140,15 @@
 				}
 				{
 					type: Repeat
-					amount: 9
+					times: 9
 					effect: {
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: MemoryIs
 							memory: choice
 							value: yes
 						}
-						effect: [
+						true: [
 							{
 								type: chooseYesOrNo
 								player: you
@@ -160,13 +156,13 @@
 								memorize: choice
 							}
 							{
-								type: conditional
-								requires: {
+								type: If
+								check: {
 									type: MemoryIs
 									memory: choice
 									value: yes
 								}
-								effect: {
+								true: {
 									type: discardTopCardsFromDeck
 									count: 3
 									forced: false
@@ -212,18 +208,23 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: dwarf
-		}
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyStrength
-				filter: self,inSkirmishAgainst(uruk-hai)
-				amount: 3
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: dwarf
+                }
+		    }
+            {
+                type: modifier
+                modifier: {
+                    type: modifyStrength
+                    filter: self,inSkirmishAgainst(uruk-hai)
+                    amount: 3
+                }
+            }
+        ]
 		gametext: To play, spot a Dwarf.<br>While skirmishing an Uruk-hai, Fror is strength +3.
 		lore: Among the envoys sent to represent the Dwarves of Erebor at the Council of Elrond was Farin, a young but wise Dwarf, and a fierce foe in battle.
 		promotext: ""

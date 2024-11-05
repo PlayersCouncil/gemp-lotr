@@ -21,7 +21,7 @@ public class DiscardCardAtRandomFromHand implements EffectAppenderProducer {
         FieldUtils.validateAllowedFields(effectObject, "hand", "count", "forced");
 
         final String player = FieldUtils.getString(effectObject.get("hand"), "hand", "you");
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
         final ValueSource countSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final boolean forced = FieldUtils.getBoolean(effectObject.get("forced"), "forced");
 

@@ -7,7 +7,6 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.ActivateCardAction;
 
-import java.util.Collections;
 import java.util.List;
 
 public abstract class AddActionToCardModifier extends AbstractModifier {
@@ -17,11 +16,8 @@ public abstract class AddActionToCardModifier extends AbstractModifier {
 
     @Override
     public List<? extends ActivateCardAction> getExtraPhaseAction(LotroGame game, PhysicalCard card) {
-        final ActivateCardAction extraPhaseAction = createExtraPhaseAction(game, card);
-        if (extraPhaseAction != null)
-            return Collections.singletonList(extraPhaseAction);
-        return null;
+        return createExtraPhaseActions(game, card);
     }
 
-    protected abstract ActivateCardAction createExtraPhaseAction(LotroGame game, PhysicalCard matchingCard);
+    protected abstract List<? extends ActivateCardAction> createExtraPhaseActions(LotroGame game, PhysicalCard matchingCard);
 }

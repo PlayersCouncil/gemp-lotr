@@ -18,7 +18,6 @@ public class ChooseAndExertCharactersEffect extends ChooseActiveCardsEffect {
     private final int _times;
     private final Filterable[] _filters;
     private CostToEffectAction _resultSubAction;
-    private int _intToRemember;
     private boolean _forToil;
 
     public ChooseAndExertCharactersEffect(Action action, String playerId, int minimum, int maximum, Filterable... filters) {
@@ -30,14 +29,6 @@ public class ChooseAndExertCharactersEffect extends ChooseActiveCardsEffect {
         _action = action;
         _times = times;
         _filters = filters;
-    }
-
-    public void setIntToRemember(int intToRemember) {
-        _intToRemember = intToRemember;
-    }
-
-    public int getIntToRemember() {
-        return _intToRemember;
     }
 
     public void setForToil(boolean forToil) {

@@ -51,7 +51,7 @@
 					effects: [
 						{
 							type: wound
-							filter: choose(companion)
+							select: choose(companion)
 						}
 						{
 							type: discardTopCardsFromDeck
@@ -142,22 +142,23 @@
 		culture: Isengard
 		title: Too Much Attention
 		type: event
-		keyword: Response
-		requires: {
-			type: canSpot
-			filter: culture(isengard),minion
-		}
+		timeword: response
 		effects: {
 			type: responseEvent
+            requires: {
+                type: canSpot
+                filter: culture(isengard),minion
+            }
 			trigger: {
 				type: putsOnRing
 			}
 			effect: [
 				{
 					type: ChooseCardsFromDrawDeck
-					filter: choose(minion)
+					select: choose(minion)
 					count: 1
 					memorize: chosenCard
+					showAll: true
 				}
 				{
 					type: preventable
@@ -171,7 +172,10 @@
 					text: Discard the top 6 cards of your draw deck to prevent your opponent taking {chosenCard} into hand
 					effect: {
 						type: PutCardsFromDeckIntoHand
-						filter: memory(chosenCard)
+						select: memory(chosenCard)
+                        reveal: true
+                        shuffle: false
+                        showAll: false
 					}
 				}
 			]	

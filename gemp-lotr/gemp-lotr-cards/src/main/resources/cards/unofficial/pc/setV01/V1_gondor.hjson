@@ -21,7 +21,7 @@
 	# 			}
 	# 			effect: {
 	# 				type: putCardsFromDeckIntoHand
-	# 				filter: choose(culture(elven),ally,maxTwilight(2))
+	# 				select: choose(culture(elven),ally,maxTwilight(2))
 	# 			}
 	# 		}
 	# 		{
@@ -30,7 +30,7 @@
 	# 			cost: {
 	# 				type: discardFromHand
 	# 				forced: false
-	# 				filter: choose(culture(elven),skirmish,event)
+	# 				select: choose(culture(elven),skirmish,event)
 	# 			}
 	# 			effect: {
 	# 				type: modifyStrength
@@ -40,18 +40,110 @@
 	# 		}
 	# 	]
 	# }
+	# 101_19: {
+	# 	cardInfo: {
+	# 		imagePath: sets/vset1/LOTR-ENV1S019.1_card.jpg
+	# 		javaClass: false
+	# 		parent: 101_19 
+	# 		parentPath: errata/pc
+	# 		version: 1
+	# 		collInfo: V1R19
+	# 		rarity: R
+	# 		setNum: "V1"
+	# 		cardNum: 19
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Aragorn
+	# 	subtitle: Estel
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Gondor
+	# 	twilight: 4
+	# 	type: Companion
+	# 	race: Man
+	# 	strength: 8
+	# 	vitality: 4
+	# 	signet: Gandalf
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: played
+	# 				filter: self
+	# 			}
+	# 			effect: {
+	# 				type: putCardsFromDeckIntoHand
+	# 				select: choose(elf,maxTwilight(2))
+	# 				reveal: true
+	# 				shuffle: true
+	# 				showAll: true
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: maneuver
+	# 			cost: {
+	# 				type: discardFromHand
+	# 				forced: false
+	# 				select: choose(culture(elven))
+	# 			}
+	# 			effect: {
+	# 				type: Choice
+	# 				texts: [
+	# 					Make Aragorn damage +1
+	# 					Make Aragorn an archer
+	# 					Make Aragorn strength +2
+	# 				]
+	# 				effects: [
+	# 					{
+	# 						type: AddKeyword
+	# 						select: self
+	# 						keyword: damage
+	# 						amount: 1
+	# 						until: start(regroup)
+	# 					}
+	# 					{
+	# 						type: AddKeyword
+	# 						select: self
+	# 						keyword: archer
+	# 						until: start(regroup)
+	# 					}
+	# 					{
+	# 						type: ModifyStrength
+	# 						select: self
+	# 						amount: 2
+	# 						until: start(regroup)
+	# 					}
+	# 				]
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.<br>Maneuver: Discard an [elven] card from hand to make Aragorn <b>damage +1</b>, <b>archer</b>, or strength +2 until the regroup phase.
+	# 	lore: "'I gave Hope to the Dúnedain, I have kept no hope for myself.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+
 	101_19: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S019.1_card.jpg
-			javaClass: false
-			parent: 101_19 
-			parentPath: errata/pc
-			version: 1
+			imagePath: sets/vset1/LOTR-ENV1S019.2_card.jpg
+			//parentId: 101_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 2
 			collInfo: V1R19
 			rarity: R
 			setNum: "V1"
 			cardNum: 19
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Aragorn
@@ -76,50 +168,29 @@
 				}
 				effect: {
 					type: putCardsFromDeckIntoHand
-					filter: choose(elf,maxTwilight(2))
+					select: choose(elf,maxTwilight(2))
+					reveal: true
+					shuffle: true
+					showAll: true
 				}
 			}
 			{
 				type: activated
-				phase: maneuver
+				phase: skirmish
 				cost: {
 					type: discardFromHand
 					forced: false
-					filter: choose(culture(elven))
+					select: choose(culture(elven))
 				}
 				effect: {
-					type: Choice
-					texts: [
-						Make Aragorn damage +1
-						Make Aragorn an archer
-						Make Aragorn strength +2
-					]
-					effects: [
-						{
-							type: AddKeyword
-							filter: self
-							keyword: damage
-							amount: 1
-							until: start(regroup)
-						}
-						{
-							type: AddKeyword
-							filter: self
-							keyword: archer
-							until: start(regroup)
-						}
-						{
-							type: ModifyStrength
-							filter: self
-							amount: 2
-							until: start(regroup)
-						}
-					]
+					type: ModifyStrength
+					select: self
+					amount: 1
 				}
 			}
 		]
-		gametext: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.<br>Maneuver: Discard an [elven] card from hand to make Aragorn <b>damage +1</b>, <b>archer</b>, or strength +2 until the regroup phase.
-		lore: "'I gave Hope to the Dúnedain, I have kept no hope for myself.'"
+		gametext: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.<br>Skirmish: Discard an [elven] card from hand to make Aragorn strength +1.
+		lore: "'I gave Hope to the Dúnedain, I have kept no<br>hope for myself.'"
 		promotext: ""
 		alts: {
 			promos: {
@@ -128,17 +199,32 @@
 			}
 		}
 	}
+
 	101_20: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S020.0_card.jpg
+			//parentId: 101_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R20
+			rarity: R
+			setNum: "V1"
+			cardNum: 20
+			style: Standard
+		}
 		title: Boromir
-		unique: true
 		subtitle: Redeemed
-		culture: gondor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
 		twilight: 3
-		type: companion
-		race: man
+		type: Companion
+		race: Man
 		strength: 5
 		vitality: 3
-		signet: aragorn
+		signet: Aragorn
 		resistance: 6
 		effects: [
 			{
@@ -162,7 +248,7 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(another,companion,signet(aragorn))
+					select: choose(another,companion,signet(aragorn))
 				}
 				effect: {
 					type: addModifier
@@ -175,14 +261,38 @@
 				}
 			}
 		]
+		gametext: Boromir is strength +2 for each minion he is skirmishing.<br>At the start of each assignment phase, you may exert another companion with the Aragorn signet to make Boromir defender +1 until the regroup phase.
+		lore: "'Few have gained such a victory. Be at peace!'" 
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	101_21: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S021.0_card.jpg
+			//parentId: 101_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C21
+			rarity: C
+			setNum: "V1"
+			cardNum: 21
+			style: Standard
+		}
 		title: The Sons of Gondor Have Returned
 		unique: true
-		culture: gondor
+		side: Free Peoples
+		culture: Gondor
 		twilight: 2
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: modifier
@@ -211,20 +321,44 @@
 				}
 			}
 		]
+		gametext: While Boromir is assigned to skirmish more than one minion, Aragorn is strength +3.<br>While Aragorn is assigned to skirmish more than one minion, Boromir is strength +3.
+		lore: "They blew a great fanfare, and the heralds cried aloud:..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	101_22: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S022.0_card.jpg
+			//parentId: 101_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R22
+			rarity: R
+			setNum: "V1"
+			cardNum: 22
+			style: Standard
+		}
 		title: Gilraen's Memorial
 		unique: true
-		culture: gondor
+		side: Free Peoples
+		culture: Gondor
 		twilight: 1
-		type: artifact
-		keyword: support area
+		type: Artifact
+		keywords: Support Area
 		effects: [
 			{
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(name(aragorn))
+					select: choose(name(aragorn))
 				}
 			}
 			{
@@ -236,16 +370,15 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
-
 			{
 				type: activated
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: choose(companion,signet(aragorn))
+					select: choose(companion,signet(aragorn))
 				}
 				effect: [
 					{
@@ -261,32 +394,56 @@
 						effects: [
 							{
 								type: exert
-								filter: choose(name(Aragorn))
+								select: choose(name(Aragorn))
 							}
 							{
 								type: discard
-								filter: self
+								select: self
 							}
 						]
 					}
 				]
 			}
 		]
+		gametext: To play, exert Aragorn.<br>When Aragorn is killed, discard this artifact.<br>Fellowship: Exert a companion with the Aragorn signet to remove a burden.  Then exert Aragorn or discard this artifact.
+		lore: "'Ónen i-estel edain, ú-chebin estel anim.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	101_23: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S023.0_card.jpg
+			//parentId: 101_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C23
+			rarity: C
+			setNum: "V1"
+			cardNum: 23
+			style: Standard
+		}
 		title: I Would Have Gone With You to the End
 		unique: true
-		culture: gondor
+		side: Free Peoples
+		culture: Gondor
 		twilight: 2
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: trigger
 				optional: true
 				trigger: {
 					type: played
-					filter: your,skirmish,event
+					filter: your,timeword(skirmish),event
 				}
 				requires: [
 					{
@@ -323,7 +480,7 @@
 						type: range
 						from: 1
 						to: {
-							type: countStacked
+							type: forEachStacked
 							on: self
 						}
 					}
@@ -331,51 +488,91 @@
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(companion,signet(aragorn),inSkirmish)
+					select: choose(companion,signet(aragorn),inSkirmish)
 					amount: {
 						type: forEachInMemory
 						memory: discardedCards
+						filter: any
 						limit: 3
 					}
 				}
 			}
 		]
+		gametext: Each time you play a skirmish event during a skirmish involving a companion with the Aragorn signet, you may spot Aragorn to stack that event here.<br>Skirmish: Spot Aragorn and discard X cards here to make a skirmishing companion with the Aragorn signet strength +X (limit +3).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	101_24: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S024.0_card.jpg
+			//parentId: 101_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C24
+			rarity: C
+			setNum: "V1"
+			cardNum: 24
+			style: Standard
+		}
 		title: You Have My Sword
 		unique: true
-		culture: gondor
+		side: Free Peoples
+		culture: Gondor
 		twilight: 1
-		type: condition
-		target: companion,signet(aragorn),not(name(Aragorn))
+		type: Condition
 		strength: 2
-		requires: {
-			type: canSpot
-			filter: name(aragorn)
-		}
-		effects: {
-			type: trigger
-			trigger: {
-				type: winsSkirmish
-				filter: bearer
+		target: companion,signet(aragorn),not(name(Aragorn))
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(aragorn)
+				}
 			}
-			effect: {
-				type: choice
-				texts: [
-					Exert Aragorn
-					Discard You Have My Sword
-				]
-				effects: [
-					{
-						type: exert
-						filter: choose(name(Aragorn))
-					}
-					{
-						type: discard
-						filter: self
-					}
-				]
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: choice
+					texts: [
+						Exert Aragorn
+						Discard You Have My Sword
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(name(Aragorn))
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+			}
+		]
+		gametext: To play, spot Aragorn. Plays on a companion with the Aragorn signet (except Aragorn).<br>Each time bearer wins a skirmish, exert Aragorn or discard this condition.
+		lore: "'I am Aragorn son of Arathorn; and if by life or death I can save you, I will.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 }

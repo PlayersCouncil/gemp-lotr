@@ -24,7 +24,7 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: choose(your,culture(isengard),orc)
+				select: choose(your,culture(isengard),orc)
 			}
 			effect: {
 				type: choice
@@ -36,21 +36,21 @@
 					{
 						type: wound
 						player: fp
-						filter: choose(companion)
+						select: choose(companion)
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpot
 							count: 6
 							filter: companion
 						}
-						effect: [
+						true: [
 							{
 								type: wound
 								count: 2
 								player: fp
-								filter: choose(companion)
+								select: choose(companion)
 							}
 						]
 					}

@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.official.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -39,28 +42,29 @@ public class Card_01_036_Tests
 	public void CurseTheirFoulFeetStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Curse Their Foul Feet!
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Elven
-		* Twilight Cost: 0
-		* Type: event
-		* Subtype: Fellowship
-		* Game Text: Fellowship: Exert an Elf to reveal an opponent's hand. That player discards a card from hand for each Orc revealed.
-		*/
+		 * Set: 1
+		 * Name: Curse Their Foul Feet!
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Fellowship
+		 * Game Text: Fellowship: Exert an Elf to reveal an opponent's hand. That player discards a card from hand for each Orc revealed.
+		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var feet = scn.GetFreepsCard("feet");
+		var card = scn.GetFreepsCard("feet");
 
-		assertFalse(feet.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, feet.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, feet.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, feet.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(feet, Keyword.FELLOWSHIP));
-		assertEquals(0, feet.getBlueprint().getTwilightCost());
+		assertEquals("Curse Their Foul Feet!", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+        assertTrue(scn.hasTimeword(card, Timeword.FELLOWSHIP));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test

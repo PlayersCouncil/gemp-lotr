@@ -25,7 +25,7 @@
 		culture: dwarven
 		twilight: 3
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -36,20 +36,20 @@
 				]
 				effects: [
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: siteNumber(1-5),siteBlock(hobbit)
 						}
-						effect: {
+						true: {
 							type: discard
-							filter: choose(culture(dwarven),follower)
+							select: choose(culture(dwarven),follower)
 							memorize: discardedFollower
 						}
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: not(siteNumber(1-5),siteBlock(hobbit))
 						}
@@ -58,32 +58,34 @@
 			}
 			effect: [
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: location
 						filter: siteNumber(1-5),siteBlock(hobbit)
 					}
-					effect: {
+					true: {
 						type: repeat
-						amount: {
+						times: {
 							type: twilightCostInMemory
 							memory: discardedFollower
 						}
 						effect: {
 							type: playCardFromDrawDeck
-							filter: choose(culture(dwarven),not(event))
+							select: choose(culture(dwarven),not(event))
+                            showAll: true
+                            shuffle: true
 						}
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: location
 						filter: not(siteNumber(1-5),siteBlock(hobbit))
 					}
-					effect: {
+					true: {
 						type: heal
-						filter: choose(name(Thorin))
+						select: choose(name(Thorin))
 						times: 2
 					}
 				}
@@ -107,7 +109,7 @@
 				}
 				effect: {
 					type: putStackedCardsIntoHand
-					filter: choose(any)
+					select: choose(any)
 					on: self
 				}
 			}
@@ -116,11 +118,11 @@
 				phase: regroup
 				cost: {
 					type: exert
-					filter: choose(culture(elven),ally)
+					select: choose(culture(elven),ally)
 				}
 				effect: {
 					type: stackCardsFromDiscard
-					filter: choose(or(and(culture(elven),event),name(Lore of Imladris)))
+					select: choose(or(and(culture(elven),event),name(Lore of Imladris)))
 					where: self
 				}
 			}
@@ -141,7 +143,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 				}
 			}
 			{
@@ -155,7 +157,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -222,7 +224,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: bearer
@@ -235,12 +237,12 @@
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 				effect: {
 					type: preventWound
-					filter: choose(memory(bearer))
+					select: choose(memory(bearer))
 				}
 			}
 		]
@@ -261,7 +263,7 @@
 				}
 				effect: {
 					type: putStackedCardsIntoHand
-					filter: choose(any)
+					select: choose(any)
 					on: self
 				}
 			}
@@ -270,24 +272,25 @@
 				phase: regroup
 				cost: {
 					type: exert
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 				}
 				effect: {
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: perPhaseLimit
 						limit: 1
 					}
-					effect: [
+					true: [
 						{
 							type: incrementPerPhaseLimit
 							limit: 1
 						}
 						{
 							type: stackCardsFromDeck
-							filter: choose(culture(dwarven),event)
+							select: choose(culture(dwarven),event)
 							where: self
 							shuffle: true
+							showAll: true
 						}
 					]
 				}
@@ -300,7 +303,7 @@
 		culture: elven
 		twilight: 3
 		type: ally
-		allyHome: hobbit,5
+		allyHome: 5H
 		race: elf
 		strength: 7
 		vitality: 4
@@ -321,11 +324,11 @@
 			}
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: EnableParticipationInArcheryFireAndSkirmishes
-				filter: self
+				select: self
 				until: start(regroup)
 			}
 		}
@@ -337,7 +340,7 @@
 		culture: elven
 		twilight: 2
 		type: ally
-		allyHome: hobbit,5
+		allyHome: 5H
 		race: elf
 		strength: 6
 		vitality: 3
@@ -351,13 +354,13 @@
 			}
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: modifyArcheryTotal
 				side: free people
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: location
 						filter: or(river,forest)
@@ -375,7 +378,7 @@
 		culture: elven
 		twilight: 2
 		type: ally
-		allyHome: hobbit,5
+		allyHome: 5H
 		race: elf
 		strength: 6
 		vitality: 3
@@ -385,11 +388,11 @@
 			phase: maneuver
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: returnToHand
-				filter: choose(orc,strengthLessThan(8))
+				select: choose(orc,MaxStrength(7))
 			}
 		}
 	}
@@ -398,28 +401,28 @@
 		culture: elven
 		twilight: 2
 		type: event
-		keyword: archery
+		timeword: archery
 		effects: {
 			type: event
 			cost: {
 				type: spot
-				filter: choose(culture(elven),archer,ally)
+				select: choose(culture(elven),archer,ally)
 				memorize: chosenAlly
 			}
 			effect: [
 				{
 					type: exert
-					filter: choose(minion)
+					select: choose(minion)
 				}
 				{
 					type: modifyStrength
-					filter: memory(chosenAlly)
+					select: memory(chosenAlly)
 					amount: 2
 					until: start(regroup)
 				}
 				{
 					type: EnableParticipationInArcheryFireAndSkirmishes
-					filter: memory(chosenAlly)
+					select: memory(chosenAlly)
 					until: start(regroup)
 				}
 			]
@@ -432,7 +435,7 @@
 		culture: elven
 		twilight: 4
 		type: ally
-		allyHome: hobbit,5
+		allyHome: 5H
 		race: elf
 		strength: 9
 		vitality: 4
@@ -448,18 +451,18 @@
 				effects: [
 					{
 						type: exert
-						filter: choose(name(Thorin))
+						select: choose(name(Thorin))
 						times: 2
 					}
 					{
 						type: discard
-						filter: choose(culture(dwarven),artifact)
+						select: choose(culture(dwarven),artifact)
 					}
 				]
 			}
 			effect: {
 				type: EnableParticipationInArcheryFireAndSkirmishes
-				filter: self
+				select: self
 				until: start(regroup)
 			}
 		}
@@ -479,7 +482,7 @@
 				type: aidCost
 				cost: {
 					type: exert
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 				}
 			}
 			{
@@ -503,7 +506,7 @@
 				}
 				effect: {
 					type: putCardsFromDiscardIntoHand
-					filter: choose(culture(gandalf))
+					select: choose(culture(gandalf))
 				}
 			}
 		]
@@ -513,15 +516,15 @@
 		culture: gandalf
 		twilight: 3
 		type: event
+		timeword: skirmish
 		keyword: [
 			spell
-			skirmish
 		]
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 			}
 			effect: [
 				{
@@ -533,11 +536,13 @@
 					effects: [
 						{
 							type: playCardFromDrawDeck
-							filter: choose(culture(gandalf),follower)
+							select: choose(culture(gandalf),follower)
+                            showAll: true
+                            shuffle: true
 						}
 						{
 							type: playCardFromDiscard
-							filter: choose(culture(gandalf),follower)
+							select: choose(culture(gandalf),follower)
 						}
 					]
 				}
@@ -546,7 +551,7 @@
 					text: Would you like to attach a GANDALF follower from your support area to a companion?
 					effect: {
 						type: transfer
-						filter: choose(culture(gandalf),follower,zone(support))
+						select: choose(culture(gandalf),follower,zone(support))
 						where: choose(companion)
 					}
 				}
@@ -568,7 +573,7 @@
 				cost: {
 					type: discardFromHand
 					forced: false
-					filter: choose(culture(gandalf))
+					select: choose(culture(gandalf))
 				}
 			}
 			{
@@ -586,16 +591,16 @@
 					}
 					{
 						type: transferToSupport
-						filter: self
+						select: self
 					}
 				]
 				effect: {
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: canSpot
 						filter: inSkirmish,mounted,orc
 					}
-					effect: {
+					true: {
 						type: cancelSkirmish
 						filter: memory(bearer)
 					}
@@ -608,8 +613,8 @@
 		culture: gandalf
 		twilight: 3
 		type: event
+		timeword: assignment
 		keyword: [
-			assignment
 			spell
 		]
 		effects: {
@@ -617,13 +622,13 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: all(culture(dwarven),companion,hasAttached(follower))
+					select: all(culture(dwarven),companion,hasAttached(follower))
 					amount: 2
 					until: start(regroup)
 				}
 				{
 					type: addKeyword
-					filter: all(culture(dwarven),companion,hasAttached(and(follower,culture(gandalf))))
+					select: all(culture(dwarven),companion,hasAttached(and(follower,culture(gandalf))))
 					keyword: defender+1
 					until: start(regroup)
 				}
@@ -636,7 +641,7 @@
 		unique: true
 		culture: gandalf
 		type: ally
-		allyHome: hobbit,5
+		allyHome: 5H
 		race: wizard
 		twilight: 4
 		strength: 8
@@ -647,7 +652,7 @@
 			phase: fellowship
 			cost: {
 				type: playCardFromDiscard
-				filter: choose(name(gandalf))
+				select: choose(name(gandalf))
 			}
 			effect: [
 				{
@@ -687,11 +692,14 @@
 			}
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: {
 				type: putCardsFromDeckIntoHand
-				filter: choose(culture(gandalf),spell)
+				select: choose(culture(gandalf),spell)
+                reveal: true
+                shuffle: true
+                showAll: true
 			}
 		}
 	}
@@ -706,7 +714,7 @@
 			phase: regroup
 			cost: {
 				type: discard
-				filter: self
+				select: self
 			}
 			effect: [
 				{
@@ -715,7 +723,7 @@
 				}
 				{
 					type: discard
-					filter: choose(side(shadow),condition)
+					select: choose(side(shadow),condition)
 			  }
       ]
     }
@@ -724,21 +732,21 @@
     title: An Invisible Ring
     culture: shire
     type: event
-    keyword: skirmish
+    timeword: skirmish
     twilight: 1
-    requires: {
-      type: ringIsOn
-    }
     effects: {
       type: event
+      requires: {
+        type: ringIsOn
+      }
       effect: [
         {
           type: wound
-          filter: all(minion,inSkirmishAgainst(ring bearer))
+          select: all(minion,inSkirmishAgainst(ring bearer))
         }
         {
           type: removefromthegame
-          filter: self
+          select: self
         }
       ]
     }
@@ -747,32 +755,32 @@
     title: Barrels
     culture: shire
     type: event
-    keyword: regroup
+    timeword: regroup
     twilight: 1
     effects: {
       type: event
       cost: {
         type: exert
         count: 2
-        filter: choose(culture(dwarven),companion)
+        select: choose(culture(dwarven),companion)
       }
       effect: [
         {
           type: discard
           count: 0-2
-          filter: choose(minion,not(name(Smaug)))
+          select: choose(minion,not(name(Smaug)))
         }
         {
           type: drawCards
           count: 3
         }
         {
-          type: conditional
-          requires: {
+          type: If
+          check: {
             type: location
             filter: river
           }
-          effect: {
+          true: {
             type: addModifier
             modifier: {
               type: modifyMoveLimit
@@ -802,12 +810,12 @@
         }
         {
           type: exert
-          filter: bearer
+          select: bearer
         }
       ]
       effect: {
         type: modifyStrength
-        filter: choose(not(bearer),companion)
+        select: choose(not(bearer),companion)
         amount: {
           type: cardAffectedLimitPerPhase
           limit: 4
@@ -829,7 +837,7 @@
         type: aidCost
         cost: {
           type: exert
-          filter: choose(name(Bilbo))
+          select: choose(name(Bilbo))
         }
       }
       {
@@ -841,7 +849,7 @@
         }
         cost: {
           type: discard
-          filter: self
+          select: self
         }
         effect: {
           type: choice
@@ -852,11 +860,14 @@
           effects: [
             {
               type: putCardsFromDeckIntoHand
-              filter: choose(side(free people),not(or(culture(gandalf),culture(elven))))
+              select: choose(side(free people),not(or(culture(gandalf),culture(elven))))
+                reveal: true
+                shuffle: true
+                showAll: true
             }
             {
               type: putCardsFromDiscardIntoHand
-              filter: choose(side(free people),not(or(culture(gandalf),culture(elven))))
+              select: choose(side(free people),not(or(culture(gandalf),culture(elven))))
             }
           ]
         }
@@ -867,24 +878,24 @@
     title: Skillful Negociator
     culture: shire
     type: event
-    keyword: maneuver
+    timeword: maneuver
     twilight: 1
     effects: {
       type: event
       cost: [
         {
           type: spot
-          filter: choose(ally)
+          select: choose(ally)
           memorize: chosenAlly
         }
         {
           type: exert
-          filter: choose(name(Bilbo))
+          select: choose(name(Bilbo))
         }
       ]
       effect: {
         type: EnableParticipationInArcheryFireAndSkirmishes
-        filter: memory(chosenAlly)
+        select: memory(chosenAlly)
         until: start(regroup)
       }
     }

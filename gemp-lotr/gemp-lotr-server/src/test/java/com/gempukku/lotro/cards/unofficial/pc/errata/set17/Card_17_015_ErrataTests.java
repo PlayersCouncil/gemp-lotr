@@ -59,8 +59,8 @@ public class Card_17_015_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, light.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, light.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, light.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(light, Keyword.FELLOWSHIP));
-		assertTrue(scn.HasKeyword(light, Keyword.SPELL));
+        assertTrue(scn.hasTimeword(light, Timeword.FELLOWSHIP));
+		assertTrue(scn.hasKeyword(light, Keyword.SPELL));
 		assertEquals(1, light.getBlueprint().getTwilightCost());
 	}
 

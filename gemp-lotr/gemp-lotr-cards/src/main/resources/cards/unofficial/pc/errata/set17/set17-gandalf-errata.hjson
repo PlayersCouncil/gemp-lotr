@@ -18,29 +18,29 @@
 		culture: gandalf
 		twilight: 1
 		type: event
+		timeword: fellowship
 		keyword: [
-			fellowship
 			spell
 		]
-		requires: {
-			type: canSpot
-			filter: culture(gandalf),wizard
-		}
 		effects: [
 			{
 				type: event
+                requires: {
+                    type: canSpot
+                    filter: culture(gandalf),wizard
+                }
 				effect: [
 					{
 						type: PutCardsFromDiscardIntoHand
 						player: freeps
 						discard: shadow
-						filter: choose(minion)
+						select: choose(minion)
 						count: 2
 						memorize: chosenMinions
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: IsGreaterThan
 							firstNumber: {
 								type: ForEachInMemory
@@ -48,7 +48,7 @@
 							}
 							secondNumber: 0
 						}
-						effect: [
+						true: [
 							{
 								type: revealHand
 								hand: shadowPlayer
@@ -59,7 +59,7 @@
 								hand: shadowPlayer
 								forced: true
 								player: you
-								filter: choose(memory(revealedCards),minion)
+								select: choose(memory(revealedCards),minion)
 							}
 						]
 					}
@@ -114,7 +114,7 @@
 				}
 				effect: {
 					type: Discard
-					filter: all(attachedTo(bearer),or(possession,weapon),another)
+					select: all(attachedTo(bearer),or(possession,weapon),another)
 				}
 			}
 			{
@@ -134,7 +134,7 @@
 				cost: [
 					{
 						type: exert
-						filter: bearer
+						select: bearer
 						times: 1				
 					}
 					{

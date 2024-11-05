@@ -29,13 +29,13 @@
 				type: activated
 				phase: shadow
 				cost: {
-					type: play
-					filter: choose(culture(sauron),minion)
+					type: PlayCardFromHand
+					select: choose(culture(sauron),minion)
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: sauron
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -43,40 +43,50 @@
 				phase: regroup
 				cost: [
 					{
-						type: chooseandremovetokens
-						culture: sauron
-						filter: self
-						memorize: numberOfTokens
+					    type: chooseANumber
+					    text: Choose how many {sauron} tokens to remove
+					    from: 0
+					    to: {
+					        type: ForEachCultureToken
+					        culture: sauron
+					        filter: self
+					    }
+					    memorize: numberOfTokens
+					}
+					{
+					    type: RemoveCultureTokens
+					    select: self
+					    count: memory(numberOfTokens)
 					}
 					{
 						type: discard
-						filter: choose(and(culture(sauron),minion))
+						select: choose(and(culture(sauron),minion))
 					}
 					{
 						type: chooseActiveCards
 						text: Choose a card for GROND to SMASH
-						filter: choose(side(free people),not(companion),minTwilight(memory(numberOfTokens)),maxTwilight(memory(numberOfTokens)))
+						select: choose(side(free people),not(companion),minTwilight(memory(numberOfTokens)),maxTwilight(memory(numberOfTokens)))
 						memorize: chosenCard
 					}
 				]
 				effect: [
 					{
-						type: conditional
-						requires: [
+						type: If
+						check: [
 							{
 								type: MemoryMatches
 								memory: chosenCard
 								filter: not(or(zone(SUPPORT),and(zone(ATTACHED),attachedTo(zone(SUPPORT)))))
 							}
 						]
-						effect: {
+						true: {
 							type: discard
-							filter: self
+							select: self
 						}
 					}
 					{
 						type: discard
-						filter: memory(chosenCard)
+						select: memory(chosenCard)
 					}
 				]
 			}
@@ -144,11 +154,11 @@
 				]
 				cost: {
 					type: discard
-					filter: choose(engine)
+					select: choose(engine)
 				}
 				effect: {
 					type: discard
-					filter: choose(condition,side(free people))
+					select: choose(condition,side(free people))
 				}
 			}
 		]

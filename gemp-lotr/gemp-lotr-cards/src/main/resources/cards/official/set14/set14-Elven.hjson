@@ -1,0 +1,182 @@
+{
+
+	14_2: {
+		cardInfo: {
+			imagePath: decipher/LOTR14002.jpg
+			//parentId: 14_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 14R2
+			rarity: R
+			setNum: "14"
+			cardNum: 2
+			style: Standard
+		}
+		title: Elladan
+		subtitle: Son of Elrond
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 3
+		type: Companion
+		race: Elf
+		strength: 7
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: name(Elrohir)
+					amount: -2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: culture(elven),event
+					requires: {
+						type: canSpot
+						filter: or(name(Elladan),name(Elrohir)),inSkirmish
+					}
+					amount: -2
+				}
+			}
+		]
+		gametext: Elrohir is twilight cost -2.<br>Each time you play an [elven] event during a skirmish involving Elladan or Elrohir, that event is twilight cost -2.
+		lore: "The Lady Celebrían bore Elrond two sons, the identical twins Elladan and Elrohir; elder brothers of Arwen, and grandchildren of Galadriel."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	14_3: {
+		cardInfo: {
+			imagePath: decipher/LOTR14003.jpg
+			//parentId: 14_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 14R3
+			rarity: R
+			setNum: "14"
+			cardNum: 3
+			style: Standard
+		}
+		title: Elrohir
+		subtitle: Son of Elrond
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 3
+		type: Companion
+		race: Elf
+		strength: 7
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: name(Elladan)
+					amount: -2
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: culture(elven),event
+				}
+				requires: {
+					type: canSpot
+					filter: or(name(Elladan),name(Elrohir)),inSkirmish
+				}
+				effect: {
+					type: modifyStrength
+					select: all(minion,inSkirmish)
+					amount: -2
+				}
+			}
+		]
+		gametext: Elladan is twilight cost -2.<br>Each time you play an [elven] event during a skirmish involving Elrohir or Elladan, each minion in that skirmish is strength -2.
+		lore: "'From the North we came with this purpose, and from Elrond our father we brought this very counsel. We will not turn back.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	14_4: {
+		cardInfo: {
+			imagePath: decipher/LOTR14004.jpg
+			//parentId: 14_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 14R4
+			rarity: R
+			setNum: "14"
+			cardNum: 4
+			style: Standard
+		}
+		title: Gildor Inglorion
+		subtitle: Of the House of Finrod
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: {
+			type: trigger
+			trigger: {
+				type: startOfPhase
+				phase: archery
+			}
+			requires: {
+				type: isGreaterThan
+				firstNumber: {
+					type: forEachYouCanSpot
+					filter: minion
+				}
+				secondNumber: {
+					type: forEachYouCanSpot
+					filter: companion
+				}
+			}
+			effect: {
+				type: addKeyword
+				select: all(companion)
+				keyword: archer
+			}
+		}
+		gametext: At the start of each archery phase, if you can spot more minions than companions, each of your companions is an <b>archer</b>.
+		lore: "'Elves seldom give unguarded advice, for advice is a dangerous gift, even from the wise to the wise, and all courses may run ill.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

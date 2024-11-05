@@ -7,14 +7,12 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_036_Tests
 {
@@ -63,7 +61,7 @@ public class Card_V1_036_Tests
 		PhysicalCardImpl vile = scn.GetFreepsCard("vile");
 
 		assertFalse(vile.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(vile, Keyword.TENTACLE)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(vile, Keyword.TENTACLE)); // test for keywords as needed
 		assertEquals(2, vile.getBlueprint().getTwilightCost());
 		assertEquals(7, vile.getBlueprint().getStrength());
 		assertEquals(2, vile.getBlueprint().getVitality());
@@ -85,7 +83,7 @@ public class Card_V1_036_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(3);
-		scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.MARSH));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowPlayCard(vile);
 
@@ -127,16 +125,16 @@ public class Card_V1_036_Tests
 		assertEquals(3, scn.GetStrength(vile));
 		assertEquals(0, scn.GetShadowDiscardCount());
 		assertEquals(1, scn.GetShadowHandCount());
-		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		assertFalse(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		scn.ShadowUseCardAction(vile);
 
 		assertEquals(7, scn.GetStrength(vile));
 		assertEquals(1, scn.GetShadowDiscardCount());
 		assertEquals(0, scn.GetShadowHandCount());
-		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		assertTrue(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 
 		scn.SkipToPhase(Phase.REGROUP);
-		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		assertTrue(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 	}
 
 }

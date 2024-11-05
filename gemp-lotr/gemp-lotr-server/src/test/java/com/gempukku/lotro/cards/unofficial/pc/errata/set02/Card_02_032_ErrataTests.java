@@ -152,10 +152,10 @@ public class Card_02_032_ErrataTests
         assertTrue(scn.FreepsAnyActionsAvailable());
         assertTrue(scn.FreepsActionAvailable(brand));
 
-        assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
+        assertFalse(scn.hasKeyword(aragorn, Keyword.DAMAGE));
         scn.FreepsUseCardAction(brand);
         assertEquals(11, scn.GetStrength(aragorn));
-        assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));
+        assertTrue(scn.hasKeyword(aragorn, Keyword.DAMAGE));
         assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
     }
 
@@ -183,10 +183,10 @@ public class Card_02_032_ErrataTests
 
         assertTrue(scn.FreepsActionAvailable(brand));
         assertEquals(9, scn.GetStrength(aragorn));
-        assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
+        assertFalse(scn.hasKeyword(aragorn, Keyword.DAMAGE));
         scn.FreepsUseCardAction(brand);
         assertEquals(11, scn.GetStrength(aragorn));
-        assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));
+        assertTrue(scn.hasKeyword(aragorn, Keyword.DAMAGE));
 
         scn.ShadowPassCurrentPhaseAction();
         scn.FreepsPassCurrentPhaseAction();
@@ -198,7 +198,7 @@ public class Card_02_032_ErrataTests
         scn.FreepsResolveSkirmish(aragorn);
         assertTrue(scn.IsAttachedTo(brand, aragorn));
         assertEquals(11, scn.GetStrength(aragorn));
-        assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));
+        assertTrue(scn.hasKeyword(aragorn, Keyword.DAMAGE));
 
         scn.PassCurrentPhaseActions();
 

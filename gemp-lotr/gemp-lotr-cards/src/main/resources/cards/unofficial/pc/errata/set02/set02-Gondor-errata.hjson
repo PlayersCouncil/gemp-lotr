@@ -56,12 +56,12 @@
 	# 			effect: [
 	# 				{
 	# 					type: modifyStrength
-	# 					filter: memory(bearer)
+	# 					select: memory(bearer)
 	# 					amount: 3
 	# 				}
 	# 				{
 	# 					type: addKeyword
-	# 					filter: memory(bearer)
+	# 					select: memory(bearer)
 	# 					keyword: damage+2
 	# 				}
 	# 			]
@@ -150,7 +150,7 @@
 						}
 						effect: {
 							type: Discard
-							filter: self
+							select: self
 						}
 					}
 					{

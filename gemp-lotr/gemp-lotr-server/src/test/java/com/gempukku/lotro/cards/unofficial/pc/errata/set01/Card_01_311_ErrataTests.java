@@ -68,7 +68,7 @@ public class Card_01_311_ErrataTests
 	@Test
 	public void FellowshipActionExertsTwicePlusOneToRemoveABurden() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
@@ -93,7 +93,7 @@ public class Card_01_311_ErrataTests
 	@Test
 	public void FellowshipActionExertsTwiceToRemoveABurdenIf2ShireAllies() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
@@ -121,7 +121,7 @@ public class Card_01_311_ErrataTests
 	@Test
 	public void FellowshipActionExertsTwiceToRemoveABurdenIfRosie() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
@@ -149,7 +149,7 @@ public class Card_01_311_ErrataTests
 	@Test
 	public void RBDeathMakesSamTheRB() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");

@@ -28,11 +28,11 @@ public class Card_03_013_ErrataTests
 	}
 
 	@Test
-	public void ElrondBStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ElrondStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 3
-		 * Name: Elrond B, Herald to Gil-galad
+		 * Name: Elrond, Herald to Gil-galad
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Elven
@@ -60,8 +60,7 @@ public class Card_03_013_ErrataTests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
-		assertEquals(3, card.getBlueprint().getAllyHomeSiteNumbers()[0]);
-		assertEquals(SitesBlock.FELLOWSHIP, card.getBlueprint().getAllyHomeSiteBlock());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

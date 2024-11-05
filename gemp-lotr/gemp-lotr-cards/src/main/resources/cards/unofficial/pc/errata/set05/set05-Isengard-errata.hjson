@@ -32,14 +32,14 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(Uruk-hai)
+					select: choose(Uruk-hai)
 				}
 				effect: [
 					{
-						type: AddTokens
-						amount: 1
+						type: AddCultureTokens
+						count: 1
 						culture: isengard
-						filter: self
+						select: self
 					}
 					{
 						type: incrementPerPhaseLimit
@@ -53,20 +53,20 @@
 				effect: [
 					{
 						type: repeat
-						amount: {
-							type: ForEachToken
+						times: {
+							type: ForEachCultureToken
 							filter: self
 							culture: isengard
 						}
 						effect: {
 							type: Heal
 							count: 1
-							filter: choose(Uruk-hai)
+							select: choose(Uruk-hai)
 						}
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}

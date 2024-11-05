@@ -18,12 +18,12 @@
 		culture: sauron
 		twilight: 2
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(sauron),minion)
+				select: choose(culture(sauron),minion)
 			}
 			effect: [
 				{
@@ -43,9 +43,10 @@
 				}
 				{
 					type: ChooseCardsFromDrawDeck
-					filter: choose(minion,MaxTwilight(memory(revealedCard)))
+					select: choose(minion,MaxTwilight(memory(revealedCard)))
 					memorize: chosenCard
 					text: Choose a minion to take into hand from your draw deck
+					showAll: true
 				}
 				{
 					type: preventable
@@ -63,7 +64,10 @@
 					text: Discard {twilightCostInMemory} cards from hand to prevent your opponent taking {chosenCard} into hand from their draw deck
 					effect: {
 						type: PutCardsFromDeckIntoHand
-						filter: memory(chosenCard)
+						select: memory(chosenCard)
+                        reveal: true
+                        shuffle: false
+                        showAll: false
 					}
 				}
 			]
@@ -98,15 +102,15 @@
 		culture: sauron
 		twilight: 0
 		type: event
+		timeword: maneuver
 		keyword: [
-			maneuver
 			search
 		]
 		effects: {
 			type: event
 			effect: {
-				type: conditional
-				requires: [
+				type: If
+				check: [
 					{
 						type: canSpot
 						filter: culture(sauron)
@@ -116,7 +120,7 @@
 						filter: nazgul
 					}
 				]
-				effect:	{
+				true:	{
 					type: preventable
 					player: freeps
 					cost: {
@@ -134,7 +138,7 @@
 						times: {
 							type: ForEachBurden
 						}
-						filter: choose(companion)
+						select: choose(companion)
 					}
 				}
 			}
@@ -176,12 +180,12 @@
 	# 		type: event
 	# 		cost: {
 	# 			type: exert
-	# 			filter: choose(culture(sauron),minion,unique)
+	# 			select: choose(culture(sauron),minion,unique)
 	# 		}
 	# 		effect: [
 	# 			{
 	# 				type: chooseActiveCards
-	# 				filter: choose(companion,not(exhausted),not(Ring-bearer))
+	# 				select: choose(companion,not(exhausted),not(Ring-bearer))
 	# 				memorize: chosenComp
 	# 				text: Choose a companion to exhaust
 	# 			}
@@ -197,7 +201,7 @@
 	# 				text: Discard 2 cards at random from hand to prevent exhausting {chosenComp}
 	# 				effect: {
 	# 					type: exhaust
-	# 					filter: memory(chosenComp)
+	# 					select: memory(chosenComp)
 	# 				}
 	# 			}
 	# 		]
@@ -233,31 +237,27 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		keyword: Maneuver
-		requires: {
-			type: canSpot
-			filter: unique,culture(sauron),minion,not(exhausted)
-		}
+		timeword: maneuver
 		effects: {
 			type: event
-			requires: {
-				type: canSpot
-				filter: unique,culture(sauron),minion,not(exhausted)
-			}
+            requires: {
+                type: canSpot
+                filter: unique,culture(sauron),minion,not(exhausted)
+            }
 			cost: {
 				type: exert
-				filter: choose(unique,culture(sauron),minion,not(exhausted))
+				select: choose(unique,culture(sauron),minion,not(exhausted))
 			},
 			effect: [
 				{
 					type: ChooseActiveCards
-					filter: choose(companion,not(ring-bearer))
+					select: choose(companion,not(ring-bearer))
 					memorize: chosenComp
 					text: Choose a companion (except the Ring-bearer) to exert and have a borne possession discarded.
 				}
 				{
 					type: ChooseActiveCards
-					filter: choose(possession,AttachedTo(memory(chosenComp)))
+					select: choose(possession,AttachedTo(memory(chosenComp)))
 					memorize: chosenPoss
 					text: Choose a possession attached to that companion to discard.
 				}
@@ -275,11 +275,11 @@
 					effect:[
 						{
 							type: Exert
-							filter: memory(chosenComp)
+							select: memory(chosenComp)
 						}
 						{
 							type: Discard
-							filter: memory(chosenPoss)
+							select: memory(chosenPoss)
 						}
 					]
 				}
@@ -324,7 +324,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(culture(sauron),minion)
+					select: choose(culture(sauron),minion)
 				}
 			]
 			effect: [
@@ -335,16 +335,16 @@
 					memorize: cardsOnTop
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: MemoryMatches
 						memory: cardsOnTop
 						filter: side(freeps)
 					}
-					effect: [
+					true: [
 						{
 							type: chooseActiveCards
-							filter: choose(companion,not(exhausted),not(Ring-bearer))
+							select: choose(companion,not(exhausted),not(Ring-bearer))
 							memorize: chosenComp
 							text: Choose a companion to exert (except the Ring-bearer)
 						}
@@ -355,12 +355,14 @@
 								type: DiscardCardsFromDrawDeck
 								player: freeps
 								deck: freeps
-								filter: all(side(freeps),memory(cardsOnTop))
+								select: all(side(freeps),memory(cardsOnTop))
+                                showAll: false
+                                shuffle: false
 							}
 							text: Discard all revealed Free Peoples cards to prevent exerting {chosenComp}?
 							effect: {
 								type: exert
-								filter: memory(chosenComp)
+								select: memory(chosenComp)
 							}
 						}
 					]
@@ -374,11 +376,11 @@
 					effects: [
 						{
 							type: exert
-							filter: memory(chosenMinion)
+							select: memory(chosenMinion)
 						}
 						{
 							type: discard
-							filter: choose(culture(sauron),minion)
+							select: choose(culture(sauron),minion)
 						}
 					]
 				}
@@ -416,14 +418,12 @@
 		culture: sauron
 		twilight: 1
 		type: event
-		keyword: [
-			regroup
-		]
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
 				type: discard
-				filter: choose(culture(sauron),minion)
+				select: choose(culture(sauron),minion)
 			}
 			effect: [
 				{
@@ -436,7 +436,7 @@
 				}
 				{
 					type: chooseActiveCards
-					filter: choose(culture(sauron),minion)
+					select: choose(culture(sauron),minion)
 					memorize: chosenMinions
 					text: Choose minions to return to hand
 					count: {
@@ -460,7 +460,7 @@
 					effect: {
 						type: ReturnToHand
 						player: shadow
-						filter: memory(chosenMinions)
+						select: memory(chosenMinions)
 					}
 				}
 			]
@@ -525,7 +525,7 @@
 	# 						effects: [
 	# 							{
 	# 								type: discard
-	# 								filter: choose(Elf)
+	# 								select: choose(Elf)
 	# 								count: 2
 	# 							}
 	# 							{
@@ -538,7 +538,7 @@
 	# 					effect: {
 	# 						type: wound
 	# 						times: 3
-	# 						filter: choose(title(Galadriel))
+	# 						select: choose(title(Galadriel))
 	# 					}
 	# 				}
 	# 			}
@@ -553,14 +553,14 @@
 	# 					player: freeps
 	# 					cost: {
 	# 						type: discard
-	# 						filter: choose(Elf)
+	# 						select: choose(Elf)
 	# 						count: 2
 	# 					}
 	# 					text: Discard 2 Elves to prevent wounding Galadriel 3 times
 	# 					effect: {
 	# 						type: wound
 	# 						times: 3
-	# 						filter: choose(title(Galadriel))
+	# 						select: choose(title(Galadriel))
 	# 					}
 	# 				}
 	# 			}
@@ -653,18 +653,83 @@
 	# 		}
 	# 	}
 	# }
+	# 53_103: {
+	# 	cardInfo: {
+	# 		imagePath: errata/LOTR-EN03E103.3_card.jpg
+	# 		javaClass: false
+	# 		parent: 3_103
+	# 		parentPath: errata/pc
+	# 		version: 3
+	# 		collInfo: 3R103
+	# 		rarity: R
+	# 		setNum: "3"
+	# 		cardNum: 103
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Terrible as the Dawn
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Sauron
+	# 	twilight: 0
+	# 	type: event
+	# 	timeword: maneuver
+	# 	effects: {
+	# 		type: event
+	# 		requires: {
+	# 			type: canSpot
+	# 			filter: culture(sauron),minion
+	# 		}
+	# 		effect: {
+	# 			type: preventable
+	# 			text: Would you like to discard 2 Elves to prevent wounding Galadriel 3 times?
+	# 			player: fp
+	# 			cost: {
+	# 				type: discard
+	# 				select: choose(elf)
+	# 				count: 2
+	# 			}
+	# 			effect: {
+	# 				type: If
+	# 				check: {
+	# 					type: CanSpot
+	# 					filter: name(Galadriel),Ring-bearer
+	# 				}
+	# 				true: {
+	# 					type: Exhaust
+	# 					select: choose(name(Galadriel))
+	# 				}
+	# 				false: {
+	# 					type: wound
+	# 					select: choose(name(Galadriel))
+	# 					times: 3
+	# 				}
+	# 			}
+	# 		}
+	# 	}
+	# 	gametext: Spot a [sauron] minion to wound Galadriel three times (or exhaust her if Galadriel is the Ring-bearer). The Free Peoples player may discard two elves to prevent this. 
+	# 	lore: ""
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_103: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E103.3_card.jpg
-			javaClass: false
-			parent: 3_103
-			parentPath: errata/pc
+			imagePath: errata/LOTR-EN03E103.4_card.jpg
+			//parentId: 3_103
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
 			version: 3
 			collInfo: 3R103
 			rarity: R
 			setNum: "3"
 			cardNum: 103
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Terrible as the Dawn
@@ -672,43 +737,36 @@
 		side: Shadow
 		culture: Sauron
 		twilight: 0
-		type: event
-		keyword: maneuver
+		type: Event
+		timewords: Response
 		effects: {
-			type: event
-			requires: {
-				type: canSpot
-				filter: culture(sauron),minion
+			type: responseEvent
+			trigger: {
+				type: UsesSpecialAbility
+				filter: or(ally,companion)
+				memorize: target
+			}
+			cost: {
+				type: Spot
+				filter: culture(sauron)
 			}
 			effect: {
-				type: preventable
-				text: Would you like to discard 2 Elves to prevent wounding Galadriel 3 times?
-				player: fp
-				cost: {
-					type: discard
-					filter: choose(elf)
-					count: 2
-				}
+				type: Preventable
+				text: Would you like to discard a companion to prevent wounding {target}?
+				player: freeps
 				effect: {
-					type: If
-					check: {
-						type: CanSpot
-						filter: name(Galadriel),Ring-bearer
-					}
-					true: {
-						type: Exhaust
-						filter: choose(name(Galadriel))
-					}
-					false: {
-						type: wound
-						filter: choose(name(Galadriel))
-						times: 3
-					}
+					type: Wound
+					select: memory(target)
+				}
+				cost: {
+					type: Discard
+					player: freeps
+					select: choose(companion,not(ring-bearer))
 				}
 			}
 		}
-		gametext: Spot a [sauron] minion to wound Galadriel three times (or exhaust her if Galadriel is the Ring-bearer). The Free Peoples player may discard two elves to prevent this. 
-		lore: ""
+		gametext: If a companion or ally's special ability is used, you may spot a [sauron] card to wound that character.  The Free Peoples player may discard a companion to prevent this.
+		lore: “‘In the place of the Dark Lord, you would have a Queen... All shall love me and despair!'”
 		promotext: ""
 		alts: {
 			promos: {
@@ -746,7 +804,7 @@
 				type: ExtraCost
 				cost: {
 					type: exert
-				filter: choose(culture(sauron),minion)
+				select: choose(culture(sauron),minion)
 				}
 			}
 			{
@@ -873,7 +931,7 @@
 		culture: Sauron
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			requires: {
@@ -886,12 +944,12 @@
 				player: fp
 				cost: {
 					type: discard
-					filter: choose(side(free),condition)
+					select: choose(side(free),condition)
 					count: 2
 				}
 				effect: {
 					type: discard
-					filter: choose(name(Bilbo))
+					select: choose(name(Bilbo))
 				}
 			}
 		}

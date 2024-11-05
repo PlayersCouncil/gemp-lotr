@@ -17,12 +17,12 @@
 		culture: moria
 		twilight: 2
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(moria),not(title(Foul Things)),not(event,response))
+				select: choose(culture(moria),not(title(Foul Things)),not(event,timeword(response)))
 			}
 		}
 		gametext: <b>Shadow</b>: Play a [Moria] card from your discard pile.

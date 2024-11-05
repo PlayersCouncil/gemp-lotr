@@ -15,7 +15,7 @@ public class Card_17_015_Tests
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<String, String>()
+				new HashMap<>()
 				{{
 					put("light", "17_15");
 					put("gandalf", "1_72");
@@ -38,31 +38,32 @@ public class Card_17_015_Tests
 	public void ANewLightStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 17
-		* Title: A New Light
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Gandalf
-		* Twilight Cost: 1
-		* Type: event
-		* Subtype: Fellowship
-		* Game Text: <b>Spell.</b>
-		* 	Spot a [gandalf] Wizard to return a minion to its owner's hand from its owner's discard pile.
+		 * Set: 17
+		 * Name: A New Light
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 1
+		 * Type: Event
+		 * Subtype: Fellowship
+		 * Game Text: <b>Spell.</b>
+		 * 	Spot a [gandalf] Wizard to return a minion to its owner's hand from its owner's discard pile.
 		 * 	Reveal that Shadow player's hand and discard a minion from his or her hand.
 		*/
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var light = scn.GetFreepsCard("light");
+		var card = scn.GetFreepsCard("light");
 
-		assertFalse(light.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, light.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, light.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, light.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(light, Keyword.FELLOWSHIP));
-		assertTrue(scn.HasKeyword(light, Keyword.SPELL));
-		assertEquals(1, light.getBlueprint().getTwilightCost());
+		assertEquals("A New Light", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+        assertTrue(scn.hasTimeword(card, Timeword.FELLOWSHIP));
+		assertTrue(scn.hasKeyword(card, Keyword.SPELL));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test

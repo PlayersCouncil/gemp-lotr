@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.PhysicalCard;
-import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.actions.DefaultActionsEnvironment;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
@@ -53,8 +52,6 @@ public class CharacterDeathRule {
 
     public void checkCharactersZeroVitality(LotroGame game) {
         if (game.getGameState().getCurrentPhase() != Phase.PUT_RING_BEARER && game.getGameState().getCurrentPhase() != Phase.BETWEEN_TURNS) {
-            GameState gameState = game.getGameState();
-
             Collection<PhysicalCard> characters = Filters.filterActive(game,
                     Filters.or(CardType.ALLY, CardType.COMPANION, CardType.MINION));
 

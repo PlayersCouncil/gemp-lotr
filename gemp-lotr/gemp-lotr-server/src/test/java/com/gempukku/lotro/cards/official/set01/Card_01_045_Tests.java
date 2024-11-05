@@ -1,8 +1,7 @@
 package com.gempukku.lotro.cards.official.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.SitesBlock;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -39,43 +38,44 @@ public class Card_01_045_Tests
     @Test
     public void GaladrielStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
-        /**
-         * Set: 1E
-         * Title: *Galadriel
-         * Subtitle: Lady of Light
-         * Side: Free Peoples
-         * Culture: Elven
-         * Twilight Cost: 3
-         * Type: Ally
-         * Subtype: Elf
-         * Home: 6
-         * Strength: 3
-         * Vitality: 3
-         * Errata Game Text: At the start of each of your turns, heal every ally whose home is site 6.
-         * Fellowship: Exert Galadriel to play an Elf for free.
-         */
+		/**
+		 * Set: 1
+		 * Name: Galadriel, Lady of Light
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 3
+		 * Type: Ally
+		 * Subtype: Elf
+		 * Strength: 3
+		 * Vitality: 3
+		 * Site Number: 6
+		 * Game Text: At the start of each of your turns, heal every ally whose home is site 6.<br><b>Fellowship:</b> Exert Galadriel to play an Elf for free.
+		*/
 
-        //Pre-game setup
+        var scn = GetSimplePlayScenario();
 
-        GenericCardTestHelper scn = GetSimplePlayScenario();
+        var card = scn.GetFreepsCard("galadriel");
 
-        PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-
-        assertTrue(galadriel.getBlueprint().isUnique());
-        assertEquals(3, galadriel.getBlueprint().getTwilightCost());
-
-        assertEquals(3, galadriel.getBlueprint().getStrength());
-        assertEquals(3, galadriel.getBlueprint().getVitality());
-        assertEquals(6, galadriel.getBlueprint().getAllyHomeSiteNumbers()[0]);
-        assertEquals(SitesBlock.FELLOWSHIP, galadriel.getBlueprint().getAllyHomeSiteBlock());
+        assertEquals("Galadriel", card.getBlueprint().getTitle());
+        assertEquals("Lady of Light", card.getBlueprint().getSubtitle());
+        assertTrue(card.getBlueprint().isUnique());
+        assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+        assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+        assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
+        assertEquals(Race.ELF, card.getBlueprint().getRace());
+        assertEquals(3, card.getBlueprint().getTwilightCost());
+        assertEquals(3, card.getBlueprint().getStrength());
+        assertEquals(3, card.getBlueprint().getVitality());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 6)));
     }
 
     @Test
     public void FellowshipActionExertsToDiscountAnElf() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetSimplePlayScenario();
+        var scn = GetSimplePlayScenario();
 
-        PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
+        var galadriel = scn.GetFreepsCard("galadriel");
         scn.FreepsMoveCharToTable(galadriel);
         scn.FreepsMoveCardToHand("elrond");
 
@@ -99,13 +99,13 @@ public class Card_01_045_Tests
     @Test
     public void Site6AlliesAllHeal() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetHome6AllyScenario();
-        PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-        PhysicalCardImpl allyHome3_1 = scn.GetFreepsCard("allyHome3_1");
+        var scn = GetHome6AllyScenario();
+        var galadriel = scn.GetFreepsCard("galadriel");
+        var allyHome3_1 = scn.GetFreepsCard("allyHome3_1");
 
-        PhysicalCardImpl allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
-        PhysicalCardImpl allyHome6_2 = scn.GetFreepsCard("allyHome6_2");
-        PhysicalCardImpl allyHome6_3 = scn.GetFreepsCard("allyHome6_3");
+        var allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
+        var allyHome6_2 = scn.GetFreepsCard("allyHome6_2");
+        var allyHome6_3 = scn.GetFreepsCard("allyHome6_3");
 
         scn.FreepsMoveCharToTable(galadriel, allyHome3_1, allyHome6_3, allyHome6_1, allyHome6_2);
 

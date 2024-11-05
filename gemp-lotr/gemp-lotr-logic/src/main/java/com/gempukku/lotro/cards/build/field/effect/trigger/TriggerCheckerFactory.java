@@ -12,46 +12,62 @@ public class TriggerCheckerFactory {
     private final Map<String, TriggerCheckerProducer> triggerCheckers = new HashMap<>();
 
     public TriggerCheckerFactory() {
+
+        //Movement triggers
+        triggerCheckers.put("movesfrom", new MovesFrom());
+        triggerCheckers.put("moves", new Moves());
+        triggerCheckers.put("abouttomoveto", new AboutToMoveTo());
+        triggerCheckers.put("movesto", new MovesTo());
+
+        //Timing Triggers
+        triggerCheckers.put("startofturn", new StartOfTurn());
+        triggerCheckers.put("startofphase", new StartOfPhase());
+        triggerCheckers.put("endofphase", new EndOfPhase());
+        triggerCheckers.put("endofturn", new EndOfTurn());
+
+        triggerCheckers.put("abouttoaddburden", new AboutToAddBurden());
+        triggerCheckers.put("abouttoaddtwilight", new AboutToAddTwilight());
         triggerCheckers.put("abouttobekilled", new AboutToBeKilled());
-        triggerCheckers.put("abouttodiscard", new AboutToDiscardFromPlay());
+        triggerCheckers.put("abouttobeoverwhelmed", new AboutToBeOverwhelmed());
+        triggerCheckers.put("abouttodiscard", new AboutToDiscard());
+        triggerCheckers.put("abouttodrawcard", new AboutToDrawCard());
         triggerCheckers.put("abouttoexert", new AboutToExert());
         triggerCheckers.put("abouttoheal", new AboutToHeal());
-        triggerCheckers.put("abouttomoveto", new AboutToMoveTo());
+        triggerCheckers.put("abouttotakecontrolofsite", new AboutToTakeControlOfSite());
         triggerCheckers.put("abouttotakewound", new AboutToTakeWound());
         triggerCheckers.put("addsburden", new AddsBurden());
+        triggerCheckers.put("addsculturetoken", new AddsCultureToken());
         triggerCheckers.put("addsthreat", new AddsThreat());
+        triggerCheckers.put("afterallskirmishes", new AfterAllSkirmishes());
         triggerCheckers.put("assignedagainst", new AssignedAgainst());
         triggerCheckers.put("assignedtoskirmish", new AssignedToSkirmish());
+        triggerCheckers.put("beforethreatwounds", new BeforeThreatWounds());
+        triggerCheckers.put("beforetoil", new BeforeToil());
         triggerCheckers.put("cancelledskirmish", new CancelledSkirmish());
         triggerCheckers.put("constantlycheck", new ConstantlyCheckTrigger());
         triggerCheckers.put("discarded", new Discarded());
-        triggerCheckers.put("discardfromdeck", new DiscardFromDeck());
-        triggerCheckers.put("discardfromhand", new DiscardFromHand());
-        triggerCheckers.put("discardfromhandby", new DiscardFromHandBy());
-        triggerCheckers.put("endofphase", new EndOfPhase());
-        triggerCheckers.put("endofturn", new EndOfTurn());
-        triggerCheckers.put("exertedby", new ExertedBy());
-        triggerCheckers.put("exerts", new Exerts());
-        triggerCheckers.put("fpdecidedifmoving", new FPDecidedIfMoving());
-        triggerCheckers.put("fpdecidedtomove", new FPDecidedToMove());
+        triggerCheckers.put("exerted", new Exerted());
+        triggerCheckers.put("exertsforspecialability", new ExertsForSpecialAbility());
+        triggerCheckers.put("exertstoplay", new ExertsToPlay());
         triggerCheckers.put("fpdecidedtostay", new FPDecidedToStay());
         triggerCheckers.put("fpstartedassigning", new FPStartedAssigning());
         triggerCheckers.put("heals", new Heals());
         triggerCheckers.put("killed", new Killed());
         triggerCheckers.put("losesinitiative", new LosesInitiative());
         triggerCheckers.put("losesskirmish", new LosesSkirmish());
-        triggerCheckers.put("moves", new Moves());
-        triggerCheckers.put("movesfrom", new MovesFrom());
-        triggerCheckers.put("movesto", new MovesTo());
         triggerCheckers.put("played", new PlayedTriggerCheckerProducer());
-        triggerCheckers.put("playedfromstacked", new PlayedFromStacked());
+        triggerCheckers.put("playerdrawscard", new PlayerDrawsCard());
         triggerCheckers.put("putsonring", new PutsOnRing());
         triggerCheckers.put("reconciles", new Reconciles());
-        triggerCheckers.put("removedfromplay", new RemovedFromPlay());
         triggerCheckers.put("removesburden", new RemovesBurden());
+        triggerCheckers.put("removesculturetoken", new RemovesCultureToken());
+        triggerCheckers.put("replacessite", new ReplacesSite());
         triggerCheckers.put("revealscardfromtopofdrawdeck", new RevealsCardFromTopOfDrawDeck());
-        triggerCheckers.put("startofphase", new StartOfPhase());
-        triggerCheckers.put("startofturn", new StartOfTurn());
+        triggerCheckers.put("revealedcardfromhand", new RevealedCardFromHand());
+        triggerCheckers.put("siteliberated", new SiteLiberated());
+        triggerCheckers.put("sitecontrolled", new SiteControlled());
+        triggerCheckers.put("skirmishabouttoend", new SkirmishAboutToEnd());
+        triggerCheckers.put("startofskirmishinvolving", new StartOfSkirmishInvolving());
         triggerCheckers.put("takesoffring", new TakesOffRing());
         triggerCheckers.put("takeswound", new TakesWound());
         triggerCheckers.put("transferred", new Transferred());

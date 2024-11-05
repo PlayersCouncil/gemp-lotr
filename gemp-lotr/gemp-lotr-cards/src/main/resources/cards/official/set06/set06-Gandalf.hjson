@@ -1,0 +1,763 @@
+{
+
+	6_24: {
+		cardInfo: {
+			imagePath: decipher/LOTR06024.jpg
+			//parentId: 6_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U24
+			rarity: U
+			setNum: "6"
+			cardNum: 24
+			style: Standard
+		}
+		title: Boomed and Trumpeted
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(ent)
+					amount: {
+						type: forEachYouCanSpot
+						filter: unbound,hobbit
+					}
+					memorize: chosenEnt
+				}
+				{
+					type: addKeyword
+					select: memory(chosenEnt)
+					keyword: damage
+					amount: {
+						type: forEachYouCanSpot
+						filter: unbound,hobbit
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make an Ent strength +X and <b>damage +X</b>, where X is the number of unbound Hobbits you can spot.
+		lore: "'For bole and bough are burning now, the furnace roars – we go to war!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_25: {
+		cardInfo: {
+			imagePath: decipher/LOTR06025.jpg
+			//parentId: 6_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U25
+			rarity: U
+			setNum: "6"
+			cardNum: 25
+			style: Standard
+		}
+		title: Crack Into Rubble
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(ent)
+				count: 2
+			},
+			effect: [
+				{
+					type: liberateSite
+				}
+				{
+					type: discard
+					select: choose(side(shadow),condition)
+				}
+			]
+		}
+		gametext: <b>Regroup:</b> Exert 2 Ents to liberate a site and discard a Shadow condition.
+		lore: "'To Isengard! Though Isengard be ringed and barred with doors of stone; / Though Isengard be strong and hard, as cold as stone and bare as bone....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_26: {
+		cardInfo: {
+			imagePath: decipher/LOTR06026.jpg
+			//parentId: 6_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R26
+			rarity: R
+			setNum: "6"
+			cardNum: 26
+			style: Standard
+		}
+		title: Enraged
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Condition
+		strength: 4
+		target: ent,not(hasAttached(name(Enraged)))
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: endOfTurn
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: Bearer must be an Ent. Limit 1 per bearer.<br>Discard this condition at the end of the turn.
+		lore: "'An angry Ent is terrifying.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_27: {
+		cardInfo: {
+			imagePath: decipher/LOTR06027.jpg
+			//parentId: 6_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C27
+			rarity: C
+			setNum: "6"
+			cardNum: 27
+			style: Standard
+		}
+		title: Ent Avenger
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Ent
+		strength: 6
+		vitality: 4
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					requires: {
+						type: canSpot
+						filter: ent
+						count: 3
+					}
+					amount: 2
+				}
+			}
+		]
+		gametext: While you can spot 3 Ents, this companion is strength +2.
+		lore: "As they drew near the flash and flicker of their eyes could be seen."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_28: {
+		cardInfo: {
+			imagePath: decipher/LOTR06028.jpg
+			//parentId: 6_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R28
+			rarity: R
+			setNum: "6"
+			cardNum: 28
+			style: Standard
+		}
+		title: Ent Horde
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 15
+		type: Companion
+		race: Ent
+		strength: 10
+		vitality: 5
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: ent,companion
+					count: 2
+				}
+			}
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: or(ent,and(unbound,hobbit))
+					multiplier: -2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self
+					requires: {
+						type: isLessThan
+						firstNumber: {
+							type: forEachYouCanSpot
+							filter: companion
+						}
+						secondNumber: {
+							type: forEachYouCanSpot
+							filter: minion
+						}
+					}
+					keyword: defender
+					amount: 1
+				}
+			}
+		]
+		gametext: To play, spot 2 Ent companions.<br>Ent Horde's twilight cost is -2 for each Ent or unbound Hobbit you can spot.<br>While you can spot more minions than companions, Ent Horde is <b>defender +1</b>.
+		lore: "'With doom we come, with doom we come!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_29: {
+		cardInfo: {
+			imagePath: decipher/LOTR06029.jpg
+			//parentId: 6_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C29
+			rarity: C
+			setNum: "6"
+			cardNum: 29
+			style: Standard
+		}
+		title: Ent Moot
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		strength: 2
+		target: ent,not(hasAttached(name(Ent Moot)))
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(unbound,hobbit)
+				}
+			}
+		]
+		gametext: To play, exert an unbound Hobbit. Bearer must be an Ent. Limit 1 per bearer.
+		lore: "But when the Ents all gathered round Treebeard,... then the Hobbits saw that they were all of the same kindred, and all had the same eyes...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_30: {
+		cardInfo: {
+			imagePath: decipher/LOTR06030.jpg
+			//parentId: 6_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R30
+			rarity: R
+			setNum: "6"
+			cardNum: 30
+			style: Standard
+		}
+		title: Gandalf
+		subtitle: Mithrandir
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 10
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		keywords: Damage+1
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: wound
+					select: self
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>.<br>Each time the fellowship moves, wound Gandalf.
+		lore: "'The Dark Lord has Nine. But we have One, mightier than they: the White Rider. He has passed through the fire and the abyss, and they shall fear him.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_31: {
+		cardInfo: {
+			imagePath: decipher/LOTR06031.jpg
+			//parentId: 6_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R31
+			rarity: R
+			setNum: "6"
+			cardNum: 31
+			style: Standard
+		}
+		title: Glamdring
+		subtitle: Lightning Brand
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: title(Gandalf)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: your,spell
+				}
+				requires: {
+					type: phase
+					phase: skirmish
+				}
+				effect: {
+					type: addKeyword
+					select: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be Gandalf.<br>He is <b>damage +1</b>.<br>Each time you play a spell during a skirmish, you may make Gandalf <b>damage +1</b> until the end of that skirmish.
+		lore: "'Thunder they heard, and lightning... smote upon Celebdil, and leaped back broken into tongues of fire.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_32: {
+		cardInfo: {
+			imagePath: decipher/LOTR06032.jpg
+			//parentId: 6_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U32
+			rarity: U
+			setNum: "6"
+			cardNum: 32
+			style: Standard
+		}
+		title: Host of Fangorn
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 13
+		type: Companion
+		race: Ent
+		strength: 10
+		vitality: 4
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: ent,companion
+					count: 2
+				}
+			}
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: or(ent,and(unbound,hobbit))
+					multiplier: -2
+				}
+			}
+		]
+		gametext: To play, spot 2 Ent companions.<br>Host of Fangorn's twilight cost is -2 for each Ent or unbound Hobbit you can spot.
+		lore: "'Of course, it is likely enough, my friends... that we are going to our doom, the last march of the Ents.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_33: {
+		cardInfo: {
+			imagePath: decipher/LOTR06033.jpg
+			//parentId: 6_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C33
+			rarity: C
+			setNum: "6"
+			cardNum: 33
+			style: Standard
+		}
+		title: Quickbeam
+		subtitle: Bregalad
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Ent
+		strength: 8
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: or(ent,and(unbound,hobbit))
+					multiplier: -1
+				}
+			}
+		]
+		gametext: Quickbeam's twilight cost is -1 for each Ent or unbound Hobbit you can spot.
+		lore: "'But if we stayed home and did nothing, doom would find us anyway, sooner or later.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_34: {
+		cardInfo: {
+			imagePath: decipher/LOTR06034.jpg
+			//parentId: 6_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C34
+			rarity: C
+			setNum: "6"
+			cardNum: 34
+			style: Standard
+		}
+		title: Roused
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(ent)
+				memorize: exertedEnt
+			},
+			effect: [
+				{
+					type: chooseHowManyToSpot
+					text: Choose how many Ents to spot
+					filter: ent
+					memorize: spotCount
+				}
+				{
+					type: modifyStrength
+					select: memory(exertedEnt)
+					amount: {
+						type: fromMemory
+						memory: spotCount
+						limit: 4
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Exert an Ent to make him strength +1 for each Ent you spot (limit +4).
+		lore: "To Isengard!' the Ents cried in many voices."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR06035.jpg
+			//parentId: 6_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6R35
+			rarity: R
+			setNum: "6"
+			cardNum: 35
+			style: Standard
+		}
+		title: Skinbark
+		subtitle: Fladrif
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 7
+		type: Companion
+		race: Ent
+		strength: 8
+		vitality: 4
+		resistance: 6
+		effects: [
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: or(ent,and(unbound,hobbit))
+					multiplier: -1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: unbound,hobbit
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: preventWound
+					select: choose(unbound,hobbit)
+				}
+			}
+		]
+		gametext: Skinbark's twilight cost is -1 for each Ent or unbound Hobbit you can spot.<br><b>Response:</b> If an unbound Hobbit is about to take a wound, exert Skinbark to prevent that wound.
+		lore: "'He was wounded by Orcs, and many of his folk and tree-herds have been murdered and destroyed.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_36: {
+		cardInfo: {
+			imagePath: decipher/LOTR06036.jpg
+			//parentId: 6_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U36
+			rarity: U
+			setNum: "6"
+			cardNum: 36
+			style: Standard
+		}
+		title: Threw Down My Enemy
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		keywords: Spell
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(name(Gandalf)))
+					amount: {
+						type: forEachWound
+						filter: character,inSkirmish
+						multiplier: -1
+					}
+				}
+			]
+		}
+		gametext: <b>Spell</b>.<br><b>Skirmish:</b> Make a minion skirmishing Gandalf strength -1 for each wound on each character in the skirmish.
+		lore: "'...he fell from the high place and broke the mountain-side where he smote it in his ruin.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_37: {
+		cardInfo: {
+			imagePath: decipher/LOTR06037.jpg
+			//parentId: 6_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6C37
+			rarity: C
+			setNum: "6"
+			cardNum: 37
+			style: Standard
+		}
+		title: Treebeard
+		subtitle: Guardian of the Forest
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 5
+		type: Companion
+		race: Ent
+		strength: 12
+		vitality: 4
+		resistance: 6
+		keywords: Unhasty
+		effects: [
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: exert
+					select: choose(unbound,hobbit)
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: unhastyCompanionCanParticipateInSkirmishes
+						filter: self
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: choose(ent)
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit to allow Treebeard to skirmish.<br><b>Skirmish:</b> Exert Treebeard to make an Ent <b>damage +1</b>.
+		lore: "'The little that I know of his long slow story would make a tale for which we have no time now.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

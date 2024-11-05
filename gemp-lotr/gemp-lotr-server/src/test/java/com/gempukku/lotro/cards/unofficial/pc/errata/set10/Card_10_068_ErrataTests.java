@@ -57,7 +57,7 @@ public class Card_10_068_ErrataTests
 		assertEquals(Culture.WRAITH, enquea.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, enquea.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, enquea.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(enquea, Keyword.ENDURING));
+		assertTrue(scn.hasKeyword(enquea, Keyword.ENDURING));
 		assertEquals(6, enquea.getBlueprint().getTwilightCost());
 		assertEquals(11, enquea.getBlueprint().getStrength());
 		assertEquals(4, enquea.getBlueprint().getVitality());

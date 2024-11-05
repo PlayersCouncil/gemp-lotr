@@ -20,11 +20,17 @@ public interface PhysicalCard extends Filterable {
 
     public PhysicalCard getStackedOn();
 
-    public void setWhileInZoneData(Object object);
+    public void setWhileInZoneData(WhileInZoneData whileInZoneData);
 
-    public Object getWhileInZoneData();
+    public WhileInZoneData getWhileInZoneData();
 
     public void setSiteNumber(Integer number);
 
     public Integer getSiteNumber();
+
+    public interface WhileInZoneData {
+        String getValue();
+
+        String getHumanReadable();
+    }
 }

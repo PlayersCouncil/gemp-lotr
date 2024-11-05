@@ -2,7 +2,8 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -10,9 +11,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_057_Tests
 {
@@ -91,6 +90,7 @@ public class Card_V1_057_Tests
 
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(1, scn.GetWoundsOn(frodo));
+		scn.FreepsChooseCardBPFromSelection(cond);
 		assertEquals(Zone.ATTACHED, cond.getZone());
 	}
 

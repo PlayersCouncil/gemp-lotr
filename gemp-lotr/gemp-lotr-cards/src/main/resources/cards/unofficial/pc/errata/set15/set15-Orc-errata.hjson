@@ -35,19 +35,19 @@
 				cost: {
 					type: discard
 					count: 5
-					filter: choose(culture(orc), minion, another)
+					select: choose(culture(orc), minion, another)
 				}
 				effect: [
 					{
 						type: addKeyword
 						keyword: fierce
-						filter: self
+						select: self
 						until: endofturn
 					}
 					{
 						type: modifystrength
 						amount: 10
-						filter: self
+						select: self
 						until: endofturn
 					}
 				]
@@ -63,12 +63,12 @@
 					{
 						type: playCardFromDiscard
 						removedTwilight: 2
-						filter: choose(culture(orc), orc)
+						select: choose(culture(orc), orc)
 						memorize: PlayedOrc
 					}
 					{
 						type: exhaust
-						filter: memory(PlayedOrc)
+						select: memory(PlayedOrc)
 					}
 				]
 			}

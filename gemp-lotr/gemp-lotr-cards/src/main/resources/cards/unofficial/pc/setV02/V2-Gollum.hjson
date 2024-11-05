@@ -1,0 +1,86 @@
+{
+
+	102_15: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S015.0_card.jpg
+			//parentId: 102_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_15
+			rarity: _
+			setNum: V2
+			cardNum: 15
+			style: Standard
+		}
+		title: Watching and Waiting
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: [
+			{
+				type: event
+				requires: {
+					type: CanSpotTwilight
+					amount: 25
+				}
+				cost: {
+					type: RemoveTwilight
+					amount: 10
+				}
+				effect: [
+					{
+						type: DrawCards
+						count: 8
+					}
+					{
+						type: RemoveFromTheGame
+						select: self
+					}
+				]
+			}
+			{
+				type: ActivatedInDiscard
+				phase: Shadow
+				requires: [
+					{
+						type: canSelfBePlayed
+					}
+				]
+				effect: {
+					type: playCardFromDiscard
+					select: self
+				}
+			}
+			{
+				type: ActivatedInDrawDeck
+				phase: Shadow
+				requires: [
+					{
+						type: canSelfBePlayed
+					}
+				]
+				effect: {
+					type: PlayCardFromDrawDeck
+					select: self
+					shuffle: true
+					showAll: true
+				}
+			}
+		]
+		gametext: Spot 25 twilight tokens and remove 10 to draw 8 cards, then remove this from the game. This event may be played from your draw deck or discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

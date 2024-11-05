@@ -1,0 +1,692 @@
+{
+
+	3_37: {
+		cardInfo: {
+			imagePath: decipher/LOTR03037.jpg
+			//parentId: 3_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3C37
+			rarity: C
+			setNum: "3"
+			cardNum: 37
+			style: Standard
+		}
+		title: Answering the Cries
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: discardFromHand
+				forced: false
+				select: choose(culture(gondor),tale)
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(culture(gondor),companion)
+				amount: 2
+			}
+		}
+		gametext: Plays to your support area.<br><b>Skirmish:</b> Discard a [gondor] tale from hand to make a [gondor] companion strength +2.
+		lore: "Drawing his bright sword and crying Elendil! Elendil! he crashed through the trees."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_38: {
+		cardInfo: {
+			imagePath: decipher/LOTR03038.jpg
+			//parentId: 3_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3R38
+			rarity: R
+			setNum: "3"
+			cardNum: 38
+			style: Standard
+		}
+		title: Aragorn
+		subtitle: Heir to the White City
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		signet: Frodo
+		resistance: 6
+		keywords: Ranger
+		effects: {
+			type: trigger
+			trigger: {
+				type: moves
+			}
+			requires: {
+				type: phase
+				phase: fellowship
+			}
+			effect: {
+				type: removeTwilight
+				amount: 2
+			}
+		}
+		gametext: <b>Ranger</b>.<br>Each time the fellowship moves during the fellowship phase, remove (2).
+		lore: "'...his hood was cast back, and his dark hair was blowing in the wind, a light was in his eyes: a king returning from exile in his own land.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_39: {
+		cardInfo: {
+			imagePath: decipher/LOTR03039.jpg
+			//parentId: 3_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3R39
+			rarity: R
+			setNum: "3"
+			cardNum: 39
+			style: Standard
+		}
+		title: Banner of the White Tree
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		keywords: Tale
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(culture(gondor),companion)
+				memorize: exertedCompanion
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: memory(exertedCompanion)
+					amount: 3
+					until: start(regroup)
+				}
+				{
+					type: addKeyword
+					select: memory(exertedCompanion)
+					keyword: defender
+					amount: 1
+					until: start(regroup)
+				}
+			]
+		}
+		gametext: <b>Tale</b>.<br><b>Maneuver:</b> Exert a [gondor] companion to make that companion strength +3 and <b>defender +1</b> until the regroup phase.
+		lore: "'Many Elves and many mighty Men, and many of their friends, had perished in the war.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_40: {
+		cardInfo: {
+			imagePath: decipher/LOTR03040.jpg
+			//parentId: 3_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3R40
+			rarity: R
+			setNum: "3"
+			cardNum: 40
+			style: Standard
+		}
+		title: Citadel of Minas Tirith
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: endOfTurn
+			}
+			requires: {
+				type: not
+				requires: {
+					type: lostSkirmishThisTurn
+					filter: or(companion,ally)
+				}
+			}
+			effect: {
+				type: heal
+				select: choose(companion)
+			}
+		}
+		gametext: Plays to your support area.<br>You may heal a [gondor] companion at the end of each turn during which no companion or ally lost a skirmish.
+		lore: "'One day our paths will lead us there, and the Tower guards shall take up the call – The Lords of Gondor have returned.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_41: {
+		cardInfo: {
+			imagePath: decipher/LOTR03041.jpg
+			//parentId: 3_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3R41
+			rarity: R
+			setNum: "3"
+			cardNum: 41
+			style: Standard
+		}
+		title: Gondor Bowmen
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: [
+			Tale
+			Support Area
+		]
+		effects: {
+			type: activated
+			phase: archery
+			cost: [
+				{
+					type: exert
+					select: choose(culture(gondor),companion)
+				}
+				{
+					type: discard
+					select: self
+				}
+			]
+			effect: {
+				type: modifyArcheryTotal
+				side: free
+				amount: 2
+			}
+		}
+		gametext: <b>Tale</b>. Plays to your support area.<br><b>Archery:</b> Exert a [gondor] companion and discard this condition to make the fellowship archery total +2.
+		lore: "Arrows of the Last Alliance brought death to Sauron's forces."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_42: {
+		cardInfo: {
+			imagePath: decipher/LOTR03042.jpg
+			//parentId: 3_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3R42
+			rarity: R
+			setNum: "3"
+			cardNum: 42
+			style: Standard
+		}
+		title: Horn of Boromir
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Possession
+		target: name(Boromir)
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: exert
+				select: bearer
+			}
+			effect: [
+				{
+					type: chooseActiveCards
+					select: choose(ally)
+					text: Choose ally to have it participate in archery and skirmishes
+					memorize: chosenAlly
+				}
+				{
+					type: modifyStrength
+					select: memory(chosenAlly)
+					amount: 3
+					until: start(regroup)
+				}
+				{
+					type: enableParticipationInArcheryFireAndSkirmishes
+					select: memory(chosenAlly)
+					until: regroup
+				}
+			]
+
+		}
+		gametext: Bearer must be Boromir.<br><b>Maneuver:</b> Exert Boromir and spot an ally. Until the regroup phase, that ally is strength +3 and participates in archery fire and skirmishes.
+		lore: "On a baldric he wore a great horn tipped with silver...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_43: {
+		cardInfo: {
+			imagePath: decipher/LOTR03043.jpg
+			//parentId: 3_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3C43
+			rarity: C
+			setNum: "3"
+			cardNum: 43
+			style: Standard
+		}
+		title: Might of Númenor
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		keywords: Tale
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(gondor),companion
+			}
+			effect: [
+				{
+					type: revealRandomCardsFromHand
+					forced: true
+					hand: shadow
+					memorize: revealedCard
+				}
+				{
+					type: heal
+					select: choose(companion)
+					count: {
+						type: twilightCostInMemory
+						memory: revealedCard
+					}
+				}
+			]
+		}
+		gametext: <b>Tale</b>.<br><b>Maneuver:</b> Spot a [gondor] companion to reveal a card at random from an opponent's hand. Heal X companions, where X is the twilight cost of the card revealed.
+		lore: "'But the lords of Minas Tirith still fight on....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_44: {
+		cardInfo: {
+			imagePath: decipher/LOTR03044.jpg
+			//parentId: 3_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3R44
+			rarity: R
+			setNum: "3"
+			cardNum: 44
+			style: Standard
+		}
+		title: The Shards of Narsil
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Artifact
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				text: Stack a GONDOR card from hand here
+				effect: {
+					type: stackCardsFromHand
+					select: choose(culture(gondor))
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				text: Add (1) to take a card from here
+				cost: {
+					type: addTwilight
+					amount: 1
+				}
+				effect: {
+					type: putStackedCardsIntoHand
+					on: self
+				}
+			}
+		]
+		gametext: Plays to your support area.<br><b>Fellowship:</b> Stack a [gondor] card from hand here.<br><b>Fellowship:</b> Add (1) to take a card stacked here into hand.
+		lore: "'...Narsil was broken and its light extinguished, and it had not yet been forged again.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_45: {
+		cardInfo: {
+			imagePath: decipher/LOTR03045.jpg
+			//parentId: 3_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3U45
+			rarity: U
+			setNum: "3"
+			cardNum: 45
+			style: Standard
+		}
+		title: Some Who Resisted
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		keywords: Tale
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(gondor),companion
+			}
+			effect: {
+				type: addModifier
+				modifier: {
+					type: modifyCost
+					filter: timeword(maneuver),event
+					amount: 2
+				}
+			}
+		}
+		gametext: <b>Tale</b>.<br><b>Maneuver:</b> Spot a [gondor] companion to make the twilight cost of each maneuver event +2.
+		lore: "'In the South the realm of Gondor long endured; and for a while its splendour grew....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_46: {
+		cardInfo: {
+			imagePath: decipher/LOTR03046.jpg
+			//parentId: 3_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3U46
+			rarity: U
+			setNum: "3"
+			cardNum: 46
+			style: Standard
+		}
+		title: Still Sharp
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(The Shards of Narsil)
+			}
+			effect: [
+				{
+					type: chooseActiveCards
+					select: choose(culture(gondor),companion)
+					text: Choose GONDOR companion to strengthen
+					memorize: chosenCompanion
+				}
+				{
+					type: modifyStrength
+					select: memory(chosenCompanion)
+					amount: 3
+				}
+				{
+					type: addKeyword
+					select: memory(chosenCompanion)
+					keyword: damage
+					amount: 1
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Spot The Shards of Narsil to make a [gondor] companion strength +3 and <b>damage +1</b>.
+		lore: "'The shards of Narsil... the blade that cut the Ring from Sauron's hand.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_47: {
+		cardInfo: {
+			imagePath: decipher/LOTR03047.jpg
+			//parentId: 3_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3U47
+			rarity: U
+			setNum: "3"
+			cardNum: 47
+			style: Standard
+		}
+		title: Voice of Rauros
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(name(Aragorn))
+			}
+			effect: {
+				type: addKeyword
+				select: all(companion,signet(Aragorn))
+				keyword: damage
+				amount: 1
+				until: start(regroup)
+			}
+		}
+		gametext: <b>Maneuver:</b> Exert Aragorn to make each companion with the Aragorn signet <b>damage +1</b> until the regroup phase.
+		lore: "As he ran the cries came louder, but fainter now and desperately the horn was blowing."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_48: {
+		cardInfo: {
+			imagePath: decipher/LOTR03048.jpg
+			//parentId: 3_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3C48
+			rarity: C
+			setNum: "3"
+			cardNum: 48
+			style: Standard
+		}
+		title: We Must Go Warily
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: moves
+			}
+			requires: {
+				type: phase
+				phase: regroup
+			}
+			cost: {
+				type: exert
+				select: choose(culture(gondor),companion)
+			}
+			effect: {
+				type: addModifier
+				modifier: {
+					type: modifyCost
+					filter: minion
+					amount: 1
+				}
+				until: start(regroup)
+			}
+		}
+		gametext: <b>Response:</b> If the fellowship moves in the regroup phase, exert a [gondor] companion twice to make each minion's twilight cost +1 until the next regroup phase.
+		lore: "'This is the lawn of Parth Galen: a fair place in the summer days of old. Let us hope that no evil has yet come here.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_122: {
+		cardInfo: {
+			imagePath: decipher/LOTR03122.jpg
+			//parentId: 3_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 3P122
+			rarity: P
+			setNum: "3"
+			cardNum: 122
+			style: Standard
+		}
+		title: Boromir
+		subtitle: Defender of Minas Tirith
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		keywords: Ranger
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: addTwilight
+				amount: 2
+			}
+			effect: {
+				type: heal
+				select: self
+			}
+		}
+		gametext: <b>Ranger</b>.<br><b>Fellowship:</b> Add (2) to heal Boromir.
+		lore: "...seated a little apart was a tall man with a fair and noble face... proud and stern of glance."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

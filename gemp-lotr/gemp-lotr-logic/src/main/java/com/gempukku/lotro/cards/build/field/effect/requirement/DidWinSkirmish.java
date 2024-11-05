@@ -24,7 +24,7 @@ public class DidWinSkirmish implements RequirementProducer {
         return actionContext -> {
             final Filterable filterable = filterableSource.getFilterable(actionContext);
 
-            final Filter aFilter = Filters.and(filterable);
+            final Filter aFilter = Filters.changeToFilter(filterable);
 
             for (EffectResult effectResult : actionContext.getGame().getActionsEnvironment().getTurnEffectResults()) {
                 if (effectResult.getType() == EffectResult.Type.CHARACTER_WON_SKIRMISH) {

@@ -6,13 +6,20 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 
+import java.util.Collections;
+import java.util.List;
+
 public class AddUntilModifierEffect extends UnrespondableEffect {
-    private final Modifier _modifier;
+    private final List<Modifier> _modifiers;
     private final TimeResolver.Time until;
 
-    public AddUntilModifierEffect(Modifier modifier, TimeResolver.Time until) {
-        _modifier = modifier;
+    public AddUntilModifierEffect(List<Modifier> modifiers, TimeResolver.Time until) {
+        _modifiers = modifiers;
         this.until = until;
+    }
+
+    public AddUntilModifierEffect(Modifier modifier, TimeResolver.Time until) {
+        this(Collections.singletonList(modifier), until);
     }
 
     @Override
@@ -21,13 +28,15 @@ public class AddUntilModifierEffect extends UnrespondableEffect {
         if (phase == null)
             phase = game.getGameState().getCurrentPhase();
 
-        if(until.isPermanent())
-            game.getModifiersEnvironment().addAlwaysOnModifier(_modifier);
-        else if (until.isEndOfTurn())
-            game.getModifiersEnvironment().addUntilEndOfTurnModifier(_modifier);
-        else if (until.isStart())
-            game.getModifiersEnvironment().addUntilStartOfPhaseModifier(_modifier, phase);
-        else
-            game.getModifiersEnvironment().addUntilEndOfPhaseModifier(_modifier, phase);
+        for (Modifier modifier : _modifiers) {
+            if (until.isPermanent())
+                game.getModifiersEnvironment().addAlwaysOnModifier(modifier);
+            else if (until.isEndOfTurn())
+                game.getModifiersEnvironment().addUntilEndOfTurnModifier(modifier);
+            else if (until.isStart())
+                game.getModifiersEnvironment().addUntilStartOfPhaseModifier(modifier, phase);
+            else
+                game.getModifiersEnvironment().addUntilEndOfPhaseModifier(modifier, phase);
+        }
     }
 }

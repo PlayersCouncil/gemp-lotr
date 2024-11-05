@@ -63,7 +63,7 @@ public class Card_01_333_ErrataTests
 
 		assertFalse(moors.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, moors.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(moors, Keyword.PLAINS));
+		assertTrue(scn.hasKeyword(moors, Keyword.PLAINS));
 		assertEquals(1, moors.getBlueprint().getTwilightCost());
 		assertEquals(2, moors.getBlueprint().getSiteNumber());
 		assertEquals(SitesBlock.FELLOWSHIP, moors.getBlueprint().getSiteBlock());

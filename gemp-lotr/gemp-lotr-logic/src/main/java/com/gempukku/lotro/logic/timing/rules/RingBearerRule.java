@@ -14,8 +14,8 @@ public class RingBearerRule {
 
     public void applyRule() {
         _modifiersLogic.addAlwaysOnModifier(
-                new CantDiscardFromPlayModifier(null, "Can't be discarded from play", Filters.ringBearer, Filters.any));
+                new CantDiscardFromPlayModifier(null, "Can't be discarded from play", null, null, Filters.ringBearer, Filters.any));
         _modifiersLogic.addAlwaysOnModifier(
-                new CantReturnToHandModifier(null, "Can't be returned to hand", Filters.ringBearer, Filters.any));
+                new CantReturnToHandModifier(null, "Can't be returned to hand", null, Filters.ringBearer, Filters.any));
     }
 }

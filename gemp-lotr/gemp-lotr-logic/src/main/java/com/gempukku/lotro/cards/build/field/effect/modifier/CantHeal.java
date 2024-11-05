@@ -11,13 +11,13 @@ public class CantHeal implements ModifierSourceProducer {
         FieldUtils.validateAllowedFields(object, "filter", "requires");
 
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
-        final String filter = FieldUtils.getString(object.get("filter"), "filter");
+        final String filter = FieldUtils.getString(object.get("filter"), "filter", "character");
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return (actionContext) -> new CantHealModifier(actionContext.getSource(),
-                new RequirementCondition(requirements, actionContext),
+                RequirementCondition.createCondition(requirements, actionContext),
                 filterableSource.getFilterable(actionContext));
     }
 }

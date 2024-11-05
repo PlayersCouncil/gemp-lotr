@@ -1,0 +1,1054 @@
+{
+
+	18_60: {
+		cardInfo: {
+			imagePath: decipher/LOTR18060.jpg
+			//parentId: 18_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18U60
+			rarity: U
+			setNum: "18"
+			cardNum: 60
+			style: Standard
+		}
+		title: Corsair Boarding Axe
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(men),minion
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: [
+					{
+						type: reinforceTokens
+						culture: men
+					}
+					{
+						type: addKeyword
+						select: bearer
+						keyword: fierce
+						until: regroup
+					}
+				]
+			}
+		]
+		gametext: Bearer must be a [men] minion.<br><b>Skirmish:</b> Remove (3) to reinforce a [men] token and make bearer <b>fierce</b> until the regroup phase.
+		lore: "Small and light, the boarding axe is ideal for close- quarters fighting aboard ships or in confined spaces."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_61: {
+		cardInfo: {
+			imagePath: decipher/LOTR18061.jpg
+			//parentId: 18_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18U61
+			rarity: U
+			setNum: "18"
+			cardNum: 61
+			style: Standard
+		}
+		title: Corsair Bow
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 2
+		type: Possession
+		strength: 1
+		itemclass: Ranged weapon
+		target: culture(men),minion
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: archer
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: companion
+				}
+				requires: {
+					type: phase
+					phase: archery
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
+		]
+		gametext: Bearer must be a [men] minion.<br>Bearer is an <b>archer</b>.<br>Each time a companion is killed during the archery phase, you may control a site.
+		lore: "Not nearly as ornate or as accurate as the Gondorian bows, the short-bows of the Corsairs killed just as well."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_62: {
+		cardInfo: {
+			imagePath: decipher/LOTR18062.jpg
+			//parentId: 18_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18U62
+			rarity: U
+			setNum: "18"
+			cardNum: 62
+			style: Standard
+		}
+		title: Corsair Grappling Hook
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 2
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		target: culture(men),minion
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					player: you
+					filter: self
+				}
+				effect: {
+					type: repeat
+					times: 2
+					effect: {
+						type: reinforceTokens
+						culture: men
+					}
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: companion
+				}
+				requires: {
+					type: phase
+					phase: skirmish
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
+		]
+		gametext: Bearer must be a [men] minion.<br>When you play this possession you may reinforce a [men] token twice.<br>Each time a companion is killed during a skirmish phase, you may control a site.
+		lore: "A tool equally useful in times of peace and in times of war."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_63: {
+		cardInfo: {
+			imagePath: decipher/LOTR18063.jpg
+			//parentId: 18_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18U63
+			rarity: U
+			setNum: "18"
+			cardNum: 63
+			style: Standard
+		}
+		title: Corsair Halberd
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 3
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(men),minion
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeCardsInDeadPileFromGame
+					player: shadow
+					select: choose(companion)
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
+		]
+		gametext: Bearer must be a [men] minion.<br>Bearer is <b>damage +1</b>.<br><b>Shadow:</b> Remove a companion in the dead pile from the game to control a site.
+		lore: "Long handled and heavy, a single powerful swing of this weapon could cleave through even some of the thickest armor."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_64: {
+		cardInfo: {
+			imagePath: decipher/LOTR18064.jpg
+			//parentId: 18_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18U64
+			rarity: U
+			setNum: "18"
+			cardNum: 64
+			style: Standard
+		}
+		title: Corsair Scimitar
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 2
+		type: Possession
+		itemclass: Hand weapon
+		target: culture(men),minion
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer
+					amount: {
+						type: ForEachCultureToken
+						culture: men
+						limit: 5
+					}
+				}
+			}
+		]
+		gametext: Bearer must be a [men] minion.<br>Bearer is strength +1 for each [men] token you can spot (limit +5).
+		lore: "A largely stylistic weapon, scimitars are favored for their light weight yet powerful strikes."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_65: {
+		cardInfo: {
+			imagePath: decipher/LOTR18065.jpg
+			//parentId: 18_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18C65
+			rarity: C
+			setNum: "18"
+			cardNum: 65
+			style: Standard
+		}
+		title: Declined Business
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: played
+				player: free people
+				filter: companion
+				memorize: playedCompanion
+			}
+			cost: {
+				type: discardFromHand
+				forced: false
+				select: choose(culture(men))
+			}
+			effect: [
+				{
+					type: returnToHand
+					select: memory(playedCompanion)
+				}
+			]
+		}
+		gametext: If the Free Peoples player plays a companion, discard a [men] card from hand to return that companion to its owner's hand.
+		lore: "During the War of the Ring, the streets of Bree were filled mainly with Southern ruffians and thieves, and Bree-folk were afraid to leave their homes."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_66: {
+		cardInfo: {
+			imagePath: decipher/LOTR18066.jpg
+			//parentId: 18_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18R66
+			rarity: R
+			setNum: "18"
+			cardNum: 66
+			style: Standard
+		}
+		title: Fleet of Corsair Ships
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 3
+		type: Possession
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					player: you
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: men
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: RemoveCultureTokens
+					count: 4
+					culture: men
+					select: self
+				}
+				effect: {
+					type: putCardsFromDiscardOnTopOfDeck
+					select: choose(culture(men))
+				}
+			}
+		]
+		gametext: When you play this possession, you may add a [men] token here.<br><b>Regroup:</b> Remove 4 [men] tokens from here to place a [men] card from your discard pile on the top of your draw deck.
+		lore: "They'll be in the city in two days. You're outnumbered, Aragorn."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_67: {
+		cardInfo: {
+			imagePath: decipher/LOTR18067.jpg
+			//parentId: 18_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18R67
+			rarity: R
+			setNum: "18"
+			cardNum: 67
+			style: Standard
+		}
+		title: Gríma
+		subtitle: Witless Worm
+		unique: true
+		side: Shadow
+		culture: Men
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 4
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				text: Exert Gríma to add 2
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				text: Remove a {men} token to add 2
+				cost: {
+					type: RemoveCultureTokens
+					culture: men
+					select: choose(any)
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				text: Remove 4 to exert an unbound companion
+				cost: {
+					type: removeTwilight
+					amount: 4
+				}
+				effect: {
+					type: exert
+					select: choose(unbound,companion)
+				}
+			}
+		]
+		gametext: <b>Regroup:</b> Exert Gríma to add (2).<br><b>Regroup:</b> Remove a [men] token to add (2).<br><b>Regroup:</b> Remove (4) to exert an unbound companion.
+		lore: "'You are held wise, my friend Wormtongue, and are doubtless a great support to your master.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_68: {
+		cardInfo: {
+			imagePath: decipher/LOTR18068.jpg
+			//parentId: 18_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18C68
+			rarity: C
+			setNum: "18"
+			cardNum: 68
+			style: Standard
+		}
+		title: Harry Goatleaf
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 6
+		vitality: 2
+		site: 2
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: regionNumber(1)
+					}
+					filter: self
+					amount: 4
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: regionNumber(2)
+					}
+					filter: self
+					amount: 2
+				}
+			}
+		]
+		gametext: While the fellowship is in region 1, this minion is strength +4.<br>While the fellowship is in region 2, this minion is strength +2.
+		lore: "What do you want?"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_69: {
+		cardInfo: {
+			imagePath: decipher/LOTR18069.jpg
+			//parentId: 18_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18R69
+			rarity: R
+			setNum: "18"
+			cardNum: 69
+			style: Standard
+		}
+		title: Henchman's Dagger
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 0
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		target: culture(men),minion
+		effects: [
+			{
+				type: extraPossessionClass
+			}
+		]
+		gametext: Bearer must be a [men] minion.<br>Bearer may bear this hand weapon in addition to 1 other hand weapon.
+		lore: "Carved from bone or forged from iron, no warrior would enter the fields of battle without a trusty, simple blade."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_70: {
+		cardInfo: {
+			imagePath: decipher/LOTR18070.jpg
+			//parentId: 18_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18C70
+			rarity: C
+			setNum: "18"
+			cardNum: 70
+			style: Standard
+		}
+		title: Ill News is an Ill Guest
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 2
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(culture(men),minion)
+			}
+			effect: [
+				{
+					type: discard
+					select: choose(follower)
+				}
+				{
+					type: If
+					check: {
+						type: canSpot
+						filter: name(Gríma)
+					}
+					true: {
+						type: drawCards
+					}
+				}
+			]
+		}
+		gametext: Exert a [men] minion to discard a follower from play (if you can spot Gríma, also draw a card).
+		lore: "Late is the hour in which this conjurer chooses to appear."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_71: {
+		cardInfo: {
+			imagePath: decipher/LOTR18071.jpg
+			//parentId: 18_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18R71
+			rarity: R
+			setNum: "18"
+			cardNum: 71
+			style: Standard
+		}
+		title: Mûmakil Commander
+		subtitle: Bold and Grim
+		unique: true
+		side: Shadow
+		culture: Men
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: battleground
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: mounted,man
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				effect: {
+					type: shuffleCardsFromPlayIntoDrawDeck
+					select: choose(your,culture(men),mount)
+					count: any
+				}
+			}
+		]
+		gametext: While at a battleground, this minion is strength +2.<br>Each mounted Man is strength +1.<br><b>Regroup:</b> Shuffle any number of your [men] mounts in play into your draw deck.
+		lore: "With a sound of his horn, a line of Mûmakil appeared and the Pelennor field was filled with chaos."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_72: {
+		cardInfo: {
+			imagePath: decipher/LOTR18072.jpg
+			//parentId: 18_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18C72
+			rarity: C
+			setNum: "18"
+			cardNum: 72
+			style: Standard
+		}
+		title: Ruffian
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 1
+		site: 2
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: regionNumber(1)
+					}
+					filter: self
+					amount: 4
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: regionNumber(2)
+					}
+					filter: self
+					amount: 2
+				}
+			}
+		]
+		gametext: While the fellowship is in region 1, this minion is strength +4.<br>While the fellowship is in region 2, this minion is strength +2.
+		lore: "It works for him!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_73: {
+		cardInfo: {
+			imagePath: decipher/LOTR18073.jpg
+			//parentId: 18_73
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18C73
+			rarity: C
+			setNum: "18"
+			cardNum: 73
+			style: Standard
+		}
+		title: Rough Man of the South
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 3
+		site: 2
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: regionNumber(1)
+					}
+					filter: self
+					amount: 4
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: regionNumber(2)
+					}
+					filter: self
+					amount: 2
+				}
+			}
+		]
+		gametext: While the fellowship is in region 1, this minion is strength +4.<br>While the fellowship is in region 2, this minion is strength +2.
+		lore: "Making money and making mischief was often inspiration enough for these louts. The taking of Bree and the Shire was easy work."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_74: {
+		cardInfo: {
+			imagePath: decipher/LOTR18074.jpg
+			//parentId: 18_74
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18C74
+			rarity: C
+			setNum: "18"
+			cardNum: 74
+			style: Standard
+		}
+		title: Squint-eyed Southerner
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 2
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: regionNumber(1)
+					}
+					filter: self
+					amount: 4
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: regionNumber(2)
+					}
+					filter: self
+					amount: 2
+				}
+			}
+		]
+		gametext: While the fellowship is in region 1, this minion is strength +4.<br>While the fellowship is in region 2, this minion is strength +2.
+		lore: "A man of Dunland, this outlaw was a prized agent of Saruman and a spy for the Witch-king."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_75: {
+		cardInfo: {
+			imagePath: decipher/LOTR18075.jpg
+			//parentId: 18_75
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18U75
+			rarity: U
+			setNum: "18"
+			cardNum: 75
+			style: Standard
+		}
+		title: Ted Sandyman
+		subtitle: Chief's Men's Ally
+		unique: true
+		side: Shadow
+		culture: Men
+		twilight: 1
+		type: Minion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		site: 2
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: liberateSite
+					controller: shadow
+				}
+				effect: {
+					type: modifyStrength
+					select: all(culture(men),minion)
+					amount: 2
+					until: regroup
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: choose(culture(men),man)
+					where: choose(possession)
+				}
+			}
+		]
+		gametext: <b>Maneuver:</b> Liberate a site you control to make each [men] minion strength +2 until the regroup phase.<br><b>Regroup:</b> Exert Ted Sandyman to stack a [men] Man in play on a possession.
+		lore: "'You can't touch me. I'm a friend o' Boss's. But he'll touch you all right, if I have any more of your mouth.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_76: {
+		cardInfo: {
+			imagePath: decipher/LOTR18076.jpg
+			//parentId: 18_76
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18R76
+			rarity: R
+			setNum: "18"
+			cardNum: 76
+			style: Standard
+		}
+		title: Treachery
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 3
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gríma)
+			}
+			effect: [
+				{
+					type: exert
+					select: choose(unbound,companion)
+					memorize: exertedCompanion
+				}
+				{
+					type: removeText
+					select: memory(exertedCompanion)
+					until: regroup
+				}
+			]
+		}
+		gametext: Spot Gríma to exert an unbound companion. That companion cannot use his or her game text until the regroup phase.
+		lore: "This order does not come from me. It comes from the king. He signed it this morning."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_77: {
+		cardInfo: {
+			imagePath: decipher/LOTR18077.jpg
+			//parentId: 18_77
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 18C77
+			rarity: C
+			setNum: "18"
+			cardNum: 77
+			style: Standard
+		}
+		title: Whisper in the Dark
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 0
+		type: Condition
+		target: follower
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				requires: {
+					type: canSpot
+					filter: culture(men),man
+				}
+				effect: {
+					type: exert
+					player: free people
+					select: choose(unbound,companion)
+				}
+			}
+		]
+		gametext: Bearer must be a follower.<br>At the start of the maneuver phase, if you can spot a [men] Man, the Free Peoples player must exert an unbound companion.
+		lore: "My lord, Gandalf the Grey is coming. He's a herald of woe."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

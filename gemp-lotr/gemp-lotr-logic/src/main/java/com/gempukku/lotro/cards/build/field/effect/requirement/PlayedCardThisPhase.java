@@ -6,7 +6,10 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.common.Filterable;
-import com.gempukku.lotro.logic.modifiers.condition.CardPlayedInCurrentPhaseCondition;
+import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.game.state.LotroGame;
+import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.results.PlayCardResult;
 import org.json.simple.JSONObject;
 
 public class PlayedCardThisPhase implements RequirementProducer {
@@ -20,7 +23,15 @@ public class PlayedCardThisPhase implements RequirementProducer {
 
         return (actionContext) -> {
             final Filterable filterable = filterableSource.getFilterable(actionContext);
-            return new CardPlayedInCurrentPhaseCondition(filterable).isFullfilled(actionContext.getGame());
+            LotroGame game = actionContext.getGame();
+            for (EffectResult effectResult : game.getActionsEnvironment().getPhaseEffectResults()) {
+                if (effectResult instanceof PlayCardResult playResult) {
+                    if (Filters.changeToFilter(filterable).accepts(game, playResult.getPlayedCard()))
+                        return true;
+                }
+            }
+
+            return false;
         };
     }
 }

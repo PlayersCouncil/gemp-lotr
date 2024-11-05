@@ -648,6 +648,205 @@ var PCCards = {
 	//Evil-smelling Fens FA
 	'5_129': 'https://i.lotrtcgpc.net/promos/LOTR-EN05U022.0_card.jpg',
 	
+
+	//PC V2 - King of the Golden Hall
+	// Driven into the Hills (V21)
+	'102_1'  : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S001.0_card.jpg',
+	// Dunlending Raider (V22)
+	'102_2'  : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S002.0_card.jpg',
+	// Dunlending Reaver (V23)
+	'102_3'  : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S003.0_card.jpg',
+	// Horsemen Took Your Lands (V24)
+	'102_4'  : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S004.0_card.jpg',
+	// No More Shall We Wait (V25)
+	'102_5'  : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S005.0_card.jpg',
+	// Arwen, Lady of Rivendell (V26)
+	'102_6'  : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S006.0_card.jpg',
+	// Deadly Contest (V27)
+	'102_7'  : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S007.0_card.jpg',
+	// Haldir, Naith Commander (V28)
+	'102_8'  : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S008.0_card.jpg',
+	// Leithio i Phillin! (V29)
+	'102_9'  : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S009.0_card.jpg',
+	// Naith Armaments (V210)
+	'102_10' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S010.0_card.jpg',
+	// To Honour That Allegiance (V211)
+	'102_11' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S011.0_card.jpg',
+	// Your Friends Are With You (V212)
+	'102_12' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S012.0_card.jpg',
+	// Gandalf, Lathspell (V213)
+	'102_13' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S013.0_card.jpg',
+	// Remember Your Old Strength (V214)
+	'102_14' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S014.0_card.jpg',
+	// Watching and Waiting (V215)
+	'102_15' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S015.0_card.jpg',
+	// Aragorn, Last Hope of Men (V216)
+	'102_16' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S016.0_card.jpg',
+	// I Will Die as One of Them (V217)
+	'102_17' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S017.0_card.jpg',
+	// Back on the Menu (V218)
+	'102_18' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S018.0_card.jpg',
+	// Berserk Deathseeker (V219)
+	'102_19' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S019.0_card.jpg',
+	// Berserk Fanatic (V220)
+	'102_20' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S020.0_card.jpg',
+	// Breaching Shot (V221)
+	'102_21' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S021.0_card.jpg',
+	// Fell from Wisdom into Folly (V222)
+	'102_22' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S022.0_card.jpg',
+	// Fires of Industry (V223)
+	'102_23' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S023.0_card.jpg',
+	// Hound of Isengard (V224)
+	'102_24' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S024.0_card.jpg',
+	// Isengard Foreman (V225)
+	'102_25' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S025.0_card.jpg',
+	// Isengard Grunt (V226)
+	'102_26' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S026.0_card.jpg',
+	// Legion of Isengard (V227)
+	'102_27' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S027.0_card.jpg',
+	// Machinery of War (V228)
+	'102_28' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S028.0_card.jpg',
+	// Saruman, Mind of Metal and Wheels (V229)
+	'102_29' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S029.0_card.jpg',
+	// Strength of the Pack (V230)
+	'102_30' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S030.0_card.jpg',
+	// Trail of Savagery (V231)
+	'102_31' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S031.0_card.jpg',
+	// Uneasy Alliance (V232)
+	'102_32' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S032.0_card.jpg',
+	// Uruk Grumbler (V233)
+	'102_33' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S033.0_card.jpg',
+	// Uruk Occupier (V234)
+	'102_34' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S034.0_card.jpg',
+	// Uruk Shield Wall (V235)
+	'102_35' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S035.0_card.jpg',
+	// Wolf Pit (V236)
+	'102_36' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S036.0_card.jpg',
+	// Ancient Evil (V237)
+	'102_37' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S037.0_card.jpg',
+	// The Balrog, Lieutenant of Morgoth (V238)
+	'102_38' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S038.0_card.jpg',
+	// From Deepest Dungeon (V239)
+	'102_39' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S039.0_card.jpg',
+	// Through Fire and Water (V240)
+	'102_40' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S040.0_card.jpg',
+	// To Highest Peak (V241)
+	'102_41' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S041.0_card.jpg',
+	// Valiant but Foolish (V242)
+	'102_42' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S042.0_card.jpg',
+	// All Hope of Secrecy Lost (V243)
+	'102_43' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S043.0_card.jpg',
+	// Threats on All Sides (V244)
+	'102_44' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S044.0_card.jpg',
+	// Do Not Trust to Hope (V245)
+	'102_45' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S045.0_card.jpg',
+	// An End Worthy of Remembrance (V246)
+	'102_46' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S046.0_card.jpg',
+	// Erkenbrand, Kinsman of the House of Eorl (V247)
+	'102_47' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S047.0_card.jpg',
+	// Fortress of My Fathers (V248)
+	'102_48' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S048.0_card.jpg',
+	// Guthwine, Eomer's Blade (V249)
+	'102_49' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S049.0_card.jpg',
+	// Let This Be the Hour (V250)
+	'102_50' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S050.0_card.jpg',
+	// Now for Wrath (V251)
+	'102_51' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S051.0_card.jpg',
+	// Now for Ruin (V252)
+	'102_52' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S052.0_card.jpg',
+	// And the Red Dawn (V253)
+	'102_53' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S053.0_card.jpg',
+	// Royal Guard (V254)
+	'102_54' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S054.0_card.jpg',
+	// Theoden, Last of His House (V255)
+	'102_55' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S055.0_card.jpg',
+	// To the King! (V256)
+	'102_56' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S056.0_card.jpg',
+	// Attention of the Eye (V257)
+	'102_57' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S057.0_card.jpg',
+	// Down to Join the Dead Ones (V258)
+	'102_58' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S058.0_card.jpg',
+	// Grishnakh, Servant of Lugburz (V259)
+	'102_59' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S059.0_card.jpg',
+	// Lugburz Spotter (V260)
+	'102_60' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S060.0_card.jpg',
+	// Marsh Wight (V261)
+	'102_61' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S061.0_card.jpg',
+	// No One's Going to Save You Now (V262)
+	'102_62' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S062.0_card.jpg',
+	// Orc of Lugburz (V263)
+	'102_63' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S063.0_card.jpg',
+	// Orc Searcher (V264)
+	'102_64' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S064.0_card.jpg',
+	// Shapes to See, Not to Touch (V265)
+	'102_65' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S065.0_card.jpg',
+	// Trapped in its Gaze (V266)
+	'102_66' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S066.0_card.jpg',
+	// Eastemnet Hills (V267)
+	'102_67' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S067.0_card.jpg',
+	// Theodred's Tomb (V268)
+	'102_68' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S068.0_card.jpg',
+	// Westfold Plains (V269)
+	'102_69' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S069.0_card.jpg',
+	// Breached Wall (V270)
+	'102_70' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S070.0_card.jpg',
+	// Helm's Tower (V271)
+	'102_71' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S071.0_card.jpg',
+	// Desolation of Saruman (V272)
+	'102_72' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S072.0_card.jpg',
+	// Isengard Clefts (V273)
+	'102_73' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S073.0_card.jpg',
+	// Path of the Fellowship (V274)
+	'102_74' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S074.0_card.jpg',
+	// Road to the Towers (V275)
+	'102_75' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S075.0_card.jpg',
+	// Journey of the King (V276)
+	'102_76' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S076.0_card.jpg',
+	
+	//V2-associated Errata
+	// Erethon, Naith Lieutenant (4R65) [Errata]
+	'54_65'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E065.1_card.jpg',
+	// Fereveldir, Son of Thandronen (4C67) [Errata]
+	'54_67'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E067.1_card.jpg',
+	// Ferevellon, Son of Thandronen (4C68) [Errata]
+	'54_68'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E068.1_card.jpg',
+	// Haldir, Emissary of the Galadhrim (4C71) [Errata]
+	'54_71'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E071.1_card.jpg',
+	// Lorien Guardian (4C76) [Errata]
+	'54_76'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E076.1_card.jpg',
+	// Lorien Swordsman (4C78) [Errata]
+	'54_78'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E078.1_card.jpg',
+	// Ordulus, Young Warrior (4U80) [Errata]
+	'54_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E080.1_card.jpg',
+	// Pengedhel, Naith Warrior (4U81) [Errata]
+	'54_81'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E081.1_card.jpg',
+	// Thandronen, Veteran Protector (4C85) [Errata]
+	'54_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E085.1_card.jpg',
+	// Thonnas, Naith Captain (4U86) [Errata]
+	'54_86'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E086.1_card.jpg',
+	// Balglin, Elven Warrior (5U10) [Errata]
+	'55_10'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E010.1_card.jpg',
+	// Taurnil, Sharp-eyed Bowman (5U13) [Errata]
+	'55_13'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E013.1_card.jpg',
+	// Naith Troop (6U22) [Errata]
+	'56_22'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN06E022.1_card.jpg',
+	// Naith Warband (6R23) [Errata]
+	'56_23'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN06E023.1_card.jpg',
+	// Lorien Protector (13S20) [Errata]
+	'63_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN13E020.1_card.jpg',
+	// Shrouded Elf (13C23) [Errata]
+	'63_23'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN13E023.1_card.jpg',
+	// Elven Warrior (15C14) [Errata]
+	'65_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN15E014.1_card.jpg',
+	// Haldir, Sentry of the Golden Wood (15U17) [Errata]
+	'65_17'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN15E017.1_card.jpg',
+	// Elven Guardian (17S7) [Errata]
+	'67_7'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN17E007.1_card.jpg',
+	// Elven Defender (18C9) [Errata]
+	'68_9'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E009.1_card.jpg',
+	// Haldir, Warrior Messenger (18R14) [Errata]
+	'68_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E014.1_card.jpg',
+
 	//September 2024 Walk-on Qualifiers
 	//Legolas, Greenleaf FA
 	'1_391': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U050.0_card.jpg',
@@ -660,7 +859,78 @@ var PCCards = {
 	'53_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E080.2_card.jpg',
 	'53_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.2_card.jpg',
 	'53_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.3_card.jpg',
-	'53_105' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E105.2_card.jpg'
+	'53_105' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E105.2_card.jpg',
 	
+	//2024 World Championship promos
+	//Unbranded - Do not release until 2025 WC has concluded.
+	//'1_393': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.0_card.jpg',
+	'1_394': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.1_card.jpg',
+	'1_395': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.2_card.jpg',
+	'1_396': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.3_card.jpg',
+	'1_397': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U196.4_card.jpg',
+	
+	//2024 Post-WC Errata
+	/// Helpless (2U76) [Errata]
+	'52_76'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E076.3_card.jpg',
+	// Can You Protect Me From Yourself? (3R50) [Errata]
+	'53_50'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E050.3_card.jpg',
+	// Such a Little Thing (3R80) [Errata]
+	'53_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E080.3_card.jpg',
+	// Too Great and Terrible (3R85) [Errata]
+	'53_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.3_card.jpg',
+	// Terrible as the Dawn (3R103) [Errata]
+	'53_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.4_card.jpg',
+	// Guided by One Purpose (V1U31) [Errata]
+	'101_31' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E031.2_card.jpg',
+	// Thrashing Tentacle (V1C33) [Errata]
+	'101_33' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E033.2_card.jpg',
+	// Out of Dark Waters (V1R34) [Errata]
+	'101_34' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E034.2_card.jpg',
+	// Sam, Of Bagshot Row (V1U54) [Errata]
+	'101_54' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E054.1_card.jpg',
+	// Merry, Of Buckland (V1R52) [Errata]
+	'101_52' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E052.1_card.jpg',
+	// Sam, Faithful Companion (1R310) [Errata]
+	'51_310' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E310.1_card.jpg',
+	// Merry, From O'er the Brandywine (1C303) [Errata]
+	'51_303' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E303.1_card.jpg',
+	// Merry, Horticulturalist (2C104) [Errata]
+	'52_104' : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E104.1_card.jpg',
+	// Pippin, Mr. Took (2C110) [Errata]
+	'52_110' : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E110.1_card.jpg',
+	// Arwen, Elven Rider (3U7) [Errata]
+	'53_7'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E007.1_card.jpg',
+	// Erestor, Chief Advisor to Elrond (3C14) [Errata]
+	'53_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E014.1_card.jpg',
+	// Golradir, Councilor of Imladris (3U20) [Errata]
+	'53_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E020.1_card.jpg',
+	// Saelbeth, Elven Councilor (3U25) [Errata]
+	'53_25'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E025.1_card.jpg',
+	// Arwen, Lady Undomiel (3R8) [Errata]
+	'53_8'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E008.1_card.jpg',
+	// Denethor, Lord of Minas Tirith (10R28) [Errata]
+	'60_28'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E028.1_card.jpg',
+	// Saved From the Fire (8R20) [Errata]
+	'58_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN08E020.1_card.jpg',
+	// Aragorn, Estel (V1R19) [Errata]
+	'101_19' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S019.2_card.jpg',
+	// Elendil, The Tall (9R+32) [Errata]
+	'59_32'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E032.1_card.jpg',
+	// Sapling of the White Tree (9R35) [Errata]
+	'59_35'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E035.1_card.jpg',
+	// Lorien Throne Room (V1U61) [Errata]
+	'101_61' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E061.1_card.jpg',
+	// Stand Against Darkness (1U63) [Errata]
+	'51_63'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E063.1_card.jpg',
+	// The Witch-king, Lord of the Nazgul (2R85) [Errata]
+	'52_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E085.1_card.jpg',
+	// Legolas, Greenleaf (1R50) [Errata]
+	'51_50'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E050.1_card.jpg',
+	
+	//V1 additions:
+	// Sirannon Dam (V165) 
+	'101_65' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S065.0_card.jpg',
+	// Writhing Tentacle (V1C66) 
+	'101_66' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E066.2_card.jpg'
 }
 

@@ -15,36 +15,43 @@
     setId: 2
     setName: Mines of Moria
     rarityFile: /set2-rarity.txt
+    needsLoading: false
   }
   {
     setId: 3
     setName: Realms of the Elf-lords
     rarityFile: /set3-rarity.txt
+    needsLoading: false
   }
   {
     setId: 4
     setName: The Two Towers
     rarityFile: /set4-rarity.txt
+    needsLoading: false
   }
   {
     setId: 5
     setName: Battle of Helm's Deep
     rarityFile: /set5-rarity.txt
+    needsLoading: false
   }
   {
     setId: 6
     setName: Ents of Fangorn
     rarityFile: /set6-rarity.txt
+    needsLoading: false
   }
   {
     setId: 7
     setName: The Return of the King
     rarityFile: /set7-rarity.txt
+    needsLoading: false
   }
   {
     setId: 8
     setName: Siege of Gondor
     rarityFile: /set8-rarity.txt
+    needsLoading: false
   }
   {
     setId: 9
@@ -56,21 +63,25 @@
     setId: 10
     setName: Mount Doom
     rarityFile: /set10-rarity.txt
+    needsLoading: false
   }
   {
     setId: 11
     setName: Shadows
     rarityFile: /set11-rarity.txt
+    needsLoading: false
   }
   {
     setId: 12
     setName: Black Rider
     rarityFile: /set12-rarity.txt
+    needsLoading: false
   }
   {
     setId: 13
     setName: Bloodlines
     rarityFile: /set13-rarity.txt
+    needsLoading: false
   }
   {
     setId: 14
@@ -82,6 +93,7 @@
     setId: 15
     setName: The Hunters
     rarityFile: /set15-rarity.txt
+    needsLoading: false
   }
   {
     setId: 16
@@ -93,11 +105,13 @@
     setId: 17
     setName: Rise of Saruman
     rarityFile: /set17-rarity.txt
+    needsLoading: false
   }
   {
     setId: 18
     setName: Treachery & Deceit
     rarityFile: /set18-rarity.txt
+    needsLoading: false
   }
   {
     setId: 19
@@ -530,6 +544,16 @@
     needsLoading: false
     playable: true
   }
+  
+  {
+    setId: 102
+    setName: King of the Golden Hall
+    rarityFile: /set102-rarity.txt
+    originalSet: false
+    merchantable: true
+    needsLoading: false
+    playable: true
+  }
 
   {
     setId: 150
@@ -545,6 +569,16 @@
     setId: 151
     setName: TEST-Shadow of the Past
     rarityFile: /set151-rarity.txt
+    originalSet: false
+    merchantable: false
+    needsLoading: false
+    playable: true
+  }
+  
+  {
+    setId: 152
+    setName: TEST-King of the Golden Hall
+    rarityFile: /set152-rarity.txt
     originalSet: false
     merchantable: false
     needsLoading: false

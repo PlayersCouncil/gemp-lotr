@@ -1,6 +1,6 @@
 package com.gempukku.lotro.logic.actions;
 
-import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.effects.DiscountEffect;
 import com.gempukku.lotro.logic.timing.Effect;
@@ -18,7 +18,7 @@ public abstract class AbstractCostToEffectAction implements CostToEffectAction {
 
     private String text;
 
-    private Phase _actionTimeword;
+    private Timeword _actionTimeword;
     private String _performingPlayer;
 
     private boolean _virtualCardAction = false;
@@ -44,13 +44,13 @@ public abstract class AbstractCostToEffectAction implements CostToEffectAction {
     }
 
     @Override
-    public Phase getActionTimeword() {
+    public Timeword getActionTimeword() {
         return _actionTimeword;
     }
 
     @Override
-    public void setActionTimeword(Phase phase) {
-        _actionTimeword = phase;
+    public void setActionTimeword(Timeword timeword) {
+        _actionTimeword = timeword;
     }
 
     @Override
@@ -122,11 +122,19 @@ public abstract class AbstractCostToEffectAction implements CostToEffectAction {
         return sum;
     }
 
+    protected final boolean hasNextCost() {
+        return !_costs.isEmpty();
+    }
+
     protected final Effect getNextCost() {
         Effect cost = _costs.poll();
         if (cost != null)
             _processedCosts.add(cost);
         return cost;
+    }
+
+    protected final boolean hasNextEffect() {
+        return !_effects.isEmpty();
     }
 
     protected final Effect getNextEffect() {

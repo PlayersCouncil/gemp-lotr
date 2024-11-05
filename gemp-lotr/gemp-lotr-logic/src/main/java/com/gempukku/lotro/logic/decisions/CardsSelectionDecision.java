@@ -9,10 +9,6 @@ public abstract class CardsSelectionDecision extends AbstractAwaitingDecision {
     private final int _minimum;
     private final int _maximum;
 
-    public CardsSelectionDecision(int id, String text, Collection<? extends PhysicalCard> physicalCard) {
-        this(id, text, physicalCard, 0, physicalCard.size());
-    }
-
     public CardsSelectionDecision(int id, String text, Collection<? extends PhysicalCard> physicalCards, int minimum, int maximum) {
         super(id, text, AwaitingDecisionType.CARD_SELECTION);
         _physicalCards = new LinkedList<PhysicalCard>(physicalCards);

@@ -1,0 +1,162 @@
+{
+
+	7_1: {
+		cardInfo: {
+			imagePath: decipher/LOTR07001.jpg
+			//parentId: 7_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7C1
+			rarity: C
+			setNum: "7"
+			cardNum: 1
+			style: Standard
+		}
+		title: The One Ring
+		subtitle: The Ruling Ring
+		unique: true
+		twilight: 0
+		type: The One Ring
+		strength: 1
+		effects: [
+			{
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				requires: [
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				effect: [
+					{
+						type: putOnRing
+					}
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+		]
+		gametext: <b>Response:</b> If bearer is about to take a wound in a skirmish, he wears The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound during a skirmish, add a burden instead.
+		lore: "One Ring to rule them all...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_2: {
+		cardInfo: {
+			imagePath: decipher/LOTR07002.jpg
+			//parentId: 7_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7R2
+			rarity: R
+			setNum: "7"
+			cardNum: 2
+			style: Standard
+		}
+		title: The One Ring
+		subtitle: Such a Weight to Carry
+		unique: true
+		twilight: 0
+		type: The One Ring
+		strength: 2
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: ringIsActive
+				}
+				cost: {
+					type: addBurdens
+				}
+				effect: {
+					type: putOnRing
+				}
+			}
+			{
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+		]
+		gametext: <b>Maneuver:</b> Add a burden to wear The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound, add a burden instead.
+		lore: "...One Ring to find them...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

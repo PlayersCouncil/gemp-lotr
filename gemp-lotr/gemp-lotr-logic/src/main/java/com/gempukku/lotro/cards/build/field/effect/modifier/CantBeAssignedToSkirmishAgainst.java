@@ -28,7 +28,7 @@ public class CantBeAssignedToSkirmishAgainst implements ModifierSourceProducer {
                 final Filterable filterable = filterableSource.getFilterable(actionContext);
                 final Filterable againstFilterable = againstSource.getFilterable(actionContext);
                 return new CantBeAssignedAgainstModifier(actionContext.getSource(), side,
-                        filterable, new RequirementCondition(requirements, actionContext), againstFilterable);
+                        filterable, RequirementCondition.createCondition(requirements, actionContext), againstFilterable);
             }
         };
     }

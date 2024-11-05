@@ -12,10 +12,6 @@ public class RemoveBurdenEffect extends AbstractEffect {
     private final PhysicalCard _source;
     private final int _count;
 
-    public RemoveBurdenEffect(String performingPlayerId, PhysicalCard source) {
-        this(performingPlayerId, source, 1);
-    }
-
     public RemoveBurdenEffect(String performingPlayerId, PhysicalCard source, int count) {
         _performingPlayerId = performingPlayerId;
         _source = source;

@@ -1,0 +1,516 @@
+{
+
+	12_185: {
+		cardInfo: {
+			imagePath: decipher/LOTR12185.jpg
+			//parentId: 12_185
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U185
+			rarity: U
+			setNum: "12"
+			cardNum: 185
+			style: Standard
+		}
+		title: The Angle
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Forest
+		effects: [
+			{
+				type: activated
+				text: Play a Nazgul to draw a card
+				phase: shadow
+				cost: {
+					type: PlayCardFromHand
+					select: choose(nazgul)
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+			{
+				type: activated
+				text: Discard 2 cards from hand to draw a card
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: companion
+					count: 6
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+		]
+		gametext: <b>Forest</b>. <b>Shadow:</b> Play a Nazgûl (or spot 6 companions and discard 2 cards from hand) to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_186: {
+		cardInfo: {
+			imagePath: decipher/LOTR12186.jpg
+			//parentId: 12_186
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U186
+			rarity: U
+			setNum: "12"
+			cardNum: 186
+			style: Standard
+		}
+		title: The Bridge of Khazad-dûm
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: [
+			Battleground
+			Underground
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: name(The Balrog)
+					amount: -3
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. <b>Underground</b>. The Balrog is twilight cost -3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_187: {
+		cardInfo: {
+			imagePath: decipher/LOTR12187.jpg
+			//parentId: 12_187
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12S187
+			rarity: S
+			setNum: "12"
+			cardNum: 187
+			style: Standard
+		}
+		title: Emyn Muil
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Mountain
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				cost: [
+					{
+						type: removeTwilight
+						amount: 2
+					}
+					{
+						type: exert
+						select: choose(your,minion,not(fierce))
+						memorize: exertedMinion
+					}
+					{
+						type: addKeyword
+						select: memory(exertedMinion)
+						keyword: fierce
+						until: regroup
+					}
+				]
+			}
+		]
+		gametext: <b>Mountain</b>. <b>Maneuver:</b> Remove (2) and exert your minion that is not fierce to make that minion <b>fierce</b> until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_188: {
+		cardInfo: {
+			imagePath: decipher/LOTR12188.jpg
+			//parentId: 12_188
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12S188
+			rarity: S
+			setNum: "12"
+			cardNum: 188
+			style: Standard
+		}
+		title: Hill of Sight
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: [
+			Battleground
+			Forest
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					requires: {
+						type: or
+						requires: [
+							{
+								type: canSpot
+								filter: minion
+								count: 3
+							}
+							{
+								type: canSpot
+								filter: companion
+								count: 6
+							}
+						]
+					}
+					filter: unbound,companion
+					amount: -2
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. <b>Forest</b>. While you can spot 3 minions (or 6 companions), each unbound companion is resistance -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_189: {
+		cardInfo: {
+			imagePath: decipher/LOTR12189.jpg
+			//parentId: 12_189
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12S189
+			rarity: S
+			setNum: "12"
+			cardNum: 189
+			style: Standard
+		}
+		title: Hobbiton Market
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Dwelling
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				effect: {
+					type: wound
+					select: all(minion,not(lurker))
+				}
+			}
+		]
+		gametext: <b>Dwelling</b>. When the fellowship moves from this site, wound each minion that is not a lurker.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_190: {
+		cardInfo: {
+			imagePath: decipher/LOTR12190.jpg
+			//parentId: 12_190
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12S190
+			rarity: S
+			setNum: "12"
+			cardNum: 190
+			style: Standard
+		}
+		title: Northern Pelennor
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: [
+			Battleground
+			Plains
+		]
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				effect: {
+					type: removeKeyword
+					select: choose(your,lurker,minion)
+					keyword: lurker
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. <b>Plains</b>. <b>Shadow:</b> Make your lurker minion lose <b>lurker</b> until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_191: {
+		cardInfo: {
+			imagePath: decipher/LOTR12191.jpg
+			//parentId: 12_191
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U191
+			rarity: U
+			setNum: "12"
+			cardNum: 191
+			style: Standard
+		}
+		title: Shores of Nen Hithoel
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: River
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: culture(orc),orc
+					count: 5
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: cantMove
+					}
+					until: endOfTurn
+				}
+			}
+		]
+		gametext: <b>River</b>. <b>Shadow:</b> Spot 5 [orc] Orcs to prevent the fellowship from moving again this turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_192: {
+		cardInfo: {
+			imagePath: decipher/LOTR12192.jpg
+			//parentId: 12_192
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U192
+			rarity: U
+			setNum: "12"
+			cardNum: 192
+			style: Standard
+		}
+		title: Slopes of Orodruin
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Mountain
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: removeTwilight
+						amount: 2
+					}
+					{
+						type: discardFromHand
+						forced: false
+						select: choose(side(free people))
+						count: 2
+					}
+				]
+				effect: {
+					type: drawCards
+				}
+			}
+		]
+		gametext: <b>Mountain</b>. <b>Shadow:</b> Remove (2) and discard 2 Free Peoples cards from hand to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_193: {
+		cardInfo: {
+			imagePath: decipher/LOTR12193.jpg
+			//parentId: 12_193
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U193
+			rarity: U
+			setNum: "12"
+			cardNum: 193
+			style: Standard
+		}
+		title: Starkhorn
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Mountain
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: your,dwarf
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+		]
+		gametext: <b>Mountain</b>. Each time your Dwarf wins a skirmish, you may draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_194: {
+		cardInfo: {
+			imagePath: decipher/LOTR12194.jpg
+			//parentId: 12_194
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 12U194
+			rarity: U
+			setNum: "12"
+			cardNum: 194
+			style: Standard
+		}
+		title: Wold Battlefield
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Plains
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(your,man,not(enduring))
+					memorize: exertedMan
+				}
+				effect: {
+					type: addKeyword
+					select: memory(exertedMan)
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Plains</b>. <b>Skirmish:</b> Exert your Man (except an enduring Man) to make him or her <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -1,12 +1,26 @@
 {
+
 	101_1: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S001.0_card.jpg
+			//parentId: 101_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C1
+			rarity: C
+			setNum: "V1"
+			cardNum: 1
+			style: Standard
+		}
 		title: Hospitality of the Dwarves
-		culture: dwarven
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 1
-		type: condition
-		keyword: [
-			support area
-		]
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: activated
@@ -69,24 +83,46 @@
 			}
 			
 		]
+		gametext: Maneuver: If the fellowship is at any sites 4 to 8, make each Dwarf lose all <b>damage</b> bonuses until the regroup phase, and each Dwarf bearing 2 or more items takes no more than 1 wound per phase until the regroup phase.
+		lore: "'Roaring fires, malt beer, red meat off the bone...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_2: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S002.0_card.jpg
+			//parentId: 101_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R2
+			rarity: R
+			setNum: "V1"
+			cardNum: 2
+			style: Standard
+		}
 		title: Deepest Delvings
 		unique: true
-		culture: dwarven
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 1
-		type: condition
-		keyword: [
-			support area
-		]
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: trigger
 				optional: true
 				trigger: {
-					type: discardfromdeck
+					type: discarded
 					filter: your,culture(dwarven)
+					fromZone: deck
 					memorize: topcard
 				}
 				cost:{
@@ -96,7 +132,7 @@
 				effect: {
 					type: stackcardsfromdiscard
 					where: self
-					filter: memory(topcard)
+					select: memory(topcard)
 				}
 			}
 			{
@@ -104,31 +140,53 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: choose(dwarf)
+					select: choose(dwarf)
 				}
 				effect: {
 					type: putStackedCardsIntoHand
-					filter: choose(culture(dwarven))
+					select: choose(culture(dwarven))
 					on: self
 				}
 			}
 		]
+		gametext: Each time a [dwarven] card is discarded from the top of your draw deck, you may add (1) to stack that card here. <br>Maneuver: Exert a Dwarf to take a card stacked here into hand.
+		lore: "'Far, far below the deepest delvings of the Dwarves, the world is gnawed by nameless things.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_3: {
-		# Hey look it's a comment because we're not in the stone age
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S003.0_card.jpg
+			//parentId: 101_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R3
+			rarity: R
+			setNum: "V1"
+			cardNum: 3
+			style: Standard
+		}
 		title: Gimli
+		subtitle: Vengeful Longbeard
 		unique: true
-		subtitle: Vengeful Naugrim
-		culture: dwarven
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 2
-		type: companion
-		race: dwarf
+		type: Companion
+		race: Dwarf
 		strength: 6
 		vitality: 3
+		signet: Frodo
 		resistance: 6
-		signet: frodo
-		keyword: damage+1
+		keywords: Damage+1
 		effects: [
 			{
 				type: modifier
@@ -157,61 +215,109 @@
 				}
 			}
 		]
+		gametext: Damage +1.<br> While Gimli bears 2 items, he is strength +2.<br>While Gimli bears 3 items, he is damage +1. 
+		lore: "'...there is one dwarf in Moria who still draws breath!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_4: {
-		title: I Name You Elf-friend
-		culture: dwarven
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S004.0_card.jpg
+			//parentId: 101_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C4
+			rarity: C
+			setNum: "V1"
+			cardNum: 4
+			style: Standard
+		}
+		title: I Name You Elf-Friend
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 1
-		type: event
-		keyword: maneuver
+		type: Event
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf)
+				select: choose(elf)
 			}
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(dwarf)
+					select: choose(dwarf)
 					until: start(regroup)
 					memorize: chosenDwarf
 					amount: 3
 				}
 				{
 					type: addKeyword
-					filter: memory(chosenDwarf)
+					select: memory(chosenDwarf)
 					keyword: damage+1
 					until: start(regroup)
 				}
 			]
 		}
-	}
-	
-	101_5: {
-		title: One Dwarf in Moria
-		culture: dwarven
-		twilight: 1
-		type: event
-		keyword: maneuver
-		requires: {
-			type: canSpot
-			filter: dwarf,hasAttachedCount(2,item)
+		gametext: Exert an Elf to make a Dwarf strength +3 and damage +1 until the regroup phase.
+		lore: "'...and may the stars shine upon the end of your road.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
+	}
+
+	101_5: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S005.0_card.jpg
+			//parentId: 101_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U5
+			rarity: U
+			setNum: "V1"
+			cardNum: 5
+			style: Standard
+		}
+		title: One Dwarf in Moria
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Maneuver
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: dwarf,hasAttachedCount(2,item)
+            }
 			effect: [
 				{
 					type: chooseActiveCards
 					count: 1
-					filter: choose(dwarf,hasAttachedCount(2,item))
+					select: choose(dwarf,hasAttachedCount(2,item))
 					memorize: chosenDwarf
 					text: Choose a Dwarf with 2 or more items to heal
 				}
 				{
 					type: heal
-					filter: memory(chosenDwarf)
+					select: memory(chosenDwarf)
 					times: 1
 				}
 				{
@@ -224,12 +330,12 @@
 				}
 				{
 					type: returntohand
-					filter: choose(item,attachedTo(memory(chosenDwarf)))
+					select: choose(item,attachedTo(memory(chosenDwarf)))
 					count: 0-50
 				}
 				{
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 					count: {
 						type: subtract
 						firstNumber: {
@@ -244,17 +350,38 @@
 				}
 			]
 		}
+		gametext: Spot a Dwarf bearing 2 or more items to heal that Dwarf.  Return X items on that Dwarf to their owners' hands to wound X minions.
+		lore: "'Let them come...!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_6: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S006.0_card.jpg
+			//parentId: 101_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C6
+			rarity: C
+			setNum: "V1"
+			cardNum: 6
+			style: Standard
+		}
 		title: So Bold and So Courteous
 		unique: true
-		culture: dwarven
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 0
-		type: condition
-		keyword: [
-			support area
-		]
+		type: Condition
+		keywords: Support Area
 		effects: {
 			type: trigger
 			optional: true
@@ -263,16 +390,25 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(elf)
+				select: choose(elf)
 				times: 1
 			}
 			effect: {
 				type: addKeyword
-				filter: choose(dwarf)
+				select: choose(dwarf)
 				keyword: defender+1
 				until: start(regroup)
 			}
 		}
+		gametext: Each time the fellowship moves, you may exert an Elf to make a Dwarf defender +1 until the regroup phase. 
+		lore: "'Let none say again that Dwarves are grasping and ungracious.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 }

@@ -21,12 +21,15 @@
 		race: man
 		strength: 9
 		vitality: 3
-		requires: {
-			type: CanSpot
-			filter: culture(Rohan),companion
-			count: 2
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: CanSpot
+                    filter: culture(Rohan),companion
+                    count: 2
+                }
+		    }
 			{
 				type: PlayedInOtherPhase
 				phase: regroup
@@ -39,7 +42,7 @@
 				}
 				effect: {
 					type: discard
-					filter: choose(minion)
+					select: choose(minion)
 					count: 0-1
 				}
 			}

@@ -4,7 +4,8 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.common.Filterable;
-import com.gempukku.lotro.logic.timing.PlayConditions;
+import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.game.state.LotroGame;
 import org.json.simple.JSONObject;
 
 public class HasCardInDiscard implements RequirementProducer {
@@ -14,14 +15,16 @@ public class HasCardInDiscard implements RequirementProducer {
 
         final String player = FieldUtils.getString(object.get("player"), "player", "you");
         final int count = FieldUtils.getInteger(object.get("count"), "count", 1);
-        final String filter = FieldUtils.getString(object.get("filter"), "filter");
+        final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         return (actionContext) -> {
             final Filterable filterable = filterableSource.getFilterable(actionContext);
-            return PlayConditions.hasCardInDiscard(actionContext.getGame(), playerSource.getPlayer(actionContext), count, filterable);
+            LotroGame game = actionContext.getGame();
+            String playerId = playerSource.getPlayer(actionContext);
+            return Filters.filter(game, game.getGameState().getDiscard(playerId), new Filterable[]{filterable}).size() >= count;
         };
     }
 }

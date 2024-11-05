@@ -8,10 +8,6 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.PlayUtils;
 
 public class ExtraFilters {
-    public static Filter attachableTo(final LotroGame game, final Filterable... filters) {
-        return attachableTo(game, 0, filters);
-    }
-
     public static Filter attachableTo(final LotroGame game, final int twilightModifier, final Filterable... filters) {
         return Filters.and(Filters.playable(game, twilightModifier),
                 new Filter() {

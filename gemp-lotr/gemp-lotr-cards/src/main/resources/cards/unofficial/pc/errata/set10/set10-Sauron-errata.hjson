@@ -44,7 +44,7 @@
 			effect: {
 				type: addTwilight
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: self,roaming

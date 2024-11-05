@@ -24,9 +24,9 @@
 		strength: 3
 		vitality: 4
 		resistance: 8
+		canStartWithRing: true
 		keyword: [
 			ring-bound
-			can start with ring
 		]
 		effects: [
 			{
@@ -42,7 +42,7 @@
 				}
 				effect: {
 					type: kill
-					filter: choose(unbound,companion)
+					select: choose(unbound,companion)
 				}
 			}
 			{
@@ -58,7 +58,7 @@
 				}
 				effect: {
 					type: discard
-					filter: all(minion)
+					select: all(minion)
 				}
 			}
 		]

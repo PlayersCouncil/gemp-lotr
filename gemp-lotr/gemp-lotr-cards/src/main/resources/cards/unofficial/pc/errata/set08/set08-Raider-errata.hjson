@@ -37,14 +37,14 @@
 	# 					filter: self
 	# 				}
 	# 				{
-	# 					type: play
-	# 					filter: choose(corsair)
+	# 					type: PlayCardFromHand
+	# 					select: choose(corsair)
 	# 				}
 	# 			]
 	# 			effect: {
-	# 				type: addTokens
+	# 				type: AddCultureTokens
 	# 				culture: raider
-	# 				filter: choose(hasToken(raider))
+	# 				select: choose(HasCultureToken(raider))
 	# 				amount: 2
 	# 			}
 	# 		}
@@ -107,18 +107,18 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 					}
 					{
-						type: play
-						filter: choose(corsair)
+						type: PlayCardFromHand
+						select: choose(corsair)
 					}
 				]
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: raider
-					filter: choose(hasToken(raider))
-					amount: 2
+					select: choose(HasCultureToken(raider))
+					count: 2
 				}
 			}
 		]
@@ -180,42 +180,27 @@
 						type: costToEffect
 						cost: {
 							type: discard
-							filter: choose(possession,side(Shadow))
+							select: choose(possession,side(Shadow))
 						}
 						effect: {
-							type: ReinforceTokens
-							culture: raider
-							filter: choose(culture(raider))
-							amount: 2
+                            type: ReinforceTokens
+                            select: choose(culture(raider))
+                            culture: raider
+                            times: 2
 						}
 					}
 					{
 						type: costToEffect
-						requires: {
-							type: IsGreaterThanOrEqual
-							firstNumber: {
-								type: forEachToken
-								culture: raider
-							}
-							secondNumber: 2
-						}
 						cost: [
 							{
-								type: ChooseAndRemoveTokens
+								type: removeTokensCumulative
 								culture: raider
-								filter: choose(any)
-								limit: 1
-							}
-							{
-								type: ChooseAndRemoveTokens
-								culture: raider
-								filter: choose(any)
-								limit: 1
+								count: 2
 							}
 						]
 						effect: {
 							type: discard
-							filter: choose(possession)
+							select: choose(possession)
 						}
 					}
 				]
@@ -270,7 +255,7 @@
 	# 				filter: self
 	# 			}
 	# 			effect: {
-	# 				type: addTokens
+	# 				type: AddCultureTokens
 	# 				culture: raider
 	# 				filter: self
 	# 			}
@@ -282,7 +267,7 @@
 	# 				requires: [
 	# 					{
 	# 						type: canSpot
-	# 						filter: self,hasTokenCount(4,raider)
+	# 						filter: self,HasCultureTokenCount(4,raider)
 	# 					}
 	# 					{
 	# 						type: canSpot
@@ -298,7 +283,7 @@
 	# 				type: memorizeNumber
 	# 				memory: numberOfTokens
 	# 				amount: {
-	# 					type: forEachToken
+	# 					type: ForEachCultureToken
 	# 					culture: raider
 	# 					filter: self
 	# 				}
@@ -361,9 +346,9 @@
 					filter: self
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: raider
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -390,7 +375,7 @@
 					type: memorizeNumber
 					memory: numberOfTokens
 					amount: {
-						type: forEachToken
+						type: ForEachCultureToken
 						culture: raider
 						filter: any
 					}
@@ -405,7 +390,7 @@
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}

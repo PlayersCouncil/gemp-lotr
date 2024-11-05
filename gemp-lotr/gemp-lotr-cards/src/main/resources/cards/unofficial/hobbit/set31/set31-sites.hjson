@@ -17,11 +17,13 @@
 				effects: [
 					{
 						type: spot
-						filter: choose(culture(gandalf),staff)
+						filter: culture(gandalf),staff
 					}
 					{
 						type: playCardFromDrawDeck
-						filter: choose(culture(gandalf),staff)
+						select: choose(culture(gandalf),staff)
+                        showAll: true
+                        shuffle: true
 					}
 				]
 			}
@@ -29,7 +31,7 @@
 				{
 					type: spot
 					text: Choose a Gandalf
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 					memorize: chosenGandalf
 				}
 				{
@@ -68,7 +70,9 @@
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(or(and(side(shadow),condition),name(The One Ring)))
+				select: choose(or(and(side(shadow),condition),name(The One Ring)))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -87,12 +91,14 @@
 			phase: assignment
 			cost: {
 				type: exert
-				filter: choose(your,orc)
+				select: choose(your,orc)
 			}
-			effect: {
-				type: DisableSkirmishAssignment
-				filter: choose(or(name(Gandalf),and(culture(elven),ally)))
-			}
+			effect: [
+                {
+                    type: disableSkirmishAssignment
+                    select: choose(or(name(Gandalf),and(culture(elven),ally)))
+                }
+            ]
 		}
 	}
 	31_47: {

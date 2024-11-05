@@ -28,15 +28,12 @@
 					type: modifyArcheryTotal
 					side: shadow
 					amount: {
-						type: multiply
-						source: {
-							type: forEachYouCanSpot
-							filter: companion
-							over: 5
-						}
-						multiplier: {
-							type: regionNumber
-						}
+                        type: forEachYouCanSpot
+                        filter: companion
+                        over: 5
+                        multiplier: {
+                            type: regionNumber
+                        }
 					}
 				}
 			}
@@ -108,7 +105,7 @@
 	# 									type: CostToEffect
 	# 									cost: {
 	# 										type: exert
-	# 										filter: choose(your,character,InSkirmish)
+	# 										select: choose(your,character,InSkirmish)
 	# 									}
 	# 									effect: [
 	# 										{
@@ -170,29 +167,29 @@
 					type: ForEachPlayer
 					effect: [
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: CanSpot
 								filter: your,InSkirmish,character,not(exhausted)
 							}
-							effect: [
+							true: [
 								{
 									type: chooseYesOrNo
 									text: Would you like to exert your skirmishing character to prevent all special abilities from being used this skirmish?
 									memorize: choice
 								}
 								{
-									type: conditional
-									requires: {
+									type: If
+									check: {
 										type: memoryIs
 										memory: choice
 										value: yes
 									}
-									effect: {
+									true: {
 										type: CostToEffect
 										cost: {
 											type: exert
-											filter: choose(your,character,InSkirmish)
+											select: choose(your,character,InSkirmish)
 										}
 										effect: [
 											{
@@ -260,11 +257,11 @@
 				effect: [
 					{
 						type: heal
-						filter: all(character,ResistanceMoreThan(4))
+						select: all(character,minResistance(5))
 					}
 					{
 						type: exert
-						filter: all(character,ResistanceLessThan(5))
+						select: all(character,not(minResistance(5)))
 					}
 				]
 			}

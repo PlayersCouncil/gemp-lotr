@@ -11,7 +11,8 @@
 				phase: skirmish
 				effect: {
 					type: transfer
-					filter: choose(self,zone(support))
+					select: self
+					fromSupport: true
 					where: choose(character,inSkirmishAgainst(nazgul))
 				}
 			}
@@ -48,7 +49,7 @@
 			type: modifier
 			modifier: {
 				type: modifyStrength
-				filter: bearer,inSkirmishAgainst(companion,resistanceLessThan(4))
+				filter: bearer,inSkirmishAgainst(companion,maxResistance(3))
 				amount: 2
 			}
 		}
@@ -61,7 +62,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: winsSkirmish
 					filter: nazgul
@@ -69,7 +70,8 @@
 				}
 				effect: {
 					type: transfer
-					filter: choose(self,zone(support))
+					select: self
+					fromSupport: true
 					where: choose(character,inSkirmishAgainst(memory(winner)),not(hasAttached(name(Blade Tip))))
 				}
 			}
@@ -86,15 +88,15 @@
 				effect: [
 					{
 						type: wound
-						filter: all(hasAttached(self),not(ring bearer))
+						select: all(hasAttached(self),not(ring bearer))
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpot
 							filter: hasAttached(self),ring bearer
 						}
-						effect: {
+						true: {
 							type: addBurdens
 						}
 					}
@@ -107,19 +109,19 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: skirmish
-		requires: {
-			type: canSpotBurdens
-			amount: 3
-		}
+		timeword: skirmish
 		effects: {
 			type: event
+            requires: {
+                type: canSpotBurdens
+                amount: 3
+            }
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(nazgul)
+					select: choose(nazgul)
 					amount: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: canSpotBurdens
 							amount: 6
@@ -131,10 +133,10 @@
 				}
 				{
 					type: addKeyword
-					filter: memory(chosenNazgul)
+					select: memory(chosenNazgul)
 					keyword: damage
 					amount: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: canSpotBurdens
 							amount: 6
@@ -151,24 +153,24 @@
 		culture: wraith
 		twilight: 1
 		type: event
-		keyword: regroup
-		requires: {
-			type: canSpot
-			filter: companion,resistanceLessThan(4)
-		}
+		timeword: regroup
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: companion,maxResistance(3)
+            }
 			cost: {
 				type: discard
-				filter: choose(nazgul)
+				select: choose(nazgul)
 			}
 			effect: {
 				type: addBurdens
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
-						filter: companion,resistanceLessThan(1)
+						filter: companion,maxResistance(0)
 					}
 					true: 2
 					false: 1
@@ -181,16 +183,7 @@
 		culture: wraith
 		twilight: 8
 		type: event
-		keyword: maneuver
-		requires: [
-			{
-				type: canSpot
-				filter: nazgul
-			}
-			{
-				type: ringIsOn
-			}
-		]
+		timeword: maneuver
 		effects: [
 			{
 				type: modifyOwnCost
@@ -201,6 +194,15 @@
 			}
 			{
 				type: event
+                requires: [
+                    {
+                        type: canSpot
+                        filter: nazgul
+                    }
+                    {
+                        type: ringIsOn
+                    }
+                ]
 				effect: {
 					type: preventable
 					player: fp
@@ -233,7 +235,8 @@
 				phase: skirmish
 				effect: {
 					type: transfer
-					filter: choose(self,zone(support))
+					select: self
+					fromSupport: true
 					where: choose(companion,inSkirmishAgainst(Nazgul),not(hasAttached(name(Lost in the Woods))))
 				}
 			}
@@ -273,7 +276,7 @@
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 				effect: {
@@ -285,12 +288,12 @@
 					effects: [
 						{
 							type: transfer
-							filter: choose(name(Blade Tip),zone(support))
+							select: choose(name(Blade Tip),zone(support))
 							where: choose(companion,inSkirmishAgainst(memory(bearer)),not(hasAttached(name(Blade Tip))))
 						}
 						{
 							type: transferFromDiscard
-							filter: choose(name(Blade Tip))
+							select: choose(name(Blade Tip))
 							where: choose(companion,inSkirmishAgainst(memory(bearer)),not(hasAttached(name(Blade Tip))))
 						}
 					]
@@ -303,13 +306,13 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: {
-				type: play
-				filter: choose(nazgul)
-				cost: -2
+				type: PlayCardFromHand
+				select: choose(nazgul)
+				discount: -2
 			}
 		}
 	}
@@ -351,12 +354,12 @@
 				}
 				effect: {
 					type: stackCardsFromHand
-					filter: choose(culture(wraith))
+					select: choose(culture(wraith))
 					where: self
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: nazgul
@@ -368,7 +371,7 @@
 				}
 				effect: {
 					type: preventWound
-					filter: choose(nazgul)
+					select: choose(nazgul)
 				}
 			}
 			{
@@ -381,7 +384,7 @@
 				}
 				effect: {
 					type: putCardsFromDiscardIntoHand
-					filter: choose(culture(wraith))
+					select: choose(culture(wraith))
 				}
 			}
 		]
@@ -398,7 +401,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(nazgul)
+					select: choose(nazgul)
 				}
 			}
 			{
@@ -417,7 +420,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -450,7 +453,7 @@
 				}
 				effect: {
 					type: discard
-					filter: choose(side(free people),condition)
+					select: choose(side(free people),condition)
 				}
 			}
 		]
@@ -466,7 +469,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(nazgul)
+					select: choose(nazgul)
 				}
 			}
 			{
@@ -486,11 +489,11 @@
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: choose(nazgul)
+					select: choose(nazgul)
 				}
 			}
 		]
@@ -500,13 +503,13 @@
 		culture: wraith
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				count: 0-100
-				filter: choose(nazgul)
+				count: any
+				select: choose(nazgul)
 				memorize: exertedNazgul
 			}
 			effect: {
@@ -515,7 +518,7 @@
 				text: Would you like to exert ring-bearer X times to prevent putting on The One Ring until regroup phase?
 				cost: {
 					type: exert
-					filter: choose(ring bearer)
+					select: choose(ring bearer)
 					times: {
 						type: forEachInMemory
 						memory: exertedNazgul
@@ -532,19 +535,19 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: response
-		requires: {
-			type: phase
-			phase: regroup
-		}
+		timeword: response
 		effects: {
 			type: responseEvent
+            requires: {
+                type: phase
+                phase: regroup
+            }
 			trigger: {
 				type: moves
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(nazgul)
+				select: choose(nazgul)
 			}
 		}
 	}
@@ -553,7 +556,7 @@
 		culture: wraith
 		twilight: 1
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -567,7 +570,7 @@
 			effect: [
 				{
 					type: exert
-					filter: memory(assignedNazgul)
+					select: memory(assignedNazgul)
 				}
 				{
 					type: addTrigger
@@ -588,16 +591,16 @@
 		culture: wraith
 		twilight: 2
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(The Witch-king))
+				select: choose(name(The Witch-king))
 			}
 			effect: {
 				type: discard
-				filter: choose(or(tale,weapon))
+				select: choose(or(tale,weapon))
 			}
 		}
 	}
@@ -606,24 +609,24 @@
 		culture: wraith
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
 				type: winsSkirmish
 				filter: nazgul
-				against: companion,resistanceLessThan(1)
+				against: companion,maxResistance(0)
 				memorize: winner
 				memorizeInvolving: involved
 			}
 			cost: {
 				type: exert
-				filter: memory(winner)
+				select: memory(winner)
 				times: 2
 			}
 			effect: {
 				type: kill
-				filter: choose(memory(involved),companion,resistanceLessThan(1))
+				select: choose(memory(involved),companion,maxResistance(0))
 			}
 		}
 	}
@@ -632,13 +635,13 @@
 		culture: wraith
 		twilight: 2
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(nazgul)
+					select: choose(nazgul)
 					amount: 2
 					memorize: chosenNazgul
 				}
@@ -658,7 +661,7 @@
 						effects: [
 							{
 								type: exert
-								filter: choose(ring bearer)
+								select: choose(ring bearer)
 							}
 							{
 								type: addBurdens
@@ -690,7 +693,7 @@
 			}
 			effect: {
 				type: exert
-				filter: choose(companion,hasAttached(culture(wraith),condition))
+				select: choose(companion,hasAttached(culture(wraith),condition))
 			}
 		}
 	}
@@ -725,11 +728,11 @@
 			]
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: discard
-				filter: choose(possession,attachedTo(companion,inSkirmishAgainst(self)))
+				select: choose(possession,attachedTo(companion,inSkirmishAgainst(self)))
 			}
 		}
 	}
@@ -770,11 +773,11 @@
 			]
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: wound
-				filter: choose(companion,not(ring bearer))
+				select: choose(companion,not(ring bearer))
 			}
 		}
 	}
@@ -798,12 +801,14 @@
 			}
 			requires: {
 				type: canSpot
-				filter: companion,resistanceLessThan(4)
+				filter: companion,maxResistance(3)
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(mount)
+				select: choose(mount)
 				on: nazgul
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -824,12 +829,12 @@
 			phase: assignment
 			requires: {
 				type: canSpot
-	      filter: companion,resistanceLessThan(3),not(ring bearer)
+	      filter: companion,maxResistance(2),not(ring bearer)
       }
       effect: {
         type: assignFpCharacterToSkirmish
-        fpCharacter: choose(companion,resistanceLessThan(3),not(ring bearer))
-        against: self
+        fpCharacter: choose(companion,maxResistance(2),not(ring bearer))
+        minion: self
       }
     }
   }
@@ -849,7 +854,7 @@
       phase: skirmish
       cost: {
         type: exert
-        filter: self
+        select: self
       }
       requires: {
         type: location
@@ -859,14 +864,13 @@
         {
           type: chooseActiveCards
           text: Choose character to use resistance instead of strength to resolve skirmish
-          filter: choose(character,inSkirmishAgainst(self))
+          select: choose(character,inSkirmishAgainst(self))
           memorize: chosenCharacter
         }
         {
-          type: addModifier
-          modifier: {
-            type: FPUsesResInsteadOfStr
-            filter: memory(chosenCharacter)
+          type: setFPStrengthOverride
+          amount: {
+            type: forEachResistance
           }
         }
       ]
@@ -913,7 +917,7 @@
       }
       effect: {
         type: exert
-        filter: choose(companion,resistanceLessThan(4))
+        select: choose(companion,maxResistance(3))
       }
     }
   }
@@ -946,7 +950,7 @@
           {
             type: exert
             player: fp
-            filter: choose(ring bearer)
+            select: choose(ring bearer)
           }
           {
             type: addBurdens

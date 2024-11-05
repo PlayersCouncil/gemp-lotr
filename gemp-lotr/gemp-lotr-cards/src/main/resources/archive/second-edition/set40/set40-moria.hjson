@@ -16,7 +16,7 @@
 				type: modifyStrength
 				filter: self
 				amount: {
-					type: countStacked
+					type: forEachStacked
 					on: culture(moria),condition
 					filter: goblin
 				}
@@ -52,7 +52,7 @@
 				}
 				effect: {
 					type: playCardFromStacked
-					filter: choose(goblin)
+					select: choose(goblin)
 					on: self
 					removedTwilight: 2
 				}
@@ -71,19 +71,19 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(moria),goblin)
+					select: choose(culture(moria),goblin)
 				}
 			}
 			{
 				type: trigger
 				trigger: {
 					type: played
-					filter: culture(dwarven),skirmish,event
+					filter: culture(dwarven),timeword(skirmish),event
 				}
 				effect: {
 					type: exert
 					player: fp
-					filter: choose(dwarf)
+					select: choose(dwarf)
 				}
 			}
 		]
@@ -168,12 +168,12 @@
 		culture: moria
 		twilight: 3
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(moria),minion)
+				select: choose(culture(moria),minion)
 			}
 		}
 	}
@@ -196,18 +196,18 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: culture(moria),goblin
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: preventWound
-					filter: choose(culture(moria),goblin)
+					select: choose(culture(moria),goblin)
 				}
 			}
 		]
@@ -246,13 +246,14 @@
 			type: trigger
 			optional: true
 			trigger: {
-				type: playedFromStacked
+				type: played
 				filter: culture(moria),minion
 				from: culture(moria),condition
+				fromZone: stacked
 			}
 			effect: {
 				type: modifyStrength
-				filter: self
+				select: self
 				until: start(regroup)
 				amount: 1
 			}
@@ -276,8 +277,8 @@
 				filter: self
 			}
 			effect: {
-				type: stackCards
-				filter: choose(goblin)
+				type: StackCardsFromPlay
+				select: choose(goblin)
 				where: choose(culture(moria),condition)
 			}
 		}
@@ -294,13 +295,10 @@
 		effects: {
 			type: modifyOwnCost
 			amount: {
-				type: multiply
+                type: forEachStacked
+                on: culture(moria),condition
+                filter: goblin
 				multiplier: -1
-				source: {
-					type: countStacked
-					on: culture(moria),condition
-					filter: goblin
-				}
 			}
 		}
 	}
@@ -322,7 +320,7 @@
 			}
 			effect: {
 				type: playCardFromStacked
-				filter: choose(goblin)
+				select: choose(goblin)
 				on: culture(moria),condition
 			}
 		}
@@ -349,13 +347,13 @@
 			}
 			cost: {
 				type: spot
-				filter: choose(unbound,companion,hasAttachedCount(3,side(free people)))
+				select: choose(unbound,companion,hasAttachedCount(3,side(free people)))
 				memorize: unboundCompanion
 			}
 			effect: {
-				type: DisableSkirmishAssignment
-				until: start(regroup)
-				filter: memory(unboundCompanion)
+                type: disableSkirmishAssignment
+                select: memory(unboundCompanion)
+				until: regroup
 			}
 		}
 	}
@@ -382,7 +380,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(moria),condition)
+				select: choose(culture(moria),condition)
 			}
 		}
 	}
@@ -405,14 +403,14 @@
 			}
 			effect: {
 				type: repeat
-				amount: {
+				times: {
 					type: forEachYouCanSpot
 					filter: companion
 					over: 5
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: choose(culture(moria),goblin)
+					select: choose(culture(moria),goblin)
 				}
 			}
 		}
@@ -461,7 +459,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(weapon)
+				select: choose(weapon)
 				on: culture(moria),goblin
 			}
 		}
@@ -496,7 +494,7 @@
 		vitality: 2
 		site: 4
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: aboutToTakeWound
 				filter: culture(moria),goblin
@@ -507,7 +505,7 @@
 			}
 			effect: {
 				type: preventWound
-				filter: choose(culture(moria),goblin)
+				select: choose(culture(moria),goblin)
 			}
 		}
 	}
@@ -516,16 +514,16 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: shadow
-		requires: {
-			type: canSpot
-			filter: culture(moria),goblin
-		}
+		timeword: shadow
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: culture(moria),goblin
+            }
 			cost: {
 				type: spot
-				filter: choose(companion)
+				select: choose(companion)
 				memorize: chosenCompanion
 			}
 			effect: {
@@ -566,15 +564,15 @@
 		keyword: support area
 		effects: [
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: winsSkirmish
 					filter: culture(moria),goblin,inSkirmish
 				}
 				effect: {
-					type: stackCards
+					type: StackCardsFromPlay
 					where: self
-					filter: choose(culture(moria),goblin,inSkirmish)
+					select: choose(culture(moria),goblin,inSkirmish)
 				}
 			}
 			{
@@ -583,7 +581,7 @@
 				effect: {
 					type: playCardFromStacked
 					on: self
-					filter: choose(goblin)
+					select: choose(goblin)
 				}
 			}
 		]
@@ -608,7 +606,7 @@
 			}
 			effect: {
 				type: modifyStrength
-				filter: self
+				select: self
 				amount: {
 					type: forEachYouCanSpot
 					filter: another,culture(moria),goblin
@@ -621,12 +619,12 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: {
 				type: playCardFromStacked
-				filter: choose(goblin)
+				select: choose(goblin)
 				on: culture(moria),condition
 			}
 		}
@@ -636,14 +634,14 @@
 		culture: moria
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(culture(moria),goblin)
+				select: choose(culture(moria),goblin)
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: dwarf
@@ -671,9 +669,10 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
-					type: discardFromHand
+					type: discarded
+					fromZone: hand
 					filter: goblin
 					memorize: discardedGoblin
 				}
@@ -683,7 +682,7 @@
 				}
 				effect: {
 					type: stackCardsFromDiscard
-					filter: memory(discardedGoblin)
+					select: memory(discardedGoblin)
 					where: self
 				}
 			}
@@ -706,7 +705,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(moria),goblin,not(memory(discardedCards)))
+				select: choose(culture(moria),goblin,not(memory(discardedCards)))
 			}
 		}
 	}
@@ -739,11 +738,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(name(Cave Troll of Moria))
+					select: choose(name(Cave Troll of Moria))
 					amount: 2
 				}
 			}
@@ -754,13 +753,13 @@
 		culture: moria
 		twilight: 0
 		type: event
-		keyword: shadow
-		requires: {
-			type: canSpot
-			filter: culture(moria),condition,hasStacked(goblin)
-		}
+		timeword: shadow
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: culture(moria),condition,hasStacked(goblin)
+            }
 			effect: {
 				type: addTwilight
 				amount: {
@@ -788,7 +787,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(moria),goblin)
+				select: choose(culture(moria),goblin)
 				removedTwilight: 4
 			}
 		}
@@ -807,8 +806,8 @@
 				amount: 3
 			}
 			effect: {
-				type: stackCards
-				filter: choose(culture(moria),goblin)
+				type: StackCardsFromPlay
+				select: choose(culture(moria),goblin)
 				where: choose(culture(moria),support area,condition)
 			}
 		}

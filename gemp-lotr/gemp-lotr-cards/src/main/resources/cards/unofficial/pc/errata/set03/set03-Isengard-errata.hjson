@@ -88,48 +88,144 @@
 	# 	}
 	# }
 	
+	# 53_50: {
+	# 	cardInfo: {
+	# 		imagePath: errata/LOTR-EN03E050.2_card.jpg
+	# 		javaClass: false
+	# 		parent: 3_50
+	# 		parentPath: errata/pc
+	# 		version: 2
+	# 		collInfo: 3R50
+	# 		rarity: R
+	# 		setNum: "3"
+	# 		cardNum: 50
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Can You Protect Me From Yourself?
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Isengard
+	# 	twilight: 0
+	# 	type: Event
+	# 	timeword: Maneuver
+	# 	effects: [
+	# 		{
+	# 			type: toPlay
+	# 			requires: [
+	# 				{
+	# 					type: canSpot
+	# 					filter: culture(isengard),minion
+	# 				}
+	# 			]
+	# 		}
+	# 		{
+	# 			type: event
+	# 			effect: {
+	# 				type: preventable
+	# 				text: Would you like to add 2 burdens to prevent exhausting Aragorn?
+	# 				player: fp
+	# 				cost: {
+	# 					type: addBurdens
+	# 					amount: 2
+	# 				}
+	# 				effect: {
+	# 					type: exhaust
+	# 					select: choose(name(Aragorn))
+	# 				}
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Spot an [isengard] minion to exhaust Aragorn. The Free Peoples player may add 2 burdens to prevent this. 
+	# 	lore: “‘Where is the Ring?'”
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_50: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E050.2_card.jpg
-			javaClass: false
-			parent: 3_50
-			parentPath: errata/pc
-			version: 2
+			imagePath: errata/LOTR-EN03E050.3_card.jpg
+			//parentId: 3_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 3
 			collInfo: 3R50
 			rarity: R
 			setNum: "3"
 			cardNum: 50
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Can You Protect Me From Yourself?
 		unique: false
 		side: Shadow
 		culture: Isengard
-		twilight: 0
-		type: Event
-		keyword: Maneuver
-		requires: {
-			type: canSpot
-			filter: culture(isengard),minion
-		}
-		effects: {
-			type: event
-			effect: {
-				type: preventable
-				text: Would you like to add 2 burdens to prevent exhausting Aragorn?
-				player: fp
-				cost: {
-					type: addBurdens
-					amount: 2
+		twilight: 1
+		type: Condition
+		target: or(companion,ally),not(hasAttached(name(Can You Protect Me From Yourself?)))
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: WinsSkirmish
+					filter: bearer
+					against: culture(isengard),minion
 				}
 				effect: {
-					type: exhaust
-					filter: choose(name(Aragorn))
+					type: AddBurdens
+					amount: 1
 				}
 			}
-		}
-		gametext: Spot an [isengard] minion to exhaust Aragorn. The Free Peoples player may add 2 burdens to prevent this. 
+			{
+				type: Trigger
+				trigger: {
+					type: StartOfPhase
+					phase: regroup
+				}
+				requires: {
+					type: IsGreaterThanOrEqual
+					firstNumber: {
+						type: ForEachVitality
+						filter: bearer
+					}
+					secondNumber: 3
+				}
+				effect: [
+					{
+						# We do this just to make the option prompt a
+						# little more elegant.
+						type: Memorize
+						filter: bearer
+						memory: bearer
+					}
+					{
+						type: Optional
+						player: freeps
+						text: Would you like to exert {bearer} twice to discard Can You Protect Me From Yourself?
+						effect: {
+							type: CostToEffect
+							cost: {
+								type: exert
+								player: freeps
+								times: 2
+								select: bearer
+							}
+							effect: {
+								type: Discard
+								select: self
+							}
+						}
+					}
+				]
+			}
+		]
+		gametext: Bearer must be a companion or ally. Limit 1 per bearer.<br>Each time bearer wins a skirmish against an [isengard] minion, add a burden.<br>At the start of the regroup phase, the Free Peoples player may exert bearer twice to discard this condition.
 		lore: “‘Where is the Ring?'”
 		promotext: ""
 		alts: {
@@ -160,41 +256,46 @@
 		twilight: 2
 		type: condition
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: culture(isengard),minion
-		}
-		effects: {
-				type: trigger
-				trigger: {
-					type: startofphase
-					phase: Shadow
-				}
-				optional: true
-				effect: {
-					type: costToEffect
-					cost: {
-						type: discardfromhand
-						forced: false
-						filter: choose(culture(isengard))
-						count: 1
-						memorize: discardedCard
-					}
-					effect: {
-						type: addTwilight
-						amount: {
-						type: requires
-							requires: {
-								type: MemoryMatches
-								memory: discardedCard
-								filter: Orc
-							}
-							true: 5
-							false: 3
-						}
-					}
-				}
-			}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(isengard),minion
+                }
+		    }
+            {
+                type: trigger
+                trigger: {
+                    type: startofphase
+                    phase: Shadow
+                }
+                optional: true
+                effect: {
+                    type: costToEffect
+                    cost: {
+                        type: discardfromhand
+                        forced: false
+                        select: choose(culture(isengard))
+                        count: 1
+                        memorize: discardedCard
+                    }
+                    effect: {
+                        type: addTwilight
+                        amount: {
+                            type: Conditional
+                            requires: {
+                                type: MemoryMatches
+                                memory: discardedCard
+                                filter: Orc
+                            }
+                            true: 5
+                            false: 3
+                        }
+                    }
+                }
+            }
+        ]
 		gametext: To play, spot an [isengard] minion.\At the start of your Shadow phase, you may discard an [isengard] card from hand to add (3) (or (5) if that card was an Orc).
 		lore: "'Rip them all down!'"
 		promotext: ""
@@ -277,14 +378,14 @@
 	# 			}
 	# 			effect: {
 	# 				type: addKeyword
-	# 				filter: choose(uruk-hai)
+	# 				select: choose(uruk-hai)
 	# 				keyword: fierce
 	# 				until: start(regroup)
 	# 				memorize: chosenUruk
 	# 			}
 	# 		}
 	# 		{
-	# 			type: activatedTrigger
+	# 			type: Response
 	# 			trigger: {
 	# 				type: aboutToTakeWound
 	# 				filter: uruk-hai
@@ -296,7 +397,7 @@
 	# 			effect:
 	# 			{
 	# 				type: preventWound
-	# 				filter: choose(uruk-hai)
+	# 				select: choose(uruk-hai)
 	# 			}
 	# 		}
 	# 	]
@@ -370,18 +471,18 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: addKeyword
-					filter: choose(uruk-hai)
+					select: choose(uruk-hai)
 					keyword: fierce
 					until: start(regroup)
 					memorize: chosenUruk
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: uruk-hai
@@ -395,25 +496,25 @@
 					]
 					effects: [
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: canSpot
 								filter: self,not(exhausted)
 							}
-							effect: {
+							true: {
 								type: exert
-								filter: self
+								select: self
 							}
 						}
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: canSpot
 								filter: self,exhausted
 							}
-							effect: {
+							true: {
 								type: discard
-								filter: self
+								select: self
 							}
 						}
 					]
@@ -421,7 +522,7 @@
 				effect:
 				{
 					type: preventWound
-					filter: choose(uruk-hai)
+					select: choose(uruk-hai)
 				}
 			}
 		]
@@ -457,40 +558,45 @@
 		type: artifact
 		itemclass: palantir
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: culture(isengard),minion
-		}
-		effects: {
-				type: activated
-				phase: shadow
-				cost: [
-					{
-						type: removeTwilight
-						amount: 2
-					}
-				]
-				requires: {
-					type: canSpot
-					filter: culture(isengard),minion
-					count: 2
-				}
-				effect: [
-					{
-						type: revealRandomCardsFromHand
-						forced: true
-						hand: freeps
-						count: 1
-						memorize: revealedCard
-					}
-					{
-						type: putCardsFromHandOnTopOfDeck
-						filter: all(memory(revealedCard))
-						player: shadow
-						hand: freeps
-					}
-				]
-			}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(isengard),minion
+                }
+		    }
+            {
+                type: activated
+                phase: shadow
+                cost: [
+                    {
+                        type: removeTwilight
+                        amount: 2
+                    }
+                ]
+                requires: {
+                    type: canSpot
+                    filter: culture(isengard),minion
+                    count: 2
+                }
+                effect: [
+                    {
+                        type: revealRandomCardsFromHand
+                        forced: true
+                        hand: freeps
+                        count: 1
+                        memorize: revealedCard
+                    }
+                    {
+                        type: putCardsFromHandOnTopOfDeck
+                        select: all(memory(revealedCard))
+                        player: shadow
+                        hand: freeps
+                    }
+                ]
+            }
+        ]
 		gametext: To play, spot an [isengard] minion. Plays to your support area.<br><b>Shadow:</b> Spot 2 [isengard] minions and remove (2) to reveal a card at random from the Free Peoples player's hand. Place that card on top of that player's draw deck.
 		lore: "'Seven stars and seven stones....'"
 		promotext: ""

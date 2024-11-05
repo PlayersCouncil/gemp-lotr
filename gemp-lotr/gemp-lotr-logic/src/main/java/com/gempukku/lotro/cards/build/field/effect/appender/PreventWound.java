@@ -23,19 +23,19 @@ import java.util.Collection;
 public class PreventWound implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "memorize");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "all(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "all(any)");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter,
+                CardResolver.resolveCards(select,
                         (actionContext) -> {
                             final PreventableCardEffect preventableEffect = (PreventableCardEffect) actionContext.getEffect();
                             return Filters.in(preventableEffect.getAffectedCardsMinusPrevented(actionContext.getGame()));
-                        }, new ConstantEvaluator(1), memory, "you", "Choose characters to prevent effect to", environment));
+                        }, actionContext -> new ConstantEvaluator(1), memory, "you", "Choose characters to prevent effect to", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

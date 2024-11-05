@@ -1,0 +1,301 @@
+{
+
+	102_1: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S001.0_card.jpg
+			//parentId: 102_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_1
+			rarity: _
+			setNum: V2
+			cardNum: 1
+			style: Standard
+		}
+		title: Driven into the Hills
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: culture(Dunland), minion
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: ModifyInitiativeHandSize
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+					}
+				}
+			}
+		]
+		gametext: To play, spot a [Dunland] minion.<br>For each companion you can spot over 4, the Free Peoples player must have an additional card in hand to have initiative.
+		lore: "'Not in half a thousand years have they forgotten their grievance that the lords of Gondor gave the Mark to Eorl the Young and made alliance with him.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_2: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S002.0_card.jpg
+			//parentId: 102_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_2
+			rarity: _
+			setNum: V2
+			cardNum: 2
+			style: Standard
+		}
+		title: Dunlending Raider
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 1
+		site: 3
+		effects: {
+			type: ModifyOwnCost
+			amount: -1
+			requires: {
+				type: HaveInitiative
+				side: Shadow
+			}
+		}
+		gametext: While you have initiative, this minion's twilight cost is -2.
+		lore: "'They bring fire...and are burning as they come, rick, cot, and tree.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_3: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S003.0_card.jpg
+			//parentId: 102_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_3
+			rarity: _
+			setNum: V2
+			cardNum: 3
+			style: Standard
+		}
+		title: Dunlending Reaver
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: 3
+					requires: {
+						type: HaveInitiative
+						side: Shadow
+					}
+				}
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: self
+					keyword: damage+1
+					requires: {
+						type: HaveInitiative
+						side: Shadow
+					}
+				}
+			}
+		]
+		gametext: While you have initiative, this minion is strength +3 and damage +1.
+		lore: "Now they could hear, borne over the dark, the sound of harsh singing..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_4: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S004.0_card.jpg
+			//parentId: 102_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_4
+			rarity: _
+			setNum: V2
+			cardNum: 4
+			style: Standard
+		}
+		title: Horsemen Took Your Lands
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: Event
+			effect: [
+				{
+					type: playCardFromDiscard
+					select: choose(culture(dunland), minion, not(unique))
+					memorize: playedDunlending
+					extraEffects: {
+						type: If
+						check: {
+							type: HaveInitiative
+							side: Shadow
+						}
+						true: {
+							type: playCardFromDiscard
+							select: choose(culture(dunland), possession)
+							on: Memory(playedDunlending)
+						}
+					}
+				}
+			]
+		}
+		gametext: Play a non-unique [Dunland] minion from your discard pile. If you have initiative, you may play a [dunland] possession on that minion from your discard pile.
+		lore: "They will not give way now for dusk or dawn..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_5: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S005.0_card.jpg
+			//parentId: 102_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_5
+			rarity: _
+			setNum: V2
+			cardNum: 5
+			style: Standard
+		}
+		title: No More Shall We Wait
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: [
+			{
+				type: event
+				requires: {
+					type: CanSpotTwilight
+					amount: 25
+				}
+				cost: {
+					type: RemoveTwilight
+					amount: 10
+				}
+				effect: [
+					{
+						type: TakeControlOfSite
+					}
+					{
+						type: TakeControlOfSite
+					}
+					{
+						type: TakeControlOfSite
+					}
+					{
+						type: RemoveFromTheGame
+						select: self
+					}
+				]
+			}
+			{
+				type: ActivatedInDiscard
+				phase: Shadow
+				requires: [
+					{
+						type: canSelfBePlayed
+					}
+				]
+				effect: {
+					type: playCardFromDiscard
+					select: self
+				}
+			}
+			{
+				type: ActivatedInDrawDeck
+				phase: Shadow
+				requires: [
+					{
+						type: canSelfBePlayed
+					}
+				]
+				effect: {
+					type: PlayCardFromDrawDeck
+					select: self
+					shuffle: true
+					showAll: true
+				}
+			}
+		]
+		gametext: Spot 25 twilight tokens and remove 10 to take control of 3 sites, then remove this from the game. This event may be played from your draw deck or discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -30,28 +30,29 @@ public class Card_01_126_Tests
 	public void HuntThemDownStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Hunt Them Down!
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Isengard
-		* Twilight Cost: 3
-		* Type: event
-		* Subtype: 
-		* Game Text: <b>Maneuver:</b> Make an Uruk-hai <b>fierce</b> until the regroup phase.
-		*/
+		 * Set: 1
+		 * Name: Hunt Them Down!
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 3
+		 * Type: Event
+		 * Subtype: Maneuver
+		 * Game Text: <b>Maneuver:</b> Make an Uruk-hai <b>fierce</b> until the regroup phase.
+		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var hunt = scn.GetFreepsCard("hunt");
+		var card = scn.GetFreepsCard("hunt");
 
-		assertFalse(hunt.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, hunt.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, hunt.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, hunt.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(hunt, Keyword.MANEUVER));
-		assertEquals(3, hunt.getBlueprint().getTwilightCost());
+		assertEquals("Hunt Them Down!", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+        assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
@@ -70,8 +71,8 @@ public class Card_01_126_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertTrue(scn.ShadowPlayAvailable(hunt));
-		assertFalse(scn.HasKeyword(uruk, Keyword.FIERCE));
+		assertFalse(scn.hasKeyword(uruk, Keyword.FIERCE));
 		scn.ShadowPlayCard(hunt);
-		assertTrue(scn.HasKeyword(uruk, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(uruk, Keyword.FIERCE));
 	}
 }

@@ -1,21 +1,38 @@
 {
+
 	101_13: {
-		title: Counsel of the Wise
-		culture: gandalf
-		twilight: 0
-		type: event
-		keyword: fellowship
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S013.0_card.jpg
+			//parentId: 101_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C13
+			rarity: C
+			setNum: "V1"
+			cardNum: 13
+			style: Standard
 		}
+		title: Counsel of the Wise
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Event
+		timewords: Fellowship
 		effects: {
 			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
 			cost: {
 				type: chooseCardsFromDrawDeck
-				filter: choose(culture(elven),ally)
+				select: choose(culture(elven),ally)
 				memorize: chosenAlly
 				text: Choose an [Elven] ally to reveal from your draw deck.
+				showAll: true
 			}
 			effect: {
 				type: optional
@@ -32,9 +49,21 @@
 					effect: {
 						type: putcardsfromdeckintohand
 						count: 1
-						filter: memory(chosenAlly)
+						select: memory(chosenAlly)
+						reveal: true
+						shuffle: false
+						showAll: false
 					}
 				}
+			}
+		}
+		gametext: Spot Gandalf to reveal an [elven] ally from your draw deck.  You may add (X) to take that ally into hand, where X is that ally's twilight cost.
+		lore: "Beside Glorfindel there were several other counsellors of Elrond's household, of whom Erestor was the chief; and with him was Galdor, an Elf from the Grey Havens..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
@@ -65,11 +94,11 @@
 	# 			}
 	# 			cost: {
 	# 				type: exert
-	# 				filter: choose(name(Gandalf))
+	# 				select: choose(name(Gandalf))
 	# 			}
 	# 			effect: {
 	# 				type: shuffleCardsFromDiscardIntoDrawDeck
-	# 				filter: choose(or(culture(gandalf),culture(elven)))
+	# 				select: choose(or(culture(gandalf),culture(elven)))
 	# 			}
 	# 		}
 	# 		{
@@ -85,7 +114,7 @@
 	# 				amount: 2
 	# 			}
 	# 		}
-			
+
 	# 		{
 	# 			type: modifier
 	# 			modifier: {
@@ -121,7 +150,6 @@
 			rarity: R
 			setNum: "V1"
 			cardNum: 14
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
 		title: Gandalf
@@ -151,11 +179,11 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: PutCardsFromDiscardIntoHand
-					filter: choose(event,or(culture(gandalf),culture(elven)))
+					select: choose(event,or(culture(gandalf),culture(elven)))
 				}
 			}			
 			{
@@ -180,25 +208,40 @@
 			}
 		}
 	}
-	
+
 	101_15: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S015.0_card.jpg
+			//parentId: 101_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R15
+			rarity: R
+			setNum: "V1"
+			cardNum: 15
+			style: Standard
+		}
 		title: Gwaihir
 		subtitle: Lord of Eagles
 		unique: true
-		culture: gandalf
+		side: Free Peoples
+		culture: Gandalf
 		twilight: 4
-		type: ally
-		allyHome: fellowship,4
-		race: eagle
+		type: Ally
+		allyHome: 4F
+		race: Eagle
 		strength: 8
 		vitality: 2
-		requires: [
-			{
-				type: canSpot
-				filter: name(Gandalf)
-			}
-		]
 		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			}
 			{
 				type: trigger
 				optional: true
@@ -208,7 +251,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(companion,signet(gandalf))
+					select: choose(companion,signet(gandalf))
 				}
 			}
 			{
@@ -216,7 +259,7 @@
 				phase: regroup
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: [
 					{
@@ -233,23 +276,48 @@
 						text: Would you like to take up to 2 Shadow cards into hand from discard?
 						effect: {
 							type: putCardsFromDiscardIntoHand
-							filter: choose(side(shadow))
+							select: choose(side(shadow))
 							count: 2
 						}
+
 					}
 				]
 			}
 		]
+		gametext: To play, spot Gandalf.<br>Each time the fellowship moves to an opponent's site, you may heal a companion with the Gandalf signet.<br>Regroup: Discard Gwaihir to make the move limit for this turn +1; the Shadow player may take up to 2 Shadow cards into hand from their discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	101_16: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S016.0_card.jpg
+			//parentId: 101_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C16
+			rarity: C
+			setNum: "V1"
+			cardNum: 16
+			style: Standard
+		}
 		title: My Heart Tells Me
 		unique: true
-		culture: gandalf
+		side: Free Peoples
+		culture: Gandalf
 		twilight: 1
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: {
-			type: activatedtrigger
+			type: Response
 			trigger: {
 				type: aboutToTakeWound
 				filter: minion
@@ -271,33 +339,58 @@
 				}
 				{
 					type: preventWound
-					filter: choose(minion)
+					select: choose(minion)
 				}
 				{
 					type: heal
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			]
 		}
+		gametext: Each time a minion is about to take a wound, you may spot Gandalf to prevent that wound and heal a companion (limit once per turn).
+		lore: "'Then do not be too eager to deal out death in judgement.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	101_17: {
-		title: Two Eyes, As Often As I Can Spare Them
-		culture: gandalf
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S017.0_card.jpg
+			//parentId: 101_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1C17
+			rarity: C
+			setNum: "V1"
+			cardNum: 17
+			style: Standard
+		}
+		title: Two Eyes, as Often as I Can Spare Them
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
 		twilight: 3
-		type: event
-		keyword: fellowship
-		requires: [
-			{
-				type: canSpot
-				filter: name(Frodo)
-			}
-			{
-				type: canSpot
-				filter: name(Gandalf)
-			}
-		]
+		type: Event
+		timewords: Fellowship
 		effects: {
 			type: event
+			requires: [
+				{
+					type: canSpot
+					filter: name(Frodo)
+				}
+				{
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			]
 			effect: {
 				type: drawCards
 				count: {
@@ -306,14 +399,38 @@
 				}
 			}
 		}
+		gametext: Spot Gandalf and Frodo to draw X cards, where X is Frodo's vitality.
+		lore: "'You’ll keep an eye on Frodo, won’t you?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	101_18: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S018.0_card.jpg
+			//parentId: 101_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1R18
+			rarity: R
+			setNum: "V1"
+			cardNum: 18
+			style: Standard
+		}
 		title: The White Council
 		unique: true
-		culture: gandalf
+		side: Free Peoples
+		culture: Gandalf
 		twilight: 1
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: modifier
@@ -348,27 +465,37 @@
 				]
 				cost: {
 					type: exert
-					filter: choose(culture(elven),ally)
+					select: choose(culture(elven),ally)
 					count: 2
 				}
 				effect: {
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: perPhaseLimit
 						limit: 2
 					}
-					effect: [
+					true: [
 						{
 							type: incrementPerPhaseLimit
 							limit: 1
 						}
 						{
 							type: heal
-							filter: choose(companion,or(name(Gandalf),signet(gandalf)))
+							select: choose(companion,or(name(Gandalf),signet(gandalf)))
 						}
 					]
 				}
 			}
 		]
+		gametext: While you can spot Gandalf and 2 [elven] allies, the first sentence of Saruman's game text does not apply.<br>Regroup: Exert 2 [elven] allies to heal Gandalf or a companion with the Gandalf signet (limit 2 per phase).
+		lore: "'For even the very wise cannot see all ends.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 }

@@ -1,0 +1,57 @@
+{
+
+	10_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR10035.jpg
+			//parentId: 10_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U35
+			rarity: U
+			setNum: "10"
+			cardNum: 35
+			style: Standard
+		}
+		title: Suffered Much Loss
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: site,zone(adventure path)
+					keyword: battleground
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: urukHai
+					amount: 1
+				}
+			}
+		]
+		gametext: Each site on the adventure path is a <b>battleground</b>.<br>While you have initiative, each Uruk-hai is strength +1.
+		lore: "'For we are already at war, as you may have seen....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

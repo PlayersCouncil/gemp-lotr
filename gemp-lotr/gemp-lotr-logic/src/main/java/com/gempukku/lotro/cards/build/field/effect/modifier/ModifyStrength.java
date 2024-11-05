@@ -23,7 +23,7 @@ public class ModifyStrength implements ModifierSourceProducer {
                     final Evaluator evaluator = valueSource.getEvaluator(actionContext);
                     return new StrengthModifier(actionContext.getSource(),
                             filterableSource.getFilterable(actionContext),
-                            new RequirementCondition(requirements, actionContext), evaluator);
+                            RequirementCondition.createCondition(requirements, actionContext), evaluator);
         };
     }
 }

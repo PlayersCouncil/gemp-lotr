@@ -1,0 +1,101 @@
+{
+
+	19_33: {
+		cardInfo: {
+			imagePath: decipher/LOTR19033.jpg
+			//parentId: 19_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 19P33
+			rarity: P
+			setNum: "19"
+			cardNum: 33
+			style: Standard
+		}
+		title: Lurtz
+		subtitle: Resilient Captain
+		unique: true
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 7
+		type: Minion
+		race: Uruk-hai
+		strength: 13
+		vitality: 3
+		site: 5
+		keywords: [
+			Archer
+			Damage+1
+		]
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: self
+				}
+				cost: {
+					type: choice
+					texts: [
+						Remove (2)
+						Exert another Uruk-hai
+					]
+					effects: [
+						{
+							type: removeTwilight
+							amount: 2
+						}
+						{
+							type: exert
+							select: choose(another,uruk-hai)
+						}
+					]
+				}
+				effect: {
+					type: preventWound
+					select: self
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToExert
+					filter: self
+				}
+				cost: {
+					type: choice
+					texts: [
+						Remove (2)
+						Exert another Uruk-hai
+					]
+					effects: [
+						{
+							type: removeTwilight
+							amount: 2
+						}
+						{
+							type: exert
+							select: choose(another,uruk-hai)
+						}
+					]
+				}
+				effect: {
+					type: preventExert
+					select: self
+				}
+			}
+		]
+		gametext: <b>Archer</b>. <b>Damage +1</b>.<br><b>Response:</b> If Lurtz is about to take a wound or be exerted, remove (2) (or exert another Uruk-hai) to prevent that wound or exertion.
+		lore: "The Uruk-hai leader walked into view on the misty hilltop beneath the dark trees. Hungry for blood."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

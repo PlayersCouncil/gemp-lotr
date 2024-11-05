@@ -1,0 +1,603 @@
+{
+
+	8_109: {
+		cardInfo: {
+			imagePath: decipher/LOTR08109.jpg
+			//parentId: 8_109
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C109
+			rarity: C
+			setNum: "8"
+			cardNum: 109
+			style: Standard
+		}
+		title: Closer and Closer He Bent
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: exert
+						select: choose(unbound,hobbit)
+					}
+					{
+						type: addBurdens
+					}
+				]
+				effect: [
+					{
+						type: revealHand
+						hand: free people
+					}
+					{
+						type: putCardsFromHandOnBottomOfDeck
+						select: all(side(free people))
+					}
+				]
+			}
+		]
+		gametext: <b>Regroup:</b> Exert an unbound Hobbit and add a burden to reveal your hand. Place each Free Peoples card revealed this way beneath your draw deck.
+		lore: "Pippin sat with his knees drawn up and the ball between them. He bent low over it, looking like a greedy child stooping over a bowl of food."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_110: {
+		cardInfo: {
+			imagePath: decipher/LOTR08110.jpg
+			//parentId: 8_110
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8U110
+			rarity: U
+			setNum: "8"
+			cardNum: 110
+			style: Standard
+		}
+		title: Morgai Foothills
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: siteBlock(king),siteNumber(4)
+				}
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						filter: ringBound,companion
+						memorize: spotCount
+					}
+					{
+						type: removeTwilight
+						amount: {
+							type: fromMemory
+							memory: spotCount
+						}
+					}
+				]
+			}
+			{
+				type: activated
+				phase: regroup
+				effect: [
+					{
+						type: discardFromHand
+						forced: false
+						select: self
+						count: {
+							type: range
+							from: 0
+							to: {
+								type: forEachYouCanSpot
+								filter: ringBound,companion
+							}
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: When the fellowship moves from site 4[K], remove (1) for each Ring-bound companion you spot.<br><b>Regroup:</b> Discard a card from hand for each Ring-bound companion you spot. Discard this condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_111: {
+		cardInfo: {
+			imagePath: decipher/LOTR08111.jpg
+			//parentId: 8_111
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C111
+			rarity: C
+			setNum: "8"
+			cardNum: 111
+			style: Standard
+		}
+		title: So Fair, So Desperate
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: haveInitiative
+				side: shadow
+			}
+			cost: {
+				type: addThreats
+			}
+			effect: [
+				{
+					type: chooseHowManyToSpot
+					filter: culture(shire)
+					memorize: spotCount
+				}
+				{
+					type: modifyStrength
+					select: choose(unbound,hobbit)
+					amount: {
+						type: fromMemory
+						memory: spotCount
+					}
+				}
+			]
+		}
+		gametext: If the Shadow has initiative, add a threat to make an unbound Hobbit strength +1 for each [shire] card you spot.
+		lore: "She should not die.... At least she should not die alone, unaided."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_112: {
+		cardInfo: {
+			imagePath: decipher/LOTR08112.jpg
+			//parentId: 8_112
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8U112
+			rarity: U
+			setNum: "8"
+			cardNum: 112
+			style: Standard
+		}
+		title: Song of the Shire
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: exert
+						select: choose(culture(shire),companion)
+					}
+					{
+						type: exert
+						select: choose(or(culture(rohan),culture(gandalf)),companion)
+					}
+				]
+				effect: {
+					type: AddCultureTokens
+					culture: shire
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					culture: shire
+					select: self
+				}
+				effect: {
+					type: alterOverwhelmMultiplier
+					select: choose(unbound,companion)
+					multiplier: 3
+				}
+			}
+		]
+		gametext: <b>Fellowship:</b> Exert a [shire] companion and either a [rohan] companion or a [gandalf] companion to add a [shire] token here.<br><b>Skirmish:</b> Remove a [shire] token here to prevent an unbound companion from being overwhelmed unless his or her strength is tripled.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_113: {
+		cardInfo: {
+			imagePath: decipher/LOTR08113.jpg
+			//parentId: 8_113
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8R113
+			rarity: R
+			setNum: "8"
+			cardNum: 113
+			style: Standard
+		}
+		title: Sting
+		subtitle: Bane of the Eight Legs
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: or(title(Frodo),title(Sam))
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: skirmishAboutToEnd
+					involving: bearer
+				}
+				requires: {
+					type: fierceSkirmish
+				}
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: discard
+					select: choose(minion,inSkirmish)
+				}
+			}
+		]
+		gametext: Bearer must be Frodo or Sam.<br><b>Response:</b> If a fierce skirmish involving bearer is about to end, add a threat to discard a minion involved in that skirmish.
+		lore: "No such anguish had Shelob ever known, or dreamed of knowing...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_114: {
+		cardInfo: {
+			imagePath: decipher/LOTR08114.jpg
+			//parentId: 8_114
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C114
+			rarity: C
+			setNum: "8"
+			cardNum: 114
+			style: Standard
+		}
+		title: Straining Towards Us
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(name(Frodo))
+			},
+			effect: [
+				{
+					type: chooseHowManyToSpot
+					filter: signet(Frodo)
+					memorize: spotCount
+				}
+				{
+					type: removeTwilight
+					amount: {
+						type: fromMemory
+						memory: spotCount
+					}
+				}
+			]
+		}
+		gametext: Exert Frodo to remove (1) for each Frodo signet you spot.
+		lore: "'...blind almost to all else that is moving. So we must keep it. Therein lies all our hope.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_115: {
+		cardInfo: {
+			imagePath: decipher/LOTR08115.jpg
+			//parentId: 8_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8R115
+			rarity: R
+			setNum: "8"
+			cardNum: 115
+			style: Standard
+		}
+		title: Unheeded
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: exerted
+				filter: minion
+				memorize: exertedMinion
+			}
+			text: Wound {exertedMinion}
+			cost: {
+				type: exert
+				select: choose(unbound,hobbit)
+			}
+			effect: [
+				{
+					type: wound
+					select: memory(exertedMinion)
+				}
+			]
+		}
+		gametext: If a minion exerts, exert an unbound Hobbit to wound that minion.
+		lore: "...and passing up beneath the hauberk had pierced the sinew behind his mighty knee."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_116: {
+		cardInfo: {
+			imagePath: decipher/LOTR08116.jpg
+			//parentId: 8_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8C116
+			rarity: C
+			setNum: "8"
+			cardNum: 116
+			style: Standard
+		}
+		title: We Shall Meet Again Soon
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: moves
+			}
+			requires: {
+				type: phase
+				phase: regroup
+			}
+			cost: {
+				type: exert
+				select: choose(unbound,hobbit)
+			}
+			effect: [
+				{
+					type: putCardsFromDiscardOnTopOfDeck
+					select: choose(side(shadow))
+				}
+			]
+		}
+		gametext: If the fellowship moves during the regroup phase, exert an unbound Hobbit to place a Shadow card from your discard pile on top of your draw deck.
+		lore: "'He said: \"Who are you?\" I still did not answer, but it hurt me horribly; and he pressed me, so I said: \"A hobbit.\"'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_121: {
+		cardInfo: {
+			imagePath: decipher/LOTR08121.jpg
+			//parentId: 8_121
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8P121
+			rarity: P
+			setNum: "8"
+			cardNum: 121
+			style: Standard
+		}
+		title: Merry
+		subtitle: Noble Warrior
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 5
+		vitality: 4
+		signet: Frodo
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(rohan),companion
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 4
+				}
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						filter: culture(rohan),companion
+						memorize: spotCount
+					}
+					{
+						type: modifyStrength
+						select: self
+						amount: {
+							type: fromMemory
+							memory: spotCount
+							multiplier: 2
+						}
+					}
+				]
+			}
+		]
+		gametext: To play, spot a [rohan] companion.<br><b>Skirmish:</b> Discard 4 cards from hand to make Merry strength +2 for each [rohan] companion you spot.
+		lore: "King's man! King's man!' his heart cried within him."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_122: {
+		cardInfo: {
+			imagePath: decipher/LOTR08122.jpg
+			//parentId: 8_122
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 8P122
+			rarity: P
+			setNum: "8"
+			cardNum: 122
+			style: Standard
+		}
+		title: Pippin
+		subtitle: Guard of Minas Tirith
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 5
+		vitality: 4
+		signet: Frodo
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gondor),man
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 4
+				}
+				effect: {
+					type: wound
+					select: choose(minion,inSkirmishAgainst(self),hasAttached(fortification))
+					times: 2
+				}
+			}
+		]
+		gametext: To play, spot a [gondor] Man.<br><b>Skirmish:</b> Discard 4 cards from hand to wound a minion Pippin is skirmishing twice if that minion bears a fortification.
+		lore: "'You're in the service of the Steward of Gondor now. You'll do as you're told.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

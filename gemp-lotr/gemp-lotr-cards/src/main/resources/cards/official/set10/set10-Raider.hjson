@@ -1,0 +1,1041 @@
+{
+
+	10_36: {
+		cardInfo: {
+			imagePath: decipher/LOTR10036.jpg
+			//parentId: 10_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C36
+			rarity: C
+			setNum: "10"
+			cardNum: 36
+			style: Standard
+		}
+		title: Cast Unto the Winds
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: southron
+				}
+				cost: [
+					{
+						type: removeThreats
+					}
+					{
+						type: removeTwilight
+						amount: 3
+					}
+				]
+				effect: {
+					type: wound
+					select: choose(unbound,companion)
+				}
+			}
+		]
+		gametext: <b>Regroup:</b> Spot a Southron, remove a threat, and remove (3) to wound an unbound companion.
+		lore: "'With horns in my mouth / I walk in the South....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_37: {
+		cardInfo: {
+			imagePath: decipher/LOTR10037.jpg
+			//parentId: 10_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C37
+			rarity: C
+			setNum: "10"
+			cardNum: 37
+			style: Standard
+		}
+		title: Corsair Boatswain
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 6
+		vitality: 2
+		site: 4
+		keywords: Corsair
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(support area,possession)
+					showAll: true
+					shuffle: true
+				}
+			}
+		]
+		gametext: <b>Corsair</b>. To play, spot a [raider] Man.<br><b>Shadow:</b> Exert this minion to play a [raider] support area possession from your draw deck.
+		lore: "Promise of plunder and of the whip keep in line a lustful Corsair crew."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_38: {
+		cardInfo: {
+			imagePath: decipher/LOTR10038.jpg
+			//parentId: 10_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10R38
+			rarity: R
+			setNum: "10"
+			cardNum: 38
+			style: Standard
+		}
+		title: Corsair Brute
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 3
+		site: 4
+		keywords: Corsair
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				cost: {
+					type: RemoveCultureTokens
+					select: choose(any)
+					culture: raider
+				}
+				effect: {
+					type: wound
+					select: choose(companion,inSkirmishAgainst(self))
+				}
+			}
+		]
+		gametext: <b>Corsair</b>.<br>At the start of each skirmish involving this minion, you may remove a [raider] token to wound a companion he is skirmishing.
+		lore: "...the region of South Gondor became a debatable land between the Corsairs and the Kings."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_39: {
+		cardInfo: {
+			imagePath: decipher/LOTR10039.jpg
+			//parentId: 10_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U39
+			rarity: U
+			setNum: "10"
+			cardNum: 39
+			style: Standard
+		}
+		title: Corsair Ruffian
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		keywords: Corsair
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,corsair
+				}
+				cost: {
+					type: discardTopCardsFromDeck
+					deck: free people
+					forced: true
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: raider
+					select: choose(HasCultureToken(raider))
+					count: 2
+				}
+			}
+		]
+		gametext: <b>Corsair</b>.<br>When you play this minion, you may spot another corsair and discard the top card of the Free Peoples player's draw deck to add 2 [raider] tokens to a card that already has a [raider] token on it.
+		lore: "An incarnation of savagery was Ghynóh the Cruel."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_40: {
+		cardInfo: {
+			imagePath: decipher/LOTR10040.jpg
+			//parentId: 10_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10R40
+			rarity: R
+			setNum: "10"
+			cardNum: 40
+			style: Standard
+		}
+		title: Easterling Berserker
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		keywords: Easterling
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: easterling
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: self,unwounded
+					}
+					filter: self
+					keyword: damage
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: wound
+					select: choose(other,culture(raider),man)
+					count: 2
+				}
+				effect: {
+					type: heal
+					select: self
+				}
+			}
+		]
+		gametext: <b>Easterling</b>. To play, spot an Easterling.<br>While this minion is unwounded, he is <b>damage +2</b>.<br><b>Skirmish:</b> Wound 2 other [raider] Men to heal this minion.
+		lore: "...from nearby there marched up an army of Easterlings that had waited for the signal...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_41: {
+		cardInfo: {
+			imagePath: decipher/LOTR10041.jpg
+			//parentId: 10_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C41
+			rarity: C
+			setNum: "10"
+			cardNum: 41
+			style: Standard
+		}
+		title: Easterling Pillager
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		keywords: [
+			Easterling
+			Fierce
+		]
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,easterling
+				}
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						filter: companion
+						memorize: spotCount
+					}
+					{
+						type: addBurdens
+						amount: {
+							type: fromMemory
+							memory: spotCount
+							over: 5
+						}
+					}
+				]
+			}
+		]
+		gametext: <b>Easterling</b>. <b>Fierce</b>.<br>When you play this minion, you may spot another Easterling to add a burden for each companion over 5.
+		lore: "...for the sack of the City and the rape of Gondor...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_42: {
+		cardInfo: {
+			imagePath: decipher/LOTR10042.jpg
+			//parentId: 10_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C42
+			rarity: C
+			setNum: "10"
+			cardNum: 42
+			style: Standard
+		}
+		title: Far Harad Mercenaries
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: [
+					{
+						type: canSpot
+						filter: self,inSkirmish
+					}
+					{
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+					{
+						type: canSpot
+						filter: another,culture(raider),man
+					}
+				]
+				effect: {
+					type: discard
+					select: choose(unbound,companion,inSkirmishAgainst(self))
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may spot 6 companions and another [raider] Man to discard an unbound companion this minion is skirmishing.
+		lore: "...men like half-trolls, with white eyes and red tongues."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_43: {
+		cardInfo: {
+			imagePath: decipher/LOTR10043.jpg
+			//parentId: 10_43
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U43
+			rarity: U
+			setNum: "10"
+			cardNum: 43
+			style: Standard
+		}
+		title: Field of the Fallen
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: companion,cultureInDeadPile
+					amount: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(your,southron)
+					memorize: exertedSouthron
+				}
+				effect: {
+					type: modifyStrength
+					select: memory(exertedSouthron)
+					amount: 1
+				}
+			}
+		]
+		gametext: To play, spot a [raider] Man.<br>While there is a character in the dead pile, each companion of the same culture as that character is strength -1.<br><b>Skirmish:</b> Exert your Southron to make him strength +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_44: {
+		cardInfo: {
+			imagePath: decipher/LOTR10044.jpg
+			//parentId: 10_44
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U44
+			rarity: U
+			setNum: "10"
+			cardNum: 44
+			style: Standard
+		}
+		title: High Vantage
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			effect: [
+				{
+					type: addTrigger
+					trigger: {
+						type: aboutToTakeWound
+						filter: southron
+					}
+					effect: {
+						type: preventWound
+						select: all(southron)
+					}
+					until: end(assignment)
+				}
+			]
+		}
+		gametext: Until the end of the assignment phase, each time a Southron is about to take a wound, prevent that.
+		lore: "Southrons rain arrows down upon their enemies from their defended perch atop their great beasts of war."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_45: {
+		cardInfo: {
+			imagePath: decipher/LOTR10045.jpg
+			//parentId: 10_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10R45
+			rarity: R
+			setNum: "10"
+			cardNum: 45
+			style: Standard
+		}
+		title: Mûmak Chieftain
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(mount)
+					on: self
+					discount: -2
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br>When you play this minion, you may play a mount on him from your discard pile. Its twilight cost is -2.
+		lore: "The commander of a mûmak never imagines he is in complete control of the beast."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_46: {
+		cardInfo: {
+			imagePath: decipher/LOTR10046.jpg
+			//parentId: 10_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10R46
+			rarity: R
+			setNum: "10"
+			cardNum: 46
+			style: Standard
+		}
+		title: Quelled
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Event
+		timewords: Archery
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(culture(raider),man)
+			},
+			effect: [
+				{
+					type: discard
+					select: choose(side(free people),condition)
+					count: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: culture(rohan),man
+						}
+						true: 1-2
+						false: 1
+					}
+				}
+			]
+		}
+		gametext: Exert a [raider] Man to discard a Free Peoples condition. If you spot a [rohan] Man, discard an additional Free Peoples condition.
+		lore: "Against the great mounts of the Southron army, Rohirrim steeds could not easily prevail."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_47: {
+		cardInfo: {
+			imagePath: decipher/LOTR10047.jpg
+			//parentId: 10_47
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10U47
+			rarity: U
+			setNum: "10"
+			cardNum: 47
+			style: Standard
+		}
+		title: Rallying Call
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantRemoveThreats
+					filter: side(free people)
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: removeTwilight
+					}
+					{
+						type: PlayCardFromHand
+						select: choose(southron)
+						removedTwilight: 1
+					}
+				]
+				effect: {
+					type: addThreats
+				}
+			}
+		]
+		gametext: To play, spot a [raider] Man.<br>Threats cannot be removed by Free Peoples cards.<br><b>Shadow:</b> Remove (1) and play a Southron to add a threat.
+		lore: "Horns were blown and trumpets were braying...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_48: {
+		cardInfo: {
+			imagePath: decipher/LOTR10048.jpg
+			//parentId: 10_48
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10R48
+			rarity: R
+			setNum: "10"
+			cardNum: 48
+			style: Standard
+		}
+		title: Seasoned Leader
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		vitality: 1
+		target: southron
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: enduring
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(raider),condition)
+				}
+			}
+		]
+		gametext: Bearer must be a Southron.<br>Bearer is <b>enduring</b>.<br><b>Skirmish:</b> Remove a threat to play a [raider] condition from your discard pile.
+		lore: "Only by many conquests and hardships does one rise to prominence in the army of the Haradrim."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_49: {
+		cardInfo: {
+			imagePath: decipher/LOTR10049.jpg
+			//parentId: 10_49
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C49
+			rarity: C
+			setNum: "10"
+			cardNum: 49
+			style: Standard
+		}
+		title: Southron Fanatic
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: assignedAgainst
+					filter: man
+					against: self
+					memorizeAssigned: assignedMan
+				}
+				effect: {
+					type: wound
+					select: memory(assignedMan)
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br>Each time a Man is assigned to skirmish this minion, wound that Man.
+		lore: "Stirred by the Dark Lord, the fullness of Southron cruelty was leveled at the people of Gondor."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_50: {
+		cardInfo: {
+			imagePath: decipher/LOTR10050.jpg
+			//parentId: 10_50
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C50
+			rarity: C
+			setNum: "10"
+			cardNum: 50
+			style: Standard
+		}
+		title: Southron Savage
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: isLessThanOrEqual
+						firstNumber: {
+							type: sum
+							source: [
+								{
+									type: forEachYouCanSpot
+									filter: other,minion
+								}
+								twilightCount
+							]
+						}
+						secondNumber: 3
+					}
+					filter: self
+					amount: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: isLessThanOrEqual
+						firstNumber: {
+							type: sum
+							source: [
+								{
+									type: forEachYouCanSpot
+									filter: other,minion
+								}
+								twilightCount
+							]
+						}
+						secondNumber: 3
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br>While the total number of other minions and twilight tokens is 3 or fewer, this minion is strength +3 and <b>fierce</b>.
+		lore: "The merciless deserts of Haradwaith breed equally merciless fighters."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_51: {
+		cardInfo: {
+			imagePath: decipher/LOTR10051.jpg
+			//parentId: 10_51
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10R51
+			rarity: R
+			setNum: "10"
+			cardNum: 51
+			style: Standard
+		}
+		title: Stampeded
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: played
+				filter: side(free people),possession
+				memorize: playedPossession
+			}
+			requires: {
+				type: canSpot
+				filter: culture(raider)
+			}
+			effect: [
+				{
+					type: discard
+					select: memory(playedPossession)
+				}
+				{
+					type: If
+					check: {
+						type: memoryMatches
+						memory: playedPossession
+						filter: or(culture(gondor),culture(rohan)),possession
+					}
+					true: {
+						type: wound
+						select: choose(unbound,man)
+					}
+				}
+			]
+		}
+		gametext: If a Free Peoples possession is played, spot a [raider] card to discard that possession. If that possession was a [gondor] or [rohan] possession, wound an unbound Man.
+		lore: "...the Mûmak of Harad was indeed a beast of vast bulk, and the like of him does not walk now in Middle-earth...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_52: {
+		cardInfo: {
+			imagePath: decipher/LOTR10052.jpg
+			//parentId: 10_52
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 10C52
+			rarity: C
+			setNum: "10"
+			cardNum: 52
+			style: Standard
+		}
+		title: Under Foot
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: [
+					{
+						type: haveInitiative
+						side: shadow
+					}
+					{
+						type: canSpot
+						filter: culture(raider),man
+					}
+				]
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: reconcileHand
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(raider),man)
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> If you have initiative, spot a [raider] Man and discard this condition to reconcile your hand.<br><b>Skirmish:</b> Discard this condition to make a [raider] Man strength +2.
+		lore: "'I make the earth shake, / As I tramp through the grass; / Trees crack as I pass.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

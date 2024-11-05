@@ -10,23 +10,23 @@
 		keyword: shire
 		strength: 3
 		vitality: 3
-		allyHome: second ed,1
+		allyHome: 1E
 		effects: {
 			type: activated
 			phase: fellowship
 			cost: [
 				{
 					type: exert
-					filter: self
+					select: self
 				}
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 			]
 			effect: {
 				type: discard
-				filter: choose(side(shadow),condition)
+				select: choose(side(shadow),condition)
 			}
 		}
 	}
@@ -44,7 +44,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -58,7 +58,7 @@
 					type: fromMemory
 					memory: numberOfPipes
 				}
-				filter: choose(tale)
+				select: choose(tale)
 			}
 		}
 	}
@@ -67,7 +67,7 @@
 		culture: shire
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -75,7 +75,7 @@
 			}
 			effect: {
 				type: wound
-				filter: all(minion,inSkirmishAgainst(ring bearer))
+				select: all(minion,inSkirmishAgainst(ring bearer))
 			}
 		}
 	}
@@ -90,25 +90,30 @@
 		keyword: shire
 		strength: 2
 		vitality: 2
-		allyHome: second ed,1
-		requires: {
-			type: canSpot
-			count: 2
-			filter: hobbit,companion
-		}
-		effects: {
-			type: activated
-			phase: skirmish
-			cost: {
-				type: exert
-				filter: self
-			}
-			effect: {
-				type: AlterOverwhelmMultiplier
-				filter: choose(hobbit)
-				multiplier: 3
-			}
-		}
+		allyHome: 1E
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    count: 2
+                    filter: hobbit,companion
+                }
+		    }
+            {
+                type: activated
+                phase: skirmish
+                cost: {
+                    type: exert
+                    select: self
+                }
+                effect: {
+                    type: AlterOverwhelmMultiplier
+                    select: choose(hobbit)
+                    multiplier: 3
+                }
+            }
+        ]
 	}
 	40_247: {
 		title: Farmer Maggot
@@ -121,17 +126,17 @@
 		keyword: shire
 		strength: 2
 		vitality: 3
-		allyHome: second ed,1
+		allyHome: 1E
 		effects: {
 			type: activated
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: heal
-				filter: choose(or(name(Merry),name(Pippin)))
+				select: choose(or(name(Merry),name(Pippin)))
 			}
 		}
 	}
@@ -146,7 +151,7 @@
 		strength: 3
 		vitality: 4
 		resistance: 10
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: {
 			type: trigger
 			optional: true
@@ -156,7 +161,7 @@
 			}
 			effect: {
 				type: heal
-				filter: all(name(Frodo))
+				select: all(name(Frodo))
 			}
 		}
 	}
@@ -171,7 +176,7 @@
 		strength: 3
 		vitality: 4
 		resistance: 10
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: {
 			type: trigger
 			optional: true
@@ -189,22 +194,22 @@
 						type: costToEffect
 						cost: {
 							type: exert
-							filter: self
+							select: self
 						}
 						effect: {
 							type: heal
-							filter: choose(companion,not(culture(shire)))
+							select: choose(companion,not(culture(shire)))
 						}
 					}
 					{
 						type: costToEffect
 						cost: {
 							type: exert
-							filter: choose(companion,not(culture(shire)))
+							select: choose(companion,not(culture(shire)))
 						}
 						effect: {
 							type: heal
-							filter: self
+							select: self
 						}
 					}
 				]
@@ -225,7 +230,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -239,7 +244,7 @@
 					type: fromMemory
 					memory: numberOfPipes
 				}
-				filter: choose(companion,hasAttached(pipe))
+				select: choose(companion,hasAttached(pipe))
 			}
 			limitPerPhase: 1
 		}
@@ -258,7 +263,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -286,17 +291,17 @@
 		keyword: shire
 		strength: 2
 		vitality: 2
-		allyHome: second ed,1
+		allyHome: 1E
 		effects: {
 			type: activated
 			phase: fellowship
 			cost: {
-				type: play
-				filter: choose(hobbit,ally)
+				type: PlayCardFromHand
+				select: choose(hobbit,ally)
 			}
 			effect: {
 				type: heal
-				filter: choose(hobbit,companion)
+				select: choose(hobbit,companion)
 			}
 		}
 	}
@@ -309,7 +314,7 @@
 		keyword: shire
 		strength: 2
 		vitality: 2
-		allyHome: second ed,1
+		allyHome: 1E
 		effects: [
 			{
 				type: trigger
@@ -318,7 +323,7 @@
 				}
 				effect: {
 					type: heal
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -326,11 +331,11 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: heal
-					filter: choose(not(self),shire,ally)
+					select: choose(not(self),shire,ally)
 				}
 			}
 		]
@@ -363,11 +368,11 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(hobbit,companion)
+				select: choose(hobbit,companion)
 			}
 			effect: {
 				type: heal
-				filter: choose(shire,ally)
+				select: choose(shire,ally)
 			}
 		}
 	}
@@ -422,12 +427,14 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(name(Merry))
+					select: choose(name(Merry))
 					times: 2
 				}
 				effect: {
 					type: playCardFromDrawDeck
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
+                    showAll: true
+                    shuffle: true
 				}
 			}
 		]
@@ -445,11 +452,11 @@
 			phase: fellowship
 			cost: {
 				type: discard
-				filter: choose(pipeweed,possession)
+				select: choose(pipeweed,possession)
 			}
 			effect: {
 				type: heal
-				filter: all(companion,hasAttached(pipe))
+				select: all(companion,hasAttached(pipe))
 			}
 			limitPerPhase: 1
 		}
@@ -459,8 +466,8 @@
 		culture: shire
 		twilight: 1
 		type: event
+		timeword: skirmish
 		keyword: [
-			skirmish
 			stealth
 		]
 		effects: {
@@ -473,8 +480,8 @@
 				]
 				effects: [
 					{
-						type: conditional
-						requires: [
+						type: If
+						check: [
 							{
 								type: location
 								filter: siteNumber(1-5)
@@ -485,14 +492,14 @@
 								count: 2
 							}
 						]
-						effect: {
+						true: {
 							type: cancelSkirmish
 							filter: hobbit
 						}
 					}
 					{
 						type: modifyStrength
-						filter: choose(hobbit)
+						select: choose(hobbit)
 						amount: 2
 					}
 				]
@@ -592,7 +599,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -646,13 +653,16 @@
 		keyword: shire
 		strength: 2
 		vitality: 2
-		allyHome: second ed,1
-		requires: {
-			type: canSpot
-			count: 2
-			filter: hobbit,companion
-		}
+		allyHome: 1E
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    count: 2
+                    filter: hobbit,companion
+                }
+		    }
 			{
 				type: activated
 				phase: skirmish
@@ -662,7 +672,7 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: cancelSkirmish
@@ -678,12 +688,12 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
 					amount: 3
-					filter: choose(hobbit)
+					select: choose(hobbit)
 				}
 			}
 		]
@@ -699,18 +709,18 @@
 		keyword: shire
 		strength: 2
 		vitality: 2
-		allyHome: second ed,1
+		allyHome: 1E
 		effects: [
 			{
 				type: activated
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: heal
-					filter: choose(name(Sam))
+					select: choose(name(Sam))
 				}
 			}
 			{
@@ -718,11 +728,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(name(Sam))
+					select: choose(name(Sam))
 					amount: 2
 				}
 			}
@@ -754,12 +764,12 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: {
 					type: discard
-					filter: choose(side(shadow),condition,attachedTo(companion))
+					select: choose(side(shadow),condition,attachedTo(companion))
 				}
 			}
 			{
@@ -804,7 +814,7 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(name(Sam))
+					select: choose(name(Sam))
 				}
 				effect: {
 					type: removeBurdens
@@ -837,7 +847,7 @@
 			cost: [
 				{
 					type: discard
-					filter: choose(pipeweed,possession)
+					select: choose(pipeweed,possession)
 				}
 				{
 					type: chooseHowManyToSpot
@@ -860,13 +870,13 @@
 		culture: shire
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(hobbit)
+					select: choose(hobbit)
 					amount: 1
 					memorize: chosenHobbit
 				}
@@ -908,7 +918,7 @@
       }
       effect: {
         type: heal
-        filter: choose(hobbit)
+        select: choose(hobbit)
       }
     }
   }
@@ -926,7 +936,7 @@
       type: modifier
       modifier: {
         type: modifyStrength
-        filter: bearer,inSkirmishAgainst(minion,strengthLessThan(9))
+        filter: bearer,inSkirmishAgainst(minion,MaxStrength(8))
         amount: 2
       }
     }
@@ -956,12 +966,12 @@
         ]
         cost: {
           type: discard
-          filter: self
+          select: self
         }
         effect: {
           type: modifyStrength
           until: start(regroup)
-          filter: all(hobbit,companion)
+          select: all(hobbit,companion)
           amount: 2
         }
       }
@@ -980,13 +990,13 @@
           }
           {
             type: discard
-            filter: self
+            select: self
           }
         ]
         effect: [
           {
             type: heal
-            filter: memory(bearer)
+            select: memory(bearer)
           }
           {
             type: removeBurdens
@@ -1000,7 +1010,7 @@
     culture: shire
     twilight: 1
     type: event
-    keyword: skirmish
+    timeword: skirmish
     effects: {
       type: event
       effect: {
@@ -1012,11 +1022,11 @@
         effects: [
           {
             type: AlterOverwhelmMultiplier
-            filter: choose(hobbit)
+            select: choose(hobbit)
           }
           {
-            type: conditional
-            requires: [
+            type: If
+            check: [
               {
                 type: canSpot
                 count: 2
@@ -1027,7 +1037,7 @@
                 filter: siteNumber(1-4)
               }
             ]
-            effect: {
+            true: {
               type: cancelSkirmish
               filter: hobbit
             }

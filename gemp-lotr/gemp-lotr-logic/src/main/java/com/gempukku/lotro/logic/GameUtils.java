@@ -191,13 +191,7 @@ public class GameUtils {
         return String.join(", ", cardStrings);
     }
 
-
-    public static String SubstituteText(String text)
-    {
-        return SubstituteText(text, null);
-    }
-
-    public static String SubstituteText(String text, ActionContext context)
+    public static String substituteText(String text, ActionContext context)
     {
         String result = text;
         while (result.contains("{")) {
@@ -240,6 +234,8 @@ public class GameUtils {
                 }
                 else if(memory.equals("shadow")) {
                     found = getFirstShadowPlayer(context.getGame());
+                } else if (memory.equals("self")) {
+                    found = GameUtils.getAppendedNames(Collections.singleton(context.getSource()));
                 }
                 else {
                     found = GameUtils.getAppendedNames(context.getCardsFromMemory(memory));
@@ -261,12 +257,6 @@ public class GameUtils {
 
         return result;
     }
-
-    // "If you can spot X [elven] tokens..."
-    public static int getSpottableTokensTotal(LotroGame game, Token token) {
-        return getSpottableCultureTokensOfType(game, token, Filters.any);
-    }
-
     // "If you can spot X [elven] tokens on conditions..."
     public static int getSpottableCultureTokensOfType(LotroGame game, Token token, Filterable... filters) {
         int tokensTotal = 0;
@@ -338,5 +328,18 @@ public class GameUtils {
 
     public static int getSpottableShadowCulturesCount(LotroGame game, String playerId) {
         return game.getModifiersQuerying().getNumberOfSpottableShadowCultures(game, playerId);
+    }
+
+    public static int getControlledSitesCountByPlayer(LotroGame game, String playerId) {
+        return game.getModifiersQuerying().getNumberOfSpottableControlledSites(game, playerId);
+    }
+
+    public static int getControlledSitesCountOfOpponents(LotroGame game, String playerId) {
+        int total = 0;
+
+        for(var opponent : getOpponents(game, playerId)) {
+            total += getControlledSitesCountByPlayer(game, opponent);
+        }
+        return total;
     }
 }

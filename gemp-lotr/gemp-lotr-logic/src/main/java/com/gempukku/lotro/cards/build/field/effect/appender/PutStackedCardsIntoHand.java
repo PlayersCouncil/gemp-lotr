@@ -19,16 +19,16 @@ import java.util.List;
 public class PutStackedCardsIntoHand implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "on");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "on");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String on = FieldUtils.getString(effectObject.get("on"), "on", "any");
         final FilterableSource onFilterSource = environment.getFilterFactory().generateFilter(on, environment);
 
         MultiEffectAppender result = new MultiEffectAppender();
         result.addEffectAppender(
-                CardResolver.resolveStackedCards(filter, valueSource, onFilterSource, "_temp", "you", "Choose cards to take into hand", environment));
+                CardResolver.resolveStackedCards(select, valueSource, onFilterSource, "_temp", "you", "Choose cards to take into hand", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

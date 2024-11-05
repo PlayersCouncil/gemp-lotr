@@ -1,0 +1,130 @@
+{
+
+	9_45: {
+		cardInfo: {
+			imagePath: decipher/LOTR09045.jpg
+			//parentId: 9_45
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R45
+			rarity: R
+			setNum: "9"
+			cardNum: 45
+			style: Standard
+		}
+		title: Horn of the Mark
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 1
+		target: or(name(Merry),name(Pippin))
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addSignet
+					filter: bearer
+					signet: Theoden
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+					memorizeInvolving: involvedCharacters
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: discard
+					select: all(minion,memory(involvedCharacters))
+				}
+			}
+		]
+		gametext: Bearer must be Merry or Pippin.<br>Bearer gains the Théoden signet.<br><b>Response:</b> If bearer wins a skirmish, exert him to discard each minion involved in that skirmish.
+		lore: "'He that blows it at need shall set fear in the hearts of his enemies and joy in the hearts of his friends....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_46: {
+		cardInfo: {
+			imagePath: decipher/LOTR09046.jpg
+			//parentId: 9_46
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 9R46
+			rarity: R
+			setNum: "9"
+			cardNum: 46
+			style: Standard
+		}
+		title: The Red Arrow
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 0
+		type: Artifact
+		#target: 
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: assignment
+			cost: {
+				type: exert
+				select: choose(culture(gondor),man)
+			}
+			effect: [
+				{
+					type: PlayCardFromHand
+					select: choose(culture(rohan),man)
+					memorize: playedRohanMan
+				}
+				{
+					type: optional
+					text: Would you like exert the played ROHAN Man to play a possession on him or her?
+					effect: {
+						type: costToEffect
+						cost: {
+							type: exert
+							select: memory(playedRohanMan)
+						}
+						effect: {
+							type: PlayCardFromHand
+							select: choose(possession)
+							on: memory(playedRohanMan)
+						}
+					}
+				}
+				{
+					type: discard
+					select: self
+				}
+			]
+		}
+		gametext: <b>Assignment:</b> Exert a [gondor] Man to play a [rohan] Man. You may exert that [rohan] Man to play a possession on him or her. Discard this artifact.
+		lore: "'The Red Arrow has not been seen in the Mark in all my years! Has it indeed come to that?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

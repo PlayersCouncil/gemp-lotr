@@ -1,0 +1,1326 @@
+{
+
+	13_82: {
+		cardInfo: {
+			imagePath: decipher/LOTR13082.jpg
+			//parentId: 13_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13C82
+			rarity: C
+			setNum: "13"
+			cardNum: 82
+			style: Standard
+		}
+		title: Bring Down the Wall
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: spot
+				select: choose(companion)
+				memorize: spottedCompanion
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(men),minion)
+					amount: {
+						type: forEachWound
+						filter: memory(spottedCompanion)
+					}
+				}
+			]
+		}
+		gametext: Spot a companion to make a [men] minion strength +1 for each wound on that companion.
+		lore: "'Helm's Deep has one weakness. Its outer wall is solid rock but for a small culvert at its base, which is little more than a drain.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_83: {
+		cardInfo: {
+			imagePath: decipher/LOTR13083.jpg
+			//parentId: 13_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13C83
+			rarity: C
+			setNum: "13"
+			cardNum: 83
+			style: Standard
+		}
+		title: Caravan From the South
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(men),minion
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: plains,site,zone(adventure path)
+				}
+				effect: {
+					type: repeat
+					times: 3
+					effect: {
+						type: reinforceTokens
+						culture: men
+					}
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: not(your),site,nextSiteNumber
+				}
+				effect: {
+					type: discard
+					select: choose(possession)
+				}
+			}
+		]
+		gametext: To play, spot a [men] minion.<br>When you play this, if you spot a plains site on the adventure path, reinforce 3 [men] tokens.<br>Each time the Free Peoples player plays the fellowship's next site, you may discard a possession from play.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_84: {
+		cardInfo: {
+			imagePath: decipher/LOTR13084.jpg
+			//parentId: 13_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13R84
+			rarity: R
+			setNum: "13"
+			cardNum: 84
+			style: Standard
+		}
+		title: Corsair Champion
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: inHandTrigger
+				trigger: {
+					type: played
+					filter: side(free people),possession
+				}
+				requires: {
+					type: canSpot
+					filter: culture(men)
+				}
+				cost: {
+					type: revealCardsFromHand
+					select: self
+				}
+				effect: {
+					type: exert
+					player: free people
+					select: choose(companion)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: cantSpot
+						filter: unwounded,companion
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+		]
+		gametext: Each time a Free Peoples possession is played, you may spot a [men] card and reveal this minion from hand to make the Free Peoples player exert a companion.<br>While each companion is wounded, this minion is <b>fierce</b>.
+		lore: "Rumor of his approach strikes terror."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_85: {
+		cardInfo: {
+			imagePath: decipher/LOTR13085.jpg
+			//parentId: 13_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13S85
+			rarity: S
+			setNum: "13"
+			cardNum: 85
+			style: Standard
+		}
+		title: Cruel Dunlending
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,notAssignedToSkirmish
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: choose(another,culture(men),minion)
+					keyword: fierce
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> If this minion is not assigned to a skirmish, you may exert him to make another [men] minion <b>fierce</b> until the regroup phase.
+		lore: "Burning with a rage stoked by Saruman, the Wild Hillmen made the Rohirrim villagers suffer."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_86: {
+		cardInfo: {
+			imagePath: decipher/LOTR13086.jpg
+			//parentId: 13_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13R86
+			rarity: R
+			setNum: "13"
+			cardNum: 86
+			style: Standard
+		}
+		title: Desert Wind
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 12
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(men),minion
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					requires: {
+						type: canSpotCultureTokens
+						amount: 5
+					}
+					side: shadow
+					amount: 2
+				}
+			}
+		]
+		gametext: To play, spot a [men] minion.<br>While you can spot 5 or more culture tokens, the minion archery total is +2.
+		lore: "Silent Haradrim assassins strike as if from nowhere."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_87: {
+		cardInfo: {
+			imagePath: decipher/LOTR13087.jpg
+			//parentId: 13_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13C87
+			rarity: C
+			setNum: "13"
+			cardNum: 87
+			style: Standard
+		}
+		title: Driven From the Plains
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: choose(culture(men),minion)
+					memorize: chosenMinion
+					keyword: damage
+					amount: {
+						type: sum
+						source: [
+							{
+								type: Conditional
+								requires: {
+									type: location
+									filter: plains
+								}
+								true: 1
+								false: 0
+							}
+							{
+								type: Conditional
+								requires: {
+									type: memoryMatches
+									memory: chosenMinion
+									filter: hasAttached(possession)
+								}
+								true: 1
+								false: 0
+							}
+							{
+								type: Conditional
+								requires: {
+									type: memoryMatches
+									memory: chosenMinion
+									filter: inSkirmishAgainst(companion,maxResistance(4))
+								}
+								true: 1
+								false: 0
+							}
+						]
+					}
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Discard this condition from play to make a [men] minion <b>damage +1</b> for each of the following that is true: it is at a plains site; it is bearing a possession; it is skirmishing a companion who has resistance 4 or less.
+		lore: "The Hillmen sent the villagers before them like lambs to the slaughter."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_88: {
+		cardInfo: {
+			imagePath: decipher/LOTR13088.jpg
+			//parentId: 13_88
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13U88
+			rarity: U
+			setNum: "13"
+			cardNum: 88
+			style: Standard
+		}
+		title: Dunlending Patriarch
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 6
+		type: Minion
+		race: Man
+		strength: 13
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: another,culture(men),minion
+				}
+				amount: {
+					type: forEachWound
+					filter: ringBearer
+					multiplier: -1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: cantSpot
+						filter: unwounded,companion
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+		]
+		gametext: When you play this, you may spot another [men] minion to make this minion twilight cost -1 for each wound on the Ring-bearer.<br>While each companion is wounded, this minion is <b>fierce</b>.
+		lore: "The wisdom of Dunland is passed from elder to youth."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_89: {
+		cardInfo: {
+			imagePath: decipher/LOTR13089.jpg
+			//parentId: 13_89
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13U89
+			rarity: U
+			setNum: "13"
+			cardNum: 89
+			style: Standard
+		}
+		title: Dunlending Trapper
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 7
+		vitality: 2
+		site: 4
+		keywords: Lurker
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(men),minion
+				}
+			}
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(culture(men))
+				}
+				effect: {
+					type: assignFpCharacterToSkirmish
+					fpCharacter: choose(unbound,companion)
+					minion: self
+				}
+			}
+		]
+		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>To play, spot a [men] minion.<br><b>Assignment:</b> Discard a [men] card from your hand to assign this minion to an unbound companion.
+		lore: "His traps catch men as well as beasts."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_90: {
+		cardInfo: {
+			imagePath: decipher/LOTR13090.jpg
+			//parentId: 13_90
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13C90
+			rarity: C
+			setNum: "13"
+			cardNum: 90
+			style: Standard
+		}
+		title: Easterling Runner
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: another,culture(men),minion
+				}
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: RemoveCultureTokens
+						select: choose(any)
+					}
+				]
+				effect: {
+					type: reinforceTokens
+					culture: men
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> Exert this minion, spot another [men] minion, and remove a culture token to reinforce a [men] token.
+		lore: "The key to coordinating the columns of the Easterling army is their use of swift couriers."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_91: {
+		cardInfo: {
+			imagePath: decipher/LOTR13091.jpg
+			//parentId: 13_91
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13U91
+			rarity: U
+			setNum: "13"
+			cardNum: 91
+			style: Standard
+		}
+		title: Fires Brightly Burning
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: discount
+				discount: {
+					type: ifRemoveFromDiscard
+					filter: culture(gollum)
+					count: 4
+				}
+			}
+			{
+				type: event
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(your,culture(men),minion)
+						amount: 2
+					}
+				]
+			}
+		]
+		gametext: You may remove from the game 4 [men] cards in your discard pile instead of paying the twilight cost for this card.<br>Make your [men] minion strength +2.
+		lore: The torches of hate carried by the Dunlendings were kindled by the voice of Saruman.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_92: {
+		cardInfo: {
+			imagePath: decipher/LOTR13092.jpg
+			//parentId: 13_92
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13U92
+			rarity: U
+			setNum: "13"
+			cardNum: 92
+			style: Standard
+		}
+		title: Gríma
+		subtitle: Footman of Saruman
+		unique: true
+		side: Shadow
+		culture: Men
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 4
+		vitality: 3
+		site: 3
+		keywords: Lurker
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: side(free people),character
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(men),minion
+				}
+				effect: {
+					type: exert
+					select: all(companion)
+				}
+			}
+		]
+		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time a Free Peoples character is killed, you may spot another [men] minion to exert each companion.
+		lore: "'He was crafty: dulling men's wariness, or working on their fears, as served the occasion.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_93: {
+		cardInfo: {
+			imagePath: decipher/LOTR13093.jpg
+			//parentId: 13_93
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13R93
+			rarity: R
+			setNum: "13"
+			cardNum: 93
+			style: Standard
+		}
+		title: Harmless
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 2
+		type: Condition
+		resistance: -1
+		keywords: Support Area
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: losesSkirmish
+					filter: companion
+					against: culture(men),minion
+					memorize: loser
+				}
+				effect: {
+					type: transfer
+					fromSupport: true
+					select: self
+					where: choose(memory(loser),not(hasAttached(name(Harmless))))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					filter: minion,inSkirmishAgainst(bearer)
+				}
+			}
+		]
+		gametext: <b>Response:</b> If a companion loses a skirmish involving a [men] minion, transfer this condition from your support area to that companion. Limit 1 per companion.<br>Minions cannot take wounds during skirmishes involving bearer.
+		lore: "The Dunlendings prey on weak village folk."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_94: {
+		cardInfo: {
+			imagePath: decipher/LOTR13094.jpg
+			//parentId: 13_94
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13U94
+			rarity: U
+			setNum: "13"
+			cardNum: 94
+			style: Standard
+		}
+		title: Howdah
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						filter: culture(men),archer
+						memorize: spotCount
+					}
+					{
+						type: AddCultureTokens
+						select: self
+						culture: men
+						count: memory(spotCount)
+					}
+				]
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: archery
+				}
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition from play
+						Remove 2 tokens from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: men
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: 1
+				}
+			}
+		]
+		gametext: When you play this, add a [men] token here for each [men] archer you spot.<br>At the start of the archery phase, you may discard this condition from play or remove 2 tokens from here to make the minion archery total +1.
+		lore: "Wooden towers perched on the backs of the Mûmakil."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_95: {
+		cardInfo: {
+			imagePath: decipher/LOTR13095.jpg
+			//parentId: 13_95
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13U95
+			rarity: U
+			setNum: "13"
+			cardNum: 95
+			style: Standard
+		}
+		title: Lying in Wait
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(your,culture(men),minion,not(hasAttached(name(Lying in Wait))))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer
+					amount: {
+						type: forEachYouCanSpot
+						filter: not(bearer),culture(men),minion
+					}
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: culture(men),minion
+				}
+				effect: {
+					type: modifyStrength
+					select: bearer
+					amount: 1
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Transfer this condition from your support area to your [men] minion. Limit 1 per bearer.<br>Bearer is strength +1 for each other [men] minion you can spot.<br>Each time a [men] minion wins a skirmish, make bearer strength +1 until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_96: {
+		cardInfo: {
+			imagePath: decipher/LOTR13096.jpg
+			//parentId: 13_96
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13C96
+			rarity: C
+			setNum: "13"
+			cardNum: 96
+			style: Standard
+		}
+		title: Merciless Dunlending
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: another,culture(men),minion
+					}
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion,assignedToSkirmish(any)
+						multiplier: 2
+					}
+				}
+			}
+		]
+		gametext: While you can spot another [men] minion, this minion is strength +2 for each companion assigned to a skirmish.
+		lore: "Victims of the Dunlendings receive no quarter."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_97: {
+		cardInfo: {
+			imagePath: decipher/LOTR13097.jpg
+			//parentId: 13_97
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13C97
+			rarity: C
+			setNum: "13"
+			cardNum: 97
+			style: Standard
+		}
+		title: Pirate Cutthroat
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 12
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(men),zone(support)
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: spot
+						select: choose(side(free people),condition)
+						memorize: spottedCondition
+					}
+				]
+				effect: {
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: nameFromMemory(spottedCondition)
+					}
+					effect: {
+						type: reinforceTokens
+						culture: men
+					}
+				}
+			}
+		]
+		gametext: To play, spot a [men] card in your support area.<br><b>Shadow:</b> Exert this minion and spot a Free Peoples condition to reinforce a [men] token for each card you spot that has the same card title as that condition.
+		lore: "Prisoners are never taken by the Corsairs of Umbar."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_98: {
+		cardInfo: {
+			imagePath: decipher/LOTR13098.jpg
+			//parentId: 13_98
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13U98
+			rarity: U
+			setNum: "13"
+			cardNum: 98
+			style: Standard
+		}
+		title: Southron Murderer
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 1
+		site: 4
+		keywords: Archer
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: [
+						{
+							type: canSpotCultureTokens
+							amount: 4
+						}
+						{
+							type: not
+							requires: {
+								type: phase
+								phase: skirmish
+							}
+						}
+					]
+					filter: self
+				}
+			}
+		]
+		gametext: <b>Archer</b>.<br>While you can spot 4 or more culture tokens, this minion cannot take wounds except during skirmishes.
+		lore: "In Harad, death is often swift, but seldom painless."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_99: {
+		cardInfo: {
+			imagePath: decipher/LOTR13099.jpg
+			//parentId: 13_99
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13S99
+			rarity: S
+			setNum: "13"
+			cardNum: 99
+			style: Standard
+		}
+		title: Stragglers
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: men
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Discard this from play
+						Remove a token from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: men
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(men),minion)
+					amount: {
+						type: forEachYouCanSpot
+						filter: culture(men),minion,notAssignedToSkirmish
+						multiplier: 2
+					}
+				}
+			}
+		]
+		gametext: When you play this, add a [men] token here.<br><b>Skirmish:</b> Discard this from play or remove a token from here to make a [men] minion strength +2 for each [men] minion not assigned to a skirmish.
+		lore: "When finished ransacking a homestead, Dunlendings slaughtered fleeing villagers."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_100: {
+		cardInfo: {
+			imagePath: decipher/LOTR13100.jpg
+			//parentId: 13_100
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13S100
+			rarity: S
+			setNum: "13"
+			cardNum: 100
+			style: Standard
+		}
+		title: Vicious Dunlending
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,notAssignedToSkirmish
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: choose(another,culture(men),minion)
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> If this minion is not assigned to a skirmish, you may exert him to make another [men] minion <b>damage +1</b>.
+		lore: "A swath of terror cut across the fields of Rohan."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_101: {
+		cardInfo: {
+			imagePath: decipher/LOTR13101.jpg
+			//parentId: 13_101
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13R101
+			rarity: R
+			setNum: "13"
+			cardNum: 101
+			style: Standard
+		}
+		title: Voice of the Desert
+		subtitle: Southron Troop
+		unique: true
+		side: Shadow
+		culture: Men
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(men),minion
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: location
+						filter: regionNumber(1)
+					}
+					filter: culture(men),minion
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: regionNumber(2)
+					}
+					filter: culture(men),minion
+					keyword: archer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: regionNumber(3)
+					}
+					filter: culture(men),minion
+					keyword: fierce
+				}
+			}
+		]
+		gametext: To play, spot a [men] minion.<br>While the fellowship is in region 1, each [men] minion cannot take wounds.<br>While the fellowship is in region 2, each [men] minion is an <b>archer</b>.<br>While the fellowship is in region 3, each [men] minion is <b>fierce</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_102: {
+		cardInfo: {
+			imagePath: decipher/LOTR13102.jpg
+			//parentId: 13_102
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 13C102
+			rarity: C
+			setNum: "13"
+			cardNum: 102
+			style: Standard
+		}
+		title: Worn Battleaxe
+		unique: false
+		side: Shadow
+		culture: Men
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(men),minion
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotCultureTokens
+					}
+					filter: bearer
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion,assignedToSkirmish(any)
+					}
+				}
+			}
+		]
+		gametext: Bearer must be a [men] minion.<br>While you can spot a culture token, bearer is strength +1 for each companion assigned to a skirmish.
+		lore: "Arms of the Hillmen of Dunland are crude but effective."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

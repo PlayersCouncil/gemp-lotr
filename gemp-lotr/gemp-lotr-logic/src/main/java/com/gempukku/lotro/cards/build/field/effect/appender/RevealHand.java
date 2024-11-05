@@ -23,7 +23,7 @@ public class RevealHand implements EffectAppenderProducer {
         FieldUtils.validateAllowedFields(effectObject, "hand", "memorize");
 
         final String player = FieldUtils.getString(effectObject.get("hand"), "hand", "you");
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
 

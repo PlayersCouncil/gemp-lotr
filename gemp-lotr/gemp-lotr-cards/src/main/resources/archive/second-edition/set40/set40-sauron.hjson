@@ -9,11 +9,14 @@
 		strength: 11
 		vitality: 3
 		site: 6
-		requires: {
-			type: canSpot
-			filter: culture(sauron),minion
-		}
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(sauron),minion
+                }
+		    }
 			{
 				type: modifier
 				modifier: {
@@ -31,11 +34,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: wound
-					filter: choose(inSkirmishAgainst(self))
+					select: choose(inSkirmishAgainst(self))
 				}
 			}
 		]
@@ -52,7 +55,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),minion)
+					select: choose(culture(sauron),minion)
 				}
 			}
 			{
@@ -70,12 +73,12 @@
 						type: addKeyword
 						until: start(regroup)
 						keyword: fierce
-						filter: memory(sauronMinion)
+						select: memory(sauronMinion)
 					}
 					cost: {
 						type: exert
 						player: fp
-						filter: choose(companion)
+						select: choose(companion)
 					}
 				}
 			}
@@ -86,7 +89,7 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -95,14 +98,11 @@
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(character,inSkirmishAgainst(culture(sauron),orc))
+				select: choose(character,inSkirmishAgainst(culture(sauron),orc))
 				amount: {
-					type: multiply
+                    type: fromMemory
+                    memory: spottedBurdens
 					multiplier: -1
-					source: {
-						type: fromMemory
-						memory: spottedBurdens
-					}
 				}
 			}
 		}
@@ -118,7 +118,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),tracker)
+					select: choose(culture(sauron),tracker)
 				}
 			}
 			{
@@ -141,7 +141,7 @@
 						{
 							type: exert
 							player: fp
-							filter: bearer
+							select: bearer
 						}
 					]
 				}
@@ -207,11 +207,13 @@
 				effects: [
 					{
 						type: playCardFromDrawDeck
-						filter: choose(culture(sauron),minion)
+						select: choose(culture(sauron),minion)
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: playCardFromDiscard
-						filter: choose(culture(sauron),minion)
+						select: choose(culture(sauron),minion)
 					}
 				]
 			}
@@ -251,7 +253,7 @@
 				}
 				cost: {
 					type: revealCardsFromHand
-					filter: self
+					select: self
 				}
 				effect: {
 					type: addBurdens
@@ -263,11 +265,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(culture(sauron),minion)
+					select: choose(culture(sauron),minion)
 					amount: 2
 				}
 			}
@@ -278,16 +280,16 @@
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(sauron),orc)
+				select: choose(culture(sauron),orc)
 			}
 			effect: {
 				type: wound
-				filter: choose(companion,not(ring bearer))
+				select: choose(companion,not(ring bearer))
 			}
 		}
 	}
@@ -302,7 +304,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 			}
 			{
@@ -316,7 +318,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -340,7 +342,7 @@
 						{
 							type: modifyStrength
 							until: start(regroup)
-							filter: all(bearer)
+							select: all(bearer)
 							amount: -2
 						}
 					]
@@ -373,12 +375,12 @@
 				phase: archery
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: {
 					type: DisableWounds
-					filter: choose(unbound,companion)
+					select: choose(unbound,companion)
 				}
 			}
 		]
@@ -403,14 +405,14 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: played
-					filter: side(free people),regroup,event
+					filter: side(free people),timeword(regroup),event
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: cancelEvent
@@ -448,7 +450,7 @@
 				effect: {
 					type: assignFpCharacterToSkirmish
 					player: fp
-					against: self
+					minion: self
 					fpCharacter: choose(hobbit)
 				}
 			}
@@ -464,29 +466,34 @@
 		vitality: 1
 		site: 6
 		keyword: archer
-		requires: {
-			type: canSpot
-			filter: culture(sauron),minion
-		}
-		effects: {
-			type: activatedTrigger
-			trigger: {
-				type: aboutToBeKilled
-				filter: self
-			}
-			requires: {
-				type: phase
-				phase: archery
-			}
-			cost: {
-				type: discard
-				filter: self
-			}
-			effect: {
-				type: heal
-				filter: choose(another,culture(sauron),archer)
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(sauron),minion
+                }
+		    }
+            {
+                type: Response
+                trigger: {
+                    type: aboutToBeKilled
+                    filter: self
+                }
+                requires: {
+                    type: phase
+                    phase: archery
+                }
+                cost: {
+                    type: discard
+                    select: self
+                }
+                effect: {
+                    type: heal
+                    select: choose(another,culture(sauron),archer)
+                }
+            }
+        ]
 	}
 	40_226: {
 		title: Orc Brute
@@ -575,7 +582,7 @@
 			}
 			effect: {
 				type: wound
-				filter: choose(companion,inSkirmishAgainst(self))
+				select: choose(companion,inSkirmishAgainst(self))
 			}
 		}
 	}
@@ -661,7 +668,7 @@
 				}
 				effect: {
 					type: discard
-					filter: choose(condition)
+					select: choose(condition)
 				}
 			}
 			{
@@ -669,12 +676,12 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: choose(culture(sauron),condition)
+					select: choose(culture(sauron),condition)
 				}
 			}
 		]
@@ -698,12 +705,12 @@
 			}
 			cost: {
 				type: discard
-				filter: self
+				select: self
 			}
 			effect: {
 				type: exert
 				player: fp
-				filter: choose(companion)
+				select: choose(companion)
 			}
 		}
 	}
@@ -731,11 +738,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: wound
-					filter: choose(character,inSkirmishAgainst(self))
+					select: choose(character,inSkirmishAgainst(self))
 				}
 			}
 		]
@@ -763,16 +770,16 @@
 			}
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: [
 				{
 					type: exert
-					filter: choose(unbound,companion)
+					select: choose(unbound,companion)
 				}
 				{
-					type: DisableArcheryTotalContribution
-					filter: self
+				    type: disableArcheryTotalContribution
+				    select: self
 				}
 			]
 		}
@@ -831,7 +838,7 @@
 			]
 			effect: {
 				type: exert
-				filter: memory(assignedAgainst)
+				select: memory(assignedAgainst)
 			}
 		}
 	}
@@ -847,7 +854,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),minion)
+					select: choose(culture(sauron),minion)
 				}
 			}
 			{
@@ -855,7 +862,7 @@
 				phase: shadow
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: addTwilight
@@ -897,7 +904,7 @@
         }
         effect: {
           type: wound
-          filter: choose(companion,not(ring bearer))
+          select: choose(companion,not(ring bearer))
         }
       }
     ]
@@ -907,13 +914,13 @@
     culture: sauron
     twilight: 1
     type: event
-    keyword: maneuver
-    requires: {
-      type: canSpot
-      filter: culture(sauron),minion
-    }
+    timeword: maneuver
     effects: {
       type: event
+        requires: {
+          type: canSpot
+          filter: culture(sauron),minion
+        }
       effect: [
         {
           type: addThreats
@@ -941,7 +948,7 @@
         type: extraCost
         cost: {
           type: exert
-          filter: choose(culture(sauron),orc)
+          select: choose(culture(sauron),orc)
         }
       }
       {
@@ -974,12 +981,12 @@
     culture: sauron
     twilight: 1
     type: event
-    keyword: skirmish
+    timeword: skirmish
     effects: {
       type: event
       effect: {
         type: modifyStrength
-        filter: choose(culture(sauron),minion)
+        select: choose(culture(sauron),minion)
         amount: {
           type: forEachThreat
         }
@@ -991,14 +998,14 @@
     culture: sauron
     twilight: 1
     type: event
-    keyword: skirmish
+    timeword: skirmish
     effects: {
       type: event
       effect: {
         type: modifyStrength
-        filter: choose(culture(sauron),minion)
+        select: choose(culture(sauron),minion)
         amount: {
-          type: requires
+          type: Conditional
           requires: {
             type: cantSpotFPCultures
             amount: 3
@@ -1033,7 +1040,7 @@
       }
       effect: {
         type: exert
-        filter: choose(companion,notAssignedToSkirmish)
+        select: choose(companion,notAssignedToSkirmish)
       }
     }
   }

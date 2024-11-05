@@ -26,72 +26,70 @@
 		site: 3
 		effects: {
 			type: trigger
+			optional: true
 			trigger: {
 				type: played
 				filter: self
 			}
-			effect: [
+			requires: [
 				{
-					type: MemorizeValue
-					memory: choice
-					value: yes
+					type: CanSpot
+					filter: companion
+					count: 5
 				}
 				{
-					type: conditional
-					requires: [
-						{
-							type: CanSpot
-							filter: companion
-							count: 5
-						}
-						{
-							type: PlayableFromDiscard
-							filter: unique,culture(wraith),minion
-						}
-					]
+					type: PlayableFromDiscard
+					filter: minion
+				}
+			]
+			effect: [
+				{
+					type: MemorizeInfo
+					memory: choice
+					info: yes
+				}
+				{
+					type: Repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+					}
 					effect: {
-						type: Repeat
-						amount: {
-							type: forEachYouCanSpot
-							filter: companion
-							over: 4
-						}
-						effect: {
-							type: conditional
-							requires: [
-								{
-									type: MemoryIs
-									memory: choice
-									value: yes
-								}
-								{
-									type: HasCardInDiscard
-									filter: playable,unique,culture(wraith),minion
-								}
-							]
-							effect: [
-								{
-									type: chooseYesOrNo
-									player: you
-									text: Would you like to play a unique WRAITH minion from your discard?
-									memorize: choice
-								}
-								{
-									type: conditional
-									requires: [
-										{
-											type: MemoryIs
-											memory: choice
-											value: yes
-										}
-									]
-									effect: {
-										type: playCardFromDiscard
-										filter: choose(unique,culture(wraith),minion)
+						type: if
+						check: [
+							{
+								type: MemoryIs
+								memory: choice
+								value: yes
+							}
+							{
+								type: HasCardInDiscard
+								filter: playable,unique,culture(wraith),minion
+							}
+						]
+						true: [
+							{
+								type: chooseYesOrNo
+								player: you
+								text: Would you like to play a unique WRAITH minion from your discard?
+								memorize: choice
+							}
+							{
+								type: if
+								check: [
+									{
+										type: MemoryIs
+										memory: choice
+										value: yes
 									}
+								]
+								true: {
+									type: playCardFromDiscard
+									select: choose(unique,culture(wraith),minion)
 								}
-							]
-						}
+							}
+						]
 					}
 				}
 			]

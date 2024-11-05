@@ -37,46 +37,45 @@ public class Card_01_080_Tests
 	public void OttarStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: *Ottar, Man of Laketown
-		* Side: Free Peoples
-		* Culture: Gandalf
-		* Twilight Cost: 1
-		* Type: Ally
-		* Subtype: Man
-		* Strength: 2
-		* Vitality: 2
-		* Site Number: 3
-		* Game Text: To play, spot Gandalf.
-		* 	<b>Fellowship:</b> Exert Ottar and discard a card from hand to draw a card.
-		*/
+		 * Set: 1
+		 * Name: Ottar, Man of Laketown
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gandalf
+		 * Twilight Cost: 1
+		 * Type: Ally
+		 * Subtype: Man
+		 * Strength: 2
+		 * Vitality: 2
+		 * Site Number: 3
+		 * Game Text: To play, spot Gandalf.
+		 * 	<b>Fellowship:</b> Exert Ottar and discard a card from hand to draw a card.
+		 */
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl ottar = scn.GetFreepsCard("ottar");
+		var card = scn.GetFreepsCard("ottar");
 
-		assertTrue(ottar.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, ottar.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, ottar.getBlueprint().getCulture());
-		assertEquals(CardType.ALLY, ottar.getBlueprint().getCardType());
-		assertEquals(Race.MAN, ottar.getBlueprint().getRace());
-		assertEquals(1, ottar.getBlueprint().getTwilightCost());
-		assertEquals(2, ottar.getBlueprint().getStrength());
-		assertEquals(2, ottar.getBlueprint().getVitality());
-		//assertEquals(, ottar.getBlueprint().getResistance());
-		//assertEquals(Signet., ottar.getBlueprint().getSignet());
-		assertEquals(3, ottar.getBlueprint().getAllyHomeSiteNumbers()[0]); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertEquals("Ottar", card.getBlueprint().getTitle());
+		assertEquals("Man of Laketown", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
 	@Test
 	public void OttarRequiresGandalfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl ottar = scn.GetFreepsCard("ottar");
-		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
+		var ottar = scn.GetFreepsCard("ottar");
+		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.FreepsMoveCardToHand(ottar, gandalf);
 
 		scn.StartGame();
@@ -88,15 +87,15 @@ public class Card_01_080_Tests
 	@Test
 	public void OttarExertsAndDiscardsOneCardFromHandToDrawOne() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl ottar = scn.GetFreepsCard("ottar");
-		PhysicalCardImpl chaff1 = scn.GetFreepsCard("chaff1");
-		PhysicalCardImpl chaff2 = scn.GetFreepsCard("chaff2");
-		PhysicalCardImpl chaff3 = scn.GetFreepsCard("chaff3");
-		PhysicalCardImpl chaff4 = scn.GetFreepsCard("chaff4");
-		PhysicalCardImpl chaff5 = scn.GetFreepsCard("chaff5");
-		PhysicalCardImpl chaff6 = scn.GetFreepsCard("chaff6");
+		var ottar = scn.GetFreepsCard("ottar");
+		var chaff1 = scn.GetFreepsCard("chaff1");
+		var chaff2 = scn.GetFreepsCard("chaff2");
+		var chaff3 = scn.GetFreepsCard("chaff3");
+		var chaff4 = scn.GetFreepsCard("chaff4");
+		var chaff5 = scn.GetFreepsCard("chaff5");
+		var chaff6 = scn.GetFreepsCard("chaff6");
 		scn.FreepsMoveCardToHand(chaff1, chaff2, chaff3);
 		scn.FreepsMoveCharToTable(ottar);
 		scn.FreepsMoveCardsToTopOfDeck(chaff4, chaff5, chaff6);
@@ -125,15 +124,15 @@ public class Card_01_080_Tests
 	@Test
 	public void OttarExertsAndDiscardsTwoCardsFromHandToDrawTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl ottar = scn.GetFreepsCard("ottar");
-		PhysicalCardImpl chaff1 = scn.GetFreepsCard("chaff1");
-		PhysicalCardImpl chaff2 = scn.GetFreepsCard("chaff2");
-		PhysicalCardImpl chaff3 = scn.GetFreepsCard("chaff3");
-		PhysicalCardImpl chaff4 = scn.GetFreepsCard("chaff4");
-		PhysicalCardImpl chaff5 = scn.GetFreepsCard("chaff5");
-		PhysicalCardImpl chaff6 = scn.GetFreepsCard("chaff6");
+		var ottar = scn.GetFreepsCard("ottar");
+		var chaff1 = scn.GetFreepsCard("chaff1");
+		var chaff2 = scn.GetFreepsCard("chaff2");
+		var chaff3 = scn.GetFreepsCard("chaff3");
+		var chaff4 = scn.GetFreepsCard("chaff4");
+		var chaff5 = scn.GetFreepsCard("chaff5");
+		var chaff6 = scn.GetFreepsCard("chaff6");
 		scn.FreepsMoveCardToHand(chaff1, chaff2, chaff3);
 		scn.FreepsMoveCharToTable(ottar);
 		scn.FreepsMoveCardsToTopOfDeck(chaff4, chaff5, chaff6);
@@ -164,15 +163,15 @@ public class Card_01_080_Tests
 	@Test
 	public void OttarExertsAndDiscardsThreeCardsFromHandToDrawThree() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl ottar = scn.GetFreepsCard("ottar");
-		PhysicalCardImpl chaff1 = scn.GetFreepsCard("chaff1");
-		PhysicalCardImpl chaff2 = scn.GetFreepsCard("chaff2");
-		PhysicalCardImpl chaff3 = scn.GetFreepsCard("chaff3");
-		PhysicalCardImpl chaff4 = scn.GetFreepsCard("chaff4");
-		PhysicalCardImpl chaff5 = scn.GetFreepsCard("chaff5");
-		PhysicalCardImpl chaff6 = scn.GetFreepsCard("chaff6");
+		var ottar = scn.GetFreepsCard("ottar");
+		var chaff1 = scn.GetFreepsCard("chaff1");
+		var chaff2 = scn.GetFreepsCard("chaff2");
+		var chaff3 = scn.GetFreepsCard("chaff3");
+		var chaff4 = scn.GetFreepsCard("chaff4");
+		var chaff5 = scn.GetFreepsCard("chaff5");
+		var chaff6 = scn.GetFreepsCard("chaff6");
 		scn.FreepsMoveCardToHand(chaff1, chaff2, chaff3);
 		scn.FreepsMoveCharToTable(ottar);
 		scn.FreepsMoveCardsToTopOfDeck(chaff4, chaff5, chaff6);
@@ -205,11 +204,11 @@ public class Card_01_080_Tests
 	@Test
 	public void OttarDoesNotRequireCardInHandToDraw() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl ottar = scn.GetFreepsCard("ottar");
-		PhysicalCardImpl chaff1 = scn.GetFreepsCard("chaff1");
-		PhysicalCardImpl chaff2 = scn.GetFreepsCard("chaff2");
+		var ottar = scn.GetFreepsCard("ottar");
+		var chaff1 = scn.GetFreepsCard("chaff1");
+		var chaff2 = scn.GetFreepsCard("chaff2");
 		scn.FreepsMoveCharToTable(ottar);
 
 		scn.StartGame();

@@ -17,21 +17,21 @@
 		culture: rohan
 		twilight: 1
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
 				type: Exert
-				filter: choose(mounted,companion)
+				select: choose(mounted,companion)
 				count: {
 					type: range
 					from: 0
 					to: {
 						type: max
-						first: {
+						firstNumber: {
 							type: ForEachBurden
 						}
-						second: {
+						secondNumber: {
 							type: ForEachYouCanSpot
 							filter: minion
 						}
@@ -42,7 +42,7 @@
 			effect: [
 				{
 					type: Wound
-					filter: choose(minion)
+					select: choose(minion)
 					count: {
 						type: ForEachInMemory
 						memory: exertedComps

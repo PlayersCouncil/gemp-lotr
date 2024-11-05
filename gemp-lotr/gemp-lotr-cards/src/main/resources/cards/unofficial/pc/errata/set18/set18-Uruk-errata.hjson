@@ -17,34 +17,31 @@
 		culture: uruk-hai
 		twilight: 4
 		type: event
-		keyword: skirmish
-		requires: {
-			type: CanSpot
-			filter: your,Uruk-hai,InSkirmishAgainst(companion)
-		}
+		timeword: skirmish
 		effects: {
 			type: event
+            requires: {
+                type: CanSpot
+                filter: your,Uruk-hai,InSkirmishAgainst(companion)
+            }
 			effect: [
 				{
-					type: addModifier
-					modifier: {
-						type: FPUsesVitInsteadOfStr
-						filter: companion,InSkirmishAgainst(your,Uruk-hai)
-					}
-				}
+                    type: setFPStrengthOverride
+                    amount: {
+                        type: forEachVitality
+                    }
+                }
+                {
+                    type: setShadowStrengthOverride
+                    amount: {
+                        type: forEachVitality
+                    }
+                }
 				{
 					type: addModifier
 					modifier: {
-						type: ShadowUsesVitInsteadOfStr
-						filter: your,Uruk-hai,InSkirmishAgainst(companion)
-					}
-				}
-				{
-					type: addModifier
-					modifier: {
-						type: CantBeOverwhelmedMultiplier
+						type: CantBeOverwhelmed
 						filter: InSkirmish
-						multiplier: 100
 					}
 				}
 			]

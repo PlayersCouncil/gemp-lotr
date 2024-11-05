@@ -1,0 +1,1096 @@
+{
+
+	11_207: {
+		cardInfo: {
+			imagePath: decipher/LOTR11207.jpg
+			//parentId: 11_207
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R207
+			rarity: R
+			setNum: "11"
+			cardNum: 207
+			style: Standard
+		}
+		title: Dark Powers Strengthen
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Event
+		timewords: Shadow
+		keywords: Toil 2
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: nazgul
+			}
+			effect: [
+				{
+					type: drawCards
+					count: 3
+				}
+			]
+		}
+		gametext: <b>Toil 2</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a Nazgûl to draw 3 cards.
+		lore: "The Witch-king nearly seized the Ring in Frodo's moment of weakness."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_208: {
+		cardInfo: {
+			imagePath: decipher/LOTR11208.jpg
+			//parentId: 11_208
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U208
+			rarity: U
+			setNum: "11"
+			cardNum: 208
+			style: Standard
+		}
+		title: Dark Wings
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: your,culture(wraith),minion
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(side(free people),condition)
+				}
+			}
+		]
+		gametext: Each time your [wraith] minion wins a skirmish, you may discard this condition to discard a Free Peoples condition from play.
+		lore: "The wicked, flying beasts of the Ringwraiths snatched warriors from the battlefield and flung them like leaves in the wind."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_209: {
+		cardInfo: {
+			imagePath: decipher/LOTR11209.jpg
+			//parentId: 11_209
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S209
+			rarity: S
+			setNum: "11"
+			cardNum: 209
+			style: Standard
+		}
+		title: Drawn to Its Power
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: killed
+					filter: companion
+				}
+				requires: {
+					type: canSpot
+					filter: nazgul,inSkirmish
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+		]
+		gametext: Each time a companion is killed in a skirmish involving a Nazgûl, add a burden.
+		lore: "'And also the Ring drew them.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_210: {
+		cardInfo: {
+			imagePath: decipher/LOTR11210.jpg
+			//parentId: 11_210
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U210
+			rarity: U
+			setNum: "11"
+			cardNum: 210
+			style: Standard
+		}
+		title: Hatred Stirred
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: losesSkirmish
+					filter: companion
+					against: culture(wraith),minion
+				}
+				requires: {
+					type: fierceSkirmish
+				}
+				effect: {
+					type: shuffleCardsFromDiscardIntoDrawDeck
+					select: choose(culture(wraith))
+				}
+			}
+		]
+		gametext: Each time a companion loses a fierce skirmish involving a [wraith] minion, you may shuffle a [wraith] card from your discard pile into your draw deck.
+		lore: "Suddenly the foremost Rider spurred his horse forward."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_211: {
+		cardInfo: {
+			imagePath: decipher/LOTR11211.jpg
+			//parentId: 11_211
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R211
+			rarity: R
+			setNum: "11"
+			cardNum: 211
+			style: Standard
+		}
+		title: Keening Wail
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 7
+		type: Event
+		timewords: Maneuver
+		keywords: Toil 2
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: nazgul
+			}
+			effect: [
+				{
+					type: addBurdens
+				}
+			]
+		}
+		gametext: <b>Toil 2</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot a Nazgûl to add a burden.
+		lore: "The piercing cries of the Nazgûl paralyze their enemies with fear."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_212: {
+		cardInfo: {
+			imagePath: decipher/LOTR11212.jpg
+			//parentId: 11_212
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U212
+			rarity: U
+			setNum: "11"
+			cardNum: 212
+			style: Standard
+		}
+		title: Lost in the Woods
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				effect: {
+					type: transfer
+					select: self
+					where: choose(companion,inSkirmishAgainst(your,nazgul),not(hasAttached(name(Lost in the Woods))))
+					fromSupport: true
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: culture(wraith),minion,inSkirmishAgainst(bearer)
+					amount: {
+						type: forEachYouCanSpot
+						filter: forest,site
+					}
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Transfer this condition from your support area to a companion your Nazgûl is skirmishing. Limit 1 per companion.<br>Each [wraith] minion skirmishing bearer is strength +1 for each forest site you can spot.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_213: {
+		cardInfo: {
+			imagePath: decipher/LOTR11213.jpg
+			//parentId: 11_213
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S213
+			rarity: S
+			setNum: "11"
+			cardNum: 213
+			style: Standard
+		}
+		title: Moving This Way
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+				cost: {
+					type: revealCardsFromHand
+					select: choose(nazgul)
+					memorize: revealedCard
+				}
+				effect: [
+					{
+						type: putCardsFromHandOnBottomOfDeck
+						select: memory(revealedCard)
+					}
+					{
+						type: drawCards
+					}
+				]
+			}
+		]
+		gametext: <b>Shadow:</b> Spot a Nazgûl and reveal a Nazgûl from hand to place the revealed card beneath your draw deck and draw a card.
+		lore: "'I thought there were two or three black shapes.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_214: {
+		cardInfo: {
+			imagePath: decipher/LOTR11214.jpg
+			//parentId: 11_214
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R214
+			rarity: R
+			setNum: "11"
+			cardNum: 214
+			style: Standard
+		}
+		title: The Pale Blade
+		subtitle: Sword of Flame
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Possession
+		strength: 3
+		itemclass: Hand weapon
+		target: nazgul
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer,name(The Witch-king)
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+		]
+		gametext: Bearer must be a Nazgûl.<br>If bearer is The Witch-king, each time he wins a skirmish, you may exert him to add a burden.
+		lore: "Die now and curse in vain!' And with that he lifted high his sword and flames ran down the blade."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_215: {
+		cardInfo: {
+			imagePath: decipher/LOTR11215.jpg
+			//parentId: 11_215
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S215
+			rarity: S
+			setNum: "11"
+			cardNum: 215
+			style: Standard
+		}
+		title: Riders in Black
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: revealHand
+				memorize: revealedCards
+			},
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(wraith),minion)
+					amount: {
+						type: forEachInMemory
+						memory: revealedCards
+						filter: culture(wraith),minion
+					}
+				}
+			]
+		}
+		gametext: Reveal your hand to make a [wraith] minion strength +1 for each [wraith] minion in your hand.
+		lore: "'The Nine are abroad again.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_216: {
+		cardInfo: {
+			imagePath: decipher/LOTR11216.jpg
+			//parentId: 11_216
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R216
+			rarity: R
+			setNum: "11"
+			cardNum: 216
+			style: Standard
+		}
+		title: A Shadow Rises
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: self,zone(support)
+				}
+				cost: {
+					type: removeTwilight
+					amount: 5
+				}
+				effect: {
+					type: turnIntoMinion
+					select: self
+					strength: 10
+					vitality: 3
+					keywords: fierce
+					until: regroup
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: {
+					type: removeAllTokens
+					select: self
+				}
+			}
+		]
+		gametext: <b>Maneuver:</b> Remove (5) to make this condition a <b>fierce</b> [wraith] minion until the start of the regroup phase that has 10 strength and 3 vitality, and cannot bear other cards. This card is still a condition.<br>At the start of the regroup phase, remove all tokens from here.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_217: {
+		cardInfo: {
+			imagePath: decipher/LOTR11217.jpg
+			//parentId: 11_217
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R217
+			rarity: R
+			setNum: "11"
+			cardNum: 217
+			style: Standard
+		}
+		title: Shapes Slowly Advancing
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: choose(nazgul)
+				}
+				effect: {
+					type: preventable
+					player: free people
+					text: Would you like to return a companion to hand to prevent adding token?
+					cost: {
+						type: returnToHand
+						player: free people
+						select: choose(companion)
+					}
+					effect: {
+						type: AddCultureTokens
+						culture: wraith
+						select: self
+					}
+				}
+			}
+			{
+				type: trigger
+				trigger:{
+					type: constantlyCheck
+				}
+				requires: {
+					type: canSpotCultureTokens
+					culture: wraith
+					filter: self
+					amount: 4
+				}
+				effect: {
+					type: corruptRingBearer
+				}
+			}
+		]
+		gametext: <b>Regroup:</b> Discard your Nazgûl from play to add a [wraith] token here. The Free Peoples player may return a companion to hand to prevent the placement of that token.<br>When you can spot 4 [wraith] tokens on this condition, the Ring-bearer is corrupted.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_218: {
+		cardInfo: {
+			imagePath: decipher/LOTR11218.jpg
+			//parentId: 11_218
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11U218
+			rarity: U
+			setNum: "11"
+			cardNum: 218
+			style: Standard
+		}
+		title: Surrounded by Wraiths
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: companion
+					memorize: playedCompanion
+				}
+				effect: {
+					type: preventable
+					player: free people
+					text: Would you like to pay twilight cost again for {playedCompanion} to prevent exhausting it?
+					cost: {
+						type: addTwilight
+						amount: {
+							type: ForEachTwilightCost
+							filter: memory(playedCompanion)
+						}
+					}
+					effect: {
+						type: exhaust
+						select: memory(playedCompanion)
+					}
+				}
+			}
+		]
+		gametext: To play, spot a Nazgûl.<br>Each time the Free Peoples player plays a companion, that companion is exhausted unless the Free Peoples player pays its twilight cost again.
+		lore: "Encircled, with nowhere to retreat, Aragorn could only hope to drive back the Nazgûl."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_219: {
+		cardInfo: {
+			imagePath: decipher/LOTR11219.jpg
+			//parentId: 11_219
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R219
+			rarity: R
+			setNum: "11"
+			cardNum: 219
+			style: Standard
+		}
+		title: Úlairë Attëa
+		subtitle: Second of the Nine Riders
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgul
+		strength: 12
+		vitality: 3
+		site: 3
+		keywords: Fierce
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: assignedAgainst
+					filter: self
+					against: character,maxResistance(4)
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+		]
+		gametext: <b>Fierce</b>.<br>Each time Úlairë Attëa is assigned to a fierce skirmish involving a character who has resistance 4 or less, you may exert Úlairë Attëa to add a burden.
+		lore: "'Hissed at me, he did. It gave me quite a shudder.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_220: {
+		cardInfo: {
+			imagePath: decipher/LOTR11220.jpg
+			//parentId: 11_220
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S220
+			rarity: S
+			setNum: "11"
+			cardNum: 220
+			style: Standard
+		}
+		title: Úlairë Cantëa
+		subtitle: Fourth of the Nine Riders
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgul
+		strength: 10
+		vitality: 3
+		site: 3
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: or(forest,dwelling)
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: or(forest,dwelling)
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+		]
+		gametext: While Úlairë Cantëa is at a forest or dwelling site, he is strength +2 and <b>fierce</b>.
+		lore: "'It's from Hobbiton that this here black rider comes, unless there's more than one.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_221: {
+		cardInfo: {
+			imagePath: decipher/LOTR11221.jpg
+			//parentId: 11_221
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S221
+			rarity: S
+			setNum: "11"
+			cardNum: 221
+			style: Standard
+		}
+		title: Úlairë Lemenya
+		subtitle: Fifth of the Nine Riders
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgul
+		strength: 9
+		vitality: 2
+		site: 3
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: character,inSkirmishAgainst(self),maxResistance(5)
+					amount: -3
+				}
+			}
+		]
+		gametext: Each character skirmishing Úlairë Lemenya who has resistance 5 or less is strength -3.
+		lore: "Terror overcame Pippin and Merry, and they threw themselves flat on the ground."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_222: {
+		cardInfo: {
+			imagePath: decipher/LOTR11222.jpg
+			//parentId: 11_222
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S222
+			rarity: S
+			setNum: "11"
+			cardNum: 222
+			style: Standard
+		}
+		title: Úlairë Nelya
+		subtitle: Third of the Nine Riders
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgul
+		strength: 10
+		vitality: 3
+		site: 2
+		keywords: Fierce
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: playSite
+					number: {
+						type: currentSiteNumber
+					}
+				}
+			}
+		]
+		gametext: <b>Fierce</b>.<br><b>Shadow:</b> Exert Úlairë Nelya to replace the fellowship's current site with a site from your adventure deck.
+		lore: "'There's been a strange customer asking for Mr. Baggins of Bag End, and he's only just gone.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_223: {
+		cardInfo: {
+			imagePath: decipher/LOTR11223.jpg
+			//parentId: 11_223
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S223
+			rarity: S
+			setNum: "11"
+			cardNum: 223
+			style: Standard
+		}
+		title: Úlairë Nertëa
+		subtitle: Ninth of the Nine Riders
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgul
+		strength: 9
+		vitality: 2
+		site: 3
+		keywords: Lurker
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: forest
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+					filter: nazgul
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>While Úlairë Nertëa is at a forest site, he is strength +2.<br>While you can spot 6 companions, each Nazgûl is strength +2.
+		lore: "Sauron's servants interrogate with terror and torture."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_224: {
+		cardInfo: {
+			imagePath: decipher/LOTR11224.jpg
+			//parentId: 11_224
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R224
+			rarity: R
+			setNum: "11"
+			cardNum: 224
+			style: Standard
+		}
+		title: Úlairë Otsëa
+		subtitle: Seventh of the Nine Riders
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgul
+		strength: 9
+		vitality: 3
+		site: 3
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				cost: {
+					type: spot
+					select: choose(companion,wounded)
+					memorize: spottedCompanion
+				}
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						count: {
+							type: forEachWound
+							filter: memory(spottedCompanion)
+						}
+						memorize: revealedCards
+					}
+					{
+						type: putCardsFromDeckIntoHand
+						select: all(memory(revealedCards),culture(wraith))
+						reveal: true
+						shuffle: false
+						showAll: false
+					}
+				]
+			}
+		]
+		gametext: When you play Úlairë Otsëa, you may spot a companion who has X wounds to reveal the top X cards of your draw deck. Take each [wraith] card revealed this way into hand.
+		lore: "The riding figure sat quite still with its head bowed, as if listening."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_225: {
+		cardInfo: {
+			imagePath: decipher/LOTR11225.jpg
+			//parentId: 11_225
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11S225
+			rarity: S
+			setNum: "11"
+			cardNum: 225
+			style: Standard
+		}
+		title: Úlairë Toldëa
+		subtitle: Eighth of the Nine Riders
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgul
+		strength: 12
+		vitality: 3
+		site: 3
+		keywords: Fierce
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: playNextSite
+				}
+			}
+		]
+		gametext: <b>Fierce</b>.<br>Each time Úlairë Toldëa wins a skirmish, you may play the fellowship's next site.
+		lore: "The terrifying pursuit of the Nazgûl on their Black Steeds drives their victims headlong into the wild."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_226: {
+		cardInfo: {
+			imagePath: decipher/LOTR11226.jpg
+			//parentId: 11_226
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 11R226
+			rarity: R
+			setNum: "11"
+			cardNum: 226
+			style: Standard
+		}
+		title: The Witch-king
+		subtitle: Captain of the Nine Riders
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 8
+		type: Minion
+		race: Nazgul
+		strength: 14
+		vitality: 4
+		site: 3
+		keywords: [
+			Fierce
+			Toil 2
+		]
+
+		gametext: <b>Fierce</b>. <b>Toil 2</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -2.)</helper> <b>Muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
+		lore: "...a shape, black-mantled, huge and threatening."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -15,6 +15,7 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.AddUntilModifierEffect;
 import com.gempukku.lotro.logic.modifiers.MinionSiteNumberModifier;
+import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
@@ -24,18 +25,18 @@ import java.util.Collection;
 public class ModifySiteNumber implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "amount", "count", "filter", "until", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "amount", "count", "select", "until", "memorize");
 
         final ValueSource amountSource = ValueResolver.resolveEvaluator(effectObject.get("amount"), environment);
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final TimeResolver.Time time = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, valueSource, memory, "you", "Choose cards to modify site number of", environment));
+                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to modify site number of", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -44,7 +45,7 @@ public class ModifySiteNumber implements EffectAppenderProducer {
                         final Evaluator evaluator = amountSource.getEvaluator(actionContext);
                         final int amount = evaluator.evaluateExpression(actionContext.getGame(), actionContext.getSource());
                         return new AddUntilModifierEffect(
-                                new MinionSiteNumberModifier(actionContext.getSource(), Filters.in(cardsFromMemory), amount), time);
+                                new MinionSiteNumberModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, new ConstantEvaluator(amount)), time);
                     }
                 });
 

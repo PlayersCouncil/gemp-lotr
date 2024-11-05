@@ -11,8 +11,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_01_043_Tests
 {
@@ -37,28 +36,29 @@ public class Card_01_043_Tests
 	public void FarseeingEyesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Far-seeing Eyes
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Elven
-		* Twilight Cost: 2
-		* Type: condition
-		* Subtype: Support Area
-		* Game Text: Each time you play an Elf, choose an opponent to discard a card from hand.
-		*/
+		 * Set: 1
+		 * Name: Far-seeing Eyes
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: Support Area
+		 * Game Text: Each time you play an Elf, choose an opponent to discard a card from hand.
+		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var eyes = scn.GetFreepsCard("eyes");
+		var card = scn.GetFreepsCard("eyes");
 
-		assertTrue(eyes.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, eyes.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, eyes.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, eyes.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(eyes, Keyword.SUPPORT_AREA));
-		assertEquals(2, eyes.getBlueprint().getTwilightCost());
+		assertEquals("Far-seeing Eyes", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test

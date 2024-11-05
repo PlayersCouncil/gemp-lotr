@@ -22,16 +22,16 @@ import java.util.Collection;
 public class DisableArcheryTotalContribution implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "memorize");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter,
+                CardResolver.resolveCards(select,
                         valueSource, memory, "you", "Choose cards to make not add to archery total", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
@@ -39,7 +39,7 @@ public class DisableArcheryTotalContribution implements EffectAppenderProducer {
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
                         return new AddUntilEndOfPhaseModifierEffect(
-                                new DoesNotAddToArcheryTotalModifier(actionContext.getSource(), Filters.in(cardsFromMemory)));
+                                new DoesNotAddToArcheryTotalModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null));
                     }
                 });
 

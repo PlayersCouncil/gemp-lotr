@@ -52,10 +52,6 @@ public class DiscardCardsFromPlayEffect extends AbstractPreventableCardEffect {
         return "Discard " + getAppendedTextNames(cards);
     }
 
-    protected void forEachDiscardedByEffectCallback(Collection<PhysicalCard> discardedCards) {
-
-    }
-
     @Override
     protected void playoutEffectOn(LotroGame game, Collection<PhysicalCard> cards) {
         Set<PhysicalCard> discardedCards = new HashSet<>();
@@ -79,7 +75,5 @@ public class DiscardCardsFromPlayEffect extends AbstractPreventableCardEffect {
 
         for (PhysicalCard discardedCard : discardedCards)
             game.getActionsEnvironment().emitEffectResult(new DiscardCardsFromPlayResult(_source, getPerformingPlayer(), discardedCard));
-
-        forEachDiscardedByEffectCallback(cards);
     }
 }

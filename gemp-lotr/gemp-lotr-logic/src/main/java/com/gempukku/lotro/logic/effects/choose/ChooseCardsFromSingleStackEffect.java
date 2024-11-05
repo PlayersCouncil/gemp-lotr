@@ -5,15 +5,11 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.decisions.ArbitraryCardsSelectionDecision;
-import com.gempukku.lotro.logic.decisions.CardsSelectionDecision;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Action;
 
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 public abstract class ChooseCardsFromSingleStackEffect extends AbstractEffect {
     private final Action _action;
@@ -49,7 +45,7 @@ public abstract class ChooseCardsFromSingleStackEffect extends AbstractEffect {
 
     @Override
     protected FullEffectResult playEffectReturningResult(final LotroGame game) {
-        var stackedCards = Filters.filter(game.getGameState().getStackedCards(_stackedOn), game, _stackedCardFilter);
+        var stackedCards = Filters.filter(game, game.getGameState().getStackedCards(_stackedOn), _stackedCardFilter);
 
         int maximum = Math.min(_maximum, stackedCards.size());
 

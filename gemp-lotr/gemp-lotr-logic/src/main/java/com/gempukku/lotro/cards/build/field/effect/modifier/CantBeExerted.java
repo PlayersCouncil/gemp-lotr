@@ -20,7 +20,7 @@ public class CantBeExerted implements ModifierSourceProducer {
 
         return (actionContext) -> new CantExertWithCardModifier(actionContext.getSource(),
                 filterableSource.getFilterable(actionContext),
-                new RequirementCondition(requirements, actionContext),
+                RequirementCondition.createCondition(requirements, actionContext),
                 byFilterableSource.getFilterable(actionContext));
     }
 }

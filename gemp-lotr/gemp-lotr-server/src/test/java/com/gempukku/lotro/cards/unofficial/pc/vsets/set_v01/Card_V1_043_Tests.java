@@ -10,9 +10,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_043_Tests
 {
@@ -54,7 +52,7 @@ public class Card_V1_043_Tests
 		assertEquals(Culture.WRAITH, faces.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, faces.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, faces.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(faces, Keyword.SKIRMISH)); // test for keywords as needed
+        assertTrue(scn.hasTimeword(faces, Timeword.SKIRMISH)); // test for keywords as needed
 		assertEquals(1, faces.getBlueprint().getTwilightCost());
 		//assertEquals(, faces.getBlueprint().getStrength());
 		//assertEquals(, faces.getBlueprint().getVitality());
@@ -114,13 +112,13 @@ public class Card_V1_043_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(14, scn.GetStrength(wk));
-		assertFalse(scn.HasKeyword(wk, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(wk, Keyword.DAMAGE));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertTrue(scn.ShadowPlayAvailable(faces));
 
 		scn.ShadowPlayCard(faces);
 		assertEquals(14, scn.GetStrength(wk));
-		assertTrue(scn.HasKeyword(wk, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(wk, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(wk, Keyword.DAMAGE));
 	}
 }

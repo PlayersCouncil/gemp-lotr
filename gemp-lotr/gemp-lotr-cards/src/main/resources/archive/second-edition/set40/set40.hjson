@@ -26,7 +26,7 @@
 				effect: [
 					{
 						type: negateWound
-						filter: all(bearer)
+						select: all(bearer)
 					}
 					{
 						type: addBurdens
@@ -48,7 +48,7 @@
 					effects: [
 						{
 							type: exert
-							filter: bearer
+							select: bearer
 						}
 						{
 							type: discardCardAtRandomFromHand
@@ -91,7 +91,7 @@
 				effect: [
 					{
 						type: negateWound
-						filter: all(bearer)
+						select: all(bearer)
 					}
 					{
 						type: addBurdens
@@ -99,7 +99,7 @@
 				]
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: bearer
@@ -116,7 +116,7 @@
 				effect: [
 					{
 						type: negateWound
-						filter: all(bearer)
+						select: all(bearer)
 					}
 					{
 						type: addBurdens
@@ -144,7 +144,7 @@
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(name(Frodo))
+				select: choose(name(Frodo))
 				until: endOfTurn
 				amount: 1
 			}
@@ -163,11 +163,13 @@
 			cost: {
 				type: exert
 				count: 2
-				filter: choose(hobbit)
+				select: choose(hobbit)
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -224,7 +226,9 @@
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(name(Aragorn))
+				select: choose(name(Aragorn))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -242,11 +246,13 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(your,hobbit)
+				select: choose(your,hobbit)
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(or(pipe,and(pipeweed,possession)))
+				select: choose(or(pipe,and(pipeweed,possession)))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -293,12 +299,12 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: choose(your,not(enduring),character)
+				select: choose(your,not(enduring),character)
 				memorize: exertedCharacter
 			}
 			effect: {
 				type: modifyStrength
-				filter: memory(exertedCharacter)
+				select: memory(exertedCharacter)
 				amount: 2
 			}
 		}
@@ -318,7 +324,7 @@
 			}
 			effect: {
 				type: exert
-				filter: all(hobbit,companion)
+				select: all(hobbit,companion)
 			}
 		}
 	}
@@ -338,7 +344,7 @@
 			effect: {
 				type: heal
 				player: fp
-				filter: choose(companion)
+				select: choose(companion)
 				count: {
 					type: forEachCulture
 					over: 2
@@ -384,7 +390,7 @@
 					}
 				}
 				effect: {
-					type: appendCardIdsToWhileInZone
+					type: storeWhileInZone
 					memory: playedNazgul
 				}
 			}
@@ -410,8 +416,8 @@
 			type: activated
 			phase: fellowship
 			cost: {
-				type: play
-				filter: choose(culture(dwarven),possession)
+				type: PlayCardFromHand
+				select: choose(culture(dwarven),possession)
 			}
 			effect: {
 				type: drawCards
@@ -524,7 +530,7 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(goblin)
+				select: choose(goblin)
 			}
 		}
 	}
@@ -546,14 +552,16 @@
 				]
 				effects: [
 					{
-						type: play
-						filter: choose(name(The Balrog))
-						cost: -6
+						type: PlayCardFromHand
+						select: choose(name(The Balrog))
+						discount: -6
 					}
 					{
 						type: playCardFromDrawDeck
-						filter: choose(name(The Balrog))
-						cost: -6
+						select: choose(name(The Balrog))
+						discount: -6
+                        showAll: true
+                        shuffle: true
 					}
 				]
 			}
@@ -593,7 +601,7 @@
 					memorize: playedUrukHai
 				}
 				effect: {
-					type: appendCardIdsToWhileInZone
+					type: storeWhileInZone
 					memory: playedUrukHai
 				}
 			}
@@ -649,19 +657,21 @@
 				]
 				effects: [
 					{
-						type: play
-						filter: choose(name(Saruman))
-						cost: -2
+						type: PlayCardFromHand
+						select: choose(name(Saruman))
+						discount: -2
 					}
 					{
 						type: playCardFromDrawDeck
-						filter: choose(name(Saruman))
-						cost: -2
+						select: choose(name(Saruman))
+						discount: -2
+                        showAll: true
+                        shuffle: true
 					}
 					{
 						type: playCardFromDiscard
-						filter: choose(name(Saruman))
-						cost: -2
+						select: choose(name(Saruman))
+						discount: -2
 					}
 				]
 			}
@@ -700,7 +710,7 @@
 			}
 			effect: {
 				type: heal
-				filter: all(ring-bound,companion)
+				select: all(ring-bound,companion)
 			}
 		}
 	}
@@ -749,12 +759,12 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(companion)
+				select: choose(companion)
 				memorize: exertedCompanion
 			}
 			effect: {
 				type: heal
-				filter: choose(companion,not(cultureFromMemory(exertedCompanion)))
+				select: choose(companion,not(cultureFromMemory(exertedCompanion)))
 			}
 		}
 	}
@@ -902,14 +912,16 @@
 				]
 				effects: [
 					{
-						type: play
-						filter: choose(name(The Witch-King))
-						cost: -4
+						type: PlayCardFromHand
+						select: choose(name(The Witch-King))
+						discount: -4
 					}
 					{
 						type: playCardFromDrawDeck
-						filter: choose(name(The Witch-King))
-						cost: -4
+						select: choose(name(The Witch-King))
+						discount: -4
+                        showAll: true
+                        shuffle: true
 					}
 				]
 			}
@@ -934,7 +946,7 @@
 			}
 			cost: {
 				type: kill
-				filter: choose(unbound,companion)
+				select: choose(unbound,companion)
 			}
 	    effect: {
         type: addModifier
@@ -1028,13 +1040,15 @@
           effects: [
             {
               type: playCardFromDrawDeck
-              filter: choose(name(The Great Eye))
-              cost: -3
+              select: choose(name(The Great Eye))
+              discount: -3
+                showAll: true
+                shuffle: true
             }
             {
               type: playCardFromDiscard
-              filter: choose(name(The Great Eye))
-              cost: -3
+              select: choose(name(The Great Eye))
+              discount: -3
             }
           ]
         }

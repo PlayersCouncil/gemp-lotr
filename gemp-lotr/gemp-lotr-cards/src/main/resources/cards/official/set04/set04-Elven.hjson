@@ -1,0 +1,1708 @@
+{
+
+	4_58: {
+		cardInfo: {
+			imagePath: decipher/LOTR04058.jpg
+			//parentId: 4_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R58
+			rarity: R
+			setNum: "4"
+			cardNum: 58
+			style: Standard
+		}
+		title: Alliance Reforged
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 3
+		type: Event
+		timewords: Fellowship
+		keywords: Tale
+		effects: {
+			type: event
+			effect: [
+				{
+					type: drawCards
+					count: {
+						type: forEachYouCanSpot
+						filter: elf,companion
+					}
+				}
+			]
+		}
+		gametext: <b>Tale</b>.<br><b>Fellowship:</b> Draw a card for each Elf companion you spot.
+		lore: "'If we do not trust the strength of Men, then we trust to the victory of Sauron.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_59: {
+		cardInfo: {
+			imagePath: decipher/LOTR04059.jpg
+			//parentId: 4_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U59
+			rarity: U
+			setNum: "4"
+			cardNum: 59
+			style: Standard
+		}
+		title: Arrow and Blade
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(elf,companion)
+				count: any
+				memorize: exertedElves
+			},
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(unbound,companion))
+					amount: {
+						type: forEachInMemory
+						memory: exertedElves
+						multiplier: -1
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Exert X Elf companions to make a minion skirmishing an unbound companion strength -X.
+		lore: "The Elven bow and the sword of Man fought together as one weapon."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_60: {
+		cardInfo: {
+			imagePath: decipher/LOTR04060.jpg
+			//parentId: 4_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U60
+			rarity: U
+			setNum: "4"
+			cardNum: 60
+			style: Standard
+		}
+		title: Blades Drawn
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+					count: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: minion
+					amount: {
+						type: forEachWound
+						filter: self
+						multiplier: -2
+					}
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: To play, spot 3 Elves. Plays to your support area.<br>For each wound on each minion, that minion is strength -2. Discard this condition during the regroup phase.
+		lore: "The sword skills of the Elven archers were unexpected."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_61: {
+		cardInfo: {
+			imagePath: decipher/LOTR04061.jpg
+			//parentId: 4_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R61
+			rarity: R
+			setNum: "4"
+			cardNum: 61
+			style: Standard
+		}
+		title: Company of Archers
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Archery
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: elf,companion
+				count: 2
+			}
+			effect: [
+				{
+					type: discard
+					select: choose(condition)
+				}
+			]
+		}
+		gametext: <b>Archery:</b> Spot 2 Elf companions to discard a condition.
+		lore: "The Naith Company, a veteran band from the South of Lórien, concentrated fire on the Uruk machines."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_62: {
+		cardInfo: {
+			imagePath: decipher/LOTR04062.jpg
+			//parentId: 4_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U62
+			rarity: U
+			setNum: "4"
+			cardNum: 62
+			style: Standard
+		}
+		title: Elven Bow
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		itemclass: Ranged weapon
+		target: elf
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: archer
+				}
+			}
+		]
+		gametext: Bearer must be an Elf.<br>Bearer is an <b>archer</b>.
+		lore: "No finer bows could defend Helm's Deep than those of the Golden Wood."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_63: {
+		cardInfo: {
+			imagePath: decipher/LOTR04063.jpg
+			//parentId: 4_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U63
+			rarity: U
+			setNum: "4"
+			cardNum: 63
+			style: Standard
+		}
+		title: Elven Brooch
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		itemclass: Brooch
+		target: companion
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToDiscard
+					filter: another,possession,attachedTo(bearer)
+					source: side(shadow)
+				}
+				effect: [
+					{
+						type: preventDiscard
+						select: choose(another,possession,attachedTo(bearer))
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: To play, spot an Elf. Bearer must be a companion.<br><b>Response:</b> If another possession borne by bearer is about to be discarded by a Shadow card, discard this possession instead.
+		lore: "'Not idly do the leaves of Lórien fall.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_64: {
+		cardInfo: {
+			imagePath: decipher/LOTR04064.jpg
+			//parentId: 4_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C64
+			rarity: C
+			setNum: "4"
+			cardNum: 64
+			style: Standard
+		}
+		title: Elven Sword
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Hand weapon
+		target: elf
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Exert bearer
+						Discard 2 cards from hand
+					]
+					effects: [
+						{
+							type: exert
+							select: bearer
+						}
+						{
+							type: discardFromHand
+							forced: false
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(bearer))
+					amount: -1
+				}
+			}
+		]
+		gametext: Bearer must be an Elf.<br><b>Skirmish:</b> Exert bearer or discard 2 cards from hand to make a minion skirmishing bearer strength -1.
+		lore: "Fine blades forged by Elven smiths are centuries-old heirlooms."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_65: {
+		cardInfo: {
+			imagePath: decipher/LOTR04065.jpg
+			//parentId: 4_65
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R65
+			rarity: R
+			setNum: "4"
+			cardNum: 65
+			style: Standard
+		}
+		title: Erethón
+		subtitle: Naith Lieutenant
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,hasAttached(ranged weapon)
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,hasAttached(ranged weapon)
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: doesNotAddToArcheryTotal
+					filter: self,hasAttached(ranged weapon)
+				}
+			}
+		]
+		gametext: To play, spot an Elf.<br>While Erethón bears a ranged weapon, he is strength +1 and <b>damage +1</b>, and he does not add to the fellowship archery total.
+		lore: "At close range, Erethón's accuracy is uncanny."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_66: {
+		cardInfo: {
+			imagePath: decipher/LOTR04066.jpg
+			//parentId: 4_66
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U66
+			rarity: U
+			setNum: "4"
+			cardNum: 66
+			style: Standard
+		}
+		title: Feathered
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(elf))
+					memorize: minion
+					amount: {
+						type: forEachWound
+						filter: memory(minion)
+						multiplier: -2
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make a minion skirmishing an Elf strength -2 for each wound on that minion.
+		lore: "Elven swords found the same targets as their arrows."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_67: {
+		cardInfo: {
+			imagePath: decipher/LOTR04067.jpg
+			//parentId: 4_67
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C67
+			rarity: C
+			setNum: "4"
+			cardNum: 67
+			style: Standard
+		}
+		title: Fereveldir
+		subtitle: Son of Thandronen
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: RemoveCultureTokens
+						culture: elven
+						select: choose(your,condition)
+					}
+				]
+				effect: {
+					type: wound
+					select: choose(minion,inSkirmishAgainst(self))
+				}
+			}
+		]
+		gametext: To play, spot an Elf.<br><b>Skirmish:</b> Exert Fereveldir and remove an [elven] token from your condition to wound a minion Fereveldir is skirmishing.
+		lore: "Thandronen's sons patrol the borders of Lórien together."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_68: {
+		cardInfo: {
+			imagePath: decipher/LOTR04068.jpg
+			//parentId: 4_68
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C68
+			rarity: C
+			setNum: "4"
+			cardNum: 68
+			style: Standard
+		}
+		title: Ferevellon
+		subtitle: Son of Thandronen
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(self))
+					amount: -2
+				}
+			}
+		]
+		gametext: To play, spot an Elf.<br><b>Skirmish:</b> Exert Ferevellon to make a minion skirmishing him strength -2.
+		lore: "The Uruks at Helm's Deep fell to his blade as easily as Goblins from the mountains."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_69: {
+		cardInfo: {
+			imagePath: decipher/LOTR04069.jpg
+			//parentId: 4_69
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R69
+			rarity: R
+			setNum: "4"
+			cardNum: 69
+			style: Standard
+		}
+		title: Final Count
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: winsSkirmish
+					filter: name(Legolas)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: elven
+					select: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: name(Legolas)
+					amount: {
+						type: min
+						firstNumber: {
+							type: ForEachCultureToken
+							filter: self
+							culture: elven
+							limit: 3
+						}
+						secondNumber: {
+							type: ForEachCultureToken
+							filter: name(My Axe Is Notched)
+							culture: dwarven
+							limit: 3
+						}
+					}
+				}
+			}
+		]
+		gametext: Plays to your support area.<br>Each time Legolas wins a skirmish, you may place an [elven] token on this card.<br>While you can spot X [elven] tokens on this card and the same number of [dwarven] tokens on My Axe Is Notched, Legolas is strength +X (limit +3).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_70: {
+		cardInfo: {
+			imagePath: decipher/LOTR04070.jpg
+			//parentId: 4_70
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C70
+			rarity: C
+			setNum: "4"
+			cardNum: 70
+			style: Standard
+		}
+		title: Flashing Steel
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(elf)
+				memorize: exertedElf
+			},
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(memory(exertedElf)))
+					amount: -3
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Exert an Elf to make a minion skirmishing that Elf strength -3.
+		lore: "'Good!... But my count is now two dozen. It has been knife-work up here.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_71: {
+		cardInfo: {
+			imagePath: decipher/LOTR04071.jpg
+			//parentId: 4_71
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C71
+			rarity: C
+			setNum: "4"
+			cardNum: 71
+			style: Standard
+		}
+		title: Haldir
+		subtitle: Emissary of the Galadhrim
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: opponentDoesNotControlSite
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: location
+					filter: battleground
+				}
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: exert
+						select: choose(another,elf)
+					}
+				]
+				effect: {
+					type: liberateSite
+				}
+			}
+		]
+		gametext: While no opponent controls a site, Haldir is strength +2.<br><b>Regroup:</b> Exert Haldir at a battleground and exert another Elf to liberate a site.
+		lore: "'In days of old, my people stood beside the King of Gondor – we come to honor that allegiance.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_72: {
+		cardInfo: {
+			imagePath: decipher/LOTR04072.jpg
+			//parentId: 4_72
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R72
+			rarity: R
+			setNum: "4"
+			cardNum: 72
+			style: Standard
+		}
+		title: Killing Field
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+					count: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: removeKeyword
+					filter: wounded,minion
+					keyword: fierce
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: To play, spot 3 Elves. Plays to your support area.<br>Each wounded minion is prevented from being <b>fierce</b>. Discard this condition during the regroup phase.
+		lore: "The courage of the defenders blunted the Uruk assaults."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_73: {
+		cardInfo: {
+			imagePath: decipher/LOTR04073.jpg
+			//parentId: 4_73
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R73
+			rarity: R
+			setNum: "4"
+			cardNum: 73
+			style: Standard
+		}
+		title: Legolas
+		subtitle: Dauntless Hunter
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		keywords: Archer
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: side(shadow),or(event,condition)
+					amount: {
+						type: forEachYouCanSpot
+						filter: unbound,hobbit
+					}
+				}
+			}
+		]
+		gametext: <b>Archer</b>.<br>The twilight cost of each Shadow event and Shadow condition is +1 for each unbound Hobbit you can spot.
+		lore: "'They are far, far away.... I know in my heart that they have not rested this night.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_74: {
+		cardInfo: {
+			imagePath: decipher/LOTR04074.jpg
+			//parentId: 4_74
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C74
+			rarity: C
+			setNum: "4"
+			cardNum: 74
+			style: Standard
+		}
+		title: Legolas
+		subtitle: Elven Comrade
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		keywords: Archer
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(unbound,companion))
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: name(Gimli),inSkirmish
+						}
+						true: -2
+						false: -1
+					}
+				}
+			}
+		]
+		gametext: <b>Archer</b>.<br><b>Skirmish:</b> Exert Legolas to make a minion skirmishing an unbound companion strength -1 (or -2 if that companion is Gimli).
+		lore: "'Come, you shall sit behind me, friend Gimli.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_75: {
+		cardInfo: {
+			imagePath: decipher/LOTR04075.jpg
+			//parentId: 4_75
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R75
+			rarity: R
+			setNum: "4"
+			cardNum: 75
+			style: Standard
+		}
+		title: Lembas
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		target: companion
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+					count: 3
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: reconcileHand
+				}
+			}
+		]
+		gametext: To play, spot 3 Elves. Bearer must be a companion.<br><b>Regroup:</b> Discard this possession to reconcile your hand.
+		lore: "Sam thought that it tasted far better, somehow, than it had for a good while...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_76: {
+		cardInfo: {
+			imagePath: decipher/LOTR04076.jpg
+			//parentId: 4_76
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C76
+			rarity: C
+			setNum: "4"
+			cardNum: 76
+			style: Standard
+		}
+		title: Lórien Guardian
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: wound
+					player: shadow
+					select: choose(minion)
+				}
+			}
+		]
+		gametext: <b>Regroup:</b> Exert this companion to make a Shadow player wound a minion.
+		lore: "Haldir's Elven bowmen were experienced defenders of the borders of the Golden Wood."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_77: {
+		cardInfo: {
+			imagePath: decipher/LOTR04077.jpg
+			//parentId: 4_77
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U77
+			rarity: U
+			setNum: "4"
+			cardNum: 77
+			style: Standard
+		}
+		title: Lórien Is Most Welcome
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+					count: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: removeKeyword
+					filter: minion,wounded
+					keyword: damage
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: To play, spot 3 Elves. Plays to your support area.<br>Each wounded minion loses all <b>damage</b> bonuses. Discard this condition during the regroup phase.
+		lore: "'We are proud to fight alongside Men once more....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_78: {
+		cardInfo: {
+			imagePath: decipher/LOTR04078.jpg
+			//parentId: 4_78
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C78
+			rarity: C
+			setNum: "4"
+			cardNum: 78
+			style: Standard
+		}
+		title: Lórien Swordsman
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: minion,inSkirmishAgainst(self)
+					amount: {
+						type: forEachWound
+						filter: self
+						multiplier: -2
+					}
+				}
+			}
+		]
+		gametext: Each minion skirmishing this companion is strength -2 for each wound on that minion.
+		lore: "Long, curved Elven steel cut down Uruks already weakened by Elven arrows."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_79: {
+		cardInfo: {
+			imagePath: decipher/LOTR04079.jpg
+			//parentId: 4_79
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R79
+			rarity: R
+			setNum: "4"
+			cardNum: 79
+			style: Standard
+		}
+		title: Night Without End
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: elf
+				memorize: winner
+			}
+			cost: {
+				type: exert
+				select: memory(winner)
+			},
+			effect: [
+				{
+					type: choice
+					texts: [
+						Liberate a site
+						Wound a minion
+					]
+					effects: [
+						{
+							type: liberateSite
+						}
+						{
+							type: wound
+							select: choose(minion)
+						}
+					]
+				}
+			]
+		}
+		gametext: <b>Response:</b> If an Elf wins a skirmish, exert that Elf to liberate a site or wound a minion.
+		lore: "'Would that this night would end, and I could have better light for shooting.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_80: {
+		cardInfo: {
+			imagePath: decipher/LOTR04080.jpg
+			//parentId: 4_80
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U80
+			rarity: U
+			setNum: "4"
+			cardNum: 80
+			style: Standard
+		}
+		title: Ordulus
+		subtitle: Young Warrior
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 2
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyPlayOnCost
+					filter: ranged weapon
+					on: self
+					amount: -1
+				}
+			}
+		]
+		gametext: To play, spot an Elf.<br>The twilight cost of each ranged weapon played on Ordulus is -1.
+		lore: "Ordulus always has an arrow nocked and a full quiver too."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_81: {
+		cardInfo: {
+			imagePath: decipher/LOTR04081.jpg
+			//parentId: 4_81
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U81
+			rarity: U
+			setNum: "4"
+			cardNum: 81
+			style: Standard
+		}
+		title: Pengedhel
+		subtitle: Naith Warrior
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,hasAttached(ranged weapon)
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: doesNotAddToArcheryTotal
+					filter: self,hasAttached(ranged weapon)
+				}
+			}
+		]
+		gametext: To play, spot an Elf.<br>While Pengedhel bears a ranged weapon, he is strength +2 and he does not add to the fellowship archery total.
+		lore: "Pengedhel can wield an arrow like a short spear."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_82: {
+		cardInfo: {
+			imagePath: decipher/LOTR04082.jpg
+			//parentId: 4_82
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U82
+			rarity: U
+			setNum: "4"
+			cardNum: 82
+			style: Standard
+		}
+		title: Strength of Arms
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: elf
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: elven
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(minion,inSkirmishAgainst(elf))
+						amount: {
+							type: ForEachCultureToken
+							culture: elven
+							filter: self
+							limit: 3
+							multiplier: -1
+						}
+					}
+					{
+						type: Discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: Plays to your support area.<br>Each time an Elf wins a skirmish, you may place an [elven] token on this card.<br><b>Skirmish:</b> Make a minion skirmishing an Elf strength -1 for each [elven] token here (limit -3). Discard this condition.
+		lore: "Elvish weapons were more than a match for the Uruks."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_83: {
+		cardInfo: {
+			imagePath: decipher/LOTR04083.jpg
+			//parentId: 4_83
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C83
+			rarity: C
+			setNum: "4"
+			cardNum: 83
+			style: Standard
+		}
+		title: Supporting Fire
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(elf)
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: elf,companion
+							count: 3
+						}
+						true: 3
+						false: 2
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make an Elf strength +2 (or +3 if you spot 3 Elf companions).
+		lore: "Sword-work is made easier with archery support."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_84: {
+		cardInfo: {
+			imagePath: decipher/LOTR04084.jpg
+			//parentId: 4_84
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R84
+			rarity: R
+			setNum: "4"
+			cardNum: 84
+			style: Standard
+		}
+		title: Sword-wall
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: elf,companion
+				count: 3
+			}
+			effect: [
+				{
+					type: choice
+					texts: [
+						Liberate a site
+						Exert a minion
+					]
+					effects: [
+						{
+							type: liberateSite
+						}
+						{
+							type: exert
+							select: choose(minion)
+						}
+					]
+				}
+			]
+		}
+		gametext: <b>Skirmish</b> <i>or</i> <b>Regroup:</b> Spot 3 Elf companions to liberate a site or exert a minion.
+		lore: "A fixed line of Elven blades can hold off great numbers of the Enemy's hordes."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_85: {
+		cardInfo: {
+			imagePath: decipher/LOTR04085.jpg
+			//parentId: 4_85
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C85
+			rarity: C
+			setNum: "4"
+			cardNum: 85
+			style: Standard
+		}
+		title: Thandronen
+		subtitle: Veteran Protector
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: discardStackedCards
+					select: choose(minion)
+					on: or(condition,site)
+				}
+			}
+		]
+		gametext: To play, spot an Elf.<br><b>Regroup:</b> Exert Thandronen to discard a minion stacked on a condition or stacked on a site.
+		lore: "The twin sons of Thandronen marched with their father to defend Helm's Deep."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_86: {
+		cardInfo: {
+			imagePath: decipher/LOTR04086.jpg
+			//parentId: 4_86
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U86
+			rarity: U
+			setNum: "4"
+			cardNum: 86
+			style: Standard
+		}
+		title: Thónnas
+		subtitle: Naith Captain
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: minion,inSkirmishAgainst(self,hasAttached(ranged weapon))
+					amount: -2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: doesNotAddToArcheryTotal
+					filter: self,hasAttached(ranged weapon)
+				}
+			}
+		]
+		gametext: To play, spot an Elf.<br>While Thónnas bears a ranged weapon, each minion skirmishing him is strength -2 and Thónnas does not add to the fellowship archery total.
+		lore: "Elves of Lórien hone their knife-work fighting Goblin raiders."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_87: {
+		cardInfo: {
+			imagePath: decipher/LOTR04087.jpg
+			//parentId: 4_87
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C87
+			rarity: C
+			setNum: "4"
+			cardNum: 87
+			style: Standard
+		}
+		title: Valor
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(elf)
+					memorize: chosenElf
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: memory(chosenElf),inSkirmishAgainst(wounded,minion)
+						}
+						true: 3
+						false: 2
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make an Elf strength +2 (or +3 if skirmishing a wounded minion).
+		lore: "An Elf avoids taking up arms, but once committed to the fray, his will is resolute."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

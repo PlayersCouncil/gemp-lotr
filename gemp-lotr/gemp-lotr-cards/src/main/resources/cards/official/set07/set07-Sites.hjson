@@ -1,0 +1,1778 @@
+{
+
+	7_329: {
+		cardInfo: {
+			imagePath: decipher/LOTR07329.jpg
+			//parentId: 7_329
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U329
+			rarity: U
+			setNum: "7"
+			cardNum: 329
+			style: Standard
+		}
+		title: Dunharrow Plateau
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: canSpot
+					filter: dwarf
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(culture(dwarven),condition)
+					showAll: true
+					shuffle: true
+				}
+				limitPerTurn: 1
+			}
+		]
+		gametext: <b>Fellowship:</b> Spot a Dwarf to play a [dwarven] condition from your draw deck (limit once per turn).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_330: {
+		cardInfo: {
+			imagePath: decipher/LOTR07330.jpg
+			//parentId: 7_330
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U330
+			rarity: U
+			setNum: "7"
+			cardNum: 330
+			style: Standard
+		}
+		title: Edoras Hall
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: culture(rohan),possession
+					amount: -1
+				}
+			}
+		]
+		gametext: The twilight cost of each [rohan] possession is -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_331: {
+		cardInfo: {
+			imagePath: decipher/LOTR07331.jpg
+			//parentId: 7_331
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U331
+			rarity: U
+			setNum: "7"
+			cardNum: 331
+			style: Standard
+		}
+		title: Isengard Ruined
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+				effect: {
+					type: forEachPlayer
+					effect: {
+						type: optional
+						text: Would you like to draw a card?
+						effect: {
+							type: drawCards
+						}
+					}
+				}
+			}
+		]
+		gametext: <b>Fellowship:</b> Spot Gandalf to add (2). Each player may draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_332: {
+		cardInfo: {
+			imagePath: decipher/LOTR07332.jpg
+			//parentId: 7_332
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U332
+			rarity: U
+			setNum: "7"
+			cardNum: 332
+			style: Standard
+		}
+		title: Rohirrim Road
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: choose(elf)
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyCost
+						filter: or(condition,possession)
+						amount: 2
+					}
+					until: endOfTurn
+				}
+			}
+		]
+		gametext: <b>Fellowship:</b> Exert an Elf to make the twilight cost of each condition and possession +2 until the end of the turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_333: {
+		cardInfo: {
+			imagePath: decipher/LOTR07333.jpg
+			//parentId: 7_333
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U333
+			rarity: U
+			setNum: "7"
+			cardNum: 333
+			style: Standard
+		}
+		title: Sleeping Quarters
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				player: free people
+				requires: {
+					type: canSpot
+					filter: hobbit
+					count: 3
+				}
+				effect: {
+					type: removeTwilight
+					amount: 2
+				}
+			}
+		]
+		gametext: When the fellowship moves from this site, the Free Peoples player may spot 3 Hobbits to remove (2).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_334: {
+		cardInfo: {
+			imagePath: decipher/LOTR07334.jpg
+			//parentId: 7_334
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U334
+			rarity: U
+			setNum: "7"
+			cardNum: 334
+			style: Standard
+		}
+		title: Steps of Edoras
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: addKeyword
+						filter: culture(gondor),companion
+						keyword: defender
+						amount: 1
+					}
+				}
+				limitPerTurn: 1
+			}
+		]
+		gametext: Each [gondor] companion is <b>defender +1</b> until the end of the turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_335: {
+		cardInfo: {
+			imagePath: decipher/LOTR07335.jpg
+			//parentId: 7_335
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U335
+			rarity: U
+			setNum: "7"
+			cardNum: 335
+			style: Standard
+		}
+		title: King's Tent
+		unique: false
+		twilight: 1
+		type: Site
+		site: 2
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: [
+					{
+						type: haveInitiative
+						side: shadow
+					}
+					{
+						type: canSpot
+						filter: your,minion
+					}
+				]
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: -1
+					}
+					until: endOfTurn
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> If the Shadow has initiative, spot your minion to make the move limit for this turn -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_336: {
+		cardInfo: {
+			imagePath: decipher/LOTR07336.jpg
+			//parentId: 7_336
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U336
+			rarity: U
+			setNum: "7"
+			cardNum: 336
+			style: Standard
+		}
+		title: Rohirrim Camp
+		unique: false
+		twilight: 2
+		type: Site
+		site: 2
+		block: King
+		direction: Left
+		keywords: Plains
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: removeKeyword
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: minion
+					keyword: roaming
+				}
+			}
+		]
+		gametext: <b>Plains</b>. If the Shadow has initiative, minions are not roaming.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_337: {
+		cardInfo: {
+			imagePath: decipher/LOTR07337.jpg
+			//parentId: 7_337
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U337
+			rarity: U
+			setNum: "7"
+			cardNum: 337
+			style: Standard
+		}
+		title: West Road
+		unique: false
+		twilight: 3
+		type: Site
+		site: 2
+		block: King
+		direction: Left
+		keywords: Plains
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: self
+					amount: 3
+				}
+			}
+		]
+		gametext: <b>Plains</b>. If the Shadow has initiative, the Shadow number of this site is +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_338: {
+		cardInfo: {
+			imagePath: decipher/LOTR07338.jpg
+			//parentId: 7_338
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U338
+			rarity: U
+			setNum: "7"
+			cardNum: 338
+			style: Standard
+		}
+		title: Beacon of Minas Tirith
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: King
+		direction: Right
+		keywords: Sanctuary
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: cantSpotThreats
+					amount: 3
+				}
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: heal
+					select: choose(companion)
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 3 threats, add a threat to heal a companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_339: {
+		cardInfo: {
+			imagePath: decipher/LOTR07339.jpg
+			//parentId: 7_339
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U339
+			rarity: U
+			setNum: "7"
+			cardNum: 339
+			style: Standard
+		}
+		title: Hall of the Kings
+		unique: false
+		twilight: 1
+		type: Site
+		site: 3
+		block: King
+		direction: Right
+		keywords: Sanctuary
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: cantSpotThreats
+					amount: 3
+				}
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 3 threats, add a threat to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_340: {
+		cardInfo: {
+			imagePath: decipher/LOTR07340.jpg
+			//parentId: 7_340
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U340
+			rarity: U
+			setNum: "7"
+			cardNum: 340
+			style: Standard
+		}
+		title: Tower of Ecthelion
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: King
+		direction: Right
+		keywords: Sanctuary
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: cantSpotThreats
+					amount: 3
+				}
+				cost: {
+					type: addThreats
+					amount: 3
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: 1
+					}
+					until: endOfTurn
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> If you cannot spot 3 threats, add 3 threats to make the move limit for this turn +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_341: {
+		cardInfo: {
+			imagePath: decipher/LOTR07341.jpg
+			//parentId: 7_341
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U341
+			rarity: U
+			setNum: "7"
+			cardNum: 341
+			style: Standard
+		}
+		title: Anduin Banks
+		unique: false
+		twilight: 3
+		type: Site
+		site: 4
+		block: King
+		direction: Right
+		keywords: River
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: your,minion
+				}
+				cost: {
+					type: removeBurdens
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(your,minion)
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>River</b>. <b>Skirmish:</b> Spot your minion and remove a burden to make that minion strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_342: {
+		cardInfo: {
+			imagePath: decipher/LOTR07342.jpg
+			//parentId: 7_342
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U342
+			rarity: U
+			setNum: "7"
+			cardNum: 342
+			style: Standard
+		}
+		title: Osgiliath Fallen
+		unique: false
+		twilight: 2
+		type: Site
+		site: 4
+		block: King
+		direction: Right
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: your,minion
+				}
+				cost: {
+					type: removeBurdens
+					amount: 2
+				}
+				effect: {
+					type: addKeyword
+					select: choose(your,minion)
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Spot your minion and remove 2 burdens to make that minion <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_343: {
+		cardInfo: {
+			imagePath: decipher/LOTR07343.jpg
+			//parentId: 7_343
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U343
+			rarity: U
+			setNum: "7"
+			cardNum: 343
+			style: Standard
+		}
+		title: Pelennor Plain
+		unique: false
+		twilight: 4
+		type: Site
+		site: 4
+		block: King
+		direction: Right
+		keywords: Plains
+		effects: [
+			{
+				type: activated
+				phase: archery
+				requires: {
+					type: canSpot
+					filter: your,minion
+				}
+				cost: {
+					type: removeBurdens
+					amount: 3
+				}
+				effect: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: 3
+				}
+			}
+		]
+		gametext: <b>Plains</b>. <b>Archery:</b> Spot your minion and remove 3 burdens to make the minion archery total +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_344: {
+		cardInfo: {
+			imagePath: decipher/LOTR07344.jpg
+			//parentId: 7_344
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U344
+			rarity: U
+			setNum: "7"
+			cardNum: 344
+			style: Standard
+		}
+		title: City Gates
+		unique: false
+		twilight: 6
+		type: Site
+		site: 5
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: addThreats
+					amount: 3
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				effect: {
+					type: removeThreats
+					amount: 3
+				}
+			}
+		]
+		gametext: When the fellowship moves to this site, add 3 threats. When the fellowship moves from this site, remove 3 threats.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_345: {
+		cardInfo: {
+			imagePath: decipher/LOTR07345.jpg
+			//parentId: 7_345
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U345
+			rarity: U
+			setNum: "7"
+			cardNum: 345
+			style: Standard
+		}
+		title: Pelennor Flat
+		unique: false
+		twilight: 6
+		type: Site
+		site: 5
+		block: King
+		direction: Left
+		keywords: Plains
+		effects: [
+			{
+				type: trigger
+				optional: false
+				player: free peoples
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				effect: {
+					type: choice
+					texts: [
+						Discard your hand
+						Add 2 burdens
+					]
+					effects: [
+						{
+							type: discardFromHand
+							forced: false
+							select: all(any)
+						}
+						{
+							type: addBurdens
+							amount: 2
+						}
+					]
+				}
+			}
+		]
+		gametext: <b>Plains</b>. At the start of the maneuver phase, the Free Peoples player must discard his or her hand or add 2 burdens.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_346: {
+		cardInfo: {
+			imagePath: decipher/LOTR07346.jpg
+			//parentId: 7_346
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U346
+			rarity: U
+			setNum: "7"
+			cardNum: 346
+			style: Standard
+		}
+		title: Minas Tirith Fifth Circle
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: King
+		direction: Left
+		keywords: Sanctuary
+		effects: [
+			{
+				type: trigger
+				player: free people
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: heal
+					select: choose(name(Gandalf))
+					times: 3
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal Gandalf three times.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_347: {
+		cardInfo: {
+			imagePath: decipher/LOTR07347.jpg
+			//parentId: 7_347
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U347
+			rarity: U
+			setNum: "7"
+			cardNum: 347
+			style: Standard
+		}
+		title: Minas Tirith First Circle
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: King
+		direction: Left
+		keywords: Sanctuary
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: wound
+					select: all(companion)
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, wound each companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_348: {
+		cardInfo: {
+			imagePath: decipher/LOTR07348.jpg
+			//parentId: 7_348
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U348
+			rarity: U
+			setNum: "7"
+			cardNum: 348
+			style: Standard
+		}
+		title: Minas Tirith Fourth Circle
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: King
+		direction: Left
+		keywords: Sanctuary
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: heal
+					select: all(culture(rohan),companion)
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal each [rohan] companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_349: {
+		cardInfo: {
+			imagePath: decipher/LOTR07349.jpg
+			//parentId: 7_349
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U349
+			rarity: U
+			setNum: "7"
+			cardNum: 349
+			style: Standard
+		}
+		title: Minas Tirith Second Circle
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: King
+		direction: Left
+		keywords: Sanctuary
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: heal
+					select: all(culture(dwarven),companion)
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal each [dwarven] companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_350: {
+		cardInfo: {
+			imagePath: decipher/LOTR07350.jpg
+			//parentId: 7_350
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U350
+			rarity: U
+			setNum: "7"
+			cardNum: 350
+			style: Standard
+		}
+		title: Minas Tirith Seventh Circle
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: King
+		direction: Left
+		keywords: Sanctuary
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: heal
+					select: all(culture(elven),companion)
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal each [elven] companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_351: {
+		cardInfo: {
+			imagePath: decipher/LOTR07351.jpg
+			//parentId: 7_351
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U351
+			rarity: U
+			setNum: "7"
+			cardNum: 351
+			style: Standard
+		}
+		title: Minas Tirith Sixth Circle
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: King
+		direction: Left
+		keywords: Sanctuary
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: heal
+					select: all(culture(gondor),companion)
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal each [gondor] companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_352: {
+		cardInfo: {
+			imagePath: decipher/LOTR07352.jpg
+			//parentId: 7_352
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U352
+			rarity: U
+			setNum: "7"
+			cardNum: 352
+			style: Standard
+		}
+		title: Minas Tirith Third Circle
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: King
+		direction: Left
+		keywords: Sanctuary
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: heal
+					select: all(hobbit,companion)
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. If the fellowship moves from this site during the regroup phase, heal each Hobbit companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_353: {
+		cardInfo: {
+			imagePath: decipher/LOTR07353.jpg
+			//parentId: 7_353
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U353
+			rarity: U
+			setNum: "7"
+			cardNum: 353
+			style: Standard
+		}
+		title: Osgiliath Crossing
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7
+		block: King
+		direction: Right
+		keywords: River
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: choose(minion)
+					count: 2
+				}
+				requires: {
+					type: canSpot
+					filter: companion
+					count: 6
+				}
+				effect: {
+					type: drawCards
+					count: 2
+				}
+			}
+		]
+		gametext: <b>River</b>. <b>Shadow:</b> Exert 2 minions and spot 6 companions to draw 2 cards.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_354: {
+		cardInfo: {
+			imagePath: decipher/LOTR07354.jpg
+			//parentId: 7_354
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U354
+			rarity: U
+			setNum: "7"
+			cardNum: 354
+			style: Standard
+		}
+		title: Pelennor Grassland
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7
+		block: King
+		direction: Right
+		keywords: Plains
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: choose(minion)
+				}
+				requires: {
+					type: canSpot
+					filter: companion
+					count: 6
+				}
+				effect: {
+					type: addTwilight
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Plains</b>. <b>Shadow:</b> Exert a minion and spot 6 companions to add (1).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_355: {
+		cardInfo: {
+			imagePath: decipher/LOTR07355.jpg
+			//parentId: 7_355
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U355
+			rarity: U
+			setNum: "7"
+			cardNum: 355
+			style: Standard
+		}
+		title: Ruined Capitol
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7
+		block: King
+		direction: Right
+		keywords: River
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: [
+					{
+						type: canSpot
+						filter: your,minion
+					}
+					{
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+				]
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: -1
+					}
+					until: endOfTurn
+				}
+			}
+		]
+		gametext: <b>River</b>. <b>Shadow:</b> Spot your minion and 6 companions to make the move limit for this turn -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_356: {
+		cardInfo: {
+			imagePath: decipher/LOTR07356.jpg
+			//parentId: 7_356
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U356
+			rarity: U
+			setNum: "7"
+			cardNum: 356
+			style: Standard
+		}
+		title: Cross Roads
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: King
+		direction: Right
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+					count: 2
+				}
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> Spot 2 [raider] Men and remove a threat to add (2).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_357: {
+		cardInfo: {
+			imagePath: decipher/LOTR07357.jpg
+			//parentId: 7_357
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U357
+			rarity: U
+			setNum: "7"
+			cardNum: 357
+			style: Standard
+		}
+		title: Morgul Vale
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: King
+		direction: Right
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: your,culture(sauron),minion
+				}
+				cost: {
+					type: removeThreats
+					amount: 2
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(your,culture(sauron),minion)
+					amount: 3
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Spot your [sauron] minion and remove 2 threats to make your [sauron] minion strength +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_358: {
+		cardInfo: {
+			imagePath: decipher/LOTR07358.jpg
+			//parentId: 7_358
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U358
+			rarity: U
+			setNum: "7"
+			cardNum: 358
+			style: Standard
+		}
+		title: Morgulduin
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: King
+		direction: Right
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeThreats
+					amount: 2
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(nazgul)
+					discount: -2
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> Remove 2 threats to play a Nazgûl from your discard pile. His twilight cost is -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_359: {
+		cardInfo: {
+			imagePath: decipher/LOTR07359.jpg
+			//parentId: 7_359
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U359
+			rarity: U
+			setNum: "7"
+			cardNum: 359
+			style: Standard
+		}
+		title: Northern Ithilien
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: King
+		direction: Right
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: removeThreats
+						amount: 2
+					}
+					{
+						type: playCardFromDiscard
+						select: choose(name(Gollum))
+					}
+				]
+				effect: {
+					type: addBurdens
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> Remove 2 threats and play Gollum from your discard pile to add 2 burdens.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_360: {
+		cardInfo: {
+			imagePath: decipher/LOTR07360.jpg
+			//parentId: 7_360
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U360
+			rarity: U
+			setNum: "7"
+			cardNum: 360
+			style: Standard
+		}
+		title: Dagorlad
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		keywords: Plains
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: addThreats
+					amount: 3
+				}
+			}
+		]
+		gametext: <b>Plains</b>. When the fellowship moves to this site, add 3 threats.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_361: {
+		cardInfo: {
+			imagePath: decipher/LOTR07361.jpg
+			//parentId: 7_361
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U361
+			rarity: U
+			setNum: "7"
+			cardNum: 361
+			style: Standard
+		}
+		title: Haunted Pass
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeThreats
+				}
+				requires: {
+					type: canSpot
+					filter: your,minion
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> Remove a threat and spot your minion to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_362: {
+		cardInfo: {
+			imagePath: decipher/LOTR07362.jpg
+			//parentId: 7_362
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U362
+			rarity: U
+			setNum: "7"
+			cardNum: 362
+			style: Standard
+		}
+		title: Narchost
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpotBurdens
+					amount: 8
+				}
+				effect: {
+					type: putOnRing
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> Spot 8 burdens to make the Ring-bearer wear The One Ring until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_363: {
+		cardInfo: {
+			imagePath: decipher/LOTR07363.jpg
+			//parentId: 7_363
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 7U363
+			rarity: U
+			setNum: "7"
+			cardNum: 363
+			style: Standard
+		}
+		title: Slag Mounds
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: killed
+					filter: companion
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+		]
+		gametext: Each time a companion is killed, add a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

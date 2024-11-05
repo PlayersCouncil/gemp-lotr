@@ -1,0 +1,1826 @@
+{
+
+	1_284: {
+		cardInfo: {
+			imagePath: decipher/LOTR01284.jpg
+			//parentId: 1_284
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R284
+			rarity: R
+			setNum: "1"
+			cardNum: 284
+			style: Standard
+		}
+		title: Bilbo
+		subtitle: Retired Adventurer
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Ally
+		allyHome: 3F
+		race: Hobbit
+		strength: 2
+		vitality: 3
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: shuffleCardsFromDiscardIntoDrawDeck
+				select: choose(culture(shire))
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert Bilbo to shuffle a [shire] card from your discard pile into your draw deck.
+		lore: "'...I don't suppose I have the strength or luck left to deal with the Ring. It has grown, and I have not.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_285: {
+		cardInfo: {
+			imagePath: decipher/LOTR01285.jpg
+			//parentId: 1_285
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U285
+			rarity: U
+			setNum: "1"
+			cardNum: 285
+			style: Standard
+		}
+		title: Bilbo's Pipe
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		itemclass: Pipe
+		target: hobbit
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: [
+				{
+					type: discard
+					select: choose(pipeweed,possession)
+				}
+				{
+					type: chooseHowManyToSpot
+					filter: pipe
+					memorize: numberOfPipes
+				}
+			]
+			effect: {
+				type: shuffleCardsFromDiscardIntoDrawDeck
+				count: {
+					type: fromMemory
+					memory: numberOfPipes
+				}
+				select: choose(tale)
+			}
+		}
+		gametext: Bearer must be a Hobbit.<br><b>Fellowship:</b> Discard a pipeweed possession and spot X pipes to shuffle X tales from your discard pile into your draw deck.
+		lore: "Bilbo has a fine pipe, carved for him by his Dwarven friends."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_286: {
+		cardInfo: {
+			imagePath: decipher/LOTR01286.jpg
+			//parentId: 1_286
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C286
+			rarity: C
+			setNum: "1"
+			cardNum: 286
+			style: Standard
+		}
+		title: Bounder
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Ally
+		allyHome: 2F
+		race: Hobbit
+		strength: 2
+		vitality: 2
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: AlterOverwhelmMultiplier
+				select: choose(hobbit)
+			}
+		}
+		gametext: <b>Skirmish:</b> Exert this ally to prevent a Hobbit from being overwhelmed unless that Hobbit's strength is tripled.
+		lore: "'Aye, reckon we're in for a quite night... mind how you go.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_287: {
+		cardInfo: {
+			imagePath: decipher/LOTR01287.jpg
+			//parentId: 1_287
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C287
+			rarity: C
+			setNum: "1"
+			cardNum: 287
+			style: Standard
+		}
+		title: Extraordinary Resilience
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: aboutToHeal
+				filter: ring bearer
+			}
+			cost: {
+				type: preventHeal
+				select: choose(ring bearer)
+			}
+			effect: {
+				type: removeBurdens
+			}
+		}
+		gametext: <b>Response:</b> If the Ring-bearer is about to heal, remove a burden instead.
+		lore: "'Don't despair!' said Strider. 'You must trust me now. Your Frodo is made of sterner stuff than I had guessed....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_288: {
+		cardInfo: {
+			imagePath: decipher/LOTR01288.jpg
+			//parentId: 1_288
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R288
+			rarity: R
+			setNum: "1"
+			cardNum: 288
+			style: Standard
+		}
+		title: Farmer Maggot
+		subtitle: Chaser of Rascals
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Ally
+		allyHome: 1F
+		race: Hobbit
+		strength: 2
+		vitality: 3
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: heal
+				select: choose(or(name(Merry),name(Pippin)))
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert Farmer Maggot to heal Merry or Pippin.
+		lore: "'Old Maggot is really a stout fellow – if you leave his mushrooms alone.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_289: {
+		cardInfo: {
+			imagePath: decipher/LOTR01289.jpg
+			//parentId: 1_289
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R289
+			rarity: R
+			setNum: "1"
+			cardNum: 289
+			style: Standard
+		}
+		title: Frodo
+		subtitle: Old Bilbo's Heir
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Gandalf
+		resistance: 10
+		canStartWithRing: true
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: startOfTurn
+			}
+			effect: {
+				type: heal
+				select: choose(hobbit,ally)
+			}
+		}
+		gametext: <b>Ring-bearer (resistance 10).</b><br>At the start of each of your turns, you may heal a Hobbit ally.
+		lore: "'But be that as it may, Mr. Frodo is as nice a young hobbit as you could wish to meet.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_290: {
+		cardInfo: {
+			imagePath: decipher/LOTR01290.jpg
+			//parentId: 1_290
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C290
+			rarity: C
+			setNum: "1"
+			cardNum: 290
+			style: Standard
+		}
+		title: Frodo
+		subtitle: Son of Drogo
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Frodo
+		resistance: 10
+		canStartWithRing: true
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: choose(another,companion,signet(frodo))
+			}
+			effect: {
+				type: heal
+				select: self
+			}
+		}
+		gametext: <b>Ring-bearer (resistance 10).</b><br><b>Fellowship:</b> Exert another companion who has the Frodo signet to heal Frodo.
+		lore: "'I think you'll find there's more to this Hobbit than meets the eye.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_291: {
+		cardInfo: {
+			imagePath: decipher/LOTR01291.jpg
+			//parentId: 1_291
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R291
+			rarity: R
+			setNum: "1"
+			cardNum: 291
+			style: Standard
+		}
+		title: The Gaffer
+		subtitle: Sam's Father
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Ally
+		allyHome: 1F
+		race: Hobbit
+		strength: 2
+		vitality: 2
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: heal
+				select: choose(or(name(Frodo),name(Sam)))
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert The Gaffer to heal Frodo or Sam.
+		lore: No one had a more attentive audience than old Ham Gamgee, commonly known as the Gaffer. He held forth at The Ivy Bush, a small inn on the Bywater road; and he 'spoke with some authority, for he had tended the garden at Bag End for forty years....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_292: {
+		cardInfo: {
+			imagePath: decipher/LOTR01292.jpg
+			//parentId: 1_292
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U292
+			rarity: U
+			setNum: "1"
+			cardNum: 292
+			style: Standard
+		}
+		title: The Gaffer's Pipe
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		itemclass: Pipe
+		target: hobbit
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: [
+				{
+					type: discard
+					select: choose(pipeweed,possession)
+				}
+				{
+					type: chooseHowManyToSpot
+					filter: pipe
+					memorize: spottedPipes
+				}
+			]
+			effect: {
+				type: removeTwilight
+				amount: {
+					type: fromMemory
+					memory: spottedPipes
+				}
+			}
+		}
+		gametext: Bearer must be a Hobbit.<br><b>Fellowship:</b> Discard a pipeweed possession and spot X pipes to remove (X).
+		lore: "'This... is the one art that we certainly claim to be our own invention. When Hobbits first began to smoke is not known....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_293: {
+		cardInfo: {
+			imagePath: decipher/LOTR01293.jpg
+			//parentId: 1_293
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U293
+			rarity: U
+			setNum: "1"
+			cardNum: 293
+			style: Standard
+		}
+		title: Halfling Deftness
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(hobbit)
+				memorize: exertedHobbit
+			}
+			effect: {
+				type: modifyStrength
+				select: memory(exertedHobbit)
+				amount: 3
+			}
+		}
+		gametext: <b>Skirmish:</b> Exert a Hobbit to make him strength +3.
+		lore: "...though they are inclined to be fat and do not hurry unnecessarily, they are nonetheless nimble and deft in their movements."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_294: {
+		cardInfo: {
+			imagePath: decipher/LOTR01294.jpg
+			//parentId: 1_294
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C294
+			rarity: C
+			setNum: "1"
+			cardNum: 294
+			style: Standard
+		}
+		title: Hobbit Appetite
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: [
+				{
+					type: addTwilight
+					amount: any
+					memorize: addedTwilight
+				}
+			]
+			effect: {
+				type: heal
+				select: choose(hobbit,companion)
+				times: {
+					type: fromMemory
+					memory: addedTwilight
+				}
+			}
+		}
+		gametext: <b>Fellowship:</b> Add (X) to heal a Hobbit companion X times.
+		lore: "'What about Elevenses, Luncheon, Afternoon Tea and Supper – he knows about them, doesn't he?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_295: {
+		cardInfo: {
+			imagePath: decipher/LOTR01295.jpg
+			//parentId: 1_295
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C295
+			rarity: C
+			setNum: "1"
+			cardNum: 295
+			style: Standard
+		}
+		title: Hobbit Farmer
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Ally
+		allyHome: 1F
+		race: Hobbit
+		strength: 2
+		vitality: 2
+		effects: [
+			{
+				type: copyCard
+				filter: your,site,siteNumber(1),siteBlock(fellowship)
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				requires: {
+					type: canSpot
+					filter: not(your),site,siteNumber(1),siteBlock(fellowship)
+				}
+				effect: {
+					type: playSite
+					number: 1
+					filter: siteBlock(fellowship)
+				}
+			}
+		]
+		gametext: While you can spot your site 1, this ally has the game text of that site.<br><b>Fellowship:</b> Exert this ally and spot opponent's site 1 to replace it with your site 1.
+		lore: "'...where our hearts truly lie is in peace and quiet and good-tilled earth....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_296: {
+		cardInfo: {
+			imagePath: decipher/LOTR01296.jpg
+			//parentId: 1_296
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C296
+			rarity: C
+			setNum: "1"
+			cardNum: 296
+			style: Standard
+		}
+		title: Hobbit Intuition
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		keywords: Stealth
+		effects: {
+			type: event
+			effect: [
+				{
+					type: If
+					check: {
+						type: location
+						filter: siteNumber(1-4),siteBlock(fellowship)
+					}
+					true: {
+						type: cancelSkirmish
+						filter: hobbit
+					}
+				}
+				{
+					type: If
+					check: {
+						type: location
+						filter: not(siteNumber(1-4),siteBlock(fellowship))
+					}
+					true: {
+						type: modifyStrength
+						select: choose(hobbit)
+						amount: 3
+					}
+				}
+			]
+		}
+		gametext: <b>Stealth</b>.<br><b>Skirmish:</b> At sites 1 to 4, cancel a skirmish involving a Hobbit. At any other site, make a Hobbit strength +3.
+		lore: "'What? That were just a little detour, that's all... a shortcut.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_297: {
+		cardInfo: {
+			imagePath: decipher/LOTR01297.jpg
+			//parentId: 1_297
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C297
+			rarity: C
+			setNum: "1"
+			cardNum: 297
+			style: Standard
+		}
+		title: Hobbit Party Guest
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Ally
+		allyHome: 1F
+		race: Hobbit
+		strength: 2
+		vitality: 2
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: startOfTurn
+				}
+				effect: {
+					type: heal
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(not(self),hobbit,ally,allyHome(fellowship,1))
+				}
+			}
+		]
+		gametext: At the start of each of your turns, heal this ally.<br><b>Fellowship:</b> Exert this ally to heal another Hobbit ally whose home is site 1.
+		lore: "'More promising still (to the hobbits' mind): an enormous open-air kitchen was erected....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_298: {
+		cardInfo: {
+			imagePath: decipher/LOTR01298.jpg
+			//parentId: 1_298
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C298
+			rarity: C
+			setNum: "1"
+			cardNum: 298
+			style: Standard
+		}
+		title: Hobbit Stealth
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		keywords: Stealth
+		effects: {
+			type: event
+			effect: [
+				{
+					type: If
+					check: {
+						type: location
+						filter: siteNumber(1-5),siteBlock(fellowship)
+					}
+					true: {
+						type: cancelSkirmish
+						filter: hobbit
+					}
+				}
+				{
+					type: If
+					check: {
+						type: location
+						filter: not(siteNumber(1-5),siteBlock(fellowship))
+					}
+					true: {
+						type: modifyStrength
+						select: choose(hobbit)
+						amount: 2
+					}
+				}
+			]
+		}
+		gametext: <b>Stealth</b>.<br><b>Skirmish:</b> At sites 1 to 5, cancel a skirmish involving a Hobbit. At any other site, make a Hobbit strength +2.
+		lore: "They possessed from the first the art of disappearing swiftly and silently, when large folk whom they do not wish to meet come blundering by...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_299: {
+		cardInfo: {
+			imagePath: decipher/LOTR01299.jpg
+			//parentId: 1_299
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C299
+			rarity: C
+			setNum: "1"
+			cardNum: 299
+			style: Standard
+		}
+		title: Hobbit Sword
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: hobbit
+
+		gametext: Bearer must be a Hobbit.
+		lore: "'Strap these on....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_300: {
+		cardInfo: {
+			imagePath: decipher/LOTR01300.jpg
+			//parentId: 1_300
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C300
+			rarity: C
+			setNum: "1"
+			cardNum: 300
+			style: Standard
+		}
+		title: Longbottom Leaf
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		#target: 
+		keywords: [
+			Pipeweed
+			Support Area
+		]
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: self
+			}
+			effect: {
+				type: discardFromHand
+				forced: false
+				count: 0-2
+			}
+		}
+		gametext: <b>Pipeweed</b>. Plays to your support area.<br>When you play this possession, you may discard up to 2 cards from hand.
+		lore: "Longbottom Leaf is the pipeweed enjoyed by most Hobbits throughout the Shire."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_301: {
+		cardInfo: {
+			imagePath: decipher/LOTR01301.jpg
+			//parentId: 1_301
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U301
+			rarity: U
+			setNum: "1"
+			cardNum: 301
+			style: Standard
+		}
+		title: Master Proudfoot
+		subtitle: Distant Relative of Bilbo
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Ally
+		allyHome: 1F
+		race: Hobbit
+		strength: 2
+		vitality: 2
+		effects: {
+			type: activated
+			phase: fellowship
+			requires: {
+				type: twilightPoolLessThan
+				amount: 3
+			}
+			cost: {
+				type: addTwilight
+				amount: 2
+			}
+			effect: [
+				{
+					type: revealTopCardsOfDrawDeck
+					count: 3
+					memorize: cardsOnTop
+				}
+				{
+					type: putCardsFromDeckIntoHand
+					select: all(memory(cardsOnTop),culture(shire))
+					reveal: true
+					shuffle: false
+					showAll: false
+				}
+				{
+					type: discardCardsFromDrawDeck
+					select: all(memory(cardsOnTop),zone(deck))
+					showAll: false
+					shuffle: false
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> If the twilight pool has fewer than 3 twilight tokens, add (2) to reveal the top 3 cards of your draw deck. Take all [shire] cards revealed into hand and discard the rest.
+		lore: "His name, of course, was Proudfoot, and well merited; his feet were large, exceptionally furry...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_302: {
+		cardInfo: {
+			imagePath: decipher/LOTR01302.jpg
+			//parentId: 1_302
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R302
+			rarity: R
+			setNum: "1"
+			cardNum: 302
+			style: Standard
+		}
+		title: Merry
+		subtitle: Friend to Sam
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Frodo
+		resistance: 6
+		effects: {
+			type: activated
+			phase: skirmish
+			requires: {
+				type: canSpot
+				filter: self,notAssignedToSkirmish
+			}
+			cost: {
+				type: exert
+				select: self
+				times: 2
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(another,companion)
+				amount: {
+					type: forEachStrength
+					filter: self
+				}
+			}
+		}
+		gametext: <b>Skirmish:</b> If Merry is not assigned to a skirmish, exert him twice to add his strength to another companion.
+		lore: "'We're coming too! You'll have to send us home tied up in a sack to stop us!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_303: {
+		cardInfo: {
+			imagePath: decipher/LOTR01303.jpg
+			//parentId: 1_303
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C303
+			rarity: C
+			setNum: "1"
+			cardNum: 303
+			style: Standard
+		}
+		title: Merry
+		subtitle: From O'er the Brandywine
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: self,hasAttached(weapon)
+				amount: 2
+			}
+		}
+		gametext: While Merry bears a weapon, he is strength +2.
+		lore: "'I don't know why he's so upset, it's only a few carrots... my point is, he's overreacting.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_304: {
+		cardInfo: {
+			imagePath: decipher/LOTR01304.jpg
+			//parentId: 1_304
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C304
+			rarity: C
+			setNum: "1"
+			cardNum: 304
+			style: Standard
+		}
+		title: Noble Intentions
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(companion,not(hobbit))
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(hobbit)
+				amount: 3
+			}
+		}
+		gametext: <b>Skirmish:</b> Exert a companion (except a Hobbit) to make a Hobbit strength +3.
+		lore: "'You carry the fate of us all, little one.... If this is indeed the will of the Council, then Gondor will see it done.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_305: {
+		cardInfo: {
+			imagePath: decipher/LOTR01305.jpg
+			//parentId: 1_305
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C305
+			rarity: C
+			setNum: "1"
+			cardNum: 305
+			style: Standard
+		}
+		title: Old Toby
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		#target: 
+		keywords: [
+			Pipeweed
+			Support Area
+		]
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: self
+			}
+			effect: {
+				type: drawCards
+				count: 1
+			}
+		}
+		gametext: <b>Pipeweed</b>. Plays to your support area.<br>When you play this possession, you may draw a card.
+		lore: "Bilbo's favorite pipeweed is Old Toby, the finest weed in the Southfarthing."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_306: {
+		cardInfo: {
+			imagePath: decipher/LOTR01306.jpg
+			//parentId: 1_306
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C306
+			rarity: C
+			setNum: "1"
+			cardNum: 306
+			style: Standard
+		}
+		title: Pippin
+		subtitle: Friend to Frodo
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Frodo
+		resistance: 6
+		effects: {
+			type: modifier
+			modifier: {
+				type: cantBeDiscarded
+				player: shadow
+				filter: your,culture(shire),tale
+			}
+		}
+		gametext: Your opponent may not discard your [shire] tales from play.
+		lore: Baggins? Sure I know a Baggins – Frodo's my second cousin once-removed, on his mother's side and my third cousin twice-removed on his father's side, if you 'follow me.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_307: {
+		cardInfo: {
+			imagePath: decipher/LOTR01307.jpg
+			//parentId: 1_307
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R307
+			rarity: R
+			setNum: "1"
+			cardNum: 307
+			style: Standard
+		}
+		title: Pippin
+		subtitle: Hobbit of Some Intelligence
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		effects: {
+			type: trigger
+			trigger: {
+				type: played
+				filter: self
+			}
+			effect: {
+				type: choice
+				texts: [
+					Remove a burden
+					Heal a companion
+				]
+				effects: [
+					{
+						type: removeBurdens
+						amount: 1
+					}
+					{
+						type: heal
+						select: choose(companion)
+					}
+				]
+			}
+		}
+		gametext: When you play Pippin, remove a burden or wound from a companion.
+		lore: "'Anyway, you need people of intelligence on this sort of mission... quest... thing.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_308: {
+		cardInfo: {
+			imagePath: decipher/LOTR01308.jpg
+			//parentId: 1_308
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R308
+			rarity: R
+			setNum: "1"
+			cardNum: 308
+			style: Standard
+		}
+		title: Power According to His Stature
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: addBurdens
+				amount: 1
+			}
+			effect: {
+				type: wound
+				select: all(minion,inSkirmishAgainst(ring bearer))
+			}
+		}
+		gametext: <b>Skirmish:</b> Add a burden to wound each minion skirmishing the Ring-bearer.
+		lore: "'The ring had given him power according to his stature.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_309: {
+		cardInfo: {
+			imagePath: decipher/LOTR01309.jpg
+			//parentId: 1_309
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U309
+			rarity: U
+			setNum: "1"
+			cardNum: 309
+			style: Standard
+		}
+		title: Rosie Cotton
+		subtitle: Hobbiton Lass
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Ally
+		allyHome: 1F
+		race: Hobbit
+		strength: 1
+		vitality: 2
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: name(Sam)
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(name(Sam))
+				}
+			}
+		]
+		gametext: Sam is strength +1.<br><b>Fellowship:</b> Exert Rosie Cotton to heal Sam.
+		lore: "'Go on Sam, ask Rosie for a dance.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_310: {
+		cardInfo: {
+			imagePath: decipher/LOTR01310.jpg
+			//parentId: 1_310
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R310
+			rarity: R
+			setNum: "1"
+			cardNum: 310
+			style: Standard
+		}
+		title: Sam
+		subtitle: Faithful Companion
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Frodo
+		resistance: 5
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(name(Bill the Pony))
+					showAll: true
+					shuffle: true
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
+			}
+		]
+		gametext: <b>Fellowship:</b> Play Bill the Pony from your draw deck.<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
+		lore: "'Mr. Frodo's not going anywhere without me!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_311: {
+		cardInfo: {
+			imagePath: decipher/LOTR01311.jpg
+			//parentId: 1_311
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C311
+			rarity: C
+			setNum: "1"
+			cardNum: 311
+			style: Standard
+		}
+		title: Sam
+		subtitle: Son of Hamfast
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 5
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: removeBurdens
+					amount: 1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
+			}
+		]
+		gametext: <b>Fellowship:</b> Exert Sam to remove a burden.<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
+		lore: "'Oh, I've never held a girl's hand before. I... I think I might just have myself another ale.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_312: {
+		cardInfo: {
+			imagePath: decipher/LOTR01312.jpg
+			//parentId: 1_312
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C312
+			rarity: C
+			setNum: "1"
+			cardNum: 312
+			style: Standard
+		}
+		title: Sorry About Everything
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(hobbit,companion)
+			}
+			effect: {
+				type: removeBurdens
+				amount: 1
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert a Hobbit companion to remove a burden.
+		lore: "'I am sorry that I brought this upon you... sorry you must carry this burden.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_313: {
+		cardInfo: {
+			imagePath: decipher/LOTR01313.jpg
+			//parentId: 1_313
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R313
+			rarity: R
+			setNum: "1"
+			cardNum: 313
+			style: Standard
+		}
+		title: Sting
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: name(Frodo)
+		effects: {
+			type: activated
+			phase: [
+				fellowship
+				regroup
+			]
+			cost: {
+				type: exert
+				select: bearer
+			}
+			effect: [
+				{
+					type: revealHand
+					hand: shadowPlayer
+					memorize: revealedCards
+				}
+				{
+					type: removeTwilight
+					amount: {
+						type: cardPhaseLimit
+						limit:	4
+						amount: {
+							type: forEachInMemory
+							memory: revealedCards
+							filter: orc
+							limit: 4
+						}
+					}
+				}
+			]
+		}
+		gametext: Bearer must be Frodo.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Exert Frodo to reveal an opponent's hand. Remove (1) for each Orc revealed (limit (4)).
+		lore: "'This is Sting.... Take it, if you like.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_314: {
+		cardInfo: {
+			imagePath: decipher/LOTR01314.jpg
+			//parentId: 1_314
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R314
+			rarity: R
+			setNum: "1"
+			cardNum: 314
+			style: Standard
+		}
+		title: Stone Trolls
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Condition
+		target: character,not(hasAttached(name(Stone Trolls)))
+		keywords: Tale
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Bilbo)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer,inSkirmishAgainst(or(troll,uruk-hai))
+					amount: 3
+				}
+			}
+		]
+		gametext: <b>Tale</b>. To play, spot Bilbo. Plays on any character. Limit 1 per character.<br>Each time bearer skirmishes a Troll or Uruk-hai, bearer is strength +3.
+		lore: "'For a couple o'pins,' says Troll, and grins, / 'I'll eat thee too, and gnaw thy shins. / A bit o' fresh meat will go down sweet!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_315: {
+		cardInfo: {
+			imagePath: decipher/LOTR01315.jpg
+			//parentId: 1_315
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C315
+			rarity: C
+			setNum: "1"
+			cardNum: 315
+			style: Standard
+		}
+		title: Stout and Sturdy
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: {
+				type: heal
+				select: choose(hobbit)
+			}
+		}
+		gametext: <b>Maneuver</b> <i>or</i> <b>Skirmish:</b> Heal a Hobbit.
+		lore: "'You have a stout heart, little hobbit, but your courage alone will not save you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_316: {
+		cardInfo: {
+			imagePath: decipher/LOTR01316.jpg
+			//parentId: 1_316
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1U316
+			rarity: U
+			setNum: "1"
+			cardNum: 316
+			style: Standard
+		}
+		title: A Talent for Not Being Seen
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: [
+			Stealth
+			Support Area
+		]
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(hobbit)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: site
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							count: 4
+							filter: hobbit,companion
+						}
+						true: -2
+						false: {
+							type: Conditional
+							requires: {
+								type: canSpot
+								count: 2
+								filter: hobbit,companion
+							}
+							true: -1
+							false: 0
+						}
+					}
+				}
+			}
+		]
+		gametext: <b>Stealth</b>. To play, exert a Hobbit. Plays to your support area.<br>Each time the fellowship moves, spot 2 Hobbit companions to make the Shadow number -1 (or spot 4 to make it -2).
+		lore: "With their small size, Hobbits use any hole to hide in, and their trail is difficult to detect."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_317: {
+		cardInfo: {
+			imagePath: decipher/LOTR01317.jpg
+			//parentId: 1_317
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1C317
+			rarity: C
+			setNum: "1"
+			cardNum: 317
+			style: Standard
+		}
+		title: There and Back Again
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		target: hobbit,companion
+		keywords: Tale
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: discard
+				select: self
+			}
+			effect: {
+				type: modifyStrength
+				select: all(hobbit,companion)
+				amount: 2
+				until: start(regroup)
+			}
+		}
+		gametext: <b>Tale</b>. Bearer must be a Hobbit companion.<br><b>Maneuver:</b> Discard this condition to make each Hobbit companion strength +2 until the regroup phase.
+		lore: "'So there I was – at the mercy of three monstrous trolls....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_318: {
+		cardInfo: {
+			imagePath: decipher/LOTR01318.jpg
+			//parentId: 1_318
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 1R318
+			rarity: R
+			setNum: "1"
+			cardNum: 318
+			style: Standard
+		}
+		title: Thrór's Map
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Possession
+		#target: 
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: [
+				fellowship
+				regroup
+			]
+			cost: [
+				{
+					type: exert
+					count: 2
+					select: choose(hobbit)
+				}
+				{
+					type: discard
+					select: self
+				}
+			]
+			effect: {
+				type: playNextSite
+			}
+		}
+		gametext: Plays to your support area.<br><b>Fellowship</b> <i>or</i> &nbsp;<b>Regroup:</b> Exert 2 Hobbits and discard Thrór's Map to play the fellowship's next site (replacing opponent's site if necessary).
+		lore: "Bilbo still keeps a map of Erebor, the Lonely Mountain, as a memento of his journey with the Dwarves many years ago."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

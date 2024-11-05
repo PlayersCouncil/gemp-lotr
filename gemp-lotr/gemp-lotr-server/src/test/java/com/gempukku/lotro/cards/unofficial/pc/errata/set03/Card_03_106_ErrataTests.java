@@ -7,15 +7,13 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_03_106_ErrataTests
 {
@@ -51,7 +49,7 @@ public class Card_03_106_ErrataTests
         assertTrue(bill.getBlueprint().isUnique());
         assertEquals(0, bill.getBlueprint().getTwilightCost());
 
-        assertTrue(scn.HasKeyword(bill, Keyword.STEALTH));
+        assertTrue(scn.hasKeyword(bill, Keyword.STEALTH));
     }
 
     @Test
@@ -106,7 +104,7 @@ public class Card_03_106_ErrataTests
 
         scn.FreepsMoveCardToHand(bill, sam);
 
-        scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
 
         scn.StartGame();
 

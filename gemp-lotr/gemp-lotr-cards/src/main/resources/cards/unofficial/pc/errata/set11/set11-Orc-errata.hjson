@@ -20,30 +20,35 @@
 		twilight: 1
 		type: condition
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: culture(orc),minion
-		}
-		effects: {
-			type: trigger
-			trigger: {
-				type: exerts
-				filter: companion
-			}
-			effect: {
-				type: addTwilight
-				amount: {
-					type: requires
-					requires: {
-						type: canSpot
-						filter: companion
-						count: 6
-					}
-					true: 2
-					false: 1
-				}
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: culture(orc),minion
+                }
+		    }
+            {
+                type: trigger
+                trigger: {
+                    type: exerted
+                    filter: companion
+                }
+                effect: {
+                    type: addTwilight
+                    amount: {
+                        type: Conditional
+                        requires: {
+                            type: canSpot
+                            filter: companion
+                            count: 6
+                        }
+                        true: 2
+                        false: 1
+                    }
+                }
+            }
+        ]
 		gametext: To play, spot an [orc] minion. <br>Each time a companion exerts, you<br> may add (1) (or (2) if you can spot 6 companions).
 		lore: "But soon there were few left in Minas Tirith<br> who had the heart to stand up and defy the hosts of Mordor."
 		promotext: ""
@@ -86,7 +91,7 @@
 			}
 			effect: {
 				type: shuffleCardsFromDiscardIntoDrawDeck
-				filter: choose(culture(orc),condition)
+				select: choose(culture(orc),condition)
 				count: 0-2
 			}
 		}

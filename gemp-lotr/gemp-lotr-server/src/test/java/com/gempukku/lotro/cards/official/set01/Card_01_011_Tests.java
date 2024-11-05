@@ -34,41 +34,45 @@ public class Card_01_011_Tests
 	public void FarinStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: *Farin, Dwarven Emissary
-		* Side: Free Peoples
-		* Culture: Dwarven
-		* Twilight Cost: 2
-		* Type: companion
-		* Subtype: Dwarf
-		* Strength: 5
-		* Vitality: 3
-		* Game Text: To play, spot a Dwarf.
-		* 	While skirmishing an Orc, Farin is strength +2.
-		*/
+		 * Set: 1
+		 * Name: Farin, Dwarven Emissary
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Dwarf
+		 * Strength: 5
+		 * Vitality: 3
+		 * Game Text: To play, spot a Dwarf.
+		 * 	While skirmishing an Orc, Farin is strength +2.
+		 * Resistance: 6
+		 */
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl farin = scn.GetFreepsCard("farin");
+		var card = scn.GetFreepsCard("farin");
 
-		assertTrue(farin.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, farin.getBlueprint().getSide());
-		assertEquals(Culture.DWARVEN, farin.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, farin.getBlueprint().getCardType());
-		assertEquals(Race.DWARF, farin.getBlueprint().getRace());
-		assertEquals(2, farin.getBlueprint().getTwilightCost());
-		assertEquals(5, farin.getBlueprint().getStrength());
-		assertEquals(3, farin.getBlueprint().getVitality());
+		assertEquals("Farin", card.getBlueprint().getTitle());
+		assertEquals("Dwarven Emissary", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.DWARF, card.getBlueprint().getRace());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(5, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	@Test
 	public void FarinRequiresDwarf() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl farin = scn.GetFreepsCard("farin");
-		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
+		var farin = scn.GetFreepsCard("farin");
+		var gimli = scn.GetFreepsCard("gimli");
 		scn.FreepsMoveCardToHand(farin, gimli);
 
 		scn.StartGame();
@@ -81,13 +85,13 @@ public class Card_01_011_Tests
 	@Test
 	public void FarinStrengthBonusAgainstOrcs() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl farin = scn.GetFreepsCard("farin");
+		var farin = scn.GetFreepsCard("farin");
 		scn.FreepsMoveCharToTable(farin);
 
-		PhysicalCardImpl orc = scn.GetShadowCard("runner");
-		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
+		var orc = scn.GetShadowCard("runner");
+		var nazgul = scn.GetShadowCard("nazgul");
 		scn.ShadowMoveCharToTable(orc, nazgul);
 
 		scn.StartGame();

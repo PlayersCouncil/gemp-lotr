@@ -22,7 +22,10 @@
 			}
 			effect: {
 				type: putCardsFromDeckIntoHand
-				filter: choose(or(culture(gandalf),culture(shire)))
+				select: choose(or(culture(gandalf),culture(shire)))
+                reveal: true
+                shuffle: true
+                showAll: true
 			}
 		}
 	}
@@ -46,7 +49,9 @@
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(or(possession,artifact))
+				select: choose(or(possession,artifact))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -62,7 +67,9 @@
 			limitPerTurn: 1
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(ally,allyHome(hobbit,3))
+				select: choose(ally,allyHome(hobbit,3))
+                showAll: true
+                shuffle: true
 			}
 		}
 	}
@@ -97,49 +104,49 @@
 					]
 					effects: [
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: memoryIs
 								memory: choice
 								value: yes
 							}
-							effect: [
+							true: [
 								{
 									type: transfer
-									filter: choose(culture(dwarven),follower)
+									select: choose(culture(dwarven),follower)
 									where: choose(culture(dwarven),companion)
 									memorizeTransferred: transferredFollowers
 								}
 								{
 									type: repeat
-									amount: {
+									times: {
 										type: forEachYouCanSpot
 										filter: follower,culture(dwarven),not(memory(transferredFollowers))
 									}
 									effect: {
-										type: conditional
-										requires: {
+										type: If
+										check: {
 											type: memoryIs
 											memory: choice
 											value: yes
 										}
-										effect: [
+										true: [
 											{
 												type: chooseYesOrNo
 												text: Would you like to transfer another follower for free?
 												memorize: choice
 											}
 											{
-												type: conditional
-												requires: {
+												type: If
+												check: {
 													type: memoryIs
 													memory: choice
 													value: yes
 												}
-												effect: [
+												true: [
 													{
 														type: transfer
-														filter: choose(culture(dwarven),follower,not(memory(transferredFollowers)))
+														select: choose(culture(dwarven),follower,not(memory(transferredFollowers)))
 														where: choose(culture(dwarven),companion)
 														memorizeTransferred: anotherTransferredFollower
 													}

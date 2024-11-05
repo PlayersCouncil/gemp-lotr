@@ -18,26 +18,36 @@ import org.json.simple.JSONObject;
 public class CancelSkirmish implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter");
+        FieldUtils.validateAllowedFields(effectObject, "filter", "involving", "fierceOnly");
 
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "any");
+        final String involving = FieldUtils.getString(effectObject.get("involving"), "involving", "any");
+        boolean fierceOnly = FieldUtils.getBoolean(effectObject.get("fierceOnly"), "fierceOnly", false);
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+        final FilterableSource involvingSource = environment.getFilterFactory().generateFilter(involving, environment);
 
         return new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 final Filterable involving = filterableSource.getFilterable(actionContext);
-                return new CancelSkirmishEffect(involving);
+                if (!fierceOnly || actionContext.getGame().getGameState().isFierceSkirmishes()) {
+                    return new CancelSkirmishEffect(involving);
+                } else {
+                    return null;
+                }
             }
 
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
-                final Filterable involving = filterableSource.getFilterable(actionContext);
+                final Filterable first = filterableSource.getFilterable(actionContext);
+                final Filterable second = involvingSource.getFilterable(actionContext);
                 final LotroGame game = actionContext.getGame();
                 return game.getGameState().getSkirmish() != null
+                        && (!fierceOnly || game.getGameState().isFierceSkirmishes())
                         && !game.getGameState().getSkirmish().isCancelled()
-                        && (Filters.countActive(game, Filters.and(involving, Filters.inSkirmish)) > 0)
+                        && (Filters.countActive(game, Filters.and(first, Filters.inSkirmish)) > 0)
+                        && (Filters.countActive(game, Filters.and(second, Filters.inSkirmish)) > 0)
                         && game.getModifiersQuerying().canCancelSkirmish(game, game.getGameState().getSkirmish().getFellowshipCharacter())
                         && (game.getFormat().canCancelRingBearerSkirmish() || Filters.countActive(game, Filters.ringBearer, Filters.inSkirmish) == 0);
             }

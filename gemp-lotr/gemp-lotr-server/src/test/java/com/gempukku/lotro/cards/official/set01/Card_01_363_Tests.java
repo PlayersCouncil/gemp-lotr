@@ -7,7 +7,6 @@ import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
@@ -48,30 +47,31 @@ public class Card_01_363_Tests
 	public void TolBrandirRuinsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Tol Brandir
-		* Shadow Number: 9
-		* Type: Site
-		* Site Number: 9
-		* Game Text: River.  Shadow: Play up to 3 trackers from your discard pile; end your Shadow phase.
-		*/
+		 * Set: 1
+		 * Name: Tol Brandir
+		 * Shadow Number: 9
+		 * Type: Site
+		 * Site Number: 9
+		 * Game Text: River.  Shadow: Play up to 3 trackers from your discard pile; end your Shadow phase.
+		 */
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		var site9 = scn.GetFreepsSite(9);
+		var card = scn.GetFreepsSite(9);
 
-		assertFalse(site9.getBlueprint().isUnique());
-		assertEquals(CardType.SITE, site9.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(site9, Keyword.RIVER)); // test for keywords as needed
-		assertEquals(9, site9.getBlueprint().getTwilightCost());
-		assertEquals(9, site9.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
+		assertEquals("Tol Brandir", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.RIVER));
+		assertEquals(9, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getSiteNumber());
 	}
 
 	@Test
 	public void TolBrandirActionPlays3TrackersAndEndsShadowPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var tolbrandir = scn.GetShadowSite(9);
 		var tracker1 = scn.GetShadowCard("tracker1");

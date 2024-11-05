@@ -45,7 +45,7 @@
 						type: wound
 						player: shadow
 						times: 1
-						filter: choose(companion)
+						select: choose(companion)
 					}
 					text: Make the Shadow player wound a companion to prevent adding a threat?
 					effect: {
@@ -63,7 +63,7 @@
 				}
 				effect: {
 					type: ModifyStrength
-					filter: self
+					select: self
 					amount: 3
 				}
 			}

@@ -1,0 +1,2104 @@
+{
+
+	4_3: {
+		cardInfo: {
+			imagePath: decipher/LOTR04003.jpg
+			//parentId: 4_3
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C3
+			rarity: C
+			setNum: "4"
+			cardNum: 3
+			style: Standard
+		}
+		title: Anger
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+					type: or
+					requires: [
+							{
+									type: canSpot
+									count: 3
+									filter: culture(dunland),minion
+							}
+							{
+									type: controlsSite
+							}
+					]
+			}
+			effect: [
+				{
+					type: addKeyword
+					select: choose(culture(dunland),man)
+					until: start(regroup)
+					keyword: fierce
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Spot 3 [dunland] minions or a site you control to make a [dunland] Man <b>fierce</b> until the regroup phase.
+		lore: "Rage filled the hearts of the Dunlending attackers."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_4: {
+		cardInfo: {
+			imagePath: decipher/LOTR04004.jpg
+			//parentId: 4_4
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C4
+			rarity: C
+			setNum: "4"
+			cardNum: 4
+			style: Standard
+		}
+		title: Band of Wild Men
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 2
+		site: 3
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+						type: winsSkirmish
+						filter: self
+				}
+				effect: {
+						type: addKeyword
+						select: self
+						keyword: fierce
+						until: start(regroup)
+				}
+			}
+		]
+		gametext: Each time this minion wins a skirmish, you may make it <b>fierce</b> until the regroup phase.
+		lore: "'The Wild Men of Dunland have no love for Théoden of Rohan since he took their land.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_5: {
+		cardInfo: {
+			imagePath: decipher/LOTR04005.jpg
+			//parentId: 4_5
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C5
+			rarity: C
+			setNum: "4"
+			cardNum: 5
+			style: Standard
+		}
+		title: Burn Every Village
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(dunland),man)
+					amount: {
+							type: Conditional
+							requires: {
+									type: controlsSite
+							}
+							true: 4
+							false: 2
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make a [dunland] Man strength +2 (or +4 if you control a site).
+		lore: "'Take your rabble through the Westemnet; take back the lands they stole from you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_6: {
+		cardInfo: {
+			imagePath: decipher/LOTR04006.jpg
+			//parentId: 4_6
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R6
+			rarity: R
+			setNum: "4"
+			cardNum: 6
+			style: Standard
+		}
+		title: Constantly Threatening
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: {
+						type: moveCountMinimum
+						amount: 2
+				}
+				cost: {
+						type: removeTwilight
+						amount: 2
+				}
+				effect: {
+						type: playCardFromDiscard
+						removedTwilight: 2
+						select: choose(culture(dunland),man)
+				}
+			}
+		]
+		gametext: Plays to your support area.<br><b>Shadow:</b> If the fellowship has moved more than once this turn, remove (2) to play a [dunland] Man from your discard pile.
+		lore: "The men of Dunland have hated the Rohirrim for many years."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_7: {
+		cardInfo: {
+			imagePath: decipher/LOTR04007.jpg
+			//parentId: 4_7
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C7
+			rarity: C
+			setNum: "4"
+			cardNum: 7
+			style: Standard
+		}
+		title: Dark Fury
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(dunland),man)
+					amount: {
+							type: Conditional
+							requires: {
+									type: location
+									filter: sanctuary
+							}
+							true: 4
+							false: 2
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make a [dunland] Man strength +2 (or +4 if at a sanctuary).
+		lore: "Dunland and Dunlendings are the names that the Rohirrim gave to them, because they were swarthy and dark-haired...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_8: {
+		cardInfo: {
+			imagePath: decipher/LOTR04008.jpg
+			//parentId: 4_8
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U8
+			rarity: U
+			setNum: "4"
+			cardNum: 8
+			style: Standard
+		}
+		title: Death to the Strawheads
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 3
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(dunland),man)
+					amount: {
+							type: forEachYouCanSpot
+							filter: companion
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make a [dunland] Man strength +1 for each companion you spot.
+		lore: "The dark Dunlendings called their fair-haired enemies from Rohan \"Strawheads.\""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_9: {
+		cardInfo: {
+			imagePath: decipher/LOTR04009.jpg
+			//parentId: 4_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U9
+			rarity: U
+			setNum: "4"
+			cardNum: 9
+			style: Standard
+		}
+		title: Dunlending Arsonist
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+						type: winsSkirmish
+						filter: self
+				}
+				effect: [
+						{
+								type: PlayCardFromHand
+								discount: -2
+								select: choose(culture(dunland),man)
+								memorize: playedMinion
+						}
+						{
+								type: addKeyword
+								select: memory(playedMinion)
+								keyword: fierce
+								until: start(regroup)
+						}
+						{
+								type: addKeyword
+								select: memory(playedMinion)
+								keyword: damage
+								amount: 1
+								until: start(regroup)
+						}
+				]
+			}
+		]
+		gametext: Each time this minion wins a skirmish, you may play a [dunland] Man from hand; his twilight cost is -2. That Man is <b>fierce</b> and <b>damage +1</b> until the regroup phase.
+		lore: "'They bring fire... and they are burning as they come, rick, cot, and tree.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_10: {
+		cardInfo: {
+			imagePath: decipher/LOTR04010.jpg
+			//parentId: 4_10
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C10
+			rarity: C
+			setNum: "4"
+			cardNum: 10
+			style: Standard
+		}
+		title: Dunlending Brigand
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 1
+		site: 3
+		gametext: ""
+		lore: "'This was a rich vale and had many homesteads. Alas for my folk!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_11: {
+		cardInfo: {
+			imagePath: decipher/LOTR04011.jpg
+			//parentId: 4_11
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U11
+			rarity: U
+			setNum: "4"
+			cardNum: 11
+			style: Standard
+		}
+		title: Dunlending Looter
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+						type: winsSkirmish
+						filter: self
+				}
+				effect: {
+						type: StackCardsFromPlay
+						select: self
+						where: choose(controlledSite)
+				}
+			}
+			{
+				type: activatedFromStacked
+				phase: shadow
+				stackedOn: controlledSite
+				effect: {
+						type: playCardFromStacked
+						select: self
+						on: controlledSite
+						discount: -2
+				}
+			}
+		]
+		gametext: When this minion wins a skirmish, you may stack him on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. His twilight cost is -2.
+		lore: "...the Dunlendings raided often over the Isen."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_12: {
+		cardInfo: {
+			imagePath: decipher/LOTR04012.jpg
+			//parentId: 4_12
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C12
+			rarity: C
+			setNum: "4"
+			cardNum: 12
+			style: Standard
+		}
+		title: Dunlending Madman
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 7
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: trigger
+				trigger: optional
+				trigger: {
+						type: winsSkirmish
+						filter: self
+				}
+				effect: [
+						{
+								type: modifyStrength
+								select: self
+								amount: 2
+								until: start(regroup)
+						}
+						{
+								type: addKeyword
+								select: self
+								keyword: fierce
+								until: start(regroup)
+						}
+				]
+			}
+		]
+		gametext: Each time this minion wins a skirmish, you may make him strength +2 and <b>fierce</b> until the regroup phase.
+		lore: "'They hate us, and they are glad; for our doom seems certain to them.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_13: {
+		cardInfo: {
+			imagePath: decipher/LOTR04013.jpg
+			//parentId: 4_13
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U13
+			rarity: U
+			setNum: "4"
+			cardNum: 13
+			style: Standard
+		}
+		title: Dunlending Pillager
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+						type: winsSkirmish
+						filter: self
+				}
+				effect: {
+						type: discard
+						select: choose(side(free),possession)
+						count: {
+								type: Conditional
+								requires: {
+										type: canSpot
+										filter: companion
+										count: 6
+								}
+								true: 2
+								false: 1
+						}
+				}
+			}
+		]
+		gametext: Each time this minion wins a skirmish, you may discard a Free Peoples possession (or 2 possessions if you spot 6 companions).
+		lore: "'Not in half a thousand years have they forgotten their grievance that the lords of Gondor gave the Mark to Eorl the Young and made alliance with him.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_14: {
+		cardInfo: {
+			imagePath: decipher/LOTR04014.jpg
+			//parentId: 4_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C14
+			rarity: C
+			setNum: "4"
+			cardNum: 14
+			style: Standard
+		}
+		title: Dunlending Ransacker
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 7
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+						type: winsSkirmish
+						filter: self
+				}
+				requires: {
+						type: canSpot
+						filter: another,culture(dunland),man
+				}
+				effect: {
+						type: takeControlOfSite
+				}
+			}
+		]
+		gametext: Each time this minion wins a skirmish, you may spot another [dunland] Man to take control of a site.
+		lore: "'Yet there are many that cry in the Dunland tongue.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_15: {
+		cardInfo: {
+			imagePath: decipher/LOTR04015.jpg
+			//parentId: 4_15
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C15
+			rarity: C
+			setNum: "4"
+			cardNum: 15
+			style: Standard
+		}
+		title: Dunlending Ravager
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Minion
+		race: Man
+		strength: 5
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: modifier
+				modifier: {
+						type: modifyStrength
+						filter: self,inSkirmishAgainst(culture(rohan),man)
+						amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: assignment
+				requires: {
+						type: canSpot
+						filter: ally
+				}
+				effect: [
+						{
+								type: enableParticipationInSkirmishes
+								select: choose(ally)
+								memorize: chosenAlly
+						}
+						{
+								type: assignFPCharacterToSkirmish
+								fpCharacter: memory(chosenAlly)
+								minion: self
+						}
+				]
+			}
+		]
+		gametext: While skirmishing a [rohan] Man, this minion is strength +2.<br><b>Assignment:</b> Spot an ally to make that ally participate in skirmishes and assign this minion to skirmish that ally.
+		lore: "'They will not give way now for dusk or dawn, until Théoden is taken, or they themselves are slain.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_16: {
+		cardInfo: {
+			imagePath: decipher/LOTR04016.jpg
+			//parentId: 4_16
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C16
+			rarity: C
+			setNum: "4"
+			cardNum: 16
+			style: Standard
+		}
+		title: Dunlending Robber
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+						type: winsSkirmish
+						filter: self
+				}
+				effect: [
+						{
+								type: modifyStrength
+								select: self
+								amount: 2
+								until: start(regroup)
+						}
+						{
+								type: addKeyword
+								select: self
+								keyword: fierce
+								until: start(regroup)
+						}
+				]
+			}
+		]
+		gametext: Each time this minion wins a skirmish, you may make him strength +2 and <b>fierce</b> until the regroup phase.
+		lore: "'We will fight....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_17: {
+		cardInfo: {
+			imagePath: decipher/LOTR04017.jpg
+			//parentId: 4_17
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C17
+			rarity: C
+			setNum: "4"
+			cardNum: 17
+			style: Standard
+		}
+		title: Dunlending Savage
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 1
+		site: 3
+		gametext: ""
+		lore: "The Dunlendings' fury could only end in the death of the king of Rohan."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_18: {
+		cardInfo: {
+			imagePath: decipher/LOTR04018.jpg
+			//parentId: 4_18
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C18
+			rarity: C
+			setNum: "4"
+			cardNum: 18
+			style: Standard
+		}
+		title: Dunlending Warrior
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: activated
+				phase: assignment
+				requires: {
+						type: canSpot
+						filter: ally
+				}
+				effect: [
+						{
+								type: enableParticipationInSkirmishes
+								select: choose(ally)
+								memorize: chosenAlly
+						}
+						{
+								type: assignFPCharacterToSkirmish
+								fpCharacter: memory(chosenAlly)
+								minion: self
+						}
+				]
+			}
+		]
+		gametext: <b>Assignment:</b> Spot an ally to make that ally participate in skirmishes and assign this minion to skirmish that ally.
+		lore: "These were a remnant of the peoples that had dwelt in the vales of the White Mountains in ages past."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_19: {
+		cardInfo: {
+			imagePath: decipher/LOTR04019.jpg
+			//parentId: 4_19
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R19
+			rarity: R
+			setNum: "4"
+			cardNum: 19
+			style: Standard
+		}
+		title: Hides
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Possession
+		#target: 
+		keywords: Support Area
+		effects: [
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: played
+								filter: self
+						}
+						effect: {
+								type: drawCards
+								count: 1
+						}
+				}
+				{
+						type: Response
+						trigger: {
+								type: aboutToTakeWound
+								filter: culture(dunland),man
+						}
+						cost: {
+							type: Choice
+							texts: [
+								Remove (2)
+								Discard this possession
+							]
+							effects: [
+								{
+									type: removeTwilight
+									amount: 2
+								}
+								{
+									type: Discard
+									select: self
+								}
+							]
+						}
+						effect: {
+								type: preventWound
+								select: choose(culture(dunland),man)
+						}
+				}
+		]
+		gametext: Plays to your support area. When you play this possession, you may draw a card.<br><b>Response:</b> If a [dunland] Man is about to take a wound, remove (2) or discard this possession to prevent that wound.
+		lore: "Only heavy animal skins armored the Dunlendings."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_20: {
+		cardInfo: {
+			imagePath: decipher/LOTR04020.jpg
+			//parentId: 4_20
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R20
+			rarity: R
+			setNum: "4"
+			cardNum: 20
+			style: Standard
+		}
+		title: Hill Chief
+		unique: true
+		side: Shadow
+		culture: Dunland
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 2
+		site: 3
+		effects: [
+				{
+						type: activated
+						phase: shadow
+						requires: {
+								type: ControlsSite
+						}
+						cost: {
+								type: exert
+								select: self
+						}
+						effect: {
+								type: drawCards
+								count: 3
+						}
+				}
+		]
+		gametext: <b>Shadow:</b> Spot a site you control and exert Hill Chief to draw 3 cards.
+		lore: "'...Saruman has armed the wild hillmen and herdfolk of Dunland beyond the rivers, and these also he loosed upon us.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_21: {
+		cardInfo: {
+			imagePath: decipher/LOTR04021.jpg
+			//parentId: 4_21
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C21
+			rarity: C
+			setNum: "4"
+			cardNum: 21
+			style: Standard
+		}
+		title: Hillman Band
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 1
+		site: 3
+		effects: [
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: moves
+						}
+						requires: {
+								type: canSpot
+								filter: another,culture(dunland),man
+						}
+						effect: {
+								type: takeControlOfSite
+						}
+				}
+		]
+		gametext: Each time the fellowship moves, you may spot another [dunland] Man to take control of a site.
+		lore: "As in years past, the Dunlendings marched in force to the west."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_22: {
+		cardInfo: {
+			imagePath: decipher/LOTR04022.jpg
+			//parentId: 4_22
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R22
+			rarity: R
+			setNum: "4"
+			cardNum: 22
+			style: Standard
+		}
+		title: Hillman Horde
+		unique: true
+		side: Shadow
+		culture: Dunland
+		twilight: 6
+		type: Minion
+		race: Man
+		strength: 14
+		vitality: 2
+		site: 3
+		effects: [
+				{
+						type: modifier
+						modifier: {
+								type: skipPhase
+								requires: {
+										type: ControlsSite
+										count: 2
+								}
+								phase: archery
+						}
+				}
+				{
+						type: modifier
+						modifier: {
+								type: addKeyword
+								requires: {
+										type: ControlsSite
+										count: 3
+								}
+								filter: your,culture(dunland),man
+								keyword: fierce
+						}
+				}
+				{
+						type: modifier
+						modifier: {
+								type: addKeyword
+								requires: {
+										type: ControlsSite
+										count: 3
+								}
+								filter: your,culture(dunland),man
+								keyword: damage
+								amount: 1
+						}
+				}
+		]
+		gametext: While you control 2 sites, skip the archery phase.<br>While you control 3 sites, each of your [dunland] Men is <b>fierce</b>.<br>While you control 4 sites, each of your [dunland] Men is <b>damage +1</b>.
+		lore: "'They are fierce folk when roused.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_23: {
+		cardInfo: {
+			imagePath: decipher/LOTR04023.jpg
+			//parentId: 4_23
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R23
+			rarity: R
+			setNum: "4"
+			cardNum: 23
+			style: Standard
+		}
+		title: Hillman Mob
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 12
+		vitality: 1
+		site: 3
+		effects: [
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: winsSkirmish
+								filter: self
+						}
+						effect: [
+						{
+								type: PlayCardFromHand
+								discount: -2
+								select: choose(culture(dunland),man)
+								memorize: playedMinion
+						}
+						{
+								type: addKeyword
+								select: memory(playedMinion)
+								keyword: fierce
+								until: start(regroup)
+						}
+						{
+								type: addKeyword
+								select: memory(playedMinion)
+								keyword: damage
+								amount: 1
+								until: start(regroup)
+						}
+								]
+				}
+		]
+		gametext: Each time this minion wins a skirmish, you may play a [dunland] Man from hand; his twilight cost is -2. That Man is <b>fierce</b> and <b>damage +1</b> until the regroup phase.
+		lore: "'That old hatred Saruman has inflamed.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_24: {
+		cardInfo: {
+			imagePath: decipher/LOTR04024.jpg
+			//parentId: 4_24
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U24
+			rarity: U
+			setNum: "4"
+			cardNum: 24
+			style: Standard
+		}
+		title: Hillman Rabble
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+						type: winsSkirmish
+						filter: self
+				}
+				effect: {
+						type: StackCardsFromPlay
+						select: self
+						where: choose(controlledSite)
+				}
+			}
+			{
+				type: activatedFromStacked
+				phase: shadow
+				stackedOn: controlledSite
+				effect: {
+						type: playCardFromStacked
+						select: self
+						on: controlledSite
+						discount: -2
+				}
+			}
+		]
+		gametext: Each time this minion wins a skirmish, you may stack it on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -2.
+		lore: "The relentless fury of the Dunlendings consumed one village after another."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_25: {
+		cardInfo: {
+			imagePath: decipher/LOTR04025.jpg
+			//parentId: 4_25
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C25
+			rarity: C
+			setNum: "4"
+			cardNum: 25
+			style: Standard
+		}
+		title: Hillman Tribe
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+						type: winsSkirmish
+						filter: self
+				}
+				requires: {
+						type: canSpot
+						filter: another,culture(dunland),minion
+				}
+				effect: {
+						type: takeControlOfSite
+				}
+			}
+		]
+		gametext: Each time this minion wins a skirmish, you may spot another [dunland] minion to take control of a site.
+		lore: "'They will not quail at the sun... the wild men of the hills.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_26: {
+		cardInfo: {
+			imagePath: decipher/LOTR04026.jpg
+			//parentId: 4_26
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C26
+			rarity: C
+			setNum: "4"
+			cardNum: 26
+			style: Standard
+		}
+		title: Iron Axe
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Possession
+		strength: 3
+		itemclass: Hand weapon
+		target: culture(dunland),man
+
+		gametext: Bearer must be a [dunland] Man.
+		lore: "Saruman armed the Dunlendings with weapons forged by his Orcs in Isengard."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_27: {
+		cardInfo: {
+			imagePath: decipher/LOTR04027.jpg
+			//parentId: 4_27
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U27
+			rarity: U
+			setNum: "4"
+			cardNum: 27
+			style: Standard
+		}
+		title: Living Off Rock
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: winsSkirmish
+								filter: culture(dunland),man
+								against: culture(rohan),man
+								memorize: winner
+						}
+						effect: [
+										{
+												type: modifyStrength
+												select: memory(winner)
+												amount: 2
+												until: regroup
+										}
+										{
+												type: addKeyword
+												select: memory(winner)
+												keyword: fierce
+												until: regroup
+										}
+						]
+				}
+		]
+		gametext: Plays to your support area.<br>Each time a [dunland] Man wins a skirmish involving a [rohan] Man, you may make that minion strength +2 and <b>fierce</b> until the regroup phase.
+		lore: "'The Horsemen took your land; they drove your people into the hills to scratch living off rock.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_28: {
+		cardInfo: {
+			imagePath: decipher/LOTR04028.jpg
+			//parentId: 4_28
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U28
+			rarity: U
+			setNum: "4"
+			cardNum: 28
+			style: Standard
+		}
+		title: No Defense
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+				{
+						type: activated
+						phase: shadow
+						cost: {
+								type: removeTwilight
+								amount: 3
+						}
+						effect: {
+								type: AddCultureTokens
+								culture: dunland
+								select: self
+						}
+				}
+				{
+						type: activated
+						phase: skirmish
+						cost: [
+								{
+										type: RemoveCultureTokens
+										culture: dunland
+										select: self
+								}
+								{
+										type: chooseActiveCards
+										text: Choose DUNLAND Man
+										select: choose(culture(dunland),man)
+										memorize: chosenMan
+								}
+								{
+										type: addModifier
+										modifier: {
+												type: cancelStrengthBonus
+												filter: inSkirmishAgainst(memory(chosenMan))
+												from: possession
+										}
+								}
+						]
+				}
+		]
+		gametext: Plays to your support area.<br><b>Shadow:</b> Remove (3) to place a [dunland] token here.<br><b>Skirmish:</b> Spot a [dunland] Man and remove a [dunland] token from this card. A character skirmishing that [dunland] Man does not gain strength bonuses from possessions.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_29: {
+		cardInfo: {
+			imagePath: decipher/LOTR04029.jpg
+			//parentId: 4_29
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R29
+			rarity: R
+			setNum: "4"
+			cardNum: 29
+			style: Standard
+		}
+		title: No Refuge
+		unique: true
+		side: Shadow
+		culture: Dunland
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+				{
+						type: modifier
+						modifier: {
+								type: modifyCost
+								requires: {
+										type: hasCardStacked
+										filter: culture(dunland),man
+										on: site
+								}
+								filter: site
+								amount: 5
+						}
+				}
+		]
+		gametext: Plays to your support area.<br>While a [dunland] Man is stacked on a site, the Shadow number of each site is +5.
+		lore: "As their homes were ravaged by the wild men, refugees fled to the safety of Helm's Deep."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_30: {
+		cardInfo: {
+			imagePath: decipher/LOTR04030.jpg
+			//parentId: 4_30
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R30
+			rarity: R
+			setNum: "4"
+			cardNum: 30
+			style: Standard
+		}
+		title: No Retreat
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 0
+		type: Condition
+		target: controlledSite
+		effects: [
+				{
+						type: activated
+						phase: regroup
+						requires: {
+								type: canSpot
+								filter: culture(dunland),man
+								count: 2
+						}
+						cost: {
+								type: discard
+								select: self
+						}
+						effect: {
+								type: addModifier
+								modifier: {
+										type: hasToMoveIfAble
+								}
+						}
+				}
+		]
+		gametext: Plays on a site you control.<br><b>Regroup:</b> Spot 2 [dunland] Men and discard this condition to make the Free Peoples player choose to move again this turn (if the move limit allows).
+		lore: "Hordes from Dunland laid waste to villages as their numbers grew."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_31: {
+		cardInfo: {
+			imagePath: decipher/LOTR04031.jpg
+			//parentId: 4_31
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U31
+			rarity: U
+			setNum: "4"
+			cardNum: 31
+			style: Standard
+		}
+		title: Over the Isen
+		unique: true
+		side: Shadow
+		culture: Dunland
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+				{
+						type: activated
+						phase: assignment
+						requires: {
+								type: ControlsSite
+						}
+						cost: {
+								type: removeTwilight
+								amount: 2
+						}
+						effect: {
+								type: assignFPCharacterToSkirmish
+								fpCharacter: choose(unbound,companion)
+								minion: choose(culture(dunland),man)
+						}
+				}
+		]
+		gametext: Plays to your support area.<br><b>Assignment:</b> Spot a site you control and remove (2) to assign a [dunland] Man to an unbound companion.
+		lore: "Like their ancestors years before, the Dunlendings came down from Isengard."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_32: {
+		cardInfo: {
+			imagePath: decipher/LOTR04032.jpg
+			//parentId: 4_32
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R32
+			rarity: R
+			setNum: "4"
+			cardNum: 32
+			style: Standard
+		}
+		title: Ravage the Defeated
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+					type: winsSkirmish
+					filter: your,culture(dunland),man
+					memorizeLoser: loser
+			}
+			effect: [
+				{
+					type: discard
+					select: all(side(free),attachedTo(memory(loser)))
+				}
+			]
+		}
+		gametext: <b>Response:</b> If your [dunland] Man wins a skirmish, discard all Free Peoples cards borne by the companion or ally he was skirmishing.
+		lore: "What the Dunlendings cannot steal, they destroy."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_33: {
+		cardInfo: {
+			imagePath: decipher/LOTR04033.jpg
+			//parentId: 4_33
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R33
+			rarity: R
+			setNum: "4"
+			cardNum: 33
+			style: Standard
+		}
+		title: Saruman
+		subtitle: Rabble-rouser
+		unique: true
+		side: Shadow
+		culture: Dunland
+		twilight: 4
+		type: Minion
+		race: Wizard
+		strength: 8
+		vitality: 4
+		site: 4
+		effects: [
+				{
+						type: modifier
+						modifier: {
+								type: cantBeAssignedToSkirmish
+								requires: {
+										type: sarumanFirstSentenceActive
+								}
+								filter: self
+						}
+				}
+				{
+						type: trigger
+						trigger: {
+								type: moves
+						}
+						effect: {
+								type: exert
+								player: fp
+								select: choose(companion)
+								count: {
+										type: forEachYouCanSpot
+										filter: culture(dunland),man
+								}
+						}
+				}
+				{
+						type: activated
+						phase: skirmish
+						cost: {
+								type: exert
+								select: self
+						}
+						effect: {
+								type: modifyStrength
+								select: choose(culture(dunland),man)
+								amount: 2
+						}
+				}
+		]
+		gametext: Saruman may not be assigned to a skirmish.<br>Each time the fellowship moves, the Free Peoples player must exert a companion for each [dunland] Man you can spot.<br><b>Skirmish:</b> Exert Saruman to make a [dunland] Man strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_34: {
+		cardInfo: {
+			imagePath: decipher/LOTR04034.jpg
+			//parentId: 4_34
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U34
+			rarity: U
+			setNum: "4"
+			cardNum: 34
+			style: Standard
+		}
+		title: Secret Folk
+		unique: true
+		side: Shadow
+		culture: Dunland
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+				{
+						type: trigger
+						optional: true
+						trigger: {
+										type: losesSkirmish
+										filter: companion
+										against: culture(dunland),man
+								}
+								effect: {
+										type: AddCultureTokens
+										culture: dunland
+										select: self
+								}
+				}
+				{
+						type: activated
+						phase: maneuver
+						effect: [
+										{
+												type: discard
+												select: choose(side(free),possession)
+												count: {
+														type: ForEachCultureToken
+														filter: self
+														culture: dunland
+														limit: 3
+												}
+										}
+										{
+												type: discard
+												select: self
+										}
+								]
+				}
+		]
+		gametext: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving a [dunland] Man, you may place a [dunland] token on this card.<br><b>Maneuver:</b> Discard a Free Peoples possession for each [dunland] token here (limit 3). Discard this condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_35: {
+		cardInfo: {
+			imagePath: decipher/LOTR04035.jpg
+			//parentId: 4_35
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R35
+			rarity: R
+			setNum: "4"
+			cardNum: 35
+			style: Standard
+		}
+		title: Wake of Destruction
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: {
+					type: ControlsSite
+					count: 2
+			}
+			effect: [
+				{
+					type: addKeyword
+					select: all(culture(dunland),man)
+					keyword: fierce
+					until: regroup
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Spot 2 sites you control to make each of your [dunland] Men <b>fierce</b> until the regroup phase.
+		lore: "The anger of the wild men increased with every home they pillaged."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_36: {
+		cardInfo: {
+			imagePath: decipher/LOTR04036.jpg
+			//parentId: 4_36
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U36
+			rarity: U
+			setNum: "4"
+			cardNum: 36
+			style: Standard
+		}
+		title: War Club
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 0
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(dunland),man
+		effects: [
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: winsSkirmish
+								filter: bearer
+						}
+						effect: {
+								type: discard
+								select: choose(side(free),possession)
+								count: 2
+						}
+				}
+		]
+		gametext: Bearer must be a [dunland] Man.<br>Each time bearer wins a skirmish, you may discard 2 Free Peoples possessions.
+		lore: "The wooden weapons of the wild men slew scores of unarmed villagers."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_37: {
+		cardInfo: {
+			imagePath: decipher/LOTR04037.jpg
+			//parentId: 4_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4C37
+			rarity: C
+			setNum: "4"
+			cardNum: 37
+			style: Standard
+		}
+		title: War Cry of Dunland
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+					type: winsSkirmish
+					filter: culture(dunland),man
+					memorize: winner
+			}
+			text: Make {winner} Fierce and +4 Strength
+			effect: [
+				{
+					type: addKeyword
+					select: memory(winner)
+					keyword: fierce
+					until: regroup
+				}
+				{
+						type: modifyStrength
+						select: memory(winner)
+						amount: 4
+						until: regroup
+				}
+			]
+		}
+		gametext: <b>Response:</b> If a [dunland] Man wins a skirmish, make him <b>fierce</b> and strength +4 until the regroup phase.
+		lore: "'Death to the Forgoil!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_38: {
+		cardInfo: {
+			imagePath: decipher/LOTR04038.jpg
+			//parentId: 4_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4U38
+			rarity: U
+			setNum: "4"
+			cardNum: 38
+			style: Standard
+		}
+		title: Wild Man of Dunland
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 1
+		site: 3
+		effects: [
+				{
+						type: trigger
+						optional: true
+						trigger: {
+								type: winsSkirmish
+								filter: self
+						}
+						effect: [
+						{
+								type: PlayCardFromHand
+								discount: -2
+								select: choose(culture(dunland),man)
+								memorize: playedMinion
+						}
+						{
+								type: addKeyword
+								select: memory(playedMinion)
+								keyword: fierce
+								until: start(regroup)
+						}
+						{
+								type: addKeyword
+								select: memory(playedMinion)
+								keyword: damage
+								amount: 1
+								until: start(regroup)
+						}
+								]
+				}
+		]
+		gametext: Each time this minion wins a skirmish, you may play a [dunland] Man from hand; his twilight cost is -2. That Man is <b>fierce</b> and <b>damage +1</b> until the regroup phase.
+		lore: "'By our blood... we swear to fight for you....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_39: {
+		cardInfo: {
+			imagePath: decipher/LOTR04039.jpg
+			//parentId: 4_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R39
+			rarity: R
+			setNum: "4"
+			cardNum: 39
+			style: Standard
+		}
+		title: Wild Man Raid
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: {
+					type: canSpot
+					filter: culture(dunland),man
+					count: 3
+			}
+			effect: [
+				{
+					type: discard
+					select: choose(side(free),or(possession,condition))
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Spot 3 [dunland] Men to discard a Free Peoples possession or condition.
+		lore: "Not even the smallest of trinkets was safe from the destruction of the Dunlendings."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_40: {
+		cardInfo: {
+			imagePath: decipher/LOTR04040.jpg
+			//parentId: 4_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 4R40
+			rarity: R
+			setNum: "4"
+			cardNum: 40
+			style: Standard
+		}
+		title: Wulf
+		subtitle: Dunlending Chieftain
+		unique: true
+		side: Shadow
+		culture: Dunland
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 2
+		site: 3
+		keywords: Fierce
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: winsSkirmish
+					filter: another,culture(dunland),man
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
+		]
+		gametext: <b>Fierce</b>.<br><b>Response:</b> If another [dunland] Man wins a skirmish, exert Wulf to take control of a site.
+		lore: "'Do you not hear their voices?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

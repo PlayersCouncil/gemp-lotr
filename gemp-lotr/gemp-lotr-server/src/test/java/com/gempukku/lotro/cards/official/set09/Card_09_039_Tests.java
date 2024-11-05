@@ -3,15 +3,12 @@ package com.gempukku.lotro.cards.official.set09;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_09_039_Tests
 {
@@ -38,44 +35,40 @@ public class Card_09_039_Tests
 
         /**
          * Set: 9
-         * Title: *Library of Orthanc
+         * Name: Library of Orthanc
+         * Unique: True
          * Side: Shadow
          * Culture: Isengard
          * Twilight Cost: 2
          * Type: Artifact
          * Subtype: Support Area
          * Game Text: Shadow: Play an [ISENGARD] minion to stack the top card of your draw deck on this card.
-         * Skirmish: Remove (1) and discard a Free Peoples card stacked here to make an [ISENGARD] minion strength +1.
-         * Regroup: Remove (1) to take an [ISENGARD] card stacked here into hand.
+         *   Skirmish: Remove (1) and discard a Free Peoples card stacked here to make an [ISENGARD] minion strength +1.
+         *   Regroup: Remove (1) to take an [ISENGARD] card stacked here into hand.
          */
 
-        //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl card = scn.GetFreepsCard("library");
+        var card = scn.GetFreepsCard("library");
 
+        assertEquals("Library of Orthanc", card.getBlueprint().getTitle());
+        assertNull(card.getBlueprint().getSubtitle());
         assertTrue(card.getBlueprint().isUnique());
         assertEquals(Side.SHADOW, card.getBlueprint().getSide());
         assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
         assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-        assertTrue(card.getBlueprint().isUnique());
-        assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA)); // test for keywords as needed
+        assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
         assertEquals(2, card.getBlueprint().getTwilightCost());
-        //assertEquals(, card.getBlueprint().getStrength());
-        //assertEquals(, card.getBlueprint().getVitality());
-        //assertEquals(, card.getBlueprint().getResistance());
-        //assertEquals(Signet., card.getBlueprint().getSignet());
-        //assertEquals(, card.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
     }
 
     @Test
     public void ShadowAbilityStacksTopCardOfDeckAfterPlayingMinion() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl library = scn.GetShadowCard("library");
-        PhysicalCardImpl troop1 = scn.GetShadowCard("troop1");
-        PhysicalCardImpl troop2 = scn.GetShadowCard("troop2");
+        var library = scn.GetShadowCard("library");
+        var troop1 = scn.GetShadowCard("troop1");
+        var troop2 = scn.GetShadowCard("troop2");
 
         scn.ShadowMoveCardToHand(library, troop1, troop2);
 
@@ -106,12 +99,12 @@ public class Card_09_039_Tests
     @Test
     public void SkirmishAbilityRemoves1AndDiscardsStackedFreepsCardToAdd1Strength() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl library = scn.GetShadowCard("library");
-        PhysicalCardImpl troop1 = scn.GetShadowCard("troop1");
-        PhysicalCardImpl troop2 = scn.GetShadowCard("troop2");
-        PhysicalCardImpl axe1 = scn.GetShadowCard("axe1");
+        var library = scn.GetShadowCard("library");
+        var troop1 = scn.GetShadowCard("troop1");
+        var troop2 = scn.GetShadowCard("troop2");
+        var axe1 = scn.GetShadowCard("axe1");
 
         scn.ShadowMoveCardToSupportArea(library);
         scn.ShadowMoveCharToTable(troop1);
@@ -145,12 +138,12 @@ public class Card_09_039_Tests
     @Test
     public void RegroupAbilityRemoves1AndTakesStackedIsengardCardIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl library = scn.GetShadowCard("library");
-        PhysicalCardImpl troop1 = scn.GetShadowCard("troop1");
-        PhysicalCardImpl runner = scn.GetShadowCard("runner");
-        PhysicalCardImpl axe1 = scn.GetShadowCard("axe1");
+        var library = scn.GetShadowCard("library");
+        var troop1 = scn.GetShadowCard("troop1");
+        var runner = scn.GetShadowCard("runner");
+        var axe1 = scn.GetShadowCard("axe1");
 
         scn.ShadowMoveCardToSupportArea(library);
         scn.StackCardsOn(library, axe1, runner, troop1);
@@ -176,8 +169,4 @@ public class Card_09_039_Tests
         assertEquals(2, scn.GetStackedCards(library).size());
         assertEquals(Zone.HAND, troop1.getZone());
     }
-
-
-
-
 }

@@ -1,0 +1,118 @@
+{
+
+	68_9: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN18E009.1_card.jpg
+			//parentId: 18_9
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 18C9
+			rarity: C
+			setNum: "18"
+			cardNum: 9
+			style: Standard
+		}
+		title: Elven Defender
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 7
+		keywords: Valiant
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotCultureTokens
+						culture: elven
+					}
+					filter: self
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Valiant.</b> <br>While you can spot an [elven] token, this companion is strength +2.
+		lore: While they may prefer to avoid conflict, the elves can be ferocious warriors in defense of their ideals.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	68_14: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN18E014.1_card.jpg
+			//parentId: 18_14
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 18R14
+			rarity: R
+			setNum: "18"
+			cardNum: 14
+			style: Standard
+		}
+		title: Haldir
+		subtitle: Warrior Messenger
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Valiant
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Exert Haldir
+						Discard an {elven} card from hand
+					]
+					effects: [
+						{
+							type: exert
+							select: self
+						}
+						{
+							type: discardFromHand
+							forced: false
+							select: choose(culture(elven))
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(self))
+					amount: -2
+				}
+			}
+		]
+		gametext: <b>Valiant.</b> <br><b>Skirmish:</b> Exert Haldir or discard a [elven] card from hand to make a minion skirmishing Haldir strength -2.
+		lore: I bring word from Elrond of Rivendell.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

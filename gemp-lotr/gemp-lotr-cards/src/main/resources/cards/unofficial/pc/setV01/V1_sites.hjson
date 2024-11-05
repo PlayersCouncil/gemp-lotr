@@ -1,11 +1,26 @@
 {
+
 	101_57: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S057.0_card.jpg
+			//parentId: 101_57
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U57
+			rarity: U
+			setNum: "V1"
+			cardNum: 57
+			style: Standard
+		}
 		title: Bag End Study
+		unique: false
 		twilight: 0
-		type: site
+		type: Site
 		site: 1
-		block: fellowship
-		direction: left
+		block: Fellowship
+		direction: Left
 		effects: {
 			type: trigger
 			optional: true
@@ -15,35 +30,61 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(culture(shire),companion)
+				select: choose(culture(shire),companion)
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(culture(shire),condition)
+				select: choose(culture(shire),condition)
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: When the fellowship moves from here, you may exert a [shire] companion to play a [shire] condition from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	101_58: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S058.0_card.jpg
+			//parentId: 101_58
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U58
+			rarity: U
+			setNum: "V1"
+			cardNum: 58
+			style: Standard
+		}
 		title: Prancing Pony Spare Room
+		unique: false
 		twilight: 2
-		type: site
+		type: Site
 		site: 2
-		block: fellowship
-		direction: left
+		block: Fellowship
+		direction: Left
 		effects: {
 			type: trigger
 			trigger: {
 				type: played
-				filter: minion,strengthLessThan(7)
+				filter: minion,MaxStrength(6)
 				memorize: weakMinion
 			}
 			effect: {
-				type: conditional
-				requires: {
+				type: If
+				check: {
 					type: cantSpot
 					filter: culture(gandalf)
 				}
-				effect: {
+				true: {
 					type: addModifier
 					modifier: {
 						type: modifyStrength
@@ -54,17 +95,41 @@
 				}
 			}
 		}
+		gametext: Each time a minion of strength 6 or less is played, make it strength +3 until the regroup phase (unless you can spot a [gandalf] card).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	101_59: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S059.0_card.jpg
+			//parentId: 101_59
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U59
+			rarity: U
+			setNum: "V1"
+			cardNum: 59
+			style: Standard
+		}
 		title: Rivendell Gateway
+		unique: false
 		twilight: 0
-		type: site
+		type: Site
 		site: 3
-		block: fellowship
-		direction: left
-		keyword: [
-			Sanctuary
+		block: Fellowship
+		direction: Right
+		keywords: [
 			Forest
+			Sanctuary
 		]
 		effects: {
 			type: activated
@@ -77,7 +142,7 @@
 			]
 			cost: {
 				type: exert
-				filter: choose(companion)
+				select: choose(companion)
 				memorize: exertedComp
 			}
 			effect: [
@@ -88,7 +153,7 @@
 				{
 					type: chooseActiveCards
 					text: Choose a companion of a different culture to make strength +1 until the end of the turn.
-					filter: choose(companion,not(cultureFromMemory(exertedComp)))
+					select: choose(companion,not(cultureFromMemory(exertedComp)))
 					memorize: pumpedComp 
 				}
 				{
@@ -102,15 +167,39 @@
 				}
 			]
 		}
+		gametext: Forest. Sanctuary. Fellowship: Exert a companion to make one of another culture strength +1 until the end of the turn (limit +6).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	101_60: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S060.0_card.jpg
+			//parentId: 101_60
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U60
+			rarity: U
+			setNum: "V1"
+			cardNum: 60
+			style: Standard
+		}
 		title: Moria Crossroads
+		unique: false
 		twilight: 3
-		type: site
+		type: Site
 		site: 4
-		block: fellowship
-		keyword: underground
-		direction: left
+		block: Fellowship
+		direction: Right
+		keywords: Underground
 		effects: {
 			type: modifier
 			modifier: {
@@ -127,49 +216,141 @@
 				]
 			}
 		}
+		gametext: Underground. While you can spot a unique [moria] minion, skirmishes involving [moria] minions may not be canceled.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+	# 101_61: {
+	# 	title: Lorien Throne Room
+	# 	twilight: 3
+	# 	type: site
+	# 	site: 6
+	# 	block: fellowship
+	# 	keyword: [
+	# 		sanctuary
+	# 		forest
+	# 	]
+	# 	direction: left
+	# 	effects: {
+	# 		type: trigger
+	# 		optional: true
+	# 		trigger: {
+	# 			type: exerted
+	# 			filter: your,companion
+	# 			memorize: exertedComp
+	# 		}
+	# 		requires: {
+	# 			type: Location
+	# 			filter: self
+	# 		}
+	# 		cost: {
+	# 			type: exert
+	# 			select: choose(culture(elven),ally)
+	# 		}
+	# 		effect: {
+	# 			type: heal
+	# 			select: memory(exertedComp)
+	# 		}
+	# 	}
+	# }
+
 	101_61: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1E061.1_card.jpg
+			//parentId: 101_61
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: V1U61
+			rarity: U
+			setNum: "V1"
+			cardNum: 61
+			style: Standard
+		}
 		title: Lorien Throne Room
+		unique: false
 		twilight: 3
-		type: site
+		type: Site
 		site: 6
-		block: fellowship
-		keyword: [
-			sanctuary
-			forest
+		block: Fellowship
+		direction: Left
+		keywords: [
+			Forest
+			Sanctuary
 		]
-		direction: left
 		effects: {
 			type: trigger
 			optional: true
 			trigger: {
-				type: exerts
+				type: exerted
 				filter: your,companion
 				memorize: exertedComp
 			}
-			requires: {
-				type: Location
-				filter: self
-			}
+			requires: [
+				{
+					type: Location
+					filter: self
+				}
+				{
+					type: PerPhaseLimit
+					limit: 1
+				}
+			]
 			cost: {
 				type: exert
-				filter: choose(culture(elven),ally)
+				select: choose(culture(elven),ally)
 			}
-			effect: {
-				type: heal
-				filter: memory(exertedComp)
+			effect: [
+				{
+					type: heal
+					select: memory(exertedComp)
+				}
+				{
+					type: IncrementPerPhaseLimit
+					limit: 1
+				}
+			]
+		}
+		gametext: Forest. Sanctuary. Each time a companion exerts here, you may exert an [elven] ally to heal that companion (limit once per phase).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
-	
+
 	101_62: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S062.0_card.jpg
+			//parentId: 101_62
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U62
+			rarity: U
+			setNum: "V1"
+			cardNum: 62
+			style: Standard
+		}
 		title: Valley of the Anduin
+		unique: false
 		twilight: 6
-		type: site
+		type: Site
 		site: 7
-		block: fellowship
-		keyword: river
-		direction: left
+		block: Fellowship
+		direction: Right
+		keywords: River
 		effects: {
 			type: trigger
 			optional: false
@@ -179,19 +360,42 @@
 			}
 			effect: {
 				type: wound
-				filter: all(character,inSkirmish,unwounded)
+				select: all(character,inSkirmish,unwounded)
+			}
+		}
+		gametext: River. At the start of each skirmish phase, wound each unwounded character in that skirmish.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
-	
+
 	101_63: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S063.0_card.jpg
+			//parentId: 101_63
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U63
+			rarity: U
+			setNum: "V1"
+			cardNum: 63
+			style: Standard
+		}
 		title: Nen Hithoel
+		unique: false
 		twilight: 7
-		type: site
+		type: Site
 		site: 8
-		block: fellowship
-		keyword: river
-		direction: left
+		block: Fellowship
+		direction: Right
+		keywords: River
 		effects: {
 			type: trigger
 			optional: true
@@ -212,16 +416,39 @@
 				}
 			}
 		}
+		gametext: River. When the fellowship moves to Nen Hithoel, each Shadow player may draw a card for each companion over 4.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_64: {
+		cardInfo: {
+			imagePath: sets/vset1/LOTR-ENV1S064.0_card.jpg
+			//parentId: 101_64
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V1U64
+			rarity: U
+			setNum: "V1"
+			cardNum: 64
+			style: Standard
+		}
 		title: Amon Hen Ruins
+		unique: false
 		twilight: 9
-		type: site
+		type: Site
 		site: 9
-		block: fellowship
-		keyword: forest
-		direction: left
+		block: Fellowship
+		direction: Left
+		keywords: Forest
 		effects: [
 			{
 				type: modifier
@@ -235,5 +462,15 @@
 				}
 			}
 		]
+		gametext: Forest. Each minion is <b>damage +1</b> for each wound on that minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 }

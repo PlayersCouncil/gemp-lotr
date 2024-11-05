@@ -15,7 +15,7 @@ public class MemoryIs implements RequirementProducer {
         final String value = FieldUtils.getString(object.get("value"), "value");
 
         return (actionContext) -> {
-            String valueFromMemory = actionContext.getValueFromMemory(memory);
+            String valueFromMemory = actionContext.getValueFromMemory(memory, null);
             return valueFromMemory != null && valueFromMemory.equalsIgnoreCase(value);
         };
     }

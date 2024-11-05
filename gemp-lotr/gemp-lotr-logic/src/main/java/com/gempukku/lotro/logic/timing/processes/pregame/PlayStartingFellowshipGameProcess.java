@@ -23,7 +23,7 @@ public class PlayStartingFellowshipGameProcess implements GameProcess {
             String currentPlayer = game.getGameState().getCurrentPlayerId();
             if (currentPlayer != null && currentPlayer.equals(_playOrder.getFirstPlayer()))
                 game.getGameState().stopAffectingCardsForCurrentPlayer();
-            game.getGameState().startPlayerTurn(nextPlayer);
+            game.getGameState().startPlayerTurn(nextPlayer, false);
             game.getGameState().startAffectingCardsForCurrentPlayer(game);
 
             _nextProcess = new PlayerPlaysStartingFellowshipGameProcess(nextPlayer, new PlayStartingFellowshipGameProcess(_playOrder, _firstPlayer));

@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.official.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -34,29 +37,30 @@ public class Card_01_029_Tests
 	public void AncientEnmityStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Ancient Enmity
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Elven
-		* Twilight Cost: 0
-		* Type: event
-		* Subtype: Skirmish
-		* Game Text: Make an Elf strength +1. 
-		* 	If a minion loses this skirmish to that Elf, that minion's owner discards 2 cards at random from hand.
-		*/
+		 * Set: 1
+		 * Name: Ancient Enmity
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Skirmish
+		 * Game Text: Make an Elf strength +1.
+		 * 	If a minion loses this skirmish to that Elf, that minion's owner discards 2 cards at random from hand.
+		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var enmity = scn.GetFreepsCard("enmity");
+		var card = scn.GetFreepsCard("enmity");
 
-		assertFalse(enmity.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, enmity.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, enmity.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, enmity.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(enmity, Keyword.SKIRMISH));
-		assertEquals(0, enmity.getBlueprint().getTwilightCost());
+		assertEquals("Ancient Enmity", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+        assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test

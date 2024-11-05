@@ -1,5 +1,120 @@
 {
-
+	
+	51_303: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN01E303.1_card.jpg
+			//parentId: 1_303
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 1C303
+			rarity: C
+			setNum: "1"
+			cardNum: 303
+			style: Standard
+		}
+		title: Merry
+		subtitle: From O'er the Brandywine
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,hasAttached(weapon)
+					amount: 2
+				}
+			}
+			{
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					type: ModifyStrength
+					select: self
+					amount: {
+						type: ForEachYouCanSpot
+						filter: hand weapon
+					}
+				}
+			}
+		]
+		gametext: While Merry bears a weapon, he is strength +2.<br>Skirmish: Exert Merry to make him strength +1 for each hand weapon you can spot (limit +3).
+		lore: "'I don't know why he's so upset, it's only a few carrots... my point is, he's overreacting.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+		51_310: {
+		cardInfo: {
+			imagePath: errata/LOTR-EN01E310.1_card.jpg
+			//parentId: 1_310
+			//One of: Variant, Errata, Reprint
+			//parentType: Errata
+			//parentPath: errata/pc
+			version: 1
+			collInfo: 1R310
+			rarity: R
+			setNum: "1"
+			cardNum: 310
+			style: Standard
+		}
+		title: Sam
+		subtitle: Faithful Companion
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Frodo
+		resistance: 5
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: PutCardsFromDeckIntoHand
+				select: choose(culture(shire),item)
+				reveal: true
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert Sam to take a [shire] item into hand from your draw deck (limit once per turn).<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
+		lore: Mr. Frodo's not going anywhere without me!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	# 51_311: {
 	# 	cardInfo: {
 	# 	# 		imagePath: errata/51_311.jpg
@@ -45,7 +160,7 @@
 	# 				}
 	# 				{
 	# 					type: exert
-	# 					filter: choose(another,companion)
+	# 					select: choose(another,companion)
 	# 				}
 	# 			]
 	# 			effect: {
@@ -112,11 +227,11 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 					}
 					{
 						type: exert
-						filter: choose(another,companion)
+						select: choose(another,companion)
 					}
 				]
 				effect: [
@@ -125,8 +240,8 @@
 						amount: 1
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: not
 							requires: {
 								type: or
@@ -144,15 +259,15 @@
 								]
 							}
 						}
-						effect: {
+						true: {
 							type: exert
-							filter: self
+							select: self
 						}
 					}
 				]
 			}
 			{
-				type: ActivatedTrigger
+				type: Response
 				trigger: {
 					type: killed
 					filter: name(Frodo),ring bearer
@@ -203,7 +318,7 @@
 			]
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: [
 				{
@@ -219,10 +334,9 @@
 						type: cardPhaseLimit
 						limit: 2
 						amount: {
-							type: forEachMatchingInMemory
+							type: forEachInMemory
 							memory: revealedCards
 							filter: orc
-							limit: 2
 						}
 					}
 				}
@@ -318,7 +432,7 @@
 	# 			type: ExtraCost
 	# 			cost: {
 	# 				type: exert
-	# 				filter: choose(or(title(Merry),title(Pippin)))
+	# 				select: choose(or(title(Merry),title(Pippin)))
 	# 			}
 	# 		}
 	# 		{

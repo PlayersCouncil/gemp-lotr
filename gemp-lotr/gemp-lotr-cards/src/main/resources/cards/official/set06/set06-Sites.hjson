@@ -1,0 +1,292 @@
+{
+
+	6_115: {
+		cardInfo: {
+			imagePath: decipher/LOTR06115.jpg
+			//parentId: 6_115
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U115
+			rarity: U
+			setNum: "6"
+			cardNum: 115
+			style: Standard
+		}
+		title: Rocks of Emyn Muil
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Towers
+		direction: Left
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: PlayCardFromHand
+					select: choose(companion,signet(Frodo))
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
+		]
+		gametext: <b>Fellowship:</b> Play a companion with the Frodo signet to remove a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_116: {
+		cardInfo: {
+			imagePath: decipher/LOTR06116.jpg
+			//parentId: 6_116
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U116
+			rarity: U
+			setNum: "6"
+			cardNum: 116
+			style: Standard
+		}
+		title: Westfold
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Towers
+		direction: Left
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: choose(name(Aragorn))
+					times: 2
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(companion,signet(Aragorn))
+					showAll: true
+					shuffle: true
+				}
+			}
+		]
+		gametext: <b>Fellowship:</b> Exert Aragorn twice to play a companion with the Aragorn signet from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_117: {
+		cardInfo: {
+			imagePath: decipher/LOTR06117.jpg
+			//parentId: 6_117
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U117
+			rarity: U
+			setNum: "6"
+			cardNum: 117
+			style: Standard
+		}
+		title: Meduseld
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: Towers
+		direction: Left
+		keywords: Sanctuary
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: choose(companion,signet(Gandalf))
+					count: 3
+				}
+				effect: {
+					type: playCardFromDeadPile
+					select: choose(unbound,companion)
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Exert 3 companions with the Gandalf signet to play an unbound companion from your dead pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_118: {
+		cardInfo: {
+			imagePath: decipher/LOTR06118.jpg
+			//parentId: 6_118
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U118
+			rarity: U
+			setNum: "6"
+			cardNum: 118
+			style: Standard
+		}
+		title: Hornburg Hall
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: Towers
+		direction: Right
+		keywords: Sanctuary
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				requires: {
+					type: canSpot
+					filter: companion,signet(Théoden)
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: all(any)
+				}
+				effect: {
+					type: drawCards
+					count: 4
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Spot 3 companions with the Théoden signet and discard your hand to draw 4 cards.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_119: {
+		cardInfo: {
+			imagePath: decipher/LOTR06119.jpg
+			//parentId: 6_119
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U119
+			rarity: U
+			setNum: "6"
+			cardNum: 119
+			style: Standard
+		}
+		title: Valley of Saruman
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: Towers
+		direction: Right
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: all(ally)
+				}
+			}
+		]
+		gametext: When the fellowship moves to this site, discard all allies.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_120: {
+		cardInfo: {
+			imagePath: decipher/LOTR06120.jpg
+			//parentId: 6_120
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 6U120
+			rarity: U
+			setNum: "6"
+			cardNum: 120
+			style: Standard
+		}
+		title: Saruman's Laboratory
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: Towers
+		direction: Left
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: your,minion
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: preventWound
+					select: choose(your,minion)
+				}
+			}
+		]
+		gametext: <b>Response:</b> If your minion is about to take a wound, discard 2 cards from hand to prevent that wound.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

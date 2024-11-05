@@ -57,7 +57,7 @@ public class Card_18_082_ErrataTests
 		assertEquals(Side.SHADOW, grond.getBlueprint().getSide());
 		assertEquals(Culture.ORC, grond.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, grond.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(grond, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(grond, Keyword.SUPPORT_AREA));
 		assertEquals(3, grond.getBlueprint().getTwilightCost());
 	}
 
@@ -133,14 +133,9 @@ public class Card_18_082_ErrataTests
 		assertEquals(Zone.DECK, chaff1.getZone());
 		assertEquals(Zone.DECK, shadow1.getZone());
 
-		//7 cards in starting deck - 3 placed in hand + 2 shuffled in from hand
-		assertEquals(6, scn.ShadowGetADParamAsList("blueprintId").size());
-		assertTrue(scn.ShadowDecisionAvailable("Cards in deck"));
-
-		scn.ShadowDismissRevealedCards();
 		assertTrue(scn.ShadowDecisionAvailable("Choose card"));
 		// 5 starting freeps cards - 2 put in hand + 1 shuffled into deck
-		assertEquals(4, scn.ShadowGetADParamAsList("blueprintId").size());
+        assertEquals(4, scn.ShadowGetSelectableCount());
 		assertEquals(Zone.DECK, chaff3.getZone());
 		assertEquals(Zone.DECK, chaff4.getZone());
 		scn.ShadowChooseCardBPFromSelection(chaff3, chaff4);

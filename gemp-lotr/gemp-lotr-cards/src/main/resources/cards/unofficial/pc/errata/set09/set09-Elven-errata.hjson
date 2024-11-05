@@ -55,7 +55,7 @@
 	# 			},
 	# 			effect: {
 	# 				type: wound
-	# 				filter: choose(orc)
+	# 				select: choose(orc)
 	# 			}
 	# 		}
 	# 	]
@@ -97,7 +97,7 @@
 		strength: 3
 		vitality: 3
 		resistance: 4
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: {
 			type: modifier
 			modifier: {
@@ -162,11 +162,11 @@
 							type: costToEffect
 							cost: {
 								type: exert
-								filter: self
+								select: self
 							}
 							effect: {
 								type: modifyStrength
-								filter: choose(nazgul,inSkirmishAgainst(self))
+								select: choose(nazgul,inSkirmishAgainst(self))
 								amount: {
 									type: twilightCostInMemory
 									memory: revealedCard

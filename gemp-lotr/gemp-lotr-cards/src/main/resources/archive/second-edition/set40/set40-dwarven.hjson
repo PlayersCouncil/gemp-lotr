@@ -26,19 +26,19 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToDiscard
-					source: shadow
+					source: side(shadow)
 					filter: your,culture(dwarven),condition
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: preventDiscard
-					filter: choose(your,culture(dwarven),condition)
+					select: choose(your,culture(dwarven),condition)
 				}
 			}
 		]
@@ -48,7 +48,7 @@
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		gametext: [
 			Exert a Dwarf to wound up to 2 Goblins.
 		]
@@ -57,12 +57,12 @@
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf)
+				select: choose(dwarf)
 			}
 			effect: {
 				type: wound
 				count: 0-2
-				filter: choose(goblin)
+				select: choose(goblin)
 			}
 		}
 	}
@@ -71,7 +71,7 @@
 		culture: dwarven
 		twilight: 2
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		gametext: [
 			If Gimli is not assigned to skirmish, exert him and discard 2 cards stacked on a {dwarven} condition to have him replace another Dwarf in skirmish. Gimli is strength +2 and \[keyword]damage +1[/keyword] while in that skirmish.
 		]
@@ -81,7 +81,7 @@
 			cost: [
 				{
 					type: exert
-					filter: choose(name(Gimli),notAssignedToSkirmish)
+					select: choose(name(Gimli),notAssignedToSkirmish)
 					memorize: exertedGimli
 				}
 				{
@@ -98,12 +98,12 @@
 				}
 				{
 					type: modifyStrength
-					filter: memory(exertedGimli)
+					select: memory(exertedGimli)
 					amount: 2
 				}
 				{
 					type: addKeyword
-					filter: memory(exertedGimli)
+					select: memory(exertedGimli)
 					keyword: damage+1
 				}
 			]
@@ -114,7 +114,7 @@
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		gametext: [
 			Stack the top 3 cards of your draw deck on a {dwarven} support area condition to make a Dwarf take no more than one wound in a skirmish.
 		]
@@ -129,7 +129,7 @@
 			}
 			effect: {
 				type: DisableWoundsOver
-				filter: choose(dwarf)
+				select: choose(dwarf)
 				wounds: 1
 			}
 		}
@@ -139,7 +139,7 @@
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		gametext: [
 			To play, exert 2 Dwarves and discard 2 cards stacked on a {dwarven} condition.
 			Each exerted Dwarf is strength +2 until the regroup phase.
@@ -151,7 +151,7 @@
 				{
 					type: exert
 					count: 2
-					filter: choose(dwarf)
+					select: choose(dwarf)
 					memorize: exertedDwarves
 				}
 				{
@@ -162,7 +162,7 @@
 			]
 			effect: {
 				type: modifyStrength
-				filter: memory(exertedDwarves)
+				select: memory(exertedDwarves)
 				amount: 2
 				until: start(regroup)
 			}
@@ -173,7 +173,7 @@
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		gametext: [
 			Make a Dwarf strength +2 (or +3 if there is a card stacked on a {dwarven} condition.)
 		]
@@ -182,9 +182,9 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(dwarf)
+				select: choose(dwarf)
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: canSpot
 						filter: culture(dwarven),condition,hasStacked(any)
@@ -220,7 +220,7 @@
 			}
 			effect: {
 				type: modifyStrength
-				filter: self
+				select: self
 				amount: 1
 			}
 		}
@@ -252,7 +252,7 @@
 			}
 			effect: {
 				type: wound
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 	}
@@ -270,7 +270,7 @@
 		]
 		lore: Dwarven-smiths forge bracers for fit and agility.
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: aboutToTakeWound
 				filter: bearer
@@ -283,12 +283,12 @@
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: {
 				type: preventWound
-				filter: memory(bearer)
+				select: memory(bearer)
 			}
 		}
 	}
@@ -297,16 +297,16 @@
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		gametext: Exert X Dwarves twice to take X {dwarven} cards stacked on {dwarven} condition into hand (and draw X cards if the fellowship is at a mountain or underground site.)
 		lore: Rage often grips Dwarves in the heat of battle.
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				count: 0-100
+				count: any
 				times: 2
-				filter: choose(dwarf)
+				select: choose(dwarf)
 				memorize: exertedDwarves
 			}
 			effect: [
@@ -316,16 +316,16 @@
 						type: forEachInMemory
 						memory: exertedDwarves
 					}
-					filter: choose(culture(dwarven))
+					select: choose(culture(dwarven))
 					on: culture(dwarven),condition
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: location
 						filter: or(mountain,underground)
 					}
-					effect: {
+					true: {
 						type: drawCards
 						count: {
 							type: forEachInMemory
@@ -352,12 +352,9 @@
 				filter: dwarf
 				keyword: damage
 				amount: {
-					type: limit
-					limit: 2
-					value: {
-						type: countStacked
-						on: self
-					}
+                    type: forEachStacked
+                    on: self
+                    limit: 2
 				}
 			}
 		}
@@ -410,12 +407,12 @@
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: {
 				type: modifyStrength
-				filter: memory(bearer)
+				select: memory(bearer)
 				amount: 1
 			}
 		}
@@ -425,7 +422,7 @@
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		gametext: Exert a Dwarf and discard a card stacked on a {dwarven} condition to remove a burden.
 		lore: Many songs were sung in the grand halls of the Dwarves.
 		effects: {
@@ -433,7 +430,7 @@
 			cost: [
 				{
 					type: exert
-					filter: choose(dwarf)
+					select: choose(dwarf)
 				}
 				{
 					type: discardStackedCards
@@ -484,11 +481,11 @@
 				cost: {
 					type: stackCardsFromHand
 					where: choose(culture(dwarven),support area,condition)
-					filter: choose(side(free people))
+					select: choose(side(free people))
 				}
 				effect: {
 					type: putCardsFromDiscardIntoHand
-					filter: choose(culture(dwarven),event)
+					select: choose(culture(dwarven),event)
 				}
 			}
 		]
@@ -582,7 +579,7 @@
 				effect: {
 					type: stackCardsFromDiscard
 					where: choose(culture(dwarven),support area,condition)
-					filter: choose(culture(dwarven),event)
+					select: choose(culture(dwarven),event)
 				}
 			}
 		]
@@ -631,24 +628,24 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: modifyStrength
-						filter: choose(dwarf)
+						select: choose(dwarf)
 						amount: 1
 						memorize: chosenDwarf
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: location
 							filter: underground
 						}
-						effect: {
+						true: {
 							type: addKeyword
-							filter: memory(chosenDwarf)
+							select: memory(chosenDwarf)
 							keyword: damage+1
 						}
 					}
@@ -661,7 +658,7 @@
 		culture: dwarven
 		twilight: 2
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		gametext: Make a Dwarf strength +2 (and \[keyword]damage +1[/keyword] if you can spot a card stacked on a {dwarven} condition.)
 		lore: Gimli slew many Orcs and other fell creatures during his battles.
 		effects: {
@@ -670,18 +667,18 @@
 				{
 					type: modifyStrength
 					amount: 2
-					filter: choose(dwarf)
+					select: choose(dwarf)
 					memorize: dwarf
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: canSpot
 						filter: culture(dwarven),condition,hasStacked(any)
 					}
-					effect: {
+					true: {
 						type: addKeyword
-						filter: memory(dwarf)
+						select: memory(dwarf)
 						keyword: damage+1
 					}
 				}
@@ -693,25 +690,25 @@
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		gametext: Exert a Dwarf to make him strength +3 and \[keyword]damage +1[/keyword].
 		lore: Dwarves strike with brute force, crushing their foes beneath the weight of heavy axes.
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf)
+				select: choose(dwarf)
 				memorize: dwarf
 			}
 			effect: [
 				{
 					type: modifyStrength
-					filter: memory(dwarf)
+					select: memory(dwarf)
 					amount: 3
 				}
 				{
 					type: addKeyword
-					filter: memory(dwarf)
+					select: memory(dwarf)
 					keyword: damage+1
 				}
 			]
@@ -746,11 +743,11 @@
 				cost: {
 					type: discardStackedCards
 					on: self
-					filter: choose(side(free people))
+					select: choose(side(free people))
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(dwarf)
+					select: choose(dwarf)
 					amount: 1
 				}
 			}
@@ -761,7 +758,7 @@
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: fellowship
+		timeword: fellowship
     gametext: Stack a Free Peoples card from hand on a {dwarven} support are condition to draw a card.
     lore: “The wealth of Moria was not in gold, or jewels, but in mithril.”
     effects: {
@@ -769,7 +766,7 @@
       cost: {
         type: stackCardsFromHand
         where: choose(culture(dwarven),support area,condition)
-        filter: choose(side(free people))
+        select: choose(side(free people))
       }
       effect: {
         type: drawCards
@@ -781,7 +778,7 @@
     culture: dwarven
     twilight: 2
     type: event
-    keyword: maneuver
+    timeword: maneuver
     gametext: Until the start of the regroup phase, each time you play a {dwarven} event, stack that event on a {dwarven} support area condition.
     lore: “Stay close young Hobbits!”
     effects: {
@@ -791,7 +788,7 @@
         until: start(regroup)
         trigger: {
           type: played
-          filter: culture(dwarven),skirmish,event
+          filter: culture(dwarven),timeword(skirmish),event
         }
         effect: {
           type: stackPlayedEvent
@@ -805,7 +802,7 @@
     culture: dwarven
     twilight: 0
     type: event
-    keyword: skirmish
+    timeword: skirmish
     gametext: [
       Make a Dwarf strength +1.
       If that Dwarf wins a skirmish, the Shadow player must discard a Shadow condition or Shadow possession.
@@ -816,7 +813,7 @@
       effect: [
         {
           type: modifyStrength
-          filter: choose(dwarf)
+          select: choose(dwarf)
           amount: 1
           memorize: chosenDwarf
         }
@@ -829,7 +826,7 @@
           effect: {
             type: discard
             player: shadowPlayer
-            filter: choose(side(shadow),or(condition,possession))
+            select: choose(side(shadow),or(condition,possession))
           }
         }
       ]
@@ -857,7 +854,7 @@
       }
       effect: {
         type: heal
-        filter: choose(dwarf,companion)
+        select: choose(dwarf,companion)
       }
     }
   }
@@ -881,7 +878,7 @@
         effect: {
           type: stackCardsFromHand
           where: self
-          filter: choose(culture(dwarven))
+          select: choose(culture(dwarven))
         }
       }
       {
@@ -894,7 +891,7 @@
         }
         effect: {
           type: playCardFromDiscard
-          filter: choose(culture(dwarven),skirmish,event)
+          select: choose(culture(dwarven),timeword(skirmish),event)
         }
       }
       {
@@ -909,7 +906,7 @@
           }
           {
             type: exert
-            filter: choose(dwarf)
+            select: choose(dwarf)
             times: 2
             memorize: exertedDwarf
           }
@@ -952,26 +949,23 @@
     culture: dwarven
     twilight: 2
     type: event
-    keyword: archery
+    timeword: archery
     gametext: Discard a {dwarven} condition to make the minion archery total -X, where X is the number of cards that were stacked on that condition.
     lore: Arrows are of little avail against the stone structures of the Dwarves.
     effects: {
       type: event
       cost: {
         type: discard
-        filter: choose(culture(dwarven),condition)
+        select: choose(culture(dwarven),condition)
         memorizeStackedCards: stackedCards
       }
       effect: {
         type: modifyArcheryTotal
         side: shadow
         amount: {
-          type: multiply
-          source: {
             type: forEachInMemory
             memory: stackedCards
-          }
-          multiplier: -1
+            multiplier: -1
         }
       }
     }
@@ -1028,7 +1022,7 @@
       effect: {
         type: exert
         player: shadowPlayer
-        filter: choose(minion)
+        select: choose(minion)
       }
     }
   }

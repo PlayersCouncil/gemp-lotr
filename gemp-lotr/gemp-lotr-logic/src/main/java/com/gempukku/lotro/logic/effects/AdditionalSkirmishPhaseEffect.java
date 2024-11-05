@@ -7,15 +7,17 @@ import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.actions.SkirmishPhaseAction;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 public class AdditionalSkirmishPhaseEffect extends UnrespondableEffect {
     private final PhysicalCard _fpCard;
     private final Set<PhysicalCard> _shadowCards;
 
-    public AdditionalSkirmishPhaseEffect(PhysicalCard fpCard, Set<PhysicalCard> shadowCards) {
+    public AdditionalSkirmishPhaseEffect(PhysicalCard fpCard, Collection<? extends PhysicalCard> shadowCards) {
         _fpCard = fpCard;
-        _shadowCards = shadowCards;
+        _shadowCards = new HashSet<>(shadowCards);
     }
 
     @Override

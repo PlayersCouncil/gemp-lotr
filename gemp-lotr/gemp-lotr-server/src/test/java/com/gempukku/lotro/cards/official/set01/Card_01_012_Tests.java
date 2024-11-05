@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -34,47 +33,51 @@ public class Card_01_012_Tests
 	public void GimliStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: *Gimli, Dwarf of Erebor
-		* Side: Free Peoples
-		* Culture: Dwarven
-		* Twilight Cost: 2
-		* Type: companion
-		* Subtype: Dwarf
-		* Strength: 6
-		* Vitality: 3
-		* Signet: aragorn
-		* Game Text: <b>Damage +1</b> 
-		* 	 <b>Fellowship: </b> If the twilight pool has fewer than 2 twilight tokens, add (2) and place a card from hand beneath your draw deck.
-		*/
+		 * Set: 1
+		 * Name: Gimli, Dwarf of Erebor
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Dwarf
+		 * Strength: 6
+		 * Vitality: 3
+		 * Resistance: 6
+		 * Signet: Aragorn
+		 * Game Text: <b>Damage +1</b>
+		 * 	 <b>Fellowship: </b> If the twilight pool has fewer than 2 twilight tokens, add (2) and place a card from hand beneath your draw deck.
+		 */
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
+		var card = scn.GetFreepsCard("gimli");
 
-		assertTrue(gimli.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, gimli.getBlueprint().getSide());
-		assertEquals(Culture.DWARVEN, gimli.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, gimli.getBlueprint().getCardType());
-		assertEquals(Race.DWARF, gimli.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
-		assertEquals(2, gimli.getBlueprint().getTwilightCost());
-		assertEquals(6, gimli.getBlueprint().getStrength());
-		assertEquals(3, gimli.getBlueprint().getVitality());
-		assertEquals(6, gimli.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, gimli.getBlueprint().getSignet());
+		assertEquals("Gimli", card.getBlueprint().getTitle());
+		assertEquals("Dwarf of Erebor", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.DWARF, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet());
 	}
 
 	@Test
 	public void GimliAbilityDoesntWorkWith2Twilight() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		PhysicalCardImpl card1 = scn.GetFreepsCard("card1");
-		PhysicalCardImpl card2 = scn.GetFreepsCard("card2");
+		var gimli = scn.GetFreepsCard("gimli");
+		var card1 = scn.GetFreepsCard("card1");
+		var card2 = scn.GetFreepsCard("card2");
 		scn.FreepsMoveCardToHand(gimli);
 		scn.FreepsMoveCardToHand(card1);
 
@@ -88,12 +91,12 @@ public class Card_01_012_Tests
 	@Test
 	public void GimliAbilityAdds2TwilightAndPlacesOnBottom() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		PhysicalCardImpl card1 = scn.GetFreepsCard("card1");
-		PhysicalCardImpl card2 = scn.GetFreepsCard("card2");
-		PhysicalCardImpl card3 = scn.GetFreepsCard("card3");
+		var gimli = scn.GetFreepsCard("gimli");
+		var card1 = scn.GetFreepsCard("card1");
+		var card2 = scn.GetFreepsCard("card2");
+		var card3 = scn.GetFreepsCard("card3");
 		scn.FreepsMoveCharToTable(gimli);
 		scn.FreepsMoveCardToHand(card1);
 		scn.FreepsMoveCardsToBottomOfDeck(card3);

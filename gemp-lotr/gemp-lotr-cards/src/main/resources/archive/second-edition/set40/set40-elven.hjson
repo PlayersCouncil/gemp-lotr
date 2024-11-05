@@ -4,11 +4,7 @@
 		culture: elven
 		twilight: 2
 		type: event
-		keyword: archery
-		requires: {
-			type: canSpot
-			filter: elf,archer,companion
-		}
+		timeword: archery
 		gametext: [
 			To play, spot an Elf archer companion.
 			Make a fellowship archery total -X (to a minimum of 0) to discard X shadow conditions.
@@ -16,18 +12,38 @@
 		lore: The arrows of the Galadhrim can pierce more than just flesh.
 		effects: {
 			type: event
-			cost: {
-				type: reduceArcheryTotal
-				side: free people
-				memorize: reducedBy
-			}
+            requires: {
+                type: canSpot
+                filter: elf,archer,companion
+            }
+			cost: [
+			    {
+                    type: chooseANumber
+                    text: Choose X (reduce fellowship archery total)
+                    from: 0
+                    to: {
+                        type: archeryTotal
+                        side: free people
+                    }
+                    memorize: x
+                }
+                {
+                    type: modifyArcheryTotal
+                    side: free people
+                    amount: {
+                        type: fromMemory
+                        memory: x
+                        multiplier: -1
+                    }
+                }
+			]
 			effect: {
 				type: discard
 				count: {
 					type: fromMemory
-					memory: reducedBy
+					memory: x
 				}
-				filter: choose(side(shadow),condition)
+				select: choose(side(shadow),condition)
 			}
 		}
 	}
@@ -90,7 +106,7 @@
 				}
 				effect: {
 					type: heal
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -98,11 +114,11 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: heal
-					filter: choose(rivendell,ally)
+					select: choose(rivendell,ally)
 				}
 			}
 		]
@@ -131,11 +147,11 @@
 			optional: true
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: {
 				type: wound
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 	}
@@ -146,10 +162,6 @@
 		twilight: 1
 		type: condition
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: elf,companion
-		}
 		gametext: [
 			To play, spot an Elf companion.
 			Each time a Nazgûl is played, that Nazgûl must exert.
@@ -157,6 +169,13 @@
 		]
 		lore: “Nin o Chithaeglir, lasto beth daer, Rimmo nin Bruinen, dan in Ulair!”
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf,companion
+                }
+		    }
 			{
 				type: trigger
 				trigger: {
@@ -166,7 +185,7 @@
 				}
 				effect: {
 					type: exert
-					filter: memory(playedNazgul)
+					select: memory(playedNazgul)
 				}
 			}
 			{
@@ -177,7 +196,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -193,7 +212,7 @@
 		keyword: lothlorien
 		strength: 6
 		vitality: 3
-		allyHome: second ed,3
+		allyHome: 3E
 		gametext: \[keyword]Maneuver:[/keyword] Exert celeborn to reveal the top card of your draw deck. If it is an {elven} card, you may discard it to wound a minion.
 		lore: “Every league you travel South the danger will increase.”
 		effects: [
@@ -202,7 +221,7 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
@@ -210,13 +229,13 @@
 						memorize: revealedCard
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryMatches
 							memory: revealedCard
 							filter: culture(elven)
 						}
-						effect: {
+						true: {
 							type: optional
 							text: Do you want to discard the top card of deck to wound a minion?
 							effect: {
@@ -228,7 +247,7 @@
 								}
 								effect: {
 									type: wound
-									filter: choose(minion)
+									select: choose(minion)
 								}
 							}
 						}
@@ -252,12 +271,9 @@
 			{
 				type: modifyOwnCost
 				amount: {
-					type: multiply
+                    type: forEachYouCanSpot
+                    filter: unwounded,culture(elven),archer,companion
 					multiplier: -1
-					source: {
-						type: forEachYouCanSpot
-						filter: unwounded,culture(elven),archer,companion
-					}
 				}
 			}
 			{
@@ -267,11 +283,11 @@
 					{
 						type: exert
 						count: 2
-						filter: choose(culture(elven),archer,companion)
+						select: choose(culture(elven),archer,companion)
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 				effect: {
@@ -287,11 +303,7 @@
 		culture: elven
 		twilight: 2
 		type: event
-		keyword: maneuver
-		requires: {
-			type: canSpot
-			filter: elf
-		}
+		timeword: maneuver
 		gametext: [
 			To play spot an Elf.
 			Until the regroup phase, each wounded minion loses [keyword]fierce[/keyword] and cannot gain [keyword]fierce[/keyword].
@@ -299,10 +311,14 @@
 		lore: “Bring him down!”
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                filter: elf
+            }
 			effect: {
 				type: removeKeyword
 				until: start(regroup)
-				filter: all(wounded,minion)
+				select: all(wounded,minion)
 				keyword: fierce
 			}
 		}
@@ -318,7 +334,7 @@
 		keyword: rivendell
 		strength: 8
 		vitality: 4
-		allyHome: second ed,3
+		allyHome: 3E
 		gametext: [
 			At the start of each of your turns, heal each Rivendell ally.
 			\[keyword]Regroup:[/keyword] Exert Elrond twice to reveal the top card of your draw deck. If it is an {elven} card, you may discard it to heal a companion. If it is a Shadow card, you may discard it to discard a Shadow condition.
@@ -332,7 +348,7 @@
 				}
 				effect: {
 					type: heal
-					filter: all(rivendell,ally)
+					select: all(rivendell,ally)
 				}
 			}
 			{
@@ -341,7 +357,7 @@
 				cost: {
 					type: exert
 					times: 2
-					filter: self
+					select: self
 				}
 				effect: [
 					{
@@ -349,13 +365,13 @@
 						memorize: revealedCard
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryMatches
 							memory: revealedCard
 							filter: culture(elven)
 						}
-						effect: {
+						true: {
 							type: optional
 							text: Do you want to discard the top card of deck to heal a companion?
 							effect: {
@@ -367,19 +383,19 @@
 								}
 								effect: {
 									type: heal
-									filter: choose(companion)
+									select: choose(companion)
 								}
 							}
 						}
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryMatches
 							memory: revealedCard
 							filter: side(shadow)
 						}
-						effect: {
+						true: {
 							type: optional
 							text: Do you want to discard the top card of deck to discard a Shadow condition?
 							effect: {
@@ -391,7 +407,7 @@
 								}
 								effect: {
 									type: discard
-									filter: choose(side(shadow),condition)
+									select: choose(side(shadow),condition)
 								}
 							}
 						}
@@ -426,7 +442,7 @@
 		culture: elven
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		gametext: [
 			Make an Elf strength +1.
 			If that Elf wins this skirmish, you may place up to 2 {elven} cards from your discard pile on top of your draw deck.
@@ -437,7 +453,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(elf)
+					select: choose(elf)
 					amount: 1
 					memorize: chosenElf
 				}
@@ -450,7 +466,7 @@
 					effect: {
 						type: putCardsFromDiscardOnTopOfDeck
 						count: 0-2
-						filter: choose(culture(elven))
+						select: choose(culture(elven))
 					}
 				}
 			]
@@ -462,44 +478,49 @@
 		twilight: 0
 		type: condition
 		keyword: support area
-		requires: {
-			type: canSpot
-			count: 2
-			filter: elf
-		}
 		gametext: [
 			To play, spot 2 Elves.
 			\[keyword]Fellowship:[/keyword] Add {1} to look at the top card of your draw deck. You may discard this condition to discard that card.
 		]
 		lore: “The White Wizard approaches...”
-		effects: {
-			type: activated
-			phase: fellowship
-			cost: {
-				type: addTwilight
-				amount: 1
-			}
-			effect: [
-				{
-					type: lookAtTopCardsOfDrawDeck
-				}
-				{
-					type: optional
-					text: Would you like to discard this condition to discard that card?
-					effect: {
-						type: costToEffect
-						cost: {
-							type: discard
-							filter: self
-						}
-						effect: {
-							type: discardTopCardsFromDeck
-							forced: false
-						}
-					}
-				}
-			]
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    count: 2
+                    filter: elf
+                }
+		    }
+            {
+                type: activated
+                phase: fellowship
+                cost: {
+                    type: addTwilight
+                    amount: 1
+                }
+                effect: [
+                    {
+                        type: lookAtTopCardsOfDrawDeck
+                    }
+                    {
+                        type: optional
+                        text: Would you like to discard this condition to discard that card?
+                        effect: {
+                            type: costToEffect
+                            cost: {
+                                type: discard
+                                select: self
+                            }
+                            effect: {
+                                type: discardTopCardsFromDeck
+                                forced: false
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
 	}
 	40_45: {
 		title: Galadriel
@@ -512,7 +533,7 @@
 		keyword: lothlorien
 		strength: 3
 		vitality: 3
-		allyHome: second ed,3
+		allyHome: 3E
 		gametext: [
 			At the start of each of your turns, heal each Lothlórien ally.
 			\[keyword]Skirmish:[/keyword] Exert Galadriel to reveal the top card of your draw deck. If it is an {elven} card, you may discard it to make a minion skirmishing an Elf strength -2.
@@ -526,7 +547,7 @@
 				}
 				effect: {
 					type: heal
-					filter: all(lothlorien,ally)
+					select: all(lothlorien,ally)
 				}
 			}
 			{
@@ -534,7 +555,7 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
@@ -542,13 +563,13 @@
 						memorize: revealedCard
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryMatches
 							memory: revealedCard
 							filter: culture(elven)
 						}
-						effect: {
+						true: {
 							type: optional
 							text: Do you want to discard the top card of deck to make a minion skirmishing an elf strength -2?
 							effect: {
@@ -561,7 +582,7 @@
 								effect: {
 									type: modifyStrength
 									amount: -2
-									filter: choose(minion,inSkirmishAgainst(elf))
+									select: choose(minion,inSkirmishAgainst(elf))
 								}
 							}
 						}
@@ -575,14 +596,14 @@
 		culture: elven
 		twilight: 1
 		type: event
-		keyword: regroup
+		timeword: regroup
 		gametext: Exert Galadriel and reveal the top card of your draw deck to discard a Shadow condition (or 2 Shadow conditions if you reveal an {elven} card).
 		lore: “Even the smallest person can change the course of the future.”
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(name(Galadriel))
+				select: choose(name(Galadriel))
 			}
 			effect: [
 				{
@@ -591,9 +612,9 @@
 				}
 				{
 					type: discard
-					filter: choose(side(shadow),condition)
+					select: choose(side(shadow),condition)
 					count: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: memoryMatches
 							memory: revealedCard
@@ -617,11 +638,6 @@
 		strength: 9
 		vitality: 3
 		resistance: 9
-		requires: {
-			type: canSpot
-			count: 3
-			filter: elf
-		}
 		gametext: [
 			To play, spot 3 Elves.
 			While skirmishing a Nazgûl, Glorfindel is not overwhelmed unless his strength is tripled.
@@ -629,6 +645,14 @@
 		]
 		lore: “... on his brow sat wisdom, and in his hand was strength.”
 		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    count: 3
+                    filter: elf
+                }
+		    }
 			{
 				type: modifier
 				modifier: {
@@ -641,11 +665,11 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: removeKeyword
-					filter: choose(nazgul,inSkirmishAgainst(self))
+					select: choose(nazgul,inSkirmishAgainst(self))
 					until: start(regroup)
 					keyword: fierce
 				}
@@ -663,34 +687,39 @@
 		keyword: rivendell
 		strength: 4
 		vitality: 3
-		allyHome: second ed,3
-		requires: {
-			type: canSpot
-			filter: elf
-		}
+		allyHome: 3E
 		gametext: [
 			To play, spot an Elf.
 			Each time you reveal an {elven} card from the top of your draw deck, you may exert Golradir to make an Orc strength -2 until the regroup phase.
 		]
 		lore: Golradir was among those on hand when the fellowship departed Imladris.
-		effects: {
-			type: trigger
-			trigger: {
-				type: revealsCardFromTopOfDrawDeck
-				filter: culture(elven)
-			}
-			optional: true
-			cost: {
-				type: exert
-				filter: self
-			}
-			effect: {
-				type: modifyStrength
-				filter: choose(orc)
-				amount: -2
-				until: start(regroup)
-			}
-		}
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: elf
+                }
+		    }
+            {
+                type: trigger
+                trigger: {
+                    type: revealsCardFromTopOfDrawDeck
+                    filter: culture(elven)
+                }
+                optional: true
+                cost: {
+                    type: exert
+                    select: self
+                }
+                effect: {
+                    type: modifyStrength
+                    select: choose(orc)
+                    amount: -2
+                    until: start(regroup)
+                }
+            }
+        ]
 	}
 	40_49: {
 		title: Gwemegil
@@ -732,19 +761,19 @@
 		culture: elven
 		twilight: 1
 		type: event
-		keyword: skirmish
-		requires: {
-			type: canSpot
-			count: 3
-			filter: elf
-		}
+		timeword: skirmish
 		gametext: Spot 3 Elves to make a minion skirmishing and Elf strength -3.
 		lore: “We still remember, we who dwell...”
 		effects: {
 			type: event
+            requires: {
+                type: canSpot
+                count: 3
+                filter: elf
+            }
 			effect: {
 				type: modifyStrength
-				filter: choose(minion,inSkirmishAgainst(elf))
+				select: choose(minion,inSkirmishAgainst(elf))
 				amount: -3
 			}
 		}
@@ -775,16 +804,16 @@
 			optional: true
       cost: {
         type: exert
-        filter: self
+        select: self
       }
       effect: [
         {
           type: wound
-          filter: choose(minion)
+          select: choose(minion)
         }
         {
-          type: DisableArcheryTotalContribution
-          filter: self
+            type: disableArcheryTotalContribution
+            select: self
         }
       ]
     }
@@ -815,7 +844,7 @@
       }
       cost: {
         type: exert
-        filter: self
+        select: self
       }
       effect: {
         type: modifyArcheryTotal
@@ -831,40 +860,45 @@
     twilight: 1
     type: condition
     keyword: support area
-    requires: {
-      type: canSpot
-      filter: elf
-    }
     gametext: [
       To play, spot an Elf.
       Each time the fellowship moves to a sanctuary, you may exert an Elf to remove a burden (or 2 burdens if that Elf is Galadriel).
     ]
     lore: “Do not let your hearts be troubled. Tonight you will sleep in peace.”
-    effects: {
-      type: trigger
-      trigger: {
-        type: movesTo
-        filter: sanctuary
-      }
-      cost: {
-        type: exert
-        filter: choose(elf)
-        memorize: exertedElf
-      }
-      effect: {
-        type: removeBurdens
-        amount: {
-          type: requires
-          requires: {
-            type: memoryMatches
-            memory: exertedElf
-            filter: name(Galadriel)
-          }
-          true: 2
-          false: 1
+    effects: [
+        {
+            type: toPlay
+            requires: {
+              type: canSpot
+              filter: elf
+            }
         }
-      }
-    }
+        {
+          type: trigger
+          trigger: {
+            type: movesTo
+            filter: sanctuary
+          }
+          cost: {
+            type: exert
+            select: choose(elf)
+            memorize: exertedElf
+          }
+          effect: {
+            type: removeBurdens
+            amount: {
+              type: Conditional
+              requires: {
+                type: memoryMatches
+                memory: exertedElf
+                filter: name(Galadriel)
+              }
+              true: 2
+              false: 1
+            }
+          }
+        }
+    ]
   }
   40_54: {
     title: Long-knives of Legolas
@@ -895,7 +929,7 @@
     culture: elven
     twilight: 1
     type: event
-    keyword: archery
+    timeword: archery
     gametext: Exert an {elven} ally and add a threat to wound a minion. If it is an {isengard} minion, wound it again.
     lore: “Strange creatures bearing the mark of the White Hand have been seen on our borders.”
     effects: {
@@ -903,7 +937,7 @@
       cost: [
         {
           type: exert
-          filter: choose(culture(elven),ally)
+          select: choose(culture(elven),ally)
         }
         {
           type: addThreats
@@ -912,19 +946,19 @@
       effect: [
         {
           type: wound
-          filter: choose(minion)
+          select: choose(minion)
           memorize: woundedMinion
         }
         {
-          type: conditional
-          requires: {
+          type: If
+          check: {
             type: memoryMatches
             memory: woundedMinion
             filter: culture(isengard),minion
           }
-          effect: {
+          true: {
             type: wound
-            filter: memory(woundedMinion)
+            select: memory(woundedMinion)
           }
         }
       ]
@@ -947,11 +981,11 @@
       optional: true
       cost: {
         type: exert
-        filter: choose(elf)
+        select: choose(elf)
       }
       effect: {
         type: modifyStrength
-        filter: choose(minion)
+        select: choose(minion)
         amount: -1
         until: start(regroup)
       }
@@ -981,19 +1015,19 @@
           memorize: revealedCard
         }
         {
-          type: conditional
-          requires: {
+          type: If
+          check: {
             type: memoryMatches
             memory: revealedCard
             filter: culture(elven)
           }
-          effect: {
+          true: {
             type: optional
             text: Would you like to make the Shadow player wound a minion?
             effect: {
               type: wound
               player: shadowPlayer
-              filter: choose(minion)
+              select: choose(minion)
             }
           }
         }
@@ -1025,12 +1059,12 @@
         }
         {
           type: discard
-          filter: self
+          select: self
         }
       ]
       effect: {
         type: modifyStrength
-        filter: memory(bearer)
+        select: memory(bearer)
         amount: 2
       }
     }
@@ -1060,11 +1094,11 @@
           effects: [
             {
               type: exert
-              filter: choose(elf)
+              select: choose(elf)
             }
             {
               type: spot
-              filter: choose(name(Galadriel))
+              filter: name(Galadriel)
             }
           ]
         }
@@ -1075,7 +1109,7 @@
         cost: [
           {
             type: exert
-            filter: choose(name(Galadriel))
+            select: choose(name(Galadriel))
           }
           {
             type: chooseHowManyToSpot
@@ -1112,12 +1146,12 @@
         phase: fellowship
         effect: {
           type: stackCardsFromHand
-          filter: choose(culture(elven))
+          select: choose(culture(elven))
           where: self
         }
       }
       {
-        type: activatedTrigger
+        type: Response
         trigger: {
           type: aboutToDiscard
           filter: culture(elven),condition
@@ -1129,7 +1163,7 @@
         }
         effect: {
           type: preventDiscard
-          filter: choose(culture(elven),condition)
+          select: choose(culture(elven),condition)
         }
       }
       {
@@ -1143,17 +1177,17 @@
         effect: [
           {
             type: heal
-            filter: choose(elf)
+            select: choose(elf)
             count: 0-1
           }
           {
             type: heal
-            filter: choose(elf)
+            select: choose(elf)
             count: 0-1
           }
           {
             type: heal
-            filter: choose(elf)
+            select: choose(elf)
             count: 0-1
           }
         ]
@@ -1165,21 +1199,21 @@
     culture: elven
     twilight: 2
     type: event
-    keyword: archery
-    requires: {
-      type: canSpot
-      count: 2
-      filter: elf,archer
-    }
+    timeword: archery
     gametext: Spot 2 Elf archers to make the fellowship archery total +2 (or +3 if at a forest).
     lore: “The Dwarf breathes so loud...”
     effects: {
       type: event
+        requires: {
+          type: canSpot
+          count: 2
+          filter: elf,archer
+        }
       effect: {
         type: modifyArcheryTotal
         side: free people
         amount: {
-          type: requires
+          type: Conditional
           requires: {
             type: location
             filter: forest

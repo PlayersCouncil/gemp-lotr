@@ -8,7 +8,10 @@ import com.gempukku.lotro.packs.ProductLibrary;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class CollectionsManager {
@@ -38,12 +41,7 @@ public class CollectionsManager {
         replacement.removeItem("1_1", 1);
         _overwriteCollection = replacement;
 
-        _cardLibrary.SubscribeToRefreshes(new ICallback() {
-            @Override
-            public void Invoke() {
-                _defaultCollection = new CompleteCardCollection(_cardLibrary);
-            }
-        });
+        _cardLibrary.subscribeToRefreshes(() -> _defaultCollection = new CompleteCardCollection(_cardLibrary));
     }
 
     public CardCollection getCompleteCardCollection() {

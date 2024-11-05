@@ -32,7 +32,7 @@ public class Choice implements EffectAppenderProducer {
 
         EffectAppender[] possibleEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         return new DelayedAppender() {
             @Override
@@ -48,7 +48,7 @@ public class Choice implements EffectAppenderProducer {
                 for (EffectAppender possibleEffectAppender : possibleEffectAppenders) {
                     if (possibleEffectAppender.isPlayableInFull(delegateActionContext)) {
                         playableEffectAppenders.add(possibleEffectAppender);
-                        effectTexts.add(GameUtils.SubstituteText(textArray[textIndex], actionContext));
+                        effectTexts.add(GameUtils.substituteText(textArray[textIndex], actionContext));
                     }
                     textIndex++;
                 }

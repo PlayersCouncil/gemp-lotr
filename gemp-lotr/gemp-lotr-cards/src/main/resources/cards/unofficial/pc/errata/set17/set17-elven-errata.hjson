@@ -29,10 +29,10 @@
 					filter: self
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: elven
-					filter: self
-					amount: {
+					select: self
+					count: {
 						type: ForEachYouCanSpot
 						limit: 3
 						filter: hunter
@@ -51,31 +51,31 @@
 						]
 						effects: [
 							{
-								type: conditional
-								requires: {
+								type: If
+								check: {
 									type: cantSpot
 									count: 1
-									filter: HasAnyTokens,self
+									filter: HasAnyCultureTokens,self
 								}
-								effect: [
+								true: [
 									{
 										type: discard
-										filter: self
+										select: self
 									}
 								]
 							}
 							{
-								type: conditional
-								requires: {
+								type: If
+								check: {
 									type: canSpot
 									count: 1
-									filter: HasAnyTokens,self
+									filter: HasAnyCultureTokens,self
 								}
-								effect: [
+								true: [
 									{
-										type: removeTokens
+										type: RemoveCultureTokens
 										count: 1
-										filter: self
+										select: self
 									}
 								]
 							}
@@ -91,7 +91,7 @@
 				]
 				effect: {
 					type: discard
-					filter: choose(condition)
+					select: choose(condition)
 				}
 			}
 		]

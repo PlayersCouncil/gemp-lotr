@@ -63,7 +63,7 @@ public class Card_V1_042_Tests
 		assertEquals(Culture.WRAITH, walks.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, walks.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, walks.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(walks, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(walks, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(2, walks.getBlueprint().getTwilightCost());
 		//assertEquals(, walks.getBlueprint().getStrength());
 		//assertEquals(, walks.getBlueprint().getVitality());

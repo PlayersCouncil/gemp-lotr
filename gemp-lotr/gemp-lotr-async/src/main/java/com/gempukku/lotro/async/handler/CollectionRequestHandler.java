@@ -4,7 +4,6 @@ import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
@@ -21,7 +20,8 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;import org.w3c.dom.Document;
+import org.apache.logging.log4j.Logger;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -308,7 +308,7 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
             group = "site";
         else if (blueprint.getCardType() == CardType.MAP)
             group = "map";
-        else if (blueprint.hasKeyword(Keyword.CAN_START_WITH_RING))
+        else if (blueprint.canStartWithRing())
             group = "ringBearer";
         else if (blueprint.getSide() == Side.FREE_PEOPLE)
             group = "fp";

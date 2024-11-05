@@ -1,0 +1,500 @@
+{
+
+	102_37: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S037.0_card.jpg
+			//parentId: 102_37
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_37
+			rarity: _
+			setNum: V2
+			cardNum: 37
+			style: Standard
+		}
+		title: Ancient Evil
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: WinsSkirmish
+					filter: unique, culture(moria), minion	
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: choose(your,culture(moria),minion,inSkirmish)
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				requires: [
+					{
+						type: HasCardStacked
+						filter: playable, unique, culture(moria), minion	
+						on: self
+					}
+				]
+				effect: [
+					{
+						type: ChooseCardsFromSingleStack
+						select: choose(playable, unique, culture(moria), minion)
+						count: 1
+						on: self
+						memorize: chosenMinion
+						text: Choose a minion to play.
+					}
+					{
+						type: MemorizeNumber
+						amount: {
+							type: ForEachStacked
+							filter: not(memory(chosenMinion))
+							on: self
+							multiplier: -1
+						}
+						memory: stackedDiscount
+					}
+					{
+						type: PlayCardFromStacked
+						select: memory(chosenMinion)
+						on: self
+						discount: memory(stackedDiscount)
+						assumePlayable: true
+					}
+					{
+						type: Discard
+						select: choose(self)
+					}
+				]
+			}
+		]
+		gametext: Each time a [moria] minion wins a skirmish, you may stack it here.<br>Shadow: Play a unique minion stacked here, it is twilight cost -1 for each other card stacked here. Discard this condition.
+		lore: "'...I found myself suddenly faced by something that I have not met before.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_38: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S038.0_card.jpg
+			//parentId: 102_38
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_38
+			rarity: _
+			setNum: V2
+			cardNum: 38
+			style: Standard
+		}
+		title: The Balrog
+		subtitle: Lieutenant of Morgoth
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 14
+		type: Minion
+		race: Balrog
+		strength: 17
+		vitality: 5
+		site: 4
+		keywords: [
+			Fierce
+			Damage+1
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: TakesWound
+					filter: minion
+				}
+				cost: {
+					type: RemoveTwilight
+					amount: 1
+				}
+				effect: {
+					type: AddThreats
+					amount: 1
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: UsesSpecialAbility
+					phase: skirmish
+					filter: side(freeps)
+				}
+				requires: {
+					type: CanSpot
+					filter: InSkirmish,self
+				}
+				effect: {
+					type: Wound
+					select: choose(InSkirmishAgainst(self))
+					times: 1
+				}
+			}
+		]
+		gametext: Fierce. Damage +1.<br>Each time a minion takes a wound, you may remove (1) to add a threat.<br>Each time the Free Peoples player uses a skirmish special ability during a skirmish involving the Balrog, you may wound a companion it is skirmishing.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_39: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S039.0_card.jpg
+			//parentId: 102_39
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_39
+			rarity: _
+			setNum: V2
+			cardNum: 39
+			style: Standard
+		}
+		title: From Deepest Dungeon
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Moves
+				}
+				cost: {
+					type: RevealCardsFromHand
+					select: choose(name(The Balrog))
+				}
+				effect: {
+					type: AddThreats
+					amount: 1
+				}
+			}
+			{
+				type: Activated
+				phase: Shadow
+				requires: [
+					{
+						type: CanPlayFromDiscard
+						filter: name(The Balrog)
+						discount: {
+							type: ForEachThreat
+							multiplier: -1
+						}
+					}
+				]
+				effect: {
+					type: CostToEffect
+					cost: {
+						type: ChooseANumber
+						text: Choose how many threats to remove
+						from: 0
+						to: {
+							type: ForEachThreat
+						}
+						memorize: removedThreats
+					}
+					effect: {
+						type: CostToEffect
+						cost: {
+							type: RemoveThreats
+							amount: memory(removedThreats)
+						}
+						effect: {
+							type: PlayCardFromDiscard
+							select: choose(name(The Balrog))
+							maxDiscount: {
+								type: ForEachThreat
+								multiplier: -1
+							}
+							discount: {
+								type: FromMemory
+								memory: removedThreats
+								multiplier: -1
+							}
+						}
+					}
+				} 
+			}
+		]
+		gametext: Each time the fellowship moves, you may reveal The Balrog from your hand to add a threat.<br>Shadow: Remove X threats.  Play The Balrog from your discard pile; its twilight cost is -X.
+		lore: "'Far, far below the deepest delving of the Dwarves, the world is gnawed by nameless things.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_40: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S040.0_card.jpg
+			//parentId: 102_40
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_40
+			rarity: _
+			setNum: V2
+			cardNum: 40
+			style: Standard
+		}
+		title: Through Fire and Water
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: WinsSkirmish
+					filter: unique, culture(moria), minion	
+				}
+				requires: {
+					type: CanSpotThreats
+					amount: 1
+				}
+				cost: {
+					type: RemoveThreats
+					amount: 1
+				}
+				effect: {
+					type: Exert
+					select: choose(companion)
+				}
+			}
+		]
+		gametext: Each time a unique [moria] minion wins a skirmish, you may remove a threat to exert a companion.
+		lore: "'His fire was quenched, but now he was a thing of slime, stronger than a strangling snake.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_41: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S041.0_card.jpg
+			//parentId: 102_41
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_41
+			rarity: _
+			setNum: V2
+			cardNum: 41
+			style: Standard
+		}
+		title: To Highest Peak
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			cost: [
+				{
+					type: ChooseANumber
+					text: Choose how many {moria} minions to discard
+					from: 0
+					to: {
+						type: ForEachYouCanSpot
+						filter: culture(moria), minion
+					}
+					memorize: discardedMinions
+				}
+				{
+					type: Discard
+					select: choose(culture(Moria), minion)
+					count: memory(discardedMinions)
+				}
+			]
+			effect: {
+				type: If
+				check: {
+					type: IsGreaterThan
+					firstNumber: memory(discardedMinions)
+					secondNumber: 0
+				}
+				true: {
+					type: Preventable
+					text: Would you like to exert {discardedMinions} companions to prevent adding {discardedMinions} threats?
+					player: freeps
+					cost: {
+						type: Exert
+						select: choose(companion)
+						count: memory(discardedMinions)
+					}
+					effect: {
+						type: AddThreats
+						amount: memory(discardedMinions)
+					}
+				}
+			}	
+		}
+		gametext: Discard X [Moria] minions to add X threats. The Free Peoples player may exert X companions to prevent this.
+		lore: "'There was none to see, or perhaps in after ages songs would still be sung of the Battle of the Peak.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_42: {
+		cardInfo: {
+			imagePath: sets/V2/LOTR-ENV2S042.0_card.jpg
+			//parentId: 102_42
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: V2_42
+			rarity: _
+			setNum: V2
+			cardNum: 42
+			style: Standard
+		}
+		title: Valiant but Foolish
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: [
+			{
+				type: event
+				requires: {
+					type: CanSpotTwilight
+					amount: 25
+				}
+				cost: {
+					type: RemoveTwilight
+					amount: 10
+				}
+				effect: [
+					{
+						type: Repeat
+						times: 4
+						effect: {
+							type: Choice
+							texts: [
+								Take a Shadow condition into hand from your draw deck
+								Take a Shadow condition into hand from your discard pile
+								Pass
+							]
+							effects: [
+								{
+									type: PutCardsFromDeckIntoHand
+									select: choose(side(shadow),condition)
+									shuffle: true
+									reveal: true
+									showAll: true
+								}
+								{
+									type: PutCardsFromDiscardIntoHand
+									discard: you
+									select: choose(side(shadow),condition)
+								}
+								{
+									type: SendMessage
+									text: "{you} declines to take a Shadow condition into hand."
+								}
+							]
+						}
+					}
+					{
+						type: RemoveFromTheGame
+						select: self
+					}
+				]
+			}
+			{
+				type: ActivatedInDiscard
+				phase: Shadow
+				requires: [
+					{
+						type: canSelfBePlayed
+					}
+				]
+				effect: {
+					type: playCardFromDiscard
+					select: self
+				}
+			}
+			{
+				type: ActivatedInDrawDeck
+				phase: Shadow
+				requires: [
+					{
+						type: canSelfBePlayed
+					}
+				]
+				effect: {
+					type: PlayCardFromDrawDeck
+					select: self
+					shuffle: true
+					showAll: true
+				}
+			}
+		]
+		gametext: Spot 25 twilight tokens and remove 10 to take up to 4 Shadow conditions into hand from your draw deck or discard pile, then remove this from the game. This event may be played from your draw deck or discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -13,10 +13,6 @@ import java.util.Collection;
 public class CantTakeMoreThanXWoundsModifier extends AbstractModifier {
     private final int _count;
 
-    public CantTakeMoreThanXWoundsModifier(PhysicalCard source, Phase phase, int count, Filterable... affectFilters) {
-        this(source, phase, count, null, affectFilters);
-    }
-
     public CantTakeMoreThanXWoundsModifier(PhysicalCard source, final Phase phase, int count, Condition condition, Filterable... affectFilters) {
         super(source, "Can't take more than " + count + " wound(s)", Filters.and(affectFilters),
                 (condition == null ? new PhaseCondition(phase) : new AndCondition(new PhaseCondition(phase), condition)), ModifierEffect.WOUND_MODIFIER);

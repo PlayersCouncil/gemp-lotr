@@ -22,15 +22,15 @@ import java.util.Collection;
 public class DisableSkirmishAssignment implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "until");
+        FieldUtils.validateAllowedFields(effectObject, "select", "until");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, new ConstantEvaluator(1), "_temp", "you", "Choose characters that you want to make unable to be assigned to skirmish", environment));
+                CardResolver.resolveCards(select, actionContext -> new ConstantEvaluator(1), "_temp", "you", "Choose characters that you want to make unable to be assigned to skirmish", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -38,7 +38,7 @@ public class DisableSkirmishAssignment implements EffectAppenderProducer {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory("_temp");
 
                         return new AddUntilModifierEffect(
-                                new CantBeAssignedToSkirmishModifier(actionContext.getSource(), Filters.in(cardsFromMemory)), until);
+                                new CantBeAssignedToSkirmishModifier(actionContext.getSource(), null, Filters.in(cardsFromMemory)), until);
                     }
                 });
 

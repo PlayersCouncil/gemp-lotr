@@ -22,19 +22,19 @@ import java.util.List;
 public class Heal implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "filter", "times", "memorize", "player");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "times", "memorize", "player");
 
         final ValueSource times = ValueResolver.resolveEvaluator(effectObject.get("times"), 1, environment);
         final ValueSource count = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter,
+                CardResolver.resolveCards(select,
                         (actionContext) -> Filters.canHeal,
                         (actionContext) -> (Filter) (game, physicalCard) -> {
                             final int healTimes = times.getEvaluator(actionContext).evaluateExpression(game, physicalCard);

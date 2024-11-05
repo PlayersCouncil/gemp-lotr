@@ -36,35 +36,35 @@ public class Card_01_017_Tests
 	public void GrimirStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Grimir, Dwarven Elder
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 1
-		* Type: ally
-		* Subtype: Dwarf
-		* Strength: 3
-		* Vitality: 3
-		* Site Number: 3
-		* Game Text: <b>Fellowship:</b>  Exert Grimir to shuffle a [dwarven] event from your discard pile into your draw deck.
-		*/
+		 * Set: 1
+		 * Name: Grimir, Dwarven Elder
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 1
+		 * Type: Ally
+		 * Subtype: Dwarf
+		 * Strength: 3
+		 * Vitality: 3
+		 * Site Number: 3
+		 * Game Text: <b>Fellowship:</b>  Exert Grimir to shuffle a [dwarven] event from your discard pile into your draw deck.
+		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var grimir = scn.GetFreepsCard("grimir");
+		var card = scn.GetFreepsCard("grimir");
 
-		assertTrue(grimir.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, grimir.getBlueprint().getSide());
-		assertEquals(Culture.DWARVEN, grimir.getBlueprint().getCulture());
-		assertEquals(CardType.ALLY, grimir.getBlueprint().getCardType());
-		assertEquals(Race.DWARF, grimir.getBlueprint().getRace());
-		assertEquals(1, grimir.getBlueprint().getTwilightCost());
-		assertEquals(3, grimir.getBlueprint().getStrength());
-		assertEquals(3, grimir.getBlueprint().getVitality());
-		assertEquals(3, grimir.getBlueprint().getAllyHomeSiteNumbers()[0]);
-		assertEquals(SitesBlock.FELLOWSHIP, grimir.getBlueprint().getAllyHomeSiteBlock());
+		assertEquals("Grimir", card.getBlueprint().getTitle());
+		assertEquals("Dwarven Elder", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
+		assertEquals(Race.DWARF, card.getBlueprint().getRace());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(3, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
 	@Test

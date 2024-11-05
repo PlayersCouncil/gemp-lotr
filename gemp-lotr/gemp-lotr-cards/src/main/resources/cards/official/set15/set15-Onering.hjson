@@ -1,0 +1,184 @@
+{
+
+	15_1: {
+		cardInfo: {
+			imagePath: decipher/LOTR15001.jpg
+			//parentId: 15_1
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 15R1
+			rarity: R
+			setNum: "15"
+			cardNum: 1
+			style: Standard
+		}
+		title: The One Ring
+		subtitle: The Ring of Doom
+		unique: true
+		twilight: 0
+		type: The One Ring
+		vitality: 2
+		effects: [
+			{
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: ringIsActive
+					}
+					{
+						type: Phase
+						phase: Skirmish
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+						amount: 1
+					}
+				]
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: [
+						{
+							type: ringIsOn
+						}
+						{
+							type: ringIsActive
+						}
+					]
+					filter: bearer
+					keyword: hunter
+					amount: 3
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: ringIsActive
+				}
+				cost: {
+					type: addBurdens
+				}
+				effect: {
+					type: putOnRing
+				}
+			}
+		]
+		gametext: While wearing The One Ring, the Ring-bearer gains <b>hunter 3</b>, and each time he or she is about to take a wound in a skirmish, add a burden instead.<br><b>Skirmish:</b> Add a burden to wear The One Ring until the regroup phase.
+		lore: "...the earth shook, the plain heaved and cracked, and Orodruin reeled."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_2: {
+		cardInfo: {
+			imagePath: decipher/LOTR15002.jpg
+			//parentId: 15_2
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 15S2
+			rarity: S
+			setNum: "15"
+			cardNum: 2
+			style: Standard
+		}
+		title: The One Ring
+		subtitle: The Ruling Ring
+		unique: true
+		twilight: 0
+		type: The One Ring
+		strength: 1
+		effects: [
+			{
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				requires: [
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				effect: [
+					{
+						type: putOnRing
+					}
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+		]
+		gametext: <b>Response:</b> If the Ring-bearer is about to take a wound in a skirmish, he or she wears The One Ring until the regroup phase.<br>While the Ring-bearer is wearing The One Ring, each time he or she is about to take a wound in a skirmish, add a burden instead.
+		lore: "One Ring to rule them all...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

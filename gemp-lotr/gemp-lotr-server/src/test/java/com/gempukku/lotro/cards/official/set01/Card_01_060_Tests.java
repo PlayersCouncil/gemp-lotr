@@ -52,48 +52,46 @@ public class Card_01_060_Tests
 	public void SilndeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Silinde
-		* Subtitle: Elf of Mirkwood
-		* Side: Free Peoples
-		* Culture: Elven
-		* Twilight Cost: 2
-		* Type: Ally
-		* Subtype: Elf
-		* Strength: 5
-		* Vitality: 2
-		* Site Number: 3
-		* Game Text: While you can spot your site 3, Silinde has the game text of that site.
-		*/
+		 * Set: 1
+		 * Name: Silinde, Elf of Mirkwood
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 2
+		 * Type: Ally
+		 * Subtype: Elf
+		 * Strength: 5
+		 * Vitality: 2
+		 * Site Number: 3
+		 * Game Text: While you can spot your site 3, Silinde has the game text of that site.
+		 */
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl silinde = scn.GetFreepsCard("silinde");
+		var card = scn.GetFreepsCard("silinde");
 
-		assertTrue(silinde.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, silinde.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, silinde.getBlueprint().getCulture());
-		assertEquals(CardType.ALLY, silinde.getBlueprint().getCardType());
-		assertEquals(Race.ELF, silinde.getBlueprint().getRace());
-		assertEquals(2, silinde.getBlueprint().getTwilightCost());
-		assertEquals(5, silinde.getBlueprint().getStrength());
-		assertEquals(2, silinde.getBlueprint().getVitality());
-		//assertEquals(, silinde.getBlueprint().getResistance());
-		//assertEquals(Signet., silinde.getBlueprint().getSignet());
-		assertEquals(3, silinde.getBlueprint().getAllyHomeSiteNumbers()[0]);
-		assertEquals(SitesBlock.FELLOWSHIP, silinde.getBlueprint().getAllyHomeSiteBlock());
+		assertEquals("Silinde", card.getBlueprint().getTitle());
+		assertEquals("Elf of Mirkwood", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
+		assertEquals(Race.ELF, card.getBlueprint().getRace());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(5, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
 	@Test
 	public void SilindeCopiesYourSite3() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl silinde = scn.GetFreepsCard("silinde");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-		PhysicalCardImpl pathfinder = scn.GetFreepsCard("pathfinder");
+		var silinde = scn.GetFreepsCard("silinde");
+		var arwen = scn.GetFreepsCard("arwen");
+		var elrond = scn.GetFreepsCard("elrond");
+		var pathfinder = scn.GetFreepsCard("pathfinder");
 		scn.FreepsMoveCardToHand(elrond, pathfinder);
 		scn.FreepsMoveCharToTable(silinde, arwen);
 
@@ -111,12 +109,12 @@ public class Card_01_060_Tests
 	@Test
 	public void SilindeDoesNotCopyOpponentSite3() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl silinde = scn.GetFreepsCard("silinde");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-		PhysicalCardImpl pathfinder = scn.GetFreepsCard("pathfinder");
+		var silinde = scn.GetFreepsCard("silinde");
+		var arwen = scn.GetFreepsCard("arwen");
+		var elrond = scn.GetFreepsCard("elrond");
+		var pathfinder = scn.GetFreepsCard("pathfinder");
 		scn.FreepsMoveCardToHand(elrond, pathfinder);
 		scn.FreepsMoveCharToTable(silinde, arwen);
 
@@ -129,12 +127,12 @@ public class Card_01_060_Tests
 	@Test
 	public void ReplacingYourSiteWithOpponentSiteStopsCopy() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl silinde = scn.GetFreepsCard("silinde");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-		PhysicalCardImpl pathfinder = scn.GetFreepsCard("pathfinder");
+		var silinde = scn.GetFreepsCard("silinde");
+		var arwen = scn.GetFreepsCard("arwen");
+		var elrond = scn.GetFreepsCard("elrond");
+		var pathfinder = scn.GetFreepsCard("pathfinder");
 		scn.FreepsMoveCardToHand(elrond, pathfinder);
 		scn.FreepsMoveCharToTable(silinde, arwen);
 
@@ -166,12 +164,12 @@ public class Card_01_060_Tests
 	@Test
 	public void ReplacingOpponentSiteWithYourSiteStartsCopy() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl silinde = scn.GetFreepsCard("silinde");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-		PhysicalCardImpl pathfinder = scn.GetFreepsCard("pathfinder");
+		var silinde = scn.GetFreepsCard("silinde");
+		var arwen = scn.GetFreepsCard("arwen");
+		var elrond = scn.GetFreepsCard("elrond");
+		var pathfinder = scn.GetFreepsCard("pathfinder");
 		scn.FreepsMoveCardToHand(elrond, pathfinder);
 		scn.FreepsMoveCharToTable(silinde, arwen);
 

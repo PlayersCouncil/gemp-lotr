@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set15;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -17,7 +16,7 @@ public class Card_15_064_Tests
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<String, String>()
+				new HashMap<>()
 				{{
 					put("madril", "15_64");
 					put("arwen", "1_30");
@@ -38,47 +37,47 @@ public class Card_15_064_Tests
 	public void MadrilStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 15
-		* Title: *Madril, Defender of Osgiliath
-		* Side: Free Peoples
-		* Culture: Gondor
-		* Twilight Cost: 2
-		* Type: companion
-		* Subtype: Man
-		* Strength: 5
-		* Vitality: 3
-		* Resistance: 6
-		* Game Text: <b>Ranger. Hunter 1.</b>
-		* 	While you can spot 2 [gondor] rangers, Madril is twilight cost -2.
-		* 	At the start of the maneuver phase, each minion is site number +1 for each threat you can spot until the start of the regroup phase.
-		*/
+		 * Set: 15
+		 * Name: Madril, Defender of Osgiliath
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 5
+		 * Vitality: 3
+		 * Resistance: 6
+		 * Game Text: <b>Ranger</b>. <b>Hunter 1</b>.
+		 *   While you can spot 2 [gondor] rangers, Madril is twilight cost -2.
+		 *   At the start of the maneuver phase, each minion is site number +1 for each threat you can spot until
+		 *   the start of the regroup phase.
+		 */
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl madril = scn.GetFreepsCard("madril");
+		var card = scn.GetFreepsCard("madril");
 
-		assertTrue(madril.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, madril.getBlueprint().getSide());
-		assertEquals(Culture.GONDOR, madril.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, madril.getBlueprint().getCardType());
-		assertEquals(Race.MAN, madril.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(madril, Keyword.RANGER));
-		assertTrue(scn.HasKeyword(madril, Keyword.HUNTER));
-		assertEquals(1, scn.GetKeywordCount(madril, Keyword.HUNTER));
-		assertEquals(2, madril.getBlueprint().getTwilightCost());
-		assertEquals(5, madril.getBlueprint().getStrength());
-		assertEquals(3, madril.getBlueprint().getVitality());
-		assertEquals(6, madril.getBlueprint().getResistance());
-		//assertEquals(Signet., madril.getBlueprint().getSignet());
-		//assertEquals(, madril.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertEquals("Madril", card.getBlueprint().getTitle());
+		assertEquals("Defender of Osgiliath", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.RANGER));
+		assertTrue(scn.hasKeyword(card, Keyword.HUNTER));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.HUNTER));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(5, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	@Test
 	public void MadrilCosts2LessWith2GondorRangers() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var madril = scn.GetFreepsCard("madril");
 		var arwen = scn.GetFreepsCard("arwen");
@@ -117,7 +116,7 @@ public class Card_15_064_Tests
 	@Test
 	public void ManeuverTriggerMakesEachMinionSiteNumberPlusOnePerThreatUntilRegroup() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var madril = scn.GetFreepsCard("madril");
 		scn.FreepsMoveCharToTable(madril);
@@ -161,7 +160,7 @@ public class Card_15_064_Tests
 	@Test
 	public void ManeuverAbilityDoesNothingWithZeroThreats() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		var madril = scn.GetFreepsCard("madril");
 		scn.FreepsMoveCardToHand(madril);

@@ -68,7 +68,7 @@ public class Card_V1_064_Tests
 		//assertEquals(Culture., card.getBlueprint().getCulture());
 		assertEquals(CardType.SITE, site9.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(site9, Keyword.FOREST)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(site9, Keyword.FOREST)); // test for keywords as needed
 		assertEquals(9, site9.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());
 		//assertEquals(, card.getBlueprint().getVitality());
@@ -139,9 +139,9 @@ public class Card_V1_064_Tests
 		scn.ShadowMoveCharToTable(moriatroop1, moriatroop2, moriatroop3, shelob);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertFalse(scn.HasKeyword(moriatroop1, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(moriatroop2, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(moriatroop3, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(moriatroop1, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(moriatroop2, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(moriatroop3, Keyword.DAMAGE));
 
 		scn.AddWoundsToChar(moriatroop2, 1);
 		scn.AddWoundsToChar(moriatroop3, 2);
@@ -154,12 +154,12 @@ public class Card_V1_064_Tests
 		assertEquals(2, scn.GetWoundsOn(moriatroop3));
 		assertEquals(7, scn.GetWoundsOn(shelob));
 
-		assertFalse(scn.HasKeyword(moriatroop1, Keyword.DAMAGE));
-		assertTrue(scn.HasKeyword(moriatroop2, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(moriatroop1, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(moriatroop2, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(moriatroop2,  Keyword.DAMAGE));
-		assertTrue(scn.HasKeyword(moriatroop3, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(moriatroop3, Keyword.DAMAGE));
 		assertEquals(2, scn.GetKeywordCount(moriatroop3,  Keyword.DAMAGE));
-		assertTrue(scn.HasKeyword(shelob, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(shelob, Keyword.DAMAGE));
 		assertEquals(7, scn.GetKeywordCount(shelob,  Keyword.DAMAGE));
 
 	}

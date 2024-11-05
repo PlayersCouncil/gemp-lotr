@@ -5,14 +5,12 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_03_017_ErrataTests
 {
@@ -104,8 +102,7 @@ public class Card_03_017_ErrataTests
 		assertEquals(3, galadriel.getBlueprint().getTwilightCost());
 		assertEquals(3, galadriel.getBlueprint().getStrength());
 		assertEquals(3, galadriel.getBlueprint().getVitality());
-		assertEquals(6, galadriel.getBlueprint().getAllyHomeSiteNumbers()[0]);
-		assertEquals(SitesBlock.FELLOWSHIP, galadriel.getBlueprint().getAllyHomeSiteBlock());
+		assertTrue(galadriel.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 6)));
 
 	}
 
@@ -174,7 +171,7 @@ public class Card_03_017_ErrataTests
 		var shadowSite2 = scn.GetShadowSite("site2");
 
 		//cheating to ensure site 2 qualifies
-		scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.name("West Road"), Keyword.FOREST));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("West Road"), null, Keyword.FOREST));
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();

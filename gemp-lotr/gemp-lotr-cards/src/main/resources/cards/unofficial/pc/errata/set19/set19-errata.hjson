@@ -51,7 +51,7 @@
 				effect: [
 					{
 						type: negateWound
-						filter: all(bearer)
+						select: all(bearer)
 					}
 					{
 						type: addBurdens
@@ -84,7 +84,7 @@
 				}
 				effect: {
 					type: modifyStrength
-					filter: bearer
+					select: bearer
 					amount: 3
 				}
 			}
@@ -131,8 +131,9 @@
 				}
 				effect: {
 					type: transfer
-					filter: self
+					select: self
 					where: choose(another,culture(rohan),man)
+					checkTarget: true
 				}
 			}
 			{
@@ -149,7 +150,7 @@
 				}
 				effect: {
 					type: returnToHand
-					filter: self
+					select: self
 				}
 			}
 		]

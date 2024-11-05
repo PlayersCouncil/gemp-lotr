@@ -19,11 +19,11 @@
 			}
 			cost: {
 				type: discard
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 			}
 			effect: {
 				type: EnableParticipationInSkirmishes
-				filter: all(wise,ally)
+				select: all(wise,ally)
 				until: start(regroup)
 			}
 		}
@@ -41,11 +41,11 @@
 			limitPerTurn: 1
 			cost: {
 				type: exert
-				filter: choose(culture(esgaroth),ally)
+				select: choose(culture(esgaroth),ally)
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(weapon)
+				select: choose(weapon)
 			}
 		}
 	}
@@ -85,7 +85,7 @@
 			limitPerTurn: 1
 			effect: {
 				type: exert
-				filter: choose(culture(dwarven),character)
+				select: choose(culture(dwarven),character)
 				count: {
 					type: forEachCulture
 					filter: side(shadow)

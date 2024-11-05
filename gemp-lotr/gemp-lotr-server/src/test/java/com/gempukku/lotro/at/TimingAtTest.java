@@ -1,29 +1,18 @@
 package com.gempukku.lotro.at;
 
+import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.common.Token;
 import com.gempukku.lotro.common.Zone;
-import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.LotroCardBlueprint;
-import com.gempukku.lotro.game.PhysicalCard;
-import com.gempukku.lotro.game.PhysicalCardImpl;
-import com.gempukku.lotro.game.state.LotroGame;
-import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
-import com.gempukku.lotro.logic.cardtype.AbstractSite;
+import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
-import com.gempukku.lotro.logic.modifiers.SpecialFlagModifier;
-import com.gempukku.lotro.logic.timing.EffectResult;
-import com.gempukku.lotro.logic.timing.TriggerConditions;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.*;
 
@@ -96,9 +85,9 @@ public class TimingAtTest extends AbstractAtTest {
         Map<String, Collection<String>> extraCards = new HashMap<>();
         initializeSimplestGame(extraCards);
 
-        PhysicalCardImpl elrond = new PhysicalCardImpl(100, "1_40", P1, _cardLibrary.getLotroCardBlueprint("1_40"));
-        PhysicalCardImpl gimli = new PhysicalCardImpl(101, "1_13", P1, _cardLibrary.getLotroCardBlueprint("1_13"));
-        PhysicalCardImpl dwarvenHeart = new PhysicalCardImpl(102, "1_10", P1, _cardLibrary.getLotroCardBlueprint("1_10"));
+        PhysicalCard elrond = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_40");
+        PhysicalCard gimli = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_13");
+        PhysicalCard dwarvenHeart = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_10");
 
         _game.getGameState().addCardToZone(_game, gimli, Zone.FREE_CHARACTERS);
         _game.getGameState().addCardToZone(_game, elrond, Zone.SUPPORT);
@@ -119,8 +108,8 @@ public class TimingAtTest extends AbstractAtTest {
         Map<String, Collection<String>> extraCards = new HashMap<>();
         initializeSimplestGame(extraCards);
 
-        PhysicalCardImpl aragorn = new PhysicalCardImpl(100, "1_365", P1, _cardLibrary.getLotroCardBlueprint("1_365"));
-        PhysicalCardImpl gandalf = new PhysicalCardImpl(101, "2_122", P1, _cardLibrary.getLotroCardBlueprint("2_122"));
+        PhysicalCard aragorn = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_365");
+        PhysicalCard gandalf = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "2_122");
 
         _game.getGameState().addCardToZone(_game, aragorn, Zone.FREE_CHARACTERS);
         _game.getGameState().addCardToZone(_game, gandalf, Zone.FREE_CHARACTERS);
@@ -147,7 +136,7 @@ public class TimingAtTest extends AbstractAtTest {
         Map<String, Collection<String>> extraCards = new HashMap<>();
         initializeSimplestGame(extraCards);
 
-        PhysicalCardImpl gollum = new PhysicalCardImpl(100, "7_58", P2, _cardLibrary.getLotroCardBlueprint("7_58"));
+        PhysicalCard gollum = _game.getGameState().createPhysicalCard(P2, _cardLibrary, "7_58");
 
         _game.getGameState().addCardToZone(_game, gollum, Zone.DISCARD);
 
@@ -173,11 +162,11 @@ public class TimingAtTest extends AbstractAtTest {
         Map<String, Collection<String>> extraCards = new HashMap<>();
         initializeSimplestGame(extraCards);
 
-        PhysicalCardImpl gimli = new PhysicalCardImpl(100, "1_13", P1, _cardLibrary.getLotroCardBlueprint("1_13"));
-        PhysicalCardImpl letThemCome = new PhysicalCardImpl(101, "1_20", P1, _cardLibrary.getLotroCardBlueprint("1_20"));
-        PhysicalCardImpl slakedThirsts = new PhysicalCardImpl(102, "7_14", P1, _cardLibrary.getLotroCardBlueprint("7_14"));
+        PhysicalCard gimli = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_13");
+        PhysicalCard letThemCome = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_20");
+        PhysicalCard slakedThirsts = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "7_14");
 
-        PhysicalCardImpl gollum = new PhysicalCardImpl(100, "7_58", P2, _cardLibrary.getLotroCardBlueprint("7_58"));
+        PhysicalCard gollum = _game.getGameState().createPhysicalCard(P2, _cardLibrary, "7_58");
 
         _game.getGameState().addCardToZone(_game, gimli, Zone.FREE_CHARACTERS);
         _game.getGameState().addCardToZone(_game, letThemCome, Zone.SUPPORT);
@@ -208,9 +197,9 @@ public class TimingAtTest extends AbstractAtTest {
         Map<String, Collection<String>> extraCards = new HashMap<>();
         initializeSimplestGame(extraCards);
 
-        PhysicalCardImpl gimli = new PhysicalCardImpl(100, "1_13", P1, _cardLibrary.getLotroCardBlueprint("1_13"));
-        PhysicalCardImpl letThemCome = new PhysicalCardImpl(101, "1_20", P1, _cardLibrary.getLotroCardBlueprint("1_20"));
-        PhysicalCardImpl tossMe = new PhysicalCardImpl(102, "6_11", P1, _cardLibrary.getLotroCardBlueprint("6_11"));
+        PhysicalCard gimli = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_13");
+        PhysicalCard letThemCome = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_20");
+        PhysicalCard tossMe = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "6_11");
 
         skipMulligans();
 
@@ -222,78 +211,17 @@ public class TimingAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void moveFromAndMoveTo() throws DecisionResultInvalidException {
+    public void movementSiteAffecting() throws Exception {
         initializeSimplestGame();
 
         skipMulligans();
 
-        final AtomicInteger moveFrom = new AtomicInteger(0);
-        final AtomicInteger moveTo = new AtomicInteger(0);
+        LotroCardBlueprintBuilder builder = new LotroCardBlueprintBuilder();
+        Map<String, LotroCardBlueprint> cards = LotroCardBlueprintLibrary.loadCardsFromFile(builder, TimingAtTest.class.getResourceAsStream("/siteTest.hjson"));
 
-        PhysicalCardImpl moveFromSite = new PhysicalCardImpl(100, "0_1234", P1,
-                new AbstractSite("Blah", SitesBlock.FELLOWSHIP, 1, 0, LotroCardBlueprint.Direction.LEFT) {
-                    @Override
-                    public List<RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult, PhysicalCard self) {
-                        if (TriggerConditions.movesFrom(game, effectResult, self)) {
-                            moveFrom.incrementAndGet();
-                        } else if (TriggerConditions.movesTo(game, effectResult, self)) {
-                            fail("Should not be called");
-                        }
-                        return null;
-                    }
-                });
+        PhysicalCardImpl moveFromSite = new PhysicalCardImpl(100, "0_1234", P1, cards.get("0_1234"));
         moveFromSite.setSiteNumber(1);
-        PhysicalCardImpl moveToSite = new PhysicalCardImpl(100, "0_1235", P1,
-                new AbstractSite("Blah", SitesBlock.FELLOWSHIP, 2, 0, LotroCardBlueprint.Direction.LEFT) {
-                    @Override
-                    public List<RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult, PhysicalCard self) {
-                        if (TriggerConditions.movesTo(game, effectResult, self)) {
-                            moveTo.incrementAndGet();
-                        } else if (TriggerConditions.movesFrom(game, effectResult, self)) {
-                            fail("Should not be called");
-                        }
-                        return null;
-                    }
-                });
-        moveToSite.setSiteNumber(2);
-
-        _game.getGameState().removeCardsFromZone(P1, Collections.singleton(_game.getGameState().getCurrentSite()));
-        _game.getGameState().addCardToZone(_game, moveFromSite, Zone.ADVENTURE_PATH);
-        _game.getGameState().addCardToZone(_game, moveToSite, Zone.ADVENTURE_PATH);
-
-        // End fellowship phase
-        playerDecided(P1, "");
-
-        // End shadow phase
-        playerDecided(P2, "");
-
-        assertEquals(1, moveFrom.get());
-        assertEquals(1, moveTo.get());
-    }
-
-    @Test
-    public void movementSiteAffecting() throws DecisionResultInvalidException {
-        initializeSimplestGame();
-
-        skipMulligans();
-
-        PhysicalCardImpl moveFromSite = new PhysicalCardImpl(100, "0_1234", P1,
-                new AbstractSite("Blah", SitesBlock.FELLOWSHIP, 1, 0, LotroCardBlueprint.Direction.LEFT) {
-                    @Override
-                    public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
-                        return Collections.singletonList(
-                                new SpecialFlagModifier(self, ModifierFlag.RING_TEXT_INACTIVE));
-                    }
-                });
-        moveFromSite.setSiteNumber(1);
-        PhysicalCardImpl moveToSite = new PhysicalCardImpl(100, "0_1235", P1,
-                new AbstractSite("Blah", SitesBlock.FELLOWSHIP, 2, 0, LotroCardBlueprint.Direction.LEFT) {
-                    @Override
-                    public List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self) {
-                        return Collections.singletonList(
-                                new SpecialFlagModifier(self, ModifierFlag.CANT_PREVENT_WOUNDS));
-                    }
-                });
+        PhysicalCardImpl moveToSite = new PhysicalCardImpl(100, "0_1235", P1, cards.get("0_1235"));
         moveToSite.setSiteNumber(2);
 
         _game.getGameState().removeCardsFromZone(P1, Collections.singleton(_game.getGameState().getCurrentSite()));
@@ -342,11 +270,11 @@ public class TimingAtTest extends AbstractAtTest {
 
         skipMulligans();
 
-        PhysicalCardImpl balinAvenged = new PhysicalCardImpl(100, "17_2", P1, _cardLibrary.getLotroCardBlueprint("17_2"));
-        PhysicalCardImpl prowlingOrc = new PhysicalCardImpl(101, "11_136", P2, _cardLibrary.getLotroCardBlueprint("11_136"));
-        PhysicalCardImpl dwarvenGuard1 = new PhysicalCardImpl(102, "1_7", P1, _cardLibrary.getLotroCardBlueprint("1_7"));
-        PhysicalCardImpl dwarvenGuard2 = new PhysicalCardImpl(103, "1_7", P1, _cardLibrary.getLotroCardBlueprint("1_7"));
-        PhysicalCardImpl prowlingOrcInDiscard = new PhysicalCardImpl(104, "11_136", P2, _cardLibrary.getLotroCardBlueprint("11_136"));
+        PhysicalCard balinAvenged = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "17_2");
+        PhysicalCard prowlingOrc = _game.getGameState().createPhysicalCard(P2, _cardLibrary, "11_136");
+        PhysicalCard dwarvenGuard1 = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_7");
+        PhysicalCard dwarvenGuard2 = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_7");
+        PhysicalCard prowlingOrcInDiscard = _game.getGameState().createPhysicalCard(P2, _cardLibrary, "11_136");
 
         _game.getGameState().addCardToZone(_game, balinAvenged, Zone.SUPPORT);
         _game.getGameState().addTokens(balinAvenged, Token.DWARVEN, 4);
@@ -382,10 +310,10 @@ public class TimingAtTest extends AbstractAtTest {
 
         skipMulligans();
 
-        PhysicalCardImpl gimlisHelm = new PhysicalCardImpl(100, "1_15", P1, _cardLibrary.getLotroCardBlueprint("1_15"));
+        PhysicalCard gimlisHelm = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_15");
         _game.getGameState().attachCard(_game, gimlisHelm, _game.getGameState().getRingBearer(P1));
 
-        PhysicalCardImpl urukHaiRaidingParty = new PhysicalCardImpl(103, "1_158", P2, _cardLibrary.getLotroCardBlueprint("1_158"));
+        PhysicalCard urukHaiRaidingParty = _game.getGameState().createPhysicalCard(P2, _cardLibrary, "1_158");
         _game.getGameState().addCardToZone(_game, urukHaiRaidingParty, Zone.SHADOW_CHARACTERS);
 
         // End fellowship phase

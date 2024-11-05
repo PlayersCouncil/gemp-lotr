@@ -1,6 +1,7 @@
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.game.LotroCardBlueprint;
+import org.hjson.JsonValue;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -15,7 +16,7 @@ public class ValidateCards {
         final String property = System.getProperty("user.dir");
         String projectRoot = new File(property).getAbsolutePath();
 
-        File path = new File(projectRoot + "/gemp-lotr-async/src/main/web/cards");
+        File path = new File(projectRoot + "/gemp-lotr-cards/src/main/resources/cards");
 
         processPath(cardBlueprintBuilder, path);
     }
@@ -34,19 +35,21 @@ public class ValidateCards {
     private static void loadCardsFromFile(LotroCardBlueprintBuilder cardBlueprintBuilder, File file) {
         JSONParser parser = new JSONParser();
         try (FileReader reader = new FileReader(file)) {
-            final JSONObject cardsFile = (JSONObject) parser.parse(reader);
+            String json = JsonValue.readHjson(reader).toString();
+            final JSONObject cardsFile = (JSONObject) parser.parse(json);
             final Set<Map.Entry<String, JSONObject>> cardsInFile = cardsFile.entrySet();
             for (Map.Entry<String, JSONObject> cardEntry : cardsInFile) {
                 String blueprint = cardEntry.getKey();
                 final JSONObject cardDefinition = cardEntry.getValue();
                 try {
-                    final LotroCardBlueprint lotroCardBlueprint = cardBlueprintBuilder.buildFromJson(cardDefinition);
+                    final LotroCardBlueprint lotroCardBlueprint = cardBlueprintBuilder.buildFromJson(blueprint, cardDefinition);
                 } catch (InvalidCardDefinitionException exp) {
                     System.out.println("Unable to load card " + blueprint);
                     exp.printStackTrace();
                 }
             }
         } catch (Exception exp) {
+            System.out.println("Unable to load set from file: " + file.getName());
             exp.printStackTrace();
         }
     }

@@ -23,9 +23,9 @@
 		strength: 6
 		vitality: 3
 		resistance: 5
+		canStartWithRing: true
 		keyword: [
 			damage+1
-			can_start_with_ring
 		]
 		effects: [
 			{

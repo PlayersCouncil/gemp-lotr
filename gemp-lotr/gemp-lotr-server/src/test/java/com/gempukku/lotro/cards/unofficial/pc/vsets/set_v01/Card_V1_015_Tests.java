@@ -71,7 +71,7 @@ public class Card_V1_015_Tests
 		assertEquals(2, gwaihir.getBlueprint().getVitality());
 		//assertEquals(, gwaihir.getBlueprint().getResistance());
 		//assertEquals(Signet., gwaihir.getBlueprint().getSignet());
-		assertEquals(4, gwaihir.getBlueprint().getAllyHomeSiteNumbers()[0]); // Change this to getAllyHomeSiteNumbers for allies
+		assertTrue(gwaihir.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 4)));
 
 	}
 

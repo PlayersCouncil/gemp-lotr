@@ -1,0 +1,411 @@
+{
+
+	15_187: {
+		cardInfo: {
+			imagePath: decipher/LOTR15187.jpg
+			//parentId: 15_187
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 15U187
+			rarity: U
+			setNum: "15"
+			cardNum: 187
+			style: Standard
+		}
+		title: Anduin River
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: River
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: -3
+				}
+			}
+		]
+		gametext: <b>River</b>. The fellowship archery total is -3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_188: {
+		cardInfo: {
+			imagePath: decipher/LOTR15188.jpg
+			//parentId: 15_188
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 15S188
+			rarity: S
+			setNum: "15"
+			cardNum: 188
+			style: Standard
+		}
+		title: Breeding pit of Isengard
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Underground
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: {
+						type: not
+						requires: {
+							type: playedCardThisPhase
+							filter: hunter,minion
+						}
+					}
+					filter: hunter,minion
+					amount: -2
+				}
+			}
+		]
+		gametext: <b>Underground</b>. The twilight cost of the first hunter minion played each Shadow phase is -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_189: {
+		cardInfo: {
+			imagePath: decipher/LOTR15189.jpg
+			//parentId: 15_189
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 15S189
+			rarity: S
+			setNum: "15"
+			cardNum: 189
+			style: Standard
+		}
+		title: City Gates
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: addThreats
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+						multiplier: {
+							type: Conditional
+							requires: {
+								type: canSpot
+								filter: hunter,minion
+							}
+							true: 2
+							false: 1
+						}
+					}
+				}
+			}
+		]
+		gametext: When the Fellowship moves to this site, add a threat (or 2 if you can spot a hunter minion) for each companion over 4.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_190: {
+		cardInfo: {
+			imagePath: decipher/LOTR15190.jpg
+			//parentId: 15_190
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 15S190
+			rarity: S
+			setNum: "15"
+			cardNum: 190
+			style: Standard
+		}
+		title: East Wall of Rohan
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		effects: [
+			{
+				type: trigger
+				optional: true
+				player: free people
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: exert
+					select: choose(hunter,companion)
+					count: 2
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(hunter,companion)
+					showAll: true
+					shuffle: true
+				}
+			}
+		]
+		gametext: At the start of the fellowship phase, you may exert two hunter companions to play a hunter companion from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_191: {
+		cardInfo: {
+			imagePath: decipher/LOTR15191.jpg
+			//parentId: 15_191
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 15S191
+			rarity: S
+			setNum: "15"
+			cardNum: 191
+			style: Standard
+		}
+		title: Gate of Mordor
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Battleground
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachCulture
+					}
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. Each time the fellowship moves to this site, add (1) for each culture you can spot.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_192: {
+		cardInfo: {
+			imagePath: decipher/LOTR15192.jpg
+			//parentId: 15_192
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 15U192
+			rarity: U
+			setNum: "15"
+			cardNum: 192
+			style: Standard
+		}
+		title: Isengard Ruined
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Battleground
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: transferred
+					filter: follower
+					to: character
+				}
+				effect: {
+					type: exert
+					player: shadow
+					select: choose(companion)
+					times: 2
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. Each time a follower is transferred to a character, the first Shadow player may exert a companion twice.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_193: {
+		cardInfo: {
+			imagePath: decipher/LOTR15193.jpg
+			//parentId: 15_193
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 15R193
+			rarity: R
+			setNum: "15"
+			cardNum: 193
+			style: Standard
+		}
+		title: Mount Doom
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: [
+			Battleground
+			Mountain
+			Underground
+		]
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: constantlyCheck
+				}
+				requires: {
+					type: not
+					requires: {
+						type: hasInZoneData
+						filter: self
+					}
+				}
+				effect: [
+					{
+						type: MemorizeInfo
+						memory: used
+						info: yes
+					}
+					{
+						type: storeWhileInZone
+						memory: used
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: cantReplaceSite
+							filter: inSameRegion
+						}
+						until: endOfGame
+					}
+				]
+			}
+		]
+		gametext: <b>Battleground</b>. <b>Mountain</b>. <b>Underground</b>. Until the end of the game, sites in this region cannot be replaced.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_194: {
+		cardInfo: {
+			imagePath: decipher/LOTR15194.jpg
+			//parentId: 15_194
+			//One of: Variant, Errata, Reprint
+			//parentType: Variant
+			//parentPath: alts/promo
+			version: 0
+			collInfo: 15S194
+			rarity: S
+			setNum: "15"
+			cardNum: 194
+			style: Standard
+		}
+		title: Westfold Village
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Plains
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: hunter,character
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Plains</b>. Each hunter character is strength +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

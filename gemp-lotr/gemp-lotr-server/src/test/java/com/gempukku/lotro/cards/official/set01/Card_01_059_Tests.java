@@ -38,28 +38,29 @@ public class Card_01_059_Tests
 	public void ShouldertoShoulderStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Shoulder to Shoulder
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Elven
-		* Twilight Cost: 1
-		* Type: condition
-		* Subtype: Support Area
-		* Game Text: <b>Fellowship:</b> Add (1) and exert a Dwarf to heal an Elf, or add (1) and exert an Elf to heal a Dwarf.
-		*/
+		 * Set: 1
+		 * Name: Shoulder to Shoulder
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support Area
+		 * Game Text: <b>Fellowship:</b> Add (1) and exert a Dwarf to heal an Elf, or add (1) and exert an Elf to heal a Dwarf.
+		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var sts = scn.GetFreepsCard("sts");
+		var card = scn.GetFreepsCard("sts");
 
-		assertFalse(sts.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, sts.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, sts.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, sts.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(sts, Keyword.SUPPORT_AREA));
-		assertEquals(1, sts.getBlueprint().getTwilightCost());
+		assertEquals("Shoulder to Shoulder", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test

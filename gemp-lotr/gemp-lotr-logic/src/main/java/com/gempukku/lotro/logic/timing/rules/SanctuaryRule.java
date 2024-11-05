@@ -8,7 +8,7 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.actions.DefaultActionsEnvironment;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.effects.ChooseAndHealCharactersEffect;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.timing.EffectResult;
 
@@ -26,7 +26,7 @@ public class SanctuaryRule {
 
     public void applyRule() {
         _modifiersLogic.addAlwaysOnModifier(
-                new KeywordModifier(null, Filters.and(CardType.SITE, Filters.or(Filters.siteNumber(3), Filters.siteNumber(6))), Keyword.SANCTUARY));
+                new AddKeywordModifier(null, Filters.and(CardType.SITE, Filters.or(Filters.siteNumber(3), Filters.siteNumber(6))), null, Keyword.SANCTUARY));
 
         _actionsEnvironment.addAlwaysOnActionProxy(
                 new AbstractActionProxy() {

@@ -361,6 +361,8 @@ class Card {
             return (cardNo == 1);
         if (setNo == 101 || setNo == 151)
             return (cardNo >= 57 && cardNo <= 64);
+        if (setNo == 102 || setNo == 152)
+            return (cardNo >= 67 && cardNo <= 73)
 
         return false;
     }

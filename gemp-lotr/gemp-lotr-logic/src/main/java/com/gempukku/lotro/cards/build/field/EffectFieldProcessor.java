@@ -5,9 +5,6 @@ import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.FieldProcessor;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.effect.*;
-import com.gempukku.lotro.cards.build.field.effect.modifier.Modifier;
-import com.gempukku.lotro.cards.build.field.effect.modifier.ModifyOwnCost;
-import com.gempukku.lotro.cards.build.field.effect.modifier.PermanentSiteModifier;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;
@@ -18,24 +15,33 @@ public class EffectFieldProcessor implements FieldProcessor {
 
     public EffectFieldProcessor() {
         effectProcessors.put("activated", new ActivatedEffectProcessor());
+        effectProcessors.put("activatedfromstacked", new ActivatedFromStackedEffectProcessor());
         effectProcessors.put("activatedindiscard", new ActivatedInDiscardEffectProcessor());
-        effectProcessors.put("activatedtrigger", new ActivatedTriggerEffectProcessor());
+        effectProcessors.put("activatedindrawdeck", new ActivatedInDrawDeckEffectProcessor());
         effectProcessors.put("aidcost", new AidCost());
+        effectProcessors.put("assignmentcost", new AssignmentCost());
+        effectProcessors.put("controlledsitemodifier", new ControlledSiteModifier());
         effectProcessors.put("copycard", new CopyCard());
         effectProcessors.put("deckbuildingrestriction", new DeckBuildingRestrictionGameTextProcessor());
         effectProcessors.put("discardedfromplaytrigger", new DiscardedFromPlayTriggerEffectProcessor());
+        effectProcessors.put("displayableinformation", new DisplayableInformationEffectProcessor());
         effectProcessors.put("discount", new PotentialDiscount());
         effectProcessors.put("event", new EventEffectProcessor());
+        effectProcessors.put("exerttargetextracost", new ExertTargetExtraCost());
         effectProcessors.put("extracost", new ExtraCost());
         effectProcessors.put("extrapossessionclass", new ExtraPossessionClassEffectProcessor());
         effectProcessors.put("inhandtrigger", new InHandTriggerEffectProcessor());
         effectProcessors.put("killedtrigger", new KilledTriggerEffectProcessor());
         effectProcessors.put("modifier", new Modifier());
-        effectProcessors.put("permanentsitemodifier", new PermanentSiteModifier());
+        effectProcessors.put("modifierindiscard", new ModifierInDiscard());
         effectProcessors.put("modifyowncost", new ModifyOwnCost());
+        effectProcessors.put("permanentsitemodifier", new PermanentSiteModifier());
         effectProcessors.put("playedinotherphase", new PlayedInOtherPhase());
+        effectProcessors.put("response", new ResponseEffectProcessor());
         effectProcessors.put("responseevent", new ResponseEventEffectProcessor());
+        effectProcessors.put("stackedonmodifier", new StackedOnModifier());
         effectProcessors.put("trigger", new TriggerEffectProcessor());
+        effectProcessors.put("toplay", new ToPlay());
     }
 
     @Override
@@ -45,7 +51,7 @@ public class EffectFieldProcessor implements FieldProcessor {
             final String effectType = FieldUtils.getString(effect.get("type"), "type");
             final EffectProcessor effectProcessor = effectProcessors.get(effectType.toLowerCase());
             if (effectProcessor == null)
-                throw new InvalidCardDefinitionException("Unable to find effect of type: " + effectType);
+                throw new InvalidCardDefinitionException("Unable to find top-level game text of type: " + effectType);
             effectProcessor.processEffect(effect, blueprint, environment);
         }
     }

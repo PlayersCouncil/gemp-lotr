@@ -9,6 +9,7 @@ import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.GameStats;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -40,7 +41,7 @@ public class GameState {
     private int _twilightPool;
 
     private int _moveCount;
-    private boolean _moving;
+    private int turnNumber;
     private boolean _fierceSkirmishes;
     private boolean _extraSkirmishes;
 
@@ -150,14 +151,6 @@ public class GameState {
                 }
             }
         }
-    }
-
-    public boolean isMoving() {
-        return _moving;
-    }
-
-    public void setMoving(boolean moving) {
-        _moving = moving;
     }
 
     private void addPlayerCards(String playerId, List<String> cards, LotroCardBlueprintLibrary library) {
@@ -504,7 +497,7 @@ public class GameState {
                 if (assignment.getFellowshipCharacter() == card)
                     removeAssignment(assignment);
                 if (assignment.getShadowCharacters().remove(card))
-                    if (assignment.getShadowCharacters().size() == 0)
+                    if (assignment.getShadowCharacters().isEmpty())
                         removeAssignment(assignment);
             }
 
@@ -541,7 +534,7 @@ public class GameState {
         if (end)
             zoneCards.add((PhysicalCardImpl) card);
         else
-            zoneCards.add(0, (PhysicalCardImpl) card);
+            zoneCards.addFirst((PhysicalCardImpl) card);
 
         if (card.getZone() != null)
             _log.error("Card was in " + card.getZone() + " when tried to add to zone: " + zone);
@@ -817,14 +810,21 @@ public class GameState {
         return _twilightPool;
     }
 
-    public void startPlayerTurn(String playerId) {
+    public void startPlayerTurn(String playerId, boolean realTurn) {
         _currentPlayerId = playerId;
+        if (realTurn) {
+            turnNumber++;
+        }
         setTwilight(0);
         _moveCount = 0;
         _fierceSkirmishes = false;
 
         for (GameStateListener listener : getAllGameStateListeners())
             listener.setCurrentPlayerId(_currentPlayerId);
+    }
+
+    public int getTurnNumber() {
+        return turnNumber;
     }
 
     public boolean isExtraSkirmishes() {

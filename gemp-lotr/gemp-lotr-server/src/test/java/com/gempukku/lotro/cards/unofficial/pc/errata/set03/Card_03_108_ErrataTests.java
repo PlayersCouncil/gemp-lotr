@@ -56,7 +56,7 @@ public class Card_03_108_ErrataTests
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(1, card.getBlueprint().getStrength());
 		//assertEquals(, card.getBlueprint().getVitality());

@@ -43,23 +43,19 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
-						type: ChooseOpponent
-						memorize: opp
-					}
-					{
 						type: Repeat
-						amount: {
+						times: {
 							type: ForEachWound
 							filter: minion,InSkirmishAgainst(self)
 						}
 						effect: {
 							type: Wound
-							player: FromMemory(opp)
-							filter: choose(minion)
+							player: shadow
+							select: choose(minion)
 						}
 					}
 					{

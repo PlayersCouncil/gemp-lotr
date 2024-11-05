@@ -30,7 +30,7 @@
 			}
 			effect: {
 				type: exert
-				filter: choose(companion)
+				select: choose(companion)
 			}
 		}
 		gametext: Each time a companion skirmishing a [Gollum] minion takes a wound, exert a companion.
