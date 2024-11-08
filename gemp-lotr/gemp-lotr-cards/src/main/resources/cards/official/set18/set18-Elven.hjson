@@ -2,17 +2,9 @@
 
 	18_4: {
 		cardInfo: {
-			imagePath: decipher/LOTR18004.jpg
-			//parentId: 18_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18004.jpg
 			collInfo: 18R4
 			rarity: R
-			setNum: "18"
-			cardNum: 4
-			style: Standard
 		}
 		title: Arwen's Bow
 		unique: true
@@ -56,17 +48,9 @@
 
 	18_5: {
 		cardInfo: {
-			imagePath: decipher/LOTR18005.jpg
-			//parentId: 18_5
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18005.jpg
 			collInfo: 18R5
 			rarity: R
-			setNum: "18"
-			cardNum: 5
-			style: Standard
 		}
 		title: Arwen's Dagger
 		unique: true
@@ -111,17 +95,9 @@
 
 	18_6: {
 		cardInfo: {
-			imagePath: decipher/LOTR18006.jpg
-			//parentId: 18_6
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18006.jpg
 			collInfo: 18R6
 			rarity: R
-			setNum: "18"
-			cardNum: 6
-			style: Standard
 		}
 		title: Back to the Light
 		unique: false
@@ -186,17 +162,9 @@
 
 	18_7: {
 		cardInfo: {
-			imagePath: decipher/LOTR18007.jpg
-			//parentId: 18_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18007.jpg
 			collInfo: 18R7
 			rarity: R
-			setNum: "18"
-			cardNum: 7
-			style: Standard
 		}
 		title: Celebring
 		subtitle: Elven-smith
@@ -250,17 +218,9 @@
 
 	18_8: {
 		cardInfo: {
-			imagePath: decipher/LOTR18008.jpg
-			//parentId: 18_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18008.jpg
 			collInfo: 18U8
 			rarity: U
-			setNum: "18"
-			cardNum: 8
-			style: Standard
 		}
 		title: Elven Armaments
 		unique: false
@@ -322,17 +282,9 @@
 
 	18_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR18009.jpg
-			//parentId: 18_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18009.jpg
 			collInfo: 18C9
 			rarity: C
-			setNum: "18"
-			cardNum: 9
-			style: Standard
 		}
 		title: Elven Defender
 		unique: false
@@ -371,17 +323,9 @@
 
 	18_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR18010.jpg
-			//parentId: 18_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18010.jpg
 			collInfo: 18U10
 			rarity: U
-			setNum: "18"
-			cardNum: 10
-			style: Standard
 		}
 		title: Elven Supplies
 		unique: false
@@ -433,17 +377,9 @@
 
 	18_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR18011.jpg
-			//parentId: 18_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18011.jpg
 			collInfo: 18R11
 			rarity: R
-			setNum: "18"
-			cardNum: 11
-			style: Standard
 		}
 		title: Galadriel's Silver Ewer
 		unique: true
@@ -504,17 +440,9 @@
 
 	18_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR18012.jpg
-			//parentId: 18_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18012.jpg
 			collInfo: 18R12
 			rarity: R
-			setNum: "18"
-			cardNum: 12
-			style: Standard
 		}
 		title: Gil-galad
 		subtitle: High King of the Noldor
@@ -574,17 +502,9 @@
 
 	18_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR18013.jpg
-			//parentId: 18_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18013.jpg
 			collInfo: 18R13
 			rarity: R
-			setNum: "18"
-			cardNum: 13
-			style: Standard
 		}
 		title: Glorfindel
 		subtitle: Eldarin Lord
@@ -640,17 +560,9 @@
 
 	18_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR18014.jpg
-			//parentId: 18_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18014.jpg
 			collInfo: 18R14
 			rarity: R
-			setNum: "18"
-			cardNum: 14
-			style: Standard
 		}
 		title: Haldir
 		subtitle: Warrior Messenger
@@ -705,17 +617,9 @@
 
 	18_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR18015.jpg
-			//parentId: 18_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18015.jpg
 			collInfo: 18R15
 			rarity: R
-			setNum: "18"
-			cardNum: 15
-			style: Standard
 		}
 		title: Lembas Bread
 		unique: false
@@ -758,17 +662,9 @@
 
 	18_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR18016.jpg
-			//parentId: 18_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18016.jpg
 			collInfo: 18C16
 			rarity: C
-			setNum: "18"
-			cardNum: 16
-			style: Standard
 		}
 		title: Miruvóre
 		unique: false
@@ -803,17 +699,9 @@
 
 	18_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR18017.jpg
-			//parentId: 18_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18017.jpg
 			collInfo: 18C17
 			rarity: C
-			setNum: "18"
-			cardNum: 17
-			style: Standard
 		}
 		title: Woodhall Elf
 		subtitle: Exile

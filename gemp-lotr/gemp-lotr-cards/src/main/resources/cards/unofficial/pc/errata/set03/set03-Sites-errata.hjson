@@ -2,17 +2,14 @@
 
 	53_120: {
 		cardInfo: {
-			imagePath: errata/53_120.jpg
-			javaClass: false
+			//id: 3_120.1
 			parent: 3_120
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/53_120.jpg
 			collInfo: 3U120
 			rarity: U
-			setNum: "3"
-			cardNum: 120
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Wastes of Emyn Muil
 		twilight: 9

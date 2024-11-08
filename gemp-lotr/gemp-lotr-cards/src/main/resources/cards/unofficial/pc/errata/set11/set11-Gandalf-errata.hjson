@@ -2,17 +2,11 @@
 
 	61_31: {
 		cardInfo: {
-			imagePath: errata/61_31.jpg
-			javaClass: false
-			parent: 11_31
-			parentPath: errata/pc
-			version: 1?
+			//id: 1_31.1
+			revision: 1
+			image: errata/61_31.jpg
 			collInfo: 11C31
 			rarity: C
-			setNum: "11"
-			cardNum: 31
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Final Account
 		culture: gandalf

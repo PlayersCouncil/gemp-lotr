@@ -2,17 +2,14 @@
 
 	53_106: {
 		cardInfo: {
-			imagePath: errata/53_106.jpg
-			javaClass: false
+			//id: 3_106.1
 			parent: 3_106
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/53_106.jpg
 			collInfo: 3U106
 			rarity: U
-			setNum: "3"
-			cardNum: 106
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Bill the Pony
 		unique: true
@@ -61,17 +58,14 @@
 
 	53_108: {
 		cardInfo: {
-			imagePath: errata/53_108.jpg
-			javaClass: false
+			//id: 3_108.1
 			parent: 3_108
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/53_108.jpg
 			collInfo: 3C108
 			rarity: C
-			setNum: "3"
-			cardNum: 108
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Frying Pan
 		culture: Shire
@@ -105,17 +99,14 @@
 
 	53_113: {
 		cardInfo: {
-			imagePath: errata/53_113.jpg
-			javaClass: false
+			//id: 3_113.1
 			parent: 3_113
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/53_113.jpg
 			collInfo: 3R113
 			rarity: R
-			setNum: "3"
-			cardNum: 113
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The Shire Countryside
 		unique: true

@@ -1,5 +1,10 @@
 {
 	33_1: {
+		cardInfo: {
+			image: hobbit/HDG331.jpg
+			collInfo: 33_1
+			rarity: _
+		}
 		title: Ancient Forges
 		unique: true
 		culture: dwarven
@@ -55,6 +60,11 @@
 		]
 	}
 	33_2: {
+		cardInfo: {
+			image: hobbit/HDG332.jpg
+			collInfo: 33_2
+			rarity: _
+		}
 		title: At Your Service!
 		culture: dwarven
 		twilight: 2
@@ -81,6 +91,11 @@
 		}
 	}
 	33_3: {
+		cardInfo: {
+			image: hobbit/HDG333.jpg
+			collInfo: 33_3
+			rarity: _
+		}
 		title: Balin's Armor
 		unique: true
 		culture: dwarven
@@ -120,6 +135,11 @@
 		]
 	}
 	33_4: {
+		cardInfo: {
+			image: hobbit/HDG334.jpg
+			collInfo: 33_4
+			rarity: _
+		}
 		title: Blunt the Knives!
 		culture: dwarven
 		twilight: 0
@@ -154,6 +174,11 @@
 		}
 	}
 	33_5: {
+		cardInfo: {
+			image: hobbit/HDG335.jpg
+			collInfo: 33_5
+			rarity: _
+		}
 		title: Dwarven Cooking Pot
 		unique: true
 		culture: dwarven

@@ -2,17 +2,9 @@
 
 	18_94: {
 		cardInfo: {
-			imagePath: decipher/LOTR18094.jpg
-			//parentId: 18_94
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18094.jpg
 			collInfo: 18C94
 			rarity: C
-			setNum: "18"
-			cardNum: 94
-			style: Standard
 		}
 		title: Cast from the Hall
 		unique: false
@@ -74,17 +66,9 @@
 
 	18_95: {
 		cardInfo: {
-			imagePath: decipher/LOTR18095.jpg
-			//parentId: 18_95
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18095.jpg
 			collInfo: 18R95
 			rarity: R
-			setNum: "18"
-			cardNum: 95
-			style: Standard
 		}
 		title: Éomer's Bow
 		unique: true
@@ -134,17 +118,9 @@
 
 	18_96: {
 		cardInfo: {
-			imagePath: decipher/LOTR18096.jpg
-			//parentId: 18_96
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18096.jpg
 			collInfo: 18R96
 			rarity: R
-			setNum: "18"
-			cardNum: 96
-			style: Standard
 		}
 		title: Erkenbrand's Horn
 		unique: true
@@ -205,17 +181,9 @@
 
 	18_97: {
 		cardInfo: {
-			imagePath: decipher/LOTR18097.jpg
-			//parentId: 18_97
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18097.jpg
 			collInfo: 18R97
 			rarity: R
-			setNum: "18"
-			cardNum: 97
-			style: Standard
 		}
 		title: Erkenbrand's Shield
 		unique: true
@@ -284,17 +252,9 @@
 
 	18_98: {
 		cardInfo: {
-			imagePath: decipher/LOTR18098.jpg
-			//parentId: 18_98
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18098.jpg
 			collInfo: 18R98
 			rarity: R
-			setNum: "18"
-			cardNum: 98
-			style: Standard
 		}
 		title: Fall Back to Helm's Deep
 		unique: false
@@ -333,17 +293,9 @@
 
 	18_99: {
 		cardInfo: {
-			imagePath: decipher/LOTR18099.jpg
-			//parentId: 18_99
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18099.jpg
 			collInfo: 18R99
 			rarity: R
-			setNum: "18"
-			cardNum: 99
-			style: Standard
 		}
 		title: Gamling
 		subtitle: Dutiful Marshal
@@ -381,17 +333,9 @@
 
 	18_100: {
 		cardInfo: {
-			imagePath: decipher/LOTR18100.jpg
-			//parentId: 18_100
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18100.jpg
 			collInfo: 18R100
 			rarity: R
-			setNum: "18"
-			cardNum: 100
-			style: Standard
 		}
 		title: Gamling's Horn
 		unique: true
@@ -451,17 +395,9 @@
 
 	18_101: {
 		cardInfo: {
-			imagePath: decipher/LOTR18101.jpg
-			//parentId: 18_101
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18101.jpg
 			collInfo: 18C101
 			rarity: C
-			setNum: "18"
-			cardNum: 101
-			style: Standard
 		}
 		title: Precise Attack
 		unique: false
@@ -514,17 +450,9 @@
 
 	18_102: {
 		cardInfo: {
-			imagePath: decipher/LOTR18102.jpg
-			//parentId: 18_102
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18102.jpg
 			collInfo: 18R102
 			rarity: R
-			setNum: "18"
-			cardNum: 102
-			style: Standard
 		}
 		title: Rohirrim Diadem
 		unique: false
@@ -576,17 +504,9 @@
 
 	18_103: {
 		cardInfo: {
-			imagePath: decipher/LOTR18103.jpg
-			//parentId: 18_103
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18103.jpg
 			collInfo: 18C103
 			rarity: C
-			setNum: "18"
-			cardNum: 103
-			style: Standard
 		}
 		title: Rohirrim Recruit
 		unique: false
@@ -626,17 +546,9 @@
 
 	18_104: {
 		cardInfo: {
-			imagePath: decipher/LOTR18104.jpg
-			//parentId: 18_104
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18104.jpg
 			collInfo: 18U104
 			rarity: U
-			setNum: "18"
-			cardNum: 104
-			style: Standard
 		}
 		title: Surrendered Weapons
 		unique: false
@@ -689,17 +601,9 @@
 
 	18_105: {
 		cardInfo: {
-			imagePath: decipher/LOTR18105.jpg
-			//parentId: 18_105
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18105.jpg
 			collInfo: 18R105
 			rarity: R
-			setNum: "18"
-			cardNum: 105
-			style: Standard
 		}
 		title: Théoden
 		subtitle: Ednew

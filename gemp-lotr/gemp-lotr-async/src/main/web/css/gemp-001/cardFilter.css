@@ -1,0 +1,13 @@
+
+#culture-buttons {
+	display:flex;
+	flex-wrap:wrap;
+}
+
+.filterLabel {
+	font-size: 80%;
+}
+
+#resetAdvancedFiltersButton, #resetAllFiltersButton {
+	font-size: 95% !important;
+}

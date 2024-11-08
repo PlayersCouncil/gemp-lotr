@@ -2,17 +2,9 @@
 
 	13_122: {
 		cardInfo: {
-			imagePath: decipher/LOTR13122.jpg
-			//parentId: 13_122
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13122.jpg
 			collInfo: 13U122
 			rarity: U
-			setNum: "13"
-			cardNum: 122
-			style: Standard
 		}
 		title: Bitter Tidings
 		unique: false
@@ -80,17 +72,9 @@
 
 	13_123: {
 		cardInfo: {
-			imagePath: decipher/LOTR13123.jpg
-			//parentId: 13_123
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13123.jpg
 			collInfo: 13R123
 			rarity: R
-			setNum: "13"
-			cardNum: 123
-			style: Standard
 		}
 		title: Éomer
 		subtitle: Heir to Meduseld
@@ -143,17 +127,9 @@
 
 	13_124: {
 		cardInfo: {
-			imagePath: decipher/LOTR13124.jpg
-			//parentId: 13_124
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13124.jpg
 			collInfo: 13U124
 			rarity: U
-			setNum: "13"
-			cardNum: 124
-			style: Standard
 		}
 		title: Éowyn
 		subtitle: Restless Warrior
@@ -221,17 +197,9 @@
 
 	13_125: {
 		cardInfo: {
-			imagePath: decipher/LOTR13125.jpg
-			//parentId: 13_125
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13125.jpg
 			collInfo: 13C125
 			rarity: C
-			setNum: "13"
-			cardNum: 125
-			style: Standard
 		}
 		title: Ferthu Théoden Hal
 		unique: false
@@ -274,17 +242,9 @@
 
 	13_126: {
 		cardInfo: {
-			imagePath: decipher/LOTR13126.jpg
-			//parentId: 13_126
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13126.jpg
 			collInfo: 13R126
 			rarity: R
-			setNum: "13"
-			cardNum: 126
-			style: Standard
 		}
 		title: Firefoot
 		subtitle: Mearas of The Mark
@@ -355,17 +315,9 @@
 
 	13_127: {
 		cardInfo: {
-			imagePath: decipher/LOTR13127.jpg
-			//parentId: 13_127
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13127.jpg
 			collInfo: 13C127
 			rarity: C
-			setNum: "13"
-			cardNum: 127
-			style: Standard
 		}
 		title: Freely Across Our Land
 		unique: true
@@ -428,17 +380,9 @@
 
 	13_128: {
 		cardInfo: {
-			imagePath: decipher/LOTR13128.jpg
-			//parentId: 13_128
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13128.jpg
 			collInfo: 13U128
 			rarity: U
-			setNum: "13"
-			cardNum: 128
-			style: Standard
 		}
 		title: Háma
 		subtitle: Captain of the King's Guard
@@ -489,17 +433,9 @@
 
 	13_129: {
 		cardInfo: {
-			imagePath: decipher/LOTR13129.jpg
-			//parentId: 13_129
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13129.jpg
 			collInfo: 13C129
 			rarity: C
-			setNum: "13"
-			cardNum: 129
-			style: Standard
 		}
 		title: Hamstrung
 		unique: false
@@ -539,17 +475,9 @@
 
 	13_130: {
 		cardInfo: {
-			imagePath: decipher/LOTR13130.jpg
-			//parentId: 13_130
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13130.jpg
 			collInfo: 13U130
 			rarity: U
-			setNum: "13"
-			cardNum: 130
-			style: Standard
 		}
 		title: Hurried Barrows
 		unique: false
@@ -601,17 +529,9 @@
 
 	13_131: {
 		cardInfo: {
-			imagePath: decipher/LOTR13131.jpg
-			//parentId: 13_131
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13131.jpg
 			collInfo: 13U131
 			rarity: U
-			setNum: "13"
-			cardNum: 131
-			style: Standard
 		}
 		title: King's Board
 		unique: true
@@ -677,17 +597,9 @@
 
 	13_132: {
 		cardInfo: {
-			imagePath: decipher/LOTR13132.jpg
-			//parentId: 13_132
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13132.jpg
 			collInfo: 13C132
 			rarity: C
-			setNum: "13"
-			cardNum: 132
-			style: Standard
 		}
 		title: Merchant of Westfold
 		unique: false
@@ -734,17 +646,9 @@
 
 	13_133: {
 		cardInfo: {
-			imagePath: decipher/LOTR13133.jpg
-			//parentId: 13_133
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13133.jpg
 			collInfo: 13C133
 			rarity: C
-			setNum: "13"
-			cardNum: 133
-			style: Standard
 		}
 		title: Riddermark Tactician
 		unique: false
@@ -812,17 +716,9 @@
 
 	13_134: {
 		cardInfo: {
-			imagePath: decipher/LOTR13134.jpg
-			//parentId: 13_134
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13134.jpg
 			collInfo: 13C134
 			rarity: C
-			setNum: "13"
-			cardNum: 134
-			style: Standard
 		}
 		title: Ride With Me
 		unique: false
@@ -896,17 +792,9 @@
 
 	13_135: {
 		cardInfo: {
-			imagePath: decipher/LOTR13135.jpg
-			//parentId: 13_135
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13135.jpg
 			collInfo: 13U135
 			rarity: U
-			setNum: "13"
-			cardNum: 135
-			style: Standard
 		}
 		title: Rider's Bow
 		unique: false
@@ -952,17 +840,9 @@
 
 	13_136: {
 		cardInfo: {
-			imagePath: decipher/LOTR13136.jpg
-			//parentId: 13_136
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13136.jpg
 			collInfo: 13R136
 			rarity: R
-			setNum: "13"
-			cardNum: 136
-			style: Standard
 		}
 		title: Snowmane
 		subtitle: Noble Mearas
@@ -1019,17 +899,9 @@
 
 	13_137: {
 		cardInfo: {
-			imagePath: decipher/LOTR13137.jpg
-			//parentId: 13_137
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13137.jpg
 			collInfo: 13R137
 			rarity: R
-			setNum: "13"
-			cardNum: 137
-			style: Standard
 		}
 		title: Théoden
 		subtitle: The Renowned
@@ -1102,17 +974,9 @@
 
 	13_138: {
 		cardInfo: {
-			imagePath: decipher/LOTR13138.jpg
-			//parentId: 13_138
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13138.jpg
 			collInfo: 13R138
 			rarity: R
-			setNum: "13"
-			cardNum: 138
-			style: Standard
 		}
 		title: Théodred
 		subtitle: Second Marshal of the Mark
@@ -1160,17 +1024,9 @@
 
 	13_139: {
 		cardInfo: {
-			imagePath: decipher/LOTR13139.jpg
-			//parentId: 13_139
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13139.jpg
 			collInfo: 13R139
 			rarity: R
-			setNum: "13"
-			cardNum: 139
-			style: Standard
 		}
 		title: Wind-swept Homestead
 		unique: true

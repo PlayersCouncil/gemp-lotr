@@ -2,17 +2,9 @@
 
 	12_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR12001.jpg
-			//parentId: 12_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12001.jpg
 			collInfo: 12U1
 			rarity: U
-			setNum: "12"
-			cardNum: 1
-			style: Standard
 		}
 		title: Argument Ready to Hand
 		unique: false
@@ -53,17 +45,9 @@
 
 	12_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR12002.jpg
-			//parentId: 12_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12002.jpg
 			collInfo: 12U2
 			rarity: U
-			setNum: "12"
-			cardNum: 2
-			style: Standard
 		}
 		title: Belt of Erebor
 		unique: false
@@ -117,17 +101,9 @@
 
 	12_3: {
 		cardInfo: {
-			imagePath: decipher/LOTR12003.jpg
-			//parentId: 12_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12003.jpg
 			collInfo: 12U3
 			rarity: U
-			setNum: "12"
-			cardNum: 3
-			style: Standard
 		}
 		title: A Clamour of Many Voices
 		unique: false
@@ -166,17 +142,9 @@
 
 	12_4: {
 		cardInfo: {
-			imagePath: decipher/LOTR12004.jpg
-			//parentId: 12_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12004.jpg
 			collInfo: 12C4
 			rarity: C
-			setNum: "12"
-			cardNum: 4
-			style: Standard
 		}
 		title: Durability
 		unique: false
@@ -218,17 +186,9 @@
 
 	12_5: {
 		cardInfo: {
-			imagePath: decipher/LOTR12005.jpg
-			//parentId: 12_5
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12005.jpg
 			collInfo: 12U5
 			rarity: U
-			setNum: "12"
-			cardNum: 5
-			style: Standard
 		}
 		title: Dwarven Bracers
 		unique: false
@@ -276,17 +236,9 @@
 
 	12_6: {
 		cardInfo: {
-			imagePath: decipher/LOTR12006.jpg
-			//parentId: 12_6
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12006.jpg
 			collInfo: 12C6
 			rarity: C
-			setNum: "12"
-			cardNum: 6
-			style: Standard
 		}
 		title: Dwarven Skill
 		unique: false
@@ -335,17 +287,9 @@
 
 	12_7: {
 		cardInfo: {
-			imagePath: decipher/LOTR12007.jpg
-			//parentId: 12_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12007.jpg
 			collInfo: 12C7
 			rarity: C
-			setNum: "12"
-			cardNum: 7
-			style: Standard
 		}
 		title: Dwarven Warrior
 		unique: false
@@ -389,17 +333,9 @@
 
 	12_8: {
 		cardInfo: {
-			imagePath: decipher/LOTR12008.jpg
-			//parentId: 12_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12008.jpg
 			collInfo: 12C8
 			rarity: C
-			setNum: "12"
-			cardNum: 8
-			style: Standard
 		}
 		title: His Father's Charge
 		unique: false
@@ -480,17 +416,9 @@
 
 	12_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR12009.jpg
-			//parentId: 12_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12009.jpg
 			collInfo: 12R9
 			rarity: R
-			setNum: "12"
-			cardNum: 9
-			style: Standard
 		}
 		title: Loud and Strong
 		unique: false
@@ -533,17 +461,9 @@
 
 	12_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR12010.jpg
-			//parentId: 12_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12010.jpg
 			collInfo: 12R10
 			rarity: R
-			setNum: "12"
-			cardNum: 10
-			style: Standard
 		}
 		title: No Pauses, No Spills
 		unique: false
@@ -590,17 +510,9 @@
 
 	12_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR12011.jpg
-			//parentId: 12_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12011.jpg
 			collInfo: 12U11
 			rarity: U
-			setNum: "12"
-			cardNum: 11
-			style: Standard
 		}
 		title: Nobody Tosses a Dwarf
 		unique: false
@@ -637,17 +549,9 @@
 
 	12_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR12012.jpg
-			//parentId: 12_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12012.jpg
 			collInfo: 12U12
 			rarity: U
-			setNum: "12"
-			cardNum: 12
-			style: Standard
 		}
 		title: Proud and Able
 		unique: true
@@ -695,17 +599,9 @@
 
 	12_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR12013.jpg
-			//parentId: 12_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12013.jpg
 			collInfo: 12U13
 			rarity: U
-			setNum: "12"
-			cardNum: 13
-			style: Standard
 		}
 		title: Sharp Defense
 		unique: false
@@ -751,17 +647,9 @@
 
 	12_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR12014.jpg
-			//parentId: 12_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12014.jpg
 			collInfo: 12U14
 			rarity: U
-			setNum: "12"
-			cardNum: 14
-			style: Standard
 		}
 		title: Stalwart Support
 		unique: false
@@ -804,17 +692,9 @@
 
 	12_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR12015.jpg
-			//parentId: 12_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12015.jpg
 			collInfo: 12U15
 			rarity: U
-			setNum: "12"
-			cardNum: 15
-			style: Standard
 		}
 		title: Thrarin
 		subtitle: Smith of Erebor

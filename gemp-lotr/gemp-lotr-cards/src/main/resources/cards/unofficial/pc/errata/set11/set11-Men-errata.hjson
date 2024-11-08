@@ -2,17 +2,11 @@
 
 	61_100: {
 		cardInfo: {
-			imagePath: errata/61_100.jpg
-			javaClass: false
-			parent: 11_100
-			parentPath: errata/pc
-			version: 1?
+			//id: 1_100.1
+			revision: 1
+			image: errata/61_100.jpg
 			collInfo: 11R100
 			rarity: R
-			setNum: "11"
-			cardNum: 100
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Strange-looking Men
 		culture: men

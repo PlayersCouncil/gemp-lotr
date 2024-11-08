@@ -2,17 +2,9 @@
 
 	6_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR06024.jpg
-			//parentId: 6_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06024.jpg
 			collInfo: 6U24
 			rarity: U
-			setNum: "6"
-			cardNum: 24
-			style: Standard
 		}
 		title: Boomed and Trumpeted
 		unique: false
@@ -57,17 +49,9 @@
 
 	6_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR06025.jpg
-			//parentId: 6_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06025.jpg
 			collInfo: 6U25
 			rarity: U
-			setNum: "6"
-			cardNum: 25
-			style: Standard
 		}
 		title: Crack Into Rubble
 		unique: false
@@ -106,17 +90,9 @@
 
 	6_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR06026.jpg
-			//parentId: 6_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06026.jpg
 			collInfo: 6R26
 			rarity: R
-			setNum: "6"
-			cardNum: 26
-			style: Standard
 		}
 		title: Enraged
 		unique: false
@@ -151,17 +127,9 @@
 
 	6_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR06027.jpg
-			//parentId: 6_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06027.jpg
 			collInfo: 6C27
 			rarity: C
-			setNum: "6"
-			cardNum: 27
-			style: Standard
 		}
 		title: Ent Avenger
 		unique: false
@@ -201,17 +169,9 @@
 
 	6_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR06028.jpg
-			//parentId: 6_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06028.jpg
 			collInfo: 6R28
 			rarity: R
-			setNum: "6"
-			cardNum: 28
-			style: Standard
 		}
 		title: Ent Horde
 		unique: true
@@ -274,17 +234,9 @@
 
 	6_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR06029.jpg
-			//parentId: 6_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06029.jpg
 			collInfo: 6C29
 			rarity: C
-			setNum: "6"
-			cardNum: 29
-			style: Standard
 		}
 		title: Ent Moot
 		unique: false
@@ -316,17 +268,9 @@
 
 	6_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR06030.jpg
-			//parentId: 6_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06030.jpg
 			collInfo: 6R30
 			rarity: R
-			setNum: "6"
-			cardNum: 30
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Mithrandir
@@ -366,17 +310,9 @@
 
 	6_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR06031.jpg
-			//parentId: 6_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06031.jpg
 			collInfo: 6R31
 			rarity: R
-			setNum: "6"
-			cardNum: 31
-			style: Standard
 		}
 		title: Glamdring
 		subtitle: Lightning Brand
@@ -430,17 +366,9 @@
 
 	6_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR06032.jpg
-			//parentId: 6_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06032.jpg
 			collInfo: 6U32
 			rarity: U
-			setNum: "6"
-			cardNum: 32
-			style: Standard
 		}
 		title: Host of Fangorn
 		unique: true
@@ -483,17 +411,9 @@
 
 	6_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR06033.jpg
-			//parentId: 6_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06033.jpg
 			collInfo: 6C33
 			rarity: C
-			setNum: "6"
-			cardNum: 33
-			style: Standard
 		}
 		title: Quickbeam
 		subtitle: Bregalad
@@ -529,17 +449,9 @@
 
 	6_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR06034.jpg
-			//parentId: 6_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06034.jpg
 			collInfo: 6C34
 			rarity: C
-			setNum: "6"
-			cardNum: 34
-			style: Standard
 		}
 		title: Roused
 		unique: false
@@ -586,17 +498,9 @@
 
 	6_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR06035.jpg
-			//parentId: 6_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06035.jpg
 			collInfo: 6R35
 			rarity: R
-			setNum: "6"
-			cardNum: 35
-			style: Standard
 		}
 		title: Skinbark
 		subtitle: Fladrif
@@ -647,17 +551,9 @@
 
 	6_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR06036.jpg
-			//parentId: 6_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06036.jpg
 			collInfo: 6U36
 			rarity: U
-			setNum: "6"
-			cardNum: 36
-			style: Standard
 		}
 		title: Threw Down My Enemy
 		unique: false
@@ -694,17 +590,9 @@
 
 	6_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR06037.jpg
-			//parentId: 6_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06037.jpg
 			collInfo: 6C37
 			rarity: C
-			setNum: "6"
-			cardNum: 37
-			style: Standard
 		}
 		title: Treebeard
 		subtitle: Guardian of the Forest

@@ -2,17 +2,14 @@
 
 	59_26: {
 		cardInfo: {
-			imagePath: errata/59_26.jpg
-			javaClass: false
+			//id: 9_26.1
 			parent: 9_26
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/59_26.jpg
 			collInfo: 9R+26
 			rarity: R+
-			setNum: "9"
-			cardNum: 26
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Radagast
 		subtitle: The Brown
@@ -72,17 +69,14 @@
 	
 	59_27: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN09E027.1_card.jpg
-			javaClass: false
+			//id: 9_27.1
 			parent: 9_27
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN09E027.1_card.jpg
 			collInfo: 9R27
 			rarity: R
-			setNum: "9"
-			cardNum: 27
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Sent Back
 		unique: false

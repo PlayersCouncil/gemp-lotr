@@ -2,17 +2,9 @@
 
 	12_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR12055.jpg
-			//parentId: 12_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12055.jpg
 			collInfo: 12S55
 			rarity: S
-			setNum: "12"
-			cardNum: 55
-			style: Standard
 		}
 		title: Brutal Easterling
 		unique: false
@@ -53,17 +45,9 @@
 
 	12_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR12056.jpg
-			//parentId: 12_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12056.jpg
 			collInfo: 12R56
 			rarity: R
-			setNum: "12"
-			cardNum: 56
-			style: Standard
 		}
 		title: Castamir of Umbar
 		subtitle: Corsair Vandal
@@ -103,17 +87,9 @@
 
 	12_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR12057.jpg
-			//parentId: 12_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12057.jpg
 			collInfo: 12R57
 			rarity: R
-			setNum: "12"
-			cardNum: 57
-			style: Standard
 		}
 		title: Corrupted Spy
 		unique: false
@@ -176,17 +152,9 @@
 
 	12_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR12058.jpg
-			//parentId: 12_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12058.jpg
 			collInfo: 12U58
 			rarity: U
-			setNum: "12"
-			cardNum: 58
-			style: Standard
 		}
 		title: Countless Companies
 		unique: false
@@ -223,17 +191,9 @@
 
 	12_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR12059.jpg
-			//parentId: 12_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12059.jpg
 			collInfo: 12C59
 			rarity: C
-			setNum: "12"
-			cardNum: 59
-			style: Standard
 		}
 		title: Covetous Easterling
 		unique: false
@@ -269,17 +229,9 @@
 
 	12_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR12060.jpg
-			//parentId: 12_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12060.jpg
 			collInfo: 12C60
 			rarity: C
-			setNum: "12"
-			cardNum: 60
-			style: Standard
 		}
 		title: Crazed Hillman
 		unique: false
@@ -323,17 +275,9 @@
 
 	12_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR12061.jpg
-			//parentId: 12_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12061.jpg
 			collInfo: 12C61
 			rarity: C
-			setNum: "12"
-			cardNum: 61
-			style: Standard
 		}
 		title: Crooked Townsman
 		unique: false
@@ -371,17 +315,9 @@
 
 	12_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR12062.jpg
-			//parentId: 12_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12062.jpg
 			collInfo: 12U62
 			rarity: U
-			setNum: "12"
-			cardNum: 62
-			style: Standard
 		}
 		title: Dunlending Zealot
 		unique: false
@@ -428,17 +364,9 @@
 
 	12_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR12063.jpg
-			//parentId: 12_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12063.jpg
 			collInfo: 12U63
 			rarity: U
-			setNum: "12"
-			cardNum: 63
-			style: Standard
 		}
 		title: Easterling Banner-bearer
 		unique: false
@@ -486,17 +414,9 @@
 
 	12_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR12064.jpg
-			//parentId: 12_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12064.jpg
 			collInfo: 12C64
 			rarity: C
-			setNum: "12"
-			cardNum: 64
-			style: Standard
 		}
 		title: Enraged Southron
 		unique: false
@@ -539,17 +459,9 @@
 
 	12_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR12065.jpg
-			//parentId: 12_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12065.jpg
 			collInfo: 12S65
 			rarity: S
-			setNum: "12"
-			cardNum: 65
-			style: Standard
 		}
 		title: Frenzied Dunlending
 		unique: false
@@ -584,17 +496,9 @@
 
 	12_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR12066.jpg
-			//parentId: 12_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12066.jpg
 			collInfo: 12U66
 			rarity: U
-			setNum: "12"
-			cardNum: 66
-			style: Standard
 		}
 		title: Gathering Strength
 		unique: false
@@ -627,17 +531,9 @@
 
 	12_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR12067.jpg
-			//parentId: 12_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12067.jpg
 			collInfo: 12C67
 			rarity: C
-			setNum: "12"
-			cardNum: 67
-			style: Standard
 		}
 		title: Goaded to War
 		unique: false
@@ -679,17 +575,9 @@
 
 	12_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR12068.jpg
-			//parentId: 12_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12068.jpg
 			collInfo: 12R68
 			rarity: R
-			setNum: "12"
-			cardNum: 68
-			style: Standard
 		}
 		title: Gríma
 		subtitle: Betrayer of Rohan
@@ -735,17 +623,9 @@
 
 	12_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR12069.jpg
-			//parentId: 12_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12069.jpg
 			collInfo: 12R69
 			rarity: R
-			setNum: "12"
-			cardNum: 69
-			style: Standard
 		}
 		title: Harrying Hillman
 		unique: false
@@ -785,17 +665,9 @@
 
 	12_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR12070.jpg
-			//parentId: 12_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12070.jpg
 			collInfo: 12C70
 			rarity: C
-			setNum: "12"
-			cardNum: 70
-			style: Standard
 		}
 		title: Hemmed In
 		unique: false
@@ -850,17 +722,9 @@
 
 	12_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR12071.jpg
-			//parentId: 12_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12071.jpg
 			collInfo: 12U71
 			rarity: U
-			setNum: "12"
-			cardNum: 71
-			style: Standard
 		}
 		title: Last Days
 		unique: true
@@ -925,17 +789,9 @@
 
 	12_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR12072.jpg
-			//parentId: 12_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12072.jpg
 			collInfo: 12R72
 			rarity: R
-			setNum: "12"
-			cardNum: 72
-			style: Standard
 		}
 		title: Messenger's Mount
 		unique: true
@@ -984,17 +840,9 @@
 
 	12_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR12073.jpg
-			//parentId: 12_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12073.jpg
 			collInfo: 12S73
 			rarity: S
-			setNum: "12"
-			cardNum: 73
-			style: Standard
 		}
 		title: The Mouth of Sauron
 		subtitle: Messenger of Mordor
@@ -1036,17 +884,9 @@
 
 	12_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR12074.jpg
-			//parentId: 12_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12074.jpg
 			collInfo: 12R74
 			rarity: R
-			setNum: "12"
-			cardNum: 74
-			style: Standard
 		}
 		title: Mûmak Rider
 		unique: false
@@ -1096,17 +936,9 @@
 
 	12_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR12075.jpg
-			//parentId: 12_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12075.jpg
 			collInfo: 12R75
 			rarity: R
-			setNum: "12"
-			cardNum: 75
-			style: Standard
 		}
 		title: Poisonous Words
 		unique: false
@@ -1146,17 +978,9 @@
 
 	12_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR12076.jpg
-			//parentId: 12_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12076.jpg
 			collInfo: 12U76
 			rarity: U
-			setNum: "12"
-			cardNum: 76
-			style: Standard
 		}
 		title: Trail of Terror
 		unique: false
@@ -1203,17 +1027,9 @@
 
 	12_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR12077.jpg
-			//parentId: 12_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12077.jpg
 			collInfo: 12C77
 			rarity: C
-			setNum: "12"
-			cardNum: 77
-			style: Standard
 		}
 		title: War Trident
 		unique: false
@@ -1255,17 +1071,9 @@
 
 	12_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR12078.jpg
-			//parentId: 12_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12078.jpg
 			collInfo: 12C78
 			rarity: C
-			setNum: "12"
-			cardNum: 78
-			style: Standard
 		}
 		title: Wrathful Hillman
 		unique: false

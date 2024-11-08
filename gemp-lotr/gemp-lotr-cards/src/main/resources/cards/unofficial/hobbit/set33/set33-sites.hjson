@@ -1,5 +1,10 @@
 {
 	33_55: {
+		cardInfo: {
+			image: hobbit/HDG3355.jpg
+			collInfo: 33_55
+			rarity: _
+		}
 		title: Prancing Pony
 		twilight: 0
 		type: site
@@ -30,6 +35,11 @@
 		}
 	}
 	33_56: {
+		cardInfo: {
+			image: hobbit/HDG3356.jpg
+			collInfo: 33_56
+			rarity: _
+		}
 		title: Great East Road
 		twilight: 4
 		type: site
@@ -56,6 +66,11 @@
 		}
 	}
 	33_57: {
+		cardInfo: {
+			image: hobbit/HDG3357.jpg
+			collInfo: 33_57
+			rarity: _
+		}
 		title: The Last Homely House
 		twilight: 1
 		type: site
@@ -74,6 +89,11 @@
 		}
 	}
 	33_58: {
+		cardInfo: {
+			image: hobbit/HDG3358.jpg
+			collInfo: 33_58
+			rarity: _
+		}
 		title: Front Gate of Erebor
 		twilight: 8
 		type: site

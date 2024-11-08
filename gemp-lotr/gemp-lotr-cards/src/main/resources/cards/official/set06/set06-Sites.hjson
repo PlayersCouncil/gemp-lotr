@@ -2,17 +2,9 @@
 
 	6_115: {
 		cardInfo: {
-			imagePath: decipher/LOTR06115.jpg
-			//parentId: 6_115
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06115.jpg
 			collInfo: 6U115
 			rarity: U
-			setNum: "6"
-			cardNum: 115
-			style: Standard
 		}
 		title: Rocks of Emyn Muil
 		unique: false
@@ -47,17 +39,9 @@
 
 	6_116: {
 		cardInfo: {
-			imagePath: decipher/LOTR06116.jpg
-			//parentId: 6_116
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06116.jpg
 			collInfo: 6U116
 			rarity: U
-			setNum: "6"
-			cardNum: 116
-			style: Standard
 		}
 		title: Westfold
 		unique: false
@@ -96,17 +80,9 @@
 
 	6_117: {
 		cardInfo: {
-			imagePath: decipher/LOTR06117.jpg
-			//parentId: 6_117
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06117.jpg
 			collInfo: 6U117
 			rarity: U
-			setNum: "6"
-			cardNum: 117
-			style: Standard
 		}
 		title: Meduseld
 		unique: false
@@ -144,17 +120,9 @@
 
 	6_118: {
 		cardInfo: {
-			imagePath: decipher/LOTR06118.jpg
-			//parentId: 6_118
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06118.jpg
 			collInfo: 6U118
 			rarity: U
-			setNum: "6"
-			cardNum: 118
-			style: Standard
 		}
 		title: Hornburg Hall
 		unique: false
@@ -196,17 +164,9 @@
 
 	6_119: {
 		cardInfo: {
-			imagePath: decipher/LOTR06119.jpg
-			//parentId: 6_119
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06119.jpg
 			collInfo: 6U119
 			rarity: U
-			setNum: "6"
-			cardNum: 119
-			style: Standard
 		}
 		title: Valley of Saruman
 		unique: false
@@ -241,17 +201,9 @@
 
 	6_120: {
 		cardInfo: {
-			imagePath: decipher/LOTR06120.jpg
-			//parentId: 6_120
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06120.jpg
 			collInfo: 6U120
 			rarity: U
-			setNum: "6"
-			cardNum: 120
-			style: Standard
 		}
 		title: Saruman's Laboratory
 		unique: false

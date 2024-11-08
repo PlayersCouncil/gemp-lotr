@@ -2,17 +2,11 @@
 	
 	68_48: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E048.1.jpg
-			javaClass: false
-			parent: 18_48
-			parentPath: errata/pc
-			version: 1
+			//id: 8_48.1
+			revision: 1
+			image: errata/LOTR-EN18E048.1.jpg
 			collInfo: 18R48
 			rarity: R
-			setNum: "18"
-			cardNum: 48
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Faramir
 		subtitle: Captain of Ithilien
@@ -69,17 +63,11 @@
 
 	68_50: {
 		cardInfo: {
-			imagePath: errata/68_50.jpg
-			javaClass: false
-			parent: 18_50
-			parentPath: errata/pc
-			version: 1?
+			//id: 8_50.1
+			revision: 1
+			image: errata/68_50.jpg
 			collInfo: 18R50
 			rarity: R
-			setNum: "18"
-			cardNum: 50
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The Faithful Stone
 		unique: true

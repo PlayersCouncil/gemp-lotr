@@ -2,17 +2,9 @@
 
 	17_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR17027.jpg
-			//parentId: 17_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17027.jpg
 			collInfo: 17R27
 			rarity: R
-			setNum: "17"
-			cardNum: 27
-			style: Standard
 		}
 		title: Andúril
 		subtitle: Sword That Was Broken
@@ -77,17 +69,9 @@
 
 	17_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR17028.jpg
-			//parentId: 17_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17028.jpg
 			collInfo: 17R28
 			rarity: R
-			setNum: "17"
-			cardNum: 28
-			style: Standard
 		}
 		title: Faramir
 		subtitle: Bearer of Quality
@@ -158,17 +142,9 @@
 
 	17_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR17029.jpg
-			//parentId: 17_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17029.jpg
 			collInfo: 17R29
 			rarity: R
-			setNum: "17"
-			cardNum: 29
-			style: Standard
 		}
 		title: Faramir's Bow
 		subtitle: Ithilien Longbow
@@ -223,17 +199,9 @@
 
 	17_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR17030.jpg
-			//parentId: 17_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17030.jpg
 			collInfo: 17S30
 			rarity: S
-			setNum: "17"
-			cardNum: 30
-			style: Standard
 		}
 		title: Madril
 		subtitle: Loyal Lieutenant
@@ -292,17 +260,9 @@
 
 	17_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR17031.jpg
-			//parentId: 17_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17031.jpg
 			collInfo: 17R31
 			rarity: R
-			setNum: "17"
-			cardNum: 31
-			style: Standard
 		}
 		title: Narsil
 		subtitle: Forged by Telchar
@@ -354,17 +314,9 @@
 
 	17_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR17032.jpg
-			//parentId: 17_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17032.jpg
 			collInfo: 17U32
 			rarity: U
-			setNum: "17"
-			cardNum: 32
-			style: Standard
 		}
 		title: Nimble Attack
 		unique: false
@@ -406,17 +358,9 @@
 
 	17_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR17033.jpg
-			//parentId: 17_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17033.jpg
 			collInfo: 17S33
 			rarity: S
-			setNum: "17"
-			cardNum: 33
-			style: Standard
 		}
 		title: Ranger of the White Tree
 		unique: false
@@ -480,17 +424,9 @@
 
 	17_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR17034.jpg
-			//parentId: 17_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17034.jpg
 			collInfo: 17U34
 			rarity: U
-			setNum: "17"
-			cardNum: 34
-			style: Standard
 		}
 		title: Spirit of the White Tree
 		unique: false
@@ -537,17 +473,9 @@
 
 	17_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR17035.jpg
-			//parentId: 17_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17035.jpg
 			collInfo: 17S35
 			rarity: S
-			setNum: "17"
-			cardNum: 35
-			style: Standard
 		}
 		title: Soldier's Cache
 		unique: false
@@ -625,17 +553,9 @@
 
 	17_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR17036.jpg
-			//parentId: 17_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17036.jpg
 			collInfo: 17R36
 			rarity: R
-			setNum: "17"
-			cardNum: 36
-			style: Standard
 		}
 		title: Throne of Minas Tirith
 		unique: true

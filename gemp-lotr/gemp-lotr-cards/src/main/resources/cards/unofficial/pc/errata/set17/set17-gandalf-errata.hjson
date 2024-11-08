@@ -1,17 +1,11 @@
 {
 	67_15: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN17E015.1.jpg
-			javaClass: false
-			parent: 17_15
-			parentPath: errata/pc
-			version: 1
+			//id: 7_15.1
+			revision: 1
+			image: errata/LOTR-EN17E015.1.jpg
 			collInfo: 17U15
 			rarity: U
-			setNum: "17"
-			cardNum: 15
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: A New Light
 		unique: false
@@ -80,17 +74,11 @@
 	
 	67_24: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN17E024.1_card.jpg
-			javaClass: false
-			parent: 17_24
-			parentPath: errata/pc
-			version: 1
+			//id: 7_24.1
+			revision: 1
+			image: errata/LOTR-EN17E024.1_card.jpg
 			collInfo: 17R24
 			rarity: R
-			setNum: "17"
-			cardNum: 24
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Shadowfax
 		subtitle: Greatest of the Mearas

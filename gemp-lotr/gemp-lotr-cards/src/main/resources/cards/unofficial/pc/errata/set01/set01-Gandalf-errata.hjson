@@ -2,17 +2,14 @@
 	
 		51_70: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E070.1_card.jpg
-			javaClass: false
+			//id: 1_70.4
 			parent: 1_70
-			parentPath: errata/pc
-			version: 4
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 4
+			image: errata/LOTR-EN01E070.1_card.jpg
 			collInfo: 1U70
 			rarity: U
-			setNum: "1"
-			cardNum: 70
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Barliman Butterbur
 		subtitle: Prancing Pony Proprietor
@@ -50,17 +47,14 @@
 
 	51_80: {
 		cardInfo: {
-			imagePath: errata/51_80.jpg
-			javaClass: false
+			//id: 1_80.1
 			parent: 1_80
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_80.jpg
 			collInfo: 1R80
 			rarity: R
-			setNum: "1"
-			cardNum: 80
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Ottar
 		subtitle: Man of Laketown
@@ -112,17 +106,14 @@
 	
 	51_87: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E087.1_card.jpg
-			javaClass: false
+			//id: 1_87.1
 			parent: 1_87
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E087.1_card.jpg
 			collInfo: 1R87
 			rarity: R
-			setNum: "1"
-			cardNum: 87
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: A Wizard Is Never Late
 		unique: false

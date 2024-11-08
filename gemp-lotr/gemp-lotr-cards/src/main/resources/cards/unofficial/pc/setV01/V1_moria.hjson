@@ -51,17 +51,11 @@
 	
 	101_31: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1E031.1_card.jpg
-			//parentId: 101_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 101_31.1
+			revision: 1
+			image: sets/vset1/LOTR-ENV1E031.1_card.jpg
 			collInfo: V1U31
 			rarity: U
-			setNum: "V1"
-			cardNum: 31
-			style: Standard
 		}
 		title: Guided by One Purpose
 		unique: false
@@ -112,17 +106,10 @@
 
 	101_32: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S032.0_card.jpg
-			//parentId: 101_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_32
+			image: sets/vset1/LOTR-ENV1S032.0_card.jpg
 			collInfo: V1C32
 			rarity: C
-			setNum: "V1"
-			cardNum: 32
-			style: Standard
 		}
 		title: Terror at Its Coming
 		unique: true
@@ -211,17 +198,11 @@
 
 	101_33: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1E033.1_card.jpg
-			//parentId: 101_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 101_33.1
+			revision: 1
+			image: sets/vset1/LOTR-ENV1E033.1_card.jpg
 			collInfo: V1C33
 			rarity: C
-			setNum: "V1"
-			cardNum: 33
-			style: Standard
 		}
 		title: Thrashing Tentacle
 		unique: false
@@ -368,17 +349,11 @@
 	
 	101_34: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1E034.1_card.jpg
-			//parentId: 101_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 101_34.1
+			revision: 1
+			image: sets/vset1/LOTR-ENV1E034.1_card.jpg
 			collInfo: V1R34
 			rarity: R
-			setNum: "V1"
-			cardNum: 34
-			style: Standard
 		}
 		title: Out of Dark Waters
 		unique: false
@@ -453,17 +428,10 @@
 
 	101_35: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S035.0_card.jpg
-			//parentId: 101_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_35
+			image: sets/vset1/LOTR-ENV1S035.0_card.jpg
 			collInfo: V1C35
 			rarity: C
-			setNum: "V1"
-			cardNum: 35
-			style: Standard
 		}
 		title: The Darkness Grew
 		unique: false
@@ -543,17 +511,10 @@
 
 	101_36: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S036.0_card.jpg
-			//parentId: 101_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_36
+			image: sets/vset1/LOTR-ENV1S036.0_card.jpg
 			collInfo: V1R36
 			rarity: R
-			setNum: "V1"
-			cardNum: 36
-			style: Standard
 		}
 		title: Vile Tentacle
 		unique: false
@@ -617,17 +578,11 @@
 	
 	101_65: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S065.0_card.jpg
-			//parentId: 101_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 101_65.1
+			revision: 1
+			image: sets/vset1/LOTR-ENV1S065.0_card.jpg
 			collInfo: V1_65
-			rarity: 
-			setNum: "V1"
-			cardNum: 65
-			style: Standard
+			rarity: _
 		}
 		title: Sirannon Dam
 		unique: true
@@ -683,17 +638,11 @@
 	
 	101_66: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1E066.2_card.jpg
-			//parentId: 101_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 101_66.1
+			revision: 1
+			image: sets/vset1/LOTR-ENV1E066.2_card.jpg
 			collInfo: V1_66
 			rarity: C
-			setNum: "V1"
-			cardNum: 66
-			style: Standard
 		}
 		title: Writhing Tentacle
 		unique: false

@@ -2,17 +2,9 @@
 
 	6_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR06076.jpg
-			//parentId: 6_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06076.jpg
 			collInfo: 6R76
 			rarity: R
-			setNum: "6"
-			cardNum: 76
-			style: Standard
 		}
 		title: The Balrog
 		subtitle: Terror of Flame and Shadow
@@ -57,17 +49,9 @@
 
 	6_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR06077.jpg
-			//parentId: 6_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06077.jpg
 			collInfo: 6R77
 			rarity: R
-			setNum: "6"
-			cardNum: 77
-			style: Standard
 		}
 		title: Durin's Tower
 		unique: true

@@ -2,17 +2,9 @@
 
 	7_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR07015.jpg
-			//parentId: 7_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07015.jpg
 			collInfo: 7U15
 			rarity: U
-			setNum: "7"
-			cardNum: 15
-			style: Standard
 		}
 		title: Ancient Blade
 		unique: true
@@ -67,17 +59,9 @@
 
 	7_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR07016.jpg
-			//parentId: 7_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07016.jpg
 			collInfo: 7R16
 			rarity: R
-			setNum: "7"
-			cardNum: 16
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Fair Elf Maiden
@@ -114,17 +98,9 @@
 
 	7_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR07017.jpg
-			//parentId: 7_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07017.jpg
 			collInfo: 7R17
 			rarity: R
-			setNum: "7"
-			cardNum: 17
-			style: Standard
 		}
 		title: Asfaloth
 		subtitle: Elven Steed
@@ -168,17 +144,9 @@
 
 	7_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR07018.jpg
-			//parentId: 7_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07018.jpg
 			collInfo: 7R18
 			rarity: R
-			setNum: "7"
-			cardNum: 18
-			style: Standard
 		}
 		title: Bow of the Galadhrim
 		subtitle: Gift of Galadriel
@@ -221,17 +189,9 @@
 
 	7_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR07019.jpg
-			//parentId: 7_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07019.jpg
 			collInfo: 7U19
 			rarity: U
-			setNum: "7"
-			cardNum: 19
-			style: Standard
 		}
 		title: Careful Study
 		unique: false
@@ -270,17 +230,9 @@
 
 	7_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR07020.jpg
-			//parentId: 7_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07020.jpg
 			collInfo: 7C20
 			rarity: C
-			setNum: "7"
-			cardNum: 20
-			style: Standard
 		}
 		title: Defiance
 		unique: false
@@ -322,17 +274,9 @@
 
 	7_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR07021.jpg
-			//parentId: 7_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07021.jpg
 			collInfo: 7R21
 			rarity: R
-			setNum: "7"
-			cardNum: 21
-			style: Standard
 		}
 		title: Elrond
 		subtitle: Elven Lord
@@ -382,17 +326,9 @@
 
 	7_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR07022.jpg
-			//parentId: 7_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07022.jpg
 			collInfo: 7R22
 			rarity: R
-			setNum: "7"
-			cardNum: 22
-			style: Standard
 		}
 		title: Hope Comes
 		unique: true
@@ -439,17 +375,9 @@
 
 	7_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR07023.jpg
-			//parentId: 7_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07023.jpg
 			collInfo: 7C23
 			rarity: C
-			setNum: "7"
-			cardNum: 23
-			style: Standard
 		}
 		title: Into the West
 		unique: false
@@ -505,17 +433,9 @@
 
 	7_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR07024.jpg
-			//parentId: 7_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07024.jpg
 			collInfo: 7R24
 			rarity: R
-			setNum: "7"
-			cardNum: 24
-			style: Standard
 		}
 		title: Leaving Forever
 		unique: false
@@ -595,17 +515,9 @@
 
 	7_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR07025.jpg
-			//parentId: 7_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07025.jpg
 			collInfo: 7R25
 			rarity: R
-			setNum: "7"
-			cardNum: 25
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Fearless Marksman
@@ -652,17 +564,9 @@
 
 	7_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR07026.jpg
-			//parentId: 7_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07026.jpg
 			collInfo: 7C26
 			rarity: C
-			setNum: "7"
-			cardNum: 26
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Nimble Warrior
@@ -711,17 +615,9 @@
 
 	7_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR07027.jpg
-			//parentId: 7_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07027.jpg
 			collInfo: 7R27
 			rarity: R
-			setNum: "7"
-			cardNum: 27
-			style: Standard
 		}
 		title: Mirkwood Bowman
 		unique: false
@@ -768,17 +664,9 @@
 
 	7_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR07028.jpg
-			//parentId: 7_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07028.jpg
 			collInfo: 7R28
 			rarity: R
-			setNum: "7"
-			cardNum: 28
-			style: Standard
 		}
 		title: Shadow Between
 		unique: true
@@ -838,17 +726,9 @@
 
 	7_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR07029.jpg
-			//parentId: 7_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07029.jpg
 			collInfo: 7C29
 			rarity: C
-			setNum: "7"
-			cardNum: 29
-			style: Standard
 		}
 		title: Still Needed
 		unique: false
@@ -887,17 +767,9 @@
 
 	7_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR07030.jpg
-			//parentId: 7_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07030.jpg
 			collInfo: 7C30
 			rarity: C
-			setNum: "7"
-			cardNum: 30
-			style: Standard
 		}
 		title: Uncertain Paths
 		unique: false

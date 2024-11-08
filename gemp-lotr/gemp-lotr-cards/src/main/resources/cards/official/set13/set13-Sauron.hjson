@@ -2,17 +2,9 @@
 
 	13_140: {
 		cardInfo: {
-			imagePath: decipher/LOTR13140.jpg
-			//parentId: 13_140
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13140.jpg
 			collInfo: 13R140
 			rarity: R
-			setNum: "13"
-			cardNum: 140
-			style: Standard
 		}
 		title: Sauron
 		subtitle: Dark Lord of Mordor
@@ -54,17 +46,9 @@
 
 	13_141: {
 		cardInfo: {
-			imagePath: decipher/LOTR13141.jpg
-			//parentId: 13_141
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13141.jpg
 			collInfo: 13R141
 			rarity: R
-			setNum: "13"
-			cardNum: 141
-			style: Standard
 		}
 		title: Sceptre of the Dark Lord
 		unique: true

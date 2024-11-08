@@ -2,17 +2,9 @@
 
 	17_7: {
 		cardInfo: {
-			imagePath: decipher/LOTR17007.jpg
-			//parentId: 17_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17007.jpg
 			collInfo: 17S7
 			rarity: S
-			setNum: "17"
-			cardNum: 7
-			style: Standard
 		}
 		title: Elven Guardian
 		unique: false
@@ -60,17 +52,9 @@
 
 	17_8: {
 		cardInfo: {
-			imagePath: decipher/LOTR17008.jpg
-			//parentId: 17_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17008.jpg
 			collInfo: 17U8
 			rarity: U
-			setNum: "17"
-			cardNum: 8
-			style: Standard
 		}
 		title: Hearth and Hall
 		unique: false
@@ -128,17 +112,9 @@
 
 	17_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR17009.jpg
-			//parentId: 17_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17009.jpg
 			collInfo: 17U9
 			rarity: U
-			setNum: "17"
-			cardNum: 9
-			style: Standard
 		}
 		title: Lothlórien Guides
 		unique: false
@@ -202,17 +178,9 @@
 
 	17_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR17010.jpg
-			//parentId: 17_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17010.jpg
 			collInfo: 17U10
 			rarity: U
-			setNum: "17"
-			cardNum: 10
-			style: Standard
 		}
 		title: Namárië
 		unique: false
@@ -281,17 +249,9 @@
 
 	17_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR17011.jpg
-			//parentId: 17_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17011.jpg
 			collInfo: 17S11
 			rarity: S
-			setNum: "17"
-			cardNum: 11
-			style: Standard
 		}
 		title: Orophin
 		subtitle: Silvan Elf
@@ -345,17 +305,9 @@
 
 	17_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR17012.jpg
-			//parentId: 17_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17012.jpg
 			collInfo: 17S12
 			rarity: S
-			setNum: "17"
-			cardNum: 12
-			style: Standard
 		}
 		title: Rúmil
 		subtitle: Silvan Elf
@@ -425,17 +377,9 @@
 
 	17_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR17013.jpg
-			//parentId: 17_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17013.jpg
 			collInfo: 17R13
 			rarity: R
-			setNum: "17"
-			cardNum: 13
-			style: Standard
 		}
 		title: The World Ahead
 		unique: false
@@ -497,17 +441,9 @@
 
 	17_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR17014.jpg
-			//parentId: 17_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17014.jpg
 			collInfo: 17U14
 			rarity: U
-			setNum: "17"
-			cardNum: 14
-			style: Standard
 		}
 		title: Weapons of Lothlórien
 		unique: false

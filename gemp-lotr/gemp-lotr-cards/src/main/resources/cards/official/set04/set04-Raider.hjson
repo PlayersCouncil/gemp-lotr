@@ -2,17 +2,9 @@
 
 	4_216: {
 		cardInfo: {
-			imagePath: decipher/LOTR04216.jpg
-			//parentId: 4_216
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04216.jpg
 			collInfo: 4U216
 			rarity: U
-			setNum: "4"
-			cardNum: 216
-			style: Standard
 		}
 		title: Arrow From the South
 		unique: true
@@ -65,17 +57,9 @@
 
 	4_217: {
 		cardInfo: {
-			imagePath: decipher/LOTR04217.jpg
-			//parentId: 4_217
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04217.jpg
 			collInfo: 4U217
 			rarity: U
-			setNum: "4"
-			cardNum: 217
-			style: Standard
 		}
 		title: Desert Lancers
 		unique: true
@@ -122,17 +106,9 @@
 
 	4_218: {
 		cardInfo: {
-			imagePath: decipher/LOTR04218.jpg
-			//parentId: 4_218
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04218.jpg
 			collInfo: 4R218
 			rarity: R
-			setNum: "4"
-			cardNum: 218
-			style: Standard
 		}
 		title: Desert Legion
 		unique: true
@@ -199,17 +175,9 @@
 
 	4_219: {
 		cardInfo: {
-			imagePath: decipher/LOTR04219.jpg
-			//parentId: 4_219
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04219.jpg
 			collInfo: 4R219
 			rarity: R
-			setNum: "4"
-			cardNum: 219
-			style: Standard
 		}
 		title: Desert Lord
 		unique: true
@@ -258,17 +226,9 @@
 
 	4_220: {
 		cardInfo: {
-			imagePath: decipher/LOTR04220.jpg
-			//parentId: 4_220
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04220.jpg
 			collInfo: 4U220
 			rarity: U
-			setNum: "4"
-			cardNum: 220
-			style: Standard
 		}
 		title: Desert Soldier
 		unique: false
@@ -316,17 +276,9 @@
 
 	4_221: {
 		cardInfo: {
-			imagePath: decipher/LOTR04221.jpg
-			//parentId: 4_221
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04221.jpg
 			collInfo: 4C221
 			rarity: C
-			setNum: "4"
-			cardNum: 221
-			style: Standard
 		}
 		title: Desert Spearman
 		unique: false
@@ -374,17 +326,9 @@
 
 	4_222: {
 		cardInfo: {
-			imagePath: decipher/LOTR04222.jpg
-			//parentId: 4_222
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04222.jpg
 			collInfo: 4C222
 			rarity: C
-			setNum: "4"
-			cardNum: 222
-			style: Standard
 		}
 		title: Desert Warrior
 		unique: false
@@ -432,17 +376,9 @@
 
 	4_223: {
 		cardInfo: {
-			imagePath: decipher/LOTR04223.jpg
-			//parentId: 4_223
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04223.jpg
 			collInfo: 4R223
 			rarity: R
-			setNum: "4"
-			cardNum: 223
-			style: Standard
 		}
 		title: Discovered
 		unique: false
@@ -486,17 +422,9 @@
 
 	4_224: {
 		cardInfo: {
-			imagePath: decipher/LOTR04224.jpg
-			//parentId: 4_224
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04224.jpg
 			collInfo: 4C224
 			rarity: C
-			setNum: "4"
-			cardNum: 224
-			style: Standard
 		}
 		title: Easterling Axeman
 		unique: false
@@ -548,17 +476,9 @@
 
 	4_225: {
 		cardInfo: {
-			imagePath: decipher/LOTR04225.jpg
-			//parentId: 4_225
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04225.jpg
 			collInfo: 4R225
 			rarity: R
-			setNum: "4"
-			cardNum: 225
-			style: Standard
 		}
 		title: Easterling Captain
 		unique: true
@@ -643,17 +563,9 @@
 
 	4_226: {
 		cardInfo: {
-			imagePath: decipher/LOTR04226.jpg
-			//parentId: 4_226
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04226.jpg
 			collInfo: 4C226
 			rarity: C
-			setNum: "4"
-			cardNum: 226
-			style: Standard
 		}
 		title: Easterling Guard
 		unique: false
@@ -698,17 +610,9 @@
 
 	4_227: {
 		cardInfo: {
-			imagePath: decipher/LOTR04227.jpg
-			//parentId: 4_227
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04227.jpg
 			collInfo: 4C227
 			rarity: C
-			setNum: "4"
-			cardNum: 227
-			style: Standard
 		}
 		title: Easterling Infantry
 		unique: false
@@ -761,17 +665,9 @@
 
 	4_228: {
 		cardInfo: {
-			imagePath: decipher/LOTR04228.jpg
-			//parentId: 4_228
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04228.jpg
 			collInfo: 4C228
 			rarity: C
-			setNum: "4"
-			cardNum: 228
-			style: Standard
 		}
 		title: Easterling Lieutenant
 		unique: false
@@ -816,17 +712,9 @@
 
 	4_229: {
 		cardInfo: {
-			imagePath: decipher/LOTR04229.jpg
-			//parentId: 4_229
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04229.jpg
 			collInfo: 4R229
 			rarity: R
-			setNum: "4"
-			cardNum: 229
-			style: Standard
 		}
 		title: Easterling Skirmisher
 		unique: false
@@ -873,17 +761,9 @@
 
 	4_230: {
 		cardInfo: {
-			imagePath: decipher/LOTR04230.jpg
-			//parentId: 4_230
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04230.jpg
 			collInfo: 4U230
 			rarity: U
-			setNum: "4"
-			cardNum: 230
-			style: Standard
 		}
 		title: Easterling Trooper
 		unique: false
@@ -936,17 +816,9 @@
 
 	4_231: {
 		cardInfo: {
-			imagePath: decipher/LOTR04231.jpg
-			//parentId: 4_231
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04231.jpg
 			collInfo: 4R231
 			rarity: R
-			setNum: "4"
-			cardNum: 231
-			style: Standard
 		}
 		title: Eastern Emyn Muil
 		unique: true
@@ -999,17 +871,9 @@
 
 	4_232: {
 		cardInfo: {
-			imagePath: decipher/LOTR04232.jpg
-			//parentId: 4_232
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04232.jpg
 			collInfo: 4U232
 			rarity: U
-			setNum: "4"
-			cardNum: 232
-			style: Standard
 		}
 		title: Elite Archer
 		unique: false
@@ -1058,17 +922,9 @@
 
 	4_233: {
 		cardInfo: {
-			imagePath: decipher/LOTR04233.jpg
-			//parentId: 4_233
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04233.jpg
 			collInfo: 4U233
 			rarity: U
-			setNum: "4"
-			cardNum: 233
-			style: Standard
 		}
 		title: Fearless
 		unique: false
@@ -1117,17 +973,9 @@
 
 	4_234: {
 		cardInfo: {
-			imagePath: decipher/LOTR04234.jpg
-			//parentId: 4_234
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04234.jpg
 			collInfo: 4U234
 			rarity: U
-			setNum: "4"
-			cardNum: 234
-			style: Standard
 		}
 		title: Flanking Attack
 		unique: false
@@ -1162,17 +1010,9 @@
 
 	4_235: {
 		cardInfo: {
-			imagePath: decipher/LOTR04235.jpg
-			//parentId: 4_235
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04235.jpg
 			collInfo: 4C235
 			rarity: C
-			setNum: "4"
-			cardNum: 235
-			style: Standard
 		}
 		title: Gathering to the Summons
 		unique: false
@@ -1207,17 +1047,9 @@
 
 	4_236: {
 		cardInfo: {
-			imagePath: decipher/LOTR04236.jpg
-			//parentId: 4_236
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04236.jpg
 			collInfo: 4U236
 			rarity: U
-			setNum: "4"
-			cardNum: 236
-			style: Standard
 		}
 		title: Howl of Harad
 		unique: false
@@ -1259,17 +1091,9 @@
 
 	4_237: {
 		cardInfo: {
-			imagePath: decipher/LOTR04237.jpg
-			//parentId: 4_237
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04237.jpg
 			collInfo: 4R237
 			rarity: R
-			setNum: "4"
-			cardNum: 237
-			style: Standard
 		}
 		title: Ithilien Wilderness
 		unique: true
@@ -1356,17 +1180,9 @@
 
 	4_238: {
 		cardInfo: {
-			imagePath: decipher/LOTR04238.jpg
-			//parentId: 4_238
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04238.jpg
 			collInfo: 4R238
 			rarity: R
-			setNum: "4"
-			cardNum: 238
-			style: Standard
 		}
 		title: Men of Harad
 		unique: false
@@ -1412,17 +1228,9 @@
 
 	4_239: {
 		cardInfo: {
-			imagePath: decipher/LOTR04239.jpg
-			//parentId: 4_239
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04239.jpg
 			collInfo: 4C239
 			rarity: C
-			setNum: "4"
-			cardNum: 239
-			style: Standard
 		}
 		title: Men of Rhûn
 		unique: false
@@ -1462,17 +1270,9 @@
 
 	4_240: {
 		cardInfo: {
-			imagePath: decipher/LOTR04240.jpg
-			//parentId: 4_240
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04240.jpg
 			collInfo: 4R240
 			rarity: R
-			setNum: "4"
-			cardNum: 240
-			style: Standard
 		}
 		title: New Fear
 		unique: false
@@ -1522,17 +1322,9 @@
 
 	4_241: {
 		cardInfo: {
-			imagePath: decipher/LOTR04241.jpg
-			//parentId: 4_241
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04241.jpg
 			collInfo: 4C241
 			rarity: C
-			setNum: "4"
-			cardNum: 241
-			style: Standard
 		}
 		title: On the March
 		unique: false
@@ -1573,17 +1365,9 @@
 
 	4_242: {
 		cardInfo: {
-			imagePath: decipher/LOTR04242.jpg
-			//parentId: 4_242
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04242.jpg
 			collInfo: 4U242
 			rarity: U
-			setNum: "4"
-			cardNum: 242
-			style: Standard
 		}
 		title: Raiders From the East
 		unique: false
@@ -1641,17 +1425,9 @@
 
 	4_243: {
 		cardInfo: {
-			imagePath: decipher/LOTR04243.jpg
-			//parentId: 4_243
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04243.jpg
 			collInfo: 4R243
 			rarity: R
-			setNum: "4"
-			cardNum: 243
-			style: Standard
 		}
 		title: Rapid Fire
 		unique: false
@@ -1690,17 +1466,9 @@
 
 	4_244: {
 		cardInfo: {
-			imagePath: decipher/LOTR04244.jpg
-			//parentId: 4_244
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04244.jpg
 			collInfo: 4R244
 			rarity: R
-			setNum: "4"
-			cardNum: 244
-			style: Standard
 		}
 		title: Regiment of Haradrim
 		unique: true
@@ -1747,17 +1515,9 @@
 
 	4_245: {
 		cardInfo: {
-			imagePath: decipher/LOTR04245.jpg
-			//parentId: 4_245
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04245.jpg
 			collInfo: 4R245
 			rarity: R
-			setNum: "4"
-			cardNum: 245
-			style: Standard
 		}
 		title: Southron Archer
 		unique: false
@@ -1802,17 +1562,9 @@
 
 	4_246: {
 		cardInfo: {
-			imagePath: decipher/LOTR04246.jpg
-			//parentId: 4_246
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04246.jpg
 			collInfo: 4R246
 			rarity: R
-			setNum: "4"
-			cardNum: 246
-			style: Standard
 		}
 		title: Southron Assassin
 		unique: false
@@ -1858,17 +1610,9 @@
 
 	4_247: {
 		cardInfo: {
-			imagePath: decipher/LOTR04247.jpg
-			//parentId: 4_247
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04247.jpg
 			collInfo: 4R247
 			rarity: R
-			setNum: "4"
-			cardNum: 247
-			style: Standard
 		}
 		title: Southron Bow
 		unique: false
@@ -1913,17 +1657,9 @@
 
 	4_248: {
 		cardInfo: {
-			imagePath: decipher/LOTR04248.jpg
-			//parentId: 4_248
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04248.jpg
 			collInfo: 4C248
 			rarity: C
-			setNum: "4"
-			cardNum: 248
-			style: Standard
 		}
 		title: Southron Bowman
 		unique: false
@@ -1972,17 +1708,9 @@
 
 	4_249: {
 		cardInfo: {
-			imagePath: decipher/LOTR04249.jpg
-			//parentId: 4_249
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04249.jpg
 			collInfo: 4U249
 			rarity: U
-			setNum: "4"
-			cardNum: 249
-			style: Standard
 		}
 		title: Southron Commander
 		unique: false
@@ -2039,17 +1767,9 @@
 
 	4_250: {
 		cardInfo: {
-			imagePath: decipher/LOTR04250.jpg
-			//parentId: 4_250
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04250.jpg
 			collInfo: 4U250
 			rarity: U
-			setNum: "4"
-			cardNum: 250
-			style: Standard
 		}
 		title: Southron Explorer
 		unique: false
@@ -2094,17 +1814,9 @@
 
 	4_251: {
 		cardInfo: {
-			imagePath: decipher/LOTR04251.jpg
-			//parentId: 4_251
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04251.jpg
 			collInfo: 4R251
 			rarity: R
-			setNum: "4"
-			cardNum: 251
-			style: Standard
 		}
 		title: Southron Fighter
 		unique: false
@@ -2153,17 +1865,9 @@
 
 	4_252: {
 		cardInfo: {
-			imagePath: decipher/LOTR04252.jpg
-			//parentId: 4_252
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04252.jpg
 			collInfo: 4C252
 			rarity: C
-			setNum: "4"
-			cardNum: 252
-			style: Standard
 		}
 		title: Southron Scout
 		unique: false
@@ -2193,17 +1897,9 @@
 
 	4_253: {
 		cardInfo: {
-			imagePath: decipher/LOTR04253.jpg
-			//parentId: 4_253
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04253.jpg
 			collInfo: 4U253
 			rarity: U
-			setNum: "4"
-			cardNum: 253
-			style: Standard
 		}
 		title: Southron Sentry
 		unique: false
@@ -2246,17 +1942,9 @@
 
 	4_254: {
 		cardInfo: {
-			imagePath: decipher/LOTR04254.jpg
-			//parentId: 4_254
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04254.jpg
 			collInfo: 4C254
 			rarity: C
-			setNum: "4"
-			cardNum: 254
-			style: Standard
 		}
 		title: Southron Soldier
 		unique: false
@@ -2286,17 +1974,9 @@
 
 	4_255: {
 		cardInfo: {
-			imagePath: decipher/LOTR04255.jpg
-			//parentId: 4_255
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04255.jpg
 			collInfo: 4C255
 			rarity: C
-			setNum: "4"
-			cardNum: 255
-			style: Standard
 		}
 		title: Southron Spear
 		unique: false
@@ -2340,17 +2020,9 @@
 
 	4_256: {
 		cardInfo: {
-			imagePath: decipher/LOTR04256.jpg
-			//parentId: 4_256
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04256.jpg
 			collInfo: 4R256
 			rarity: R
-			setNum: "4"
-			cardNum: 256
-			style: Standard
 		}
 		title: Southron Troop
 		unique: false
@@ -2416,17 +2088,9 @@
 
 	4_257: {
 		cardInfo: {
-			imagePath: decipher/LOTR04257.jpg
-			//parentId: 4_257
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04257.jpg
 			collInfo: 4R257
 			rarity: R
-			setNum: "4"
-			cardNum: 257
-			style: Standard
 		}
 		title: Southron Veterans
 		unique: false
@@ -2476,17 +2140,9 @@
 
 	4_258: {
 		cardInfo: {
-			imagePath: decipher/LOTR04258.jpg
-			//parentId: 4_258
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04258.jpg
 			collInfo: 4C258
 			rarity: C
-			setNum: "4"
-			cardNum: 258
-			style: Standard
 		}
 		title: Southron Wanderer
 		unique: false
@@ -2516,17 +2172,9 @@
 
 	4_259: {
 		cardInfo: {
-			imagePath: decipher/LOTR04259.jpg
-			//parentId: 4_259
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04259.jpg
 			collInfo: 4R259
 			rarity: R
-			setNum: "4"
-			cardNum: 259
-			style: Standard
 		}
 		title: Vision From Afar
 		unique: false
@@ -2565,17 +2213,9 @@
 
 	4_260: {
 		cardInfo: {
-			imagePath: decipher/LOTR04260.jpg
-			//parentId: 4_260
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04260.jpg
 			collInfo: 4C260
 			rarity: C
-			setNum: "4"
-			cardNum: 260
-			style: Standard
 		}
 		title: Whirling Strike
 		unique: false
@@ -2606,17 +2246,9 @@
 
 	4_261: {
 		cardInfo: {
-			imagePath: decipher/LOTR04261.jpg
-			//parentId: 4_261
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04261.jpg
 			collInfo: 4R261
 			rarity: R
-			setNum: "4"
-			cardNum: 261
-			style: Standard
 		}
 		title: Wrath of Harad
 		unique: false

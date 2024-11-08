@@ -2,17 +2,9 @@
 
 	14_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR14010.jpg
-			//parentId: 14_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14010.jpg
 			collInfo: 14R10
 			rarity: R
-			setNum: "14"
-			cardNum: 10
-			style: Standard
 		}
 		title: Furious Hillman
 		unique: false
@@ -55,17 +47,9 @@
 
 	14_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR14011.jpg
-			//parentId: 14_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14011.jpg
 			collInfo: 14R11
 			rarity: R
-			setNum: "14"
-			cardNum: 11
-			style: Standard
 		}
 		title: Swarming Hillman
 		unique: false

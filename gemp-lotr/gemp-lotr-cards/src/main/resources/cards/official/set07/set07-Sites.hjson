@@ -2,17 +2,9 @@
 
 	7_329: {
 		cardInfo: {
-			imagePath: decipher/LOTR07329.jpg
-			//parentId: 7_329
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07329.jpg
 			collInfo: 7U329
 			rarity: U
-			setNum: "7"
-			cardNum: 329
-			style: Standard
 		}
 		title: Dunharrow Plateau
 		unique: false
@@ -51,17 +43,9 @@
 
 	7_330: {
 		cardInfo: {
-			imagePath: decipher/LOTR07330.jpg
-			//parentId: 7_330
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07330.jpg
 			collInfo: 7U330
 			rarity: U
-			setNum: "7"
-			cardNum: 330
-			style: Standard
 		}
 		title: Edoras Hall
 		unique: false
@@ -93,17 +77,9 @@
 
 	7_331: {
 		cardInfo: {
-			imagePath: decipher/LOTR07331.jpg
-			//parentId: 7_331
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07331.jpg
 			collInfo: 7U331
 			rarity: U
-			setNum: "7"
-			cardNum: 331
-			style: Standard
 		}
 		title: Isengard Ruined
 		unique: false
@@ -149,17 +125,9 @@
 
 	7_332: {
 		cardInfo: {
-			imagePath: decipher/LOTR07332.jpg
-			//parentId: 7_332
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07332.jpg
 			collInfo: 7U332
 			rarity: U
-			setNum: "7"
-			cardNum: 332
-			style: Standard
 		}
 		title: Rohirrim Road
 		unique: false
@@ -200,17 +168,9 @@
 
 	7_333: {
 		cardInfo: {
-			imagePath: decipher/LOTR07333.jpg
-			//parentId: 7_333
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07333.jpg
 			collInfo: 7U333
 			rarity: U
-			setNum: "7"
-			cardNum: 333
-			style: Standard
 		}
 		title: Sleeping Quarters
 		unique: false
@@ -252,17 +212,9 @@
 
 	7_334: {
 		cardInfo: {
-			imagePath: decipher/LOTR07334.jpg
-			//parentId: 7_334
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07334.jpg
 			collInfo: 7U334
 			rarity: U
-			setNum: "7"
-			cardNum: 334
-			style: Standard
 		}
 		title: Steps of Edoras
 		unique: false
@@ -302,17 +254,9 @@
 
 	7_335: {
 		cardInfo: {
-			imagePath: decipher/LOTR07335.jpg
-			//parentId: 7_335
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07335.jpg
 			collInfo: 7U335
 			rarity: U
-			setNum: "7"
-			cardNum: 335
-			style: Standard
 		}
 		title: King's Tent
 		unique: false
@@ -358,17 +302,9 @@
 
 	7_336: {
 		cardInfo: {
-			imagePath: decipher/LOTR07336.jpg
-			//parentId: 7_336
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07336.jpg
 			collInfo: 7U336
 			rarity: U
-			setNum: "7"
-			cardNum: 336
-			style: Standard
 		}
 		title: Rohirrim Camp
 		unique: false
@@ -405,17 +341,9 @@
 
 	7_337: {
 		cardInfo: {
-			imagePath: decipher/LOTR07337.jpg
-			//parentId: 7_337
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07337.jpg
 			collInfo: 7U337
 			rarity: U
-			setNum: "7"
-			cardNum: 337
-			style: Standard
 		}
 		title: West Road
 		unique: false
@@ -452,17 +380,9 @@
 
 	7_338: {
 		cardInfo: {
-			imagePath: decipher/LOTR07338.jpg
-			//parentId: 7_338
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07338.jpg
 			collInfo: 7U338
 			rarity: U
-			setNum: "7"
-			cardNum: 338
-			style: Standard
 		}
 		title: Beacon of Minas Tirith
 		unique: false
@@ -502,17 +422,9 @@
 
 	7_339: {
 		cardInfo: {
-			imagePath: decipher/LOTR07339.jpg
-			//parentId: 7_339
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07339.jpg
 			collInfo: 7U339
 			rarity: U
-			setNum: "7"
-			cardNum: 339
-			style: Standard
 		}
 		title: Hall of the Kings
 		unique: false
@@ -551,17 +463,9 @@
 
 	7_340: {
 		cardInfo: {
-			imagePath: decipher/LOTR07340.jpg
-			//parentId: 7_340
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07340.jpg
 			collInfo: 7U340
 			rarity: U
-			setNum: "7"
-			cardNum: 340
-			style: Standard
 		}
 		title: Tower of Ecthelion
 		unique: false
@@ -606,17 +510,9 @@
 
 	7_341: {
 		cardInfo: {
-			imagePath: decipher/LOTR07341.jpg
-			//parentId: 7_341
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07341.jpg
 			collInfo: 7U341
 			rarity: U
-			setNum: "7"
-			cardNum: 341
-			style: Standard
 		}
 		title: Anduin Banks
 		unique: false
@@ -657,17 +553,9 @@
 
 	7_342: {
 		cardInfo: {
-			imagePath: decipher/LOTR07342.jpg
-			//parentId: 7_342
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07342.jpg
 			collInfo: 7U342
 			rarity: U
-			setNum: "7"
-			cardNum: 342
-			style: Standard
 		}
 		title: Osgiliath Fallen
 		unique: false
@@ -709,17 +597,9 @@
 
 	7_343: {
 		cardInfo: {
-			imagePath: decipher/LOTR07343.jpg
-			//parentId: 7_343
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07343.jpg
 			collInfo: 7U343
 			rarity: U
-			setNum: "7"
-			cardNum: 343
-			style: Standard
 		}
 		title: Pelennor Plain
 		unique: false
@@ -761,17 +641,9 @@
 
 	7_344: {
 		cardInfo: {
-			imagePath: decipher/LOTR07344.jpg
-			//parentId: 7_344
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07344.jpg
 			collInfo: 7U344
 			rarity: U
-			setNum: "7"
-			cardNum: 344
-			style: Standard
 		}
 		title: City Gates
 		unique: false
@@ -817,17 +689,9 @@
 
 	7_345: {
 		cardInfo: {
-			imagePath: decipher/LOTR07345.jpg
-			//parentId: 7_345
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07345.jpg
 			collInfo: 7U345
 			rarity: U
-			setNum: "7"
-			cardNum: 345
-			style: Standard
 		}
 		title: Pelennor Flat
 		unique: false
@@ -879,17 +743,9 @@
 
 	7_346: {
 		cardInfo: {
-			imagePath: decipher/LOTR07346.jpg
-			//parentId: 7_346
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07346.jpg
 			collInfo: 7U346
 			rarity: U
-			setNum: "7"
-			cardNum: 346
-			style: Standard
 		}
 		title: Minas Tirith Fifth Circle
 		unique: false
@@ -931,17 +787,9 @@
 
 	7_347: {
 		cardInfo: {
-			imagePath: decipher/LOTR07347.jpg
-			//parentId: 7_347
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07347.jpg
 			collInfo: 7U347
 			rarity: U
-			setNum: "7"
-			cardNum: 347
-			style: Standard
 		}
 		title: Minas Tirith First Circle
 		unique: false
@@ -981,17 +829,9 @@
 
 	7_348: {
 		cardInfo: {
-			imagePath: decipher/LOTR07348.jpg
-			//parentId: 7_348
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07348.jpg
 			collInfo: 7U348
 			rarity: U
-			setNum: "7"
-			cardNum: 348
-			style: Standard
 		}
 		title: Minas Tirith Fourth Circle
 		unique: false
@@ -1031,17 +871,9 @@
 
 	7_349: {
 		cardInfo: {
-			imagePath: decipher/LOTR07349.jpg
-			//parentId: 7_349
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07349.jpg
 			collInfo: 7U349
 			rarity: U
-			setNum: "7"
-			cardNum: 349
-			style: Standard
 		}
 		title: Minas Tirith Second Circle
 		unique: false
@@ -1081,17 +913,9 @@
 
 	7_350: {
 		cardInfo: {
-			imagePath: decipher/LOTR07350.jpg
-			//parentId: 7_350
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07350.jpg
 			collInfo: 7U350
 			rarity: U
-			setNum: "7"
-			cardNum: 350
-			style: Standard
 		}
 		title: Minas Tirith Seventh Circle
 		unique: false
@@ -1131,17 +955,9 @@
 
 	7_351: {
 		cardInfo: {
-			imagePath: decipher/LOTR07351.jpg
-			//parentId: 7_351
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07351.jpg
 			collInfo: 7U351
 			rarity: U
-			setNum: "7"
-			cardNum: 351
-			style: Standard
 		}
 		title: Minas Tirith Sixth Circle
 		unique: false
@@ -1181,17 +997,9 @@
 
 	7_352: {
 		cardInfo: {
-			imagePath: decipher/LOTR07352.jpg
-			//parentId: 7_352
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07352.jpg
 			collInfo: 7U352
 			rarity: U
-			setNum: "7"
-			cardNum: 352
-			style: Standard
 		}
 		title: Minas Tirith Third Circle
 		unique: false
@@ -1231,17 +1039,9 @@
 
 	7_353: {
 		cardInfo: {
-			imagePath: decipher/LOTR07353.jpg
-			//parentId: 7_353
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07353.jpg
 			collInfo: 7U353
 			rarity: U
-			setNum: "7"
-			cardNum: 353
-			style: Standard
 		}
 		title: Osgiliath Crossing
 		unique: false
@@ -1284,17 +1084,9 @@
 
 	7_354: {
 		cardInfo: {
-			imagePath: decipher/LOTR07354.jpg
-			//parentId: 7_354
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07354.jpg
 			collInfo: 7U354
 			rarity: U
-			setNum: "7"
-			cardNum: 354
-			style: Standard
 		}
 		title: Pelennor Grassland
 		unique: false
@@ -1336,17 +1128,9 @@
 
 	7_355: {
 		cardInfo: {
-			imagePath: decipher/LOTR07355.jpg
-			//parentId: 7_355
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07355.jpg
 			collInfo: 7U355
 			rarity: U
-			setNum: "7"
-			cardNum: 355
-			style: Standard
 		}
 		title: Ruined Capitol
 		unique: false
@@ -1394,17 +1178,9 @@
 
 	7_356: {
 		cardInfo: {
-			imagePath: decipher/LOTR07356.jpg
-			//parentId: 7_356
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07356.jpg
 			collInfo: 7U356
 			rarity: U
-			setNum: "7"
-			cardNum: 356
-			style: Standard
 		}
 		title: Cross Roads
 		unique: false
@@ -1444,17 +1220,9 @@
 
 	7_357: {
 		cardInfo: {
-			imagePath: decipher/LOTR07357.jpg
-			//parentId: 7_357
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07357.jpg
 			collInfo: 7U357
 			rarity: U
-			setNum: "7"
-			cardNum: 357
-			style: Standard
 		}
 		title: Morgul Vale
 		unique: false
@@ -1495,17 +1263,9 @@
 
 	7_358: {
 		cardInfo: {
-			imagePath: decipher/LOTR07358.jpg
-			//parentId: 7_358
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07358.jpg
 			collInfo: 7U358
 			rarity: U
-			setNum: "7"
-			cardNum: 358
-			style: Standard
 		}
 		title: Morgulduin
 		unique: false
@@ -1542,17 +1302,9 @@
 
 	7_359: {
 		cardInfo: {
-			imagePath: decipher/LOTR07359.jpg
-			//parentId: 7_359
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07359.jpg
 			collInfo: 7U359
 			rarity: U
-			setNum: "7"
-			cardNum: 359
-			style: Standard
 		}
 		title: Northern Ithilien
 		unique: false
@@ -1594,17 +1346,9 @@
 
 	7_360: {
 		cardInfo: {
-			imagePath: decipher/LOTR07360.jpg
-			//parentId: 7_360
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07360.jpg
 			collInfo: 7U360
 			rarity: U
-			setNum: "7"
-			cardNum: 360
-			style: Standard
 		}
 		title: Dagorlad
 		unique: false
@@ -1640,17 +1384,9 @@
 
 	7_361: {
 		cardInfo: {
-			imagePath: decipher/LOTR07361.jpg
-			//parentId: 7_361
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07361.jpg
 			collInfo: 7U361
 			rarity: U
-			setNum: "7"
-			cardNum: 361
-			style: Standard
 		}
 		title: Haunted Pass
 		unique: false
@@ -1688,17 +1424,9 @@
 
 	7_362: {
 		cardInfo: {
-			imagePath: decipher/LOTR07362.jpg
-			//parentId: 7_362
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07362.jpg
 			collInfo: 7U362
 			rarity: U
-			setNum: "7"
-			cardNum: 362
-			style: Standard
 		}
 		title: Narchost
 		unique: false
@@ -1733,17 +1461,9 @@
 
 	7_363: {
 		cardInfo: {
-			imagePath: decipher/LOTR07363.jpg
-			//parentId: 7_363
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07363.jpg
 			collInfo: 7U363
 			rarity: U
-			setNum: "7"
-			cardNum: 363
-			style: Standard
 		}
 		title: Slag Mounds
 		unique: false

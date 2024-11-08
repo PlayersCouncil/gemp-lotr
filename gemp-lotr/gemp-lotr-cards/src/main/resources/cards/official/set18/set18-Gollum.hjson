@@ -2,17 +2,9 @@
 
 	18_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR18028.jpg
-			//parentId: 18_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18028.jpg
 			collInfo: 18R28
 			rarity: R
-			setNum: "18"
-			cardNum: 28
-			style: Standard
 		}
 		title: Countless Cords
 		unique: false
@@ -50,17 +42,9 @@
 
 	18_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR18029.jpg
-			//parentId: 18_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18029.jpg
 			collInfo: 18R29
 			rarity: R
-			setNum: "18"
-			cardNum: 29
-			style: Standard
 		}
 		title: Deceit
 		unique: false
@@ -99,17 +83,9 @@
 
 	18_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR18030.jpg
-			//parentId: 18_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18030.jpg
 			collInfo: 18U30
 			rarity: U
-			setNum: "18"
-			cardNum: 30
-			style: Standard
 		}
 		title: Enemy in Your Midst
 		unique: false
@@ -144,17 +120,9 @@
 
 	18_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR18031.jpg
-			//parentId: 18_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18031.jpg
 			collInfo: 18R31
 			rarity: R
-			setNum: "18"
-			cardNum: 31
-			style: Standard
 		}
 		title: It Draws Him
 		unique: false
@@ -204,17 +172,9 @@
 
 	18_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR18032.jpg
-			//parentId: 18_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18032.jpg
 			collInfo: 18R32
 			rarity: R
-			setNum: "18"
-			cardNum: 32
-			style: Standard
 		}
 		title: Not Easily Avoided
 		unique: false
@@ -274,17 +234,9 @@
 
 	18_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR18033.jpg
-			//parentId: 18_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18033.jpg
 			collInfo: 18U33
 			rarity: U
-			setNum: "18"
-			cardNum: 33
-			style: Standard
 		}
 		title: Set Up
 		unique: false
@@ -319,17 +271,9 @@
 
 	18_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR18034.jpg
-			//parentId: 18_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18034.jpg
 			collInfo: 18R34
 			rarity: R
-			setNum: "18"
-			cardNum: 34
-			style: Standard
 		}
 		title: Shelob
 		subtitle: Menace
@@ -401,17 +345,9 @@
 
 	18_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR18035.jpg
-			//parentId: 18_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18035.jpg
 			collInfo: 18R35
 			rarity: R
-			setNum: "18"
-			cardNum: 35
-			style: Standard
 		}
 		title: Sting of Shelob
 		unique: false
@@ -452,17 +388,9 @@
 
 	18_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR18036.jpg
-			//parentId: 18_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18036.jpg
 			collInfo: 18C36
 			rarity: C
-			setNum: "18"
-			cardNum: 36
-			style: Standard
 		}
 		title: Time for Food
 		unique: false
@@ -500,17 +428,9 @@
 
 	18_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR18037.jpg
-			//parentId: 18_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18037.jpg
 			collInfo: 18U37
 			rarity: U
-			setNum: "18"
-			cardNum: 37
-			style: Standard
 		}
 		title: Trusted Promise
 		unique: false

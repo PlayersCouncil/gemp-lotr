@@ -2,17 +2,9 @@
 
 	19_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR19034.jpg
-			//parentId: 19_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19034.jpg
 			collInfo: 19P34
 			rarity: P
-			setNum: "19"
-			cardNum: 34
-			style: Standard
 		}
 		title: In Twilight
 		unique: false
@@ -61,17 +53,9 @@
 
 	19_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR19035.jpg
-			//parentId: 19_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19035.jpg
 			collInfo: 19P35
 			rarity: P
-			setNum: "19"
-			cardNum: 35
-			style: Standard
 		}
 		title: Úlairë Attëa
 		subtitle: Dark Predator
@@ -116,17 +100,9 @@
 
 	19_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR19036.jpg
-			//parentId: 19_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19036.jpg
 			collInfo: 19P36
 			rarity: P
-			setNum: "19"
-			cardNum: 36
-			style: Standard
 		}
 		title: Úlairë Enquëa
 		subtitle: Dark Threat
@@ -171,17 +147,9 @@
 
 	19_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR19037.jpg
-			//parentId: 19_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19037.jpg
 			collInfo: 19P37
 			rarity: P
-			setNum: "19"
-			cardNum: 37
-			style: Standard
 		}
 		title: Úlairë Lemenya
 		subtitle: Dark Enemy
@@ -219,17 +187,9 @@
 
 	19_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR19038.jpg
-			//parentId: 19_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19038.jpg
 			collInfo: 19P38
 			rarity: P
-			setNum: "19"
-			cardNum: 38
-			style: Standard
 		}
 		title: Úlairë Nertëa
 		subtitle: Dark Horseman
@@ -284,17 +244,9 @@
 
 	19_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR19039.jpg
-			//parentId: 19_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19039.jpg
 			collInfo: 19P39
 			rarity: P
-			setNum: "19"
-			cardNum: 39
-			style: Standard
 		}
 		title: Úlairë Toldëa
 		subtitle: Dark Shadow
@@ -346,17 +298,9 @@
 
 	19_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR19040.jpg
-			//parentId: 19_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19040.jpg
 			collInfo: 19P40
 			rarity: P
-			setNum: "19"
-			cardNum: 40
-			style: Standard
 		}
 		title: The Witch-king
 		subtitle: Dark Lord

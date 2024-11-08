@@ -2,17 +2,9 @@
 
 	19_8: {
 		cardInfo: {
-			imagePath: decipher/LOTR19008.jpg
-			//parentId: 19_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19008.jpg
 			collInfo: 19P8
 			rarity: P
-			setNum: "19"
-			cardNum: 8
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Wise Guide
@@ -54,17 +46,9 @@
 
 	19_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR19009.jpg
-			//parentId: 19_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19009.jpg
 			collInfo: 19P9
 			rarity: P
-			setNum: "19"
-			cardNum: 9
-			style: Standard
 		}
 		title: Stern Words
 		unique: false

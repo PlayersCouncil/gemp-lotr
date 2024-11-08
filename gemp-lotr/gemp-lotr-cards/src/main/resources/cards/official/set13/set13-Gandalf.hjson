@@ -2,17 +2,9 @@
 
 	13_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR13028.jpg
-			//parentId: 13_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13028.jpg
 			collInfo: 13U28
 			rarity: U
-			setNum: "13"
-			cardNum: 28
-			style: Standard
 		}
 		title: Alatar
 		subtitle: Final Envoy
@@ -68,17 +60,9 @@
 
 	13_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR13029.jpg
-			//parentId: 13_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13029.jpg
 			collInfo: 13C29
 			rarity: C
-			setNum: "13"
-			cardNum: 29
-			style: Standard
 		}
 		title: Dasron
 		subtitle: Merchant From Dorwinion
@@ -123,17 +107,9 @@
 
 	13_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR13030.jpg
-			//parentId: 13_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13030.jpg
 			collInfo: 13C30
 			rarity: C
-			setNum: "13"
-			cardNum: 30
-			style: Standard
 		}
 		title: Fear and Great Wonder
 		unique: true
@@ -197,17 +173,9 @@
 
 	13_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR13031.jpg
-			//parentId: 13_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13031.jpg
 			collInfo: 13U31
 			rarity: U
-			setNum: "13"
-			cardNum: 31
-			style: Standard
 		}
 		title: The Flame of Anor
 		unique: false
@@ -245,17 +213,9 @@
 
 	13_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR13032.jpg
-			//parentId: 13_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13032.jpg
 			collInfo: 13C32
 			rarity: C
-			setNum: "13"
-			cardNum: 32
-			style: Standard
 		}
 		title: For a While Less Dark
 		unique: false
@@ -298,17 +258,9 @@
 
 	13_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR13033.jpg
-			//parentId: 13_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13033.jpg
 			collInfo: 13R33
 			rarity: R
-			setNum: "13"
-			cardNum: 33
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Bearer of Obligation
@@ -374,17 +326,9 @@
 
 	13_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR13034.jpg
-			//parentId: 13_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13034.jpg
 			collInfo: 13U34
 			rarity: U
-			setNum: "13"
-			cardNum: 34
-			style: Standard
 		}
 		title: Look to My Coming
 		unique: false
@@ -439,17 +383,9 @@
 
 	13_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR13035.jpg
-			//parentId: 13_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13035.jpg
 			collInfo: 13C35
 			rarity: C
-			setNum: "13"
-			cardNum: 35
-			style: Standard
 		}
 		title: No Colour Now
 		unique: false
@@ -487,17 +423,9 @@
 
 	13_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR13036.jpg
-			//parentId: 13_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13036.jpg
 			collInfo: 13R36
 			rarity: R
-			setNum: "13"
-			cardNum: 36
-			style: Standard
 		}
 		title: The Palantír of Orthanc
 		subtitle: Recovered Seeing Stone
@@ -559,17 +487,9 @@
 
 	13_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR13037.jpg
-			//parentId: 13_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13037.jpg
 			collInfo: 13R37
 			rarity: R
-			setNum: "13"
-			cardNum: 37
-			style: Standard
 		}
 		title: Pallando
 		subtitle: Far-travelling One
@@ -626,17 +546,9 @@
 
 	13_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR13038.jpg
-			//parentId: 13_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13038.jpg
 			collInfo: 13R38
 			rarity: R
-			setNum: "13"
-			cardNum: 38
-			style: Standard
 		}
 		title: Radagast
 		subtitle: Tender of Beasts
@@ -681,17 +593,9 @@
 
 	13_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR13039.jpg
-			//parentId: 13_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13039.jpg
 			collInfo: 13C39
 			rarity: C
-			setNum: "13"
-			cardNum: 39
-			style: Standard
 		}
 		title: Return to Us
 		unique: false
@@ -728,17 +632,9 @@
 
 	13_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR13040.jpg
-			//parentId: 13_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13040.jpg
 			collInfo: 13R40
 			rarity: R
-			setNum: "13"
-			cardNum: 40
-			style: Standard
 		}
 		title: Shadowfax
 		subtitle: Roaring Wind
@@ -790,17 +686,9 @@
 
 	13_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR13041.jpg
-			//parentId: 13_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13041.jpg
 			collInfo: 13C41
 			rarity: C
-			setNum: "13"
-			cardNum: 41
-			style: Standard
 		}
 		title: Strange Meeting
 		unique: false
@@ -840,17 +728,9 @@
 
 	13_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR13042.jpg
-			//parentId: 13_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13042.jpg
 			collInfo: 13R42
 			rarity: R
-			setNum: "13"
-			cardNum: 42
-			style: Standard
 		}
 		title: Traveler's Homestead
 		unique: true
@@ -923,17 +803,9 @@
 
 	13_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR13043.jpg
-			//parentId: 13_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13043.jpg
 			collInfo: 13U43
 			rarity: U
-			setNum: "13"
-			cardNum: 43
-			style: Standard
 		}
 		title: Vapour and Steam
 		unique: false

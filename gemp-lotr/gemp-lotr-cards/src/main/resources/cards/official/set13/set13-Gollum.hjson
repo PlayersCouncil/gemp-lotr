@@ -2,17 +2,9 @@
 
 	13_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR13044.jpg
-			//parentId: 13_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13044.jpg
 			collInfo: 13R44
 			rarity: R
-			setNum: "13"
-			cardNum: 44
-			style: Standard
 		}
 		title: Chasm's Edge
 		unique: false
@@ -47,17 +39,9 @@
 
 	13_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR13045.jpg
-			//parentId: 13_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13045.jpg
 			collInfo: 13U45
 			rarity: U
-			setNum: "13"
-			cardNum: 45
-			style: Standard
 		}
 		title: Cunningly Hidden
 		unique: false
@@ -103,17 +87,9 @@
 
 	13_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR13046.jpg
-			//parentId: 13_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13046.jpg
 			collInfo: 13R46
 			rarity: R
-			setNum: "13"
-			cardNum: 46
-			style: Standard
 		}
 		title: Déagol
 		subtitle: Fateful Finder
@@ -177,17 +153,9 @@
 
 	13_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR13047.jpg
-			//parentId: 13_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13047.jpg
 			collInfo: 13C47
 			rarity: C
-			setNum: "13"
-			cardNum: 47
-			style: Standard
 		}
 		title: Duality
 		unique: false
@@ -239,17 +207,9 @@
 
 	13_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR13048.jpg
-			//parentId: 13_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13048.jpg
 			collInfo: 13R48
 			rarity: R
-			setNum: "13"
-			cardNum: 48
-			style: Standard
 		}
 		title: Fishing Boat
 		unique: true
@@ -304,17 +264,9 @@
 
 	13_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR13049.jpg
-			//parentId: 13_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13049.jpg
 			collInfo: 13R49
 			rarity: R
-			setNum: "13"
-			cardNum: 49
-			style: Standard
 		}
 		title: Gladden Homestead
 		unique: true
@@ -388,17 +340,9 @@
 
 	13_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR13050.jpg
-			//parentId: 13_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13050.jpg
 			collInfo: 13U50
 			rarity: U
-			setNum: "13"
-			cardNum: 50
-			style: Standard
 		}
 		title: Gollum
 		subtitle: Her Sneak
@@ -461,17 +405,9 @@
 
 	13_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR13051.jpg
-			//parentId: 13_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13051.jpg
 			collInfo: 13C51
 			rarity: C
-			setNum: "13"
-			cardNum: 51
-			style: Standard
 		}
 		title: It's My Birthday
 		unique: false
@@ -511,17 +447,9 @@
 
 	13_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR13052.jpg
-			//parentId: 13_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13052.jpg
 			collInfo: 13U52
 			rarity: U
-			setNum: "13"
-			cardNum: 52
-			style: Standard
 		}
 		title: Little Snuffler
 		unique: false
@@ -638,17 +566,9 @@
 
 	13_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR13053.jpg
-			//parentId: 13_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13053.jpg
 			collInfo: 13U53
 			rarity: U
-			setNum: "13"
-			cardNum: 53
-			style: Standard
 		}
 		title: Naked Waste
 		unique: false
@@ -704,17 +624,9 @@
 
 	13_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR13054.jpg
-			//parentId: 13_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13054.jpg
 			collInfo: 13C54
 			rarity: C
-			setNum: "13"
-			cardNum: 54
-			style: Standard
 		}
 		title: Out of All Knowledge
 		unique: false
@@ -771,17 +683,9 @@
 
 	13_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR13055.jpg
-			//parentId: 13_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13055.jpg
 			collInfo: 13U55
 			rarity: U
-			setNum: "13"
-			cardNum: 55
-			style: Standard
 		}
 		title: Sméagol
 		subtitle: Simple Stoor
@@ -853,17 +757,9 @@
 
 	13_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR13056.jpg
-			//parentId: 13_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13056.jpg
 			collInfo: 13U56
 			rarity: U
-			setNum: "13"
-			cardNum: 56
-			style: Standard
 		}
 		title: Softly Up Behind
 		unique: false
@@ -914,17 +810,9 @@
 
 	13_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR13057.jpg
-			//parentId: 13_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13057.jpg
 			collInfo: 13R57
 			rarity: R
-			setNum: "13"
-			cardNum: 57
-			style: Standard
 		}
 		title: Trap Is Sprung
 		unique: false
@@ -995,17 +883,9 @@
 
 	13_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR13058.jpg
-			//parentId: 13_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13058.jpg
 			collInfo: 13R58
 			rarity: R
-			setNum: "13"
-			cardNum: 58
-			style: Standard
 		}
 		title: Wild Light of Madness
 		unique: false

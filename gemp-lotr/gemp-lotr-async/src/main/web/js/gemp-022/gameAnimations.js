@@ -53,11 +53,13 @@ var GameAnimations = Class.extend({
 
             var participantId = element.getAttribute("participantId");
             var blueprintId = element.getAttribute("blueprintId");
+            var testingText = element.getAttribute("testingText");
+            var backSideTestingText = element.getAttribute("backSideTestingText");
 
             // Play-out game event animation only if it's not the player who initiated it
             if (this.game.spectatorMode || this.game.replayMode || (participantId != this.game.bottomPlayerId)) {
-                var card = new Card(blueprintId, "ANIMATION", "anim", participantId);
-                var cardDiv = createSimpleCardDiv(card.imageUrl);
+                var card = new Card(blueprintId, testingText, backSideTestingText, "ANIMATION", "anim", participantId);
+                var cardDiv = Card.CreateSimpleCardDiv(card.imageUrl, card.testingText, card.foil, card.incomplete, 16);
 
                 $("#main").queue(
                     function (next) {
@@ -123,6 +125,8 @@ var GameAnimations = Class.extend({
             var participantId = element.getAttribute("participantId");
             var blueprintId = element.getAttribute("blueprintId");
             var targetCardIds = element.getAttribute("otherCardIds").split(",");
+            var testingText = element.getAttribute("testingText");
+            var backSideTestingText = element.getAttribute("backSideTestingText");
 
             // Play-out card affects card animation only if it's not the player who initiated it
             if (this.game.spectatorMode || this.game.replayMode || this.game.replayMode || (participantId != this.game.bottomPlayerId)) {
@@ -131,8 +135,8 @@ var GameAnimations = Class.extend({
                         for (var i = 0; i < targetCardIds.length; i++) {
                             var targetCardId = targetCardIds[i];
 
-                            var card = new Card(blueprintId, "ANIMATION", "anim" + i, participantId);
-                            var cardDiv = createSimpleCardDiv(card.imageUrl);
+                            var card = new Card(blueprintId, testingText, backSideTestingText, "ANIMATION", "anim" + i, participantId);
+                            var cardDiv = Card.CreateSimpleCardDiv(card.imageUrl, card.testingText, card.foil, card.incomplete, 16);
 
                             var targetCard = $(".card:cardId(" + targetCardId + ")");
                             if (targetCard.length > 0) {
@@ -215,15 +219,17 @@ var GameAnimations = Class.extend({
                 var blueprintId = element.getAttribute("blueprintId");
                 var targetCardId = element.getAttribute("targetCardId");
                 var controllerId = element.getAttribute("controllerId");
+                var testingText = element.getAttribute("testingText");
+                var backSideTestingText = element.getAttribute("backSideTestingText");
 
                 if (controllerId != null)
                     participantId = controllerId;
 
                 var card;
                 if (zone == "ADVENTURE_PATH")
-                    card = new Card(blueprintId, zone, cardId, participantId, element.getAttribute("index"));
+                    card = new Card(blueprintId, testingText, backSideTestingText, zone, cardId, participantId, element.getAttribute("index"));
                 else
-                    card = new Card(blueprintId, zone, cardId, participantId);
+                    card = new Card(blueprintId, testingText, backSideTestingText, zone, cardId, participantId);
 
                 var cardDiv = that.game.createCardDiv(card, null, card.isFoil(), card.hasErrata());
                 if (zone == "DISCARD")

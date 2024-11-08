@@ -2,17 +2,9 @@
 
 	18_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR18060.jpg
-			//parentId: 18_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18060.jpg
 			collInfo: 18U60
 			rarity: U
-			setNum: "18"
-			cardNum: 60
-			style: Standard
 		}
 		title: Corsair Boarding Axe
 		unique: false
@@ -58,17 +50,9 @@
 
 	18_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR18061.jpg
-			//parentId: 18_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18061.jpg
 			collInfo: 18U61
 			rarity: U
-			setNum: "18"
-			cardNum: 61
-			style: Standard
 		}
 		title: Corsair Bow
 		unique: false
@@ -117,17 +101,9 @@
 
 	18_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR18062.jpg
-			//parentId: 18_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18062.jpg
 			collInfo: 18U62
 			rarity: U
-			setNum: "18"
-			cardNum: 62
-			style: Standard
 		}
 		title: Corsair Grappling Hook
 		unique: false
@@ -185,17 +161,9 @@
 
 	18_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR18063.jpg
-			//parentId: 18_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18063.jpg
 			collInfo: 18U63
 			rarity: U
-			setNum: "18"
-			cardNum: 63
-			style: Standard
 		}
 		title: Corsair Halberd
 		unique: false
@@ -242,17 +210,9 @@
 
 	18_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR18064.jpg
-			//parentId: 18_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18064.jpg
 			collInfo: 18U64
 			rarity: U
-			setNum: "18"
-			cardNum: 64
-			style: Standard
 		}
 		title: Corsair Scimitar
 		unique: false
@@ -289,17 +249,9 @@
 
 	18_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR18065.jpg
-			//parentId: 18_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18065.jpg
 			collInfo: 18C65
 			rarity: C
-			setNum: "18"
-			cardNum: 65
-			style: Standard
 		}
 		title: Declined Business
 		unique: false
@@ -341,17 +293,9 @@
 
 	18_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR18066.jpg
-			//parentId: 18_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18066.jpg
 			collInfo: 18R66
 			rarity: R
-			setNum: "18"
-			cardNum: 66
-			style: Standard
 		}
 		title: Fleet of Corsair Ships
 		unique: false
@@ -404,17 +348,9 @@
 
 	18_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR18067.jpg
-			//parentId: 18_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18067.jpg
 			collInfo: 18R67
 			rarity: R
-			setNum: "18"
-			cardNum: 67
-			style: Standard
 		}
 		title: Gríma
 		subtitle: Witless Worm
@@ -482,17 +418,9 @@
 
 	18_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR18068.jpg
-			//parentId: 18_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18068.jpg
 			collInfo: 18C68
 			rarity: C
-			setNum: "18"
-			cardNum: 68
-			style: Standard
 		}
 		title: Harry Goatleaf
 		unique: false
@@ -543,17 +471,9 @@
 
 	18_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR18069.jpg
-			//parentId: 18_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18069.jpg
 			collInfo: 18R69
 			rarity: R
-			setNum: "18"
-			cardNum: 69
-			style: Standard
 		}
 		title: Henchman's Dagger
 		unique: false
@@ -582,17 +502,9 @@
 
 	18_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR18070.jpg
-			//parentId: 18_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18070.jpg
 			collInfo: 18C70
 			rarity: C
-			setNum: "18"
-			cardNum: 70
-			style: Standard
 		}
 		title: Ill News is an Ill Guest
 		unique: false
@@ -637,17 +549,9 @@
 
 	18_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR18071.jpg
-			//parentId: 18_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18071.jpg
 			collInfo: 18R71
 			rarity: R
-			setNum: "18"
-			cardNum: 71
-			style: Standard
 		}
 		title: Mûmakil Commander
 		subtitle: Bold and Grim
@@ -704,17 +608,9 @@
 
 	18_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR18072.jpg
-			//parentId: 18_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18072.jpg
 			collInfo: 18C72
 			rarity: C
-			setNum: "18"
-			cardNum: 72
-			style: Standard
 		}
 		title: Ruffian
 		unique: false
@@ -765,17 +661,9 @@
 
 	18_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR18073.jpg
-			//parentId: 18_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18073.jpg
 			collInfo: 18C73
 			rarity: C
-			setNum: "18"
-			cardNum: 73
-			style: Standard
 		}
 		title: Rough Man of the South
 		unique: false
@@ -826,17 +714,9 @@
 
 	18_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR18074.jpg
-			//parentId: 18_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18074.jpg
 			collInfo: 18C74
 			rarity: C
-			setNum: "18"
-			cardNum: 74
-			style: Standard
 		}
 		title: Squint-eyed Southerner
 		unique: false
@@ -887,17 +767,9 @@
 
 	18_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR18075.jpg
-			//parentId: 18_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18075.jpg
 			collInfo: 18U75
 			rarity: U
-			setNum: "18"
-			cardNum: 75
-			style: Standard
 		}
 		title: Ted Sandyman
 		subtitle: Chief's Men's Ally
@@ -952,17 +824,9 @@
 
 	18_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR18076.jpg
-			//parentId: 18_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18076.jpg
 			collInfo: 18R76
 			rarity: R
-			setNum: "18"
-			cardNum: 76
-			style: Standard
 		}
 		title: Treachery
 		unique: false
@@ -1003,17 +867,9 @@
 
 	18_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR18077.jpg
-			//parentId: 18_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18077.jpg
 			collInfo: 18C77
 			rarity: C
-			setNum: "18"
-			cardNum: 77
-			style: Standard
 		}
 		title: Whisper in the Dark
 		unique: false

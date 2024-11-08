@@ -2,17 +2,9 @@
 
 	1_284: {
 		cardInfo: {
-			imagePath: decipher/LOTR01284.jpg
-			//parentId: 1_284
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01284.jpg
 			collInfo: 1R284
 			rarity: R
-			setNum: "1"
-			cardNum: 284
-			style: Standard
 		}
 		title: Bilbo
 		subtitle: Retired Adventurer
@@ -50,17 +42,9 @@
 
 	1_285: {
 		cardInfo: {
-			imagePath: decipher/LOTR01285.jpg
-			//parentId: 1_285
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01285.jpg
 			collInfo: 1U285
 			rarity: U
-			setNum: "1"
-			cardNum: 285
-			style: Standard
 		}
 		title: Bilbo's Pipe
 		unique: true
@@ -106,17 +90,9 @@
 
 	1_286: {
 		cardInfo: {
-			imagePath: decipher/LOTR01286.jpg
-			//parentId: 1_286
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01286.jpg
 			collInfo: 1C286
 			rarity: C
-			setNum: "1"
-			cardNum: 286
-			style: Standard
 		}
 		title: Bounder
 		unique: false
@@ -153,17 +129,9 @@
 
 	1_287: {
 		cardInfo: {
-			imagePath: decipher/LOTR01287.jpg
-			//parentId: 1_287
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01287.jpg
 			collInfo: 1C287
 			rarity: C
-			setNum: "1"
-			cardNum: 287
-			style: Standard
 		}
 		title: Extraordinary Resilience
 		unique: false
@@ -199,17 +167,9 @@
 
 	1_288: {
 		cardInfo: {
-			imagePath: decipher/LOTR01288.jpg
-			//parentId: 1_288
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01288.jpg
 			collInfo: 1R288
 			rarity: R
-			setNum: "1"
-			cardNum: 288
-			style: Standard
 		}
 		title: Farmer Maggot
 		subtitle: Chaser of Rascals
@@ -247,17 +207,9 @@
 
 	1_289: {
 		cardInfo: {
-			imagePath: decipher/LOTR01289.jpg
-			//parentId: 1_289
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01289.jpg
 			collInfo: 1R289
 			rarity: R
-			setNum: "1"
-			cardNum: 289
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Old Bilbo's Heir
@@ -296,17 +248,9 @@
 
 	1_290: {
 		cardInfo: {
-			imagePath: decipher/LOTR01290.jpg
-			//parentId: 1_290
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01290.jpg
 			collInfo: 1C290
 			rarity: C
-			setNum: "1"
-			cardNum: 290
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Son of Drogo
@@ -346,17 +290,9 @@
 
 	1_291: {
 		cardInfo: {
-			imagePath: decipher/LOTR01291.jpg
-			//parentId: 1_291
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01291.jpg
 			collInfo: 1R291
 			rarity: R
-			setNum: "1"
-			cardNum: 291
-			style: Standard
 		}
 		title: The Gaffer
 		subtitle: Sam's Father
@@ -394,17 +330,9 @@
 
 	1_292: {
 		cardInfo: {
-			imagePath: decipher/LOTR01292.jpg
-			//parentId: 1_292
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01292.jpg
 			collInfo: 1U292
 			rarity: U
-			setNum: "1"
-			cardNum: 292
-			style: Standard
 		}
 		title: The Gaffer's Pipe
 		unique: true
@@ -449,17 +377,9 @@
 
 	1_293: {
 		cardInfo: {
-			imagePath: decipher/LOTR01293.jpg
-			//parentId: 1_293
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01293.jpg
 			collInfo: 1U293
 			rarity: U
-			setNum: "1"
-			cardNum: 293
-			style: Standard
 		}
 		title: Halfling Deftness
 		unique: false
@@ -494,17 +414,9 @@
 
 	1_294: {
 		cardInfo: {
-			imagePath: decipher/LOTR01294.jpg
-			//parentId: 1_294
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01294.jpg
 			collInfo: 1C294
 			rarity: C
-			setNum: "1"
-			cardNum: 294
-			style: Standard
 		}
 		title: Hobbit Appetite
 		unique: false
@@ -544,17 +456,9 @@
 
 	1_295: {
 		cardInfo: {
-			imagePath: decipher/LOTR01295.jpg
-			//parentId: 1_295
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01295.jpg
 			collInfo: 1C295
 			rarity: C
-			setNum: "1"
-			cardNum: 295
-			style: Standard
 		}
 		title: Hobbit Farmer
 		unique: false
@@ -602,17 +506,9 @@
 
 	1_296: {
 		cardInfo: {
-			imagePath: decipher/LOTR01296.jpg
-			//parentId: 1_296
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01296.jpg
 			collInfo: 1C296
 			rarity: C
-			setNum: "1"
-			cardNum: 296
-			style: Standard
 		}
 		title: Hobbit Intuition
 		unique: false
@@ -663,17 +559,9 @@
 
 	1_297: {
 		cardInfo: {
-			imagePath: decipher/LOTR01297.jpg
-			//parentId: 1_297
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01297.jpg
 			collInfo: 1C297
 			rarity: C
-			setNum: "1"
-			cardNum: 297
-			style: Standard
 		}
 		title: Hobbit Party Guest
 		unique: false
@@ -722,17 +610,9 @@
 
 	1_298: {
 		cardInfo: {
-			imagePath: decipher/LOTR01298.jpg
-			//parentId: 1_298
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01298.jpg
 			collInfo: 1C298
 			rarity: C
-			setNum: "1"
-			cardNum: 298
-			style: Standard
 		}
 		title: Hobbit Stealth
 		unique: false
@@ -783,17 +663,9 @@
 
 	1_299: {
 		cardInfo: {
-			imagePath: decipher/LOTR01299.jpg
-			//parentId: 1_299
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01299.jpg
 			collInfo: 1C299
 			rarity: C
-			setNum: "1"
-			cardNum: 299
-			style: Standard
 		}
 		title: Hobbit Sword
 		unique: false
@@ -818,17 +690,9 @@
 
 	1_300: {
 		cardInfo: {
-			imagePath: decipher/LOTR01300.jpg
-			//parentId: 1_300
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01300.jpg
 			collInfo: 1C300
 			rarity: C
-			setNum: "1"
-			cardNum: 300
-			style: Standard
 		}
 		title: Longbottom Leaf
 		unique: false
@@ -867,17 +731,9 @@
 
 	1_301: {
 		cardInfo: {
-			imagePath: decipher/LOTR01301.jpg
-			//parentId: 1_301
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01301.jpg
 			collInfo: 1U301
 			rarity: U
-			setNum: "1"
-			cardNum: 301
-			style: Standard
 		}
 		title: Master Proudfoot
 		subtitle: Distant Relative of Bilbo
@@ -935,17 +791,9 @@
 
 	1_302: {
 		cardInfo: {
-			imagePath: decipher/LOTR01302.jpg
-			//parentId: 1_302
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01302.jpg
 			collInfo: 1R302
 			rarity: R
-			setNum: "1"
-			cardNum: 302
-			style: Standard
 		}
 		title: Merry
 		subtitle: Friend to Sam
@@ -993,17 +841,9 @@
 
 	1_303: {
 		cardInfo: {
-			imagePath: decipher/LOTR01303.jpg
-			//parentId: 1_303
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01303.jpg
 			collInfo: 1C303
 			rarity: C
-			setNum: "1"
-			cardNum: 303
-			style: Standard
 		}
 		title: Merry
 		subtitle: From O'er the Brandywine
@@ -1038,17 +878,9 @@
 
 	1_304: {
 		cardInfo: {
-			imagePath: decipher/LOTR01304.jpg
-			//parentId: 1_304
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01304.jpg
 			collInfo: 1C304
 			rarity: C
-			setNum: "1"
-			cardNum: 304
-			style: Standard
 		}
 		title: Noble Intentions
 		unique: false
@@ -1082,17 +914,9 @@
 
 	1_305: {
 		cardInfo: {
-			imagePath: decipher/LOTR01305.jpg
-			//parentId: 1_305
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01305.jpg
 			collInfo: 1C305
 			rarity: C
-			setNum: "1"
-			cardNum: 305
-			style: Standard
 		}
 		title: Old Toby
 		unique: false
@@ -1130,17 +954,9 @@
 
 	1_306: {
 		cardInfo: {
-			imagePath: decipher/LOTR01306.jpg
-			//parentId: 1_306
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01306.jpg
 			collInfo: 1C306
 			rarity: C
-			setNum: "1"
-			cardNum: 306
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Friend to Frodo
@@ -1175,17 +991,9 @@
 
 	1_307: {
 		cardInfo: {
-			imagePath: decipher/LOTR01307.jpg
-			//parentId: 1_307
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01307.jpg
 			collInfo: 1R307
 			rarity: R
-			setNum: "1"
-			cardNum: 307
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Hobbit of Some Intelligence
@@ -1236,17 +1044,9 @@
 
 	1_308: {
 		cardInfo: {
-			imagePath: decipher/LOTR01308.jpg
-			//parentId: 1_308
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01308.jpg
 			collInfo: 1R308
 			rarity: R
-			setNum: "1"
-			cardNum: 308
-			style: Standard
 		}
 		title: Power According to His Stature
 		unique: false
@@ -1279,17 +1079,9 @@
 
 	1_309: {
 		cardInfo: {
-			imagePath: decipher/LOTR01309.jpg
-			//parentId: 1_309
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01309.jpg
 			collInfo: 1U309
 			rarity: U
-			setNum: "1"
-			cardNum: 309
-			style: Standard
 		}
 		title: Rosie Cotton
 		subtitle: Hobbiton Lass
@@ -1337,17 +1129,9 @@
 
 	1_310: {
 		cardInfo: {
-			imagePath: decipher/LOTR01310.jpg
-			//parentId: 1_310
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01310.jpg
 			collInfo: 1R310
 			rarity: R
-			setNum: "1"
-			cardNum: 310
-			style: Standard
 		}
 		title: Sam
 		subtitle: Faithful Companion
@@ -1396,17 +1180,9 @@
 
 	1_311: {
 		cardInfo: {
-			imagePath: decipher/LOTR01311.jpg
-			//parentId: 1_311
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01311.jpg
 			collInfo: 1C311
 			rarity: C
-			setNum: "1"
-			cardNum: 311
-			style: Standard
 		}
 		title: Sam
 		subtitle: Son of Hamfast
@@ -1457,17 +1233,9 @@
 
 	1_312: {
 		cardInfo: {
-			imagePath: decipher/LOTR01312.jpg
-			//parentId: 1_312
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01312.jpg
 			collInfo: 1C312
 			rarity: C
-			setNum: "1"
-			cardNum: 312
-			style: Standard
 		}
 		title: Sorry About Everything
 		unique: false
@@ -1500,17 +1268,9 @@
 
 	1_313: {
 		cardInfo: {
-			imagePath: decipher/LOTR01313.jpg
-			//parentId: 1_313
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01313.jpg
 			collInfo: 1R313
 			rarity: R
-			setNum: "1"
-			cardNum: 313
-			style: Standard
 		}
 		title: Sting
 		unique: true
@@ -1565,17 +1325,9 @@
 
 	1_314: {
 		cardInfo: {
-			imagePath: decipher/LOTR01314.jpg
-			//parentId: 1_314
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01314.jpg
 			collInfo: 1R314
 			rarity: R
-			setNum: "1"
-			cardNum: 314
-			style: Standard
 		}
 		title: Stone Trolls
 		unique: false
@@ -1615,17 +1367,9 @@
 
 	1_315: {
 		cardInfo: {
-			imagePath: decipher/LOTR01315.jpg
-			//parentId: 1_315
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01315.jpg
 			collInfo: 1C315
 			rarity: C
-			setNum: "1"
-			cardNum: 315
-			style: Standard
 		}
 		title: Stout and Sturdy
 		unique: false
@@ -1654,17 +1398,9 @@
 
 	1_316: {
 		cardInfo: {
-			imagePath: decipher/LOTR01316.jpg
-			//parentId: 1_316
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01316.jpg
 			collInfo: 1U316
 			rarity: U
-			setNum: "1"
-			cardNum: 316
-			style: Standard
 		}
 		title: A Talent for Not Being Seen
 		unique: true
@@ -1724,17 +1460,9 @@
 
 	1_317: {
 		cardInfo: {
-			imagePath: decipher/LOTR01317.jpg
-			//parentId: 1_317
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01317.jpg
 			collInfo: 1C317
 			rarity: C
-			setNum: "1"
-			cardNum: 317
-			style: Standard
 		}
 		title: There and Back Again
 		unique: true
@@ -1771,17 +1499,9 @@
 
 	1_318: {
 		cardInfo: {
-			imagePath: decipher/LOTR01318.jpg
-			//parentId: 1_318
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01318.jpg
 			collInfo: 1R318
 			rarity: R
-			setNum: "1"
-			cardNum: 318
-			style: Standard
 		}
 		title: Thrór's Map
 		unique: true

@@ -2,17 +2,9 @@
 
 	9_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR09028.jpg
-			//parentId: 9_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09028.jpg
 			collInfo: 9R+28
 			rarity: R+
-			setNum: "9"
-			cardNum: 28
-			style: Standard
 		}
 		title: Gollum
 		subtitle: Dark as Darkness
@@ -101,17 +93,9 @@
 
 	9_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR09029.jpg
-			//parentId: 9_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09029.jpg
 			collInfo: 9R+29
 			rarity: R+
-			setNum: "9"
-			cardNum: 29
-			style: Standard
 		}
 		title: Slippery as Fishes
 		unique: false
@@ -176,17 +160,9 @@
 
 	9_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR09030.jpg
-			//parentId: 9_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09030.jpg
 			collInfo: 9R+30
 			rarity: R+
-			setNum: "9"
-			cardNum: 30
-			style: Standard
 		}
 		title: Sméagol
 		subtitle: Bearer of Great Secrets

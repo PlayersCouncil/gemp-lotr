@@ -1,17 +1,11 @@
 {
 	60_28: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN10E028.1_card.jpg
-			//parentId: 10_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1?
+			//id: 60_28.1
+			revision: 1
+			image: errata/LOTR-EN10E028.1_card.jpg
 			collInfo: 10R28
 			rarity: R
-			setNum: "10"
-			cardNum: 28
-			style: Standard
 		}
 		title: Denethor
 		subtitle: Lord of Minas Tirith

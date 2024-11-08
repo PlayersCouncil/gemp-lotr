@@ -2,17 +2,10 @@
 
 	102_1: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S001.0_card.jpg
-			//parentId: 102_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_1
+			image: sets/V2/LOTR-ENV2S001.0_card.jpg
 			collInfo: V2_1
 			rarity: _
-			setNum: V2
-			cardNum: 1
-			style: Standard
 		}
 		title: Driven into the Hills
 		unique: false
@@ -54,17 +47,10 @@
 
 	102_2: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S002.0_card.jpg
-			//parentId: 102_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_2
+			image: sets/V2/LOTR-ENV2S002.0_card.jpg
 			collInfo: V2_2
 			rarity: _
-			setNum: V2
-			cardNum: 2
-			style: Standard
 		}
 		title: Dunlending Raider
 		unique: false
@@ -97,17 +83,10 @@
 
 	102_3: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S003.0_card.jpg
-			//parentId: 102_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_3
+			image: sets/V2/LOTR-ENV2S003.0_card.jpg
 			collInfo: V2_3
 			rarity: _
-			setNum: V2
-			cardNum: 3
-			style: Standard
 		}
 		title: Dunlending Reaver
 		unique: false
@@ -158,17 +137,10 @@
 
 	102_4: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S004.0_card.jpg
-			//parentId: 102_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_4
+			image: sets/V2/LOTR-ENV2S004.0_card.jpg
 			collInfo: V2_4
 			rarity: _
-			setNum: V2
-			cardNum: 4
-			style: Standard
 		}
 		title: Horsemen Took Your Lands
 		unique: false
@@ -212,17 +184,10 @@
 
 	102_5: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S005.0_card.jpg
-			//parentId: 102_5
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_5
+			image: sets/V2/LOTR-ENV2S005.0_card.jpg
 			collInfo: V2_5
 			rarity: _
-			setNum: V2
-			cardNum: 5
-			style: Standard
 		}
 		title: No More Shall We Wait
 		unique: false

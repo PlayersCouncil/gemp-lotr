@@ -1,5 +1,10 @@
 {
 	30_32: {
+		cardInfo: {
+			image: hobbit/HDG3032.jpg
+			collInfo: 30_32
+			rarity: _
+		}
 		title: Anger
 		culture: gundabad
 		twilight: 1
@@ -25,6 +30,11 @@
 		}
 	}
 	30_33: {
+		cardInfo: {
+			image: hobbit/HDG3033.jpg
+			collInfo: 30_33
+			rarity: _
+		}
 		title: Fimbul
 		subtitle: Orkish Assassin
 		unique: true
@@ -61,6 +71,11 @@
 		]
 	}
 	30_34: {
+		cardInfo: {
+			image: hobbit/HDG3034.jpg
+			collInfo: 30_34
+			rarity: _
+		}
 		title: Hatred Rekindled
 		culture: gundabad
 		twilight: 3
@@ -82,6 +97,11 @@
 		}
 	}
 	30_35: {
+		cardInfo: {
+			image: hobbit/HDG3035.jpg
+			collInfo: 30_35
+			rarity: _
+		}
 		title: Host of Thousands
 		culture: gundabad
 		twilight: 0
@@ -96,6 +116,11 @@
 		}
 	}
 	30_36: {
+		cardInfo: {
+			image: hobbit/HDG3036.jpg
+			collInfo: 30_36
+			rarity: _
+		}
 		title: Narzug
 		subtitle: Orkish Assassin
 		unique: true
@@ -134,6 +159,11 @@
 		}
 	}
 	30_37: {
+		cardInfo: {
+			image: hobbit/HDG3037.jpg
+			collInfo: 30_37
+			rarity: _
+		}
 		title: Not at Home
 		unique: true
 		culture: gundabad
@@ -174,6 +204,11 @@
 		]
 	}
 	30_38: {
+		cardInfo: {
+			image: hobbit/HDG3038.jpg
+			collInfo: 30_38
+			rarity: _
+		}
 		title: Orkish Marauder
 		culture: gundabad
 		twilight: 3
@@ -220,6 +255,11 @@
 		]
 	}
 	30_39: {
+		cardInfo: {
+			image: hobbit/HDG3039.jpg
+			collInfo: 30_39
+			rarity: _
+		}
 		title: Orkish Aggressor
 		culture: gundabad
 		twilight: 2
@@ -257,6 +297,11 @@
 		}
 	}
 	30_40: {
+		cardInfo: {
+			image: hobbit/HDG3040.jpg
+			collInfo: 30_40
+			rarity: _
+		}
 		title: Watchful Orc
 		culture: gundabad
 		twilight: 4
@@ -307,6 +352,11 @@
 		]
 	}
 	30_41: {
+		cardInfo: {
+			image: hobbit/HDG3041.jpg
+			collInfo: 30_41
+			rarity: _
+		}
 		title: Yazneg
 		subtitle: Orkish Assassin
 		unique: true
@@ -337,6 +387,11 @@
 		}
 	}
 	30_42: {
+		cardInfo: {
+			image: hobbit/HDG3042.jpg
+			collInfo: 30_42
+			rarity: _
+		}
 		title: Goblin Footman
 		culture: moria
 		twilight: 3
@@ -360,6 +415,11 @@
 		}
 	}
 	30_66: {
+		cardInfo: {
+			image: hobbit/HDG3066.jpg
+			collInfo: 30_66
+			rarity: _
+		}
 		title: Smaug
 		subtitle: The Golden
 		unique: true

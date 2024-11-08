@@ -1,5 +1,10 @@
 {
 	32_1: {
+		cardInfo: {
+			image: hobbit/HDG321.jpg
+			collInfo: 32_1
+			rarity: _
+		}
 		title: Crown of Erebor
 		unique: true
 		culture: dwarven
@@ -44,6 +49,11 @@
 		]
 	}
 	32_2: {
+		cardInfo: {
+			image: hobbit/HDG322.jpg
+			collInfo: 32_2
+			rarity: _
+		}
 		title: Dain Ironfoot
 		subtitle: Lord of the Iron Hills
 		unique: true
@@ -82,6 +92,11 @@
 		]
 	}
 	32_3: {
+		cardInfo: {
+			image: hobbit/HDG323.jpg
+			collInfo: 32_3
+			rarity: _
+		}
 		title: Du Bekar!
 		culture: dwarven
 		twilight: 3
@@ -101,6 +116,11 @@
 		}
 	}
 	32_4: {
+		cardInfo: {
+			image: hobbit/HDG324.jpg
+			collInfo: 32_4
+			rarity: _
+		}
 		title: Dwarven Spear
 		culture: dwarven
 		twilight: 1
@@ -118,6 +138,11 @@
 		}
 	}
 	32_5: {
+		cardInfo: {
+			image: hobbit/HDG325.jpg
+			collInfo: 32_5
+			rarity: _
+		}
 		title: Iron Hills Army
 		unique: true
 		culture: dwarven
@@ -160,6 +185,11 @@
 		}
 	}
 	32_6: {
+		cardInfo: {
+			image: hobbit/HDG326.jpg
+			collInfo: 32_6
+			rarity: _
+		}
 		title: King Under the Mountain
 		culture: dwarven
 		twilight: 1
@@ -179,6 +209,11 @@
 		}
 	}
 	32_7: {
+		cardInfo: {
+			image: hobbit/HDG327.jpg
+			collInfo: 32_7
+			rarity: _
+		}
 		title: Ring of Thror
 		unique: true
 		culture: dwarven
@@ -217,6 +252,11 @@
 		]
 	}
 	32_8: {
+		cardInfo: {
+			image: hobbit/HDG328.jpg
+			collInfo: 32_8
+			rarity: _
+		}
 		title: Roac
 		subtitle: Son of Carc
 		unique: true
@@ -268,6 +308,11 @@
 		]
 	}
 	32_9: {
+		cardInfo: {
+			image: hobbit/HDG329.jpg
+			collInfo: 32_9
+			rarity: _
+		}
 		title: Thrain
 		subtitle: Father of Thorin
 		unique: true
@@ -308,6 +353,11 @@
 		]
 	}
 	32_10: {
+		cardInfo: {
+			image: hobbit/HDG3210.jpg
+			collInfo: 32_10
+			rarity: _
+		}
 		title: Thror's Heirlooms
 		culture: dwarven
 		twilight: 3
@@ -341,6 +391,11 @@
 		}
 	}
 	32_11: {
+		cardInfo: {
+			image: hobbit/HDG3211.jpg
+			collInfo: 32_11
+			rarity: _
+		}
 		title: Thror's Key
 		unique: true
 		culture: dwarven
@@ -391,6 +446,11 @@
 		]
 	}
 	32_12: {
+		cardInfo: {
+			image: hobbit/HDG3212.jpg
+			collInfo: 32_12
+			rarity: _
+		}
 		title: Thror's Map
 		unique: true
 		culture: dwarven
@@ -441,6 +501,11 @@
 		}
 	}
 	32_13: {
+		cardInfo: {
+			image: hobbit/HDG3213.jpg
+			collInfo: 32_13
+			rarity: _
+		}
 		title: Galadriel
 		subtitle: Elven Lady
 		unique: true
@@ -497,6 +562,11 @@
 		]
 	}
 	32_14: {
+		cardInfo: {
+			image: hobbit/HDG3214.jpg
+			collInfo: 32_14
+			rarity: _
+		}
 		title: Nenya
 		unique: true
 		culture: elven
@@ -541,6 +611,11 @@
 		]
 	}
 	32_15: {
+		cardInfo: {
+			image: hobbit/HDG3215.jpg
+			collInfo: 32_15
+			rarity: _
+		}
 		title: Bain
 		subtitle: Son of Bard
 		unique: true
@@ -579,6 +654,11 @@
 		]
 	}
 	32_16: {
+		cardInfo: {
+			image: hobbit/HDG3216.jpg
+			collInfo: 32_16
+			rarity: _
+		}
 		title: Black Arrow
 		unique: true
 		culture: esgaroth
@@ -623,6 +703,11 @@
 		}
 	}
 	32_17: {
+		cardInfo: {
+			image: hobbit/HDG3217.jpg
+			collInfo: 32_17
+			rarity: _
+		}
 		title: Esgaroth Volunteers
 		unique: true
 		culture: esgaroth
@@ -652,6 +737,11 @@
 		}
 	}
 	32_18: {
+		cardInfo: {
+			image: hobbit/HDG3218.jpg
+			collInfo: 32_18
+			rarity: _
+		}
 		title: Iron-forged Weapon
 		culture: esgaroth
 		twilight: 2
@@ -677,6 +767,11 @@
 		}
 	}
 	32_19: {
+		cardInfo: {
+			image: hobbit/HDG3219.jpg
+			collInfo: 32_19
+			rarity: _
+		}
 		title: Percy
 		subtitle: Bard's Lieutenant
 		unique: true
@@ -714,6 +809,11 @@
 		]
 	}
 	32_20: {
+		cardInfo: {
+			image: hobbit/HDG3220.jpg
+			collInfo: 32_20
+			rarity: _
+		}
 		title: The Master
 		subtitle: Master of Lake-Town
 		unique: true

@@ -2,17 +2,9 @@
 
 	10_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR10036.jpg
-			//parentId: 10_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10036.jpg
 			collInfo: 10C36
 			rarity: C
-			setNum: "10"
-			cardNum: 36
-			style: Standard
 		}
 		title: Cast Unto the Winds
 		unique: false
@@ -57,17 +49,9 @@
 
 	10_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR10037.jpg
-			//parentId: 10_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10037.jpg
 			collInfo: 10C37
 			rarity: C
-			setNum: "10"
-			cardNum: 37
-			style: Standard
 		}
 		title: Corsair Boatswain
 		unique: false
@@ -116,17 +100,9 @@
 
 	10_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR10038.jpg
-			//parentId: 10_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10038.jpg
 			collInfo: 10R38
 			rarity: R
-			setNum: "10"
-			cardNum: 38
-			style: Standard
 		}
 		title: Corsair Brute
 		unique: false
@@ -175,17 +151,9 @@
 
 	10_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR10039.jpg
-			//parentId: 10_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10039.jpg
 			collInfo: 10U39
 			rarity: U
-			setNum: "10"
-			cardNum: 39
-			style: Standard
 		}
 		title: Corsair Ruffian
 		unique: false
@@ -236,17 +204,9 @@
 
 	10_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR10040.jpg
-			//parentId: 10_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10040.jpg
 			collInfo: 10R40
 			rarity: R
-			setNum: "10"
-			cardNum: 40
-			style: Standard
 		}
 		title: Easterling Berserker
 		unique: false
@@ -307,17 +267,9 @@
 
 	10_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR10041.jpg
-			//parentId: 10_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10041.jpg
 			collInfo: 10C41
 			rarity: C
-			setNum: "10"
-			cardNum: 41
-			style: Standard
 		}
 		title: Easterling Pillager
 		unique: true
@@ -375,17 +327,9 @@
 
 	10_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR10042.jpg
-			//parentId: 10_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10042.jpg
 			collInfo: 10C42
 			rarity: C
-			setNum: "10"
-			cardNum: 42
-			style: Standard
 		}
 		title: Far Harad Mercenaries
 		unique: false
@@ -440,17 +384,9 @@
 
 	10_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR10043.jpg
-			//parentId: 10_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10043.jpg
 			collInfo: 10U43
 			rarity: U
-			setNum: "10"
-			cardNum: 43
-			style: Standard
 		}
 		title: Field of the Fallen
 		unique: false
@@ -503,17 +439,9 @@
 
 	10_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR10044.jpg
-			//parentId: 10_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10044.jpg
 			collInfo: 10U44
 			rarity: U
-			setNum: "10"
-			cardNum: 44
-			style: Standard
 		}
 		title: High Vantage
 		unique: false
@@ -552,17 +480,9 @@
 
 	10_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR10045.jpg
-			//parentId: 10_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10045.jpg
 			collInfo: 10R45
 			rarity: R
-			setNum: "10"
-			cardNum: 45
-			style: Standard
 		}
 		title: Mûmak Chieftain
 		unique: false
@@ -604,17 +524,9 @@
 
 	10_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR10046.jpg
-			//parentId: 10_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10046.jpg
 			collInfo: 10R46
 			rarity: R
-			setNum: "10"
-			cardNum: 46
-			style: Standard
 		}
 		title: Quelled
 		unique: false
@@ -658,17 +570,9 @@
 
 	10_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR10047.jpg
-			//parentId: 10_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10047.jpg
 			collInfo: 10U47
 			rarity: U
-			setNum: "10"
-			cardNum: 47
-			style: Standard
 		}
 		title: Rallying Call
 		unique: false
@@ -723,17 +627,9 @@
 
 	10_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR10048.jpg
-			//parentId: 10_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10048.jpg
 			collInfo: 10R48
 			rarity: R
-			setNum: "10"
-			cardNum: 48
-			style: Standard
 		}
 		title: Seasoned Leader
 		unique: false
@@ -777,17 +673,9 @@
 
 	10_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR10049.jpg
-			//parentId: 10_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10049.jpg
 			collInfo: 10C49
 			rarity: C
-			setNum: "10"
-			cardNum: 49
-			style: Standard
 		}
 		title: Southron Fanatic
 		unique: false
@@ -828,17 +716,9 @@
 
 	10_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR10050.jpg
-			//parentId: 10_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10050.jpg
 			collInfo: 10C50
 			rarity: C
-			setNum: "10"
-			cardNum: 50
-			style: Standard
 		}
 		title: Southron Savage
 		unique: false
@@ -910,17 +790,9 @@
 
 	10_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR10051.jpg
-			//parentId: 10_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10051.jpg
 			collInfo: 10R51
 			rarity: R
-			setNum: "10"
-			cardNum: 51
-			style: Standard
 		}
 		title: Stampeded
 		unique: false
@@ -972,17 +844,9 @@
 
 	10_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR10052.jpg
-			//parentId: 10_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10052.jpg
 			collInfo: 10C52
 			rarity: C
-			setNum: "10"
-			cardNum: 52
-			style: Standard
 		}
 		title: Under Foot
 		unique: true

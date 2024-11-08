@@ -2,17 +2,9 @@
 
 	10_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR10025.jpg
-			//parentId: 10_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10025.jpg
 			collInfo: 10R25
 			rarity: R
-			setNum: "10"
-			cardNum: 25
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Elessar Telcontar
@@ -70,17 +62,9 @@
 
 	10_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR10026.jpg
-			//parentId: 10_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10026.jpg
 			collInfo: 10U26
 			rarity: U
-			setNum: "10"
-			cardNum: 26
-			style: Standard
 		}
 		title: Cursed of Erech
 		unique: true
@@ -145,17 +129,9 @@
 
 	10_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR10027.jpg
-			//parentId: 10_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10027.jpg
 			collInfo: 10C27
 			rarity: C
-			setNum: "10"
-			cardNum: 27
-			style: Standard
 		}
 		title: Dead Man of Dunharrow
 		unique: false
@@ -201,17 +177,9 @@
 
 	10_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR10028.jpg
-			//parentId: 10_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10028.jpg
 			collInfo: 10R28
 			rarity: R
-			setNum: "10"
-			cardNum: 28
-			style: Standard
 		}
 		title: Denethor
 		subtitle: Lord of Minas Tirith
@@ -279,17 +247,9 @@
 
 	10_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR10029.jpg
-			//parentId: 10_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10029.jpg
 			collInfo: 10R29
 			rarity: R
-			setNum: "10"
-			cardNum: 29
-			style: Standard
 		}
 		title: Drawing His Eye
 		unique: false
@@ -341,17 +301,9 @@
 
 	10_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR10030.jpg
-			//parentId: 10_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10030.jpg
 			collInfo: 10C30
 			rarity: C
-			setNum: "10"
-			cardNum: 30
-			style: Standard
 		}
 		title: End of the Game
 		unique: false
@@ -410,17 +362,9 @@
 
 	10_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR10031.jpg
-			//parentId: 10_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10031.jpg
 			collInfo: 10C31
 			rarity: C
-			setNum: "10"
-			cardNum: 31
-			style: Standard
 		}
 		title: Every Little is a Gain
 		unique: false
@@ -468,17 +412,9 @@
 
 	10_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR10032.jpg
-			//parentId: 10_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10032.jpg
 			collInfo: 10U32
 			rarity: U
-			setNum: "10"
-			cardNum: 32
-			style: Standard
 		}
 		title: Fifth Level
 		unique: false
@@ -545,17 +481,9 @@
 
 	10_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR10033.jpg
-			//parentId: 10_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10033.jpg
 			collInfo: 10U33
 			rarity: U
-			setNum: "10"
-			cardNum: 33
-			style: Standard
 		}
 		title: Hardy Garrison
 		unique: true
@@ -599,17 +527,9 @@
 
 	10_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR10034.jpg
-			//parentId: 10_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10034.jpg
 			collInfo: 10C34
 			rarity: C
-			setNum: "10"
-			cardNum: 34
-			style: Standard
 		}
 		title: Last Throw
 		unique: false

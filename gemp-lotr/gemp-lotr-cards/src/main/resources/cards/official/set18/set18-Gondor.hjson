@@ -2,17 +2,9 @@
 
 	18_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR18038.jpg
-			//parentId: 18_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18038.jpg
 			collInfo: 18R38
 			rarity: R
-			setNum: "18"
-			cardNum: 38
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Heir to the Throne of Gondor
@@ -67,17 +59,9 @@
 
 	18_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR18039.jpg
-			//parentId: 18_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18039.jpg
 			collInfo: 18C39
 			rarity: C
-			setNum: "18"
-			cardNum: 39
-			style: Standard
 		}
 		title: Armor of the White City
 		unique: false
@@ -111,17 +95,9 @@
 
 	18_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR18040.jpg
-			//parentId: 18_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18040.jpg
 			collInfo: 18R40
 			rarity: R
-			setNum: "18"
-			cardNum: 40
-			style: Standard
 		}
 		title: Boromir
 		subtitle: Proud and Noble Man
@@ -173,17 +149,9 @@
 
 	18_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR18041.jpg
-			//parentId: 18_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18041.jpg
 			collInfo: 18R41
 			rarity: R
-			setNum: "18"
-			cardNum: 41
-			style: Standard
 		}
 		title: Crown of Gondor
 		unique: true
@@ -236,17 +204,9 @@
 
 	18_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR18042.jpg
-			//parentId: 18_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18042.jpg
 			collInfo: 18R42
 			rarity: R
-			setNum: "18"
-			cardNum: 42
-			style: Standard
 		}
 		title: Denethor
 		subtitle: On the Edge of Madness
@@ -305,17 +265,9 @@
 
 	18_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR18043.jpg
-			//parentId: 18_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18043.jpg
 			collInfo: 18R43
 			rarity: R
-			setNum: "18"
-			cardNum: 43
-			style: Standard
 		}
 		title: Denethor's Sword
 		unique: true
@@ -348,17 +300,9 @@
 
 	18_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR18044.jpg
-			//parentId: 18_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18044.jpg
 			collInfo: 18C44
 			rarity: C
-			setNum: "18"
-			cardNum: 44
-			style: Standard
 		}
 		title: Defenses Long Held
 		unique: false
@@ -398,17 +342,9 @@
 
 	18_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR18045.jpg
-			//parentId: 18_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18045.jpg
 			collInfo: 18U45
 			rarity: U
-			setNum: "18"
-			cardNum: 45
-			style: Standard
 		}
 		title: Dúnadan's Bow
 		unique: false
@@ -448,17 +384,9 @@
 
 	18_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR18046.jpg
-			//parentId: 18_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18046.jpg
 			collInfo: 18U46
 			rarity: U
-			setNum: "18"
-			cardNum: 46
-			style: Standard
 		}
 		title: Disarmed
 		unique: false
@@ -529,17 +457,9 @@
 
 	18_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR18047.jpg
-			//parentId: 18_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18047.jpg
 			collInfo: 18R47
 			rarity: R
-			setNum: "18"
-			cardNum: 47
-			style: Standard
 		}
 		title: Elendil's Army
 		unique: true
@@ -570,17 +490,9 @@
 
 	18_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR18048.jpg
-			//parentId: 18_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18048.jpg
 			collInfo: 18R48
 			rarity: R
-			setNum: "18"
-			cardNum: 48
-			style: Standard
 		}
 		title: Faramir
 		subtitle: Captain of Ithilien
@@ -632,17 +544,9 @@
 
 	18_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR18049.jpg
-			//parentId: 18_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18049.jpg
 			collInfo: 18C49
 			rarity: C
-			setNum: "18"
-			cardNum: 49
-			style: Standard
 		}
 		title: Faramir's Company
 		unique: true
@@ -687,17 +591,9 @@
 
 	18_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR18050.jpg
-			//parentId: 18_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18050.jpg
 			collInfo: 18R50
 			rarity: R
-			setNum: "18"
-			cardNum: 50
-			style: Standard
 		}
 		title: The Faithful Stone
 		unique: false
@@ -767,17 +663,9 @@
 
 	18_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR18051.jpg
-			//parentId: 18_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18051.jpg
 			collInfo: 18C51
 			rarity: C
-			setNum: "18"
-			cardNum: 51
-			style: Standard
 		}
 		title: For Gondor!
 		unique: false
@@ -814,17 +702,9 @@
 
 	18_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR18052.jpg
-			//parentId: 18_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18052.jpg
 			collInfo: 18R52
 			rarity: R
-			setNum: "18"
-			cardNum: 52
-			style: Standard
 		}
 		title: Gondorian Servant
 		subtitle: Denethor's Handman
@@ -867,17 +747,9 @@
 
 	18_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR18053.jpg
-			//parentId: 18_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18053.jpg
 			collInfo: 18R53
 			rarity: R
-			setNum: "18"
-			cardNum: 53
-			style: Standard
 		}
 		title: Horn of Boromir
 		subtitle: The Great Horn
@@ -947,17 +819,9 @@
 
 	18_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR18054.jpg
-			//parentId: 18_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18054.jpg
 			collInfo: 18R54
 			rarity: R
-			setNum: "18"
-			cardNum: 54
-			style: Standard
 		}
 		title: Isildur
 		subtitle: Sword-bearer
@@ -1008,17 +872,9 @@
 
 	18_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR18055.jpg
-			//parentId: 18_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18055.jpg
 			collInfo: 18R55
 			rarity: R
-			setNum: "18"
-			cardNum: 55
-			style: Standard
 		}
 		title: Ranger of the North
 		unique: true
@@ -1073,17 +929,9 @@
 
 	18_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR18056.jpg
-			//parentId: 18_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18056.jpg
 			collInfo: 18C56
 			rarity: C
-			setNum: "18"
-			cardNum: 56
-			style: Standard
 		}
 		title: Ranger of the South
 		unique: false
@@ -1123,17 +971,9 @@
 
 	18_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR18057.jpg
-			//parentId: 18_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18057.jpg
 			collInfo: 18C57
 			rarity: C
-			setNum: "18"
-			cardNum: 57
-			style: Standard
 		}
 		title: Shield of the White Tree
 		unique: false
@@ -1185,17 +1025,9 @@
 
 	18_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR18058.jpg
-			//parentId: 18_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18058.jpg
 			collInfo: 18U58
 			rarity: U
-			setNum: "18"
-			cardNum: 58
-			style: Standard
 		}
 		title: Soldier's Cache
 		unique: false
@@ -1273,17 +1105,9 @@
 
 	18_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR18059.jpg
-			//parentId: 18_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18059.jpg
 			collInfo: 18R59
 			rarity: R
-			setNum: "18"
-			cardNum: 59
-			style: Standard
 		}
 		title: Watcher at Sarn Ford
 		subtitle: Ranger of the North

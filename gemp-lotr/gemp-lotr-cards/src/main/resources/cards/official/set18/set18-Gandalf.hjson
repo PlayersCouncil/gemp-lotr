@@ -2,17 +2,9 @@
 
 	18_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR18018.jpg
-			//parentId: 18_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18018.jpg
 			collInfo: 18R18
 			rarity: R
-			setNum: "18"
-			cardNum: 18
-			style: Standard
 		}
 		title: Beorning Axe
 		unique: false
@@ -51,17 +43,9 @@
 
 	18_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR18019.jpg
-			//parentId: 18_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18019.jpg
 			collInfo: 18C19
 			rarity: C
-			setNum: "18"
-			cardNum: 19
-			style: Standard
 		}
 		title: Drawn to Full Height
 		unique: false
@@ -107,17 +91,9 @@
 
 	18_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR18020.jpg
-			//parentId: 18_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18020.jpg
 			collInfo: 18C20
 			rarity: C
-			setNum: "18"
-			cardNum: 20
-			style: Standard
 		}
 		title: Ents Marching
 		unique: false
@@ -200,17 +176,9 @@
 
 	18_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR18021.jpg
-			//parentId: 18_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18021.jpg
 			collInfo: 18U21
 			rarity: U
-			setNum: "18"
-			cardNum: 21
-			style: Standard
 		}
 		title: Last Stand
 		unique: false
@@ -263,17 +231,9 @@
 
 	18_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR18022.jpg
-			//parentId: 18_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18022.jpg
 			collInfo: 18C22
 			rarity: C
-			setNum: "18"
-			cardNum: 22
-			style: Standard
 		}
 		title: Librarian
 		subtitle: Keeper of Ancient Texts
@@ -338,17 +298,9 @@
 
 	18_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR18023.jpg
-			//parentId: 18_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18023.jpg
 			collInfo: 18U23
 			rarity: U
-			setNum: "18"
-			cardNum: 23
-			style: Standard
 		}
 		title: One-Upsmanship
 		unique: false
@@ -388,17 +340,9 @@
 
 	18_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR18024.jpg
-			//parentId: 18_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18024.jpg
 			collInfo: 18R24
 			rarity: R
-			setNum: "18"
-			cardNum: 24
-			style: Standard
 		}
 		title: Our Time
 		unique: true
@@ -461,17 +405,9 @@
 
 	18_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR18025.jpg
-			//parentId: 18_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18025.jpg
 			collInfo: 18U25
 			rarity: U
-			setNum: "18"
-			cardNum: 25
-			style: Standard
 		}
 		title: Perspective
 		unique: false
@@ -522,17 +458,9 @@
 
 	18_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR18026.jpg
-			//parentId: 18_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18026.jpg
 			collInfo: 18R26
 			rarity: R
-			setNum: "18"
-			cardNum: 26
-			style: Standard
 		}
 		title: Radagast's Herb Bag
 		unique: true
@@ -575,17 +503,9 @@
 
 	18_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR18027.jpg
-			//parentId: 18_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18027.jpg
 			collInfo: 18U27
 			rarity: U
-			setNum: "18"
-			cardNum: 27
-			style: Standard
 		}
 		title: Ship of Smoke
 		unique: true

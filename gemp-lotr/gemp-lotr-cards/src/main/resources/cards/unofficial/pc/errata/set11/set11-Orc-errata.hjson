@@ -2,17 +2,11 @@
 
 	61_114: {
 		cardInfo: {
-			imagePath: errata/61_114.jpg
-			javaClass: false
-			parent: 11_114
-			parentPath: errata/pc
-			version: 1?
+			//id: 1_114.1
+			revision: 1
+			image: errata/61_114.jpg
 			collInfo: 11U114
 			rarity: U
-			setNum: "11"
-			cardNum: 114
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Demoralized
 		unique: true
@@ -62,17 +56,11 @@
 
 	61_132: {
 		cardInfo: {
-			imagePath: errata/61_132.jpg
-			javaClass: false
-			parent: 11_132
-			parentPath: errata/pc
-			version: 1?
+			//id: 1_132.1
+			revision: 1
+			image: errata/61_132.jpg
 			collInfo: 11C132
 			rarity: C
-			setNum: "11"
-			cardNum: 132
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Orkish Smith
 		culture: orc

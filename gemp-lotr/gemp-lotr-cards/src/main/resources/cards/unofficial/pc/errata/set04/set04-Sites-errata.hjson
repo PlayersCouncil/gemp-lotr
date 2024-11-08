@@ -1,17 +1,14 @@
 {
 	54_355: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E355.1_card.jpg
-			javaClass: false
+			//id: 4_355.1
 			parent: 4_355
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN04E355.1_card.jpg
 			collInfo: 4U355
 			rarity: U
-			setNum: "4"
-			cardNum: 355
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Cavern Entrance
 		unique: false

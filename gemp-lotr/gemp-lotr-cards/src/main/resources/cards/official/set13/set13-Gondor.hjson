@@ -2,17 +2,9 @@
 
 	13_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR13059.jpg
-			//parentId: 13_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13059.jpg
 			collInfo: 13R59
 			rarity: R
-			setNum: "13"
-			cardNum: 59
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Isildur's Heir
@@ -70,17 +62,9 @@
 
 	13_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR13060.jpg
-			//parentId: 13_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13060.jpg
 			collInfo: 13U60
 			rarity: U
-			setNum: "13"
-			cardNum: 60
-			style: Standard
 		}
 		title: Away on the Wind
 		unique: false
@@ -133,17 +117,9 @@
 
 	13_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR13061.jpg
-			//parentId: 13_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13061.jpg
 			collInfo: 13U61
 			rarity: U
-			setNum: "13"
-			cardNum: 61
-			style: Standard
 		}
 		title: Banners Blowing
 		unique: false
@@ -195,17 +171,9 @@
 
 	13_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR13062.jpg
-			//parentId: 13_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13062.jpg
 			collInfo: 13S62
 			rarity: S
-			setNum: "13"
-			cardNum: 62
-			style: Standard
 		}
 		title: Boromir
 		subtitle: Doomed Heir
@@ -261,17 +229,9 @@
 
 	13_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR13063.jpg
-			//parentId: 13_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13063.jpg
 			collInfo: 13R63
 			rarity: R
-			setNum: "13"
-			cardNum: 63
-			style: Standard
 		}
 		title: Brego
 		subtitle: Loyal Steed
@@ -328,17 +288,9 @@
 
 	13_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR13064.jpg
-			//parentId: 13_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13064.jpg
 			collInfo: 13R64
 			rarity: R
-			setNum: "13"
-			cardNum: 64
-			style: Standard
 		}
 		title: Denethor
 		subtitle: Last Ruling Steward
@@ -390,17 +342,9 @@
 
 	13_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR13065.jpg
-			//parentId: 13_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13065.jpg
 			collInfo: 13R65
 			rarity: R
-			setNum: "13"
-			cardNum: 65
-			style: Standard
 		}
 		title: Elendil
 		subtitle: High-king of Gondor
@@ -474,17 +418,9 @@
 
 	13_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR13066.jpg
-			//parentId: 13_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13066.jpg
 			collInfo: 13C66
 			rarity: C
-			setNum: "13"
-			cardNum: 66
-			style: Standard
 		}
 		title: Faramir
 		subtitle: Prince of Ithilien
@@ -537,17 +473,9 @@
 
 	13_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR13067.jpg
-			//parentId: 13_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13067.jpg
 			collInfo: 13U67
 			rarity: U
-			setNum: "13"
-			cardNum: 67
-			style: Standard
 		}
 		title: Guard of the White Tree
 		unique: false
@@ -588,17 +516,9 @@
 
 	13_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR13068.jpg
-			//parentId: 13_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13068.jpg
 			collInfo: 13C68
 			rarity: C
-			setNum: "13"
-			cardNum: 68
-			style: Standard
 		}
 		title: Guarded City
 		unique: false
@@ -641,17 +561,9 @@
 
 	13_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR13069.jpg
-			//parentId: 13_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13069.jpg
 			collInfo: 13C69
 			rarity: C
-			setNum: "13"
-			cardNum: 69
-			style: Standard
 		}
 		title: Heirs of Gondor
 		unique: true
@@ -714,17 +626,9 @@
 
 	13_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR13070.jpg
-			//parentId: 13_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13070.jpg
 			collInfo: 13U70
 			rarity: U
-			setNum: "13"
-			cardNum: 70
-			style: Standard
 		}
 		title: Hope Renewed
 		unique: false
@@ -767,17 +671,9 @@
 
 	13_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR13071.jpg
-			//parentId: 13_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13071.jpg
 			collInfo: 13U71
 			rarity: U
-			setNum: "13"
-			cardNum: 71
-			style: Standard
 		}
 		title: Isildur
 		subtitle: Heir of Elendil
@@ -845,17 +741,9 @@
 
 	13_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR13072.jpg
-			//parentId: 13_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13072.jpg
 			collInfo: 13U72
 			rarity: U
-			setNum: "13"
-			cardNum: 72
-			style: Standard
 		}
 		title: Kings' Legacy
 		unique: true
@@ -917,17 +805,9 @@
 
 	13_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR13073.jpg
-			//parentId: 13_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13073.jpg
 			collInfo: 13C73
 			rarity: C
-			setNum: "13"
-			cardNum: 73
-			style: Standard
 		}
 		title: Kingsfoil
 		unique: false
@@ -979,17 +859,9 @@
 
 	13_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR13074.jpg
-			//parentId: 13_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13074.jpg
 			collInfo: 13S74
 			rarity: S
-			setNum: "13"
-			cardNum: 74
-			style: Standard
 		}
 		title: Rally the Company
 		unique: false
@@ -1031,17 +903,9 @@
 
 	13_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR13075.jpg
-			//parentId: 13_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13075.jpg
 			collInfo: 13U75
 			rarity: U
-			setNum: "13"
-			cardNum: 75
-			style: Standard
 		}
 		title: Stewards' Legacy
 		unique: true
@@ -1110,17 +974,9 @@
 
 	13_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR13076.jpg
-			//parentId: 13_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13076.jpg
 			collInfo: 13R76
 			rarity: R
-			setNum: "13"
-			cardNum: 76
-			style: Standard
 		}
 		title: Storied Homestead
 		unique: true
@@ -1189,17 +1045,9 @@
 
 	13_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR13077.jpg
-			//parentId: 13_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13077.jpg
 			collInfo: 13C77
 			rarity: C
-			setNum: "13"
-			cardNum: 77
-			style: Standard
 		}
 		title: Tradesman From Lebennin
 		unique: false

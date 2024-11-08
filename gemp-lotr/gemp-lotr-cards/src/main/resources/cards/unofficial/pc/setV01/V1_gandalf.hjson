@@ -2,17 +2,10 @@
 
 	101_13: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S013.0_card.jpg
-			//parentId: 101_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_13
+			image: sets/vset1/LOTR-ENV1S013.0_card.jpg
 			collInfo: V1C13
 			rarity: C
-			setNum: "V1"
-			cardNum: 13
-			style: Standard
 		}
 		title: Counsel of the Wise
 		unique: false
@@ -141,16 +134,11 @@
 	# }
 	101_14: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S014.1_card.jpg
-			javaClass: false
-			parent: 101_14 
-			parentPath: errata/pc
-			version: 1
+			//id: 101_14
+			image: sets/vset1/LOTR-ENV1S014.1_card.jpg
+			revision: 1
 			collInfo: V1R14
 			rarity: R
-			setNum: "V1"
-			cardNum: 14
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Olorin
@@ -211,17 +199,10 @@
 
 	101_15: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S015.0_card.jpg
-			//parentId: 101_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_15
+			image: sets/vset1/LOTR-ENV1S015.0_card.jpg
 			collInfo: V1R15
 			rarity: R
-			setNum: "V1"
-			cardNum: 15
-			style: Standard
 		}
 		title: Gwaihir
 		subtitle: Lord of Eagles
@@ -297,17 +278,10 @@
 
 	101_16: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S016.0_card.jpg
-			//parentId: 101_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_16
+			image: sets/vset1/LOTR-ENV1S016.0_card.jpg
 			collInfo: V1C16
 			rarity: C
-			setNum: "V1"
-			cardNum: 16
-			style: Standard
 		}
 		title: My Heart Tells Me
 		unique: true
@@ -360,17 +334,10 @@
 
 	101_17: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S017.0_card.jpg
-			//parentId: 101_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_17
+			image: sets/vset1/LOTR-ENV1S017.0_card.jpg
 			collInfo: V1C17
 			rarity: C
-			setNum: "V1"
-			cardNum: 17
-			style: Standard
 		}
 		title: Two Eyes, as Often as I Can Spare Them
 		unique: false
@@ -412,17 +379,10 @@
 
 	101_18: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S018.0_card.jpg
-			//parentId: 101_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_18
+			image: sets/vset1/LOTR-ENV1S018.0_card.jpg
 			collInfo: V1R18
 			rarity: R
-			setNum: "V1"
-			cardNum: 18
-			style: Standard
 		}
 		title: The White Council
 		unique: true

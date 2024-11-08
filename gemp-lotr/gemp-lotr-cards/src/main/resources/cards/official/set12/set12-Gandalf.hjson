@@ -2,17 +2,9 @@
 
 	12_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR12025.jpg
-			//parentId: 12_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12025.jpg
 			collInfo: 12U25
 			rarity: U
-			setNum: "12"
-			cardNum: 25
-			style: Standard
 		}
 		title: Betrayal of Isengard
 		unique: false
@@ -65,17 +57,9 @@
 
 	12_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR12026.jpg
-			//parentId: 12_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12026.jpg
 			collInfo: 12R26
 			rarity: R
-			setNum: "12"
-			cardNum: 26
-			style: Standard
 		}
 		title: Discoveries
 		unique: false
@@ -123,17 +107,9 @@
 
 	12_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR12027.jpg
-			//parentId: 12_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12027.jpg
 			collInfo: 12R27
 			rarity: R
-			setNum: "12"
-			cardNum: 27
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: The White Rider
@@ -188,17 +164,9 @@
 
 	12_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR12028.jpg
-			//parentId: 12_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12028.jpg
 			collInfo: 12R28
 			rarity: R
-			setNum: "12"
-			cardNum: 28
-			style: Standard
 		}
 		title: Gandalf's Hat
 		unique: true
@@ -244,17 +212,9 @@
 
 	12_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR12029.jpg
-			//parentId: 12_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12029.jpg
 			collInfo: 12U29
 			rarity: U
-			setNum: "12"
-			cardNum: 29
-			style: Standard
 		}
 		title: Introspection
 		unique: false
@@ -311,17 +271,9 @@
 
 	12_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR12030.jpg
-			//parentId: 12_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12030.jpg
 			collInfo: 12R30
 			rarity: R
-			setNum: "12"
-			cardNum: 30
-			style: Standard
 		}
 		title: Járnsmid
 		subtitle: Barding Emissary
@@ -373,17 +325,9 @@
 
 	12_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR12031.jpg
-			//parentId: 12_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12031.jpg
 			collInfo: 12C31
 			rarity: C
-			setNum: "12"
-			cardNum: 31
-			style: Standard
 		}
 		title: Mysterious Wizard
 		unique: false
@@ -424,17 +368,9 @@
 
 	12_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR12032.jpg
-			//parentId: 12_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12032.jpg
 			collInfo: 12C32
 			rarity: C
-			setNum: "12"
-			cardNum: 32
-			style: Standard
 		}
 		title: Salve
 		unique: false
@@ -488,17 +424,9 @@
 
 	12_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR12033.jpg
-			//parentId: 12_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12033.jpg
 			collInfo: 12C33
 			rarity: C
-			setNum: "12"
-			cardNum: 33
-			style: Standard
 		}
 		title: The Terror of His Coming
 		unique: false
@@ -542,17 +470,9 @@
 
 	12_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR12034.jpg
-			//parentId: 12_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12034.jpg
 			collInfo: 12C34
 			rarity: C
-			setNum: "12"
-			cardNum: 34
-			style: Standard
 		}
 		title: Traveled Leader
 		unique: false
@@ -599,17 +519,9 @@
 
 	12_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR12035.jpg
-			//parentId: 12_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12035.jpg
 			collInfo: 12R35
 			rarity: R
-			setNum: "12"
-			cardNum: 35
-			style: Standard
 		}
 		title: Watch and Wait
 		unique: false
@@ -651,17 +563,9 @@
 
 	12_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR12036.jpg
-			//parentId: 12_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12036.jpg
 			collInfo: 12U36
 			rarity: U
-			setNum: "12"
-			cardNum: 36
-			style: Standard
 		}
 		title: With Doom We Come
 		unique: false

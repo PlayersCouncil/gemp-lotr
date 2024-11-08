@@ -2,17 +2,9 @@
 
 	14_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR14001.jpg
-			//parentId: 14_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14001.jpg
 			collInfo: 14R1
 			rarity: R
-			setNum: "14"
-			cardNum: 1
-			style: Standard
 		}
 		title: Dáin Ironfoot
 		subtitle: King Under the Mountain

@@ -2,17 +2,9 @@
 
 	1_120: {
 		cardInfo: {
-			imagePath: decipher/LOTR01120.jpg
-			//parentId: 1_120
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01120.jpg
 			collInfo: 1R120
 			rarity: R
-			setNum: "1"
-			cardNum: 120
-			style: Standard
 		}
 		title: Alive and Unspoiled
 		unique: false
@@ -80,17 +72,9 @@
 
 	1_121: {
 		cardInfo: {
-			imagePath: decipher/LOTR01121.jpg
-			//parentId: 1_121
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01121.jpg
 			collInfo: 1C121
 			rarity: C
-			setNum: "1"
-			cardNum: 121
-			style: Standard
 		}
 		title: Bred for Battle
 		unique: false
@@ -125,17 +109,9 @@
 
 	1_122: {
 		cardInfo: {
-			imagePath: decipher/LOTR01122.jpg
-			//parentId: 1_122
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01122.jpg
 			collInfo: 1C122
 			rarity: C
-			setNum: "1"
-			cardNum: 122
-			style: Standard
 		}
 		title: Breeding Pit
 		unique: false
@@ -169,17 +145,9 @@
 
 	1_123: {
 		cardInfo: {
-			imagePath: decipher/LOTR01123.jpg
-			//parentId: 1_123
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01123.jpg
 			collInfo: 1R123
 			rarity: R
-			setNum: "1"
-			cardNum: 123
-			style: Standard
 		}
 		title: Caradhras Has Not Forgiven Us
 		unique: false
@@ -221,17 +189,9 @@
 
 	1_124: {
 		cardInfo: {
-			imagePath: decipher/LOTR01124.jpg
-			//parentId: 1_124
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01124.jpg
 			collInfo: 1R124
 			rarity: R
-			setNum: "1"
-			cardNum: 124
-			style: Standard
 		}
 		title: Cruel Caradhras
 		unique: false
@@ -281,17 +241,9 @@
 
 	1_125: {
 		cardInfo: {
-			imagePath: decipher/LOTR01125.jpg
-			//parentId: 1_125
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01125.jpg
 			collInfo: 1R125
 			rarity: R
-			setNum: "1"
-			cardNum: 125
-			style: Standard
 		}
 		title: Greed
 		unique: false
@@ -339,17 +291,9 @@
 
 	1_126: {
 		cardInfo: {
-			imagePath: decipher/LOTR01126.jpg
-			//parentId: 1_126
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01126.jpg
 			collInfo: 1U126
 			rarity: U
-			setNum: "1"
-			cardNum: 126
-			style: Standard
 		}
 		title: Hunt Them Down!
 		unique: false
@@ -380,17 +324,9 @@
 
 	1_127: {
 		cardInfo: {
-			imagePath: decipher/LOTR01127.jpg
-			//parentId: 1_127
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01127.jpg
 			collInfo: 1R127
 			rarity: R
-			setNum: "1"
-			cardNum: 127
-			style: Standard
 		}
 		title: Lurtz
 		subtitle: Servant of Isengard
@@ -434,17 +370,9 @@
 
 	1_128: {
 		cardInfo: {
-			imagePath: decipher/LOTR01128.jpg
-			//parentId: 1_128
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01128.jpg
 			collInfo: 1R128
 			rarity: R
-			setNum: "1"
-			cardNum: 128
-			style: Standard
 		}
 		title: Lurtz's Battle Cry
 		unique: false
@@ -482,17 +410,9 @@
 
 	1_129: {
 		cardInfo: {
-			imagePath: decipher/LOTR01129.jpg
-			//parentId: 1_129
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01129.jpg
 			collInfo: 1R129
 			rarity: R
-			setNum: "1"
-			cardNum: 129
-			style: Standard
 		}
 		title: The Misadventure of Mr. Underhill
 		unique: false
@@ -535,17 +455,9 @@
 
 	1_130: {
 		cardInfo: {
-			imagePath: decipher/LOTR01130.jpg
-			//parentId: 1_130
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01130.jpg
 			collInfo: 1U130
 			rarity: U
-			setNum: "1"
-			cardNum: 130
-			style: Standard
 		}
 		title: No Ordinary Storm
 		unique: false
@@ -578,17 +490,9 @@
 
 	1_131: {
 		cardInfo: {
-			imagePath: decipher/LOTR01131.jpg
-			//parentId: 1_131
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01131.jpg
 			collInfo: 1R131
 			rarity: R
-			setNum: "1"
-			cardNum: 131
-			style: Standard
 		}
 		title: Orthanc Assassin
 		unique: true
@@ -618,17 +522,9 @@
 
 	1_132: {
 		cardInfo: {
-			imagePath: decipher/LOTR01132.jpg
-			//parentId: 1_132
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01132.jpg
 			collInfo: 1R132
 			rarity: R
-			setNum: "1"
-			cardNum: 132
-			style: Standard
 		}
 		title: Parry
 		unique: false
@@ -674,17 +570,9 @@
 
 	1_133: {
 		cardInfo: {
-			imagePath: decipher/LOTR01133.jpg
-			//parentId: 1_133
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01133.jpg
 			collInfo: 1C133
 			rarity: C
-			setNum: "1"
-			cardNum: 133
-			style: Standard
 		}
 		title: Saruman's Ambition
 		unique: false
@@ -729,17 +617,9 @@
 
 	1_134: {
 		cardInfo: {
-			imagePath: decipher/LOTR01134.jpg
-			//parentId: 1_134
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01134.jpg
 			collInfo: 1C134
 			rarity: C
-			setNum: "1"
-			cardNum: 134
-			style: Standard
 		}
 		title: Saruman's Chill
 		unique: false
@@ -795,17 +675,9 @@
 
 	1_135: {
 		cardInfo: {
-			imagePath: decipher/LOTR01135.jpg
-			//parentId: 1_135
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01135.jpg
 			collInfo: 1U135
 			rarity: U
-			setNum: "1"
-			cardNum: 135
-			style: Standard
 		}
 		title: Saruman's Frost
 		unique: false
@@ -862,17 +734,9 @@
 
 	1_136: {
 		cardInfo: {
-			imagePath: decipher/LOTR01136.jpg
-			//parentId: 1_136
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01136.jpg
 			collInfo: 1U136
 			rarity: U
-			setNum: "1"
-			cardNum: 136
-			style: Standard
 		}
 		title: Saruman's Power
 		unique: false
@@ -906,17 +770,9 @@
 
 	1_137: {
 		cardInfo: {
-			imagePath: decipher/LOTR01137.jpg
-			//parentId: 1_137
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01137.jpg
 			collInfo: 1R137
 			rarity: R
-			setNum: "1"
-			cardNum: 137
-			style: Standard
 		}
 		title: Saruman's Reach
 		unique: false
@@ -964,17 +820,9 @@
 
 	1_138: {
 		cardInfo: {
-			imagePath: decipher/LOTR01138.jpg
-			//parentId: 1_138
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01138.jpg
 			collInfo: 1C138
 			rarity: C
-			setNum: "1"
-			cardNum: 138
-			style: Standard
 		}
 		title: Saruman's Snows
 		unique: false
@@ -1030,17 +878,9 @@
 
 	1_139: {
 		cardInfo: {
-			imagePath: decipher/LOTR01139.jpg
-			//parentId: 1_139
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01139.jpg
 			collInfo: 1R139
 			rarity: R
-			setNum: "1"
-			cardNum: 139
-			style: Standard
 		}
 		title: Savagery to Match Their Numbers
 		unique: false
@@ -1102,17 +942,9 @@
 
 	1_140: {
 		cardInfo: {
-			imagePath: decipher/LOTR01140.jpg
-			//parentId: 1_140
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01140.jpg
 			collInfo: 1R140
 			rarity: R
-			setNum: "1"
-			cardNum: 140
-			style: Standard
 		}
 		title: Spies of Saruman
 		unique: false
@@ -1164,17 +996,9 @@
 
 	1_141: {
 		cardInfo: {
-			imagePath: decipher/LOTR01141.jpg
-			//parentId: 1_141
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01141.jpg
 			collInfo: 1C141
 			rarity: C
-			setNum: "1"
-			cardNum: 141
-			style: Standard
 		}
 		title: Their Arrows Enrage
 		unique: false
@@ -1213,17 +1037,9 @@
 
 	1_142: {
 		cardInfo: {
-			imagePath: decipher/LOTR01142.jpg
-			//parentId: 1_142
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01142.jpg
 			collInfo: 1U142
 			rarity: U
-			setNum: "1"
-			cardNum: 142
-			style: Standard
 		}
 		title: Traitor's Voice
 		unique: false
@@ -1296,17 +1112,9 @@
 
 	1_143: {
 		cardInfo: {
-			imagePath: decipher/LOTR01143.jpg
-			//parentId: 1_143
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01143.jpg
 			collInfo: 1R143
 			rarity: R
-			setNum: "1"
-			cardNum: 143
-			style: Standard
 		}
 		title: Troop of Uruk-hai
 		unique: false
@@ -1340,17 +1148,9 @@
 
 	1_144: {
 		cardInfo: {
-			imagePath: decipher/LOTR01144.jpg
-			//parentId: 1_144
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01144.jpg
 			collInfo: 1C144
 			rarity: C
-			setNum: "1"
-			cardNum: 144
-			style: Standard
 		}
 		title: Uruk Bloodlust
 		unique: false
@@ -1387,17 +1187,9 @@
 
 	1_145: {
 		cardInfo: {
-			imagePath: decipher/LOTR01145.jpg
-			//parentId: 1_145
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01145.jpg
 			collInfo: 1C145
 			rarity: C
-			setNum: "1"
-			cardNum: 145
-			style: Standard
 		}
 		title: Uruk Brood
 		unique: false
@@ -1446,17 +1238,9 @@
 
 	1_146: {
 		cardInfo: {
-			imagePath: decipher/LOTR01146.jpg
-			//parentId: 1_146
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01146.jpg
 			collInfo: 1C146
 			rarity: C
-			setNum: "1"
-			cardNum: 146
-			style: Standard
 		}
 		title: Uruk Fighter
 		unique: false
@@ -1497,17 +1281,9 @@
 
 	1_147: {
 		cardInfo: {
-			imagePath: decipher/LOTR01147.jpg
-			//parentId: 1_147
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01147.jpg
 			collInfo: 1R147
 			rarity: R
-			setNum: "1"
-			cardNum: 147
-			style: Standard
 		}
 		title: Uruk Guard
 		unique: false
@@ -1558,17 +1334,9 @@
 
 	1_148: {
 		cardInfo: {
-			imagePath: decipher/LOTR01148.jpg
-			//parentId: 1_148
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01148.jpg
 			collInfo: 1R148
 			rarity: R
-			setNum: "1"
-			cardNum: 148
-			style: Standard
 		}
 		title: Uruk Lieutenant
 		unique: false
@@ -1605,17 +1373,9 @@
 
 	1_149: {
 		cardInfo: {
-			imagePath: decipher/LOTR01149.jpg
-			//parentId: 1_149
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01149.jpg
 			collInfo: 1C149
 			rarity: C
-			setNum: "1"
-			cardNum: 149
-			style: Standard
 		}
 		title: Uruk Messenger
 		unique: false
@@ -1653,17 +1413,9 @@
 
 	1_150: {
 		cardInfo: {
-			imagePath: decipher/LOTR01150.jpg
-			//parentId: 1_150
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01150.jpg
 			collInfo: 1C150
 			rarity: C
-			setNum: "1"
-			cardNum: 150
-			style: Standard
 		}
 		title: Uruk Rager
 		unique: false
@@ -1702,17 +1454,9 @@
 
 	1_151: {
 		cardInfo: {
-			imagePath: decipher/LOTR01151.jpg
-			//parentId: 1_151
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01151.jpg
 			collInfo: 1C151
 			rarity: C
-			setNum: "1"
-			cardNum: 151
-			style: Standard
 		}
 		title: Uruk Savage
 		unique: false
@@ -1739,17 +1483,9 @@
 
 	1_152: {
 		cardInfo: {
-			imagePath: decipher/LOTR01152.jpg
-			//parentId: 1_152
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01152.jpg
 			collInfo: 1C152
 			rarity: C
-			setNum: "1"
-			cardNum: 152
-			style: Standard
 		}
 		title: Uruk Shaman
 		unique: false
@@ -1787,17 +1523,9 @@
 
 	1_153: {
 		cardInfo: {
-			imagePath: decipher/LOTR01153.jpg
-			//parentId: 1_153
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01153.jpg
 			collInfo: 1U153
 			rarity: U
-			setNum: "1"
-			cardNum: 153
-			style: Standard
 		}
 		title: Uruk Slayer
 		unique: false
@@ -1840,17 +1568,9 @@
 
 	1_154: {
 		cardInfo: {
-			imagePath: decipher/LOTR01154.jpg
-			//parentId: 1_154
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01154.jpg
 			collInfo: 1C154
 			rarity: C
-			setNum: "1"
-			cardNum: 154
-			style: Standard
 		}
 		title: Uruk Soldier
 		unique: false
@@ -1890,17 +1610,9 @@
 
 	1_155: {
 		cardInfo: {
-			imagePath: decipher/LOTR01155.jpg
-			//parentId: 1_155
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01155.jpg
 			collInfo: 1R155
 			rarity: R
-			setNum: "1"
-			cardNum: 155
-			style: Standard
 		}
 		title: Uruk Spy
 		unique: false
@@ -1959,17 +1671,9 @@
 
 	1_156: {
 		cardInfo: {
-			imagePath: decipher/LOTR01156.jpg
-			//parentId: 1_156
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01156.jpg
 			collInfo: 1C156
 			rarity: C
-			setNum: "1"
-			cardNum: 156
-			style: Standard
 		}
 		title: Uruk Warrior
 		unique: false
@@ -2010,17 +1714,9 @@
 
 	1_157: {
 		cardInfo: {
-			imagePath: decipher/LOTR01157.jpg
-			//parentId: 1_157
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01157.jpg
 			collInfo: 1C157
 			rarity: C
-			setNum: "1"
-			cardNum: 157
-			style: Standard
 		}
 		title: Uruk-hai Armory
 		unique: false
@@ -2054,17 +1750,9 @@
 
 	1_158: {
 		cardInfo: {
-			imagePath: decipher/LOTR01158.jpg
-			//parentId: 1_158
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01158.jpg
 			collInfo: 1C158
 			rarity: C
-			setNum: "1"
-			cardNum: 158
-			style: Standard
 		}
 		title: Uruk-hai Raiding Party
 		unique: false
@@ -2091,17 +1779,9 @@
 
 	1_159: {
 		cardInfo: {
-			imagePath: decipher/LOTR01159.jpg
-			//parentId: 1_159
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01159.jpg
 			collInfo: 1U159
 			rarity: U
-			setNum: "1"
-			cardNum: 159
-			style: Standard
 		}
 		title: Uruk-hai Rampage
 		unique: false
@@ -2150,17 +1830,9 @@
 
 	1_160: {
 		cardInfo: {
-			imagePath: decipher/LOTR01160.jpg
-			//parentId: 1_160
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01160.jpg
 			collInfo: 1C160
 			rarity: C
-			setNum: "1"
-			cardNum: 160
-			style: Standard
 		}
 		title: Uruk-hai Sword
 		unique: false
@@ -2197,17 +1869,9 @@
 
 	1_161: {
 		cardInfo: {
-			imagePath: decipher/LOTR01161.jpg
-			//parentId: 1_161
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01161.jpg
 			collInfo: 1U161
 			rarity: U
-			setNum: "1"
-			cardNum: 161
-			style: Standard
 		}
 		title: Wariness
 		unique: false
@@ -2257,17 +1921,9 @@
 
 	1_162: {
 		cardInfo: {
-			imagePath: decipher/LOTR01162.jpg
-			//parentId: 1_162
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01162.jpg
 			collInfo: 1U162
 			rarity: U
-			setNum: "1"
-			cardNum: 162
-			style: Standard
 		}
 		title: Worry
 		unique: true

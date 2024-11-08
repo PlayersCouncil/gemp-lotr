@@ -2,17 +2,9 @@
 
 	2_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR02039.jpg
-			//parentId: 2_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02039.jpg
 			collInfo: 2R39
 			rarity: R
-			setNum: "2"
-			cardNum: 39
-			style: Standard
 		}
 		title: Beyond the Height of Men
 		unique: false
@@ -67,17 +59,9 @@
 
 	2_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR02040.jpg
-			//parentId: 2_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02040.jpg
 			collInfo: 2C40
 			rarity: C
-			setNum: "2"
-			cardNum: 40
-			style: Standard
 		}
 		title: Demands of the Sackville-Bagginses
 		unique: false
@@ -119,17 +103,9 @@
 
 	2_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR02041.jpg
-			//parentId: 2_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02041.jpg
 			collInfo: 2U41
 			rarity: U
-			setNum: "2"
-			cardNum: 41
-			style: Standard
 		}
 		title: Evil Afoot
 		unique: false
@@ -172,17 +148,9 @@
 
 	2_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR02042.jpg
-			//parentId: 2_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02042.jpg
 			collInfo: 2C42
 			rarity: C
-			setNum: "2"
-			cardNum: 42
-			style: Standard
 		}
 		title: Goblin Man
 		unique: false
@@ -235,17 +203,9 @@
 
 	2_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR02043.jpg
-			//parentId: 2_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02043.jpg
 			collInfo: 2R43
 			rarity: R
-			setNum: "2"
-			cardNum: 43
-			style: Standard
 		}
 		title: Lurtz's Sword
 		unique: true
@@ -292,17 +252,9 @@
 
 	2_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR02044.jpg
-			//parentId: 2_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02044.jpg
 			collInfo: 2C44
 			rarity: C
-			setNum: "2"
-			cardNum: 44
-			style: Standard
 		}
 		title: No Business of Ours
 		unique: false
@@ -341,17 +293,9 @@
 
 	2_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR02045.jpg
-			//parentId: 2_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02045.jpg
 			collInfo: 2R45
 			rarity: R
-			setNum: "2"
-			cardNum: 45
-			style: Standard
 		}
 		title: Too Much Attention
 		unique: false
@@ -389,17 +333,9 @@
 
 	2_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR02046.jpg
-			//parentId: 2_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02046.jpg
 			collInfo: 2R46
 			rarity: R
-			setNum: "2"
-			cardNum: 46
-			style: Standard
 		}
 		title: Uruk Captain
 		unique: true
@@ -443,17 +379,9 @@
 
 	2_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR02047.jpg
-			//parentId: 2_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02047.jpg
 			collInfo: 2C47
 			rarity: C
-			setNum: "2"
-			cardNum: 47
-			style: Standard
 		}
 		title: Uruk Scout
 		unique: false
@@ -507,17 +435,9 @@
 
 	2_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR02048.jpg
-			//parentId: 2_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02048.jpg
 			collInfo: 2U48
 			rarity: U
-			setNum: "2"
-			cardNum: 48
-			style: Standard
 		}
 		title: Wizard Storm
 		unique: false

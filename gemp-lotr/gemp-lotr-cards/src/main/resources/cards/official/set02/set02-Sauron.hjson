@@ -2,17 +2,9 @@
 
 	2_87: {
 		cardInfo: {
-			imagePath: decipher/LOTR02087.jpg
-			//parentId: 2_87
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02087.jpg
 			collInfo: 2U87
 			rarity: U
-			setNum: "2"
-			cardNum: 87
-			style: Standard
 		}
 		title: The Eye of Sauron
 		unique: false
@@ -55,17 +47,9 @@
 
 	2_88: {
 		cardInfo: {
-			imagePath: decipher/LOTR02088.jpg
-			//parentId: 2_88
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02088.jpg
 			collInfo: 2C88
 			rarity: C
-			setNum: "2"
-			cardNum: 88
-			style: Standard
 		}
 		title: Memory of Many Things
 		unique: false
@@ -113,17 +97,9 @@
 
 	2_89: {
 		cardInfo: {
-			imagePath: decipher/LOTR02089.jpg
-			//parentId: 2_89
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02089.jpg
 			collInfo: 2C89
 			rarity: C
-			setNum: "2"
-			cardNum: 89
-			style: Standard
 		}
 		title: Orc Scout
 		unique: false
@@ -187,17 +163,9 @@
 
 	2_90: {
 		cardInfo: {
-			imagePath: decipher/LOTR02090.jpg
-			//parentId: 2_90
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02090.jpg
 			collInfo: 2C90
 			rarity: C
-			setNum: "2"
-			cardNum: 90
-			style: Standard
 		}
 		title: Orc Taskmaster
 		unique: false
@@ -234,17 +202,9 @@
 
 	2_91: {
 		cardInfo: {
-			imagePath: decipher/LOTR02091.jpg
-			//parentId: 2_91
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02091.jpg
 			collInfo: 2C91
 			rarity: C
-			setNum: "2"
-			cardNum: 91
-			style: Standard
 		}
 		title: Southern Spies
 		unique: false
@@ -283,17 +243,9 @@
 
 	2_92: {
 		cardInfo: {
-			imagePath: decipher/LOTR02092.jpg
-			//parentId: 2_92
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02092.jpg
 			collInfo: 2U92
 			rarity: U
-			setNum: "2"
-			cardNum: 92
-			style: Standard
 		}
 		title: Spies of Mordor
 		unique: false
@@ -350,17 +302,9 @@
 
 	2_93: {
 		cardInfo: {
-			imagePath: decipher/LOTR02093.jpg
-			//parentId: 2_93
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02093.jpg
 			collInfo: 2R93
 			rarity: R
-			setNum: "2"
-			cardNum: 93
-			style: Standard
 		}
 		title: Tower Assassin
 		unique: true
@@ -397,17 +341,9 @@
 
 	2_94: {
 		cardInfo: {
-			imagePath: decipher/LOTR02094.jpg
-			//parentId: 2_94
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02094.jpg
 			collInfo: 2R94
 			rarity: R
-			setNum: "2"
-			cardNum: 94
-			style: Standard
 		}
 		title: Verily I Come
 		unique: false
@@ -453,17 +389,9 @@
 
 	2_95: {
 		cardInfo: {
-			imagePath: decipher/LOTR02095.jpg
-			//parentId: 2_95
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02095.jpg
 			collInfo: 2C95
 			rarity: C
-			setNum: "2"
-			cardNum: 95
-			style: Standard
 		}
 		title: Vile Blade
 		unique: false

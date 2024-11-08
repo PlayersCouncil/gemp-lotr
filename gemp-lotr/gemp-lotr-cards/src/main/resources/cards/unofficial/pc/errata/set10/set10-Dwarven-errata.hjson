@@ -2,17 +2,11 @@
 
 	60_2: {
 		cardInfo: {
-			imagePath: errata/60_2.jpg
-			javaClass: false
-			parent: 10_2
-			parentPath: errata/pc
-			version: 1?
+			//id: 0_2.1
+			revision: 1
+			image: errata/60_2.jpg
 			collInfo: 10U2
 			rarity: U
-			setNum: "10"
-			cardNum: 2
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Memories of Darkness
 		unique: true

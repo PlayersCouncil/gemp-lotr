@@ -1,17 +1,11 @@
 {
 	68_110: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E110.1.jpg
-			javaClass: false
-			parent: 18_110
-			parentPath: errata/pc
-			version: 1
+			//id: 8_110.1
+			revision: 1
+			image: errata/LOTR-EN18E110.1.jpg
 			collInfo: 18R110
 			rarity: U
-			setNum: "18"
-			cardNum: 110
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Prized Lagan
 		unique: false
@@ -86,17 +80,11 @@
 	
 	68_111: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E111.1.jpg
-			javaClass: false
-			parent: 18_111
-			parentPath: errata/pc
-			version: 1
+			//id: 8_111.1
+			revision: 1
+			image: errata/LOTR-EN18E111.1.jpg
 			collInfo: 18U111
 			rarity: U
-			setNum: "18"
-			cardNum: 111
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Robin Smallburrow
 		subtitle: Shirriff Cock-Robin
@@ -151,17 +139,11 @@
 
 	68_112: {
 		cardInfo: {
-			imagePath: errata/68_112.jpg
-			javaClass: false
-			parent: 18_112
-			parentPath: errata/pc
-			version: 1?
+			//id: 8_112.1
+			revision: 1
+			image: errata/68_112.jpg
 			collInfo: 18R112
 			rarity: R
-			setNum: "18"
-			cardNum: 112
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Scouring of the Shire
 		unique: true

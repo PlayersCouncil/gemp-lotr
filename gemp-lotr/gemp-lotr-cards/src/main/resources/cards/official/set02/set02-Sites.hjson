@@ -2,17 +2,9 @@
 
 	2_115: {
 		cardInfo: {
-			imagePath: decipher/LOTR02115.jpg
-			//parentId: 2_115
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02115.jpg
 			collInfo: 2U115
 			rarity: U
-			setNum: "2"
-			cardNum: 115
-			style: Standard
 		}
 		title: Hobbiton Party Field
 		unique: false
@@ -48,17 +40,9 @@
 
 	2_116: {
 		cardInfo: {
-			imagePath: decipher/LOTR02116.jpg
-			//parentId: 2_116
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02116.jpg
 			collInfo: 2U116
 			rarity: U
-			setNum: "2"
-			cardNum: 116
-			style: Standard
 		}
 		title: Hobbiton Woods
 		unique: false
@@ -92,17 +76,9 @@
 
 	2_117: {
 		cardInfo: {
-			imagePath: decipher/LOTR02117.jpg
-			//parentId: 2_117
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02117.jpg
 			collInfo: 2C117
 			rarity: C
-			setNum: "2"
-			cardNum: 117
-			style: Standard
 		}
 		title: Town Center
 		unique: false
@@ -136,17 +112,9 @@
 
 	2_118: {
 		cardInfo: {
-			imagePath: decipher/LOTR02118.jpg
-			//parentId: 2_118
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02118.jpg
 			collInfo: 2U118
 			rarity: U
-			setNum: "2"
-			cardNum: 118
-			style: Standard
 		}
 		title: Great Chasm
 		unique: false
@@ -184,17 +152,9 @@
 
 	2_119: {
 		cardInfo: {
-			imagePath: decipher/LOTR02119.jpg
-			//parentId: 2_119
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02119.jpg
 			collInfo: 2C119
 			rarity: C
-			setNum: "2"
-			cardNum: 119
-			style: Standard
 		}
 		title: Hollin
 		unique: false
@@ -225,17 +185,9 @@
 
 	2_120: {
 		cardInfo: {
-			imagePath: decipher/LOTR02120.jpg
-			//parentId: 2_120
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02120.jpg
 			collInfo: 2U120
 			rarity: U
-			setNum: "2"
-			cardNum: 120
-			style: Standard
 		}
 		title: Valley of the Silverlode
 		unique: false

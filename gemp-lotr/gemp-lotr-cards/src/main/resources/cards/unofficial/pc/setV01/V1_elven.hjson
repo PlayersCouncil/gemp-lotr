@@ -2,17 +2,10 @@
 
 	101_7: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S007.0_card.jpg
-			//parentId: 101_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_7
+			image: sets/vset1/LOTR-ENV1S007.0_card.jpg
 			collInfo: V1U7
 			rarity: U
-			setNum: "V1"
-			cardNum: 7
-			style: Standard
 		}
 		title: I Was There
 		unique: false
@@ -53,17 +46,10 @@
 
 	101_8: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S008.0_card.jpg
-			//parentId: 101_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_8
+			image: sets/vset1/LOTR-ENV1S008.0_card.jpg
 			collInfo: V1U8
 			rarity: U
-			setNum: "V1"
-			cardNum: 8
-			style: Standard
 		}
 		title: Lament for the Fallen
 		unique: false
@@ -217,16 +203,11 @@
 
 	101_9: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S009.1_card.jpg
-			javaClass: false
-			parent: 101_9
-			parentPath: errata/pc
-			version: 1
-			collInfo: V1R9
+			//id: 101_10
+			image: sets/vset1/LOTR-ENV1S009.1_card.jpg
+			revision: 1
+			collInfo: V1R10
 			rarity: R
-			setNum: "V1"
-			cardNum: 9
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Keen-eyed
@@ -272,17 +253,10 @@
 
 	101_10: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S010.0_card.jpg
-			//parentId: 101_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_10
+			image: sets/vset1/LOTR-ENV1S010.0_card.jpg
 			collInfo: V1R10
 			rarity: R
-			setNum: "V1"
-			cardNum: 10
-			style: Standard
 		}
 		title: Let Fly the Darts of Lindon
 		unique: false
@@ -342,17 +316,10 @@
 
 	101_11: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S011.0_card.jpg
-			//parentId: 101_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_11
+			image: sets/vset1/LOTR-ENV1S011.0_card.jpg
 			collInfo: V1R11
 			rarity: R
-			setNum: "V1"
-			cardNum: 11
-			style: Standard
 		}
 		title: Library of Rivendell
 		unique: true
@@ -459,17 +426,10 @@
 
 	101_12: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S012.0_card.jpg
-			//parentId: 101_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_12
+			image: sets/vset1/LOTR-ENV1S012.0_card.jpg
 			collInfo: V1U12
 			rarity: U
-			setNum: "V1"
-			cardNum: 12
-			style: Standard
 		}
 		title: Three for the Elven-Kings
 		unique: true

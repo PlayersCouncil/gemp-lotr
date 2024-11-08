@@ -2,17 +2,9 @@
 
 	12_107: {
 		cardInfo: {
-			imagePath: decipher/LOTR12107.jpg
-			//parentId: 12_107
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12107.jpg
 			collInfo: 12C107
 			rarity: C
-			setNum: "12"
-			cardNum: 107
-			style: Standard
 		}
 		title: Aldred
 		subtitle: Éored Soldier
@@ -56,17 +48,9 @@
 
 	12_108: {
 		cardInfo: {
-			imagePath: decipher/LOTR12108.jpg
-			//parentId: 12_108
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12108.jpg
 			collInfo: 12R108
 			rarity: R
-			setNum: "12"
-			cardNum: 108
-			style: Standard
 		}
 		title: Cast Out
 		unique: false
@@ -127,17 +111,9 @@
 
 	12_109: {
 		cardInfo: {
-			imagePath: decipher/LOTR12109.jpg
-			//parentId: 12_109
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12109.jpg
 			collInfo: 12C109
 			rarity: C
-			setNum: "12"
-			cardNum: 109
-			style: Standard
 		}
 		title: Challenging the Orc-host
 		unique: false
@@ -182,17 +158,9 @@
 
 	12_110: {
 		cardInfo: {
-			imagePath: decipher/LOTR12110.jpg
-			//parentId: 12_110
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12110.jpg
 			collInfo: 12C110
 			rarity: C
-			setNum: "12"
-			cardNum: 110
-			style: Standard
 		}
 		title: Cleaving a Path
 		unique: false
@@ -270,17 +238,9 @@
 
 	12_111: {
 		cardInfo: {
-			imagePath: decipher/LOTR12111.jpg
-			//parentId: 12_111
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12111.jpg
 			collInfo: 12R111
 			rarity: R
-			setNum: "12"
-			cardNum: 111
-			style: Standard
 		}
 		title: Coif
 		unique: false
@@ -332,17 +292,9 @@
 
 	12_112: {
 		cardInfo: {
-			imagePath: decipher/LOTR12112.jpg
-			//parentId: 12_112
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12112.jpg
 			collInfo: 12U112
 			rarity: U
-			setNum: "12"
-			cardNum: 112
-			style: Standard
 		}
 		title: Éomer
 		subtitle: Éored Leader
@@ -403,17 +355,9 @@
 
 	12_113: {
 		cardInfo: {
-			imagePath: decipher/LOTR12113.jpg
-			//parentId: 12_113
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12113.jpg
 			collInfo: 12S113
 			rarity: S
-			setNum: "12"
-			cardNum: 113
-			style: Standard
 		}
 		title: Éored Warrior
 		unique: false
@@ -452,17 +396,9 @@
 
 	12_114: {
 		cardInfo: {
-			imagePath: decipher/LOTR12114.jpg
-			//parentId: 12_114
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12114.jpg
 			collInfo: 12C114
 			rarity: C
-			setNum: "12"
-			cardNum: 114
-			style: Standard
 		}
 		title: For the Mark
 		unique: false
@@ -507,17 +443,9 @@
 
 	12_115: {
 		cardInfo: {
-			imagePath: decipher/LOTR12115.jpg
-			//parentId: 12_115
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12115.jpg
 			collInfo: 12C115
 			rarity: C
-			setNum: "12"
-			cardNum: 115
-			style: Standard
 		}
 		title: Golden Glimmer
 		unique: false
@@ -560,17 +488,9 @@
 
 	12_116: {
 		cardInfo: {
-			imagePath: decipher/LOTR12116.jpg
-			//parentId: 12_116
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12116.jpg
 			collInfo: 12R116
 			rarity: R
-			setNum: "12"
-			cardNum: 116
-			style: Standard
 		}
 		title: Haethen
 		subtitle: Veteran Fighter
@@ -621,17 +541,9 @@
 
 	12_117: {
 		cardInfo: {
-			imagePath: decipher/LOTR12117.jpg
-			//parentId: 12_117
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12117.jpg
 			collInfo: 12U117
 			rarity: U
-			setNum: "12"
-			cardNum: 117
-			style: Standard
 		}
 		title: Léofric
 		subtitle: Defender of the Mark

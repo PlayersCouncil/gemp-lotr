@@ -2,17 +2,9 @@
 
 	11_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR11053.jpg
-			//parentId: 11_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11053.jpg
 			collInfo: 11S53
 			rarity: S
-			setNum: "11"
-			cardNum: 53
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Guide and Protector
@@ -57,17 +49,9 @@
 
 	11_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR11054.jpg
-			//parentId: 11_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11054.jpg
 			collInfo: 11R54
 			rarity: R
-			setNum: "11"
-			cardNum: 54
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Strider
@@ -106,17 +90,9 @@
 
 	11_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR11055.jpg
-			//parentId: 11_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11055.jpg
 			collInfo: 11U55
 			rarity: U
-			setNum: "11"
-			cardNum: 55
-			style: Standard
 		}
 		title: Armor of the Citadel
 		unique: false
@@ -162,17 +138,9 @@
 
 	11_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR11056.jpg
-			//parentId: 11_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11056.jpg
 			collInfo: 11S56
 			rarity: S
-			setNum: "11"
-			cardNum: 56
-			style: Standard
 		}
 		title: Battle Cry
 		unique: false
@@ -213,17 +181,9 @@
 
 	11_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR11057.jpg
-			//parentId: 11_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11057.jpg
 			collInfo: 11R57
 			rarity: R
-			setNum: "11"
-			cardNum: 57
-			style: Standard
 		}
 		title: Boromir
 		subtitle: Hero of Osgiliath
@@ -264,17 +224,9 @@
 
 	11_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR11058.jpg
-			//parentId: 11_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11058.jpg
 			collInfo: 11U58
 			rarity: U
-			setNum: "11"
-			cardNum: 58
-			style: Standard
 		}
 		title: Bow of Minas Tirith
 		unique: false
@@ -321,17 +273,9 @@
 
 	11_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR11059.jpg
-			//parentId: 11_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11059.jpg
 			collInfo: 11U59
 			rarity: U
-			setNum: "11"
-			cardNum: 59
-			style: Standard
 		}
 		title: Gondorian Blade
 		unique: false
@@ -379,17 +323,9 @@
 
 	11_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR11060.jpg
-			//parentId: 11_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11060.jpg
 			collInfo: 11R60
 			rarity: R
-			setNum: "11"
-			cardNum: 60
-			style: Standard
 		}
 		title: The Highest Quality
 		unique: false
@@ -457,17 +393,9 @@
 
 	11_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR11061.jpg
-			//parentId: 11_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11061.jpg
 			collInfo: 11U61
 			rarity: U
-			setNum: "11"
-			cardNum: 61
-			style: Standard
 		}
 		title: Houses of Healing
 		unique: true
@@ -540,17 +468,9 @@
 
 	11_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR11062.jpg
-			//parentId: 11_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11062.jpg
 			collInfo: 11C62
 			rarity: C
-			setNum: "11"
-			cardNum: 62
-			style: Standard
 		}
 		title: Madril
 		subtitle: Ranger of Ithilien
@@ -594,17 +514,9 @@
 
 	11_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR11063.jpg
-			//parentId: 11_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11063.jpg
 			collInfo: 11C63
 			rarity: C
-			setNum: "11"
-			cardNum: 63
-			style: Standard
 		}
 		title: Much-needed Rest
 		unique: false
@@ -635,17 +547,9 @@
 
 	11_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR11064.jpg
-			//parentId: 11_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11064.jpg
 			collInfo: 11S64
 			rarity: S
-			setNum: "11"
-			cardNum: 64
-			style: Standard
 		}
 		title: Pledge of Loyalty
 		unique: false
@@ -686,17 +590,9 @@
 
 	11_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR11065.jpg
-			//parentId: 11_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11065.jpg
 			collInfo: 11S65
 			rarity: S
-			setNum: "11"
-			cardNum: 65
-			style: Standard
 		}
 		title: Ranger of Westernesse
 		unique: false
@@ -735,17 +631,9 @@
 
 	11_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR11066.jpg
-			//parentId: 11_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11066.jpg
 			collInfo: 11R66
 			rarity: R
-			setNum: "11"
-			cardNum: 66
-			style: Standard
 		}
 		title: Well-traveled
 		unique: false

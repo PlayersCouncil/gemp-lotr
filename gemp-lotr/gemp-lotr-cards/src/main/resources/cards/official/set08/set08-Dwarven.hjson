@@ -2,17 +2,9 @@
 
 	8_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR08001.jpg
-			//parentId: 8_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08001.jpg
 			collInfo: 8C1
 			rarity: C
-			setNum: "8"
-			cardNum: 1
-			style: Standard
 		}
 		title: Aggression
 		unique: false
@@ -73,17 +65,9 @@
 
 	8_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR08002.jpg
-			//parentId: 8_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08002.jpg
 			collInfo: 8R2
 			rarity: R
-			setNum: "8"
-			cardNum: 2
-			style: Standard
 		}
 		title: Battle in Earnest
 		unique: false
@@ -128,17 +112,9 @@
 
 	8_3: {
 		cardInfo: {
-			imagePath: decipher/LOTR08003.jpg
-			//parentId: 8_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08003.jpg
 			collInfo: 8R3
 			rarity: R
-			setNum: "8"
-			cardNum: 3
-			style: Standard
 		}
 		title: Blood Runs Chill
 		unique: false
@@ -181,17 +157,9 @@
 
 	8_4: {
 		cardInfo: {
-			imagePath: decipher/LOTR08004.jpg
-			//parentId: 8_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08004.jpg
 			collInfo: 8U4
 			rarity: U
-			setNum: "8"
-			cardNum: 4
-			style: Standard
 		}
 		title: Counts But One
 		unique: false
@@ -230,17 +198,9 @@
 
 	8_5: {
 		cardInfo: {
-			imagePath: decipher/LOTR08005.jpg
-			//parentId: 8_5
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08005.jpg
 			collInfo: 8C5
 			rarity: C
-			setNum: "8"
-			cardNum: 5
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Counter of Foes
@@ -293,17 +253,9 @@
 
 	8_6: {
 		cardInfo: {
-			imagePath: decipher/LOTR08006.jpg
-			//parentId: 8_6
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08006.jpg
 			collInfo: 8C6
 			rarity: C
-			setNum: "8"
-			cardNum: 6
-			style: Standard
 		}
 		title: Honed
 		unique: false
@@ -340,17 +292,9 @@
 
 	8_7: {
 		cardInfo: {
-			imagePath: decipher/LOTR08007.jpg
-			//parentId: 8_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08007.jpg
 			collInfo: 8R7
 			rarity: R
-			setNum: "8"
-			cardNum: 7
-			style: Standard
 		}
 		title: Unheard of
 		unique: false
@@ -391,17 +335,9 @@
 
 	8_8: {
 		cardInfo: {
-			imagePath: decipher/LOTR08008.jpg
-			//parentId: 8_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08008.jpg
 			collInfo: 8U8
 			rarity: U
-			setNum: "8"
-			cardNum: 8
-			style: Standard
 		}
 		title: Wish For Our Kinfolk
 		unique: false

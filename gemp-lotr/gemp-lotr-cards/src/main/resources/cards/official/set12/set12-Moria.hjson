@@ -2,17 +2,9 @@
 
 	12_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR12079.jpg
-			//parentId: 12_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12079.jpg
 			collInfo: 12R79
 			rarity: R
-			setNum: "12"
-			cardNum: 79
-			style: Standard
 		}
 		title: The Balrog
 		subtitle: The Terror of Khazad-dûm
@@ -75,17 +67,9 @@
 
 	12_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR12080.jpg
-			//parentId: 12_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12080.jpg
 			collInfo: 12R80
 			rarity: R
-			setNum: "12"
-			cardNum: 80
-			style: Standard
 		}
 		title: Whip of Many Thongs
 		subtitle: Weapon of Flame and Shadow

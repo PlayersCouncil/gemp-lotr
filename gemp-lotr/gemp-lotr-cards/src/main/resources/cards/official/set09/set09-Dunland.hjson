@@ -2,17 +2,9 @@
 
 	9_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR09002.jpg
-			//parentId: 9_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09002.jpg
 			collInfo: 9R+2
 			rarity: R+
-			setNum: "9"
-			cardNum: 2
-			style: Standard
 		}
 		title: Freca
 		subtitle: Hungry Savage

@@ -2,17 +2,9 @@
 
 	1_203: {
 		cardInfo: {
-			imagePath: decipher/LOTR01203.jpg
-			//parentId: 1_203
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01203.jpg
 			collInfo: 1U203
 			rarity: U
-			setNum: "1"
-			cardNum: 203
-			style: Standard
 		}
 		title: All Blades Perish
 		unique: false
@@ -45,17 +37,9 @@
 
 	1_204: {
 		cardInfo: {
-			imagePath: decipher/LOTR01204.jpg
-			//parentId: 1_204
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01204.jpg
 			collInfo: 1R204
 			rarity: R
-			setNum: "1"
-			cardNum: 204
-			style: Standard
 		}
 		title: All Veils Removed
 		unique: false
@@ -92,17 +76,9 @@
 
 	1_205: {
 		cardInfo: {
-			imagePath: decipher/LOTR01205.jpg
-			//parentId: 1_205
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01205.jpg
 			collInfo: 1R205
 			rarity: R
-			setNum: "1"
-			cardNum: 205
-			style: Standard
 		}
 		title: Beauty Is Fading
 		unique: false
@@ -162,17 +138,9 @@
 
 	1_206: {
 		cardInfo: {
-			imagePath: decipher/LOTR01206.jpg
-			//parentId: 1_206
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01206.jpg
 			collInfo: 1R206
 			rarity: R
-			setNum: "1"
-			cardNum: 206
-			style: Standard
 		}
 		title: Bent on Discovery
 		unique: false
@@ -233,17 +201,9 @@
 
 	1_207: {
 		cardInfo: {
-			imagePath: decipher/LOTR01207.jpg
-			//parentId: 1_207
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01207.jpg
 			collInfo: 1U207
 			rarity: U
-			setNum: "1"
-			cardNum: 207
-			style: Standard
 		}
 		title: Black Breath
 		unique: false
@@ -295,17 +255,9 @@
 
 	1_208: {
 		cardInfo: {
-			imagePath: decipher/LOTR01208.jpg
-			//parentId: 1_208
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01208.jpg
 			collInfo: 1R208
 			rarity: R
-			setNum: "1"
-			cardNum: 208
-			style: Standard
 		}
 		title: Black Steed
 		unique: false
@@ -357,17 +309,9 @@
 
 	1_209: {
 		cardInfo: {
-			imagePath: decipher/LOTR01209.jpg
-			//parentId: 1_209
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01209.jpg
 			collInfo: 1U209
 			rarity: U
-			setNum: "1"
-			cardNum: 209
-			style: Standard
 		}
 		title: Blade Tip
 		unique: false
@@ -432,17 +376,9 @@
 
 	1_210: {
 		cardInfo: {
-			imagePath: decipher/LOTR01210.jpg
-			//parentId: 1_210
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01210.jpg
 			collInfo: 1R210
 			rarity: R
-			setNum: "1"
-			cardNum: 210
-			style: Standard
 		}
 		title: Dark Whispers
 		unique: false
@@ -520,17 +456,9 @@
 
 	1_211: {
 		cardInfo: {
-			imagePath: decipher/LOTR01211.jpg
-			//parentId: 1_211
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01211.jpg
 			collInfo: 1U211
 			rarity: U
-			setNum: "1"
-			cardNum: 211
-			style: Standard
 		}
 		title: Drawn to Its Power
 		unique: false
@@ -566,17 +494,9 @@
 
 	1_212: {
 		cardInfo: {
-			imagePath: decipher/LOTR01212.jpg
-			//parentId: 1_212
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01212.jpg
 			collInfo: 1R212
 			rarity: R
-			setNum: "1"
-			cardNum: 212
-			style: Standard
 		}
 		title: Fear
 		unique: false
@@ -610,17 +530,9 @@
 
 	1_213: {
 		cardInfo: {
-			imagePath: decipher/LOTR01213.jpg
-			//parentId: 1_213
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01213.jpg
 			collInfo: 1U213
 			rarity: U
-			setNum: "1"
-			cardNum: 213
-			style: Standard
 		}
 		title: Frozen by Fear
 		unique: false
@@ -658,17 +570,9 @@
 
 	1_214: {
 		cardInfo: {
-			imagePath: decipher/LOTR01214.jpg
-			//parentId: 1_214
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01214.jpg
 			collInfo: 1R214
 			rarity: R
-			setNum: "1"
-			cardNum: 214
-			style: Standard
 		}
 		title: In the Ringwraith's Wake
 		unique: false
@@ -714,17 +618,9 @@
 
 	1_215: {
 		cardInfo: {
-			imagePath: decipher/LOTR01215.jpg
-			//parentId: 1_215
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01215.jpg
 			collInfo: 1U215
 			rarity: U
-			setNum: "1"
-			cardNum: 215
-			style: Standard
 		}
 		title: The Master's Will
 		unique: false
@@ -778,17 +674,9 @@
 
 	1_216: {
 		cardInfo: {
-			imagePath: decipher/LOTR01216.jpg
-			//parentId: 1_216
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01216.jpg
 			collInfo: 1R216
 			rarity: R
-			setNum: "1"
-			cardNum: 216
-			style: Standard
 		}
 		title: Morgul Blade
 		unique: false
@@ -852,17 +740,9 @@
 
 	1_217: {
 		cardInfo: {
-			imagePath: decipher/LOTR01217.jpg
-			//parentId: 1_217
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01217.jpg
 			collInfo: 1R217
 			rarity: R
-			setNum: "1"
-			cardNum: 217
-			style: Standard
 		}
 		title: Morgul Gates
 		unique: false
@@ -892,17 +772,9 @@
 
 	1_218: {
 		cardInfo: {
-			imagePath: decipher/LOTR01218.jpg
-			//parentId: 1_218
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01218.jpg
 			collInfo: 1U218
 			rarity: U
-			setNum: "1"
-			cardNum: 218
-			style: Standard
 		}
 		title: Nazgûl Sword
 		unique: false
@@ -938,17 +810,9 @@
 
 	1_219: {
 		cardInfo: {
-			imagePath: decipher/LOTR01219.jpg
-			//parentId: 1_219
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01219.jpg
 			collInfo: 1U219
 			rarity: U
-			setNum: "1"
-			cardNum: 219
-			style: Standard
 		}
 		title: The Nine Servants of Sauron
 		unique: false
@@ -985,17 +849,9 @@
 
 	1_220: {
 		cardInfo: {
-			imagePath: decipher/LOTR01220.jpg
-			//parentId: 1_220
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01220.jpg
 			collInfo: 1U220
 			rarity: U
-			setNum: "1"
-			cardNum: 220
-			style: Standard
 		}
 		title: Not Easily Destroyed
 		unique: false
@@ -1032,17 +888,9 @@
 
 	1_221: {
 		cardInfo: {
-			imagePath: decipher/LOTR01221.jpg
-			//parentId: 1_221
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01221.jpg
 			collInfo: 1R221
 			rarity: R
-			setNum: "1"
-			cardNum: 221
-			style: Standard
 		}
 		title: The Pale Blade
 		unique: true
@@ -1091,17 +939,9 @@
 
 	1_222: {
 		cardInfo: {
-			imagePath: decipher/LOTR01222.jpg
-			//parentId: 1_222
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01222.jpg
 			collInfo: 1U222
 			rarity: U
-			setNum: "1"
-			cardNum: 222
-			style: Standard
 		}
 		title: Paths Seldom Trodden
 		unique: false
@@ -1150,17 +990,9 @@
 
 	1_223: {
 		cardInfo: {
-			imagePath: decipher/LOTR01223.jpg
-			//parentId: 1_223
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01223.jpg
 			collInfo: 1U223
 			rarity: U
-			setNum: "1"
-			cardNum: 223
-			style: Standard
 		}
 		title: Relentless Charge
 		unique: false
@@ -1193,17 +1025,9 @@
 
 	1_224: {
 		cardInfo: {
-			imagePath: decipher/LOTR01224.jpg
-			//parentId: 1_224
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01224.jpg
 			collInfo: 1R224
 			rarity: R
-			setNum: "1"
-			cardNum: 224
-			style: Standard
 		}
 		title: Return to Its Master
 		unique: false
@@ -1259,17 +1083,9 @@
 
 	1_225: {
 		cardInfo: {
-			imagePath: decipher/LOTR01225.jpg
-			//parentId: 1_225
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01225.jpg
 			collInfo: 1U225
 			rarity: U
-			setNum: "1"
-			cardNum: 225
-			style: Standard
 		}
 		title: Sword of Minas Morgul
 		unique: true
@@ -1315,17 +1131,9 @@
 
 	1_226: {
 		cardInfo: {
-			imagePath: decipher/LOTR01226.jpg
-			//parentId: 1_226
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01226.jpg
 			collInfo: 1U226
 			rarity: U
-			setNum: "1"
-			cardNum: 226
-			style: Standard
 		}
 		title: Their Power Is in Terror
 		unique: false
@@ -1358,17 +1166,9 @@
 
 	1_227: {
 		cardInfo: {
-			imagePath: decipher/LOTR01227.jpg
-			//parentId: 1_227
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01227.jpg
 			collInfo: 1U227
 			rarity: U
-			setNum: "1"
-			cardNum: 227
-			style: Standard
 		}
 		title: Threshold of Shadow
 		unique: false
@@ -1406,17 +1206,9 @@
 
 	1_228: {
 		cardInfo: {
-			imagePath: decipher/LOTR01228.jpg
-			//parentId: 1_228
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01228.jpg
 			collInfo: 1R228
 			rarity: R
-			setNum: "1"
-			cardNum: 228
-			style: Standard
 		}
 		title: The Twilight World
 		unique: false
@@ -1452,17 +1244,9 @@
 
 	1_229: {
 		cardInfo: {
-			imagePath: decipher/LOTR01229.jpg
-			//parentId: 1_229
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01229.jpg
 			collInfo: 1R229
 			rarity: R
-			setNum: "1"
-			cardNum: 229
-			style: Standard
 		}
 		title: Úlairë Attëa
 		subtitle: Keeper of Dol Guldur
@@ -1514,17 +1298,9 @@
 
 	1_230: {
 		cardInfo: {
-			imagePath: decipher/LOTR01230.jpg
-			//parentId: 1_230
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01230.jpg
 			collInfo: 1R230
 			rarity: R
-			setNum: "1"
-			cardNum: 230
-			style: Standard
 		}
 		title: Úlairë Cantëa
 		subtitle: Lieutenant of Dol Guldur
@@ -1563,17 +1339,9 @@
 
 	1_231: {
 		cardInfo: {
-			imagePath: decipher/LOTR01231.jpg
-			//parentId: 1_231
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01231.jpg
 			collInfo: 1U231
 			rarity: U
-			setNum: "1"
-			cardNum: 231
-			style: Standard
 		}
 		title: Úlairë Enquëa
 		subtitle: Lieutenant of Morgul
@@ -1626,17 +1394,9 @@
 
 	1_232: {
 		cardInfo: {
-			imagePath: decipher/LOTR01232.jpg
-			//parentId: 1_232
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01232.jpg
 			collInfo: 1U232
 			rarity: U
-			setNum: "1"
-			cardNum: 232
-			style: Standard
 		}
 		title: Úlairë Lemenya
 		subtitle: Lieutenant of Morgul
@@ -1670,17 +1430,9 @@
 
 	1_233: {
 		cardInfo: {
-			imagePath: decipher/LOTR01233.jpg
-			//parentId: 1_233
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01233.jpg
 			collInfo: 1U233
 			rarity: U
-			setNum: "1"
-			cardNum: 233
-			style: Standard
 		}
 		title: Úlairë Nelya
 		subtitle: Lieutenant of Morgul
@@ -1730,17 +1482,9 @@
 
 	1_234: {
 		cardInfo: {
-			imagePath: decipher/LOTR01234.jpg
-			//parentId: 1_234
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01234.jpg
 			collInfo: 1U234
 			rarity: U
-			setNum: "1"
-			cardNum: 234
-			style: Standard
 		}
 		title: Úlairë Nertëa
 		subtitle: Messenger of Dol Guldur
@@ -1836,17 +1580,9 @@
 
 	1_235: {
 		cardInfo: {
-			imagePath: decipher/LOTR01235.jpg
-			//parentId: 1_235
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01235.jpg
 			collInfo: 1U235
 			rarity: U
-			setNum: "1"
-			cardNum: 235
-			style: Standard
 		}
 		title: Úlairë Otsëa
 		subtitle: Lieutenant of Morgul
@@ -1886,17 +1622,9 @@
 
 	1_236: {
 		cardInfo: {
-			imagePath: decipher/LOTR01236.jpg
-			//parentId: 1_236
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01236.jpg
 			collInfo: 1R236
 			rarity: R
-			setNum: "1"
-			cardNum: 236
-			style: Standard
 		}
 		title: Úlairë Toldëa
 		subtitle: Messenger of Morgul
@@ -1936,17 +1664,9 @@
 
 	1_237: {
 		cardInfo: {
-			imagePath: decipher/LOTR01237.jpg
-			//parentId: 1_237
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01237.jpg
 			collInfo: 1R237
 			rarity: R
-			setNum: "1"
-			cardNum: 237
-			style: Standard
 		}
 		title: The Witch-king
 		subtitle: Lord of Angmar
@@ -1985,17 +1705,9 @@
 
 	1_238: {
 		cardInfo: {
-			imagePath: decipher/LOTR01238.jpg
-			//parentId: 1_238
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01238.jpg
 			collInfo: 1U238
 			rarity: U
-			setNum: "1"
-			cardNum: 238
-			style: Standard
 		}
 		title: Wreathed in Shadow
 		unique: false

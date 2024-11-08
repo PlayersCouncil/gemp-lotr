@@ -2,17 +2,9 @@
 
 	9_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR09049.jpg
-			//parentId: 9_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09049.jpg
 			collInfo: 9R+49
 			rarity: R+
-			setNum: "9"
-			cardNum: 49
-			style: Standard
 		}
 		title: Bilbo
 		subtitle: Bearer of Things Burgled
@@ -83,17 +75,9 @@
 
 	9_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR09050.jpg
-			//parentId: 9_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09050.jpg
 			collInfo: 9R50
 			rarity: R
-			setNum: "9"
-			cardNum: 50
-			style: Standard
 		}
 		title: Everyone Knows
 		unique: false
@@ -145,17 +129,9 @@
 
 	9_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR09051.jpg
-			//parentId: 9_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09051.jpg
 			collInfo: 9R+51
 			rarity: R+
-			setNum: "9"
-			cardNum: 51
-			style: Standard
 		}
 		title: Goldberry
 		subtitle: River-daughter
@@ -210,17 +186,9 @@
 
 	9_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR09052.jpg
-			//parentId: 9_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09052.jpg
 			collInfo: 9R+52
 			rarity: R+
-			setNum: "9"
-			cardNum: 52
-			style: Standard
 		}
 		title: Tom Bombadil
 		subtitle: The Master

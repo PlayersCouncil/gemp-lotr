@@ -2,17 +2,9 @@
 
 	15_181: {
 		cardInfo: {
-			imagePath: decipher/LOTR15181.jpg
-			//parentId: 15_181
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15181.jpg
 			collInfo: 15U181
 			rarity: U
-			setNum: "15"
-			cardNum: 181
-			style: Standard
 		}
 		title: Later Than You Think
 		unique: false
@@ -56,17 +48,9 @@
 
 	15_182: {
 		cardInfo: {
-			imagePath: decipher/LOTR15182.jpg
-			//parentId: 15_182
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15182.jpg
 			collInfo: 15R182
 			rarity: R
-			setNum: "15"
-			cardNum: 182
-			style: Standard
 		}
 		title: A Shadow Fell Over Them
 		unique: false
@@ -137,17 +121,9 @@
 
 	15_183: {
 		cardInfo: {
-			imagePath: decipher/LOTR15183.jpg
-			//parentId: 15_183
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15183.jpg
 			collInfo: 15U183
 			rarity: U
-			setNum: "15"
-			cardNum: 183
-			style: Standard
 		}
 		title: They Feel The Precious
 		unique: false
@@ -185,17 +161,9 @@
 
 	15_184: {
 		cardInfo: {
-			imagePath: decipher/LOTR15184.jpg
-			//parentId: 15_184
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15184.jpg
 			collInfo: 15R184
 			rarity: R
-			setNum: "15"
-			cardNum: 184
-			style: Standard
 		}
 		title: Úlairë Attëa
 		subtitle: Desirous of Power
@@ -235,17 +203,9 @@
 
 	15_185: {
 		cardInfo: {
-			imagePath: decipher/LOTR15185.jpg
-			//parentId: 15_185
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15185.jpg
 			collInfo: 15R185
 			rarity: R
-			setNum: "15"
-			cardNum: 185
-			style: Standard
 		}
 		title: Úlairë Lemenya
 		subtitle: Eternally Threatening
@@ -291,17 +251,9 @@
 
 	15_186: {
 		cardInfo: {
-			imagePath: decipher/LOTR15186.jpg
-			//parentId: 15_186
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15186.jpg
 			collInfo: 15R186
 			rarity: R
-			setNum: "15"
-			cardNum: 186
-			style: Standard
 		}
 		title: Úlairë Nelya
 		subtitle: Fell Rider

@@ -2,17 +2,9 @@
 
 	10_4: {
 		cardInfo: {
-			imagePath: decipher/LOTR10004.jpg
-			//parentId: 10_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10004.jpg
 			collInfo: 10U4
 			rarity: U
-			setNum: "10"
-			cardNum: 4
-			style: Standard
 		}
 		title: Aegnor
 		subtitle: Elven Escort
@@ -64,17 +56,9 @@
 
 	10_5: {
 		cardInfo: {
-			imagePath: decipher/LOTR10005.jpg
-			//parentId: 10_5
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10005.jpg
 			collInfo: 10U5
 			rarity: U
-			setNum: "10"
-			cardNum: 5
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Echo of Lúthien
@@ -131,17 +115,9 @@
 
 	10_6: {
 		cardInfo: {
-			imagePath: decipher/LOTR10006.jpg
-			//parentId: 10_6
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10006.jpg
 			collInfo: 10R6
 			rarity: R
-			setNum: "10"
-			cardNum: 6
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Queen of Elves and Men
@@ -182,17 +158,9 @@
 
 	10_7: {
 		cardInfo: {
-			imagePath: decipher/LOTR10007.jpg
-			//parentId: 10_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10007.jpg
 			collInfo: 10R7
 			rarity: R
-			setNum: "10"
-			cardNum: 7
-			style: Standard
 		}
 		title: Celeborn
 		subtitle: Lord of the Galadhrim
@@ -263,17 +231,9 @@
 
 	10_8: {
 		cardInfo: {
-			imagePath: decipher/LOTR10008.jpg
-			//parentId: 10_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10008.jpg
 			collInfo: 10R8
 			rarity: R
-			setNum: "10"
-			cardNum: 8
-			style: Standard
 		}
 		title: Círdan
 		subtitle: The Shipwright
@@ -326,17 +286,9 @@
 
 	10_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR10009.jpg
-			//parentId: 10_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10009.jpg
 			collInfo: 10R9
 			rarity: R
-			setNum: "10"
-			cardNum: 9
-			style: Standard
 		}
 		title: Elrond
 		subtitle: Venerable Lord
@@ -402,17 +354,9 @@
 
 	10_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR10010.jpg
-			//parentId: 10_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10010.jpg
 			collInfo: 10C10
 			rarity: C
-			setNum: "10"
-			cardNum: 10
-			style: Standard
 		}
 		title: Fleet-footed
 		unique: false
@@ -454,17 +398,9 @@
 
 	10_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR10011.jpg
-			//parentId: 10_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10011.jpg
 			collInfo: 10R11
 			rarity: R
-			setNum: "10"
-			cardNum: 11
-			style: Standard
 		}
 		title: Galadriel
 		subtitle: Lady Redeemed
@@ -516,17 +452,9 @@
 
 	10_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR10012.jpg
-			//parentId: 10_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10012.jpg
 			collInfo: 10U12
 			rarity: U
-			setNum: "10"
-			cardNum: 12
-			style: Standard
 		}
 		title: Glimpse of Fate
 		unique: true
@@ -571,17 +499,9 @@
 
 	10_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR10013.jpg
-			//parentId: 10_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10013.jpg
 			collInfo: 10R13
 			rarity: R
-			setNum: "10"
-			cardNum: 13
-			style: Standard
 		}
 		title: Phial of Galadriel
 		subtitle: Star-glass

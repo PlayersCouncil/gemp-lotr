@@ -2,17 +2,9 @@
 
 	8_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR08022.jpg
-			//parentId: 8_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08022.jpg
 			collInfo: 8C22
 			rarity: C
-			setNum: "8"
-			cardNum: 22
-			style: Standard
 		}
 		title: Hidden Even From Her
 		unique: false
@@ -67,17 +59,9 @@
 
 	8_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR08023.jpg
-			//parentId: 8_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08023.jpg
 			collInfo: 8U23
 			rarity: U
-			setNum: "8"
-			cardNum: 23
-			style: Standard
 		}
 		title: Larder
 		unique: false
@@ -138,17 +122,9 @@
 
 	8_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR08024.jpg
-			//parentId: 8_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08024.jpg
 			collInfo: 8R24
 			rarity: R
-			setNum: "8"
-			cardNum: 24
-			style: Standard
 		}
 		title: Promise Keeping
 		unique: true
@@ -187,17 +163,9 @@
 
 	8_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR08025.jpg
-			//parentId: 8_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08025.jpg
 			collInfo: 8R25
 			rarity: R
-			setNum: "8"
-			cardNum: 25
-			style: Standard
 		}
 		title: Shelob
 		subtitle: Eater of Light
@@ -253,17 +221,9 @@
 
 	8_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR08026.jpg
-			//parentId: 8_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08026.jpg
 			collInfo: 8C26
 			rarity: C
-			setNum: "8"
-			cardNum: 26
-			style: Standard
 		}
 		title: Shelob
 		subtitle: Last Child of Ungoliant
@@ -308,17 +268,9 @@
 
 	8_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR08027.jpg
-			//parentId: 8_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08027.jpg
 			collInfo: 8R27
 			rarity: R
-			setNum: "8"
-			cardNum: 27
-			style: Standard
 		}
 		title: Sméagol
 		subtitle: Slippery Sneak
@@ -380,17 +332,9 @@
 
 	8_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR08028.jpg
-			//parentId: 8_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08028.jpg
 			collInfo: 8C28
 			rarity: C
-			setNum: "8"
-			cardNum: 28
-			style: Standard
 		}
 		title: Spider Poison
 		unique: false
@@ -450,17 +394,9 @@
 
 	8_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR08029.jpg
-			//parentId: 8_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08029.jpg
 			collInfo: 8U29
 			rarity: U
-			setNum: "8"
-			cardNum: 29
-			style: Standard
 		}
 		title: Still Far Ahead
 		unique: false
@@ -507,17 +443,9 @@
 
 	8_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR08030.jpg
-			//parentId: 8_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08030.jpg
 			collInfo: 8C30
 			rarity: C
-			setNum: "8"
-			cardNum: 30
-			style: Standard
 		}
 		title: Web
 		unique: false

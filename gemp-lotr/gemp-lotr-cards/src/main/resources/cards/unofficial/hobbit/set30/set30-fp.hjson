@@ -1,5 +1,10 @@
 {
 	30_1: {
+		cardInfo: {
+			image: hobbit/HDG301.jpg
+			collInfo: 30_1
+			rarity: _
+		}
 		title: Ancestral Knowledge
 		culture: dwarven
 		twilight: 2
@@ -28,6 +33,11 @@
 		}
 	}
 	30_2: {
+		cardInfo: {
+			image: hobbit/HDG302.jpg
+			collInfo: 30_2
+			rarity: _
+		}
 		title: Balin
 		subtitle: Brother of Dwalin
 		unique: true
@@ -52,6 +62,11 @@
 		}
 	}
 	30_3: {
+		cardInfo: {
+			image: hobbit/HDG303.jpg
+			collInfo: 30_3
+			rarity: _
+		}
 		title: Battle Fury
 		culture: dwarven
 		twilight: 1
@@ -77,6 +92,11 @@
 		}
 	}
 	30_4: {
+		cardInfo: {
+			image: hobbit/HDG304.jpg
+			collInfo: 30_4
+			rarity: _
+		}
 		title: Battle of Azanulbizar
 		culture: dwarven
 		twilight: 0
@@ -110,6 +130,11 @@
 		}
 	}
 	30_5: {
+		cardInfo: {
+			image: hobbit/HDG305.jpg
+			collInfo: 30_5
+			rarity: _
+		}
 		title: Bifur
 		subtitle: Inarticulate
 		unique: true
@@ -144,6 +169,11 @@
 		]
 	}
 	30_6: {
+		cardInfo: {
+			image: hobbit/HDG306.jpg
+			collInfo: 30_6
+			rarity: _
+		}
 		title: Bofur
 		subtitle: Encouraging Fellow
 		unique: true
@@ -184,6 +214,11 @@
 		]
 	}
 	30_7: {
+		cardInfo: {
+			image: hobbit/HDG307.jpg
+			collInfo: 30_7
+			rarity: _
+		}
 		title: Bombur
 		subtitle: Chief Cook
 		unique: true
@@ -211,6 +246,11 @@
 		]
 	}
 	30_8: {
+		cardInfo: {
+			image: hobbit/HDG308.jpg
+			collInfo: 30_8
+			rarity: _
+		}
 		title: Dori
 		subtitle: Really a Decent Fellow
 		unique: true
@@ -238,6 +278,11 @@
 		]
 	}
 	30_9: {
+		cardInfo: {
+			image: hobbit/HDG309.jpg
+			collInfo: 30_9
+			rarity: _
+		}
 		title: Dwalin
 		subtitle: Brother of Balin
 		unique: true
@@ -265,6 +310,11 @@
 		}
 	}
 	30_10: {
+		cardInfo: {
+			image: hobbit/HDG3010.jpg
+			collInfo: 30_10
+			rarity: _
+		}
 		title: Fili
 		subtitle: Brother of Kili
 		unique: true
@@ -299,6 +349,11 @@
 		}
 	}
 	30_11: {
+		cardInfo: {
+			image: hobbit/HDG3011.jpg
+			collInfo: 30_11
+			rarity: _
+		}
 		title: Gloin
 		subtitle: Father of Gimli
 		unique: true
@@ -325,6 +380,11 @@
 		}
 	}
 	30_12: {
+		cardInfo: {
+			image: hobbit/HDG3012.jpg
+			collInfo: 30_12
+			rarity: _
+		}
 		title: Kili
 		subtitle: Brother of Fili
 		unique: true
@@ -356,6 +416,11 @@
 		}
 	}
 	30_13: {
+		cardInfo: {
+			image: hobbit/HDG3013.jpg
+			collInfo: 30_13
+			rarity: _
+		}
 		title: Lore of Imladris
 		culture: dwarven
 		twilight: 1
@@ -391,6 +456,11 @@
 		}
 	}
 	30_14: {
+		cardInfo: {
+			image: hobbit/HDG3014.jpg
+			collInfo: 30_14
+			rarity: _
+		}
 		title: Noble Intentions
 		culture: dwarven
 		twilight: 0
@@ -410,6 +480,11 @@
 		}
 	}
 	30_15: {
+		cardInfo: {
+			image: hobbit/HDG3015.jpg
+			collInfo: 30_15
+			rarity: _
+		}
 		title: Nori
 		subtitle: Of the Blue Mountains
 		unique: true
@@ -441,6 +516,11 @@
 		}
 	}
 	30_16: {
+		cardInfo: {
+			image: hobbit/HDG3016.jpg
+			collInfo: 30_16
+			rarity: _
+		}
 		title: Oin
 		subtitle: Knowledgeable Healer
 		unique: true
@@ -473,6 +553,11 @@
 		]
 	}
 	30_17: {
+		cardInfo: {
+			image: hobbit/HDG3017.jpg
+			collInfo: 30_17
+			rarity: _
+		}
 		title: Orcrist
 		unique: true
 		culture: dwarven
@@ -505,6 +590,11 @@
 		]
 	}
 	30_18: {
+		cardInfo: {
+			image: hobbit/HDG3018.jpg
+			collInfo: 30_18
+			rarity: _
+		}
 		title: Ori
 		subtitle: Dwarven Chronicler
 		unique: true
@@ -538,6 +628,11 @@
 		]
 	}
 	30_19: {
+		cardInfo: {
+			image: hobbit/HDG3019.jpg
+			collInfo: 30_19
+			rarity: _
+		}
 		title: Thorin
 		subtitle: Oakenshield
 		unique: true
@@ -576,6 +671,11 @@
 		]
 	}
 	30_20: {
+		cardInfo: {
+			image: hobbit/HDG3020.jpg
+			collInfo: 30_20
+			rarity: _
+		}
 		title: To me! O My Kinsfolk!
 		culture: dwarven
 		twilight: 0
@@ -590,6 +690,11 @@
 		}
 	}
 	30_21: {
+		cardInfo: {
+			image: hobbit/HDG3021.jpg
+			collInfo: 30_21
+			rarity: _
+		}
 		title: Elrond
 		subtitle: Elven Lord
 		unique: true
@@ -643,6 +748,11 @@
 		]
 	}
 	30_22: {
+		cardInfo: {
+			image: hobbit/HDG3022.jpg
+			collInfo: 30_22
+			rarity: _
+		}
 		title: Bard
 		subtitle: The Bowman
 		unique: true
@@ -683,6 +793,11 @@
 		}
 	}
 	30_23: {
+		cardInfo: {
+			image: hobbit/HDG3023.jpg
+			collInfo: 30_23
+			rarity: _
+		}
 		title: A Wizard Is Never Late
 		culture: gandalf
 		twilight: 1
@@ -712,6 +827,11 @@
 		}
 	}
 	30_24: {
+		cardInfo: {
+			image: hobbit/HDG3024.jpg
+			collInfo: 30_24
+			rarity: _
+		}
 		title: Dawn Take You All
 		culture: gandalf
 		twilight: 3
@@ -748,6 +868,11 @@
 		}
 	}
 	30_25: {
+		cardInfo: {
+			image: hobbit/HDG3025.jpg
+			collInfo: 30_25
+			rarity: _
+		}
 		title: Gandalf
 		subtitle: Leader of Dwarves
 		unique: true
@@ -813,6 +938,11 @@
 		]
 	}
 	30_26: {
+		cardInfo: {
+			image: hobbit/HDG3026.jpg
+			collInfo: 30_26
+			rarity: _
+		}
 		title: Gandalf
 		subtitle: Friend of Thorin
 		unique: true
@@ -871,6 +1001,11 @@
 		]
 	}
 	30_27: {
+		cardInfo: {
+			image: hobbit/HDG3027.jpg
+			collInfo: 30_27
+			rarity: _
+		}
 		title: Gandalf
 		subtitle: The Grey
 		unique: true

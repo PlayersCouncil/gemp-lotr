@@ -1,5 +1,10 @@
 {
 	31_1: {
+		cardInfo: {
+			image: hobbit/HDG311.jpg
+			collInfo: 31_1
+			rarity: _
+		}
 		title: Dwarven Axe
 		culture: dwarven
 		twilight: 1
@@ -21,6 +26,11 @@
 		}
 	}
 	31_2: {
+		cardInfo: {
+			image: hobbit/HDG312.jpg
+			collInfo: 31_2
+			rarity: _
+		}
 		title: Dwarven Song
 		culture: dwarven
 		twilight: 3
@@ -93,6 +103,11 @@
 		}
 	}
 	31_3: {
+		cardInfo: {
+			image: hobbit/HDG313.jpg
+			collInfo: 31_3
+			rarity: _
+		}
 		title: Emeralds of Girion
 		unique: true
 		culture: dwarven
@@ -129,6 +144,11 @@
 		]
 	}
 	31_4: {
+		cardInfo: {
+			image: hobbit/HDG314.jpg
+			collInfo: 31_4
+			rarity: _
+		}
 		title: Great Barricade
 		unique: true
 		culture: dwarven
@@ -175,6 +195,11 @@
 		]
 	}
 	31_5: {
+		cardInfo: {
+			image: hobbit/HDG315.jpg
+			collInfo: 31_5
+			rarity: _
+		}
 		title: Mithril-coat
 		unique: true
 		culture: dwarven
@@ -206,6 +231,11 @@
 		]
 	}
 	31_6: {
+		cardInfo: {
+			image: hobbit/HDG316.jpg
+			collInfo: 31_6
+			rarity: _
+		}
 		title: Oakenshield
 		unique: true
 		culture: dwarven
@@ -248,6 +278,11 @@
 		]
 	}
 	31_7: {
+		cardInfo: {
+			image: hobbit/HDG317.jpg
+			collInfo: 31_7
+			rarity: _
+		}
 		title: The Arkenstone
 		unique: true
 		culture: dwarven
@@ -298,6 +333,11 @@
 		]
 	}
 	31_8: {
+		cardInfo: {
+			image: hobbit/HDG318.jpg
+			collInfo: 31_8
+			rarity: _
+		}
 		title: Elf Army
 		unique: true
 		culture: elven
@@ -334,6 +374,11 @@
 		}
 	}
 	31_9: {
+		cardInfo: {
+			image: hobbit/HDG319.jpg
+			collInfo: 31_9
+			rarity: _
+		}
 		title: Legolas
 		subtitle: Prince of Mirkwood
 		unique: true
@@ -372,6 +417,11 @@
 		}
 	}
 	31_10: {
+		cardInfo: {
+			image: hobbit/HDG3110.jpg
+			collInfo: 31_10
+			rarity: _
+		}
 		title: Tauriel
 		subtitle: Staunch Defender
 		unique: true
@@ -397,6 +447,11 @@
 		}
 	}
 	31_11: {
+		cardInfo: {
+			image: hobbit/HDG3111.jpg
+			collInfo: 31_11
+			rarity: _
+		}
 		title: The Evil Becomes Stronger
 		culture: elven
 		twilight: 2
@@ -429,6 +484,11 @@
 		}
 	}
 	31_12: {
+		cardInfo: {
+			image: hobbit/HDG3112.jpg
+			collInfo: 31_12
+			rarity: _
+		}
 		title: Thranduil
 		subtitle: Elven King
 		unique: true
@@ -468,6 +528,11 @@
 		}
 	}
 	31_13: {
+		cardInfo: {
+			image: hobbit/HDG3113.jpg
+			collInfo: 31_13
+			rarity: _
+		}
 		title: Beorn
 		subtitle: Skin-Changer
 		unique: true
@@ -512,6 +577,11 @@
 		]
 	}
 	31_14: {
+		cardInfo: {
+			image: hobbit/HDG3114.jpg
+			collInfo: 31_14
+			rarity: _
+		}
 		title: The Eagles Are Coming
 		culture: gandalf
 		twilight: 3
@@ -559,6 +629,11 @@
 		}
 	}
 	31_15: {
+		cardInfo: {
+			image: hobbit/HDG3115.jpg
+			collInfo: 31_15
+			rarity: _
+		}
 		title: Gwaihir
 		subtitle: Lord of the Eagles
 		unique: true
@@ -609,6 +684,11 @@
 		]
 	}
 	31_16: {
+		cardInfo: {
+			image: hobbit/HDG3116.jpg
+			collInfo: 31_16
+			rarity: _
+		}
 		title: His Wrath Was Redoubled
 		culture: gandalf
 		twilight: 3
@@ -636,6 +716,11 @@
 		}
 	}
 	31_17: {
+		cardInfo: {
+			image: hobbit/HDG3117.jpg
+			collInfo: 31_17
+			rarity: _
+		}
 		title: Radagast
 		subtitle: The Brown
 		unique: true
@@ -676,6 +761,11 @@
 		}
 	}
 	31_18: {
+		cardInfo: {
+			image: hobbit/HDG3118.jpg
+			collInfo: 31_18
+			rarity: _
+		}
 		title: Wizard Staff
 		unique: true
 		culture: gandalf
@@ -704,6 +794,11 @@
 		}
 	}
 	31_38: {
+		cardInfo: {
+			image: hobbit/HDG3138.jpg
+			collInfo: 31_38
+			rarity: _
+		}
 		title: An Acorn from Beorn's House
 		culture: shire
 		twilight: 1

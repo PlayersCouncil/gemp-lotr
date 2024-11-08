@@ -1,17 +1,14 @@
 {
 	52_43: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E043.1.jpg
-			javaClass: false
+			//id: 2_43.1
 			parent: 2_43
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN02E043.1.jpg
 			collInfo: 2R43
 			rarity: R
-			setNum: "2"
-			cardNum: 43
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		side: shadow
 		twilight: 1
@@ -76,17 +73,14 @@
 	
 	52_44: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E044.1.jpg
-			javaClass: false
+			//id: 2_44.1
 			parent: 2_44
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN02E044.1.jpg
 			collInfo: 2C44
 			rarity: C
-			setNum: "2"
-			cardNum: 44
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		side: shadow
 		twilight: 3
@@ -125,17 +119,14 @@
 	
 	52_45: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E045.1.jpg
-			javaClass: false
+			//id: 2_45.1
 			parent: 2_45
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN02E045.1.jpg
 			collInfo: 2R45
 			rarity: R
-			setNum: "2"
-			cardNum: 45
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		side: shadow
 		twilight: 1

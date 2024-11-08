@@ -2,17 +2,9 @@
 
 	19_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR19001.jpg
-			//parentId: 19_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19001.jpg
 			collInfo: 19P1
 			rarity: P
-			setNum: "19"
-			cardNum: 1
-			style: Standard
 		}
 		title: The One Ring
 		subtitle: The Great Ring

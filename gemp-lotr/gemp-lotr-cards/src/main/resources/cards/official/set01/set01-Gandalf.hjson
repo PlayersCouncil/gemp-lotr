@@ -2,17 +2,9 @@
 
 	1_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR01069.jpg
-			//parentId: 1_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01069.jpg
 			collInfo: 1R69
 			rarity: R
-			setNum: "1"
-			cardNum: 69
-			style: Standard
 		}
 		title: Albert Dreary
 		subtitle: Entertainer from Bree
@@ -59,17 +51,9 @@
 
 	1_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR01070.jpg
-			//parentId: 1_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01070.jpg
 			collInfo: 1U70
 			rarity: U
-			setNum: "1"
-			cardNum: 70
-			style: Standard
 		}
 		title: Barliman Butterbur
 		subtitle: Prancing Pony Proprietor
@@ -107,17 +91,9 @@
 
 	1_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR01071.jpg
-			//parentId: 1_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01071.jpg
 			collInfo: 1R71
 			rarity: R
-			setNum: "1"
-			cardNum: 71
-			style: Standard
 		}
 		title: Durin's Secret
 		unique: false
@@ -164,17 +140,9 @@
 
 	1_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR01072.jpg
-			//parentId: 1_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01072.jpg
 			collInfo: 1R72
 			rarity: R
-			setNum: "1"
-			cardNum: 72
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Friend of the Shirefolk
@@ -249,17 +217,9 @@
 
 	1_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR01073.jpg
-			//parentId: 1_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01073.jpg
 			collInfo: 1U73
 			rarity: U
-			setNum: "1"
-			cardNum: 73
-			style: Standard
 		}
 		title: Gandalf's Cart
 		unique: true
@@ -351,17 +311,9 @@
 
 	1_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR01074.jpg
-			//parentId: 1_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01074.jpg
 			collInfo: 1U74
 			rarity: U
-			setNum: "1"
-			cardNum: 74
-			style: Standard
 		}
 		title: Gandalf's Pipe
 		unique: true
@@ -406,17 +358,9 @@
 
 	1_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR01075.jpg
-			//parentId: 1_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01075.jpg
 			collInfo: 1R75
 			rarity: R
-			setNum: "1"
-			cardNum: 75
-			style: Standard
 		}
 		title: Glamdring
 		unique: true
@@ -476,17 +420,9 @@
 
 	1_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR01076.jpg
-			//parentId: 1_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01076.jpg
 			collInfo: 1C76
 			rarity: C
-			setNum: "1"
-			cardNum: 76
-			style: Standard
 		}
 		title: Intimidate
 		unique: false
@@ -524,17 +460,9 @@
 
 	1_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR01077.jpg
-			//parentId: 1_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01077.jpg
 			collInfo: 1U77
 			rarity: U
-			setNum: "1"
-			cardNum: 77
-			style: Standard
 		}
 		title: Let Folly Be Our Cloak
 		unique: false
@@ -572,17 +500,9 @@
 
 	1_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR01078.jpg
-			//parentId: 1_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01078.jpg
 			collInfo: 1C78
 			rarity: C
-			setNum: "1"
-			cardNum: 78
-			style: Standard
 		}
 		title: Mysterious Wizard
 		unique: false
@@ -621,17 +541,9 @@
 
 	1_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR01079.jpg
-			//parentId: 1_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01079.jpg
 			collInfo: 1R79
 			rarity: R
-			setNum: "1"
-			cardNum: 79
-			style: Standard
 		}
 		title: The Nine Walkers
 		unique: false
@@ -670,17 +582,9 @@
 
 	1_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR01080.jpg
-			//parentId: 1_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01080.jpg
 			collInfo: 1R80
 			rarity: R
-			setNum: "1"
-			cardNum: 80
-			style: Standard
 		}
 		title: Ottar
 		subtitle: Man of Laketown
@@ -738,17 +642,9 @@
 
 	1_81: {
 		cardInfo: {
-			imagePath: decipher/LOTR01081.jpg
-			//parentId: 1_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01081.jpg
 			collInfo: 1R81
 			rarity: R
-			setNum: "1"
-			cardNum: 81
-			style: Standard
 		}
 		title: Questions That Need Answering
 		unique: false
@@ -805,17 +701,9 @@
 
 	1_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR01082.jpg
-			//parentId: 1_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01082.jpg
 			collInfo: 1C82
 			rarity: C
-			setNum: "1"
-			cardNum: 82
-			style: Standard
 		}
 		title: Risk a Little Light
 		unique: false
@@ -872,17 +760,9 @@
 
 	1_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR01083.jpg
-			//parentId: 1_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01083.jpg
 			collInfo: 1R83
 			rarity: R
-			setNum: "1"
-			cardNum: 83
-			style: Standard
 		}
 		title: Servant of the Secret Fire
 		unique: false
@@ -917,17 +797,9 @@
 
 	1_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR01084.jpg
-			//parentId: 1_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01084.jpg
 			collInfo: 1C84
 			rarity: C
-			setNum: "1"
-			cardNum: 84
-			style: Standard
 		}
 		title: Sleep, Caradhras
 		unique: false
@@ -961,17 +833,9 @@
 
 	1_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR01085.jpg
-			//parentId: 1_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01085.jpg
 			collInfo: 1C85
 			rarity: C
-			setNum: "1"
-			cardNum: 85
-			style: Standard
 		}
 		title: Strength of Spirit
 		unique: false
@@ -1009,17 +873,9 @@
 
 	1_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR01086.jpg
-			//parentId: 1_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01086.jpg
 			collInfo: 1C86
 			rarity: C
-			setNum: "1"
-			cardNum: 86
-			style: Standard
 		}
 		title: Treachery Deeper Than You Know
 		unique: false
@@ -1053,17 +909,9 @@
 
 	1_87: {
 		cardInfo: {
-			imagePath: decipher/LOTR01087.jpg
-			//parentId: 1_87
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01087.jpg
 			collInfo: 1R87
 			rarity: R
-			setNum: "1"
-			cardNum: 87
-			style: Standard
 		}
 		title: A Wizard Is Never Late
 		unique: false
@@ -1094,17 +942,9 @@
 
 	1_364: {
 		cardInfo: {
-			imagePath: decipher/LOTR01364.jpg
-			//parentId: 1_364
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01364.jpg
 			collInfo: 1P364
 			rarity: P
-			setNum: "1"
-			cardNum: 364
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: The Grey Wizard

@@ -2,17 +2,11 @@
 
 	65_112: {
 		cardInfo: {
-			imagePath: errata/65_112.jpg
-			javaClass: false
-			parent: 15_112
-			parentPath: errata/pc
-			version: 1?
+			//id: 5_112.1
+			revision: 1
+			image: errata/65_112.jpg
 			collInfo: 15R112
 			rarity: R
-			setNum: "15"
-			cardNum: 112
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Mountain-troll
 		unique: false

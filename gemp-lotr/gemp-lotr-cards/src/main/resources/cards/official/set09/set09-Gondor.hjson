@@ -2,17 +2,9 @@
 
 	9_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR09031.jpg
-			//parentId: 9_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09031.jpg
 			collInfo: 9R+31
 			rarity: R+
-			setNum: "9"
-			cardNum: 31
-			style: Standard
 		}
 		title: Boromir
 		subtitle: Bearer of Council
@@ -81,17 +73,9 @@
 
 	9_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR09032.jpg
-			//parentId: 9_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09032.jpg
 			collInfo: 9R+32
 			rarity: R+
-			setNum: "9"
-			cardNum: 32
-			style: Standard
 		}
 		title: Elendil
 		subtitle: The Tall
@@ -155,17 +139,9 @@
 
 	9_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR09033.jpg
-			//parentId: 9_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09033.jpg
 			collInfo: 9R+33
 			rarity: R+
-			setNum: "9"
-			cardNum: 33
-			style: Standard
 		}
 		title: Isildur
 		subtitle: Bearer of Heirlooms
@@ -235,17 +211,9 @@
 
 	9_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR09034.jpg
-			//parentId: 9_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09034.jpg
 			collInfo: 9R+34
 			rarity: R+
-			setNum: "9"
-			cardNum: 34
-			style: Standard
 		}
 		title: Narsil
 		subtitle: Blade of the Faithful
@@ -300,17 +268,9 @@
 
 	9_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR09035.jpg
-			//parentId: 9_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09035.jpg
 			collInfo: 9R35
 			rarity: R
-			setNum: "9"
-			cardNum: 35
-			style: Standard
 		}
 		title: Sapling of the White Tree
 		unique: false
@@ -357,17 +317,9 @@
 
 	9_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR09036.jpg
-			//parentId: 9_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09036.jpg
 			collInfo: 9R36
 			rarity: R
-			setNum: "9"
-			cardNum: 36
-			style: Standard
 		}
 		title: Scroll of Isildur
 		unique: true
@@ -426,17 +378,9 @@
 
 	9_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR09037.jpg
-			//parentId: 9_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09037.jpg
 			collInfo: 9R37
 			rarity: R
-			setNum: "9"
-			cardNum: 37
-			style: Standard
 		}
 		title: Seeing Stone of Minas Anor
 		unique: true
@@ -523,17 +467,9 @@
 
 	9_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR09038.jpg
-			//parentId: 9_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09038.jpg
 			collInfo: 9R38
 			rarity: R
-			setNum: "9"
-			cardNum: 38
-			style: Standard
 		}
 		title: Seeing Stone of Orthanc
 		unique: true

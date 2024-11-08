@@ -151,15 +151,15 @@
     merchantable: false
     needsLoading: false
   }
-  {
-    setId: 40
-    setName: Second Edition
-    rarityFile: /set40-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: false
-  }
+  # {
+  #   setId: 40
+  #   setName: Second Edition
+  #   rarityFile: /set40-rarity.txt
+  #   originalSet: false
+  #   merchantable: false
+  #   needsLoading: false
+  #   playable: false
+  # }
 
 
   {

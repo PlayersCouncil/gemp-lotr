@@ -2,17 +2,9 @@
 
 	18_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR18078.jpg
-			//parentId: 18_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18078.jpg
 			collInfo: 18U78
 			rarity: U
-			setNum: "18"
-			cardNum: 78
-			style: Standard
 		}
 		title: Destroyers and Usurpers
 		unique: false
@@ -76,17 +68,9 @@
 
 	18_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR18079.jpg
-			//parentId: 18_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18079.jpg
 			collInfo: 18U79
 			rarity: U
-			setNum: "18"
-			cardNum: 79
-			style: Standard
 		}
 		title: Frenzy of Arrows
 		unique: false
@@ -135,17 +119,9 @@
 
 	18_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR18080.jpg
-			//parentId: 18_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18080.jpg
 			collInfo: 18R80
 			rarity: R
-			setNum: "18"
-			cardNum: 80
-			style: Standard
 		}
 		title: Gothmog
 		subtitle: Morgul Leader
@@ -208,17 +184,9 @@
 
 	18_81: {
 		cardInfo: {
-			imagePath: decipher/LOTR18081.jpg
-			//parentId: 18_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18081.jpg
 			collInfo: 18R81
 			rarity: R
-			setNum: "18"
-			cardNum: 81
-			style: Standard
 		}
 		title: Gothmog's Warg
 		subtitle: Leader's Mount
@@ -263,17 +231,9 @@
 
 	18_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR18082.jpg
-			//parentId: 18_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18082.jpg
 			collInfo: 18R82
 			rarity: R
-			setNum: "18"
-			cardNum: 82
-			style: Standard
 		}
 		title: Grond
 		subtitle: Forged With Black Steel
@@ -329,17 +289,9 @@
 
 	18_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR18083.jpg
-			//parentId: 18_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18083.jpg
 			collInfo: 18R83
 			rarity: R
-			setNum: "18"
-			cardNum: 83
-			style: Standard
 		}
 		title: Gruesome Meal
 		unique: false
@@ -381,17 +333,9 @@
 
 	18_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR18084.jpg
-			//parentId: 18_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18084.jpg
 			collInfo: 18C84
 			rarity: C
-			setNum: "18"
-			cardNum: 84
-			style: Standard
 		}
 		title: Orkish Ax
 		unique: false
@@ -428,17 +372,9 @@
 
 	18_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR18085.jpg
-			//parentId: 18_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18085.jpg
 			collInfo: 18C85
 			rarity: C
-			setNum: "18"
-			cardNum: 85
-			style: Standard
 		}
 		title: Orkish Aggressor
 		unique: false
@@ -477,17 +413,9 @@
 
 	18_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR18086.jpg
-			//parentId: 18_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18086.jpg
 			collInfo: 18U86
 			rarity: U
-			setNum: "18"
-			cardNum: 86
-			style: Standard
 		}
 		title: Orkish Archer Troop
 		unique: false
@@ -532,17 +460,9 @@
 
 	18_87: {
 		cardInfo: {
-			imagePath: decipher/LOTR18087.jpg
-			//parentId: 18_87
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18087.jpg
 			collInfo: 18C87
 			rarity: C
-			setNum: "18"
-			cardNum: 87
-			style: Standard
 		}
 		title: Orkish Breeder
 		unique: false
@@ -583,17 +503,9 @@
 
 	18_88: {
 		cardInfo: {
-			imagePath: decipher/LOTR18088.jpg
-			//parentId: 18_88
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18088.jpg
 			collInfo: 18C88
 			rarity: C
-			setNum: "18"
-			cardNum: 88
-			style: Standard
 		}
 		title: Orkish Defender
 		unique: false
@@ -637,17 +549,9 @@
 
 	18_89: {
 		cardInfo: {
-			imagePath: decipher/LOTR18089.jpg
-			//parentId: 18_89
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18089.jpg
 			collInfo: 18C89
 			rarity: C
-			setNum: "18"
-			cardNum: 89
-			style: Standard
 		}
 		title: Orkish Headsman
 		unique: false
@@ -689,17 +593,9 @@
 
 	18_90: {
 		cardInfo: {
-			imagePath: decipher/LOTR18090.jpg
-			//parentId: 18_90
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18090.jpg
 			collInfo: 18C90
 			rarity: C
-			setNum: "18"
-			cardNum: 90
-			style: Standard
 		}
 		title: Orkish Skirmisher
 		unique: false
@@ -743,17 +639,9 @@
 
 	18_91: {
 		cardInfo: {
-			imagePath: decipher/LOTR18091.jpg
-			//parentId: 18_91
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18091.jpg
 			collInfo: 18C91
 			rarity: C
-			setNum: "18"
-			cardNum: 91
-			style: Standard
 		}
 		title: Orkish Sneak
 		unique: true
@@ -826,17 +714,9 @@
 
 	18_92: {
 		cardInfo: {
-			imagePath: decipher/LOTR18092.jpg
-			//parentId: 18_92
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18092.jpg
 			collInfo: 18U92
 			rarity: U
-			setNum: "18"
-			cardNum: 92
-			style: Standard
 		}
 		title: War Preparations
 		unique: false
@@ -870,17 +750,9 @@
 
 	18_93: {
 		cardInfo: {
-			imagePath: decipher/LOTR18093.jpg
-			//parentId: 18_93
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18093.jpg
 			collInfo: 18U93
 			rarity: U
-			setNum: "18"
-			cardNum: 93
-			style: Standard
 		}
 		title: Wary Orc
 		unique: false

@@ -2,17 +2,9 @@
 
 	18_114: {
 		cardInfo: {
-			imagePath: decipher/LOTR18114.jpg
-			//parentId: 18_114
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18114.jpg
 			collInfo: 18R114
 			rarity: R
-			setNum: "18"
-			cardNum: 114
-			style: Standard
 		}
 		title: Cleaved
 		unique: false
@@ -66,17 +58,9 @@
 
 	18_115: {
 		cardInfo: {
-			imagePath: decipher/LOTR18115.jpg
-			//parentId: 18_115
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18115.jpg
 			collInfo: 18R115
 			rarity: R
-			setNum: "18"
-			cardNum: 115
-			style: Standard
 		}
 		title: Final Triumph
 		unique: false
@@ -119,17 +103,9 @@
 
 	18_116: {
 		cardInfo: {
-			imagePath: decipher/LOTR18116.jpg
-			//parentId: 18_116
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18116.jpg
 			collInfo: 18C116
 			rarity: C
-			setNum: "18"
-			cardNum: 116
-			style: Standard
 		}
 		title: Fury of the Evil Army
 		unique: true
@@ -183,17 +159,9 @@
 
 	18_117: {
 		cardInfo: {
-			imagePath: decipher/LOTR18117.jpg
-			//parentId: 18_117
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18117.jpg
 			collInfo: 18C117
 			rarity: C
-			setNum: "18"
-			cardNum: 117
-			style: Standard
 		}
 		title: Ghastly Wound
 		unique: false
@@ -232,17 +200,9 @@
 
 	18_118: {
 		cardInfo: {
-			imagePath: decipher/LOTR18118.jpg
-			//parentId: 18_118
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18118.jpg
 			collInfo: 18R118
 			rarity: R
-			setNum: "18"
-			cardNum: 118
-			style: Standard
 		}
 		title: Lurtz
 		subtitle: Halfling Hunter
@@ -323,17 +283,9 @@
 
 	18_119: {
 		cardInfo: {
-			imagePath: decipher/LOTR18119.jpg
-			//parentId: 18_119
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18119.jpg
 			collInfo: 18R119
 			rarity: R
-			setNum: "18"
-			cardNum: 119
-			style: Standard
 		}
 		title: Lurtz's Bow
 		subtitle: Black-fletch Bow
@@ -392,17 +344,9 @@
 
 	18_120: {
 		cardInfo: {
-			imagePath: decipher/LOTR18120.jpg
-			//parentId: 18_120
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18120.jpg
 			collInfo: 18U120
 			rarity: U
-			setNum: "18"
-			cardNum: 120
-			style: Standard
 		}
 		title: New Forges Built
 		unique: false
@@ -437,17 +381,9 @@
 
 	18_121: {
 		cardInfo: {
-			imagePath: decipher/LOTR18121.jpg
-			//parentId: 18_121
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18121.jpg
 			collInfo: 18U121
 			rarity: U
-			setNum: "18"
-			cardNum: 121
-			style: Standard
 		}
 		title: Pikes Upon Pikes
 		unique: false
@@ -495,17 +431,9 @@
 
 	18_122: {
 		cardInfo: {
-			imagePath: decipher/LOTR18122.jpg
-			//parentId: 18_122
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18122.jpg
 			collInfo: 18R122
 			rarity: R
-			setNum: "18"
-			cardNum: 122
-			style: Standard
 		}
 		title: Shagrat
 		subtitle: Tower Captain
@@ -571,17 +499,9 @@
 
 	18_123: {
 		cardInfo: {
-			imagePath: decipher/LOTR18123.jpg
-			//parentId: 18_123
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18123.jpg
 			collInfo: 18U123
 			rarity: U
-			setNum: "18"
-			cardNum: 123
-			style: Standard
 		}
 		title: Tracking the Prize
 		unique: true
@@ -621,17 +541,9 @@
 
 	18_124: {
 		cardInfo: {
-			imagePath: decipher/LOTR18124.jpg
-			//parentId: 18_124
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18124.jpg
 			collInfo: 18C124
 			rarity: C
-			setNum: "18"
-			cardNum: 124
-			style: Standard
 		}
 		title: White Hand Attacker(2)
 		unique: false
@@ -671,17 +583,9 @@
 
 	18_125: {
 		cardInfo: {
-			imagePath: decipher/LOTR18125.jpg
-			//parentId: 18_125
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18125.jpg
 			collInfo: 18C125
 			rarity: C
-			setNum: "18"
-			cardNum: 125
-			style: Standard
 		}
 		title: White Hand Exorciser
 		unique: false
@@ -722,17 +626,9 @@
 
 	18_126: {
 		cardInfo: {
-			imagePath: decipher/LOTR18126.jpg
-			//parentId: 18_126
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18126.jpg
 			collInfo: 18R126
 			rarity: R
-			setNum: "18"
-			cardNum: 126
-			style: Standard
 		}
 		title: White Hand Marchers
 		unique: true
@@ -771,17 +667,9 @@
 
 	18_127: {
 		cardInfo: {
-			imagePath: decipher/LOTR18127.jpg
-			//parentId: 18_127
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18127.jpg
 			collInfo: 18R127
 			rarity: R
-			setNum: "18"
-			cardNum: 127
-			style: Standard
 		}
 		title: White Hand Marshal
 		unique: true
@@ -820,17 +708,9 @@
 
 	18_128: {
 		cardInfo: {
-			imagePath: decipher/LOTR18128.jpg
-			//parentId: 18_128
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18128.jpg
 			collInfo: 18C128
 			rarity: C
-			setNum: "18"
-			cardNum: 128
-			style: Standard
 		}
 		title: White Hand Mystic
 		unique: false
@@ -873,17 +753,9 @@
 
 	18_129: {
 		cardInfo: {
-			imagePath: decipher/LOTR18129.jpg
-			//parentId: 18_129
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18129.jpg
 			collInfo: 18C129
 			rarity: C
-			setNum: "18"
-			cardNum: 129
-			style: Standard
 		}
 		title: White Hand Sieger
 		unique: false
@@ -923,17 +795,9 @@
 
 	18_130: {
 		cardInfo: {
-			imagePath: decipher/LOTR18130.jpg
-			//parentId: 18_130
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18130.jpg
 			collInfo: 18U130
 			rarity: U
-			setNum: "18"
-			cardNum: 130
-			style: Standard
 		}
 		title: White Hand Traveler
 		unique: false
@@ -987,17 +851,9 @@
 
 	18_131: {
 		cardInfo: {
-			imagePath: decipher/LOTR18131.jpg
-			//parentId: 18_131
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18131.jpg
 			collInfo: 18C131
 			rarity: C
-			setNum: "18"
-			cardNum: 131
-			style: Standard
 		}
 		title: White Hand Uruk
 		unique: false

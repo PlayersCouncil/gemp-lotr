@@ -15,9 +15,9 @@ public class GameText {
     public static String ConvertNanDeckNotation(String text) {
         return text
                 //Replacing a single backslash and other line breaks
-                .replaceAll("\\\\", "<br>")
                 .replaceAll("\n", "<br>")
                 .replaceAll("\\n", "<br>")
+                .replaceAll("\\\\", "<br>")
                 //non-breaking space
                 .replaceAll("_", "&nbsp;")
                 //em dash helper

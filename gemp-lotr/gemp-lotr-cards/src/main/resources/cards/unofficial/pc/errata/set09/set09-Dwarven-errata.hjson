@@ -1,17 +1,14 @@
 {
 	59_4: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN09E004.1_card.jpg
-			javaClass: false
+			//id: 9_4.1
 			parent: 9_4
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN09E004.1_card.jpg
 			collInfo: 9R+4
 			rarity: R+
-			setNum: "9"
-			cardNum: 4
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Bearer of Grudges

@@ -2,17 +2,9 @@
 
 	10_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR10072.jpg
-			//parentId: 10_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10072.jpg
 			collInfo: 10R72
 			rarity: R
-			setNum: "10"
-			cardNum: 72
-			style: Standard
 		}
 		title: Éowyn
 		subtitle: Lady of Ithilien
@@ -61,17 +53,9 @@
 
 	10_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR10073.jpg
-			//parentId: 10_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10073.jpg
 			collInfo: 10U73
 			rarity: U
-			setNum: "10"
-			cardNum: 73
-			style: Standard
 		}
 		title: Fell Deeds Awake
 		unique: true
@@ -113,17 +97,9 @@
 
 	10_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR10074.jpg
-			//parentId: 10_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10074.jpg
 			collInfo: 10U74
 			rarity: U
-			setNum: "10"
-			cardNum: 74
-			style: Standard
 		}
 		title: Unyielding
 		unique: false

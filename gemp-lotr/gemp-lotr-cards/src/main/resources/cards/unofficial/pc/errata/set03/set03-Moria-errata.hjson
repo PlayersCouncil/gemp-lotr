@@ -1,17 +1,14 @@
 {
 	53_79: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E079.1.jpg
-			javaClass: false
+			//id: 3_79.1
 			parent: 3_79
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN03E079.1.jpg
 			collInfo: 3U79
 			rarity: U
-			setNum: "3"
-			cardNum: 79
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Malice
 		culture: moria
@@ -80,7 +77,7 @@
 	# 		javaClass: false
 	# 		parent: 3_80
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 3R80
 	# 		rarity: R
 	# 		setNum: "3"
@@ -167,7 +164,7 @@
 	# 		javaClass: false
 	# 		parent: 3_80
 	# 		parentPath: errata/pc
-	# 		version: 2
+	# 		revision: 2
 	# 		collInfo: 3R80
 	# 		rarity: R
 	# 		setNum: "3"
@@ -229,17 +226,14 @@
 	
 	53_80: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E080.3_card.jpg
-			//parentId: 3_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 3
+			//id: 3_80.3
+			parent: 3_80
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 3
+			image: errata/LOTR-EN03E080.3_card.jpg
 			collInfo: 3R80
 			rarity: R
-			setNum: "3"
-			cardNum: 80
-			style: Standard
 		}
 		title: Such a Little Thing
 		unique: false

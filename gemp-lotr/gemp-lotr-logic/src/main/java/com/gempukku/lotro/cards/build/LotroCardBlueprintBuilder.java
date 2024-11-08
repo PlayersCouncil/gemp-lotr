@@ -39,6 +39,7 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
         fieldProcessors.put("strength", new StrengthFieldProcessor());
         fieldProcessors.put("vitality", new VitalityFieldProcessor());
         fieldProcessors.put("resistance", new ResistanceFieldProcessor());
+        fieldProcessors.put("canstartwithring", new CanStartWithRing());
         fieldProcessors.put("signet", new SignetFieldProcessor());
         fieldProcessors.put("block", new SiteBlockFieldProcessor());
         fieldProcessors.put("site", new SiteNumberFieldProcessor());
@@ -46,20 +47,27 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
         fieldProcessors.put("direction", new DirectionFieldProcessor());
         fieldProcessors.put("target", new TargetFieldProcessor());
         fieldProcessors.put("effects", new EffectFieldProcessor());
-        fieldProcessors.put("canstartwithring", new CanStartWithRing());
 
         fieldProcessors.put("gametext", new GameTextFieldProcessor());
         fieldProcessors.put("lore", new LoreFieldProcessor());
         fieldProcessors.put("promotext", new PromoTextFieldProcessor());
 
-        //Soon!  But not yet
-        fieldProcessors.put("cardinfo", new NullProcessor());
+        fieldProcessors.put("cardinfo", new CardInfoFieldProcessor());
         fieldProcessors.put("alts", new NullProcessor());
     }
 
     public LotroCardBlueprint buildFromJson(String cardId, JSONObject json) throws InvalidCardDefinitionException {
         BuiltLotroCardBlueprint result = new BuiltLotroCardBlueprint();
         result.setId(cardId);
+
+        //TODO: Detect a cardinfo without any other fields and add these to a
+        // list of stubs that are processed after the entire "real" blueprint
+        // library is complete.
+
+        //TODO: load up alts/promos and stuff them into the mechanism above
+
+        //TODO: Load up alts/errata and put them in the same mechanism, but have them set up to
+        // clear/replace applicable aspects of the cloned blueprint
 
         Set<Map.Entry<String, Object>> values = json.entrySet();
         for (Map.Entry<String, Object> value : values) {
@@ -78,9 +86,7 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
     }
 
     @Override
-    public EffectAppenderFactory getEffectAppenderFactory() {
-        return effectAppenderFactory;
-    }
+    public EffectAppenderFactory getEffectAppenderFactory() { return effectAppenderFactory; }
 
     @Override
     public FilterFactory getFilterFactory() {
@@ -100,6 +106,11 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
     @Override
     public ModifierSourceFactory getModifierSourceFactory() {
         return modifierSourceFactory;
+    }
+
+    @Override
+    public void recordCardVariant(String parentId, BuiltLotroCardBlueprint card) {
+
     }
 
     private static class NullProcessor implements FieldProcessor {

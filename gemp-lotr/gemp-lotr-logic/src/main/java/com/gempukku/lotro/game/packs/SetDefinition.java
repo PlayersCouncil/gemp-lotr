@@ -4,21 +4,18 @@ import java.util.List;
 import java.util.Set;
 
 public interface SetDefinition {
-    public String getSetName();
+    String getSetName();
 
-    public String getSetId();
+    String getSetId();
 
-    public boolean IsDecipherSet();
+    boolean IsDecipherSet();
+    boolean Merchantable();
+    boolean NeedsLoading();
+    List<String> getCardsOfRarity(String rarity);
 
-    public boolean Merchantable();
+    List<String> getTengwarCards();
 
-    public boolean NeedsLoading();
+    String getCardRarity(String cardId);
 
-    public List<String> getCardsOfRarity(String rarity);
-
-    public List<String> getTengwarCards();
-
-    public String getCardRarity(String cardId);
-
-    public Set<String> getAllCards();
+    Set<String> getAllCards();
 }

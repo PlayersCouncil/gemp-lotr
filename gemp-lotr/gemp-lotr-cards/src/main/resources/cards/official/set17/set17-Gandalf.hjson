@@ -2,17 +2,9 @@
 
 	17_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR17015.jpg
-			//parentId: 17_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17015.jpg
 			collInfo: 17U15
 			rarity: U
-			setNum: "17"
-			cardNum: 15
-			style: Standard
 		}
 		title: A New Light
 		unique: false
@@ -77,17 +69,9 @@
 
 	17_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR17016.jpg
-			//parentId: 17_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17016.jpg
 			collInfo: 17U16
 			rarity: U
-			setNum: "17"
-			cardNum: 16
-			style: Standard
 		}
 		title: Barliman Butterbur
 		subtitle: Red-faced Landlord
@@ -154,17 +138,9 @@
 
 	17_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR17017.jpg
-			//parentId: 17_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17017.jpg
 			collInfo: 17R17
 			rarity: R
-			setNum: "17"
-			cardNum: 17
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Returned
@@ -240,17 +216,9 @@
 
 	17_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR17018.jpg
-			//parentId: 17_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17018.jpg
 			collInfo: 17R18
 			rarity: R
-			setNum: "17"
-			cardNum: 18
-			style: Standard
 		}
 		title: Glamdring
 		subtitle: Orc Beater
@@ -303,17 +271,9 @@
 
 	17_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR17019.jpg
-			//parentId: 17_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17019.jpg
 			collInfo: 17U19
 			rarity: U
-			setNum: "17"
-			cardNum: 19
-			style: Standard
 		}
 		title: Guidance of the Istari
 		unique: false
@@ -348,17 +308,9 @@
 
 	17_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR17020.jpg
-			//parentId: 17_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17020.jpg
 			collInfo: 17R20
 			rarity: R
-			setNum: "17"
-			cardNum: 20
-			style: Standard
 		}
 		title: Gwaihir
 		subtitle: The Windlord
@@ -422,17 +374,9 @@
 
 	17_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR17021.jpg
-			//parentId: 17_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17021.jpg
 			collInfo: 17U21
 			rarity: U
-			setNum: "17"
-			cardNum: 21
-			style: Standard
 		}
 		title: Long-stemmed Pipe
 		unique: false
@@ -491,17 +435,9 @@
 
 	17_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR17022.jpg
-			//parentId: 17_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17022.jpg
 			collInfo: 17U22
 			rarity: U
-			setNum: "17"
-			cardNum: 22
-			style: Standard
 		}
 		title: Meneldor
 		subtitle: Misty Mountain Eagle
@@ -549,17 +485,9 @@
 
 	17_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR17023.jpg
-			//parentId: 17_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17023.jpg
 			collInfo: 17R23
 			rarity: R
-			setNum: "17"
-			cardNum: 23
-			style: Standard
 		}
 		title: Scintillating Bird
 		unique: false
@@ -658,17 +586,9 @@
 
 	17_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR17024.jpg
-			//parentId: 17_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17024.jpg
 			collInfo: 17R24
 			rarity: R
-			setNum: "17"
-			cardNum: 24
-			style: Standard
 		}
 		title: Shadowfax
 		subtitle: Greatest of the Mearas
@@ -726,17 +646,9 @@
 
 	17_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR17025.jpg
-			//parentId: 17_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17025.jpg
 			collInfo: 17U25
 			rarity: U
-			setNum: "17"
-			cardNum: 25
-			style: Standard
 		}
 		title: The Sap is in the Bough
 		unique: false
@@ -782,17 +694,9 @@
 
 	17_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR17026.jpg
-			//parentId: 17_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17026.jpg
 			collInfo: 17U26
 			rarity: U
-			setNum: "17"
-			cardNum: 26
-			style: Standard
 		}
 		title: Woodland Onod
 		unique: false

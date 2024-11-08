@@ -1,18 +1,10 @@
-{
+	{
 
 	6_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR06012.jpg
-			//parentId: 6_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06012.jpg
 			collInfo: 6C12
 			rarity: C
-			setNum: "6"
-			cardNum: 12
-			style: Standard
 		}
 		title: Agility
 		unique: true
@@ -81,17 +73,9 @@
 
 	6_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR06013.jpg
-			//parentId: 6_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06013.jpg
 			collInfo: 6U13
 			rarity: U
-			setNum: "6"
-			cardNum: 13
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Evenstar of Her People
@@ -133,17 +117,9 @@
 
 	6_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR06014.jpg
-			//parentId: 6_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06014.jpg
 			collInfo: 6U14
 			rarity: U
-			setNum: "6"
-			cardNum: 14
-			style: Standard
 		}
 		title: Banner of Elbereth
 		unique: false
@@ -193,17 +169,9 @@
 
 	6_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR06015.jpg
-			//parentId: 6_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06015.jpg
 			collInfo: 6R15
 			rarity: R
-			setNum: "6"
-			cardNum: 15
-			style: Standard
 		}
 		title: Elrond
 		subtitle: Keeper of Vilya
@@ -278,17 +246,9 @@
 
 	6_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR06016.jpg
-			//parentId: 6_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06016.jpg
 			collInfo: 6U16
 			rarity: U
-			setNum: "6"
-			cardNum: 16
-			style: Standard
 		}
 		title: Forearmed
 		unique: false
@@ -328,17 +288,9 @@
 
 	6_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR06017.jpg
-			//parentId: 6_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06017.jpg
 			collInfo: 6C17
 			rarity: C
-			setNum: "6"
-			cardNum: 17
-			style: Standard
 		}
 		title: Forewarned
 		unique: false
@@ -401,17 +353,9 @@
 
 	6_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR06018.jpg
-			//parentId: 6_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06018.jpg
 			collInfo: 6R18
 			rarity: R
-			setNum: "6"
-			cardNum: 18
-			style: Standard
 		}
 		title: Galadriel
 		subtitle: Keeper of Nenya
@@ -477,17 +421,9 @@
 
 	6_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR06019.jpg
-			//parentId: 6_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06019.jpg
 			collInfo: 6U19
 			rarity: U
-			setNum: "6"
-			cardNum: 19
-			style: Standard
 		}
 		title: Gift of Foresight
 		unique: false
@@ -548,17 +484,9 @@
 
 	6_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR06020.jpg
-			//parentId: 6_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06020.jpg
 			collInfo: 6U20
 			rarity: U
-			setNum: "6"
-			cardNum: 20
-			style: Standard
 		}
 		title: Must Be a Dream
 		unique: false
@@ -608,17 +536,9 @@
 
 	6_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR06021.jpg
-			//parentId: 6_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06021.jpg
 			collInfo: 6C21
 			rarity: C
-			setNum: "6"
-			cardNum: 21
-			style: Standard
 		}
 		title: Naith Longbow
 		unique: false
@@ -671,17 +591,9 @@
 
 	6_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR06022.jpg
-			//parentId: 6_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06022.jpg
 			collInfo: 6U22
 			rarity: U
-			setNum: "6"
-			cardNum: 22
-			style: Standard
 		}
 		title: Naith Troop
 		unique: true
@@ -744,17 +656,9 @@
 
 	6_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR06023.jpg
-			//parentId: 6_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06023.jpg
 			collInfo: 6R23
 			rarity: R
-			setNum: "6"
-			cardNum: 23
-			style: Standard
 		}
 		title: Naith Warband
 		unique: true

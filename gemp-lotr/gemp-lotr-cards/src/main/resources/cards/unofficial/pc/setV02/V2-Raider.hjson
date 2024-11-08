@@ -2,17 +2,10 @@
 
 	102_43: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S043.0_card.jpg
-			//parentId: 102_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_43
+			image: sets/V2/LOTR-ENV2S043.0_card.jpg
 			collInfo: V2_43
 			rarity: _
-			setNum: V2
-			cardNum: 43
-			style: Standard
 		}
 		title: All Hope of Secrecy Lost
 		unique: false

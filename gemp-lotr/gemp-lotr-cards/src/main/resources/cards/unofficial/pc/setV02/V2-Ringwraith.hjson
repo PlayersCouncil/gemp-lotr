@@ -2,17 +2,10 @@
 
 	102_44: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S044.0_card.jpg
-			//parentId: 102_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_44
+			image: sets/V2/LOTR-ENV2S044.0_card.jpg
 			collInfo: V2_44
 			rarity: _
-			setNum: V2
-			cardNum: 44
-			style: Standard
 		}
 		title: Threats on All Sides
 		unique: false

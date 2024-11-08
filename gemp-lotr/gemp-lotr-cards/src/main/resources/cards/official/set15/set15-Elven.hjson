@@ -2,17 +2,9 @@
 
 	15_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR15011.jpg
-			//parentId: 15_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15011.jpg
 			collInfo: 15R11
 			rarity: R
-			setNum: "15"
-			cardNum: 11
-			style: Standard
 		}
 		title: Arwen
 		subtitle: She-Elf
@@ -78,17 +70,9 @@
 
 	15_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR15012.jpg
-			//parentId: 15_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15012.jpg
 			collInfo: 15R12
 			rarity: R
-			setNum: "15"
-			cardNum: 12
-			style: Standard
 		}
 		title: Dínendal
 		subtitle: Mirkwood Archer
@@ -139,17 +123,9 @@
 
 	15_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR15013.jpg
-			//parentId: 15_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15013.jpg
 			collInfo: 15C13
 			rarity: C
-			setNum: "15"
-			cardNum: 13
-			style: Standard
 		}
 		title: Elven Bow
 		unique: false
@@ -182,17 +158,9 @@
 
 	15_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR15014.jpg
-			//parentId: 15_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15014.jpg
 			collInfo: 15C14
 			rarity: C
-			setNum: "15"
-			cardNum: 14
-			style: Standard
 		}
 		title: Elven Warrior
 		unique: false
@@ -239,17 +207,9 @@
 
 	15_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR15015.jpg
-			//parentId: 15_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15015.jpg
 			collInfo: 15C15
 			rarity: C
-			setNum: "15"
-			cardNum: 15
-			style: Standard
 		}
 		title: Focus
 		unique: false
@@ -298,17 +258,9 @@
 
 	15_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR15016.jpg
-			//parentId: 15_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15016.jpg
 			collInfo: 15U16
 			rarity: U
-			setNum: "15"
-			cardNum: 16
-			style: Standard
 		}
 		title: Gift of the Evenstar
 		subtitle: Blessed Light
@@ -368,17 +320,9 @@
 
 	15_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR15017.jpg
-			//parentId: 15_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15017.jpg
 			collInfo: 15U17
 			rarity: U
-			setNum: "15"
-			cardNum: 17
-			style: Standard
 		}
 		title: Haldir
 		subtitle: Sentry of the Golden Wood
@@ -437,17 +381,9 @@
 
 	15_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR15018.jpg
-			//parentId: 15_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15018.jpg
 			collInfo: 15S18
 			rarity: S
-			setNum: "15"
-			cardNum: 18
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Fleet-footed Hunter
@@ -488,17 +424,9 @@
 
 	15_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR15019.jpg
-			//parentId: 15_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15019.jpg
 			collInfo: 15R19
 			rarity: R
-			setNum: "15"
-			cardNum: 19
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Of the Woodland Realm
@@ -550,17 +478,9 @@
 
 	15_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR15020.jpg
-			//parentId: 15_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15020.jpg
 			collInfo: 15U20
 			rarity: U
-			setNum: "15"
-			cardNum: 20
-			style: Standard
 		}
 		title: Lórien's Blessing
 		unique: false
@@ -596,17 +516,9 @@
 
 	15_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR15021.jpg
-			//parentId: 15_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15021.jpg
 			collInfo: 15U21
 			rarity: U
-			setNum: "15"
-			cardNum: 21
-			style: Standard
 		}
 		title: Mighty Shot
 		unique: false
@@ -645,17 +557,9 @@
 
 	15_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR15022.jpg
-			//parentId: 15_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15022.jpg
 			collInfo: 15R22
 			rarity: R
-			setNum: "15"
-			cardNum: 22
-			style: Standard
 		}
 		title: The Mirror of Galadriel
 		subtitle: Dangerous Guide
@@ -730,17 +634,9 @@
 
 	15_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR15023.jpg
-			//parentId: 15_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15023.jpg
 			collInfo: 15C23
 			rarity: C
-			setNum: "15"
-			cardNum: 23
-			style: Standard
 		}
 		title: Point Blank Range
 		unique: false
@@ -781,17 +677,9 @@
 
 	15_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR15024.jpg
-			//parentId: 15_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15024.jpg
 			collInfo: 15R24
 			rarity: R
-			setNum: "15"
-			cardNum: 24
-			style: Standard
 		}
 		title: Spied From Afar
 		unique: false
@@ -851,17 +739,9 @@
 
 	15_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR15025.jpg
-			//parentId: 15_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15025.jpg
 			collInfo: 15C25
 			rarity: C
-			setNum: "15"
-			cardNum: 25
-			style: Standard
 		}
 		title: Sword of the Fallen
 		unique: false
@@ -910,17 +790,9 @@
 
 	15_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR15026.jpg
-			//parentId: 15_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15026.jpg
 			collInfo: 15U26
 			rarity: U
-			setNum: "15"
-			cardNum: 26
-			style: Standard
 		}
 		title: Uruviel
 		subtitle: Woodland Maid

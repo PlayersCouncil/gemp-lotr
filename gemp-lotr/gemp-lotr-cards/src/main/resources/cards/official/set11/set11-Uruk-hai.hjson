@@ -2,17 +2,9 @@
 
 	11_177: {
 		cardInfo: {
-			imagePath: decipher/LOTR11177.jpg
-			//parentId: 11_177
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11177.jpg
 			collInfo: 11R177
 			rarity: R
-			setNum: "11"
-			cardNum: 177
-			style: Standard
 		}
 		title: Army of Uruk-hai
 		unique: false
@@ -47,17 +39,9 @@
 
 	11_178: {
 		cardInfo: {
-			imagePath: decipher/LOTR11178.jpg
-			//parentId: 11_178
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11178.jpg
 			collInfo: 11S178
 			rarity: S
-			setNum: "11"
-			cardNum: 178
-			style: Standard
 		}
 		title: Bloodthirsty Uruk
 		unique: false
@@ -97,17 +81,9 @@
 
 	11_179: {
 		cardInfo: {
-			imagePath: decipher/LOTR11179.jpg
-			//parentId: 11_179
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11179.jpg
 			collInfo: 11R179
 			rarity: R
-			setNum: "11"
-			cardNum: 179
-			style: Standard
 		}
 		title: Brawling Uruk
 		unique: false
@@ -149,17 +125,9 @@
 
 	11_180: {
 		cardInfo: {
-			imagePath: decipher/LOTR11180.jpg
-			//parentId: 11_180
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11180.jpg
 			collInfo: 11S180
 			rarity: S
-			setNum: "11"
-			cardNum: 180
-			style: Standard
 		}
 		title: Brutality
 		unique: false
@@ -194,17 +162,9 @@
 
 	11_181: {
 		cardInfo: {
-			imagePath: decipher/LOTR11181.jpg
-			//parentId: 11_181
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11181.jpg
 			collInfo: 11R181
 			rarity: R
-			setNum: "11"
-			cardNum: 181
-			style: Standard
 		}
 		title: Determined Uruk
 		unique: false
@@ -249,17 +209,9 @@
 
 	11_182: {
 		cardInfo: {
-			imagePath: decipher/LOTR11182.jpg
-			//parentId: 11_182
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11182.jpg
 			collInfo: 11U182
 			rarity: U
-			setNum: "11"
-			cardNum: 182
-			style: Standard
 		}
 		title: Devastation
 		unique: false
@@ -294,17 +246,9 @@
 
 	11_183: {
 		cardInfo: {
-			imagePath: decipher/LOTR11183.jpg
-			//parentId: 11_183
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11183.jpg
 			collInfo: 11S183
 			rarity: S
-			setNum: "11"
-			cardNum: 183
-			style: Standard
 		}
 		title: Feral Uruk
 		unique: false
@@ -356,17 +300,9 @@
 
 	11_184: {
 		cardInfo: {
-			imagePath: decipher/LOTR11184.jpg
-			//parentId: 11_184
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11184.jpg
 			collInfo: 11R184
 			rarity: R
-			setNum: "11"
-			cardNum: 184
-			style: Standard
 		}
 		title: Force of Uruk-hai
 		unique: false
@@ -416,17 +352,9 @@
 
 	11_185: {
 		cardInfo: {
-			imagePath: decipher/LOTR11185.jpg
-			//parentId: 11_185
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11185.jpg
 			collInfo: 11U185
 			rarity: U
-			setNum: "11"
-			cardNum: 185
-			style: Standard
 		}
 		title: Fortitude
 		unique: true
@@ -496,17 +424,9 @@
 
 	11_186: {
 		cardInfo: {
-			imagePath: decipher/LOTR11186.jpg
-			//parentId: 11_186
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11186.jpg
 			collInfo: 11R186
 			rarity: R
-			setNum: "11"
-			cardNum: 186
-			style: Standard
 		}
 		title: Furious Uruk
 		unique: false
@@ -545,17 +465,9 @@
 
 	11_187: {
 		cardInfo: {
-			imagePath: decipher/LOTR11187.jpg
-			//parentId: 11_187
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11187.jpg
 			collInfo: 11S187
 			rarity: S
-			setNum: "11"
-			cardNum: 187
-			style: Standard
 		}
 		title: Furor
 		unique: false
@@ -595,17 +507,9 @@
 
 	11_188: {
 		cardInfo: {
-			imagePath: decipher/LOTR11188.jpg
-			//parentId: 11_188
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11188.jpg
 			collInfo: 11S188
 			rarity: S
-			setNum: "11"
-			cardNum: 188
-			style: Standard
 		}
 		title: Hounding Uruk
 		unique: false
@@ -645,17 +549,9 @@
 
 	11_189: {
 		cardInfo: {
-			imagePath: decipher/LOTR11189.jpg
-			//parentId: 11_189
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11189.jpg
 			collInfo: 11U189
 			rarity: U
-			setNum: "11"
-			cardNum: 189
-			style: Standard
 		}
 		title: Intimidating Uruk
 		unique: false
@@ -706,17 +602,9 @@
 
 	11_190: {
 		cardInfo: {
-			imagePath: decipher/LOTR11190.jpg
-			//parentId: 11_190
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11190.jpg
 			collInfo: 11S190
 			rarity: S
-			setNum: "11"
-			cardNum: 190
-			style: Standard
 		}
 		title: Invincible Uruk
 		unique: false
@@ -767,17 +655,9 @@
 
 	11_191: {
 		cardInfo: {
-			imagePath: decipher/LOTR11191.jpg
-			//parentId: 11_191
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11191.jpg
 			collInfo: 11U191
 			rarity: U
-			setNum: "11"
-			cardNum: 191
-			style: Standard
 		}
 		title: Isengard Siege Bow
 		unique: false
@@ -815,17 +695,9 @@
 
 	11_192: {
 		cardInfo: {
-			imagePath: decipher/LOTR11192.jpg
-			//parentId: 11_192
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11192.jpg
 			collInfo: 11C192
 			rarity: C
-			setNum: "11"
-			cardNum: 192
-			style: Standard
 		}
 		title: Isengard Sword
 		unique: false
@@ -858,17 +730,9 @@
 
 	11_193: {
 		cardInfo: {
-			imagePath: decipher/LOTR11193.jpg
-			//parentId: 11_193
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11193.jpg
 			collInfo: 11S193
 			rarity: S
-			setNum: "11"
-			cardNum: 193
-			style: Standard
 		}
 		title: Lookout Uruk
 		unique: false
@@ -904,17 +768,9 @@
 
 	11_194: {
 		cardInfo: {
-			imagePath: decipher/LOTR11194.jpg
-			//parentId: 11_194
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11194.jpg
 			collInfo: 11R194
 			rarity: R
-			setNum: "11"
-			cardNum: 194
-			style: Standard
 		}
 		title: Lurtz
 		subtitle: Minion of the White Wizard
@@ -959,17 +815,9 @@
 
 	11_195: {
 		cardInfo: {
-			imagePath: decipher/LOTR11195.jpg
-			//parentId: 11_195
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11195.jpg
 			collInfo: 11C195
 			rarity: C
-			setNum: "11"
-			cardNum: 195
-			style: Standard
 		}
 		title: Murderous Uruk
 		unique: false
@@ -999,17 +847,9 @@
 
 	11_196: {
 		cardInfo: {
-			imagePath: decipher/LOTR11196.jpg
-			//parentId: 11_196
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11196.jpg
 			collInfo: 11C196
 			rarity: C
-			setNum: "11"
-			cardNum: 196
-			style: Standard
 		}
 		title: Our Foes Are Weak
 		unique: false
@@ -1042,17 +882,9 @@
 
 	11_197: {
 		cardInfo: {
-			imagePath: decipher/LOTR11197.jpg
-			//parentId: 11_197
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11197.jpg
 			collInfo: 11U197
 			rarity: U
-			setNum: "11"
-			cardNum: 197
-			style: Standard
 		}
 		title: Overpowering Uruk
 		unique: false
@@ -1091,17 +923,9 @@
 
 	11_198: {
 		cardInfo: {
-			imagePath: decipher/LOTR11198.jpg
-			//parentId: 11_198
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11198.jpg
 			collInfo: 11C198
 			rarity: C
-			setNum: "11"
-			cardNum: 198
-			style: Standard
 		}
 		title: Patrol of Uruk-hai
 		unique: false
@@ -1136,17 +960,9 @@
 
 	11_199: {
 		cardInfo: {
-			imagePath: decipher/LOTR11199.jpg
-			//parentId: 11_199
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11199.jpg
 			collInfo: 11C199
 			rarity: C
-			setNum: "11"
-			cardNum: 199
-			style: Standard
 		}
 		title: Relentless Uruk
 		unique: false
@@ -1191,17 +1007,9 @@
 
 	11_200: {
 		cardInfo: {
-			imagePath: decipher/LOTR11200.jpg
-			//parentId: 11_200
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11200.jpg
 			collInfo: 11C200
 			rarity: C
-			setNum: "11"
-			cardNum: 200
-			style: Standard
 		}
 		title: Ruthless Uruk
 		unique: false
@@ -1246,17 +1054,9 @@
 
 	11_201: {
 		cardInfo: {
-			imagePath: decipher/LOTR11201.jpg
-			//parentId: 11_201
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11201.jpg
 			collInfo: 11C201
 			rarity: C
-			setNum: "11"
-			cardNum: 201
-			style: Standard
 		}
 		title: Sentinel Uruk
 		unique: false
@@ -1319,17 +1119,9 @@
 
 	11_202: {
 		cardInfo: {
-			imagePath: decipher/LOTR11202.jpg
-			//parentId: 11_202
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11202.jpg
 			collInfo: 11C202
 			rarity: C
-			setNum: "11"
-			cardNum: 202
-			style: Standard
 		}
 		title: Squad of Uruk-hai
 		unique: false
@@ -1366,17 +1158,9 @@
 
 	11_203: {
 		cardInfo: {
-			imagePath: decipher/LOTR11203.jpg
-			//parentId: 11_203
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11203.jpg
 			collInfo: 11C203
 			rarity: C
-			setNum: "11"
-			cardNum: 203
-			style: Standard
 		}
 		title: Swarming Uruk
 		unique: false
@@ -1415,17 +1199,9 @@
 
 	11_204: {
 		cardInfo: {
-			imagePath: decipher/LOTR11204.jpg
-			//parentId: 11_204
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11204.jpg
 			collInfo: 11C204
 			rarity: C
-			setNum: "11"
-			cardNum: 204
-			style: Standard
 		}
 		title: Tyrannical Uruk
 		unique: false
@@ -1455,17 +1231,9 @@
 
 	11_205: {
 		cardInfo: {
-			imagePath: decipher/LOTR11205.jpg
-			//parentId: 11_205
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11205.jpg
 			collInfo: 11R205
 			rarity: R
-			setNum: "11"
-			cardNum: 205
-			style: Standard
 		}
 		title: Vigilant Uruk
 		unique: false
@@ -1508,17 +1276,9 @@
 
 	11_206: {
 		cardInfo: {
-			imagePath: decipher/LOTR11206.jpg
-			//parentId: 11_206
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11206.jpg
 			collInfo: 11C206
 			rarity: C
-			setNum: "11"
-			cardNum: 206
-			style: Standard
 		}
 		title: Watchman Uruk
 		unique: false

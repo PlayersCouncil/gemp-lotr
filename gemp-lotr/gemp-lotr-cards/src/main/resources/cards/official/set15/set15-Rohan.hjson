@@ -2,17 +2,9 @@
 
 	15_121: {
 		cardInfo: {
-			imagePath: decipher/LOTR15121.jpg
-			//parentId: 15_121
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15121.jpg
 			collInfo: 15C121
 			rarity: C
-			setNum: "15"
-			cardNum: 121
-			style: Standard
 		}
 		title: Brilliant Light
 		unique: false
@@ -68,17 +60,9 @@
 
 	15_122: {
 		cardInfo: {
-			imagePath: decipher/LOTR15122.jpg
-			//parentId: 15_122
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15122.jpg
 			collInfo: 15R122
 			rarity: R
-			setNum: "15"
-			cardNum: 122
-			style: Standard
 		}
 		title: Burial Mounds
 		unique: false
@@ -121,17 +105,9 @@
 
 	15_123: {
 		cardInfo: {
-			imagePath: decipher/LOTR15123.jpg
-			//parentId: 15_123
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15123.jpg
 			collInfo: 15R123
 			rarity: R
-			setNum: "15"
-			cardNum: 123
-			style: Standard
 		}
 		title: Éomer
 		subtitle: Horsemaster
@@ -185,17 +161,9 @@
 
 	15_124: {
 		cardInfo: {
-			imagePath: decipher/LOTR15124.jpg
-			//parentId: 15_124
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15124.jpg
 			collInfo: 15R124
 			rarity: R
-			setNum: "15"
-			cardNum: 124
-			style: Standard
 		}
 		title: Éomer's Spear
 		subtitle: Trusty Weapon
@@ -262,17 +230,9 @@
 
 	15_125: {
 		cardInfo: {
-			imagePath: decipher/LOTR15125.jpg
-			//parentId: 15_125
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15125.jpg
 			collInfo: 15C125
 			rarity: C
-			setNum: "15"
-			cardNum: 125
-			style: Standard
 		}
 		title: Éowyn
 		subtitle: Willing Fighter
@@ -316,17 +276,9 @@
 
 	15_126: {
 		cardInfo: {
-			imagePath: decipher/LOTR15126.jpg
-			//parentId: 15_126
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15126.jpg
 			collInfo: 15S126
 			rarity: S
-			setNum: "15"
-			cardNum: 126
-			style: Standard
 		}
 		title: Gamling
 		subtitle: The Old
@@ -378,17 +330,9 @@
 
 	15_127: {
 		cardInfo: {
-			imagePath: decipher/LOTR15127.jpg
-			//parentId: 15_127
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15127.jpg
 			collInfo: 15C127
 			rarity: C
-			setNum: "15"
-			cardNum: 127
-			style: Standard
 		}
 		title: Grim Trophy
 		unique: false
@@ -430,17 +374,9 @@
 
 	15_128: {
 		cardInfo: {
-			imagePath: decipher/LOTR15128.jpg
-			//parentId: 15_128
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15128.jpg
 			collInfo: 15U128
 			rarity: U
-			setNum: "15"
-			cardNum: 128
-			style: Standard
 		}
 		title: Haleth
 		subtitle: Son of Háma
@@ -508,17 +444,9 @@
 
 	15_129: {
 		cardInfo: {
-			imagePath: decipher/LOTR15129.jpg
-			//parentId: 15_129
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15129.jpg
 			collInfo: 15U129
 			rarity: U
-			setNum: "15"
-			cardNum: 129
-			style: Standard
 		}
 		title: Horse of Great Stature
 		unique: false
@@ -567,17 +495,9 @@
 
 	15_130: {
 		cardInfo: {
-			imagePath: decipher/LOTR15130.jpg
-			//parentId: 15_130
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15130.jpg
 			collInfo: 15C130
 			rarity: C
-			setNum: "15"
-			cardNum: 130
-			style: Standard
 		}
 		title: Horseman of the North
 		unique: false
@@ -624,17 +544,9 @@
 
 	15_131: {
 		cardInfo: {
-			imagePath: decipher/LOTR15131.jpg
-			//parentId: 15_131
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15131.jpg
 			collInfo: 15C131
 			rarity: C
-			setNum: "15"
-			cardNum: 131
-			style: Standard
 		}
 		title: Our Inspiration
 		unique: false
@@ -676,17 +588,9 @@
 
 	15_132: {
 		cardInfo: {
-			imagePath: decipher/LOTR15132.jpg
-			//parentId: 15_132
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15132.jpg
 			collInfo: 15U132
 			rarity: U
-			setNum: "15"
-			cardNum: 132
-			style: Standard
 		}
 		title: Last Days of My House
 		unique: false
@@ -733,17 +637,9 @@
 
 	15_133: {
 		cardInfo: {
-			imagePath: decipher/LOTR15133.jpg
-			//parentId: 15_133
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15133.jpg
 			collInfo: 15C133
 			rarity: C
-			setNum: "15"
-			cardNum: 133
-			style: Standard
 		}
 		title: Rider's Mount
 		unique: false
@@ -779,17 +675,9 @@
 
 	15_134: {
 		cardInfo: {
-			imagePath: decipher/LOTR15134.jpg
-			//parentId: 15_134
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15134.jpg
 			collInfo: 15U134
 			rarity: U
-			setNum: "15"
-			cardNum: 134
-			style: Standard
 		}
 		title: Rohan Stable Master
 		unique: false
@@ -834,17 +722,9 @@
 
 	15_135: {
 		cardInfo: {
-			imagePath: decipher/LOTR15135.jpg
-			//parentId: 15_135
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15135.jpg
 			collInfo: 15R135
 			rarity: R
-			setNum: "15"
-			cardNum: 135
-			style: Standard
 		}
 		title: Rohan Worker
 		unique: false
@@ -897,17 +777,9 @@
 
 	15_136: {
 		cardInfo: {
-			imagePath: decipher/LOTR15136.jpg
-			//parentId: 15_136
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15136.jpg
 			collInfo: 15C136
 			rarity: C
-			setNum: "15"
-			cardNum: 136
-			style: Standard
 		}
 		title: Rohirrim Axe
 		unique: false
@@ -942,17 +814,9 @@
 
 	15_137: {
 		cardInfo: {
-			imagePath: decipher/LOTR15137.jpg
-			//parentId: 15_137
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15137.jpg
 			collInfo: 15U137
 			rarity: U
-			setNum: "15"
-			cardNum: 137
-			style: Standard
 		}
 		title: Rohirrim Doorwarden
 		unique: true
@@ -1000,17 +864,9 @@
 
 	15_138: {
 		cardInfo: {
-			imagePath: decipher/LOTR15138.jpg
-			//parentId: 15_138
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15138.jpg
 			collInfo: 15S138
 			rarity: S
-			setNum: "15"
-			cardNum: 138
-			style: Standard
 		}
 		title: Rohirrim Soldier
 		unique: false
@@ -1057,17 +913,9 @@
 
 	15_139: {
 		cardInfo: {
-			imagePath: decipher/LOTR15139.jpg
-			//parentId: 15_139
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15139.jpg
 			collInfo: 15U139
 			rarity: U
-			setNum: "15"
-			cardNum: 139
-			style: Standard
 		}
 		title: Rohirrim Warrior
 		unique: true
@@ -1128,17 +976,9 @@
 
 	15_140: {
 		cardInfo: {
-			imagePath: decipher/LOTR15140.jpg
-			//parentId: 15_140
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15140.jpg
 			collInfo: 15U140
 			rarity: U
-			setNum: "15"
-			cardNum: 140
-			style: Standard
 		}
 		title: Spear of the Mark
 		unique: false
@@ -1174,17 +1014,9 @@
 
 	15_141: {
 		cardInfo: {
-			imagePath: decipher/LOTR15141.jpg
-			//parentId: 15_141
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15141.jpg
 			collInfo: 15R141
 			rarity: R
-			setNum: "15"
-			cardNum: 141
-			style: Standard
 		}
 		title: Sturdy Shield
 		unique: false
@@ -1252,17 +1084,9 @@
 
 	15_142: {
 		cardInfo: {
-			imagePath: decipher/LOTR15142.jpg
-			//parentId: 15_142
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15142.jpg
 			collInfo: 15U142
 			rarity: U
-			setNum: "15"
-			cardNum: 142
-			style: Standard
 		}
 		title: Swift Stroke
 		unique: false

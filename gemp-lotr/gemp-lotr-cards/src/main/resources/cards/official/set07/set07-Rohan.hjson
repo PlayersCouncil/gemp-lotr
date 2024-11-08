@@ -2,17 +2,9 @@
 
 	7_222: {
 		cardInfo: {
-			imagePath: decipher/LOTR07222.jpg
-			//parentId: 7_222
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07222.jpg
 			collInfo: 7C222
 			rarity: C
-			setNum: "7"
-			cardNum: 222
-			style: Standard
 		}
 		title: Déor
 		unique: true
@@ -57,17 +49,9 @@
 
 	7_223: {
 		cardInfo: {
-			imagePath: decipher/LOTR07223.jpg
-			//parentId: 7_223
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07223.jpg
 			collInfo: 7R223
 			rarity: R
-			setNum: "7"
-			cardNum: 223
-			style: Standard
 		}
 		title: Death They Cried
 		unique: false
@@ -135,17 +119,9 @@
 
 	7_224: {
 		cardInfo: {
-			imagePath: decipher/LOTR07224.jpg
-			//parentId: 7_224
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07224.jpg
 			collInfo: 7U224
 			rarity: U
-			setNum: "7"
-			cardNum: 224
-			style: Standard
 		}
 		title: Elfhelm
 		subtitle: Marshal of Rohan
@@ -190,17 +166,9 @@
 
 	7_225: {
 		cardInfo: {
-			imagePath: decipher/LOTR07225.jpg
-			//parentId: 7_225
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07225.jpg
 			collInfo: 7C225
 			rarity: C
-			setNum: "7"
-			cardNum: 225
-			style: Standard
 		}
 		title: Elite Rider
 		unique: false
@@ -243,17 +211,9 @@
 
 	7_226: {
 		cardInfo: {
-			imagePath: decipher/LOTR07226.jpg
-			//parentId: 7_226
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07226.jpg
 			collInfo: 7C226
 			rarity: C
-			setNum: "7"
-			cardNum: 226
-			style: Standard
 		}
 		title: Enraged Horseman
 		unique: false
@@ -305,17 +265,9 @@
 
 	7_227: {
 		cardInfo: {
-			imagePath: decipher/LOTR07227.jpg
-			//parentId: 7_227
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07227.jpg
 			collInfo: 7R227
 			rarity: R
-			setNum: "7"
-			cardNum: 227
-			style: Standard
 		}
 		title: Éomer
 		subtitle: Skilled Tactician
@@ -365,17 +317,9 @@
 
 	7_228: {
 		cardInfo: {
-			imagePath: decipher/LOTR07228.jpg
-			//parentId: 7_228
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07228.jpg
 			collInfo: 7R228
 			rarity: R
-			setNum: "7"
-			cardNum: 228
-			style: Standard
 		}
 		title: Éowyn
 		subtitle: Dernhelm
@@ -421,17 +365,9 @@
 
 	7_229: {
 		cardInfo: {
-			imagePath: decipher/LOTR07229.jpg
-			//parentId: 7_229
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07229.jpg
 			collInfo: 7C229
 			rarity: C
-			setNum: "7"
-			cardNum: 229
-			style: Standard
 		}
 		title: Éowyn
 		subtitle: Restless Maiden
@@ -473,17 +409,9 @@
 
 	7_230: {
 		cardInfo: {
-			imagePath: decipher/LOTR07230.jpg
-			//parentId: 7_230
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07230.jpg
 			collInfo: 7R230
 			rarity: R
-			setNum: "7"
-			cardNum: 230
-			style: Standard
 		}
 		title: Éowyn's Sword
 		subtitle: Dernhelm's Blade
@@ -526,17 +454,9 @@
 
 	7_231: {
 		cardInfo: {
-			imagePath: decipher/LOTR07231.jpg
-			//parentId: 7_231
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07231.jpg
 			collInfo: 7U231
 			rarity: U
-			setNum: "7"
-			cardNum: 231
-			style: Standard
 		}
 		title: Fey He Seemed
 		unique: false
@@ -592,17 +512,9 @@
 
 	7_232: {
 		cardInfo: {
-			imagePath: decipher/LOTR07232.jpg
-			//parentId: 7_232
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07232.jpg
 			collInfo: 7R232
 			rarity: R
-			setNum: "7"
-			cardNum: 232
-			style: Standard
 		}
 		title: Firefoot
 		subtitle: Éomer's Steed
@@ -668,17 +580,9 @@
 
 	7_233: {
 		cardInfo: {
-			imagePath: decipher/LOTR07233.jpg
-			//parentId: 7_233
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07233.jpg
 			collInfo: 7R233
 			rarity: R
-			setNum: "7"
-			cardNum: 233
-			style: Standard
 		}
 		title: Grimbold
 		subtitle: Marshal of Rohan
@@ -723,17 +627,9 @@
 
 	7_234: {
 		cardInfo: {
-			imagePath: decipher/LOTR07234.jpg
-			//parentId: 7_234
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07234.jpg
 			collInfo: 7U234
 			rarity: U
-			setNum: "7"
-			cardNum: 234
-			style: Standard
 		}
 		title: Guarded Fastness
 		unique: false
@@ -773,17 +669,9 @@
 
 	7_235: {
 		cardInfo: {
-			imagePath: decipher/LOTR07235.jpg
-			//parentId: 7_235
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07235.jpg
 			collInfo: 7C235
 			rarity: C
-			setNum: "7"
-			cardNum: 235
-			style: Standard
 		}
 		title: Guthláf
 		subtitle: Herald
@@ -824,17 +712,9 @@
 
 	7_236: {
 		cardInfo: {
-			imagePath: decipher/LOTR07236.jpg
-			//parentId: 7_236
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07236.jpg
 			collInfo: 7R236
 			rarity: R
-			setNum: "7"
-			cardNum: 236
-			style: Standard
 		}
 		title: Herugrim
 		subtitle: Sword of the Mark
@@ -890,17 +770,9 @@
 
 	7_237: {
 		cardInfo: {
-			imagePath: decipher/LOTR07237.jpg
-			//parentId: 7_237
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07237.jpg
 			collInfo: 7C237
 			rarity: C
-			setNum: "7"
-			cardNum: 237
-			style: Standard
 		}
 		title: His Golden Shield
 		unique: false
@@ -957,17 +829,9 @@
 
 	7_238: {
 		cardInfo: {
-			imagePath: decipher/LOTR07238.jpg
-			//parentId: 7_238
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07238.jpg
 			collInfo: 7U238
 			rarity: U
-			setNum: "7"
-			cardNum: 238
-			style: Standard
 		}
 		title: Knights of His House
 		unique: false
@@ -1024,17 +888,9 @@
 
 	7_239: {
 		cardInfo: {
-			imagePath: decipher/LOTR07239.jpg
-			//parentId: 7_239
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07239.jpg
 			collInfo: 7R239
 			rarity: R
-			setNum: "7"
-			cardNum: 239
-			style: Standard
 		}
 		title: Léowyn
 		unique: true
@@ -1079,17 +935,9 @@
 
 	7_240: {
 		cardInfo: {
-			imagePath: decipher/LOTR07240.jpg
-			//parentId: 7_240
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07240.jpg
 			collInfo: 7C240
 			rarity: C
-			setNum: "7"
-			cardNum: 240
-			style: Standard
 		}
 		title: Long Spear
 		unique: false
@@ -1122,17 +970,9 @@
 
 	7_241: {
 		cardInfo: {
-			imagePath: decipher/LOTR07241.jpg
-			//parentId: 7_241
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07241.jpg
 			collInfo: 7R241
 			rarity: R
-			setNum: "7"
-			cardNum: 241
-			style: Standard
 		}
 		title: Merry's Armor
 		unique: true
@@ -1172,17 +1012,9 @@
 
 	7_242: {
 		cardInfo: {
-			imagePath: decipher/LOTR07242.jpg
-			//parentId: 7_242
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07242.jpg
 			collInfo: 7R242
 			rarity: R
-			setNum: "7"
-			cardNum: 242
-			style: Standard
 		}
 		title: Merry's Sword
 		unique: true
@@ -1235,17 +1067,9 @@
 
 	7_243: {
 		cardInfo: {
-			imagePath: decipher/LOTR07243.jpg
-			//parentId: 7_243
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07243.jpg
 			collInfo: 7C243
 			rarity: C
-			setNum: "7"
-			cardNum: 243
-			style: Standard
 		}
 		title: Morning Came
 		unique: false
@@ -1295,17 +1119,9 @@
 
 	7_244: {
 		cardInfo: {
-			imagePath: decipher/LOTR07244.jpg
-			//parentId: 7_244
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07244.jpg
 			collInfo: 7U244
 			rarity: U
-			setNum: "7"
-			cardNum: 244
-			style: Standard
 		}
 		title: Mustering for Battle
 		unique: false
@@ -1363,17 +1179,9 @@
 
 	7_245: {
 		cardInfo: {
-			imagePath: decipher/LOTR07245.jpg
-			//parentId: 7_245
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07245.jpg
 			collInfo: 7U245
 			rarity: U
-			setNum: "7"
-			cardNum: 245
-			style: Standard
 		}
 		title: Riding Armor
 		unique: false
@@ -1424,17 +1232,9 @@
 
 	7_246: {
 		cardInfo: {
-			imagePath: decipher/LOTR07246.jpg
-			//parentId: 7_246
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07246.jpg
 			collInfo: 7C246
 			rarity: C
-			setNum: "7"
-			cardNum: 246
-			style: Standard
 		}
 		title: Rohirrim Guard
 		unique: false
@@ -1473,17 +1273,9 @@
 
 	7_247: {
 		cardInfo: {
-			imagePath: decipher/LOTR07247.jpg
-			//parentId: 7_247
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07247.jpg
 			collInfo: 7C247
 			rarity: C
-			setNum: "7"
-			cardNum: 247
-			style: Standard
 		}
 		title: Rohirrim Herdsman
 		unique: false
@@ -1531,17 +1323,9 @@
 
 	7_248: {
 		cardInfo: {
-			imagePath: decipher/LOTR07248.jpg
-			//parentId: 7_248
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07248.jpg
 			collInfo: 7C248
 			rarity: C
-			setNum: "7"
-			cardNum: 248
-			style: Standard
 		}
 		title: Rohirrim Javelin
 		unique: false
@@ -1580,17 +1364,9 @@
 
 	7_249: {
 		cardInfo: {
-			imagePath: decipher/LOTR07249.jpg
-			//parentId: 7_249
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07249.jpg
 			collInfo: 7R249
 			rarity: R
-			setNum: "7"
-			cardNum: 249
-			style: Standard
 		}
 		title: Seeking New Foes
 		unique: false
@@ -1655,17 +1431,9 @@
 
 	7_250: {
 		cardInfo: {
-			imagePath: decipher/LOTR07250.jpg
-			//parentId: 7_250
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07250.jpg
 			collInfo: 7R250
 			rarity: R
-			setNum: "7"
-			cardNum: 250
-			style: Standard
 		}
 		title: Snowmane
 		unique: true
@@ -1729,17 +1497,9 @@
 
 	7_251: {
 		cardInfo: {
-			imagePath: decipher/LOTR07251.jpg
-			//parentId: 7_251
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07251.jpg
 			collInfo: 7R251
 			rarity: R
-			setNum: "7"
-			cardNum: 251
-			style: Standard
 		}
 		title: Stern People
 		unique: false
@@ -1802,17 +1562,9 @@
 
 	7_252: {
 		cardInfo: {
-			imagePath: decipher/LOTR07252.jpg
-			//parentId: 7_252
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07252.jpg
 			collInfo: 7U252
 			rarity: U
-			setNum: "7"
-			cardNum: 252
-			style: Standard
 		}
 		title: Strong Arms
 		unique: false
@@ -1863,17 +1615,9 @@
 
 	7_253: {
 		cardInfo: {
-			imagePath: decipher/LOTR07253.jpg
-			//parentId: 7_253
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07253.jpg
 			collInfo: 7C253
 			rarity: C
-			setNum: "7"
-			cardNum: 253
-			style: Standard
 		}
 		title: Swift Steed
 		unique: false
@@ -1926,17 +1670,9 @@
 
 	7_254: {
 		cardInfo: {
-			imagePath: decipher/LOTR07254.jpg
-			//parentId: 7_254
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07254.jpg
 			collInfo: 7U254
 			rarity: U
-			setNum: "7"
-			cardNum: 254
-			style: Standard
 		}
 		title: Théoden
 		subtitle: Leader of Spears
@@ -1989,17 +1725,9 @@
 
 	7_255: {
 		cardInfo: {
-			imagePath: decipher/LOTR07255.jpg
-			//parentId: 7_255
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07255.jpg
 			collInfo: 7R255
 			rarity: R
-			setNum: "7"
-			cardNum: 255
-			style: Standard
 		}
 		title: Théoden
 		subtitle: Rekindled King
@@ -2059,17 +1787,9 @@
 
 	7_256: {
 		cardInfo: {
-			imagePath: decipher/LOTR07256.jpg
-			//parentId: 7_256
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07256.jpg
 			collInfo: 7C256
 			rarity: C
-			setNum: "7"
-			cardNum: 256
-			style: Standard
 		}
 		title: They Sang as They Slew
 		unique: false
@@ -2110,17 +1830,9 @@
 
 	7_257: {
 		cardInfo: {
-			imagePath: decipher/LOTR07257.jpg
-			//parentId: 7_257
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07257.jpg
 			collInfo: 7C257
 			rarity: C
-			setNum: "7"
-			cardNum: 257
-			style: Standard
 		}
 		title: Veteran Horseman
 		unique: false
@@ -2170,17 +1882,9 @@
 
 	7_258: {
 		cardInfo: {
-			imagePath: decipher/LOTR07258.jpg
-			//parentId: 7_258
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07258.jpg
 			collInfo: 7U258
 			rarity: U
-			setNum: "7"
-			cardNum: 258
-			style: Standard
 		}
 		title: White Hot Fury
 		unique: false
@@ -2237,17 +1941,9 @@
 
 	7_259: {
 		cardInfo: {
-			imagePath: decipher/LOTR07259.jpg
-			//parentId: 7_259
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07259.jpg
 			collInfo: 7C259
 			rarity: C
-			setNum: "7"
-			cardNum: 259
-			style: Standard
 		}
 		title: Wind in His Face
 		unique: false
@@ -2292,17 +1988,9 @@
 
 	7_260: {
 		cardInfo: {
-			imagePath: decipher/LOTR07260.jpg
-			//parentId: 7_260
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07260.jpg
 			collInfo: 7R260
 			rarity: R
-			setNum: "7"
-			cardNum: 260
-			style: Standard
 		}
 		title: Windfola
 		unique: true
@@ -2359,17 +2047,9 @@
 
 	7_261: {
 		cardInfo: {
-			imagePath: decipher/LOTR07261.jpg
-			//parentId: 7_261
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07261.jpg
 			collInfo: 7R261
 			rarity: R
-			setNum: "7"
-			cardNum: 261
-			style: Standard
 		}
 		title: With Strength to Fight
 		unique: false
@@ -2435,17 +2115,9 @@
 
 	7_365: {
 		cardInfo: {
-			imagePath: decipher/LOTR07365.jpg
-			//parentId: 7_365
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07365.jpg
 			collInfo: 7P365
 			rarity: P
-			setNum: "7"
-			cardNum: 365
-			style: Standard
 		}
 		title: Éomer
 		subtitle: Valiant Warchief

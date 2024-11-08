@@ -2,17 +2,11 @@
 
 	63_20: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN13E020.1_card.jpg
-			//parentId: 13_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 63_20.1
+			revision: 1
+			image: errata/LOTR-EN13E020.1_card.jpg
 			collInfo: 13S20
 			rarity: S
-			setNum: "13"
-			cardNum: 20
-			style: Standard
 		}
 		title: Lorien Protector
 		unique: false
@@ -69,17 +63,11 @@
 
 	63_23: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN13E023.1_card.jpg
-			//parentId: 13_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 63_23.1
+			revision: 1
+			image: errata/LOTR-EN13E023.1_card.jpg
 			collInfo: 13C23
 			rarity: C
-			setNum: "13"
-			cardNum: 23
-			style: Standard
 		}
 		title: Shrouded Elf
 		unique: false

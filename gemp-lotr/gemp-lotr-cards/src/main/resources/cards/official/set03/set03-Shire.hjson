@@ -2,17 +2,9 @@
 
 	3_106: {
 		cardInfo: {
-			imagePath: decipher/LOTR03106.jpg
-			//parentId: 3_106
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03106.jpg
 			collInfo: 3U106
 			rarity: U
-			setNum: "3"
-			cardNum: 106
-			style: Standard
 		}
 		title: Bill the Pony
 		unique: true
@@ -58,17 +50,9 @@
 
 	3_107: {
 		cardInfo: {
-			imagePath: decipher/LOTR03107.jpg
-			//parentId: 3_107
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03107.jpg
 			collInfo: 3U107
 			rarity: U
-			setNum: "3"
-			cardNum: 107
-			style: Standard
 		}
 		title: Frodo's Pipe
 		unique: true
@@ -114,17 +98,9 @@
 
 	3_108: {
 		cardInfo: {
-			imagePath: decipher/LOTR03108.jpg
-			//parentId: 3_108
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03108.jpg
 			collInfo: 3C108
 			rarity: C
-			setNum: "3"
-			cardNum: 108
-			style: Standard
 		}
 		title: Frying Pan
 		unique: false
@@ -160,17 +136,9 @@
 
 	3_109: {
 		cardInfo: {
-			imagePath: decipher/LOTR03109.jpg
-			//parentId: 3_109
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03109.jpg
 			collInfo: 3C109
 			rarity: C
-			setNum: "3"
-			cardNum: 109
-			style: Standard
 		}
 		title: Meant to Be Alone
 		unique: false
@@ -214,17 +182,9 @@
 
 	3_110: {
 		cardInfo: {
-			imagePath: decipher/LOTR03110.jpg
-			//parentId: 3_110
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03110.jpg
 			collInfo: 3R110
 			rarity: R
-			setNum: "3"
-			cardNum: 110
-			style: Standard
 		}
 		title: Melilot Brandybuck
 		subtitle: Merry Dancer
@@ -264,17 +224,9 @@
 
 	3_111: {
 		cardInfo: {
-			imagePath: decipher/LOTR03111.jpg
-			//parentId: 3_111
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03111.jpg
 			collInfo: 3C111
 			rarity: C
-			setNum: "3"
-			cardNum: 111
-			style: Standard
 		}
 		title: Old Noakes
 		subtitle: Purveyor of Wisdoms
@@ -314,17 +266,9 @@
 
 	3_112: {
 		cardInfo: {
-			imagePath: decipher/LOTR03112.jpg
-			//parentId: 3_112
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03112.jpg
 			collInfo: 3C112
 			rarity: C
-			setNum: "3"
-			cardNum: 112
-			style: Standard
 		}
 		title: Seek and Hide
 		unique: false
@@ -360,17 +304,9 @@
 
 	3_113: {
 		cardInfo: {
-			imagePath: decipher/LOTR03113.jpg
-			//parentId: 3_113
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03113.jpg
 			collInfo: 3R113
 			rarity: R
-			setNum: "3"
-			cardNum: 113
-			style: Standard
 		}
 		title: The Shire Countryside
 		unique: false
@@ -415,17 +351,9 @@
 
 	3_114: {
 		cardInfo: {
-			imagePath: decipher/LOTR03114.jpg
-			//parentId: 3_114
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03114.jpg
 			collInfo: 3C114
 			rarity: C
-			setNum: "3"
-			cardNum: 114
-			style: Standard
 		}
 		title: Three Monstrous Trolls
 		unique: false

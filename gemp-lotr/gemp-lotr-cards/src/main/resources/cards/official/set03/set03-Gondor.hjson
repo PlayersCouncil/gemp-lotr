@@ -2,17 +2,9 @@
 
 	3_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR03037.jpg
-			//parentId: 3_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03037.jpg
 			collInfo: 3C37
 			rarity: C
-			setNum: "3"
-			cardNum: 37
-			style: Standard
 		}
 		title: Answering the Cries
 		unique: false
@@ -48,17 +40,9 @@
 
 	3_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR03038.jpg
-			//parentId: 3_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03038.jpg
 			collInfo: 3R38
 			rarity: R
-			setNum: "3"
-			cardNum: 38
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Heir to the White City
@@ -100,17 +84,9 @@
 
 	3_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR03039.jpg
-			//parentId: 3_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03039.jpg
 			collInfo: 3R39
 			rarity: R
-			setNum: "3"
-			cardNum: 39
-			style: Standard
 		}
 		title: Banner of the White Tree
 		unique: false
@@ -156,17 +132,9 @@
 
 	3_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR03040.jpg
-			//parentId: 3_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03040.jpg
 			collInfo: 3R40
 			rarity: R
-			setNum: "3"
-			cardNum: 40
-			style: Standard
 		}
 		title: Citadel of Minas Tirith
 		unique: false
@@ -206,17 +174,9 @@
 
 	3_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR03041.jpg
-			//parentId: 3_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03041.jpg
 			collInfo: 3R41
 			rarity: R
-			setNum: "3"
-			cardNum: 41
-			style: Standard
 		}
 		title: Gondor Bowmen
 		unique: false
@@ -260,17 +220,9 @@
 
 	3_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR03042.jpg
-			//parentId: 3_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03042.jpg
 			collInfo: 3R42
 			rarity: R
-			setNum: "3"
-			cardNum: 42
-			style: Standard
 		}
 		title: Horn of Boromir
 		unique: true
@@ -320,17 +272,9 @@
 
 	3_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR03043.jpg
-			//parentId: 3_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03043.jpg
 			collInfo: 3C43
 			rarity: C
-			setNum: "3"
-			cardNum: 43
-			style: Standard
 		}
 		title: Might of Númenor
 		unique: false
@@ -376,17 +320,9 @@
 
 	3_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR03044.jpg
-			//parentId: 3_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03044.jpg
 			collInfo: 3R44
 			rarity: R
-			setNum: "3"
-			cardNum: 44
-			style: Standard
 		}
 		title: The Shards of Narsil
 		unique: true
@@ -434,17 +370,9 @@
 
 	3_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR03045.jpg
-			//parentId: 3_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03045.jpg
 			collInfo: 3U45
 			rarity: U
-			setNum: "3"
-			cardNum: 45
-			style: Standard
 		}
 		title: Some Who Resisted
 		unique: false
@@ -482,17 +410,9 @@
 
 	3_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR03046.jpg
-			//parentId: 3_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03046.jpg
 			collInfo: 3U46
 			rarity: U
-			setNum: "3"
-			cardNum: 46
-			style: Standard
 		}
 		title: Still Sharp
 		unique: false
@@ -540,17 +460,9 @@
 
 	3_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR03047.jpg
-			//parentId: 3_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03047.jpg
 			collInfo: 3U47
 			rarity: U
-			setNum: "3"
-			cardNum: 47
-			style: Standard
 		}
 		title: Voice of Rauros
 		unique: false
@@ -586,17 +498,9 @@
 
 	3_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR03048.jpg
-			//parentId: 3_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03048.jpg
 			collInfo: 3C48
 			rarity: C
-			setNum: "3"
-			cardNum: 48
-			style: Standard
 		}
 		title: We Must Go Warily
 		unique: false
@@ -641,17 +545,9 @@
 
 	3_122: {
 		cardInfo: {
-			imagePath: decipher/LOTR03122.jpg
-			//parentId: 3_122
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03122.jpg
 			collInfo: 3P122
 			rarity: P
-			setNum: "3"
-			cardNum: 122
-			style: Standard
 		}
 		title: Boromir
 		subtitle: Defender of Minas Tirith

@@ -2,17 +2,9 @@
 
 	17_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR17067.jpg
-			//parentId: 17_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17067.jpg
 			collInfo: 17R67
 			rarity: R
-			setNum: "17"
-			cardNum: 67
-			style: Standard
 		}
 		title: A Defiled Charge
 		unique: false
@@ -72,17 +64,9 @@
 
 	17_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR17068.jpg
-			//parentId: 17_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17068.jpg
 			collInfo: 17C68
 			rarity: C
-			setNum: "17"
-			cardNum: 68
-			style: Standard
 		}
 		title: Chaotic Clash
 		unique: false
@@ -133,17 +117,9 @@
 
 	17_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR17069.jpg
-			//parentId: 17_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17069.jpg
 			collInfo: 17C69
 			rarity: C
-			setNum: "17"
-			cardNum: 69
-			style: Standard
 		}
 		title: Cry and Panic
 		unique: false
@@ -187,17 +163,9 @@
 
 	17_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR17070.jpg
-			//parentId: 17_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17070.jpg
 			collInfo: 17C70
 			rarity: C
-			setNum: "17"
-			cardNum: 70
-			style: Standard
 		}
 		title: Feral Ride
 		unique: false
@@ -239,17 +207,9 @@
 
 	17_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR17071.jpg
-			//parentId: 17_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17071.jpg
 			collInfo: 17R71
 			rarity: R
-			setNum: "17"
-			cardNum: 71
-			style: Standard
 		}
 		title: Grishnákh
 		subtitle: Treacherous Captain
@@ -314,17 +274,9 @@
 
 	17_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR17072.jpg
-			//parentId: 17_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17072.jpg
 			collInfo: 17C72
 			rarity: C
-			setNum: "17"
-			cardNum: 72
-			style: Standard
 		}
 		title: Orkish Assassin
 		unique: false
@@ -363,17 +315,9 @@
 
 	17_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR17073.jpg
-			//parentId: 17_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17073.jpg
 			collInfo: 17R73
 			rarity: R
-			setNum: "17"
-			cardNum: 73
-			style: Standard
 		}
 		title: Orkish Berserker
 		unique: false
@@ -411,17 +355,9 @@
 
 	17_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR17074.jpg
-			//parentId: 17_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17074.jpg
 			collInfo: 17R74
 			rarity: R
-			setNum: "17"
-			cardNum: 74
-			style: Standard
 		}
 		title: Orkish Cavalry
 		unique: false
@@ -477,17 +413,9 @@
 
 	17_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR17075.jpg
-			//parentId: 17_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17075.jpg
 			collInfo: 17C75
 			rarity: C
-			setNum: "17"
-			cardNum: 75
-			style: Standard
 		}
 		title: Orkish Dreg
 		unique: false
@@ -537,17 +465,9 @@
 
 	17_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR17076.jpg
-			//parentId: 17_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17076.jpg
 			collInfo: 17R76
 			rarity: R
-			setNum: "17"
-			cardNum: 76
-			style: Standard
 		}
 		title: Orkish Fiend
 		unique: false
@@ -615,17 +535,9 @@
 
 	17_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR17077.jpg
-			//parentId: 17_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17077.jpg
 			collInfo: 17C77
 			rarity: C
-			setNum: "17"
-			cardNum: 77
-			style: Standard
 		}
 		title: Orkish Flanker
 		unique: false
@@ -680,17 +592,9 @@
 
 	17_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR17078.jpg
-			//parentId: 17_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17078.jpg
 			collInfo: 17C78
 			rarity: C
-			setNum: "17"
-			cardNum: 78
-			style: Standard
 		}
 		title: Orkish Footman
 		unique: false
@@ -727,17 +631,9 @@
 
 	17_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR17079.jpg
-			//parentId: 17_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17079.jpg
 			collInfo: 17R79
 			rarity: R
-			setNum: "17"
-			cardNum: 79
-			style: Standard
 		}
 		title: Orkish Invader
 		unique: false
@@ -787,17 +683,9 @@
 
 	17_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR17080.jpg
-			//parentId: 17_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17080.jpg
 			collInfo: 17C80
 			rarity: C
-			setNum: "17"
-			cardNum: 80
-			style: Standard
 		}
 		title: Orkish Lackey
 		unique: false
@@ -841,17 +729,9 @@
 
 	17_81: {
 		cardInfo: {
-			imagePath: decipher/LOTR17081.jpg
-			//parentId: 17_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17081.jpg
 			collInfo: 17C81
 			rarity: C
-			setNum: "17"
-			cardNum: 81
-			style: Standard
 		}
 		title: Orkish Maurader
 		unique: false
@@ -890,17 +770,9 @@
 
 	17_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR17082.jpg
-			//parentId: 17_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17082.jpg
 			collInfo: 17R82
 			rarity: R
-			setNum: "17"
-			cardNum: 82
-			style: Standard
 		}
 		title: Orkish Rider
 		unique: false
@@ -948,17 +820,9 @@
 
 	17_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR17083.jpg
-			//parentId: 17_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17083.jpg
 			collInfo: 17C83
 			rarity: C
-			setNum: "17"
-			cardNum: 83
-			style: Standard
 		}
 		title: Orkish Runner
 		unique: false
@@ -1003,17 +867,9 @@
 
 	17_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR17084.jpg
-			//parentId: 17_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17084.jpg
 			collInfo: 17R84
 			rarity: R
-			setNum: "17"
-			cardNum: 84
-			style: Standard
 		}
 		title: Orkish Scout
 		unique: false
@@ -1055,17 +911,9 @@
 
 	17_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR17085.jpg
-			//parentId: 17_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17085.jpg
 			collInfo: 17C85
 			rarity: C
-			setNum: "17"
-			cardNum: 85
-			style: Standard
 		}
 		title: Orkish Traveler
 		unique: false
@@ -1113,17 +961,9 @@
 
 	17_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR17086.jpg
-			//parentId: 17_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17086.jpg
 			collInfo: 17R86
 			rarity: R
-			setNum: "17"
-			cardNum: 86
-			style: Standard
 		}
 		title: Orkish Veteran
 		unique: true
@@ -1175,17 +1015,9 @@
 
 	17_87: {
 		cardInfo: {
-			imagePath: decipher/LOTR17087.jpg
-			//parentId: 17_87
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17087.jpg
 			collInfo: 17R87
 			rarity: R
-			setNum: "17"
-			cardNum: 87
-			style: Standard
 		}
 		title: Orkish Warg-master
 		unique: true
@@ -1239,17 +1071,9 @@
 
 	17_88: {
 		cardInfo: {
-			imagePath: decipher/LOTR17088.jpg
-			//parentId: 17_88
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17088.jpg
 			collInfo: 17U88
 			rarity: U
-			setNum: "17"
-			cardNum: 88
-			style: Standard
 		}
 		title: Orkish Warrior
 		unique: false
@@ -1302,17 +1126,9 @@
 
 	17_89: {
 		cardInfo: {
-			imagePath: decipher/LOTR17089.jpg
-			//parentId: 17_89
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17089.jpg
 			collInfo: 17R89
 			rarity: R
-			setNum: "17"
-			cardNum: 89
-			style: Standard
 		}
 		title: Relentless Warg
 		unique: false
@@ -1387,17 +1203,9 @@
 
 	17_90: {
 		cardInfo: {
-			imagePath: decipher/LOTR17090.jpg
-			//parentId: 17_90
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17090.jpg
 			collInfo: 17U90
 			rarity: U
-			setNum: "17"
-			cardNum: 90
-			style: Standard
 		}
 		title: Rider's Gear
 		unique: false
@@ -1437,17 +1245,9 @@
 
 	17_91: {
 		cardInfo: {
-			imagePath: decipher/LOTR17091.jpg
-			//parentId: 17_91
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17091.jpg
 			collInfo: 17U91
 			rarity: U
-			setNum: "17"
-			cardNum: 91
-			style: Standard
 		}
 		title: Threatening Warg
 		unique: false
@@ -1501,17 +1301,9 @@
 
 	17_92: {
 		cardInfo: {
-			imagePath: decipher/LOTR17092.jpg
-			//parentId: 17_92
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17092.jpg
 			collInfo: 17C92
 			rarity: C
-			setNum: "17"
-			cardNum: 92
-			style: Standard
 		}
 		title: Vicious Warg
 		unique: false

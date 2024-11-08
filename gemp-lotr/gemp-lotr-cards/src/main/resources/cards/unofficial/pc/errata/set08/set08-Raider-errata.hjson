@@ -6,7 +6,7 @@
 	# 		javaClass: false
 	# 		parent: 8_51
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 8R51
 	# 		rarity: R
 	# 		setNum: "8"
@@ -62,17 +62,14 @@
 
 	58_51: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN08E051.2_card.jpg
-			javaClass: false
+			//id: 8_51.2
 			parent: 8_51
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN08E051.2_card.jpg
 			collInfo: 8R51
 			rarity: R
-			setNum: "8"
-			cardNum: 51
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Castamir of Umbar
 		unique: true
@@ -134,17 +131,14 @@
 	}
 	58_57: {
 		cardInfo: {
-			imagePath: errata/58_57.jpg
-			javaClass: false
+			//id: 8_57.1
 			parent: 8_57
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/58_57.jpg
 			collInfo: 8R57
 			rarity: R
-			setNum: "8"
-			cardNum: 57
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Corsair Marauder
 		unique: false
@@ -233,7 +227,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 1?
+	# 		revision: 1
 	# 		collInfo: 8U59
 	# 		rarity: U
 	# 		setNum: "8"
@@ -318,17 +312,14 @@
 	
 	58_59: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN08E059.2_card.jpg
-			javaClass: false
+			//id: 8_59.2
 			parent: 8_59
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN08E059.2_card.jpg
 			collInfo: 8U59
 			rarity: U
-			setNum: "8"
-			cardNum: 59
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Corsair War Galley
 		unique: true

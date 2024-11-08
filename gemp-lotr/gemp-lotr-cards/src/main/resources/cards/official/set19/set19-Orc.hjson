@@ -2,17 +2,9 @@
 
 	19_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR19022.jpg
-			//parentId: 19_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19022.jpg
 			collInfo: 19P22
 			rarity: P
-			setNum: "19"
-			cardNum: 22
-			style: Standard
 		}
 		title: Pit Troll
 		unique: false
@@ -67,17 +59,9 @@
 
 	19_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR19023.jpg
-			//parentId: 19_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19023.jpg
 			collInfo: 19P23
 			rarity: P
-			setNum: "19"
-			cardNum: 23
-			style: Standard
 		}
 		title: Troll of the Deep
 		subtitle: Cave Troll

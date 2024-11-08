@@ -2,17 +2,9 @@
 
 	5_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR05044.jpg
-			//parentId: 5_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05044.jpg
 			collInfo: 5U44
 			rarity: U
-			setNum: "5"
-			cardNum: 44
-			style: Standard
 		}
 		title: Battering Ram
 		unique: false
@@ -66,17 +58,9 @@
 
 	5_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR05045.jpg
-			//parentId: 5_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05045.jpg
 			collInfo: 5U45
 			rarity: U
-			setNum: "5"
-			cardNum: 45
-			style: Standard
 		}
 		title: Berserk Rager
 		unique: true
@@ -137,17 +121,9 @@
 
 	5_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR05046.jpg
-			//parentId: 5_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05046.jpg
 			collInfo: 5R46
 			rarity: R
-			setNum: "5"
-			cardNum: 46
-			style: Standard
 		}
 		title: Berserk Savage
 		unique: true
@@ -208,17 +184,9 @@
 
 	5_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR05047.jpg
-			//parentId: 5_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05047.jpg
 			collInfo: 5R47
 			rarity: R
-			setNum: "5"
-			cardNum: 47
-			style: Standard
 		}
 		title: Berserk Slayer
 		unique: true
@@ -279,17 +247,9 @@
 
 	5_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR05048.jpg
-			//parentId: 5_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05048.jpg
 			collInfo: 5U48
 			rarity: U
-			setNum: "5"
-			cardNum: 48
-			style: Standard
 		}
 		title: Black Shapes Crawling
 		unique: false
@@ -346,17 +306,9 @@
 
 	5_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR05049.jpg
-			//parentId: 5_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05049.jpg
 			collInfo: 5R49
 			rarity: R
-			setNum: "5"
-			cardNum: 49
-			style: Standard
 		}
 		title: Devilry of Orthanc
 		unique: true
@@ -414,17 +366,9 @@
 
 	5_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR05050.jpg
-			//parentId: 5_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05050.jpg
 			collInfo: 5R50
 			rarity: R
-			setNum: "5"
-			cardNum: 50
-			style: Standard
 		}
 		title: Foul Horde
 		unique: true
@@ -478,17 +422,9 @@
 
 	5_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR05051.jpg
-			//parentId: 5_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05051.jpg
 			collInfo: 5R51
 			rarity: R
-			setNum: "5"
-			cardNum: 51
-			style: Standard
 		}
 		title: Gríma
 		subtitle: Chief Counselor
@@ -540,17 +476,9 @@
 
 	5_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR05052.jpg
-			//parentId: 5_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05052.jpg
 			collInfo: 5C52
 			rarity: C
-			setNum: "5"
-			cardNum: 52
-			style: Standard
 		}
 		title: Isengard Flanker
 		unique: false
@@ -586,17 +514,9 @@
 
 	5_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR05053.jpg
-			//parentId: 5_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05053.jpg
 			collInfo: 5C53
 			rarity: C
-			setNum: "5"
-			cardNum: 53
-			style: Standard
 		}
 		title: Isengard Rider
 		unique: false
@@ -632,17 +552,9 @@
 
 	5_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR05054.jpg
-			//parentId: 5_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05054.jpg
 			collInfo: 5U54
 			rarity: U
-			setNum: "5"
-			cardNum: 54
-			style: Standard
 		}
 		title: Isengard Scimitar
 		unique: false
@@ -682,17 +594,9 @@
 
 	5_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR05055.jpg
-			//parentId: 5_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05055.jpg
 			collInfo: 5U55
 			rarity: U
-			setNum: "5"
-			cardNum: 55
-			style: Standard
 		}
 		title: Isengard Scout Troop
 		unique: false
@@ -743,17 +647,9 @@
 
 	5_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR05056.jpg
-			//parentId: 5_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05056.jpg
 			collInfo: 5R56
 			rarity: R
-			setNum: "5"
-			cardNum: 56
-			style: Standard
 		}
 		title: Saruman
 		subtitle: Master of Foul Folk
@@ -831,17 +727,9 @@
 
 	5_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR05057.jpg
-			//parentId: 5_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05057.jpg
 			collInfo: 5U57
 			rarity: U
-			setNum: "5"
-			cardNum: 57
-			style: Standard
 		}
 		title: Scaling Ladder
 		unique: false
@@ -899,17 +787,9 @@
 
 	5_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR05058.jpg
-			//parentId: 5_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05058.jpg
 			collInfo: 5R58
 			rarity: R
-			setNum: "5"
-			cardNum: 58
-			style: Standard
 		}
 		title: Sharku
 		subtitle: Warg-captain
@@ -959,17 +839,9 @@
 
 	5_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR05059.jpg
-			//parentId: 5_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05059.jpg
 			collInfo: 5R59
 			rarity: R
-			setNum: "5"
-			cardNum: 59
-			style: Standard
 		}
 		title: Sharku's Warg
 		unique: true
@@ -1023,17 +895,9 @@
 
 	5_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR05060.jpg
-			//parentId: 5_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05060.jpg
 			collInfo: 5U60
 			rarity: U
-			setNum: "5"
-			cardNum: 60
-			style: Standard
 		}
 		title: Siege Engine
 		unique: false
@@ -1089,17 +953,9 @@
 
 	5_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR05061.jpg
-			//parentId: 5_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05061.jpg
 			collInfo: 5C61
 			rarity: C
-			setNum: "5"
-			cardNum: 61
-			style: Standard
 		}
 		title: Uruk Engineer
 		unique: false
@@ -1140,17 +996,9 @@
 
 	5_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR05062.jpg
-			//parentId: 5_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05062.jpg
 			collInfo: 5C62
 			rarity: C
-			setNum: "5"
-			cardNum: 62
-			style: Standard
 		}
 		title: Uruk Sapper
 		unique: false
@@ -1191,17 +1039,9 @@
 
 	5_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR05063.jpg
-			//parentId: 5_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05063.jpg
 			collInfo: 5U63
 			rarity: U
-			setNum: "5"
-			cardNum: 63
-			style: Standard
 		}
 		title: Uruk-hai Berserker
 		unique: false
@@ -1240,17 +1080,9 @@
 
 	5_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR05064.jpg
-			//parentId: 5_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05064.jpg
 			collInfo: 5U64
 			rarity: U
-			setNum: "5"
-			cardNum: 64
-			style: Standard
 		}
 		title: War-warg
 		unique: false
@@ -1295,17 +1127,9 @@
 
 	5_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR05065.jpg
-			//parentId: 5_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05065.jpg
 			collInfo: 5C65
 			rarity: C
-			setNum: "5"
-			cardNum: 65
-			style: Standard
 		}
 		title: Warg
 		unique: false
@@ -1350,17 +1174,9 @@
 
 	5_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR05066.jpg
-			//parentId: 5_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05066.jpg
 			collInfo: 5C66
 			rarity: C
-			setNum: "5"
-			cardNum: 66
-			style: Standard
 		}
 		title: Warg-master
 		unique: false
@@ -1408,17 +1224,9 @@
 
 	5_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR05067.jpg
-			//parentId: 5_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05067.jpg
 			collInfo: 5C67
 			rarity: C
-			setNum: "5"
-			cardNum: 67
-			style: Standard
 		}
 		title: Warg-rider
 		unique: false
@@ -1454,17 +1262,9 @@
 
 	5_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR05068.jpg
-			//parentId: 5_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05068.jpg
 			collInfo: 5C68
 			rarity: C
-			setNum: "5"
-			cardNum: 68
-			style: Standard
 		}
 		title: Wolf-voices
 		unique: false
@@ -1509,17 +1309,9 @@
 
 	5_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR05069.jpg
-			//parentId: 5_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05069.jpg
 			collInfo: 5R69
 			rarity: R
-			setNum: "5"
-			cardNum: 69
-			style: Standard
 		}
 		title: Wolves of Isengard
 		unique: false

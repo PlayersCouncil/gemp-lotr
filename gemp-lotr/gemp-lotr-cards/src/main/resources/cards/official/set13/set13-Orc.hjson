@@ -2,17 +2,9 @@
 
 	13_103: {
 		cardInfo: {
-			imagePath: decipher/LOTR13103.jpg
-			//parentId: 13_103
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13103.jpg
 			collInfo: 13U103
 			rarity: U
-			setNum: "13"
-			cardNum: 103
-			style: Standard
 		}
 		title: Always Threatening
 		unique: false
@@ -80,17 +72,9 @@
 
 	13_104: {
 		cardInfo: {
-			imagePath: decipher/LOTR13104.jpg
-			//parentId: 13_104
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13104.jpg
 			collInfo: 13R104
 			rarity: R
-			setNum: "13"
-			cardNum: 104
-			style: Standard
 		}
 		title: Chamber Patrol
 		unique: true
@@ -159,17 +143,9 @@
 
 	13_105: {
 		cardInfo: {
-			imagePath: decipher/LOTR13105.jpg
-			//parentId: 13_105
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13105.jpg
 			collInfo: 13U105
 			rarity: U
-			setNum: "13"
-			cardNum: 105
-			style: Standard
 		}
 		title: Defiled
 		unique: false
@@ -211,17 +187,9 @@
 
 	13_106: {
 		cardInfo: {
-			imagePath: decipher/LOTR13106.jpg
-			//parentId: 13_106
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13106.jpg
 			collInfo: 13U106
 			rarity: U
-			setNum: "13"
-			cardNum: 106
-			style: Standard
 		}
 		title: Enemy Upon Enemy
 		unique: false
@@ -272,17 +240,9 @@
 
 	13_107: {
 		cardInfo: {
-			imagePath: decipher/LOTR13107.jpg
-			//parentId: 13_107
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13107.jpg
 			collInfo: 13C107
 			rarity: C
-			setNum: "13"
-			cardNum: 107
-			style: Standard
 		}
 		title: Expendable Servants
 		unique: false
@@ -328,17 +288,9 @@
 
 	13_108: {
 		cardInfo: {
-			imagePath: decipher/LOTR13108.jpg
-			//parentId: 13_108
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13108.jpg
 			collInfo: 13R108
 			rarity: R
-			setNum: "13"
-			cardNum: 108
-			style: Standard
 		}
 		title: Forced March
 		unique: false
@@ -397,17 +349,9 @@
 
 	13_109: {
 		cardInfo: {
-			imagePath: decipher/LOTR13109.jpg
-			//parentId: 13_109
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13109.jpg
 			collInfo: 13S109
 			rarity: S
-			setNum: "13"
-			cardNum: 109
-			style: Standard
 		}
 		title: Howling Orc
 		unique: false
@@ -450,17 +394,9 @@
 
 	13_110: {
 		cardInfo: {
-			imagePath: decipher/LOTR13110.jpg
-			//parentId: 13_110
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13110.jpg
 			collInfo: 13U110
 			rarity: U
-			setNum: "13"
-			cardNum: 110
-			style: Standard
 		}
 		title: Isengard Informant
 		unique: false
@@ -499,17 +435,9 @@
 
 	13_111: {
 		cardInfo: {
-			imagePath: decipher/LOTR13111.jpg
-			//parentId: 13_111
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13111.jpg
 			collInfo: 13C111
 			rarity: C
-			setNum: "13"
-			cardNum: 111
-			style: Standard
 		}
 		title: Massing Strength
 		unique: false
@@ -551,17 +479,9 @@
 
 	13_112: {
 		cardInfo: {
-			imagePath: decipher/LOTR13112.jpg
-			//parentId: 13_112
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13112.jpg
 			collInfo: 13R112
 			rarity: R
-			setNum: "13"
-			cardNum: 112
-			style: Standard
 		}
 		title: Orc Crusher
 		unique: true
@@ -617,17 +537,9 @@
 
 	13_113: {
 		cardInfo: {
-			imagePath: decipher/LOTR13113.jpg
-			//parentId: 13_113
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13113.jpg
 			collInfo: 13C113
 			rarity: C
-			setNum: "13"
-			cardNum: 113
-			style: Standard
 		}
 		title: Orc Line-breaker
 		unique: false
@@ -677,17 +589,9 @@
 
 	13_114: {
 		cardInfo: {
-			imagePath: decipher/LOTR13114.jpg
-			//parentId: 13_114
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13114.jpg
 			collInfo: 13S114
 			rarity: S
-			setNum: "13"
-			cardNum: 114
-			style: Standard
 		}
 		title: Orc Plains Runner
 		unique: false
@@ -753,17 +657,9 @@
 
 	13_115: {
 		cardInfo: {
-			imagePath: decipher/LOTR13115.jpg
-			//parentId: 13_115
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13115.jpg
 			collInfo: 13R115
 			rarity: R
-			setNum: "13"
-			cardNum: 115
-			style: Standard
 		}
 		title: Orc Raid Commander
 		unique: false
@@ -813,17 +709,9 @@
 
 	13_116: {
 		cardInfo: {
-			imagePath: decipher/LOTR13116.jpg
-			//parentId: 13_116
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13116.jpg
 			collInfo: 13C116
 			rarity: C
-			setNum: "13"
-			cardNum: 116
-			style: Standard
 		}
 		title: Orc Reaper
 		unique: false
@@ -862,17 +750,9 @@
 
 	13_117: {
 		cardInfo: {
-			imagePath: decipher/LOTR13117.jpg
-			//parentId: 13_117
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13117.jpg
 			collInfo: 13R117
 			rarity: R
-			setNum: "13"
-			cardNum: 117
-			style: Standard
 		}
 		title: Ordnance Grunt
 		unique: false
@@ -922,17 +802,9 @@
 
 	13_118: {
 		cardInfo: {
-			imagePath: decipher/LOTR13118.jpg
-			//parentId: 13_118
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13118.jpg
 			collInfo: 13S118
 			rarity: S
-			setNum: "13"
-			cardNum: 118
-			style: Standard
 		}
 		title: Picket Denizen
 		unique: false
@@ -975,17 +847,9 @@
 
 	13_119: {
 		cardInfo: {
-			imagePath: decipher/LOTR13119.jpg
-			//parentId: 13_119
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13119.jpg
 			collInfo: 13C119
 			rarity: C
-			setNum: "13"
-			cardNum: 119
-			style: Standard
 		}
 		title: Underdeeps Denizen
 		unique: false
@@ -1023,17 +887,9 @@
 
 	13_120: {
 		cardInfo: {
-			imagePath: decipher/LOTR13120.jpg
-			//parentId: 13_120
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13120.jpg
 			collInfo: 13C120
 			rarity: C
-			setNum: "13"
-			cardNum: 120
-			style: Standard
 		}
 		title: Unforgiving Depths
 		unique: false
@@ -1089,17 +945,9 @@
 
 	13_121: {
 		cardInfo: {
-			imagePath: decipher/LOTR13121.jpg
-			//parentId: 13_121
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13121.jpg
 			collInfo: 13C121
 			rarity: C
-			setNum: "13"
-			cardNum: 121
-			style: Standard
 		}
 		title: Whatever Means
 		unique: false

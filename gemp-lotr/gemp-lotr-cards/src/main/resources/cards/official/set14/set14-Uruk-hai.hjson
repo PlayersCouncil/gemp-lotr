@@ -2,17 +2,9 @@
 
 	14_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR14014.jpg
-			//parentId: 14_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14014.jpg
 			collInfo: 14R14
 			rarity: R
-			setNum: "14"
-			cardNum: 14
-			style: Standard
 		}
 		title: Uruk-hai Healer
 		unique: false
@@ -58,17 +50,9 @@
 
 	14_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR14015.jpg
-			//parentId: 14_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14015.jpg
 			collInfo: 14R15
 			rarity: R
-			setNum: "14"
-			cardNum: 15
-			style: Standard
 		}
 		title: Uruk-hai Scout
 		unique: false

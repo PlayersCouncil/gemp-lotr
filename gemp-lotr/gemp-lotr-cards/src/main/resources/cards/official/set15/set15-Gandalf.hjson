@@ -2,17 +2,9 @@
 
 	15_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR15027.jpg
-			//parentId: 15_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15027.jpg
 			collInfo: 15U27
 			rarity: U
-			setNum: "15"
-			cardNum: 27
-			style: Standard
 		}
 		title: Be Gone!
 		unique: false
@@ -76,17 +68,9 @@
 
 	15_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR15028.jpg
-			//parentId: 15_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15028.jpg
 			collInfo: 15C28
 			rarity: C
-			setNum: "15"
-			cardNum: 28
-			style: Standard
 		}
 		title: Ent Avenger
 		unique: false
@@ -126,17 +110,9 @@
 
 	15_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR15029.jpg
-			//parentId: 15_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15029.jpg
 			collInfo: 15R29
 			rarity: R
-			setNum: "15"
-			cardNum: 29
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Powerful Guide
@@ -204,17 +180,9 @@
 
 	15_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR15030.jpg
-			//parentId: 15_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15030.jpg
 			collInfo: 15R30
 			rarity: R
-			setNum: "15"
-			cardNum: 30
-			style: Standard
 		}
 		title: Leaflock
 		subtitle: Finglas
@@ -263,17 +231,9 @@
 
 	15_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR15031.jpg
-			//parentId: 15_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15031.jpg
 			collInfo: 15U31
 			rarity: U
-			setNum: "15"
-			cardNum: 31
-			style: Standard
 		}
 		title: Mellon!
 		unique: true
@@ -348,17 +308,9 @@
 
 	15_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR15032.jpg
-			//parentId: 15_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15032.jpg
 			collInfo: 15U32
 			rarity: U
-			setNum: "15"
-			cardNum: 32
-			style: Standard
 		}
 		title: Momentous Gathering
 		unique: false
@@ -450,17 +402,9 @@
 
 	15_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR15033.jpg
-			//parentId: 15_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15033.jpg
 			collInfo: 15R33
 			rarity: R
-			setNum: "15"
-			cardNum: 33
-			style: Standard
 		}
 		title: One Last Surprise
 		unique: false
@@ -505,17 +449,9 @@
 
 	15_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR15034.jpg
-			//parentId: 15_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15034.jpg
 			collInfo: 15R34
 			rarity: R
-			setNum: "15"
-			cardNum: 34
-			style: Standard
 		}
 		title: Quickbeam
 		subtitle: Hastiest of All Ents
@@ -569,17 +505,9 @@
 
 	15_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR15035.jpg
-			//parentId: 15_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15035.jpg
 			collInfo: 15U35
 			rarity: U
-			setNum: "15"
-			cardNum: 35
-			style: Standard
 		}
 		title: Shadow of the Wood
 		unique: false
@@ -626,17 +554,9 @@
 
 	15_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR15036.jpg
-			//parentId: 15_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15036.jpg
 			collInfo: 15R36
 			rarity: R
-			setNum: "15"
-			cardNum: 36
-			style: Standard
 		}
 		title: Shepherd of the Trees
 		unique: false
@@ -708,17 +628,9 @@
 
 	15_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR15037.jpg
-			//parentId: 15_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15037.jpg
 			collInfo: 15U37
 			rarity: U
-			setNum: "15"
-			cardNum: 37
-			style: Standard
 		}
 		title: Skinbark
 		subtitle: Elder Ent
@@ -766,17 +678,9 @@
 
 	15_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR15038.jpg
-			//parentId: 15_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15038.jpg
 			collInfo: 15R38
 			rarity: R
-			setNum: "15"
-			cardNum: 38
-			style: Standard
 		}
 		title: Treebeard
 		subtitle: Enraged Shepherd

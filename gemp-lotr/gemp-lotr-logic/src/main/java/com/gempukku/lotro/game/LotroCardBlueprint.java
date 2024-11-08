@@ -39,8 +39,15 @@ public interface LotroCardBlueprint {
 
     String getTitle();
     String getSanitizedTitle();
+    String getFullName();
+    String getSanitizedFullName();
 
     String getSubtitle();
+    String getGameText();
+    String getFormattedGameText();
+    String getLore();
+    String getPromoText();
+    CardInfo getCardInfo();
 
     Signet getSignet();
 

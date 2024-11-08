@@ -2,17 +2,9 @@
 
 	15_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR15072.jpg
-			//parentId: 15_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15072.jpg
 			collInfo: 15R72
 			rarity: R
-			setNum: "15"
-			cardNum: 72
-			style: Standard
 		}
 		title: Bill Ferny
 		subtitle: Agent of Saruman
@@ -69,17 +61,9 @@
 
 	15_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR15073.jpg
-			//parentId: 15_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15073.jpg
 			collInfo: 15C73
 			rarity: C
-			setNum: "15"
-			cardNum: 73
-			style: Standard
 		}
 		title: Bold Easterling
 		unique: false
@@ -131,17 +115,9 @@
 
 	15_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR15074.jpg
-			//parentId: 15_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15074.jpg
 			collInfo: 15R74
 			rarity: R
-			setNum: "15"
-			cardNum: 74
-			style: Standard
 		}
 		title: Chieftain of Dunland
 		unique: true
@@ -222,17 +198,9 @@
 
 	15_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR15075.jpg
-			//parentId: 15_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15075.jpg
 			collInfo: 15C75
 			rarity: C
-			setNum: "15"
-			cardNum: 75
-			style: Standard
 		}
 		title: Courageous Easterling
 		unique: false
@@ -284,17 +252,9 @@
 
 	15_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR15076.jpg
-			//parentId: 15_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15076.jpg
 			collInfo: 15R76
 			rarity: R
-			setNum: "15"
-			cardNum: 76
-			style: Standard
 		}
 		title: Destroyed Homestead
 		unique: false
@@ -358,17 +318,9 @@
 
 	15_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR15077.jpg
-			//parentId: 15_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15077.jpg
 			collInfo: 15C77
 			rarity: C
-			setNum: "15"
-			cardNum: 77
-			style: Standard
 		}
 		title: Easterling Scout
 		unique: false
@@ -420,17 +372,9 @@
 
 	15_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR15078.jpg
-			//parentId: 15_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15078.jpg
 			collInfo: 15U78
 			rarity: U
-			setNum: "15"
-			cardNum: 78
-			style: Standard
 		}
 		title: Engrossed Hillman
 		unique: false
@@ -491,17 +435,9 @@
 
 	15_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR15079.jpg
-			//parentId: 15_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15079.jpg
 			collInfo: 15U79
 			rarity: U
-			setNum: "15"
-			cardNum: 79
-			style: Standard
 		}
 		title: Enraged Herdsman
 		unique: false
@@ -566,17 +502,9 @@
 
 	15_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR15080.jpg
-			//parentId: 15_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15080.jpg
 			collInfo: 15C80
 			rarity: C
-			setNum: "15"
-			cardNum: 80
-			style: Standard
 		}
 		title: Great Axe
 		unique: false
@@ -610,17 +538,9 @@
 
 	15_81: {
 		cardInfo: {
-			imagePath: decipher/LOTR15081.jpg
-			//parentId: 15_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15081.jpg
 			collInfo: 15U81
 			rarity: U
-			setNum: "15"
-			cardNum: 81
-			style: Standard
 		}
 		title: Grieving the Fallen
 		unique: false
@@ -674,17 +594,9 @@
 
 	15_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR15082.jpg
-			//parentId: 15_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15082.jpg
 			collInfo: 15C82
 			rarity: C
-			setNum: "15"
-			cardNum: 82
-			style: Standard
 		}
 		title: Grousing Hillman
 		unique: false
@@ -733,17 +645,9 @@
 
 	15_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR15083.jpg
-			//parentId: 15_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15083.jpg
 			collInfo: 15C83
 			rarity: C
-			setNum: "15"
-			cardNum: 83
-			style: Standard
 		}
 		title: Hunting Herdsman
 		unique: false
@@ -783,17 +687,9 @@
 
 	15_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR15084.jpg
-			//parentId: 15_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15084.jpg
 			collInfo: 15R84
 			rarity: R
-			setNum: "15"
-			cardNum: 84
-			style: Standard
 		}
 		title: Last Gasp
 		unique: false
@@ -829,17 +725,9 @@
 
 	15_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR15085.jpg
-			//parentId: 15_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15085.jpg
 			collInfo: 15U85
 			rarity: U
-			setNum: "15"
-			cardNum: 85
-			style: Standard
 		}
 		title: Lying Counsel
 		unique: false
@@ -893,17 +781,9 @@
 
 	15_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR15086.jpg
-			//parentId: 15_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15086.jpg
 			collInfo: 15R86
 			rarity: R
-			setNum: "15"
-			cardNum: 86
-			style: Standard
 		}
 		title: Mûmak Commander
 		subtitle: Giant Among the Swertings
@@ -945,17 +825,9 @@
 
 	15_87: {
 		cardInfo: {
-			imagePath: decipher/LOTR15087.jpg
-			//parentId: 15_87
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15087.jpg
 			collInfo: 15R87
 			rarity: R
-			setNum: "15"
-			cardNum: 87
-			style: Standard
 		}
 		title: Primitive Savage
 		unique: true
@@ -1005,17 +877,9 @@
 
 	15_88: {
 		cardInfo: {
-			imagePath: decipher/LOTR15088.jpg
-			//parentId: 15_88
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15088.jpg
 			collInfo: 15U88
 			rarity: U
-			setNum: "15"
-			cardNum: 88
-			style: Standard
 		}
 		title: Pursuing Horde
 		unique: false
@@ -1056,17 +920,9 @@
 
 	15_89: {
 		cardInfo: {
-			imagePath: decipher/LOTR15089.jpg
-			//parentId: 15_89
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15089.jpg
 			collInfo: 15U89
 			rarity: U
-			setNum: "15"
-			cardNum: 89
-			style: Standard
 		}
 		title: Rapid Reload
 		unique: false
@@ -1118,17 +974,9 @@
 
 	15_90: {
 		cardInfo: {
-			imagePath: decipher/LOTR15090.jpg
-			//parentId: 15_90
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15090.jpg
 			collInfo: 15U90
 			rarity: U
-			setNum: "15"
-			cardNum: 90
-			style: Standard
 		}
 		title: Rapt Hillman
 		unique: false
@@ -1195,17 +1043,9 @@
 
 	15_91: {
 		cardInfo: {
-			imagePath: decipher/LOTR15091.jpg
-			//parentId: 15_91
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15091.jpg
 			collInfo: 15C91
 			rarity: C
-			setNum: "15"
-			cardNum: 91
-			style: Standard
 		}
 		title: Ravaging Wild Man
 		unique: false
@@ -1262,17 +1102,9 @@
 
 	15_92: {
 		cardInfo: {
-			imagePath: decipher/LOTR15092.jpg
-			//parentId: 15_92
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15092.jpg
 			collInfo: 15U92
 			rarity: U
-			setNum: "15"
-			cardNum: 92
-			style: Standard
 		}
 		title: Savage Southron
 		unique: false
@@ -1329,17 +1161,9 @@
 
 	15_93: {
 		cardInfo: {
-			imagePath: decipher/LOTR15093.jpg
-			//parentId: 15_93
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15093.jpg
 			collInfo: 15C93
 			rarity: C
-			setNum: "15"
-			cardNum: 93
-			style: Standard
 		}
 		title: Swarthy Hillman
 		unique: false
@@ -1377,17 +1201,9 @@
 
 	15_94: {
 		cardInfo: {
-			imagePath: decipher/LOTR15094.jpg
-			//parentId: 15_94
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15094.jpg
 			collInfo: 15U94
 			rarity: U
-			setNum: "15"
-			cardNum: 94
-			style: Standard
 		}
 		title: Wandering Hillman
 		unique: false

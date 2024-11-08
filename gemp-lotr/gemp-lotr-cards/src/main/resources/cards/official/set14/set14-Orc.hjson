@@ -2,17 +2,9 @@
 
 	14_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR14012.jpg
-			//parentId: 14_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14012.jpg
 			collInfo: 14R12
 			rarity: R
-			setNum: "14"
-			cardNum: 12
-			style: Standard
 		}
 		title: Half-troll of Far Harad
 		unique: false
@@ -65,17 +57,9 @@
 
 	14_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR14013.jpg
-			//parentId: 14_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14013.jpg
 			collInfo: 14R13
 			rarity: R
-			setNum: "14"
-			cardNum: 13
-			style: Standard
 		}
 		title: Horror of Harad
 		unique: true

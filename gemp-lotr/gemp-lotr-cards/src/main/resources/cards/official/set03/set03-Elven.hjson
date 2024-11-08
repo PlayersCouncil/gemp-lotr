@@ -2,17 +2,9 @@
 
 	3_7: {
 		cardInfo: {
-			imagePath: decipher/LOTR03007.jpg
-			//parentId: 3_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03007.jpg
 			collInfo: 3U7
 			rarity: U
-			setNum: "3"
-			cardNum: 7
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Elven Rider
@@ -56,17 +48,9 @@
 
 	3_8: {
 		cardInfo: {
-			imagePath: decipher/LOTR03008.jpg
-			//parentId: 3_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03008.jpg
 			collInfo: 3R8
 			rarity: R
-			setNum: "3"
-			cardNum: 8
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Lady Undómiel
@@ -106,17 +90,9 @@
 
 	3_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR03009.jpg
-			//parentId: 3_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03009.jpg
 			collInfo: 3U9
 			rarity: U
-			setNum: "3"
-			cardNum: 9
-			style: Standard
 		}
 		title: Beren and Lúthien
 		unique: false
@@ -169,17 +145,9 @@
 
 	3_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR03010.jpg
-			//parentId: 3_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03010.jpg
 			collInfo: 3U10
 			rarity: U
-			setNum: "3"
-			cardNum: 10
-			style: Standard
 		}
 		title: Calaglin
 		subtitle: Elf of Lórien
@@ -218,17 +186,9 @@
 
 	3_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR03011.jpg
-			//parentId: 3_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03011.jpg
 			collInfo: 3C11
 			rarity: C
-			setNum: "3"
-			cardNum: 11
-			style: Standard
 		}
 		title: Cast It Into the Fire!
 		unique: false
@@ -273,17 +233,9 @@
 
 	3_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR03012.jpg
-			//parentId: 3_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03012.jpg
 			collInfo: 3U12
 			rarity: U
-			setNum: "3"
-			cardNum: 12
-			style: Standard
 		}
 		title: Dínendal
 		subtitle: Silent Scout
@@ -322,17 +274,9 @@
 
 	3_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR03013.jpg
-			//parentId: 3_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03013.jpg
 			collInfo: 3R13
 			rarity: R
-			setNum: "3"
-			cardNum: 13
-			style: Standard
 		}
 		title: Elrond
 		subtitle: Herald to Gil-galad
@@ -401,17 +345,9 @@
 
 	3_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR03014.jpg
-			//parentId: 3_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03014.jpg
 			collInfo: 3C14
 			rarity: C
-			setNum: "3"
-			cardNum: 14
-			style: Standard
 		}
 		title: Erestor
 		subtitle: Chief Advisor to Elrond
@@ -462,17 +398,9 @@
 
 	3_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR03015.jpg
-			//parentId: 3_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03015.jpg
 			collInfo: 3R15
 			rarity: R
-			setNum: "3"
-			cardNum: 15
-			style: Standard
 		}
 		title: Forests of Lothlórien
 		unique: false
@@ -510,17 +438,9 @@
 
 	3_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR03016.jpg
-			//parentId: 3_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03016.jpg
 			collInfo: 3C16
 			rarity: C
-			setNum: "3"
-			cardNum: 16
-			style: Standard
 		}
 		title: Friends of Old
 		unique: false
@@ -561,17 +481,9 @@
 
 	3_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR03017.jpg
-			//parentId: 3_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03017.jpg
 			collInfo: 3R17
 			rarity: R
-			setNum: "3"
-			cardNum: 17
-			style: Standard
 		}
 		title: Galadriel
 		subtitle: Lady of the Golden Wood
@@ -623,17 +535,9 @@
 
 	3_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR03018.jpg
-			//parentId: 3_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03018.jpg
 			collInfo: 3U18
 			rarity: U
-			setNum: "3"
-			cardNum: 18
-			style: Standard
 		}
 		title: Galdor
 		subtitle: Councilor From the West
@@ -680,17 +584,9 @@
 
 	3_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR03019.jpg
-			//parentId: 3_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03019.jpg
 			collInfo: 3R19
 			rarity: R
-			setNum: "3"
-			cardNum: 19
-			style: Standard
 		}
 		title: Gift of the Evenstar
 		unique: true
@@ -748,17 +644,9 @@
 
 	3_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR03020.jpg
-			//parentId: 3_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03020.jpg
 			collInfo: 3U20
 			rarity: U
-			setNum: "3"
-			cardNum: 20
-			style: Standard
 		}
 		title: Golradir
 		subtitle: Councilor of Imladris
@@ -806,17 +694,9 @@
 
 	3_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR03021.jpg
-			//parentId: 3_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03021.jpg
 			collInfo: 3R21
 			rarity: R
-			setNum: "3"
-			cardNum: 21
-			style: Standard
 		}
 		title: Long-knives of Legolas
 		unique: true
@@ -848,17 +728,9 @@
 
 	3_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR03022.jpg
-			//parentId: 3_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03022.jpg
 			collInfo: 3C22
 			rarity: C
-			setNum: "3"
-			cardNum: 22
-			style: Standard
 		}
 		title: Master of Healing
 		unique: false
@@ -901,17 +773,9 @@
 
 	3_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR03023.jpg
-			//parentId: 3_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03023.jpg
 			collInfo: 3R23
 			rarity: R
-			setNum: "3"
-			cardNum: 23
-			style: Standard
 		}
 		title: Nenya
 		unique: true
@@ -956,17 +820,9 @@
 
 	3_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR03024.jpg
-			//parentId: 3_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03024.jpg
 			collInfo: 3U24
 			rarity: U
-			setNum: "3"
-			cardNum: 24
-			style: Standard
 		}
 		title: Phial of Galadriel
 		unique: true
@@ -1005,17 +861,9 @@
 
 	3_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR03025.jpg
-			//parentId: 3_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03025.jpg
 			collInfo: 3U25
 			rarity: U
-			setNum: "3"
-			cardNum: 25
-			style: Standard
 		}
 		title: Saelbeth
 		subtitle: Elven Councilor
@@ -1063,17 +911,9 @@
 
 	3_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR03026.jpg
-			//parentId: 3_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03026.jpg
 			collInfo: 3U26
 			rarity: U
-			setNum: "3"
-			cardNum: 26
-			style: Standard
 		}
 		title: Something Draws Near
 		unique: false
@@ -1106,17 +946,9 @@
 
 	3_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR03027.jpg
-			//parentId: 3_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03027.jpg
 			collInfo: 3R27
 			rarity: R
-			setNum: "3"
-			cardNum: 27
-			style: Standard
 		}
 		title: Vilya
 		unique: true
@@ -1153,17 +985,9 @@
 
 	3_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR03028.jpg
-			//parentId: 3_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03028.jpg
 			collInfo: 3C28
 			rarity: C
-			setNum: "3"
-			cardNum: 28
-			style: Standard
 		}
 		title: Voice of Nimrodel
 		unique: false
@@ -1202,17 +1026,9 @@
 
 	3_121: {
 		cardInfo: {
-			imagePath: decipher/LOTR03121.jpg
-			//parentId: 3_121
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03121.jpg
 			collInfo: 3P121
 			rarity: P
-			setNum: "3"
-			cardNum: 121
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Son of Thranduil

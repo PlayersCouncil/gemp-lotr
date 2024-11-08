@@ -2,17 +2,9 @@
 
 	12_185: {
 		cardInfo: {
-			imagePath: decipher/LOTR12185.jpg
-			//parentId: 12_185
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12185.jpg
 			collInfo: 12U185
 			rarity: U
-			setNum: "12"
-			cardNum: 185
-			style: Standard
 		}
 		title: The Angle
 		unique: false
@@ -66,17 +58,9 @@
 
 	12_186: {
 		cardInfo: {
-			imagePath: decipher/LOTR12186.jpg
-			//parentId: 12_186
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12186.jpg
 			collInfo: 12U186
 			rarity: U
-			setNum: "12"
-			cardNum: 186
-			style: Standard
 		}
 		title: The Bridge of Khazad-dûm
 		unique: false
@@ -111,17 +95,9 @@
 
 	12_187: {
 		cardInfo: {
-			imagePath: decipher/LOTR12187.jpg
-			//parentId: 12_187
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12187.jpg
 			collInfo: 12S187
 			rarity: S
-			setNum: "12"
-			cardNum: 187
-			style: Standard
 		}
 		title: Emyn Muil
 		unique: false
@@ -166,17 +142,9 @@
 
 	12_188: {
 		cardInfo: {
-			imagePath: decipher/LOTR12188.jpg
-			//parentId: 12_188
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12188.jpg
 			collInfo: 12S188
 			rarity: S
-			setNum: "12"
-			cardNum: 188
-			style: Standard
 		}
 		title: Hill of Sight
 		unique: false
@@ -226,17 +194,9 @@
 
 	12_189: {
 		cardInfo: {
-			imagePath: decipher/LOTR12189.jpg
-			//parentId: 12_189
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12189.jpg
 			collInfo: 12S189
 			rarity: S
-			setNum: "12"
-			cardNum: 189
-			style: Standard
 		}
 		title: Hobbiton Market
 		unique: false
@@ -271,17 +231,9 @@
 
 	12_190: {
 		cardInfo: {
-			imagePath: decipher/LOTR12190.jpg
-			//parentId: 12_190
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12190.jpg
 			collInfo: 12S190
 			rarity: S
-			setNum: "12"
-			cardNum: 190
-			style: Standard
 		}
 		title: Northern Pelennor
 		unique: false
@@ -318,17 +270,9 @@
 
 	12_191: {
 		cardInfo: {
-			imagePath: decipher/LOTR12191.jpg
-			//parentId: 12_191
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12191.jpg
 			collInfo: 12U191
 			rarity: U
-			setNum: "12"
-			cardNum: 191
-			style: Standard
 		}
 		title: Shores of Nen Hithoel
 		unique: false
@@ -368,17 +312,9 @@
 
 	12_192: {
 		cardInfo: {
-			imagePath: decipher/LOTR12192.jpg
-			//parentId: 12_192
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12192.jpg
 			collInfo: 12U192
 			rarity: U
-			setNum: "12"
-			cardNum: 192
-			style: Standard
 		}
 		title: Slopes of Orodruin
 		unique: false
@@ -421,17 +357,9 @@
 
 	12_193: {
 		cardInfo: {
-			imagePath: decipher/LOTR12193.jpg
-			//parentId: 12_193
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12193.jpg
 			collInfo: 12U193
 			rarity: U
-			setNum: "12"
-			cardNum: 193
-			style: Standard
 		}
 		title: Starkhorn
 		unique: false
@@ -466,17 +394,9 @@
 
 	12_194: {
 		cardInfo: {
-			imagePath: decipher/LOTR12194.jpg
-			//parentId: 12_194
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12194.jpg
 			collInfo: 12U194
 			rarity: U
-			setNum: "12"
-			cardNum: 194
-			style: Standard
 		}
 		title: Wold Battlefield
 		unique: false

@@ -2,17 +2,10 @@
 
 	102_37: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S037.0_card.jpg
-			//parentId: 102_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_37
+			image: sets/V2/LOTR-ENV2S037.0_card.jpg
 			collInfo: V2_37
 			rarity: _
-			setNum: V2
-			cardNum: 37
-			style: Standard
 		}
 		title: Ancient Evil
 		unique: false
@@ -91,17 +84,10 @@
 
 	102_38: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S038.0_card.jpg
-			//parentId: 102_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_38
+			image: sets/V2/LOTR-ENV2S038.0_card.jpg
 			collInfo: V2_38
 			rarity: _
-			setNum: V2
-			cardNum: 38
-			style: Standard
 		}
 		title: The Balrog
 		subtitle: Lieutenant of Morgoth
@@ -167,17 +153,10 @@
 
 	102_39: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S039.0_card.jpg
-			//parentId: 102_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_39
+			image: sets/V2/LOTR-ENV2S039.0_card.jpg
 			collInfo: V2_39
 			rarity: _
-			setNum: V2
-			cardNum: 39
-			style: Standard
 		}
 		title: From Deepest Dungeon
 		unique: true
@@ -262,17 +241,10 @@
 
 	102_40: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S040.0_card.jpg
-			//parentId: 102_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_40
+			image: sets/V2/LOTR-ENV2S040.0_card.jpg
 			collInfo: V2_40
 			rarity: _
-			setNum: V2
-			cardNum: 40
-			style: Standard
 		}
 		title: Through Fire and Water
 		unique: false
@@ -316,17 +288,10 @@
 
 	102_41: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S041.0_card.jpg
-			//parentId: 102_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_41
+			image: sets/V2/LOTR-ENV2S041.0_card.jpg
 			collInfo: V2_41
 			rarity: _
-			setNum: V2
-			cardNum: 41
-			style: Standard
 		}
 		title: To Highest Peak
 		unique: false
@@ -390,17 +355,10 @@
 
 	102_42: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S042.0_card.jpg
-			//parentId: 102_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_42
+			image: sets/V2/LOTR-ENV2S042.0_card.jpg
 			collInfo: V2_42
 			rarity: _
-			setNum: V2
-			cardNum: 42
-			style: Standard
 		}
 		title: Valiant but Foolish
 		unique: false

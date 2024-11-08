@@ -2,17 +2,10 @@
 
 	101_57: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S057.0_card.jpg
-			//parentId: 101_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_57
+			image: sets/vset1/LOTR-ENV1S057.0_card.jpg
 			collInfo: V1U57
 			rarity: U
-			setNum: "V1"
-			cardNum: 57
-			style: Standard
 		}
 		title: Bag End Study
 		unique: false
@@ -52,17 +45,10 @@
 
 	101_58: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S058.0_card.jpg
-			//parentId: 101_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_58
+			image: sets/vset1/LOTR-ENV1S058.0_card.jpg
 			collInfo: V1U58
 			rarity: U
-			setNum: "V1"
-			cardNum: 58
-			style: Standard
 		}
 		title: Prancing Pony Spare Room
 		unique: false
@@ -108,17 +94,10 @@
 
 	101_59: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S059.0_card.jpg
-			//parentId: 101_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_59
+			image: sets/vset1/LOTR-ENV1S059.0_card.jpg
 			collInfo: V1U59
 			rarity: U
-			setNum: "V1"
-			cardNum: 59
-			style: Standard
 		}
 		title: Rivendell Gateway
 		unique: false
@@ -180,17 +159,10 @@
 
 	101_60: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S060.0_card.jpg
-			//parentId: 101_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_60
+			image: sets/vset1/LOTR-ENV1S060.0_card.jpg
 			collInfo: V1U60
 			rarity: U
-			setNum: "V1"
-			cardNum: 60
-			style: Standard
 		}
 		title: Moria Crossroads
 		unique: false
@@ -262,17 +234,11 @@
 
 	101_61: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1E061.1_card.jpg
-			//parentId: 101_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 101_61.1
+			revision: 1
+			image: sets/vset1/LOTR-ENV1E061.1_card.jpg
 			collInfo: V1U61
 			rarity: U
-			setNum: "V1"
-			cardNum: 61
-			style: Standard
 		}
 		title: Lorien Throne Room
 		unique: false
@@ -331,17 +297,10 @@
 
 	101_62: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S062.0_card.jpg
-			//parentId: 101_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_62
+			image: sets/vset1/LOTR-ENV1S062.0_card.jpg
 			collInfo: V1U62
 			rarity: U
-			setNum: "V1"
-			cardNum: 62
-			style: Standard
 		}
 		title: Valley of the Anduin
 		unique: false
@@ -376,17 +335,10 @@
 
 	101_63: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S063.0_card.jpg
-			//parentId: 101_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_63
+			image: sets/vset1/LOTR-ENV1S063.0_card.jpg
 			collInfo: V1U63
 			rarity: U
-			setNum: "V1"
-			cardNum: 63
-			style: Standard
 		}
 		title: Nen Hithoel
 		unique: false
@@ -429,17 +381,10 @@
 
 	101_64: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S064.0_card.jpg
-			//parentId: 101_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_64
+			image: sets/vset1/LOTR-ENV1S064.0_card.jpg
 			collInfo: V1U64
 			rarity: U
-			setNum: "V1"
-			cardNum: 64
-			style: Standard
 		}
 		title: Amon Hen Ruins
 		unique: false

@@ -2,17 +2,9 @@
 
 	17_93: {
 		cardInfo: {
-			imagePath: decipher/LOTR17093.jpg
-			//parentId: 17_93
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17093.jpg
 			collInfo: 17R93
 			rarity: R
-			setNum: "17"
-			cardNum: 93
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Defender of Rohan
@@ -54,17 +46,9 @@
 
 	17_94: {
 		cardInfo: {
-			imagePath: decipher/LOTR17094.jpg
-			//parentId: 17_94
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17094.jpg
 			collInfo: 17U94
 			rarity: U
-			setNum: "17"
-			cardNum: 94
-			style: Standard
 		}
 		title: Dispatched With Haste
 		unique: false
@@ -117,17 +101,9 @@
 
 	17_95: {
 		cardInfo: {
-			imagePath: decipher/LOTR17095.jpg
-			//parentId: 17_95
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17095.jpg
 			collInfo: 17R95
 			rarity: R
-			setNum: "17"
-			cardNum: 95
-			style: Standard
 		}
 		title: Éomer
 		subtitle: Northman
@@ -187,17 +163,9 @@
 
 	17_96: {
 		cardInfo: {
-			imagePath: decipher/LOTR17096.jpg
-			//parentId: 17_96
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17096.jpg
 			collInfo: 17R96
 			rarity: R
-			setNum: "17"
-			cardNum: 96
-			style: Standard
 		}
 		title: Éowyn
 		subtitle: Northwoman
@@ -260,17 +228,9 @@
 
 	17_97: {
 		cardInfo: {
-			imagePath: decipher/LOTR17097.jpg
-			//parentId: 17_97
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17097.jpg
 			collInfo: 17U97
 			rarity: U
-			setNum: "17"
-			cardNum: 97
-			style: Standard
 		}
 		title: For Death and Glory
 		unique: false
@@ -322,17 +282,9 @@
 
 	17_98: {
 		cardInfo: {
-			imagePath: decipher/LOTR17098.jpg
-			//parentId: 17_98
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17098.jpg
 			collInfo: 17R98
 			rarity: R
-			setNum: "17"
-			cardNum: 98
-			style: Standard
 		}
 		title: Throne of the Golden Hall
 		unique: true
@@ -403,17 +355,9 @@
 
 	17_99: {
 		cardInfo: {
-			imagePath: decipher/LOTR17099.jpg
-			//parentId: 17_99
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17099.jpg
 			collInfo: 17R99
 			rarity: R
-			setNum: "17"
-			cardNum: 99
-			style: Standard
 		}
 		title: Háma
 		subtitle: Northman
@@ -466,17 +410,9 @@
 
 	17_100: {
 		cardInfo: {
-			imagePath: decipher/LOTR17100.jpg
-			//parentId: 17_100
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17100.jpg
 			collInfo: 17U100
 			rarity: U
-			setNum: "17"
-			cardNum: 100
-			style: Standard
 		}
 		title: Into the Caves
 		unique: false
@@ -547,17 +483,9 @@
 
 	17_101: {
 		cardInfo: {
-			imagePath: decipher/LOTR17101.jpg
-			//parentId: 17_101
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17101.jpg
 			collInfo: 17U101
 			rarity: U
-			setNum: "17"
-			cardNum: 101
-			style: Standard
 		}
 		title: Soldier of Rohan
 		unique: false
@@ -596,17 +524,9 @@
 
 	17_102: {
 		cardInfo: {
-			imagePath: decipher/LOTR17102.jpg
-			//parentId: 17_102
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17102.jpg
 			collInfo: 17R102
 			rarity: R
-			setNum: "17"
-			cardNum: 102
-			style: Standard
 		}
 		title: Théoden
 		subtitle: Northman, King of Rohan
@@ -662,17 +582,9 @@
 
 	17_103: {
 		cardInfo: {
-			imagePath: decipher/LOTR17103.jpg
-			//parentId: 17_103
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17103.jpg
 			collInfo: 17U103
 			rarity: U
-			setNum: "17"
-			cardNum: 103
-			style: Standard
 		}
 		title: Where Now The Horse
 		unique: false
@@ -721,17 +633,9 @@
 
 	17_104: {
 		cardInfo: {
-			imagePath: decipher/LOTR17104.jpg
-			//parentId: 17_104
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17104.jpg
 			collInfo: 17U104
 			rarity: U
-			setNum: "17"
-			cardNum: 104
-			style: Standard
 		}
 		title: Warrior of Rohan
 		unique: false

@@ -1,17 +1,11 @@
 {
 	68_11: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E011.1.jpg
-			javaClass: false
-			parent: 18_11
-			parentPath: errata/pc
-			version: 1
+			//id: 8_11.1
+			revision: 1
+			image: errata/LOTR-EN18E011.1.jpg
 			collInfo: 18R11
 			rarity: R
-			setNum: "18"
-			cardNum: 11
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Galadriel's Silver Ewer
 		unique: true
@@ -83,17 +77,11 @@
 	
 	68_12: {
 		cardInfo: {
-			imagePath: errata/68_12.jpg
-			javaClass: false
-			parent: 18_12
-			parentPath: errata/pc
-			version: 1?
+			//id: 8_12.1
+			revision: 1
+			image: errata/68_12.jpg
 			collInfo: 18R12
 			rarity: R
-			setNum: "18"
-			cardNum: 12
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Gil-galad
 		subtitle: High King of the Noldor

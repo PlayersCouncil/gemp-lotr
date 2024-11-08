@@ -3,6 +3,7 @@ package com.gempukku.lotro.game;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.common.AppConfig;
+import com.gempukku.lotro.common.BlueprintUtils;
 import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.game.packs.DefaultSetDefinition;
 import com.gempukku.lotro.game.packs.SetDefinition;
@@ -225,7 +226,7 @@ public class LotroCardBlueprintLibrary {
     }
 
     public String getBaseBlueprintId(String blueprintId) {
-        blueprintId = stripBlueprintModifiers(blueprintId);
+        blueprintId = BlueprintUtils.stripModifiers(blueprintId);
         String base = _blueprintMapping.get(blueprintId);
         if (base != null)
             return base;
@@ -345,7 +346,7 @@ public class LotroCardBlueprintLibrary {
     }
 
     public LotroCardBlueprint getLotroCardBlueprint(String blueprintId) throws CardNotFoundException {
-        blueprintId = stripBlueprintModifiers(blueprintId);
+        blueprintId = BlueprintUtils.stripModifiers(blueprintId);
         LotroCardBlueprint bp = null;
 
         try {
@@ -364,12 +365,71 @@ public class LotroCardBlueprintLibrary {
         }
     }
 
-    public String stripBlueprintModifiers(String blueprintId) {
-        if (blueprintId.endsWith("*"))
-            blueprintId = blueprintId.substring(0, blueprintId.length() - 1);
-        if (blueprintId.endsWith("T"))
-            blueprintId = blueprintId.substring(0, blueprintId.length() - 1);
-        return blueprintId;
+//    private LotroCardBlueprint findJavaBlueprint(String blueprintId) throws CardNotFoundException {
+//        if (_blueprintMapping.containsKey(blueprintId))
+//            return getLotroCardBlueprint(_blueprintMapping.get(blueprintId));
+//
+//        String[] blueprintParts = blueprintId.split("_");
+//
+//        String setNumber = blueprintParts[0];
+//        String cardNumber = blueprintParts[1];
+//
+//        for (String packageName : _packageNames) {
+//            LotroCardBlueprint blueprint;
+//            try {
+//                blueprint = tryLoadingFromPackage(packageName, setNumber, cardNumber);
+//            } catch (IllegalAccessException | InstantiationException | NoSuchMethodException e) {
+//                throw new CardNotFoundException(blueprintId);
+//            }
+//            if (blueprint != null)
+//                return blueprint;
+//        }
+//
+//        throw new CardNotFoundException(blueprintId);
+//    }
+
+//    private LotroCardBlueprint tryLoadingFromPackage(String packageName, String setNumber, String cardNumber) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
+//        try {
+//            Class clazz = Class.forName("com.gempukku.lotro.cards.set" + setNumber + packageName + ".Card" + setNumber + "_" + normalizeId(cardNumber));
+//            return (LotroCardBlueprint) clazz.getDeclaredConstructor().newInstance();
+//        } catch (ClassNotFoundException | InvocationTargetException e) {
+//            // Ignore
+//            return null;
+//        }
+//    }
+
+    private String normalizeId(String blueprintPart) {
+        int id = Integer.parseInt(blueprintPart);
+        if (id < 10)
+            return "00" + id;
+        else if (id < 100)
+            return "0" + id;
+        else
+            return String.valueOf(id);
+    }
+
+    private void determineNeedsLoadingFlag(JSONObject setDefinition, Set<String> flags) {
+        Boolean needsLoading = (Boolean) setDefinition.get("needsLoading");
+        if (needsLoading == null)
+            needsLoading = true;
+        if (needsLoading)
+            flags.add("needsLoading");
+    }
+
+    private void determineMerchantableFlag(JSONObject setDefinition, Set<String> flags) {
+        Boolean merchantable = (Boolean) setDefinition.get("merchantable");
+        if (merchantable == null)
+            merchantable = true;
+        if (merchantable)
+            flags.add("merchantable");
+    }
+
+    private void determineOriginalSetFlag(JSONObject setDefinition, Set<String> flags) {
+        Boolean originalSet = (Boolean) setDefinition.get("originalSet");
+        if (originalSet == null)
+            originalSet = true;
+        if (originalSet)
+            flags.add("originalSet");
     }
 
     private void readSetRarityFile(DefaultSetDefinition rarity, String setNo, String rarityFile) throws IOException {

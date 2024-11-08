@@ -2,17 +2,10 @@
 
 	102_6: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S006.0_card.jpg
-			//parentId: 102_6
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_6
+			image: sets/V2/LOTR-ENV2S006.0_card.jpg
 			collInfo: V2_6
 			rarity: _
-			setNum: V2
-			cardNum: 6
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Lady of Rivendell
@@ -77,17 +70,10 @@
 
 	102_7: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S007.0_card.jpg
-			//parentId: 102_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_7
+			image: sets/V2/LOTR-ENV2S007.0_card.jpg
 			collInfo: V2_7
 			rarity: _
-			setNum: V2
-			cardNum: 7
-			style: Standard
 		}
 		title: Deadly Contest
 		unique: false
@@ -180,17 +166,10 @@
 
 	102_8: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S008.0_card.jpg
-			//parentId: 102_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_8
+			image: sets/V2/LOTR-ENV2S008.0_card.jpg
 			collInfo: V2_8
 			rarity: _
-			setNum: V2
-			cardNum: 8
-			style: Standard
 		}
 		title: Haldir
 		subtitle: Naith Commander
@@ -257,17 +236,10 @@
 
 	102_9: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S009.0_card.jpg
-			//parentId: 102_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_9
+			image: sets/V2/LOTR-ENV2S009.0_card.jpg
 			collInfo: V2_9
 			rarity: _
-			setNum: V2
-			cardNum: 9
-			style: Standard
 		}
 		title: Leithio i Phillin!
 		unique: false
@@ -314,17 +286,10 @@
 
 	102_10: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S010.0_card.jpg
-			//parentId: 102_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_10
+			image: sets/V2/LOTR-ENV2S010.0_card.jpg
 			collInfo: V2_10
 			rarity: _
-			setNum: V2
-			cardNum: 10
-			style: Standard
 		}
 		title: Naith Armaments
 		unique: false
@@ -374,17 +339,10 @@
 
 	102_11: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S011.0_card.jpg
-			//parentId: 102_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_11
+			image: sets/V2/LOTR-ENV2S011.0_card.jpg
 			collInfo: V2_11
 			rarity: _
-			setNum: V2
-			cardNum: 11
-			style: Standard
 		}
 		title: To Honour That Allegiance
 		unique: false
@@ -436,17 +394,10 @@
 
 	102_12: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S012.0_card.jpg
-			//parentId: 102_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_12
+			image: sets/V2/LOTR-ENV2S012.0_card.jpg
 			collInfo: V2_12
 			rarity: _
-			setNum: V2
-			cardNum: 12
-			style: Standard
 		}
 		title: Your Friends Are With You
 		unique: true

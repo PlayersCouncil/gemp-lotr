@@ -1,17 +1,14 @@
 {
 	51_240: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E240.1.jpg
-			javaClass: false
+			//id: 1_240.1
 			parent: 1_240
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E240.1.jpg
 			collInfo: 1R240
 			rarity: R
-			setNum: "1"
-			cardNum: 240
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Band of the Eye
 		culture: sauron
@@ -62,17 +59,14 @@
 	
 	51_245: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E245.1.jpg
-			javaClass: false
+			//id: 1_245.1
 			parent: 1_245
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E245.1.jpg
 			collInfo: 1R245
 			rarity: R
-			setNum: "1"
-			cardNum: 245
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Desperate Measures
 		culture: sauron
@@ -126,17 +120,14 @@
 	
 	51_248: {
 		cardInfo: {
-			imagePath: errata/51_248.jpg
-			javaClass: false
+			//id: 1_248.1
 			parent: 1_248
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_248.jpg
 			collInfo: 1C248
 			rarity: C
-			setNum: "1"
-			cardNum: 248
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Forces of Mordor
 		culture: sauron
@@ -171,17 +162,14 @@
 	
 	51_252: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E252.1.jpg
-			javaClass: false
+			//id: 1_252.1
 			parent: 1_252
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E252.1.jpg
 			collInfo: 1R252
 			rarity: R
-			setNum: "1"
-			cardNum: 252
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The Irresistible Shadow
 		unique: true
@@ -238,17 +226,14 @@
 	
 	51_254: {
 		cardInfo: {
-			imagePath: errata/51_254.jpg
-			javaClass: false
+			//id: 1_254.1
 			parent: 1_254
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_254.jpg
 			collInfo: 1R254
 			rarity: R
-			setNum: "1"
-			cardNum: 254
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Mordor Enraged
 		culture: sauron
@@ -292,17 +277,14 @@
 	
 	51_265: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E265.1.jpg
-			javaClass: false
+			//id: 1_265.1
 			parent: 1_265
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E265.1.jpg
 			collInfo: 1R265
 			rarity: R
-			setNum: "1"
-			cardNum: 265
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Orc Butchery
 		culture: sauron
@@ -403,17 +385,14 @@
 	
 	51_268: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E268.1.jpg
-			javaClass: false
+			//id: 1_268.1
 			parent: 1_268
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E268.1.jpg
 			collInfo: 1C268
 			rarity: C
-			setNum: "1"
-			cardNum: 268
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Orc Inquisitor
 		culture: sauron
@@ -458,17 +437,14 @@
 	
 	51_280: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E280.1.jpg
-			javaClass: false
+			//id: 1_280.1
 			parent: 1_280
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E280.1.jpg
 			collInfo: 1U280
 			rarity: U
-			setNum: "1"
-			cardNum: 280
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Tower Lieutenant
 		unique: true
@@ -523,17 +499,14 @@
 
 	51_282: {
 		cardInfo: {
-			imagePath: errata/51_282.jpg
-			javaClass: false
+			//id: 1_282.1
 			parent: 1_282
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_282.jpg
 			collInfo: 1R282
 			rarity: R
-			setNum: "1"
-			cardNum: 282
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The Weight of a Legacy
 		culture: sauron

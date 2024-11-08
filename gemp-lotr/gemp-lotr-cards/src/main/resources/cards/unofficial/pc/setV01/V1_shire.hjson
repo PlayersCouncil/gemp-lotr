@@ -2,17 +2,10 @@
 
 	101_50: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S050.0_card.jpg
-			//parentId: 101_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_50
+			image: sets/vset1/LOTR-ENV1S050.0_card.jpg
 			collInfo: V1U50
 			rarity: U
-			setNum: "V1"
-			cardNum: 50
-			style: Standard
 		}
 		title: Bilbo
 		subtitle: Of Bag End
@@ -69,17 +62,10 @@
 
 	101_51: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S051.0_card.jpg
-			//parentId: 101_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_51
+			image: sets/vset1/LOTR-ENV1S051.0_card.jpg
 			collInfo: V1C51
 			rarity: C
-			setNum: "V1"
-			cardNum: 51
-			style: Standard
 		}
 		title: Griffo Boffin
 		subtitle: Uncouth Fellow
@@ -170,17 +156,11 @@
 
 	101_52: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1E052.1_card.jpg
-			//parentId: 101_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 2
+			//id: 101_52.2
+			revision: 2
+			image: sets/vset1/LOTR-ENV1E052.1_card.jpg
 			collInfo: V1R52
 			rarity: R
-			setNum: "V1"
-			cardNum: 52
-			style: Standard
 		}
 		title: Merry
 		subtitle: Of Buckland
@@ -240,17 +220,10 @@
 
 	101_53: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S053.0_card.jpg
-			//parentId: 101_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_53
+			image: sets/vset1/LOTR-ENV1S053.0_card.jpg
 			collInfo: V1R53
 			rarity: R
-			setNum: "V1"
-			cardNum: 53
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Of Tuckborough
@@ -364,17 +337,11 @@
 
 	101_54: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1E054.1_card.jpg
-			//parentId: 101_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 2
+			//id: 101_54.2
+			revision: 2
+			image: sets/vset1/LOTR-ENV1E054.1_card.jpg
 			collInfo: V1U54
 			rarity: U
-			setNum: "V1"
-			cardNum: 54
-			style: Standard
 		}
 		title: Sam
 		subtitle: Of Bagshot Row
@@ -426,17 +393,10 @@
 
 	101_55: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S055.0_card.jpg
-			//parentId: 101_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_55
+			image: sets/vset1/LOTR-ENV1S055.0_card.jpg
 			collInfo: V1C55
 			rarity: C
-			setNum: "V1"
-			cardNum: 55
-			style: Standard
 		}
 		title: We May Yet
 		unique: false
@@ -475,17 +435,10 @@
 
 	101_56: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S056.0_card.jpg
-			//parentId: 101_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_56
+			image: sets/vset1/LOTR-ENV1S056.0_card.jpg
 			collInfo: V1C56
 			rarity: C
-			setNum: "V1"
-			cardNum: 56
-			style: Standard
 		}
 		title: We're Coming, Too!
 		unique: false

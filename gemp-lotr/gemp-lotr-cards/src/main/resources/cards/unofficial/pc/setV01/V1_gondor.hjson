@@ -46,7 +46,7 @@
 	# 		javaClass: false
 	# 		parent: 101_19 
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: V1R19
 	# 		rarity: R
 	# 		setNum: "V1"
@@ -134,17 +134,11 @@
 
 	101_19: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S019.2_card.jpg
-			//parentId: 101_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 2
+			//id: 101_19.2
+			revision: 2
+			image: sets/vset1/LOTR-ENV1S019.2_card.jpg
 			collInfo: V1R19
 			rarity: R
-			setNum: "V1"
-			cardNum: 19
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Estel
@@ -202,17 +196,10 @@
 
 	101_20: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S020.0_card.jpg
-			//parentId: 101_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_20
+			image: sets/vset1/LOTR-ENV1S020.0_card.jpg
 			collInfo: V1R20
 			rarity: R
-			setNum: "V1"
-			cardNum: 20
-			style: Standard
 		}
 		title: Boromir
 		subtitle: Redeemed
@@ -274,17 +261,10 @@
 
 	101_21: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S021.0_card.jpg
-			//parentId: 101_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_21
+			image: sets/vset1/LOTR-ENV1S021.0_card.jpg
 			collInfo: V1C21
 			rarity: C
-			setNum: "V1"
-			cardNum: 21
-			style: Standard
 		}
 		title: The Sons of Gondor Have Returned
 		unique: true
@@ -334,17 +314,10 @@
 
 	101_22: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S022.0_card.jpg
-			//parentId: 101_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_22
+			image: sets/vset1/LOTR-ENV1S022.0_card.jpg
 			collInfo: V1R22
 			rarity: R
-			setNum: "V1"
-			cardNum: 22
-			style: Standard
 		}
 		title: Gilraen's Memorial
 		unique: true
@@ -418,17 +391,10 @@
 
 	101_23: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S023.0_card.jpg
-			//parentId: 101_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_23
+			image: sets/vset1/LOTR-ENV1S023.0_card.jpg
 			collInfo: V1C23
 			rarity: C
-			setNum: "V1"
-			cardNum: 23
-			style: Standard
 		}
 		title: I Would Have Gone With You to the End
 		unique: true
@@ -511,17 +477,10 @@
 
 	101_24: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S024.0_card.jpg
-			//parentId: 101_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_24
+			image: sets/vset1/LOTR-ENV1S024.0_card.jpg
 			collInfo: V1C24
 			rarity: C
-			setNum: "V1"
-			cardNum: 24
-			style: Standard
 		}
 		title: You Have My Sword
 		unique: true

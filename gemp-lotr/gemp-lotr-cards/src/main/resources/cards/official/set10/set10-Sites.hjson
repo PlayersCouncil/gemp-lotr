@@ -2,17 +2,9 @@
 
 	10_117: {
 		cardInfo: {
-			imagePath: decipher/LOTR10117.jpg
-			//parentId: 10_117
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10117.jpg
 			collInfo: 10U117
 			rarity: U
-			setNum: "10"
-			cardNum: 117
-			style: Standard
 		}
 		title: Base of Mindolluin
 		unique: false
@@ -54,17 +46,9 @@
 
 	10_118: {
 		cardInfo: {
-			imagePath: decipher/LOTR10118.jpg
-			//parentId: 10_118
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10118.jpg
 			collInfo: 10U118
 			rarity: U
-			setNum: "10"
-			cardNum: 118
-			style: Standard
 		}
 		title: Pelennor Prairie
 		unique: false
@@ -107,17 +91,9 @@
 
 	10_119: {
 		cardInfo: {
-			imagePath: decipher/LOTR10119.jpg
-			//parentId: 10_119
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10119.jpg
 			collInfo: 10U119
 			rarity: U
-			setNum: "10"
-			cardNum: 119
-			style: Standard
 		}
 		title: Steward's Tomb
 		unique: false
@@ -159,17 +135,9 @@
 
 	10_120: {
 		cardInfo: {
-			imagePath: decipher/LOTR10120.jpg
-			//parentId: 10_120
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10120.jpg
 			collInfo: 10U120
 			rarity: U
-			setNum: "10"
-			cardNum: 120
-			style: Standard
 		}
 		title: Watchers of Cirith Ungol
 		unique: false

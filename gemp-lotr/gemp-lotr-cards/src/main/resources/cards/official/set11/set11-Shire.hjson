@@ -2,17 +2,9 @@
 
 	11_161: {
 		cardInfo: {
-			imagePath: decipher/LOTR11161.jpg
-			//parentId: 11_161
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11161.jpg
 			collInfo: 11S161
 			rarity: S
-			setNum: "11"
-			cardNum: 161
-			style: Standard
 		}
 		title: Concerning Hobbits
 		unique: false
@@ -47,17 +39,9 @@
 
 	11_162: {
 		cardInfo: {
-			imagePath: decipher/LOTR11162.jpg
-			//parentId: 11_162
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11162.jpg
 			collInfo: 11C162
 			rarity: C
-			setNum: "11"
-			cardNum: 162
-			style: Standard
 		}
 		title: Crouched Down
 		unique: false
@@ -101,17 +85,9 @@
 
 	11_163: {
 		cardInfo: {
-			imagePath: decipher/LOTR11163.jpg
-			//parentId: 11_163
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11163.jpg
 			collInfo: 11U163
 			rarity: U
-			setNum: "11"
-			cardNum: 163
-			style: Standard
 		}
 		title: Farmer Maggot
 		subtitle: Hobbit of the Marish
@@ -151,17 +127,9 @@
 
 	11_164: {
 		cardInfo: {
-			imagePath: decipher/LOTR11164.jpg
-			//parentId: 11_164
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11164.jpg
 			collInfo: 11S164
 			rarity: S
-			setNum: "11"
-			cardNum: 164
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Protected by Many
@@ -211,17 +179,9 @@
 
 	11_165: {
 		cardInfo: {
-			imagePath: decipher/LOTR11165.jpg
-			//parentId: 11_165
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11165.jpg
 			collInfo: 11R165
 			rarity: R
-			setNum: "11"
-			cardNum: 165
-			style: Standard
 		}
 		title: Habits of Home
 		unique: false
@@ -257,17 +217,9 @@
 
 	11_166: {
 		cardInfo: {
-			imagePath: decipher/LOTR11166.jpg
-			//parentId: 11_166
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11166.jpg
 			collInfo: 11S166
 			rarity: S
-			setNum: "11"
-			cardNum: 166
-			style: Standard
 		}
 		title: Hobbit Sword
 		unique: false
@@ -292,17 +244,9 @@
 
 	11_167: {
 		cardInfo: {
-			imagePath: decipher/LOTR11167.jpg
-			//parentId: 11_167
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11167.jpg
 			collInfo: 11C167
 			rarity: C
-			setNum: "11"
-			cardNum: 167
-			style: Standard
 		}
 		title: Incognito
 		unique: false
@@ -351,17 +295,9 @@
 
 	11_168: {
 		cardInfo: {
-			imagePath: decipher/LOTR11168.jpg
-			//parentId: 11_168
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11168.jpg
 			collInfo: 11C168
 			rarity: C
-			setNum: "11"
-			cardNum: 168
-			style: Standard
 		}
 		title: Merry
 		subtitle: Loyal Companion
@@ -401,17 +337,9 @@
 
 	11_169: {
 		cardInfo: {
-			imagePath: decipher/LOTR11169.jpg
-			//parentId: 11_169
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11169.jpg
 			collInfo: 11C169
 			rarity: C
-			setNum: "11"
-			cardNum: 169
-			style: Standard
 		}
 		title: The More, The Merrier
 		unique: false
@@ -448,17 +376,9 @@
 
 	11_170: {
 		cardInfo: {
-			imagePath: decipher/LOTR11170.jpg
-			//parentId: 11_170
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11170.jpg
 			collInfo: 11R170
 			rarity: R
-			setNum: "11"
-			cardNum: 170
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Brave Decoy
@@ -505,17 +425,9 @@
 
 	11_171: {
 		cardInfo: {
-			imagePath: decipher/LOTR11171.jpg
-			//parentId: 11_171
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11171.jpg
 			collInfo: 11R171
 			rarity: R
-			setNum: "11"
-			cardNum: 171
-			style: Standard
 		}
 		title: Salt from the Shire
 		unique: false
@@ -576,17 +488,9 @@
 
 	11_172: {
 		cardInfo: {
-			imagePath: decipher/LOTR11172.jpg
-			//parentId: 11_172
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11172.jpg
 			collInfo: 11U172
 			rarity: U
-			setNum: "11"
-			cardNum: 172
-			style: Standard
 		}
 		title: Sam
 		subtitle: Steadfast Friend
@@ -623,17 +527,9 @@
 
 	11_173: {
 		cardInfo: {
-			imagePath: decipher/LOTR11173.jpg
-			//parentId: 11_173
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11173.jpg
 			collInfo: 11R173
 			rarity: R
-			setNum: "11"
-			cardNum: 173
-			style: Standard
 		}
 		title: Sting
 		subtitle: Weapon of Heritage
@@ -689,17 +585,9 @@
 
 	11_174: {
 		cardInfo: {
-			imagePath: decipher/LOTR11174.jpg
-			//parentId: 11_174
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11174.jpg
 			collInfo: 11S174
 			rarity: S
-			setNum: "11"
-			cardNum: 174
-			style: Standard
 		}
 		title: Sworn Companion
 		unique: false
@@ -734,17 +622,9 @@
 
 	11_175: {
 		cardInfo: {
-			imagePath: decipher/LOTR11175.jpg
-			//parentId: 11_175
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11175.jpg
 			collInfo: 11U175
 			rarity: U
-			setNum: "11"
-			cardNum: 175
-			style: Standard
 		}
 		title: A Task Now to Be Done
 		unique: false
@@ -781,17 +661,9 @@
 
 	11_176: {
 		cardInfo: {
-			imagePath: decipher/LOTR11176.jpg
-			//parentId: 11_176
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11176.jpg
 			collInfo: 11S176
 			rarity: S
-			setNum: "11"
-			cardNum: 176
-			style: Standard
 		}
 		title: Unharmed
 		unique: false

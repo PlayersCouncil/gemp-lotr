@@ -2,17 +2,10 @@
 
 	102_57: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S057.0_card.jpg
-			//parentId: 102_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_57
+			image: sets/V2/LOTR-ENV2S057.0_card.jpg
 			collInfo: V2_57
 			rarity: _
-			setNum: V2
-			cardNum: 57
-			style: Standard
 		}
 		title: Attention of the Eye
 		unique: false
@@ -95,17 +88,10 @@
 
 	102_58: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S058.0_card.jpg
-			//parentId: 102_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_58
+			image: sets/V2/LOTR-ENV2S058.0_card.jpg
 			collInfo: V2_58
 			rarity: _
-			setNum: V2
-			cardNum: 58
-			style: Standard
 		}
 		title: Down to Join the Dead Ones
 		unique: false
@@ -157,17 +143,10 @@
 
 	102_59: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S059.0_card.jpg
-			//parentId: 102_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_59
+			image: sets/V2/LOTR-ENV2S059.0_card.jpg
 			collInfo: V2_59
 			rarity: _
-			setNum: V2
-			cardNum: 59
-			style: Standard
 		}
 		title: Grishnakh
 		subtitle: Servant of Lugburz
@@ -218,17 +197,10 @@
 
 	102_60: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S060.0_card.jpg
-			//parentId: 102_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_60
+			image: sets/V2/LOTR-ENV2S060.0_card.jpg
 			collInfo: V2_60
 			rarity: _
-			setNum: V2
-			cardNum: 60
-			style: Standard
 		}
 		title: Lugburz Spotter
 		unique: false
@@ -264,17 +236,10 @@
 
 	102_61: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S061.0_card.jpg
-			//parentId: 102_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_61
+			image: sets/V2/LOTR-ENV2S061.0_card.jpg
 			collInfo: V2_61
 			rarity: _
-			setNum: V2
-			cardNum: 61
-			style: Standard
 		}
 		title: Marsh Wight
 		unique: false
@@ -328,17 +293,10 @@
 
 	102_62: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S062.0_card.jpg
-			//parentId: 102_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_62
+			image: sets/V2/LOTR-ENV2S062.0_card.jpg
 			collInfo: V2_62
 			rarity: _
-			setNum: V2
-			cardNum: 62
-			style: Standard
 		}
 		title: No One's Going to Save You Now
 		unique: false
@@ -375,17 +333,10 @@
 
 	102_63: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S063.0_card.jpg
-			//parentId: 102_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_63
+			image: sets/V2/LOTR-ENV2S063.0_card.jpg
 			collInfo: V2_63
 			rarity: _
-			setNum: V2
-			cardNum: 63
-			style: Standard
 		}
 		title: Orc of Lugburz
 		unique: false
@@ -427,17 +378,10 @@
 
 	102_64: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S064.0_card.jpg
-			//parentId: 102_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_64
+			image: sets/V2/LOTR-ENV2S064.0_card.jpg
 			collInfo: V2_64
 			rarity: _
-			setNum: V2
-			cardNum: 64
-			style: Standard
 		}
 		title: Orc Searcher
 		unique: false
@@ -479,17 +423,10 @@
 
 	102_65: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S065.0_card.jpg
-			//parentId: 102_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_65
+			image: sets/V2/LOTR-ENV2S065.0_card.jpg
 			collInfo: V2_65
 			rarity: _
-			setNum: V2
-			cardNum: 65
-			style: Standard
 		}
 		title: Shapes to See, Not to Touch
 		unique: false
@@ -544,17 +481,10 @@
 
 	102_66: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S066.0_card.jpg
-			//parentId: 102_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_66
+			image: sets/V2/LOTR-ENV2S066.0_card.jpg
 			collInfo: V2_66
 			rarity: _
-			setNum: V2
-			cardNum: 66
-			style: Standard
 		}
 		title: Trapped in its Gaze
 		unique: false

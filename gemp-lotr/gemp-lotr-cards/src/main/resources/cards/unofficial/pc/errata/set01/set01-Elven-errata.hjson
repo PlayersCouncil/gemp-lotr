@@ -1,17 +1,14 @@
 {
 	51_29: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E029.1.jpg
-			javaClass: false
+			//id: 1_29.1
 			parent: 1_29
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E029.1.jpg
 			collInfo: 1U29
 			rarity: U
-			setNum: "1"
-			cardNum: 29
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Ancient Enmity
 		culture: elven
@@ -76,17 +73,14 @@
 	
 	51_36: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E036.1.jpg
-			javaClass: false
+			//id: 1_36.1
 			parent: 1_36
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E036.1.jpg
 			collInfo: 1R36
 			rarity: R
-			setNum: "1"
-			cardNum: 36
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Curse Their Foul Feet!
 		culture: elven
@@ -173,17 +167,14 @@
 	
 	51_40: {
 		cardInfo: {
-			imagePath: errata/51_40.jpg
-			javaClass: false
+			//id: 1_40.1
 			parent: 1_40
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_40.jpg
 			collInfo: 1R40
 			rarity: R
-			setNum: "1"
-			cardNum: 40
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Elrond
 		subtitle: Lord of Rivendell
@@ -249,17 +240,14 @@
 	
 	51_43: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E043.1.jpg
-			javaClass: false
+			//id: 1_43.1
 			parent: 1_43
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E043.1.jpg
 			collInfo: 1C43
 			rarity: C
-			setNum: "1"
-			cardNum: 43
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Far-seeing Eyes
 		unique: true
@@ -303,17 +291,14 @@
 
 	51_45: {
 		cardInfo: {
-			imagePath: errata/51_45.jpg
-			javaClass: false
+			//id: 1_45.1
 			parent: 1_45
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_45.jpg
 			collInfo: 1R45
 			rarity: R
-			setNum: "1"
-			cardNum: 45
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Galadriel
 		subtitle: Lady of Light
@@ -365,17 +350,14 @@
 	
 	51_50: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E050.1_card.jpg
-			//parentId: 1_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1?
+			//id: 1_50.1
+			parent: 1_50
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E050.1_card.jpg
 			collInfo: 1R50
 			rarity: R
-			setNum: "1"
-			cardNum: 50
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Greenleaf
@@ -417,17 +399,14 @@
 	
 	51_53: {
 		cardInfo: {
-			imagePath: errata/51_53.jpg
-			javaClass: false
+			//id: 1_53.1
 			parent: 1_53
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_53.jpg
 			collInfo: 1C53
 			rarity: C
-			setNum: "1"
-			cardNum: 53
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Lorien Elf
 		culture: elven
@@ -457,17 +436,14 @@
 
 	51_55: {
 		cardInfo: {
-			imagePath: errata/51_55.jpg
-			javaClass: false
+			//id: 1_55.1
 			parent: 1_55
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_55.jpg
 			collInfo: 1R55
 			rarity: R
-			setNum: "1"
-			cardNum: 55
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The Mirror of Galadriel
 		unique: true
@@ -521,17 +497,14 @@
 	
 	51_59: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E059.1_card.jpg
-			javaClass: false
+			//id: 1_59.1
 			parent: 1_59
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E059.1_card.jpg
 			collInfo: 1C59
 			rarity: C
-			setNum: "1"
-			cardNum: 59
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Shoulder to Shoulder
 		unique: false
@@ -595,17 +568,14 @@
 	
 	51_63: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E063.1_card.jpg
-			//parentId: 1_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 1_63.1
+			parent: 1_63
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E063.1_card.jpg
 			collInfo: 1U63
 			rarity: U
-			setNum: "1"
-			cardNum: 63
-			style: Standard
 		}
 		title: Stand Against Darkness
 		unique: false
@@ -654,17 +624,14 @@
 	
 	51_68: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E068.1.jpg
-			javaClass: false
+			//id: 1_68.1
 			parent: 1_68
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E068.1.jpg
 			collInfo: 1C68
 			rarity: C
-			setNum: "1"
-			cardNum: 68
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The White Arrows of Lorien
 		culture: elven

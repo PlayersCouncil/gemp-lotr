@@ -1,17 +1,14 @@
 {
 	59_31: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN09E031.1_card.jpg
-			javaClass: false
+			//id: 9_31.1
 			parent: 9_31
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN09E031.1_card.jpg
 			collInfo: 9R+31
 			rarity: R+
-			setNum: "9"
-			cardNum: 31
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Boromir
 		subtitle: Bearer of Council
@@ -80,17 +77,14 @@
 	
 	59_32: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN09E032.1_card.jpg
-			//parentId: 9_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 9_32.1
+			parent: 9_32
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN09E032.1_card.jpg
 			collInfo: 9R+32
 			rarity: R+
-			setNum: "9"
-			cardNum: 32
-			style: Standard
 		}
 		title: Elendil
 		subtitle: The Tall
@@ -154,17 +148,14 @@
 
 	59_33: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN09E033.1_card.jpg
-			javaClass: false
+			//id: 9_33.1
 			parent: 9_33
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN09E033.1_card.jpg
 			collInfo: 9R+33
 			rarity: R+
-			setNum: "9"
-			cardNum: 33
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Isildur
 		subtitle: Bearer of Heirlooms
@@ -234,17 +225,14 @@
 	
 	59_35: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN09E035.1_card.jpg
-			//parentId: 9_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 9_35.1
+			parent: 9_35
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN09E035.1_card.jpg
 			collInfo: 9R35
 			rarity: R
-			setNum: "9"
-			cardNum: 35
-			style: Standard
 		}
 		title: Sapling of the White Tree
 		unique: true

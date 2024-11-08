@@ -2,17 +2,9 @@
 
 	5_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR05021.jpg
-			//parentId: 5_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05021.jpg
 			collInfo: 5R21
 			rarity: R
-			setNum: "5"
-			cardNum: 21
-			style: Standard
 		}
 		title: Be Back Soon
 		unique: false
@@ -58,17 +50,9 @@
 
 	5_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR05022.jpg
-			//parentId: 5_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05022.jpg
 			collInfo: 5U22
 			rarity: U
-			setNum: "5"
-			cardNum: 22
-			style: Standard
 		}
 		title: Evil-smelling Fens
 		unique: false
@@ -119,17 +103,9 @@
 
 	5_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR05023.jpg
-			//parentId: 5_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05023.jpg
 			collInfo: 5U23
 			rarity: U
-			setNum: "5"
-			cardNum: 23
-			style: Standard
 		}
 		title: Follow Sméagol
 		unique: false
@@ -164,17 +140,9 @@
 
 	5_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR05024.jpg
-			//parentId: 5_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05024.jpg
 			collInfo: 5C24
 			rarity: C
-			setNum: "5"
-			cardNum: 24
-			style: Standard
 		}
 		title: Gollum
 		subtitle: Nasty Treacherous Creature
@@ -213,17 +181,9 @@
 
 	5_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR05025.jpg
-			//parentId: 5_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05025.jpg
 			collInfo: 5R25
 			rarity: R
-			setNum: "5"
-			cardNum: 25
-			style: Standard
 		}
 		title: Gollum
 		subtitle: Stinker
@@ -271,17 +231,9 @@
 
 	5_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR05026.jpg
-			//parentId: 5_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05026.jpg
 			collInfo: 5U26
 			rarity: U
-			setNum: "5"
-			cardNum: 26
-			style: Standard
 		}
 		title: Look at Him
 		unique: false
@@ -318,17 +270,9 @@
 
 	5_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR05027.jpg
-			//parentId: 5_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05027.jpg
 			collInfo: 5C27
 			rarity: C
-			setNum: "5"
-			cardNum: 27
-			style: Standard
 		}
 		title: Poor Wretch
 		unique: false
@@ -367,17 +311,9 @@
 
 	5_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR05028.jpg
-			//parentId: 5_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05028.jpg
 			collInfo: 5C28
 			rarity: C
-			setNum: "5"
-			cardNum: 28
-			style: Standard
 		}
 		title: Sméagol
 		subtitle: Old Noser
@@ -445,17 +381,9 @@
 
 	5_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR05029.jpg
-			//parentId: 5_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05029.jpg
 			collInfo: 5R29
 			rarity: R
-			setNum: "5"
-			cardNum: 29
-			style: Standard
 		}
 		title: Sméagol
 		subtitle: Slinker
@@ -508,17 +436,9 @@
 
 	5_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR05030.jpg
-			//parentId: 5_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05030.jpg
 			collInfo: 5C30
 			rarity: C
-			setNum: "5"
-			cardNum: 30
-			style: Standard
 		}
 		title: We Must Have It
 		unique: false

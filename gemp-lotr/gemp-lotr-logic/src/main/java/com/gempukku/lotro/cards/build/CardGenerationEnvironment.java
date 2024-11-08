@@ -16,4 +16,5 @@ public interface CardGenerationEnvironment {
     TriggerCheckerFactory getTriggerCheckerFactory();
 
     ModifierSourceFactory getModifierSourceFactory();
+    void recordCardVariant(String parentId, BuiltLotroCardBlueprint card);
 }

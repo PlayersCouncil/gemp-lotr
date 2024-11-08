@@ -1,17 +1,14 @@
 {
 	58_91: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN08E091.1.jpg
-			javaClass: false
+			//id: 8_91.1
 			parent: 8_91
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN08E091.1.jpg
 			collInfo: 8R91
 			rarity: R
-			setNum: "8"
-			cardNum: 91
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Rohirrim Army
 		unique: true

@@ -2,17 +2,9 @@
 
 	3_115: {
 		cardInfo: {
-			imagePath: decipher/LOTR03115.jpg
-			//parentId: 3_115
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03115.jpg
 			collInfo: 3U115
 			rarity: U
-			setNum: "3"
-			cardNum: 115
-			style: Standard
 		}
 		title: Caras Galadhon
 		unique: false
@@ -48,17 +40,9 @@
 
 	3_116: {
 		cardInfo: {
-			imagePath: decipher/LOTR03116.jpg
-			//parentId: 3_116
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03116.jpg
 			collInfo: 3U116
 			rarity: U
-			setNum: "3"
-			cardNum: 116
-			style: Standard
 		}
 		title: Eregion Hills
 		unique: false
@@ -91,17 +75,9 @@
 
 	3_117: {
 		cardInfo: {
-			imagePath: decipher/LOTR03117.jpg
-			//parentId: 3_117
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03117.jpg
 			collInfo: 3C117
 			rarity: C
-			setNum: "3"
-			cardNum: 117
-			style: Standard
 		}
 		title: Gates of Argonath
 		unique: false
@@ -131,17 +107,9 @@
 
 	3_118: {
 		cardInfo: {
-			imagePath: decipher/LOTR03118.jpg
-			//parentId: 3_118
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03118.jpg
 			collInfo: 3C118
 			rarity: C
-			setNum: "3"
-			cardNum: 118
-			style: Standard
 		}
 		title: The Great River
 		unique: false
@@ -174,17 +142,9 @@
 
 	3_119: {
 		cardInfo: {
-			imagePath: decipher/LOTR03119.jpg
-			//parentId: 3_119
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03119.jpg
 			collInfo: 3U119
 			rarity: U
-			setNum: "3"
-			cardNum: 119
-			style: Standard
 		}
 		title: House of Elrond
 		unique: false
@@ -223,17 +183,9 @@
 
 	3_120: {
 		cardInfo: {
-			imagePath: decipher/LOTR03120.jpg
-			//parentId: 3_120
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03120.jpg
 			collInfo: 3U120
 			rarity: U
-			setNum: "3"
-			cardNum: 120
-			style: Standard
 		}
 		title: Wastes of Emyn Muil
 		unique: false

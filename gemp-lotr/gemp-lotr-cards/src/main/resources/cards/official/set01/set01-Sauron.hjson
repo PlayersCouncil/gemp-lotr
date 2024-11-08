@@ -2,17 +2,9 @@
 
 	1_239: {
 		cardInfo: {
-			imagePath: decipher/LOTR01239.jpg
-			//parentId: 1_239
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01239.jpg
 			collInfo: 1U239
 			rarity: U
-			setNum: "1"
-			cardNum: 239
-			style: Standard
 		}
 		title: All Thought Bent on It
 		unique: false
@@ -62,17 +54,9 @@
 
 	1_240: {
 		cardInfo: {
-			imagePath: decipher/LOTR01240.jpg
-			//parentId: 1_240
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01240.jpg
 			collInfo: 1R240
 			rarity: R
-			setNum: "1"
-			cardNum: 240
-			style: Standard
 		}
 		title: Band of the Eye
 		unique: false
@@ -113,17 +97,9 @@
 
 	1_241: {
 		cardInfo: {
-			imagePath: decipher/LOTR01241.jpg
-			//parentId: 1_241
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01241.jpg
 			collInfo: 1U241
 			rarity: U
-			setNum: "1"
-			cardNum: 241
-			style: Standard
 		}
 		title: Curse From Mordor
 		unique: false
@@ -156,17 +132,9 @@
 
 	1_242: {
 		cardInfo: {
-			imagePath: decipher/LOTR01242.jpg
-			//parentId: 1_242
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01242.jpg
 			collInfo: 1U242
 			rarity: U
-			setNum: "1"
-			cardNum: 242
-			style: Standard
 		}
 		title: The Dark Lord's Summons
 		unique: false
@@ -241,17 +209,9 @@
 
 	1_243: {
 		cardInfo: {
-			imagePath: decipher/LOTR01243.jpg
-			//parentId: 1_243
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01243.jpg
 			collInfo: 1R243
 			rarity: R
-			setNum: "1"
-			cardNum: 243
-			style: Standard
 		}
 		title: Despair
 		unique: false
@@ -301,17 +261,9 @@
 
 	1_244: {
 		cardInfo: {
-			imagePath: decipher/LOTR01244.jpg
-			//parentId: 1_244
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01244.jpg
 			collInfo: 1R244
 			rarity: R
-			setNum: "1"
-			cardNum: 244
-			style: Standard
 		}
 		title: Desperate Defense of the Ring
 		unique: false
@@ -367,17 +319,9 @@
 
 	1_245: {
 		cardInfo: {
-			imagePath: decipher/LOTR01245.jpg
-			//parentId: 1_245
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01245.jpg
 			collInfo: 1R245
 			rarity: R
-			setNum: "1"
-			cardNum: 245
-			style: Standard
 		}
 		title: Desperate Measures
 		unique: false
@@ -415,17 +359,9 @@
 
 	1_246: {
 		cardInfo: {
-			imagePath: decipher/LOTR01246.jpg
-			//parentId: 1_246
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01246.jpg
 			collInfo: 1R246
 			rarity: R
-			setNum: "1"
-			cardNum: 246
-			style: Standard
 		}
 		title: Enduring Evil
 		unique: false
@@ -463,17 +399,9 @@
 
 	1_247: {
 		cardInfo: {
-			imagePath: decipher/LOTR01247.jpg
-			//parentId: 1_247
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01247.jpg
 			collInfo: 1R247
 			rarity: R
-			setNum: "1"
-			cardNum: 247
-			style: Standard
 		}
 		title: Enheartened Foe
 		unique: false
@@ -509,17 +437,9 @@
 
 	1_248: {
 		cardInfo: {
-			imagePath: decipher/LOTR01248.jpg
-			//parentId: 1_248
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01248.jpg
 			collInfo: 1C248
 			rarity: C
-			setNum: "1"
-			cardNum: 248
-			style: Standard
 		}
 		title: Forces of Mordor
 		unique: false
@@ -556,17 +476,9 @@
 
 	1_249: {
 		cardInfo: {
-			imagePath: decipher/LOTR01249.jpg
-			//parentId: 1_249
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01249.jpg
 			collInfo: 1U249
 			rarity: U
-			setNum: "1"
-			cardNum: 249
-			style: Standard
 		}
 		title: Gleaming Spires Will Crumble
 		unique: false
@@ -609,17 +521,9 @@
 
 	1_250: {
 		cardInfo: {
-			imagePath: decipher/LOTR01250.jpg
-			//parentId: 1_250
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01250.jpg
 			collInfo: 1R250
 			rarity: R
-			setNum: "1"
-			cardNum: 250
-			style: Standard
 		}
 		title: Hate
 		unique: false
@@ -652,17 +556,9 @@
 
 	1_251: {
 		cardInfo: {
-			imagePath: decipher/LOTR01251.jpg
-			//parentId: 1_251
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01251.jpg
 			collInfo: 1U251
 			rarity: U
-			setNum: "1"
-			cardNum: 251
-			style: Standard
 		}
 		title: A Host Avails Little
 		unique: false
@@ -711,17 +607,9 @@
 
 	1_252: {
 		cardInfo: {
-			imagePath: decipher/LOTR01252.jpg
-			//parentId: 1_252
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01252.jpg
 			collInfo: 1R252
 			rarity: R
-			setNum: "1"
-			cardNum: 252
-			style: Standard
 		}
 		title: The Irresistible Shadow
 		unique: false
@@ -772,17 +660,9 @@
 
 	1_253: {
 		cardInfo: {
-			imagePath: decipher/LOTR01253.jpg
-			//parentId: 1_253
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01253.jpg
 			collInfo: 1R253
 			rarity: R
-			setNum: "1"
-			cardNum: 253
-			style: Standard
 		}
 		title: Journey Into Danger
 		unique: false
@@ -829,17 +709,9 @@
 
 	1_254: {
 		cardInfo: {
-			imagePath: decipher/LOTR01254.jpg
-			//parentId: 1_254
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01254.jpg
 			collInfo: 1R254
 			rarity: R
-			setNum: "1"
-			cardNum: 254
-			style: Standard
 		}
 		title: Mordor Enraged
 		unique: false
@@ -876,17 +748,9 @@
 
 	1_255: {
 		cardInfo: {
-			imagePath: decipher/LOTR01255.jpg
-			//parentId: 1_255
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01255.jpg
 			collInfo: 1C255
 			rarity: C
-			setNum: "1"
-			cardNum: 255
-			style: Standard
 		}
 		title: Mordor's Strength
 		unique: false
@@ -920,17 +784,9 @@
 
 	1_256: {
 		cardInfo: {
-			imagePath: decipher/LOTR01256.jpg
-			//parentId: 1_256
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01256.jpg
 			collInfo: 1R256
 			rarity: R
-			setNum: "1"
-			cardNum: 256
-			style: Standard
 		}
 		title: Morgul Hunter
 		unique: false
@@ -966,17 +822,9 @@
 
 	1_257: {
 		cardInfo: {
-			imagePath: decipher/LOTR01257.jpg
-			//parentId: 1_257
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01257.jpg
 			collInfo: 1U257
 			rarity: U
-			setNum: "1"
-			cardNum: 257
-			style: Standard
 		}
 		title: Morgul Skirmisher
 		unique: false
@@ -1013,17 +861,9 @@
 
 	1_258: {
 		cardInfo: {
-			imagePath: decipher/LOTR01258.jpg
-			//parentId: 1_258
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01258.jpg
 			collInfo: 1U258
 			rarity: U
-			setNum: "1"
-			cardNum: 258
-			style: Standard
 		}
 		title: Morgul Skulker
 		unique: false
@@ -1061,17 +901,9 @@
 
 	1_259: {
 		cardInfo: {
-			imagePath: decipher/LOTR01259.jpg
-			//parentId: 1_259
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01259.jpg
 			collInfo: 1R259
 			rarity: R
-			setNum: "1"
-			cardNum: 259
-			style: Standard
 		}
 		title: Morgul Warden
 		unique: true
@@ -1107,17 +939,9 @@
 
 	1_260: {
 		cardInfo: {
-			imagePath: decipher/LOTR01260.jpg
-			//parentId: 1_260
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01260.jpg
 			collInfo: 1U260
 			rarity: U
-			setNum: "1"
-			cardNum: 260
-			style: Standard
 		}
 		title: The Number Must Be Few
 		unique: false
@@ -1173,17 +997,9 @@
 
 	1_261: {
 		cardInfo: {
-			imagePath: decipher/LOTR01261.jpg
-			//parentId: 1_261
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01261.jpg
 			collInfo: 1C261
 			rarity: C
-			setNum: "1"
-			cardNum: 261
-			style: Standard
 		}
 		title: Orc Ambusher
 		unique: false
@@ -1237,17 +1053,9 @@
 
 	1_262: {
 		cardInfo: {
-			imagePath: decipher/LOTR01262.jpg
-			//parentId: 1_262
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01262.jpg
 			collInfo: 1U262
 			rarity: U
-			setNum: "1"
-			cardNum: 262
-			style: Standard
 		}
 		title: Orc Assassin
 		unique: false
@@ -1304,17 +1112,9 @@
 
 	1_263: {
 		cardInfo: {
-			imagePath: decipher/LOTR01263.jpg
-			//parentId: 1_263
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01263.jpg
 			collInfo: 1R263
 			rarity: R
-			setNum: "1"
-			cardNum: 263
-			style: Standard
 		}
 		title: Orc Banner
 		unique: false
@@ -1350,17 +1150,9 @@
 
 	1_264: {
 		cardInfo: {
-			imagePath: decipher/LOTR01264.jpg
-			//parentId: 1_264
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01264.jpg
 			collInfo: 1R264
 			rarity: R
-			setNum: "1"
-			cardNum: 264
-			style: Standard
 		}
 		title: Orc Bowmen
 		unique: false
@@ -1394,17 +1186,9 @@
 
 	1_265: {
 		cardInfo: {
-			imagePath: decipher/LOTR01265.jpg
-			//parentId: 1_265
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01265.jpg
 			collInfo: 1R265
 			rarity: R
-			setNum: "1"
-			cardNum: 265
-			style: Standard
 		}
 		title: Orc Butchery
 		unique: false
@@ -1446,17 +1230,9 @@
 
 	1_266: {
 		cardInfo: {
-			imagePath: decipher/LOTR01266.jpg
-			//parentId: 1_266
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01266.jpg
 			collInfo: 1C266
 			rarity: C
-			setNum: "1"
-			cardNum: 266
-			style: Standard
 		}
 		title: Orc Chieftain
 		unique: false
@@ -1503,17 +1279,9 @@
 
 	1_267: {
 		cardInfo: {
-			imagePath: decipher/LOTR01267.jpg
-			//parentId: 1_267
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01267.jpg
 			collInfo: 1U267
 			rarity: U
-			setNum: "1"
-			cardNum: 267
-			style: Standard
 		}
 		title: Orc Hunters
 		unique: false
@@ -1550,17 +1318,9 @@
 
 	1_268: {
 		cardInfo: {
-			imagePath: decipher/LOTR01268.jpg
-			//parentId: 1_268
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01268.jpg
 			collInfo: 1C268
 			rarity: C
-			setNum: "1"
-			cardNum: 268
-			style: Standard
 		}
 		title: Orc Inquisitor
 		unique: false
@@ -1598,17 +1358,9 @@
 
 	1_269: {
 		cardInfo: {
-			imagePath: decipher/LOTR01269.jpg
-			//parentId: 1_269
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01269.jpg
 			collInfo: 1C269
 			rarity: C
-			setNum: "1"
-			cardNum: 269
-			style: Standard
 		}
 		title: Orc Scimitar
 		unique: false
@@ -1654,17 +1406,9 @@
 
 	1_270: {
 		cardInfo: {
-			imagePath: decipher/LOTR01270.jpg
-			//parentId: 1_270
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01270.jpg
 			collInfo: 1U270
 			rarity: U
-			setNum: "1"
-			cardNum: 270
-			style: Standard
 		}
 		title: Orc Scouting Band
 		unique: false
@@ -1712,17 +1456,9 @@
 
 	1_271: {
 		cardInfo: {
-			imagePath: decipher/LOTR01271.jpg
-			//parentId: 1_271
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01271.jpg
 			collInfo: 1C271
 			rarity: C
-			setNum: "1"
-			cardNum: 271
-			style: Standard
 		}
 		title: Orc Soldier
 		unique: false
@@ -1759,17 +1495,9 @@
 
 	1_272: {
 		cardInfo: {
-			imagePath: decipher/LOTR01272.jpg
-			//parentId: 1_272
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01272.jpg
 			collInfo: 1R272
 			rarity: R
-			setNum: "1"
-			cardNum: 272
-			style: Standard
 		}
 		title: Orc War Band
 		unique: false
@@ -1806,17 +1534,9 @@
 
 	1_273: {
 		cardInfo: {
-			imagePath: decipher/LOTR01273.jpg
-			//parentId: 1_273
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01273.jpg
 			collInfo: 1C273
 			rarity: C
-			setNum: "1"
-			cardNum: 273
-			style: Standard
 		}
 		title: The Ring's Oppression
 		unique: false
@@ -1860,17 +1580,9 @@
 
 	1_274: {
 		cardInfo: {
-			imagePath: decipher/LOTR01274.jpg
-			//parentId: 1_274
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01274.jpg
 			collInfo: 1U274
 			rarity: U
-			setNum: "1"
-			cardNum: 274
-			style: Standard
 		}
 		title: Sauron's Defenses
 		unique: false
@@ -1935,17 +1647,9 @@
 
 	1_275: {
 		cardInfo: {
-			imagePath: decipher/LOTR01275.jpg
-			//parentId: 1_275
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01275.jpg
 			collInfo: 1U275
 			rarity: U
-			setNum: "1"
-			cardNum: 275
-			style: Standard
 		}
 		title: Seeking It Always
 		unique: false
@@ -1984,17 +1688,9 @@
 
 	1_276: {
 		cardInfo: {
-			imagePath: decipher/LOTR01276.jpg
-			//parentId: 1_276
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01276.jpg
 			collInfo: 1R276
 			rarity: R
-			setNum: "1"
-			cardNum: 276
-			style: Standard
 		}
 		title: Seeking Its Master
 		unique: false
@@ -2033,17 +1729,9 @@
 
 	1_277: {
 		cardInfo: {
-			imagePath: decipher/LOTR01277.jpg
-			//parentId: 1_277
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01277.jpg
 			collInfo: 1C277
 			rarity: C
-			setNum: "1"
-			cardNum: 277
-			style: Standard
 		}
 		title: Shadow's Reach
 		unique: false
@@ -2076,17 +1764,9 @@
 
 	1_278: {
 		cardInfo: {
-			imagePath: decipher/LOTR01278.jpg
-			//parentId: 1_278
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01278.jpg
 			collInfo: 1C278
 			rarity: C
-			setNum: "1"
-			cardNum: 278
-			style: Standard
 		}
 		title: Strength Born of Fear
 		unique: false
@@ -2121,17 +1801,9 @@
 
 	1_279: {
 		cardInfo: {
-			imagePath: decipher/LOTR01279.jpg
-			//parentId: 1_279
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01279.jpg
 			collInfo: 1R279
 			rarity: R
-			setNum: "1"
-			cardNum: 279
-			style: Standard
 		}
 		title: Thin and Stretched
 		unique: true
@@ -2185,17 +1857,9 @@
 
 	1_280: {
 		cardInfo: {
-			imagePath: decipher/LOTR01280.jpg
-			//parentId: 1_280
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01280.jpg
 			collInfo: 1U280
 			rarity: U
-			setNum: "1"
-			cardNum: 280
-			style: Standard
 		}
 		title: Tower Lieutenant
 		unique: true
@@ -2233,17 +1897,9 @@
 
 	1_281: {
 		cardInfo: {
-			imagePath: decipher/LOTR01281.jpg
-			//parentId: 1_281
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01281.jpg
 			collInfo: 1C281
 			rarity: C
-			setNum: "1"
-			cardNum: 281
-			style: Standard
 		}
 		title: Under the Watching Eye
 		unique: false
@@ -2288,17 +1944,9 @@
 
 	1_282: {
 		cardInfo: {
-			imagePath: decipher/LOTR01282.jpg
-			//parentId: 1_282
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01282.jpg
 			collInfo: 1R282
 			rarity: R
-			setNum: "1"
-			cardNum: 282
-			style: Standard
 		}
 		title: The Weight of a Legacy
 		unique: false
@@ -2328,17 +1976,9 @@
 
 	1_283: {
 		cardInfo: {
-			imagePath: decipher/LOTR01283.jpg
-			//parentId: 1_283
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01283.jpg
 			collInfo: 1C283
 			rarity: C
-			setNum: "1"
-			cardNum: 283
-			style: Standard
 		}
 		title: You Bring Great Evil
 		unique: false

@@ -2,17 +2,9 @@
 
 	9_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR09024.jpg
-			//parentId: 9_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09024.jpg
 			collInfo: 9R24
 			rarity: R
-			setNum: "9"
-			cardNum: 24
-			style: Standard
 		}
 		title: Ent Draught
 		unique: false
@@ -58,17 +50,9 @@
 
 	9_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR09025.jpg
-			//parentId: 9_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09025.jpg
 			collInfo: 9R25
 			rarity: R
-			setNum: "9"
-			cardNum: 25
-			style: Standard
 		}
 		title: Huorn
 		unique: false
@@ -122,17 +106,9 @@
 
 	9_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR09026.jpg
-			//parentId: 9_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09026.jpg
 			collInfo: 9R+26
 			rarity: R+
-			setNum: "9"
-			cardNum: 26
-			style: Standard
 		}
 		title: Radagast
 		subtitle: The Brown
@@ -218,17 +194,9 @@
 
 	9_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR09027.jpg
-			//parentId: 9_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09027.jpg
 			collInfo: 9R27
 			rarity: R
-			setNum: "9"
-			cardNum: 27
-			style: Standard
 		}
 		title: Sent Back
 		unique: false

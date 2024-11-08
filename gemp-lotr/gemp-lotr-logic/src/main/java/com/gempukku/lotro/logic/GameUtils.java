@@ -32,15 +32,29 @@ public class GameUtils {
     }
 
     public static String getFullName(PhysicalCard card) {
-        LotroCardBlueprint blueprint = card.getBlueprint();
-        return getFullName(blueprint);
+        return getFullName(card.getBlueprint());
     }
 
     public static String getFullName(LotroCardBlueprint blueprint) {
-        if (blueprint.getSubtitle() != null)
-            return blueprint.getTitle() + ", " + blueprint.getSubtitle();
-        return blueprint.getTitle();
+        return blueprint.getFullName();
     }
+
+    public static String getFullSanitizedName(LotroCardBlueprint blueprint) {
+        return blueprint.getSanitizedFullName();
+    }
+
+    public static String getFullText(PhysicalCard card) {
+        return getFullName(card.getBlueprint());
+    }
+
+    public static String getFullText(LotroCardBlueprint bp) {
+        return bp.getGameText();
+    }
+
+    public static String getFullFormattedText(LotroCardBlueprint bp) {
+        return bp.getFormattedGameText();
+    }
+
 
     public static String getFirstShadowPlayer(LotroGame game) {
         if (game.isSolo())

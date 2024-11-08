@@ -15,7 +15,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 1?
+	# 		revision: 1
 	# 		collInfo: 2R32
 	# 		rarity: R
 	# 		setNum: "2"
@@ -83,17 +83,14 @@
 
 	52_32: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E032.2.jpg
-			javaClass: false
+			//id: 2_32.2
 			parent: 2_32
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN02E032.2.jpg
 			collInfo: 2R32
 			rarity: R
-			setNum: "2"
-			cardNum: 32
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Flaming Brand
 		side: free_people

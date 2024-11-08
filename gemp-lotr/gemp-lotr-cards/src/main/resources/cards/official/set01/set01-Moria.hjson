@@ -2,17 +2,9 @@
 
 	1_163: {
 		cardInfo: {
-			imagePath: decipher/LOTR01163.jpg
-			//parentId: 1_163
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01163.jpg
 			collInfo: 1R163
 			rarity: R
-			setNum: "1"
-			cardNum: 163
-			style: Standard
 		}
 		title: Ancient Chieftain
 		unique: true
@@ -48,17 +40,9 @@
 
 	1_164: {
 		cardInfo: {
-			imagePath: decipher/LOTR01164.jpg
-			//parentId: 1_164
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01164.jpg
 			collInfo: 1U164
 			rarity: U
-			setNum: "1"
-			cardNum: 164
-			style: Standard
 		}
 		title: Bitter Hatred
 		unique: false
@@ -91,17 +75,9 @@
 
 	1_165: {
 		cardInfo: {
-			imagePath: decipher/LOTR01165.jpg
-			//parentId: 1_165
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01165.jpg
 			collInfo: 1R165
 			rarity: R
-			setNum: "1"
-			cardNum: 165
-			style: Standard
 		}
 		title: Cave Troll of Moria
 		subtitle: Scourge of the Black Pit
@@ -148,17 +124,9 @@
 
 	1_166: {
 		cardInfo: {
-			imagePath: decipher/LOTR01166.jpg
-			//parentId: 1_166
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01166.jpg
 			collInfo: 1R166
 			rarity: R
-			setNum: "1"
-			cardNum: 166
-			style: Standard
 		}
 		title: Cave Troll's Hammer
 		unique: true
@@ -190,17 +158,9 @@
 
 	1_167: {
 		cardInfo: {
-			imagePath: decipher/LOTR01167.jpg
-			//parentId: 1_167
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01167.jpg
 			collInfo: 1R167
 			rarity: R
-			setNum: "1"
-			cardNum: 167
-			style: Standard
 		}
 		title: Denizens Enraged
 		unique: false
@@ -235,17 +195,9 @@
 
 	1_168: {
 		cardInfo: {
-			imagePath: decipher/LOTR01168.jpg
-			//parentId: 1_168
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01168.jpg
 			collInfo: 1C168
 			rarity: C
-			setNum: "1"
-			cardNum: 168
-			style: Standard
 		}
 		title: Drums in the Deep
 		unique: false
@@ -284,17 +236,9 @@
 
 	1_169: {
 		cardInfo: {
-			imagePath: decipher/LOTR01169.jpg
-			//parentId: 1_169
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01169.jpg
 			collInfo: 1R169
 			rarity: R
-			setNum: "1"
-			cardNum: 169
-			style: Standard
 		}
 		title: The End Comes
 		unique: false
@@ -330,17 +274,9 @@
 
 	1_170: {
 		cardInfo: {
-			imagePath: decipher/LOTR01170.jpg
-			//parentId: 1_170
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01170.jpg
 			collInfo: 1R170
 			rarity: R
-			setNum: "1"
-			cardNum: 170
-			style: Standard
 		}
 		title: Fool of a Took!
 		unique: false
@@ -397,17 +333,9 @@
 
 	1_171: {
 		cardInfo: {
-			imagePath: decipher/LOTR01171.jpg
-			//parentId: 1_171
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01171.jpg
 			collInfo: 1C171
 			rarity: C
-			setNum: "1"
-			cardNum: 171
-			style: Standard
 		}
 		title: Frenzy
 		unique: false
@@ -437,17 +365,9 @@
 
 	1_172: {
 		cardInfo: {
-			imagePath: decipher/LOTR01172.jpg
-			//parentId: 1_172
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01172.jpg
 			collInfo: 1R172
 			rarity: R
-			setNum: "1"
-			cardNum: 172
-			style: Standard
 		}
 		title: Goblin Archer
 		unique: false
@@ -485,17 +405,9 @@
 
 	1_173: {
 		cardInfo: {
-			imagePath: decipher/LOTR01173.jpg
-			//parentId: 1_173
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01173.jpg
 			collInfo: 1R173
 			rarity: R
-			setNum: "1"
-			cardNum: 173
-			style: Standard
 		}
 		title: Goblin Armory
 		unique: false
@@ -544,17 +456,9 @@
 
 	1_174: {
 		cardInfo: {
-			imagePath: decipher/LOTR01174.jpg
-			//parentId: 1_174
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01174.jpg
 			collInfo: 1C174
 			rarity: C
-			setNum: "1"
-			cardNum: 174
-			style: Standard
 		}
 		title: Goblin Backstabber
 		unique: false
@@ -591,17 +495,9 @@
 
 	1_175: {
 		cardInfo: {
-			imagePath: decipher/LOTR01175.jpg
-			//parentId: 1_175
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01175.jpg
 			collInfo: 1R175
 			rarity: R
-			setNum: "1"
-			cardNum: 175
-			style: Standard
 		}
 		title: Goblin Domain
 		unique: false
@@ -651,17 +547,9 @@
 
 	1_176: {
 		cardInfo: {
-			imagePath: decipher/LOTR01176.jpg
-			//parentId: 1_176
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01176.jpg
 			collInfo: 1C176
 			rarity: C
-			setNum: "1"
-			cardNum: 176
-			style: Standard
 		}
 		title: Goblin Marksman
 		unique: false
@@ -687,17 +575,9 @@
 
 	1_177: {
 		cardInfo: {
-			imagePath: decipher/LOTR01177.jpg
-			//parentId: 1_177
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01177.jpg
 			collInfo: 1C177
 			rarity: C
-			setNum: "1"
-			cardNum: 177
-			style: Standard
 		}
 		title: Goblin Patrol Troop
 		unique: false
@@ -722,17 +602,9 @@
 
 	1_178: {
 		cardInfo: {
-			imagePath: decipher/LOTR01178.jpg
-			//parentId: 1_178
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01178.jpg
 			collInfo: 1U178
 			rarity: U
-			setNum: "1"
-			cardNum: 178
-			style: Standard
 		}
 		title: Goblin Runner
 		unique: false
@@ -768,17 +640,9 @@
 
 	1_179: {
 		cardInfo: {
-			imagePath: decipher/LOTR01179.jpg
-			//parentId: 1_179
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01179.jpg
 			collInfo: 1C179
 			rarity: C
-			setNum: "1"
-			cardNum: 179
-			style: Standard
 		}
 		title: Goblin Scavengers
 		unique: false
@@ -816,17 +680,9 @@
 
 	1_180: {
 		cardInfo: {
-			imagePath: decipher/LOTR01180.jpg
-			//parentId: 1_180
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01180.jpg
 			collInfo: 1C180
 			rarity: C
-			setNum: "1"
-			cardNum: 180
-			style: Standard
 		}
 		title: Goblin Scimitar
 		unique: false
@@ -861,17 +717,9 @@
 
 	1_181: {
 		cardInfo: {
-			imagePath: decipher/LOTR01181.jpg
-			//parentId: 1_181
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01181.jpg
 			collInfo: 1U181
 			rarity: U
-			setNum: "1"
-			cardNum: 181
-			style: Standard
 		}
 		title: Goblin Sneak
 		unique: false
@@ -908,17 +756,9 @@
 
 	1_182: {
 		cardInfo: {
-			imagePath: decipher/LOTR01182.jpg
-			//parentId: 1_182
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01182.jpg
 			collInfo: 1C182
 			rarity: C
-			setNum: "1"
-			cardNum: 182
-			style: Standard
 		}
 		title: Goblin Spear
 		unique: false
@@ -967,17 +807,9 @@
 
 	1_183: {
 		cardInfo: {
-			imagePath: decipher/LOTR01183.jpg
-			//parentId: 1_183
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01183.jpg
 			collInfo: 1R183
 			rarity: R
-			setNum: "1"
-			cardNum: 183
-			style: Standard
 		}
 		title: Goblin Swarms
 		unique: false
@@ -1040,17 +872,9 @@
 
 	1_184: {
 		cardInfo: {
-			imagePath: decipher/LOTR01184.jpg
-			//parentId: 1_184
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01184.jpg
 			collInfo: 1C184
 			rarity: C
-			setNum: "1"
-			cardNum: 184
-			style: Standard
 		}
 		title: Goblin Wallcrawler
 		unique: false
@@ -1101,17 +925,9 @@
 
 	1_185: {
 		cardInfo: {
-			imagePath: decipher/LOTR01185.jpg
-			//parentId: 1_185
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01185.jpg
 			collInfo: 1C185
 			rarity: C
-			setNum: "1"
-			cardNum: 185
-			style: Standard
 		}
 		title: Goblin Warrior
 		unique: false
@@ -1148,17 +964,9 @@
 
 	1_186: {
 		cardInfo: {
-			imagePath: decipher/LOTR01186.jpg
-			//parentId: 1_186
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01186.jpg
 			collInfo: 1R186
 			rarity: R
-			setNum: "1"
-			cardNum: 186
-			style: Standard
 		}
 		title: Guard Commander
 		unique: true
@@ -1196,17 +1004,9 @@
 
 	1_187: {
 		cardInfo: {
-			imagePath: decipher/LOTR01187.jpg
-			//parentId: 1_187
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01187.jpg
 			collInfo: 1C187
 			rarity: C
-			setNum: "1"
-			cardNum: 187
-			style: Standard
 		}
 		title: Host of Thousands
 		unique: false
@@ -1235,17 +1035,9 @@
 
 	1_188: {
 		cardInfo: {
-			imagePath: decipher/LOTR01188.jpg
-			//parentId: 1_188
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01188.jpg
 			collInfo: 1U188
 			rarity: U
-			setNum: "1"
-			cardNum: 188
-			style: Standard
 		}
 		title: The Long Dark
 		unique: true
@@ -1297,17 +1089,9 @@
 
 	1_189: {
 		cardInfo: {
-			imagePath: decipher/LOTR01189.jpg
-			//parentId: 1_189
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01189.jpg
 			collInfo: 1R189
 			rarity: R
-			setNum: "1"
-			cardNum: 189
-			style: Standard
 		}
 		title: Lost to the Goblins
 		unique: false
@@ -1367,17 +1151,9 @@
 
 	1_190: {
 		cardInfo: {
-			imagePath: decipher/LOTR01190.jpg
-			//parentId: 1_190
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01190.jpg
 			collInfo: 1R190
 			rarity: R
-			setNum: "1"
-			cardNum: 190
-			style: Standard
 		}
 		title: Moria Axe
 		unique: false
@@ -1424,17 +1200,9 @@
 
 	1_191: {
 		cardInfo: {
-			imagePath: decipher/LOTR01191.jpg
-			//parentId: 1_191
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01191.jpg
 			collInfo: 1C191
 			rarity: C
-			setNum: "1"
-			cardNum: 191
-			style: Standard
 		}
 		title: Moria Scout
 		unique: false
@@ -1474,17 +1242,9 @@
 
 	1_192: {
 		cardInfo: {
-			imagePath: decipher/LOTR01192.jpg
-			//parentId: 1_192
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01192.jpg
 			collInfo: 1C192
 			rarity: C
-			setNum: "1"
-			cardNum: 192
-			style: Standard
 		}
 		title: Pinned Down
 		unique: false
@@ -1518,17 +1278,9 @@
 
 	1_193: {
 		cardInfo: {
-			imagePath: decipher/LOTR01193.jpg
-			//parentId: 1_193
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01193.jpg
 			collInfo: 1C193
 			rarity: C
-			setNum: "1"
-			cardNum: 193
-			style: Standard
 		}
 		title: Plundered Armories
 		unique: false
@@ -1563,17 +1315,9 @@
 
 	1_194: {
 		cardInfo: {
-			imagePath: decipher/LOTR01194.jpg
-			//parentId: 1_194
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01194.jpg
 			collInfo: 1U194
 			rarity: U
-			setNum: "1"
-			cardNum: 194
-			style: Standard
 		}
 		title: Relentless
 		unique: false
@@ -1611,17 +1355,9 @@
 
 	1_195: {
 		cardInfo: {
-			imagePath: decipher/LOTR01195.jpg
-			//parentId: 1_195
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01195.jpg
 			collInfo: 1R195
 			rarity: R
-			setNum: "1"
-			cardNum: 195
-			style: Standard
 		}
 		title: Relics of Moria
 		unique: false
@@ -1656,17 +1392,9 @@
 
 	1_196: {
 		cardInfo: {
-			imagePath: decipher/LOTR01196.jpg
-			//parentId: 1_196
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01196.jpg
 			collInfo: 1C196
 			rarity: C
-			setNum: "1"
-			cardNum: 196
-			style: Standard
 		}
 		title: They Are Coming
 		unique: false
@@ -1702,17 +1430,9 @@
 
 	1_197: {
 		cardInfo: {
-			imagePath: decipher/LOTR01197.jpg
-			//parentId: 1_197
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01197.jpg
 			collInfo: 1C197
 			rarity: C
-			setNum: "1"
-			cardNum: 197
-			style: Standard
 		}
 		title: Threat of the Unknown
 		unique: false
@@ -1745,17 +1465,9 @@
 
 	1_198: {
 		cardInfo: {
-			imagePath: decipher/LOTR01198.jpg
-			//parentId: 1_198
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01198.jpg
 			collInfo: 1U198
 			rarity: U
-			setNum: "1"
-			cardNum: 198
-			style: Standard
 		}
 		title: Through the Misty Mountains
 		unique: false
@@ -1806,17 +1518,9 @@
 
 	1_199: {
 		cardInfo: {
-			imagePath: decipher/LOTR01199.jpg
-			//parentId: 1_199
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01199.jpg
 			collInfo: 1R199
 			rarity: R
-			setNum: "1"
-			cardNum: 199
-			style: Standard
 		}
 		title: Troll's Keyward
 		unique: true
@@ -1849,17 +1553,9 @@
 
 	1_200: {
 		cardInfo: {
-			imagePath: decipher/LOTR01200.jpg
-			//parentId: 1_200
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01200.jpg
 			collInfo: 1R200
 			rarity: R
-			setNum: "1"
-			cardNum: 200
-			style: Standard
 		}
 		title: The Underdeeps of Moria
 		unique: false
@@ -1908,17 +1604,9 @@
 
 	1_201: {
 		cardInfo: {
-			imagePath: decipher/LOTR01201.jpg
-			//parentId: 1_201
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01201.jpg
 			collInfo: 1C201
 			rarity: C
-			setNum: "1"
-			cardNum: 201
-			style: Standard
 		}
 		title: Unfamiliar Territory
 		unique: false
@@ -1958,17 +1646,9 @@
 
 	1_202: {
 		cardInfo: {
-			imagePath: decipher/LOTR01202.jpg
-			//parentId: 1_202
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01202.jpg
 			collInfo: 1U202
 			rarity: U
-			setNum: "1"
-			cardNum: 202
-			style: Standard
 		}
 		title: What Is This New Devilry?
 		unique: false

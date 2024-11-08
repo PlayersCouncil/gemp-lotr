@@ -1,5 +1,10 @@
 {
 	33_22: {
+		cardInfo: {
+			image: hobbit/HDG3322.jpg
+			collInfo: 33_22
+			rarity: _
+		}
 		title: Bill Ferny Sr.
 		subtitle: Servant of Azog
 		unique: true
@@ -43,6 +48,11 @@
 		]
 	}
 	33_23: {
+		cardInfo: {
+			image: hobbit/HDG3323.jpg
+			collInfo: 33_23
+			rarity: _
+		}
 		title: Scouting Warg
 		culture: gundabad
 		twilight: 4
@@ -93,6 +103,11 @@
 		]
 	}
 	33_24: {
+		cardInfo: {
+			image: hobbit/HDG3324.jpg
+			collInfo: 33_24
+			rarity: _
+		}
 		title: Alfrid's Influence
 		culture: men
 		twilight: 1
@@ -137,6 +152,11 @@
 		]
 	}
 	33_25: {
+		cardInfo: {
+			image: hobbit/HDG3325.jpg
+			collInfo: 33_25
+			rarity: _
+		}
 		title: Braga
 		subtitle: Captain of the Guard
 		unique: true
@@ -164,6 +184,11 @@
 		}
 	}
 	33_26: {
+		cardInfo: {
+			image: hobbit/HDG3326.jpg
+			collInfo: 33_26
+			rarity: _
+		}
 		title: Gangsquad Spies
 		culture: men
 		twilight: 3
@@ -197,6 +222,11 @@
 		]
 	}
 	33_27: {
+		cardInfo: {
+			image: hobbit/HDG3327.jpg
+			collInfo: 33_27
+			rarity: _
+		}
 		title: Laketown Patrol
 		culture: men
 		twilight: 4
@@ -230,6 +260,11 @@
 		]
 	}
 	33_28: {
+		cardInfo: {
+			image: hobbit/HDG3328.jpg
+			collInfo: 33_28
+			rarity: _
+		}
 		title: Spear of the Guard
 		culture: men
 		twilight: 0
@@ -267,6 +302,11 @@
 		}
 	}
 	33_29: {
+		cardInfo: {
+			image: hobbit/HDG3329.jpg
+			collInfo: 33_29
+			rarity: _
+		}
 		title: Ancient Grudge
 		culture: mirkwood
 		twilight: 2
@@ -302,6 +342,11 @@
 		]
 	}
 	33_30: {
+		cardInfo: {
+			image: hobbit/HDG3330.jpg
+			collInfo: 33_30
+			rarity: _
+		}
 		title: Borders of the Forest
 		culture: mirkwood
 		twilight: 1
@@ -386,6 +431,11 @@
 		]
 	}
 	33_31: {
+		cardInfo: {
+			image: hobbit/HDG3331.jpg
+			collInfo: 33_31
+			rarity: _
+		}
 		title: Elf-guards
 		unique: true
 		culture: mirkwood
@@ -422,6 +472,11 @@
 		]
 	}
 	33_32: {
+		cardInfo: {
+			image: hobbit/HDG3332.jpg
+			collInfo: 33_32
+			rarity: _
+		}
 		title: Elven Jails
 		culture: mirkwood
 		twilight: 2
@@ -490,6 +545,11 @@
 		]
 	}
 	33_33: {
+		cardInfo: {
+			image: hobbit/HDG3333.jpg
+			collInfo: 33_33
+			rarity: _
+		}
 		title: Secretive People
 		culture: mirkwood
 		twilight: 1
@@ -544,6 +604,11 @@
 		]
 	}
 	33_34: {
+		cardInfo: {
+			image: hobbit/HDG3334.jpg
+			collInfo: 33_34
+			rarity: _
+		}
 		title: The Elvenking
 		unique: true
 		culture: mirkwood
@@ -597,6 +662,11 @@
 		]
 	}
 	33_35: {
+		cardInfo: {
+			image: hobbit/HDG3335.jpg
+			collInfo: 33_35
+			rarity: _
+		}
 		title: Boulder Rock
 		culture: moria
 		twilight: 1
@@ -639,6 +709,11 @@
 		}
 	}
 	33_36: {
+		cardInfo: {
+			image: hobbit/HDG3336.jpg
+			collInfo: 33_36
+			rarity: _
+		}
 		title: Bridging Troll
 		culture: moria
 		twilight: 5
@@ -668,6 +743,11 @@
 		}
 	}
 	33_37: {
+		cardInfo: {
+			image: hobbit/HDG3337.jpg
+			collInfo: 33_37
+			rarity: _
+		}
 		title: Catapult Troll
 		culture: moria
 		twilight: 5
@@ -707,6 +787,11 @@
 		}
 	}
 	33_38: {
+		cardInfo: {
+			image: hobbit/HDG3338.jpg
+			collInfo: 33_38
+			rarity: _
+		}
 		title: Goblin Archer
 		culture: moria
 		twilight: 2
@@ -743,6 +828,11 @@
 		}
 	}
 	33_39: {
+		cardInfo: {
+			image: hobbit/HDG3339.jpg
+			collInfo: 33_39
+			rarity: _
+		}
 		title: Goblin Band
 		culture: moria
 		twilight: 3
@@ -776,6 +866,11 @@
 		}
 	}
 	33_40: {
+		cardInfo: {
+			image: hobbit/HDG3340.jpg
+			collInfo: 33_40
+			rarity: _
+		}
 		title: Goblin Bow
 		culture: moria
 		twilight: 0
@@ -819,6 +914,11 @@
 		]
 	}
 	33_41: {
+		cardInfo: {
+			image: hobbit/HDG3341.jpg
+			collInfo: 33_41
+			rarity: _
+		}
 		title: Goblin Troop
 		culture: moria
 		twilight: 4
@@ -842,6 +942,11 @@
 		}
 	}
 	33_42: {
+		cardInfo: {
+			image: hobbit/HDG3342.jpg
+			collInfo: 33_42
+			rarity: _
+		}
 		title: Granite Giant
 		culture: moria
 		twilight: 5
@@ -889,6 +994,11 @@
 		]
 	}
 	33_43: {
+		cardInfo: {
+			image: hobbit/HDG3343.jpg
+			collInfo: 33_43
+			rarity: _
+		}
 		title: Great Goblin's Sceptre
 		unique: true
 		culture: moria
@@ -912,6 +1022,11 @@
 		}
 	}
 	33_44: {
+		cardInfo: {
+			image: hobbit/HDG3344.jpg
+			collInfo: 33_44
+			rarity: _
+		}
 		title: Lavastone Giant
 		culture: moria
 		twilight: 7
@@ -990,6 +1105,11 @@
 		]
 	}
 	33_45: {
+		cardInfo: {
+			image: hobbit/HDG3345.jpg
+			collInfo: 33_45
+			rarity: _
+		}
 		title: The Great Goblin
 		subtitle: Goblin King
 		unique: true
@@ -1033,6 +1153,11 @@
 		]
 	}
 	33_46: {
+		cardInfo: {
+			image: hobbit/HDG3346.jpg
+			collInfo: 33_46
+			rarity: _
+		}
 		title: Hidden
 		culture: sauron
 		twilight: 0
@@ -1060,6 +1185,11 @@
 		}
 	}
 	33_47: {
+		cardInfo: {
+			image: hobbit/HDG3347.jpg
+			collInfo: 33_47
+			rarity: _
+		}
 		title: Malevolent Orc
 		culture: sauron
 		twilight: 2
@@ -1082,6 +1212,11 @@
 		}
 	}
 	33_48: {
+		cardInfo: {
+			image: hobbit/HDG3348.jpg
+			collInfo: 33_48
+			rarity: _
+		}
 		title: Orc Ambusher
 		culture: sauron
 		twilight: 1
@@ -1125,6 +1260,11 @@
 		]
 	}
 	33_49: {
+		cardInfo: {
+			image: hobbit/HDG3349.jpg
+			collInfo: 33_49
+			rarity: _
+		}
 		title: Orc Sentinel
 		culture: sauron
 		twilight: 1
@@ -1169,6 +1309,11 @@
 		]
 	}
 	33_50: {
+		cardInfo: {
+			image: hobbit/HDG3350.jpg
+			collInfo: 33_50
+			rarity: _
+		}
 		title: Orc Underling
 		culture: sauron
 		twilight: 1
@@ -1204,6 +1349,11 @@
 		]
 	}
 	33_51: {
+		cardInfo: {
+			image: hobbit/HDG3351.jpg
+			collInfo: 33_51
+			rarity: _
+		}
 		title: Rise of the Necromancer
 		culture: sauron
 		twilight: 2
@@ -1237,6 +1387,11 @@
 		}
 	}
 	33_59: {
+		cardInfo: {
+			image: hobbit/HDG3359.jpg
+			collInfo: 33_59
+			rarity: _
+		}
 		title: Dragon-sickness
 		unique: true
 		culture: smaug
@@ -1271,6 +1426,11 @@
 		]
 	}
 	33_60: {
+		cardInfo: {
+			image: hobbit/HDG3360.jpg
+			collInfo: 33_60
+			rarity: _
+		}
 		title: The Last Lights of Durin's Day
 		unique: true
 		culture: smaug
@@ -1308,6 +1468,11 @@
 		}
 	}
 	33_61: {
+		cardInfo: {
+			image: hobbit/HDG3361.jpg
+			collInfo: 33_61
+			rarity: _
+		}
 		title: Dark Sorcery
 		unique: true
 		culture: wraith

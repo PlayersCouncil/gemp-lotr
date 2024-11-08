@@ -2,17 +2,9 @@
 
 	15_187: {
 		cardInfo: {
-			imagePath: decipher/LOTR15187.jpg
-			//parentId: 15_187
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15187.jpg
 			collInfo: 15U187
 			rarity: U
-			setNum: "15"
-			cardNum: 187
-			style: Standard
 		}
 		title: Anduin River
 		unique: false
@@ -44,17 +36,9 @@
 
 	15_188: {
 		cardInfo: {
-			imagePath: decipher/LOTR15188.jpg
-			//parentId: 15_188
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15188.jpg
 			collInfo: 15S188
 			rarity: S
-			setNum: "15"
-			cardNum: 188
-			style: Standard
 		}
 		title: Breeding pit of Isengard
 		unique: false
@@ -93,17 +77,9 @@
 
 	15_189: {
 		cardInfo: {
-			imagePath: decipher/LOTR15189.jpg
-			//parentId: 15_189
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15189.jpg
 			collInfo: 15S189
 			rarity: S
-			setNum: "15"
-			cardNum: 189
-			style: Standard
 		}
 		title: City Gates
 		unique: false
@@ -150,17 +126,9 @@
 
 	15_190: {
 		cardInfo: {
-			imagePath: decipher/LOTR15190.jpg
-			//parentId: 15_190
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15190.jpg
 			collInfo: 15S190
 			rarity: S
-			setNum: "15"
-			cardNum: 190
-			style: Standard
 		}
 		title: East Wall of Rohan
 		unique: false
@@ -203,17 +171,9 @@
 
 	15_191: {
 		cardInfo: {
-			imagePath: decipher/LOTR15191.jpg
-			//parentId: 15_191
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15191.jpg
 			collInfo: 15S191
 			rarity: S
-			setNum: "15"
-			cardNum: 191
-			style: Standard
 		}
 		title: Gate of Mordor
 		unique: false
@@ -250,17 +210,9 @@
 
 	15_192: {
 		cardInfo: {
-			imagePath: decipher/LOTR15192.jpg
-			//parentId: 15_192
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15192.jpg
 			collInfo: 15U192
 			rarity: U
-			setNum: "15"
-			cardNum: 192
-			style: Standard
 		}
 		title: Isengard Ruined
 		unique: false
@@ -298,17 +250,9 @@
 
 	15_193: {
 		cardInfo: {
-			imagePath: decipher/LOTR15193.jpg
-			//parentId: 15_193
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15193.jpg
 			collInfo: 15R193
 			rarity: R
-			setNum: "15"
-			cardNum: 193
-			style: Standard
 		}
 		title: Mount Doom
 		unique: false
@@ -368,17 +312,9 @@
 
 	15_194: {
 		cardInfo: {
-			imagePath: decipher/LOTR15194.jpg
-			//parentId: 15_194
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15194.jpg
 			collInfo: 15S194
 			rarity: S
-			setNum: "15"
-			cardNum: 194
-			style: Standard
 		}
 		title: Westfold Village
 		unique: false

@@ -2,17 +2,9 @@
 
 	0_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR00059.jpg
-			//parentId: 0_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR00059.jpg
 			collInfo: 0P59
 			rarity: P
-			setNum: "0"
-			cardNum: 59
-			style: Standard
 		}
 		title: Erkenbrand
 		subtitle: Master of Westfold
@@ -60,17 +52,9 @@
 
 	0_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR00066.jpg
-			//parentId: 0_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR00066.jpg
 			collInfo: 0P66
 			rarity: P
-			setNum: "0"
-			cardNum: 66
-			style: Standard
 		}
 		title: Éomer
 		subtitle: Forthwith Banished

@@ -2,17 +2,9 @@
 
 	5_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR05001.jpg
-			//parentId: 5_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05001.jpg
 			collInfo: 5U1
 			rarity: U
-			setNum: "5"
-			cardNum: 1
-			style: Standard
 		}
 		title: Dunlending Rampager
 		unique: false
@@ -65,17 +57,9 @@
 
 	5_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR05002.jpg
-			//parentId: 5_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05002.jpg
 			collInfo: 5U2
 			rarity: U
-			setNum: "5"
-			cardNum: 2
-			style: Standard
 		}
 		title: Dunlending Renegade
 		unique: false
@@ -128,17 +112,9 @@
 
 	5_3: {
 		cardInfo: {
-			imagePath: decipher/LOTR05003.jpg
-			//parentId: 5_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05003.jpg
 			collInfo: 5R3
 			rarity: R
-			setNum: "5"
-			cardNum: 3
-			style: Standard
 		}
 		title: Leaping Blaze
 		unique: false
@@ -192,17 +168,9 @@
 
 	5_4: {
 		cardInfo: {
-			imagePath: decipher/LOTR05004.jpg
-			//parentId: 5_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05004.jpg
 			collInfo: 5R4
 			rarity: R
-			setNum: "5"
-			cardNum: 4
-			style: Standard
 		}
 		title: Wild Men of the Hills
 		unique: false

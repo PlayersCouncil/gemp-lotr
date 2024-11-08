@@ -2,17 +2,9 @@
 
 	12_119: {
 		cardInfo: {
-			imagePath: decipher/LOTR12119.jpg
-			//parentId: 12_119
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12119.jpg
 			collInfo: 12R119
 			rarity: R
-			setNum: "12"
-			cardNum: 119
-			style: Standard
 		}
 		title: Bilbo
 		subtitle: Melancholy Hobbit
@@ -56,17 +48,9 @@
 
 	12_120: {
 		cardInfo: {
-			imagePath: decipher/LOTR12120.jpg
-			//parentId: 12_120
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12120.jpg
 			collInfo: 12R120
 			rarity: R
-			setNum: "12"
-			cardNum: 120
-			style: Standard
 		}
 		title: Diversion
 		unique: false
@@ -115,17 +99,9 @@
 
 	12_121: {
 		cardInfo: {
-			imagePath: decipher/LOTR12121.jpg
-			//parentId: 12_121
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12121.jpg
 			collInfo: 12C121
 			rarity: C
-			setNum: "12"
-			cardNum: 121
-			style: Standard
 		}
 		title: Flotsam and Jetsam
 		unique: false
@@ -160,17 +136,9 @@
 
 	12_122: {
 		cardInfo: {
-			imagePath: decipher/LOTR12122.jpg
-			//parentId: 12_122
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12122.jpg
 			collInfo: 12C122
 			rarity: C
-			setNum: "12"
-			cardNum: 122
-			style: Standard
 		}
 		title: Home and Hearth
 		unique: false
@@ -218,17 +186,9 @@
 
 	12_123: {
 		cardInfo: {
-			imagePath: decipher/LOTR12123.jpg
-			//parentId: 12_123
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12123.jpg
 			collInfo: 12C123
 			rarity: C
-			setNum: "12"
-			cardNum: 123
-			style: Standard
 		}
 		title: Hope is Kindled
 		unique: false
@@ -272,17 +232,9 @@
 
 	12_124: {
 		cardInfo: {
-			imagePath: decipher/LOTR12124.jpg
-			//parentId: 12_124
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12124.jpg
 			collInfo: 12R124
 			rarity: R
-			setNum: "12"
-			cardNum: 124
-			style: Standard
 		}
 		title: Long Live the Halflings
 		unique: false
@@ -331,17 +283,9 @@
 
 	12_125: {
 		cardInfo: {
-			imagePath: decipher/LOTR12125.jpg
-			//parentId: 12_125
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12125.jpg
 			collInfo: 12S125
 			rarity: S
-			setNum: "12"
-			cardNum: 125
-			style: Standard
 		}
 		title: Measure of Comfort
 		unique: false
@@ -377,17 +321,9 @@
 
 	12_126: {
 		cardInfo: {
-			imagePath: decipher/LOTR12126.jpg
-			//parentId: 12_126
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12126.jpg
 			collInfo: 12S126
 			rarity: S
-			setNum: "12"
-			cardNum: 126
-			style: Standard
 		}
 		title: No Worse for Wear
 		unique: false
@@ -441,17 +377,9 @@
 
 	12_127: {
 		cardInfo: {
-			imagePath: decipher/LOTR12127.jpg
-			//parentId: 12_127
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12127.jpg
 			collInfo: 12R127
 			rarity: R
-			setNum: "12"
-			cardNum: 127
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Hobbit of Some Intelligence
@@ -502,17 +430,9 @@
 
 	12_128: {
 		cardInfo: {
-			imagePath: decipher/LOTR12128.jpg
-			//parentId: 12_128
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12128.jpg
 			collInfo: 12R128
 			rarity: R
-			setNum: "12"
-			cardNum: 128
-			style: Standard
 		}
 		title: A Promise
 		unique: false
@@ -554,17 +474,9 @@
 
 	12_129: {
 		cardInfo: {
-			imagePath: decipher/LOTR12129.jpg
-			//parentId: 12_129
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12129.jpg
 			collInfo: 12R129
 			rarity: R
-			setNum: "12"
-			cardNum: 129
-			style: Standard
 		}
 		title: Rosie Cotton
 		subtitle: Barmaid
@@ -612,17 +524,9 @@
 
 	12_130: {
 		cardInfo: {
-			imagePath: decipher/LOTR12130.jpg
-			//parentId: 12_130
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12130.jpg
 			collInfo: 12U130
 			rarity: U
-			setNum: "12"
-			cardNum: 130
-			style: Standard
 		}
 		title: Simple Living
 		unique: true
@@ -661,17 +565,9 @@
 
 	12_131: {
 		cardInfo: {
-			imagePath: decipher/LOTR12131.jpg
-			//parentId: 12_131
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12131.jpg
 			collInfo: 12U131
 			rarity: U
-			setNum: "12"
-			cardNum: 131
-			style: Standard
 		}
 		title: Stand Together
 		unique: false
@@ -709,17 +605,9 @@
 
 	12_132: {
 		cardInfo: {
-			imagePath: decipher/LOTR12132.jpg
-			//parentId: 12_132
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12132.jpg
 			collInfo: 12U132
 			rarity: U
-			setNum: "12"
-			cardNum: 132
-			style: Standard
 		}
 		title: Sudden Fury
 		unique: false
@@ -769,17 +657,9 @@
 
 	12_133: {
 		cardInfo: {
-			imagePath: decipher/LOTR12133.jpg
-			//parentId: 12_133
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12133.jpg
 			collInfo: 12S133
 			rarity: S
-			setNum: "12"
-			cardNum: 133
-			style: Standard
 		}
 		title: Tolman Cotton
 		subtitle: Farmer of Bywater

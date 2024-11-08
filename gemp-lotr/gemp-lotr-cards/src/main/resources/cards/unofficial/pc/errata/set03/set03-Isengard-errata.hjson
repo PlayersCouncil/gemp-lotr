@@ -5,7 +5,7 @@
 	# 		javaClass: false
 	# 		parent: 3_50
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 3R50
 	# 		rarity: R
 	# 		setNum: "3"
@@ -94,7 +94,7 @@
 	# 		javaClass: false
 	# 		parent: 3_50
 	# 		parentPath: errata/pc
-	# 		version: 2
+	# 		revision: 2
 	# 		collInfo: 3R50
 	# 		rarity: R
 	# 		setNum: "3"
@@ -149,17 +149,14 @@
 	
 	53_50: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E050.3_card.jpg
-			//parentId: 3_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 3
+			//id: 3_50.3
+			parent: 3_50
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 3
+			image: errata/LOTR-EN03E050.3_card.jpg
 			collInfo: 3R50
 			rarity: R
-			setNum: "3"
-			cardNum: 50
-			style: Standard
 		}
 		title: Can You Protect Me From Yourself?
 		unique: false
@@ -238,17 +235,14 @@
 	
 	53_54: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E054.1.jpg
-			javaClass: false
+			//id: 3_54.1
 			parent: 3_54
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN03E054.1.jpg
 			collInfo: 3R54
 			rarity: R
-			setNum: "3"
-			cardNum: 54
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Hollowing of Isengard
 		unique: false
@@ -323,7 +317,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 1?
+	# 		revision: 1
 	# 		collInfo: 3R68
 	# 		rarity: R
 	# 		setNum: "3"
@@ -416,17 +410,14 @@
 	
 	53_68: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E068.1.jpg
-			javaClass: false
+			//id: 3_68.2
 			parent: 3_68
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN03E068.1.jpg
 			collInfo: 3R68
 			rarity: R
-			setNum: "3"
-			cardNum: 68
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Saruman
 		subtitle: Keeper of Isengard
@@ -539,17 +530,14 @@
 
 	53_67: {
 		cardInfo: {
-			imagePath: errata/53_67.jpg
-			javaClass: false
+			//id: 3_67.1
 			parent: 3_67
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/53_67.jpg
 			collInfo: 3R67
 			rarity: R
-			setNum: "3"
-			cardNum: 67
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The Palantir of Orthanc
 		unique: true

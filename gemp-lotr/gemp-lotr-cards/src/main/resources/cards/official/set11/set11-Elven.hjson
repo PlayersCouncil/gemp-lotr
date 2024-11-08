@@ -2,17 +2,9 @@
 
 	11_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR11015.jpg
-			//parentId: 11_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11015.jpg
 			collInfo: 11U15
 			rarity: U
-			setNum: "11"
-			cardNum: 15
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Staunch Defender
@@ -52,17 +44,9 @@
 
 	11_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR11016.jpg
-			//parentId: 11_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11016.jpg
 			collInfo: 11U16
 			rarity: U
-			setNum: "11"
-			cardNum: 16
-			style: Standard
 		}
 		title: Blade of Lindon
 		unique: false
@@ -100,17 +84,9 @@
 
 	11_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR11017.jpg
-			//parentId: 11_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11017.jpg
 			collInfo: 11R17
 			rarity: R
-			setNum: "11"
-			cardNum: 17
-			style: Standard
 		}
 		title: Elven Marksmanship
 		unique: false
@@ -157,17 +133,9 @@
 
 	11_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR11018.jpg
-			//parentId: 11_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11018.jpg
 			collInfo: 11S18
 			rarity: S
-			setNum: "11"
-			cardNum: 18
-			style: Standard
 		}
 		title: Elven Scout
 		unique: false
@@ -206,17 +174,9 @@
 
 	11_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR11019.jpg
-			//parentId: 11_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11019.jpg
 			collInfo: 11C19
 			rarity: C
-			setNum: "11"
-			cardNum: 19
-			style: Standard
 		}
 		title: Farewell to Lórien
 		unique: false
@@ -251,17 +211,9 @@
 
 	11_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR11020.jpg
-			//parentId: 11_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11020.jpg
 			collInfo: 11S20
 			rarity: S
-			setNum: "11"
-			cardNum: 20
-			style: Standard
 		}
 		title: The Lady's Blessing
 		unique: false
@@ -301,17 +253,9 @@
 
 	11_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR11021.jpg
-			//parentId: 11_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11021.jpg
 			collInfo: 11S21
 			rarity: S
-			setNum: "11"
-			cardNum: 21
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Companion of the Ring
@@ -363,17 +307,9 @@
 
 	11_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR11022.jpg
-			//parentId: 11_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11022.jpg
 			collInfo: 11R22
 			rarity: R
-			setNum: "11"
-			cardNum: 22
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Woodland Emissary
@@ -417,17 +353,9 @@
 
 	11_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR11023.jpg
-			//parentId: 11_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11023.jpg
 			collInfo: 11R23
 			rarity: R
-			setNum: "11"
-			cardNum: 23
-			style: Standard
 		}
 		title: Legolas' Bow
 		unique: true
@@ -474,17 +402,9 @@
 
 	11_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR11024.jpg
-			//parentId: 11_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11024.jpg
 			collInfo: 11R24
 			rarity: R
-			setNum: "11"
-			cardNum: 24
-			style: Standard
 		}
 		title: Might of the Elf-lords
 		unique: false
@@ -532,17 +452,9 @@
 
 	11_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR11025.jpg
-			//parentId: 11_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11025.jpg
 			collInfo: 11U25
 			rarity: U
-			setNum: "11"
-			cardNum: 25
-			style: Standard
 		}
 		title: Nocked
 		unique: false
@@ -577,17 +489,9 @@
 
 	11_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR11026.jpg
-			//parentId: 11_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11026.jpg
 			collInfo: 11U26
 			rarity: U
-			setNum: "11"
-			cardNum: 26
-			style: Standard
 		}
 		title: Uncertain Future
 		unique: true
@@ -665,17 +569,9 @@
 
 	11_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR11027.jpg
-			//parentId: 11_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11027.jpg
 			collInfo: 11C27
 			rarity: C
-			setNum: "11"
-			cardNum: 27
-			style: Standard
 		}
 		title: Woodland Sentinel
 		unique: false

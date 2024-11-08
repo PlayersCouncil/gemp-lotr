@@ -2,17 +2,11 @@
 
 	60_8: {
 		cardInfo: {
-			imagePath: errata/60_8.jpg
-			javaClass: false
-			parent: 10_8
-			parentPath: errata/pc
-			version: 1?
+			//id: 0_8.1
+			revision: 1
+			image: errata/60_8.jpg
 			collInfo: 10R8
 			rarity: R
-			setNum: "10"
-			cardNum: 8
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Cirdan
 		subtitle: The Shipwright
@@ -84,7 +78,7 @@
 	# 		javaClass: false
 	# 		parent: 10_11
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 10R11
 	# 		rarity: R
 	# 		setNum: "10"
@@ -147,7 +141,7 @@
 	# 		javaClass: false
 	# 		parent: 10_11
 	# 		parentPath: errata/pc
-	# 		version: 2
+	# 		revision: 2
 	# 		collInfo: 10R11
 	# 		rarity: R
 	# 		setNum: "10"
@@ -212,17 +206,11 @@
 	
 	60_11: {
 		cardInfo: {
-			imagePath: errata/60_11.jpg
-			javaClass: false
-			parent: 10_11
-			parentPath: errata/pc
-			version: 3
+			//id: 0_11.3
+			revision: 3
+			image: errata/60_11.jpg
 			collInfo: 10R11
 			rarity: R
-			setNum: "10"
-			cardNum: 11
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Galadriel
 		subtitle: Lady Redeemed
@@ -283,17 +271,11 @@
 	
 	60_12: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN10E012.1.jpg
-			javaClass: false
-			parent: 10_12
-			parentPath: errata/pc
-			version: 1
+			//id: 0_12.1
+			revision: 1
+			image: errata/LOTR-EN10E012.1.jpg
 			collInfo: 10U12
 			rarity: U
-			setNum: "10"
-			cardNum: 12
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Glimpse of Fate
 		unique: true

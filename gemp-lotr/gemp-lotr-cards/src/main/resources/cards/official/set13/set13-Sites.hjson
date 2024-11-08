@@ -2,17 +2,9 @@
 
 	13_185: {
 		cardInfo: {
-			imagePath: decipher/LOTR13185.jpg
-			//parentId: 13_185
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13185.jpg
 			collInfo: 13U185
 			rarity: U
-			setNum: "13"
-			cardNum: 185
-			style: Standard
 		}
 		title: Abandoned Mine Shaft
 		unique: false
@@ -50,17 +42,9 @@
 
 	13_186: {
 		cardInfo: {
-			imagePath: decipher/LOTR13186.jpg
-			//parentId: 13_186
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13186.jpg
 			collInfo: 13S186
 			rarity: S
-			setNum: "13"
-			cardNum: 186
-			style: Standard
 		}
 		title: Caves of Aglarond
 		unique: false
@@ -101,17 +85,9 @@
 
 	13_187: {
 		cardInfo: {
-			imagePath: decipher/LOTR13187.jpg
-			//parentId: 13_187
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13187.jpg
 			collInfo: 13U187
 			rarity: U
-			setNum: "13"
-			cardNum: 187
-			style: Standard
 		}
 		title: City of Kings
 		unique: false
@@ -152,17 +128,9 @@
 
 	13_188: {
 		cardInfo: {
-			imagePath: decipher/LOTR13188.jpg
-			//parentId: 13_188
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13188.jpg
 			collInfo: 13U188
 			rarity: U
-			setNum: "13"
-			cardNum: 188
-			style: Standard
 		}
 		title: Courtyard Parapet
 		unique: false
@@ -203,17 +171,9 @@
 
 	13_189: {
 		cardInfo: {
-			imagePath: decipher/LOTR13189.jpg
-			//parentId: 13_189
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13189.jpg
 			collInfo: 13S189
 			rarity: S
-			setNum: "13"
-			cardNum: 189
-			style: Standard
 		}
 		title: Crossroads of the Fallen Kings
 		unique: false
@@ -283,17 +243,9 @@
 
 	13_190: {
 		cardInfo: {
-			imagePath: decipher/LOTR13190.jpg
-			//parentId: 13_190
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13190.jpg
 			collInfo: 13U190
 			rarity: U
-			setNum: "13"
-			cardNum: 190
-			style: Standard
 		}
 		title: Doors of Durin
 		unique: false
@@ -325,17 +277,9 @@
 
 	13_191: {
 		cardInfo: {
-			imagePath: decipher/LOTR13191.jpg
-			//parentId: 13_191
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13191.jpg
 			collInfo: 13S191
 			rarity: S
-			setNum: "13"
-			cardNum: 191
-			style: Standard
 		}
 		title: Fords of Isen
 		unique: false
@@ -370,17 +314,9 @@
 
 	13_192: {
 		cardInfo: {
-			imagePath: decipher/LOTR13192.jpg
-			//parentId: 13_192
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13192.jpg
 			collInfo: 13S192
 			rarity: S
-			setNum: "13"
-			cardNum: 192
-			style: Standard
 		}
 		title: The Great Gates
 		unique: false
@@ -423,17 +359,9 @@
 
 	13_193: {
 		cardInfo: {
-			imagePath: decipher/LOTR13193.jpg
-			//parentId: 13_193
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13193.jpg
 			collInfo: 13U193
 			rarity: U
-			setNum: "13"
-			cardNum: 193
-			style: Standard
 		}
 		title: Isenwash
 		unique: false
@@ -477,17 +405,9 @@
 
 	13_194: {
 		cardInfo: {
-			imagePath: decipher/LOTR13194.jpg
-			//parentId: 13_194
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13194.jpg
 			collInfo: 13U194
 			rarity: U
-			setNum: "13"
-			cardNum: 194
-			style: Standard
 		}
 		title: Redhorn Pass
 		unique: false

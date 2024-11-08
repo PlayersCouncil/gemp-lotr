@@ -2,17 +2,14 @@
 	
 	51_303: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E303.1_card.jpg
-			//parentId: 1_303
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 1_303.1
+			parent: 1_303
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E303.1_card.jpg
 			collInfo: 1C303
 			rarity: C
-			setNum: "1"
-			cardNum: 303
-			style: Standard
 		}
 		title: Merry
 		subtitle: From O'er the Brandywine
@@ -65,17 +62,14 @@
 	
 		51_310: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E310.1_card.jpg
-			//parentId: 1_310
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 1_310.1
+			parent: 1_310
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E310.1_card.jpg
 			collInfo: 1R310
 			rarity: R
-			setNum: "1"
-			cardNum: 310
-			style: Standard
 		}
 		title: Sam
 		subtitle: Faithful Companion
@@ -130,7 +124,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 1?
+	# 		revision: 1
 	# 		collInfo: 1C311
 	# 		rarity: C
 	# 		setNum: "1"
@@ -195,17 +189,14 @@
 	
 	51_311: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01S311.2_card.jpg
-			javaClass: false
+			//id: 1_311.2
 			parent: 1_311
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN01S311.2_card.jpg
 			collInfo: 1C311
 			rarity: C
-			setNum: "1"
-			cardNum: 311
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Sam
 		subtitle: Son of Hamfast
@@ -290,17 +281,14 @@
 
 	51_313: {
 		cardInfo: {
-			imagePath: errata/51_313.jpg
-			javaClass: false
+			//id: 1_313.1
 			parent: 1_313
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_313.jpg
 			collInfo: 1R313
 			rarity: R
-			setNum: "1"
-			cardNum: 313
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Sting
 		unique: true
@@ -355,17 +343,14 @@
 
 	51_316: {
 		cardInfo: {
-			imagePath: errata/51_316.jpg
-			javaClass: false
+			//id: 1_316.1
 			parent: 1_316
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_316.jpg
 			collInfo: 1U316
 			rarity: U
-			setNum: "1"
-			cardNum: 316
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: A Talent for Not Being Seen
 		culture: shire
@@ -409,7 +394,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 2
+	# 		revision: 2
 	# 		collInfo: 1U316
 	# 		rarity: U
 	# 		setNum: "1"

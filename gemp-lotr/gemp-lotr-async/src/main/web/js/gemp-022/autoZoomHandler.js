@@ -7,21 +7,28 @@ class AutoZoom {
 	
 	autoZoomToggle = null;
 	previewImageDiv = null;
+	cardDisplay = null;
+	
 	previewImage = null;
+	flipMessageDiv = null;
+	//The actual card on the table, referenced so that we know
+	// what the original rotation is.
+	baseImageDiv = null;
+
+	hoverTimer = null;
+	hoverValid = false;
+	cooldownTimer = null;
+
+	static HoverDelay = 500;
+	static HoverCooldown = 500;
 
 	constructor(cookieName) {
 		const that = this;
 		this.cookieName = cookieName;
-		this.isTouchDevice = 'ontouchstart' in document.documentElement;
-		const cookie = $.cookie(this.cookieName);
-		
+		this.isTouchDevice = onTouchDevice();
+
 		//An unset cookie should default to true.
-		if(cookie == "false") {
-			this.showPreviewImage = false;
-		}
-		else {
-			this.showPreviewImage = true;
-		}
+		this.showPreviewImage = loadFromCookie(this.cookieName, "true") === "true";
 		
 		if(!this.isTouchDevice) {
 			this._setupToggleButton();
@@ -32,10 +39,20 @@ class AutoZoom {
 			class: 'previewImage',
 			style: ""
 		}).appendTo('body');
-		this.previewImageDiv.append("<img></img>")
-		this.previewImage = this.previewImageDiv.find("img")[0];
 		
-		this.previewImageDiv = this.previewImageDiv[0];		
+		this.cardDisplay = new CardDisplay();
+		this.cardDisplay.baseDiv.appendTo(this.previewImageDiv);
+		this.cardDisplay.baseDiv.css({
+			position: "absolute"
+		});
+		
+		this.flipMessageDiv = $('<div>', {
+			id: 'auto-zoom-message'
+		}).appendTo(this.cardDisplay.baseDiv);
+		
+		this.previewImageDiv = this.previewImageDiv[0];
+		
+		this.hidePreviewImage();		
 	}
 	
 	_setupToggleButton() {
@@ -58,139 +75,221 @@ class AutoZoom {
 				if (that.showPreviewImage) {
 					that.autoZoomToggle.button("option", "icons", {primary:disabledIcon});
 					that.showPreviewImage = false;
-					that.saveCookieValue();
+					saveToCookie(that.cookieName, "" + that.showPreviewImage);
 				} else {
 					that.autoZoomToggle.button("option", "icons", {primary:enabledIcon});
 					that.showPreviewImage = true;
-					that.saveCookieValue();
+					saveToCookie(that.cookieName, "" + that.showPreviewImage);
 				}
 			});
-		
-		var selected = $("#previewImageOnHover").prop("checked");
-	}
-	
-	saveCookieValue() {
-		$.cookie(this.cookieName, "" + this.showPreviewImage, { expires: 365 });
 	}
 	
 	// make the preview image shown be the reference image that's hovered on:
-	displayPreviewImage(refImageDiv) {
+	displayPreviewImage(card, refImageDiv) {
 	
 		const that = this;
+
+		// get the size of the browser window:
+		var windowWidth = window.innerWidth;
+		var windowHeight = window.innerHeight;
+		var windowRatio = windowWidth / windowHeight;
 		
-		this.previewImage.onload = function () {
-			
-			that.previewImage.style.display = "block";
-			
-			// get position and size of the reference image (actually the parent div):
-			var rect = refImageDiv.getBoundingClientRect();
-			var srcImageX = rect.left;
-			var srcImageY = rect.top;
-			var srcImageWidth = rect.right - rect.left;
-			var srcImageHeight = rect.bottom - rect.top;
-			// get the size of the browser window:
-			var windowWidth = window.innerWidth;
-			var windowHeight = window.innerHeight;
-			// get the elements to be altered:
-			var previewImageStyle = that.previewImageDiv.style;
-			var previewImageImgStyle = that.previewImage.style;
-			var previewImageHeight = that.previewImage.naturalHeight;
-			var previewImageWidth = that.previewImage.naturalWidth;
-			
-			var ratio = previewImageWidth / previewImageHeight;
+		//We want horizontal and vertical representations of cards to 
+		// match the same size, else depending on the screen some cards will
+		// be big and others small based entirely on their orientation.
+		var maxLongSide  = windowHeight * 0.9;
+		
+		//If we are on a vertically-oriented browser window (not a phone, 
+		// because this feature is disabled on mobile)
+		if(windowRatio <= 1) {
+			maxLongSide = windowWidth * 0.9;
+		}
+		
+		var maxShortSide = maxLongSide * CardDisplay.TargetVertRatio;
+		
+		// Some cards are remastered at a higher resolution, but not all.  So we
+		// will stretch the lower-res cards to the higher resolution, to avoid 
+		// disparate sizes, while keeping them within the max window bounds.
+		var targetLong = Math.min(maxLongSide, CardDisplay.TargetLong);
+		var targetShort = Math.min(maxShortSide, CardDisplay.TargetShort);
 
-			if (previewImageHeight > windowHeight / 2) {
-				previewImageHeight = windowHeight / 2;
-				previewImageWidth = ratio * previewImageHeight;
-			}
-			else if (previewImageWidth > windowWidth / 2) {
-				previewImageWidth = windowWidth / 2;
-				previewImageHeight = previewImageWidth / ratio;
-			}
+		if(card.horizontal || card.effectivelyHorizontal()) {
+			this.cardDisplay.reloadFromCard(card, targetLong, targetShort);
+		}
+		else {
+			this.cardDisplay.reloadFromCard(card, targetShort, targetLong);
+		}
+		
+		// get position and size of the reference image (or card hint):
+		var rect = refImageDiv.getBoundingClientRect();
+		const isHint = $(refImageDiv).hasClass("cardHint");
+		if(isHint) {
+			//For hints (i.e. the links in the chat log) we use the parent, which is
+			// the whole chat line, which prevents us from covering up too much log
+			// text with the hover preview.
+			rect = $(refImageDiv).parent()[0].getBoundingClientRect();
+		}
 
-			// set the horizontal position of the preview image:
-			const rightEdge = srcImageX + srcImageWidth;
-			const leftEdge = srcImageX;
-			const goesPastRightBound = rightEdge + previewImageWidth > windowWidth;
-			const goesPastLeftBound = leftEdge - previewImageWidth < 0;
-			var previewImageLeft = rightEdge;
+		var srcImageX = rect.left;
+		var srcImageY = rect.top;
+		var srcImageWidth = rect.right - rect.left;
+		var srcImageHeight = rect.bottom - rect.top;
+
+		var previewImageWidth = this.cardDisplay.baseDiv.width();
+		var previewImageHeight = this.cardDisplay.baseDiv.height();
+
+		var imageRatio = previewImageWidth / previewImageHeight;
+
+		// set the horizontal position of the preview image:
+		const rightEdge = srcImageX + srcImageWidth - 15;
+		const leftEdge = srcImageX;
+		const goesPastRightBound = rightEdge + previewImageWidth > windowWidth;
+		const goesPastLeftBound = leftEdge - previewImageWidth < 0;
+		var previewImageLeft = rightEdge;
+		
+		if (goesPastRightBound && goesPastLeftBound) {
+			// if previewImage would extend past either left or right side
+			// of screen, (i.e. it is the center location on a narrow display)
+			// then we must find the best place to put it.
 			
-			if (goesPastRightBound && goesPastLeftBound) {
-				// if previewImage would extend past either left or right side
-				// of screen, display the previewImage in the biggest space 
-				// available and shrink to fit
-				const rightSpace = windowWidth - (leftEdge + srcImageWidth);
-				const leftSpace = leftEdge;
-				if (rightSpace > leftSpace) {
-					previewImageWidth = rightSpace;
-					previewImageLeft = rightEdge;
-				}
-				else {
-					previewImageWidth = leftSpace;
-					previewImageLeft = leftEdge - previewImageWidth;
-				}
-				previewImageHeight = previewImageWidth / ratio;
+			//display the previewImage in the biggest space 
+			// available and shrink to fit
+			const rightSpace = windowWidth - (leftEdge + srcImageWidth);
+			const leftSpace = leftEdge;
+			
+			if (rightSpace > leftSpace) {
+				previewImageWidth = rightSpace;
+				previewImageLeft = rightEdge;
 			}
 			else {
-				if (goesPastRightBound) {
-					previewImageLeft = leftEdge - previewImageWidth;
-				}
-				else if (goesPastLeftBound) {
-					previewImageLeft = rightEdge;
-				}
+				previewImageWidth = leftSpace;
+				previewImageLeft = leftEdge - previewImageWidth;
 			}
-
-			// set the vertical position of the preview image (and make sure it isn't extending over the edge of the window):
-			var previewImageTop = (srcImageY + (srcImageHeight / 2)) - (previewImageHeight / 2);
-			if ((previewImageTop + previewImageHeight) > windowHeight) {
-				previewImageTop = windowHeight - previewImageHeight;
-			}
-			else if (previewImageTop < 0) {
-				previewImageTop = 0;
-			}
-
-			// assign the positions to the preview image element:
-			previewImageStyle.left = previewImageLeft + "px";
-			previewImageStyle.top = previewImageTop + "px";
-			previewImageImgStyle.width = previewImageWidth + 'px';
-			previewImageImgStyle.height = previewImageHeight + 'px';
+			previewImageHeight = previewImageWidth / imageRatio;
 		}
+		else {
+			if (goesPastRightBound) {
+				previewImageLeft = leftEdge - previewImageWidth;
+			}
+			else if (goesPastLeftBound) {
+				previewImageLeft = rightEdge;
+			}
+		}
+
+		// set the vertical position of the preview image (and make sure it isn't extending over the edge of the window):
+		var previewImageTop = (srcImageY + (srcImageHeight / 2)) - (previewImageHeight / 2);
+		//console.log("previewImageTop: " + previewImageTop);
+		if ((previewImageTop + previewImageHeight + 15) > windowHeight) {
+			previewImageTop = windowHeight - previewImageHeight - 15;
+		}
+		else if (previewImageTop < 0) {
+			previewImageTop = 0;
+		}
+
+		this.cardDisplay.baseDiv[0].style.left = previewImageLeft + "px";
+		this.cardDisplay.baseDiv[0].style.top = previewImageTop + "px";
 		
-		let cardImage = Card.getImageUrl(this.previewImageBPID);
-
-		if (cardImage != null) {
-			this.previewImage.src = cardImage;
-		}
+		previewImageTop = (srcImageY + (srcImageHeight / 2)) - (previewImageHeight / 2);;
 	}
 
 	hidePreviewImage() {
-		this.previewImageBPID = "0";
-		this.previewImage.src = "";
-		this.previewImage.style.display = "none";
+		this.cardDisplay.clear();
+
+		this.hidePreviewMessage();
 	}
 
-	rotatePreviewImage(shouldRotate) {
-		var previewImageStyle = this.previewImage.style;
-		if (!shouldRotate) {
-			previewImageStyle.transform = "rotate(0deg)";
-		}
-		else {
-			previewImageStyle.transform = "rotate(180deg)";
-		}
+	invertPreviewImage(shiftHeld) {
+		const invertShift = !this.cardDisplay.reversible  
+			&& this.baseImageDiv.style.transform.includes("180");
+		//If the base image is already rotated (such as a location facing 
+		// the player), then we act as if Shift is held, even if it's not.  
+		// However if shift IS held AND it's rotated, we act like it's not.  
+		// This is basically XOR; when they are the same they cancel out,
+		// but when they are different they cause a rotation.
+		this.cardDisplay.setInvert(shiftHeld != invertShift);
+	}
+	
+	setPreviewMessage(reversible) {
+		let message = "";
+		
+		// let focus = document.hasFocus();
+		
+		// if(reversible) {
+		// 	message = "Tap <b>[Shift]</b> to flip.";
+		// }
+		// else if(this.baseImageDiv.style.transform.includes("180")) {
+		// 	message = "Hold <b>[Shift]</b> to rotate.";
+		// }
+		
+		// if(message) {
+			
+		// 	if(!focus) {
+		// 		message = "Focus this window for key controls."
+		// 	}
+			
+		// 	this.flipMessageDiv.html(message);
+		// 	this.flipMessageDiv[0].style.display = "block";
+		// }
+		// else {
+		// 	this.hidePreviewMessage();	
+		// }
+	}
+	
+	hidePreviewMessage() {
+		this.flipMessageDiv.html("");
+		this.flipMessageDiv[0].style.display = "none";
 	}
 
+	triggerHover(target, shift) {
+		const refCard = target.closest(".card");
+		this.baseImageDiv = refCard[0];
+		var card = refCard.data("card");
+
+		// don't show preview image if card is animating
+		if (!$(this.baseImageDiv).hasClass('card-animating')) {
+
+			let bp = card.bareBlueprint;
+			// don't show preview image if hovered card is the DS/LS card back art
+			if (bp !== "-1_1" && bp !== "-1_2") {
+				this.displayPreviewImage(card, this.baseImageDiv);
+				this.invertPreviewImage(shift);
+				this.setPreviewMessage(this.cardDisplay.reversible);
+			}
+		}
+		else if (this.cardDisplay.populated) {
+			this.hidePreviewImage();
+		}
+	}
+	
+	
+	triggerHintHover(target, shift) {
+		const blueprintId = target.attr("value");
+		const testingText = target.attr("data-testingText");
+		const backSideTestingText = target.attr("data-backSideTestingText");
+		const card = new Card(blueprintId, testingText, backSideTestingText, "SPECIAL", "hint", "");
+
+		this.baseImageDiv = target[0];
+		this.displayPreviewImage(card, this.baseImageDiv);
+		this.invertPreviewImage(shift);
+		this.setPreviewMessage(this.cardDisplay.reversible);
+
+		this.abortHoverTimer();
+		this.hoverValid = true;
+	}
+	
 	handleMouseOver(event, isDragging, infoDialogOpen) {
+		const that = this;
 		const target = $(event.target);
 		const tarIsCard = target.hasClass("actionArea");
+		const tarIsHint = target.hasClass("cardHint");
 		
-		// if mouse over target is a card on table, and client supports image previews, showImage
-		if(this.isTouchDevice || !this.showPreviewImage
-		   || !tarIsCard || isDragging || infoDialogOpen) {
+		// Reasons to cancel the popup: we're on a touch device,
+		// auto zoom has been disabled, we're not hovering over a card,
+		// we are currently click-dragging, the card preview box is open.
+		if(this.isTouchDevice || !this.showPreviewImage || (!tarIsHint && !tarIsCard)
+			 || isDragging || infoDialogOpen) {
 			
-			// if previewImage is active and either the event target isn't a card 
-			// on table OR the user shift+clicked to bring up the card detail 
-			// dialogue, we need to hide the current previewImage
-			if (this.previewImageBPID !== "0" && !tarIsCard) {
+			if (this.cardDisplay.populated) {
 				this.hidePreviewImage();
 				event.stopPropagation();
 				return false;
@@ -199,69 +298,129 @@ class AutoZoom {
 			return true;
 		}
 
-		
-		const refCard = target.closest(".card");
-		const refCardDiv = refCard[0];
-		const card = refCard.data("card");
-		
-		// don't show preview image if card is animating
-		if (!$(refCardDiv).hasClass('card-animating')) {
-			const startFlipped = event.shiftKey;
-			const blueprintId = card.blueprintId;
-			const reverseSideImage = Card.getImageUrl(blueprintId + "_BACK");
-			const imageBlueprintId = startFlipped && reverseSideImage ? blueprintId + "_BACK" : blueprintId;
+		this.abortCooldownTimer();
 
-			// don't show preview image if hovered card is the DS/LS card back art
-			if (imageBlueprintId !== "-1_1" && imageBlueprintId !== "-1_2") {
-				this.previewImageBPID = imageBlueprintId;
-				this.displayPreviewImage(refCardDiv);
-
-				if (!reverseSideImage) {
-					// set the starting rotation based on if shift key
-					// is active when event was triggered, as long as the
-					// card doesn't have a reverse side
-					this.rotatePreviewImage(startFlipped);
-				}
-				
-				event.stopPropagation();
-				return false;
+		if(this.hoverValid) {
+			if(tarIsCard) {
+				this.triggerHover(target, event.shiftKey);	
 			}
+			else if(tarIsHint) {
+				this.triggerHintHover(target, event.shiftKey);
+			}
+
+			event.stopPropagation();
+			return false;
 		}
+		else if(!this.hoverTimer) {
+			this.startHoverTimer(function(){
+				if(tarIsCard) {
+					that.triggerHover(target, event.shiftKey);	
+				}
+				else if(tarIsHint) {
+					that.triggerHintHover(target, event.shiftKey);
+					event.stopPropagation();
+				}
+			});
+		}
+
+		return true;
+	}
+
+	startHoverTimer(callback) {
+		var that = this;
+		
+		this.hoverTimer = setTimeout(function(){
+			if(that.hoverTimer !== null) {
+				//console.log("completing hoverTimer" + that.hoverTimer);
+				that.hoverTimer = null;
+				that.hoverValid = true;
+	
+				if(callback !== undefined) {
+					callback();
+				}
+			}
+		}, AutoZoom.HoverDelay);
+
+		//console.log("beginning hoverTimer " + this.hoverTimer);
+	}
+
+	abortHoverTimer() {
+		//console.log("aborting hoverTimer" + this.hoverTimer);
+		clearTimeout(this.hoverTimer);
+		this.hoverTimer = null;
+	}
+
+	startCooldownTimer() {
+		var that = this;
+
+		this.cooldownTimer = setTimeout(function(){
+			if(that.cooldownTimer !== null) {
+				//console.log("completing cooldownTimer" + that.cooldownTimer);
+				that.cooldownTimer = null;
+				that.hoverValid = false;
+			}
+		}, AutoZoom.HoverCooldown);
+
+		//console.log("beginning cooldownTimer" + this.cooldownTimer);
+	}
+
+	abortCooldownTimer() {
+		//console.log("aborting cooldownTimer" + this.cooldownTimer);
+		clearTimeout(this.cooldownTimer);
+		this.cooldownTimer = null;
+	}
+
+	handleMouseOut(event) {
+		if(this.hoverTimer) {
+			this.abortHoverTimer();
+
+			event.stopPropagation();
+			return false;
+		}
+
+		if(this.hoverValid && !this.cooldownTimer) {
+			this.startCooldownTimer();
+
+			event.stopPropagation();
+			return false;
+		}
+
+		return true;
 	}
 	
 	handleMouseDown(event) {
-		if (this.previewImageBPID !== 0) {
+		this.abortHoverTimer();
+		this.startCooldownTimer();
+		if (this.cardDisplay.populated) {
 			this.hidePreviewImage();
 		}
 	}
 	
 	handleKeyDown(event) {
-		if (this.showPreviewImage && !this.isTouchDevice 
-				&& event.which === 16 && this.previewImageBPID != "0") {
-			const reverseSideImage = Card.getImageUrl(this.previewImageBPID + "_BACK");
-		
-			if (reverseSideImage) {
-				this.previewImageBPID = this.previewImageBPID + "_BACK";
-				this.previewImage.src = reverseSideImage;
-			} 
-			else {
-				this.rotatePreviewImage(true)
+		if (!event.repeat && this.showPreviewImage && !this.isTouchDevice 
+				&& event.key === "Shift" && this.cardDisplay.populated) {
+			
+			if(this.cardDisplay.reversible) {
+				this.cardDisplay.invert();
 			}
-		};
+			else {
+				this.invertPreviewImage(true);
+			}
+			
+		}
+		
 		return true;
 	}
 	
 	handleKeyUp(event) {
 		if (this.showPreviewImage && !this.isTouchDevice 
-				&& event.which === 16 && this.previewImageBPID != "0") {
-			const isBackImage = this.previewImageBPID.endsWith('_BACK');
-			if (isBackImage) {
-				this.previewImageBPID = this.previewImageBPID.substring(0, this.previewImageBPID.length - 5);
-				this.previewImage.src = Card.getImageUrl(this.previewImageBPID);
-			} else {
-				this.rotatePreviewImage(false)
+				&& event.key === "Shift" && this.cardDisplay.populated) {
+			//This makes only presses work for reversibles
+			if(!this.cardDisplay.reversible) {
+				this.invertPreviewImage(false);
 			}
-		};
+		}
+		
 		return true;
 	}
 	

@@ -2,17 +2,9 @@
 
 	8_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR08014.jpg
-			//parentId: 8_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08014.jpg
 			collInfo: 8C14
 			rarity: C
-			setNum: "8"
-			cardNum: 14
-			style: Standard
 		}
 		title: A Fool
 		unique: false
@@ -55,17 +47,9 @@
 
 	8_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR08015.jpg
-			//parentId: 8_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08015.jpg
 			collInfo: 8R15
 			rarity: R
-			setNum: "8"
-			cardNum: 15
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Leader of Men
@@ -102,17 +86,9 @@
 
 	8_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR08016.jpg
-			//parentId: 8_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08016.jpg
 			collInfo: 8U16
 			rarity: U
-			setNum: "8"
-			cardNum: 16
-			style: Standard
 		}
 		title: Let Us Not Tarry
 		unique: false
@@ -157,17 +133,9 @@
 
 	8_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR08017.jpg
-			//parentId: 8_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08017.jpg
 			collInfo: 8U17
 			rarity: U
-			setNum: "8"
-			cardNum: 17
-			style: Standard
 		}
 		title: Mighty Steed
 		unique: false
@@ -220,17 +188,9 @@
 
 	8_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR08018.jpg
-			//parentId: 8_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08018.jpg
 			collInfo: 8U18
 			rarity: U
-			setNum: "8"
-			cardNum: 18
-			style: Standard
 		}
 		title: Not the First Halfling
 		unique: false
@@ -287,17 +247,9 @@
 
 	8_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR08019.jpg
-			//parentId: 8_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08019.jpg
 			collInfo: 8U19
 			rarity: U
-			setNum: "8"
-			cardNum: 19
-			style: Standard
 		}
 		title: On Your Doorstep
 		unique: false
@@ -337,17 +289,9 @@
 
 	8_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR08020.jpg
-			//parentId: 8_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08020.jpg
 			collInfo: 8R20
 			rarity: R
-			setNum: "8"
-			cardNum: 20
-			style: Standard
 		}
 		title: Saved From the Fire
 		unique: false
@@ -394,17 +338,9 @@
 
 	8_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR08021.jpg
-			//parentId: 8_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08021.jpg
 			collInfo: 8R21
 			rarity: R
-			setNum: "8"
-			cardNum: 21
-			style: Standard
 		}
 		title: Shadowfax
 		subtitle: Greatheart

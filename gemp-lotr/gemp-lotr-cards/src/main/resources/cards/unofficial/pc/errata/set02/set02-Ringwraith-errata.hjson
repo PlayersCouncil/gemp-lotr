@@ -2,17 +2,14 @@
 
 	52_75: {
 		cardInfo: {
-			imagePath: errata/52_75.jpg
-			javaClass: false
+			//id: 2_75.1
 			parent: 2_75
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/52_75.jpg
 			collInfo: 2R75
 			rarity: R
-			setNum: "2"
-			cardNum: 75
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Bill Ferny
 		subtitle: Swarthy Sneering Fellow
@@ -78,7 +75,7 @@
 	# 		javaClass: false
 	# 		parent: 2_76
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 2U76
 	# 		rarity: U
 	# 		setNum: "2"
@@ -175,7 +172,7 @@
 	# 		javaClass: false
 	# 		parent: 2_76
 	# 		parentPath: errata/pc
-	# 		version: 2
+	# 		revision: 2
 	# 		collInfo: 2U76
 	# 		rarity: U
 	# 		setNum: "2"
@@ -221,17 +218,14 @@
 	
 	52_76: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E076.3_card.jpg
-			//parentId: 2_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 3
+			//id: 2_76.3
+			parent: 2_76
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 3
+			image: errata/LOTR-EN02E076.3_card.jpg
 			collInfo: 2U76
 			rarity: U
-			setNum: "2"
-			cardNum: 76
-			style: Standard
 		}
 		title: Helpless
 		unique: false
@@ -276,17 +270,14 @@
 	
 	52_85: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E085.1_card.jpg
-			//parentId: 2_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 2_85.1
+			parent: 2_85
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN02E085.1_card.jpg
 			collInfo: 2R85
 			rarity: R
-			setNum: "2"
-			cardNum: 85
-			style: Standard
 		}
 		title: The Witch-king
 		subtitle: Lord of the Nazgul

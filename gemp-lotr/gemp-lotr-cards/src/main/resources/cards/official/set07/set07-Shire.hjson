@@ -2,17 +2,9 @@
 
 	7_317: {
 		cardInfo: {
-			imagePath: decipher/LOTR07317.jpg
-			//parentId: 7_317
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07317.jpg
 			collInfo: 7C317
 			rarity: C
-			setNum: "7"
-			cardNum: 317
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Hope of Free Peoples
@@ -57,17 +49,9 @@
 
 	7_318: {
 		cardInfo: {
-			imagePath: decipher/LOTR07318.jpg
-			//parentId: 7_318
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07318.jpg
 			collInfo: 7R318
 			rarity: R
-			setNum: "7"
-			cardNum: 318
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Wicked Masster!
@@ -114,17 +98,9 @@
 
 	7_319: {
 		cardInfo: {
-			imagePath: decipher/LOTR07319.jpg
-			//parentId: 7_319
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07319.jpg
 			collInfo: 7C319
 			rarity: C
-			setNum: "7"
-			cardNum: 319
-			style: Standard
 		}
 		title: Hobbit Sword
 		unique: false
@@ -149,17 +125,9 @@
 
 	7_320: {
 		cardInfo: {
-			imagePath: decipher/LOTR07320.jpg
-			//parentId: 7_320
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07320.jpg
 			collInfo: 7C320
 			rarity: C
-			setNum: "7"
-			cardNum: 320
-			style: Standard
 		}
 		title: Merry
 		subtitle: Rohirrim Squire
@@ -204,17 +172,9 @@
 
 	7_321: {
 		cardInfo: {
-			imagePath: decipher/LOTR07321.jpg
-			//parentId: 7_321
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07321.jpg
 			collInfo: 7R321
 			rarity: R
-			setNum: "7"
-			cardNum: 321
-			style: Standard
 		}
 		title: Merry
 		subtitle: Swordthain
@@ -267,17 +227,9 @@
 
 	7_322: {
 		cardInfo: {
-			imagePath: decipher/LOTR07322.jpg
-			//parentId: 7_322
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07322.jpg
 			collInfo: 7C322
 			rarity: C
-			setNum: "7"
-			cardNum: 322
-			style: Standard
 		}
 		title: Noble Intentions
 		unique: false
@@ -313,17 +265,9 @@
 
 	7_323: {
 		cardInfo: {
-			imagePath: decipher/LOTR07323.jpg
-			//parentId: 7_323
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07323.jpg
 			collInfo: 7C323
 			rarity: C
-			setNum: "7"
-			cardNum: 323
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Sworn to Service
@@ -366,17 +310,9 @@
 
 	7_324: {
 		cardInfo: {
-			imagePath: decipher/LOTR07324.jpg
-			//parentId: 7_324
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07324.jpg
 			collInfo: 7R324
 			rarity: R
-			setNum: "7"
-			cardNum: 324
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Wearer of Black and Silver
@@ -422,17 +358,9 @@
 
 	7_325: {
 		cardInfo: {
-			imagePath: decipher/LOTR07325.jpg
-			//parentId: 7_325
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07325.jpg
 			collInfo: 7R325
 			rarity: R
-			setNum: "7"
-			cardNum: 325
-			style: Standard
 		}
 		title: Pressing On
 		unique: false
@@ -497,17 +425,9 @@
 
 	7_326: {
 		cardInfo: {
-			imagePath: decipher/LOTR07326.jpg
-			//parentId: 7_326
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07326.jpg
 			collInfo: 7C326
 			rarity: C
-			setNum: "7"
-			cardNum: 326
-			style: Standard
 		}
 		title: Sam
 		subtitle: Needer of Vittles
@@ -558,17 +478,9 @@
 
 	7_327: {
 		cardInfo: {
-			imagePath: decipher/LOTR07327.jpg
-			//parentId: 7_327
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07327.jpg
 			collInfo: 7R327
 			rarity: R
-			setNum: "7"
-			cardNum: 327
-			style: Standard
 		}
 		title: Sam
 		subtitle: Resolute Halfling
@@ -624,17 +536,9 @@
 
 	7_328: {
 		cardInfo: {
-			imagePath: decipher/LOTR07328.jpg
-			//parentId: 7_328
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07328.jpg
 			collInfo: 7U328
 			rarity: U
-			setNum: "7"
-			cardNum: 328
-			style: Standard
 		}
 		title: Slow-kindled Courage
 		unique: true

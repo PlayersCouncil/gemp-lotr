@@ -2,17 +2,14 @@
 
 	56_22: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN06E022.1_card.jpg
-			//parentId: 6_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 6_22.1
+			parent: 6_22
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN06E022.1_card.jpg
 			collInfo: 6U22
 			rarity: U
-			setNum: "6"
-			cardNum: 22
-			style: Standard
 		}
 		title: Naith Troop
 		unique: true
@@ -76,17 +73,14 @@
 
 	56_23: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN06E023.1_card.jpg
-			//parentId: 6_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 6_23.1
+			parent: 6_23
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN06E023.1_card.jpg
 			collInfo: 6R23
 			rarity: R
-			setNum: "6"
-			cardNum: 23
-			style: Standard
 		}
 		title: Naith Warband
 		unique: true

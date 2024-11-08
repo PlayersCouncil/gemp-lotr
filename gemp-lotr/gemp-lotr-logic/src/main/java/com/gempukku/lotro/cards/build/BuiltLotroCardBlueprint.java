@@ -1,6 +1,5 @@
 package com.gempukku.lotro.cards.build;
 
-import com.gempukku.lotro.cards.build.field.effect.DefaultActionSource;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
@@ -22,9 +21,17 @@ import java.util.*;
 
 public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private String id;
+
+    private CardInfo info;
+
+    //Sanitized versions of text are used for searching and comparisons, as opposed
+    // to the regular display versions which can have capitalization, spaces, accents, etc.
     private String title;
     private String sanitizedTitle;
     private String subtitle;
+    private String sanitizedSubtitle;
+    private String fullName;
+    private String sanitizedFullName;
     private boolean canStartWithRing;
     private boolean unique;
     private Side side;
@@ -96,6 +103,15 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private ExtraPossessionClassTest extraPossessionClassTest;
 
     private PreGameDeckValidation deckValidation;
+
+//    //Constructor used when creating a raw blueprint from scratch
+//    public BuiltLotroCardBlueprint() { }
+//
+//    //Used when creating an errata copy that is mostly the same and only
+//    // changes a few pieces.
+//    public BuiltLotroCardBlueprint(BuiltLotroCardBlueprint other) {
+//
+//    }
 
     // Building methods
 
@@ -233,9 +249,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         permanentSiteModifiers.add(modifierSource);
     }
 
-    public void appendTargetFilter(FilterableSource targetFilter) {
-        if (targetFilters == null)
-            targetFilters = new LinkedList<>();
+    public void setTargetFilter(FilterableSource targetFilter) {
+        targetFilters = new LinkedList<>();
         targetFilters.add(targetFilter);
     }
 
@@ -298,10 +313,24 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     public void setTitle(String title) {
         this.title = title;
         this.sanitizedTitle = Names.SanitizeName(title);
+        setFullName();
     }
 
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
+        this.sanitizedSubtitle = Names.SanitizeName(subtitle);
+        setFullName();
+    }
+
+    private void setFullName() {
+        if(subtitle != null) {
+            this.fullName = title + ", " + subtitle;
+            this.sanitizedFullName = sanitizedTitle + ", " + sanitizedSubtitle;
+        }
+        else {
+            this.fullName = title;
+            this.sanitizedFullName = title;
+        }
     }
 
     public void setGameText(String text) {
@@ -315,6 +344,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     public void setPromoText(String text) {
         this.promoText = GameText.ConvertTextToHTML(text.trim());
+    }
+
+    public void setInfo(CardInfo info) {
+        this.info = info;
     }
 
     public void setUnique(boolean unique) {
@@ -398,6 +431,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new UnsupportedOperationException("Id for this blueprint has already been set");
 
         this.id = id;
+        info = new CardInfo(id);
     }
 
     @Override
@@ -443,6 +477,28 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     @Override
     public String getSubtitle() {
         return subtitle;
+    }
+
+    @Override
+    public String getFullName() { return fullName; }
+
+    @Override
+    public String getSanitizedFullName() { return sanitizedFullName; }
+
+    @Override
+    public String getGameText() { return gameText; }
+
+    @Override
+    public String getFormattedGameText() { return formattedGameText; }
+    @Override
+    public String getLore()  { return loreText; }
+    @Override
+    public String getPromoText() { return promoText; }
+
+
+    @Override
+    public CardInfo getCardInfo() {
+        return info;
     }
 
     @Override

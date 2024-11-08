@@ -2,17 +2,9 @@
 
 	9_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR09045.jpg
-			//parentId: 9_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09045.jpg
 			collInfo: 9R45
 			rarity: R
-			setNum: "9"
-			cardNum: 45
-			style: Standard
 		}
 		title: Horn of the Mark
 		unique: true
@@ -61,17 +53,9 @@
 
 	9_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR09046.jpg
-			//parentId: 9_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09046.jpg
 			collInfo: 9R46
 			rarity: R
-			setNum: "9"
-			cardNum: 46
-			style: Standard
 		}
 		title: The Red Arrow
 		unique: true

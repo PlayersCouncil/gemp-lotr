@@ -2,17 +2,9 @@
 
 	19_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR19010.jpg
-			//parentId: 19_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19010.jpg
 			collInfo: 19P10
 			rarity: P
-			setNum: "19"
-			cardNum: 10
-			style: Standard
 		}
 		title: Gollum
 		subtitle: Threatening Guide
@@ -60,17 +52,9 @@
 
 	19_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR19011.jpg
-			//parentId: 19_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19011.jpg
 			collInfo: 19P11
 			rarity: P
-			setNum: "19"
-			cardNum: 11
-			style: Standard
 		}
 		title: Sméagol
 		subtitle: Pitiable Guide

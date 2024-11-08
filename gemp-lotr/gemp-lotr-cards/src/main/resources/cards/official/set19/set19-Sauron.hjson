@@ -2,17 +2,9 @@
 
 	19_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR19027.jpg
-			//parentId: 19_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19027.jpg
 			collInfo: 19P27
 			rarity: P
-			setNum: "19"
-			cardNum: 27
-			style: Standard
 		}
 		title: Sauron's Might
 		unique: false

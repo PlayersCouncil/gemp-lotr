@@ -2,17 +2,9 @@
 
 	11_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR11041.jpg
-			//parentId: 11_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11041.jpg
 			collInfo: 11U41
 			rarity: U
-			setNum: "11"
-			cardNum: 41
-			style: Standard
 		}
 		title: Frenzied Attack
 		unique: false
@@ -54,17 +46,9 @@
 
 	11_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR11042.jpg
-			//parentId: 11_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11042.jpg
 			collInfo: 11R42
 			rarity: R
-			setNum: "11"
-			cardNum: 42
-			style: Standard
 		}
 		title: Gollum
 		subtitle: Skulker
@@ -106,17 +90,9 @@
 
 	11_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR11043.jpg
-			//parentId: 11_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11043.jpg
 			collInfo: 11R43
 			rarity: R
-			setNum: "11"
-			cardNum: 43
-			style: Standard
 		}
 		title: Horribly Strong
 		unique: false
@@ -151,17 +127,9 @@
 
 	11_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR11044.jpg
-			//parentId: 11_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11044.jpg
 			collInfo: 11R44
 			rarity: R
-			setNum: "11"
-			cardNum: 44
-			style: Standard
 		}
 		title: Incited
 		unique: true
@@ -201,17 +169,9 @@
 
 	11_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR11045.jpg
-			//parentId: 11_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11045.jpg
 			collInfo: 11U45
 			rarity: U
-			setNum: "11"
-			cardNum: 45
-			style: Standard
 		}
 		title: Led Astray
 		unique: false
@@ -267,17 +227,9 @@
 
 	11_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR11046.jpg
-			//parentId: 11_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11046.jpg
 			collInfo: 11C46
 			rarity: C
-			setNum: "11"
-			cardNum: 46
-			style: Standard
 		}
 		title: Master Commands It
 		unique: false
@@ -312,17 +264,9 @@
 
 	11_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR11047.jpg
-			//parentId: 11_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11047.jpg
 			collInfo: 11U47
 			rarity: U
-			setNum: "11"
-			cardNum: 47
-			style: Standard
 		}
 		title: No End of Wickedness
 		unique: false
@@ -367,17 +311,9 @@
 
 	11_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR11048.jpg
-			//parentId: 11_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11048.jpg
 			collInfo: 11R48
 			rarity: R
-			setNum: "11"
-			cardNum: 48
-			style: Standard
 		}
 		title: Not Yet Vanquished
 		unique: true
@@ -419,17 +355,9 @@
 
 	11_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR11049.jpg
-			//parentId: 11_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11049.jpg
 			collInfo: 11U49
 			rarity: U
-			setNum: "11"
-			cardNum: 49
-			style: Standard
 		}
 		title: One Good Turn Deserves Another
 		unique: false
@@ -479,17 +407,9 @@
 
 	11_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR11050.jpg
-			//parentId: 11_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11050.jpg
 			collInfo: 11R50
 			rarity: R
-			setNum: "11"
-			cardNum: 50
-			style: Standard
 		}
 		title: Safe Passage
 		unique: true
@@ -555,17 +475,9 @@
 
 	11_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR11051.jpg
-			//parentId: 11_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11051.jpg
 			collInfo: 11R51
 			rarity: R
-			setNum: "11"
-			cardNum: 51
-			style: Standard
 		}
 		title: Sméagol
 		subtitle: Scout and Guide
@@ -626,17 +538,9 @@
 
 	11_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR11052.jpg
-			//parentId: 11_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11052.jpg
 			collInfo: 11U52
 			rarity: U
-			setNum: "11"
-			cardNum: 52
-			style: Standard
 		}
 		title: Strange and Terrible
 		unique: false

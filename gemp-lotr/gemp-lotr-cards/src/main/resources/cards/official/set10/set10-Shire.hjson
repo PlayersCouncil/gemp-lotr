@@ -2,17 +2,9 @@
 
 	10_104: {
 		cardInfo: {
-			imagePath: decipher/LOTR10104.jpg
-			//parentId: 10_104
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10104.jpg
 			collInfo: 10R104
 			rarity: R
-			setNum: "10"
-			cardNum: 104
-			style: Standard
 		}
 		title: Birthday Present
 		unique: false
@@ -69,17 +61,9 @@
 
 	10_105: {
 		cardInfo: {
-			imagePath: decipher/LOTR10105.jpg
-			//parentId: 10_105
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10105.jpg
 			collInfo: 10U105
 			rarity: U
-			setNum: "10"
-			cardNum: 105
-			style: Standard
 		}
 		title: Brave and Loyal
 		unique: false
@@ -116,17 +100,9 @@
 
 	10_106: {
 		cardInfo: {
-			imagePath: decipher/LOTR10106.jpg
-			//parentId: 10_106
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10106.jpg
 			collInfo: 10C106
 			rarity: C
-			setNum: "10"
-			cardNum: 106
-			style: Standard
 		}
 		title: Chance Observation
 		unique: false
@@ -166,17 +142,9 @@
 
 	10_107: {
 		cardInfo: {
-			imagePath: decipher/LOTR10107.jpg
-			//parentId: 10_107
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10107.jpg
 			collInfo: 10C107
 			rarity: C
-			setNum: "10"
-			cardNum: 107
-			style: Standard
 		}
 		title: Great Heart
 		unique: false
@@ -223,17 +191,9 @@
 
 	10_108: {
 		cardInfo: {
-			imagePath: decipher/LOTR10108.jpg
-			//parentId: 10_108
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10108.jpg
 			collInfo: 10U108
 			rarity: U
-			setNum: "10"
-			cardNum: 108
-			style: Standard
 		}
 		title: A Light in his Mind
 		unique: true
@@ -273,17 +233,9 @@
 
 	10_109: {
 		cardInfo: {
-			imagePath: decipher/LOTR10109.jpg
-			//parentId: 10_109
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10109.jpg
 			collInfo: 10C109
 			rarity: C
-			setNum: "10"
-			cardNum: 109
-			style: Standard
 		}
 		title: Make Haste
 		unique: false
@@ -333,17 +285,9 @@
 
 	10_110: {
 		cardInfo: {
-			imagePath: decipher/LOTR10110.jpg
-			//parentId: 10_110
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10110.jpg
 			collInfo: 10C110
 			rarity: C
-			setNum: "10"
-			cardNum: 110
-			style: Standard
 		}
 		title: A Marvel
 		unique: false
@@ -380,17 +324,9 @@
 
 	10_111: {
 		cardInfo: {
-			imagePath: decipher/LOTR10111.jpg
-			//parentId: 10_111
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10111.jpg
 			collInfo: 10U111
 			rarity: U
-			setNum: "10"
-			cardNum: 111
-			style: Standard
 		}
 		title: Narrow Escape
 		unique: false
@@ -437,17 +373,9 @@
 
 	10_112: {
 		cardInfo: {
-			imagePath: decipher/LOTR10112.jpg
-			//parentId: 10_112
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10112.jpg
 			collInfo: 10C112
 			rarity: C
-			setNum: "10"
-			cardNum: 112
-			style: Standard
 		}
 		title: Nine-fingered Frodo and the Ring of Doom
 		unique: false
@@ -495,17 +423,9 @@
 
 	10_113: {
 		cardInfo: {
-			imagePath: decipher/LOTR10113.jpg
-			//parentId: 10_113
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10113.jpg
 			collInfo: 10C113
 			rarity: C
-			setNum: "10"
-			cardNum: 113
-			style: Standard
 		}
 		title: Orc Armor
 		unique: false
@@ -538,17 +458,9 @@
 
 	10_114: {
 		cardInfo: {
-			imagePath: decipher/LOTR10114.jpg
-			//parentId: 10_114
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10114.jpg
 			collInfo: 10U114
 			rarity: U
-			setNum: "10"
-			cardNum: 114
-			style: Standard
 		}
 		title: Shadowplay
 		unique: false
@@ -598,17 +510,9 @@
 
 	10_115: {
 		cardInfo: {
-			imagePath: decipher/LOTR10115.jpg
-			//parentId: 10_115
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10115.jpg
 			collInfo: 10U115
 			rarity: U
-			setNum: "10"
-			cardNum: 115
-			style: Standard
 		}
 		title: Slunk Out of Sight
 		unique: false
@@ -670,17 +574,9 @@
 
 	10_116: {
 		cardInfo: {
-			imagePath: decipher/LOTR10116.jpg
-			//parentId: 10_116
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10116.jpg
 			collInfo: 10U116
 			rarity: U
-			setNum: "10"
-			cardNum: 116
-			style: Standard
 		}
 		title: The Tale of the Great Ring
 		unique: true
@@ -737,17 +633,9 @@
 
 	10_121: {
 		cardInfo: {
-			imagePath: decipher/LOTR10121.jpg
-			//parentId: 10_121
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10121.jpg
 			collInfo: 10P121
 			rarity: P
-			setNum: "10"
-			cardNum: 121
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Resolute Hobbit
@@ -776,17 +664,9 @@
 
 	10_122: {
 		cardInfo: {
-			imagePath: decipher/LOTR10122.jpg
-			//parentId: 10_122
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10122.jpg
 			collInfo: 10P122
 			rarity: P
-			setNum: "10"
-			cardNum: 122
-			style: Standard
 		}
 		title: Sam
 		subtitle: Great Elf Warrior

@@ -2,17 +2,9 @@
 
 	19_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR19012.jpg
-			//parentId: 19_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19012.jpg
 			collInfo: 19P12
 			rarity: P
-			setNum: "19"
-			cardNum: 12
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Well-traveled Guide
@@ -80,17 +72,9 @@
 
 	19_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR19013.jpg
-			//parentId: 19_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19013.jpg
 			collInfo: 19P13
 			rarity: P
-			setNum: "19"
-			cardNum: 13
-			style: Standard
 		}
 		title: Boromir
 		subtitle: Destined Guide
@@ -147,17 +131,9 @@
 
 	19_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR19014.jpg
-			//parentId: 19_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19014.jpg
 			collInfo: 19P14
 			rarity: P
-			setNum: "19"
-			cardNum: 14
-			style: Standard
 		}
 		title: Not Bound to His Fate
 		unique: false
@@ -209,17 +185,9 @@
 
 	19_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR19015.jpg
-			//parentId: 19_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19015.jpg
 			collInfo: 19P15
 			rarity: P
-			setNum: "19"
-			cardNum: 15
-			style: Standard
 		}
 		title: Strength in My Blood
 		unique: false

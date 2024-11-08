@@ -1,17 +1,14 @@
 {
 	56_16: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN06E016.1_card.jpg
-			javaClass: false
+			//id: 6_16.1
 			parent: 6_16
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN06E016.1_card.jpg
 			collInfo: 6U16
 			rarity: U
-			setNum: "6"
-			cardNum: 16
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Forearmed
 		unique: false

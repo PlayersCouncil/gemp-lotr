@@ -2,17 +2,9 @@
 
 	0_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR00063.jpg
-			//parentId: 0_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR00063.jpg
 			collInfo: 0P63
 			rarity: P
-			setNum: "0"
-			cardNum: 63
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Maiden of Rivendell

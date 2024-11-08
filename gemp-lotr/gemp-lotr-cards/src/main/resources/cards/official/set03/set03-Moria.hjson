@@ -2,17 +2,9 @@
 
 	3_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR03076.jpg
-			//parentId: 3_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03076.jpg
 			collInfo: 3C76
 			rarity: C
-			setNum: "3"
-			cardNum: 76
-			style: Standard
 		}
 		title: Dangerous Gamble
 		unique: false
@@ -56,17 +48,9 @@
 
 	3_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR03077.jpg
-			//parentId: 3_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03077.jpg
 			collInfo: 3R77
 			rarity: R
-			setNum: "3"
-			cardNum: 77
-			style: Standard
 		}
 		title: Depths of Moria
 		unique: false
@@ -111,17 +95,9 @@
 
 	3_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR03078.jpg
-			//parentId: 3_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03078.jpg
 			collInfo: 3C78
 			rarity: C
-			setNum: "3"
-			cardNum: 78
-			style: Standard
 		}
 		title: Hide and Seek
 		unique: false
@@ -158,17 +134,9 @@
 
 	3_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR03079.jpg
-			//parentId: 3_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03079.jpg
 			collInfo: 3U79
 			rarity: U
-			setNum: "3"
-			cardNum: 79
-			style: Standard
 		}
 		title: Malice
 		unique: false
@@ -207,17 +175,9 @@
 
 	3_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR03080.jpg
-			//parentId: 3_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03080.jpg
 			collInfo: 3R80
 			rarity: R
-			setNum: "3"
-			cardNum: 80
-			style: Standard
 		}
 		title: Such a Little Thing
 		unique: false

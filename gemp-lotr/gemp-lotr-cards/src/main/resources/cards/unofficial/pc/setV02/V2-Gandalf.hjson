@@ -2,17 +2,10 @@
 
 	102_13: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S013.0_card.jpg
-			//parentId: 102_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_13
+			image: sets/V2/LOTR-ENV2S013.0_card.jpg
 			collInfo: V2_13
 			rarity: _
-			setNum: V2
-			cardNum: 13
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Lathspell
@@ -86,17 +79,10 @@
 
 	102_14: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S014.0_card.jpg
-			//parentId: 102_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_14
+			image: sets/V2/LOTR-ENV2S014.0_card.jpg
 			collInfo: V2_14
 			rarity: _
-			setNum: V2
-			cardNum: 14
-			style: Standard
 		}
 		title: Remember Your Old Strength
 		unique: false

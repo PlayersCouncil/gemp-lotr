@@ -2,17 +2,9 @@
 
 	17_106: {
 		cardInfo: {
-			imagePath: decipher/LOTR17106.jpg
-			//parentId: 17_106
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17106.jpg
 			collInfo: 17U106
 			rarity: U
-			setNum: "17"
-			cardNum: 106
-			style: Standard
 		}
 		title: Halfling Leaf
 		unique: false
@@ -58,17 +50,9 @@
 
 	17_107: {
 		cardInfo: {
-			imagePath: decipher/LOTR17107.jpg
-			//parentId: 17_107
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17107.jpg
 			collInfo: 17U107
 			rarity: U
-			setNum: "17"
-			cardNum: 107
-			style: Standard
 		}
 		title: Merry
 		subtitle: In the Bloom of Health
@@ -115,17 +99,9 @@
 
 	17_108: {
 		cardInfo: {
-			imagePath: decipher/LOTR17108.jpg
-			//parentId: 17_108
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17108.jpg
 			collInfo: 17U108
 			rarity: U
-			setNum: "17"
-			cardNum: 108
-			style: Standard
 		}
 		title: Hornblower Leaf
 		unique: false
@@ -184,17 +160,9 @@
 
 	17_109: {
 		cardInfo: {
-			imagePath: decipher/LOTR17109.jpg
-			//parentId: 17_109
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17109.jpg
 			collInfo: 17U109
 			rarity: U
-			setNum: "17"
-			cardNum: 109
-			style: Standard
 		}
 		title: Pippin
 		subtitle: In the Bloom of Health
@@ -241,17 +209,9 @@
 
 	17_110: {
 		cardInfo: {
-			imagePath: decipher/LOTR17110.jpg
-			//parentId: 17_110
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17110.jpg
 			collInfo: 17U110
 			rarity: U
-			setNum: "17"
-			cardNum: 110
-			style: Standard
 		}
 		title: Southfarthing Leaf
 		unique: false
@@ -312,17 +272,9 @@
 
 	17_111: {
 		cardInfo: {
-			imagePath: decipher/LOTR17111.jpg
-			//parentId: 17_111
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17111.jpg
 			collInfo: 17U111
 			rarity: U
-			setNum: "17"
-			cardNum: 111
-			style: Standard
 		}
 		title: Southlinch Leaf
 		unique: false

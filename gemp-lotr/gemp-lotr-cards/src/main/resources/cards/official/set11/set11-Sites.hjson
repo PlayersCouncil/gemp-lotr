@@ -2,17 +2,9 @@
 
 	11_227: {
 		cardInfo: {
-			imagePath: decipher/LOTR11227.jpg
-			//parentId: 11_227
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11227.jpg
 			collInfo: 11U227
 			rarity: U
-			setNum: "11"
-			cardNum: 227
-			style: Standard
 		}
 		title: Anduin Banks
 		unique: false
@@ -49,17 +41,9 @@
 
 	11_228: {
 		cardInfo: {
-			imagePath: decipher/LOTR11228.jpg
-			//parentId: 11_228
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11228.jpg
 			collInfo: 11S228
 			rarity: S
-			setNum: "11"
-			cardNum: 228
-			style: Standard
 		}
 		title: Anduin Confluence
 		unique: false
@@ -94,17 +78,9 @@
 
 	11_229: {
 		cardInfo: {
-			imagePath: decipher/LOTR11229.jpg
-			//parentId: 11_229
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11229.jpg
 			collInfo: 11S229
 			rarity: S
-			setNum: "11"
-			cardNum: 229
-			style: Standard
 		}
 		title: Barazinbar
 		unique: false
@@ -146,17 +122,9 @@
 
 	11_230: {
 		cardInfo: {
-			imagePath: decipher/LOTR11230.jpg
-			//parentId: 11_230
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11230.jpg
 			collInfo: 11S230
 			rarity: S
-			setNum: "11"
-			cardNum: 230
-			style: Standard
 		}
 		title: Buckland Homestead
 		unique: false
@@ -193,17 +161,9 @@
 
 	11_231: {
 		cardInfo: {
-			imagePath: decipher/LOTR11231.jpg
-			//parentId: 11_231
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11231.jpg
 			collInfo: 11S231
 			rarity: S
-			setNum: "11"
-			cardNum: 231
-			style: Standard
 		}
 		title: Caras Galadhon
 		unique: false
@@ -233,17 +193,9 @@
 
 	11_232: {
 		cardInfo: {
-			imagePath: decipher/LOTR11232.jpg
-			//parentId: 11_232
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11232.jpg
 			collInfo: 11S232
 			rarity: S
-			setNum: "11"
-			cardNum: 232
-			style: Standard
 		}
 		title: Cavern Entrance
 		unique: false
@@ -274,17 +226,9 @@
 
 	11_233: {
 		cardInfo: {
-			imagePath: decipher/LOTR11233.jpg
-			//parentId: 11_233
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11233.jpg
 			collInfo: 11S233
 			rarity: S
-			setNum: "11"
-			cardNum: 233
-			style: Standard
 		}
 		title: Chamber of Mazarbul
 		unique: false
@@ -314,17 +258,9 @@
 
 	11_234: {
 		cardInfo: {
-			imagePath: decipher/LOTR11234.jpg
-			//parentId: 11_234
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11234.jpg
 			collInfo: 11S234
 			rarity: S
-			setNum: "11"
-			cardNum: 234
-			style: Standard
 		}
 		title: Crags of Emyn Muil
 		unique: false
@@ -363,17 +299,9 @@
 
 	11_235: {
 		cardInfo: {
-			imagePath: decipher/LOTR11235.jpg
-			//parentId: 11_235
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11235.jpg
 			collInfo: 11U235
 			rarity: U
-			setNum: "11"
-			cardNum: 235
-			style: Standard
 		}
 		title: Dammed Gate-stream
 		unique: false
@@ -409,17 +337,9 @@
 
 	11_236: {
 		cardInfo: {
-			imagePath: decipher/LOTR11236.jpg
-			//parentId: 11_236
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11236.jpg
 			collInfo: 11S236
 			rarity: S
-			setNum: "11"
-			cardNum: 236
-			style: Standard
 		}
 		title: East Road
 		unique: false
@@ -451,17 +371,9 @@
 
 	11_237: {
 		cardInfo: {
-			imagePath: decipher/LOTR11237.jpg
-			//parentId: 11_237
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11237.jpg
 			collInfo: 11S237
 			rarity: S
-			setNum: "11"
-			cardNum: 237
-			style: Standard
 		}
 		title: Ettenmoors
 		unique: false
@@ -499,17 +411,9 @@
 
 	11_238: {
 		cardInfo: {
-			imagePath: decipher/LOTR11238.jpg
-			//parentId: 11_238
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11238.jpg
 			collInfo: 11S238
 			rarity: S
-			setNum: "11"
-			cardNum: 238
-			style: Standard
 		}
 		title: Expanding Marshland
 		unique: false
@@ -556,17 +460,9 @@
 
 	11_239: {
 		cardInfo: {
-			imagePath: decipher/LOTR11239.jpg
-			//parentId: 11_239
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11239.jpg
 			collInfo: 11S239
 			rarity: S
-			setNum: "11"
-			cardNum: 239
-			style: Standard
 		}
 		title: Fangorn Glade
 		unique: false
@@ -604,17 +500,9 @@
 
 	11_240: {
 		cardInfo: {
-			imagePath: decipher/LOTR11240.jpg
-			//parentId: 11_240
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11240.jpg
 			collInfo: 11S240
 			rarity: S
-			setNum: "11"
-			cardNum: 240
-			style: Standard
 		}
 		title: Flats of Rohan
 		unique: false
@@ -646,17 +534,9 @@
 
 	11_241: {
 		cardInfo: {
-			imagePath: decipher/LOTR11241.jpg
-			//parentId: 11_241
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11241.jpg
 			collInfo: 11S241
 			rarity: S
-			setNum: "11"
-			cardNum: 241
-			style: Standard
 		}
 		title: Fortress of Orthanc
 		unique: false
@@ -696,17 +576,9 @@
 
 	11_242: {
 		cardInfo: {
-			imagePath: decipher/LOTR11242.jpg
-			//parentId: 11_242
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11242.jpg
 			collInfo: 11S242
 			rarity: S
-			setNum: "11"
-			cardNum: 242
-			style: Standard
 		}
 		title: Green Dragon Inn
 		unique: false
@@ -749,17 +621,9 @@
 
 	11_243: {
 		cardInfo: {
-			imagePath: decipher/LOTR11243.jpg
-			//parentId: 11_243
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11243.jpg
 			collInfo: 11S243
 			rarity: S
-			setNum: "11"
-			cardNum: 243
-			style: Standard
 		}
 		title: Harrowdale
 		unique: false
@@ -817,17 +681,9 @@
 
 	11_244: {
 		cardInfo: {
-			imagePath: decipher/LOTR11244.jpg
-			//parentId: 11_244
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11244.jpg
 			collInfo: 11U244
 			rarity: U
-			setNum: "11"
-			cardNum: 244
-			style: Standard
 		}
 		title: Heights of Isengard
 		unique: false
@@ -865,17 +721,9 @@
 
 	11_245: {
 		cardInfo: {
-			imagePath: decipher/LOTR11245.jpg
-			//parentId: 11_245
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11245.jpg
 			collInfo: 11S245
 			rarity: S
-			setNum: "11"
-			cardNum: 245
-			style: Standard
 		}
 		title: Helm's Gate
 		unique: false
@@ -907,17 +755,9 @@
 
 	11_246: {
 		cardInfo: {
-			imagePath: decipher/LOTR11246.jpg
-			//parentId: 11_246
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11246.jpg
 			collInfo: 11U246
 			rarity: U
-			setNum: "11"
-			cardNum: 246
-			style: Standard
 		}
 		title: Mere of Dead Faces
 		unique: false
@@ -952,17 +792,9 @@
 
 	11_247: {
 		cardInfo: {
-			imagePath: decipher/LOTR11247.jpg
-			//parentId: 11_247
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11247.jpg
 			collInfo: 11S247
 			rarity: S
-			setNum: "11"
-			cardNum: 247
-			style: Standard
 		}
 		title: Moria Guardroom
 		unique: false
@@ -1003,17 +835,9 @@
 
 	11_248: {
 		cardInfo: {
-			imagePath: decipher/LOTR11248.jpg
-			//parentId: 11_248
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11248.jpg
 			collInfo: 11S248
 			rarity: S
-			setNum: "11"
-			cardNum: 248
-			style: Standard
 		}
 		title: Moria Stairway
 		unique: false
@@ -1046,17 +870,9 @@
 
 	11_249: {
 		cardInfo: {
-			imagePath: decipher/LOTR11249.jpg
-			//parentId: 11_249
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11249.jpg
 			collInfo: 11S249
 			rarity: S
-			setNum: "11"
-			cardNum: 249
-			style: Standard
 		}
 		title: Neekerbreekers' Bog
 		unique: false
@@ -1097,17 +913,9 @@
 
 	11_250: {
 		cardInfo: {
-			imagePath: decipher/LOTR11250.jpg
-			//parentId: 11_250
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11250.jpg
 			collInfo: 11S250
 			rarity: S
-			setNum: "11"
-			cardNum: 250
-			style: Standard
 		}
 		title: North Undeep
 		unique: false
@@ -1139,17 +947,9 @@
 
 	11_251: {
 		cardInfo: {
-			imagePath: decipher/LOTR11251.jpg
-			//parentId: 11_251
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11251.jpg
 			collInfo: 11S251
 			rarity: S
-			setNum: "11"
-			cardNum: 251
-			style: Standard
 		}
 		title: Old Forest Road
 		unique: false
@@ -1187,17 +987,9 @@
 
 	11_252: {
 		cardInfo: {
-			imagePath: decipher/LOTR11252.jpg
-			//parentId: 11_252
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11252.jpg
 			collInfo: 11S252
 			rarity: S
-			setNum: "11"
-			cardNum: 252
-			style: Standard
 		}
 		title: Osgiliath Reclaimed
 		unique: false
@@ -1237,17 +1029,9 @@
 
 	11_253: {
 		cardInfo: {
-			imagePath: decipher/LOTR11253.jpg
-			//parentId: 11_253
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11253.jpg
 			collInfo: 11S253
 			rarity: S
-			setNum: "11"
-			cardNum: 253
-			style: Standard
 		}
 		title: Pelennor Fields
 		unique: false
@@ -1280,17 +1064,9 @@
 
 	11_254: {
 		cardInfo: {
-			imagePath: decipher/LOTR11254.jpg
-			//parentId: 11_254
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11254.jpg
 			collInfo: 11S254
 			rarity: S
-			setNum: "11"
-			cardNum: 254
-			style: Standard
 		}
 		title: Pelennor Flat
 		unique: false
@@ -1339,17 +1115,9 @@
 
 	11_255: {
 		cardInfo: {
-			imagePath: decipher/LOTR11255.jpg
-			//parentId: 11_255
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11255.jpg
 			collInfo: 11S255
 			rarity: S
-			setNum: "11"
-			cardNum: 255
-			style: Standard
 		}
 		title: Pinnacle of Zirakzigil
 		unique: false
@@ -1391,17 +1159,9 @@
 
 	11_256: {
 		cardInfo: {
-			imagePath: decipher/LOTR11256.jpg
-			//parentId: 11_256
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11256.jpg
 			collInfo: 11S256
 			rarity: S
-			setNum: "11"
-			cardNum: 256
-			style: Standard
 		}
 		title: The Prancing Pony
 		unique: false
@@ -1443,17 +1203,9 @@
 
 	11_257: {
 		cardInfo: {
-			imagePath: decipher/LOTR11257.jpg
-			//parentId: 11_257
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11257.jpg
 			collInfo: 11S257
 			rarity: S
-			setNum: "11"
-			cardNum: 257
-			style: Standard
 		}
 		title: Rohan Uplands
 		unique: false
@@ -1488,17 +1240,9 @@
 
 	11_258: {
 		cardInfo: {
-			imagePath: decipher/LOTR11258.jpg
-			//parentId: 11_258
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11258.jpg
 			collInfo: 11S258
 			rarity: S
-			setNum: "11"
-			cardNum: 258
-			style: Standard
 		}
 		title: Slag Mounds
 		unique: false
@@ -1532,17 +1276,9 @@
 
 	11_259: {
 		cardInfo: {
-			imagePath: decipher/LOTR11259.jpg
-			//parentId: 11_259
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11259.jpg
 			collInfo: 11S259
 			rarity: S
-			setNum: "11"
-			cardNum: 259
-			style: Standard
 		}
 		title: Stables
 		unique: false
@@ -1584,17 +1320,9 @@
 
 	11_260: {
 		cardInfo: {
-			imagePath: decipher/LOTR11260.jpg
-			//parentId: 11_260
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11260.jpg
 			collInfo: 11S260
 			rarity: S
-			setNum: "11"
-			cardNum: 260
-			style: Standard
 		}
 		title: Trollshaw Forest
 		unique: false
@@ -1631,17 +1359,9 @@
 
 	11_261: {
 		cardInfo: {
-			imagePath: decipher/LOTR11261.jpg
-			//parentId: 11_261
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11261.jpg
 			collInfo: 11S261
 			rarity: S
-			setNum: "11"
-			cardNum: 261
-			style: Standard
 		}
 		title: Valley of the Silverlode
 		unique: false
@@ -1680,17 +1400,9 @@
 
 	11_262: {
 		cardInfo: {
-			imagePath: decipher/LOTR11262.jpg
-			//parentId: 11_262
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11262.jpg
 			collInfo: 11S262
 			rarity: S
-			setNum: "11"
-			cardNum: 262
-			style: Standard
 		}
 		title: Watch-tower of Cirith Ungol
 		unique: false
@@ -1727,17 +1439,9 @@
 
 	11_263: {
 		cardInfo: {
-			imagePath: decipher/LOTR11263.jpg
-			//parentId: 11_263
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11263.jpg
 			collInfo: 11S263
 			rarity: S
-			setNum: "11"
-			cardNum: 263
-			style: Standard
 		}
 		title: West Gate of Moria
 		unique: false
@@ -1772,17 +1476,9 @@
 
 	11_264: {
 		cardInfo: {
-			imagePath: decipher/LOTR11264.jpg
-			//parentId: 11_264
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11264.jpg
 			collInfo: 11S264
 			rarity: S
-			setNum: "11"
-			cardNum: 264
-			style: Standard
 		}
 		title: Westemnet Village
 		unique: false
@@ -1825,17 +1521,9 @@
 
 	11_265: {
 		cardInfo: {
-			imagePath: decipher/LOTR11265.jpg
-			//parentId: 11_265
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11265.jpg
 			collInfo: 11S265
 			rarity: S
-			setNum: "11"
-			cardNum: 265
-			style: Standard
 		}
 		title: Window on the West
 		unique: false
@@ -1868,17 +1556,9 @@
 
 	11_266: {
 		cardInfo: {
-			imagePath: decipher/LOTR11266.jpg
-			//parentId: 11_266
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11266.jpg
 			collInfo: 11S266
 			rarity: S
-			setNum: "11"
-			cardNum: 266
-			style: Standard
 		}
 		title: Woody-End
 		unique: false

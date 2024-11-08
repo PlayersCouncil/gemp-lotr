@@ -1,17 +1,14 @@
 {
 	52_1: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E001.1.jpg
-			javaClass: false
+			//id: 2_1.1
 			parent: 2_1
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN02E001.1.jpg
 			collInfo: 2R1
 			rarity: R
-			setNum: "2"
-			cardNum: 1
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Beneath the Mountains
 		culture: dwarven
@@ -63,17 +60,14 @@
 	
 	52_12: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E012.1.jpg
-			javaClass: false
+			//id: 2_12.1
 			parent: 2_12
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN02E012.1.jpg
 			collInfo: 2R12
 			rarity: R
-			setNum: "2"
-			cardNum: 12
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Realm of Dwarrowdelf
 		unique: true
@@ -186,17 +180,14 @@
 	
 	52_6: {
 		cardInfo: {
-			imagePath: errata/52_6.jpg
-			javaClass: false
+			//id: 2_6.1
 			parent: 2_6
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/52_6.jpg
 			collInfo: 2C6
 			rarity: C
-			setNum: "2"
-			cardNum: 6
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Fror
 		subtitle: Gimli's Kinsman
@@ -238,17 +229,14 @@
 
 	52_7: {
 		cardInfo: {
-			imagePath: errata/52_7.jpg
-			javaClass: false
+			//id: 2_7.1
 			parent: 2_7
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/52_7.jpg
 			collInfo: 2R7
 			rarity: R
-			setNum: "2"
-			cardNum: 7
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Gloin
 		subtitle: Friend to Thorin
@@ -285,17 +273,14 @@
 
 	52_121: {
 		cardInfo: {
-			imagePath: errata/52_121.jpg
-			javaClass: false
+			//id: 2_121.1
 			parent: 2_121
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/52_121.jpg
 			collInfo: 2P121
 			rarity: P
-			setNum: "2"
-			cardNum: 121
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Dwarf of the Mountain-race

@@ -2,17 +2,9 @@
 
 	17_139: {
 		cardInfo: {
-			imagePath: decipher/LOTR17139.jpg
-			//parentId: 17_139
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17139.jpg
 			collInfo: 17R139
 			rarity: R
-			setNum: "17"
-			cardNum: 139
-			style: Standard
 		}
 		title: Úlairë Cantëa
 		subtitle: Duplicitous Assassin
@@ -65,17 +57,9 @@
 
 	17_140: {
 		cardInfo: {
-			imagePath: decipher/LOTR17140.jpg
-			//parentId: 17_140
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17140.jpg
 			collInfo: 17R140
 			rarity: R
-			setNum: "17"
-			cardNum: 140
-			style: Standard
 		}
 		title: Úlairë Enquëa
 		subtitle: Duplicitous Lieutenant
@@ -140,17 +124,9 @@
 
 	17_141: {
 		cardInfo: {
-			imagePath: decipher/LOTR17141.jpg
-			//parentId: 17_141
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17141.jpg
 			collInfo: 17R141
 			rarity: R
-			setNum: "17"
-			cardNum: 141
-			style: Standard
 		}
 		title: Úlairë Otsëa
 		subtitle: Duplicitous Specter
@@ -217,17 +193,9 @@
 
 	17_142: {
 		cardInfo: {
-			imagePath: decipher/LOTR17142.jpg
-			//parentId: 17_142
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17142.jpg
 			collInfo: 17R142
 			rarity: R
-			setNum: "17"
-			cardNum: 142
-			style: Standard
 		}
 		title: Ring of Savagery
 		unique: true
@@ -289,17 +257,9 @@
 
 	17_143: {
 		cardInfo: {
-			imagePath: decipher/LOTR17143.jpg
-			//parentId: 17_143
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17143.jpg
 			collInfo: 17R143
 			rarity: R
-			setNum: "17"
-			cardNum: 143
-			style: Standard
 		}
 		title: Ring of Terror
 		unique: true
@@ -360,17 +320,9 @@
 
 	17_144: {
 		cardInfo: {
-			imagePath: decipher/LOTR17144.jpg
-			//parentId: 17_144
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17144.jpg
 			collInfo: 17R144
 			rarity: R
-			setNum: "17"
-			cardNum: 144
-			style: Standard
 		}
 		title: The Witch-king
 		subtitle: Conqueror of Arthedain

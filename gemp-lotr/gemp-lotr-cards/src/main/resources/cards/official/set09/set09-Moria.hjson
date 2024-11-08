@@ -2,17 +2,9 @@
 
 	9_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR09041.jpg
-			//parentId: 9_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09041.jpg
 			collInfo: 9R+41
 			rarity: R+
-			setNum: "9"
-			cardNum: 41
-			style: Standard
 		}
 		title: Host of Moria
 		subtitle: Legion of the Underdeeps

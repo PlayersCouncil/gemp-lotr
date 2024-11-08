@@ -2,17 +2,9 @@
 
 	8_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR08009.jpg
-			//parentId: 8_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08009.jpg
 			collInfo: 8U9
 			rarity: U
-			setNum: "8"
-			cardNum: 9
-			style: Standard
 		}
 		title: A Grey Ship
 		unique: false
@@ -80,17 +72,9 @@
 
 	8_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR08010.jpg
-			//parentId: 8_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08010.jpg
 			collInfo: 8C10
 			rarity: C
-			setNum: "8"
-			cardNum: 10
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Elven Stalwart
@@ -133,17 +117,9 @@
 
 	8_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR08011.jpg
-			//parentId: 8_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08011.jpg
 			collInfo: 8R11
 			rarity: R
-			setNum: "8"
-			cardNum: 11
-			style: Standard
 		}
 		title: Life of the Eldar
 		unique: false
@@ -183,17 +159,9 @@
 
 	8_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR08012.jpg
-			//parentId: 8_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08012.jpg
 			collInfo: 8R12
 			rarity: R
-			setNum: "8"
-			cardNum: 12
-			style: Standard
 		}
 		title: Reckless We Rode
 		unique: false
@@ -261,17 +229,9 @@
 
 	8_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR08013.jpg
-			//parentId: 8_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08013.jpg
 			collInfo: 8U13
 			rarity: U
-			setNum: "8"
-			cardNum: 13
-			style: Standard
 		}
 		title: Shake Off the Shadow
 		unique: false

@@ -2,17 +2,9 @@
 
 	2_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR02049.jpg
-			//parentId: 2_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02049.jpg
 			collInfo: 2R49
 			rarity: R
-			setNum: "2"
-			cardNum: 49
-			style: Standard
 		}
 		title: Archer Commander
 		unique: true
@@ -46,17 +38,9 @@
 
 	2_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR02050.jpg
-			//parentId: 2_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02050.jpg
 			collInfo: 2R50
 			rarity: R
-			setNum: "2"
-			cardNum: 50
-			style: Standard
 		}
 		title: The Balrog's Sword
 		unique: true
@@ -93,17 +77,9 @@
 
 	2_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR02051.jpg
-			//parentId: 2_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02051.jpg
 			collInfo: 2C51
 			rarity: C
-			setNum: "2"
-			cardNum: 51
-			style: Standard
 		}
 		title: The Balrog
 		subtitle: Durin's Bane
@@ -173,17 +149,9 @@
 
 	2_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR02052.jpg
-			//parentId: 2_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02052.jpg
 			collInfo: 2R52
 			rarity: R
-			setNum: "2"
-			cardNum: 52
-			style: Standard
 		}
 		title: The Balrog
 		subtitle: Flame of Udûn
@@ -259,17 +227,9 @@
 
 	2_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR02053.jpg
-			//parentId: 2_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02053.jpg
 			collInfo: 2R53
 			rarity: R
-			setNum: "2"
-			cardNum: 53
-			style: Standard
 		}
 		title: Cave Troll's Chain
 		unique: true
@@ -341,17 +301,9 @@
 
 	2_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR02054.jpg
-			//parentId: 2_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02054.jpg
 			collInfo: 2U54
 			rarity: U
-			setNum: "2"
-			cardNum: 54
-			style: Standard
 		}
 		title: Dark Fire
 		unique: false
@@ -393,17 +345,9 @@
 
 	2_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR02055.jpg
-			//parentId: 2_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02055.jpg
 			collInfo: 2C55
 			rarity: C
-			setNum: "2"
-			cardNum: 55
-			style: Standard
 		}
 		title: Dark Places
 		unique: false
@@ -460,17 +404,9 @@
 
 	2_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR02056.jpg
-			//parentId: 2_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02056.jpg
 			collInfo: 2U56
 			rarity: U
-			setNum: "2"
-			cardNum: 56
-			style: Standard
 		}
 		title: Fill With Fear
 		unique: false
@@ -517,17 +453,9 @@
 
 	2_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR02057.jpg
-			//parentId: 2_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02057.jpg
 			collInfo: 2R57
 			rarity: R
-			setNum: "2"
-			cardNum: 57
-			style: Standard
 		}
 		title: Final Cry
 		unique: false
@@ -561,17 +489,9 @@
 
 	2_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR02058.jpg
-			//parentId: 2_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02058.jpg
 			collInfo: 2C58
 			rarity: C
-			setNum: "2"
-			cardNum: 58
-			style: Standard
 		}
 		title: Foul Tentacle
 		unique: false
@@ -635,17 +555,9 @@
 
 	2_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR02059.jpg
-			//parentId: 2_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02059.jpg
 			collInfo: 2U59
 			rarity: U
-			setNum: "2"
-			cardNum: 59
-			style: Standard
 		}
 		title: Foul Things
 		unique: false
@@ -674,17 +586,9 @@
 
 	2_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR02060.jpg
-			//parentId: 2_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02060.jpg
 			collInfo: 2C60
 			rarity: C
-			setNum: "2"
-			cardNum: 60
-			style: Standard
 		}
 		title: Goblin Bowman
 		unique: false
@@ -711,17 +615,9 @@
 
 	2_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR02061.jpg
-			//parentId: 2_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02061.jpg
 			collInfo: 2C61
 			rarity: C
-			setNum: "2"
-			cardNum: 61
-			style: Standard
 		}
 		title: Goblin Flankers
 		unique: false
@@ -762,17 +658,9 @@
 
 	2_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR02062.jpg
-			//parentId: 2_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02062.jpg
 			collInfo: 2C62
 			rarity: C
-			setNum: "2"
-			cardNum: 62
-			style: Standard
 		}
 		title: Goblin Pursuer
 		unique: false
@@ -809,17 +697,9 @@
 
 	2_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR02063.jpg
-			//parentId: 2_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02063.jpg
 			collInfo: 2C63
 			rarity: C
-			setNum: "2"
-			cardNum: 63
-			style: Standard
 		}
 		title: Goblin Reinforcements
 		unique: false
@@ -856,17 +736,9 @@
 
 	2_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR02064.jpg
-			//parentId: 2_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02064.jpg
 			collInfo: 2C64
 			rarity: C
-			setNum: "2"
-			cardNum: 64
-			style: Standard
 		}
 		title: Goblin Scrabbler
 		unique: false
@@ -912,17 +784,9 @@
 
 	2_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR02065.jpg
-			//parentId: 2_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02065.jpg
 			collInfo: 2C65
 			rarity: C
-			setNum: "2"
-			cardNum: 65
-			style: Standard
 		}
 		title: Goblin Spearman
 		unique: false
@@ -956,17 +820,9 @@
 
 	2_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR02066.jpg
-			//parentId: 2_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02066.jpg
 			collInfo: 2R66
 			rarity: R
-			setNum: "2"
-			cardNum: 66
-			style: Standard
 		}
 		title: Huge Tentacle
 		unique: false
@@ -1033,17 +889,9 @@
 
 	2_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR02067.jpg
-			//parentId: 2_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02067.jpg
 			collInfo: 2U67
 			rarity: U
-			setNum: "2"
-			cardNum: 67
-			style: Standard
 		}
 		title: Moria Archer Troop
 		unique: false
@@ -1081,17 +929,9 @@
 
 	2_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR02068.jpg
-			//parentId: 2_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02068.jpg
 			collInfo: 2U68
 			rarity: U
-			setNum: "2"
-			cardNum: 68
-			style: Standard
 		}
 		title: Must Do Without Hope
 		unique: false
@@ -1124,17 +964,9 @@
 
 	2_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR02069.jpg
-			//parentId: 2_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02069.jpg
 			collInfo: 2C69
 			rarity: C
-			setNum: "2"
-			cardNum: 69
-			style: Standard
 		}
 		title: Old Differences
 		unique: false
@@ -1178,17 +1010,9 @@
 
 	2_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR02070.jpg
-			//parentId: 2_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02070.jpg
 			collInfo: 2U70
 			rarity: U
-			setNum: "2"
-			cardNum: 70
-			style: Standard
 		}
 		title: Power and Terror
 		unique: false
@@ -1228,17 +1052,9 @@
 
 	2_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR02071.jpg
-			//parentId: 2_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02071.jpg
 			collInfo: 2U71
 			rarity: U
-			setNum: "2"
-			cardNum: 71
-			style: Standard
 		}
 		title: Throw Yourself in Next Time
 		unique: false
@@ -1277,17 +1093,9 @@
 
 	2_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR02072.jpg
-			//parentId: 2_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02072.jpg
 			collInfo: 2U72
 			rarity: U
-			setNum: "2"
-			cardNum: 72
-			style: Standard
 		}
 		title: Troubled Mountains
 		unique: false
@@ -1326,17 +1134,9 @@
 
 	2_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR02073.jpg
-			//parentId: 2_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02073.jpg
 			collInfo: 2R73
 			rarity: R
-			setNum: "2"
-			cardNum: 73
-			style: Standard
 		}
 		title: Watcher in the Water
 		subtitle: Keeper of Westgate
@@ -1417,17 +1217,9 @@
 
 	2_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR02074.jpg
-			//parentId: 2_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02074.jpg
 			collInfo: 2R74
 			rarity: R
-			setNum: "2"
-			cardNum: 74
-			style: Standard
 		}
 		title: Whip of Many Thongs
 		unique: true

@@ -2,17 +2,9 @@
 
 	19_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR19002.jpg
-			//parentId: 19_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19002.jpg
 			collInfo: 19P2
 			rarity: P
-			setNum: "19"
-			cardNum: 2
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Opinionated Guide
@@ -53,17 +45,9 @@
 
 	19_3: {
 		cardInfo: {
-			imagePath: decipher/LOTR19003.jpg
-			//parentId: 19_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19003.jpg
 			collInfo: 19P3
 			rarity: P
-			setNum: "19"
-			cardNum: 3
-			style: Standard
 		}
 		title: Still Twitching
 		unique: false
@@ -125,17 +109,9 @@
 
 	19_4: {
 		cardInfo: {
-			imagePath: decipher/LOTR19004.jpg
-			//parentId: 19_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19004.jpg
 			collInfo: 19P4
 			rarity: P
-			setNum: "19"
-			cardNum: 4
-			style: Standard
 		}
 		title: That's Two!
 		unique: false
