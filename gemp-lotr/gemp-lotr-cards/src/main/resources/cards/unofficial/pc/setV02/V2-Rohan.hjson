@@ -720,7 +720,7 @@
 					filter: self
 					amount: {
 						type: ForEachYouCanSpot
-						filter: valiant, companion, AssignedToSkirmish(any)
+						filter: other, valiant, companion, AssignedToSkirmish(any)
 					}
 				}
 			}

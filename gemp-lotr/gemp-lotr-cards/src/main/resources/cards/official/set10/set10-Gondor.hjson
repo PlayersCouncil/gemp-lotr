@@ -280,7 +280,8 @@
 					forced: true
 					hand: shadow
 					player: you
-					select: memory(revealedCards)
+					count: 1
+					select: choose(memory(revealedCards))
 				}
 				{
 					type: drawCards
