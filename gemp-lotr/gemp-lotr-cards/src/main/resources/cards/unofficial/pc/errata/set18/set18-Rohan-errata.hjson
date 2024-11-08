@@ -2,17 +2,11 @@
 
 	68_96: {
 		cardInfo: {
-			imagePath: errata/68_96.jpg
-			javaClass: false
-			parent: 18_96
-			parentPath: errata/pc
-			version: 1?
+			//id: 8_96.1
+			revision: 1
+			image: errata/68_96.jpg
 			collInfo: 18R96
 			rarity: R
-			setNum: "18"
-			cardNum: 96
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Erkenbrand's Horn
 		unique: true

@@ -2,17 +2,9 @@
 
 	19_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR19028.jpg
-			//parentId: 19_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19028.jpg
 			collInfo: 19P28
 			rarity: P
-			setNum: "19"
-			cardNum: 28
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Little Master
@@ -58,17 +50,9 @@
 
 	19_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR19029.jpg
-			//parentId: 19_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19029.jpg
 			collInfo: 19P29
 			rarity: P
-			setNum: "19"
-			cardNum: 29
-			style: Standard
 		}
 		title: Merry
 		subtitle: Resolute Friend
@@ -113,17 +97,9 @@
 
 	19_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR19030.jpg
-			//parentId: 19_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19030.jpg
 			collInfo: 19P30
 			rarity: P
-			setNum: "19"
-			cardNum: 30
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Steadfast Friend
@@ -161,17 +137,9 @@
 
 	19_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR19031.jpg
-			//parentId: 19_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19031.jpg
 			collInfo: 19P31
 			rarity: P
-			setNum: "19"
-			cardNum: 31
-			style: Standard
 		}
 		title: Rabbit Stew
 		unique: false
@@ -220,17 +188,9 @@
 
 	19_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR19032.jpg
-			//parentId: 19_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19032.jpg
 			collInfo: 19P32
 			rarity: P
-			setNum: "19"
-			cardNum: 32
-			style: Standard
 		}
 		title: Sam
 		subtitle: Loyal Friend

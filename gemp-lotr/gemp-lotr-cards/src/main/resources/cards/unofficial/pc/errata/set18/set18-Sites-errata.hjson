@@ -2,17 +2,11 @@
 	
 	68_134: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E134.1.jpg
-			javaClass: false
-			parent: 18_134
-			parentPath: errata/pc
-			version: 1
+			//id: 8_134.1
+			revision: 1
+			image: errata/LOTR-EN18E134.1.jpg
 			collInfo: 18U134
 			rarity: U
-			setNum: "18"
-			cardNum: 134
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Doorway to Doom
 		unique: false
@@ -65,17 +59,11 @@
 
 	68_136: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E136.1.jpg
-			javaClass: false
-			parent: 18_136
-			parentPath: errata/pc
-			version: 1
+			//id: 8_136.1
+			revision: 1
+			image: errata/LOTR-EN18E136.1.jpg
 			collInfo: 18U136
 			rarity: U
-			setNum: "18"
-			cardNum: 136
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Mithlond
 		unique: false
@@ -116,17 +104,11 @@
 
 	68_139: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E139.1.jpg
-			javaClass: false
-			parent: 18_139
-			parentPath: errata/pc
-			version: 1
+			//id: 8_139.1
+			revision: 1
+			image: errata/LOTR-EN18E139.1.jpg
 			collInfo: 18U139
 			rarity: U
-			setNum: "18"
-			cardNum: 139
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Steward's Tomb
 		unique: false

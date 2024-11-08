@@ -2,17 +2,9 @@
 
 	7_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR07079.jpg
-			//parentId: 7_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07079.jpg
 			collInfo: 7R79
 			rarity: R
-			setNum: "7"
-			cardNum: 79
-			style: Standard
 		}
 		title: Andúril
 		subtitle: Flame of the West
@@ -82,17 +74,9 @@
 
 	7_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR07080.jpg
-			//parentId: 7_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07080.jpg
 			collInfo: 7R80
 			rarity: R
-			setNum: "7"
-			cardNum: 80
-			style: Standard
 		}
 		title: Andúril
 		subtitle: King's Blade
@@ -134,17 +118,9 @@
 
 	7_81: {
 		cardInfo: {
-			imagePath: decipher/LOTR07081.jpg
-			//parentId: 7_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07081.jpg
 			collInfo: 7C81
 			rarity: C
-			setNum: "7"
-			cardNum: 81
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Captain of Gondor
@@ -190,17 +166,9 @@
 
 	7_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR07082.jpg
-			//parentId: 7_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07082.jpg
 			collInfo: 7C82
 			rarity: C
-			setNum: "7"
-			cardNum: 82
-			style: Standard
 		}
 		title: Cirion
 		unique: true
@@ -251,17 +219,9 @@
 
 	7_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR07083.jpg
-			//parentId: 7_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07083.jpg
 			collInfo: 7C83
 			rarity: C
-			setNum: "7"
-			cardNum: 83
-			style: Standard
 		}
 		title: City of Men
 		unique: false
@@ -320,17 +280,9 @@
 
 	7_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR07084.jpg
-			//parentId: 7_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07084.jpg
 			collInfo: 7C84
 			rarity: C
-			setNum: "7"
-			cardNum: 84
-			style: Standard
 		}
 		title: Dagger Strike
 		unique: false
@@ -369,17 +321,9 @@
 
 	7_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR07085.jpg
-			//parentId: 7_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07085.jpg
 			collInfo: 7R85
 			rarity: R
-			setNum: "7"
-			cardNum: 85
-			style: Standard
 		}
 		title: Denethor
 		subtitle: Steward of the City
@@ -437,17 +381,9 @@
 
 	7_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR07086.jpg
-			//parentId: 7_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07086.jpg
 			collInfo: 7C86
 			rarity: C
-			setNum: "7"
-			cardNum: 86
-			style: Standard
 		}
 		title: Denethor
 		subtitle: Wizened Steward
@@ -488,17 +424,9 @@
 
 	7_87: {
 		cardInfo: {
-			imagePath: decipher/LOTR07087.jpg
-			//parentId: 7_87
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07087.jpg
 			collInfo: 7R87
 			rarity: R
-			setNum: "7"
-			cardNum: 87
-			style: Standard
 		}
 		title: Derufin
 		unique: true
@@ -544,17 +472,9 @@
 
 	7_88: {
 		cardInfo: {
-			imagePath: decipher/LOTR07088.jpg
-			//parentId: 7_88
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07088.jpg
 			collInfo: 7U88
 			rarity: U
-			setNum: "7"
-			cardNum: 88
-			style: Standard
 		}
 		title: Dervorin
 		unique: true
@@ -606,17 +526,9 @@
 
 	7_89: {
 		cardInfo: {
-			imagePath: decipher/LOTR07089.jpg
-			//parentId: 7_89
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07089.jpg
 			collInfo: 7C89
 			rarity: C
-			setNum: "7"
-			cardNum: 89
-			style: Standard
 		}
 		title: Duty of Two
 		unique: false
@@ -651,17 +563,9 @@
 
 	7_90: {
 		cardInfo: {
-			imagePath: decipher/LOTR07090.jpg
-			//parentId: 7_90
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07090.jpg
 			collInfo: 7C90
 			rarity: C
-			setNum: "7"
-			cardNum: 90
-			style: Standard
 		}
 		title: Faramir
 		subtitle: Stout Captain
@@ -716,17 +620,9 @@
 
 	7_91: {
 		cardInfo: {
-			imagePath: decipher/LOTR07091.jpg
-			//parentId: 7_91
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07091.jpg
 			collInfo: 7R91
 			rarity: R
-			setNum: "7"
-			cardNum: 91
-			style: Standard
 		}
 		title: Faramir
 		subtitle: Wizard's Pupil
@@ -795,17 +691,9 @@
 
 	7_92: {
 		cardInfo: {
-			imagePath: decipher/LOTR07092.jpg
-			//parentId: 7_92
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07092.jpg
 			collInfo: 7C92
 			rarity: C
-			setNum: "7"
-			cardNum: 92
-			style: Standard
 		}
 		title: First Level
 		unique: false
@@ -860,17 +748,9 @@
 
 	7_93: {
 		cardInfo: {
-			imagePath: decipher/LOTR07093.jpg
-			//parentId: 7_93
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07093.jpg
 			collInfo: 7U93
 			rarity: U
-			setNum: "7"
-			cardNum: 93
-			style: Standard
 		}
 		title: Footman's Armor
 		unique: false
@@ -924,17 +804,9 @@
 
 	7_94: {
 		cardInfo: {
-			imagePath: decipher/LOTR07094.jpg
-			//parentId: 7_94
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07094.jpg
 			collInfo: 7U94
 			rarity: U
-			setNum: "7"
-			cardNum: 94
-			style: Standard
 		}
 		title: Gondor Bow
 		unique: false
@@ -979,17 +851,9 @@
 
 	7_95: {
 		cardInfo: {
-			imagePath: decipher/LOTR07095.jpg
-			//parentId: 7_95
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07095.jpg
 			collInfo: 7R95
 			rarity: R
-			setNum: "7"
-			cardNum: 95
-			style: Standard
 		}
 		title: Gondor Still Stands
 		unique: true
@@ -1048,17 +912,9 @@
 
 	7_96: {
 		cardInfo: {
-			imagePath: decipher/LOTR07096.jpg
-			//parentId: 7_96
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07096.jpg
 			collInfo: 7C96
 			rarity: C
-			setNum: "7"
-			cardNum: 96
-			style: Standard
 		}
 		title: Gondorian Captain
 		unique: false
@@ -1097,17 +953,9 @@
 
 	7_97: {
 		cardInfo: {
-			imagePath: decipher/LOTR07097.jpg
-			//parentId: 7_97
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07097.jpg
 			collInfo: 7R97
 			rarity: R
-			setNum: "7"
-			cardNum: 97
-			style: Standard
 		}
 		title: Gondorian Merchant
 		unique: true
@@ -1153,17 +1001,9 @@
 
 	7_98: {
 		cardInfo: {
-			imagePath: decipher/LOTR07098.jpg
-			//parentId: 7_98
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07098.jpg
 			collInfo: 7U98
 			rarity: U
-			setNum: "7"
-			cardNum: 98
-			style: Standard
 		}
 		title: Gondorian Sword
 		unique: false
@@ -1204,17 +1044,9 @@
 
 	7_99: {
 		cardInfo: {
-			imagePath: decipher/LOTR07099.jpg
-			//parentId: 7_99
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07099.jpg
 			collInfo: 7C99
 			rarity: C
-			setNum: "7"
-			cardNum: 99
-			style: Standard
 		}
 		title: Great Gate
 		unique: false
@@ -1259,17 +1091,9 @@
 
 	7_100: {
 		cardInfo: {
-			imagePath: decipher/LOTR07100.jpg
-			//parentId: 7_100
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07100.jpg
 			collInfo: 7R100
 			rarity: R
-			setNum: "7"
-			cardNum: 100
-			style: Standard
 		}
 		title: Greatest Stronghold
 		unique: false
@@ -1310,17 +1134,9 @@
 
 	7_101: {
 		cardInfo: {
-			imagePath: decipher/LOTR07101.jpg
-			//parentId: 7_101
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07101.jpg
 			collInfo: 7R101
 			rarity: R
-			setNum: "7"
-			cardNum: 101
-			style: Standard
 		}
 		title: Guarded
 		unique: false
@@ -1399,17 +1215,9 @@
 
 	7_102: {
 		cardInfo: {
-			imagePath: decipher/LOTR07102.jpg
-			//parentId: 7_102
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07102.jpg
 			collInfo: 7U102
 			rarity: U
-			setNum: "7"
-			cardNum: 102
-			style: Standard
 		}
 		title: Hasty Repairs
 		unique: false
@@ -1461,17 +1269,9 @@
 
 	7_103: {
 		cardInfo: {
-			imagePath: decipher/LOTR07103.jpg
-			//parentId: 7_103
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07103.jpg
 			collInfo: 7R103
 			rarity: R
-			setNum: "7"
-			cardNum: 103
-			style: Standard
 		}
 		title: Hearts Raised
 		unique: false
@@ -1514,17 +1314,9 @@
 
 	7_104: {
 		cardInfo: {
-			imagePath: decipher/LOTR07104.jpg
-			//parentId: 7_104
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07104.jpg
 			collInfo: 7R104
 			rarity: R
-			setNum: "7"
-			cardNum: 104
-			style: Standard
 		}
 		title: Hidden Knowledge
 		unique: false
@@ -1586,17 +1378,9 @@
 
 	7_105: {
 		cardInfo: {
-			imagePath: decipher/LOTR07105.jpg
-			//parentId: 7_105
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07105.jpg
 			collInfo: 7C105
 			rarity: C
-			setNum: "7"
-			cardNum: 105
-			style: Standard
 		}
 		title: I Will Go
 		unique: true
@@ -1633,17 +1417,9 @@
 
 	7_106: {
 		cardInfo: {
-			imagePath: decipher/LOTR07106.jpg
-			//parentId: 7_106
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07106.jpg
 			collInfo: 7C106
 			rarity: C
-			setNum: "7"
-			cardNum: 106
-			style: Standard
 		}
 		title: Ingold
 		unique: true
@@ -1684,17 +1460,9 @@
 
 	7_107: {
 		cardInfo: {
-			imagePath: decipher/LOTR07107.jpg
-			//parentId: 7_107
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07107.jpg
 			collInfo: 7U107
 			rarity: U
-			setNum: "7"
-			cardNum: 107
-			style: Standard
 		}
 		title: Iorlas
 		unique: true
@@ -1750,17 +1518,9 @@
 
 	7_108: {
 		cardInfo: {
-			imagePath: decipher/LOTR07108.jpg
-			//parentId: 7_108
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07108.jpg
 			collInfo: 7C108
 			rarity: C
-			setNum: "7"
-			cardNum: 108
-			style: Standard
 		}
 		title: Knight's Spear
 		unique: false
@@ -1805,17 +1565,9 @@
 
 	7_109: {
 		cardInfo: {
-			imagePath: decipher/LOTR07109.jpg
-			//parentId: 7_109
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07109.jpg
 			collInfo: 7U109
 			rarity: U
-			setNum: "7"
-			cardNum: 109
-			style: Standard
 		}
 		title: Long Prepared
 		unique: false
@@ -1870,17 +1622,9 @@
 
 	7_110: {
 		cardInfo: {
-			imagePath: decipher/LOTR07110.jpg
-			//parentId: 7_110
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07110.jpg
 			collInfo: 7U110
 			rarity: U
-			setNum: "7"
-			cardNum: 110
-			style: Standard
 		}
 		title: Madril
 		subtitle: Faramir's Aide
@@ -1926,17 +1670,9 @@
 
 	7_111: {
 		cardInfo: {
-			imagePath: decipher/LOTR07111.jpg
-			//parentId: 7_111
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07111.jpg
 			collInfo: 7C111
 			rarity: C
-			setNum: "7"
-			cardNum: 111
-			style: Standard
 		}
 		title: Man the Walls
 		unique: false
@@ -1968,17 +1704,9 @@
 
 	7_112: {
 		cardInfo: {
-			imagePath: decipher/LOTR07112.jpg
-			//parentId: 7_112
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07112.jpg
 			collInfo: 7R112
 			rarity: R
-			setNum: "7"
-			cardNum: 112
-			style: Standard
 		}
 		title: Noble Leaders
 		unique: true
@@ -2054,17 +1782,9 @@
 
 	7_113: {
 		cardInfo: {
-			imagePath: decipher/LOTR07113.jpg
-			//parentId: 7_113
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07113.jpg
 			collInfo: 7R113
 			rarity: R
-			setNum: "7"
-			cardNum: 113
-			style: Standard
 		}
 		title: Pippin's Armor
 		unique: true
@@ -2105,17 +1825,9 @@
 
 	7_114: {
 		cardInfo: {
-			imagePath: decipher/LOTR07114.jpg
-			//parentId: 7_114
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07114.jpg
 			collInfo: 7R114
 			rarity: R
-			setNum: "7"
-			cardNum: 114
-			style: Standard
 		}
 		title: Pippin's Sword
 		unique: true
@@ -2166,17 +1878,9 @@
 
 	7_115: {
 		cardInfo: {
-			imagePath: decipher/LOTR07115.jpg
-			//parentId: 7_115
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07115.jpg
 			collInfo: 7C115
 			rarity: C
-			setNum: "7"
-			cardNum: 115
-			style: Standard
 		}
 		title: Ranger of Minas Tirith
 		unique: false
@@ -2221,17 +1925,9 @@
 
 	7_116: {
 		cardInfo: {
-			imagePath: decipher/LOTR07116.jpg
-			//parentId: 7_116
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07116.jpg
 			collInfo: 7C116
 			rarity: C
-			setNum: "7"
-			cardNum: 116
-			style: Standard
 		}
 		title: Ranger of Osgiliath
 		unique: false
@@ -2272,17 +1968,9 @@
 
 	7_117: {
 		cardInfo: {
-			imagePath: decipher/LOTR07117.jpg
-			//parentId: 7_117
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07117.jpg
 			collInfo: 7C117
 			rarity: C
-			setNum: "7"
-			cardNum: 117
-			style: Standard
 		}
 		title: Reckless Counter
 		unique: false
@@ -2345,17 +2033,9 @@
 
 	7_118: {
 		cardInfo: {
-			imagePath: decipher/LOTR07118.jpg
-			//parentId: 7_118
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07118.jpg
 			collInfo: 7C118
 			rarity: C
-			setNum: "7"
-			cardNum: 118
-			style: Standard
 		}
 		title: Second Level
 		unique: false
@@ -2410,17 +2090,9 @@
 
 	7_119: {
 		cardInfo: {
-			imagePath: decipher/LOTR07119.jpg
-			//parentId: 7_119
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07119.jpg
 			collInfo: 7R119
 			rarity: R
-			setNum: "7"
-			cardNum: 119
-			style: Standard
 		}
 		title: Seventh Level
 		unique: true
@@ -2464,17 +2136,9 @@
 
 	7_120: {
 		cardInfo: {
-			imagePath: decipher/LOTR07120.jpg
-			//parentId: 7_120
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07120.jpg
 			collInfo: 7U120
 			rarity: U
-			setNum: "7"
-			cardNum: 120
-			style: Standard
 		}
 		title: Stand to Arms
 		unique: false
@@ -2515,17 +2179,9 @@
 
 	7_121: {
 		cardInfo: {
-			imagePath: decipher/LOTR07121.jpg
-			//parentId: 7_121
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07121.jpg
 			collInfo: 7C121
 			rarity: C
-			setNum: "7"
-			cardNum: 121
-			style: Standard
 		}
 		title: Stout Resistance
 		unique: false
@@ -2560,17 +2216,9 @@
 
 	7_122: {
 		cardInfo: {
-			imagePath: decipher/LOTR07122.jpg
-			//parentId: 7_122
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07122.jpg
 			collInfo: 7R122
 			rarity: R
-			setNum: "7"
-			cardNum: 122
-			style: Standard
 		}
 		title: Strong and Old
 		unique: true
@@ -2624,17 +2272,9 @@
 
 	7_123: {
 		cardInfo: {
-			imagePath: decipher/LOTR07123.jpg
-			//parentId: 7_123
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07123.jpg
 			collInfo: 7U123
 			rarity: U
-			setNum: "7"
-			cardNum: 123
-			style: Standard
 		}
 		title: Support of the City
 		unique: false
@@ -2693,17 +2333,9 @@
 
 	7_124: {
 		cardInfo: {
-			imagePath: decipher/LOTR07124.jpg
-			//parentId: 7_124
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07124.jpg
 			collInfo: 7C124
 			rarity: C
-			setNum: "7"
-			cardNum: 124
-			style: Standard
 		}
 		title: Targon
 		unique: true
@@ -2748,17 +2380,9 @@
 
 	7_125: {
 		cardInfo: {
-			imagePath: decipher/LOTR07125.jpg
-			//parentId: 7_125
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07125.jpg
 			collInfo: 7U125
 			rarity: U
-			setNum: "7"
-			cardNum: 125
-			style: Standard
 		}
 		title: Third Level
 		unique: false
@@ -2814,17 +2438,9 @@
 
 	7_126: {
 		cardInfo: {
-			imagePath: decipher/LOTR07126.jpg
-			//parentId: 7_126
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07126.jpg
 			collInfo: 7U126
 			rarity: U
-			setNum: "7"
-			cardNum: 126
-			style: Standard
 		}
 		title: Unexpected Visitor
 		unique: true
@@ -2880,17 +2496,9 @@
 
 	7_127: {
 		cardInfo: {
-			imagePath: decipher/LOTR07127.jpg
-			//parentId: 7_127
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07127.jpg
 			collInfo: 7R127
 			rarity: R
-			setNum: "7"
-			cardNum: 127
-			style: Standard
 		}
 		title: Vorondil
 		unique: true
@@ -2955,17 +2563,9 @@
 
 	7_128: {
 		cardInfo: {
-			imagePath: decipher/LOTR07128.jpg
-			//parentId: 7_128
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07128.jpg
 			collInfo: 7U128
 			rarity: U
-			setNum: "7"
-			cardNum: 128
-			style: Standard
 		}
 		title: While We Yet Live
 		unique: false
@@ -2997,17 +2597,9 @@
 
 	7_364: {
 		cardInfo: {
-			imagePath: decipher/LOTR07364.jpg
-			//parentId: 7_364
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07364.jpg
 			collInfo: 7P364
 			rarity: P
-			setNum: "7"
-			cardNum: 364
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Driven by Need

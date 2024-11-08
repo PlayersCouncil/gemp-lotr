@@ -2,17 +2,9 @@
 
 	19_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR19024.jpg
-			//parentId: 19_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19024.jpg
 			collInfo: 19P24
 			rarity: P
-			setNum: "19"
-			cardNum: 24
-			style: Standard
 		}
 		title: Brought Down from Inside
 		unique: false
@@ -67,17 +59,9 @@
 
 	19_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR19025.jpg
-			//parentId: 19_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19025.jpg
 			collInfo: 19P25
 			rarity: P
-			setNum: "19"
-			cardNum: 25
-			style: Standard
 		}
 		title: Éomer
 		subtitle: Éored Captain
@@ -116,17 +100,9 @@
 
 	19_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR19026.jpg
-			//parentId: 19_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19026.jpg
 			collInfo: 19P26
 			rarity: P
-			setNum: "19"
-			cardNum: 26
-			style: Standard
 		}
 		title: Éowyn
 		subtitle: Lady of the Mark

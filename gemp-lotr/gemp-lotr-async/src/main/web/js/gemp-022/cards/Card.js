@@ -56,6 +56,7 @@ class Card {
         return bpid.includes("^", 2);
     }
 
+    //blueprintId, zone, cardId, owner, siteNumber
     constructor (blueprintId, testingText, backSideTestingText, zone, cardId, owner, siteNumber, upsideDown, onSide) {
         this.blueprintId = blueprintId;
         this.bareBlueprint = Card.StripBlueprintId(this.blueprintId);

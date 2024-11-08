@@ -2,17 +2,9 @@
 
 	6_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR06057.jpg
-			//parentId: 6_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06057.jpg
 			collInfo: 6R57
 			rarity: R
-			setNum: "6"
-			cardNum: 57
-			style: Standard
 		}
 		title: Agents of Orthanc
 		unique: false
@@ -63,17 +55,9 @@
 
 	6_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR06058.jpg
-			//parentId: 6_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06058.jpg
 			collInfo: 6U58
 			rarity: U
-			setNum: "6"
-			cardNum: 58
-			style: Standard
 		}
 		title: Assault Ladder
 		unique: false
@@ -134,17 +118,9 @@
 
 	6_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR06059.jpg
-			//parentId: 6_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06059.jpg
 			collInfo: 6C59
 			rarity: C
-			setNum: "6"
-			cardNum: 59
-			style: Standard
 		}
 		title: Banner of Isengard
 		unique: false
@@ -185,17 +161,9 @@
 
 	6_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR06060.jpg
-			//parentId: 6_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06060.jpg
 			collInfo: 6R60
 			rarity: R
-			setNum: "6"
-			cardNum: 60
-			style: Standard
 		}
 		title: Berserk Butcher
 		unique: true
@@ -266,17 +234,9 @@
 
 	6_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR06061.jpg
-			//parentId: 6_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06061.jpg
 			collInfo: 6U61
 			rarity: U
-			setNum: "6"
-			cardNum: 61
-			style: Standard
 		}
 		title: Desertion
 		unique: false
@@ -319,17 +279,9 @@
 
 	6_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR06062.jpg
-			//parentId: 6_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06062.jpg
 			collInfo: 6R62
 			rarity: R
-			setNum: "6"
-			cardNum: 62
-			style: Standard
 		}
 		title: Fires and Foul Fumes
 		unique: false
@@ -366,17 +318,9 @@
 
 	6_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR06063.jpg
-			//parentId: 6_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06063.jpg
 			collInfo: 6U63
 			rarity: U
-			setNum: "6"
-			cardNum: 63
-			style: Standard
 		}
 		title: Gnawing, Biting, Hacking, Burning
 		unique: false
@@ -440,17 +384,9 @@
 
 	6_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR06064.jpg
-			//parentId: 6_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06064.jpg
 			collInfo: 6U64
 			rarity: U
-			setNum: "6"
-			cardNum: 64
-			style: Standard
 		}
 		title: Iron Fist of the Orc
 		unique: false
@@ -513,17 +449,9 @@
 
 	6_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR06065.jpg
-			//parentId: 6_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06065.jpg
 			collInfo: 6C65
 			rarity: C
-			setNum: "6"
-			cardNum: 65
-			style: Standard
 		}
 		title: Isengard Artisan
 		unique: false
@@ -563,17 +491,9 @@
 
 	6_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR06066.jpg
-			//parentId: 6_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06066.jpg
 			collInfo: 6U66
 			rarity: U
-			setNum: "6"
-			cardNum: 66
-			style: Standard
 		}
 		title: Isengard Builder
 		unique: false
@@ -614,17 +534,9 @@
 
 	6_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR06067.jpg
-			//parentId: 6_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06067.jpg
 			collInfo: 6C67
 			rarity: C
-			setNum: "6"
-			cardNum: 67
-			style: Standard
 		}
 		title: Isengard Journeyman
 		unique: false
@@ -664,17 +576,9 @@
 
 	6_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR06068.jpg
-			//parentId: 6_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06068.jpg
 			collInfo: 6R68
 			rarity: R
-			setNum: "6"
-			cardNum: 68
-			style: Standard
 		}
 		title: Isengard Mechanics
 		unique: false
@@ -742,17 +646,9 @@
 
 	6_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR06069.jpg
-			//parentId: 6_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06069.jpg
 			collInfo: 6C69
 			rarity: C
-			setNum: "6"
-			cardNum: 69
-			style: Standard
 		}
 		title: Isengard Plodder
 		unique: false
@@ -792,17 +688,9 @@
 
 	6_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR06070.jpg
-			//parentId: 6_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06070.jpg
 			collInfo: 6U70
 			rarity: U
-			setNum: "6"
-			cardNum: 70
-			style: Standard
 		}
 		title: Isengard Tender
 		unique: false
@@ -849,17 +737,9 @@
 
 	6_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR06071.jpg
-			//parentId: 6_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06071.jpg
 			collInfo: 6C71
 			rarity: C
-			setNum: "6"
-			cardNum: 71
-			style: Standard
 		}
 		title: Isengard Tinker
 		unique: false
@@ -899,17 +779,9 @@
 
 	6_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR06072.jpg
-			//parentId: 6_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06072.jpg
 			collInfo: 6C72
 			rarity: C
-			setNum: "6"
-			cardNum: 72
-			style: Standard
 		}
 		title: Rohirrim Traitor
 		unique: false
@@ -948,17 +820,9 @@
 
 	6_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR06073.jpg
-			//parentId: 6_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06073.jpg
 			collInfo: 6U73
 			rarity: U
-			setNum: "6"
-			cardNum: 73
-			style: Standard
 		}
 		title: Scaffolding
 		unique: false
@@ -1019,17 +883,9 @@
 
 	6_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR06074.jpg
-			//parentId: 6_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06074.jpg
 			collInfo: 6R74
 			rarity: R
-			setNum: "6"
-			cardNum: 74
-			style: Standard
 		}
 		title: Sharku
 		subtitle: Vile Marauder
@@ -1078,17 +934,9 @@
 
 	6_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR06075.jpg
-			//parentId: 6_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06075.jpg
 			collInfo: 6U75
 			rarity: U
-			setNum: "6"
-			cardNum: 75
-			style: Standard
 		}
 		title: Twisted Tales
 		unique: false

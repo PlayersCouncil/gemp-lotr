@@ -2,17 +2,14 @@
 
 	52_101: {
 		cardInfo: {
-			imagePath: errata/52_101.jpg
-			javaClass: false
+			//id: 2_101.1
 			parent: 2_101
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/52_101.jpg
 			collInfo: 2C101
 			rarity: C
-			setNum: "2"
-			cardNum: 101
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Filibert Bolger
 		subtitle: Wily Rascal
@@ -53,17 +50,14 @@
 	
 	52_104: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E104.1_card.jpg
-			//parentId: 2_104
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 2_104.1
+			parent: 2_104
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN02E104.1_card.jpg
 			collInfo: 2C104
 			rarity: C
-			setNum: "2"
-			cardNum: 104
-			style: Standard
 		}
 		title: Merry
 		subtitle: Horticulturalist
@@ -106,17 +100,14 @@
 	
 	52_107: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E107.1.jpg
-			javaClass: false
+			//id: 2_107.1
 			parent: 2_107
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN02E107.1.jpg
 			collInfo: 2U107
 			rarity: U
-			setNum: "2"
-			cardNum: 107
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Not Feared in Sunlight
 		unique: false
@@ -164,17 +155,14 @@
 
 	52_108: {
 		cardInfo: {
-			imagePath: errata/52_108.jpg
-			javaClass: false
+			//id: 2_108.1
 			parent: 2_108
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/52_108.jpg
 			collInfo: 2R108
 			rarity: R
-			setNum: "2"
-			cardNum: 108
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: O Elbereth! Gilthoniel!
 		unique: true
@@ -239,17 +227,14 @@
 	
 	52_110: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E110.1_card.jpg
-			//parentId: 2_110
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 2_110.1
+			parent: 2_110
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN02E110.1_card.jpg
 			collInfo: 2C110
 			rarity: C
-			setNum: "2"
-			cardNum: 110
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Mr. Took

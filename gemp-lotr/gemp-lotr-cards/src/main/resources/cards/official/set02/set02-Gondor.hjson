@@ -2,17 +2,9 @@
 
 	2_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR02031.jpg
-			//parentId: 2_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02031.jpg
 			collInfo: 2U31
 			rarity: U
-			setNum: "2"
-			cardNum: 31
-			style: Standard
 		}
 		title: Blood of Númenor
 		unique: false
@@ -73,17 +65,9 @@
 
 	2_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR02032.jpg
-			//parentId: 2_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02032.jpg
 			collInfo: 2R32
 			rarity: R
-			setNum: "2"
-			cardNum: 32
-			style: Standard
 		}
 		title: Flaming Brand
 		unique: false
@@ -128,17 +112,9 @@
 
 	2_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR02033.jpg
-			//parentId: 2_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02033.jpg
 			collInfo: 2U33
 			rarity: U
-			setNum: "2"
-			cardNum: 33
-			style: Standard
 		}
 		title: Flee in Terror
 		unique: false
@@ -188,17 +164,9 @@
 
 	2_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR02034.jpg
-			//parentId: 2_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02034.jpg
 			collInfo: 2U34
 			rarity: U
-			setNum: "2"
-			cardNum: 34
-			style: Standard
 		}
 		title: Gondor Will See It Done
 		unique: false
@@ -235,17 +203,9 @@
 
 	2_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR02035.jpg
-			//parentId: 2_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02035.jpg
 			collInfo: 2C35
 			rarity: C
-			setNum: "2"
-			cardNum: 35
-			style: Standard
 		}
 		title: Natural Cover
 		unique: false
@@ -288,17 +248,9 @@
 
 	2_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR02036.jpg
-			//parentId: 2_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02036.jpg
 			collInfo: 2R36
 			rarity: R
-			setNum: "2"
-			cardNum: 36
-			style: Standard
 		}
 		title: No Mere Ranger
 		unique: false
@@ -342,17 +294,9 @@
 
 	2_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR02037.jpg
-			//parentId: 2_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02037.jpg
 			collInfo: 2C37
 			rarity: C
-			setNum: "2"
-			cardNum: 37
-			style: Standard
 		}
 		title: Sentinels of Númenor
 		unique: false
@@ -390,17 +334,9 @@
 
 	2_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR02038.jpg
-			//parentId: 2_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02038.jpg
 			collInfo: 2R38
 			rarity: R
-			setNum: "2"
-			cardNum: 38
-			style: Standard
 		}
 		title: Shield of Boromir
 		unique: true

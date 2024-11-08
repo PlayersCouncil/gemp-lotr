@@ -2,17 +2,9 @@
 
 	2_96: {
 		cardInfo: {
-			imagePath: decipher/LOTR02096.jpg
-			//parentId: 2_96
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02096.jpg
 			collInfo: 2U96
 			rarity: U
-			setNum: "2"
-			cardNum: 96
-			style: Standard
 		}
 		title: Bilbo
 		subtitle: Well-spoken Gentlehobbit
@@ -56,17 +48,9 @@
 
 	2_97: {
 		cardInfo: {
-			imagePath: decipher/LOTR02097.jpg
-			//parentId: 2_97
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02097.jpg
 			collInfo: 2R97
 			rarity: R
-			setNum: "2"
-			cardNum: 97
-			style: Standard
 		}
 		title: Consorting With Wizards
 		unique: false
@@ -133,17 +117,9 @@
 
 	2_98: {
 		cardInfo: {
-			imagePath: decipher/LOTR02098.jpg
-			//parentId: 2_98
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02098.jpg
 			collInfo: 2U98
 			rarity: U
-			setNum: "2"
-			cardNum: 98
-			style: Standard
 		}
 		title: Dear Friends
 		unique: false
@@ -187,17 +163,9 @@
 
 	2_99: {
 		cardInfo: {
-			imagePath: decipher/LOTR02099.jpg
-			//parentId: 2_99
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02099.jpg
 			collInfo: 2C99
 			rarity: C
-			setNum: "2"
-			cardNum: 99
-			style: Standard
 		}
 		title: Deft in Their Movements
 		unique: false
@@ -237,17 +205,9 @@
 
 	2_100: {
 		cardInfo: {
-			imagePath: decipher/LOTR02100.jpg
-			//parentId: 2_100
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02100.jpg
 			collInfo: 2R100
 			rarity: R
-			setNum: "2"
-			cardNum: 100
-			style: Standard
 		}
 		title: Fearing the Worst
 		unique: false
@@ -290,17 +250,9 @@
 
 	2_101: {
 		cardInfo: {
-			imagePath: decipher/LOTR02101.jpg
-			//parentId: 2_101
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02101.jpg
 			collInfo: 2C101
 			rarity: C
-			setNum: "2"
-			cardNum: 101
-			style: Standard
 		}
 		title: Filibert Bolger
 		subtitle: Wily Rascal
@@ -341,17 +293,9 @@
 
 	2_102: {
 		cardInfo: {
-			imagePath: decipher/LOTR02102.jpg
-			//parentId: 2_102
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02102.jpg
 			collInfo: 2C102
 			rarity: C
-			setNum: "2"
-			cardNum: 102
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Reluctant Adventurer
@@ -388,17 +332,9 @@
 
 	2_103: {
 		cardInfo: {
-			imagePath: decipher/LOTR02103.jpg
-			//parentId: 2_103
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02103.jpg
 			collInfo: 2U103
 			rarity: U
-			setNum: "2"
-			cardNum: 103
-			style: Standard
 		}
 		title: Hobbit Sword-play
 		unique: false
@@ -448,17 +384,9 @@
 
 	2_104: {
 		cardInfo: {
-			imagePath: decipher/LOTR02104.jpg
-			//parentId: 2_104
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02104.jpg
 			collInfo: 2C104
 			rarity: C
-			setNum: "2"
-			cardNum: 104
-			style: Standard
 		}
 		title: Merry
 		subtitle: Horticulturalist
@@ -499,17 +427,9 @@
 
 	2_105: {
 		cardInfo: {
-			imagePath: decipher/LOTR02105.jpg
-			//parentId: 2_105
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02105.jpg
 			collInfo: 2R105
 			rarity: R
-			setNum: "2"
-			cardNum: 105
-			style: Standard
 		}
 		title: Mithril-coat
 		unique: true
@@ -558,17 +478,9 @@
 
 	2_106: {
 		cardInfo: {
-			imagePath: decipher/LOTR02106.jpg
-			//parentId: 2_106
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02106.jpg
 			collInfo: 2U106
 			rarity: U
-			setNum: "2"
-			cardNum: 106
-			style: Standard
 		}
 		title: Nice Imitation
 		unique: false
@@ -608,17 +520,9 @@
 
 	2_107: {
 		cardInfo: {
-			imagePath: decipher/LOTR02107.jpg
-			//parentId: 2_107
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02107.jpg
 			collInfo: 2U107
 			rarity: U
-			setNum: "2"
-			cardNum: 107
-			style: Standard
 		}
 		title: Not Feared in Sunlight
 		unique: false
@@ -669,17 +573,9 @@
 
 	2_108: {
 		cardInfo: {
-			imagePath: decipher/LOTR02108.jpg
-			//parentId: 2_108
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02108.jpg
 			collInfo: 2R108
 			rarity: R
-			setNum: "2"
-			cardNum: 108
-			style: Standard
 		}
 		title: O Elbereth! Gilthoniel!
 		unique: true
@@ -728,17 +624,9 @@
 
 	2_109: {
 		cardInfo: {
-			imagePath: decipher/LOTR02109.jpg
-			//parentId: 2_109
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02109.jpg
 			collInfo: 2R109
 			rarity: R
-			setNum: "2"
-			cardNum: 109
-			style: Standard
 		}
 		title: Orc-bane
 		unique: false
@@ -818,17 +706,9 @@
 
 	2_110: {
 		cardInfo: {
-			imagePath: decipher/LOTR02110.jpg
-			//parentId: 2_110
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02110.jpg
 			collInfo: 2C110
 			rarity: C
-			setNum: "2"
-			cardNum: 110
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Mr. Took
@@ -864,17 +744,9 @@
 
 	2_111: {
 		cardInfo: {
-			imagePath: decipher/LOTR02111.jpg
-			//parentId: 2_111
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02111.jpg
 			collInfo: 2U111
 			rarity: U
-			setNum: "2"
-			cardNum: 111
-			style: Standard
 		}
 		title: Practically Everyone Was Invited
 		unique: false
@@ -909,17 +781,9 @@
 
 	2_112: {
 		cardInfo: {
-			imagePath: decipher/LOTR02112.jpg
-			//parentId: 2_112
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02112.jpg
 			collInfo: 2R112
 			rarity: R
-			setNum: "2"
-			cardNum: 112
-			style: Standard
 		}
 		title: A Promise
 		unique: false
@@ -959,17 +823,9 @@
 
 	2_113: {
 		cardInfo: {
-			imagePath: decipher/LOTR02113.jpg
-			//parentId: 2_113
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02113.jpg
 			collInfo: 2R113
 			rarity: R
-			setNum: "2"
-			cardNum: 113
-			style: Standard
 		}
 		title: Red Book of Westmarch
 		unique: true
@@ -1011,17 +867,9 @@
 
 	2_114: {
 		cardInfo: {
-			imagePath: decipher/LOTR02114.jpg
-			//parentId: 2_114
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02114.jpg
 			collInfo: 2C114
 			rarity: C
-			setNum: "2"
-			cardNum: 114
-			style: Standard
 		}
 		title: Sam
 		subtitle: Proper Poet

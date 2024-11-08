@@ -2,17 +2,9 @@
 
 	2_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR02016.jpg
-			//parentId: 2_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02016.jpg
 			collInfo: 2U16
 			rarity: U
-			setNum: "2"
-			cardNum: 16
-			style: Standard
 		}
 		title: A Blended Race
 		unique: false
@@ -70,17 +62,9 @@
 
 	2_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR02017.jpg
-			//parentId: 2_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02017.jpg
 			collInfo: 2U17
 			rarity: U
-			setNum: "2"
-			cardNum: 17
-			style: Standard
 		}
 		title: Dismay Our Enemies
 		unique: false
@@ -123,17 +107,9 @@
 
 	2_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR02018.jpg
-			//parentId: 2_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02018.jpg
 			collInfo: 2U18
 			rarity: U
-			setNum: "2"
-			cardNum: 18
-			style: Standard
 		}
 		title: Hosts of the Last Alliance
 		unique: false
@@ -187,17 +163,9 @@
 
 	2_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR02019.jpg
-			//parentId: 2_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02019.jpg
 			collInfo: 2R19
 			rarity: R
-			setNum: "2"
-			cardNum: 19
-			style: Standard
 		}
 		title: Release the Angry Flood
 		unique: false
@@ -239,17 +207,9 @@
 
 	2_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR02020.jpg
-			//parentId: 2_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02020.jpg
 			collInfo: 2R20
 			rarity: R
-			setNum: "2"
-			cardNum: 20
-			style: Standard
 		}
 		title: Secret Sentinels
 		unique: false

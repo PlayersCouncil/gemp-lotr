@@ -2,17 +2,14 @@
 	
 	54_146: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E146.1.jpg
-			javaClass: false
+			//id: 4_146.1
 			parent: 4_146
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN04E146.1.jpg
 			collInfo: 4R146
 			rarity: R
-			setNum: "4"
-			cardNum: 146
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Come Down
 		culture: isengard
@@ -101,17 +98,14 @@
 
 	54_192: {
 		cardInfo: {
-			imagePath: errata/54_192.jpg
-			javaClass: false
+			//id: 4_192.1
 			parent: 4_192
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/54_192.jpg
 			collInfo: 4C192
 			rarity: C
-			setNum: "4"
-			cardNum: 192
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Uruk Regular
 		unique: false

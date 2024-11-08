@@ -444,6 +444,11 @@ body {
     float: right;
 }
 
+#auto-zoom-li > span {
+    position: relative;
+    top: -20px;
+}
+
 ul.ui-tabs-nav {
     height: 14px;
 }

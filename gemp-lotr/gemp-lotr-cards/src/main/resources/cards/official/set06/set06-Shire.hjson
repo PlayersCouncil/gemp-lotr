@@ -2,17 +2,9 @@
 
 	6_109: {
 		cardInfo: {
-			imagePath: decipher/LOTR06109.jpg
-			//parentId: 6_109
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06109.jpg
 			collInfo: 6R109
 			rarity: R
-			setNum: "6"
-			cardNum: 109
-			style: Standard
 		}
 		title: Held
 		unique: false
@@ -74,17 +66,9 @@
 
 	6_110: {
 		cardInfo: {
-			imagePath: decipher/LOTR06110.jpg
-			//parentId: 6_110
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06110.jpg
 			collInfo: 6U110
 			rarity: U
-			setNum: "6"
-			cardNum: 110
-			style: Standard
 		}
 		title: It Burns Us
 		unique: false
@@ -134,17 +118,9 @@
 
 	6_111: {
 		cardInfo: {
-			imagePath: decipher/LOTR06111.jpg
-			//parentId: 6_111
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06111.jpg
 			collInfo: 6C111
 			rarity: C
-			setNum: "6"
-			cardNum: 111
-			style: Standard
 		}
 		title: Kept Safe
 		unique: true
@@ -210,17 +186,9 @@
 
 	6_112: {
 		cardInfo: {
-			imagePath: decipher/LOTR06112.jpg
-			//parentId: 6_112
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06112.jpg
 			collInfo: 6C112
 			rarity: C
-			setNum: "6"
-			cardNum: 112
-			style: Standard
 		}
 		title: Long Slow Wrath
 		unique: false
@@ -269,17 +237,9 @@
 
 	6_113: {
 		cardInfo: {
-			imagePath: decipher/LOTR06113.jpg
-			//parentId: 6_113
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06113.jpg
 			collInfo: 6R113
 			rarity: R
-			setNum: "6"
-			cardNum: 113
-			style: Standard
 		}
 		title: Merry
 		subtitle: Impatient Hobbit
@@ -320,17 +280,9 @@
 
 	6_114: {
 		cardInfo: {
-			imagePath: decipher/LOTR06114.jpg
-			//parentId: 6_114
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06114.jpg
 			collInfo: 6R114
 			rarity: R
-			setNum: "6"
-			cardNum: 114
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Hastiest of All

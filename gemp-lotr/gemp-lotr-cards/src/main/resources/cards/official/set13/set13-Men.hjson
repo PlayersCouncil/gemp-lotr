@@ -2,17 +2,9 @@
 
 	13_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR13082.jpg
-			//parentId: 13_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13082.jpg
 			collInfo: 13C82
 			rarity: C
-			setNum: "13"
-			cardNum: 82
-			style: Standard
 		}
 		title: Bring Down the Wall
 		unique: false
@@ -52,17 +44,9 @@
 
 	13_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR13083.jpg
-			//parentId: 13_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13083.jpg
 			collInfo: 13C83
 			rarity: C
-			setNum: "13"
-			cardNum: 83
-			style: Standard
 		}
 		title: Caravan From the South
 		unique: false
@@ -124,17 +108,9 @@
 
 	13_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR13084.jpg
-			//parentId: 13_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13084.jpg
 			collInfo: 13R84
 			rarity: R
-			setNum: "13"
-			cardNum: 84
-			style: Standard
 		}
 		title: Corsair Champion
 		unique: false
@@ -193,17 +169,9 @@
 
 	13_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR13085.jpg
-			//parentId: 13_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13085.jpg
 			collInfo: 13S85
 			rarity: S
-			setNum: "13"
-			cardNum: 85
-			style: Standard
 		}
 		title: Cruel Dunlending
 		unique: false
@@ -248,17 +216,9 @@
 
 	13_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR13086.jpg
-			//parentId: 13_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13086.jpg
 			collInfo: 13R86
 			rarity: R
-			setNum: "13"
-			cardNum: 86
-			style: Standard
 		}
 		title: Desert Wind
 		unique: false
@@ -304,17 +264,9 @@
 
 	13_87: {
 		cardInfo: {
-			imagePath: decipher/LOTR13087.jpg
-			//parentId: 13_87
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13087.jpg
 			collInfo: 13C87
 			rarity: C
-			setNum: "13"
-			cardNum: 87
-			style: Standard
 		}
 		title: Driven From the Plains
 		unique: false
@@ -386,17 +338,9 @@
 
 	13_88: {
 		cardInfo: {
-			imagePath: decipher/LOTR13088.jpg
-			//parentId: 13_88
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13088.jpg
 			collInfo: 13U88
 			rarity: U
-			setNum: "13"
-			cardNum: 88
-			style: Standard
 		}
 		title: Dunlending Patriarch
 		unique: false
@@ -447,17 +391,9 @@
 
 	13_89: {
 		cardInfo: {
-			imagePath: decipher/LOTR13089.jpg
-			//parentId: 13_89
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13089.jpg
 			collInfo: 13U89
 			rarity: U
-			setNum: "13"
-			cardNum: 89
-			style: Standard
 		}
 		title: Dunlending Trapper
 		unique: false
@@ -506,17 +442,9 @@
 
 	13_90: {
 		cardInfo: {
-			imagePath: decipher/LOTR13090.jpg
-			//parentId: 13_90
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13090.jpg
 			collInfo: 13C90
 			rarity: C
-			setNum: "13"
-			cardNum: 90
-			style: Standard
 		}
 		title: Easterling Runner
 		unique: false
@@ -565,17 +493,9 @@
 
 	13_91: {
 		cardInfo: {
-			imagePath: decipher/LOTR13091.jpg
-			//parentId: 13_91
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13091.jpg
 			collInfo: 13U91
 			rarity: U
-			setNum: "13"
-			cardNum: 91
-			style: Standard
 		}
 		title: Fires Brightly Burning
 		unique: false
@@ -617,17 +537,9 @@
 
 	13_92: {
 		cardInfo: {
-			imagePath: decipher/LOTR13092.jpg
-			//parentId: 13_92
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13092.jpg
 			collInfo: 13U92
 			rarity: U
-			setNum: "13"
-			cardNum: 92
-			style: Standard
 		}
 		title: Gríma
 		subtitle: Footman of Saruman
@@ -672,17 +584,9 @@
 
 	13_93: {
 		cardInfo: {
-			imagePath: decipher/LOTR13093.jpg
-			//parentId: 13_93
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13093.jpg
 			collInfo: 13R93
 			rarity: R
-			setNum: "13"
-			cardNum: 93
-			style: Standard
 		}
 		title: Harmless
 		unique: false
@@ -729,17 +633,9 @@
 
 	13_94: {
 		cardInfo: {
-			imagePath: decipher/LOTR13094.jpg
-			//parentId: 13_94
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13094.jpg
 			collInfo: 13U94
 			rarity: U
-			setNum: "13"
-			cardNum: 94
-			style: Standard
 		}
 		title: Howdah
 		unique: false
@@ -814,17 +710,9 @@
 
 	13_95: {
 		cardInfo: {
-			imagePath: decipher/LOTR13095.jpg
-			//parentId: 13_95
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13095.jpg
 			collInfo: 13U95
 			rarity: U
-			setNum: "13"
-			cardNum: 95
-			style: Standard
 		}
 		title: Lying in Wait
 		unique: false
@@ -882,17 +770,9 @@
 
 	13_96: {
 		cardInfo: {
-			imagePath: decipher/LOTR13096.jpg
-			//parentId: 13_96
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13096.jpg
 			collInfo: 13C96
 			rarity: C
-			setNum: "13"
-			cardNum: 96
-			style: Standard
 		}
 		title: Merciless Dunlending
 		unique: false
@@ -935,17 +815,9 @@
 
 	13_97: {
 		cardInfo: {
-			imagePath: decipher/LOTR13097.jpg
-			//parentId: 13_97
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13097.jpg
 			collInfo: 13C97
 			rarity: C
-			setNum: "13"
-			cardNum: 97
-			style: Standard
 		}
 		title: Pirate Cutthroat
 		unique: false
@@ -1005,17 +877,9 @@
 
 	13_98: {
 		cardInfo: {
-			imagePath: decipher/LOTR13098.jpg
-			//parentId: 13_98
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13098.jpg
 			collInfo: 13U98
 			rarity: U
-			setNum: "13"
-			cardNum: 98
-			style: Standard
 		}
 		title: Southron Murderer
 		unique: false
@@ -1063,17 +927,9 @@
 
 	13_99: {
 		cardInfo: {
-			imagePath: decipher/LOTR13099.jpg
-			//parentId: 13_99
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13099.jpg
 			collInfo: 13S99
 			rarity: S
-			setNum: "13"
-			cardNum: 99
-			style: Standard
 		}
 		title: Stragglers
 		unique: false
@@ -1140,17 +996,9 @@
 
 	13_100: {
 		cardInfo: {
-			imagePath: decipher/LOTR13100.jpg
-			//parentId: 13_100
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13100.jpg
 			collInfo: 13S100
 			rarity: S
-			setNum: "13"
-			cardNum: 100
-			style: Standard
 		}
 		title: Vicious Dunlending
 		unique: false
@@ -1195,17 +1043,9 @@
 
 	13_101: {
 		cardInfo: {
-			imagePath: decipher/LOTR13101.jpg
-			//parentId: 13_101
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13101.jpg
 			collInfo: 13R101
 			rarity: R
-			setNum: "13"
-			cardNum: 101
-			style: Standard
 		}
 		title: Voice of the Desert
 		subtitle: Southron Troop
@@ -1275,17 +1115,9 @@
 
 	13_102: {
 		cardInfo: {
-			imagePath: decipher/LOTR13102.jpg
-			//parentId: 13_102
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13102.jpg
 			collInfo: 13C102
 			rarity: C
-			setNum: "13"
-			cardNum: 102
-			style: Standard
 		}
 		title: Worn Battleaxe
 		unique: false

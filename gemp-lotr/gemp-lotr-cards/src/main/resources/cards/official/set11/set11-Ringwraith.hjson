@@ -2,17 +2,9 @@
 
 	11_207: {
 		cardInfo: {
-			imagePath: decipher/LOTR11207.jpg
-			//parentId: 11_207
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11207.jpg
 			collInfo: 11R207
 			rarity: R
-			setNum: "11"
-			cardNum: 207
-			style: Standard
 		}
 		title: Dark Powers Strengthen
 		unique: false
@@ -48,17 +40,9 @@
 
 	11_208: {
 		cardInfo: {
-			imagePath: decipher/LOTR11208.jpg
-			//parentId: 11_208
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11208.jpg
 			collInfo: 11U208
 			rarity: U
-			setNum: "11"
-			cardNum: 208
-			style: Standard
 		}
 		title: Dark Wings
 		unique: false
@@ -98,17 +82,9 @@
 
 	11_209: {
 		cardInfo: {
-			imagePath: decipher/LOTR11209.jpg
-			//parentId: 11_209
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11209.jpg
 			collInfo: 11S209
 			rarity: S
-			setNum: "11"
-			cardNum: 209
-			style: Standard
 		}
 		title: Drawn to Its Power
 		unique: false
@@ -146,17 +122,9 @@
 
 	11_210: {
 		cardInfo: {
-			imagePath: decipher/LOTR11210.jpg
-			//parentId: 11_210
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11210.jpg
 			collInfo: 11U210
 			rarity: U
-			setNum: "11"
-			cardNum: 210
-			style: Standard
 		}
 		title: Hatred Stirred
 		unique: true
@@ -196,17 +164,9 @@
 
 	11_211: {
 		cardInfo: {
-			imagePath: decipher/LOTR11211.jpg
-			//parentId: 11_211
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11211.jpg
 			collInfo: 11R211
 			rarity: R
-			setNum: "11"
-			cardNum: 211
-			style: Standard
 		}
 		title: Keening Wail
 		unique: false
@@ -241,17 +201,9 @@
 
 	11_212: {
 		cardInfo: {
-			imagePath: decipher/LOTR11212.jpg
-			//parentId: 11_212
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11212.jpg
 			collInfo: 11U212
 			rarity: U
-			setNum: "11"
-			cardNum: 212
-			style: Standard
 		}
 		title: Lost in the Woods
 		unique: false
@@ -296,17 +248,9 @@
 
 	11_213: {
 		cardInfo: {
-			imagePath: decipher/LOTR11213.jpg
-			//parentId: 11_213
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11213.jpg
 			collInfo: 11S213
 			rarity: S
-			setNum: "11"
-			cardNum: 213
-			style: Standard
 		}
 		title: Moving This Way
 		unique: false
@@ -352,17 +296,9 @@
 
 	11_214: {
 		cardInfo: {
-			imagePath: decipher/LOTR11214.jpg
-			//parentId: 11_214
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11214.jpg
 			collInfo: 11R214
 			rarity: R
-			setNum: "11"
-			cardNum: 214
-			style: Standard
 		}
 		title: The Pale Blade
 		subtitle: Sword of Flame
@@ -404,17 +340,9 @@
 
 	11_215: {
 		cardInfo: {
-			imagePath: decipher/LOTR11215.jpg
-			//parentId: 11_215
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11215.jpg
 			collInfo: 11S215
 			rarity: S
-			setNum: "11"
-			cardNum: 215
-			style: Standard
 		}
 		title: Riders in Black
 		unique: false
@@ -454,17 +382,9 @@
 
 	11_216: {
 		cardInfo: {
-			imagePath: decipher/LOTR11216.jpg
-			//parentId: 11_216
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11216.jpg
 			collInfo: 11R216
 			rarity: R
-			setNum: "11"
-			cardNum: 216
-			style: Standard
 		}
 		title: A Shadow Rises
 		unique: false
@@ -519,17 +439,9 @@
 
 	11_217: {
 		cardInfo: {
-			imagePath: decipher/LOTR11217.jpg
-			//parentId: 11_217
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11217.jpg
 			collInfo: 11R217
 			rarity: R
-			setNum: "11"
-			cardNum: 217
-			style: Standard
 		}
 		title: Shapes Slowly Advancing
 		unique: false
@@ -591,17 +503,9 @@
 
 	11_218: {
 		cardInfo: {
-			imagePath: decipher/LOTR11218.jpg
-			//parentId: 11_218
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11218.jpg
 			collInfo: 11U218
 			rarity: U
-			setNum: "11"
-			cardNum: 218
-			style: Standard
 		}
 		title: Surrounded by Wraiths
 		unique: true
@@ -656,17 +560,9 @@
 
 	11_219: {
 		cardInfo: {
-			imagePath: decipher/LOTR11219.jpg
-			//parentId: 11_219
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11219.jpg
 			collInfo: 11R219
 			rarity: R
-			setNum: "11"
-			cardNum: 219
-			style: Standard
 		}
 		title: Úlairë Attëa
 		subtitle: Second of the Nine Riders
@@ -711,17 +607,9 @@
 
 	11_220: {
 		cardInfo: {
-			imagePath: decipher/LOTR11220.jpg
-			//parentId: 11_220
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11220.jpg
 			collInfo: 11S220
 			rarity: S
-			setNum: "11"
-			cardNum: 220
-			style: Standard
 		}
 		title: Úlairë Cantëa
 		subtitle: Fourth of the Nine Riders
@@ -773,17 +661,9 @@
 
 	11_221: {
 		cardInfo: {
-			imagePath: decipher/LOTR11221.jpg
-			//parentId: 11_221
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11221.jpg
 			collInfo: 11S221
 			rarity: S
-			setNum: "11"
-			cardNum: 221
-			style: Standard
 		}
 		title: Úlairë Lemenya
 		subtitle: Fifth of the Nine Riders
@@ -819,17 +699,9 @@
 
 	11_222: {
 		cardInfo: {
-			imagePath: decipher/LOTR11222.jpg
-			//parentId: 11_222
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11222.jpg
 			collInfo: 11S222
 			rarity: S
-			setNum: "11"
-			cardNum: 222
-			style: Standard
 		}
 		title: Úlairë Nelya
 		subtitle: Third of the Nine Riders
@@ -872,17 +744,9 @@
 
 	11_223: {
 		cardInfo: {
-			imagePath: decipher/LOTR11223.jpg
-			//parentId: 11_223
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11223.jpg
 			collInfo: 11S223
 			rarity: S
-			setNum: "11"
-			cardNum: 223
-			style: Standard
 		}
 		title: Úlairë Nertëa
 		subtitle: Ninth of the Nine Riders
@@ -936,17 +800,9 @@
 
 	11_224: {
 		cardInfo: {
-			imagePath: decipher/LOTR11224.jpg
-			//parentId: 11_224
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11224.jpg
 			collInfo: 11R224
 			rarity: R
-			setNum: "11"
-			cardNum: 224
-			style: Standard
 		}
 		title: Úlairë Otsëa
 		subtitle: Seventh of the Nine Riders
@@ -1004,17 +860,9 @@
 
 	11_225: {
 		cardInfo: {
-			imagePath: decipher/LOTR11225.jpg
-			//parentId: 11_225
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11225.jpg
 			collInfo: 11S225
 			rarity: S
-			setNum: "11"
-			cardNum: 225
-			style: Standard
 		}
 		title: Úlairë Toldëa
 		subtitle: Eighth of the Nine Riders
@@ -1054,17 +902,9 @@
 
 	11_226: {
 		cardInfo: {
-			imagePath: decipher/LOTR11226.jpg
-			//parentId: 11_226
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11226.jpg
 			collInfo: 11R226
 			rarity: R
-			setNum: "11"
-			cardNum: 226
-			style: Standard
 		}
 		title: The Witch-king
 		subtitle: Captain of the Nine Riders

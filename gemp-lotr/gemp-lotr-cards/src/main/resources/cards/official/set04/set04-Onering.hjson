@@ -2,17 +2,9 @@
 
 	4_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR04001.jpg
-			//parentId: 4_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04001.jpg
 			collInfo: 4R1
 			rarity: R
-			setNum: "4"
-			cardNum: 1
-			style: Standard
 		}
 		title: The One Ring
 		subtitle: Answer To All Riddles
@@ -92,17 +84,9 @@
 
 	4_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR04002.jpg
-			//parentId: 4_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04002.jpg
 			collInfo: 4C2
 			rarity: C
-			setNum: "4"
-			cardNum: 2
-			style: Standard
 		}
 		title: The One Ring
 		subtitle: The Ruling Ring

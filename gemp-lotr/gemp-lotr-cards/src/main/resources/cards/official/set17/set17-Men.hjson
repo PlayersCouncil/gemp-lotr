@@ -2,17 +2,9 @@
 
 	17_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR17040.jpg
-			//parentId: 17_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17040.jpg
 			collInfo: 17U40
 			rarity: U
-			setNum: "17"
-			cardNum: 40
-			style: Standard
 		}
 		title: Beast of War
 		unique: false
@@ -74,17 +66,9 @@
 
 	17_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR17041.jpg
-			//parentId: 17_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17041.jpg
 			collInfo: 17R41
 			rarity: R
-			setNum: "17"
-			cardNum: 41
-			style: Standard
 		}
 		title: Ceremonial Armor
 		unique: false
@@ -157,17 +141,9 @@
 
 	17_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR17042.jpg
-			//parentId: 17_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17042.jpg
 			collInfo: 17U42
 			rarity: U
-			setNum: "17"
-			cardNum: 42
-			style: Standard
 		}
 		title: Easterling Dispatcher
 		unique: false
@@ -218,17 +194,9 @@
 
 	17_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR17043.jpg
-			//parentId: 17_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17043.jpg
 			collInfo: 17R43
 			rarity: R
-			setNum: "17"
-			cardNum: 43
-			style: Standard
 		}
 		title: Easterling Sneak
 		unique: true
@@ -291,17 +259,9 @@
 
 	17_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR17044.jpg
-			//parentId: 17_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17044.jpg
 			collInfo: 17R44
 			rarity: R
-			setNum: "17"
-			cardNum: 44
-			style: Standard
 		}
 		title: Gríma's Dagger
 		unique: true
@@ -352,17 +312,9 @@
 
 	17_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR17045.jpg
-			//parentId: 17_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17045.jpg
 			collInfo: 17R45
 			rarity: R
-			setNum: "17"
-			cardNum: 45
-			style: Standard
 		}
 		title: In the Wild Men's Wake
 		unique: false
@@ -427,17 +379,9 @@
 
 	17_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR17046.jpg
-			//parentId: 17_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17046.jpg
 			collInfo: 17C46
 			rarity: C
-			setNum: "17"
-			cardNum: 46
-			style: Standard
 		}
 		title: Pandemonium
 		unique: false
@@ -469,17 +413,9 @@
 
 	17_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR17047.jpg
-			//parentId: 17_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17047.jpg
 			collInfo: 17C47
 			rarity: C
-			setNum: "17"
-			cardNum: 47
-			style: Standard
 		}
 		title: Primitive Brand
 		unique: false
@@ -527,17 +463,9 @@
 
 	17_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR17048.jpg
-			//parentId: 17_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17048.jpg
 			collInfo: 17S48
 			rarity: S
-			setNum: "17"
-			cardNum: 48
-			style: Standard
 		}
 		title: Saruman
 		subtitle: Coldly Still
@@ -588,17 +516,9 @@
 
 	17_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR17049.jpg
-			//parentId: 17_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17049.jpg
 			collInfo: 17R49
 			rarity: R
-			setNum: "17"
-			cardNum: 49
-			style: Standard
 		}
 		title: Stampeding Chief
 		unique: true
@@ -661,17 +581,9 @@
 
 	17_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR17050.jpg
-			//parentId: 17_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17050.jpg
 			collInfo: 17C50
 			rarity: C
-			setNum: "17"
-			cardNum: 50
-			style: Standard
 		}
 		title: Stampeding Hillsman
 		unique: false
@@ -718,17 +630,9 @@
 
 	17_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR17051.jpg
-			//parentId: 17_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17051.jpg
 			collInfo: 17C51
 			rarity: C
-			setNum: "17"
-			cardNum: 51
-			style: Standard
 		}
 		title: Stampeding Madman
 		unique: false
@@ -782,17 +686,9 @@
 
 	17_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR17052.jpg
-			//parentId: 17_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17052.jpg
 			collInfo: 17R52
 			rarity: R
-			setNum: "17"
-			cardNum: 52
-			style: Standard
 		}
 		title: Stampeding Ransacker
 		unique: false
@@ -841,17 +737,9 @@
 
 	17_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR17053.jpg
-			//parentId: 17_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17053.jpg
 			collInfo: 17C53
 			rarity: C
-			setNum: "17"
-			cardNum: 53
-			style: Standard
 		}
 		title: Stampeding Savage
 		unique: false
@@ -904,17 +792,9 @@
 
 	17_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR17054.jpg
-			//parentId: 17_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17054.jpg
 			collInfo: 17C54
 			rarity: C
-			setNum: "17"
-			cardNum: 54
-			style: Standard
 		}
 		title: Stampeding Shepherd
 		unique: false
@@ -963,17 +843,9 @@
 
 	17_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR17055.jpg
-			//parentId: 17_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17055.jpg
 			collInfo: 17C55
 			rarity: C
-			setNum: "17"
-			cardNum: 55
-			style: Standard
 		}
 		title: Sunland Guard
 		unique: false
@@ -1026,17 +898,9 @@
 
 	17_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR17056.jpg
-			//parentId: 17_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17056.jpg
 			collInfo: 17R56
 			rarity: R
-			setNum: "17"
-			cardNum: 56
-			style: Standard
 		}
 		title: Sunland Scout
 		unique: false
@@ -1090,17 +954,9 @@
 
 	17_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR17057.jpg
-			//parentId: 17_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17057.jpg
 			collInfo: 17C57
 			rarity: C
-			setNum: "17"
-			cardNum: 57
-			style: Standard
 		}
 		title: Sunland Skirmisher
 		unique: false
@@ -1152,17 +1008,9 @@
 
 	17_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR17058.jpg
-			//parentId: 17_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17058.jpg
 			collInfo: 17R58
 			rarity: R
-			setNum: "17"
-			cardNum: 58
-			style: Standard
 		}
 		title: Sunland Sneak
 		unique: false
@@ -1198,17 +1046,9 @@
 
 	17_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR17059.jpg
-			//parentId: 17_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17059.jpg
 			collInfo: 17C59
 			rarity: C
-			setNum: "17"
-			cardNum: 59
-			style: Standard
 		}
 		title: Sunland Trooper
 		unique: false
@@ -1272,17 +1112,9 @@
 
 	17_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR17060.jpg
-			//parentId: 17_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17060.jpg
 			collInfo: 17C60
 			rarity: C
-			setNum: "17"
-			cardNum: 60
-			style: Standard
 		}
 		title: Sunland Warrior
 		unique: false
@@ -1328,17 +1160,9 @@
 
 	17_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR17061.jpg
-			//parentId: 17_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17061.jpg
 			collInfo: 17R61
 			rarity: R
-			setNum: "17"
-			cardNum: 61
-			style: Standard
 		}
 		title: Sunland Weaponmaster
 		unique: false
@@ -1384,17 +1208,9 @@
 
 	17_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR17062.jpg
-			//parentId: 17_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17062.jpg
 			collInfo: 17C62
 			rarity: C
-			setNum: "17"
-			cardNum: 62
-			style: Standard
 		}
 		title: Vengeful Savage
 		unique: false
@@ -1434,17 +1250,9 @@
 
 	17_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR17063.jpg
-			//parentId: 17_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17063.jpg
 			collInfo: 17C63
 			rarity: C
-			setNum: "17"
-			cardNum: 63
-			style: Standard
 		}
 		title: Vengeful Wild Man
 		unique: false
@@ -1504,17 +1312,9 @@
 
 	17_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR17064.jpg
-			//parentId: 17_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17064.jpg
 			collInfo: 17C64
 			rarity: C
-			setNum: "17"
-			cardNum: 64
-			style: Standard
 		}
 		title: Vengeful Pillager
 		unique: false
@@ -1563,17 +1363,9 @@
 
 	17_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR17065.jpg
-			//parentId: 17_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17065.jpg
 			collInfo: 17R65
 			rarity: R
-			setNum: "17"
-			cardNum: 65
-			style: Standard
 		}
 		title: Vengeful Primitive
 		unique: false
@@ -1629,17 +1421,9 @@
 
 	17_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR17066.jpg
-			//parentId: 17_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17066.jpg
 			collInfo: 17C66
 			rarity: C
-			setNum: "17"
-			cardNum: 66
-			style: Standard
 		}
 		title: Wildman's Oath
 		unique: false

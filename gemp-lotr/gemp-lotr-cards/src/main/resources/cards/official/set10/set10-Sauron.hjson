@@ -2,17 +2,9 @@
 
 	10_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR10075.jpg
-			//parentId: 10_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10075.jpg
 			collInfo: 10R75
 			rarity: R
-			setNum: "10"
-			cardNum: 75
-			style: Standard
 		}
 		title: Advance Captain
 		unique: true
@@ -48,17 +40,9 @@
 
 	10_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR10076.jpg
-			//parentId: 10_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10076.jpg
 			collInfo: 10C76
 			rarity: C
-			setNum: "10"
-			cardNum: 76
-			style: Standard
 		}
 		title: Advance Marauder
 		unique: false
@@ -98,17 +82,9 @@
 
 	10_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR10077.jpg
-			//parentId: 10_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10077.jpg
 			collInfo: 10C77
 			rarity: C
-			setNum: "10"
-			cardNum: 77
-			style: Standard
 		}
 		title: Advance Regular
 		unique: false
@@ -143,17 +119,9 @@
 
 	10_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR10078.jpg
-			//parentId: 10_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10078.jpg
 			collInfo: 10U78
 			rarity: U
-			setNum: "10"
-			cardNum: 78
-			style: Standard
 		}
 		title: Advance Scout
 		unique: false
@@ -208,17 +176,9 @@
 
 	10_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR10079.jpg
-			//parentId: 10_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10079.jpg
 			collInfo: 10C79
 			rarity: C
-			setNum: "10"
-			cardNum: 79
-			style: Standard
 		}
 		title: Barren Land
 		unique: true
@@ -273,17 +233,9 @@
 
 	10_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR10080.jpg
-			//parentId: 10_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10080.jpg
 			collInfo: 10C80
 			rarity: C
-			setNum: "10"
-			cardNum: 80
-			style: Standard
 		}
 		title: Beaten Back
 		unique: false
@@ -332,17 +284,9 @@
 
 	10_81: {
 		cardInfo: {
-			imagePath: decipher/LOTR10081.jpg
-			//parentId: 10_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10081.jpg
 			collInfo: 10C81
 			rarity: C
-			setNum: "10"
-			cardNum: 81
-			style: Standard
 		}
 		title: Cirith Ungol Guard
 		unique: false
@@ -369,17 +313,9 @@
 
 	10_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR10082.jpg
-			//parentId: 10_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10082.jpg
 			collInfo: 10U82
 			rarity: U
-			setNum: "10"
-			cardNum: 82
-			style: Standard
 		}
 		title: Cirith Ungol Patroller
 		unique: false
@@ -420,17 +356,9 @@
 
 	10_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR10083.jpg
-			//parentId: 10_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10083.jpg
 			collInfo: 10U83
 			rarity: U
-			setNum: "10"
-			cardNum: 83
-			style: Standard
 		}
 		title: Cirith Ungol Sentinel
 		unique: false
@@ -470,17 +398,9 @@
 
 	10_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR10084.jpg
-			//parentId: 10_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10084.jpg
 			collInfo: 10C84
 			rarity: C
-			setNum: "10"
-			cardNum: 84
-			style: Standard
 		}
 		title: Cirith Ungol Sentry
 		unique: false
@@ -507,17 +427,9 @@
 
 	10_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR10085.jpg
-			//parentId: 10_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10085.jpg
 			collInfo: 10C85
 			rarity: C
-			setNum: "10"
-			cardNum: 85
-			style: Standard
 		}
 		title: Flames Within
 		unique: true
@@ -576,17 +488,9 @@
 
 	10_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR10086.jpg
-			//parentId: 10_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10086.jpg
 			collInfo: 10C86
 			rarity: C
-			setNum: "10"
-			cardNum: 86
-			style: Standard
 		}
 		title: Gorgoroth Keeper
 		unique: false
@@ -630,17 +534,9 @@
 
 	10_87: {
 		cardInfo: {
-			imagePath: decipher/LOTR10087.jpg
-			//parentId: 10_87
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10087.jpg
 			collInfo: 10C87
 			rarity: C
-			setNum: "10"
-			cardNum: 87
-			style: Standard
 		}
 		title: Gorgoroth Swarm
 		unique: false
@@ -696,17 +592,9 @@
 
 	10_88: {
 		cardInfo: {
-			imagePath: decipher/LOTR10088.jpg
-			//parentId: 10_88
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10088.jpg
 			collInfo: 10R88
 			rarity: R
-			setNum: "10"
-			cardNum: 88
-			style: Standard
 		}
 		title: Gothmog
 		subtitle: Lieutenant of Morgul
@@ -761,17 +649,9 @@
 
 	10_89: {
 		cardInfo: {
-			imagePath: decipher/LOTR10089.jpg
-			//parentId: 10_89
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10089.jpg
 			collInfo: 10R89
 			rarity: R
-			setNum: "10"
-			cardNum: 89
-			style: Standard
 		}
 		title: Gothmog's Warg
 		unique: true
@@ -819,17 +699,9 @@
 
 	10_90: {
 		cardInfo: {
-			imagePath: decipher/LOTR10090.jpg
-			//parentId: 10_90
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10090.jpg
 			collInfo: 10C90
 			rarity: C
-			setNum: "10"
-			cardNum: 90
-			style: Standard
 		}
 		title: Mordor Brute
 		unique: false
@@ -870,17 +742,9 @@
 
 	10_91: {
 		cardInfo: {
-			imagePath: decipher/LOTR10091.jpg
-			//parentId: 10_91
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10091.jpg
 			collInfo: 10C91
 			rarity: C
-			setNum: "10"
-			cardNum: 91
-			style: Standard
 		}
 		title: Mordor Fiend
 		unique: false
@@ -933,17 +797,9 @@
 
 	10_92: {
 		cardInfo: {
-			imagePath: decipher/LOTR10092.jpg
-			//parentId: 10_92
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10092.jpg
 			collInfo: 10U92
 			rarity: U
-			setNum: "10"
-			cardNum: 92
-			style: Standard
 		}
 		title: Mordor Pillager
 		unique: false
@@ -1008,17 +864,9 @@
 
 	10_93: {
 		cardInfo: {
-			imagePath: decipher/LOTR10093.jpg
-			//parentId: 10_93
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10093.jpg
 			collInfo: 10U93
 			rarity: U
-			setNum: "10"
-			cardNum: 93
-			style: Standard
 		}
 		title: Mordor Wretch
 		unique: false
@@ -1067,17 +915,9 @@
 
 	10_94: {
 		cardInfo: {
-			imagePath: decipher/LOTR10094.jpg
-			//parentId: 10_94
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10094.jpg
 			collInfo: 10R94
 			rarity: R
-			setNum: "10"
-			cardNum: 94
-			style: Standard
 		}
 		title: Orc Ravager
 		unique: false
@@ -1123,17 +963,9 @@
 
 	10_95: {
 		cardInfo: {
-			imagePath: decipher/LOTR10095.jpg
-			//parentId: 10_95
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10095.jpg
 			collInfo: 10R95
 			rarity: R
-			setNum: "10"
-			cardNum: 95
-			style: Standard
 		}
 		title: Orc Slaughterer
 		unique: false
@@ -1173,17 +1005,9 @@
 
 	10_96: {
 		cardInfo: {
-			imagePath: decipher/LOTR10096.jpg
-			//parentId: 10_96
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10096.jpg
 			collInfo: 10U96
 			rarity: U
-			setNum: "10"
-			cardNum: 96
-			style: Standard
 		}
 		title: Rank and File
 		unique: true
@@ -1260,17 +1084,9 @@
 
 	10_97: {
 		cardInfo: {
-			imagePath: decipher/LOTR10097.jpg
-			//parentId: 10_97
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10097.jpg
 			collInfo: 10U97
 			rarity: U
-			setNum: "10"
-			cardNum: 97
-			style: Standard
 		}
 		title: The Ring is Mine!
 		unique: false
@@ -1307,17 +1123,9 @@
 
 	10_98: {
 		cardInfo: {
-			imagePath: decipher/LOTR10098.jpg
-			//parentId: 10_98
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10098.jpg
 			collInfo: 10U98
 			rarity: U
-			setNum: "10"
-			cardNum: 98
-			style: Standard
 		}
 		title: Ruinous Hall
 		unique: false
@@ -1360,17 +1168,9 @@
 
 	10_99: {
 		cardInfo: {
-			imagePath: decipher/LOTR10099.jpg
-			//parentId: 10_99
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10099.jpg
 			collInfo: 10R99
 			rarity: R
-			setNum: "10"
-			cardNum: 99
-			style: Standard
 		}
 		title: Shagrat
 		subtitle: Captain of Cirith Ungol
@@ -1411,17 +1211,9 @@
 
 	10_100: {
 		cardInfo: {
-			imagePath: decipher/LOTR10100.jpg
-			//parentId: 10_100
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10100.jpg
 			collInfo: 10R100
 			rarity: R
-			setNum: "10"
-			cardNum: 100
-			style: Standard
 		}
 		title: Speak No More to Me
 		unique: false
@@ -1470,17 +1262,9 @@
 
 	10_101: {
 		cardInfo: {
-			imagePath: decipher/LOTR10101.jpg
-			//parentId: 10_101
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10101.jpg
 			collInfo: 10R101
 			rarity: R
-			setNum: "10"
-			cardNum: 101
-			style: Standard
 		}
 		title: Troll of Cirith Gorgor
 		unique: false
@@ -1529,17 +1313,9 @@
 
 	10_102: {
 		cardInfo: {
-			imagePath: decipher/LOTR10102.jpg
-			//parentId: 10_102
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10102.jpg
 			collInfo: 10C102
 			rarity: C
-			setNum: "10"
-			cardNum: 102
-			style: Standard
 		}
 		title: Uruk Axe
 		unique: false
@@ -1573,17 +1349,9 @@
 
 	10_103: {
 		cardInfo: {
-			imagePath: decipher/LOTR10103.jpg
-			//parentId: 10_103
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10103.jpg
 			collInfo: 10C103
 			rarity: C
-			setNum: "10"
-			cardNum: 103
-			style: Standard
 		}
 		title: Window of the Eye
 		unique: false

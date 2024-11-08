@@ -2,17 +2,10 @@
 
 	101_37: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S037.0_card.jpg
-			//parentId: 101_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_37
+			image: sets/vset1/LOTR-ENV1S037.0_card.jpg
 			collInfo: V1U37
 			rarity: U
-			setNum: "V1"
-			cardNum: 37
-			style: Standard
 		}
 		title: Fell Voices Call
 		unique: false
@@ -56,17 +49,10 @@
 
 	101_38: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S038.0_card.jpg
-			//parentId: 101_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_38
+			image: sets/vset1/LOTR-ENV1S038.0_card.jpg
 			collInfo: V1R38
 			rarity: R
-			setNum: "V1"
-			cardNum: 38
-			style: Standard
 		}
 		title: Harry Goatleaf
 		subtitle: In Thrall to the Nine
@@ -117,17 +103,10 @@
 
 	101_39: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S039.0_card.jpg
-			//parentId: 101_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_39
+			image: sets/vset1/LOTR-ENV1S039.0_card.jpg
 			collInfo: V1R39
 			rarity: R
-			setNum: "V1"
-			cardNum: 39
-			style: Standard
 		}
 		title: Pale Crown
 		unique: false
@@ -194,17 +173,10 @@
 
 	101_40: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S040.0_card.jpg
-			//parentId: 101_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_40
+			image: sets/vset1/LOTR-ENV1S040.0_card.jpg
 			collInfo: V1U40
 			rarity: U
-			setNum: "V1"
-			cardNum: 40
-			style: Standard
 		}
 		title: Ringwraith in Twilight
 		unique: false
@@ -271,17 +243,10 @@
 
 	101_41: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S041.0_card.jpg
-			//parentId: 101_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_41
+			image: sets/vset1/LOTR-ENV1S041.0_card.jpg
 			collInfo: V1U41
 			rarity: U
-			setNum: "V1"
-			cardNum: 41
-			style: Standard
 		}
 		title: Their Eyes Fell Upon Him
 		unique: false
@@ -340,17 +305,10 @@
 
 	101_42: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S042.0_card.jpg
-			//parentId: 101_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_42
+			image: sets/vset1/LOTR-ENV1S042.0_card.jpg
 			collInfo: V1U42
 			rarity: U
-			setNum: "V1"
-			cardNum: 42
-			style: Standard
 		}
 		title: Walks in Twilight
 		unique: true
@@ -391,17 +349,10 @@
 
 	101_43: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S043.0_card.jpg
-			//parentId: 101_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_43
+			image: sets/vset1/LOTR-ENV1S043.0_card.jpg
 			collInfo: V1U43
 			rarity: U
-			setNum: "V1"
-			cardNum: 43
-			style: Standard
 		}
 		title: White Faces Burned
 		unique: false

@@ -2,17 +2,9 @@
 
 	0_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR00056.jpg
-			//parentId: 0_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR00056.jpg
 			collInfo: 0P56
 			rarity: P
-			setNum: "0"
-			cardNum: 56
-			style: Standard
 		}
 		title: Ghân-buri-Ghân
 		subtitle: Chieftain of the Woses
@@ -64,17 +56,9 @@
 
 	0_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR00057.jpg
-			//parentId: 0_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR00057.jpg
 			collInfo: 0P57
 			rarity: P
-			setNum: "0"
-			cardNum: 57
-			style: Standard
 		}
 		title: Radagast's Staff
 		unique: true
@@ -114,17 +98,9 @@
 
 	0_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR00064.jpg
-			//parentId: 0_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR00064.jpg
 			collInfo: 0P64
 			rarity: P
-			setNum: "0"
-			cardNum: 64
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Stormcrow

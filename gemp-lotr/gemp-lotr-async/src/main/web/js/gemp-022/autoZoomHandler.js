@@ -212,27 +212,27 @@ class AutoZoom {
 	setPreviewMessage(reversible) {
 		let message = "";
 		
-		let focus = document.hasFocus();
+		// let focus = document.hasFocus();
 		
-		if(reversible) {
-			message = "Tap <b>[Shift]</b> to flip.";
-		}
-		else if(this.baseImageDiv.style.transform.includes("180")) {
-			message = "Hold <b>[Shift]</b> to rotate.";
-		}
+		// if(reversible) {
+		// 	message = "Tap <b>[Shift]</b> to flip.";
+		// }
+		// else if(this.baseImageDiv.style.transform.includes("180")) {
+		// 	message = "Hold <b>[Shift]</b> to rotate.";
+		// }
 		
-		if(message) {
+		// if(message) {
 			
-			if(!focus) {
-				message = "Focus this window for key controls."
-			}
+		// 	if(!focus) {
+		// 		message = "Focus this window for key controls."
+		// 	}
 			
-			this.flipMessageDiv.html(message);
-			this.flipMessageDiv[0].style.display = "block";
-		}
-		else {
-			this.hidePreviewMessage();	
-		}
+		// 	this.flipMessageDiv.html(message);
+		// 	this.flipMessageDiv[0].style.display = "block";
+		// }
+		// else {
+		// 	this.hidePreviewMessage();	
+		// }
 	}
 	
 	hidePreviewMessage() {

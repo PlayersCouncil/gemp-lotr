@@ -2,17 +2,9 @@
 
 	9_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR09012.jpg
-			//parentId: 9_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09012.jpg
 			collInfo: 9R+12
 			rarity: R+
-			setNum: "9"
-			cardNum: 12
-			style: Standard
 		}
 		title: Aiglos
 		unique: true
@@ -76,17 +68,9 @@
 
 	9_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR09013.jpg
-			//parentId: 9_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09013.jpg
 			collInfo: 9R13
 			rarity: R
-			setNum: "9"
-			cardNum: 13
-			style: Standard
 		}
 		title: Elven Rope
 		unique: true
@@ -130,17 +114,9 @@
 
 	9_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR09014.jpg
-			//parentId: 9_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09014.jpg
 			collInfo: 9R+14
 			rarity: R+
-			setNum: "9"
-			cardNum: 14
-			style: Standard
 		}
 		title: Galadriel
 		subtitle: Bearer of Wisdom
@@ -178,17 +154,9 @@
 
 	9_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR09015.jpg
-			//parentId: 9_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09015.jpg
 			collInfo: 9R+15
 			rarity: R+
-			setNum: "9"
-			cardNum: 15
-			style: Standard
 		}
 		title: Gil-galad
 		subtitle: Elven High King
@@ -236,17 +204,9 @@
 
 	9_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR09016.jpg
-			//parentId: 9_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09016.jpg
 			collInfo: 9R+16
 			rarity: R+
-			setNum: "9"
-			cardNum: 16
-			style: Standard
 		}
 		title: Glorfindel
 		subtitle: Revealed in Wrath
@@ -313,17 +273,9 @@
 
 	9_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR09017.jpg
-			//parentId: 9_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09017.jpg
 			collInfo: 9R+17
 			rarity: R+
-			setNum: "9"
-			cardNum: 17
-			style: Standard
 		}
 		title: Knife of the Galadhrim
 		unique: true
@@ -372,17 +324,9 @@
 
 	9_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR09018.jpg
-			//parentId: 9_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09018.jpg
 			collInfo: 9R18
 			rarity: R
-			setNum: "9"
-			cardNum: 18
-			style: Standard
 		}
 		title: Merry's Dagger
 		unique: true
@@ -441,17 +385,9 @@
 
 	9_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR09019.jpg
-			//parentId: 9_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09019.jpg
 			collInfo: 9R19
 			rarity: R
-			setNum: "9"
-			cardNum: 19
-			style: Standard
 		}
 		title: Narya
 		subtitle: Ring of Fire
@@ -497,17 +433,9 @@
 
 	9_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR09020.jpg
-			//parentId: 9_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09020.jpg
 			collInfo: 9R20
 			rarity: R
-			setNum: "9"
-			cardNum: 20
-			style: Standard
 		}
 		title: Nenya
 		subtitle: Ring of Adamant
@@ -551,17 +479,9 @@
 
 	9_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR09021.jpg
-			//parentId: 9_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09021.jpg
 			collInfo: 9R21
 			rarity: R
-			setNum: "9"
-			cardNum: 21
-			style: Standard
 		}
 		title: Pippin's Dagger
 		unique: true
@@ -620,17 +540,9 @@
 
 	9_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR09022.jpg
-			//parentId: 9_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09022.jpg
 			collInfo: 9R22
 			rarity: R
-			setNum: "9"
-			cardNum: 22
-			style: Standard
 		}
 		title: Strands of Elven Hair
 		unique: true
@@ -723,17 +635,9 @@
 
 	9_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR09023.jpg
-			//parentId: 9_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09023.jpg
 			collInfo: 9R23
 			rarity: R
-			setNum: "9"
-			cardNum: 23
-			style: Standard
 		}
 		title: Vilya
 		subtitle: Ring of Air

@@ -2,17 +2,9 @@
 
 	9_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR09042.jpg
-			//parentId: 9_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09042.jpg
 			collInfo: 9R42
 			rarity: R
-			setNum: "9"
-			cardNum: 42
-			style: Standard
 		}
 		title: Ring of Asperity
 		unique: true
@@ -60,17 +52,9 @@
 
 	9_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR09043.jpg
-			//parentId: 9_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09043.jpg
 			collInfo: 9R+43
 			rarity: R+
-			setNum: "9"
-			cardNum: 43
-			style: Standard
 		}
 		title: Ring of Ire
 		unique: true
@@ -120,17 +104,9 @@
 
 	9_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR09044.jpg
-			//parentId: 9_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09044.jpg
 			collInfo: 9R44
 			rarity: R
-			setNum: "9"
-			cardNum: 44
-			style: Standard
 		}
 		title: Ring of Rancor
 		unique: true

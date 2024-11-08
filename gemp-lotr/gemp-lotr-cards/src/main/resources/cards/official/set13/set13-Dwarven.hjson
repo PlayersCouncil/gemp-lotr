@@ -2,17 +2,9 @@
 
 	13_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR13001.jpg
-			//parentId: 13_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13001.jpg
 			collInfo: 13R1
 			rarity: R
-			setNum: "13"
-			cardNum: 1
-			style: Standard
 		}
 		title: Arod
 		subtitle: Rohirrim Steed
@@ -71,17 +63,9 @@
 
 	13_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR13002.jpg
-			//parentId: 13_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13002.jpg
 			collInfo: 13C2
 			rarity: C
-			setNum: "13"
-			cardNum: 2
-			style: Standard
 		}
 		title: Awkward Moment
 		unique: false
@@ -135,17 +119,9 @@
 
 	13_3: {
 		cardInfo: {
-			imagePath: decipher/LOTR13003.jpg
-			//parentId: 13_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13003.jpg
 			collInfo: 13U3
 			rarity: U
-			setNum: "13"
-			cardNum: 3
-			style: Standard
 		}
 		title: Deep Hatred
 		unique: false
@@ -219,17 +195,9 @@
 
 	13_4: {
 		cardInfo: {
-			imagePath: decipher/LOTR13004.jpg
-			//parentId: 13_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13004.jpg
 			collInfo: 13U4
 			rarity: U
-			setNum: "13"
-			cardNum: 4
-			style: Standard
 		}
 		title: Dwarf-lords
 		unique: false
@@ -281,17 +249,9 @@
 
 	13_5: {
 		cardInfo: {
-			imagePath: decipher/LOTR13005.jpg
-			//parentId: 13_5
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13005.jpg
 			collInfo: 13R5
 			rarity: R
-			setNum: "13"
-			cardNum: 5
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Lord of the Glittering Caves
@@ -352,17 +312,9 @@
 
 	13_6: {
 		cardInfo: {
-			imagePath: decipher/LOTR13006.jpg
-			//parentId: 13_6
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13006.jpg
 			collInfo: 13C6
 			rarity: C
-			setNum: "13"
-			cardNum: 6
-			style: Standard
 		}
 		title: Honoring His Kinfolk
 		unique: false
@@ -408,17 +360,9 @@
 
 	13_7: {
 		cardInfo: {
-			imagePath: decipher/LOTR13007.jpg
-			//parentId: 13_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13007.jpg
 			collInfo: 13C7
 			rarity: C
-			setNum: "13"
-			cardNum: 7
-			style: Standard
 		}
 		title: Sorrow Shared
 		unique: false
@@ -454,17 +398,9 @@
 
 	13_8: {
 		cardInfo: {
-			imagePath: decipher/LOTR13008.jpg
-			//parentId: 13_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13008.jpg
 			collInfo: 13R8
 			rarity: R
-			setNum: "13"
-			cardNum: 8
-			style: Standard
 		}
 		title: Subterranean Homestead
 		unique: true

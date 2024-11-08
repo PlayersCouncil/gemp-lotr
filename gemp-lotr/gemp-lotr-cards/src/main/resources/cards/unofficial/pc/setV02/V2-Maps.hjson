@@ -2,17 +2,10 @@
 
 	102_74: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S074.0_card.jpg
-			//parentId: 102_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_74
+			image: sets/V2/LOTR-ENV2S074.0_card.jpg
 			collInfo: V2_74
 			rarity: _
-			setNum: V2
-			cardNum: 74
-			style: Standard
 		}
 		title: Path of the Fellowship
 		unique: false
@@ -44,17 +37,10 @@
 	
 	102_75: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S075.0_card.jpg
-			//parentId: 102_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_75
+			image: sets/V2/LOTR-ENV2S075.0_card.jpg
 			collInfo: V2_75
 			rarity: _
-			setNum: V2
-			cardNum: 75
-			style: Standard
 		}
 		title: Road to the Towers
 		unique: false
@@ -87,17 +73,10 @@
 	
 	102_76: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S076.0_card.jpg
-			//parentId: 102_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_76
+			image: sets/V2/LOTR-ENV2S076.0_card.jpg
 			collInfo: V2_76
 			rarity: _
-			setNum: V2
-			cardNum: 76
-			style: Standard
 		}
 		title: Journey of the King
 		unique: false

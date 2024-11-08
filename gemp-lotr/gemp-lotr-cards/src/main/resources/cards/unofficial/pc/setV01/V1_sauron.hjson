@@ -2,17 +2,10 @@
 
 	101_44: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S044.0_card.jpg
-			//parentId: 101_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_44
+			image: sets/vset1/LOTR-ENV1S044.0_card.jpg
 			collInfo: V1C44
 			rarity: C
-			setNum: "V1"
-			cardNum: 44
-			style: Standard
 		}
 		title: Fell to Its Power
 		unique: false
@@ -56,17 +49,10 @@
 
 	101_45: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S045.0_card.jpg
-			//parentId: 101_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_45
+			image: sets/vset1/LOTR-ENV1S045.0_card.jpg
 			collInfo: V1U45
 			rarity: U
-			setNum: "V1"
-			cardNum: 45
-			style: Standard
 		}
 		title: Gaze of the Eye
 		unique: true
@@ -105,17 +91,10 @@
 
 	101_46: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S046.0_card.jpg
-			//parentId: 101_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_46
+			image: sets/vset1/LOTR-ENV1S046.0_card.jpg
 			collInfo: V1C46
 			rarity: C
-			setNum: "V1"
-			cardNum: 46
-			style: Standard
 		}
 		title: I See You
 		unique: false
@@ -168,17 +147,10 @@
 
 	101_47: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S047.0_card.jpg
-			//parentId: 101_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_47
+			image: sets/vset1/LOTR-ENV1S047.0_card.jpg
 			collInfo: V1C47
 			rarity: C
-			setNum: "V1"
-			cardNum: 47
-			style: Standard
 		}
 		title: It Betrayed Isildur
 		unique: false
@@ -243,17 +215,10 @@
 
 	101_48: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S048.0_card.jpg
-			//parentId: 101_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_48
+			image: sets/vset1/LOTR-ENV1S048.0_card.jpg
 			collInfo: V1R48
 			rarity: R
-			setNum: "V1"
-			cardNum: 48
-			style: Standard
 		}
 		title: Orc Ambush Troop
 		unique: false
@@ -306,17 +271,10 @@
 
 	101_49: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S049.0_card.jpg
-			//parentId: 101_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_49
+			image: sets/vset1/LOTR-ENV1S049.0_card.jpg
 			collInfo: V1R49
 			rarity: R
-			setNum: "V1"
-			cardNum: 49
-			style: Standard
 		}
 		title: A Shadow of the Past
 		unique: true

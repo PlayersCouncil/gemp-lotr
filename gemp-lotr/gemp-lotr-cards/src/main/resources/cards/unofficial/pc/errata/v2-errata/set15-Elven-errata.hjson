@@ -2,17 +2,11 @@
 
 	65_14: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN15E014.1_card.jpg
-			//parentId: 15_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 65_14.1
+			revision: 1
+			image: errata/LOTR-EN15E014.1_card.jpg
 			collInfo: 15C14
 			rarity: C
-			setNum: "15"
-			cardNum: 14
-			style: Standard
 		}
 		title: Elven Warrior
 		unique: false
@@ -60,17 +54,11 @@
 
 	65_17: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN15E017.1_card.jpg
-			//parentId: 15_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 65_17.1
+			revision: 1
+			image: errata/LOTR-EN15E017.1_card.jpg
 			collInfo: 15U17
 			rarity: U
-			setNum: "15"
-			cardNum: 17
-			style: Standard
 		}
 		title: Haldir
 		subtitle: Sentry of the Golden Wood

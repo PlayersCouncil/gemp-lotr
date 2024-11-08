@@ -1,17 +1,14 @@
 {
 	53_82: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E082.1.jpg
-			javaClass: false
+			//id: 3_82.1
 			parent: 3_82
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN03E082.1.jpg
 			collInfo: 3U82
 			rarity: U
-			setNum: "3"
-			cardNum: 82
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: News of Mordor
 		culture: wraith
@@ -76,7 +73,7 @@
 	# 		javaClass: false
 	# 		parent: 3_85
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 3R85
 	# 		rarity: R
 	# 		setNum: "3"
@@ -171,7 +168,7 @@
 	# 		javaClass: false
 	# 		parent: 3_85
 	# 		parentPath: errata/pc
-	# 		version: 2
+	# 		revision: 2
 	# 		collInfo: 3R85
 	# 		rarity: R
 	# 		setNum: "3"
@@ -224,17 +221,14 @@
 	
 	53_85: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E085.3_card.jpg
-			//parentId: 3_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 3
+			//id: 3_85.3
+			parent: 3_85
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 3
+			image: errata/LOTR-EN03E085.3_card.jpg
 			collInfo: 3R85
 			rarity: R
-			setNum: "3"
-			cardNum: 85
-			style: Standard
 		}
 		title: Too Great and Terrible
 		unique: false

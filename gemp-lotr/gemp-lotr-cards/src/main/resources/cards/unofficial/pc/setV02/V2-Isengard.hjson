@@ -2,17 +2,10 @@
 
 	102_18: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S018.0_card.jpg
-			//parentId: 102_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_18
+			image: sets/V2/LOTR-ENV2S018.0_card.jpg
 			collInfo: V2_18
 			rarity: _
-			setNum: V2
-			cardNum: 18
-			style: Standard
 		}
 		title: Back on the Menu
 		unique: false
@@ -63,17 +56,10 @@
 
 	102_19: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S019.0_card.jpg
-			//parentId: 102_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_19
+			image: sets/V2/LOTR-ENV2S019.0_card.jpg
 			collInfo: V2_19
 			rarity: _
-			setNum: V2
-			cardNum: 19
-			style: Standard
 		}
 		title: Berserk Deathseeker
 		unique: true
@@ -122,17 +108,10 @@
 
 	102_20: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S020.0_card.jpg
-			//parentId: 102_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_20
+			image: sets/V2/LOTR-ENV2S020.0_card.jpg
 			collInfo: V2_20
 			rarity: _
-			setNum: V2
-			cardNum: 20
-			style: Standard
 		}
 		title: Berserk Fanatic
 		unique: false
@@ -189,17 +168,10 @@
 
 	102_21: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S021.0_card.jpg
-			//parentId: 102_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_21
+			image: sets/V2/LOTR-ENV2S021.0_card.jpg
 			collInfo: V2_21
 			rarity: _
-			setNum: V2
-			cardNum: 21
-			style: Standard
 		}
 		title: Breaching Shot
 		unique: false
@@ -257,17 +229,10 @@
 
 	102_22: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S022.0_card.jpg
-			//parentId: 102_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_22
+			image: sets/V2/LOTR-ENV2S022.0_card.jpg
 			collInfo: V2_22
 			rarity: _
-			setNum: V2
-			cardNum: 22
-			style: Standard
 		}
 		title: Fell from Wisdom into Folly
 		unique: false
@@ -344,17 +309,10 @@
 
 	102_23: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S023.0_card.jpg
-			//parentId: 102_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_23
+			image: sets/V2/LOTR-ENV2S023.0_card.jpg
 			collInfo: V2_23
 			rarity: _
-			setNum: V2
-			cardNum: 23
-			style: Standard
 		}
 		title: Fires of Industry
 		unique: true
@@ -434,17 +392,10 @@
 
 	102_24: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S024.0_card.jpg
-			//parentId: 102_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_24
+			image: sets/V2/LOTR-ENV2S024.0_card.jpg
 			collInfo: V2_24
 			rarity: _
-			setNum: V2
-			cardNum: 24
-			style: Standard
 		}
 		title: Hound of Isengard
 		unique: false
@@ -484,17 +435,10 @@
 
 	102_25: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S025.0_card.jpg
-			//parentId: 102_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_25
+			image: sets/V2/LOTR-ENV2S025.0_card.jpg
 			collInfo: V2_25
 			rarity: _
-			setNum: V2
-			cardNum: 25
-			style: Standard
 		}
 		title: Isengard Foreman
 		unique: true
@@ -509,6 +453,7 @@
 		effects: [
 			{
 				type: Trigger
+				optional: true
 				trigger: {
 					type: Played
 					filter: self
@@ -555,17 +500,10 @@
 
 	102_26: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S026.0_card.jpg
-			//parentId: 102_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_26
+			image: sets/V2/LOTR-ENV2S026.0_card.jpg
 			collInfo: V2_26
 			rarity: _
-			setNum: V2
-			cardNum: 26
-			style: Standard
 		}
 		title: Isengard Grunt
 		unique: false
@@ -605,17 +543,10 @@
 
 	102_27: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S027.0_card.jpg
-			//parentId: 102_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_27
+			image: sets/V2/LOTR-ENV2S027.0_card.jpg
 			collInfo: V2_27
 			rarity: _
-			setNum: V2
-			cardNum: 27
-			style: Standard
 		}
 		title: Legion of Isengard
 		unique: true
@@ -667,17 +598,10 @@
 
 	102_28: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S028.0_card.jpg
-			//parentId: 102_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_28
+			image: sets/V2/LOTR-ENV2S028.0_card.jpg
 			collInfo: V2_28
 			rarity: _
-			setNum: V2
-			cardNum: 28
-			style: Standard
 		}
 		title: Machinery of War
 		unique: false
@@ -762,17 +686,10 @@
 
 	102_29: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S029.0_card.jpg
-			//parentId: 102_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_29
+			image: sets/V2/LOTR-ENV2S029.0_card.jpg
 			collInfo: V2_29
 			rarity: _
-			setNum: V2
-			cardNum: 29
-			style: Standard
 		}
 		title: Saruman
 		subtitle: Mind of Metal and Wheels
@@ -834,17 +751,10 @@
 
 	102_30: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S030.0_card.jpg
-			//parentId: 102_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_30
+			image: sets/V2/LOTR-ENV2S030.0_card.jpg
 			collInfo: V2_30
 			rarity: _
-			setNum: V2
-			cardNum: 30
-			style: Standard
 		}
 		title: Strength of the Pack
 		unique: false
@@ -889,17 +799,10 @@
 
 	102_31: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S031.0_card.jpg
-			//parentId: 102_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_31
+			image: sets/V2/LOTR-ENV2S031.0_card.jpg
 			collInfo: V2_31
 			rarity: _
-			setNum: V2
-			cardNum: 31
-			style: Standard
 		}
 		title: Trail of Savagery
 		unique: true
@@ -949,17 +852,10 @@
 
 	102_32: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S032.0_card.jpg
-			//parentId: 102_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_32
+			image: sets/V2/LOTR-ENV2S032.0_card.jpg
 			collInfo: V2_32
 			rarity: _
-			setNum: V2
-			cardNum: 32
-			style: Standard
 		}
 		title: Uneasy Alliance
 		unique: false
@@ -1025,17 +921,10 @@
 
 	102_33: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S033.0_card.jpg
-			//parentId: 102_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_33
+			image: sets/V2/LOTR-ENV2S033.0_card.jpg
 			collInfo: V2_33
 			rarity: _
-			setNum: V2
-			cardNum: 33
-			style: Standard
 		}
 		title: Uruk Grumbler
 		unique: false
@@ -1090,17 +979,10 @@
 
 	102_34: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S034.0_card.jpg
-			//parentId: 102_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_34
+			image: sets/V2/LOTR-ENV2S034.0_card.jpg
 			collInfo: V2_34
 			rarity: _
-			setNum: V2
-			cardNum: 34
-			style: Standard
 		}
 		title: Uruk Occupier
 		unique: false
@@ -1163,17 +1045,10 @@
 
 	102_35: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S035.0_card.jpg
-			//parentId: 102_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_35
+			image: sets/V2/LOTR-ENV2S035.0_card.jpg
 			collInfo: V2_35
 			rarity: _
-			setNum: V2
-			cardNum: 35
-			style: Standard
 		}
 		title: Uruk Shield Wall
 		unique: false
@@ -1244,17 +1119,10 @@
 
 	102_36: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S036.0_card.jpg
-			//parentId: 102_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_36
+			image: sets/V2/LOTR-ENV2S036.0_card.jpg
 			collInfo: V2_36
 			rarity: _
-			setNum: V2
-			cardNum: 36
-			style: Standard
 		}
 		title: Wolf Pit
 		unique: false

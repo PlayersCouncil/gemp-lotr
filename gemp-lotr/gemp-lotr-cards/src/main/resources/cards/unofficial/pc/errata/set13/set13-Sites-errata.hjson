@@ -2,17 +2,11 @@
 
 	63_188: {
 		cardInfo: {
-			imagePath: errata/63_188.jpg
-			javaClass: false
-			parent: 13_188
-			parentPath: errata/pc
-			version: 1?
+			//id: 3_188.1
+			revision: 1
+			image: errata/63_188.jpg
 			collInfo: 13U188
 			rarity: U
-			setNum: "13"
-			cardNum: 188
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Courtyard Parapet
 		type: site

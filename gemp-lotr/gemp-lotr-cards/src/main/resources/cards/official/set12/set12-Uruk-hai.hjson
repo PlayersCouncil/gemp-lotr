@@ -2,17 +2,9 @@
 
 	12_134: {
 		cardInfo: {
-			imagePath: decipher/LOTR12134.jpg
-			//parentId: 12_134
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12134.jpg
 			collInfo: 12C134
 			rarity: C
-			setNum: "12"
-			cardNum: 134
-			style: Standard
 		}
 		title: Advancing Uruk
 		unique: false
@@ -57,17 +49,9 @@
 
 	12_135: {
 		cardInfo: {
-			imagePath: decipher/LOTR12135.jpg
-			//parentId: 12_135
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12135.jpg
 			collInfo: 12U135
 			rarity: U
-			setNum: "12"
-			cardNum: 135
-			style: Standard
 		}
 		title: Barbaric Uruk
 		unique: false
@@ -105,17 +89,9 @@
 
 	12_136: {
 		cardInfo: {
-			imagePath: decipher/LOTR12136.jpg
-			//parentId: 12_136
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12136.jpg
 			collInfo: 12U136
 			rarity: U
-			setNum: "12"
-			cardNum: 136
-			style: Standard
 		}
 		title: Berserker Torch
 		unique: false
@@ -152,17 +128,9 @@
 
 	12_137: {
 		cardInfo: {
-			imagePath: decipher/LOTR12137.jpg
-			//parentId: 12_137
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12137.jpg
 			collInfo: 12C137
 			rarity: C
-			setNum: "12"
-			cardNum: 137
-			style: Standard
 		}
 		title: Breeding Pit Conscript
 		unique: false
@@ -208,17 +176,9 @@
 
 	12_138: {
 		cardInfo: {
-			imagePath: decipher/LOTR12138.jpg
-			//parentId: 12_138
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12138.jpg
 			collInfo: 12U138
 			rarity: U
-			setNum: "12"
-			cardNum: 138
-			style: Standard
 		}
 		title: Broken Heirloom
 		unique: false
@@ -254,17 +214,9 @@
 
 	12_139: {
 		cardInfo: {
-			imagePath: decipher/LOTR12139.jpg
-			//parentId: 12_139
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12139.jpg
 			collInfo: 12R139
 			rarity: R
-			setNum: "12"
-			cardNum: 139
-			style: Standard
 		}
 		title: Broken in Defeat
 		unique: false
@@ -311,17 +263,9 @@
 
 	12_140: {
 		cardInfo: {
-			imagePath: decipher/LOTR12140.jpg
-			//parentId: 12_140
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12140.jpg
 			collInfo: 12U140
 			rarity: U
-			setNum: "12"
-			cardNum: 140
-			style: Standard
 		}
 		title: Crushing Uruk
 		unique: false
@@ -366,17 +310,9 @@
 
 	12_141: {
 		cardInfo: {
-			imagePath: decipher/LOTR12141.jpg
-			//parentId: 12_141
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12141.jpg
 			collInfo: 12R141
 			rarity: R
-			setNum: "12"
-			cardNum: 141
-			style: Standard
 		}
 		title: Dark Alliance
 		unique: false
@@ -420,17 +356,9 @@
 
 	12_142: {
 		cardInfo: {
-			imagePath: decipher/LOTR12142.jpg
-			//parentId: 12_142
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12142.jpg
 			collInfo: 12C142
 			rarity: C
-			setNum: "12"
-			cardNum: 142
-			style: Standard
 		}
 		title: Merciless Uruk
 		unique: false
@@ -474,17 +402,9 @@
 
 	12_143: {
 		cardInfo: {
-			imagePath: decipher/LOTR12143.jpg
-			//parentId: 12_143
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12143.jpg
 			collInfo: 12C143
 			rarity: C
-			setNum: "12"
-			cardNum: 143
-			style: Standard
 		}
 		title: Quelling Force
 		unique: false
@@ -520,17 +440,9 @@
 
 	12_144: {
 		cardInfo: {
-			imagePath: decipher/LOTR12144.jpg
-			//parentId: 12_144
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12144.jpg
 			collInfo: 12S144
 			rarity: S
-			setNum: "12"
-			cardNum: 144
-			style: Standard
 		}
 		title: Saruman
 		subtitle: Agent of the Dark Lord
@@ -595,17 +507,9 @@
 
 	12_145: {
 		cardInfo: {
-			imagePath: decipher/LOTR12145.jpg
-			//parentId: 12_145
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12145.jpg
 			collInfo: 12C145
 			rarity: C
-			setNum: "12"
-			cardNum: 145
-			style: Standard
 		}
 		title: Shingle in a Storm
 		unique: false
@@ -656,17 +560,9 @@
 
 	12_146: {
 		cardInfo: {
-			imagePath: decipher/LOTR12146.jpg
-			//parentId: 12_146
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12146.jpg
 			collInfo: 12C146
 			rarity: C
-			setNum: "12"
-			cardNum: 146
-			style: Standard
 		}
 		title: Strange Device
 		unique: false
@@ -720,17 +616,9 @@
 
 	12_147: {
 		cardInfo: {
-			imagePath: decipher/LOTR12147.jpg
-			//parentId: 12_147
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12147.jpg
 			collInfo: 12U147
 			rarity: U
-			setNum: "12"
-			cardNum: 147
-			style: Standard
 		}
 		title: Suppressing Uruk
 		unique: true
@@ -770,17 +658,9 @@
 
 	12_148: {
 		cardInfo: {
-			imagePath: decipher/LOTR12148.jpg
-			//parentId: 12_148
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12148.jpg
 			collInfo: 12U148
 			rarity: U
-			setNum: "12"
-			cardNum: 148
-			style: Standard
 		}
 		title: Tempest of War
 		unique: false
@@ -838,17 +718,9 @@
 
 	12_149: {
 		cardInfo: {
-			imagePath: decipher/LOTR12149.jpg
-			//parentId: 12_149
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12149.jpg
 			collInfo: 12C149
 			rarity: C
-			setNum: "12"
-			cardNum: 149
-			style: Standard
 		}
 		title: Uruk Common
 		unique: false
@@ -907,17 +779,9 @@
 
 	12_150: {
 		cardInfo: {
-			imagePath: decipher/LOTR12150.jpg
-			//parentId: 12_150
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12150.jpg
 			collInfo: 12R150
 			rarity: R
-			setNum: "12"
-			cardNum: 150
-			style: Standard
 		}
 		title: Uruk Decimator
 		unique: false
@@ -965,17 +829,9 @@
 
 	12_151: {
 		cardInfo: {
-			imagePath: decipher/LOTR12151.jpg
-			//parentId: 12_151
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12151.jpg
 			collInfo: 12S151
 			rarity: S
-			setNum: "12"
-			cardNum: 151
-			style: Standard
 		}
 		title: Uruk Desecrator
 		unique: false
@@ -1014,17 +870,9 @@
 
 	12_152: {
 		cardInfo: {
-			imagePath: decipher/LOTR12152.jpg
-			//parentId: 12_152
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12152.jpg
 			collInfo: 12S152
 			rarity: S
-			setNum: "12"
-			cardNum: 152
-			style: Standard
 		}
 		title: Uruk Dominator
 		unique: true
@@ -1084,17 +932,9 @@
 
 	12_153: {
 		cardInfo: {
-			imagePath: decipher/LOTR12153.jpg
-			//parentId: 12_153
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12153.jpg
 			collInfo: 12C153
 			rarity: C
-			setNum: "12"
-			cardNum: 153
-			style: Standard
 		}
 		title: Uruk Pikeman
 		unique: false
@@ -1138,17 +978,9 @@
 
 	12_154: {
 		cardInfo: {
-			imagePath: decipher/LOTR12154.jpg
-			//parentId: 12_154
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12154.jpg
 			collInfo: 12R154
 			rarity: R
-			setNum: "12"
-			cardNum: 154
-			style: Standard
 		}
 		title: Uruk Slaughterer
 		unique: false
@@ -1199,17 +1031,9 @@
 
 	12_155: {
 		cardInfo: {
-			imagePath: decipher/LOTR12155.jpg
-			//parentId: 12_155
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12155.jpg
 			collInfo: 12R155
 			rarity: R
-			setNum: "12"
-			cardNum: 155
-			style: Standard
 		}
 		title: Uruk Zealot
 		unique: true
@@ -1264,17 +1088,9 @@
 
 	12_156: {
 		cardInfo: {
-			imagePath: decipher/LOTR12156.jpg
-			//parentId: 12_156
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12156.jpg
 			collInfo: 12R156
 			rarity: R
-			setNum: "12"
-			cardNum: 156
-			style: Standard
 		}
 		title: Uruk-hai Guard
 		unique: false
@@ -1326,17 +1142,9 @@
 
 	12_157: {
 		cardInfo: {
-			imagePath: decipher/LOTR12157.jpg
-			//parentId: 12_157
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12157.jpg
 			collInfo: 12R157
 			rarity: R
-			setNum: "12"
-			cardNum: 157
-			style: Standard
 		}
 		title: Uruk-hai Troop
 		unique: false
@@ -1372,17 +1180,9 @@
 
 	12_158: {
 		cardInfo: {
-			imagePath: decipher/LOTR12158.jpg
-			//parentId: 12_158
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12158.jpg
 			collInfo: 12U158
 			rarity: U
-			setNum: "12"
-			cardNum: 158
-			style: Standard
 		}
 		title: Vicious Uruk
 		unique: false
@@ -1425,17 +1225,9 @@
 
 	12_159: {
 		cardInfo: {
-			imagePath: decipher/LOTR12159.jpg
-			//parentId: 12_159
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12159.jpg
 			collInfo: 12C159
 			rarity: C
-			setNum: "12"
-			cardNum: 159
-			style: Standard
 		}
 		title: Weapon of Opportunity
 		unique: false
@@ -1472,17 +1264,9 @@
 
 	12_160: {
 		cardInfo: {
-			imagePath: decipher/LOTR12160.jpg
-			//parentId: 12_160
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12160.jpg
 			collInfo: 12C160
 			rarity: C
-			setNum: "12"
-			cardNum: 160
-			style: Standard
 		}
 		title: Worthy of Mordor
 		unique: false

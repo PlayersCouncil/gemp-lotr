@@ -2,17 +2,14 @@
 
 	55_10: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN05E010.1_card.jpg
-			//parentId: 5_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 5_10.1
+			parent: 5_10
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN05E010.1_card.jpg
 			collInfo: 5U10
 			rarity: U
-			setNum: "5"
-			cardNum: 10
-			style: Standard
 		}
 		title: Balglin
 		subtitle: Elven Warrior
@@ -61,17 +58,14 @@
 
 	55_13: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN05E013.1_card.jpg
-			//parentId: 5_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 5_13.1
+			parent: 5_13
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN05E013.1_card.jpg
 			collInfo: 5U13
 			rarity: U
-			setNum: "5"
-			cardNum: 13
-			style: Standard
 		}
 		title: Taurnil
 		subtitle: Sharp-eyed Bowman

@@ -2,17 +2,9 @@
 
 	12_161: {
 		cardInfo: {
-			imagePath: decipher/LOTR12161.jpg
-			//parentId: 12_161
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12161.jpg
 			collInfo: 12U161
 			rarity: U
-			setNum: "12"
-			cardNum: 161
-			style: Standard
 		}
 		title: Black Rider
 		unique: false
@@ -51,17 +43,9 @@
 
 	12_162: {
 		cardInfo: {
-			imagePath: decipher/LOTR12162.jpg
-			//parentId: 12_162
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12162.jpg
 			collInfo: 12R162
 			rarity: R
-			setNum: "12"
-			cardNum: 162
-			style: Standard
 		}
 		title: Dark Approach
 		unique: false
@@ -98,17 +82,9 @@
 
 	12_163: {
 		cardInfo: {
-			imagePath: decipher/LOTR12163.jpg
-			//parentId: 12_163
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12163.jpg
 			collInfo: 12R163
 			rarity: R
-			setNum: "12"
-			cardNum: 163
-			style: Standard
 		}
 		title: Dark Temptation
 		unique: false
@@ -148,17 +124,9 @@
 
 	12_164: {
 		cardInfo: {
-			imagePath: decipher/LOTR12164.jpg
-			//parentId: 12_164
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12164.jpg
 			collInfo: 12C164
 			rarity: C
-			setNum: "12"
-			cardNum: 164
-			style: Standard
 		}
 		title: Echo of Hooves
 		unique: false
@@ -203,17 +171,9 @@
 
 	12_165: {
 		cardInfo: {
-			imagePath: decipher/LOTR12165.jpg
-			//parentId: 12_165
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12165.jpg
 			collInfo: 12U165
 			rarity: U
-			setNum: "12"
-			cardNum: 165
-			style: Standard
 		}
 		title: In the Ringwraith's Wake
 		unique: false
@@ -261,17 +221,9 @@
 
 	12_166: {
 		cardInfo: {
-			imagePath: decipher/LOTR12166.jpg
-			//parentId: 12_166
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12166.jpg
 			collInfo: 12U166
 			rarity: U
-			setNum: "12"
-			cardNum: 166
-			style: Standard
 		}
 		title: Lingering Shadow
 		unique: false
@@ -315,17 +267,9 @@
 
 	12_167: {
 		cardInfo: {
-			imagePath: decipher/LOTR12167.jpg
-			//parentId: 12_167
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12167.jpg
 			collInfo: 12U167
 			rarity: U
-			setNum: "12"
-			cardNum: 167
-			style: Standard
 		}
 		title: Minas Morgul Answers
 		unique: false
@@ -361,17 +305,9 @@
 
 	12_168: {
 		cardInfo: {
-			imagePath: decipher/LOTR12168.jpg
-			//parentId: 12_168
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12168.jpg
 			collInfo: 12C168
 			rarity: C
-			setNum: "12"
-			cardNum: 168
-			style: Standard
 		}
 		title: Nazgûl Blade
 		unique: false
@@ -409,17 +345,9 @@
 
 	12_169: {
 		cardInfo: {
-			imagePath: decipher/LOTR12169.jpg
-			//parentId: 12_169
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12169.jpg
 			collInfo: 12R169
 			rarity: R
-			setNum: "12"
-			cardNum: 169
-			style: Standard
 		}
 		title: Sauron's Gaze
 		unique: false
@@ -461,17 +389,9 @@
 
 	12_170: {
 		cardInfo: {
-			imagePath: decipher/LOTR12170.jpg
-			//parentId: 12_170
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12170.jpg
 			collInfo: 12U170
 			rarity: U
-			setNum: "12"
-			cardNum: 170
-			style: Standard
 		}
 		title: Sense of Obligation
 		unique: false
@@ -522,17 +442,9 @@
 
 	12_171: {
 		cardInfo: {
-			imagePath: decipher/LOTR12171.jpg
-			//parentId: 12_171
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12171.jpg
 			collInfo: 12R171
 			rarity: R
-			setNum: "12"
-			cardNum: 171
-			style: Standard
 		}
 		title: Shadowy Mount
 		unique: false
@@ -580,17 +492,9 @@
 
 	12_172: {
 		cardInfo: {
-			imagePath: decipher/LOTR12172.jpg
-			//parentId: 12_172
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12172.jpg
 			collInfo: 12C172
 			rarity: C
-			setNum: "12"
-			cardNum: 172
-			style: Standard
 		}
 		title: Steed of Mordor
 		unique: false
@@ -636,17 +540,9 @@
 
 	12_173: {
 		cardInfo: {
-			imagePath: decipher/LOTR12173.jpg
-			//parentId: 12_173
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12173.jpg
 			collInfo: 12R173
 			rarity: R
-			setNum: "12"
-			cardNum: 173
-			style: Standard
 		}
 		title: Úlairë Attëa
 		subtitle: Black Predator
@@ -695,17 +591,9 @@
 
 	12_174: {
 		cardInfo: {
-			imagePath: decipher/LOTR12174.jpg
-			//parentId: 12_174
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12174.jpg
 			collInfo: 12R174
 			rarity: R
-			setNum: "12"
-			cardNum: 174
-			style: Standard
 		}
 		title: Úlairë Cantëa
 		subtitle: Black Assassin
@@ -762,17 +650,9 @@
 
 	12_175: {
 		cardInfo: {
-			imagePath: decipher/LOTR12175.jpg
-			//parentId: 12_175
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12175.jpg
 			collInfo: 12R175
 			rarity: R
-			setNum: "12"
-			cardNum: 175
-			style: Standard
 		}
 		title: Úlairë Enquëa
 		subtitle: Black Threat
@@ -818,17 +698,9 @@
 
 	12_176: {
 		cardInfo: {
-			imagePath: decipher/LOTR12176.jpg
-			//parentId: 12_176
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12176.jpg
 			collInfo: 12U176
 			rarity: U
-			setNum: "12"
-			cardNum: 176
-			style: Standard
 		}
 		title: Úlairë Lemenya
 		subtitle: Black Enemy
@@ -868,17 +740,9 @@
 
 	12_177: {
 		cardInfo: {
-			imagePath: decipher/LOTR12177.jpg
-			//parentId: 12_177
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12177.jpg
 			collInfo: 12C177
 			rarity: C
-			setNum: "12"
-			cardNum: 177
-			style: Standard
 		}
 		title: Úlairë Nelya
 		subtitle: Black Hunter
@@ -918,17 +782,9 @@
 
 	12_178: {
 		cardInfo: {
-			imagePath: decipher/LOTR12178.jpg
-			//parentId: 12_178
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12178.jpg
 			collInfo: 12C178
 			rarity: C
-			setNum: "12"
-			cardNum: 178
-			style: Standard
 		}
 		title: Úlairë Nertëa
 		subtitle: Black Horseman
@@ -988,17 +844,9 @@
 
 	12_179: {
 		cardInfo: {
-			imagePath: decipher/LOTR12179.jpg
-			//parentId: 12_179
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12179.jpg
 			collInfo: 12R179
 			rarity: R
-			setNum: "12"
-			cardNum: 179
-			style: Standard
 		}
 		title: Úlairë Otsëa
 		subtitle: Black Specter
@@ -1045,17 +893,9 @@
 
 	12_180: {
 		cardInfo: {
-			imagePath: decipher/LOTR12180.jpg
-			//parentId: 12_180
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12180.jpg
 			collInfo: 12U180
 			rarity: U
-			setNum: "12"
-			cardNum: 180
-			style: Standard
 		}
 		title: Úlairë Toldëa
 		subtitle: Black Shadow
@@ -1100,17 +940,9 @@
 
 	12_181: {
 		cardInfo: {
-			imagePath: decipher/LOTR12181.jpg
-			//parentId: 12_181
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12181.jpg
 			collInfo: 12C181
 			rarity: C
-			setNum: "12"
-			cardNum: 181
-			style: Standard
 		}
 		title: Unending Life
 		unique: false
@@ -1159,17 +991,9 @@
 
 	12_182: {
 		cardInfo: {
-			imagePath: decipher/LOTR12182.jpg
-			//parentId: 12_182
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12182.jpg
 			collInfo: 12C182
 			rarity: C
-			setNum: "12"
-			cardNum: 182
-			style: Standard
 		}
 		title: Unimpeded
 		unique: false
@@ -1247,17 +1071,9 @@
 
 	12_183: {
 		cardInfo: {
-			imagePath: decipher/LOTR12183.jpg
-			//parentId: 12_183
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12183.jpg
 			collInfo: 12R183
 			rarity: R
-			setNum: "12"
-			cardNum: 183
-			style: Standard
 		}
 		title: The Witch-king
 		subtitle: Black Lord
@@ -1309,17 +1125,9 @@
 
 	12_184: {
 		cardInfo: {
-			imagePath: decipher/LOTR12184.jpg
-			//parentId: 12_184
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12184.jpg
 			collInfo: 12U184
 			rarity: U
-			setNum: "12"
-			cardNum: 184
-			style: Standard
 		}
 		title: The Witch-king's Beast
 		subtitle: Fell Creature

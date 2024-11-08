@@ -2,17 +2,9 @@
 
 	13_142: {
 		cardInfo: {
-			imagePath: decipher/LOTR13142.jpg
-			//parentId: 13_142
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13142.jpg
 			collInfo: 13R142
 			rarity: R
-			setNum: "13"
-			cardNum: 142
-			style: Standard
 		}
 		title: Bilbo
 		subtitle: Aged Ring-bearer
@@ -68,17 +60,9 @@
 
 	13_143: {
 		cardInfo: {
-			imagePath: decipher/LOTR13143.jpg
-			//parentId: 13_143
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13143.jpg
 			collInfo: 13R143
 			rarity: R
-			setNum: "13"
-			cardNum: 143
-			style: Standard
 		}
 		title: Bill the Pony
 		subtitle: Dearly-loved
@@ -134,17 +118,9 @@
 
 	13_144: {
 		cardInfo: {
-			imagePath: decipher/LOTR13144.jpg
-			//parentId: 13_144
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13144.jpg
 			collInfo: 13U144
 			rarity: U
-			setNum: "13"
-			cardNum: 144
-			style: Standard
 		}
 		title: Daddy Twofoot
 		subtitle: Next-door Neighbor
@@ -188,17 +164,9 @@
 
 	13_145: {
 		cardInfo: {
-			imagePath: decipher/LOTR13145.jpg
-			//parentId: 13_145
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13145.jpg
 			collInfo: 13C145
 			rarity: C
-			setNum: "13"
-			cardNum: 145
-			style: Standard
 		}
 		title: Don't Let Go
 		unique: false
@@ -278,17 +246,9 @@
 
 	13_146: {
 		cardInfo: {
-			imagePath: decipher/LOTR13146.jpg
-			//parentId: 13_146
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13146.jpg
 			collInfo: 13U146
 			rarity: U
-			setNum: "13"
-			cardNum: 146
-			style: Standard
 		}
 		title: Everything but My Bones
 		unique: false
@@ -344,17 +304,9 @@
 
 	13_147: {
 		cardInfo: {
-			imagePath: decipher/LOTR13147.jpg
-			//parentId: 13_147
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13147.jpg
 			collInfo: 13C147
 			rarity: C
-			setNum: "13"
-			cardNum: 147
-			style: Standard
 		}
 		title: Faith in Friendship
 		unique: true
@@ -419,17 +371,9 @@
 
 	13_148: {
 		cardInfo: {
-			imagePath: decipher/LOTR13148.jpg
-			//parentId: 13_148
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13148.jpg
 			collInfo: 13U148
 			rarity: U
-			setNum: "13"
-			cardNum: 148
-			style: Standard
 		}
 		title: Fates Entwined
 		unique: false
@@ -476,17 +420,9 @@
 
 	13_149: {
 		cardInfo: {
-			imagePath: decipher/LOTR13149.jpg
-			//parentId: 13_149
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13149.jpg
 			collInfo: 13R149
 			rarity: R
-			setNum: "13"
-			cardNum: 149
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Frenzied Fighter
@@ -551,17 +487,9 @@
 
 	13_150: {
 		cardInfo: {
-			imagePath: decipher/LOTR13150.jpg
-			//parentId: 13_150
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13150.jpg
 			collInfo: 13U150
 			rarity: U
-			setNum: "13"
-			cardNum: 150
-			style: Standard
 		}
 		title: Frodo Gamgee
 		subtitle: Son of Samwise
@@ -611,17 +539,9 @@
 
 	13_151: {
 		cardInfo: {
-			imagePath: decipher/LOTR13151.jpg
-			//parentId: 13_151
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13151.jpg
 			collInfo: 13U151
 			rarity: U
-			setNum: "13"
-			cardNum: 151
-			style: Standard
 		}
 		title: The Gaffer
 		subtitle: Master Gardener
@@ -673,17 +593,9 @@
 
 	13_152: {
 		cardInfo: {
-			imagePath: decipher/LOTR13152.jpg
-			//parentId: 13_152
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13152.jpg
 			collInfo: 13R152
 			rarity: R
-			setNum: "13"
-			cardNum: 152
-			style: Standard
 		}
 		title: Humble Homestead
 		unique: true
@@ -757,17 +669,9 @@
 
 	13_153: {
 		cardInfo: {
-			imagePath: decipher/LOTR13153.jpg
-			//parentId: 13_153
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13153.jpg
 			collInfo: 13R153
 			rarity: R
-			setNum: "13"
-			cardNum: 153
-			style: Standard
 		}
 		title: Mithril-coat
 		subtitle: Dwarf-mail
@@ -815,17 +719,9 @@
 
 	13_154: {
 		cardInfo: {
-			imagePath: decipher/LOTR13154.jpg
-			//parentId: 13_154
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13154.jpg
 			collInfo: 13U154
 			rarity: U
-			setNum: "13"
-			cardNum: 154
-			style: Standard
 		}
 		title: New Chapter
 		unique: false
@@ -880,17 +776,9 @@
 
 	13_155: {
 		cardInfo: {
-			imagePath: decipher/LOTR13155.jpg
-			//parentId: 13_155
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13155.jpg
 			collInfo: 13R155
 			rarity: R
-			setNum: "13"
-			cardNum: 155
-			style: Standard
 		}
 		title: Phial of Galadriel
 		subtitle: The Light of Eärendil
@@ -953,17 +841,9 @@
 
 	13_156: {
 		cardInfo: {
-			imagePath: decipher/LOTR13156.jpg
-			//parentId: 13_156
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13156.jpg
 			collInfo: 13R156
 			rarity: R
-			setNum: "13"
-			cardNum: 156
-			style: Standard
 		}
 		title: Sam
 		subtitle: Bearer of Great Need
@@ -1022,17 +902,9 @@
 
 	13_157: {
 		cardInfo: {
-			imagePath: decipher/LOTR13157.jpg
-			//parentId: 13_157
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13157.jpg
 			collInfo: 13C157
 			rarity: C
-			setNum: "13"
-			cardNum: 157
-			style: Standard
 		}
 		title: Westfarthing Businessman
 		unique: false

@@ -65,16 +65,10 @@
 	
 	101_25: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S025.1_card.jpg
-			javaClass: false
-			parent: 101_25
-			parentPath: errata/pc
-			version: 1
+			//id: 101_25
+			image: sets/vset1/LOTR-ENV1S025.1_card.jpg
 			collInfo: V1C25
 			rarity: C
-			setNum: "V1"
-			cardNum: 25
-			style: Standard
 		}
 		title: Crebain Flock
 		unique: false
@@ -246,16 +240,10 @@
 	
 	101_26: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S026.1_card.jpg
-			javaClass: false
-			parent: 101_26
-			parentPath: errata/pc
-			version: 1
+			//id: 101_26
+			image: sets/vset1/LOTR-ENV1S026.1_card.jpg
 			collInfo: V1C26
 			rarity: C
-			setNum: "V1"
-			cardNum: 26
-			style: Standard
 		}
 		title: Crows of Isengard
 		unique: false
@@ -363,17 +351,10 @@
 
 	101_27: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S027.0_card.jpg
-			//parentId: 101_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_27
+			image: sets/vset1/LOTR-ENV1S027.0_card.jpg
 			collInfo: V1U27
 			rarity: U
-			setNum: "V1"
-			cardNum: 27
-			style: Standard
 		}
 		title: Frostbite
 		unique: false
@@ -478,16 +459,10 @@
 
 	101_28: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S028.1_card.jpg
-			javaClass: false
-			parent: 101_28
-			parentPath: errata/pc
-			version: 1
+			//id: 101_28
+			image: sets/vset1/LOTR-ENV1S028.1_card.jpg
 			collInfo: V1C28
 			rarity: C
-			setNum: "V1"
-			cardNum: 28
-			style: Standard
 		}
 		title: Just a Wisp of Cloud
 		unique: false
@@ -617,16 +592,10 @@
 	
 	101_29: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S029.1_card.jpg
-			javaClass: false
-			parent: 101_29
-			parentPath: errata/pc
-			version: 1
+			//id: 101_29
+			image: sets/vset1/LOTR-ENV1S029.1_card.jpg
 			collInfo: V1R29
 			rarity: R
-			setNum: "V1"
-			cardNum: 29
-			style: Standard
 		}
 		title: Murder of Crows
 		unique: true
@@ -714,17 +683,10 @@
 
 	101_30: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S030.0_card.jpg
-			//parentId: 101_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_30
+			image: sets/vset1/LOTR-ENV1S030.0_card.jpg
 			collInfo: V1R30
 			rarity: R
-			setNum: "V1"
-			cardNum: 30
-			style: Standard
 		}
 		title: Saruman
 		subtitle: Fell Voice

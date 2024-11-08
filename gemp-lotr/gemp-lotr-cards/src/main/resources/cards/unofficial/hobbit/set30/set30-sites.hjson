@@ -1,5 +1,10 @@
 {
 	30_49: {
+		cardInfo: {
+			image: hobbit/HDG3049.jpg
+			collInfo: 30_49
+			rarity: _
+		}
 		title: Bag End
 		type: site
 		block: hobbit
@@ -19,6 +24,11 @@
 		}
 	}
 	30_50: {
+		cardInfo: {
+			image: hobbit/HDG3050.jpg
+			collInfo: 30_50
+			rarity: _
+		}
 		title: The Troll Hoard
 		twilight: 3
 		type: site
@@ -48,6 +58,11 @@
 		}
 	}
 	30_51: {
+		cardInfo: {
+			image: hobbit/HDG3051.jpg
+			collInfo: 30_51
+			rarity: _
+		}
 		title: Rivendell
 		twilight: 1
 		type: site
@@ -62,6 +77,11 @@
 		}
 	}
 	30_52: {
+		cardInfo: {
+			image: hobbit/HDG3052.jpg
+			collInfo: 30_52
+			rarity: _
+		}
 		title: Goblin Town
 		twilight: 4
 		type: site
@@ -84,6 +104,11 @@
 		}
 	}
 	30_53: {
+		cardInfo: {
+			image: hobbit/HDG3053.jpg
+			collInfo: 30_53
+			rarity: _
+		}
 		title: Mirkwood
 		twilight: 6
 		type: site
@@ -103,6 +128,11 @@
 		}
 	}
 	30_54: {
+		cardInfo: {
+			image: hobbit/HDG3054.jpg
+			collInfo: 30_54
+			rarity: _
+		}
 		title: Esgaroth
 		twilight: 3
 		type: site
@@ -129,6 +159,11 @@
 		}
 	}
 	30_55: {
+		cardInfo: {
+			image: hobbit/HDG3055.jpg
+			collInfo: 30_55
+			rarity: _
+		}
 		title: Erebor
 		twilight: 6
 		type: site
@@ -158,6 +193,11 @@
 		}
 	}
 	30_56: {
+		cardInfo: {
+			image: hobbit/HDG3056.jpg
+			collInfo: 30_56
+			rarity: _
+		}
 		title: Smaug's Den
 		twilight: 8
 		type: site
@@ -192,6 +232,11 @@
 		}
 	}
 	30_57: {
+		cardInfo: {
+			image: hobbit/HDG3057.jpg
+			collInfo: 30_57
+			rarity: _
+		}
 		title: Battle of the Five Armies
 		twilight: 9
 		type: site
@@ -215,6 +260,11 @@
 		}
 	}
 	30_58: {
+		cardInfo: {
+			image: hobbit/HDG3058.jpg
+			collInfo: 30_58
+			rarity: _
+		}
 		title: Bilbo's Kitchen
 		twilight: 0
 		type: site
@@ -244,6 +294,11 @@
 		}
 	}
 	30_59: {
+		cardInfo: {
+			image: hobbit/HDG3059.jpg
+			collInfo: 30_59
+			rarity: _
+		}
 		title: Trollshaw Forest
 		twilight: 2
 		type: site
@@ -283,6 +338,11 @@
 		}
 	}
 	30_60: {
+		cardInfo: {
+			image: hobbit/HDG3060.jpg
+			collInfo: 30_60
+			rarity: _
+		}
 		title: Rhudaur
 		twilight: 1
 		type: site
@@ -306,6 +366,11 @@
 		}
 	}
 	30_61: {
+		cardInfo: {
+			image: hobbit/HDG3061.jpg
+			collInfo: 30_61
+			rarity: _
+		}
 		title: Wooded Steep Cliff
 		twilight: 3
 		type: site
@@ -343,6 +408,11 @@
 		}
 	}
 	30_62: {
+		cardInfo: {
+			image: hobbit/HDG3062.jpg
+			collInfo: 30_62
+			rarity: _
+		}
 		title: Old Forest Road
 		twilight: 5
 		type: site
@@ -371,6 +441,11 @@
 		}
 	}
 	30_63: {
+		cardInfo: {
+			image: hobbit/HDG3063.jpg
+			collInfo: 30_63
+			rarity: _
+		}
 		title: Lake-Town
 		twilight: 3
 		type: site
@@ -423,6 +498,11 @@
 		]
 	}
 	30_64: {
+		cardInfo: {
+			image: hobbit/HDG3064.jpg
+			collInfo: 30_64
+			rarity: _
+		}
 		title: Dale
 		twilight: 6
 		type: site
@@ -452,6 +532,11 @@
 		}
 	}
 	30_65: {
+		cardInfo: {
+			image: hobbit/HDG3065.jpg
+			collInfo: 30_65
+			rarity: _
+		}
 		title: Ravenhill
 		twilight: 8
 		type: site

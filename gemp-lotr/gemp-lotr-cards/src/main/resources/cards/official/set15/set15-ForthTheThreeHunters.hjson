@@ -1,17 +1,9 @@
 {
 	15_204: {
 		cardInfo: {
-			imagePath: decipher/LOTR15060.jpg
-			//parentId: 15_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15060.jpg
 			collInfo: 15C60
 			rarity: C
-			setNum: "15"
-			cardNum: 60
-			style: Standard
 		}
 		title: Forth the Three Hunters!
 		subtitle: Dwarven Version
@@ -115,17 +107,9 @@
 	
 	15_205: {
 		cardInfo: {
-			imagePath: decipher/LOTR15060.jpg
-			//parentId: 15_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15060.jpg
 			collInfo: 15C60
 			rarity: C
-			setNum: "15"
-			cardNum: 60
-			style: Standard
 		}
 		title: Forth the Three Hunters!
 		subtitle: Elven Version
@@ -229,17 +213,9 @@
 	
 	15_206: {
 		cardInfo: {
-			imagePath: decipher/LOTR15060.jpg
-			//parentId: 15_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15060.jpg
 			collInfo: 15C60
 			rarity: C
-			setNum: "15"
-			cardNum: 60
-			style: Standard
 		}
 		title: Forth the Three Hunters!
 		subtitle: Gondor Version

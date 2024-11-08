@@ -2,17 +2,9 @@
 
 	8_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR08067.jpg
-			//parentId: 8_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08067.jpg
 			collInfo: 8R67
 			rarity: R
-			setNum: "8"
-			cardNum: 67
-			style: Standard
 		}
 		title: Between Nazgûl and Prey
 		unique: false
@@ -50,17 +42,9 @@
 
 	8_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR08068.jpg
-			//parentId: 8_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08068.jpg
 			collInfo: 8R68
 			rarity: R
-			setNum: "8"
-			cardNum: 68
-			style: Standard
 		}
 		title: Beyond All Darkness
 		unique: false
@@ -120,17 +104,9 @@
 
 	8_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR08069.jpg
-			//parentId: 8_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08069.jpg
 			collInfo: 8U69
 			rarity: U
-			setNum: "8"
-			cardNum: 69
-			style: Standard
 		}
 		title: Black Dart
 		unique: false
@@ -182,17 +158,9 @@
 
 	8_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR08070.jpg
-			//parentId: 8_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08070.jpg
 			collInfo: 8R70
 			rarity: R
-			setNum: "8"
-			cardNum: 70
-			style: Standard
 		}
 		title: Black Flail
 		unique: true
@@ -240,17 +208,9 @@
 
 	8_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR08071.jpg
-			//parentId: 8_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08071.jpg
 			collInfo: 8U71
 			rarity: U
-			setNum: "8"
-			cardNum: 71
-			style: Standard
 		}
 		title: Flung Into the Fray
 		unique: true
@@ -324,17 +284,9 @@
 
 	8_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR08072.jpg
-			//parentId: 8_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08072.jpg
 			collInfo: 8R72
 			rarity: R
-			setNum: "8"
-			cardNum: 72
-			style: Standard
 		}
 		title: Gothmog
 		subtitle: Morgul Commander
@@ -374,17 +326,9 @@
 
 	8_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR08073.jpg
-			//parentId: 8_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08073.jpg
 			collInfo: 8U73
 			rarity: U
-			setNum: "8"
-			cardNum: 73
-			style: Standard
 		}
 		title: Mastered By Madness
 		unique: false
@@ -429,17 +373,9 @@
 
 	8_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR08074.jpg
-			//parentId: 8_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08074.jpg
 			collInfo: 8C74
 			rarity: C
-			setNum: "8"
-			cardNum: 74
-			style: Standard
 		}
 		title: Morgul Ambusher
 		unique: false
@@ -478,17 +414,9 @@
 
 	8_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR08075.jpg
-			//parentId: 8_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08075.jpg
 			collInfo: 8C75
 			rarity: C
-			setNum: "8"
-			cardNum: 75
-			style: Standard
 		}
 		title: Morgul Creeper
 		unique: false
@@ -527,17 +455,9 @@
 
 	8_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR08076.jpg
-			//parentId: 8_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08076.jpg
 			collInfo: 8C76
 			rarity: C
-			setNum: "8"
-			cardNum: 76
-			style: Standard
 		}
 		title: Morgul Lurker
 		unique: false
@@ -576,17 +496,9 @@
 
 	8_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR08077.jpg
-			//parentId: 8_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08077.jpg
 			collInfo: 8R77
 			rarity: R
-			setNum: "8"
-			cardNum: 77
-			style: Standard
 		}
 		title: Morgul Squealer
 		unique: false
@@ -657,17 +569,9 @@
 
 	8_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR08078.jpg
-			//parentId: 8_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08078.jpg
 			collInfo: 8U78
 			rarity: U
-			setNum: "8"
-			cardNum: 78
-			style: Standard
 		}
 		title: Streaming to the Field
 		unique: true
@@ -714,17 +618,9 @@
 
 	8_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR08079.jpg
-			//parentId: 8_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08079.jpg
 			collInfo: 8U79
 			rarity: U
-			setNum: "8"
-			cardNum: 79
-			style: Standard
 		}
 		title: Úlairë Attëa
 		subtitle: Thrall of The One
@@ -769,17 +665,9 @@
 
 	8_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR08080.jpg
-			//parentId: 8_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08080.jpg
 			collInfo: 8U80
 			rarity: U
-			setNum: "8"
-			cardNum: 80
-			style: Standard
 		}
 		title: Úlairë Nertëa
 		subtitle: Thrall of The One
@@ -819,17 +707,9 @@
 
 	8_81: {
 		cardInfo: {
-			imagePath: decipher/LOTR08081.jpg
-			//parentId: 8_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08081.jpg
 			collInfo: 8R81
 			rarity: R
-			setNum: "8"
-			cardNum: 81
-			style: Standard
 		}
 		title: Úlairë Otsëa
 		subtitle: Thrall of The One
@@ -875,17 +755,9 @@
 
 	8_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR08082.jpg
-			//parentId: 8_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08082.jpg
 			collInfo: 8U82
 			rarity: U
-			setNum: "8"
-			cardNum: 82
-			style: Standard
 		}
 		title: Unhindered
 		unique: false
@@ -932,17 +804,9 @@
 
 	8_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR08083.jpg
-			//parentId: 8_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08083.jpg
 			collInfo: 8U83
 			rarity: U
-			setNum: "8"
-			cardNum: 83
-			style: Standard
 		}
 		title: Winged Mount
 		unique: false
@@ -990,17 +854,9 @@
 
 	8_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR08084.jpg
-			//parentId: 8_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08084.jpg
 			collInfo: 8R84
 			rarity: R
-			setNum: "8"
-			cardNum: 84
-			style: Standard
 		}
 		title: The Witch-king
 		subtitle: Black Captain

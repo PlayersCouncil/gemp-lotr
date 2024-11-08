@@ -1,17 +1,14 @@
 {
 	52_20: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E020.1_card.jpg
-			javaClass: false
+			//id: 2_20.1
 			parent: 2_20
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN02E020.1_card.jpg
 			collInfo: 2R20
 			rarity: R
-			setNum: "2"
-			cardNum: 20
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Secret Sentinels
 		unique: false

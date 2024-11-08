@@ -1,5 +1,10 @@
 {
 	32_46: {
+		cardInfo: {
+			image: hobbit/HDG3246.jpg
+			collInfo: 32_46
+			rarity: _
+		}
 		title: Dol Guldur
 		twilight: 8
 		type: site
@@ -29,6 +34,11 @@
 		}
 	}
 	32_47: {
+		cardInfo: {
+			image: hobbit/HDG3247.jpg
+			collInfo: 32_47
+			rarity: _
+		}
 		title: Town Hall
 		twilight: 3
 		type: site
@@ -50,6 +60,11 @@
 		}
 	}
 	32_48: {
+		cardInfo: {
+			image: hobbit/HDG3248.jpg
+			collInfo: 32_48
+			rarity: _
+		}
 		title: Secret Door
 		twilight: 8
 		type: site
@@ -70,6 +85,11 @@
 		}
 	}
 	32_49: {
+		cardInfo: {
+			image: hobbit/HDG3249.jpg
+			collInfo: 32_49
+			rarity: _
+		}
 		title: Northern Slopes
 		twilight: 9
 		type: site

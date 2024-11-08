@@ -2,17 +2,14 @@
 
 	51_234: {
 		cardInfo: {
-			imagePath: errata/51_234.jpg
-			javaClass: false
+			//id: 1_234.1
 			parent: 1_234
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_234.jpg
 			collInfo: 1U234
 			rarity: U
-			setNum: "1"
-			cardNum: 234
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Úlairë Nertëa
 		subtitle: Messenger of Dol Guldur

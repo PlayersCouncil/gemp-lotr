@@ -2,17 +2,9 @@
 
 	10_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR10001.jpg
-			//parentId: 10_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10001.jpg
 			collInfo: 10R1
 			rarity: R
-			setNum: "10"
-			cardNum: 1
-			style: Standard
 		}
 		title: Great Day, Great Hour
 		unique: false
@@ -58,17 +50,9 @@
 
 	10_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR10002.jpg
-			//parentId: 10_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10002.jpg
 			collInfo: 10U2
 			rarity: U
-			setNum: "10"
-			cardNum: 2
-			style: Standard
 		}
 		title: Memories of Darkness
 		unique: true
@@ -131,17 +115,9 @@
 
 	10_3: {
 		cardInfo: {
-			imagePath: decipher/LOTR10003.jpg
-			//parentId: 10_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10003.jpg
 			collInfo: 10R3
 			rarity: R
-			setNum: "10"
-			cardNum: 3
-			style: Standard
 		}
 		title: More Yet to Come
 		unique: false

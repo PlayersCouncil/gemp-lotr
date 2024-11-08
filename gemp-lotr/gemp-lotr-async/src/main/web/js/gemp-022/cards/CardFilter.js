@@ -41,6 +41,8 @@ var CardFilter = Class.extend({
     
     nameLabel: null,
     nameInput: null,
+    gametextLabel: null,
+    gametextInput: null,
     
     productLabel:null,
     productSelect:null,
@@ -233,7 +235,7 @@ var CardFilter = Class.extend({
             
             + "</select>");
 
-        this.cardTypeLabel = $("<label for='cardTypeSelect' class='filterLabel'>Card&nbsp;type:</label>");
+        this.cardTypeLabel = $("<label for='cardTypeSelect' class='filterLabel'>Card&nbsp;Type:</label>");
         this.cardTypeSelect = $("<select id='cardTypeSelect' class='filterInput'>"
             + "<option value='' selected='selected'>Any</option>"
             + "<option value='COMPANION,ALLY,MINION'>Characters</option>"
@@ -457,8 +459,7 @@ var CardFilter = Class.extend({
         filterTable.append(genFilterTRPair(this.cardTypeLabel, this.cardTypeSelect));
         filterTable.append(genFilterTRSolo("Advanced filters (<a target='_blank' href='https://wiki.lotrtcgpc.net/wiki/Special:RunQuery/CardSearch'>See more on the Wiki.</a>)", "cardFilterText"));
         filterTable.append(genFilterTRPair(this.nameLabel, this.nameInput));
-        //Need to actually load game text before this can be done
-        //filterTable.append(genFilterTRPair(this.gametextLabel, this.gametextInput));
+        filterTable.append(genFilterTRPair(this.gametextLabel, this.gametextInput));
 
         filterTable.append(genFilterTR(this.keywordLabel, this.keywordSelect, this.phaseLabel, this.phaseSelect));
         filterTable.append(genFilterTR(this.raceLabel, this.raceSelect, this.itemClassLabel, this.itemClassSelect));
@@ -552,6 +553,7 @@ var CardFilter = Class.extend({
 
         this.setSelect.change(setFilterChanged);
         this.nameInput.change(fullFilterChanged);
+        this.gametextInput.change(fullFilterChanged);
         this.sortSelect.change(fullFilterChanged);
         this.raritySelect.change(fullFilterChanged);
         
@@ -566,7 +568,7 @@ var CardFilter = Class.extend({
             $("#raritySelect").prop("disabled", isPack);
             $("#sortSelect").prop("disabled", isPack);
             
-            $("#gametextInput").prop("hidden", isPack);
+            $("#gametextInput").prop("disabled", isPack);
             $("#keywordSelect").prop("disabled", isPack);
             $("#raceSelect").prop("disabled", isPack);
             $("#itemClassSelect").prop("disabled", isPack);
@@ -774,13 +776,10 @@ var CardFilter = Class.extend({
                 name += " name:" + nameElems[i];
         }
 
-        // var gametext = $("#gametextInput").prop("value");
-        // if (gametext != "" && !predefFilter.includes("gametext:")) {
-        //     var gametextElems = gametext.split(" ");
-        //     gametext = "";
-        //     for (var i = 0; i < gametextElems.length; i++)
-        //         gametext += " gametext:" + gametextElems[i];
-        // }
+        var gametext = $("#gametextInput").prop("value");
+        if (gametext != "" && !predefFilter.includes("gametext:")) {
+            gametext = " gametext:" + gametext.replace(" ", "_");
+        }
         
         var keyword = $("#keywordSelect option:selected").prop("value");
         if (keyword != "" && !predefFilter.includes("keyword:"))
@@ -848,7 +847,7 @@ var CardFilter = Class.extend({
         }
 
         var filterString = side + set + cardType + rarity + sort + product + culture + name 
-                //+ gametext
+                + gametext
                 + keyword + phase + race + itemClass
                 + twilight + strength + vitality + resistance + siteNumber + signet;
 

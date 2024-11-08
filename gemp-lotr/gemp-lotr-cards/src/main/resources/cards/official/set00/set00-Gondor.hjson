@@ -2,17 +2,9 @@
 
 	0_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR00058.jpg
-			//parentId: 0_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR00058.jpg
 			collInfo: 0P58
 			rarity: P
-			setNum: "0"
-			cardNum: 58
-			style: Standard
 		}
 		title: Anárion
 		subtitle: Lord of Anórien
@@ -55,17 +47,9 @@
 
 	0_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR00065.jpg
-			//parentId: 0_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR00065.jpg
 			collInfo: 0P65
 			rarity: P
-			setNum: "0"
-			cardNum: 65
-			style: Standard
 		}
 		title: Boromir
 		subtitle: Steward's Heir

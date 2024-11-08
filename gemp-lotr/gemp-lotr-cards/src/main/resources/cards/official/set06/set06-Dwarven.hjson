@@ -1,18 +1,10 @@
-{
+	{
 
 	6_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR06009.jpg
-			//parentId: 6_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06009.jpg
 			collInfo: 6U9
 			rarity: U
-			setNum: "6"
-			cardNum: 9
-			style: Standard
 		}
 		title: Lend Us Your Aid
 		unique: false
@@ -56,17 +48,9 @@
 
 	6_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR06010.jpg
-			//parentId: 6_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06010.jpg
 			collInfo: 6C10
 			rarity: C
-			setNum: "6"
-			cardNum: 10
-			style: Standard
 		}
 		title: Suspended Palaces
 		unique: true
@@ -135,17 +119,9 @@
 
 	6_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR06011.jpg
-			//parentId: 6_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06011.jpg
 			collInfo: 6R11
 			rarity: R
-			setNum: "6"
-			cardNum: 11
-			style: Standard
 		}
 		title: Toss Me
 		unique: false

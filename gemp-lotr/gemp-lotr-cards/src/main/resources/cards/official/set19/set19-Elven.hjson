@@ -2,17 +2,9 @@
 
 	19_5: {
 		cardInfo: {
-			imagePath: decipher/LOTR19005.jpg
-			//parentId: 19_5
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19005.jpg
 			collInfo: 19P5
 			rarity: P
-			setNum: "19"
-			cardNum: 5
-			style: Standard
 		}
 		title: Army Long Trained
 		unique: false
@@ -74,17 +66,9 @@
 
 	19_6: {
 		cardInfo: {
-			imagePath: decipher/LOTR19006.jpg
-			//parentId: 19_6
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19006.jpg
 			collInfo: 19P6
 			rarity: P
-			setNum: "19"
-			cardNum: 6
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Royal Maiden
@@ -137,17 +121,9 @@
 
 	19_7: {
 		cardInfo: {
-			imagePath: decipher/LOTR19007.jpg
-			//parentId: 19_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19007.jpg
 			collInfo: 19P7
 			rarity: P
-			setNum: "19"
-			cardNum: 7
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Skeptical Guide

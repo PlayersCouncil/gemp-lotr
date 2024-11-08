@@ -2,17 +2,10 @@
 
 	102_45: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S045.0_card.jpg
-			//parentId: 102_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_45
+			image: sets/V2/LOTR-ENV2S045.0_card.jpg
 			collInfo: V2_45
 			rarity: _
-			setNum: V2
-			cardNum: 45
-			style: Standard
 		}
 		title: Do Not Trust to Hope
 		unique: false
@@ -76,17 +69,10 @@
 
 	102_46: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S046.0_card.jpg
-			//parentId: 102_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_46
+			image: sets/V2/LOTR-ENV2S046.0_card.jpg
 			collInfo: V2_46
 			rarity: _
-			setNum: V2
-			cardNum: 46
-			style: Standard
 		}
 		title: An End Worthy of Remembrance
 		unique: false
@@ -153,17 +139,10 @@
 
 	102_47: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S047.0_card.jpg
-			//parentId: 102_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_47
+			image: sets/V2/LOTR-ENV2S047.0_card.jpg
 			collInfo: V2_47
 			rarity: _
-			setNum: V2
-			cardNum: 47
-			style: Standard
 		}
 		title: Erkenbrand
 		subtitle: Kinsman of the House of Eorl
@@ -212,17 +191,10 @@
 
 	102_48: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S048.0_card.jpg
-			//parentId: 102_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_48
+			image: sets/V2/LOTR-ENV2S048.0_card.jpg
 			collInfo: V2_48
 			rarity: _
-			setNum: V2
-			cardNum: 48
-			style: Standard
 		}
 		title: Fortress of My Fathers
 		unique: false
@@ -298,17 +270,10 @@
 
 	102_49: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S049.0_card.jpg
-			//parentId: 102_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_49
+			image: sets/V2/LOTR-ENV2S049.0_card.jpg
 			collInfo: V2_49
 			rarity: _
-			setNum: V2
-			cardNum: 49
-			style: Standard
 		}
 		title: Gúthwinë
 		subtitle: Eomer's Blade
@@ -363,17 +328,10 @@
 
 	102_50: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S050.0_card.jpg
-			//parentId: 102_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_50
+			image: sets/V2/LOTR-ENV2S050.0_card.jpg
 			collInfo: V2_50
 			rarity: _
-			setNum: V2
-			cardNum: 50
-			style: Standard
 		}
 		title: Let This Be the Hour
 		unique: false
@@ -422,17 +380,10 @@
 	
 	102_51: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S051.0_card.jpg
-			//parentId: 102_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_51
+			image: sets/V2/LOTR-ENV2S051.0_card.jpg
 			collInfo: V2_51
 			rarity: _
-			setNum: V2
-			cardNum: 51
-			style: Standard
 		}
 		title: Now for Wrath
 		unique: true
@@ -501,17 +452,10 @@
 
 	102_52: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S052.0_card.jpg
-			//parentId: 102_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_52
+			image: sets/V2/LOTR-ENV2S052.0_card.jpg
 			collInfo: V2_52
 			rarity: _
-			setNum: V2
-			cardNum: 52
-			style: Standard
 		}
 		title: Now for Ruin
 		unique: true
@@ -579,17 +523,10 @@
 
 	102_53: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S053.0_card.jpg
-			//parentId: 102_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_53
+			image: sets/V2/LOTR-ENV2S053.0_card.jpg
 			collInfo: V2_53
 			rarity: _
-			setNum: V2
-			cardNum: 53
-			style: Standard
 		}
 		title: And the Red Dawn
 		unique: true
@@ -670,17 +607,10 @@
 
 	102_54: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S054.0_card.jpg
-			//parentId: 102_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_54
+			image: sets/V2/LOTR-ENV2S054.0_card.jpg
 			collInfo: V2_54
 			rarity: _
-			setNum: V2
-			cardNum: 54
-			style: Standard
 		}
 		title: Royal Guard
 		unique: true
@@ -764,17 +694,10 @@
 
 	102_55: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S055.0_card.jpg
-			//parentId: 102_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_55
+			image: sets/V2/LOTR-ENV2S055.0_card.jpg
 			collInfo: V2_55
 			rarity: _
-			setNum: V2
-			cardNum: 55
-			style: Standard
 		}
 		title: Theoden
 		subtitle: Last of His House
@@ -815,17 +738,10 @@
 
 	102_56: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S056.0_card.jpg
-			//parentId: 102_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_56
+			image: sets/V2/LOTR-ENV2S056.0_card.jpg
 			collInfo: V2_56
 			rarity: _
-			setNum: V2
-			cardNum: 56
-			style: Standard
 		}
 		title: To the King!
 		unique: false

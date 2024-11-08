@@ -2,17 +2,11 @@
 
 	60_91: {
 		cardInfo: {
-			imagePath: errata/60_91.jpg
-			javaClass: false
-			parent: 10_91
-			parentPath: errata/pc
-			version: 1?
+			//id: 0_91.1
+			revision: 1
+			image: errata/60_91.jpg
 			collInfo: 10C91
 			rarity: C
-			setNum: "10"
-			cardNum: 91
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Mordor Fiend
 		culture: sauron

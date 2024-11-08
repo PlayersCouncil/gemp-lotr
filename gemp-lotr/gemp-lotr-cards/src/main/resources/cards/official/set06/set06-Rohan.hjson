@@ -2,17 +2,9 @@
 
 	6_90: {
 		cardInfo: {
-			imagePath: decipher/LOTR06090.jpg
-			//parentId: 6_90
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06090.jpg
 			collInfo: 6U90
 			rarity: U
-			setNum: "6"
-			cardNum: 90
-			style: Standard
 		}
 		title: Banner of the Mark
 		unique: false
@@ -65,17 +57,9 @@
 
 	6_91: {
 		cardInfo: {
-			imagePath: decipher/LOTR06091.jpg
-			//parentId: 6_91
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06091.jpg
 			collInfo: 6U91
 			rarity: U
-			setNum: "6"
-			cardNum: 91
-			style: Standard
 		}
 		title: Blood Has Been Spilled
 		unique: false
@@ -125,17 +109,9 @@
 
 	6_92: {
 		cardInfo: {
-			imagePath: decipher/LOTR06092.jpg
-			//parentId: 6_92
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06092.jpg
 			collInfo: 6R92
 			rarity: R
-			setNum: "6"
-			cardNum: 92
-			style: Standard
 		}
 		title: Éomer
 		subtitle: Rohirrim Captain
@@ -192,17 +168,9 @@
 
 	6_93: {
 		cardInfo: {
-			imagePath: decipher/LOTR06093.jpg
-			//parentId: 6_93
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06093.jpg
 			collInfo: 6U93
 			rarity: U
-			setNum: "6"
-			cardNum: 93
-			style: Standard
 		}
 		title: Ever the Hope of Men
 		unique: false
@@ -239,17 +207,9 @@
 
 	6_94: {
 		cardInfo: {
-			imagePath: decipher/LOTR06094.jpg
-			//parentId: 6_94
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06094.jpg
 			collInfo: 6R94
 			rarity: R
-			setNum: "6"
-			cardNum: 94
-			style: Standard
 		}
 		title: Háma
 		subtitle: Doorward of Théoden
@@ -296,17 +256,9 @@
 
 	6_95: {
 		cardInfo: {
-			imagePath: decipher/LOTR06095.jpg
-			//parentId: 6_95
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06095.jpg
 			collInfo: 6C95
 			rarity: C
-			setNum: "6"
-			cardNum: 95
-			style: Standard
 		}
 		title: Hrethel
 		subtitle: Rider of Rohan
@@ -358,17 +310,9 @@
 
 	6_96: {
 		cardInfo: {
-			imagePath: decipher/LOTR06096.jpg
-			//parentId: 6_96
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06096.jpg
 			collInfo: 6R96
 			rarity: R
-			setNum: "6"
-			cardNum: 96
-			style: Standard
 		}
 		title: News From the Mark
 		unique: false
@@ -418,17 +362,9 @@
 
 	6_97: {
 		cardInfo: {
-			imagePath: decipher/LOTR06097.jpg
-			//parentId: 6_97
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06097.jpg
 			collInfo: 6C97
 			rarity: C
-			setNum: "6"
-			cardNum: 97
-			style: Standard
 		}
 		title: We Left None Alive
 		unique: true

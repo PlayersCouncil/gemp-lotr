@@ -2,17 +2,9 @@
 
 	5_111: {
 		cardInfo: {
-			imagePath: decipher/LOTR05111.jpg
-			//parentId: 5_111
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05111.jpg
 			collInfo: 5U111
 			rarity: U
-			setNum: "5"
-			cardNum: 111
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Master of the Precious
@@ -54,17 +46,9 @@
 
 	5_112: {
 		cardInfo: {
-			imagePath: decipher/LOTR05112.jpg
-			//parentId: 5_112
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05112.jpg
 			collInfo: 5R112
 			rarity: R
-			setNum: "5"
-			cardNum: 112
-			style: Standard
 		}
 		title: No Help for It
 		unique: false
@@ -103,17 +87,9 @@
 
 	5_113: {
 		cardInfo: {
-			imagePath: decipher/LOTR05113.jpg
-			//parentId: 5_113
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05113.jpg
 			collInfo: 5R113
 			rarity: R
-			setNum: "5"
-			cardNum: 113
-			style: Standard
 		}
 		title: No Use That Way
 		unique: false
@@ -149,17 +125,9 @@
 
 	5_114: {
 		cardInfo: {
-			imagePath: decipher/LOTR05114.jpg
-			//parentId: 5_114
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05114.jpg
 			collInfo: 5U114
 			rarity: U
-			setNum: "5"
-			cardNum: 114
-			style: Standard
 		}
 		title: Rare Good Ballast
 		unique: true
@@ -198,17 +166,9 @@
 
 	5_115: {
 		cardInfo: {
-			imagePath: decipher/LOTR05115.jpg
-			//parentId: 5_115
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05115.jpg
 			collInfo: 5U115
 			rarity: U
-			setNum: "5"
-			cardNum: 115
-			style: Standard
 		}
 		title: Sam
 		subtitle: Nice Sensible Hobbit
@@ -266,17 +226,9 @@
 
 	5_116: {
 		cardInfo: {
-			imagePath: decipher/LOTR05116.jpg
-			//parentId: 5_116
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05116.jpg
 			collInfo: 5R116
 			rarity: R
-			setNum: "5"
-			cardNum: 116
-			style: Standard
 		}
 		title: Sting
 		subtitle: Baggins Heirloom
@@ -330,17 +282,9 @@
 
 	5_117: {
 		cardInfo: {
-			imagePath: decipher/LOTR05117.jpg
-			//parentId: 5_117
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05117.jpg
 			collInfo: 5C117
 			rarity: C
-			setNum: "5"
-			cardNum: 117
-			style: Standard
 		}
 		title: You Must Help Us
 		unique: false

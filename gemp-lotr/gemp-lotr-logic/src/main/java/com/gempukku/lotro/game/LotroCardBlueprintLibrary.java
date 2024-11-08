@@ -365,38 +365,38 @@ public class LotroCardBlueprintLibrary {
         }
     }
 
-    private LotroCardBlueprint findJavaBlueprint(String blueprintId) throws CardNotFoundException {
-        if (_blueprintMapping.containsKey(blueprintId))
-            return getLotroCardBlueprint(_blueprintMapping.get(blueprintId));
+//    private LotroCardBlueprint findJavaBlueprint(String blueprintId) throws CardNotFoundException {
+//        if (_blueprintMapping.containsKey(blueprintId))
+//            return getLotroCardBlueprint(_blueprintMapping.get(blueprintId));
+//
+//        String[] blueprintParts = blueprintId.split("_");
+//
+//        String setNumber = blueprintParts[0];
+//        String cardNumber = blueprintParts[1];
+//
+//        for (String packageName : _packageNames) {
+//            LotroCardBlueprint blueprint;
+//            try {
+//                blueprint = tryLoadingFromPackage(packageName, setNumber, cardNumber);
+//            } catch (IllegalAccessException | InstantiationException | NoSuchMethodException e) {
+//                throw new CardNotFoundException(blueprintId);
+//            }
+//            if (blueprint != null)
+//                return blueprint;
+//        }
+//
+//        throw new CardNotFoundException(blueprintId);
+//    }
 
-        String[] blueprintParts = blueprintId.split("_");
-
-        String setNumber = blueprintParts[0];
-        String cardNumber = blueprintParts[1];
-
-        for (String packageName : _packageNames) {
-            LotroCardBlueprint blueprint;
-            try {
-                blueprint = tryLoadingFromPackage(packageName, setNumber, cardNumber);
-            } catch (IllegalAccessException | InstantiationException | NoSuchMethodException e) {
-                throw new CardNotFoundException(blueprintId);
-            }
-            if (blueprint != null)
-                return blueprint;
-        }
-
-        throw new CardNotFoundException(blueprintId);
-    }
-
-    private LotroCardBlueprint tryLoadingFromPackage(String packageName, String setNumber, String cardNumber) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
-        try {
-            Class clazz = Class.forName("com.gempukku.lotro.cards.set" + setNumber + packageName + ".Card" + setNumber + "_" + normalizeId(cardNumber));
-            return (LotroCardBlueprint) clazz.getDeclaredConstructor().newInstance();
-        } catch (ClassNotFoundException | InvocationTargetException e) {
-            // Ignore
-            return null;
-        }
-    }
+//    private LotroCardBlueprint tryLoadingFromPackage(String packageName, String setNumber, String cardNumber) throws IllegalAccessException, InstantiationException, NoSuchMethodException {
+//        try {
+//            Class clazz = Class.forName("com.gempukku.lotro.cards.set" + setNumber + packageName + ".Card" + setNumber + "_" + normalizeId(cardNumber));
+//            return (LotroCardBlueprint) clazz.getDeclaredConstructor().newInstance();
+//        } catch (ClassNotFoundException | InvocationTargetException e) {
+//            // Ignore
+//            return null;
+//        }
+//    }
 
     private String normalizeId(String blueprintPart) {
         int id = Integer.parseInt(blueprintPart);

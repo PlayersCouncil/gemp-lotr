@@ -2,17 +2,9 @@
 
 	1_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR01029.jpg
-			//parentId: 1_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01029.jpg
 			collInfo: 1U29
 			rarity: U
-			setNum: "1"
-			cardNum: 29
-			style: Standard
 		}
 		title: Ancient Enmity
 		unique: false
@@ -60,17 +52,9 @@
 
 	1_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR01030.jpg
-			//parentId: 1_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01030.jpg
 			collInfo: 1R30
 			rarity: R
-			setNum: "1"
-			cardNum: 30
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Daughter of Elrond
@@ -106,17 +90,9 @@
 
 	1_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR01031.jpg
-			//parentId: 1_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01031.jpg
 			collInfo: 1U31
 			rarity: U
-			setNum: "1"
-			cardNum: 31
-			style: Standard
 		}
 		title: Asfaloth
 		unique: true
@@ -179,17 +155,9 @@
 
 	1_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR01032.jpg
-			//parentId: 1_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01032.jpg
 			collInfo: 1C32
 			rarity: C
-			setNum: "1"
-			cardNum: 32
-			style: Standard
 		}
 		title: Border Defenses
 		unique: false
@@ -228,17 +196,9 @@
 
 	1_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR01033.jpg
-			//parentId: 1_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01033.jpg
 			collInfo: 1R33
 			rarity: R
-			setNum: "1"
-			cardNum: 33
-			style: Standard
 		}
 		title: Bow of the Galadhrim
 		unique: true
@@ -274,17 +234,9 @@
 
 	1_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR01034.jpg
-			//parentId: 1_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01034.jpg
 			collInfo: 1R34
 			rarity: R
-			setNum: "1"
-			cardNum: 34
-			style: Standard
 		}
 		title: Celeborn
 		subtitle: Lord of Lórien
@@ -322,17 +274,9 @@
 
 	1_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR01035.jpg
-			//parentId: 1_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01035.jpg
 			collInfo: 1R35
 			rarity: R
-			setNum: "1"
-			cardNum: 35
-			style: Standard
 		}
 		title: The Council of Elrond
 		unique: false
@@ -367,17 +311,9 @@
 
 	1_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR01036.jpg
-			//parentId: 1_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01036.jpg
 			collInfo: 1R36
 			rarity: R
-			setNum: "1"
-			cardNum: 36
-			style: Standard
 		}
 		title: Curse Their Foul Feet!
 		unique: false
@@ -436,17 +372,9 @@
 
 	1_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR01037.jpg
-			//parentId: 1_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01037.jpg
 			collInfo: 1C37
 			rarity: C
-			setNum: "1"
-			cardNum: 37
-			style: Standard
 		}
 		title: Defiance
 		unique: false
@@ -485,17 +413,9 @@
 
 	1_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR01038.jpg
-			//parentId: 1_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01038.jpg
 			collInfo: 1R38
 			rarity: R
-			setNum: "1"
-			cardNum: 38
-			style: Standard
 		}
 		title: Double Shot
 		unique: false
@@ -529,17 +449,9 @@
 
 	1_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR01039.jpg
-			//parentId: 1_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01039.jpg
 			collInfo: 1C39
 			rarity: C
-			setNum: "1"
-			cardNum: 39
-			style: Standard
 		}
 		title: Elf-song
 		unique: false
@@ -571,17 +483,9 @@
 
 	1_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR01040.jpg
-			//parentId: 1_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01040.jpg
 			collInfo: 1R40
 			rarity: R
-			setNum: "1"
-			cardNum: 40
-			style: Standard
 		}
 		title: Elrond
 		subtitle: Lord of Rivendell
@@ -637,17 +541,9 @@
 
 	1_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR01041.jpg
-			//parentId: 1_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01041.jpg
 			collInfo: 1C41
 			rarity: C
-			setNum: "1"
-			cardNum: 41
-			style: Standard
 		}
 		title: Elven Bow
 		unique: false
@@ -678,17 +574,9 @@
 
 	1_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR01042.jpg
-			//parentId: 1_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01042.jpg
 			collInfo: 1C42
 			rarity: C
-			setNum: "1"
-			cardNum: 42
-			style: Standard
 		}
 		title: Elven Cloak
 		unique: false
@@ -728,17 +616,9 @@
 
 	1_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR01043.jpg
-			//parentId: 1_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01043.jpg
 			collInfo: 1C43
 			rarity: C
-			setNum: "1"
-			cardNum: 43
-			style: Standard
 		}
 		title: Far-seeing Eyes
 		unique: true
@@ -773,17 +653,9 @@
 
 	1_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR01044.jpg
-			//parentId: 1_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01044.jpg
 			collInfo: 1U44
 			rarity: U
-			setNum: "1"
-			cardNum: 44
-			style: Standard
 		}
 		title: Foul Creation
 		unique: false
@@ -845,17 +717,9 @@
 
 	1_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR01045.jpg
-			//parentId: 1_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01045.jpg
 			collInfo: 1R45
 			rarity: R
-			setNum: "1"
-			cardNum: 45
-			style: Standard
 		}
 		title: Galadriel
 		subtitle: Lady of Light
@@ -906,17 +770,9 @@
 
 	1_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR01046.jpg
-			//parentId: 1_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01046.jpg
 			collInfo: 1U46
 			rarity: U
-			setNum: "1"
-			cardNum: 46
-			style: Standard
 		}
 		title: Gift of Boats
 		unique: true
@@ -966,17 +822,9 @@
 
 	1_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR01047.jpg
-			//parentId: 1_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01047.jpg
 			collInfo: 1R47
 			rarity: R
-			setNum: "1"
-			cardNum: 47
-			style: Standard
 		}
 		title: Gwemegil
 		unique: true
@@ -1037,17 +885,9 @@
 
 	1_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR01048.jpg
-			//parentId: 1_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01048.jpg
 			collInfo: 1U48
 			rarity: U
-			setNum: "1"
-			cardNum: 48
-			style: Standard
 		}
 		title: Haldir
 		subtitle: Elf of the Golden Wood
@@ -1094,17 +934,9 @@
 
 	1_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR01049.jpg
-			//parentId: 1_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01049.jpg
 			collInfo: 1R49
 			rarity: R
-			setNum: "1"
-			cardNum: 49
-			style: Standard
 		}
 		title: The Last Alliance of Elves and Men
 		unique: false
@@ -1139,17 +971,9 @@
 
 	1_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR01050.jpg
-			//parentId: 1_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01050.jpg
 			collInfo: 1R50
 			rarity: R
-			setNum: "1"
-			cardNum: 50
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Greenleaf
@@ -1195,17 +1019,9 @@
 
 	1_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR01051.jpg
-			//parentId: 1_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01051.jpg
 			collInfo: 1U51
 			rarity: U
-			setNum: "1"
-			cardNum: 51
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Prince of Mirkwood
@@ -1241,17 +1057,9 @@
 
 	1_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR01052.jpg
-			//parentId: 1_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01052.jpg
 			collInfo: 1C52
 			rarity: C
-			setNum: "1"
-			cardNum: 52
-			style: Standard
 		}
 		title: Lightfootedness
 		unique: false
@@ -1285,17 +1093,9 @@
 
 	1_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR01053.jpg
-			//parentId: 1_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01053.jpg
 			collInfo: 1C53
 			rarity: C
-			setNum: "1"
-			cardNum: 53
-			style: Standard
 		}
 		title: Lórien Elf
 		unique: false
@@ -1327,17 +1127,9 @@
 
 	1_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR01054.jpg
-			//parentId: 1_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01054.jpg
 			collInfo: 1U54
 			rarity: U
-			setNum: "1"
-			cardNum: 54
-			style: Standard
 		}
 		title: Mallorn-trees
 		unique: false
@@ -1374,17 +1166,9 @@
 
 	1_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR01055.jpg
-			//parentId: 1_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01055.jpg
 			collInfo: 1R55
 			rarity: R
-			setNum: "1"
-			cardNum: 55
-			style: Standard
 		}
 		title: The Mirror of Galadriel
 		unique: true
@@ -1445,17 +1229,9 @@
 
 	1_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR01056.jpg
-			//parentId: 1_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01056.jpg
 			collInfo: 1U56
 			rarity: U
-			setNum: "1"
-			cardNum: 56
-			style: Standard
 		}
 		title: Orophin
 		subtitle: Lórien Bowman
@@ -1494,17 +1270,9 @@
 
 	1_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR01057.jpg
-			//parentId: 1_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01057.jpg
 			collInfo: 1U57
 			rarity: U
-			setNum: "1"
-			cardNum: 57
-			style: Standard
 		}
 		title: Rúmil
 		subtitle: Elven Protector
@@ -1543,17 +1311,9 @@
 
 	1_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR01058.jpg
-			//parentId: 1_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01058.jpg
 			collInfo: 1C58
 			rarity: C
-			setNum: "1"
-			cardNum: 58
-			style: Standard
 		}
 		title: The Seen and the Unseen
 		unique: false
@@ -1587,17 +1347,9 @@
 
 	1_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR01059.jpg
-			//parentId: 1_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01059.jpg
 			collInfo: 1C59
 			rarity: C
-			setNum: "1"
-			cardNum: 59
-			style: Standard
 		}
 		title: Shoulder to Shoulder
 		unique: false
@@ -1661,17 +1413,9 @@
 
 	1_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR01060.jpg
-			//parentId: 1_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01060.jpg
 			collInfo: 1U60
 			rarity: U
-			setNum: "1"
-			cardNum: 60
-			style: Standard
 		}
 		title: Silinde
 		subtitle: Elf of Mirkwood
@@ -1701,17 +1445,9 @@
 
 	1_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR01061.jpg
-			//parentId: 1_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01061.jpg
 			collInfo: 1C61
 			rarity: C
-			setNum: "1"
-			cardNum: 61
-			style: Standard
 		}
 		title: Songs of the Blessed Realm
 		unique: false
@@ -1744,17 +1480,9 @@
 
 	1_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR01062.jpg
-			//parentId: 1_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01062.jpg
 			collInfo: 1R62
 			rarity: R
-			setNum: "1"
-			cardNum: 62
-			style: Standard
 		}
 		title: The Splendor of Their Banners
 		unique: true
@@ -1794,17 +1522,9 @@
 
 	1_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR01063.jpg
-			//parentId: 1_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01063.jpg
 			collInfo: 1U63
 			rarity: U
-			setNum: "1"
-			cardNum: 63
-			style: Standard
 		}
 		title: Stand Against Darkness
 		unique: false
@@ -1837,17 +1557,9 @@
 
 	1_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR01064.jpg
-			//parentId: 1_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01064.jpg
 			collInfo: 1U64
 			rarity: U
-			setNum: "1"
-			cardNum: 64
-			style: Standard
 		}
 		title: Support of the Last Homely House
 		unique: false
@@ -1890,17 +1602,9 @@
 
 	1_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR01065.jpg
-			//parentId: 1_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01065.jpg
 			collInfo: 1U65
 			rarity: U
-			setNum: "1"
-			cardNum: 65
-			style: Standard
 		}
 		title: Swan-ship of the Galadhrim
 		unique: false
@@ -1943,17 +1647,9 @@
 
 	1_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR01066.jpg
-			//parentId: 1_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01066.jpg
 			collInfo: 1R66
 			rarity: R
-			setNum: "1"
-			cardNum: 66
-			style: Standard
 		}
 		title: The Tale of Gil-galad
 		unique: true
@@ -1997,17 +1693,9 @@
 
 	1_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR01067.jpg
-			//parentId: 1_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01067.jpg
 			collInfo: 1C67
 			rarity: C
-			setNum: "1"
-			cardNum: 67
-			style: Standard
 		}
 		title: Uruviel
 		subtitle: Maid of Lórien
@@ -2037,17 +1725,9 @@
 
 	1_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR01068.jpg
-			//parentId: 1_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01068.jpg
 			collInfo: 1C68
 			rarity: C
-			setNum: "1"
-			cardNum: 68
-			style: Standard
 		}
 		title: The White Arrows of Lórien
 		unique: false

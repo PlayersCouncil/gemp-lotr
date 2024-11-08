@@ -1,17 +1,14 @@
 {
 	57_256: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN07E256.1.jpg
-			javaClass: false
+			//id: 7_256.1
 			parent: 7_256
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN07E256.1.jpg
 			collInfo: 7C256
 			rarity: C
-			setNum: "7"
-			cardNum: 256
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: They Sang as They Slew
 		culture: rohan

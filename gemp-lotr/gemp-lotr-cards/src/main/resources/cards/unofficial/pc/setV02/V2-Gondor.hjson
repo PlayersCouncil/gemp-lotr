@@ -2,17 +2,10 @@
 
 	102_16: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S016.0_card.jpg
-			//parentId: 102_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_16
+			image: sets/V2/LOTR-ENV2S016.0_card.jpg
 			collInfo: V2_16
 			rarity: _
-			setNum: V2
-			cardNum: 16
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Last Hope of Men
@@ -71,17 +64,10 @@
 
 	102_17: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S017.0_card.jpg
-			//parentId: 102_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_17
+			image: sets/V2/LOTR-ENV2S017.0_card.jpg
 			collInfo: V2_17
 			rarity: _
-			setNum: V2
-			cardNum: 17
-			style: Standard
 		}
 		title: I Will Die as One of Them
 		unique: false

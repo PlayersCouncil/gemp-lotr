@@ -2,17 +2,9 @@
 
 	9_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR09047.jpg
-			//parentId: 9_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09047.jpg
 			collInfo: 9R+47
 			rarity: R+
-			setNum: "9"
-			cardNum: 47
-			style: Standard
 		}
 		title: Ithil Stone
 		unique: true
@@ -68,17 +60,9 @@
 
 	9_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR09048.jpg
-			//parentId: 9_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09048.jpg
 			collInfo: 9R+48
 			rarity: R+
-			setNum: "9"
-			cardNum: 48
-			style: Standard
 		}
 		title: Sauron
 		subtitle: The Lord of the Rings

@@ -2,17 +2,10 @@
 
 	101_1: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S001.0_card.jpg
-			//parentId: 101_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_1
+			image: sets/vset1/LOTR-ENV1S001.0_card.jpg
 			collInfo: V1C1
 			rarity: C
-			setNum: "V1"
-			cardNum: 1
-			style: Standard
 		}
 		title: Hospitality of the Dwarves
 		unique: false
@@ -96,17 +89,10 @@
 
 	101_2: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S002.0_card.jpg
-			//parentId: 101_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_2
+			image: sets/vset1/LOTR-ENV1S002.0_card.jpg
 			collInfo: V1R2
 			rarity: R
-			setNum: "V1"
-			cardNum: 2
-			style: Standard
 		}
 		title: Deepest Delvings
 		unique: true
@@ -162,17 +148,10 @@
 
 	101_3: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S003.0_card.jpg
-			//parentId: 101_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_3
+			image: sets/vset1/LOTR-ENV1S003.0_card.jpg
 			collInfo: V1R3
 			rarity: R
-			setNum: "V1"
-			cardNum: 3
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Vengeful Longbeard
@@ -228,17 +207,10 @@
 
 	101_4: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S004.0_card.jpg
-			//parentId: 101_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_4
+			image: sets/vset1/LOTR-ENV1S004.0_card.jpg
 			collInfo: V1C4
 			rarity: C
-			setNum: "V1"
-			cardNum: 4
-			style: Standard
 		}
 		title: I Name You Elf-Friend
 		unique: false
@@ -282,17 +254,10 @@
 
 	101_5: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S005.0_card.jpg
-			//parentId: 101_5
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_5
+			image: sets/vset1/LOTR-ENV1S005.0_card.jpg
 			collInfo: V1U5
 			rarity: U
-			setNum: "V1"
-			cardNum: 5
-			style: Standard
 		}
 		title: One Dwarf in Moria
 		unique: false
@@ -363,17 +328,10 @@
 
 	101_6: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S006.0_card.jpg
-			//parentId: 101_6
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 101_6
+			image: sets/vset1/LOTR-ENV1S006.0_card.jpg
 			collInfo: V1C6
 			rarity: C
-			setNum: "V1"
-			cardNum: 6
-			style: Standard
 		}
 		title: So Bold and So Courteous
 		unique: true

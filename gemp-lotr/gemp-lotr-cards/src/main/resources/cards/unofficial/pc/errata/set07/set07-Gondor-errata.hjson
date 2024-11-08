@@ -2,17 +2,14 @@
 
 	57_96: {
 		cardInfo: {
-			imagePath: errata/57_96.jpg
-			javaClass: false
+			//id: 7_96.1
 			parent: 7_96
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/57_96.jpg
 			collInfo: 7C96
 			rarity: C
-			setNum: "7"
-			cardNum: 96
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Gondorian Captain
 		culture: gondor

@@ -2,17 +2,11 @@
 
 	68_9: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E009.1_card.jpg
-			//parentId: 18_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 68_9.1
+			revision: 1
+			image: errata/LOTR-EN18E009.1_card.jpg
 			collInfo: 18C9
 			rarity: C
-			setNum: "18"
-			cardNum: 9
-			style: Standard
 		}
 		title: Elven Defender
 		unique: false
@@ -52,17 +46,11 @@
 
 	68_14: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E014.1_card.jpg
-			//parentId: 18_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 68_14.1
+			revision: 1
+			image: errata/LOTR-EN18E014.1_card.jpg
 			collInfo: 18R14
 			rarity: R
-			setNum: "18"
-			cardNum: 14
-			style: Standard
 		}
 		title: Haldir
 		subtitle: Warrior Messenger

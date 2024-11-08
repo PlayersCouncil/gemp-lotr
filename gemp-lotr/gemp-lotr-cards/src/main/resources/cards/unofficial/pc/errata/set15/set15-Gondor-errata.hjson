@@ -2,17 +2,11 @@
 
 	65_62: {
 		cardInfo: {
-			imagePath: errata/65_62.jpg
-			javaClass: false
-			parent: 15_62
-			parentPath: errata/pc
-			version: 1?
+			//id: 5_62.1
+			revision: 1
+			image: errata/65_62.jpg
 			collInfo: 15C62
 			rarity: C
-			setNum: "15"
-			cardNum: 62
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Ithilien Blade
 		unique: false
@@ -63,17 +57,11 @@
 
 	65_64: {
 		cardInfo: {
-			imagePath: errata/65_64.jpg
-			javaClass: false
-			parent: 15_64
-			parentPath: errata/pc
-			version: 1?
+			//id: 5_64.1
+			revision: 1
+			image: errata/65_64.jpg
 			collInfo: 15R64
 			rarity: R
-			setNum: "15"
-			cardNum: 64
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Madril
 		subtitle: Defender of Osgiliath

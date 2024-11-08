@@ -650,6 +650,7 @@ var TableCardGroup = CardGroup.extend({
         this.heightPadding = 1;
         this.widthPadding = 5;
         this.columnWidthToAttachedHeightAboveRatio = 0.17;
+        this.cardScale = 350 / 490;
     },
 
    /**

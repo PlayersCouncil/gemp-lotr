@@ -2,17 +2,9 @@
 
 	8_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR08031.jpg
-			//parentId: 8_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08031.jpg
 			collInfo: 8C31
 			rarity: C
-			setNum: "8"
-			cardNum: 31
-			style: Standard
 		}
 		title: At His Command
 		unique: false
@@ -55,17 +47,9 @@
 
 	8_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR08032.jpg
-			//parentId: 8_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08032.jpg
 			collInfo: 8R32
 			rarity: R
-			setNum: "8"
-			cardNum: 32
-			style: Standard
 		}
 		title: Catapult
 		unique: false
@@ -121,17 +105,9 @@
 
 	8_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR08033.jpg
-			//parentId: 8_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08033.jpg
 			collInfo: 8R33
 			rarity: R
-			setNum: "8"
-			cardNum: 33
-			style: Standard
 		}
 		title: Elessar's Edict
 		unique: false
@@ -189,17 +165,9 @@
 
 	8_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR08034.jpg
-			//parentId: 8_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08034.jpg
 			collInfo: 8C34
 			rarity: C
-			setNum: "8"
-			cardNum: 34
-			style: Standard
 		}
 		title: Faramir
 		subtitle: Defender of Osgiliath
@@ -257,17 +225,9 @@
 
 	8_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR08035.jpg
-			//parentId: 8_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08035.jpg
 			collInfo: 8C35
 			rarity: C
-			setNum: "8"
-			cardNum: 35
-			style: Standard
 		}
 		title: Fourth Level
 		unique: false
@@ -331,17 +291,9 @@
 
 	8_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR08036.jpg
-			//parentId: 8_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08036.jpg
 			collInfo: 8R36
 			rarity: R
-			setNum: "8"
-			cardNum: 36
-			style: Standard
 		}
 		title: Garrison of Gondor
 		unique: true
@@ -393,17 +345,9 @@
 
 	8_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR08037.jpg
-			//parentId: 8_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08037.jpg
 			collInfo: 8R37
 			rarity: R
-			setNum: "8"
-			cardNum: 37
-			style: Standard
 		}
 		title: Imrahil
 		subtitle: Prince of Dol Amroth
@@ -452,17 +396,9 @@
 
 	8_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR08038.jpg
-			//parentId: 8_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08038.jpg
 			collInfo: 8R38
 			rarity: R
-			setNum: "8"
-			cardNum: 38
-			style: Standard
 		}
 		title: King of the Dead
 		subtitle: Oathbreaker
@@ -525,17 +461,9 @@
 
 	8_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR08039.jpg
-			//parentId: 8_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08039.jpg
 			collInfo: 8C39
 			rarity: C
-			setNum: "8"
-			cardNum: 39
-			style: Standard
 		}
 		title: Knight of Dol Amroth
 		unique: false
@@ -575,17 +503,9 @@
 
 	8_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR08040.jpg
-			//parentId: 8_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08040.jpg
 			collInfo: 8C40
 			rarity: C
-			setNum: "8"
-			cardNum: 40
-			style: Standard
 		}
 		title: Knight's Mount
 		unique: false
@@ -623,17 +543,9 @@
 
 	8_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR08041.jpg
-			//parentId: 8_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08041.jpg
 			collInfo: 8C41
 			rarity: C
-			setNum: "8"
-			cardNum: 41
-			style: Standard
 		}
 		title: Oathbreaker
 		unique: false
@@ -681,17 +593,9 @@
 
 	8_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR08042.jpg
-			//parentId: 8_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08042.jpg
 			collInfo: 8U42
 			rarity: U
-			setNum: "8"
-			cardNum: 42
-			style: Standard
 		}
 		title: A Path Appointed
 		unique: false
@@ -747,17 +651,9 @@
 
 	8_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR08043.jpg
-			//parentId: 8_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08043.jpg
 			collInfo: 8R43
 			rarity: R
-			setNum: "8"
-			cardNum: 43
-			style: Standard
 		}
 		title: Shadow Host
 		unique: true
@@ -810,17 +706,9 @@
 
 	8_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR08044.jpg
-			//parentId: 8_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08044.jpg
 			collInfo: 8U44
 			rarity: U
-			setNum: "8"
-			cardNum: 44
-			style: Standard
 		}
 		title: Sixth Level
 		unique: false
@@ -860,17 +748,9 @@
 
 	8_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR08045.jpg
-			//parentId: 8_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08045.jpg
 			collInfo: 8U45
 			rarity: U
-			setNum: "8"
-			cardNum: 45
-			style: Standard
 		}
 		title: Sleepless Dead
 		unique: false
@@ -921,17 +801,9 @@
 
 	8_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR08046.jpg
-			//parentId: 8_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08046.jpg
 			collInfo: 8U46
 			rarity: U
-			setNum: "8"
-			cardNum: 46
-			style: Standard
 		}
 		title: Spectral Sword
 		unique: false
@@ -970,17 +842,9 @@
 
 	8_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR08047.jpg
-			//parentId: 8_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08047.jpg
 			collInfo: 8C47
 			rarity: C
-			setNum: "8"
-			cardNum: 47
-			style: Standard
 		}
 		title: Stronger and More Terrible
 		unique: false
@@ -1021,17 +885,9 @@
 
 	8_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR08048.jpg
-			//parentId: 8_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08048.jpg
 			collInfo: 8C48
 			rarity: C
-			setNum: "8"
-			cardNum: 48
-			style: Standard
 		}
 		title: Swept Away
 		unique: false

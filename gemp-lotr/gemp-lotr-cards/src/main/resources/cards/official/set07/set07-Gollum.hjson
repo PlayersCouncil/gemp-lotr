@@ -2,17 +2,9 @@
 
 	7_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR07053.jpg
-			//parentId: 7_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07053.jpg
 			collInfo: 7C53
 			rarity: C
-			setNum: "7"
-			cardNum: 53
-			style: Standard
 		}
 		title: Captured by the Ring
 		unique: false
@@ -65,17 +57,9 @@
 
 	7_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR07054.jpg
-			//parentId: 7_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07054.jpg
 			collInfo: 7U54
 			rarity: U
-			setNum: "7"
-			cardNum: 54
-			style: Standard
 		}
 		title: Clever Hobbits
 		unique: false
@@ -127,17 +111,9 @@
 
 	7_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR07055.jpg
-			//parentId: 7_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07055.jpg
 			collInfo: 7U55
 			rarity: U
-			setNum: "7"
-			cardNum: 55
-			style: Standard
 		}
 		title: Days Growing Dark
 		unique: false
@@ -174,17 +150,9 @@
 
 	7_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR07056.jpg
-			//parentId: 7_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07056.jpg
 			collInfo: 7R56
 			rarity: R
-			setNum: "7"
-			cardNum: 56
-			style: Standard
 		}
 		title: The Dead City
 		unique: false
@@ -224,17 +192,9 @@
 
 	7_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR07057.jpg
-			//parentId: 7_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07057.jpg
 			collInfo: 7R57
 			rarity: R
-			setNum: "7"
-			cardNum: 57
-			style: Standard
 		}
 		title: Fat One Wants It
 		unique: true
@@ -280,17 +240,9 @@
 
 	7_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR07058.jpg
-			//parentId: 7_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07058.jpg
 			collInfo: 7R58
 			rarity: R
-			setNum: "7"
-			cardNum: 58
-			style: Standard
 		}
 		title: Gollum
 		subtitle: Plotting Deceiver
@@ -334,17 +286,9 @@
 
 	7_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR07059.jpg
-			//parentId: 7_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07059.jpg
 			collInfo: 7C59
 			rarity: C
-			setNum: "7"
-			cardNum: 59
-			style: Standard
 		}
 		title: Gollum
 		subtitle: Vile Creature
@@ -397,17 +341,9 @@
 
 	7_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR07060.jpg
-			//parentId: 7_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07060.jpg
 			collInfo: 7U60
 			rarity: U
-			setNum: "7"
-			cardNum: 60
-			style: Standard
 		}
 		title: Heavy Burden
 		unique: false
@@ -447,17 +383,9 @@
 
 	7_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR07061.jpg
-			//parentId: 7_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07061.jpg
 			collInfo: 7R61
 			rarity: R
-			setNum: "7"
-			cardNum: 61
-			style: Standard
 		}
 		title: Hobbitses Are Dead
 		unique: false
@@ -515,17 +443,9 @@
 
 	7_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR07062.jpg
-			//parentId: 7_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07062.jpg
 			collInfo: 7C62
 			rarity: C
-			setNum: "7"
-			cardNum: 62
-			style: Standard
 		}
 		title: It's Mine
 		unique: false
@@ -581,17 +501,9 @@
 
 	7_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR07063.jpg
-			//parentId: 7_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07063.jpg
 			collInfo: 7R63
 			rarity: R
-			setNum: "7"
-			cardNum: 63
-			style: Standard
 		}
 		title: Let Her Deal With Them
 		unique: false
@@ -648,17 +560,9 @@
 
 	7_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR07064.jpg
-			//parentId: 7_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07064.jpg
 			collInfo: 7U64
 			rarity: U
-			setNum: "7"
-			cardNum: 64
-			style: Standard
 		}
 		title: Nasty
 		unique: false
@@ -699,17 +603,9 @@
 
 	7_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR07065.jpg
-			//parentId: 7_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07065.jpg
 			collInfo: 7C65
 			rarity: C
-			setNum: "7"
-			cardNum: 65
-			style: Standard
 		}
 		title: Never
 		unique: false
@@ -752,17 +648,9 @@
 
 	7_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR07066.jpg
-			//parentId: 7_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07066.jpg
 			collInfo: 7R66
 			rarity: R
-			setNum: "7"
-			cardNum: 66
-			style: Standard
 		}
 		title: No Safe Places
 		unique: false
@@ -808,17 +696,9 @@
 
 	7_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR07067.jpg
-			//parentId: 7_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07067.jpg
 			collInfo: 7R67
 			rarity: R
-			setNum: "7"
-			cardNum: 67
-			style: Standard
 		}
 		title: Plotting
 		unique: true
@@ -884,17 +764,9 @@
 
 	7_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR07068.jpg
-			//parentId: 7_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07068.jpg
 			collInfo: 7R68
 			rarity: R
-			setNum: "7"
-			cardNum: 68
-			style: Standard
 		}
 		title: Scouting
 		unique: false
@@ -970,17 +842,9 @@
 
 	7_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR07069.jpg
-			//parentId: 7_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07069.jpg
 			collInfo: 7R69
 			rarity: R
-			setNum: "7"
-			cardNum: 69
-			style: Standard
 		}
 		title: Secret Paths
 		unique: false
@@ -1035,17 +899,9 @@
 
 	7_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR07070.jpg
-			//parentId: 7_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07070.jpg
 			collInfo: 7R70
 			rarity: R
-			setNum: "7"
-			cardNum: 70
-			style: Standard
 		}
 		title: Serving the Precious
 		unique: false
@@ -1080,17 +936,9 @@
 
 	7_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR07071.jpg
-			//parentId: 7_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07071.jpg
 			collInfo: 7R71
 			rarity: R
-			setNum: "7"
-			cardNum: 71
-			style: Standard
 		}
 		title: Sméagol
 		subtitle: Always Helps
@@ -1145,17 +993,9 @@
 
 	7_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR07072.jpg
-			//parentId: 7_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07072.jpg
 			collInfo: 7C72
 			rarity: C
-			setNum: "7"
-			cardNum: 72
-			style: Standard
 		}
 		title: Sméagol
 		subtitle: Hurried Guide
@@ -1208,17 +1048,9 @@
 
 	7_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR07073.jpg
-			//parentId: 7_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07073.jpg
 			collInfo: 7R73
 			rarity: R
-			setNum: "7"
-			cardNum: 73
-			style: Standard
 		}
 		title: Sneaking!
 		unique: false
@@ -1268,17 +1100,9 @@
 
 	7_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR07074.jpg
-			//parentId: 7_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07074.jpg
 			collInfo: 7R74
 			rarity: R
-			setNum: "7"
-			cardNum: 74
-			style: Standard
 		}
 		title: So Polite
 		unique: false
@@ -1320,17 +1144,9 @@
 
 	7_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR07075.jpg
-			//parentId: 7_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07075.jpg
 			collInfo: 7C75
 			rarity: C
-			setNum: "7"
-			cardNum: 75
-			style: Standard
 		}
 		title: Sweeter Meats
 		unique: false
@@ -1369,17 +1185,9 @@
 
 	7_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR07076.jpg
-			//parentId: 7_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07076.jpg
 			collInfo: 7C76
 			rarity: C
-			setNum: "7"
-			cardNum: 76
-			style: Standard
 		}
 		title: Very Nice Friends
 		unique: false
@@ -1432,17 +1240,9 @@
 
 	7_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR07077.jpg
-			//parentId: 7_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07077.jpg
 			collInfo: 7U77
 			rarity: U
-			setNum: "7"
-			cardNum: 77
-			style: Standard
 		}
 		title: We Hates Them
 		unique: true
@@ -1499,17 +1299,9 @@
 
 	7_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR07078.jpg
-			//parentId: 7_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07078.jpg
 			collInfo: 7U78
 			rarity: U
-			setNum: "7"
-			cardNum: 78
-			style: Standard
 		}
 		title: Where Shall We Go
 		unique: false

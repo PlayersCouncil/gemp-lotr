@@ -2,17 +2,9 @@
 
 	10_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR10053.jpg
-			//parentId: 10_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10053.jpg
 			collInfo: 10U53
 			rarity: U
-			setNum: "10"
-			cardNum: 53
-			style: Standard
 		}
 		title: Black Marshal
 		unique: false
@@ -62,17 +54,9 @@
 
 	10_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR10054.jpg
-			//parentId: 10_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10054.jpg
 			collInfo: 10U54
 			rarity: U
-			setNum: "10"
-			cardNum: 54
-			style: Standard
 		}
 		title: Cirith Ungol Scavenger
 		unique: false
@@ -115,17 +99,9 @@
 
 	10_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR10055.jpg
-			//parentId: 10_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10055.jpg
 			collInfo: 10C55
 			rarity: C
-			setNum: "10"
-			cardNum: 55
-			style: Standard
 		}
 		title: Cirith Ungol Soldier
 		unique: false
@@ -166,17 +142,9 @@
 
 	10_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR10056.jpg
-			//parentId: 10_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10056.jpg
 			collInfo: 10C56
 			rarity: C
-			setNum: "10"
-			cardNum: 56
-			style: Standard
 		}
 		title: Cirith Ungol Warrior
 		unique: false
@@ -217,17 +185,9 @@
 
 	10_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR10057.jpg
-			//parentId: 10_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10057.jpg
 			collInfo: 10U57
 			rarity: U
-			setNum: "10"
-			cardNum: 57
-			style: Standard
 		}
 		title: Cirith Ungol Watchman
 		unique: false
@@ -271,17 +231,9 @@
 
 	10_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR10058.jpg
-			//parentId: 10_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10058.jpg
 			collInfo: 10R58
 			rarity: R
-			setNum: "10"
-			cardNum: 58
-			style: Standard
 		}
 		title: Dark Swooping Shadows
 		unique: false
@@ -328,17 +280,9 @@
 
 	10_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR10059.jpg
-			//parentId: 10_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10059.jpg
 			collInfo: 10R59
 			rarity: R
-			setNum: "10"
-			cardNum: 59
-			style: Standard
 		}
 		title: Gorbag
 		subtitle: Covetous Captain
@@ -377,17 +321,9 @@
 
 	10_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR10060.jpg
-			//parentId: 10_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10060.jpg
 			collInfo: 10R60
 			rarity: R
-			setNum: "10"
-			cardNum: 60
-			style: Standard
 		}
 		title: Gorbag's Sword
 		unique: true
@@ -456,17 +392,9 @@
 
 	10_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR10061.jpg
-			//parentId: 10_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10061.jpg
 			collInfo: 10C61
 			rarity: C
-			setNum: "10"
-			cardNum: 61
-			style: Standard
 		}
 		title: Houses of Lamentation
 		unique: false
@@ -508,17 +436,9 @@
 
 	10_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR10062.jpg
-			//parentId: 10_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10062.jpg
 			collInfo: 10C62
 			rarity: C
-			setNum: "10"
-			cardNum: 62
-			style: Standard
 		}
 		title: Morgul Banner-bearer
 		unique: false
@@ -589,17 +509,9 @@
 
 	10_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR10063.jpg
-			//parentId: 10_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10063.jpg
 			collInfo: 10R63
 			rarity: R
-			setNum: "10"
-			cardNum: 63
-			style: Standard
 		}
 		title: Morgul Vanguard
 		unique: true
@@ -635,17 +547,9 @@
 
 	10_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR10064.jpg
-			//parentId: 10_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10064.jpg
 			collInfo: 10C64
 			rarity: C
-			setNum: "10"
-			cardNum: 64
-			style: Standard
 		}
 		title: Stooping to the Kill
 		unique: true
@@ -695,17 +599,9 @@
 
 	10_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR10065.jpg
-			//parentId: 10_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10065.jpg
 			collInfo: 10C65
 			rarity: C
-			setNum: "10"
-			cardNum: 65
-			style: Standard
 		}
 		title: Swarming Like Beetles
 		unique: false
@@ -744,17 +640,9 @@
 
 	10_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR10066.jpg
-			//parentId: 10_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10066.jpg
 			collInfo: 10C66
 			rarity: C
-			setNum: "10"
-			cardNum: 66
-			style: Standard
 		}
 		title: Ten Times Outnumbered
 		unique: false
@@ -790,17 +678,9 @@
 
 	10_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR10067.jpg
-			//parentId: 10_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10067.jpg
 			collInfo: 10R67
 			rarity: R
-			setNum: "10"
-			cardNum: 67
-			style: Standard
 		}
 		title: Úlairë Cantëa
 		subtitle: Thrall of The One
@@ -856,17 +736,9 @@
 
 	10_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR10068.jpg
-			//parentId: 10_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10068.jpg
 			collInfo: 10R68
 			rarity: R
-			setNum: "10"
-			cardNum: 68
-			style: Standard
 		}
 		title: Úlairë Enquëa
 		subtitle: Thrall of The One
@@ -922,17 +794,9 @@
 
 	10_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR10069.jpg
-			//parentId: 10_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10069.jpg
 			collInfo: 10U69
 			rarity: U
-			setNum: "10"
-			cardNum: 69
-			style: Standard
 		}
 		title: Úlairë Lemenya
 		subtitle: Thrall of The One
@@ -989,17 +853,9 @@
 
 	10_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR10070.jpg
-			//parentId: 10_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10070.jpg
 			collInfo: 10U70
 			rarity: U
-			setNum: "10"
-			cardNum: 70
-			style: Standard
 		}
 		title: Úlairë Nelya
 		subtitle: Thrall of The One
@@ -1057,17 +913,9 @@
 
 	10_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR10071.jpg
-			//parentId: 10_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10071.jpg
 			collInfo: 10R71
 			rarity: R
-			setNum: "10"
-			cardNum: 71
-			style: Standard
 		}
 		title: Úlairë Toldëa
 		subtitle: Thrall of The One

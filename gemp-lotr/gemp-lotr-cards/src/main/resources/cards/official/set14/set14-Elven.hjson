@@ -2,17 +2,9 @@
 
 	14_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR14002.jpg
-			//parentId: 14_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14002.jpg
 			collInfo: 14R2
 			rarity: R
-			setNum: "14"
-			cardNum: 2
-			style: Standard
 		}
 		title: Elladan
 		subtitle: Son of Elrond
@@ -60,17 +52,9 @@
 
 	14_3: {
 		cardInfo: {
-			imagePath: decipher/LOTR14003.jpg
-			//parentId: 14_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14003.jpg
 			collInfo: 14R3
 			rarity: R
-			setNum: "14"
-			cardNum: 3
-			style: Standard
 		}
 		title: Elrohir
 		subtitle: Son of Elrond
@@ -122,17 +106,9 @@
 
 	14_4: {
 		cardInfo: {
-			imagePath: decipher/LOTR14004.jpg
-			//parentId: 14_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14004.jpg
 			collInfo: 14R4
 			rarity: R
-			setNum: "14"
-			cardNum: 4
-			style: Standard
 		}
 		title: Gildor Inglorion
 		subtitle: Of the House of Finrod

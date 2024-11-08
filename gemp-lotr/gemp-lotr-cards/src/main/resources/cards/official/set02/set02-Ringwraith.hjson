@@ -2,17 +2,9 @@
 
 	2_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR02075.jpg
-			//parentId: 2_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02075.jpg
 			collInfo: 2R75
 			rarity: R
-			setNum: "2"
-			cardNum: 75
-			style: Standard
 		}
 		title: Bill Ferny
 		subtitle: Swarthy Sneering Fellow
@@ -70,17 +62,9 @@
 
 	2_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR02076.jpg
-			//parentId: 2_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02076.jpg
 			collInfo: 2U76
 			rarity: U
-			setNum: "2"
-			cardNum: 76
-			style: Standard
 		}
 		title: Helpless
 		unique: false
@@ -124,17 +108,9 @@
 
 	2_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR02077.jpg
-			//parentId: 2_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02077.jpg
 			collInfo: 2R77
 			rarity: R
-			setNum: "2"
-			cardNum: 77
-			style: Standard
 		}
 		title: His Terrible Servants
 		unique: false
@@ -171,17 +147,9 @@
 
 	2_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR02078.jpg
-			//parentId: 2_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02078.jpg
 			collInfo: 2U78
 			rarity: U
-			setNum: "2"
-			cardNum: 78
-			style: Standard
 		}
 		title: It Wants to be Found
 		unique: false
@@ -214,17 +182,9 @@
 
 	2_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR02079.jpg
-			//parentId: 2_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02079.jpg
 			collInfo: 2U79
 			rarity: U
-			setNum: "2"
-			cardNum: 79
-			style: Standard
 		}
 		title: Resistance Becomes Unbearable
 		unique: false
@@ -270,17 +230,9 @@
 
 	2_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR02080.jpg
-			//parentId: 2_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02080.jpg
 			collInfo: 2R80
 			rarity: R
-			setNum: "2"
-			cardNum: 80
-			style: Standard
 		}
 		title: Stricken Dumb
 		unique: false
@@ -313,17 +265,9 @@
 
 	2_81: {
 		cardInfo: {
-			imagePath: decipher/LOTR02081.jpg
-			//parentId: 2_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02081.jpg
 			collInfo: 2U81
 			rarity: U
-			setNum: "2"
-			cardNum: 81
-			style: Standard
 		}
 		title: They Will Find the Ring
 		unique: false
@@ -362,17 +306,9 @@
 
 	2_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR02082.jpg
-			//parentId: 2_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02082.jpg
 			collInfo: 2U82
 			rarity: U
-			setNum: "2"
-			cardNum: 82
-			style: Standard
 		}
 		title: Úlairë Attëa
 		subtitle: The Easterling
@@ -411,17 +347,9 @@
 
 	2_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR02083.jpg
-			//parentId: 2_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02083.jpg
 			collInfo: 2U83
 			rarity: U
-			setNum: "2"
-			cardNum: 83
-			style: Standard
 		}
 		title: Úlairë Enquëa
 		subtitle: Ringwraith in Twilight
@@ -473,17 +401,9 @@
 
 	2_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR02084.jpg
-			//parentId: 2_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02084.jpg
 			collInfo: 2R84
 			rarity: R
-			setNum: "2"
-			cardNum: 84
-			style: Standard
 		}
 		title: Úlairë Nelya
 		subtitle: Ringwraith in Twilight
@@ -557,17 +477,9 @@
 
 	2_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR02085.jpg
-			//parentId: 2_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02085.jpg
 			collInfo: 2R85
 			rarity: R
-			setNum: "2"
-			cardNum: 85
-			style: Standard
 		}
 		title: The Witch-king
 		subtitle: Lord of the Nazgûl
@@ -620,17 +532,9 @@
 
 	2_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR02086.jpg
-			//parentId: 2_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02086.jpg
 			collInfo: 2R86
 			rarity: R
-			setNum: "2"
-			cardNum: 86
-			style: Standard
 		}
 		title: Wraith-world
 		unique: false

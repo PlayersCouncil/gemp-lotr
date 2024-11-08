@@ -2,17 +2,14 @@
 
 	54_65: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E065.1_card.jpg
-			//parentId: 4_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 4_65.1
+			parent: 4_65
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E065.1_card.jpg
 			collInfo: 4R65
 			rarity: R
-			setNum: "4"
-			cardNum: 65
-			style: Standard
 		}
 		title: Erethón
 		subtitle: Naith Lieutenant
@@ -72,17 +69,14 @@
 
 	54_67: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E067.1_card.jpg
-			//parentId: 4_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 4_67.1
+			parent: 4_67
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E067.1_card.jpg
 			collInfo: 4C67
 			rarity: C
-			setNum: "4"
-			cardNum: 67
-			style: Standard
 		}
 		title: Fereveldir
 		subtitle: Son of Thandronen
@@ -137,17 +131,14 @@
 
 	54_68: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E068.1_card.jpg
-			//parentId: 4_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 4_68.1
+			parent: 4_68
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E068.1_card.jpg
 			collInfo: 4C68
 			rarity: C
-			setNum: "4"
-			cardNum: 68
-			style: Standard
 		}
 		title: Ferevellon
 		subtitle: Son of Thandronen
@@ -196,17 +187,14 @@
 
 	54_71: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E071.1_card.jpg
-			//parentId: 4_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 4_71.1
+			parent: 4_71
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E071.1_card.jpg
 			collInfo: 4C71
 			rarity: C
-			setNum: "4"
-			cardNum: 71
-			style: Standard
 		}
 		title: Haldir
 		subtitle: Emissary of the Galadhrim
@@ -267,17 +255,14 @@
 
 	54_76: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E076.1_card.jpg
-			//parentId: 4_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 4_76.1
+			parent: 4_76
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E076.1_card.jpg
 			collInfo: 4C76
 			rarity: C
-			setNum: "4"
-			cardNum: 76
-			style: Standard
 		}
 		title: Lórien Guardian
 		unique: false
@@ -318,17 +303,14 @@
 
 	54_78: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E078.1_card.jpg
-			//parentId: 4_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 4_78.1
+			parent: 4_78
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E078.1_card.jpg
 			collInfo: 4C78
 			rarity: C
-			setNum: "4"
-			cardNum: 78
-			style: Standard
 		}
 		title: Lórien Swordsman
 		unique: false
@@ -367,17 +349,14 @@
 
 	54_80: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E080.1_card.jpg
-			//parentId: 4_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 4_80.1
+			parent: 4_80
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E080.1_card.jpg
 			collInfo: 4U80
 			rarity: U
-			setNum: "4"
-			cardNum: 80
-			style: Standard
 		}
 		title: Ordulus
 		subtitle: Young Warrior
@@ -422,17 +401,14 @@
 
 	54_81: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E081.1_card.jpg
-			//parentId: 4_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 4_81.1
+			parent: 4_81
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E081.1_card.jpg
 			collInfo: 4U81
 			rarity: U
-			setNum: "4"
-			cardNum: 81
-			style: Standard
 		}
 		title: Pengedhel
 		subtitle: Naith Warrior
@@ -483,17 +459,14 @@
 
 	54_85: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E085.1_card.jpg
-			//parentId: 4_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 4_85.1
+			parent: 4_85
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E085.1_card.jpg
 			collInfo: 4C85
 			rarity: C
-			setNum: "4"
-			cardNum: 85
-			style: Standard
 		}
 		title: Thandronen
 		subtitle: Veteran Protector
@@ -542,17 +515,14 @@
 
 	54_86: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E086.1_card.jpg
-			//parentId: 4_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 4_86.1
+			parent: 4_86
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E086.1_card.jpg
 			collInfo: 4U86
 			rarity: U
-			setNum: "4"
-			cardNum: 86
-			style: Standard
 		}
 		title: Thónnas
 		subtitle: Naith Captain

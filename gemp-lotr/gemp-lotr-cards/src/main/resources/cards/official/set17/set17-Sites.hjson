@@ -2,17 +2,9 @@
 
 	17_145: {
 		cardInfo: {
-			imagePath: decipher/LOTR17145.jpg
-			//parentId: 17_145
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17145.jpg
 			collInfo: 17U145
 			rarity: U
-			setNum: "17"
-			cardNum: 145
-			style: Standard
 		}
 		title: Dol Guldur
 		unique: false
@@ -53,17 +45,9 @@
 
 	17_146: {
 		cardInfo: {
-			imagePath: decipher/LOTR17146.jpg
-			//parentId: 17_146
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17146.jpg
 			collInfo: 17U146
 			rarity: U
-			setNum: "17"
-			cardNum: 146
-			style: Standard
 		}
 		title: Falls of Rauros
 		unique: false
@@ -98,17 +82,9 @@
 
 	17_147: {
 		cardInfo: {
-			imagePath: decipher/LOTR17147.jpg
-			//parentId: 17_147
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17147.jpg
 			collInfo: 17U147
 			rarity: U
-			setNum: "17"
-			cardNum: 147
-			style: Standard
 		}
 		title: Imladris
 		unique: false
@@ -143,17 +119,9 @@
 
 	17_148: {
 		cardInfo: {
-			imagePath: decipher/LOTR17148.jpg
-			//parentId: 17_148
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17148.jpg
 			collInfo: 17U148
 			rarity: U
-			setNum: "17"
-			cardNum: 148
-			style: Standard
 		}
 		title: Nurn
 		unique: false

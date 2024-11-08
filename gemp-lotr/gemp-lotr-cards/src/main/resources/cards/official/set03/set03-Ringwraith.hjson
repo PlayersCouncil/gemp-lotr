@@ -2,17 +2,9 @@
 
 	3_81: {
 		cardInfo: {
-			imagePath: decipher/LOTR03081.jpg
-			//parentId: 3_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03081.jpg
 			collInfo: 3R81
 			rarity: R
-			setNum: "3"
-			cardNum: 81
-			style: Standard
 		}
 		title: Gates of the Dead City
 		unique: false
@@ -55,17 +47,9 @@
 
 	3_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR03082.jpg
-			//parentId: 3_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03082.jpg
 			collInfo: 3U82
 			rarity: U
-			setNum: "3"
-			cardNum: 82
-			style: Standard
 		}
 		title: News of Mordor
 		unique: false
@@ -100,17 +84,9 @@
 
 	3_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR03083.jpg
-			//parentId: 3_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03083.jpg
 			collInfo: 3U83
 			rarity: U
-			setNum: "3"
-			cardNum: 83
-			style: Standard
 		}
 		title: The Ring Draws Them
 		unique: true
@@ -170,17 +146,9 @@
 
 	3_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR03084.jpg
-			//parentId: 3_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03084.jpg
 			collInfo: 3C84
 			rarity: C
-			setNum: "3"
-			cardNum: 84
-			style: Standard
 		}
 		title: They Will Never Stop Hunting You
 		unique: false
@@ -225,17 +193,9 @@
 
 	3_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR03085.jpg
-			//parentId: 3_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03085.jpg
 			collInfo: 3R85
 			rarity: R
-			setNum: "3"
-			cardNum: 85
-			style: Standard
 		}
 		title: Too Great and Terrible
 		unique: false
@@ -282,17 +242,9 @@
 
 	3_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR03086.jpg
-			//parentId: 3_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03086.jpg
 			collInfo: 3U86
 			rarity: U
-			setNum: "3"
-			cardNum: 86
-			style: Standard
 		}
 		title: Úlairë Otsëa
 		subtitle: Ringwraith in Twilight

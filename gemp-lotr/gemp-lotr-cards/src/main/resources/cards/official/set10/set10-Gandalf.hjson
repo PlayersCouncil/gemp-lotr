@@ -2,17 +2,9 @@
 
 	10_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR10014.jpg
-			//parentId: 10_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10014.jpg
 			collInfo: 10R14
 			rarity: R
-			setNum: "10"
-			cardNum: 14
-			style: Standard
 		}
 		title: Borne Far Away
 		unique: false
@@ -62,17 +54,9 @@
 
 	10_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR10015.jpg
-			//parentId: 10_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10015.jpg
 			collInfo: 10U15
 			rarity: U
-			setNum: "10"
-			cardNum: 15
-			style: Standard
 		}
 		title: Brooding on Tomorrow
 		unique: true
@@ -113,17 +97,9 @@
 
 	10_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR10016.jpg
-			//parentId: 10_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10016.jpg
 			collInfo: 10C16
 			rarity: C
-			setNum: "10"
-			cardNum: 16
-			style: Standard
 		}
 		title: Gathering Wind
 		unique: false
@@ -166,17 +142,9 @@
 
 	10_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR10017.jpg
-			//parentId: 10_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10017.jpg
 			collInfo: 10R17
 			rarity: R
-			setNum: "10"
-			cardNum: 17
-			style: Standard
 		}
 		title: Out of the High Airs
 		unique: false
@@ -218,17 +186,9 @@
 
 	10_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR10018.jpg
-			//parentId: 10_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10018.jpg
 			collInfo: 10R18
 			rarity: R
-			setNum: "10"
-			cardNum: 18
-			style: Standard
 		}
 		title: Treebeard
 		subtitle: Keeper of the Watchwood

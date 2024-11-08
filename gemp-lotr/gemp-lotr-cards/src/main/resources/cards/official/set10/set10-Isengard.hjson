@@ -2,17 +2,9 @@
 
 	10_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR10035.jpg
-			//parentId: 10_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10035.jpg
 			collInfo: 10U35
 			rarity: U
-			setNum: "10"
-			cardNum: 35
-			style: Standard
 		}
 		title: Suffered Much Loss
 		unique: false

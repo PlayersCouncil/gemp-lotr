@@ -2,17 +2,9 @@
 
 	17_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR17037.jpg
-			//parentId: 17_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17037.jpg
 			collInfo: 17R37
 			rarity: R
-			setNum: "17"
-			cardNum: 37
-			style: Standard
 		}
 		title: Saruman
 		subtitle: Instigator of Insurrection
@@ -79,17 +71,9 @@
 
 	17_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR17038.jpg
-			//parentId: 17_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17038.jpg
 			collInfo: 17R38
 			rarity: R
-			setNum: "17"
-			cardNum: 38
-			style: Standard
 		}
 		title: Saruman
 		subtitle: Servant of Sauron
@@ -132,17 +116,9 @@
 
 	17_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR17039.jpg
-			//parentId: 17_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17039.jpg
 			collInfo: 17R39
 			rarity: R
-			setNum: "17"
-			cardNum: 39
-			style: Standard
 		}
 		title: Throne of Isengard
 		unique: true

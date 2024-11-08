@@ -2,17 +2,9 @@
 
 	4_298: {
 		cardInfo: {
-			imagePath: decipher/LOTR04298.jpg
-			//parentId: 4_298
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04298.jpg
 			collInfo: 4C298
 			rarity: C
-			setNum: "4"
-			cardNum: 298
-			style: Standard
 		}
 		title: Brace of Coneys
 		unique: false
@@ -48,17 +40,9 @@
 
 	4_299: {
 		cardInfo: {
-			imagePath: decipher/LOTR04299.jpg
-			//parentId: 4_299
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04299.jpg
 			collInfo: 4R299
 			rarity: R
-			setNum: "4"
-			cardNum: 299
-			style: Standard
 		}
 		title: Cliffs of Emyn Muil
 		unique: true
@@ -107,17 +91,9 @@
 
 	4_300: {
 		cardInfo: {
-			imagePath: decipher/LOTR04300.jpg
-			//parentId: 4_300
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04300.jpg
 			collInfo: 4R300
 			rarity: R
-			setNum: "4"
-			cardNum: 300
-			style: Standard
 		}
 		title: Escape
 		unique: false
@@ -165,17 +141,9 @@
 
 	4_301: {
 		cardInfo: {
-			imagePath: decipher/LOTR04301.jpg
-			//parentId: 4_301
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04301.jpg
 			collInfo: 4R301
 			rarity: R
-			setNum: "4"
-			cardNum: 301
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Courteous Halfling
@@ -217,17 +185,9 @@
 
 	4_302: {
 		cardInfo: {
-			imagePath: decipher/LOTR04302.jpg
-			//parentId: 4_302
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04302.jpg
 			collInfo: 4C302
 			rarity: C
-			setNum: "4"
-			cardNum: 302
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Tired Traveller
@@ -269,17 +229,9 @@
 
 	4_303: {
 		cardInfo: {
-			imagePath: decipher/LOTR04303.jpg
-			//parentId: 4_303
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04303.jpg
 			collInfo: 4R303
 			rarity: R
-			setNum: "4"
-			cardNum: 303
-			style: Standard
 		}
 		title: Frodo's Cloak
 		unique: true
@@ -349,17 +301,9 @@
 
 	4_304: {
 		cardInfo: {
-			imagePath: decipher/LOTR04304.jpg
-			//parentId: 4_304
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04304.jpg
 			collInfo: 4R304
 			rarity: R
-			setNum: "4"
-			cardNum: 304
-			style: Standard
 		}
 		title: Get On and Get Away
 		unique: false
@@ -402,17 +346,9 @@
 
 	4_305: {
 		cardInfo: {
-			imagePath: decipher/LOTR04305.jpg
-			//parentId: 4_305
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04305.jpg
 			collInfo: 4U305
 			rarity: U
-			setNum: "4"
-			cardNum: 305
-			style: Standard
 		}
 		title: Good Work
 		unique: true
@@ -468,17 +404,9 @@
 
 	4_306: {
 		cardInfo: {
-			imagePath: decipher/LOTR04306.jpg
-			//parentId: 4_306
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04306.jpg
 			collInfo: 4C306
 			rarity: C
-			setNum: "4"
-			cardNum: 306
-			style: Standard
 		}
 		title: Hobbit Sword
 		unique: false
@@ -504,17 +432,9 @@
 
 	4_307: {
 		cardInfo: {
-			imagePath: decipher/LOTR04307.jpg
-			//parentId: 4_307
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04307.jpg
 			collInfo: 4R307
 			rarity: R
-			setNum: "4"
-			cardNum: 307
-			style: Standard
 		}
 		title: Impatient and Angry
 		unique: false
@@ -562,17 +482,9 @@
 
 	4_308: {
 		cardInfo: {
-			imagePath: decipher/LOTR04308.jpg
-			//parentId: 4_308
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04308.jpg
 			collInfo: 4C308
 			rarity: C
-			setNum: "4"
-			cardNum: 308
-			style: Standard
 		}
 		title: Knocked on the Head
 		unique: false
@@ -603,17 +515,9 @@
 
 	4_309: {
 		cardInfo: {
-			imagePath: decipher/LOTR04309.jpg
-			//parentId: 4_309
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04309.jpg
 			collInfo: 4U309
 			rarity: U
-			setNum: "4"
-			cardNum: 309
-			style: Standard
 		}
 		title: Light Shining Faintly
 		unique: false
@@ -648,17 +552,9 @@
 
 	4_310: {
 		cardInfo: {
-			imagePath: decipher/LOTR04310.jpg
-			//parentId: 4_310
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04310.jpg
 			collInfo: 4C310
 			rarity: C
-			setNum: "4"
-			cardNum: 310
-			style: Standard
 		}
 		title: Merry
 		subtitle: Learned Guide
@@ -708,17 +604,9 @@
 
 	4_311: {
 		cardInfo: {
-			imagePath: decipher/LOTR04311.jpg
-			//parentId: 4_311
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04311.jpg
 			collInfo: 4R311
 			rarity: R
-			setNum: "4"
-			cardNum: 311
-			style: Standard
 		}
 		title: Merry
 		subtitle: Unquenchable Hobbit
@@ -763,17 +651,9 @@
 
 	4_312: {
 		cardInfo: {
-			imagePath: decipher/LOTR04312.jpg
-			//parentId: 4_312
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04312.jpg
 			collInfo: 4U312
 			rarity: U
-			setNum: "4"
-			cardNum: 312
-			style: Standard
 		}
 		title: Mind Your Own Affairs
 		unique: false
@@ -811,17 +691,9 @@
 
 	4_313: {
 		cardInfo: {
-			imagePath: decipher/LOTR04313.jpg
-			//parentId: 4_313
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04313.jpg
 			collInfo: 4R313
 			rarity: R
-			setNum: "4"
-			cardNum: 313
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Just a Nuisance
@@ -866,17 +738,9 @@
 
 	4_314: {
 		cardInfo: {
-			imagePath: decipher/LOTR04314.jpg
-			//parentId: 4_314
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04314.jpg
 			collInfo: 4C314
 			rarity: C
-			setNum: "4"
-			cardNum: 314
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Woolly-footed Rascal
@@ -925,17 +789,9 @@
 
 	4_315: {
 		cardInfo: {
-			imagePath: decipher/LOTR04315.jpg
-			//parentId: 4_315
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04315.jpg
 			collInfo: 4R315
 			rarity: R
-			setNum: "4"
-			cardNum: 315
-			style: Standard
 		}
 		title: Sam
 		subtitle: Frodo's Gardener
@@ -989,17 +845,9 @@
 
 	4_316: {
 		cardInfo: {
-			imagePath: decipher/LOTR04316.jpg
-			//parentId: 4_316
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04316.jpg
 			collInfo: 4C316
 			rarity: C
-			setNum: "4"
-			cardNum: 316
-			style: Standard
 		}
 		title: Sam
 		subtitle: Samwise the Brave
@@ -1057,17 +905,9 @@
 
 	4_317: {
 		cardInfo: {
-			imagePath: decipher/LOTR04317.jpg
-			//parentId: 4_317
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04317.jpg
 			collInfo: 4R317
 			rarity: R
-			setNum: "4"
-			cardNum: 317
-			style: Standard
 		}
 		title: Sam's Pack
 		unique: true
@@ -1106,17 +946,9 @@
 
 	4_318: {
 		cardInfo: {
-			imagePath: decipher/LOTR04318.jpg
-			//parentId: 4_318
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04318.jpg
 			collInfo: 4U318
 			rarity: U
-			setNum: "4"
-			cardNum: 318
-			style: Standard
 		}
 		title: Seven We Had
 		unique: false
@@ -1150,17 +982,9 @@
 
 	4_319: {
 		cardInfo: {
-			imagePath: decipher/LOTR04319.jpg
-			//parentId: 4_319
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04319.jpg
 			collInfo: 4C319
 			rarity: C
-			setNum: "4"
-			cardNum: 319
-			style: Standard
 		}
 		title: Severed His Bonds
 		unique: false
@@ -1204,17 +1028,9 @@
 
 	4_320: {
 		cardInfo: {
-			imagePath: decipher/LOTR04320.jpg
-			//parentId: 4_320
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04320.jpg
 			collInfo: 4U320
 			rarity: U
-			setNum: "4"
-			cardNum: 320
-			style: Standard
 		}
 		title: Store-room
 		unique: false
@@ -1254,17 +1070,9 @@
 
 	4_321: {
 		cardInfo: {
-			imagePath: decipher/LOTR04321.jpg
-			//parentId: 4_321
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04321.jpg
 			collInfo: 4C321
 			rarity: C
-			setNum: "4"
-			cardNum: 321
-			style: Standard
 		}
 		title: Swiftly and Softly
 		unique: false
@@ -1308,17 +1116,9 @@
 
 	4_322: {
 		cardInfo: {
-			imagePath: decipher/LOTR04322.jpg
-			//parentId: 4_322
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04322.jpg
 			collInfo: 4C322
 			rarity: C
-			setNum: "4"
-			cardNum: 322
-			style: Standard
 		}
 		title: Warmed Up a Bit
 		unique: false

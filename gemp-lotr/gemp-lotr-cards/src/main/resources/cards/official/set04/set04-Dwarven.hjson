@@ -2,17 +2,9 @@
 
 	4_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR04041.jpg
-			//parentId: 4_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04041.jpg
 			collInfo: 4R41
 			rarity: R
-			setNum: "4"
-			cardNum: 41
-			style: Standard
 		}
 		title: Axe of Erebor
 		unique: true
@@ -73,17 +65,9 @@
 
 	4_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR04042.jpg
-			//parentId: 4_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04042.jpg
 			collInfo: 4C42
 			rarity: C
-			setNum: "4"
-			cardNum: 42
-			style: Standard
 		}
 		title: Best Company
 		unique: false
@@ -123,17 +107,9 @@
 
 	4_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR04043.jpg
-			//parentId: 4_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04043.jpg
 			collInfo: 4U43
 			rarity: U
-			setNum: "4"
-			cardNum: 43
-			style: Standard
 		}
 		title: Come Here Lad
 		unique: false
@@ -165,17 +141,9 @@
 
 	4_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR04044.jpg
-			//parentId: 4_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04044.jpg
 			collInfo: 4C44
 			rarity: C
-			setNum: "4"
-			cardNum: 44
-			style: Standard
 		}
 		title: Courtesy of My Hall
 		unique: true
@@ -222,17 +190,9 @@
 
 	4_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR04045.jpg
-			//parentId: 4_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04045.jpg
 			collInfo: 4R45
 			rarity: R
-			setNum: "4"
-			cardNum: 45
-			style: Standard
 		}
 		title: Dwarven Foresight
 		unique: false
@@ -268,17 +228,9 @@
 
 	4_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR04046.jpg
-			//parentId: 4_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04046.jpg
 			collInfo: 4R46
 			rarity: R
-			setNum: "4"
-			cardNum: 46
-			style: Standard
 		}
 		title: Ever My Heart Rises
 		unique: true
@@ -366,17 +318,9 @@
 
 	4_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR04047.jpg
-			//parentId: 4_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04047.jpg
 			collInfo: 4U47
 			rarity: U
-			setNum: "4"
-			cardNum: 47
-			style: Standard
 		}
 		title: From the Armory
 		unique: false
@@ -420,17 +364,9 @@
 
 	4_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR04048.jpg
-			//parentId: 4_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04048.jpg
 			collInfo: 4R48
 			rarity: R
-			setNum: "4"
-			cardNum: 48
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Lockbearer
@@ -471,17 +407,9 @@
 
 	4_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR04049.jpg
-			//parentId: 4_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04049.jpg
 			collInfo: 4C49
 			rarity: C
-			setNum: "4"
-			cardNum: 49
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Unbidden Guest
@@ -534,17 +462,9 @@
 
 	4_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR04050.jpg
-			//parentId: 4_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04050.jpg
 			collInfo: 4C50
 			rarity: C
-			setNum: "4"
-			cardNum: 50
-			style: Standard
 		}
 		title: Here Is Good Rock
 		unique: true
@@ -586,17 +506,9 @@
 
 	4_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR04051.jpg
-			//parentId: 4_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04051.jpg
 			collInfo: 4C51
 			rarity: C
-			setNum: "4"
-			cardNum: 51
-			style: Standard
 		}
 		title: Khazâd Ai-mênu
 		unique: false
@@ -649,17 +561,9 @@
 
 	4_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR04052.jpg
-			//parentId: 4_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04052.jpg
 			collInfo: 4R52
 			rarity: R
-			setNum: "4"
-			cardNum: 52
-			style: Standard
 		}
 		title: My Axe Is Notched
 		unique: true
@@ -717,17 +621,9 @@
 
 	4_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR04053.jpg
-			//parentId: 4_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04053.jpg
 			collInfo: 4U53
 			rarity: U
-			setNum: "4"
-			cardNum: 53
-			style: Standard
 		}
 		title: Quick As May Be
 		unique: false
@@ -768,17 +664,9 @@
 
 	4_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR04054.jpg
-			//parentId: 4_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04054.jpg
 			collInfo: 4R54
 			rarity: R
-			setNum: "4"
-			cardNum: 54
-			style: Standard
 		}
 		title: Rest by Blind Night
 		unique: false
@@ -811,17 +699,9 @@
 
 	4_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR04055.jpg
-			//parentId: 4_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04055.jpg
 			collInfo: 4R55
 			rarity: R
-			setNum: "4"
-			cardNum: 55
-			style: Standard
 		}
 		title: Restless Axe
 		unique: false
@@ -869,17 +749,9 @@
 
 	4_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR04056.jpg
-			//parentId: 4_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04056.jpg
 			collInfo: 4C56
 			rarity: C
-			setNum: "4"
-			cardNum: 56
-			style: Standard
 		}
 		title: Search Far and Wide
 		unique: false
@@ -918,17 +790,9 @@
 
 	4_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR04057.jpg
-			//parentId: 4_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04057.jpg
 			collInfo: 4U57
 			rarity: U
-			setNum: "4"
-			cardNum: 57
-			style: Standard
 		}
 		title: Stout and Strong
 		unique: true

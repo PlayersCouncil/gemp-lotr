@@ -2,17 +2,9 @@
 
 	1_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR01001.jpg
-			//parentId: 1_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01001.jpg
 			collInfo: 1R1
 			rarity: R
-			setNum: "1"
-			cardNum: 1
-			style: Standard
 		}
 		title: The One Ring
 		subtitle: Isildur's Bane
@@ -84,17 +76,9 @@
 
 	1_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR01002.jpg
-			//parentId: 1_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR01002.jpg
 			collInfo: 1C2
 			rarity: C
-			setNum: "1"
-			cardNum: 2
-			style: Standard
 		}
 		title: The One Ring
 		subtitle: The Ruling Ring

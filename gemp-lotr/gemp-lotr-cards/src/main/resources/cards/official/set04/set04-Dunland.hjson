@@ -2,17 +2,9 @@
 
 	4_3: {
 		cardInfo: {
-			imagePath: decipher/LOTR04003.jpg
-			//parentId: 4_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04003.jpg
 			collInfo: 4C3
 			rarity: C
-			setNum: "4"
-			cardNum: 3
-			style: Standard
 		}
 		title: Anger
 		unique: false
@@ -58,17 +50,9 @@
 
 	4_4: {
 		cardInfo: {
-			imagePath: decipher/LOTR04004.jpg
-			//parentId: 4_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04004.jpg
 			collInfo: 4C4
 			rarity: C
-			setNum: "4"
-			cardNum: 4
-			style: Standard
 		}
 		title: Band of Wild Men
 		unique: false
@@ -109,17 +93,9 @@
 
 	4_5: {
 		cardInfo: {
-			imagePath: decipher/LOTR04005.jpg
-			//parentId: 4_5
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04005.jpg
 			collInfo: 4C5
 			rarity: C
-			setNum: "4"
-			cardNum: 5
-			style: Standard
 		}
 		title: Burn Every Village
 		unique: false
@@ -158,17 +134,9 @@
 
 	4_6: {
 		cardInfo: {
-			imagePath: decipher/LOTR04006.jpg
-			//parentId: 4_6
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04006.jpg
 			collInfo: 4R6
 			rarity: R
-			setNum: "4"
-			cardNum: 6
-			style: Standard
 		}
 		title: Constantly Threatening
 		unique: false
@@ -209,17 +177,9 @@
 
 	4_7: {
 		cardInfo: {
-			imagePath: decipher/LOTR04007.jpg
-			//parentId: 4_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04007.jpg
 			collInfo: 4C7
 			rarity: C
-			setNum: "4"
-			cardNum: 7
-			style: Standard
 		}
 		title: Dark Fury
 		unique: false
@@ -259,17 +219,9 @@
 
 	4_8: {
 		cardInfo: {
-			imagePath: decipher/LOTR04008.jpg
-			//parentId: 4_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04008.jpg
 			collInfo: 4U8
 			rarity: U
-			setNum: "4"
-			cardNum: 8
-			style: Standard
 		}
 		title: Death to the Strawheads
 		unique: false
@@ -304,17 +256,9 @@
 
 	4_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR04009.jpg
-			//parentId: 4_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04009.jpg
 			collInfo: 4U9
 			rarity: U
-			setNum: "4"
-			cardNum: 9
-			style: Standard
 		}
 		title: Dunlending Arsonist
 		unique: false
@@ -370,17 +314,9 @@
 
 	4_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR04010.jpg
-			//parentId: 4_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04010.jpg
 			collInfo: 4C10
 			rarity: C
-			setNum: "4"
-			cardNum: 10
-			style: Standard
 		}
 		title: Dunlending Brigand
 		unique: false
@@ -405,17 +341,9 @@
 
 	4_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR04011.jpg
-			//parentId: 4_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04011.jpg
 			collInfo: 4U11
 			rarity: U
-			setNum: "4"
-			cardNum: 11
-			style: Standard
 		}
 		title: Dunlending Looter
 		unique: false
@@ -466,17 +394,9 @@
 
 	4_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR04012.jpg
-			//parentId: 4_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04012.jpg
 			collInfo: 4C12
 			rarity: C
-			setNum: "4"
-			cardNum: 12
-			style: Standard
 		}
 		title: Dunlending Madman
 		unique: false
@@ -525,17 +445,9 @@
 
 	4_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR04013.jpg
-			//parentId: 4_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04013.jpg
 			collInfo: 4U13
 			rarity: U
-			setNum: "4"
-			cardNum: 13
-			style: Standard
 		}
 		title: Dunlending Pillager
 		unique: false
@@ -584,17 +496,9 @@
 
 	4_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR04014.jpg
-			//parentId: 4_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04014.jpg
 			collInfo: 4C14
 			rarity: C
-			setNum: "4"
-			cardNum: 14
-			style: Standard
 		}
 		title: Dunlending Ransacker
 		unique: false
@@ -636,17 +540,9 @@
 
 	4_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR04015.jpg
-			//parentId: 4_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04015.jpg
 			collInfo: 4C15
 			rarity: C
-			setNum: "4"
-			cardNum: 15
-			style: Standard
 		}
 		title: Dunlending Ravager
 		unique: false
@@ -701,17 +597,9 @@
 
 	4_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR04016.jpg
-			//parentId: 4_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04016.jpg
 			collInfo: 4C16
 			rarity: C
-			setNum: "4"
-			cardNum: 16
-			style: Standard
 		}
 		title: Dunlending Robber
 		unique: false
@@ -760,17 +648,9 @@
 
 	4_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR04017.jpg
-			//parentId: 4_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04017.jpg
 			collInfo: 4C17
 			rarity: C
-			setNum: "4"
-			cardNum: 17
-			style: Standard
 		}
 		title: Dunlending Savage
 		unique: false
@@ -795,17 +675,9 @@
 
 	4_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR04018.jpg
-			//parentId: 4_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04018.jpg
 			collInfo: 4C18
 			rarity: C
-			setNum: "4"
-			cardNum: 18
-			style: Standard
 		}
 		title: Dunlending Warrior
 		unique: false
@@ -852,17 +724,9 @@
 
 	4_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR04019.jpg
-			//parentId: 4_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04019.jpg
 			collInfo: 4R19
 			rarity: R
-			setNum: "4"
-			cardNum: 19
-			style: Standard
 		}
 		title: Hides
 		unique: false
@@ -927,17 +791,9 @@
 
 	4_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR04020.jpg
-			//parentId: 4_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04020.jpg
 			collInfo: 4R20
 			rarity: R
-			setNum: "4"
-			cardNum: 20
-			style: Standard
 		}
 		title: Hill Chief
 		unique: true
@@ -979,17 +835,9 @@
 
 	4_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR04021.jpg
-			//parentId: 4_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04021.jpg
 			collInfo: 4C21
 			rarity: C
-			setNum: "4"
-			cardNum: 21
-			style: Standard
 		}
 		title: Hillman Band
 		unique: false
@@ -1030,17 +878,9 @@
 
 	4_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR04022.jpg
-			//parentId: 4_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04022.jpg
 			collInfo: 4R22
 			rarity: R
-			setNum: "4"
-			cardNum: 22
-			style: Standard
 		}
 		title: Hillman Horde
 		unique: true
@@ -1103,17 +943,9 @@
 
 	4_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR04023.jpg
-			//parentId: 4_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04023.jpg
 			collInfo: 4R23
 			rarity: R
-			setNum: "4"
-			cardNum: 23
-			style: Standard
 		}
 		title: Hillman Mob
 		unique: false
@@ -1169,17 +1001,9 @@
 
 	4_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR04024.jpg
-			//parentId: 4_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04024.jpg
 			collInfo: 4U24
 			rarity: U
-			setNum: "4"
-			cardNum: 24
-			style: Standard
 		}
 		title: Hillman Rabble
 		unique: false
@@ -1230,17 +1054,9 @@
 
 	4_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR04025.jpg
-			//parentId: 4_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04025.jpg
 			collInfo: 4C25
 			rarity: C
-			setNum: "4"
-			cardNum: 25
-			style: Standard
 		}
 		title: Hillman Tribe
 		unique: false
@@ -1282,17 +1098,9 @@
 
 	4_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR04026.jpg
-			//parentId: 4_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04026.jpg
 			collInfo: 4C26
 			rarity: C
-			setNum: "4"
-			cardNum: 26
-			style: Standard
 		}
 		title: Iron Axe
 		unique: false
@@ -1317,17 +1125,9 @@
 
 	4_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR04027.jpg
-			//parentId: 4_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04027.jpg
 			collInfo: 4U27
 			rarity: U
-			setNum: "4"
-			cardNum: 27
-			style: Standard
 		}
 		title: Living Off Rock
 		unique: false
@@ -1375,17 +1175,9 @@
 
 	4_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR04028.jpg
-			//parentId: 4_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04028.jpg
 			collInfo: 4U28
 			rarity: U
-			setNum: "4"
-			cardNum: 28
-			style: Standard
 		}
 		title: No Defense
 		unique: false
@@ -1447,17 +1239,9 @@
 
 	4_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR04029.jpg
-			//parentId: 4_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04029.jpg
 			collInfo: 4R29
 			rarity: R
-			setNum: "4"
-			cardNum: 29
-			style: Standard
 		}
 		title: No Refuge
 		unique: true
@@ -1494,17 +1278,9 @@
 
 	4_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR04030.jpg
-			//parentId: 4_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04030.jpg
 			collInfo: 4R30
 			rarity: R
-			setNum: "4"
-			cardNum: 30
-			style: Standard
 		}
 		title: No Retreat
 		unique: false
@@ -1547,17 +1323,9 @@
 
 	4_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR04031.jpg
-			//parentId: 4_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04031.jpg
 			collInfo: 4U31
 			rarity: U
-			setNum: "4"
-			cardNum: 31
-			style: Standard
 		}
 		title: Over the Isen
 		unique: true
@@ -1597,17 +1365,9 @@
 
 	4_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR04032.jpg
-			//parentId: 4_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04032.jpg
 			collInfo: 4R32
 			rarity: R
-			setNum: "4"
-			cardNum: 32
-			style: Standard
 		}
 		title: Ravage the Defeated
 		unique: false
@@ -1643,17 +1403,9 @@
 
 	4_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR04033.jpg
-			//parentId: 4_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04033.jpg
 			collInfo: 4R33
 			rarity: R
-			setNum: "4"
-			cardNum: 33
-			style: Standard
 		}
 		title: Saruman
 		subtitle: Rabble-rouser
@@ -1719,17 +1471,9 @@
 
 	4_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR04034.jpg
-			//parentId: 4_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04034.jpg
 			collInfo: 4U34
 			rarity: U
-			setNum: "4"
-			cardNum: 34
-			style: Standard
 		}
 		title: Secret Folk
 		unique: true
@@ -1787,17 +1531,9 @@
 
 	4_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR04035.jpg
-			//parentId: 4_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04035.jpg
 			collInfo: 4R35
 			rarity: R
-			setNum: "4"
-			cardNum: 35
-			style: Standard
 		}
 		title: Wake of Destruction
 		unique: false
@@ -1834,17 +1570,9 @@
 
 	4_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR04036.jpg
-			//parentId: 4_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04036.jpg
 			collInfo: 4U36
 			rarity: U
-			setNum: "4"
-			cardNum: 36
-			style: Standard
 		}
 		title: War Club
 		unique: false
@@ -1883,17 +1611,9 @@
 
 	4_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR04037.jpg
-			//parentId: 4_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04037.jpg
 			collInfo: 4C37
 			rarity: C
-			setNum: "4"
-			cardNum: 37
-			style: Standard
 		}
 		title: War Cry of Dunland
 		unique: false
@@ -1938,17 +1658,9 @@
 
 	4_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR04038.jpg
-			//parentId: 4_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04038.jpg
 			collInfo: 4U38
 			rarity: U
-			setNum: "4"
-			cardNum: 38
-			style: Standard
 		}
 		title: Wild Man of Dunland
 		unique: false
@@ -2004,17 +1716,9 @@
 
 	4_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR04039.jpg
-			//parentId: 4_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04039.jpg
 			collInfo: 4R39
 			rarity: R
-			setNum: "4"
-			cardNum: 39
-			style: Standard
 		}
 		title: Wild Man Raid
 		unique: false
@@ -2050,17 +1754,9 @@
 
 	4_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR04040.jpg
-			//parentId: 4_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04040.jpg
 			collInfo: 4R40
 			rarity: R
-			setNum: "4"
-			cardNum: 40
-			style: Standard
 		}
 		title: Wulf
 		subtitle: Dunlending Chieftain

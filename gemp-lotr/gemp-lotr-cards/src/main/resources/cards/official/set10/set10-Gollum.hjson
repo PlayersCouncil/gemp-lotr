@@ -2,17 +2,9 @@
 
 	10_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR10019.jpg
-			//parentId: 10_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10019.jpg
 			collInfo: 10R19
 			rarity: R
-			setNum: "10"
-			cardNum: 19
-			style: Standard
 		}
 		title: A Dark Shape Sprang
 		unique: false
@@ -71,17 +63,9 @@
 
 	10_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR10020.jpg
-			//parentId: 10_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10020.jpg
 			collInfo: 10U20
 			rarity: U
-			setNum: "10"
-			cardNum: 20
-			style: Standard
 		}
 		title: Final Strike
 		unique: false
@@ -147,17 +131,9 @@
 
 	10_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR10021.jpg
-			//parentId: 10_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10021.jpg
 			collInfo: 10R21
 			rarity: R
-			setNum: "10"
-			cardNum: 21
-			style: Standard
 		}
 		title: Gollum
 		subtitle: Mad Thing
@@ -212,17 +188,9 @@
 
 	10_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR10022.jpg
-			//parentId: 10_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10022.jpg
 			collInfo: 10U22
 			rarity: U
-			setNum: "10"
-			cardNum: 22
-			style: Standard
 		}
 		title: Reclaim the Precious
 		unique: false
@@ -286,17 +254,9 @@
 
 	10_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR10023.jpg
-			//parentId: 10_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10023.jpg
 			collInfo: 10R23
 			rarity: R
-			setNum: "10"
-			cardNum: 23
-			style: Standard
 		}
 		title: Shelob
 		subtitle: Her Ladyship
@@ -347,17 +307,9 @@
 
 	10_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR10024.jpg
-			//parentId: 10_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR10024.jpg
 			collInfo: 10C24
 			rarity: C
-			setNum: "10"
-			cardNum: 24
-			style: Standard
 		}
 		title: Unabated in Malice
 		unique: true

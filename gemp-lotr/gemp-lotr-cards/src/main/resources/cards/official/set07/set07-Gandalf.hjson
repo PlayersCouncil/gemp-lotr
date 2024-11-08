@@ -2,17 +2,9 @@
 
 	7_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR07031.jpg
-			//parentId: 7_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07031.jpg
 			collInfo: 7C31
 			rarity: C
-			setNum: "7"
-			cardNum: 31
-			style: Standard
 		}
 		title: All Save One
 		unique: false
@@ -66,17 +58,9 @@
 
 	7_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR07032.jpg
-			//parentId: 7_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07032.jpg
 			collInfo: 7R32
 			rarity: R
-			setNum: "7"
-			cardNum: 32
-			style: Standard
 		}
 		title: The Board Is Set
 		unique: false
@@ -130,17 +114,9 @@
 
 	7_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR07033.jpg
-			//parentId: 7_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07033.jpg
 			collInfo: 7R33
 			rarity: R
-			setNum: "7"
-			cardNum: 33
-			style: Standard
 		}
 		title: Citadel to Gate
 		unique: false
@@ -188,17 +164,9 @@
 
 	7_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR07034.jpg
-			//parentId: 7_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07034.jpg
 			collInfo: 7C34
 			rarity: C
-			setNum: "7"
-			cardNum: 34
-			style: Standard
 		}
 		title: Echoes of Valinor
 		unique: false
@@ -239,17 +207,9 @@
 
 	7_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR07035.jpg
-			//parentId: 7_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07035.jpg
 			collInfo: 7U35
 			rarity: U
-			setNum: "7"
-			cardNum: 35
-			style: Standard
 		}
 		title: Fool's Hope
 		unique: false
@@ -297,17 +257,9 @@
 
 	7_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR07036.jpg
-			//parentId: 7_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07036.jpg
 			collInfo: 7C36
 			rarity: C
-			setNum: "7"
-			cardNum: 36
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Defender of the West
@@ -352,17 +304,9 @@
 
 	7_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR07037.jpg
-			//parentId: 7_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07037.jpg
 			collInfo: 7R37
 			rarity: R
-			setNum: "7"
-			cardNum: 37
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Manager of Wizards
@@ -415,17 +359,9 @@
 
 	7_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR07038.jpg
-			//parentId: 7_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07038.jpg
 			collInfo: 7R38
 			rarity: R
-			setNum: "7"
-			cardNum: 38
-			style: Standard
 		}
 		title: Gandalf's Staff
 		subtitle: Focus of Power
@@ -464,17 +400,9 @@
 
 	7_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR07039.jpg
-			//parentId: 7_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07039.jpg
 			collInfo: 7R39
 			rarity: R
-			setNum: "7"
-			cardNum: 39
-			style: Standard
 		}
 		title: Glamdring
 		subtitle: Elven Blade
@@ -535,17 +463,9 @@
 
 	7_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR07040.jpg
-			//parentId: 7_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07040.jpg
 			collInfo: 7C40
 			rarity: C
-			setNum: "7"
-			cardNum: 40
-			style: Standard
 		}
 		title: Have Patience
 		unique: false
@@ -581,17 +501,9 @@
 
 	7_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR07041.jpg
-			//parentId: 7_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07041.jpg
 			collInfo: 7C41
 			rarity: C
-			setNum: "7"
-			cardNum: 41
-			style: Standard
 		}
 		title: Intimidate
 		unique: false
@@ -631,17 +543,9 @@
 
 	7_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR07042.jpg
-			//parentId: 7_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07042.jpg
 			collInfo: 7U42
 			rarity: U
-			setNum: "7"
-			cardNum: 42
-			style: Standard
 		}
 		title: King's Advisor
 		unique: false
@@ -690,17 +594,9 @@
 
 	7_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR07043.jpg
-			//parentId: 7_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07043.jpg
 			collInfo: 7R43
 			rarity: R
-			setNum: "7"
-			cardNum: 43
-			style: Standard
 		}
 		title: Light the Beacons
 		unique: false
@@ -752,17 +648,9 @@
 
 	7_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR07044.jpg
-			//parentId: 7_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07044.jpg
 			collInfo: 7R44
 			rarity: R
-			setNum: "7"
-			cardNum: 44
-			style: Standard
 		}
 		title: Moment of Respite
 		unique: true
@@ -803,17 +691,9 @@
 
 	7_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR07045.jpg
-			//parentId: 7_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07045.jpg
 			collInfo: 7U45
 			rarity: U
-			setNum: "7"
-			cardNum: 45
-			style: Standard
 		}
 		title: Númenor's Pride
 		unique: false
@@ -880,17 +760,9 @@
 
 	7_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR07046.jpg
-			//parentId: 7_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07046.jpg
 			collInfo: 7C46
 			rarity: C
-			setNum: "7"
-			cardNum: 46
-			style: Standard
 		}
 		title: Peace of Mind
 		unique: false
@@ -926,17 +798,9 @@
 
 	7_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR07047.jpg
-			//parentId: 7_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07047.jpg
 			collInfo: 7U47
 			rarity: U
-			setNum: "7"
-			cardNum: 47
-			style: Standard
 		}
 		title: Sharpen Your Swords
 		unique: false
@@ -982,17 +846,9 @@
 
 	7_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR07048.jpg
-			//parentId: 7_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07048.jpg
 			collInfo: 7R48
 			rarity: R
-			setNum: "7"
-			cardNum: 48
-			style: Standard
 		}
 		title: Stay This Madness
 		unique: false
@@ -1058,17 +914,9 @@
 
 	7_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR07049.jpg
-			//parentId: 7_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07049.jpg
 			collInfo: 7U49
 			rarity: U
-			setNum: "7"
-			cardNum: 49
-			style: Standard
 		}
 		title: Steadfast Champion
 		unique: true
@@ -1125,17 +973,9 @@
 
 	7_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR07050.jpg
-			//parentId: 7_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07050.jpg
 			collInfo: 7R50
 			rarity: R
-			setNum: "7"
-			cardNum: 50
-			style: Standard
 		}
 		title: Terrible and Evil
 		unique: false
@@ -1212,17 +1052,9 @@
 
 	7_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR07051.jpg
-			//parentId: 7_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07051.jpg
 			collInfo: 7C51
 			rarity: C
-			setNum: "7"
-			cardNum: 51
-			style: Standard
 		}
 		title: Undaunted
 		unique: false
@@ -1267,17 +1099,9 @@
 
 	7_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR07052.jpg
-			//parentId: 7_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07052.jpg
 			collInfo: 7C52
 			rarity: C
-			setNum: "7"
-			cardNum: 52
-			style: Standard
 		}
 		title: Wizard Staff
 		unique: false

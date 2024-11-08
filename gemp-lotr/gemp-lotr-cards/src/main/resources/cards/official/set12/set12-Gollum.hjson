@@ -2,17 +2,9 @@
 
 	12_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR12037.jpg
-			//parentId: 12_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12037.jpg
 			collInfo: 12R37
 			rarity: R
-			setNum: "12"
-			cardNum: 37
-			style: Standard
 		}
 		title: Come Away
 		unique: false
@@ -71,17 +63,9 @@
 
 	12_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR12038.jpg
-			//parentId: 12_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12038.jpg
 			collInfo: 12R38
 			rarity: R
-			setNum: "12"
-			cardNum: 38
-			style: Standard
 		}
 		title: From Deep in Shadow
 		unique: false
@@ -125,17 +109,9 @@
 
 	12_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR12039.jpg
-			//parentId: 12_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12039.jpg
 			collInfo: 12U39
 			rarity: U
-			setNum: "12"
-			cardNum: 39
-			style: Standard
 		}
 		title: Not Alone
 		unique: false
@@ -176,17 +152,9 @@
 
 	12_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR12040.jpg
-			//parentId: 12_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12040.jpg
 			collInfo: 12C40
 			rarity: C
-			setNum: "12"
-			cardNum: 40
-			style: Standard
 		}
 		title: There's Another Way
 		unique: false
@@ -239,17 +207,9 @@
 
 	12_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR12041.jpg
-			//parentId: 12_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12041.jpg
 			collInfo: 12U41
 			rarity: U
-			setNum: "12"
-			cardNum: 41
-			style: Standard
 		}
 		title: Treacherous Little Toad
 		unique: false

@@ -2,17 +2,9 @@
 
 	0_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR00060.jpg
-			//parentId: 0_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR00060.jpg
 			collInfo: 0P60
 			rarity: P
-			setNum: "0"
-			cardNum: 60
-			style: Standard
 		}
 		title: Tom Bombadil's Hat
 		unique: true
@@ -76,17 +68,9 @@
 
 	0_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR00067.jpg
-			//parentId: 0_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR00067.jpg
 			collInfo: 0P67
 			rarity: P
-			setNum: "0"
-			cardNum: 67
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Mr. Underhill

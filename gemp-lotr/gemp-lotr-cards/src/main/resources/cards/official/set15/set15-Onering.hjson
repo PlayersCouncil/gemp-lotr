@@ -2,17 +2,9 @@
 
 	15_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR15001.jpg
-			//parentId: 15_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15001.jpg
 			collInfo: 15R1
 			rarity: R
-			setNum: "15"
-			cardNum: 1
-			style: Standard
 		}
 		title: The One Ring
 		subtitle: The Ring of Doom
@@ -94,17 +86,9 @@
 
 	15_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR15002.jpg
-			//parentId: 15_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15002.jpg
 			collInfo: 15S2
 			rarity: S
-			setNum: "15"
-			cardNum: 2
-			style: Standard
 		}
 		title: The One Ring
 		subtitle: The Ruling Ring

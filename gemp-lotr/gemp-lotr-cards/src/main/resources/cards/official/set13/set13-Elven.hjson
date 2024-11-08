@@ -2,17 +2,9 @@
 
 	13_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR13009.jpg
-			//parentId: 13_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13009.jpg
 			collInfo: 13S9
 			rarity: S
-			setNum: "13"
-			cardNum: 9
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Reflection of Lúthien
@@ -68,17 +60,9 @@
 
 	13_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR13010.jpg
-			//parentId: 13_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13010.jpg
 			collInfo: 13R10
 			rarity: R
-			setNum: "13"
-			cardNum: 10
-			style: Standard
 		}
 		title: Asfaloth
 		subtitle: Swift Blossom
@@ -143,17 +127,9 @@
 
 	13_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR13011.jpg
-			//parentId: 13_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13011.jpg
 			collInfo: 13R11
 			rarity: R
-			setNum: "13"
-			cardNum: 11
-			style: Standard
 		}
 		title: Celeborn
 		subtitle: The Wise
@@ -208,17 +184,9 @@
 
 	13_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR13012.jpg
-			//parentId: 13_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13012.jpg
 			collInfo: 13C12
 			rarity: C
-			setNum: "13"
-			cardNum: 12
-			style: Standard
 		}
 		title: City of the Trees
 		unique: false
@@ -269,17 +237,9 @@
 
 	13_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR13013.jpg
-			//parentId: 13_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13013.jpg
 			collInfo: 13C13
 			rarity: C
-			setNum: "13"
-			cardNum: 13
-			style: Standard
 		}
 		title: Crashing Cavalry
 		unique: false
@@ -329,17 +289,9 @@
 
 	13_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR13014.jpg
-			//parentId: 13_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13014.jpg
 			collInfo: 13C14
 			rarity: C
-			setNum: "13"
-			cardNum: 14
-			style: Standard
 		}
 		title: Final Shot
 		unique: false
@@ -380,17 +332,9 @@
 
 	13_15: {
 		cardInfo: {
-			imagePath: decipher/LOTR13015.jpg
-			//parentId: 13_15
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13015.jpg
 			collInfo: 13R15
 			rarity: R
-			setNum: "13"
-			cardNum: 15
-			style: Standard
 		}
 		title: Galadriel
 		subtitle: Sorceress of the Hidden Land
@@ -458,17 +402,9 @@
 
 	13_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR13016.jpg
-			//parentId: 13_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13016.jpg
 			collInfo: 13C16
 			rarity: C
-			setNum: "13"
-			cardNum: 16
-			style: Standard
 		}
 		title: Inside a Song
 		unique: false
@@ -511,17 +447,9 @@
 
 	13_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR13017.jpg
-			//parentId: 13_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13017.jpg
 			collInfo: 13U17
 			rarity: U
-			setNum: "13"
-			cardNum: 17
-			style: Standard
 		}
 		title: Kindreds Estranged
 		unique: false
@@ -580,17 +508,9 @@
 
 	13_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR13018.jpg
-			//parentId: 13_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13018.jpg
 			collInfo: 13R18
 			rarity: R
-			setNum: "13"
-			cardNum: 18
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Of the Grey Company
@@ -645,17 +565,9 @@
 
 	13_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR13019.jpg
-			//parentId: 13_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13019.jpg
 			collInfo: 13U19
 			rarity: U
-			setNum: "13"
-			cardNum: 19
-			style: Standard
 		}
 		title: Let Fly
 		unique: false
@@ -697,17 +609,9 @@
 
 	13_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR13020.jpg
-			//parentId: 13_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13020.jpg
 			collInfo: 13S20
 			rarity: S
-			setNum: "13"
-			cardNum: 20
-			style: Standard
 		}
 		title: Lórien Protector
 		unique: false
@@ -763,17 +667,9 @@
 
 	13_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR13021.jpg
-			//parentId: 13_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13021.jpg
 			collInfo: 13C21
 			rarity: C
-			setNum: "13"
-			cardNum: 21
-			style: Standard
 		}
 		title: Many Miles
 		unique: false
@@ -817,17 +713,9 @@
 
 	13_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR13022.jpg
-			//parentId: 13_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13022.jpg
 			collInfo: 13R22
 			rarity: R
-			setNum: "13"
-			cardNum: 22
-			style: Standard
 		}
 		title: Secluded Homestead
 		unique: true
@@ -901,17 +789,9 @@
 
 	13_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR13023.jpg
-			//parentId: 13_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13023.jpg
 			collInfo: 13C23
 			rarity: C
-			setNum: "13"
-			cardNum: 23
-			style: Standard
 		}
 		title: Shrouded Elf
 		unique: false
@@ -956,17 +836,9 @@
 
 	13_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR13024.jpg
-			//parentId: 13_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13024.jpg
 			collInfo: 13C24
 			rarity: C
-			setNum: "13"
-			cardNum: 24
-			style: Standard
 		}
 		title: Spring Forth Nimbly
 		unique: false
@@ -1001,17 +873,9 @@
 
 	13_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR13025.jpg
-			//parentId: 13_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13025.jpg
 			collInfo: 13C25
 			rarity: C
-			setNum: "13"
-			cardNum: 25
-			style: Standard
 		}
 		title: Standing Tall
 		unique: false
@@ -1091,17 +955,9 @@
 
 	13_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR13026.jpg
-			//parentId: 13_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13026.jpg
 			collInfo: 13R26
 			rarity: R
-			setNum: "13"
-			cardNum: 26
-			style: Standard
 		}
 		title: Take Up the Bow
 		unique: false
@@ -1155,17 +1011,9 @@
 
 	13_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR13027.jpg
-			//parentId: 13_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13027.jpg
 			collInfo: 13U27
 			rarity: U
-			setNum: "13"
-			cardNum: 27
-			style: Standard
 		}
 		title: Wells of Deep Memory
 		unique: true

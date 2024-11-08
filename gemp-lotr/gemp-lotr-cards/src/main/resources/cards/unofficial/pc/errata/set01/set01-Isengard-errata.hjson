@@ -1,17 +1,14 @@
 {
 	51_126: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E126.1.jpg
-			javaClass: false
+			//id: 1_126.1
 			parent: 1_126
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E126.1.jpg
 			collInfo: 1C126
 			rarity: U
-			setNum: "1"
-			cardNum: 126
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Hunt Them Down!
 		culture: isengard
@@ -40,17 +37,14 @@
 	
 	51_138: {
 		cardInfo: {
-			imagePath: errata/51_138.jpg
-			javaClass: false
+			//id: 1_138.1
 			parent: 1_138
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_138.jpg
 			collInfo: 1C138
 			rarity: C
-			setNum: "1"
-			cardNum: 138
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Saruman's Snows
 		culture: isengard
@@ -123,7 +117,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 1R139
 	# 		rarity: R
 	# 		setNum: "1"
@@ -190,17 +184,14 @@
 	
 	51_139: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E139.2.jpg
-			javaClass: false
+			//id: 1_139.3
 			parent: 1_139
-			parentPath: errata/pc
-			version: 3
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 3
+			image: errata/LOTR-EN01E139.2.jpg
 			collInfo: 1R139
 			rarity: R
-			setNum: "1"
-			cardNum: 139
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Savagery To Match Their Numbers
 		culture: isengard
@@ -265,17 +256,14 @@
 	
 	51_150: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E150.1.jpg
-			javaClass: false
+			//id: 1_150.1
 			parent: 1_150
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E150.1.jpg
 			collInfo: 1C150
 			rarity: C
-			setNum: "1"
-			cardNum: 150
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Uruk Rager
 		culture: isengard
@@ -326,17 +314,14 @@
 	
 	51_154: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E154.1.jpg
-			javaClass: false
+			//id: 1_154.1
 			parent: 1_154
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E154.1.jpg
 			collInfo: 1C154
 			rarity: C
-			setNum: "1"
-			cardNum: 154
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Uruk Soldier
 		culture: isengard
@@ -391,17 +376,14 @@
 	
 	51_160: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E160.1.jpg
-			javaClass: false
+			//id: 1_160.1
 			parent: 1_160
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E160.1.jpg
 			collInfo: 1C160
 			rarity: C
-			setNum: "1"
-			cardNum: 160
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Uruk-hai Sword
 		culture: isengard

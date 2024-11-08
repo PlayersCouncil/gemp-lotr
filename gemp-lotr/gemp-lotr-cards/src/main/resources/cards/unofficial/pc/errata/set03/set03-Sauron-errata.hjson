@@ -1,17 +1,14 @@
 {
 	53_87: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E087.1.jpg
-			javaClass: false
+			//id: 3_87.1
 			parent: 3_87
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN03E087.1.jpg
 			collInfo: 3C87
 			rarity: C
-			setNum: "3"
-			cardNum: 87
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The Dark Lord Advances
 		unique: false
@@ -85,17 +82,14 @@
 	
 	53_88: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E088.1.jpg
-			javaClass: false
+			//id: 3_88.1
 			parent: 3_88
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN03E088.1.jpg
 			collInfo: 3U88
 			rarity: U
-			setNum: "3"
-			cardNum: 88
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Get Off the Road!
 		unique: false
@@ -160,7 +154,7 @@
 	# 		javaClass: false
 	# 		parent: 3_90
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 3C90
 	# 		rarity: C
 	# 		setNum: "3"
@@ -219,17 +213,14 @@
 	
 	53_90: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E090.2_card.jpg
-			javaClass: false
+			//id: 3_90.2
 			parent: 3_90
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN03E090.2_card.jpg
 			collInfo: 3C90
 			rarity: C
-			setNum: "3"
-			cardNum: 90
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Hand of Sauron
 		unique: false
@@ -298,17 +289,14 @@
 	
 	53_91: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E091.1.jpg
-			javaClass: false
+			//id: 3_91.1
 			parent: 3_91
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN03E091.1.jpg
 			collInfo: 3R91
 			rarity: R
-			setNum: "3"
-			cardNum: 91
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: His Cruelty and Malice
 		unique: false
@@ -401,17 +389,14 @@
 	
 	53_92: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E092.1.jpg
-			javaClass: false
+			//id: 3_92.1
 			parent: 3_92
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN03E092.1.jpg
 			collInfo: 3U92
 			rarity: U
-			setNum: "3"
-			cardNum: 92
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Massing in the East
 		unique: false
@@ -482,7 +467,7 @@
 	# 		javaClass: false
 	# 		parent: 3_103
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 3R103
 	# 		rarity: R
 	# 		setNum: "3"
@@ -584,7 +569,7 @@
 	# 		javaClass: false
 	# 		parent: 3_103
 	# 		parentPath: errata/pc
-	# 		version: 2
+	# 		revision: 2
 	# 		collInfo: 3R103
 	# 		rarity: R
 	# 		setNum: "3"
@@ -659,7 +644,7 @@
 	# 		javaClass: false
 	# 		parent: 3_103
 	# 		parentPath: errata/pc
-	# 		version: 3
+	# 		revision: 3
 	# 		collInfo: 3R103
 	# 		rarity: R
 	# 		setNum: "3"
@@ -720,17 +705,14 @@
 	
 	53_103: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E103.4_card.jpg
-			//parentId: 3_103
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 3
+			//id: 3_103.3
+			parent: 3_103
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 3
+			image: errata/LOTR-EN03E103.4_card.jpg
 			collInfo: 3R103
 			rarity: R
-			setNum: "3"
-			cardNum: 103
-			style: Standard
 		}
 		title: Terrible as the Dawn
 		unique: false
@@ -778,17 +760,14 @@
 	
 	53_104: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E104.1.jpg
-			javaClass: false
+			//id: 3_104.1
 			parent: 3_104
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN03E104.1.jpg
 			collInfo: 3R104
 			rarity: R
-			setNum: "3"
-			cardNum: 104
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Tower of Barad-dur
 		unique: false
@@ -849,7 +828,7 @@
 	# 		javaClass: false
 	# 		parent: 3_105
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 3R105
 	# 		rarity: R
 	# 		setNum: "3"
@@ -913,17 +892,14 @@
 	# }
 	53_105: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E105.2_card.jpg
-			javaClass: false
+			//id: 3_105.2
 			parent: 3_105
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN03E105.2_card.jpg
 			collInfo: 3R105
 			rarity: R
-			setNum: "3"
-			cardNum: 105
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Why Shouldn't I Keep It?
 		unique: false

@@ -2,17 +2,9 @@
 
 	17_105: {
 		cardInfo: {
-			imagePath: decipher/LOTR17105.jpg
-			//parentId: 17_105
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17105.jpg
 			collInfo: 17R105
 			rarity: R
-			setNum: "17"
-			cardNum: 105
-			style: Standard
 		}
 		title: Throne of the Dark Lord
 		unique: true

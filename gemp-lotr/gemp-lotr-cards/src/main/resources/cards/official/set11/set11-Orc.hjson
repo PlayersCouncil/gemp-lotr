@@ -2,17 +2,9 @@
 
 	11_106: {
 		cardInfo: {
-			imagePath: decipher/LOTR11106.jpg
-			//parentId: 11_106
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11106.jpg
 			collInfo: 11U106
 			rarity: U
-			setNum: "11"
-			cardNum: 106
-			style: Standard
 		}
 		title: Armed for Battle
 		unique: false
@@ -75,17 +67,9 @@
 
 	11_107: {
 		cardInfo: {
-			imagePath: decipher/LOTR11107.jpg
-			//parentId: 11_107
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11107.jpg
 			collInfo: 11C107
 			rarity: C
-			setNum: "11"
-			cardNum: 107
-			style: Standard
 		}
 		title: Barbarous Orc
 		unique: false
@@ -133,17 +117,9 @@
 
 	11_108: {
 		cardInfo: {
-			imagePath: decipher/LOTR11108.jpg
-			//parentId: 11_108
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11108.jpg
 			collInfo: 11R108
 			rarity: R
-			setNum: "11"
-			cardNum: 108
-			style: Standard
 		}
 		title: Beastly Olog-hai
 		unique: false
@@ -200,17 +176,9 @@
 
 	11_109: {
 		cardInfo: {
-			imagePath: decipher/LOTR11109.jpg
-			//parentId: 11_109
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11109.jpg
 			collInfo: 11U109
 			rarity: U
-			setNum: "11"
-			cardNum: 109
-			style: Standard
 		}
 		title: Bladed Gauntlets
 		unique: false
@@ -256,17 +224,9 @@
 
 	11_110: {
 		cardInfo: {
-			imagePath: decipher/LOTR11110.jpg
-			//parentId: 11_110
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11110.jpg
 			collInfo: 11U110
 			rarity: U
-			setNum: "11"
-			cardNum: 110
-			style: Standard
 		}
 		title: Bound to its Fate
 		unique: false
@@ -322,17 +282,9 @@
 
 	11_111: {
 		cardInfo: {
-			imagePath: decipher/LOTR11111.jpg
-			//parentId: 11_111
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11111.jpg
 			collInfo: 11C111
 			rarity: C
-			setNum: "11"
-			cardNum: 111
-			style: Standard
 		}
 		title: Champion Orc
 		unique: false
@@ -359,17 +311,9 @@
 
 	11_112: {
 		cardInfo: {
-			imagePath: decipher/LOTR11112.jpg
-			//parentId: 11_112
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11112.jpg
 			collInfo: 11S112
 			rarity: S
-			setNum: "11"
-			cardNum: 112
-			style: Standard
 		}
 		title: Conquered Halls
 		unique: false
@@ -404,17 +348,9 @@
 
 	11_113: {
 		cardInfo: {
-			imagePath: decipher/LOTR11113.jpg
-			//parentId: 11_113
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11113.jpg
 			collInfo: 11C113
 			rarity: C
-			setNum: "11"
-			cardNum: 113
-			style: Standard
 		}
 		title: Cutthroat Orc
 		unique: false
@@ -452,17 +388,9 @@
 
 	11_114: {
 		cardInfo: {
-			imagePath: decipher/LOTR11114.jpg
-			//parentId: 11_114
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11114.jpg
 			collInfo: 11U114
 			rarity: U
-			setNum: "11"
-			cardNum: 114
-			style: Standard
 		}
 		title: Demoralized
 		unique: false
@@ -514,17 +442,9 @@
 
 	11_115: {
 		cardInfo: {
-			imagePath: decipher/LOTR11115.jpg
-			//parentId: 11_115
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11115.jpg
 			collInfo: 11S115
 			rarity: S
-			setNum: "11"
-			cardNum: 115
-			style: Standard
 		}
 		title: Denizen of Khazad-dûm
 		unique: false
@@ -563,17 +483,9 @@
 
 	11_116: {
 		cardInfo: {
-			imagePath: decipher/LOTR11116.jpg
-			//parentId: 11_116
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11116.jpg
 			collInfo: 11S116
 			rarity: S
-			setNum: "11"
-			cardNum: 116
-			style: Standard
 		}
 		title: Denizen of Moria
 		unique: false
@@ -612,17 +524,9 @@
 
 	11_117: {
 		cardInfo: {
-			imagePath: decipher/LOTR11117.jpg
-			//parentId: 11_117
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11117.jpg
 			collInfo: 11S117
 			rarity: S
-			setNum: "11"
-			cardNum: 117
-			style: Standard
 		}
 		title: Denizen of the Black Pit
 		unique: false
@@ -661,17 +565,9 @@
 
 	11_118: {
 		cardInfo: {
-			imagePath: decipher/LOTR11118.jpg
-			//parentId: 11_118
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11118.jpg
 			collInfo: 11U118
 			rarity: U
-			setNum: "11"
-			cardNum: 118
-			style: Standard
 		}
 		title: Dread and Despair
 		unique: false
@@ -718,17 +614,9 @@
 
 	11_119: {
 		cardInfo: {
-			imagePath: decipher/LOTR11119.jpg
-			//parentId: 11_119
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11119.jpg
 			collInfo: 11R119
 			rarity: R
-			setNum: "11"
-			cardNum: 119
-			style: Standard
 		}
 		title: Emboldened Orc
 		unique: false
@@ -767,17 +655,9 @@
 
 	11_120: {
 		cardInfo: {
-			imagePath: decipher/LOTR11120.jpg
-			//parentId: 11_120
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11120.jpg
 			collInfo: 11C120
 			rarity: C
-			setNum: "11"
-			cardNum: 120
-			style: Standard
 		}
 		title: Entrapping Orc
 		unique: false
@@ -813,17 +693,9 @@
 
 	11_121: {
 		cardInfo: {
-			imagePath: decipher/LOTR11121.jpg
-			//parentId: 11_121
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11121.jpg
 			collInfo: 11C121
 			rarity: C
-			setNum: "11"
-			cardNum: 121
-			style: Standard
 		}
 		title: Foraging Orc
 		unique: false
@@ -872,17 +744,9 @@
 
 	11_122: {
 		cardInfo: {
-			imagePath: decipher/LOTR11122.jpg
-			//parentId: 11_122
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11122.jpg
 			collInfo: 11C122
 			rarity: C
-			setNum: "11"
-			cardNum: 122
-			style: Standard
 		}
 		title: Frenzied Orc
 		unique: false
@@ -934,17 +798,9 @@
 
 	11_123: {
 		cardInfo: {
-			imagePath: decipher/LOTR11123.jpg
-			//parentId: 11_123
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11123.jpg
 			collInfo: 11R123
 			rarity: R
-			setNum: "11"
-			cardNum: 123
-			style: Standard
 		}
 		title: Goblin Hordes
 		unique: false
@@ -987,17 +843,9 @@
 
 	11_124: {
 		cardInfo: {
-			imagePath: decipher/LOTR11124.jpg
-			//parentId: 11_124
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11124.jpg
 			collInfo: 11U124
 			rarity: U
-			setNum: "11"
-			cardNum: 124
-			style: Standard
 		}
 		title: Hill Orc
 		unique: false
@@ -1036,17 +884,9 @@
 
 	11_125: {
 		cardInfo: {
-			imagePath: decipher/LOTR11125.jpg
-			//parentId: 11_125
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11125.jpg
 			collInfo: 11C125
 			rarity: C
-			setNum: "11"
-			cardNum: 125
-			style: Standard
 		}
 		title: Isengard Underling
 		unique: false
@@ -1085,17 +925,9 @@
 
 	11_126: {
 		cardInfo: {
-			imagePath: decipher/LOTR11126.jpg
-			//parentId: 11_126
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11126.jpg
 			collInfo: 11S126
 			rarity: S
-			setNum: "11"
-			cardNum: 126
-			style: Standard
 		}
 		title: Marauding Orcs
 		unique: false
@@ -1136,17 +968,9 @@
 
 	11_127: {
 		cardInfo: {
-			imagePath: decipher/LOTR11127.jpg
-			//parentId: 11_127
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11127.jpg
 			collInfo: 11C127
 			rarity: C
-			setNum: "11"
-			cardNum: 127
-			style: Standard
 		}
 		title: Mocking Goblin
 		unique: false
@@ -1195,17 +1019,9 @@
 
 	11_128: {
 		cardInfo: {
-			imagePath: decipher/LOTR11128.jpg
-			//parentId: 11_128
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11128.jpg
 			collInfo: 11C128
 			rarity: C
-			setNum: "11"
-			cardNum: 128
-			style: Standard
 		}
 		title: Mordor Scimitar
 		unique: false
@@ -1245,17 +1061,9 @@
 
 	11_129: {
 		cardInfo: {
-			imagePath: decipher/LOTR11129.jpg
-			//parentId: 11_129
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11129.jpg
 			collInfo: 11C129
 			rarity: C
-			setNum: "11"
-			cardNum: 129
-			style: Standard
 		}
 		title: Mountain Orc
 		unique: false
@@ -1296,17 +1104,9 @@
 
 	11_130: {
 		cardInfo: {
-			imagePath: decipher/LOTR11130.jpg
-			//parentId: 11_130
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11130.jpg
 			collInfo: 11S130
 			rarity: S
-			setNum: "11"
-			cardNum: 130
-			style: Standard
 		}
 		title: Orc Hammer
 		unique: false
@@ -1344,17 +1144,9 @@
 
 	11_131: {
 		cardInfo: {
-			imagePath: decipher/LOTR11131.jpg
-			//parentId: 11_131
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11131.jpg
 			collInfo: 11C131
 			rarity: C
-			setNum: "11"
-			cardNum: 131
-			style: Standard
 		}
 		title: Orc Miscreant
 		unique: false
@@ -1399,17 +1191,9 @@
 
 	11_132: {
 		cardInfo: {
-			imagePath: decipher/LOTR11132.jpg
-			//parentId: 11_132
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11132.jpg
 			collInfo: 11C132
 			rarity: C
-			setNum: "11"
-			cardNum: 132
-			style: Standard
 		}
 		title: Orkish Smith
 		unique: false
@@ -1448,17 +1232,9 @@
 
 	11_133: {
 		cardInfo: {
-			imagePath: decipher/LOTR11133.jpg
-			//parentId: 11_133
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11133.jpg
 			collInfo: 11R133
 			rarity: R
-			setNum: "11"
-			cardNum: 133
-			style: Standard
 		}
 		title: Orkish Worker
 		unique: false
@@ -1519,17 +1295,9 @@
 
 	11_134: {
 		cardInfo: {
-			imagePath: decipher/LOTR11134.jpg
-			//parentId: 11_134
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11134.jpg
 			collInfo: 11R134
 			rarity: R
-			setNum: "11"
-			cardNum: 134
-			style: Standard
 		}
 		title: Persistent Orc
 		unique: false
@@ -1578,17 +1346,9 @@
 
 	11_135: {
 		cardInfo: {
-			imagePath: decipher/LOTR11135.jpg
-			//parentId: 11_135
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11135.jpg
 			collInfo: 11R135
 			rarity: R
-			setNum: "11"
-			cardNum: 135
-			style: Standard
 		}
 		title: Porter Troll
 		unique: false
@@ -1646,17 +1406,9 @@
 
 	11_136: {
 		cardInfo: {
-			imagePath: decipher/LOTR11136.jpg
-			//parentId: 11_136
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11136.jpg
 			collInfo: 11C136
 			rarity: C
-			setNum: "11"
-			cardNum: 136
-			style: Standard
 		}
 		title: Prowling Orc
 		unique: false
@@ -1697,17 +1449,9 @@
 
 	11_137: {
 		cardInfo: {
-			imagePath: decipher/LOTR11137.jpg
-			//parentId: 11_137
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11137.jpg
 			collInfo: 11U137
 			rarity: U
-			setNum: "11"
-			cardNum: 137
-			style: Standard
 		}
 		title: Scurrying Goblin
 		unique: false
@@ -1756,17 +1500,9 @@
 
 	11_138: {
 		cardInfo: {
-			imagePath: decipher/LOTR11138.jpg
-			//parentId: 11_138
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11138.jpg
 			collInfo: 11S138
 			rarity: S
-			setNum: "11"
-			cardNum: 138
-			style: Standard
 		}
 		title: Skulking Goblin
 		unique: false
@@ -1801,17 +1537,9 @@
 
 	11_139: {
 		cardInfo: {
-			imagePath: decipher/LOTR11139.jpg
-			//parentId: 11_139
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11139.jpg
 			collInfo: 11U139
 			rarity: U
-			setNum: "11"
-			cardNum: 139
-			style: Standard
 		}
 		title: Spurred to Battle
 		unique: false
@@ -1853,17 +1581,9 @@
 
 	11_140: {
 		cardInfo: {
-			imagePath: decipher/LOTR11140.jpg
-			//parentId: 11_140
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11140.jpg
 			collInfo: 11C140
 			rarity: C
-			setNum: "11"
-			cardNum: 140
-			style: Standard
 		}
 		title: Strength in Shadows
 		unique: false
@@ -1905,17 +1625,9 @@
 
 	11_141: {
 		cardInfo: {
-			imagePath: decipher/LOTR11141.jpg
-			//parentId: 11_141
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11141.jpg
 			collInfo: 11R141
 			rarity: R
-			setNum: "11"
-			cardNum: 141
-			style: Standard
 		}
 		title: Undisciplined
 		unique: false
@@ -1948,17 +1660,9 @@
 
 	11_142: {
 		cardInfo: {
-			imagePath: decipher/LOTR11142.jpg
-			//parentId: 11_142
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11142.jpg
 			collInfo: 11S142
 			rarity: S
-			setNum: "11"
-			cardNum: 142
-			style: Standard
 		}
 		title: Unyielding Goblin
 		unique: false
@@ -2001,17 +1705,9 @@
 
 	11_143: {
 		cardInfo: {
-			imagePath: decipher/LOTR11143.jpg
-			//parentId: 11_143
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11143.jpg
 			collInfo: 11R143
 			rarity: R
-			setNum: "11"
-			cardNum: 143
-			style: Standard
 		}
 		title: Watchful Orc
 		unique: false

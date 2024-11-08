@@ -1,17 +1,14 @@
 {
 	51_92: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E092.1_card.jpg
-			javaClass: false
+			//id: 1_92.1
 			parent: 1_92
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E092.1_card.jpg
 			collInfo: 1C92
 			rarity: C
-			setNum: "1"
-			cardNum: 92
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Armor
 		unique: false
@@ -43,17 +40,14 @@
 	
 	51_101: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E101.1_card.jpg
-			javaClass: false
+			//id: 1_101.1
 			parent: 1_101
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E101.1_card.jpg
 			collInfo: 1C101
 			rarity: C
-			setNum: "1"
-			cardNum: 101
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Coat of Mail
 		unique: false
@@ -83,17 +77,14 @@
 	
 	51_107: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E107.1_card.jpg
-			javaClass: false
+			//id: 1_107.1
 			parent: 1_107
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E107.1_card.jpg
 			collInfo: 1C107
 			rarity: C
-			setNum: "1"
-			cardNum: 107
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Great Shield
 		unique: false
@@ -125,17 +116,14 @@
 	
 	51_108: {
 		cardInfo: {
-			imagePath: errata/51_108.jpg
-			javaClass: false
+			//id: 1_108.1
 			parent: 1_108
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_108.jpg
 			collInfo: 1U108
 			rarity: U
-			setNum: "1"
-			cardNum: 108
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: No Stranger to the Shadows
 		unique: true
@@ -167,17 +155,14 @@
 	
 	51_115: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E115.1_card.jpg
-			javaClass: false
+			//id: 1_115.1
 			parent: 1_115
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E115.1_card.jpg
 			collInfo: 1R115
 			rarity: R
-			setNum: "1"
-			cardNum: 115
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Strength of Kings
 		unique: false

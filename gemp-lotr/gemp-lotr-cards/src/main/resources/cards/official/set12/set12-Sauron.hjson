@@ -2,17 +2,9 @@
 
 	12_118: {
 		cardInfo: {
-			imagePath: decipher/LOTR12118.jpg
-			//parentId: 12_118
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12118.jpg
 			collInfo: 12R118
 			rarity: R
-			setNum: "12"
-			cardNum: 118
-			style: Standard
 		}
 		title: The Mouth of Sauron
 		subtitle: Lieutenant of Barad-dûr

@@ -2,17 +2,9 @@
 
 	15_155: {
 		cardInfo: {
-			imagePath: decipher/LOTR15155.jpg
-			//parentId: 15_155
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15155.jpg
 			collInfo: 15R155
 			rarity: R
-			setNum: "15"
-			cardNum: 155
-			style: Standard
 		}
 		title: Advancing Horde
 		unique: false
@@ -50,17 +42,9 @@
 
 	15_156: {
 		cardInfo: {
-			imagePath: decipher/LOTR15156.jpg
-			//parentId: 15_156
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15156.jpg
 			collInfo: 15C156
 			rarity: C
-			setNum: "15"
-			cardNum: 156
-			style: Standard
 		}
 		title: Charging Uruk
 		unique: false
@@ -105,17 +89,9 @@
 
 	15_157: {
 		cardInfo: {
-			imagePath: decipher/LOTR15157.jpg
-			//parentId: 15_157
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15157.jpg
 			collInfo: 15C157
 			rarity: C
-			setNum: "15"
-			cardNum: 157
-			style: Standard
 		}
 		title: Chasing Uruk
 		unique: false
@@ -171,17 +147,9 @@
 
 	15_158: {
 		cardInfo: {
-			imagePath: decipher/LOTR15158.jpg
-			//parentId: 15_158
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15158.jpg
 			collInfo: 15C158
 			rarity: C
-			setNum: "15"
-			cardNum: 158
-			style: Standard
 		}
 		title: Covetous Uruk
 		unique: false
@@ -220,17 +188,9 @@
 
 	15_159: {
 		cardInfo: {
-			imagePath: decipher/LOTR15159.jpg
-			//parentId: 15_159
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15159.jpg
 			collInfo: 15U159
 			rarity: U
-			setNum: "15"
-			cardNum: 159
-			style: Standard
 		}
 		title: Defensive Rush
 		unique: false
@@ -289,17 +249,9 @@
 
 	15_160: {
 		cardInfo: {
-			imagePath: decipher/LOTR15160.jpg
-			//parentId: 15_160
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15160.jpg
 			collInfo: 15U160
 			rarity: U
-			setNum: "15"
-			cardNum: 160
-			style: Standard
 		}
 		title: Following Uruk
 		unique: false
@@ -342,17 +294,9 @@
 
 	15_161: {
 		cardInfo: {
-			imagePath: decipher/LOTR15161.jpg
-			//parentId: 15_161
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15161.jpg
 			collInfo: 15C161
 			rarity: C
-			setNum: "15"
-			cardNum: 161
-			style: Standard
 		}
 		title: Hunting Uruk
 		unique: false
@@ -392,17 +336,9 @@
 
 	15_162: {
 		cardInfo: {
-			imagePath: decipher/LOTR15162.jpg
-			//parentId: 15_162
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15162.jpg
 			collInfo: 15R162
 			rarity: R
-			setNum: "15"
-			cardNum: 162
-			style: Standard
 		}
 		title: Lurtz
 		subtitle: Now Perfected
@@ -446,17 +382,9 @@
 
 	15_163: {
 		cardInfo: {
-			imagePath: decipher/LOTR15163.jpg
-			//parentId: 15_163
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15163.jpg
 			collInfo: 15R163
 			rarity: R
-			setNum: "15"
-			cardNum: 163
-			style: Standard
 		}
 		title: Lurtz's Sword
 		subtitle: Mighty Longsword
@@ -500,17 +428,9 @@
 
 	15_164: {
 		cardInfo: {
-			imagePath: decipher/LOTR15164.jpg
-			//parentId: 15_164
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15164.jpg
 			collInfo: 15S164
 			rarity: S
-			setNum: "15"
-			cardNum: 164
-			style: Standard
 		}
 		title: Mauhúr
 		subtitle: Relentless Hunter
@@ -555,17 +475,9 @@
 
 	15_165: {
 		cardInfo: {
-			imagePath: decipher/LOTR15165.jpg
-			//parentId: 15_165
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15165.jpg
 			collInfo: 15R165
 			rarity: R
-			setNum: "15"
-			cardNum: 165
-			style: Standard
 		}
 		title: Merciless Berserker
 		unique: false
@@ -624,17 +536,9 @@
 
 	15_166: {
 		cardInfo: {
-			imagePath: decipher/LOTR15166.jpg
-			//parentId: 15_166
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15166.jpg
 			collInfo: 15U166
 			rarity: U
-			setNum: "15"
-			cardNum: 166
-			style: Standard
 		}
 		title: Poised for Assault
 		unique: true
@@ -684,17 +588,9 @@
 
 	15_167: {
 		cardInfo: {
-			imagePath: decipher/LOTR15167.jpg
-			//parentId: 15_167
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15167.jpg
 			collInfo: 15C167
 			rarity: C
-			setNum: "15"
-			cardNum: 167
-			style: Standard
 		}
 		title: Pursuing Uruk
 		unique: false
@@ -731,17 +627,9 @@
 
 	15_168: {
 		cardInfo: {
-			imagePath: decipher/LOTR15168.jpg
-			//parentId: 15_168
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15168.jpg
 			collInfo: 15U168
 			rarity: U
-			setNum: "15"
-			cardNum: 168
-			style: Standard
 		}
 		title: Searching Uruk
 		unique: true
@@ -783,17 +671,9 @@
 
 	15_169: {
 		cardInfo: {
-			imagePath: decipher/LOTR15169.jpg
-			//parentId: 15_169
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15169.jpg
 			collInfo: 15C169
 			rarity: C
-			setNum: "15"
-			cardNum: 169
-			style: Standard
 		}
 		title: Seeking Uruk
 		unique: false
@@ -835,17 +715,9 @@
 
 	15_170: {
 		cardInfo: {
-			imagePath: decipher/LOTR15170.jpg
-			//parentId: 15_170
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15170.jpg
 			collInfo: 15R170
 			rarity: R
-			setNum: "15"
-			cardNum: 170
-			style: Standard
 		}
 		title: Sentry Uruk
 		unique: true
@@ -917,17 +789,9 @@
 
 	15_171: {
 		cardInfo: {
-			imagePath: decipher/LOTR15171.jpg
-			//parentId: 15_171
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15171.jpg
 			collInfo: 15S171
 			rarity: S
-			setNum: "15"
-			cardNum: 171
-			style: Standard
 		}
 		title: Tracking Uruk
 		unique: false
@@ -954,17 +818,9 @@
 
 	15_172: {
 		cardInfo: {
-			imagePath: decipher/LOTR15172.jpg
-			//parentId: 15_172
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15172.jpg
 			collInfo: 15R172
 			rarity: R
-			setNum: "15"
-			cardNum: 172
-			style: Standard
 		}
 		title: Uglúk
 		subtitle: Ugly Fellow
@@ -1007,17 +863,9 @@
 
 	15_173: {
 		cardInfo: {
-			imagePath: decipher/LOTR15173.jpg
-			//parentId: 15_173
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15173.jpg
 			collInfo: 15R173
 			rarity: R
-			setNum: "15"
-			cardNum: 173
-			style: Standard
 		}
 		title: Uglúk's Sword
 		subtitle: Weapon of Command
@@ -1073,17 +921,9 @@
 
 	15_174: {
 		cardInfo: {
-			imagePath: decipher/LOTR15174.jpg
-			//parentId: 15_174
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15174.jpg
 			collInfo: 15R174
 			rarity: R
-			setNum: "15"
-			cardNum: 174
-			style: Standard
 		}
 		title: Uruk Cavern Striker
 		unique: false
@@ -1132,17 +972,9 @@
 
 	15_175: {
 		cardInfo: {
-			imagePath: decipher/LOTR15175.jpg
-			//parentId: 15_175
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15175.jpg
 			collInfo: 15U175
 			rarity: U
-			setNum: "15"
-			cardNum: 175
-			style: Standard
 		}
 		title: Uruk Infantry
 		unique: false
@@ -1208,17 +1040,9 @@
 
 	15_176: {
 		cardInfo: {
-			imagePath: decipher/LOTR15176.jpg
-			//parentId: 15_176
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15176.jpg
 			collInfo: 15C176
 			rarity: C
-			setNum: "15"
-			cardNum: 176
-			style: Standard
 		}
 		title: Uruk Village Assassin
 		unique: false
@@ -1279,17 +1103,9 @@
 
 	15_177: {
 		cardInfo: {
-			imagePath: decipher/LOTR15177.jpg
-			//parentId: 15_177
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15177.jpg
 			collInfo: 15U177
 			rarity: U
-			setNum: "15"
-			cardNum: 177
-			style: Standard
 		}
 		title: Uruk Village Rager
 		unique: false
@@ -1346,17 +1162,9 @@
 
 	15_178: {
 		cardInfo: {
-			imagePath: decipher/LOTR15178.jpg
-			//parentId: 15_178
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15178.jpg
 			collInfo: 15C178
 			rarity: C
-			setNum: "15"
-			cardNum: 178
-			style: Standard
 		}
 		title: Uruk Village Stormer
 		unique: false
@@ -1411,17 +1219,9 @@
 
 	15_179: {
 		cardInfo: {
-			imagePath: decipher/LOTR15179.jpg
-			//parentId: 15_179
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15179.jpg
 			collInfo: 15C179
 			rarity: C
-			setNum: "15"
-			cardNum: 179
-			style: Standard
 		}
 		title: Violent Hurl
 		unique: false
@@ -1468,17 +1268,9 @@
 
 	15_180: {
 		cardInfo: {
-			imagePath: decipher/LOTR15180.jpg
-			//parentId: 15_180
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15180.jpg
 			collInfo: 15R180
 			rarity: R
-			setNum: "15"
-			cardNum: 180
-			style: Standard
 		}
 		title: With All Possible Speed
 		unique: true

@@ -2,17 +2,9 @@
 
 	15_143: {
 		cardInfo: {
-			imagePath: decipher/LOTR15143.jpg
-			//parentId: 15_143
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15143.jpg
 			collInfo: 15C143
 			rarity: C
-			setNum: "15"
-			cardNum: 143
-			style: Standard
 		}
 		title: Community Living
 		unique: false
@@ -49,17 +41,9 @@
 
 	15_144: {
 		cardInfo: {
-			imagePath: decipher/LOTR15144.jpg
-			//parentId: 15_144
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15144.jpg
 			collInfo: 15C144
 			rarity: C
-			setNum: "15"
-			cardNum: 144
-			style: Standard
 		}
 		title: Frodo
 		subtitle: Weary From the Journey
@@ -100,17 +84,9 @@
 
 	15_145: {
 		cardInfo: {
-			imagePath: decipher/LOTR15145.jpg
-			//parentId: 15_145
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15145.jpg
 			collInfo: 15C145
 			rarity: C
-			setNum: "15"
-			cardNum: 145
-			style: Standard
 		}
 		title: Hobbit Sword
 		unique: false
@@ -135,17 +111,9 @@
 
 	15_146: {
 		cardInfo: {
-			imagePath: decipher/LOTR15146.jpg
-			//parentId: 15_146
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15146.jpg
 			collInfo: 15R146
 			rarity: R
-			setNum: "15"
-			cardNum: 146
-			style: Standard
 		}
 		title: Hobbiton Brewer
 		subtitle: Maker of Fine Ales
@@ -206,17 +174,9 @@
 
 	15_147: {
 		cardInfo: {
-			imagePath: decipher/LOTR15147.jpg
-			//parentId: 15_147
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15147.jpg
 			collInfo: 15C147
 			rarity: C
-			setNum: "15"
-			cardNum: 147
-			style: Standard
 		}
 		title: Hobbiton Farmer
 		subtitle: Lover of Pipeweed
@@ -267,17 +227,9 @@
 
 	15_148: {
 		cardInfo: {
-			imagePath: decipher/LOTR15148.jpg
-			//parentId: 15_148
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15148.jpg
 			collInfo: 15R148
 			rarity: R
-			setNum: "15"
-			cardNum: 148
-			style: Standard
 		}
 		title: Little Golden Flower
 		unique: true
@@ -325,17 +277,9 @@
 
 	15_149: {
 		cardInfo: {
-			imagePath: decipher/LOTR15149.jpg
-			//parentId: 15_149
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15149.jpg
 			collInfo: 15C149
 			rarity: C
-			setNum: "15"
-			cardNum: 149
-			style: Standard
 		}
 		title: Merry
 		subtitle: The Tall One
@@ -387,17 +331,9 @@
 
 	15_150: {
 		cardInfo: {
-			imagePath: decipher/LOTR15150.jpg
-			//parentId: 15_150
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15150.jpg
 			collInfo: 15C150
 			rarity: C
-			setNum: "15"
-			cardNum: 150
-			style: Standard
 		}
 		title: No Visitors
 		unique: false
@@ -433,17 +369,9 @@
 
 	15_151: {
 		cardInfo: {
-			imagePath: decipher/LOTR15151.jpg
-			//parentId: 15_151
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15151.jpg
 			collInfo: 15C151
 			rarity: C
-			setNum: "15"
-			cardNum: 151
-			style: Standard
 		}
 		title: Pippin
 		subtitle: The Short One
@@ -496,17 +424,9 @@
 
 	15_152: {
 		cardInfo: {
-			imagePath: decipher/LOTR15152.jpg
-			//parentId: 15_152
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15152.jpg
 			collInfo: 15R152
 			rarity: R
-			setNum: "15"
-			cardNum: 152
-			style: Standard
 		}
 		title: Relaxation
 		unique: false
@@ -557,17 +477,9 @@
 
 	15_153: {
 		cardInfo: {
-			imagePath: decipher/LOTR15153.jpg
-			//parentId: 15_153
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15153.jpg
 			collInfo: 15U153
 			rarity: U
-			setNum: "15"
-			cardNum: 153
-			style: Standard
 		}
 		title: Sam
 		subtitle: Innocent Traveler
@@ -630,17 +542,9 @@
 
 	15_154: {
 		cardInfo: {
-			imagePath: decipher/LOTR15154.jpg
-			//parentId: 15_154
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15154.jpg
 			collInfo: 15R154
 			rarity: R
-			setNum: "15"
-			cardNum: 154
-			style: Standard
 		}
 		title: Second Breakfast
 		unique: false

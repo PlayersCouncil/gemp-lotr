@@ -2,17 +2,14 @@
 
 	54_73: {
 		cardInfo: {
-			imagePath: errata/54_73.jpg
-			javaClass: false
+			//id: 4_73.1
 			parent: 4_73
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/54_73.jpg
 			collInfo: 4R73
 			rarity: R
-			setNum: "4"
-			cardNum: 73
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Dauntless Hunter
@@ -51,17 +48,14 @@
 	
 	54_73: {
 		cardInfo: {
-			imagePath: errata/54_73.jpg
-			javaClass: false
+			//id: 4_73.2
 			parent: 4_73
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/54_73.jpg
 			collInfo: 4R73
 			rarity: R
-			setNum: "4"
-			cardNum: 73
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Dauntless Hunter

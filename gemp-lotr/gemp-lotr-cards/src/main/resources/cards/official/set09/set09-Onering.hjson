@@ -2,17 +2,9 @@
 
 	9_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR09001.jpg
-			//parentId: 9_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09001.jpg
 			collInfo: 9R+1
 			rarity: R+
-			setNum: "9"
-			cardNum: 1
-			style: Standard
 		}
 		title: The One Ring
 		subtitle: The Binding Ring

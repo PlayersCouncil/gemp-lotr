@@ -2,17 +2,9 @@
 
 	2_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR02021.jpg
-			//parentId: 2_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02021.jpg
 			collInfo: 2C21
 			rarity: C
-			setNum: "2"
-			cardNum: 21
-			style: Standard
 		}
 		title: Erland
 		subtitle: Advisor to Brand
@@ -55,17 +47,9 @@
 
 	2_22: {
 		cardInfo: {
-			imagePath: decipher/LOTR02022.jpg
-			//parentId: 2_22
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02022.jpg
 			collInfo: 2R22
 			rarity: R
-			setNum: "2"
-			cardNum: 22
-			style: Standard
 		}
 		title: Gandalf's Staff
 		unique: true
@@ -112,17 +96,9 @@
 
 	2_23: {
 		cardInfo: {
-			imagePath: decipher/LOTR02023.jpg
-			//parentId: 2_23
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02023.jpg
 			collInfo: 2C23
 			rarity: C
-			setNum: "2"
-			cardNum: 23
-			style: Standard
 		}
 		title: Gandalf's Wisdom
 		unique: false
@@ -153,17 +129,9 @@
 
 	2_24: {
 		cardInfo: {
-			imagePath: decipher/LOTR02024.jpg
-			//parentId: 2_24
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02024.jpg
 			collInfo: 2C24
 			rarity: C
-			setNum: "2"
-			cardNum: 24
-			style: Standard
 		}
 		title: Hugin
 		subtitle: Emissary from Laketown
@@ -222,17 +190,9 @@
 
 	2_25: {
 		cardInfo: {
-			imagePath: decipher/LOTR02025.jpg
-			//parentId: 2_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02025.jpg
 			collInfo: 2R25
 			rarity: R
-			setNum: "2"
-			cardNum: 25
-			style: Standard
 		}
 		title: Járnsmid
 		subtitle: Merchant from Dale
@@ -275,17 +235,9 @@
 
 	2_26: {
 		cardInfo: {
-			imagePath: decipher/LOTR02026.jpg
-			//parentId: 2_26
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02026.jpg
 			collInfo: 2C26
 			rarity: C
-			setNum: "2"
-			cardNum: 26
-			style: Standard
 		}
 		title: Speak "Friend" and Enter
 		unique: false
@@ -331,17 +283,9 @@
 
 	2_27: {
 		cardInfo: {
-			imagePath: decipher/LOTR02027.jpg
-			//parentId: 2_27
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02027.jpg
 			collInfo: 2R27
 			rarity: R
-			setNum: "2"
-			cardNum: 27
-			style: Standard
 		}
 		title: Staff Asunder
 		unique: false
@@ -382,17 +326,9 @@
 
 	2_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR02028.jpg
-			//parentId: 2_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02028.jpg
 			collInfo: 2U28
 			rarity: U
-			setNum: "2"
-			cardNum: 28
-			style: Standard
 		}
 		title: Wielder of the Flame
 		unique: false
@@ -437,17 +373,9 @@
 
 	2_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR02029.jpg
-			//parentId: 2_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02029.jpg
 			collInfo: 2C29
 			rarity: C
-			setNum: "2"
-			cardNum: 29
-			style: Standard
 		}
 		title: Wizard Staff
 		unique: false
@@ -485,17 +413,9 @@
 
 	2_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR02030.jpg
-			//parentId: 2_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02030.jpg
 			collInfo: 2U30
 			rarity: U
-			setNum: "2"
-			cardNum: 30
-			style: Standard
 		}
 		title: You Cannot Pass!
 		unique: false
@@ -531,17 +451,9 @@
 
 	2_122: {
 		cardInfo: {
-			imagePath: decipher/LOTR02122.jpg
-			//parentId: 2_122
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR02122.jpg
 			collInfo: 2P122
 			rarity: P
-			setNum: "2"
-			cardNum: 122
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: The Grey Pilgrim

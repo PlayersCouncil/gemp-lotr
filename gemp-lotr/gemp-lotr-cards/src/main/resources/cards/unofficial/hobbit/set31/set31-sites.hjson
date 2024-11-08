@@ -1,5 +1,10 @@
 {
 	31_44: {
+		cardInfo: {
+			image: hobbit/HDG3144.jpg
+			collInfo: 31_44
+			rarity: _
+		}
 		title: Beorn's House
 		type: site
 		block: hobbit
@@ -46,6 +51,11 @@
 		}
 	}
 	31_45: {
+		cardInfo: {
+			image: hobbit/HDG3145.jpg
+			collInfo: 31_45
+			rarity: _
+		}
 		title: Underground Lake
 		twilight: 2
 		type: site
@@ -77,6 +87,11 @@
 		}
 	}
 	31_46: {
+		cardInfo: {
+			image: hobbit/HDG3146.jpg
+			collInfo: 31_46
+			rarity: _
+		}
 		title: Forest River
 		type: site
 		block: hobbit
@@ -102,6 +117,11 @@
 		}
 	}
 	31_47: {
+		cardInfo: {
+			image: hobbit/HDG3147.jpg
+			collInfo: 31_47
+			rarity: _
+		}
 		title: Thrór's Throne
 		type: site
 		block: hobbit

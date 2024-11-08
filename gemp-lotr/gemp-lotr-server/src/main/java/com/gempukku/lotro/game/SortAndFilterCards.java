@@ -2,7 +2,6 @@ package com.gempukku.lotro.game;
 
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
-import com.gempukku.lotro.game.packs.SetDefinition;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.util.MultipleComparator;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +24,7 @@ public class SortAndFilterCards {
         var cultures = getEnumFilter(Culture.values(), Culture.class, params.get("culture"), true);
 
         var nameWords = getWords(params.get("name"), true);
-        var textWords = getWords(params.get("gametext"));
+        var textWords = getWords(params.get("gametext"), false);
 
         var keywords = getEnumFilter(Keyword.values(), Keyword.class, params.get("keyword"), true);
         var phases = getEnumFilter(Keyword.values(),Keyword.class, params.get("phase"), true);
@@ -44,7 +43,7 @@ public class SortAndFilterCards {
         var resistanceComparator = getSingleton(params.get("resistancecompare"));
         var signets = getEnumFilter(Signet.values(), Signet.class, params.get("signet"), true);
         
-        var canStartWithRing = getBoolean(params);
+        var canStartWithRing = getBoolean(params.get("canstartwithring"));
 
         List<T> result = new ArrayList<>();
         var cardBPCache = new HashMap<String, LotroCardBlueprint>();
@@ -75,6 +74,9 @@ public class SortAndFilterCards {
 
             var card = cardBPCache.get(blueprintId);
             boolean valid = true;
+
+            if(!IsFlagAccepted(canStartWithRing, card.canStartWithRing()))
+                continue;
 
             if(product != null) {
                 switch(product.toLowerCase()) {
@@ -132,8 +134,8 @@ public class SortAndFilterCards {
                 continue;
 
             if(card.getCardType() == CardType.ALLY) {
-                for(int home : card.getAllyHomeSiteNumbers()) {
-                    if(!isAttributeValueAccepted(siteNumber, siteNumberComparator, home)) {
+                for(var home : card.getAllyHomes()) {
+                    if(!isAttributeValueAccepted(siteNumber, siteNumberComparator, home.siteNum())) {
                         valid = false;
                         break;
                     }
@@ -170,12 +172,9 @@ public class SortAndFilterCards {
 
             if(!nameWords.isEmpty() && !containsAllWords(GameUtils.getFullSanitizedName(card), nameWords))
                 continue;
-            
-            //&& (canStartWithRing == null || blueprint.canStartWithRing() == canStartWithRing)
 
-            //Oops...don't have game text available anywhere yet.
-//            if(!textWords.isEmpty() && !containsAllWords(GameUtils.getFullSanitizedName(card), nameWords))
-//                continue;
+            if(!textWords.isEmpty() && !containsAllWords(GameUtils.getFullText(card), textWords))
+                continue;
 
             //Reached the end of the gauntlet and nothing filtered it out.
             result.add(item);
@@ -239,73 +238,14 @@ public class SortAndFilterCards {
         return result;
     }
 
-    private Side getSideFilter(String[] filterParams) {
-        for (String filterParam : filterParams) {
-            if (filterParam.startsWith("side:"))
-                return Side.valueOf(filterParam.substring("side:".length()));
-        }
-        return null;
-    }
-
-    private String getTypeFilter(String[] filterParams) {
-        for (String filterParam : filterParams) {
-            if (filterParam.startsWith("type:"))
-                return filterParam.substring("type:".length());
-        }
-        return null;
-    }
-
-    private String[] getRarityFilter(String[] filterParams) {
-        for (String filterParam : filterParams) {
-            if (filterParam.startsWith("rarity:"))
-                return filterParam.substring("rarity:".length()).split(",");
-        }
-        return null;
-    }
-
-    private String[] getSetFilter(String[] filterParams) {
-        String setStr = getSetNumber(filterParams);
-        String[] sets = null;
-        if (setStr != null)
-            sets = setStr.split(",");
-        return sets;
-    }
-
-    private boolean isRarity(String blueprintId, String[] rarity, LotroCardBlueprintLibrary library, Map<String, SetDefinition> rarities) {
-        if (blueprintId.contains("_")) {
-            SetDefinition setRarity = rarities.get(blueprintId.substring(0, blueprintId.indexOf("_")));
-            if (setRarity != null) {
-                String cardRarity = setRarity.getCardRarity(library.stripBlueprintModifiers(blueprintId));
-                if (cardRarity == null) {
-                    //TODO: log that the rarity was not set
-                    //real TODO: put the rarity in the friggin json
-                    return false;
-                }
-                for (String r : rarity) {
-                    if (cardRarity.equals(r))
-                        return true;
-                }
-            }
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isInSets(String blueprintId, String[] sets, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary, Map<String, LotroCardBlueprint> cardBlueprint) {
-        for (String set : sets) {
+    private boolean isInSets(String blueprintId, LotroCardBlueprint card, List<String> setFilters, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
+        for (String set : setFilters) {
             LotroFormat format = formatLibrary.getFormat(set);
 
             if (format != null) {
-                String valid = format.validateCard(blueprintId);
-                if (valid != null && !valid.isEmpty())
-                    return false;
-
-                final LotroCardBlueprint blueprint = cardBlueprint.get(blueprintId);
-                if (blueprint.getCardType() == CardType.SITE) {
-                    if (blueprint.getSiteBlock() == SitesBlock.FELLOWSHIP) {
-                        if ("fotr_block,pc_fotr_block,test_pc_fotr_block".contains(set)) {
-                            return true;
-                        }
+                if (card.getCardType() == CardType.SITE) {
+                    String invalid = format.validateSite(blueprintId);
+                    if(!StringUtils.isEmpty(invalid))
                         return false;
                 }
 
@@ -327,10 +267,9 @@ public class SortAndFilterCards {
             }
         }
 
+
         return false;
     }
-
-    private List<String> getWords(List<String> params) { return getWords(params, false); }
 
     private List<String> getWords(List<String> params, boolean sanitize) {
         var result = new ArrayList<String>();
@@ -338,26 +277,26 @@ public class SortAndFilterCards {
             return result;
 
         for (String str : params) {
-            //The client usually does some pre-processing and chops these up into words, but we will check to make sure
-            for(String word : str.split(" ")) {
-                if(sanitize) {
+            //If we're sanitizing, then we want to remove all spaces and diacritics.  If not,
+            // then we need to coerce underscores in the input to preserve spaces
+            if(sanitize) {
+                for(String word : str.split(" ")) {
                     result.add(Names.SanitizeName(word));
                 }
-                else {
-                    result.add(word);
-                }
+            }
+            else {
+                result.add(str.replace("_", " "));
             }
         }
         return result;
     }
 
-    private Boolean getBoolean(String[] filterParams) {
-        Boolean result = null;
-        for (String filterParam : filterParams) {
-            if (filterParam.startsWith("canStartWithRing:"))
-                result = Boolean.parseBoolean(filterParam.substring("canStartWithRing:".length()));
-        }
-        return result;
+    private Boolean getBoolean(List<String> params) {
+        var statStr = getSingleton(params);
+        if(statStr == null)
+            return null;
+
+        return Boolean.parseBoolean(statStr);
     }
 
     private Integer getStat(List<String> params) {
@@ -399,6 +338,9 @@ public class SortAndFilterCards {
     }
 
     private boolean containsAllWords(String cardData, List<String> words) {
+        if(cardData == null || cardData.isEmpty())
+            return false;
+
         for (String word : words) {
             if (!cardData.contains(word))
                 return false;
@@ -448,6 +390,16 @@ public class SortAndFilterCards {
         }
 
         return result;
+    }
+
+    private static boolean IsFlagAccepted(Boolean filterValue, Boolean blueprintValue) {
+        if(filterValue == null)
+            return true;
+
+        if (blueprintValue == null)
+            return false;
+
+        return filterValue == blueprintValue;
     }
 
 

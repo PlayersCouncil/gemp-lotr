@@ -2,17 +2,9 @@
 
 	17_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR17001.jpg
-			//parentId: 17_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17001.jpg
 			collInfo: 17U1
 			rarity: U
-			setNum: "17"
-			cardNum: 1
-			style: Standard
 		}
 		title: Armor of Khazâd
 		unique: false
@@ -65,17 +57,9 @@
 
 	17_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR17002.jpg
-			//parentId: 17_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17002.jpg
 			collInfo: 17R2
 			rarity: R
-			setNum: "17"
-			cardNum: 2
-			style: Standard
 		}
 		title: Balin Avenged
 		unique: true
@@ -155,17 +139,9 @@
 
 	17_3: {
 		cardInfo: {
-			imagePath: decipher/LOTR17003.jpg
-			//parentId: 17_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17003.jpg
 			collInfo: 17U3
 			rarity: U
-			setNum: "17"
-			cardNum: 3
-			style: Standard
 		}
 		title: Dwarven Stratagem
 		unique: false
@@ -227,17 +203,9 @@
 
 	17_4: {
 		cardInfo: {
-			imagePath: decipher/LOTR17004.jpg
-			//parentId: 17_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17004.jpg
 			collInfo: 17R4
 			rarity: R
-			setNum: "17"
-			cardNum: 4
-			style: Standard
 		}
 		title: Ring of Artifice
 		unique: true
@@ -295,17 +263,9 @@
 
 	17_5: {
 		cardInfo: {
-			imagePath: decipher/LOTR17005.jpg
-			//parentId: 17_5
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17005.jpg
 			collInfo: 17U5
 			rarity: U
-			setNum: "17"
-			cardNum: 5
-			style: Standard
 		}
 		title: Axe-work
 		unique: false
@@ -347,17 +307,9 @@
 
 	17_6: {
 		cardInfo: {
-			imagePath: decipher/LOTR17006.jpg
-			//parentId: 17_6
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR17006.jpg
 			collInfo: 17R6
 			rarity: R
-			setNum: "17"
-			cardNum: 6
-			style: Standard
 		}
 		title: Thorin III
 		subtitle: Stonehelm

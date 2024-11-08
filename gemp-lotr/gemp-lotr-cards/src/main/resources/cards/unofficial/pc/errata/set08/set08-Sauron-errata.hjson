@@ -2,17 +2,14 @@
 
 	58_103: {
 		cardInfo: {
-			imagePath: errata/58_103.jpg
-			javaClass: false
+			//id: 8_103.1
 			parent: 8_103
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/58_103.jpg
 			collInfo: 8R103
 			rarity: R
-			setNum: "8"
-			cardNum: 103
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Grond
 		subtitle: Hammer of the Underworld
@@ -104,17 +101,14 @@
 
 	58_102: {
 		cardInfo: {
-			imagePath: errata/58_102.jpg
-			javaClass: false
+			//id: 8_102.1
 			parent: 8_102
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/58_102.jpg
 			collInfo: 8C102
 			rarity: C
-			setNum: "8"
-			cardNum: 102
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Great Hill Troll
 		side: shadow

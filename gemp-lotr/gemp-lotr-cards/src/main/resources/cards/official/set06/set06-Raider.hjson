@@ -2,17 +2,9 @@
 
 	6_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR06078.jpg
-			//parentId: 6_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06078.jpg
 			collInfo: 6R78
 			rarity: R
-			setNum: "6"
-			cardNum: 78
-			style: Standard
 		}
 		title: Easterling Army
 		unique: false
@@ -97,17 +89,9 @@
 
 	6_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR06079.jpg
-			//parentId: 6_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06079.jpg
 			collInfo: 6U79
 			rarity: U
-			setNum: "6"
-			cardNum: 79
-			style: Standard
 		}
 		title: Easterling Polearm
 		unique: false
@@ -157,17 +141,9 @@
 
 	6_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR06080.jpg
-			//parentId: 6_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06080.jpg
 			collInfo: 6R80
 			rarity: R
-			setNum: "6"
-			cardNum: 80
-			style: Standard
 		}
 		title: Southron Archer Legion
 		unique: false
@@ -216,17 +192,9 @@
 
 	6_81: {
 		cardInfo: {
-			imagePath: decipher/LOTR06081.jpg
-			//parentId: 6_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06081.jpg
 			collInfo: 6C81
 			rarity: C
-			setNum: "6"
-			cardNum: 81
-			style: Standard
 		}
 		title: Southron Invaders
 		unique: false
@@ -273,17 +241,9 @@
 
 	6_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR06082.jpg
-			//parentId: 6_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06082.jpg
 			collInfo: 6R82
 			rarity: R
-			setNum: "6"
-			cardNum: 82
-			style: Standard
 		}
 		title: Trample
 		unique: false

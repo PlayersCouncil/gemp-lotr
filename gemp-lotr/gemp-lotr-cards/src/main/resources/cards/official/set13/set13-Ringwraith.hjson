@@ -2,17 +2,9 @@
 
 	13_178: {
 		cardInfo: {
-			imagePath: decipher/LOTR13178.jpg
-			//parentId: 13_178
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13178.jpg
 			collInfo: 13R178
 			rarity: R
-			setNum: "13"
-			cardNum: 178
-			style: Standard
 		}
 		title: Dark Fell About Him
 		unique: false
@@ -89,17 +81,9 @@
 
 	13_179: {
 		cardInfo: {
-			imagePath: decipher/LOTR13179.jpg
-			//parentId: 13_179
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13179.jpg
 			collInfo: 13U179
 			rarity: U
-			setNum: "13"
-			cardNum: 179
-			style: Standard
 		}
 		title: From Hideous Eyrie
 		unique: false
@@ -141,17 +125,9 @@
 
 	13_180: {
 		cardInfo: {
-			imagePath: decipher/LOTR13180.jpg
-			//parentId: 13_180
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13180.jpg
 			collInfo: 13R180
 			rarity: R
-			setNum: "13"
-			cardNum: 180
-			style: Standard
 		}
 		title: Shadow in the East
 		unique: false
@@ -209,17 +185,9 @@
 
 	13_181: {
 		cardInfo: {
-			imagePath: decipher/LOTR13181.jpg
-			//parentId: 13_181
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13181.jpg
 			collInfo: 13U181
 			rarity: U
-			setNum: "13"
-			cardNum: 181
-			style: Standard
 		}
 		title: They Came From Mordor
 		unique: false
@@ -289,17 +257,9 @@
 
 	13_182: {
 		cardInfo: {
-			imagePath: decipher/LOTR13182.jpg
-			//parentId: 13_182
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13182.jpg
 			collInfo: 13R182
 			rarity: R
-			setNum: "13"
-			cardNum: 182
-			style: Standard
 		}
 		title: Úlairë Enquëa
 		subtitle: Sixth of the Nine Riders
@@ -358,17 +318,9 @@
 
 	13_183: {
 		cardInfo: {
-			imagePath: decipher/LOTR13183.jpg
-			//parentId: 13_183
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13183.jpg
 			collInfo: 13U183
 			rarity: U
-			setNum: "13"
-			cardNum: 183
-			style: Standard
 		}
 		title: Úlairë Lemenya
 		subtitle: Servant of the Shadow
@@ -416,17 +368,9 @@
 
 	13_184: {
 		cardInfo: {
-			imagePath: decipher/LOTR13184.jpg
-			//parentId: 13_184
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13184.jpg
 			collInfo: 13C184
 			rarity: C
-			setNum: "13"
-			cardNum: 184
-			style: Standard
 		}
 		title: Úlairë Nertëa
 		subtitle: Servant of the Shadow

@@ -2,17 +2,9 @@
 
 	4_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR04058.jpg
-			//parentId: 4_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04058.jpg
 			collInfo: 4R58
 			rarity: R
-			setNum: "4"
-			cardNum: 58
-			style: Standard
 		}
 		title: Alliance Reforged
 		unique: false
@@ -47,17 +39,9 @@
 
 	4_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR04059.jpg
-			//parentId: 4_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04059.jpg
 			collInfo: 4U59
 			rarity: U
-			setNum: "4"
-			cardNum: 59
-			style: Standard
 		}
 		title: Arrow and Blade
 		unique: false
@@ -99,17 +83,9 @@
 
 	4_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR04060.jpg
-			//parentId: 4_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04060.jpg
 			collInfo: 4U60
 			rarity: U
-			setNum: "4"
-			cardNum: 60
-			style: Standard
 		}
 		title: Blades Drawn
 		unique: false
@@ -164,17 +140,9 @@
 
 	4_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR04061.jpg
-			//parentId: 4_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04061.jpg
 			collInfo: 4R61
 			rarity: R
-			setNum: "4"
-			cardNum: 61
-			style: Standard
 		}
 		title: Company of Archers
 		unique: false
@@ -210,17 +178,9 @@
 
 	4_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR04062.jpg
-			//parentId: 4_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04062.jpg
 			collInfo: 4U62
 			rarity: U
-			setNum: "4"
-			cardNum: 62
-			style: Standard
 		}
 		title: Elven Bow
 		unique: false
@@ -253,17 +213,9 @@
 
 	4_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR04063.jpg
-			//parentId: 4_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04063.jpg
 			collInfo: 4U63
 			rarity: U
-			setNum: "4"
-			cardNum: 63
-			style: Standard
 		}
 		title: Elven Brooch
 		unique: false
@@ -313,17 +265,9 @@
 
 	4_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR04064.jpg
-			//parentId: 4_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04064.jpg
 			collInfo: 4C64
 			rarity: C
-			setNum: "4"
-			cardNum: 64
-			style: Standard
 		}
 		title: Elven Sword
 		unique: false
@@ -376,17 +320,9 @@
 
 	4_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR04065.jpg
-			//parentId: 4_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04065.jpg
 			collInfo: 4R65
 			rarity: R
-			setNum: "4"
-			cardNum: 65
-			style: Standard
 		}
 		title: Erethón
 		subtitle: Naith Lieutenant
@@ -445,17 +381,9 @@
 
 	4_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR04066.jpg
-			//parentId: 4_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04066.jpg
 			collInfo: 4U66
 			rarity: U
-			setNum: "4"
-			cardNum: 66
-			style: Standard
 		}
 		title: Feathered
 		unique: false
@@ -492,17 +420,9 @@
 
 	4_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR04067.jpg
-			//parentId: 4_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04067.jpg
 			collInfo: 4C67
 			rarity: C
-			setNum: "4"
-			cardNum: 67
-			style: Standard
 		}
 		title: Fereveldir
 		subtitle: Son of Thandronen
@@ -556,17 +476,9 @@
 
 	4_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR04068.jpg
-			//parentId: 4_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04068.jpg
 			collInfo: 4C68
 			rarity: C
-			setNum: "4"
-			cardNum: 68
-			style: Standard
 		}
 		title: Ferevellon
 		subtitle: Son of Thandronen
@@ -614,17 +526,9 @@
 
 	4_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR04069.jpg
-			//parentId: 4_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04069.jpg
 			collInfo: 4R69
 			rarity: R
-			setNum: "4"
-			cardNum: 69
-			style: Standard
 		}
 		title: Final Count
 		unique: true
@@ -682,17 +586,9 @@
 
 	4_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR04070.jpg
-			//parentId: 4_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04070.jpg
 			collInfo: 4C70
 			rarity: C
-			setNum: "4"
-			cardNum: 70
-			style: Standard
 		}
 		title: Flashing Steel
 		unique: false
@@ -729,17 +625,9 @@
 
 	4_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR04071.jpg
-			//parentId: 4_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04071.jpg
 			collInfo: 4C71
 			rarity: C
-			setNum: "4"
-			cardNum: 71
-			style: Standard
 		}
 		title: Haldir
 		subtitle: Emissary of the Galadhrim
@@ -799,17 +687,9 @@
 
 	4_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR04072.jpg
-			//parentId: 4_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04072.jpg
 			collInfo: 4R72
 			rarity: R
-			setNum: "4"
-			cardNum: 72
-			style: Standard
 		}
 		title: Killing Field
 		unique: false
@@ -860,17 +740,9 @@
 
 	4_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR04073.jpg
-			//parentId: 4_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04073.jpg
 			collInfo: 4R73
 			rarity: R
-			setNum: "4"
-			cardNum: 73
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Dauntless Hunter
@@ -911,17 +783,9 @@
 
 	4_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR04074.jpg
-			//parentId: 4_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04074.jpg
 			collInfo: 4C74
 			rarity: C
-			setNum: "4"
-			cardNum: 74
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Elven Comrade
@@ -972,17 +836,9 @@
 
 	4_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR04075.jpg
-			//parentId: 4_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04075.jpg
 			collInfo: 4R75
 			rarity: R
-			setNum: "4"
-			cardNum: 75
-			style: Standard
 		}
 		title: Lembas
 		unique: false
@@ -1025,17 +881,9 @@
 
 	4_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR04076.jpg
-			//parentId: 4_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04076.jpg
 			collInfo: 4C76
 			rarity: C
-			setNum: "4"
-			cardNum: 76
-			style: Standard
 		}
 		title: Lórien Guardian
 		unique: false
@@ -1075,17 +923,9 @@
 
 	4_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR04077.jpg
-			//parentId: 4_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04077.jpg
 			collInfo: 4U77
 			rarity: U
-			setNum: "4"
-			cardNum: 77
-			style: Standard
 		}
 		title: Lórien Is Most Welcome
 		unique: false
@@ -1136,17 +976,9 @@
 
 	4_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR04078.jpg
-			//parentId: 4_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04078.jpg
 			collInfo: 4C78
 			rarity: C
-			setNum: "4"
-			cardNum: 78
-			style: Standard
 		}
 		title: Lórien Swordsman
 		unique: false
@@ -1185,17 +1017,9 @@
 
 	4_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR04079.jpg
-			//parentId: 4_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04079.jpg
 			collInfo: 4R79
 			rarity: R
-			setNum: "4"
-			cardNum: 79
-			style: Standard
 		}
 		title: Night Without End
 		unique: false
@@ -1247,17 +1071,9 @@
 
 	4_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR04080.jpg
-			//parentId: 4_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04080.jpg
 			collInfo: 4U80
 			rarity: U
-			setNum: "4"
-			cardNum: 80
-			style: Standard
 		}
 		title: Ordulus
 		subtitle: Young Warrior
@@ -1301,17 +1117,9 @@
 
 	4_81: {
 		cardInfo: {
-			imagePath: decipher/LOTR04081.jpg
-			//parentId: 4_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04081.jpg
 			collInfo: 4U81
 			rarity: U
-			setNum: "4"
-			cardNum: 81
-			style: Standard
 		}
 		title: Pengedhel
 		subtitle: Naith Warrior
@@ -1361,17 +1169,9 @@
 
 	4_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR04082.jpg
-			//parentId: 4_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04082.jpg
 			collInfo: 4U82
 			rarity: U
-			setNum: "4"
-			cardNum: 82
-			style: Standard
 		}
 		title: Strength of Arms
 		unique: true
@@ -1429,17 +1229,9 @@
 
 	4_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR04083.jpg
-			//parentId: 4_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04083.jpg
 			collInfo: 4C83
 			rarity: C
-			setNum: "4"
-			cardNum: 83
-			style: Standard
 		}
 		title: Supporting Fire
 		unique: false
@@ -1480,17 +1272,9 @@
 
 	4_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR04084.jpg
-			//parentId: 4_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04084.jpg
 			collInfo: 4R84
 			rarity: R
-			setNum: "4"
-			cardNum: 84
-			style: Standard
 		}
 		title: Sword-wall
 		unique: false
@@ -1538,17 +1322,9 @@
 
 	4_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR04085.jpg
-			//parentId: 4_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04085.jpg
 			collInfo: 4C85
 			rarity: C
-			setNum: "4"
-			cardNum: 85
-			style: Standard
 		}
 		title: Thandronen
 		subtitle: Veteran Protector
@@ -1596,17 +1372,9 @@
 
 	4_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR04086.jpg
-			//parentId: 4_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04086.jpg
 			collInfo: 4U86
 			rarity: U
-			setNum: "4"
-			cardNum: 86
-			style: Standard
 		}
 		title: Thónnas
 		subtitle: Naith Captain
@@ -1656,17 +1424,9 @@
 
 	4_87: {
 		cardInfo: {
-			imagePath: decipher/LOTR04087.jpg
-			//parentId: 4_87
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR04087.jpg
 			collInfo: 4C87
 			rarity: C
-			setNum: "4"
-			cardNum: 87
-			style: Standard
 		}
 		title: Valor
 		unique: false

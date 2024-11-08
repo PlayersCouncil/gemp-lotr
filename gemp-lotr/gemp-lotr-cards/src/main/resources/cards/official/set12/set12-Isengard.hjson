@@ -2,17 +2,9 @@
 
 	12_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR12054.jpg
-			//parentId: 12_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR12054.jpg
 			collInfo: 12R54
 			rarity: R
-			setNum: "12"
-			cardNum: 54
-			style: Standard
 		}
 		title: Saruman
 		subtitle: Of Many Colours

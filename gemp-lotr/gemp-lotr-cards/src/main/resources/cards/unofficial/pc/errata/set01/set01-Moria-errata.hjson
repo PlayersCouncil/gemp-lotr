@@ -5,7 +5,7 @@
 	# 		javaClass: false
 	# 		parent: 1_177
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 1C177
 	# 		rarity: C
 	# 		setNum: "1"
@@ -49,17 +49,14 @@
 	# }
 	51_177: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E177.2_card.jpg
-			javaClass: false
+			//id: 1_177.2
 			parent: 1_177
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN01E177.2_card.jpg
 			collInfo: 1C177
 			rarity: C
-			setNum: "1"
-			cardNum: 177
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Goblin Patrol Troop
 		unique: false
@@ -98,17 +95,14 @@
 	
 	51_195: {
 		cardInfo: {
-			imagePath: errata/51_195.jpg
-			javaClass: false
+			//id: 1_195.1
 			parent: 1_195
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_195.jpg
 			collInfo: 1R195
 			rarity: R
-			setNum: "1"
-			cardNum: 195
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Relics of Moria
 		unique: true
@@ -142,17 +136,14 @@
 	
 	51_198: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E198.1.jpg
-			javaClass: false
+			//id: 1_198.1
 			parent: 1_198
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E198.1.jpg
 			collInfo: 1U198
 			rarity: U
-			setNum: "1"
-			cardNum: 198
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Through the Misty Mountains
 		culture: moria

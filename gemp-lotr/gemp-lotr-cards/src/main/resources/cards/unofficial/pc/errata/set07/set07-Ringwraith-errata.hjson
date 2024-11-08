@@ -2,17 +2,14 @@
 
 	57_190: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN07E190.1_card.jpg
-			javaClass: false
+			//id: 7_190.1
 			parent: 7_190
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN07E190.1_card.jpg
 			collInfo: 7U190
 			rarity: U
-			setNum: "7"
-			cardNum: 190
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Morgul Destroyer
 		unique: false

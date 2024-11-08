@@ -2,17 +2,9 @@
 
 	11_28: {
 		cardInfo: {
-			imagePath: decipher/LOTR11028.jpg
-			//parentId: 11_28
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11028.jpg
 			collInfo: 11U28
 			rarity: U
-			setNum: "11"
-			cardNum: 28
-			style: Standard
 		}
 		title: The Art of Gandalf
 		unique: false
@@ -66,17 +58,9 @@
 
 	11_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR11029.jpg
-			//parentId: 11_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11029.jpg
 			collInfo: 11U29
 			rarity: U
-			setNum: "11"
-			cardNum: 29
-			style: Standard
 		}
 		title: Ease the Burden
 		unique: false
@@ -119,17 +103,9 @@
 
 	11_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR11030.jpg
-			//parentId: 11_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11030.jpg
 			collInfo: 11R30
 			rarity: R
-			setNum: "11"
-			cardNum: 30
-			style: Standard
 		}
 		title: Erland
 		subtitle: Dale Counselor
@@ -176,17 +152,9 @@
 
 	11_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR11031.jpg
-			//parentId: 11_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11031.jpg
 			collInfo: 11C31
 			rarity: C
-			setNum: "11"
-			cardNum: 31
-			style: Standard
 		}
 		title: Final Account
 		unique: false
@@ -232,17 +200,9 @@
 
 	11_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR11032.jpg
-			//parentId: 11_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11032.jpg
 			collInfo: 11S32
 			rarity: S
-			setNum: "11"
-			cardNum: 32
-			style: Standard
 		}
 		title: G for Grand
 		unique: false
@@ -278,17 +238,9 @@
 
 	11_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR11033.jpg
-			//parentId: 11_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11033.jpg
 			collInfo: 11S33
 			rarity: S
-			setNum: "11"
-			cardNum: 33
-			style: Standard
 		}
 		title: Gandalf
 		subtitle: Leader of the Company
@@ -352,17 +304,9 @@
 
 	11_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR11034.jpg
-			//parentId: 11_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11034.jpg
 			collInfo: 11R34
 			rarity: R
-			setNum: "11"
-			cardNum: 34
-			style: Standard
 		}
 		title: Gandalf's Staff
 		subtitle: Ash-staff
@@ -409,17 +353,9 @@
 
 	11_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR11035.jpg
-			//parentId: 11_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11035.jpg
 			collInfo: 11R35
 			rarity: R
-			setNum: "11"
-			cardNum: 35
-			style: Standard
 		}
 		title: Glamdring
 		subtitle: Foe-hammer
@@ -457,17 +393,9 @@
 
 	11_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR11036.jpg
-			//parentId: 11_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11036.jpg
 			collInfo: 11C36
 			rarity: C
-			setNum: "11"
-			cardNum: 36
-			style: Standard
 		}
 		title: Inspiration
 		unique: false
@@ -520,17 +448,9 @@
 
 	11_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR11037.jpg
-			//parentId: 11_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11037.jpg
 			collInfo: 11U37
 			rarity: U
-			setNum: "11"
-			cardNum: 37
-			style: Standard
 		}
 		title: New Authority
 		unique: true
@@ -587,17 +507,9 @@
 
 	11_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR11038.jpg
-			//parentId: 11_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11038.jpg
 			collInfo: 11U38
 			rarity: U
-			setNum: "11"
-			cardNum: 38
-			style: Standard
 		}
 		title: New-awakened
 		unique: false
@@ -637,17 +549,9 @@
 
 	11_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR11039.jpg
-			//parentId: 11_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11039.jpg
 			collInfo: 11C39
 			rarity: C
-			setNum: "11"
-			cardNum: 39
-			style: Standard
 		}
 		title: Prolonged Struggle
 		unique: false
@@ -689,17 +593,9 @@
 
 	11_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR11040.jpg
-			//parentId: 11_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11040.jpg
 			collInfo: 11U40
 			rarity: U
-			setNum: "11"
-			cardNum: 40
-			style: Standard
 		}
 		title: Shadowfax
 		subtitle: Unequaled Steed

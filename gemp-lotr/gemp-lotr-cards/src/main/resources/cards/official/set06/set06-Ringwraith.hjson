@@ -2,17 +2,9 @@
 
 	6_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR06083.jpg
-			//parentId: 6_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06083.jpg
 			collInfo: 6U83
 			rarity: U
-			setNum: "6"
-			cardNum: 83
-			style: Standard
 		}
 		title: Fell Beast
 		unique: false
@@ -54,17 +46,9 @@
 
 	6_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR06084.jpg
-			//parentId: 6_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06084.jpg
 			collInfo: 6U84
 			rarity: U
-			setNum: "6"
-			cardNum: 84
-			style: Standard
 		}
 		title: Spied From Above
 		unique: false
@@ -109,17 +93,9 @@
 
 	6_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR06085.jpg
-			//parentId: 6_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06085.jpg
 			collInfo: 6R85
 			rarity: R
-			setNum: "6"
-			cardNum: 85
-			style: Standard
 		}
 		title: Sword of Dol Guldur
 		unique: true
@@ -161,17 +137,9 @@
 
 	6_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR06086.jpg
-			//parentId: 6_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06086.jpg
 			collInfo: 6U86
 			rarity: U
-			setNum: "6"
-			cardNum: 86
-			style: Standard
 		}
 		title: Úlairë Lemenya
 		subtitle: Winged Hunter
@@ -218,17 +186,9 @@
 
 	6_87: {
 		cardInfo: {
-			imagePath: decipher/LOTR06087.jpg
-			//parentId: 6_87
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06087.jpg
 			collInfo: 6U87
 			rarity: U
-			setNum: "6"
-			cardNum: 87
-			style: Standard
 		}
 		title: Úlairë Nertëa
 		subtitle: Winged Hunter
@@ -276,17 +236,9 @@
 
 	6_88: {
 		cardInfo: {
-			imagePath: decipher/LOTR06088.jpg
-			//parentId: 6_88
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06088.jpg
 			collInfo: 6R88
 			rarity: R
-			setNum: "6"
-			cardNum: 88
-			style: Standard
 		}
 		title: Úlairë Toldëa
 		subtitle: Winged Sentry
@@ -341,17 +293,9 @@
 
 	6_89: {
 		cardInfo: {
-			imagePath: decipher/LOTR06089.jpg
-			//parentId: 6_89
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06089.jpg
 			collInfo: 6R89
 			rarity: R
-			setNum: "6"
-			cardNum: 89
-			style: Standard
 		}
 		title: Winged and Ominous
 		unique: false
@@ -402,17 +346,9 @@
 
 	6_122: {
 		cardInfo: {
-			imagePath: decipher/LOTR06122.jpg
-			//parentId: 6_122
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06122.jpg
 			collInfo: 6P122
 			rarity: P
-			setNum: "6"
-			cardNum: 122
-			style: Standard
 		}
 		title: The Witch-king
 		subtitle: Deathless Lord

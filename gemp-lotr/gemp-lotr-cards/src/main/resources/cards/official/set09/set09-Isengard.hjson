@@ -2,17 +2,9 @@
 
 	9_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR09039.jpg
-			//parentId: 9_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09039.jpg
 			collInfo: 9R+39
 			rarity: R+
-			setNum: "9"
-			cardNum: 39
-			style: Standard
 		}
 		title: Library of Orthanc
 		unique: true
@@ -80,17 +72,9 @@
 
 	9_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR09040.jpg
-			//parentId: 9_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09040.jpg
 			collInfo: 9R40
 			rarity: R
-			setNum: "9"
-			cardNum: 40
-			style: Standard
 		}
 		title: Sack of the Shire
 		unique: false

@@ -1,17 +1,14 @@
 {
 	53_7: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E007.1_card.jpg
-			//parentId: 3_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 3_7.1
+			parent: 3_7
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN03E007.1_card.jpg
 			collInfo: 3U7
 			rarity: U
-			setNum: "3"
-			cardNum: 7
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Elven Rider
@@ -57,17 +54,14 @@
 	
 	53_8: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E008.1_card.jpg
-			//parentId: 3_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 3_8.1
+			parent: 3_8
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN03E008.1_card.jpg
 			collInfo: 3R8
 			rarity: R
-			setNum: "3"
-			cardNum: 8
-			style: Standard
 		}
 		title: Arwen
 		subtitle: Lady Undomiel
@@ -107,17 +101,14 @@
 	
 	53_13: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E013.1_card.jpg
-			javaClass: false
+			//id: 3_13.1
 			parent: 3_13
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN03E013.1_card.jpg
 			collInfo: 3R13
 			rarity: R
-			setNum: "3"
-			cardNum: 13
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Elrond
 		subtitle: Herald to Gil-galad
@@ -205,17 +196,14 @@
 	
 	53_14: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E014.1_card.jpg
-			//parentId: 3_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 3_14.1
+			parent: 3_14
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN03E014.1_card.jpg
 			collInfo: 3C14
 			rarity: C
-			setNum: "3"
-			cardNum: 14
-			style: Standard
 		}
 		title: Erestor
 		subtitle: Chief Advisor to Elrond
@@ -266,17 +254,14 @@
 	
 	53_17: {
 		cardInfo: {
-			imagePath: errata/53_17.jpg
-			javaClass: false
+			//id: 3_17.1
 			parent: 3_17
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/53_17.jpg
 			collInfo: 3R17
 			rarity: R
-			setNum: "3"
-			cardNum: 17
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Galadriel
 		subtitle: Lady of the Golden Wood
@@ -343,17 +328,14 @@
 	
 	53_20: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E020.1_card.jpg
-			//parentId: 3_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 3_20.1
+			parent: 3_20
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN03E020.1_card.jpg
 			collInfo: 3U20
 			rarity: U
-			setNum: "3"
-			cardNum: 20
-			style: Standard
 		}
 		title: Golradir
 		subtitle: Councilor of Imladris
@@ -422,17 +404,14 @@
 	
 	53_24: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E024.1_card.jpg
-			javaClass: false
+			//id: 3_24.1
 			parent: 3_24
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN03E024.1_card.jpg
 			collInfo: 3U24
 			rarity: U
-			setNum: "3"
-			cardNum: 24
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Phial of Galadriel
 		unique: true
@@ -471,17 +450,14 @@
 	
 	53_25: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E025.1_card.jpg
-			//parentId: 3_25
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 3_25.1
+			parent: 3_25
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN03E025.1_card.jpg
 			collInfo: 3U25
 			rarity: U
-			setNum: "3"
-			cardNum: 25
-			style: Standard
 		}
 		title: Saelbeth
 		subtitle: Elven Councilor
@@ -554,7 +530,7 @@
 	# 		javaClass: false
 	# 		parent: 3_27
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 3R27
 	# 		rarity: R
 	# 		setNum: "3"
@@ -622,17 +598,14 @@
 	
 	53_27: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E027.2_card.jpg
-			javaClass: false
+			//id: 3_27.2
 			parent: 3_27
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN03E027.2_card.jpg
 			collInfo: 3R27
 			rarity: R
-			setNum: "3"
-			cardNum: 27
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Vilya
 		unique: true

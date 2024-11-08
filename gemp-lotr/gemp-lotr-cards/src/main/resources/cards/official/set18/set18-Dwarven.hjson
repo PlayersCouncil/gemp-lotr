@@ -2,17 +2,9 @@
 
 	18_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR18001.jpg
-			//parentId: 18_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18001.jpg
 			collInfo: 18R1
 			rarity: R
-			setNum: "18"
-			cardNum: 1
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Sprinter
@@ -70,17 +62,9 @@
 
 	18_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR18002.jpg
-			//parentId: 18_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18002.jpg
 			collInfo: 18U2
 			rarity: U
-			setNum: "18"
-			cardNum: 2
-			style: Standard
 		}
 		title: Run Until Found
 		unique: false
@@ -145,17 +129,9 @@
 
 	18_3: {
 		cardInfo: {
-			imagePath: decipher/LOTR18003.jpg
-			//parentId: 18_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18003.jpg
 			collInfo: 18C3
 			rarity: C
-			setNum: "18"
-			cardNum: 3
-			style: Standard
 		}
 		title: Thorin's Harp
 		unique: false

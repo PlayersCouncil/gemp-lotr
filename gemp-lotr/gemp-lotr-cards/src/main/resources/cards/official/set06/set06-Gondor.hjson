@@ -2,17 +2,9 @@
 
 	6_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR06048.jpg
-			//parentId: 6_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06048.jpg
 			collInfo: 6C48
 			rarity: C
-			setNum: "6"
-			cardNum: 48
-			style: Standard
 		}
 		title: Anborn
 		subtitle: Skilled Huntsman
@@ -58,17 +50,9 @@
 
 	6_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR06049.jpg
-			//parentId: 6_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06049.jpg
 			collInfo: 6R49
 			rarity: R
-			setNum: "6"
-			cardNum: 49
-			style: Standard
 		}
 		title: Ancient Roads
 		unique: false
@@ -105,17 +89,9 @@
 
 	6_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR06050.jpg
-			//parentId: 6_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06050.jpg
 			collInfo: 6R50
 			rarity: R
-			setNum: "6"
-			cardNum: 50
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Defender of Free Peoples
@@ -191,17 +167,9 @@
 
 	6_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR06051.jpg
-			//parentId: 6_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06051.jpg
 			collInfo: 6U51
 			rarity: U
-			setNum: "6"
-			cardNum: 51
-			style: Standard
 		}
 		title: Banner of Westernesse
 		unique: false
@@ -254,17 +222,9 @@
 
 	6_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR06052.jpg
-			//parentId: 6_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06052.jpg
 			collInfo: 6C52
 			rarity: C
-			setNum: "6"
-			cardNum: 52
-			style: Standard
 		}
 		title: Garrison of Osgiliath
 		unique: true
@@ -336,17 +296,9 @@
 
 	6_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR06053.jpg
-			//parentId: 6_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06053.jpg
 			collInfo: 6C53
 			rarity: C
-			setNum: "6"
-			cardNum: 53
-			style: Standard
 		}
 		title: Mortal Men
 		unique: false
@@ -389,17 +341,9 @@
 
 	6_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR06054.jpg
-			//parentId: 6_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06054.jpg
 			collInfo: 6U54
 			rarity: U
-			setNum: "6"
-			cardNum: 54
-			style: Standard
 		}
 		title: Perilous Ventures
 		unique: false
@@ -450,17 +394,9 @@
 
 	6_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR06055.jpg
-			//parentId: 6_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06055.jpg
 			collInfo: 6R55
 			rarity: R
-			setNum: "6"
-			cardNum: 55
-			style: Standard
 		}
 		title: Ring of Barahir
 		unique: true
@@ -496,17 +432,9 @@
 
 	6_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR06056.jpg
-			//parentId: 6_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06056.jpg
 			collInfo: 6C56
 			rarity: C
-			setNum: "6"
-			cardNum: 56
-			style: Standard
 		}
 		title: Trust
 		unique: false
@@ -549,17 +477,9 @@
 
 	6_121: {
 		cardInfo: {
-			imagePath: decipher/LOTR06121.jpg
-			//parentId: 6_121
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR06121.jpg
 			collInfo: 6P121
 			rarity: P
-			setNum: "6"
-			cardNum: 121
-			style: Standard
 		}
 		title: Faramir
 		subtitle: Ithilien Ranger

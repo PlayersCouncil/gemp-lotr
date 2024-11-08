@@ -2,17 +2,14 @@
 
 	57_332: {
 		cardInfo: {
-			imagePath: errata/57_332.jpg
-			javaClass: false
+			//id: 7_332.1
 			parent: 7_332
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/57_332.jpg
 			collInfo: 7U332
 			rarity: U
-			setNum: "7"
-			cardNum: 332
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Rohirrim Road
 		type: site
@@ -53,17 +50,14 @@
 	
 	57_359: {
 		cardInfo: {
-			imagePath: errata/57_359.jpg
-			javaClass: false
+			//id: 7_359.1
 			parent: 7_359
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/57_359.jpg
 			collInfo: 7U359
 			rarity: U
-			setNum: "7"
-			cardNum: 359
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Northern Ithilien
 		type: site

@@ -2,17 +2,10 @@
 
 	102_67: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S067.0_card.jpg
-			//parentId: 102_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_67
+			image: sets/V2/LOTR-ENV2S067.0_card.jpg
 			collInfo: V2_67
 			rarity: _
-			setNum: V2
-			cardNum: 67
-			style: Standard
 		}
 		title: Eastemnet Hills
 		unique: false
@@ -68,17 +61,10 @@
 
 	102_68: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S068.0_card.jpg
-			//parentId: 102_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_68
+			image: sets/V2/LOTR-ENV2S068.0_card.jpg
 			collInfo: V2_68
 			rarity: _
-			setNum: V2
-			cardNum: 68
-			style: Standard
 		}
 		title: Theodred's Tomb
 		unique: false
@@ -115,17 +101,10 @@
 
 	102_69: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S069.0_card.jpg
-			//parentId: 102_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_69
+			image: sets/V2/LOTR-ENV2S069.0_card.jpg
 			collInfo: V2_69
 			rarity: _
-			setNum: V2
-			cardNum: 69
-			style: Standard
 		}
 		title: Westfold Plains
 		unique: false
@@ -158,17 +137,10 @@
 
 	102_70: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S070.0_card.jpg
-			//parentId: 102_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_70
+			image: sets/V2/LOTR-ENV2S070.0_card.jpg
 			collInfo: V2_70
 			rarity: _
-			setNum: V2
-			cardNum: 70
-			style: Standard
 		}
 		title: Breached Wall
 		unique: false
@@ -200,17 +172,10 @@
 
 	102_71: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S071.0_card.jpg
-			//parentId: 102_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_71
+			image: sets/V2/LOTR-ENV2S071.0_card.jpg
 			collInfo: V2_71
 			rarity: _
-			setNum: V2
-			cardNum: 71
-			style: Standard
 		}
 		title: Helm's Tower
 		unique: false
@@ -248,17 +213,10 @@
 
 	102_72: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S072.0_card.jpg
-			//parentId: 102_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_72
+			image: sets/V2/LOTR-ENV2S072.0_card.jpg
 			collInfo: V2_72
 			rarity: _
-			setNum: V2
-			cardNum: 72
-			style: Standard
 		}
 		title: Desolation of Saruman
 		unique: false
@@ -300,17 +258,10 @@
 
 	102_73: {
 		cardInfo: {
-			imagePath: sets/V2/LOTR-ENV2S073.0_card.jpg
-			//parentId: 102_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			//id: 102_73
+			image: sets/V2/LOTR-ENV2S073.0_card.jpg
 			collInfo: V2_73
 			rarity: _
-			setNum: V2
-			cardNum: 73
-			style: Standard
 		}
 		title: Isengard Clefts
 		unique: false

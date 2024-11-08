@@ -1,17 +1,14 @@
 {
 	52_91: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E091.1.jpg
-			javaClass: false
+			//id: 2_91.1
 			parent: 2_91
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN02E091.1.jpg
 			collInfo: 2C91
 			rarity: C
-			setNum: "2"
-			cardNum: 91
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		side: shadow
 		twilight: 0

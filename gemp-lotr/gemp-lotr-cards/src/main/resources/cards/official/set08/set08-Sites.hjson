@@ -2,17 +2,9 @@
 
 	8_117: {
 		cardInfo: {
-			imagePath: decipher/LOTR08117.jpg
-			//parentId: 8_117
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08117.jpg
 			collInfo: 8U117
 			rarity: U
-			setNum: "8"
-			cardNum: 117
-			style: Standard
 		}
 		title: The Dimholt
 		unique: false
@@ -54,17 +46,9 @@
 
 	8_118: {
 		cardInfo: {
-			imagePath: decipher/LOTR08118.jpg
-			//parentId: 8_118
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08118.jpg
 			collInfo: 8U118
 			rarity: U
-			setNum: "8"
-			cardNum: 118
-			style: Standard
 		}
 		title: City of the Dead
 		unique: false
@@ -116,17 +100,9 @@
 
 	8_119: {
 		cardInfo: {
-			imagePath: decipher/LOTR08119.jpg
-			//parentId: 8_119
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08119.jpg
 			collInfo: 8U119
 			rarity: U
-			setNum: "8"
-			cardNum: 119
-			style: Standard
 		}
 		title: Crashed Gate
 		unique: false
@@ -175,17 +151,9 @@
 
 	8_120: {
 		cardInfo: {
-			imagePath: decipher/LOTR08120.jpg
-			//parentId: 8_120
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08120.jpg
 			collInfo: 8U120
 			rarity: U
-			setNum: "8"
-			cardNum: 120
-			style: Standard
 		}
 		title: Osgiliath Channel
 		unique: false

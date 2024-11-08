@@ -2,17 +2,9 @@
 
 	7_174: {
 		cardInfo: {
-			imagePath: decipher/LOTR07174.jpg
-			//parentId: 7_174
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07174.jpg
 			collInfo: 7U174
 			rarity: U
-			setNum: "7"
-			cardNum: 174
-			style: Standard
 		}
 		title: Called
 		unique: false
@@ -61,17 +53,9 @@
 
 	7_175: {
 		cardInfo: {
-			imagePath: decipher/LOTR07175.jpg
-			//parentId: 7_175
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07175.jpg
 			collInfo: 7U175
 			rarity: U
-			setNum: "7"
-			cardNum: 175
-			style: Standard
 		}
 		title: Corrupt
 		unique: false
@@ -110,17 +94,9 @@
 
 	7_176: {
 		cardInfo: {
-			imagePath: decipher/LOTR07176.jpg
-			//parentId: 7_176
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07176.jpg
 			collInfo: 7U176
 			rarity: U
-			setNum: "7"
-			cardNum: 176
-			style: Standard
 		}
 		title: Disposable Servants
 		unique: false
@@ -179,17 +155,9 @@
 
 	7_177: {
 		cardInfo: {
-			imagePath: decipher/LOTR07177.jpg
-			//parentId: 7_177
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07177.jpg
 			collInfo: 7R177
 			rarity: R
-			setNum: "7"
-			cardNum: 177
-			style: Standard
 		}
 		title: Feel His Blade
 		unique: false
@@ -251,17 +219,9 @@
 
 	7_178: {
 		cardInfo: {
-			imagePath: decipher/LOTR07178.jpg
-			//parentId: 7_178
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07178.jpg
 			collInfo: 7U178
 			rarity: U
-			setNum: "7"
-			cardNum: 178
-			style: Standard
 		}
 		title: Foul Clutches
 		unique: false
@@ -298,17 +258,9 @@
 
 	7_179: {
 		cardInfo: {
-			imagePath: decipher/LOTR07179.jpg
-			//parentId: 7_179
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07179.jpg
 			collInfo: 7R179
 			rarity: R
-			setNum: "7"
-			cardNum: 179
-			style: Standard
 		}
 		title: Ghastly Host
 		unique: false
@@ -348,17 +300,9 @@
 
 	7_180: {
 		cardInfo: {
-			imagePath: decipher/LOTR07180.jpg
-			//parentId: 7_180
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07180.jpg
 			collInfo: 7R180
 			rarity: R
-			setNum: "7"
-			cardNum: 180
-			style: Standard
 		}
 		title: Gorbag
 		subtitle: Lieutenant of Cirith Ungol
@@ -411,17 +355,9 @@
 
 	7_181: {
 		cardInfo: {
-			imagePath: decipher/LOTR07181.jpg
-			//parentId: 7_181
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07181.jpg
 			collInfo: 7R181
 			rarity: R
-			setNum: "7"
-			cardNum: 181
-			style: Standard
 		}
 		title: Held Ground
 		unique: true
@@ -496,17 +432,9 @@
 
 	7_182: {
 		cardInfo: {
-			imagePath: decipher/LOTR07182.jpg
-			//parentId: 7_182
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07182.jpg
 			collInfo: 7R182
 			rarity: R
-			setNum: "7"
-			cardNum: 182
-			style: Standard
 		}
 		title: Loathsome
 		unique: false
@@ -541,17 +469,9 @@
 
 	7_183: {
 		cardInfo: {
-			imagePath: decipher/LOTR07183.jpg
-			//parentId: 7_183
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07183.jpg
 			collInfo: 7R183
 			rarity: R
-			setNum: "7"
-			cardNum: 183
-			style: Standard
 		}
 		title: Mind and Body
 		unique: false
@@ -587,17 +507,9 @@
 
 	7_184: {
 		cardInfo: {
-			imagePath: decipher/LOTR07184.jpg
-			//parentId: 7_184
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07184.jpg
 			collInfo: 7C184
 			rarity: C
-			setNum: "7"
-			cardNum: 184
-			style: Standard
 		}
 		title: More Unbearable
 		unique: false
@@ -653,17 +565,9 @@
 
 	7_185: {
 		cardInfo: {
-			imagePath: decipher/LOTR07185.jpg
-			//parentId: 7_185
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07185.jpg
 			collInfo: 7U185
 			rarity: U
-			setNum: "7"
-			cardNum: 185
-			style: Standard
 		}
 		title: Morgul Answers
 		unique: false
@@ -711,17 +615,9 @@
 
 	7_186: {
 		cardInfo: {
-			imagePath: decipher/LOTR07186.jpg
-			//parentId: 7_186
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07186.jpg
 			collInfo: 7C186
 			rarity: C
-			setNum: "7"
-			cardNum: 186
-			style: Standard
 		}
 		title: Morgul Axe
 		unique: false
@@ -761,17 +657,9 @@
 
 	7_187: {
 		cardInfo: {
-			imagePath: decipher/LOTR07187.jpg
-			//parentId: 7_187
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07187.jpg
 			collInfo: 7U187
 			rarity: U
-			setNum: "7"
-			cardNum: 187
-			style: Standard
 		}
 		title: Morgul Brawler
 		unique: false
@@ -835,17 +723,9 @@
 
 	7_188: {
 		cardInfo: {
-			imagePath: decipher/LOTR07188.jpg
-			//parentId: 7_188
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07188.jpg
 			collInfo: 7R188
 			rarity: R
-			setNum: "7"
-			cardNum: 188
-			style: Standard
 		}
 		title: Morgul Brute
 		unique: false
@@ -908,17 +788,9 @@
 
 	7_189: {
 		cardInfo: {
-			imagePath: decipher/LOTR07189.jpg
-			//parentId: 7_189
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07189.jpg
 			collInfo: 7C189
 			rarity: C
-			setNum: "7"
-			cardNum: 189
-			style: Standard
 		}
 		title: Morgul Cur
 		unique: false
@@ -957,17 +829,9 @@
 
 	7_190: {
 		cardInfo: {
-			imagePath: decipher/LOTR07190.jpg
-			//parentId: 7_190
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07190.jpg
 			collInfo: 7U190
 			rarity: U
-			setNum: "7"
-			cardNum: 190
-			style: Standard
 		}
 		title: Morgul Destroyer
 		unique: false
@@ -1031,17 +895,9 @@
 
 	7_191: {
 		cardInfo: {
-			imagePath: decipher/LOTR07191.jpg
-			//parentId: 7_191
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07191.jpg
 			collInfo: 7R191
 			rarity: R
-			setNum: "7"
-			cardNum: 191
-			style: Standard
 		}
 		title: Morgul Detachment
 		unique: false
@@ -1093,17 +949,9 @@
 
 	7_192: {
 		cardInfo: {
-			imagePath: decipher/LOTR07192.jpg
-			//parentId: 7_192
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07192.jpg
 			collInfo: 7C192
 			rarity: C
-			setNum: "7"
-			cardNum: 192
-			style: Standard
 		}
 		title: Morgul Hound
 		unique: false
@@ -1156,17 +1004,9 @@
 
 	7_193: {
 		cardInfo: {
-			imagePath: decipher/LOTR07193.jpg
-			//parentId: 7_193
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07193.jpg
 			collInfo: 7C193
 			rarity: C
-			setNum: "7"
-			cardNum: 193
-			style: Standard
 		}
 		title: Morgul Lackey
 		unique: false
@@ -1206,17 +1046,9 @@
 
 	7_194: {
 		cardInfo: {
-			imagePath: decipher/LOTR07194.jpg
-			//parentId: 7_194
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07194.jpg
 			collInfo: 7C194
 			rarity: C
-			setNum: "7"
-			cardNum: 194
-			style: Standard
 		}
 		title: Morgul Mongrel
 		unique: false
@@ -1270,17 +1102,9 @@
 
 	7_195: {
 		cardInfo: {
-			imagePath: decipher/LOTR07195.jpg
-			//parentId: 7_195
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07195.jpg
 			collInfo: 7U195
 			rarity: U
-			setNum: "7"
-			cardNum: 195
-			style: Standard
 		}
 		title: Morgul on the March
 		unique: true
@@ -1345,17 +1169,9 @@
 
 	7_196: {
 		cardInfo: {
-			imagePath: decipher/LOTR07196.jpg
-			//parentId: 7_196
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07196.jpg
 			collInfo: 7C196
 			rarity: C
-			setNum: "7"
-			cardNum: 196
-			style: Standard
 		}
 		title: Morgul Predator
 		unique: false
@@ -1395,17 +1211,9 @@
 
 	7_197: {
 		cardInfo: {
-			imagePath: decipher/LOTR07197.jpg
-			//parentId: 7_197
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07197.jpg
 			collInfo: 7R197
 			rarity: R
-			setNum: "7"
-			cardNum: 197
-			style: Standard
 		}
 		title: Morgul Regiment
 		unique: false
@@ -1465,17 +1273,9 @@
 
 	7_198: {
 		cardInfo: {
-			imagePath: decipher/LOTR07198.jpg
-			//parentId: 7_198
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07198.jpg
 			collInfo: 7C198
 			rarity: C
-			setNum: "7"
-			cardNum: 198
-			style: Standard
 		}
 		title: Morgul Ruffian
 		unique: false
@@ -1522,17 +1322,9 @@
 
 	7_199: {
 		cardInfo: {
-			imagePath: decipher/LOTR07199.jpg
-			//parentId: 7_199
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07199.jpg
 			collInfo: 7C199
 			rarity: C
-			setNum: "7"
-			cardNum: 199
-			style: Standard
 		}
 		title: Morgul Soldier
 		unique: false
@@ -1567,17 +1359,9 @@
 
 	7_200: {
 		cardInfo: {
-			imagePath: decipher/LOTR07200.jpg
-			//parentId: 7_200
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07200.jpg
 			collInfo: 7C200
 			rarity: C
-			setNum: "7"
-			cardNum: 200
-			style: Standard
 		}
 		title: Morgul Spawn
 		unique: false
@@ -1617,17 +1401,9 @@
 
 	7_201: {
 		cardInfo: {
-			imagePath: decipher/LOTR07201.jpg
-			//parentId: 7_201
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07201.jpg
 			collInfo: 7C201
 			rarity: C
-			setNum: "7"
-			cardNum: 201
-			style: Standard
 		}
 		title: Morgul Spearman
 		unique: false
@@ -1667,17 +1443,9 @@
 
 	7_202: {
 		cardInfo: {
-			imagePath: decipher/LOTR07202.jpg
-			//parentId: 7_202
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07202.jpg
 			collInfo: 7U202
 			rarity: U
-			setNum: "7"
-			cardNum: 202
-			style: Standard
 		}
 		title: Morgul Whelp
 		unique: false
@@ -1716,17 +1484,9 @@
 
 	7_203: {
 		cardInfo: {
-			imagePath: decipher/LOTR07203.jpg
-			//parentId: 7_203
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07203.jpg
 			collInfo: 7U203
 			rarity: U
-			setNum: "7"
-			cardNum: 203
-			style: Standard
 		}
 		title: Nazgûl Scimitar
 		unique: false
@@ -1765,17 +1525,9 @@
 
 	7_204: {
 		cardInfo: {
-			imagePath: decipher/LOTR07204.jpg
-			//parentId: 7_204
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07204.jpg
 			collInfo: 7R204
 			rarity: R
-			setNum: "7"
-			cardNum: 204
-			style: Standard
 		}
 		title: Out of Sight and Shot
 		unique: true
@@ -1834,17 +1586,9 @@
 
 	7_205: {
 		cardInfo: {
-			imagePath: decipher/LOTR07205.jpg
-			//parentId: 7_205
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07205.jpg
 			collInfo: 7R205
 			rarity: R
-			setNum: "7"
-			cardNum: 205
-			style: Standard
 		}
 		title: Put Forth His Strength
 		unique: false
@@ -1905,17 +1649,9 @@
 
 	7_206: {
 		cardInfo: {
-			imagePath: decipher/LOTR07206.jpg
-			//parentId: 7_206
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07206.jpg
 			collInfo: 7R206
 			rarity: R
-			setNum: "7"
-			cardNum: 206
-			style: Standard
 		}
 		title: Stronghold of Minas Morgul
 		unique: true
@@ -1983,17 +1719,9 @@
 
 	7_207: {
 		cardInfo: {
-			imagePath: decipher/LOTR07207.jpg
-			//parentId: 7_207
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07207.jpg
 			collInfo: 7U207
 			rarity: U
-			setNum: "7"
-			cardNum: 207
-			style: Standard
 		}
 		title: Their Power Is in Terror
 		unique: false
@@ -2028,17 +1756,9 @@
 
 	7_208: {
 		cardInfo: {
-			imagePath: decipher/LOTR07208.jpg
-			//parentId: 7_208
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07208.jpg
 			collInfo: 7C208
 			rarity: C
-			setNum: "7"
-			cardNum: 208
-			style: Standard
 		}
 		title: There Came a Cry
 		unique: false
@@ -2081,17 +1801,9 @@
 
 	7_209: {
 		cardInfo: {
-			imagePath: decipher/LOTR07209.jpg
-			//parentId: 7_209
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07209.jpg
 			collInfo: 7C209
 			rarity: C
-			setNum: "7"
-			cardNum: 209
-			style: Standard
 		}
 		title: Too Late
 		unique: false
@@ -2135,17 +1847,9 @@
 
 	7_210: {
 		cardInfo: {
-			imagePath: decipher/LOTR07210.jpg
-			//parentId: 7_210
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07210.jpg
 			collInfo: 7R210
 			rarity: R
-			setNum: "7"
-			cardNum: 210
-			style: Standard
 		}
 		title: Úlairë Attëa
 		subtitle: Wraith on Wings
@@ -2195,17 +1899,9 @@
 
 	7_211: {
 		cardInfo: {
-			imagePath: decipher/LOTR07211.jpg
-			//parentId: 7_211
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07211.jpg
 			collInfo: 7R211
 			rarity: R
-			setNum: "7"
-			cardNum: 211
-			style: Standard
 		}
 		title: Úlairë Cantëa
 		subtitle: Faster Than Winds
@@ -2265,17 +1961,9 @@
 
 	7_212: {
 		cardInfo: {
-			imagePath: decipher/LOTR07212.jpg
-			//parentId: 7_212
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07212.jpg
 			collInfo: 7U212
 			rarity: U
-			setNum: "7"
-			cardNum: 212
-			style: Standard
 		}
 		title: Úlairë Enquëa
 		subtitle: Faster Than Winds
@@ -2334,17 +2022,9 @@
 
 	7_213: {
 		cardInfo: {
-			imagePath: decipher/LOTR07213.jpg
-			//parentId: 7_213
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07213.jpg
 			collInfo: 7R213
 			rarity: R
-			setNum: "7"
-			cardNum: 213
-			style: Standard
 		}
 		title: Úlairë Lemenya
 		subtitle: Assailing Minion
@@ -2410,17 +2090,9 @@
 
 	7_214: {
 		cardInfo: {
-			imagePath: decipher/LOTR07214.jpg
-			//parentId: 7_214
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07214.jpg
 			collInfo: 7U214
 			rarity: U
-			setNum: "7"
-			cardNum: 214
-			style: Standard
 		}
 		title: Úlairë Lemenya
 		subtitle: Wraith on Wings
@@ -2464,17 +2136,9 @@
 
 	7_215: {
 		cardInfo: {
-			imagePath: decipher/LOTR07215.jpg
-			//parentId: 7_215
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07215.jpg
 			collInfo: 7R215
 			rarity: R
-			setNum: "7"
-			cardNum: 215
-			style: Standard
 		}
 		title: Úlairë Nelya
 		subtitle: Assailing Minion
@@ -2516,17 +2180,9 @@
 
 	7_216: {
 		cardInfo: {
-			imagePath: decipher/LOTR07216.jpg
-			//parentId: 7_216
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07216.jpg
 			collInfo: 7U216
 			rarity: U
-			setNum: "7"
-			cardNum: 216
-			style: Standard
 		}
 		title: Úlairë Nelya
 		subtitle: Black-Mantled Wraith
@@ -2571,17 +2227,9 @@
 
 	7_217: {
 		cardInfo: {
-			imagePath: decipher/LOTR07217.jpg
-			//parentId: 7_217
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07217.jpg
 			collInfo: 7U217
 			rarity: U
-			setNum: "7"
-			cardNum: 217
-			style: Standard
 		}
 		title: Úlairë Nertëa
 		subtitle: Black-Mantled Wraith
@@ -2624,17 +2272,9 @@
 
 	7_218: {
 		cardInfo: {
-			imagePath: decipher/LOTR07218.jpg
-			//parentId: 7_218
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07218.jpg
 			collInfo: 7U218
 			rarity: U
-			setNum: "7"
-			cardNum: 218
-			style: Standard
 		}
 		title: Úlairë Otsëa
 		subtitle: Black-Mantled Wraith
@@ -2694,17 +2334,9 @@
 
 	7_219: {
 		cardInfo: {
-			imagePath: decipher/LOTR07219.jpg
-			//parentId: 7_219
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07219.jpg
 			collInfo: 7R219
 			rarity: R
-			setNum: "7"
-			cardNum: 219
-			style: Standard
 		}
 		title: Úlairë Toldëa
 		subtitle: Wraith on Wings
@@ -2747,17 +2379,9 @@
 
 	7_220: {
 		cardInfo: {
-			imagePath: decipher/LOTR07220.jpg
-			//parentId: 7_220
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07220.jpg
 			collInfo: 7C220
 			rarity: C
-			setNum: "7"
-			cardNum: 220
-			style: Standard
 		}
 		title: War Long Planned
 		unique: false
@@ -2798,17 +2422,9 @@
 
 	7_221: {
 		cardInfo: {
-			imagePath: decipher/LOTR07221.jpg
-			//parentId: 7_221
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07221.jpg
 			collInfo: 7R221
 			rarity: R
-			setNum: "7"
-			cardNum: 221
-			style: Standard
 		}
 		title: The Witch-king
 		subtitle: Morgul King

@@ -2,17 +2,11 @@
 
 	60_52: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN10E052.1_card.jpg
-			javaClass: false
-			parent: 10_52
-			parentPath: errata/pc
-			version: 1
+			//id: 0_52.1
+			revision: 1
+			image: errata/LOTR-EN10E052.1_card.jpg
 			collInfo: 10C52
 			rarity: C
-			setNum: "10"
-			cardNum: 52
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Under Foot
 		unique: true

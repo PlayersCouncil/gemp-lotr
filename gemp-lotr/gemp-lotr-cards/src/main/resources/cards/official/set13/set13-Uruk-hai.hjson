@@ -2,17 +2,9 @@
 
 	13_158: {
 		cardInfo: {
-			imagePath: decipher/LOTR13158.jpg
-			//parentId: 13_158
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13158.jpg
 			collInfo: 13R158
 			rarity: R
-			setNum: "13"
-			cardNum: 158
-			style: Standard
 		}
 		title: Assault Commander
 		unique: false
@@ -64,17 +56,9 @@
 
 	13_159: {
 		cardInfo: {
-			imagePath: decipher/LOTR13159.jpg
-			//parentId: 13_159
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13159.jpg
 			collInfo: 13C159
 			rarity: C
-			setNum: "13"
-			cardNum: 159
-			style: Standard
 		}
 		title: Assault Denizen
 		unique: false
@@ -113,17 +97,9 @@
 
 	13_160: {
 		cardInfo: {
-			imagePath: decipher/LOTR13160.jpg
-			//parentId: 13_160
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13160.jpg
 			collInfo: 13C160
 			rarity: C
-			setNum: "13"
-			cardNum: 160
-			style: Standard
 		}
 		title: Cavern Denizen
 		unique: false
@@ -171,17 +147,9 @@
 
 	13_161: {
 		cardInfo: {
-			imagePath: decipher/LOTR13161.jpg
-			//parentId: 13_161
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13161.jpg
 			collInfo: 13C161
 			rarity: C
-			setNum: "13"
-			cardNum: 161
-			style: Standard
 		}
 		title: Endless Assault
 		unique: false
@@ -261,17 +229,9 @@
 
 	13_162: {
 		cardInfo: {
-			imagePath: decipher/LOTR13162.jpg
-			//parentId: 13_162
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13162.jpg
 			collInfo: 13C162
 			rarity: C
-			setNum: "13"
-			cardNum: 162
-			style: Standard
 		}
 		title: Enemy Without Number
 		unique: false
@@ -332,17 +292,9 @@
 
 	13_163: {
 		cardInfo: {
-			imagePath: decipher/LOTR13163.jpg
-			//parentId: 13_163
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13163.jpg
 			collInfo: 13C163
 			rarity: C
-			setNum: "13"
-			cardNum: 163
-			style: Standard
 		}
 		title: Entranced Uruk
 		unique: false
@@ -381,17 +333,9 @@
 
 	13_164: {
 		cardInfo: {
-			imagePath: decipher/LOTR13164.jpg
-			//parentId: 13_164
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13164.jpg
 			collInfo: 13C164
 			rarity: C
-			setNum: "13"
-			cardNum: 164
-			style: Standard
 		}
 		title: Fearless Approach
 		unique: false
@@ -441,17 +385,9 @@
 
 	13_165: {
 		cardInfo: {
-			imagePath: decipher/LOTR13165.jpg
-			//parentId: 13_165
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13165.jpg
 			collInfo: 13U165
 			rarity: U
-			setNum: "13"
-			cardNum: 165
-			style: Standard
 		}
 		title: Isengard Infiltrator
 		unique: false
@@ -499,17 +435,9 @@
 
 	13_166: {
 		cardInfo: {
-			imagePath: decipher/LOTR13166.jpg
-			//parentId: 13_166
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13166.jpg
 			collInfo: 13U166
 			rarity: U
-			setNum: "13"
-			cardNum: 166
-			style: Standard
 		}
 		title: New Enemy
 		unique: false
@@ -551,17 +479,9 @@
 
 	13_167: {
 		cardInfo: {
-			imagePath: decipher/LOTR13167.jpg
-			//parentId: 13_167
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13167.jpg
 			collInfo: 13U167
 			rarity: U
-			setNum: "13"
-			cardNum: 167
-			style: Standard
 		}
 		title: Signs of War
 		unique: true
@@ -601,17 +521,9 @@
 
 	13_168: {
 		cardInfo: {
-			imagePath: decipher/LOTR13168.jpg
-			//parentId: 13_168
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13168.jpg
 			collInfo: 13C168
 			rarity: C
-			setNum: "13"
-			cardNum: 168
-			style: Standard
 		}
 		title: Uruk Aggressor
 		unique: false
@@ -647,17 +559,9 @@
 
 	13_169: {
 		cardInfo: {
-			imagePath: decipher/LOTR13169.jpg
-			//parentId: 13_169
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13169.jpg
 			collInfo: 13R169
 			rarity: R
-			setNum: "13"
-			cardNum: 169
-			style: Standard
 		}
 		title: Uruk Blitz
 		unique: true
@@ -728,17 +632,9 @@
 
 	13_170: {
 		cardInfo: {
-			imagePath: decipher/LOTR13170.jpg
-			//parentId: 13_170
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13170.jpg
 			collInfo: 13U170
 			rarity: U
-			setNum: "13"
-			cardNum: 170
-			style: Standard
 		}
 		title: Uruk Distractor
 		unique: false
@@ -782,17 +678,9 @@
 
 	13_171: {
 		cardInfo: {
-			imagePath: decipher/LOTR13171.jpg
-			//parentId: 13_171
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13171.jpg
 			collInfo: 13R171
 			rarity: R
-			setNum: "13"
-			cardNum: 171
-			style: Standard
 		}
 		title: Uruk Invader
 		unique: false
@@ -828,17 +716,9 @@
 
 	13_172: {
 		cardInfo: {
-			imagePath: decipher/LOTR13172.jpg
-			//parentId: 13_172
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13172.jpg
 			collInfo: 13C172
 			rarity: C
-			setNum: "13"
-			cardNum: 172
-			style: Standard
 		}
 		title: Uruk Outrider
 		unique: false
@@ -877,17 +757,9 @@
 
 	13_173: {
 		cardInfo: {
-			imagePath: decipher/LOTR13173.jpg
-			//parentId: 13_173
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13173.jpg
 			collInfo: 13C173
 			rarity: C
-			setNum: "13"
-			cardNum: 173
-			style: Standard
 		}
 		title: Uruk Reserve
 		unique: false
@@ -931,17 +803,9 @@
 
 	13_174: {
 		cardInfo: {
-			imagePath: decipher/LOTR13174.jpg
-			//parentId: 13_174
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13174.jpg
 			collInfo: 13R174
 			rarity: R
-			setNum: "13"
-			cardNum: 174
-			style: Standard
 		}
 		title: Uruk Rogue
 		unique: false
@@ -996,17 +860,9 @@
 
 	13_175: {
 		cardInfo: {
-			imagePath: decipher/LOTR13175.jpg
-			//parentId: 13_175
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13175.jpg
 			collInfo: 13C175
 			rarity: C
-			setNum: "13"
-			cardNum: 175
-			style: Standard
 		}
 		title: Uruk Tactician
 		unique: false
@@ -1047,17 +903,9 @@
 
 	13_176: {
 		cardInfo: {
-			imagePath: decipher/LOTR13176.jpg
-			//parentId: 13_176
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13176.jpg
 			collInfo: 13C176
 			rarity: C
-			setNum: "13"
-			cardNum: 176
-			style: Standard
 		}
 		title: War Machine
 		unique: false
@@ -1093,17 +941,9 @@
 
 	13_177: {
 		cardInfo: {
-			imagePath: decipher/LOTR13177.jpg
-			//parentId: 13_177
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR13177.jpg
 			collInfo: 13U177
 			rarity: U
-			setNum: "13"
-			cardNum: 177
-			style: Standard
 		}
 		title: Weapons of Control
 		unique: false

@@ -2,17 +2,9 @@
 
 	19_16: {
 		cardInfo: {
-			imagePath: decipher/LOTR19016.jpg
-			//parentId: 19_16
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19016.jpg
 			collInfo: 19P16
 			rarity: P
-			setNum: "19"
-			cardNum: 16
-			style: Standard
 		}
 		title: Gríma
 		subtitle: Servant of Another Master
@@ -86,17 +78,9 @@
 
 	19_17: {
 		cardInfo: {
-			imagePath: decipher/LOTR19017.jpg
-			//parentId: 19_17
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19017.jpg
 			collInfo: 19P17
 			rarity: P
-			setNum: "19"
-			cardNum: 17
-			style: Standard
 		}
 		title: Urgency
 		unique: false

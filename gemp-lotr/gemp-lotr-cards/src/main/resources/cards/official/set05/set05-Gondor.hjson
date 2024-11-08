@@ -2,17 +2,9 @@
 
 	5_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR05031.jpg
-			//parentId: 5_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05031.jpg
 			collInfo: 5R31
 			rarity: R
-			setNum: "5"
-			cardNum: 31
-			style: Standard
 		}
 		title: Alcarin
 		subtitle: Warrior of Lamedon
@@ -66,17 +58,9 @@
 
 	5_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR05032.jpg
-			//parentId: 5_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05032.jpg
 			collInfo: 5C32
 			rarity: C
-			setNum: "5"
-			cardNum: 32
-			style: Standard
 		}
 		title: Citadel of the Stars
 		unique: true
@@ -133,17 +117,9 @@
 
 	5_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR05033.jpg
-			//parentId: 5_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05033.jpg
 			collInfo: 5C33
 			rarity: C
-			setNum: "5"
-			cardNum: 33
-			style: Standard
 		}
 		title: City Wall
 		unique: false
@@ -199,17 +175,9 @@
 
 	5_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR05034.jpg
-			//parentId: 5_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05034.jpg
 			collInfo: 5U34
 			rarity: U
-			setNum: "5"
-			cardNum: 34
-			style: Standard
 		}
 		title: Fall Back
 		unique: false
@@ -246,17 +214,9 @@
 
 	5_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR05035.jpg
-			//parentId: 5_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05035.jpg
 			collInfo: 5C35
 			rarity: C
-			setNum: "5"
-			cardNum: 35
-			style: Standard
 		}
 		title: Gondorian Knight
 		unique: false
@@ -283,17 +243,9 @@
 
 	5_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR05036.jpg
-			//parentId: 5_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05036.jpg
 			collInfo: 5C36
 			rarity: C
-			setNum: "5"
-			cardNum: 36
-			style: Standard
 		}
 		title: Knight of Gondor
 		unique: false
@@ -333,17 +285,9 @@
 
 	5_37: {
 		cardInfo: {
-			imagePath: decipher/LOTR05037.jpg
-			//parentId: 5_37
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05037.jpg
 			collInfo: 5C37
 			rarity: C
-			setNum: "5"
-			cardNum: 37
-			style: Standard
 		}
 		title: Men of Númenor
 		unique: false
@@ -374,17 +318,9 @@
 
 	5_38: {
 		cardInfo: {
-			imagePath: decipher/LOTR05038.jpg
-			//parentId: 5_38
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05038.jpg
 			collInfo: 5U38
 			rarity: U
-			setNum: "5"
-			cardNum: 38
-			style: Standard
 		}
 		title: Rally Point
 		unique: false
@@ -420,17 +356,9 @@
 
 	5_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR05039.jpg
-			//parentId: 5_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05039.jpg
 			collInfo: 5R39
 			rarity: R
-			setNum: "5"
-			cardNum: 39
-			style: Standard
 		}
 		title: Stone Tower
 		unique: true
@@ -473,17 +401,9 @@
 
 	5_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR05040.jpg
-			//parentId: 5_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05040.jpg
 			collInfo: 5C40
 			rarity: C
-			setNum: "5"
-			cardNum: 40
-			style: Standard
 		}
 		title: Take Cover
 		unique: false
@@ -518,17 +438,9 @@
 
 	5_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR05041.jpg
-			//parentId: 5_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05041.jpg
 			collInfo: 5R41
 			rarity: R
-			setNum: "5"
-			cardNum: 41
-			style: Standard
 		}
 		title: These Are My People
 		unique: false
@@ -575,17 +487,9 @@
 
 	5_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR05042.jpg
-			//parentId: 5_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05042.jpg
 			collInfo: 5U42
 			rarity: U
-			setNum: "5"
-			cardNum: 42
-			style: Standard
 		}
 		title: Turgon
 		subtitle: Man of Belfalas
@@ -633,17 +537,9 @@
 
 	5_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR05043.jpg
-			//parentId: 5_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05043.jpg
 			collInfo: 5C43
 			rarity: C
-			setNum: "5"
-			cardNum: 43
-			style: Standard
 		}
 		title: War Must Be
 		unique: false

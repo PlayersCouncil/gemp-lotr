@@ -1,17 +1,14 @@
 {
 	58_20: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN08E020.1_card.jpg
-			//parentId: 8_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 8_20.1
+			parent: 8_20
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN08E020.1_card.jpg
 			collInfo: 8R20
 			rarity: R
-			setNum: "8"
-			cardNum: 20
-			style: Standard
 		}
 		title: Saved From the Fire
 		unique: false

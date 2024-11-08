@@ -1,5 +1,10 @@
 {
 	32_25: {
+		cardInfo: {
+			image: hobbit/HDG3225.jpg
+			collInfo: 32_25
+			rarity: _
+		}
 		title: Alfrid
 		subtitle: Lickspittle
 		unique: true
@@ -52,6 +57,11 @@
 		]
 	}
 	32_26: {
+		cardInfo: {
+			image: hobbit/HDG3226.jpg
+			collInfo: 32_26
+			rarity: _
+		}
 		title: War for Gold
 		unique: true
 		culture: mirkwood
@@ -101,6 +111,11 @@
 		]
 	}
 	32_27: {
+		cardInfo: {
+			image: hobbit/HDG3227.jpg
+			collInfo: 32_27
+			rarity: _
+		}
 		title: Assaulting Goblin
 		culture: moria
 		twilight: 2
@@ -130,6 +145,11 @@
 		}
 	}
 	32_28: {
+		cardInfo: {
+			image: hobbit/HDG3228.jpg
+			collInfo: 32_28
+			rarity: _
+		}
 		title: Azog
 		subtitle: Commander of the Wolves Army
 		unique: true
@@ -160,6 +180,11 @@
 		}
 	}
 	32_29: {
+		cardInfo: {
+			image: hobbit/HDG3229.jpg
+			collInfo: 32_29
+			rarity: _
+		}
 		title: Azog's Mace
 		unique: true
 		culture: moria
@@ -201,6 +226,11 @@
 		]
 	}
 	32_30: {
+		cardInfo: {
+			image: hobbit/HDG3230.jpg
+			collInfo: 32_30
+			rarity: _
+		}
 		title: Dark Bats
 		culture: moria
 		twilight: 1
@@ -240,6 +270,11 @@
 		}
 	}
 	32_31: {
+		cardInfo: {
+			image: hobbit/HDG3231.jpg
+			collInfo: 32_31
+			rarity: _
+		}
 		title: Demolition Troll
 		culture: moria
 		twilight: 5
@@ -267,6 +302,11 @@
 		}
 	}
 	32_32: {
+		cardInfo: {
+			image: hobbit/HDG3232.jpg
+			collInfo: 32_32
+			rarity: _
+		}
 		title: Vicious Warg
 		culture: moria
 		twilight: 3
@@ -303,6 +343,11 @@
 		]
 	}
 	32_33: {
+		cardInfo: {
+			image: hobbit/HDG3233.jpg
+			collInfo: 32_33
+			rarity: _
+		}
 		title: Were-worms
 		unique: true
 		culture: moria
@@ -358,6 +403,11 @@
 		]
 	}
 	32_34: {
+		cardInfo: {
+			image: hobbit/HDG3234.jpg
+			collInfo: 32_34
+			rarity: _
+		}
 		title: The Wolves Army
 		unique: true
 		culture: moria
@@ -396,6 +446,11 @@
 		}
 	}
 	32_35: {
+		cardInfo: {
+			image: hobbit/HDG3235.jpg
+			collInfo: 32_35
+			rarity: _
+		}
 		title: Azog
 		subtitle: Servant of Sauron
 		unique: true
@@ -442,6 +497,11 @@
 		]
 	}
 	32_36: {
+		cardInfo: {
+			image: hobbit/HDG3236.jpg
+			collInfo: 32_36
+			rarity: _
+		}
 		title: Bolg
 		subtitle: Captain of the Orc Army
 		unique: true
@@ -482,6 +542,11 @@
 		]
 	}
 	32_37: {
+		cardInfo: {
+			image: hobbit/HDG3237.jpg
+			collInfo: 32_37
+			rarity: _
+		}
 		title: Danger Wrapped in Shadows
 		culture: sauron
 		twilight: 2
@@ -548,6 +613,11 @@
 		]
 	}
 	32_38: {
+		cardInfo: {
+			image: hobbit/HDG3238.jpg
+			collInfo: 32_38
+			rarity: _
+		}
 		title: Hidden Attack
 		culture: sauron
 		twilight: 0
@@ -579,6 +649,11 @@
 		}
 	}
 	32_39: {
+		cardInfo: {
+			image: hobbit/HDG3239.jpg
+			collInfo: 32_39
+			rarity: _
+		}
 		title: Jail
 		culture: sauron
 		twilight: 2
@@ -626,6 +701,11 @@
 		]
 	}
 	32_40: {
+		cardInfo: {
+			image: hobbit/HDG3240.jpg
+			collInfo: 32_40
+			rarity: _
+		}
 		title: The Orc Army
 		unique: true
 		culture: sauron
@@ -669,6 +749,11 @@
 		]
 	}
 	32_41: {
+		cardInfo: {
+			image: hobbit/HDG3241.jpg
+			collInfo: 32_41
+			rarity: _
+		}
 		title: Orkish Bow
 		culture: sauron
 		twilight: 1

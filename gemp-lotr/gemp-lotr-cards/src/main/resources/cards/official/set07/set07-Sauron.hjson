@@ -2,17 +2,9 @@
 
 	7_262: {
 		cardInfo: {
-			imagePath: decipher/LOTR07262.jpg
-			//parentId: 7_262
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07262.jpg
 			collInfo: 7C262
 			rarity: C
-			setNum: "7"
-			cardNum: 262
-			style: Standard
 		}
 		title: Above the Battlement
 		unique: false
@@ -60,17 +52,9 @@
 
 	7_263: {
 		cardInfo: {
-			imagePath: decipher/LOTR07263.jpg
-			//parentId: 7_263
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07263.jpg
 			collInfo: 7C263
 			rarity: C
-			setNum: "7"
-			cardNum: 263
-			style: Standard
 		}
 		title: Anguish
 		unique: false
@@ -106,17 +90,9 @@
 
 	7_264: {
 		cardInfo: {
-			imagePath: decipher/LOTR07264.jpg
-			//parentId: 7_264
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07264.jpg
 			collInfo: 7U264
 			rarity: U
-			setNum: "7"
-			cardNum: 264
-			style: Standard
 		}
 		title: Army of Udûn
 		unique: true
@@ -189,17 +165,9 @@
 
 	7_265: {
 		cardInfo: {
-			imagePath: decipher/LOTR07265.jpg
-			//parentId: 7_265
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07265.jpg
 			collInfo: 7C265
 			rarity: C
-			setNum: "7"
-			cardNum: 265
-			style: Standard
 		}
 		title: Besieging Pike
 		unique: false
@@ -237,17 +205,9 @@
 
 	7_266: {
 		cardInfo: {
-			imagePath: decipher/LOTR07266.jpg
-			//parentId: 7_266
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07266.jpg
 			collInfo: 7R266
 			rarity: R
-			setNum: "7"
-			cardNum: 266
-			style: Standard
 		}
 		title: Breached
 		unique: false
@@ -288,17 +248,9 @@
 
 	7_267: {
 		cardInfo: {
-			imagePath: decipher/LOTR07267.jpg
-			//parentId: 7_267
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07267.jpg
 			collInfo: 7R267
 			rarity: R
-			setNum: "7"
-			cardNum: 267
-			style: Standard
 		}
 		title: Din of Arms
 		unique: false
@@ -363,17 +315,9 @@
 
 	7_268: {
 		cardInfo: {
-			imagePath: decipher/LOTR07268.jpg
-			//parentId: 7_268
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07268.jpg
 			collInfo: 7R268
 			rarity: R
-			setNum: "7"
-			cardNum: 268
-			style: Standard
 		}
 		title: Encirclement
 		unique: true
@@ -437,17 +381,9 @@
 
 	7_269: {
 		cardInfo: {
-			imagePath: decipher/LOTR07269.jpg
-			//parentId: 7_269
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07269.jpg
 			collInfo: 7R269
 			rarity: R
-			setNum: "7"
-			cardNum: 269
-			style: Standard
 		}
 		title: Fires Raged Unchecked
 		unique: false
@@ -494,17 +430,9 @@
 
 	7_270: {
 		cardInfo: {
-			imagePath: decipher/LOTR07270.jpg
-			//parentId: 7_270
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07270.jpg
 			collInfo: 7U270
 			rarity: U
-			setNum: "7"
-			cardNum: 270
-			style: Standard
 		}
 		title: Gorgoroth Attacker
 		unique: false
@@ -547,17 +475,9 @@
 
 	7_271: {
 		cardInfo: {
-			imagePath: decipher/LOTR07271.jpg
-			//parentId: 7_271
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07271.jpg
 			collInfo: 7U271
 			rarity: U
-			setNum: "7"
-			cardNum: 271
-			style: Standard
 		}
 		title: Gorgoroth Axeman
 		unique: false
@@ -609,17 +529,9 @@
 
 	7_272: {
 		cardInfo: {
-			imagePath: decipher/LOTR07272.jpg
-			//parentId: 7_272
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07272.jpg
 			collInfo: 7U272
 			rarity: U
-			setNum: "7"
-			cardNum: 272
-			style: Standard
 		}
 		title: Gorgoroth Engineer
 		unique: false
@@ -660,17 +572,9 @@
 
 	7_273: {
 		cardInfo: {
-			imagePath: decipher/LOTR07273.jpg
-			//parentId: 7_273
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07273.jpg
 			collInfo: 7C273
 			rarity: C
-			setNum: "7"
-			cardNum: 273
-			style: Standard
 		}
 		title: Gorgoroth Garrison
 		unique: false
@@ -728,17 +632,9 @@
 
 	7_274: {
 		cardInfo: {
-			imagePath: decipher/LOTR07274.jpg
-			//parentId: 7_274
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07274.jpg
 			collInfo: 7R274
 			rarity: R
-			setNum: "7"
-			cardNum: 274
-			style: Standard
 		}
 		title: Gorgoroth Officer
 		unique: false
@@ -795,17 +691,9 @@
 
 	7_275: {
 		cardInfo: {
-			imagePath: decipher/LOTR07275.jpg
-			//parentId: 7_275
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07275.jpg
 			collInfo: 7C275
 			rarity: C
-			setNum: "7"
-			cardNum: 275
-			style: Standard
 		}
 		title: Gorgoroth Pillager
 		unique: false
@@ -842,17 +730,9 @@
 
 	7_276: {
 		cardInfo: {
-			imagePath: decipher/LOTR07276.jpg
-			//parentId: 7_276
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07276.jpg
 			collInfo: 7C276
 			rarity: C
-			setNum: "7"
-			cardNum: 276
-			style: Standard
 		}
 		title: Gorgoroth Ransacker
 		unique: false
@@ -902,17 +782,9 @@
 
 	7_277: {
 		cardInfo: {
-			imagePath: decipher/LOTR07277.jpg
-			//parentId: 7_277
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07277.jpg
 			collInfo: 7C277
 			rarity: C
-			setNum: "7"
-			cardNum: 277
-			style: Standard
 		}
 		title: Gorgoroth Sapper
 		unique: false
@@ -970,17 +842,9 @@
 
 	7_278: {
 		cardInfo: {
-			imagePath: decipher/LOTR07278.jpg
-			//parentId: 7_278
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07278.jpg
 			collInfo: 7U278
 			rarity: U
-			setNum: "7"
-			cardNum: 278
-			style: Standard
 		}
 		title: Gorgoroth Soldier
 		unique: false
@@ -1024,17 +888,9 @@
 
 	7_279: {
 		cardInfo: {
-			imagePath: decipher/LOTR07279.jpg
-			//parentId: 7_279
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07279.jpg
 			collInfo: 7R279
 			rarity: R
-			setNum: "7"
-			cardNum: 279
-			style: Standard
 		}
 		title: Gorgoroth Troop
 		unique: true
@@ -1076,17 +932,9 @@
 
 	7_280: {
 		cardInfo: {
-			imagePath: decipher/LOTR07280.jpg
-			//parentId: 7_280
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07280.jpg
 			collInfo: 7U280
 			rarity: U
-			setNum: "7"
-			cardNum: 280
-			style: Standard
 		}
 		title: Great Peril of Fire
 		unique: false
@@ -1137,17 +985,9 @@
 
 	7_281: {
 		cardInfo: {
-			imagePath: decipher/LOTR07281.jpg
-			//parentId: 7_281
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07281.jpg
 			collInfo: 7U281
 			rarity: U
-			setNum: "7"
-			cardNum: 281
-			style: Standard
 		}
 		title: Great Siege-towers
 		unique: false
@@ -1202,17 +1042,9 @@
 
 	7_282: {
 		cardInfo: {
-			imagePath: decipher/LOTR07282.jpg
-			//parentId: 7_282
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07282.jpg
 			collInfo: 7U282
 			rarity: U
-			setNum: "7"
-			cardNum: 282
-			style: Standard
 		}
 		title: Host of Udûn
 		unique: true
@@ -1245,17 +1077,9 @@
 
 	7_283: {
 		cardInfo: {
-			imagePath: decipher/LOTR07283.jpg
-			//parentId: 7_283
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07283.jpg
 			collInfo: 7R283
 			rarity: R
-			setNum: "7"
-			cardNum: 283
-			style: Standard
 		}
 		title: Legions of Morgul
 		unique: true
@@ -1331,17 +1155,9 @@
 
 	7_284: {
 		cardInfo: {
-			imagePath: decipher/LOTR07284.jpg
-			//parentId: 7_284
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07284.jpg
 			collInfo: 7R284
 			rarity: R
-			setNum: "7"
-			cardNum: 284
-			style: Standard
 		}
 		title: Mordor Assassin
 		unique: false
@@ -1397,17 +1213,9 @@
 
 	7_285: {
 		cardInfo: {
-			imagePath: decipher/LOTR07285.jpg
-			//parentId: 7_285
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07285.jpg
 			collInfo: 7C285
 			rarity: C
-			setNum: "7"
-			cardNum: 285
-			style: Standard
 		}
 		title: Mordor Defender
 		unique: false
@@ -1449,17 +1257,9 @@
 
 	7_286: {
 		cardInfo: {
-			imagePath: decipher/LOTR07286.jpg
-			//parentId: 7_286
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07286.jpg
 			collInfo: 7R286
 			rarity: R
-			setNum: "7"
-			cardNum: 286
-			style: Standard
 		}
 		title: Mordor Fighter
 		unique: false
@@ -1501,17 +1301,9 @@
 
 	7_287: {
 		cardInfo: {
-			imagePath: decipher/LOTR07287.jpg
-			//parentId: 7_287
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07287.jpg
 			collInfo: 7C287
 			rarity: C
-			setNum: "7"
-			cardNum: 287
-			style: Standard
 		}
 		title: Mordor Guard
 		unique: false
@@ -1559,17 +1351,9 @@
 
 	7_288: {
 		cardInfo: {
-			imagePath: decipher/LOTR07288.jpg
-			//parentId: 7_288
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07288.jpg
 			collInfo: 7C288
 			rarity: C
-			setNum: "7"
-			cardNum: 288
-			style: Standard
 		}
 		title: Mordor Regular
 		unique: false
@@ -1611,17 +1395,9 @@
 
 	7_289: {
 		cardInfo: {
-			imagePath: decipher/LOTR07289.jpg
-			//parentId: 7_289
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07289.jpg
 			collInfo: 7U289
 			rarity: U
-			setNum: "7"
-			cardNum: 289
-			style: Standard
 		}
 		title: Mordor Savage
 		unique: false
@@ -1663,17 +1439,9 @@
 
 	7_290: {
 		cardInfo: {
-			imagePath: decipher/LOTR07290.jpg
-			//parentId: 7_290
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07290.jpg
 			collInfo: 7C290
 			rarity: C
-			setNum: "7"
-			cardNum: 290
-			style: Standard
 		}
 		title: Mordor Soldier
 		unique: false
@@ -1712,17 +1480,9 @@
 
 	7_291: {
 		cardInfo: {
-			imagePath: decipher/LOTR07291.jpg
-			//parentId: 7_291
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07291.jpg
 			collInfo: 7C291
 			rarity: C
-			setNum: "7"
-			cardNum: 291
-			style: Standard
 		}
 		title: Mordor Trooper
 		unique: false
@@ -1762,17 +1522,9 @@
 
 	7_292: {
 		cardInfo: {
-			imagePath: decipher/LOTR07292.jpg
-			//parentId: 7_292
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07292.jpg
 			collInfo: 7U292
 			rarity: U
-			setNum: "7"
-			cardNum: 292
-			style: Standard
 		}
 		title: Mordor Veteran
 		unique: false
@@ -1812,17 +1564,9 @@
 
 	7_293: {
 		cardInfo: {
-			imagePath: decipher/LOTR07293.jpg
-			//parentId: 7_293
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07293.jpg
 			collInfo: 7U293
 			rarity: U
-			setNum: "7"
-			cardNum: 293
-			style: Standard
 		}
 		title: Mordor Warrior
 		unique: false
@@ -1863,17 +1607,9 @@
 
 	7_294: {
 		cardInfo: {
-			imagePath: decipher/LOTR07294.jpg
-			//parentId: 7_294
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07294.jpg
 			collInfo: 7U294
 			rarity: U
-			setNum: "7"
-			cardNum: 294
-			style: Standard
 		}
 		title: Orc Archer Troop
 		unique: true
@@ -1925,17 +1661,9 @@
 
 	7_295: {
 		cardInfo: {
-			imagePath: decipher/LOTR07295.jpg
-			//parentId: 7_295
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07295.jpg
 			collInfo: 7U295
 			rarity: U
-			setNum: "7"
-			cardNum: 295
-			style: Standard
 		}
 		title: Orc Assault Band
 		unique: false
@@ -1980,17 +1708,9 @@
 
 	7_296: {
 		cardInfo: {
-			imagePath: decipher/LOTR07296.jpg
-			//parentId: 7_296
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07296.jpg
 			collInfo: 7C296
 			rarity: C
-			setNum: "7"
-			cardNum: 296
-			style: Standard
 		}
 		title: Orc Brood
 		unique: false
@@ -2031,17 +1751,9 @@
 
 	7_297: {
 		cardInfo: {
-			imagePath: decipher/LOTR07297.jpg
-			//parentId: 7_297
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07297.jpg
 			collInfo: 7C297
 			rarity: C
-			setNum: "7"
-			cardNum: 297
-			style: Standard
 		}
 		title: Orc Butcher
 		unique: false
@@ -2079,17 +1791,9 @@
 
 	7_298: {
 		cardInfo: {
-			imagePath: decipher/LOTR07298.jpg
-			//parentId: 7_298
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07298.jpg
 			collInfo: 7C298
 			rarity: C
-			setNum: "7"
-			cardNum: 298
-			style: Standard
 		}
 		title: Orc Chaser
 		unique: false
@@ -2137,17 +1841,9 @@
 
 	7_299: {
 		cardInfo: {
-			imagePath: decipher/LOTR07299.jpg
-			//parentId: 7_299
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07299.jpg
 			collInfo: 7C299
 			rarity: C
-			setNum: "7"
-			cardNum: 299
-			style: Standard
 		}
 		title: Orc Destroyer
 		unique: false
@@ -2190,17 +1886,9 @@
 
 	7_300: {
 		cardInfo: {
-			imagePath: decipher/LOTR07300.jpg
-			//parentId: 7_300
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07300.jpg
 			collInfo: 7C300
 			rarity: C
-			setNum: "7"
-			cardNum: 300
-			style: Standard
 		}
 		title: Orc Fanatic
 		unique: false
@@ -2240,17 +1928,9 @@
 
 	7_301: {
 		cardInfo: {
-			imagePath: decipher/LOTR07301.jpg
-			//parentId: 7_301
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07301.jpg
 			collInfo: 7U301
 			rarity: U
-			setNum: "7"
-			cardNum: 301
-			style: Standard
 		}
 		title: Orc Marauder
 		unique: false
@@ -2290,17 +1970,9 @@
 
 	7_302: {
 		cardInfo: {
-			imagePath: decipher/LOTR07302.jpg
-			//parentId: 7_302
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07302.jpg
 			collInfo: 7U302
 			rarity: U
-			setNum: "7"
-			cardNum: 302
-			style: Standard
 		}
 		title: Orc Officer
 		unique: false
@@ -2340,17 +2012,9 @@
 
 	7_303: {
 		cardInfo: {
-			imagePath: decipher/LOTR07303.jpg
-			//parentId: 7_303
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07303.jpg
 			collInfo: 7C303
 			rarity: C
-			setNum: "7"
-			cardNum: 303
-			style: Standard
 		}
 		title: Orc Pursuer(2)
 		unique: false
@@ -2398,17 +2062,9 @@
 
 	7_304: {
 		cardInfo: {
-			imagePath: decipher/LOTR07304.jpg
-			//parentId: 7_304
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07304.jpg
 			collInfo: 7C304
 			rarity: C
-			setNum: "7"
-			cardNum: 304
-			style: Standard
 		}
 		title: Orc Rager
 		unique: false
@@ -2448,17 +2104,9 @@
 
 	7_305: {
 		cardInfo: {
-			imagePath: decipher/LOTR07305.jpg
-			//parentId: 7_305
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07305.jpg
 			collInfo: 7U305
 			rarity: U
-			setNum: "7"
-			cardNum: 305
-			style: Standard
 		}
 		title: Orc Savage
 		unique: false
@@ -2523,17 +2171,9 @@
 
 	7_306: {
 		cardInfo: {
-			imagePath: decipher/LOTR07306.jpg
-			//parentId: 7_306
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07306.jpg
 			collInfo: 7R306
 			rarity: R
-			setNum: "7"
-			cardNum: 306
-			style: Standard
 		}
 		title: Orc Seeker
 		unique: true
@@ -2591,17 +2231,9 @@
 
 	7_307: {
 		cardInfo: {
-			imagePath: decipher/LOTR07307.jpg
-			//parentId: 7_307
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07307.jpg
 			collInfo: 7U307
 			rarity: U
-			setNum: "7"
-			cardNum: 307
-			style: Standard
 		}
 		title: Orc Stalker
 		unique: false
@@ -2649,17 +2281,9 @@
 
 	7_308: {
 		cardInfo: {
-			imagePath: decipher/LOTR07308.jpg
-			//parentId: 7_308
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07308.jpg
 			collInfo: 7R308
 			rarity: R
-			setNum: "7"
-			cardNum: 308
-			style: Standard
 		}
 		title: Rally the Host
 		unique: false
@@ -2708,17 +2332,9 @@
 
 	7_309: {
 		cardInfo: {
-			imagePath: decipher/LOTR07309.jpg
-			//parentId: 7_309
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07309.jpg
 			collInfo: 7U309
 			rarity: U
-			setNum: "7"
-			cardNum: 309
-			style: Standard
 		}
 		title: Rope and Winch
 		unique: false
@@ -2783,17 +2399,9 @@
 
 	7_310: {
 		cardInfo: {
-			imagePath: decipher/LOTR07310.jpg
-			//parentId: 7_310
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07310.jpg
 			collInfo: 7U310
 			rarity: U
-			setNum: "7"
-			cardNum: 310
-			style: Standard
 		}
 		title: Sauron's Hatred
 		unique: false
@@ -2851,17 +2459,9 @@
 
 	7_311: {
 		cardInfo: {
-			imagePath: decipher/LOTR07311.jpg
-			//parentId: 7_311
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07311.jpg
 			collInfo: 7R311
 			rarity: R
-			setNum: "7"
-			cardNum: 311
-			style: Standard
 		}
 		title: Siege Commander
 		unique: true
@@ -2904,17 +2504,9 @@
 
 	7_312: {
 		cardInfo: {
-			imagePath: decipher/LOTR07312.jpg
-			//parentId: 7_312
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07312.jpg
 			collInfo: 7C312
 			rarity: C
-			setNum: "7"
-			cardNum: 312
-			style: Standard
 		}
 		title: Siegecraft
 		unique: false
@@ -2951,17 +2543,9 @@
 
 	7_313: {
 		cardInfo: {
-			imagePath: decipher/LOTR07313.jpg
-			//parentId: 7_313
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07313.jpg
 			collInfo: 7C313
 			rarity: C
-			setNum: "7"
-			cardNum: 313
-			style: Standard
 		}
 		title: Some Secret Art of Flame
 		unique: false
@@ -3017,17 +2601,9 @@
 
 	7_314: {
 		cardInfo: {
-			imagePath: decipher/LOTR07314.jpg
-			//parentId: 7_314
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07314.jpg
 			collInfo: 7R314
 			rarity: R
-			setNum: "7"
-			cardNum: 314
-			style: Standard
 		}
 		title: Stronghold of Cirith Ungol
 		unique: true
@@ -3084,17 +2660,9 @@
 
 	7_315: {
 		cardInfo: {
-			imagePath: decipher/LOTR07315.jpg
-			//parentId: 7_315
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07315.jpg
 			collInfo: 7C315
 			rarity: C
-			setNum: "7"
-			cardNum: 315
-			style: Standard
 		}
 		title: Tower Walkway
 		unique: true
@@ -3156,17 +2724,9 @@
 
 	7_316: {
 		cardInfo: {
-			imagePath: decipher/LOTR07316.jpg
-			//parentId: 7_316
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07316.jpg
 			collInfo: 7R316
 			rarity: R
-			setNum: "7"
-			cardNum: 316
-			style: Standard
 		}
 		title: Troop Tower
 		unique: true

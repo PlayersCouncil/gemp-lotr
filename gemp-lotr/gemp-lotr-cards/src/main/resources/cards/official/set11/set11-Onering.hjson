@@ -2,17 +2,9 @@
 
 	11_1: {
 		cardInfo: {
-			imagePath: decipher/LOTR11001.jpg
-			//parentId: 11_1
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11001.jpg
 			collInfo: 11R1
 			rarity: R
-			setNum: "11"
-			cardNum: 1
-			style: Standard
 		}
 		title: The One Ring
 		subtitle: The Ring of Rings
@@ -89,17 +81,9 @@
 
 	11_2: {
 		cardInfo: {
-			imagePath: decipher/LOTR11002.jpg
-			//parentId: 11_2
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11002.jpg
 			collInfo: 11S2
 			rarity: S
-			setNum: "11"
-			cardNum: 2
-			style: Standard
 		}
 		title: The One Ring
 		subtitle: The Ruling Ring

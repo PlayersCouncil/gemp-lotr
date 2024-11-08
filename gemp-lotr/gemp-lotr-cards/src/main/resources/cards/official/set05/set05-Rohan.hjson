@@ -2,17 +2,9 @@
 
 	5_79: {
 		cardInfo: {
-			imagePath: decipher/LOTR05079.jpg
-			//parentId: 5_79
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05079.jpg
 			collInfo: 5U79
 			rarity: U
-			setNum: "5"
-			cardNum: 79
-			style: Standard
 		}
 		title: Armory
 		unique: true
@@ -72,17 +64,9 @@
 
 	5_80: {
 		cardInfo: {
-			imagePath: decipher/LOTR05080.jpg
-			//parentId: 5_80
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05080.jpg
 			collInfo: 5U80
 			rarity: U
-			setNum: "5"
-			cardNum: 80
-			style: Standard
 		}
 		title: Arrow-slits
 		unique: true
@@ -128,17 +112,9 @@
 
 	5_81: {
 		cardInfo: {
-			imagePath: decipher/LOTR05081.jpg
-			//parentId: 5_81
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05081.jpg
 			collInfo: 5C81
 			rarity: C
-			setNum: "5"
-			cardNum: 81
-			style: Standard
 		}
 		title: Ecglaf
 		subtitle: Courageous Farmer
@@ -184,17 +160,9 @@
 
 	5_82: {
 		cardInfo: {
-			imagePath: decipher/LOTR05082.jpg
-			//parentId: 5_82
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05082.jpg
 			collInfo: 5R82
 			rarity: R
-			setNum: "5"
-			cardNum: 82
-			style: Standard
 		}
 		title: Gamling
 		subtitle: Warrior of Rohan
@@ -252,17 +220,9 @@
 
 	5_83: {
 		cardInfo: {
-			imagePath: decipher/LOTR05083.jpg
-			//parentId: 5_83
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05083.jpg
 			collInfo: 5C83
 			rarity: C
-			setNum: "5"
-			cardNum: 83
-			style: Standard
 		}
 		title: Household Guard
 		unique: false
@@ -289,17 +249,9 @@
 
 	5_84: {
 		cardInfo: {
-			imagePath: decipher/LOTR05084.jpg
-			//parentId: 5_84
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05084.jpg
 			collInfo: 5R84
 			rarity: R
-			setNum: "5"
-			cardNum: 84
-			style: Standard
 		}
 		title: I Am Here
 		unique: false
@@ -336,17 +288,9 @@
 
 	5_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR05085.jpg
-			//parentId: 5_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05085.jpg
 			collInfo: 5C85
 			rarity: C
-			setNum: "5"
-			cardNum: 85
-			style: Standard
 		}
 		title: Let Us Be Swift
 		unique: false
@@ -386,17 +330,9 @@
 
 	5_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR05086.jpg
-			//parentId: 5_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05086.jpg
 			collInfo: 5R86
 			rarity: R
-			setNum: "5"
-			cardNum: 86
-			style: Standard
 		}
 		title: No Rest for the Weary
 		unique: false
@@ -435,17 +371,9 @@
 
 	5_87: {
 		cardInfo: {
-			imagePath: decipher/LOTR05087.jpg
-			//parentId: 5_87
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05087.jpg
 			collInfo: 5U87
 			rarity: U
-			setNum: "5"
-			cardNum: 87
-			style: Standard
 		}
 		title: Parapet
 		unique: true
@@ -506,17 +434,9 @@
 
 	5_88: {
 		cardInfo: {
-			imagePath: decipher/LOTR05088.jpg
-			//parentId: 5_88
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05088.jpg
 			collInfo: 5C88
 			rarity: C
-			setNum: "5"
-			cardNum: 88
-			style: Standard
 		}
 		title: Rohirrim Bow
 		unique: false
@@ -560,17 +480,9 @@
 
 	5_89: {
 		cardInfo: {
-			imagePath: decipher/LOTR05089.jpg
-			//parentId: 5_89
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05089.jpg
 			collInfo: 5R89
 			rarity: R
-			setNum: "5"
-			cardNum: 89
-			style: Standard
 		}
 		title: Rohirrim Helm
 		unique: false
@@ -624,17 +536,9 @@
 
 	5_90: {
 		cardInfo: {
-			imagePath: decipher/LOTR05090.jpg
-			//parentId: 5_90
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05090.jpg
 			collInfo: 5C90
 			rarity: C
-			setNum: "5"
-			cardNum: 90
-			style: Standard
 		}
 		title: Rohirrim Scout
 		unique: false
@@ -678,17 +582,9 @@
 
 	5_91: {
 		cardInfo: {
-			imagePath: decipher/LOTR05091.jpg
-			//parentId: 5_91
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05091.jpg
 			collInfo: 5C91
 			rarity: C
-			setNum: "5"
-			cardNum: 91
-			style: Standard
 		}
 		title: Rohirrim Shield
 		unique: false
@@ -740,17 +636,9 @@
 
 	5_92: {
 		cardInfo: {
-			imagePath: decipher/LOTR05092.jpg
-			//parentId: 5_92
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05092.jpg
 			collInfo: 5U92
 			rarity: U
-			setNum: "5"
-			cardNum: 92
-			style: Standard
 		}
 		title: Sigewulf
 		subtitle: Brave Volunteer
@@ -796,17 +684,9 @@
 
 	5_93: {
 		cardInfo: {
-			imagePath: decipher/LOTR05093.jpg
-			//parentId: 5_93
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05093.jpg
 			collInfo: 5C93
 			rarity: C
-			setNum: "5"
-			cardNum: 93
-			style: Standard
 		}
 		title: Théoden
 		subtitle: King of the Golden Hall
@@ -849,17 +729,9 @@
 
 	5_94: {
 		cardInfo: {
-			imagePath: decipher/LOTR05094.jpg
-			//parentId: 5_94
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05094.jpg
 			collInfo: 5R94
 			rarity: R
-			setNum: "5"
-			cardNum: 94
-			style: Standard
 		}
 		title: Thundering Host
 		unique: false
@@ -910,17 +782,9 @@
 
 	5_122: {
 		cardInfo: {
-			imagePath: decipher/LOTR05122.jpg
-			//parentId: 5_122
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05122.jpg
 			collInfo: 5P122
 			rarity: P
-			setNum: "5"
-			cardNum: 122
-			style: Standard
 		}
 		title: Éowyn
 		subtitle: Daughter of Éomund

@@ -2,17 +2,9 @@
 
 	8_85: {
 		cardInfo: {
-			imagePath: decipher/LOTR08085.jpg
-			//parentId: 8_85
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08085.jpg
 			collInfo: 8U85
 			rarity: U
-			setNum: "8"
-			cardNum: 85
-			style: Standard
 		}
 		title: Charged Headlong
 		unique: false
@@ -51,17 +43,9 @@
 
 	8_86: {
 		cardInfo: {
-			imagePath: decipher/LOTR08086.jpg
-			//parentId: 8_86
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08086.jpg
 			collInfo: 8U86
 			rarity: U
-			setNum: "8"
-			cardNum: 86
-			style: Standard
 		}
 		title: Doom Drove Them
 		unique: false
@@ -117,17 +101,9 @@
 
 	8_87: {
 		cardInfo: {
-			imagePath: decipher/LOTR08087.jpg
-			//parentId: 8_87
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08087.jpg
 			collInfo: 8C87
 			rarity: C
-			setNum: "8"
-			cardNum: 87
-			style: Standard
 		}
 		title: Éomer
 		subtitle: Keeper of Oaths
@@ -188,17 +164,9 @@
 
 	8_88: {
 		cardInfo: {
-			imagePath: decipher/LOTR08088.jpg
-			//parentId: 8_88
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08088.jpg
 			collInfo: 8R88
 			rarity: R
-			setNum: "8"
-			cardNum: 88
-			style: Standard
 		}
 		title: Éowyn's Shield
 		unique: true
@@ -252,17 +220,9 @@
 
 	8_89: {
 		cardInfo: {
-			imagePath: decipher/LOTR08089.jpg
-			//parentId: 8_89
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08089.jpg
 			collInfo: 8C89
 			rarity: C
-			setNum: "8"
-			cardNum: 89
-			style: Standard
 		}
 		title: Fury of the Northmen
 		unique: false
@@ -293,17 +253,9 @@
 
 	8_90: {
 		cardInfo: {
-			imagePath: decipher/LOTR08090.jpg
-			//parentId: 8_90
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08090.jpg
 			collInfo: 8C90
 			rarity: C
-			setNum: "8"
-			cardNum: 90
-			style: Standard
 		}
 		title: No Living Man
 		unique: false
@@ -346,17 +298,9 @@
 
 	8_91: {
 		cardInfo: {
-			imagePath: decipher/LOTR08091.jpg
-			//parentId: 8_91
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08091.jpg
 			collInfo: 8R91
 			rarity: R
-			setNum: "8"
-			cardNum: 91
-			style: Standard
 		}
 		title: Rohirrim Army
 		unique: true
@@ -407,17 +351,9 @@
 
 	8_92: {
 		cardInfo: {
-			imagePath: decipher/LOTR08092.jpg
-			//parentId: 8_92
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08092.jpg
 			collInfo: 8R92
 			rarity: R
-			setNum: "8"
-			cardNum: 92
-			style: Standard
 		}
 		title: Théoden
 		subtitle: Tall and Proud

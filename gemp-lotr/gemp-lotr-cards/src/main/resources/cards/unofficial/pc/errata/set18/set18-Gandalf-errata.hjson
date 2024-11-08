@@ -1,17 +1,11 @@
 {
 	68_18: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E018.1.jpg
-			javaClass: false
-			parent: 18_18
-			parentPath: errata/pc
-			version: 1
+			//id: 8_18.1
+			revision: 1
+			image: errata/LOTR-EN18E018.1.jpg
 			collInfo: 18R18
 			rarity: R
-			setNum: "18"
-			cardNum: 18
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Beorning Axe
 		unique: false

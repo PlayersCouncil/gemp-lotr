@@ -2,17 +2,11 @@
 
 	67_7: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN17E007.1_card.jpg
-			//parentId: 17_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Errata
-			//parentPath: errata/pc
-			version: 1
+			//id: 67_7.1
+			revision: 1
+			image: errata/LOTR-EN17E007.1_card.jpg
 			collInfo: 17S7
 			rarity: S
-			setNum: "17"
-			cardNum: 7
-			style: Standard
 		}
 		title: Elven Guardian
 		unique: false

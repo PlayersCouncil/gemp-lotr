@@ -2,17 +2,9 @@
 
 	19_18: {
 		cardInfo: {
-			imagePath: decipher/LOTR19018.jpg
-			//parentId: 19_18
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19018.jpg
 			collInfo: 19P18
 			rarity: P
-			setNum: "19"
-			cardNum: 18
-			style: Standard
 		}
 		title: The Balrog
 		subtitle: Demon of Might
@@ -78,17 +70,9 @@
 
 	19_19: {
 		cardInfo: {
-			imagePath: decipher/LOTR19019.jpg
-			//parentId: 19_19
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19019.jpg
 			collInfo: 19P19
 			rarity: P
-			setNum: "19"
-			cardNum: 19
-			style: Standard
 		}
 		title: Reaching Tentacle
 		unique: false
@@ -149,17 +133,9 @@
 
 	19_20: {
 		cardInfo: {
-			imagePath: decipher/LOTR19020.jpg
-			//parentId: 19_20
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19020.jpg
 			collInfo: 19P20
 			rarity: P
-			setNum: "19"
-			cardNum: 20
-			style: Standard
 		}
 		title: Strong Tentacle
 		unique: false
@@ -220,17 +196,9 @@
 
 	19_21: {
 		cardInfo: {
-			imagePath: decipher/LOTR19021.jpg
-			//parentId: 19_21
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR19021.jpg
 			collInfo: 19P21
 			rarity: P
-			setNum: "19"
-			cardNum: 21
-			style: Standard
 		}
 		title: Watcher in the Water
 		subtitle: Many-tentacled Creature

@@ -2,17 +2,9 @@
 
 	5_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR05070.jpg
-			//parentId: 5_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05070.jpg
 			collInfo: 5R70
 			rarity: R
-			setNum: "5"
-			cardNum: 70
-			style: Standard
 		}
 		title: Army of Haradrim
 		unique: true
@@ -53,17 +45,9 @@
 
 	5_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR05071.jpg
-			//parentId: 5_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05071.jpg
 			collInfo: 5R71
 			rarity: R
-			setNum: "5"
-			cardNum: 71
-			style: Standard
 		}
 		title: Company of Haradrim
 		unique: false
@@ -111,17 +95,9 @@
 
 	5_72: {
 		cardInfo: {
-			imagePath: decipher/LOTR05072.jpg
-			//parentId: 5_72
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05072.jpg
 			collInfo: 5R72
 			rarity: R
-			setNum: "5"
-			cardNum: 72
-			style: Standard
 		}
 		title: Desert Stalker
 		unique: false
@@ -168,17 +144,9 @@
 
 	5_73: {
 		cardInfo: {
-			imagePath: decipher/LOTR05073.jpg
-			//parentId: 5_73
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05073.jpg
 			collInfo: 5C73
 			rarity: C
-			setNum: "5"
-			cardNum: 73
-			style: Standard
 		}
 		title: Mûmak
 		unique: false
@@ -224,17 +192,9 @@
 
 	5_74: {
 		cardInfo: {
-			imagePath: decipher/LOTR05074.jpg
-			//parentId: 5_74
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05074.jpg
 			collInfo: 5C74
 			rarity: C
-			setNum: "5"
-			cardNum: 74
-			style: Standard
 		}
 		title: Southron Marcher
 		unique: false
@@ -273,17 +233,9 @@
 
 	5_75: {
 		cardInfo: {
-			imagePath: decipher/LOTR05075.jpg
-			//parentId: 5_75
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05075.jpg
 			collInfo: 5C75
 			rarity: C
-			setNum: "5"
-			cardNum: 75
-			style: Standard
 		}
 		title: Southron Runner
 		unique: false
@@ -322,17 +274,9 @@
 
 	5_76: {
 		cardInfo: {
-			imagePath: decipher/LOTR05076.jpg
-			//parentId: 5_76
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05076.jpg
 			collInfo: 5C76
 			rarity: C
-			setNum: "5"
-			cardNum: 76
-			style: Standard
 		}
 		title: Southron Traveler
 		unique: false
@@ -378,17 +322,9 @@
 
 	5_77: {
 		cardInfo: {
-			imagePath: decipher/LOTR05077.jpg
-			//parentId: 5_77
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05077.jpg
 			collInfo: 5U77
 			rarity: U
-			setNum: "5"
-			cardNum: 77
-			style: Standard
 		}
 		title: Strength in Numbers
 		unique: false
@@ -442,17 +378,9 @@
 
 	5_78: {
 		cardInfo: {
-			imagePath: decipher/LOTR05078.jpg
-			//parentId: 5_78
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR05078.jpg
 			collInfo: 5R78
 			rarity: R
-			setNum: "5"
-			cardNum: 78
-			style: Standard
 		}
 		title: War Mûmak
 		unique: false

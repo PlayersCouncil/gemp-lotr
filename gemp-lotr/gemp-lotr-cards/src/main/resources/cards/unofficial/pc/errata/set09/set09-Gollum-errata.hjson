@@ -1,17 +1,14 @@
 {
 	59_30: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN09E030.1_card.jpg
-			javaClass: false
+			//id: 9_30.1
 			parent: 9_30
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN09E030.1_card.jpg
 			collInfo: 9R+30
 			rarity: R+
-			setNum: "9"
-			cardNum: 30
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Smeagol
 		subtitle: Bearer of Great Secrets

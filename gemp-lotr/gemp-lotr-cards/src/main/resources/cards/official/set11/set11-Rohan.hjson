@@ -2,17 +2,9 @@
 
 	11_144: {
 		cardInfo: {
-			imagePath: decipher/LOTR11144.jpg
-			//parentId: 11_144
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11144.jpg
 			collInfo: 11U144
 			rarity: U
-			setNum: "11"
-			cardNum: 144
-			style: Standard
 		}
 		title: Border Patrol
 		unique: true
@@ -87,17 +79,9 @@
 
 	11_145: {
 		cardInfo: {
-			imagePath: decipher/LOTR11145.jpg
-			//parentId: 11_145
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11145.jpg
 			collInfo: 11U145
 			rarity: U
-			setNum: "11"
-			cardNum: 145
-			style: Standard
 		}
 		title: Éomer
 		subtitle: Guardian of the Eastmark
@@ -149,17 +133,9 @@
 
 	11_146: {
 		cardInfo: {
-			imagePath: decipher/LOTR11146.jpg
-			//parentId: 11_146
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11146.jpg
 			collInfo: 11S146
 			rarity: S
-			setNum: "11"
-			cardNum: 146
-			style: Standard
 		}
 		title: Éowyn
 		subtitle: Shieldmaiden of Rohan
@@ -200,17 +176,9 @@
 
 	11_147: {
 		cardInfo: {
-			imagePath: decipher/LOTR11147.jpg
-			//parentId: 11_147
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11147.jpg
 			collInfo: 11R147
 			rarity: R
-			setNum: "11"
-			cardNum: 147
-			style: Standard
 		}
 		title: Gamling
 		subtitle: Defender of the Hornburg
@@ -256,17 +224,9 @@
 
 	11_148: {
 		cardInfo: {
-			imagePath: decipher/LOTR11148.jpg
-			//parentId: 11_148
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11148.jpg
 			collInfo: 11C148
 			rarity: C
-			setNum: "11"
-			cardNum: 148
-			style: Standard
 		}
 		title: Hrothlac
 		subtitle: Man of Rohan
@@ -309,17 +269,9 @@
 
 	11_149: {
 		cardInfo: {
-			imagePath: decipher/LOTR11149.jpg
-			//parentId: 11_149
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11149.jpg
 			collInfo: 11U149
 			rarity: U
-			setNum: "11"
-			cardNum: 149
-			style: Standard
 		}
 		title: Protecting the Hall
 		unique: false
@@ -358,17 +310,9 @@
 
 	11_150: {
 		cardInfo: {
-			imagePath: decipher/LOTR11150.jpg
-			//parentId: 11_150
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11150.jpg
 			collInfo: 11S150
 			rarity: S
-			setNum: "11"
-			cardNum: 150
-			style: Standard
 		}
 		title: Rally Cry
 		unique: false
@@ -405,17 +349,9 @@
 
 	11_151: {
 		cardInfo: {
-			imagePath: decipher/LOTR11151.jpg
-			//parentId: 11_151
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11151.jpg
 			collInfo: 11U151
 			rarity: U
-			setNum: "11"
-			cardNum: 151
-			style: Standard
 		}
 		title: Riddermark Javelin
 		unique: false
@@ -462,17 +398,9 @@
 
 	11_152: {
 		cardInfo: {
-			imagePath: decipher/LOTR11152.jpg
-			//parentId: 11_152
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11152.jpg
 			collInfo: 11S152
 			rarity: S
-			setNum: "11"
-			cardNum: 152
-			style: Standard
 		}
 		title: Riddermark Soldier
 		unique: false
@@ -512,17 +440,9 @@
 
 	11_153: {
 		cardInfo: {
-			imagePath: decipher/LOTR11153.jpg
-			//parentId: 11_153
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11153.jpg
 			collInfo: 11S153
 			rarity: S
-			setNum: "11"
-			cardNum: 153
-			style: Standard
 		}
 		title: Rider's Spear
 		unique: false
@@ -557,17 +477,9 @@
 
 	11_154: {
 		cardInfo: {
-			imagePath: decipher/LOTR11154.jpg
-			//parentId: 11_154
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11154.jpg
 			collInfo: 11R154
 			rarity: R
-			setNum: "11"
-			cardNum: 154
-			style: Standard
 		}
 		title: Riders of the Mark
 		unique: true
@@ -618,17 +530,9 @@
 
 	11_155: {
 		cardInfo: {
-			imagePath: decipher/LOTR11155.jpg
-			//parentId: 11_155
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11155.jpg
 			collInfo: 11C155
 			rarity: C
-			setNum: "11"
-			cardNum: 155
-			style: Standard
 		}
 		title: Riding Like the Wind
 		unique: false
@@ -686,17 +590,9 @@
 
 	11_156: {
 		cardInfo: {
-			imagePath: decipher/LOTR11156.jpg
-			//parentId: 11_156
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11156.jpg
 			collInfo: 11U156
 			rarity: U
-			setNum: "11"
-			cardNum: 156
-			style: Standard
 		}
 		title: Rohirrim Mount
 		unique: false
@@ -749,17 +645,9 @@
 
 	11_157: {
 		cardInfo: {
-			imagePath: decipher/LOTR11157.jpg
-			//parentId: 11_157
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11157.jpg
 			collInfo: 11C157
 			rarity: C
-			setNum: "11"
-			cardNum: 157
-			style: Standard
 		}
 		title: Rush of Steeds
 		unique: true
@@ -824,17 +712,9 @@
 
 	11_158: {
 		cardInfo: {
-			imagePath: decipher/LOTR11158.jpg
-			//parentId: 11_158
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11158.jpg
 			collInfo: 11R158
 			rarity: R
-			setNum: "11"
-			cardNum: 158
-			style: Standard
 		}
 		title: Sword Rack
 		unique: false
@@ -892,17 +772,9 @@
 
 	11_159: {
 		cardInfo: {
-			imagePath: decipher/LOTR11159.jpg
-			//parentId: 11_159
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11159.jpg
 			collInfo: 11U159
 			rarity: U
-			setNum: "11"
-			cardNum: 159
-			style: Standard
 		}
 		title: Théoden
 		subtitle: King of the Eorlingas
@@ -954,17 +826,9 @@
 
 	11_160: {
 		cardInfo: {
-			imagePath: decipher/LOTR11160.jpg
-			//parentId: 11_160
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR11160.jpg
 			collInfo: 11S160
 			rarity: S
-			setNum: "11"
-			cardNum: 160
-			style: Standard
 		}
 		title: War Now Calls Us
 		unique: false

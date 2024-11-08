@@ -241,6 +241,13 @@ var GempLotrDeckBuildingUI = Class.extend({
         }, false, $("#map-content"));
 
         this.siteDiv = $("#sitesDiv");
+        this.siteDiv.click(
+                function () {
+                    that.showPredefinedFilter("cardType:MAP product:card", that.mapDiv);
+                    
+                    $("#cardTypeSelect").val('SITE').trigger('change');
+                    $("#sortSelect").val('siteNumber,name').trigger('change');
+                });
         this.siteGroup = new VerticalBarGroup(this.siteDiv, function (card) {
             return true;
         }, false, $("#sites-content"));

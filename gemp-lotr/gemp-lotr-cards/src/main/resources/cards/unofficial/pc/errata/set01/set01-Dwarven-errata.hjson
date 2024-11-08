@@ -2,17 +2,14 @@
 
 	51_7: {
 		cardInfo: {
-			imagePath: errata/51_7.jpg
-			javaClass: false
+			//id: 1_7.1
 			parent: 1_7
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_7.jpg
 			collInfo: 1C7
 			rarity: C
-			setNum: "1"
-			cardNum: 7
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Dwarf Guard
 		culture: Dwarven
@@ -55,7 +52,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 1?
+	# 		revision: 1
 	# 		collInfo: 1C9
 	# 		rarity: C
 	# 		setNum: "1"
@@ -113,17 +110,14 @@
 	
 	51_9: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E009.2_card.jpg
-			javaClass: false
+			//id: 1_9.2
 			parent: 1_9
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN01E009.2_card.jpg
 			collInfo: 1C9
 			rarity: C
-			setNum: "1"
-			cardNum: 9
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Dwarven Axe
 		unique: false
@@ -194,17 +188,14 @@
 
 	51_11: {
 		cardInfo: {
-			imagePath: errata/51_11.jpg
-			javaClass: false
+			//id: 1_11.1
 			parent: 1_11
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_11.jpg
 			collInfo: 1C11
 			rarity: C
-			setNum: "1"
-			cardNum: 11
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Farin
 		subtitle: Dwarven Emissary
@@ -246,17 +237,14 @@
 
 	51_12: {
 		cardInfo: {
-			imagePath: errata/51_12.jpg
-			javaClass: false
+			//id: 1_12.1
 			parent: 1_12
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_12.jpg
 			collInfo: 1U12
 			rarity: U
-			setNum: "1"
-			cardNum: 12
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Dwarf of Erebor
@@ -303,17 +291,14 @@
 	
 	51_16: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E016.1.jpg
-			javaClass: false
+			//id: 1_16.1
 			parent: 1_16
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E016.1.jpg
 			collInfo: 1R16
 			rarity: R
-			setNum: "1"
-			cardNum: 16
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Greatest Kingdom of My People
 		unique: true
@@ -387,17 +372,14 @@
 	
 	51_17: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E017.1.jpg
-			javaClass: false
+			//id: 1_17.1
 			parent: 1_17
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E017.1.jpg
 			collInfo: 1U17
 			rarity: U
-			setNum: "1"
-			cardNum: 17
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Grimir
 		subtitle: Dwarven Elder
@@ -443,17 +425,14 @@
 	
 	51_23: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E023.1.jpg
-			javaClass: false
+			//id: 1_23.1
 			parent: 1_23
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E023.1.jpg
 			collInfo: 1R23
 			rarity: R
-			setNum: "1"
-			cardNum: 23
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Nobody Tosses a Dwarf
 		culture: dwarven

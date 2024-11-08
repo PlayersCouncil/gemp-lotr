@@ -2,17 +2,9 @@
 
 	18_106: {
 		cardInfo: {
-			imagePath: decipher/LOTR18106.jpg
-			//parentId: 18_106
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18106.jpg
 			collInfo: 18C106
 			rarity: C
-			setNum: "18"
-			cardNum: 106
-			style: Standard
 		}
 		title: A Dragon's Tale
 		unique: false
@@ -59,17 +51,9 @@
 
 	18_107: {
 		cardInfo: {
-			imagePath: decipher/LOTR18107.jpg
-			//parentId: 18_107
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18107.jpg
 			collInfo: 18R107
 			rarity: R
-			setNum: "18"
-			cardNum: 107
-			style: Standard
 		}
 		title: Fredegar Bolger
 		subtitle: Fatty
@@ -116,17 +100,9 @@
 
 	18_108: {
 		cardInfo: {
-			imagePath: decipher/LOTR18108.jpg
-			//parentId: 18_108
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18108.jpg
 			collInfo: 18U108
 			rarity: U
-			setNum: "18"
-			cardNum: 108
-			style: Standard
 		}
 		title: Golden Perch Ale
 		unique: true
@@ -176,17 +152,9 @@
 
 	18_109: {
 		cardInfo: {
-			imagePath: decipher/LOTR18109.jpg
-			//parentId: 18_109
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18109.jpg
 			collInfo: 18C109
 			rarity: C
-			setNum: "18"
-			cardNum: 109
-			style: Standard
 		}
 		title: Make a Run For It
 		unique: false
@@ -222,17 +190,9 @@
 
 	18_110: {
 		cardInfo: {
-			imagePath: decipher/LOTR18110.jpg
-			//parentId: 18_110
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18110.jpg
 			collInfo: 18U110
 			rarity: U
-			setNum: "18"
-			cardNum: 110
-			style: Standard
 		}
 		title: Prized Lagan
 		unique: false
@@ -284,17 +244,9 @@
 
 	18_111: {
 		cardInfo: {
-			imagePath: decipher/LOTR18111.jpg
-			//parentId: 18_111
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18111.jpg
 			collInfo: 18U111
 			rarity: U
-			setNum: "18"
-			cardNum: 111
-			style: Standard
 		}
 		title: Robin Smallburrow
 		subtitle: Shirriff Cock-Robin
@@ -348,17 +300,9 @@
 
 	18_112: {
 		cardInfo: {
-			imagePath: decipher/LOTR18112.jpg
-			//parentId: 18_112
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18112.jpg
 			collInfo: 18R112
 			rarity: R
-			setNum: "18"
-			cardNum: 112
-			style: Standard
 		}
 		title: Scouring of the Shire
 		unique: false
@@ -418,17 +362,9 @@
 
 	18_113: {
 		cardInfo: {
-			imagePath: decipher/LOTR18113.jpg
-			//parentId: 18_113
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR18113.jpg
 			collInfo: 18R113
 			rarity: R
-			setNum: "18"
-			cardNum: 113
-			style: Standard
 		}
 		title: Sting
 		subtitle: Elven Long Knife

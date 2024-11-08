@@ -2,17 +2,9 @@
 
 	3_29: {
 		cardInfo: {
-			imagePath: decipher/LOTR03029.jpg
-			//parentId: 3_29
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03029.jpg
 			collInfo: 3R29
 			rarity: R
-			setNum: "3"
-			cardNum: 29
-			style: Standard
 		}
 		title: Betrayal of Isengard
 		unique: false
@@ -65,17 +57,9 @@
 
 	3_30: {
 		cardInfo: {
-			imagePath: decipher/LOTR03030.jpg
-			//parentId: 3_30
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03030.jpg
 			collInfo: 3C30
 			rarity: C
-			setNum: "3"
-			cardNum: 30
-			style: Standard
 		}
 		title: Deep in Thought
 		unique: false
@@ -115,17 +99,9 @@
 
 	3_31: {
 		cardInfo: {
-			imagePath: decipher/LOTR03031.jpg
-			//parentId: 3_31
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03031.jpg
 			collInfo: 3C31
 			rarity: C
-			setNum: "3"
-			cardNum: 31
-			style: Standard
 		}
 		title: Depart Silently
 		unique: false
@@ -184,17 +160,9 @@
 
 	3_32: {
 		cardInfo: {
-			imagePath: decipher/LOTR03032.jpg
-			//parentId: 3_32
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03032.jpg
 			collInfo: 3C32
 			rarity: C
-			setNum: "3"
-			cardNum: 32
-			style: Standard
 		}
 		title: Fireworks
 		unique: false
@@ -243,17 +211,9 @@
 
 	3_33: {
 		cardInfo: {
-			imagePath: decipher/LOTR03033.jpg
-			//parentId: 3_33
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03033.jpg
 			collInfo: 3C33
 			rarity: C
-			setNum: "3"
-			cardNum: 33
-			style: Standard
 		}
 		title: His First Serious Check
 		unique: false
@@ -315,17 +275,9 @@
 
 	3_34: {
 		cardInfo: {
-			imagePath: decipher/LOTR03034.jpg
-			//parentId: 3_34
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03034.jpg
 			collInfo: 3R34
 			rarity: R
-			setNum: "3"
-			cardNum: 34
-			style: Standard
 		}
 		title: Narya
 		unique: true
@@ -364,17 +316,9 @@
 
 	3_35: {
 		cardInfo: {
-			imagePath: decipher/LOTR03035.jpg
-			//parentId: 3_35
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03035.jpg
 			collInfo: 3U35
 			rarity: U
-			setNum: "3"
-			cardNum: 35
-			style: Standard
 		}
 		title: Trust Me as You Once Did
 		unique: false
@@ -413,17 +357,9 @@
 
 	3_36: {
 		cardInfo: {
-			imagePath: decipher/LOTR03036.jpg
-			//parentId: 3_36
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR03036.jpg
 			collInfo: 3C36
 			rarity: C
-			setNum: "3"
-			cardNum: 36
-			style: Standard
 		}
 		title: Unknown Perils
 		unique: false

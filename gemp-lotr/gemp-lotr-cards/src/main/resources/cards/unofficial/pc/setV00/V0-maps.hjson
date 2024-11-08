@@ -3,7 +3,7 @@
 	# 	cardInfo: {
 	# 		imagePath: sets/LOTR-ENV0S002.0.jpg
 	# 		javaClass: false
-	# 		version: 0
+	# 		revision: 0
 	# 		collInfo: V0 2
 	# 		rarity: X
 	# 		setNum: V0
@@ -42,7 +42,7 @@
 	# 	cardInfo: {
 	# 		imagePath: sets/LOTR-ENV0S003.0.jpg
 	# 		javaClass: false
-	# 		version: 0
+	# 		revision: 0
 	# 		collInfo: V0 3
 	# 		rarity: X
 	# 		setNum: V0
@@ -81,11 +81,11 @@
 	# 	cardInfo: {
 	# 		imagePath: sets/LOTR-ENV0S004.0.jpg
 	# 		javaClass: false
-	# 		//parentId: 1_319
+	# 		//parent//id: 1_319
 	# 		//One of: Variant, Errata, Reprint
 	# 		//parentType: Variant
 	# 		//parentPath: alts/promo
-	# 		version: 0
+	# 		revision: 0
 	# 		collInfo: V0 4
 	# 		rarity: X
 	# 		setNum: V0

@@ -2,17 +2,9 @@
 
 	7_129: {
 		cardInfo: {
-			imagePath: decipher/LOTR07129.jpg
-			//parentId: 7_129
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07129.jpg
 			collInfo: 7R129
 			rarity: R
-			setNum: "7"
-			cardNum: 129
-			style: Standard
 		}
 		title: Bold Men and Grim
 		unique: true
@@ -76,17 +68,9 @@
 
 	7_130: {
 		cardInfo: {
-			imagePath: decipher/LOTR07130.jpg
-			//parentId: 7_130
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07130.jpg
 			collInfo: 7C130
 			rarity: C
-			setNum: "7"
-			cardNum: 130
-			style: Standard
 		}
 		title: Dark Tidings
 		unique: false
@@ -127,17 +111,9 @@
 
 	7_131: {
 		cardInfo: {
-			imagePath: decipher/LOTR07131.jpg
-			//parentId: 7_131
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07131.jpg
 			collInfo: 7C131
 			rarity: C
-			setNum: "7"
-			cardNum: 131
-			style: Standard
 		}
 		title: Desert Fighter
 		unique: false
@@ -183,17 +159,9 @@
 
 	7_132: {
 		cardInfo: {
-			imagePath: decipher/LOTR07132.jpg
-			//parentId: 7_132
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07132.jpg
 			collInfo: 7C132
 			rarity: C
-			setNum: "7"
-			cardNum: 132
-			style: Standard
 		}
 		title: Desert Nomad
 		unique: false
@@ -234,17 +202,9 @@
 
 	7_133: {
 		cardInfo: {
-			imagePath: decipher/LOTR07133.jpg
-			//parentId: 7_133
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07133.jpg
 			collInfo: 7C133
 			rarity: C
-			setNum: "7"
-			cardNum: 133
-			style: Standard
 		}
 		title: Desert Runner
 		unique: false
@@ -292,17 +252,9 @@
 
 	7_134: {
 		cardInfo: {
-			imagePath: decipher/LOTR07134.jpg
-			//parentId: 7_134
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07134.jpg
 			collInfo: 7U134
 			rarity: U
-			setNum: "7"
-			cardNum: 134
-			style: Standard
 		}
 		title: Desert Scout
 		unique: false
@@ -350,17 +302,9 @@
 
 	7_135: {
 		cardInfo: {
-			imagePath: decipher/LOTR07135.jpg
-			//parentId: 7_135
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07135.jpg
 			collInfo: 7C135
 			rarity: C
-			setNum: "7"
-			cardNum: 135
-			style: Standard
 		}
 		title: Desert Sneak
 		unique: false
@@ -408,17 +352,9 @@
 
 	7_136: {
 		cardInfo: {
-			imagePath: decipher/LOTR07136.jpg
-			//parentId: 7_136
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07136.jpg
 			collInfo: 7U136
 			rarity: U
-			setNum: "7"
-			cardNum: 136
-			style: Standard
 		}
 		title: Desert Soldier
 		unique: false
@@ -466,17 +402,9 @@
 
 	7_137: {
 		cardInfo: {
-			imagePath: decipher/LOTR07137.jpg
-			//parentId: 7_137
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07137.jpg
 			collInfo: 7C137
 			rarity: C
-			setNum: "7"
-			cardNum: 137
-			style: Standard
 		}
 		title: Desert Spearman
 		unique: false
@@ -524,17 +452,9 @@
 
 	7_138: {
 		cardInfo: {
-			imagePath: decipher/LOTR07138.jpg
-			//parentId: 7_138
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07138.jpg
 			collInfo: 7U138
 			rarity: U
-			setNum: "7"
-			cardNum: 138
-			style: Standard
 		}
 		title: Desert Villain
 		unique: false
@@ -580,17 +500,9 @@
 
 	7_139: {
 		cardInfo: {
-			imagePath: decipher/LOTR07139.jpg
-			//parentId: 7_139
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07139.jpg
 			collInfo: 7C139
 			rarity: C
-			setNum: "7"
-			cardNum: 139
-			style: Standard
 		}
 		title: Easterling Aggressor
 		unique: false
@@ -645,17 +557,9 @@
 
 	7_140: {
 		cardInfo: {
-			imagePath: decipher/LOTR07140.jpg
-			//parentId: 7_140
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07140.jpg
 			collInfo: 7C140
 			rarity: C
-			setNum: "7"
-			cardNum: 140
-			style: Standard
 		}
 		title: Easterling Assailant
 		unique: false
@@ -709,17 +613,9 @@
 
 	7_141: {
 		cardInfo: {
-			imagePath: decipher/LOTR07141.jpg
-			//parentId: 7_141
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07141.jpg
 			collInfo: 7C141
 			rarity: C
-			setNum: "7"
-			cardNum: 141
-			style: Standard
 		}
 		title: Easterling Attacker
 		unique: false
@@ -761,17 +657,9 @@
 
 	7_142: {
 		cardInfo: {
-			imagePath: decipher/LOTR07142.jpg
-			//parentId: 7_142
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07142.jpg
 			collInfo: 7C142
 			rarity: C
-			setNum: "7"
-			cardNum: 142
-			style: Standard
 		}
 		title: Easterling Blademaster
 		unique: false
@@ -813,17 +701,9 @@
 
 	7_143: {
 		cardInfo: {
-			imagePath: decipher/LOTR07143.jpg
-			//parentId: 7_143
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07143.jpg
 			collInfo: 7R143
 			rarity: R
-			setNum: "7"
-			cardNum: 143
-			style: Standard
 		}
 		title: Easterling Footman
 		unique: false
@@ -875,17 +755,9 @@
 
 	7_144: {
 		cardInfo: {
-			imagePath: decipher/LOTR07144.jpg
-			//parentId: 7_144
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07144.jpg
 			collInfo: 7C144
 			rarity: C
-			setNum: "7"
-			cardNum: 144
-			style: Standard
 		}
 		title: Easterling Ransacker
 		unique: false
@@ -927,17 +799,9 @@
 
 	7_145: {
 		cardInfo: {
-			imagePath: decipher/LOTR07145.jpg
-			//parentId: 7_145
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07145.jpg
 			collInfo: 7R145
 			rarity: R
-			setNum: "7"
-			cardNum: 145
-			style: Standard
 		}
 		title: Easterling Regiment
 		unique: true
@@ -982,17 +846,9 @@
 
 	7_146: {
 		cardInfo: {
-			imagePath: decipher/LOTR07146.jpg
-			//parentId: 7_146
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07146.jpg
 			collInfo: 7U146
 			rarity: U
-			setNum: "7"
-			cardNum: 146
-			style: Standard
 		}
 		title: Easterling Sergeant
 		unique: false
@@ -1044,17 +900,9 @@
 
 	7_147: {
 		cardInfo: {
-			imagePath: decipher/LOTR07147.jpg
-			//parentId: 7_147
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07147.jpg
 			collInfo: 7U147
 			rarity: U
-			setNum: "7"
-			cardNum: 147
-			style: Standard
 		}
 		title: Easterling Veteran
 		unique: false
@@ -1094,17 +942,9 @@
 
 	7_148: {
 		cardInfo: {
-			imagePath: decipher/LOTR07148.jpg
-			//parentId: 7_148
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07148.jpg
 			collInfo: 7R148
 			rarity: R
-			setNum: "7"
-			cardNum: 148
-			style: Standard
 		}
 		title: Fierce in Despair
 		unique: false
@@ -1140,17 +980,9 @@
 
 	7_149: {
 		cardInfo: {
-			imagePath: decipher/LOTR07149.jpg
-			//parentId: 7_149
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07149.jpg
 			collInfo: 7C149
 			rarity: C
-			setNum: "7"
-			cardNum: 149
-			style: Standard
 		}
 		title: Great Beasts
 		unique: false
@@ -1202,17 +1034,9 @@
 
 	7_150: {
 		cardInfo: {
-			imagePath: decipher/LOTR07150.jpg
-			//parentId: 7_150
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07150.jpg
 			collInfo: 7C150
 			rarity: C
-			setNum: "7"
-			cardNum: 150
-			style: Standard
 		}
 		title: Harsh Tongues
 		unique: false
@@ -1272,17 +1096,9 @@
 
 	7_151: {
 		cardInfo: {
-			imagePath: decipher/LOTR07151.jpg
-			//parentId: 7_151
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07151.jpg
 			collInfo: 7U151
 			rarity: U
-			setNum: "7"
-			cardNum: 151
-			style: Standard
 		}
 		title: Hosts Still Unfought
 		unique: false
@@ -1342,17 +1158,9 @@
 
 	7_152: {
 		cardInfo: {
-			imagePath: decipher/LOTR07152.jpg
-			//parentId: 7_152
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07152.jpg
 			collInfo: 7R152
 			rarity: R
-			setNum: "7"
-			cardNum: 152
-			style: Standard
 		}
 		title: Mûmak Commander
 		unique: false
@@ -1402,17 +1210,9 @@
 
 	7_153: {
 		cardInfo: {
-			imagePath: decipher/LOTR07153.jpg
-			//parentId: 7_153
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07153.jpg
 			collInfo: 7C153
 			rarity: C
-			setNum: "7"
-			cardNum: 153
-			style: Standard
 		}
 		title: Mûmakil of the Harad
 		unique: false
@@ -1450,17 +1250,9 @@
 
 	7_154: {
 		cardInfo: {
-			imagePath: decipher/LOTR07154.jpg
-			//parentId: 7_154
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07154.jpg
 			collInfo: 7C154
 			rarity: C
-			setNum: "7"
-			cardNum: 154
-			style: Standard
 		}
 		title: New Strength Came Now
 		unique: false
@@ -1500,17 +1292,9 @@
 
 	7_155: {
 		cardInfo: {
-			imagePath: decipher/LOTR07155.jpg
-			//parentId: 7_155
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07155.jpg
 			collInfo: 7C155
 			rarity: C
-			setNum: "7"
-			cardNum: 155
-			style: Standard
 		}
 		title: Raider Bow
 		unique: false
@@ -1552,17 +1336,9 @@
 
 	7_156: {
 		cardInfo: {
-			imagePath: decipher/LOTR07156.jpg
-			//parentId: 7_156
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07156.jpg
 			collInfo: 7C156
 			rarity: C
-			setNum: "7"
-			cardNum: 156
-			style: Standard
 		}
 		title: Raider Halberd
 		unique: false
@@ -1600,17 +1376,9 @@
 
 	7_157: {
 		cardInfo: {
-			imagePath: decipher/LOTR07157.jpg
-			//parentId: 7_157
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07157.jpg
 			collInfo: 7U157
 			rarity: U
-			setNum: "7"
-			cardNum: 157
-			style: Standard
 		}
 		title: Red Wrath
 		unique: false
@@ -1647,17 +1415,9 @@
 
 	7_158: {
 		cardInfo: {
-			imagePath: decipher/LOTR07158.jpg
-			//parentId: 7_158
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07158.jpg
 			collInfo: 7R158
 			rarity: R
-			setNum: "7"
-			cardNum: 158
-			style: Standard
 		}
 		title: Rout
 		unique: false
@@ -1704,17 +1464,9 @@
 
 	7_159: {
 		cardInfo: {
-			imagePath: decipher/LOTR07159.jpg
-			//parentId: 7_159
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07159.jpg
 			collInfo: 7R159
 			rarity: R
-			setNum: "7"
-			cardNum: 159
-			style: Standard
 		}
 		title: Small Hope
 		unique: false
@@ -1769,17 +1521,9 @@
 
 	7_160: {
 		cardInfo: {
-			imagePath: decipher/LOTR07160.jpg
-			//parentId: 7_160
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07160.jpg
 			collInfo: 7U160
 			rarity: U
-			setNum: "7"
-			cardNum: 160
-			style: Standard
 		}
 		title: Southron Bandit
 		unique: false
@@ -1827,17 +1571,9 @@
 
 	7_161: {
 		cardInfo: {
-			imagePath: decipher/LOTR07161.jpg
-			//parentId: 7_161
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07161.jpg
 			collInfo: 7C161
 			rarity: C
-			setNum: "7"
-			cardNum: 161
-			style: Standard
 		}
 		title: Southron Brigand
 		unique: false
@@ -1885,17 +1621,9 @@
 
 	7_162: {
 		cardInfo: {
-			imagePath: decipher/LOTR07162.jpg
-			//parentId: 7_162
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07162.jpg
 			collInfo: 7U162
 			rarity: U
-			setNum: "7"
-			cardNum: 162
-			style: Standard
 		}
 		title: Southron Captain
 		unique: false
@@ -1936,17 +1664,9 @@
 
 	7_163: {
 		cardInfo: {
-			imagePath: decipher/LOTR07163.jpg
-			//parentId: 7_163
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07163.jpg
 			collInfo: 7R163
 			rarity: R
-			setNum: "7"
-			cardNum: 163
-			style: Standard
 		}
 		title: Southron Chieftain
 		unique: false
@@ -1996,17 +1716,9 @@
 
 	7_164: {
 		cardInfo: {
-			imagePath: decipher/LOTR07164.jpg
-			//parentId: 7_164
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07164.jpg
 			collInfo: 7R164
 			rarity: R
-			setNum: "7"
-			cardNum: 164
-			style: Standard
 		}
 		title: Southron Conqueror
 		unique: false
@@ -2063,17 +1775,9 @@
 
 	7_165: {
 		cardInfo: {
-			imagePath: decipher/LOTR07165.jpg
-			//parentId: 7_165
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07165.jpg
 			collInfo: 7R165
 			rarity: R
-			setNum: "7"
-			cardNum: 165
-			style: Standard
 		}
 		title: Southron Intruder
 		unique: false
@@ -2140,17 +1844,9 @@
 
 	7_166: {
 		cardInfo: {
-			imagePath: decipher/LOTR07166.jpg
-			//parentId: 7_166
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07166.jpg
 			collInfo: 7R166
 			rarity: R
-			setNum: "7"
-			cardNum: 166
-			style: Standard
 		}
 		title: Southron Leader
 		unique: false
@@ -2206,17 +1902,9 @@
 
 	7_167: {
 		cardInfo: {
-			imagePath: decipher/LOTR07167.jpg
-			//parentId: 7_167
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07167.jpg
 			collInfo: 7R167
 			rarity: R
-			setNum: "7"
-			cardNum: 167
-			style: Standard
 		}
 		title: Southron Marksmen
 		unique: false
@@ -2273,17 +1961,9 @@
 
 	7_168: {
 		cardInfo: {
-			imagePath: decipher/LOTR07168.jpg
-			//parentId: 7_168
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07168.jpg
 			collInfo: 7U168
 			rarity: U
-			setNum: "7"
-			cardNum: 168
-			style: Standard
 		}
 		title: Southron Thief
 		unique: false
@@ -2333,17 +2013,9 @@
 
 	7_169: {
 		cardInfo: {
-			imagePath: decipher/LOTR07169.jpg
-			//parentId: 7_169
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07169.jpg
 			collInfo: 7R169
 			rarity: R
-			setNum: "7"
-			cardNum: 169
-			style: Standard
 		}
 		title: Surging Up
 		unique: false
@@ -2410,17 +2082,9 @@
 
 	7_170: {
 		cardInfo: {
-			imagePath: decipher/LOTR07170.jpg
-			//parentId: 7_170
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07170.jpg
 			collInfo: 7R170
 			rarity: R
-			setNum: "7"
-			cardNum: 170
-			style: Standard
 		}
 		title: Suzerain of Harad
 		unique: true
@@ -2481,17 +2145,9 @@
 
 	7_171: {
 		cardInfo: {
-			imagePath: decipher/LOTR07171.jpg
-			//parentId: 7_171
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07171.jpg
 			collInfo: 7U171
 			rarity: U
-			setNum: "7"
-			cardNum: 171
-			style: Standard
 		}
 		title: Thrice Outnumbered
 		unique: false
@@ -2537,17 +2193,9 @@
 
 	7_172: {
 		cardInfo: {
-			imagePath: decipher/LOTR07172.jpg
-			//parentId: 7_172
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07172.jpg
 			collInfo: 7C172
 			rarity: C
-			setNum: "7"
-			cardNum: 172
-			style: Standard
 		}
 		title: Troop of Haradrim
 		unique: false
@@ -2612,17 +2260,9 @@
 
 	7_173: {
 		cardInfo: {
-			imagePath: decipher/LOTR07173.jpg
-			//parentId: 7_173
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07173.jpg
 			collInfo: 7C173
 			rarity: C
-			setNum: "7"
-			cardNum: 173
-			style: Standard
 		}
 		title: War Towers
 		unique: false

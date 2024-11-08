@@ -2,17 +2,9 @@
 
 	9_3: {
 		cardInfo: {
-			imagePath: decipher/LOTR09003.jpg
-			//parentId: 9_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09003.jpg
 			collInfo: 9R+3
 			rarity: R+
-			setNum: "9"
-			cardNum: 3
-			style: Standard
 		}
 		title: Durin III
 		subtitle: Dwarven Lord
@@ -61,17 +53,9 @@
 
 	9_4: {
 		cardInfo: {
-			imagePath: decipher/LOTR09004.jpg
-			//parentId: 9_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09004.jpg
 			collInfo: 9R+4
 			rarity: R+
-			setNum: "9"
-			cardNum: 4
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Bearer of Grudges
@@ -141,17 +125,9 @@
 
 	9_5: {
 		cardInfo: {
-			imagePath: decipher/LOTR09005.jpg
-			//parentId: 9_5
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09005.jpg
 			collInfo: 9R5
 			rarity: R
-			setNum: "9"
-			cardNum: 5
-			style: Standard
 		}
 		title: Linnar
 		subtitle: Dwarven Lord
@@ -209,17 +185,9 @@
 
 	9_6: {
 		cardInfo: {
-			imagePath: decipher/LOTR09006.jpg
-			//parentId: 9_6
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09006.jpg
 			collInfo: 9R6
 			rarity: R
-			setNum: "9"
-			cardNum: 6
-			style: Standard
 		}
 		title: Ring of Accretion
 		unique: true
@@ -289,17 +257,9 @@
 
 	9_7: {
 		cardInfo: {
-			imagePath: decipher/LOTR09007.jpg
-			//parentId: 9_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09007.jpg
 			collInfo: 9R+7
 			rarity: R+
-			setNum: "9"
-			cardNum: 7
-			style: Standard
 		}
 		title: Ring of Fury
 		unique: true
@@ -357,17 +317,9 @@
 
 	9_8: {
 		cardInfo: {
-			imagePath: decipher/LOTR09008.jpg
-			//parentId: 9_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09008.jpg
 			collInfo: 9R8
 			rarity: R
-			setNum: "9"
-			cardNum: 8
-			style: Standard
 		}
 		title: Ring of Guile
 		unique: true
@@ -415,17 +367,9 @@
 
 	9_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR09009.jpg
-			//parentId: 9_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09009.jpg
 			collInfo: 9R9
 			rarity: R
-			setNum: "9"
-			cardNum: 9
-			style: Standard
 		}
 		title: Ring of Retribution
 		unique: true
@@ -465,17 +409,9 @@
 
 	9_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR09010.jpg
-			//parentId: 9_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09010.jpg
 			collInfo: 9R10
 			rarity: R
-			setNum: "9"
-			cardNum: 10
-			style: Standard
 		}
 		title: Sindri
 		subtitle: Dwarven Lord
@@ -513,17 +449,9 @@
 
 	9_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR09011.jpg
-			//parentId: 9_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR09011.jpg
 			collInfo: 9R11
 			rarity: R
-			setNum: "9"
-			cardNum: 11
-			style: Standard
 		}
 		title: Úri
 		subtitle: Dwarven Lord

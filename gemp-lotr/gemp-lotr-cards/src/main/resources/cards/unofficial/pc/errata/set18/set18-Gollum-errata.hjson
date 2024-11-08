@@ -2,17 +2,11 @@
 
 	68_29: {
 		cardInfo: {
-			imagePath: errata/68_29.jpg
-			javaClass: false
-			parent: 18_29
-			parentPath: errata/pc
-			version: 1?
+			//id: 8_29.1
+			revision: 1
+			image: errata/68_29.jpg
 			collInfo: 18R29
 			rarity: R
-			setNum: "18"
-			cardNum: 29
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Deceit
 		unique: true

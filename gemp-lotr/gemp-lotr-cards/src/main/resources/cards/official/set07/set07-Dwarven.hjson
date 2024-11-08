@@ -2,17 +2,9 @@
 
 	7_3: {
 		cardInfo: {
-			imagePath: decipher/LOTR07003.jpg
-			//parentId: 7_3
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07003.jpg
 			collInfo: 7U3
 			rarity: U
-			setNum: "7"
-			cardNum: 3
-			style: Standard
 		}
 		title: Battle Tested
 		unique: false
@@ -52,17 +44,9 @@
 
 	7_4: {
 		cardInfo: {
-			imagePath: decipher/LOTR07004.jpg
-			//parentId: 7_4
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07004.jpg
 			collInfo: 7C4
 			rarity: C
-			setNum: "7"
-			cardNum: 4
-			style: Standard
 		}
 		title: Calculated Risk
 		unique: false
@@ -100,17 +84,9 @@
 
 	7_5: {
 		cardInfo: {
-			imagePath: decipher/LOTR07005.jpg
-			//parentId: 7_5
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07005.jpg
 			collInfo: 7R5
 			rarity: R
-			setNum: "7"
-			cardNum: 5
-			style: Standard
 		}
 		title: Dark Ways
 		unique: false
@@ -182,17 +158,9 @@
 
 	7_6: {
 		cardInfo: {
-			imagePath: decipher/LOTR07006.jpg
-			//parentId: 7_6
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07006.jpg
 			collInfo: 7C6
 			rarity: C
-			setNum: "7"
-			cardNum: 6
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Faithful Companion
@@ -234,17 +202,9 @@
 
 	7_7: {
 		cardInfo: {
-			imagePath: decipher/LOTR07007.jpg
-			//parentId: 7_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07007.jpg
 			collInfo: 7R7
 			rarity: R
-			setNum: "7"
-			cardNum: 7
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Feared Axeman
@@ -304,17 +264,9 @@
 
 	7_8: {
 		cardInfo: {
-			imagePath: decipher/LOTR07008.jpg
-			//parentId: 7_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07008.jpg
 			collInfo: 7U8
 			rarity: U
-			setNum: "7"
-			cardNum: 8
-			style: Standard
 		}
 		title: Gimli's Armor
 		unique: true
@@ -359,17 +311,9 @@
 
 	7_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR07009.jpg
-			//parentId: 7_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07009.jpg
 			collInfo: 7R9
 			rarity: R
-			setNum: "7"
-			cardNum: 9
-			style: Standard
 		}
 		title: Gimli's Battle Axe
 		subtitle: Trusted Weapon
@@ -433,17 +377,9 @@
 
 	7_10: {
 		cardInfo: {
-			imagePath: decipher/LOTR07010.jpg
-			//parentId: 7_10
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07010.jpg
 			collInfo: 7R10
 			rarity: R
-			setNum: "7"
-			cardNum: 10
-			style: Standard
 		}
 		title: Loyalty Unshaken
 		unique: false
@@ -518,17 +454,9 @@
 
 	7_11: {
 		cardInfo: {
-			imagePath: decipher/LOTR07011.jpg
-			//parentId: 7_11
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07011.jpg
 			collInfo: 7C11
 			rarity: C
-			setNum: "7"
-			cardNum: 11
-			style: Standard
 		}
 		title: Out of Darkness
 		unique: false
@@ -583,17 +511,9 @@
 
 	7_12: {
 		cardInfo: {
-			imagePath: decipher/LOTR07012.jpg
-			//parentId: 7_12
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07012.jpg
 			collInfo: 7R12
 			rarity: R
-			setNum: "7"
-			cardNum: 12
-			style: Standard
 		}
 		title: Preparations
 		unique: false
@@ -648,17 +568,9 @@
 
 	7_13: {
 		cardInfo: {
-			imagePath: decipher/LOTR07013.jpg
-			//parentId: 7_13
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07013.jpg
 			collInfo: 7U13
 			rarity: U
-			setNum: "7"
-			cardNum: 13
-			style: Standard
 		}
 		title: Reckless Pride
 		unique: true
@@ -708,17 +620,9 @@
 
 	7_14: {
 		cardInfo: {
-			imagePath: decipher/LOTR07014.jpg
-			//parentId: 7_14
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR07014.jpg
 			collInfo: 7U14
 			rarity: U
-			setNum: "7"
-			cardNum: 14
-			style: Standard
 		}
 		title: Slaked Thirsts
 		unique: false

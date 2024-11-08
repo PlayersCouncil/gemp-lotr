@@ -2,17 +2,9 @@
 
 	15_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR15054.jpg
-			//parentId: 15_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15054.jpg
 			collInfo: 15S54
 			rarity: S
-			setNum: "15"
-			cardNum: 54
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Swift Hunter
@@ -57,17 +49,9 @@
 
 	15_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR15055.jpg
-			//parentId: 15_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15055.jpg
 			collInfo: 15R55
 			rarity: R
-			setNum: "15"
-			cardNum: 55
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Thorongil
@@ -124,17 +108,9 @@
 
 	15_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR15056.jpg
-			//parentId: 15_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15056.jpg
 			collInfo: 15R56
 			rarity: R
-			setNum: "15"
-			cardNum: 56
-			style: Standard
 		}
 		title: Aragorn's Bow
 		subtitle: Ranger's Longbow
@@ -179,17 +155,9 @@
 
 	15_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR15057.jpg
-			//parentId: 15_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15057.jpg
 			collInfo: 15U57
 			rarity: U
-			setNum: "15"
-			cardNum: 57
-			style: Standard
 		}
 		title: Damrod
 		subtitle: Dúnadan of Gondor
@@ -236,17 +204,9 @@
 
 	15_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR15058.jpg
-			//parentId: 15_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15058.jpg
 			collInfo: 15R58
 			rarity: R
-			setNum: "15"
-			cardNum: 58
-			style: Standard
 		}
 		title: Decorated Barricade
 		unique: true
@@ -298,17 +258,9 @@
 
 	15_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR15059.jpg
-			//parentId: 15_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15059.jpg
 			collInfo: 15C59
 			rarity: C
-			setNum: "15"
-			cardNum: 59
-			style: Standard
 		}
 		title: Dúnedain of the South
 		unique: false
@@ -353,17 +305,9 @@
 
 	15_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR15061.jpg
-			//parentId: 15_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15061.jpg
 			collInfo: 15U61
 			rarity: U
-			setNum: "15"
-			cardNum: 61
-			style: Standard
 		}
 		title: Gondorian Prowler
 		unique: false
@@ -429,17 +373,9 @@
 
 	15_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR15062.jpg
-			//parentId: 15_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15062.jpg
 			collInfo: 15C62
 			rarity: C
-			setNum: "15"
-			cardNum: 62
-			style: Standard
 		}
 		title: Ithilien Blade
 		unique: false
@@ -490,17 +426,9 @@
 
 	15_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR15063.jpg
-			//parentId: 15_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15063.jpg
 			collInfo: 15U63
 			rarity: U
-			setNum: "15"
-			cardNum: 63
-			style: Standard
 		}
 		title: Mablung
 		subtitle: Ranger of Ithilien
@@ -548,17 +476,9 @@
 
 	15_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR15064.jpg
-			//parentId: 15_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15064.jpg
 			collInfo: 15R64
 			rarity: R
-			setNum: "15"
-			cardNum: 64
-			style: Standard
 		}
 		title: Madril
 		subtitle: Defender of Osgiliath
@@ -614,17 +534,9 @@
 
 	15_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR15065.jpg
-			//parentId: 15_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15065.jpg
 			collInfo: 15C65
 			rarity: C
-			setNum: "15"
-			cardNum: 65
-			style: Standard
 		}
 		title: No Quicker Path
 		unique: false
@@ -675,17 +587,9 @@
 
 	15_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR15066.jpg
-			//parentId: 15_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15066.jpg
 			collInfo: 15U66
 			rarity: U
-			setNum: "15"
-			cardNum: 66
-			style: Standard
 		}
 		title: No Travellers In This Land
 		unique: false
@@ -731,17 +635,9 @@
 
 	15_67: {
 		cardInfo: {
-			imagePath: decipher/LOTR15067.jpg
-			//parentId: 15_67
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15067.jpg
 			collInfo: 15U67
 			rarity: U
-			setNum: "15"
-			cardNum: 67
-			style: Standard
 		}
 		title: Portico
 		unique: false
@@ -806,17 +702,9 @@
 
 	15_68: {
 		cardInfo: {
-			imagePath: decipher/LOTR15068.jpg
-			//parentId: 15_68
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15068.jpg
 			collInfo: 15C68
 			rarity: C
-			setNum: "15"
-			cardNum: 68
-			style: Standard
 		}
 		title: Ranger's Cloak
 		unique: false
@@ -889,17 +777,9 @@
 
 	15_69: {
 		cardInfo: {
-			imagePath: decipher/LOTR15069.jpg
-			//parentId: 15_69
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15069.jpg
 			collInfo: 15C69
 			rarity: C
-			setNum: "15"
-			cardNum: 69
-			style: Standard
 		}
 		title: Silent Traveler
 		unique: false
@@ -943,17 +823,9 @@
 
 	15_70: {
 		cardInfo: {
-			imagePath: decipher/LOTR15070.jpg
-			//parentId: 15_70
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15070.jpg
 			collInfo: 15R70
 			rarity: R
-			setNum: "15"
-			cardNum: 70
-			style: Standard
 		}
 		title: Tremendous Wall
 		unique: true
@@ -1015,17 +887,9 @@
 
 	15_71: {
 		cardInfo: {
-			imagePath: decipher/LOTR15071.jpg
-			//parentId: 15_71
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15071.jpg
 			collInfo: 15C71
 			rarity: C
-			setNum: "15"
-			cardNum: 71
-			style: Standard
 		}
 		title: Unyielding Ranger
 		unique: false

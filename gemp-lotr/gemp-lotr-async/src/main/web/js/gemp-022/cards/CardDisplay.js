@@ -84,7 +84,7 @@ class CardDisplay {
 			class: "borderOverlay"
 		}).css({
 			position: "absolute",
-			borderWidth: "16px"
+			borderWidth: "18px"
 		}).appendTo(this.baseDiv);
 		
 		$('<img>', {
@@ -184,7 +184,7 @@ class CardDisplay {
 		}
 
 		//Calculating the various borders sizes proportionate to the longest side
-		const borderSize = Math.floor(Math.max(widthSide, heightSide) / 30);
+		const borderSize = Math.floor(Math.max(widthSide, heightSide) / 28);
 		const testBorderWidth = Math.floor(Math.max(widthSide, heightSide) / 24);
 		const testBorderHeight = Math.floor(Math.max(widthSide, heightSide) / 27.6);
 

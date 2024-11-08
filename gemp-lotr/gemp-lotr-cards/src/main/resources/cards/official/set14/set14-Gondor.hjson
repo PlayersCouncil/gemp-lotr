@@ -2,17 +2,9 @@
 
 	14_7: {
 		cardInfo: {
-			imagePath: decipher/LOTR14007.jpg
-			//parentId: 14_7
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14007.jpg
 			collInfo: 14R7
 			rarity: R
-			setNum: "14"
-			cardNum: 7
-			style: Standard
 		}
 		title: Duilin
 		subtitle: Ranger From Blackroot Vale
@@ -51,17 +43,9 @@
 
 	14_8: {
 		cardInfo: {
-			imagePath: decipher/LOTR14008.jpg
-			//parentId: 14_8
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14008.jpg
 			collInfo: 14R8
 			rarity: R
-			setNum: "14"
-			cardNum: 8
-			style: Standard
 		}
 		title: Duinhir
 		subtitle: Tall Man of Blackroot Vale
@@ -128,17 +112,9 @@
 
 	14_9: {
 		cardInfo: {
-			imagePath: decipher/LOTR14009.jpg
-			//parentId: 14_9
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR14009.jpg
 			collInfo: 14R9
 			rarity: R
-			setNum: "14"
-			cardNum: 9
-			style: Standard
 		}
 		title: Halbarad
 		subtitle: Ranger of the North

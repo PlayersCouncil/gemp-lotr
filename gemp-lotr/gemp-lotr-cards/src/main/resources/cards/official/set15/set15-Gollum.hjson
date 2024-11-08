@@ -2,17 +2,9 @@
 
 	15_39: {
 		cardInfo: {
-			imagePath: decipher/LOTR15039.jpg
-			//parentId: 15_39
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15039.jpg
 			collInfo: 15U39
 			rarity: U
-			setNum: "15"
-			cardNum: 39
-			style: Standard
 		}
 		title: Called to Mordor
 		unique: false
@@ -60,17 +52,9 @@
 
 	15_40: {
 		cardInfo: {
-			imagePath: decipher/LOTR15040.jpg
-			//parentId: 15_40
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15040.jpg
 			collInfo: 15R40
 			rarity: R
-			setNum: "15"
-			cardNum: 40
-			style: Standard
 		}
 		title: Connected By Fate
 		unique: true
@@ -128,17 +112,9 @@
 
 	15_41: {
 		cardInfo: {
-			imagePath: decipher/LOTR15041.jpg
-			//parentId: 15_41
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15041.jpg
 			collInfo: 15U41
 			rarity: U
-			setNum: "15"
-			cardNum: 41
-			style: Standard
 		}
 		title: Controlled By The Ring
 		unique: false
@@ -179,17 +155,9 @@
 
 	15_42: {
 		cardInfo: {
-			imagePath: decipher/LOTR15042.jpg
-			//parentId: 15_42
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15042.jpg
 			collInfo: 15R42
 			rarity: R
-			setNum: "15"
-			cardNum: 42
-			style: Standard
 		}
 		title: Desperate Move
 		unique: false
@@ -237,17 +205,9 @@
 
 	15_43: {
 		cardInfo: {
-			imagePath: decipher/LOTR15043.jpg
-			//parentId: 15_43
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15043.jpg
 			collInfo: 15R43
 			rarity: R
-			setNum: "15"
-			cardNum: 43
-			style: Standard
 		}
 		title: Gollum
 		subtitle: Hopeless
@@ -288,17 +248,9 @@
 
 	15_44: {
 		cardInfo: {
-			imagePath: decipher/LOTR15044.jpg
-			//parentId: 15_44
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15044.jpg
 			collInfo: 15U44
 			rarity: U
-			setNum: "15"
-			cardNum: 44
-			style: Standard
 		}
 		title: Herbs and Stewed Rabbit
 		unique: false
@@ -359,17 +311,9 @@
 
 	15_45: {
 		cardInfo: {
-			imagePath: decipher/LOTR15045.jpg
-			//parentId: 15_45
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15045.jpg
 			collInfo: 15C45
 			rarity: C
-			setNum: "15"
-			cardNum: 45
-			style: Standard
 		}
 		title: Hurry Hobbitses
 		unique: false
@@ -404,17 +348,9 @@
 
 	15_46: {
 		cardInfo: {
-			imagePath: decipher/LOTR15046.jpg
-			//parentId: 15_46
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15046.jpg
 			collInfo: 15C46
 			rarity: C
-			setNum: "15"
-			cardNum: 46
-			style: Standard
 		}
 		title: Nice Fish
 		unique: false
@@ -471,17 +407,9 @@
 
 	15_47: {
 		cardInfo: {
-			imagePath: decipher/LOTR15047.jpg
-			//parentId: 15_47
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15047.jpg
 			collInfo: 15R47
 			rarity: R
-			setNum: "15"
-			cardNum: 47
-			style: Standard
 		}
 		title: Not This Time!
 		unique: false
@@ -522,17 +450,9 @@
 
 	15_48: {
 		cardInfo: {
-			imagePath: decipher/LOTR15048.jpg
-			//parentId: 15_48
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15048.jpg
 			collInfo: 15C48
 			rarity: C
-			setNum: "15"
-			cardNum: 48
-			style: Standard
 		}
 		title: Release Them
 		unique: false
@@ -587,17 +507,9 @@
 
 	15_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR15049.jpg
-			//parentId: 15_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15049.jpg
 			collInfo: 15R49
 			rarity: R
-			setNum: "15"
-			cardNum: 49
-			style: Standard
 		}
 		title: Sméagol
 		subtitle: Wretched and Hungry
@@ -660,17 +572,9 @@
 
 	15_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR15050.jpg
-			//parentId: 15_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15050.jpg
 			collInfo: 15U50
 			rarity: U
-			setNum: "15"
-			cardNum: 50
-			style: Standard
 		}
 		title: Something Slimy
 		unique: false
@@ -725,17 +629,9 @@
 
 	15_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR15051.jpg
-			//parentId: 15_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15051.jpg
 			collInfo: 15U51
 			rarity: U
-			setNum: "15"
-			cardNum: 51
-			style: Standard
 		}
 		title: Sudden Strike
 		unique: false
@@ -787,17 +683,9 @@
 
 	15_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR15052.jpg
-			//parentId: 15_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15052.jpg
 			collInfo: 15U52
 			rarity: U
-			setNum: "15"
-			cardNum: 52
-			style: Standard
 		}
 		title: Swear by the Precious
 		unique: false
@@ -849,17 +737,9 @@
 
 	15_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR15053.jpg
-			//parentId: 15_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR15053.jpg
 			collInfo: 15R53
 			rarity: R
-			setNum: "15"
-			cardNum: 53
-			style: Standard
 		}
 		title: Unseen Foe
 		unique: false

@@ -2,17 +2,9 @@
 
 	8_49: {
 		cardInfo: {
-			imagePath: decipher/LOTR08049.jpg
-			//parentId: 8_49
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08049.jpg
 			collInfo: 8R49
 			rarity: R
-			setNum: "8"
-			cardNum: 49
-			style: Standard
 		}
 		title: Black Númenorean
 		unique: false
@@ -60,17 +52,9 @@
 
 	8_50: {
 		cardInfo: {
-			imagePath: decipher/LOTR08050.jpg
-			//parentId: 8_50
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08050.jpg
 			collInfo: 8C50
 			rarity: C
-			setNum: "8"
-			cardNum: 50
-			style: Standard
 		}
 		title: Black Sails of Umbar
 		unique: false
@@ -163,17 +147,9 @@
 
 	8_51: {
 		cardInfo: {
-			imagePath: decipher/LOTR08051.jpg
-			//parentId: 8_51
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08051.jpg
 			collInfo: 8R51
 			rarity: R
-			setNum: "8"
-			cardNum: 51
-			style: Standard
 		}
 		title: Castamir of Umbar
 		unique: true
@@ -225,17 +201,9 @@
 
 	8_52: {
 		cardInfo: {
-			imagePath: decipher/LOTR08052.jpg
-			//parentId: 8_52
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08052.jpg
 			collInfo: 8C52
 			rarity: C
-			setNum: "8"
-			cardNum: 52
-			style: Standard
 		}
 		title: Corsair Ballista
 		unique: false
@@ -285,17 +253,9 @@
 
 	8_53: {
 		cardInfo: {
-			imagePath: decipher/LOTR08053.jpg
-			//parentId: 8_53
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08053.jpg
 			collInfo: 8C53
 			rarity: C
-			setNum: "8"
-			cardNum: 53
-			style: Standard
 		}
 		title: Corsair Buccaneer
 		unique: false
@@ -340,17 +300,9 @@
 
 	8_54: {
 		cardInfo: {
-			imagePath: decipher/LOTR08054.jpg
-			//parentId: 8_54
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08054.jpg
 			collInfo: 8C54
 			rarity: C
-			setNum: "8"
-			cardNum: 54
-			style: Standard
 		}
 		title: Corsair Freebooter
 		unique: false
@@ -396,17 +348,9 @@
 
 	8_55: {
 		cardInfo: {
-			imagePath: decipher/LOTR08055.jpg
-			//parentId: 8_55
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08055.jpg
 			collInfo: 8C55
 			rarity: C
-			setNum: "8"
-			cardNum: 55
-			style: Standard
 		}
 		title: Corsair Gunners
 		unique: false
@@ -453,17 +397,9 @@
 
 	8_56: {
 		cardInfo: {
-			imagePath: decipher/LOTR08056.jpg
-			//parentId: 8_56
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08056.jpg
 			collInfo: 8U56
 			rarity: U
-			setNum: "8"
-			cardNum: 56
-			style: Standard
 		}
 		title: Corsair Lookout
 		unique: false
@@ -513,17 +449,9 @@
 
 	8_57: {
 		cardInfo: {
-			imagePath: decipher/LOTR08057.jpg
-			//parentId: 8_57
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08057.jpg
 			collInfo: 8R57
 			rarity: R
-			setNum: "8"
-			cardNum: 57
-			style: Standard
 		}
 		title: Corsair Marauder
 		unique: false
@@ -571,17 +499,9 @@
 
 	8_58: {
 		cardInfo: {
-			imagePath: decipher/LOTR08058.jpg
-			//parentId: 8_58
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08058.jpg
 			collInfo: 8C58
 			rarity: C
-			setNum: "8"
-			cardNum: 58
-			style: Standard
 		}
 		title: Corsair Plunderer
 		unique: false
@@ -628,17 +548,9 @@
 
 	8_59: {
 		cardInfo: {
-			imagePath: decipher/LOTR08059.jpg
-			//parentId: 8_59
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08059.jpg
 			collInfo: 8U59
 			rarity: U
-			setNum: "8"
-			cardNum: 59
-			style: Standard
 		}
 		title: Corsair War Galley
 		unique: false
@@ -710,17 +622,9 @@
 
 	8_60: {
 		cardInfo: {
-			imagePath: decipher/LOTR08060.jpg
-			//parentId: 8_60
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08060.jpg
 			collInfo: 8U60
 			rarity: U
-			setNum: "8"
-			cardNum: 60
-			style: Standard
 		}
 		title: Haradrim Marksman
 		unique: true
@@ -762,17 +666,9 @@
 
 	8_61: {
 		cardInfo: {
-			imagePath: decipher/LOTR08061.jpg
-			//parentId: 8_61
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08061.jpg
 			collInfo: 8C61
 			rarity: C
-			setNum: "8"
-			cardNum: 61
-			style: Standard
 		}
 		title: Haradwaith
 		unique: true
@@ -834,17 +730,9 @@
 
 	8_62: {
 		cardInfo: {
-			imagePath: decipher/LOTR08062.jpg
-			//parentId: 8_62
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08062.jpg
 			collInfo: 8R62
 			rarity: R
-			setNum: "8"
-			cardNum: 62
-			style: Standard
 		}
 		title: Heavy Axeman
 		unique: true
@@ -896,17 +784,9 @@
 
 	8_63: {
 		cardInfo: {
-			imagePath: decipher/LOTR08063.jpg
-			//parentId: 8_63
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08063.jpg
 			collInfo: 8C63
 			rarity: C
-			setNum: "8"
-			cardNum: 63
-			style: Standard
 		}
 		title: Line of Defense
 		unique: false
@@ -950,17 +830,9 @@
 
 	8_64: {
 		cardInfo: {
-			imagePath: decipher/LOTR08064.jpg
-			//parentId: 8_64
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08064.jpg
 			collInfo: 8U64
 			rarity: U
-			setNum: "8"
-			cardNum: 64
-			style: Standard
 		}
 		title: Mûmakil
 		unique: false
@@ -1016,17 +888,9 @@
 
 	8_65: {
 		cardInfo: {
-			imagePath: decipher/LOTR08065.jpg
-			//parentId: 8_65
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08065.jpg
 			collInfo: 8R65
 			rarity: R
-			setNum: "8"
-			cardNum: 65
-			style: Standard
 		}
 		title: Ships of Great Draught
 		unique: false
@@ -1091,17 +955,9 @@
 
 	8_66: {
 		cardInfo: {
-			imagePath: decipher/LOTR08066.jpg
-			//parentId: 8_66
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
+			image: decipher/LOTR08066.jpg
 			collInfo: 8C66
 			rarity: C
-			setNum: "8"
-			cardNum: 66
-			style: Standard
 		}
 		title: Wind That Sped Ships
 		unique: false
