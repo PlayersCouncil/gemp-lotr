@@ -194,13 +194,13 @@ public class Filters {
         return assignableToSkirmishAgainst(assignedBySide, againstFilter, false, false);
     }
 
-    public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter, final boolean ignoreUnassigned, final boolean allowAllyToSkirmish) {
+    public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter, final boolean ignoreExistingAssignments, final boolean allowAllyToSkirmish) {
         return Filters.and(
-                assignableToSkirmish(assignedBySide, ignoreUnassigned, allowAllyToSkirmish),
+                assignableToSkirmish(assignedBySide, ignoreExistingAssignments, allowAllyToSkirmish),
                 (Filter) (game, physicalCard) -> {
                     for (PhysicalCard card : Filters.filterActive(game, againstFilter)) {
                         if (card.getBlueprint().getSide() != physicalCard.getBlueprint().getSide()
-                                && Filters.assignableToSkirmish(assignedBySide, ignoreUnassigned, allowAllyToSkirmish).accepts(game, card)) {
+                                && Filters.assignableToSkirmish(assignedBySide, ignoreExistingAssignments, allowAllyToSkirmish).accepts(game, card)) {
                             Map<PhysicalCard, Set<PhysicalCard>> thisAssignment = new HashMap<>();
                             if (card.getBlueprint().getSide() == Side.FREE_PEOPLE) {
                                 if (thisAssignment.containsKey(card))
@@ -222,7 +222,7 @@ public class Filters {
                 });
     }
 
-    public static Filter assignableToSkirmish(final Side assignedBySide, final boolean ignoreUnassigned, final boolean allowAllyToSkirmish) {
+    public static Filter assignableToSkirmish(final Side assignedBySide, final boolean ignoreExistingAssignments, final boolean allowAllyToSkirmish) {
         Filter assignableFilter = Filters.or(
                 Filters.and(
                         CardType.ALLY,
@@ -253,9 +253,9 @@ public class Filters {
         return Filters.and(
                 assignableFilter,
                 (Filter) (game, physicalCard) -> {
-                    if (!ignoreUnassigned) {
-                        boolean notAssignedToSkirmish = Filters.notAssignedToSkirmish.accepts(game, physicalCard);
-                        if (!notAssignedToSkirmish)
+                    if (!ignoreExistingAssignments) {
+                        boolean assignedToSkirmish = Filters.assignedToSkirmish.accepts(game, physicalCard);
+                        if (assignedToSkirmish)
                             return false;
                     }
                     return game.getModifiersQuerying().canBeAssignedToSkirmish(game, assignedBySide, physicalCard);

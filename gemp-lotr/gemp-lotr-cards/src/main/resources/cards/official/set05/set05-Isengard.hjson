@@ -920,7 +920,7 @@
 				effect: {
 					type: AddCultureTokens
 					culture: isengard
-					select: machine
+					select: choose(machine)
 				}
 			}
 			{

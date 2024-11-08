@@ -17,8 +17,9 @@ public class Card_01_262_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "1_262");
-					// put other cards in here as needed for the test case
+					put("assassin", "1_262");
+					put("runner", "1_178");
+					put("sam", "1_310");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +47,7 @@ public class Card_01_262_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("assassin");
 
 		assertEquals("Orc Assassin", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +63,37 @@ public class Card_01_262_Tests
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OrcAssassinTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void OrcAssassinDoesNotInterruptSkirmishesAfterUsingAssignmentAbility() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var assassin = scn.GetShadowCard("assassin");
+		var runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCharToTable(assassin, runner);
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(assassin));
+		scn.ShadowUseCardAction(assassin);
+		assertEquals(2, scn.GetFreepsCardChoiceCount());
+
+		assertTrue(scn.CanBeAssigned(sam));
+		scn.FreepsChooseCard(sam);
+		assertTrue(scn.IsCharAssigned(sam));
+		assertTrue(scn.IsCharAssigned(assassin));
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(frodo, runner);
+		// If beginning skirmishes now fails, then there is some dangling minion that Gemp thinks
+		// is unassigned, which isn't right.
+		scn.FreepsResolveSkirmish(sam);
 	}
 }

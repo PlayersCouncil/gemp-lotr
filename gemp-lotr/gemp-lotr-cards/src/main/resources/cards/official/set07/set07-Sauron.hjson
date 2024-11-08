@@ -1196,7 +1196,7 @@
 					type: assignFpCharacterToSkirmish
 					fpCharacter: choose(ringBearer)
 					minion: self
-					ignoreUnassigned: true
+					ignoreExistingAssignments: true
 				}
 			}
 		]
