@@ -57,7 +57,6 @@
 		culture: Gondor
 		twilight: 1
 		type: Possession
-		#target: 
 		keywords: Support Area
 		effects: [
 			{
@@ -83,10 +82,8 @@
 						memorize: revealedCard
 					}
 					{
-						type: discardFromHand
-						hand: shadow
+						type: Discard
 						player: shadow
-						forced: true
 						select: choose(side(shadow),printedTwilightCostFromMemory(revealedCard))
 					}
 				]

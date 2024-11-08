@@ -158,7 +158,7 @@
 			}
 			effect: {
 				type: heal
-				select: choose(companion)
+				select: choose(culture(gondor),companion)
 			}
 		}
 		gametext: Plays to your support area.<br>You may heal a [gondor] companion at the end of each turn during which no companion or ally lost a skirmish.
