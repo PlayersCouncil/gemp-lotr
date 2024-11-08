@@ -407,8 +407,8 @@
 		twilight: 0
 		type: Event
 		timeword: [
-		    Fellowship
-		    Regroup
+			Fellowship
+			Regroup
 		]
 		effects: {
 			type: event

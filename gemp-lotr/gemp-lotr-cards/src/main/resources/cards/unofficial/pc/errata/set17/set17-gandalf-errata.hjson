@@ -19,10 +19,10 @@
 		effects: [
 			{
 				type: event
-                requires: {
-                    type: canSpot
-                    filter: culture(gandalf),wizard
-                }
+				requires: {
+					type: canSpot
+					filter: culture(gandalf),wizard
+				}
 				effect: [
 					{
 						type: PutCardsFromDiscardIntoHand

@@ -64,8 +64,8 @@
 				effect: {
 					type: playCardFromDrawDeck
 					select: choose(minion)
-                    showAll: true
-                    shuffle: true
+					showAll: true
+					shuffle: true
 				}
 			}
 		]

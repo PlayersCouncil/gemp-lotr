@@ -116,38 +116,38 @@
 		type: condition
 		keyword: support area
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    count: 2
-                    filter: culture(shire),companion
-                }
-		    }
-            {
-                type: trigger
-                optional: true
-                trigger: {
-                    type: removesBurden
-                    filter: your,not(hobbit)
-                }
-                requires: {
-                    type: perPhaseLimit
-                    limit: 1
-                }
-                effect: [
-                    {
-                        type: incrementPerPhaseLimit
-                        limit: 1
-                    }
-                    {
-                        type: heal
-                        count: 0-2
-                        select: choose(companion)
-                    }
-                ]
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					count: 2
+					filter: culture(shire),companion
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: removesBurden
+					filter: your,not(hobbit)
+				}
+				requires: {
+					type: perPhaseLimit
+					limit: 1
+				}
+				effect: [
+					{
+						type: incrementPerPhaseLimit
+						limit: 1
+					}
+					{
+						type: heal
+						count: 0-2
+						select: choose(companion)
+					}
+				]
+			}
+		]
 		gametext: To play, spot 2 [Shire] companions. Plays to your support area.<br>Each time you remove a burden (except by a Hobbit's game text), you may heal up to 2 companions (limit once per phase).
 		lore: "'Life in the wide world goes on... scarcely even aware of the existence of hobbits....'"
 		promotext: ""

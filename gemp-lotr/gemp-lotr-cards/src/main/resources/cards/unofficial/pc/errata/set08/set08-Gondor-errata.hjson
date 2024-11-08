@@ -24,14 +24,14 @@
 		signet: Aragorn
 		resistance: 6
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: culture(gondor),wraith
-                    count: 2
-                }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gondor),wraith
+					count: 2
+				}
+			}
 			{
 				type: ExtraCost
 				cost: {

@@ -20,8 +20,8 @@
 				effects: {
 			type: event
 			requires: {
-			    type: canSpot
-			    filter: name(Gandalf)
+				type: canSpot
+				filter: name(Gandalf)
 			}
 			cost: {
 				type: kill
@@ -44,7 +44,7 @@
 					showAll: true
 				}
 				{
-				    type: shuffleDeck
+					type: shuffleDeck
 				}
 			]
 		}

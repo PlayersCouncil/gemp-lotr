@@ -326,8 +326,8 @@
 		twilight: 1
 		type: Event
 		timeword: [
-		    Fellowship
-		    Skirmish
+			Fellowship
+			Skirmish
 		]
 		effects: {
 			type: event

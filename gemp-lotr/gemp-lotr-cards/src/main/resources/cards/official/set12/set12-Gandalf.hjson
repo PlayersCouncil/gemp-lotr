@@ -482,8 +482,8 @@
 		twilight: 1
 		type: Event
 		timeword: [
-		    Maneuver
-		    Regroup
+			Maneuver
+			Regroup
 		]
 		effects: {
 			type: event

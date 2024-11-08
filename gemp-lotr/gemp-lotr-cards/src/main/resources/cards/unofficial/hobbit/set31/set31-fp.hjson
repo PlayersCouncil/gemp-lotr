@@ -82,8 +82,8 @@
 						effect: {
 							type: playCardFromDrawDeck
 							select: choose(culture(dwarven),not(event))
-                            showAll: true
-                            shuffle: true
+							showAll: true
+							shuffle: true
 						}
 					}
 				}
@@ -608,8 +608,8 @@
 						{
 							type: playCardFromDrawDeck
 							select: choose(culture(gandalf),follower)
-                            showAll: true
-                            shuffle: true
+							showAll: true
+							shuffle: true
 						}
 						{
 							type: playCardFromDiscard
@@ -788,9 +788,9 @@
 			effect: {
 				type: putCardsFromDeckIntoHand
 				select: choose(culture(gandalf),spell)
-                reveal: true
-                shuffle: true
-                showAll: true
+				reveal: true
+				shuffle: true
+				showAll: true
 			}
 		}
 	}
@@ -821,179 +821,179 @@
 					type: discard
 					select: choose(side(shadow),condition)
 			  }
-      ]
-    }
+	  ]
+	}
   }
   31_39: {
-    title: An Invisible Ring
-    culture: shire
-    type: event
-    timeword: skirmish
-    twilight: 1
-    effects: {
-      type: event
-      requires: {
-        type: ringIsOn
-      }
-      effect: [
-        {
-          type: wound
-          select: all(minion,inSkirmishAgainst(ring bearer))
-        }
-        {
-          type: removefromthegame
-          select: self
-        }
-      ]
-    }
+	title: An Invisible Ring
+	culture: shire
+	type: event
+	timeword: skirmish
+	twilight: 1
+	effects: {
+	  type: event
+	  requires: {
+		type: ringIsOn
+	  }
+	  effect: [
+		{
+		  type: wound
+		  select: all(minion,inSkirmishAgainst(ring bearer))
+		}
+		{
+		  type: removefromthegame
+		  select: self
+		}
+	  ]
+	}
   }
   31_40: {
-    title: Barrels
-    culture: shire
-    type: event
-    timeword: regroup
-    twilight: 1
-    effects: {
-      type: event
-      cost: {
-        type: exert
-        count: 2
-        select: choose(culture(dwarven),companion)
-      }
-      effect: [
-        {
-          type: discard
-          count: 0-2
-          select: choose(minion,not(name(Smaug)))
-        }
-        {
-          type: drawCards
-          count: 3
-        }
-        {
-          type: If
-          check: {
-            type: location
-            filter: river
-          }
-          true: {
-            type: addModifier
-            modifier: {
-              type: modifyMoveLimit
-              amount: 1
-            }
-            until: endOfTurn
-          }
-        }
-      ]
-    }
+	title: Barrels
+	culture: shire
+	type: event
+	timeword: regroup
+	twilight: 1
+	effects: {
+	  type: event
+	  cost: {
+		type: exert
+		count: 2
+		select: choose(culture(dwarven),companion)
+	  }
+	  effect: [
+		{
+		  type: discard
+		  count: 0-2
+		  select: choose(minion,not(name(Smaug)))
+		}
+		{
+		  type: drawCards
+		  count: 3
+		}
+		{
+		  type: If
+		  check: {
+			type: location
+			filter: river
+		  }
+		  true: {
+			type: addModifier
+			modifier: {
+			  type: modifyMoveLimit
+			  amount: 1
+			}
+			until: endOfTurn
+		  }
+		}
+	  ]
+	}
   }
   31_41: {
-    title: Burglar's Contract
+	title: Burglar's Contract
 		unique: true
-    culture: shire
-    type: possession
-    twilight: 1
-    resistance: 1
-    target: name(Bilbo)
-    effects: {
-      type: activated
-      phase: skirmish
-      cost: [
-        {
-          type: addBurdens
-          amount: 1
-        }
-        {
-          type: exert
-          select: bearer
-        }
-      ]
-      effect: {
-        type: modifyStrength
-        select: choose(not(bearer),companion)
-        amount: {
-          type: cardAffectedLimitPerPhase
-          limit: 4
-          source: 2
-        }
-      }
-    }
+	culture: shire
+	type: possession
+	twilight: 1
+	resistance: 1
+	target: name(Bilbo)
+	effects: {
+	  type: activated
+	  phase: skirmish
+	  cost: [
+		{
+		  type: addBurdens
+		  amount: 1
+		}
+		{
+		  type: exert
+		  select: bearer
+		}
+	  ]
+	  effect: {
+		type: modifyStrength
+		select: choose(not(bearer),companion)
+		amount: {
+		  type: cardAffectedLimitPerPhase
+		  limit: 4
+		  source: 2
+		}
+	  }
+	}
   }
   31_42: {
-    title: Old Thrush
+	title: Old Thrush
 		unique: true
-    culture: shire
-    type: follower
-    race: bird
-    twilight: 1
-    strength: 1
-    effects: [
-      {
-        type: aidCost
-        cost: {
-          type: exert
-          select: choose(name(Bilbo))
-        }
-      }
-      {
-        type: activated
-        phase: maneuver
-        requires: {
-          type: canSpot
-          filter: self,attachedTo(any)
-        }
-        cost: {
-          type: discard
-          select: self
-        }
-        effect: {
-          type: choice
-          texts: [
-            Take a card from your draw deck into hand
-            Take a card from your discard into hand
-          ]
-          effects: [
-            {
-              type: putCardsFromDeckIntoHand
-              select: choose(side(free people),not(or(culture(gandalf),culture(elven))))
-                reveal: true
-                shuffle: true
-                showAll: true
-            }
-            {
-              type: putCardsFromDiscardIntoHand
-              select: choose(side(free people),not(or(culture(gandalf),culture(elven))))
-            }
-          ]
-        }
-      }
-    ]
+	culture: shire
+	type: follower
+	race: bird
+	twilight: 1
+	strength: 1
+	effects: [
+	  {
+		type: aidCost
+		cost: {
+		  type: exert
+		  select: choose(name(Bilbo))
+		}
+	  }
+	  {
+		type: activated
+		phase: maneuver
+		requires: {
+		  type: canSpot
+		  filter: self,attachedTo(any)
+		}
+		cost: {
+		  type: discard
+		  select: self
+		}
+		effect: {
+		  type: choice
+		  texts: [
+			Take a card from your draw deck into hand
+			Take a card from your discard into hand
+		  ]
+		  effects: [
+			{
+			  type: putCardsFromDeckIntoHand
+			  select: choose(side(free people),not(or(culture(gandalf),culture(elven))))
+				reveal: true
+				shuffle: true
+				showAll: true
+			}
+			{
+			  type: putCardsFromDiscardIntoHand
+			  select: choose(side(free people),not(or(culture(gandalf),culture(elven))))
+			}
+		  ]
+		}
+	  }
+	]
   }
   31_43: {
-    title: Skillful Negociator
-    culture: shire
-    type: event
-    timeword: maneuver
-    twilight: 1
-    effects: {
-      type: event
-      cost: [
-        {
-          type: spot
-          select: choose(ally)
-          memorize: chosenAlly
-        }
-        {
-          type: exert
-          select: choose(name(Bilbo))
-        }
-      ]
-      effect: {
-        type: EnableParticipationInArcheryFireAndSkirmishes
-        select: memory(chosenAlly)
-        until: start(regroup)
-      }
-    }
+	title: Skillful Negociator
+	culture: shire
+	type: event
+	timeword: maneuver
+	twilight: 1
+	effects: {
+	  type: event
+	  cost: [
+		{
+		  type: spot
+		  select: choose(ally)
+		  memorize: chosenAlly
+		}
+		{
+		  type: exert
+		  select: choose(name(Bilbo))
+		}
+	  ]
+	  effect: {
+		type: EnableParticipationInArcheryFireAndSkirmishes
+		select: memory(chosenAlly)
+		until: start(regroup)
+	  }
+	}
   }
 }

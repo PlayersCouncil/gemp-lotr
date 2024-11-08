@@ -27,8 +27,8 @@
 					{
 						type: playCardFromDrawDeck
 						select: choose(culture(gandalf),staff)
-                        showAll: true
-                        shuffle: true
+						showAll: true
+						shuffle: true
 					}
 				]
 			}
@@ -81,8 +81,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				select: choose(or(and(side(shadow),condition),name(The One Ring)))
-                showAll: true
-                shuffle: true
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
@@ -109,11 +109,11 @@
 				select: choose(your,orc)
 			}
 			effect: [
-                {
-                    type: disableSkirmishAssignment
-                    select: choose(or(name(Gandalf),and(culture(elven),ally)))
-                }
-            ]
+				{
+					type: disableSkirmishAssignment
+					select: choose(or(name(Gandalf),and(culture(elven),ally)))
+				}
+			]
 		}
 	}
 	31_47: {

@@ -231,8 +231,8 @@
 		strength: 2
 		vitality: 1
 		itemclass: [
-		    Hand weapon
-		    Shield
+			Hand weapon
+			Shield
 		]
 		target: culture(elven),companion,not(hasAttached(possession))
 		effects: [

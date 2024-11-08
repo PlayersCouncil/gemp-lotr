@@ -17,16 +17,16 @@
 		timeword: maneuver
 		effects: {
 			type: event
-            requires: [
-                {
-                    type: CanSpot
-                    filter: culture(moria),Orc
-                }
-                {
-                    type: CanSpot
-                    filter: culture(sauron),Orc
-                }
-            ]
+			requires: [
+				{
+					type: CanSpot
+					filter: culture(moria),Orc
+				}
+				{
+					type: CanSpot
+					filter: culture(sauron),Orc
+				}
+			]
 			effect: [
 				{
 					type: playCardFromDiscard

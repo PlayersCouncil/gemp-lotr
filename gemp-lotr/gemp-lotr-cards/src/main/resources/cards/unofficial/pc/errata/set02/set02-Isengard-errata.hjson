@@ -137,10 +137,10 @@
 		timeword: response
 		effects: {
 			type: responseEvent
-            requires: {
-                type: canSpot
-                filter: culture(isengard),minion
-            }
+			requires: {
+				type: canSpot
+				filter: culture(isengard),minion
+			}
 			trigger: {
 				type: putsOnRing
 			}
@@ -165,9 +165,9 @@
 					effect: {
 						type: PutCardsFromDeckIntoHand
 						select: memory(chosenCard)
-                        reveal: true
-                        shuffle: false
-                        showAll: false
+						reveal: true
+						shuffle: false
+						showAll: false
 					}
 				}
 			]	

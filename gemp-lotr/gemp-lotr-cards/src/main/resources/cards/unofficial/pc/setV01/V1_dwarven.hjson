@@ -268,10 +268,10 @@
 		timewords: Maneuver
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: dwarf,hasAttachedCount(2,item)
-            }
+			requires: {
+				type: canSpot
+				filter: dwarf,hasAttachedCount(2,item)
+			}
 			effect: [
 				{
 					type: chooseActiveCards

@@ -565,25 +565,25 @@
 		type: Condition
 		target: culture(gondor),companion,not(hasAttached(title(Valorous Leader)))
 		effects: [
-		    {
-		        type: activated
-		        phase: skirmish
-		        cost: [
-		            {
-                        type: memorizeActive
-                        filter: bearer
-                        memory: bearer
-                    }
-                    {
-                        type: discard
-                        select: self
-                    }
-		        ]
-		        effect: {
-		            type: discard
-		            select: choose(possession,attachedTo(minion,inSkirmishAgainst(memory(bearer))))
-		        }
-		    }
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: memorizeActive
+						filter: bearer
+						memory: bearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: discard
+					select: choose(possession,attachedTo(minion,inSkirmishAgainst(memory(bearer))))
+				}
+			}
 
 		]
 		gametext: Bearer must be a [gondor] companion. Limit 1 per bearer.<br><b>Skirmish:</b> Discard this condition to discard a possession borne by a minion skirmishing bearer.

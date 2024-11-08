@@ -161,13 +161,13 @@
 		type: Event
 		timewords: Regroup
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpotburdens
-                    amount: 5
-                }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpotburdens
+					amount: 5
+				}
+			}
 			{
 				type: extraCost
 				cost: {

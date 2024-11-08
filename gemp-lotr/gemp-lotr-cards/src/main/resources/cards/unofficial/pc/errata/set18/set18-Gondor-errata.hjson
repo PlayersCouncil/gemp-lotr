@@ -122,8 +122,8 @@
 							amount: 2
 						}
 						effect: {
-                            type: disableSkirmishAssignment
-                            select: memory(chosenMinion)
+							type: disableSkirmishAssignment
+							select: memory(chosenMinion)
 							until: regroup
 						}
 					}

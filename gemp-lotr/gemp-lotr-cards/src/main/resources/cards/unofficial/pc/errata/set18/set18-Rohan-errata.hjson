@@ -26,8 +26,8 @@
 				effect: {
 					type: playcardfromdrawdeck
 					select: choose(follower,culture(rohan))
-                    showAll: true
-                    shuffle: true
+					showAll: true
+					shuffle: true
 				}
 			}
 			{

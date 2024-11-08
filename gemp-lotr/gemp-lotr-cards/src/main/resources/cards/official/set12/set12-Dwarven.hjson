@@ -530,10 +530,10 @@
 			}
 			effect: [
 				{
-				    type: discardTopCardsFromDeck
-				    forced: true
-				    deck: shadow
-				    count: 3
+					type: discardTopCardsFromDeck
+					forced: true
+					deck: shadow
+					count: 3
 				}
 			]
 		}

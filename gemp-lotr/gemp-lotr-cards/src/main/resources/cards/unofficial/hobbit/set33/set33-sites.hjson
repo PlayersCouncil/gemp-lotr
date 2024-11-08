@@ -28,9 +28,9 @@
 			effect: {
 				type: putCardsFromDeckIntoHand
 				select: choose(or(culture(gandalf),culture(shire)))
-                reveal: true
-                shuffle: true
-                showAll: true
+				reveal: true
+				shuffle: true
+				showAll: true
 			}
 		}
 	}
@@ -60,8 +60,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				select: choose(or(possession,artifact))
-                showAll: true
-                shuffle: true
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
@@ -83,8 +83,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				select: choose(ally,allyHome(hobbit,3))
-                showAll: true
-                shuffle: true
+				showAll: true
+				shuffle: true
 			}
 		}
 	}

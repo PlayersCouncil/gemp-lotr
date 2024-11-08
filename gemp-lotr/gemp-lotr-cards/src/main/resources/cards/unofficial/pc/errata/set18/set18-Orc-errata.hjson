@@ -63,13 +63,13 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: CanSpot
-                    filter: culture(Orc),minion
-                }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: CanSpot
+					filter: culture(Orc),minion
+				}
+			}
 			{
 				type: Trigger
 				optional: false
@@ -97,8 +97,8 @@
 						player: you
 						deck: freeps
 						count: 2
-                        showAll: true
-                        shuffle: true
+						showAll: true
+						shuffle: true
 					}
 				]
 			}

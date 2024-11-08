@@ -49,8 +49,8 @@
 					true: {
 						type: DiscardCardsFromDrawDeck
 						select: memory(revealedCard)
-                        showAll: false
-                        shuffle: false
+						showAll: false
+						shuffle: false
 					}
 				}
 			]

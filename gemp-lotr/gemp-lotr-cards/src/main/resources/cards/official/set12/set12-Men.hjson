@@ -951,9 +951,9 @@
 		twilight: 4
 		type: Event
 		timeword: [
-            Maneuver
-            Regroup
-        ]
+			Maneuver
+			Regroup
+		]
 		keywords: [
 			Toil 2
 		]

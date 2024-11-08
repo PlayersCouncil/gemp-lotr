@@ -46,7 +46,7 @@
 							}
 							effect: [
 								{
-								    type: disableWounds
+									type: disableWounds
 									select: choose(culture(isengard),minion)
 									until: regroup
 								}

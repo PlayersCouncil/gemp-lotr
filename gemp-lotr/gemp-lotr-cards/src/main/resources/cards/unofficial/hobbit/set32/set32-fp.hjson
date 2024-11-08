@@ -203,8 +203,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				select: choose(culture(dwarven),follower)
-                showAll: true
-                shuffle: true
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
@@ -294,8 +294,8 @@
 						{
 							type: playCardFromDrawDeck
 							select: choose(culture(dwarven),ally)
-                            showAll: true
-                            shuffle: true
+							showAll: true
+							shuffle: true
 						}
 						{
 							type: EnableParticipationInSkirmishes
@@ -346,8 +346,8 @@
 					type: playCardFromDrawDeck
 					select: choose(culture(dwarven),or(possession,artifact))
 					on: bearer
-                    showAll: true
-                    shuffle: true
+					showAll: true
+					shuffle: true
 				}
 			}
 		]
@@ -379,8 +379,8 @@
 					{
 						type: playCardFromDrawDeck
 						select: choose(or(name(Thrain),and(culture(dwarven),or(possession,artifact))))
-                        showAll: true
-                        shuffle: true
+						showAll: true
+						shuffle: true
 					}
 					{
 						type: playCardFromDiscard
@@ -862,151 +862,151 @@
 							type: forEachInMemory
 							memory: discardedCards
 						}
-          }
-        ]
-      }
-    ]
+		  }
+		]
+	  }
+	]
   }
   32_21: {
-    title: Former Herald
-    culture: gandalf
-    twilight: 1
-    type: event
-    timeword: maneuver
-    effects: {
-      type: event
-      cost: {
-        type: exert
-        select: choose(wise,ally)
-        memorize: exertedAlly
-      }
-      effect: [
-        {
-          type: modifyStrength
-          select: memory(exertedAlly)
-          amount: 3
-          until: start(regroup)
-        }
-        {
-          type: EnableParticipationInArcheryFireAndSkirmishes
-          select: memory(exertedAlly)
-          until: start(regroup)
-        }
-      ]
-    }
+	title: Former Herald
+	culture: gandalf
+	twilight: 1
+	type: event
+	timeword: maneuver
+	effects: {
+	  type: event
+	  cost: {
+		type: exert
+		select: choose(wise,ally)
+		memorize: exertedAlly
+	  }
+	  effect: [
+		{
+		  type: modifyStrength
+		  select: memory(exertedAlly)
+		  amount: 3
+		  until: start(regroup)
+		}
+		{
+		  type: EnableParticipationInArcheryFireAndSkirmishes
+		  select: memory(exertedAlly)
+		  until: start(regroup)
+		}
+	  ]
+	}
   }
   32_22: {
-    title: Gathering of the Three Rings
-    culture: gandalf
-    twilight: 3
-    type: event
-    timeword: maneuver
-    keyword: [
-      spell
-    ]
-    effects: {
-      type: event
-      effect: {
-        type: modifyStrength
-        count: {
-          type: forEachYouCanSpot
-          filter: or(name(Gandalf),name(Elrond),name(Galadriel))
-        }
-        select: choose(minion)
-        amount: {
-          type: forEachYouCanSpot
-          filter: or(name(Gandalf),name(Elrond),name(Galadriel))
-          multiplier: -1
-        }
-        until: start(regroup)
-      }
-    }
+	title: Gathering of the Three Rings
+	culture: gandalf
+	twilight: 3
+	type: event
+	timeword: maneuver
+	keyword: [
+	  spell
+	]
+	effects: {
+	  type: event
+	  effect: {
+		type: modifyStrength
+		count: {
+		  type: forEachYouCanSpot
+		  filter: or(name(Gandalf),name(Elrond),name(Galadriel))
+		}
+		select: choose(minion)
+		amount: {
+		  type: forEachYouCanSpot
+		  filter: or(name(Gandalf),name(Elrond),name(Galadriel))
+		  multiplier: -1
+		}
+		until: start(regroup)
+	  }
+	}
   }
   32_23: {
-    title: Narya
-    unique: true
-    culture: gandalf
-    twilight: 0
-    type: artifact
-    itemclass: ring
-    vitality: 1
-    target: name(Gandalf)
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: modifyCost
-          filter: culture(gandalf),event
-          amount: -1
-        }
-      }
-      {
-        type: Response
-        trigger: {
-          type: aboutToDiscard
-          filter: bearer
-        }
-        cost: {
-          type: exert
-          select: bearer
-        }
-        effect: {
-          type: preventDiscard
-          select: bearer
-        }
-      }
-    ]
+	title: Narya
+	unique: true
+	culture: gandalf
+	twilight: 0
+	type: artifact
+	itemclass: ring
+	vitality: 1
+	target: name(Gandalf)
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: modifyCost
+		  filter: culture(gandalf),event
+		  amount: -1
+		}
+	  }
+	  {
+		type: Response
+		trigger: {
+		  type: aboutToDiscard
+		  filter: bearer
+		}
+		cost: {
+		  type: exert
+		  select: bearer
+		}
+		effect: {
+		  type: preventDiscard
+		  select: bearer
+		}
+	  }
+	]
   }
   32_24: {
-    title: Saruman
-    subtitle: The White
+	title: Saruman
+	subtitle: The White
 		unique: true
-    culture: gandalf
-    type: ally
-    allyHome: 3H
-    race: wizard
-    twilight: 4
-    strength: 8
-    vitality: 4
-    keyword: wise
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: addKeyword
-          filter: name(Gandalf)
-          keyword: defender+1
-        }
-      }
-      {
-        type: activated
-        phase: fellowship
-        cost: {
-          type: discard
-          select: choose(wise,ally)
-        }
-        effect: {
-          type: playCardFromDiscard
-          select: choose(name(Gandalf))
-        }
-      }
-      {
-        type: activated
-        phase: skirmish
-        cost: {
-          type: exert
-          select: self
-        }
-        effect: {
-          type: modifyStrength
-          select: choose(wise,character)
-          amount: {
-            type: cardAffectedLimitPerPhase
-            source: 2
-            limit: 2
-          }
-        }
-      }
-    ]
+	culture: gandalf
+	type: ally
+	allyHome: 3H
+	race: wizard
+	twilight: 4
+	strength: 8
+	vitality: 4
+	keyword: wise
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: addKeyword
+		  filter: name(Gandalf)
+		  keyword: defender+1
+		}
+	  }
+	  {
+		type: activated
+		phase: fellowship
+		cost: {
+		  type: discard
+		  select: choose(wise,ally)
+		}
+		effect: {
+		  type: playCardFromDiscard
+		  select: choose(name(Gandalf))
+		}
+	  }
+	  {
+		type: activated
+		phase: skirmish
+		cost: {
+		  type: exert
+		  select: self
+		}
+		effect: {
+		  type: modifyStrength
+		  select: choose(wise,character)
+		  amount: {
+			type: cardAffectedLimitPerPhase
+			source: 2
+			limit: 2
+		  }
+		}
+	  }
+	]
   }
 }

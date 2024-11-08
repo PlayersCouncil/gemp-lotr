@@ -95,22 +95,22 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: culture(moria),orc
-                }
-		    }
-            {
-                type: modifyOwnCost
-                requires: {
-                    type: location
-                    filter: underground
-                }
-                amount: -3
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(moria),orc
+				}
+			}
+			{
+				type: modifyOwnCost
+				requires: {
+					type: location
+					filter: underground
+				}
+				amount: -3
+			}
+		]
 		gametext: <b>Damage +1</b>. <b>Fierce</b>. To play, spot a [moria] Orc.<br>At an underground site, Cave Troll of Moria's twilight cost is -3.
 		lore: "Frodo's quest nearly ended before his companions halted the Cave Troll's ferocious attack."
 		promotext: ""
@@ -511,30 +511,30 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: culture(moria),minion
-                }
-		    }
-            {
-                type: trigger
-                trigger: {
-                    type: played
-                    filter: companion
-                    memorize: playedCompanion
-                }
-                requires: {
-                    type: location
-                    filter: siteBlock(fellowship),siteNumber(4-9)
-                }
-                effect: {
-                    type: exhaust
-                    select: memory(playedCompanion)
-                }
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(moria),minion
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: companion
+					memorize: playedCompanion
+				}
+				requires: {
+					type: location
+					filter: siteBlock(fellowship),siteNumber(4-9)
+				}
+				effect: {
+					type: exhaust
+					select: memory(playedCompanion)
+				}
+			}
+		]
 		gametext: <b>Search</b>. To play, spot a [moria] minion. Plays to your support area.<br>Each time a companion is played to site 4 or higher, that companion comes into play exhausted.
 		lore: "The once beautiful kingdom of Khazad-dûm has become Moria, the black pit."
 		promotext: ""

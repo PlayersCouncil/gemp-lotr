@@ -177,10 +177,10 @@
 							select: choose(possession,side(Shadow))
 						}
 						effect: {
-                            type: ReinforceTokens
-                            select: choose(culture(raider))
-                            culture: raider
-                            times: 2
+							type: ReinforceTokens
+							select: choose(culture(raider))
+							culture: raider
+							times: 2
 						}
 					}
 					{

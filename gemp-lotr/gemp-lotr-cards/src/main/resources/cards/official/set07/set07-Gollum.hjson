@@ -1257,38 +1257,38 @@
 		type: Condition
 		target: name(Sméagol)
 		effects: [
-            {
-                type: modifier
-                modifier: {
-                    type: addActivated
-                    filter: minion
-                    phase: assignment
-                    text: Assign this minion to bearer of Reckless Pride.
-                    effect: {
-                        type: assignFpCharacterToSkirmish
-                        fpCharacter: choose(name(Sméagol))
-                        minion: self
-                    }
-                }
-            }
-            {
-                type: activated
-                phase: regroup
-                cost: {
-                    type: discard
-                    select: self
-                }
-                effect: [
-                    {
-                        type: discard
-                        select: choose(minion)
-                    }
-                    {
-                        type: playCardFromDiscard
-                        select: choose(companion)
-                    }
-                ]
-            }
+			{
+				type: modifier
+				modifier: {
+					type: addActivated
+					filter: minion
+					phase: assignment
+					text: Assign this minion to bearer of Reckless Pride.
+					effect: {
+						type: assignFpCharacterToSkirmish
+						fpCharacter: choose(name(Sméagol))
+						minion: self
+					}
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: discard
+						select: choose(minion)
+					}
+					{
+						type: playCardFromDiscard
+						select: choose(companion)
+					}
+				]
+			}
 
 		]
 		gametext: Bearer must be Sméagol.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to Sméagol."<br><b>Regroup:</b> Discard this condition to discard a minion and play a companion from your discard pile.

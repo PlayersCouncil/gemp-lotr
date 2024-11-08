@@ -634,8 +634,8 @@
 						{
 							type: playCardFromDrawDeck
 							select: choose(culture(mirkwood),condition)
-                            showAll: true
-                            shuffle: true
+							showAll: true
+							shuffle: true
 						}
 						{
 							type: playCardFromDiscard
@@ -1166,10 +1166,10 @@
 		timeword: assignment
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: culture(sauron)
-            }
+			requires: {
+				type: canSpot
+				filter: culture(sauron)
+			}
 			effect: {
 				type: playCardFromDiscard
 				select: choose(orc)
@@ -1362,11 +1362,11 @@
 		timeword: skirmish
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: culture(sauron),minion
-                count: 2
-            }
+			requires: {
+				type: canSpot
+				filter: culture(sauron),minion
+				count: 2
+			}
 			effect: [
 				{
 					type: shuffleCardsFromPlayIntoDrawDeck
@@ -1378,9 +1378,9 @@
 					type: modifyStrength
 					select: choose(orc)
 					 amount: {
-                        type: forEachInMemory
-                        memory: shuffledOrcs
-                        filter: orc
+						type: forEachInMemory
+						memory: shuffledOrcs
+						filter: orc
 						multiplier: 3
 					}
 				}

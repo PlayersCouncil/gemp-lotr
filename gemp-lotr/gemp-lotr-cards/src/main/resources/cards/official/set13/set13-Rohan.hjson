@@ -88,31 +88,31 @@
 		vitality: 3
 		resistance: 7
 		effects: [
-		    {
-		        type: modifier
-		        modifier: {
-                    type: addKeyword
-                    filter: self,hasAttached(mount)
-                    keyword: damage
-                    amount: 1
-		        }
-		    }
-            {
-                type: modifier
-                modifier: {
-                    type: modifyStrength
-                    requires: {
-                        type: cantSpot
-                        filter: other,companion,assignedToSkirmish(any)
-                    }
-                    filter: self
-                    amount: {
-                        type: forEachYouCanSpot
-                        filter: other,culture(rohan),companion
-                    }
-                }
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,hasAttached(mount)
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: cantSpot
+						filter: other,companion,assignedToSkirmish(any)
+					}
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: other,culture(rohan),companion
+					}
+				}
 
-            }
+			}
 		]
 		gametext: While Éomer bears a mount, he is <b>damage +1</b>.<br>While no other companion is assigned to a skirmish, Éomer is strength +1 for each other [rohan] companion you can spot.
 		lore: "'I have no child. Théodred my son is slain. I name Éomer my sister-son to be my heir.'"
