@@ -68,6 +68,8 @@ var CardFilter = Class.extend({
     resistanceCompareSelect:null,
     resistanceValueInput:null,
     
+    pauseUpdates: false,
+    
 
     init: function (pageElem, getCollectionFunc, clearCollectionFunc, addCardFunc, finishCollectionFunc) {
         this.getCollectionFunc = getCollectionFunc;
@@ -542,9 +544,14 @@ var CardFilter = Class.extend({
         };
 
         var fullFilterChanged = function () {
+            
             that.filter = that.calculateDeckFilter()
-            that.start = 0;
-            that.getCollection();
+            
+            if(!that.pauseUpdates) {
+                that.start = 0;
+                that.getCollection();
+            }
+            
             return true;
         };
 
@@ -633,6 +640,7 @@ var CardFilter = Class.extend({
         // Reset buttons
         $("#resetAdvancedFiltersButton").click(
                 function (event) {
+                    that.pauseUpdates = true;
                     $("#nameInput, #gametextInput" +
                       ", #keywordSelect, #raceSelect, #itemClassSelect, #phaseSelect, " +
                       ", #twilightCompareSelect, #twilightValueInput" +
@@ -641,8 +649,8 @@ var CardFilter = Class.extend({
                       ", #signetSelect" +
                       ", #siteNumberCompareSelect, #siteNumberValueInput" +
                       ", #resistanceCompareSelect, #resistanceValueInput").val('').trigger('change');
-                    
-                    //fullFilterChanged();
+                    that.pauseUpdates = false;
+                    fullFilterChanged();
                     
                     // $("#labelDWARVEN, #labelELVEN, #labelGANDALF, #labelGONDOR, #labelROHAN, #labelSHIRE" +
                     //   ", #labelGOLLUM, #labelDUNLAND, #labelISENGARD, #labelMORIA, #labelRAIDER, #labelSAURON" +
@@ -651,6 +659,7 @@ var CardFilter = Class.extend({
                 });
         $("#resetAllFiltersButton").click(
                 function (event) {
+                    that.pauseUpdates = true;
                     $("#productSelect, #raritySelect, #sideSelect, #sortSelect, #setSelect, #cardTypeSelect" +
                       ", #nameInput, #gametextInput" +
                       ", #keywordSelect, #raceSelect, #itemClassSelect, #phaseSelect, " +
@@ -665,8 +674,8 @@ var CardFilter = Class.extend({
                       ", #GOLLUM, #DUNLAND, #ISENGARD, #MORIA, #RAIDER, #SAURON" +
                       ", #MEN, #ORC, #URUK_HAI, #WRAITH" +
                       ", #ESGAROTH, #GUNDABAD, #MIRKWOOD, #SMAUG, #SPIDER, #TROLL").prop("checked", false).change();
-                    
-                    //fullFilterChanged();
+                    that.pauseUpdates = false;
+                    fullFilterChanged();
                 });
 
         // Triggers for filter fields changed
