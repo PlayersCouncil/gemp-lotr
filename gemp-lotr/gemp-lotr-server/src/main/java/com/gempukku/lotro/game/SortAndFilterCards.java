@@ -341,8 +341,9 @@ public class SortAndFilterCards {
         if(cardData == null || cardData.isEmpty())
             return false;
 
+        cardData = cardData.toLowerCase();
         for (String word : words) {
-            if (!cardData.contains(word))
+            if (!cardData.contains(word.toLowerCase()))
                 return false;
         }
         return true;
