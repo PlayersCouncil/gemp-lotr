@@ -329,7 +329,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         }
         else {
             this.fullName = title;
-            this.sanitizedFullName = title;
+            this.sanitizedFullName = sanitizedTitle;
         }
     }
 

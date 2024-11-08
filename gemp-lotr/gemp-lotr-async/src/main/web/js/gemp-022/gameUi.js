@@ -2079,6 +2079,15 @@ var GempLotrGameUI = Class.extend({
                 var actionId = actionIds[i];
                 var actionText = actionTexts[i];
                 var blueprintId = blueprintIds[i];
+                
+                var testingText = testingTexts[i];
+                if (testingText == "null") {
+                    testingText = null;
+                }
+                var backSideTestingText = backSideTestingTexts[i];
+                if (backSideTestingText == "null") {
+                    backSideTestingText = null;
+                }
 
                 if (blueprintId == "inPlay") {
                     var cardIdElem = $(".card:cardId(" + cardId + ")");
@@ -2227,6 +2236,14 @@ var GempLotrGameUI = Class.extend({
 
         for (var i = 0; i < blueprintIds.length; i++) {
             var blueprintId = blueprintIds[i];
+            var testingText = testingTexts[i];
+            if (testingText == "null") {
+                testingText = null;
+            }
+            var backSideTestingText = backSideTestingTexts[i];
+            if (backSideTestingText == "null") {
+                backSideTestingText = null;
+            }
 
             cardIds.push("temp" + i);
             var card = new Card(blueprintId, testingText, backSideTestingText, "SPECIAL", "temp" + i, null);

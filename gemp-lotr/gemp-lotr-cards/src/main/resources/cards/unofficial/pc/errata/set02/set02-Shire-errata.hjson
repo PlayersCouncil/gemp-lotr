@@ -73,6 +73,7 @@
 		resistance: 6
 		effects: {
 			type: activated
+			limitPerTurn: 1
 			phase: fellowship
 			cost: {
 				type: exert
