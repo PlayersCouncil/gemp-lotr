@@ -18,7 +18,8 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: assignedAgainst
 					filter: self
@@ -431,7 +432,8 @@
 		keywords: Ambush 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: constantlyCheck
 				}
@@ -551,7 +553,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: or(battleground,plains)
@@ -593,7 +596,7 @@
 		keywords: Lurker
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: losesSkirmish
@@ -640,7 +643,8 @@
 		keywords: Lurker
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: losesSkirmish
 					filter: companion
@@ -735,7 +739,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: [
 					{
@@ -901,7 +905,7 @@
 		keywords: Archer
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -991,7 +995,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -1087,7 +1091,8 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: assignedToSkirmish
 					filter: self

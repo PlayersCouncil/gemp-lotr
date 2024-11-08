@@ -74,7 +74,8 @@
 	# 	resistance: 6
 	# 	effects: [
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
+			optional: false
 	# 			optional: true
 	# 			trigger: {
 	# 				type: startOfPhase
@@ -154,7 +155,7 @@
 		resistance: 6
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -224,7 +225,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: movesTo

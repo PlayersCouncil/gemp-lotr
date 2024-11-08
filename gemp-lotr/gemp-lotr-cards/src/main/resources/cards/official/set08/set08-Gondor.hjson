@@ -181,7 +181,7 @@
 		keywords: Knight
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -367,7 +367,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -475,7 +475,7 @@
 		keywords: Knight
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -515,7 +515,7 @@
 		target: knight
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -769,7 +769,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -858,7 +858,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -895,7 +895,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}

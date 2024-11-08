@@ -23,6 +23,7 @@
 		effects: [
 			{
 				type: Trigger
+				optional: false
 				trigger: {
 					type: StartOfTurn
 				}

@@ -81,7 +81,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}
@@ -275,7 +276,8 @@
 		site: 5
 		keyword: damage+1
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: winsSkirmish
 				filter: self
@@ -333,7 +335,8 @@
 		site: 5
 		keyword: damage+1
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			optional: false
 			trigger: {
 				type: played
@@ -393,7 +396,8 @@
 		strength: 2
 		target: uruk-hai
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: winsSkirmish
 				filter: bearer

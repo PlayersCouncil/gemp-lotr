@@ -80,7 +80,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				text: Stack {discardedMinion}
 				trigger: {
@@ -157,7 +157,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -428,7 +428,7 @@
 		target: culture(men),minion
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -536,7 +536,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -654,7 +655,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -710,7 +711,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: self
@@ -982,7 +984,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -1224,7 +1226,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -1266,7 +1268,8 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfPhase
 					phase: maneuver
@@ -1328,7 +1331,8 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: [
 					{
 						type: played
@@ -1383,7 +1387,7 @@
 				phase: maneuver
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -1435,7 +1439,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				text: Stack {discardedMinion}
 				trigger: {

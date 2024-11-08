@@ -108,7 +108,8 @@
 		target: nazgul
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				requires: {
 					type: canSpot
 					filter: bearer,name(Úlairë Toldëa)
@@ -203,7 +204,8 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -254,7 +256,8 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: self
@@ -364,7 +367,8 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: killed
 					filter: companion

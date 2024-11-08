@@ -19,7 +19,8 @@
 		type: condition
 		keyword: support area
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: takesWound
 				filter: companion,inSkirmishAgainst(culture(gollum),minion)

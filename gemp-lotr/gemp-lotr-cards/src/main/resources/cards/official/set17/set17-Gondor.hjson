@@ -28,7 +28,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -87,7 +87,8 @@
 		canStartWithRing: true
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfSkirmishInvolving
 					filter: self,ringBearer
@@ -285,7 +286,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -449,7 +450,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: addsBurden
 					player: shadow
@@ -490,7 +492,7 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -584,7 +586,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					# this also covered a killed minions

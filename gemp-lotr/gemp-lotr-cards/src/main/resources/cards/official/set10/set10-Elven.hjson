@@ -175,7 +175,7 @@
 		resistance: 6
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -310,7 +310,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -473,7 +473,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: losesInitiative
 					side: free people

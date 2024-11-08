@@ -418,7 +418,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: your,culture(moria),weapon
@@ -617,7 +618,8 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: self
@@ -655,7 +657,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -694,7 +696,7 @@
 		itemclass: Hand weapon
 		target: culture(moria),orc
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -732,7 +734,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -770,7 +772,8 @@
 		itemclass: Hand weapon
 		target: culture(moria),minion
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: killed
 				filter: companion
@@ -940,7 +943,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -1048,7 +1051,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: siteBlock(fellowship),siteNumber(4-5)
@@ -1215,7 +1219,8 @@
 		vitality: 2
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: self
@@ -1488,7 +1493,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: siteBlock(fellowship),siteNumber(4-6)

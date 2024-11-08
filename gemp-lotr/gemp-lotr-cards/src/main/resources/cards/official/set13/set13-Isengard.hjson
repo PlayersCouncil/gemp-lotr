@@ -15,7 +15,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: wizard
@@ -75,7 +76,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -140,7 +141,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: heals
 					filter: wizard

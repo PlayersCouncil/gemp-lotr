@@ -106,7 +106,8 @@
 	# 			amount: -3
 	# 		}
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
+			optional: false
 	# 			optional: true
 	# 			trigger: {
 	# 				type: startOfPhase
@@ -293,7 +294,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: losesInitiative

@@ -468,7 +468,8 @@
 		signet: Aragorn
 		resistance: 6
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: startOfTurn
 			}

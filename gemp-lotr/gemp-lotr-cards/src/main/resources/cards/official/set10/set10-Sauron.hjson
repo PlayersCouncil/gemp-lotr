@@ -196,7 +196,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: siteNumber(8-9)
@@ -551,7 +552,7 @@
 		keywords: Besieger
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -610,7 +611,8 @@
 		keywords: Besieger
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -1018,7 +1020,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: takesWound
@@ -1186,7 +1188,7 @@
 		keywords: Damage+1
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: losesSkirmish
@@ -1369,7 +1371,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: moves

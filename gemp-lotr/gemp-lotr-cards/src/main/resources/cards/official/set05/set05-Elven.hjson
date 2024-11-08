@@ -106,7 +106,7 @@
 		target: title(Legolas)
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: moves
@@ -254,7 +254,7 @@
 		keywords: Archer
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish

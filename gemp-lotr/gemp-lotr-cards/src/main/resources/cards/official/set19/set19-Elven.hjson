@@ -16,7 +16,7 @@
 		target: culture(elven),companion
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -29,7 +29,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfPhase
 					phase: archery

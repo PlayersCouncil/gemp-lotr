@@ -177,7 +177,8 @@
 		direction: Right
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self

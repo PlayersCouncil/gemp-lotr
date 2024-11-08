@@ -103,7 +103,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: discarded
@@ -341,7 +341,7 @@
 		type: Condition
 		keywords: Support Area
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: moves

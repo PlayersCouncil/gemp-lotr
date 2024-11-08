@@ -84,7 +84,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				optional: false
 				trigger: {
 					type: moves

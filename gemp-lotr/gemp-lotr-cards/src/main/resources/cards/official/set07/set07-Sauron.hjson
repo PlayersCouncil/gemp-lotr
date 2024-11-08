@@ -447,7 +447,8 @@
 		keywords: Besieger
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -546,7 +547,8 @@
 		keywords: Besieger
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -1108,7 +1110,7 @@
 				]
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: aboutToBeKilled
@@ -1125,7 +1127,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfPhase
 					phase: regroup
@@ -1986,7 +1989,8 @@
 		site: 6
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: losesSkirmish
 					overwhelm: true
@@ -2196,7 +2200,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played

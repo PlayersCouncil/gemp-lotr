@@ -39,7 +39,7 @@
 			underground
 		]
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfPhase
@@ -116,7 +116,8 @@
 		site: 5
 		keyword: forest
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: movesTo
 				filter: self
@@ -140,7 +141,7 @@
 		site: 6
 		keyword: river
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			requires: {
 				type: isSide
@@ -271,7 +272,7 @@
 		block: hobbit
 		site: 1
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			requires: {
 				type: isSide
@@ -306,7 +307,8 @@
 		site: 2
 		keyword: forest
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: startOfPhase
 				phase: maneuver
@@ -381,7 +383,8 @@
 			forest
 		]
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: movesTo
 				filter: self
@@ -420,7 +423,7 @@
 		site: 5
 		keyword: forest
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfPhase
@@ -468,7 +471,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: orc
@@ -487,7 +491,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}

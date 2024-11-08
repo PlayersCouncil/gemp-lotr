@@ -130,7 +130,7 @@
 		target: or(title(Arwen),title(Elrond))
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -411,7 +411,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: underground

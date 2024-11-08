@@ -17,7 +17,8 @@
 		vitality: 3
 		site: 6
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: self

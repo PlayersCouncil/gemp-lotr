@@ -201,7 +201,7 @@
 			Sanctuary
 		]
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: movesTo

@@ -352,7 +352,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: mountain

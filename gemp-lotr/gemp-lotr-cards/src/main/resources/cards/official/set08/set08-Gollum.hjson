@@ -135,7 +135,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: takesWound
 					filter: companion
@@ -181,7 +182,7 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -370,7 +371,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: assignedToSkirmish
 					filter: bearer

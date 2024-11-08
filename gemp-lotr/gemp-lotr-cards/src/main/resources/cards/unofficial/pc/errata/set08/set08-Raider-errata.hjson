@@ -152,7 +152,7 @@
 		site: 4
 		keyword: Corsair
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -242,7 +242,8 @@
 	# 	keyword: Support Area
 	# 	effects: [
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
+			optional: false
 	# 			optional: true
 	# 			trigger: {
 	# 				type: played
@@ -330,7 +331,7 @@
 		keyword: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played

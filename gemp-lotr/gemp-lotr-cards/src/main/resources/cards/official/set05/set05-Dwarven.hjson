@@ -109,7 +109,7 @@
 		resistance: 6
 		keywords: Damage+1
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: winsSkirmish

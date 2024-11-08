@@ -20,7 +20,7 @@
 		site: 5
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true,
 				trigger: {
 					type: played

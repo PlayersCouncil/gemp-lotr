@@ -32,7 +32,8 @@
 				phase: regroup
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self

@@ -22,7 +22,7 @@
 		keywords: Ring-bound
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: moves
@@ -379,7 +379,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}

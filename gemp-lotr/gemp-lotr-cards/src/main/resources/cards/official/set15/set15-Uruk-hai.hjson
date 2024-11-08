@@ -109,7 +109,7 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -212,7 +212,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -269,7 +269,7 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -354,7 +354,8 @@
 		keywords: Damage+1
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: self
@@ -549,7 +550,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: losesSkirmish
 					filter: companion
@@ -839,7 +841,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfSkirmishInvolving
 					filter: self
@@ -1057,7 +1060,7 @@
 		keywords: Damage+1
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -1120,7 +1123,8 @@
 		keywords: Damage+1
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: self
@@ -1191,7 +1195,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: killed

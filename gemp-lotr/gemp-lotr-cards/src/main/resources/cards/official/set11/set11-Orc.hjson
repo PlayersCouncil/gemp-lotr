@@ -408,7 +408,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: exerted
@@ -709,7 +709,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -818,7 +818,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: movesFrom
@@ -859,7 +859,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -900,7 +900,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -941,7 +941,8 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: constantlyCheck
 				}
@@ -984,7 +985,8 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: self
@@ -1034,7 +1036,7 @@
 		target: culture(orc),minion
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: assignedAgainst
@@ -1077,7 +1079,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: assignedAgainst
@@ -1119,7 +1121,7 @@
 		target: culture(orc),minion
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -1207,7 +1209,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -1248,7 +1250,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -1311,7 +1313,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: [
 					{
@@ -1373,7 +1375,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -1465,7 +1468,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -1557,7 +1560,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfPhase
 					phase: shadow
@@ -1721,7 +1725,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played

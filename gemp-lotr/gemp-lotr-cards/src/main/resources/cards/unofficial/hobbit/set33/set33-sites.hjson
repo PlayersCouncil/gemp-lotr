@@ -11,7 +11,7 @@
 		block: hobbit
 		site: 1
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfPhase
@@ -47,7 +47,7 @@
 		site: 2
 		keyword: forest
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfPhase
@@ -104,7 +104,8 @@
 			river
 		]
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: startOfPhase
 				phase: maneuver

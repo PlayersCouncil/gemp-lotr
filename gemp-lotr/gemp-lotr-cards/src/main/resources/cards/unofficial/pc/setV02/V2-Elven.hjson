@@ -40,7 +40,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: AboutToTakeWound
@@ -306,7 +306,7 @@
 		target: valiant,Elf
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: WinsSkirmish
@@ -408,7 +408,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				optional: false
 				trigger: {
 					type: WinsSkirmish

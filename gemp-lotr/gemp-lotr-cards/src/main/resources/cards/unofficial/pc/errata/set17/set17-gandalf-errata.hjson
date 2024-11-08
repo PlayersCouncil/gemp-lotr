@@ -96,6 +96,7 @@
 			{
 				type: Trigger
 				optional: false
+				optional: false
 				trigger: {
 					type: Played
 					filter: self

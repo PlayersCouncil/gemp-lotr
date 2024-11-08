@@ -12,7 +12,7 @@
 		site: 5
 		keyword: forest
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			requires: {
 				type: isSide

@@ -95,6 +95,7 @@
 	# 	effects: [
 	# 		{
 	# 			type: Trigger
+			optional: false
 	# 			optional: false
 	# 			trigger: {
 	# 				type: StartOfPhase
@@ -245,6 +246,7 @@
 		effects: [
 			{
 				type: Trigger
+				optional: false
 				optional: false
 				trigger: {
 					type: StartOfPhase

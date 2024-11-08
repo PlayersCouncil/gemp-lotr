@@ -15,7 +15,7 @@
 		block: Fellowship
 		direction: Left
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: movesFrom
@@ -58,7 +58,8 @@
 		block: Fellowship
 		direction: Left
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: minion,MaxStrength(6)
@@ -210,7 +211,8 @@
 	# 	]
 	# 	direction: left
 	# 	effects: {
-	# 		type: trigger
+	# 		type: Trigger
+		optional: false
 	# 		optional: true
 	# 		trigger: {
 	# 			type: exerted
@@ -252,7 +254,7 @@
 			Sanctuary
 		]
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: exerted
@@ -311,7 +313,8 @@
 		direction: Right
 		keywords: River
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			optional: false
 			trigger: {
 				type: startOfPhase
@@ -349,7 +352,7 @@
 		direction: Right
 		keywords: River
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: movesTo

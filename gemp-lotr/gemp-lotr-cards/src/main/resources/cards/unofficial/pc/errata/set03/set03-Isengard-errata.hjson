@@ -23,6 +23,7 @@
 	# 	effects: [
 	# 		{
 	# 			type: Trigger
+			optional: false
 	# 			optional: false
 	# 			trigger: {
 	# 				type: WinsSkirmish
@@ -36,6 +37,7 @@
 	# 		}
 	# 		{
 	# 			type: Trigger
+			optional: false
 	# 			trigger: {
 	# 				type: StartOfPhase
 	# 				phase: regroup
@@ -169,6 +171,7 @@
 			{
 				type: Trigger
 				optional: false
+				optional: false
 				trigger: {
 					type: WinsSkirmish
 					filter: bearer
@@ -181,6 +184,7 @@
 			}
 			{
 				type: Trigger
+				optional: false
 				trigger: {
 					type: StartOfPhase
 					phase: regroup

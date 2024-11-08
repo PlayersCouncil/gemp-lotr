@@ -13,7 +13,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -74,7 +74,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -336,7 +336,7 @@
 				]
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -404,7 +404,8 @@
 		target: culture(dwarven),companion
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: siteNumber(6-7)
@@ -519,7 +520,7 @@
 		keyword: wise
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfTurn
@@ -577,7 +578,7 @@
 		target: name(Galadriel)
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfTurn
@@ -628,7 +629,7 @@
 		vitality: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfTurn
@@ -826,7 +827,7 @@
 		vitality: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfTurn

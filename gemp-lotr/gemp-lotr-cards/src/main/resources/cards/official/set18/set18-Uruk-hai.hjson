@@ -117,7 +117,7 @@
 		target: culture(uruk-hai),minion
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -300,7 +300,7 @@
 		target: urukHai
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -512,7 +512,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfSkirmishInvolving
 					filter: culture(uruk-hai),hunter
@@ -600,7 +601,7 @@
 		keywords: Damage+1
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -684,7 +685,7 @@
 		keywords: Damage+1
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish

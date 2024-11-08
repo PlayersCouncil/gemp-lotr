@@ -23,7 +23,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: ConstantlyCheck
 					requires: {
@@ -240,7 +241,7 @@
 		strength: 1
 		vitality: 2
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: discarded
@@ -325,7 +326,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: removesBurden

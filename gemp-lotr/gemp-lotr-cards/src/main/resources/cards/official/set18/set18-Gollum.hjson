@@ -289,7 +289,8 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				text: Add threats up to the number of burdens
 				optional: true
 				trigger: {
@@ -304,7 +305,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				text: Play Gollum from your discard pile
 				optional: true
 				trigger: {

@@ -63,7 +63,8 @@
 		keyword: plains
 		direction: left
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: minion

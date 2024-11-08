@@ -167,7 +167,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}
@@ -563,7 +564,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -775,7 +776,7 @@
 		vitality: 1
 		target: wizard
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfTurn

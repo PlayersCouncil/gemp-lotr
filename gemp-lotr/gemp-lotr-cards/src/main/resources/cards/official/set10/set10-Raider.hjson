@@ -117,7 +117,7 @@
 		keywords: Corsair
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -168,7 +168,7 @@
 		keywords: Corsair
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -287,7 +287,7 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -344,7 +344,7 @@
 		keywords: Southron
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -497,7 +497,7 @@
 		keywords: Southron
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -690,7 +690,8 @@
 		keywords: Southron
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: assignedAgainst
 					filter: man

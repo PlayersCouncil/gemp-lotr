@@ -238,7 +238,7 @@
 		keyword: fierce
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -354,7 +354,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: endOfPhase
@@ -444,7 +444,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: losesSkirmish
@@ -503,7 +503,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: aboutToDiscard
 					filter: self
@@ -617,7 +618,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -802,7 +803,7 @@
 		site: 4
 		keyword: archer
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -1199,7 +1200,7 @@
 		vitality: 2
 		site: 5
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: endOfPhase

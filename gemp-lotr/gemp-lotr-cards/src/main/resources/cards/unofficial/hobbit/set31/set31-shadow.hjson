@@ -29,7 +29,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: endOfPhase
@@ -79,7 +79,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -193,7 +193,8 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}
@@ -259,7 +260,7 @@
 		site: 3
 		keyword: damage+1
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -290,7 +291,7 @@
 		site: 3
 		keyword: damage+1
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: winsSkirmish
@@ -331,7 +332,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: bearer
@@ -498,7 +500,8 @@
 		twilight: 2
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: siteNumber(5)
@@ -546,7 +549,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -611,7 +614,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played

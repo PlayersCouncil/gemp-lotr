@@ -594,6 +594,7 @@
 	# 		}
 	# 		{
 	# 			type: Trigger
+			optional: false
 	# 			trigger: {
 	# 				type: UsesSpecialAbility
 	# 				filter: bearer
@@ -787,7 +788,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: moves
@@ -853,6 +854,7 @@
 	# 		}
 	# 		{		
 	# 			type: Trigger
+			optional: false
 	# 			trigger: {
 	# 				type: UsesSpecialAbility
 	# 				filter: bearer

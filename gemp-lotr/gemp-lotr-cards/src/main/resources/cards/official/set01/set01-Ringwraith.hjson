@@ -154,7 +154,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfPhase
 					phase: shadow
@@ -164,7 +165,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfPhase
 					phase: shadow
@@ -282,7 +284,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: ConstantlyCheck
 					requires: {
@@ -336,7 +339,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfPhase
 					phase: fellowship
@@ -468,7 +472,8 @@
 		type: Condition
 		keywords: Support Area
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: killed
 				filter: companion
@@ -825,7 +830,7 @@
 			Support Area
 		]
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -1498,7 +1503,7 @@
 		vitality: 2
 		site: 3
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played

@@ -71,7 +71,8 @@
 		signet: aragorn
 		resistance: 6
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			optional: false
 			trigger: {
 				type: played

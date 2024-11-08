@@ -120,7 +120,7 @@
 		keywords: Valiant
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -326,7 +326,7 @@
 				phase: regroup
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played

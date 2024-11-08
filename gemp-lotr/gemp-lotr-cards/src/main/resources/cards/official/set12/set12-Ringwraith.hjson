@@ -95,7 +95,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -244,7 +244,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: heals
 					filter: bearer
@@ -409,7 +410,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfPhase
 					phase: assignment
@@ -515,7 +517,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -715,7 +717,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -758,7 +760,7 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -911,7 +913,7 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -1141,7 +1143,7 @@
 		target: nazgul
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				requires: {
 					type: canSpot

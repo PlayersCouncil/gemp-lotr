@@ -23,7 +23,7 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -181,7 +181,8 @@
 		target: culture(gondor),companion
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				text: Heal another {gondor} companion
 				optional: true
 				trigger: {
@@ -238,7 +239,7 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -408,7 +409,7 @@
 		target: title(Aragorn)
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfTurn

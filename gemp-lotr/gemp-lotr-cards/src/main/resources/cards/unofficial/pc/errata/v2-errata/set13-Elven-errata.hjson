@@ -21,7 +21,8 @@
 		keywords: Valiant
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: aboutToTakeWound
 					filter: self

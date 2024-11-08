@@ -165,7 +165,8 @@
 	# 	site: 4
 	# 	effects: [
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
+			optional: false
 	# 			trigger: {
 	# 				type: played
 	# 				filter: self
@@ -257,7 +258,8 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -372,7 +374,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: weather
@@ -383,7 +386,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: aboutToDiscard
 					filter: self

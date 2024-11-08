@@ -68,7 +68,8 @@
 	# 	strength: 2
 	# 	target: dwarf
 	# 	effects: {
-	# 		type: trigger
+	# 		type: Trigger
+		optional: false
 	# 		trigger: {
 	# 			type: losesSkirmish
 	# 			filter: minion
@@ -129,7 +130,8 @@
 		strength: 2
 		target: dwarf
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: losesSkirmish
 				filter: minion
@@ -318,7 +320,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played

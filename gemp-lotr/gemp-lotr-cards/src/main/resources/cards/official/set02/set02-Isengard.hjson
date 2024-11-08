@@ -79,7 +79,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: exerted
 					filter: culture(shire),ally
@@ -164,7 +165,8 @@
 		site: 2
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: ConstantlyCheck
 					requires: {
@@ -226,7 +228,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: bearer
@@ -459,7 +462,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: hasAttached(self)
@@ -470,7 +474,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}

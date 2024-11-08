@@ -58,7 +58,8 @@
 		resistance: 6
 		keywords: Ranger
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: moves
 			}
@@ -144,7 +145,7 @@
 		type: Condition
 		keywords: Support Area
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: endOfTurn

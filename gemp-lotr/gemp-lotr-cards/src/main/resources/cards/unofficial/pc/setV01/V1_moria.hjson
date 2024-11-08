@@ -120,7 +120,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: moves
@@ -167,7 +167,8 @@
 	# 			}
 	# 		}
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
+			optional: false
 	# 			trigger: {
 	# 				type: ConstantlyCheck
 	# 				requires: {
@@ -228,7 +229,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: ConstantlyCheck
 					requires: {
@@ -244,6 +246,7 @@
 			
 			{
 				type: Trigger
+				optional: false
 				trigger: {
 					type: LosesSkirmish
 					filter: self
@@ -665,7 +668,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: ConstantlyCheck
 					requires: {

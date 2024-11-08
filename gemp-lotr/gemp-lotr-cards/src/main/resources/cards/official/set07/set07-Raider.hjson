@@ -29,7 +29,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: aboutToBeKilled
@@ -44,7 +44,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfPhase
 					phase: regroup
@@ -128,7 +129,7 @@
 		keywords: Southron
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -222,7 +223,7 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: assignedToSkirmish
@@ -272,7 +273,7 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: assignedToSkirmish
@@ -322,7 +323,7 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: assignedToSkirmish
@@ -369,7 +370,7 @@
 		keywords: Southron
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -419,7 +420,7 @@
 		keywords: Southron
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -469,7 +470,7 @@
 		keywords: Southron
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -819,7 +820,7 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -1182,7 +1183,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				requires: {
 					type: canSpotThreats
 					amount: 6
@@ -1435,7 +1437,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}
@@ -1688,7 +1691,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: assignedToSkirmish
 					filter: self

@@ -17,7 +17,7 @@
 		target: nazgul
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played

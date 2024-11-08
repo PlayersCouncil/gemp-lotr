@@ -106,6 +106,7 @@
 	# 		}
 	# 		{
 	# 			type: Trigger
+			optional: false
 	# 			trigger: {
 	# 				type: StartOfPhase
 	# 				phase: regroup
@@ -247,6 +248,7 @@
 			}
 			{
 				type: Trigger
+				optional: false
 				trigger: {
 					type: Exerted
 					filter: bearer

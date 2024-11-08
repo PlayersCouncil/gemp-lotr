@@ -26,6 +26,7 @@
 			}
 			{
 				type: Trigger
+				optional: false
 				trigger: {
 					type: StartOfPhase
 					phase: regroup
@@ -159,6 +160,7 @@
 		effects: [
 			{
 				type: Trigger
+				optional: false
 				trigger: {
 					type: Played
 					filter: self
@@ -300,6 +302,7 @@
 			}
 			{
 				type: Trigger
+				optional: false
 				trigger: {
 					type: WinsSkirmish
 					filter: bearer
@@ -395,6 +398,7 @@
 		effects: [
 			{
 				type: Trigger
+				optional: false
 				trigger: [
 					{
 						type: Discarded
@@ -467,6 +471,7 @@
 		effects: [
 			{
 				type: Trigger
+				optional: false
 				trigger: {
 					type: Killed
 					filter: minion
@@ -484,6 +489,7 @@
 			}
 			{
 				type: Trigger
+				optional: false
 				trigger: {
 					type: AddsCultureToken
 					on: self

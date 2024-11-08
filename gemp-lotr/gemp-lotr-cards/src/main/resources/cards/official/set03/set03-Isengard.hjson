@@ -272,7 +272,8 @@
 		itemclass: Hand weapon
 		target: culture(isengard),orc
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: self
@@ -1056,7 +1057,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: moves
@@ -1229,7 +1230,7 @@
 		site: 5
 		keywords: Damage+1
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played

@@ -15,7 +15,7 @@
 		target: title(Sméagol)
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: usesSpecialAbility
@@ -220,7 +220,8 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfSkirmishInvolving
 					filter: self
@@ -361,7 +362,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: name(Sméagol)
