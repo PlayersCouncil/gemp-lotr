@@ -140,10 +140,18 @@
 						memorize: revealedCards
 					}
 					{
-						type: playCardFromDrawDeck
-						select: choose(memory(revealedCards),culture(rohan),possession)
-						showAll: false
-						shuffle: false
+						type: Repeat
+						times: {
+							type: ForEachInMemory
+							memory: revealedCards
+							filter: culture(rohan),possession
+						}
+						effect: {
+							type: playCardFromDrawDeck
+							select: choose(memory(revealedCards),culture(rohan),possession)
+							showAll: false
+							shuffle: false
+						}
 					}
 					{
 						type: shuffleDeck

@@ -57,7 +57,7 @@ public class Card_V2_051_Tests
 	}
 
 	@Test
-	public void NowforWrathTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NowforWrathReactsToReconciledPossessionDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
