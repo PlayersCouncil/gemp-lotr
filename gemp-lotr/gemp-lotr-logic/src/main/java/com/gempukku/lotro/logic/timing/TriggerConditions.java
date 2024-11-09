@@ -389,8 +389,8 @@ public class TriggerConditions {
             final var cardPlayedFrom = playResult.getAttachedOrStackedPlayedFrom();
             final var zone = playResult.getPlayedFrom();
 
-            if (targetFilter != null && targetFilter != Filters.any && attachedTo != null
-                    && !Filters.accepts(game, targetFilter, attachedTo))
+            if (targetFilter != null && targetFilter != Filters.any &&
+                    (attachedTo == null || !Filters.accepts(game, targetFilter, attachedTo)))
                 return false;
 
             if(fromFilter != null && fromFilter != Filters.any && cardPlayedFrom != null

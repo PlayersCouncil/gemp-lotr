@@ -17,10 +17,24 @@ public class Card_01_334_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "1_334");
-					// put other cards in here as needed for the test case
+					put("sting", "1_313");
+					put("toby", "1_305");
+
+					put("filler1", "1_310");
+					put("filler2", "1_311");
+					put("filler3", "1_312");
 				}},
-				GenericCardTestHelper.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_334");
+					put("site3", "1_337");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_350");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing
 		);
@@ -44,9 +58,7 @@ public class Card_01_334_Tests
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(2);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(2);
 
 		assertEquals("Trollshaw Forest", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,18 +69,35 @@ public class Card_01_334_Tests
 		assertEquals(2, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TrollshawForestTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void TrollshawForestDrawsFromAttachedItemsButNotSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var trollshaw = scn.GetShadowSite(2);
+
+		var sting = scn.GetFreepsCard("sting");
+		var toby = scn.GetFreepsCard("toby");
+		scn.FreepsMoveCardToHand(sting, toby);
+
+		var filler1 = scn.GetFreepsCard("filler1");
+		var filler2 = scn.GetFreepsCard("filler2");
+		var filler3 = scn.GetFreepsCard("filler3");
+		scn.FreepsMoveCardsToTopOfDeck(filler1, filler2, filler3);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(2);
+		assertEquals(trollshaw, scn.GetCurrentSite());
+		scn.FreepsMoveCardsToTopOfDeck(filler1, filler2, filler3);
+		assertEquals(3, scn.GetFreepsDeckCount());
 
-		assertEquals(1, scn.GetTwilight());
+		//Playing a card attached to a companion should draw
+		scn.FreepsPlayCard(sting);
+		assertEquals(2, scn.GetFreepsDeckCount());
+
+		//Playing a support area possession should not
+		scn.FreepsPlayCard(toby);
+		scn.FreepsDeclineOptionalTrigger(); //toby's own text
+		assertEquals(2, scn.GetFreepsDeckCount());
 	}
 }
