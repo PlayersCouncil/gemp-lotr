@@ -62,9 +62,9 @@
 					effect: {
 						type: PutCardsFromDeckIntoHand
 						select: memory(chosenCard)
-                        reveal: true
-                        shuffle: false
-                        showAll: false
+						reveal: true
+						shuffle: false
+						showAll: false
 					}
 				}
 			]
@@ -231,10 +231,10 @@
 		timeword: maneuver
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: unique,culture(sauron),minion,not(exhausted)
-            }
+			requires: {
+				type: canSpot
+				filter: unique,culture(sauron),minion,not(exhausted)
+			}
 			cost: {
 				type: exert
 				select: choose(unique,culture(sauron),minion,not(exhausted))
@@ -344,8 +344,8 @@
 								player: freeps
 								deck: freeps
 								select: all(side(freeps),memory(cardsOnTop))
-                                showAll: false
-                                shuffle: false
+								showAll: false
+								shuffle: false
 							}
 							text: Discard all revealed Free Peoples cards to prevent exerting {chosenComp}?
 							effect: {
@@ -787,7 +787,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: moves

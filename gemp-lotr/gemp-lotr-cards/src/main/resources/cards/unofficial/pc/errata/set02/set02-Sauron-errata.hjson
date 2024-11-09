@@ -18,10 +18,10 @@
 		timeword: response
 		effects: {
 			type: responseEvent
-            requires: {
-                type: canSpot
-                filter: culture(sauron),minion
-            }
+			requires: {
+				type: canSpot
+				filter: culture(sauron),minion
+			}
 			trigger: {
 				type: putsOnRing
 			}

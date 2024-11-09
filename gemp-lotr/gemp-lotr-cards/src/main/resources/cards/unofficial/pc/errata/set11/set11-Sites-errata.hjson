@@ -22,12 +22,12 @@
 					type: modifyArcheryTotal
 					side: shadow
 					amount: {
-                        type: forEachYouCanSpot
-                        filter: companion
-                        over: 5
-                        multiplier: {
-                            type: regionNumber
-                        }
+						type: forEachYouCanSpot
+						filter: companion
+						over: 5
+						multiplier: {
+							type: regionNumber
+						}
 					}
 				}
 			}
@@ -67,7 +67,7 @@
 	# 		underground
 	# 	]
 	# 	effects: {
-	# 		type: trigger
+	# 		type: Trigger
 	# 		trigger: {
 	# 			type: startOfPhase
 	# 			phase: skirmish
@@ -145,7 +145,8 @@
 		block: Shadows
 		direction: Right
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: startOfPhase
 				phase: skirmish
@@ -227,7 +228,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self

@@ -23,7 +23,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				text: Would you like to spot a Nazgul to add 1 threat?
 				requires: {

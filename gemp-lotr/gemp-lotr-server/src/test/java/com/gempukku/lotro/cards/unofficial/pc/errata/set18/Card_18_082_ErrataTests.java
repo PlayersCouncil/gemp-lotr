@@ -139,6 +139,7 @@ public class Card_18_082_ErrataTests
 		assertEquals(Zone.DECK, chaff3.getZone());
 		assertEquals(Zone.DECK, chaff4.getZone());
 		scn.ShadowChooseCardBPFromSelection(chaff3, chaff4);
+		scn.ShadowDismissRevealedCards();
 		assertEquals(Zone.DISCARD, chaff3.getZone());
 		assertEquals(Zone.DISCARD, chaff4.getZone());
 	}

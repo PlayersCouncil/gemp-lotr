@@ -304,7 +304,8 @@
 		block: Fellowship
 		direction: Left
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: ConstantlyCheck
 				requires: {
@@ -509,7 +510,8 @@
 		direction: Left
 		keywords: Marsh
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: movesTo
 				filter: self
@@ -549,7 +551,8 @@
 		direction: Left
 		keywords: Plains
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: minion
@@ -588,7 +591,8 @@
 		direction: Left
 		keywords: Forest
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: or(possession,artifact)
@@ -690,7 +694,8 @@
 		direction: Right
 		keywords: Sanctuary
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: movesFrom
 				filter: self
@@ -742,7 +747,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: nazgul
@@ -893,7 +899,8 @@
 			Sanctuary
 		]
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: ConstantlyCheck
 				requires: {
@@ -997,7 +1004,8 @@
 		direction: Right
 		keywords: Underground
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: movesTo
 				filter: self
@@ -1085,7 +1093,8 @@
 		direction: Right
 		keywords: Marsh
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: movesTo
 				filter: self
@@ -1283,7 +1292,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: culture(moria),orc
@@ -1393,7 +1403,8 @@
 		direction: Right
 		keywords: River
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: movesTo
 				filter: self
@@ -1464,7 +1475,8 @@
 		direction: Right
 		keywords: River
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: movesTo
 				filter: self
@@ -1728,7 +1740,7 @@
 		block: Fellowship
 		direction: Left
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: movesTo

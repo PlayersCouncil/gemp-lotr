@@ -39,7 +39,7 @@
 			underground
 		]
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfPhase
@@ -52,8 +52,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				select: choose(hand weapon)
-                showAll: true
-                shuffle: true
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
@@ -98,8 +98,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				select: choose(name(The One Ring))
-                showAll: true
-                shuffle: true
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
@@ -116,7 +116,8 @@
 		site: 5
 		keyword: forest
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: movesTo
 				filter: self
@@ -140,7 +141,7 @@
 		site: 6
 		keyword: river
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			requires: {
 				type: isSide
@@ -153,8 +154,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				select: choose(or(culture(esgaroth),culture(dwarven)),ally)
-                showAll: true
-                shuffle: true
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
@@ -220,8 +221,8 @@
 					{
 						type: playCardFromDrawDeck
 						select: choose(name(Smaug))
-                        showAll: true
-                        shuffle: true
+						showAll: true
+						shuffle: true
 					}
 					{
 						type: playCardFromDiscard
@@ -271,7 +272,7 @@
 		block: hobbit
 		site: 1
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			requires: {
 				type: isSide
@@ -288,8 +289,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				select: choose(culture(dwarven),follower)
-                showAll: true
-                shuffle: true
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
@@ -306,7 +307,8 @@
 		site: 2
 		keyword: forest
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: startOfPhase
 				phase: maneuver
@@ -329,8 +331,8 @@
 						true: {
 							type: playCardFromDrawDeck
 							select: choose(hand weapon)
-                            showAll: true
-                            shuffle: true
+							showAll: true
+							shuffle: true
 						}
 					}
 				]
@@ -360,8 +362,8 @@
 			effect: {
 				type: playCardFromDrawDeck
 				select: choose(condition)
-                showAll: true
-                shuffle: true
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
@@ -381,7 +383,8 @@
 			forest
 		]
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: movesTo
 				filter: self
@@ -420,7 +423,7 @@
 		site: 5
 		keyword: forest
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfPhase
@@ -468,7 +471,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: orc
@@ -487,7 +491,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}

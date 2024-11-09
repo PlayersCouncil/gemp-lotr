@@ -59,23 +59,26 @@ public abstract class ChooseCardsFromDeckEffect extends AbstractEffect {
         } else if (cards.size() == minimum) {
             cardsSelected(game, cards);
         } else {
-            if (showAll) {
-                game.getUserFeedback().sendAwaitingDecision(_playerId,
-                        new ArbitraryCardsSelectionDecision(1, "Choose cards from deck", game.getGameState().getDeck(_deckId), new LinkedList<>(cards), minimum, _maximum) {
-                            @Override
-                            public void decisionMade(String result) throws DecisionResultInvalidException {
-                                cardsSelected(game, getSelectedCardsByResponse(result));
+            game.getUserFeedback().sendAwaitingDecision(_playerId,
+                    new ArbitraryCardsSelectionDecision(1, "Choose cards from deck", new LinkedList<>(cards), minimum, _maximum) {
+                        @Override
+                        public void decisionMade(String result) throws DecisionResultInvalidException {
+                            var actualSelection = getSelectedCardsByResponse(result);
+                            if (showAll) {
+                                game.getUserFeedback().sendAwaitingDecision(_playerId,
+                                        new ArbitraryCardsSelectionDecision(2, "You may inspect the contents of your deck while retrieving cards", game.getGameState().getDeck(_deckId), new LinkedList<>(), 0, 0) {
+                                            @Override
+                                            public void decisionMade(String result2) throws DecisionResultInvalidException {
+                                                cardsSelected(game, actualSelection);
+                                            }
+                                        });
                             }
-                        });
-            } else {
-                game.getUserFeedback().sendAwaitingDecision(_playerId,
-                        new ArbitraryCardsSelectionDecision(1, "Choose cards from deck", new LinkedList<>(cards), minimum, _maximum) {
-                            @Override
-                            public void decisionMade(String result) throws DecisionResultInvalidException {
-                                cardsSelected(game, getSelectedCardsByResponse(result));
+                            else {
+                                cardsSelected(game, actualSelection);
                             }
-                        });
-            }
+                        }
+                    });
+
         }
 
         return new FullEffectResult(success);

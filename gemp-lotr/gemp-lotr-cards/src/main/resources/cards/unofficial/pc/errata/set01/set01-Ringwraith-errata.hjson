@@ -22,7 +22,7 @@
 		vitality: 2
 		site: 3
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played

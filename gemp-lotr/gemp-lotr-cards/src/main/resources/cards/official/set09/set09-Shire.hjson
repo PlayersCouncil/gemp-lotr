@@ -21,7 +21,8 @@
 		keywords: Ring-bound
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}
@@ -145,7 +146,8 @@
 		vitality: 6
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: river

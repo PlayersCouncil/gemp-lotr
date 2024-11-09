@@ -16,7 +16,7 @@
 		target: dwarf
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: aboutToTakeWound
@@ -70,7 +70,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -325,7 +325,8 @@
 		keywords: Damage+1
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: losesSkirmish
 					filter: minion

@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,8 @@ public class Card_V2_051_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_51");
-					// put other cards in here as needed for the test case
+					put("wrath", "102_51");
+					put("javelin", "7_248");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -45,7 +44,7 @@ public class Card_V2_051_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("wrath");
 
 		assertEquals("Now for Wrath", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,18 +56,24 @@ public class Card_V2_051_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void NowforWrathTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void NowforWrathReactsToReconciledPossessionDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var wrath = scn.GetFreepsCard("wrath");
+		var javelin = scn.GetFreepsCard("javelin");
+		scn.FreepsMoveCardToSupportArea(wrath);
+		scn.FreepsMoveCardToHand(javelin);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsChooseToStay();
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(0, scn.GetCultureTokensOn(wrath));
+		scn.FreepsChooseCard(javelin);
+		assertEquals(Zone.DISCARD, javelin.getZone());
+		assertEquals(1, scn.GetCultureTokensOn(wrath));
 	}
 }

@@ -29,7 +29,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				requires: [
 					{
 						type: ringIsOn
@@ -111,7 +112,7 @@
 		target: culture(rohan),man
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -125,7 +126,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}

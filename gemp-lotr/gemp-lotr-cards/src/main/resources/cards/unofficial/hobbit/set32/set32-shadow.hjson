@@ -17,7 +17,8 @@
 		site: 6
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: assignedToSkirmish
 					filter: culture(esgaroth),ally
@@ -50,8 +51,8 @@
 				effect: {
 					type: playCardFromDrawDeck
 					select: choose(side(shadow),condition)
-                    showAll: true
-                    shuffle: true
+					showAll: true
+					shuffle: true
 				}
 			}
 		]
@@ -70,7 +71,8 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}
@@ -325,7 +327,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -356,7 +358,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -418,7 +420,7 @@
 		vitality: 3
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -434,8 +436,8 @@
 					{
 						type: playCardFromDrawDeck
 						select: choose(culture(moria),not(timeword(response)))
-                        showAll: true
-                        shuffle: true
+						showAll: true
+						shuffle: true
 					}
 					{
 						type: playCardFromDiscard
@@ -464,7 +466,7 @@
 		keyword: damage+1
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -571,8 +573,8 @@
 						{
 							type: playCardFromDrawDeck
 							select: choose(culture(sauron),not(and(timeword(response),event)))
-                            showAll: true
-                            shuffle: true
+							showAll: true
+							shuffle: true
 						}
 						{
 							type: playCardFromDiscard
@@ -625,10 +627,10 @@
 		timeword: regroup
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: orc
-            }
+			requires: {
+				type: canSpot
+				filter: orc
+			}
 			effect: [
 				{
 					type: playCardFromDiscard
@@ -717,7 +719,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -771,971 +773,972 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
 					filter: self
 				}
-		    effect: [
-          {
-            type: chooseActiveCards
-            text: Choose card to discard
-            select: choose(culture(dwarven),weapon)
-            memorize: chosenWeapon
-          }
-          {
-            type: memorize
-            memory: bearer
-            filter: hasAttached(memory(chosenWeapon))
-          }
-          {
-            type: preventable
-            text: Would you like to exert {bearer} to prevent discarding of {chosenWeapon}?
-            player: fp
-            cost: {
-              type: exert
-              select: choose(memory(bearer))
-            }
-            effect: {
-              type: discard
-              select: memory(chosenWeapon)
-            }
-          }
-        ]
-      }
-    ]
+			effect: [
+		  {
+			type: chooseActiveCards
+			text: Choose card to discard
+			select: choose(culture(dwarven),weapon)
+			memorize: chosenWeapon
+		  }
+		  {
+			type: memorize
+			memory: bearer
+			filter: hasAttached(memory(chosenWeapon))
+		  }
+		  {
+			type: preventable
+			text: Would you like to exert {bearer} to prevent discarding of {chosenWeapon}?
+			player: fp
+			cost: {
+			  type: exert
+			  select: choose(memory(bearer))
+			}
+			effect: {
+			  type: discard
+			  select: memory(chosenWeapon)
+			}
+		  }
+		]
+	  }
+	]
   }
   32_42: {
-    title: Orkish Pursuer
-    culture: sauron
-    twilight: 3
-    type: minion
-    race: orc
-    strength: 8
-    vitality: 3
-    site: 4
-    effects: [
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: winsSkirmish
-          filter: self
-        }
-        cost: {
-          type: exert
-          select: self
-          times: 2
-        }
-        effect: {
-          type: addBurdens
-        }
-      }
-      {
-        type: activated
-        phase: regroup
-        requires: {
-          type: cantSpot
-          filter: self,mounted
-        }
-        cost: {
-          type: exert
-          select: self
-        }
-        effect: {
-          type: wound
-          player: fp
-          select: choose(companion)
-        }
-      }
-    ]
+	title: Orkish Pursuer
+	culture: sauron
+	twilight: 3
+	type: minion
+	race: orc
+	strength: 8
+	vitality: 3
+	site: 4
+	effects: [
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: winsSkirmish
+		  filter: self
+		}
+		cost: {
+		  type: exert
+		  select: self
+		  times: 2
+		}
+		effect: {
+		  type: addBurdens
+		}
+	  }
+	  {
+		type: activated
+		phase: regroup
+		requires: {
+		  type: cantSpot
+		  filter: self,mounted
+		}
+		cost: {
+		  type: exert
+		  select: self
+		}
+		effect: {
+		  type: wound
+		  player: fp
+		  select: choose(companion)
+		}
+	  }
+	]
   }
   32_43: {
-    title: Orkish Veteran
-    culture: sauron
-    twilight: 2
-    type: minion
-    race: orc
-    strength: 7
-    vitality: 2
-    site: 4
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: addKeyword
-          requires: {
-            type: location
-            filter: siteNumber(9)
-          }
-          filter: orc
-          keyword: archer
-        }
-      }
-      {
-        type: activated
-        phase: regroup
-        cost: {
-          type: discard
-          select: choose(orc)
-        }
-        effect: {
-          type: wound
-          player: fp
-          select: choose(companion)
-        }
-      }
-    ]
+	title: Orkish Veteran
+	culture: sauron
+	twilight: 2
+	type: minion
+	race: orc
+	strength: 7
+	vitality: 2
+	site: 4
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: addKeyword
+		  requires: {
+			type: location
+			filter: siteNumber(9)
+		  }
+		  filter: orc
+		  keyword: archer
+		}
+	  }
+	  {
+		type: activated
+		phase: regroup
+		cost: {
+		  type: discard
+		  select: choose(orc)
+		}
+		effect: {
+		  type: wound
+		  player: fp
+		  select: choose(companion)
+		}
+	  }
+	]
   }
   32_44: {
-    title: Ring of Thror
-    subtitle: Last of the Seven Rings
+	title: Ring of Thror
+	subtitle: Last of the Seven Rings
 		unique: true
-    culture: sauron
-    twilight: 0
-    type: artifact
-    itemclass: ring
-    vitality: 1
-    target: name(Sauron)
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: addKeyword
-          filter: bearer
-          keyword: fierce
-        }
-      }
-      {
-        type: activated
-        phase: skirmish
-        cost: {
-          type: removeTwilight
-          amount: 2
-        }
-        effect: {
-          type: addKeyword
-          select: choose(or(name(Sauron),and(culture(wraith),minion)))
-          keyword: damage
-          amount: {
-            type: cardAffectedLimitPerPhase
-            limit: 1
-            source: 1
-          }
-        }
-      }
-    ]
+	culture: sauron
+	twilight: 0
+	type: artifact
+	itemclass: ring
+	vitality: 1
+	target: name(Sauron)
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: addKeyword
+		  filter: bearer
+		  keyword: fierce
+		}
+	  }
+	  {
+		type: activated
+		phase: skirmish
+		cost: {
+		  type: removeTwilight
+		  amount: 2
+		}
+		effect: {
+		  type: addKeyword
+		  select: choose(or(name(Sauron),and(culture(wraith),minion)))
+		  keyword: damage
+		  amount: {
+			type: cardAffectedLimitPerPhase
+			limit: 1
+			source: 1
+		  }
+		}
+	  }
+	]
   }
   32_45: {
-    title: Sauron
-    subtitle: The Necromancer
+	title: Sauron
+	subtitle: The Necromancer
 		unique: true
-    culture: sauron
-    twilight: 5
-    type: minion
-    race: maia
-    strength: 13
-    vitality: 4
-    site: 5
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: modifyStrength
-          filter: culture(gundabad),orc
-          amount: 1
-        }
-      }
-      {
-        type: modifier
-        modifier: {
-          type: addKeyword
-          filter: culture(gundabad),orc
-          keyword: fierce
-        }
-      }
-      {
-        type: activated
-        phase: assignment
-        cost: {
-          type: exert
-          select: self
-        }
-        effect: [
-            {
-                type: assignFPCharacterToSkirmish
-                fpCharacter: choose(companion,not(name(Bilbo)))
-                minion: choose(minion,or(culture(gundabad),culture(wraith)))
-                memorizeFPCharacter: chosenCompanion
-                memorizeMinion: chosenMinion
-                preventText: Would you like to add 2 doubts or exert {chosenCompanion} to prevent it from being assigned to {chosenMinion}?
-                preventCost: {
-                    type: choice
-                    texts: [
-                        Add 2 doubts
-                        Exert the companion
-                    ]
-                    effects: [
-                        {
-                            type: addBurdens
-                            amount: 2
-                        }
-                        {
-                            type: exert
-                            select: memory(chosenCompanion)
-                        }
-                    ]
-                }
-            }
-        ]
-      }
-    ]
+	culture: sauron
+	twilight: 5
+	type: minion
+	race: maia
+	strength: 13
+	vitality: 4
+	site: 5
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: modifyStrength
+		  filter: culture(gundabad),orc
+		  amount: 1
+		}
+	  }
+	  {
+		type: modifier
+		modifier: {
+		  type: addKeyword
+		  filter: culture(gundabad),orc
+		  keyword: fierce
+		}
+	  }
+	  {
+		type: activated
+		phase: assignment
+		cost: {
+		  type: exert
+		  select: self
+		}
+		effect: [
+			{
+				type: assignFPCharacterToSkirmish
+				fpCharacter: choose(companion,not(name(Bilbo)))
+				minion: choose(minion,or(culture(gundabad),culture(wraith)))
+				memorizeFPCharacter: chosenCompanion
+				memorizeMinion: chosenMinion
+				preventText: Would you like to add 2 doubts or exert {chosenCompanion} to prevent it from being assigned to {chosenMinion}?
+				preventCost: {
+					type: choice
+					texts: [
+						Add 2 doubts
+						Exert the companion
+					]
+					effects: [
+						{
+							type: addBurdens
+							amount: 2
+						}
+						{
+							type: exert
+							select: memory(chosenCompanion)
+						}
+					]
+				}
+			}
+		]
+	  }
+	]
   }
   32_50: {
-    title: Dissention
-    culture: smaug
-    twilight: 2
-    type: event
-    timeword: skirmish
-    effects: [
-      {
-        type: activatedInDiscard
-        phase: skirmish
-        cost: {
-          type: exert
-          select: choose(name(Smaug))
-          times: 2
-        }
-        effect: {
-          type: playCardFromDiscard
-          select: self
-        }
-      }
-      {
-        type: event
-        cost: {
-          type: chooseHowManyBurdensToSpot
-          memorize: burdenCount
-        }
-        effect: {
-          type: modifyStrength
-          select: choose(culture(dwarven),companion)
-          amount: {
-            type: fromMemory
-            memory: burdenCount
-            multiplier: -1
-          }
-        }
-      }
-    ]
+	title: Dissention
+	culture: smaug
+	twilight: 2
+	type: event
+	timeword: skirmish
+	effects: [
+	  {
+		type: activatedInDiscard
+		phase: skirmish
+		cost: {
+		  type: exert
+		  select: choose(name(Smaug))
+		  times: 2
+		}
+		effect: {
+		  type: playCardFromDiscard
+		  select: self
+		}
+	  }
+	  {
+		type: event
+		cost: {
+		  type: chooseHowManyBurdensToSpot
+		  memorize: burdenCount
+		}
+		effect: {
+		  type: modifyStrength
+		  select: choose(culture(dwarven),companion)
+		  amount: {
+			type: fromMemory
+			memory: burdenCount
+			multiplier: -1
+		  }
+		}
+	  }
+	]
   }
   32_51: {
-    title: Dragon's Malice
+	title: Dragon's Malice
 		unique: true
-    culture: smaug
-    twilight: 0
-    type: condition
-    keyword: support area
-    effects: [
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: winsSkirmish
-          filter: name(Smaug)
-        }
-        effect: {
-          type: addBurdens
-          amount: 1
-        }
-      }
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: killed
-          filter: companion,culture(dwarven)
-        }
-        requires: {
-          type: canSpot
-          filter: name(Smaug),inSkirmish
-        }
-        effect: {
-          type: addBurdens
-          amount: 1
-        }
-      }
-      {
-        type: modifier
-        modifier: {
-          type: cantTakeWounds
-          filter: name(Bilbo)
-          requires: [
-            {
-              type: ringIsOn
-            }
-            {
-              type: canSpot
-              filter: name(Bilbo),inSkirmishAgainst(name(Smaug))
-            }
-          ]
-        }
-      }
-    ]
+	culture: smaug
+	twilight: 0
+	type: condition
+	keyword: support area
+	effects: [
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: winsSkirmish
+		  filter: name(Smaug)
+		}
+		effect: {
+		  type: addBurdens
+		  amount: 1
+		}
+	  }
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: killed
+		  filter: companion,culture(dwarven)
+		}
+		requires: {
+		  type: canSpot
+		  filter: name(Smaug),inSkirmish
+		}
+		effect: {
+		  type: addBurdens
+		  amount: 1
+		}
+	  }
+	  {
+		type: modifier
+		modifier: {
+		  type: cantTakeWounds
+		  filter: name(Bilbo)
+		  requires: [
+			{
+			  type: ringIsOn
+			}
+			{
+			  type: canSpot
+			  filter: name(Bilbo),inSkirmishAgainst(name(Smaug))
+			}
+		  ]
+		}
+	  }
+	]
   }
   32_52: {
-    title: Smaug's Awakening
-    culture: smaug
-    twilight: 0
-    type: event
-    timeword: shadow
-    effects: {
-      type: event
-      effect: [
-        {
-          type: choice
-          texts: [
-            Play Smaug from your draw deck
-            Play Smaug from your discard pile
-          ]
-          effects: [
-            {
-              type: playCardFromDrawDeck
-              select: choose(name(Smaug))
-              discount: -8
-              memorize: playedSmaug
-                showAll: true
-                shuffle: true
-            }
-            {
-              type: playCardFromDiscard
-              select: choose(name(Smaug))
-              discount: -8
-              memorize: playedSmaug
-            }
-          ]
-        }
-        {
-          type: modifyStrength
-          select: memory(playedSmaug)
-          amount: -4
-          until: start(regroup)
-        }
-        {
-          type: addKeyword
-          select: memory(playedSmaug)
-          keyword: damage
-          amount: -1
-          until: start(regroup)
-        }
-        {
-          type: optional
-          text: Would you like to discard 2 Orcs to take this event back into hand?
-          effect: {
-            type: costToEffect
-            cost: {
-              type: discard
-              select: choose(orc)
-              count: 2
-            }
-            effect: {
-              type: putPlayedEventIntoHand
-            }
-          }
-        }
-      ]
-    }
+	title: Smaug's Awakening
+	culture: smaug
+	twilight: 0
+	type: event
+	timeword: shadow
+	effects: {
+	  type: event
+	  effect: [
+		{
+		  type: choice
+		  texts: [
+			Play Smaug from your draw deck
+			Play Smaug from your discard pile
+		  ]
+		  effects: [
+			{
+			  type: playCardFromDrawDeck
+			  select: choose(name(Smaug))
+			  discount: -8
+			  memorize: playedSmaug
+				showAll: true
+				shuffle: true
+			}
+			{
+			  type: playCardFromDiscard
+			  select: choose(name(Smaug))
+			  discount: -8
+			  memorize: playedSmaug
+			}
+		  ]
+		}
+		{
+		  type: modifyStrength
+		  select: memory(playedSmaug)
+		  amount: -4
+		  until: start(regroup)
+		}
+		{
+		  type: addKeyword
+		  select: memory(playedSmaug)
+		  keyword: damage
+		  amount: -1
+		  until: start(regroup)
+		}
+		{
+		  type: optional
+		  text: Would you like to discard 2 Orcs to take this event back into hand?
+		  effect: {
+			type: costToEffect
+			cost: {
+			  type: discard
+			  select: choose(orc)
+			  count: 2
+			}
+			effect: {
+			  type: putPlayedEventIntoHand
+			}
+		  }
+		}
+	  ]
+	}
   }
   32_53: {
-    title: Terrifying Legend
+	title: Terrifying Legend
 		unique: true
-    culture: smaug
-    twilight: 0
-    type: condition
-    keyword: support area
-    effects: [
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: killed
-          filter: companion
-        }
-        effect: [
-          {
-            type: discard
-            select: choose(weapon)
-          }
-          {
-            type: If
-            check: {
-              type: canSpot
-              filter: name(Smaug)
-            }
-            true: {
-              type: exert
-              select: all(ally)
-            }
-          }
-        ]
-      }
-      {
-        type: activated
-        phase: regroup
-        cost: [
-          {
-            type: discard
-            select: choose(minion)
-          }
-          {
-            type: removeTwilight
-            amount: 3
-          }
-        ]
-        effect: {
-          type: discard
-          select: choose(man,ally)
-        }
-      }
-    ]
+	culture: smaug
+	twilight: 0
+	type: condition
+	keyword: support area
+	effects: [
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: killed
+		  filter: companion
+		}
+		effect: [
+		  {
+			type: discard
+			select: choose(weapon)
+		  }
+		  {
+			type: If
+			check: {
+			  type: canSpot
+			  filter: name(Smaug)
+			}
+			true: {
+			  type: exert
+			  select: all(ally)
+			}
+		  }
+		]
+	  }
+	  {
+		type: activated
+		phase: regroup
+		cost: [
+		  {
+			type: discard
+			select: choose(minion)
+		  }
+		  {
+			type: removeTwilight
+			amount: 3
+		  }
+		]
+		effect: {
+		  type: discard
+		  select: choose(man,ally)
+		}
+	  }
+	]
   }
   32_54: {
-    title: Twisted Gold of Dragon
+	title: Twisted Gold of Dragon
 		unique: true
-    culture: smaug
-    twilight: 1
-    type: condition
-    keyword: support area
-    effects: [
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: played
-          filter: your,name(Smaug)
-        }
-        effect: {
-          type: playCardFromDrawDeck
-          select: choose(side(shadow),condition)
-            showAll: true
-            shuffle: true
-        }
-      }
-      {
-        type: activated
-        phase: shadow
-        cost: {
-          type: discard
-          select: choose(orc)
-          count: 3
-        }
-        effect: {
-          type: choice
-          texts: [
-            Play Smaug from your draw deck
-            Play Smaug from your discard pile
-          ]
-          effects: [
-            {
-              type: playCardFromDrawDeck
-              select: choose(name(Smaug))
-              discount: -6
-                showAll: true
-                shuffle: true
-            }
-            {
-              type: playCardFromDiscard
-              select: choose(name(Smaug))
-              discount: -6
-            }
-          ]
-        }
-      }
-    ]
+	culture: smaug
+	twilight: 1
+	type: condition
+	keyword: support area
+	effects: [
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: played
+		  filter: your,name(Smaug)
+		}
+		effect: {
+		  type: playCardFromDrawDeck
+		  select: choose(side(shadow),condition)
+			showAll: true
+			shuffle: true
+		}
+	  }
+	  {
+		type: activated
+		phase: shadow
+		cost: {
+		  type: discard
+		  select: choose(orc)
+		  count: 3
+		}
+		effect: {
+		  type: choice
+		  texts: [
+			Play Smaug from your draw deck
+			Play Smaug from your discard pile
+		  ]
+		  effects: [
+			{
+			  type: playCardFromDrawDeck
+			  select: choose(name(Smaug))
+			  discount: -6
+				showAll: true
+				shuffle: true
+			}
+			{
+			  type: playCardFromDiscard
+			  select: choose(name(Smaug))
+			  discount: -6
+			}
+		  ]
+		}
+	  }
+	]
   }
   32_55: {
-    title: Wrath of the Dragon
+	title: Wrath of the Dragon
 		unique: true
-    culture: smaug
-    twilight: 2
-    type: condition
-    keyword: support area
-    effects: [
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: killed
-          filter: character
-        }
-        requires: {
-          type: canSpot
-          filter: name(Smaug),inSkirmish
-        }
-        effect: {
-          type: playCardFromDiscard
-          select: choose(orc)
-        }
-      }
-      {
-        type: activated
-        phase: skirmish
-        cost: {
-          type: choice
-          texts: [
-            Discard this condition
-            Exert Smaug twice
-          ]
-          effects: [
-            {
-              type: discard
-              select: self
-            }
-            {
-              type: exert
-              select: choose(name(Smaug))
-              times: 2
-            }
-          ]
-        }
-        effect: {
-          type: playCardFromDiscard
-          select: choose(side(shadow),condition)
-        }
-      }
-    ]
+	culture: smaug
+	twilight: 2
+	type: condition
+	keyword: support area
+	effects: [
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: killed
+		  filter: character
+		}
+		requires: {
+		  type: canSpot
+		  filter: name(Smaug),inSkirmish
+		}
+		effect: {
+		  type: playCardFromDiscard
+		  select: choose(orc)
+		}
+	  }
+	  {
+		type: activated
+		phase: skirmish
+		cost: {
+		  type: choice
+		  texts: [
+			Discard this condition
+			Exert Smaug twice
+		  ]
+		  effects: [
+			{
+			  type: discard
+			  select: self
+			}
+			{
+			  type: exert
+			  select: choose(name(Smaug))
+			  times: 2
+			}
+		  ]
+		}
+		effect: {
+		  type: playCardFromDiscard
+		  select: choose(side(shadow),condition)
+		}
+	  }
+	]
   }
   32_56: {
-    title: Dol Guldur Blade
-    culture: wraith
-    twilight: 0
-    type: possession
-    itemclass: hand weapon
-    strength: 2
-    target: culture(wraith),minion
-    effects: [
-      {
-        type: trigger
-        trigger: {
-          type: played
-          filter: self
-        }
-        effect: {
-          type: addTwilight
-          amount: 2
-        }
-      }
-      {
-        type: activated
-        phase: maneuver
-        cost: {
-          type: discard
-          select: choose(orc)
-        }
-        effect: {
-          type: choice
-          texts: [
-            Play a WRAITH card from your draw deck
-            Play a WRAITH card from your discard pile
-          ]
-          effects: [
-            {
-              type: playCardFromDrawDeck
-              select: choose(culture(wraith),not(timeword(response),event))
-                showAll: true
-                shuffle: true
-            }
-            {
-              type: playCardFromDiscard
-              select: choose(culture(wraith),not(timeword(response),event))
-            }
-          ]
-        }
-      }
-    ]
+	title: Dol Guldur Blade
+	culture: wraith
+	twilight: 0
+	type: possession
+	itemclass: hand weapon
+	strength: 2
+	target: culture(wraith),minion
+	effects: [
+	  {
+		type: Trigger
+		optional: false
+		trigger: {
+		  type: played
+		  filter: self
+		}
+		effect: {
+		  type: addTwilight
+		  amount: 2
+		}
+	  }
+	  {
+		type: activated
+		phase: maneuver
+		cost: {
+		  type: discard
+		  select: choose(orc)
+		}
+		effect: {
+		  type: choice
+		  texts: [
+			Play a WRAITH card from your draw deck
+			Play a WRAITH card from your discard pile
+		  ]
+		  effects: [
+			{
+			  type: playCardFromDrawDeck
+			  select: choose(culture(wraith),not(timeword(response),event))
+				showAll: true
+				shuffle: true
+			}
+			{
+			  type: playCardFromDiscard
+			  select: choose(culture(wraith),not(timeword(response),event))
+			}
+		  ]
+		}
+	  }
+	]
   }
   32_57: {
-    title: The Great Enemy
-    culture: wraith
-    twilight: 1
-    type: event
-    timeword: shadow
-    effects: {
-      type: event
-      effect: [
-        {
-          type: chooseHowManyToSpot
-          filter: wise,character
-          memorize: countOfCharacters
-        }
-        {
-          type: putCardsFromDiscardIntoHand
-          select: choose(minion)
-          count: {
-            type: fromMemory
-            memory: countOfCharacters
-          }
-        }
-      ]
-    }
+	title: The Great Enemy
+	culture: wraith
+	twilight: 1
+	type: event
+	timeword: shadow
+	effects: {
+	  type: event
+	  effect: [
+		{
+		  type: chooseHowManyToSpot
+		  filter: wise,character
+		  memorize: countOfCharacters
+		}
+		{
+		  type: putCardsFromDiscardIntoHand
+		  select: choose(minion)
+		  count: {
+			type: fromMemory
+			memory: countOfCharacters
+		  }
+		}
+	  ]
+	}
   }
   32_58: {
-    title: He Is Summoning His Servants
+	title: He Is Summoning His Servants
 		unique: true
-    culture: wraith
-    twilight: 2
-    type: condition
-    keyword: support area
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: modifyStrength
-          requires: {
-            type: cantSpot
-            count: 2
-            filter: wise,character
-          }
-          filter: culture(wraith),minion
-          amount: 2
-        }
-      }
-      {
-        type: activated
-        phase: shadow
-        cost: {
-          type: discardFromHand
-          forced: false
-          select: choose(orc)
-        }
-        effect: {
-          type: playCardFromDiscard
-          select: choose(culture(wraith),minion)
-        }
-      }
-    ]
+	culture: wraith
+	twilight: 2
+	type: condition
+	keyword: support area
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: modifyStrength
+		  requires: {
+			type: cantSpot
+			count: 2
+			filter: wise,character
+		  }
+		  filter: culture(wraith),minion
+		  amount: 2
+		}
+	  }
+	  {
+		type: activated
+		phase: shadow
+		cost: {
+		  type: discardFromHand
+		  forced: false
+		  select: choose(orc)
+		}
+		effect: {
+		  type: playCardFromDiscard
+		  select: choose(culture(wraith),minion)
+		}
+	  }
+	]
   }
   32_59: {
-    title: Úlairë Attëa
-    subtitle: Revived
+	title: Úlairë Attëa
+	subtitle: Revived
 		unique: true
-    culture: wraith
-    twilight: 6
-    type: minion
-    race: nazgul
-    strength: 12
-    vitality: 3
-    site: 5
-    keyword: fierce
-    effects: [
-      {
-        type: modifyOwnCost
-        amount: {
-          type: forEachYouCanSpot
-          filter: wise,character
-          limit: 2
-          multiplier: -1
-        }
-      }
-      {
-        type: activated
-        phase: skirmish
-        cost: {
-          type: removeTwilight
-          amount: 1
-        }
-        effect: {
-          type: modifyStrength
-          select: choose(another,culture(wraith),minion)
-          amount: {
-            type: cardAffectedLimitPerPhase
-            limit: 3
-            source: 1
-          }
-        }
-      }
-    ]
+	culture: wraith
+	twilight: 6
+	type: minion
+	race: nazgul
+	strength: 12
+	vitality: 3
+	site: 5
+	keyword: fierce
+	effects: [
+	  {
+		type: modifyOwnCost
+		amount: {
+		  type: forEachYouCanSpot
+		  filter: wise,character
+		  limit: 2
+		  multiplier: -1
+		}
+	  }
+	  {
+		type: activated
+		phase: skirmish
+		cost: {
+		  type: removeTwilight
+		  amount: 1
+		}
+		effect: {
+		  type: modifyStrength
+		  select: choose(another,culture(wraith),minion)
+		  amount: {
+			type: cardAffectedLimitPerPhase
+			limit: 3
+			source: 1
+		  }
+		}
+	  }
+	]
   }
   32_60: {
-    title: Úlairë Cantëa
-    subtitle: Revived
+	title: Úlairë Cantëa
+	subtitle: Revived
 		unique: true
-    culture: wraith
-    twilight: 5
-    type: minion
-    race: nazgul
-    strength: 10
-    vitality: 3
-    site: 5
-    keyword: fierce
-    effects: {
-      type: trigger
-      optional: true
-      trigger: {
-        type: transferred
-        filter: side(free people),follower
-        to: character
-      }
-      cost: {
-        type: exert
-        select: self
-      }
-      effect: {
-        type: discard
-        select: choose(weapon)
-      }
-    }
+	culture: wraith
+	twilight: 5
+	type: minion
+	race: nazgul
+	strength: 10
+	vitality: 3
+	site: 5
+	keyword: fierce
+	effects: {
+	  type: trigger
+	  optional: true
+	  trigger: {
+		type: transferred
+		filter: side(free people),follower
+		to: character
+	  }
+	  cost: {
+		type: exert
+		select: self
+	  }
+	  effect: {
+		type: discard
+		select: choose(weapon)
+	  }
+	}
   }
   32_61: {
-    title: Úlairë Enquëa
-    subtitle: Revived
+	title: Úlairë Enquëa
+	subtitle: Revived
 		unique: true
-    culture: wraith
-    twilight: 6
-    type: minion
-    race: nazgul
-    strength: 11
-    vitality: 4
-    site: 5
-    keyword: fierce
-    effects: [
-      {
-        type: modifyOwnCost
-        amount: {
-          type: forEachYouCanSpot
-          filter: wise,character
-          limit: 2
-          multiplier: -1
-        }
-      }
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: discarded
-          player: fp
-          filter: condition
-        }
-        effect: {
-          type: exert
-          select: choose(companion)
-        }
-      }
-    ]
+	culture: wraith
+	twilight: 6
+	type: minion
+	race: nazgul
+	strength: 11
+	vitality: 4
+	site: 5
+	keyword: fierce
+	effects: [
+	  {
+		type: modifyOwnCost
+		amount: {
+		  type: forEachYouCanSpot
+		  filter: wise,character
+		  limit: 2
+		  multiplier: -1
+		}
+	  }
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: discarded
+		  player: fp
+		  filter: condition
+		}
+		effect: {
+		  type: exert
+		  select: choose(companion)
+		}
+	  }
+	]
   }
   32_62: {
-    title: Úlairë Lemenya
-    subtitle: Revived
+	title: Úlairë Lemenya
+	subtitle: Revived
 		unique: true
-    culture: wraith
-    twilight: 4
-    type: minion
-    race: nazgul
-    strength: 9
-    vitality: 2
-    site: 5
-    keyword: fierce
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: modifySiteNumber
-          filter: culture(wraith),minion
-          amount: -3
-        }
-      }
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: discarded
-          player: fp
-          filter: condition
-        }
-        effect: {
-          type: discard
-          select: choose(ally)
-        }
-      }
-    ]
+	culture: wraith
+	twilight: 4
+	type: minion
+	race: nazgul
+	strength: 9
+	vitality: 2
+	site: 5
+	keyword: fierce
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: modifySiteNumber
+		  filter: culture(wraith),minion
+		  amount: -3
+		}
+	  }
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: discarded
+		  player: fp
+		  filter: condition
+		}
+		effect: {
+		  type: discard
+		  select: choose(ally)
+		}
+	  }
+	]
   }
   32_63: {
-    title: Úlairë Nelya
-    subtitle: Revived
+	title: Úlairë Nelya
+	subtitle: Revived
 		unique: true
-    culture: wraith
-    twilight: 5
-    type: minion
-    race: nazgul
-    strength: 10
-    vitality: 3
-    site: 5
-    keyword: fierce
-    effects: {
-      type: modifier
-      modifier: {
-        type: addKeyword
-        requires: {
-          type: canSpot
-          filter: follower,attachedTo(companion)
-        }
-        filter: self
-        keyword: damage+1
-      }
-    }
+	culture: wraith
+	twilight: 5
+	type: minion
+	race: nazgul
+	strength: 10
+	vitality: 3
+	site: 5
+	keyword: fierce
+	effects: {
+	  type: modifier
+	  modifier: {
+		type: addKeyword
+		requires: {
+		  type: canSpot
+		  filter: follower,attachedTo(companion)
+		}
+		filter: self
+		keyword: damage+1
+	  }
+	}
   }
   32_64: {
-    title: Úlairë Nertëa
-    subtitle: Revived
+	title: Úlairë Nertëa
+	subtitle: Revived
 		unique: true
-    culture: wraith
-    twilight: 4
-    type: minion
-    race: nazgul
-    strength: 9
-    vitality: 2
-    site: 5
-    keyword: fierce
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: modifySiteNumber
-          filter: culture(wraith),minion
-          amount: -3
-        }
-      }
-      {
-        type: Response
-        trigger: {
-          type: discarded
-          player: fp
-          filter: condition
-        }
-        cost: {
-          type: exert
-          select: self
-        }
-        effect: {
-          type: playCardFromDiscard
-          select: choose(culture(wraith),minion)
-          discount: -8
-        }
-      }
-    ]
+	culture: wraith
+	twilight: 4
+	type: minion
+	race: nazgul
+	strength: 9
+	vitality: 2
+	site: 5
+	keyword: fierce
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: modifySiteNumber
+		  filter: culture(wraith),minion
+		  amount: -3
+		}
+	  }
+	  {
+		type: Response
+		trigger: {
+		  type: discarded
+		  player: fp
+		  filter: condition
+		}
+		cost: {
+		  type: exert
+		  select: self
+		}
+		effect: {
+		  type: playCardFromDiscard
+		  select: choose(culture(wraith),minion)
+		  discount: -8
+		}
+	  }
+	]
   }
   32_65: {
-    title: Úlairë Otsëa
-    subtitle: Revived
+	title: Úlairë Otsëa
+	subtitle: Revived
 		unique: true
-    culture: wraith
-    twilight: 4
-    type: minion
-    race: nazgul
-    strength: 9
-    vitality: 3
-    site: 5
-    keyword: fierce
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: modifySiteNumber
-          filter: culture(wraith),minion
-          amount: -3
-        }
-      }
-      {
-        type: modifier
-        modifier: {
-          type: modifyStrength
-          requires: {
-            type: canSpot
-            filter: follower,attachedTo(companion)
-          }
-          filter: culture(wraith),minion
-          amount: 1
-        }
-      }
-    ]
+	culture: wraith
+	twilight: 4
+	type: minion
+	race: nazgul
+	strength: 9
+	vitality: 3
+	site: 5
+	keyword: fierce
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: modifySiteNumber
+		  filter: culture(wraith),minion
+		  amount: -3
+		}
+	  }
+	  {
+		type: modifier
+		modifier: {
+		  type: modifyStrength
+		  requires: {
+			type: canSpot
+			filter: follower,attachedTo(companion)
+		  }
+		  filter: culture(wraith),minion
+		  amount: 1
+		}
+	  }
+	]
   }
   32_66: {
-    title: Úlairë Toldëa
-    subtitle: Revived
+	title: Úlairë Toldëa
+	subtitle: Revived
 		unique: true
-    culture: wraith
-    twilight: 6
-    type: minion
-    race: nazgul
-    strength: 12
-    vitality: 3
-    site: 5
-    keyword: fierce
-    effects: [
-      {
-        type: modifyOwnCost
-        amount: {
-          type: forEachYouCanSpot
-          filter: wise,character
-          limit: 2
-          multiplier: -1
-        }
-      }
-      {
-        type: activated
-        phase: skirmish
-        cost: {
-          type: removeTwilight
-          amount: 3
-        }
-        effect: {
-          type: modifyStrength
-          select: choose(culture(wraith),minion)
-          amount: {
-            type: cardAffectedLimitPerPhase
-            limit: 4
-            source: 2
-          }
-        }
-      }
-    ]
+	culture: wraith
+	twilight: 6
+	type: minion
+	race: nazgul
+	strength: 12
+	vitality: 3
+	site: 5
+	keyword: fierce
+	effects: [
+	  {
+		type: modifyOwnCost
+		amount: {
+		  type: forEachYouCanSpot
+		  filter: wise,character
+		  limit: 2
+		  multiplier: -1
+		}
+	  }
+	  {
+		type: activated
+		phase: skirmish
+		cost: {
+		  type: removeTwilight
+		  amount: 3
+		}
+		effect: {
+		  type: modifyStrength
+		  select: choose(culture(wraith),minion)
+		  amount: {
+			type: cardAffectedLimitPerPhase
+			limit: 4
+			source: 2
+		  }
+		}
+	  }
+	]
   }
   32_67: {
-    title: The Witch-king
-    subtitle: Revived
+	title: The Witch-king
+	subtitle: Revived
 		unique: true
-    culture: wraith
-    twilight: 8
-    type: minion
-    race: nazgul
-    strength: 14
-    vitality: 4
-    site: 5
-    keyword: fierce
-    effects: [
-      {
-        type: modifyOwnCost
-        amount: {
-          type: forEachYouCanSpot
-          filter: wise,character
-          multiplier: -1
-        }
-      }
-      {
-        type: activated
-        phase: skirmish
-        cost: {
-          type: discardFromHand
-          forced: false
-          count: 3
-        }
-        effect: {
-          type: addKeyword
-          select: choose(culture(wraith),minion)
-          keyword: damage+1
-        }
-      }
-    ]
+	culture: wraith
+	twilight: 8
+	type: minion
+	race: nazgul
+	strength: 14
+	vitality: 4
+	site: 5
+	keyword: fierce
+	effects: [
+	  {
+		type: modifyOwnCost
+		amount: {
+		  type: forEachYouCanSpot
+		  filter: wise,character
+		  multiplier: -1
+		}
+	  }
+	  {
+		type: activated
+		phase: skirmish
+		cost: {
+		  type: discardFromHand
+		  forced: false
+		  count: 3
+		}
+		effect: {
+		  type: addKeyword
+		  select: choose(culture(wraith),minion)
+		  keyword: damage+1
+		}
+	  }
+	]
   }
 }

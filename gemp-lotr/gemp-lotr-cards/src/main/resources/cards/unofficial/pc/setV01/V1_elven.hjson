@@ -96,7 +96,8 @@
 			}
 			
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				optional: false
 				trigger: {
 					type: startOfPhase
@@ -114,7 +115,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				optional: false
 				trigger: {
 					type: startOfPhase
@@ -224,6 +226,7 @@
 		keywords: Archer
 		effects: {
 			type: Trigger
+			optional: false
 			optional: false
 			requires: {
 				type: Phase
@@ -443,7 +446,7 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				text: Would you like to spot 1 [elven] or [gandalf] ring to place a card from hand beneath your draw deck and draw a card?
 				trigger: {
@@ -466,7 +469,8 @@
 				]
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				optional: false
 				text: Would you like to spot 3 [elven] or [gandalf] rings to heal a companion?
 				trigger: {

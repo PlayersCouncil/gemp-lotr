@@ -19,7 +19,7 @@
 		vitality: 3
 		site: 6
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: winsSkirmish
@@ -75,10 +75,10 @@
 		timeword: maneuver
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: culture(sauron),orc
-            }
+			requires: {
+				type: canSpot
+				filter: culture(sauron),orc
+			}
 			cost: {
 				type: removeBurdens
 				amount: 1
@@ -249,7 +249,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: usesspecialability
 					filter: side(free people)
@@ -403,7 +404,7 @@
 		vitality: 3
 		site: 6
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -456,7 +457,7 @@
 		vitality: 3
 		site: 6
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: winsSkirmish

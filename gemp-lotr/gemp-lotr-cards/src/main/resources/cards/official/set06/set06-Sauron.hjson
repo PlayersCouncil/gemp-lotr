@@ -17,7 +17,7 @@
 		target: culture(sauron),orc
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -459,7 +459,7 @@
 		target: culture(sauron),troll
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played

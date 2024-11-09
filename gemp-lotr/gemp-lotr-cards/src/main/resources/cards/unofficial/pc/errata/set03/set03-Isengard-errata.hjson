@@ -169,6 +169,7 @@
 			{
 				type: Trigger
 				optional: false
+				optional: false
 				trigger: {
 					type: WinsSkirmish
 					filter: bearer
@@ -181,6 +182,7 @@
 			}
 			{
 				type: Trigger
+				optional: false
 				trigger: {
 					type: StartOfPhase
 					phase: regroup
@@ -251,45 +253,46 @@
 		type: condition
 		keyword: support area
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: culture(isengard),minion
-                }
-		    }
-            {
-                type: trigger
-                trigger: {
-                    type: startofphase
-                    phase: Shadow
-                }
-                optional: true
-                effect: {
-                    type: costToEffect
-                    cost: {
-                        type: discardfromhand
-                        forced: false
-                        select: choose(culture(isengard))
-                        count: 1
-                        memorize: discardedCard
-                    }
-                    effect: {
-                        type: addTwilight
-                        amount: {
-                            type: Conditional
-                            requires: {
-                                type: MemoryMatches
-                                memory: discardedCard
-                                filter: Orc
-                            }
-                            true: 5
-                            false: 3
-                        }
-                    }
-                }
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(isengard),minion
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startofphase
+					phase: Shadow
+				}
+				optional: true
+				effect: {
+					type: costToEffect
+					cost: {
+						type: discardfromhand
+						forced: false
+						select: choose(culture(isengard))
+						count: 1
+						memorize: discardedCard
+					}
+					effect: {
+						type: addTwilight
+						amount: {
+							type: Conditional
+							requires: {
+								type: MemoryMatches
+								memory: discardedCard
+								filter: Orc
+							}
+							true: 5
+							false: 3
+						}
+					}
+				}
+			}
+		]
 		gametext: To play, spot an [isengard] minion.\At the start of your Shadow phase, you may discard an [isengard] card from hand to add (3) (or (5) if that card was an Orc).
 		lore: "'Rip them all down!'"
 		promotext: ""
@@ -547,44 +550,44 @@
 		itemclass: palantir
 		keyword: support area
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: culture(isengard),minion
-                }
-		    }
-            {
-                type: activated
-                phase: shadow
-                cost: [
-                    {
-                        type: removeTwilight
-                        amount: 2
-                    }
-                ]
-                requires: {
-                    type: canSpot
-                    filter: culture(isengard),minion
-                    count: 2
-                }
-                effect: [
-                    {
-                        type: revealRandomCardsFromHand
-                        forced: true
-                        hand: freeps
-                        count: 1
-                        memorize: revealedCard
-                    }
-                    {
-                        type: putCardsFromHandOnTopOfDeck
-                        select: all(memory(revealedCard))
-                        player: shadow
-                        hand: freeps
-                    }
-                ]
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(isengard),minion
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: removeTwilight
+						amount: 2
+					}
+				]
+				requires: {
+					type: canSpot
+					filter: culture(isengard),minion
+					count: 2
+				}
+				effect: [
+					{
+						type: revealRandomCardsFromHand
+						forced: true
+						hand: freeps
+						count: 1
+						memorize: revealedCard
+					}
+					{
+						type: putCardsFromHandOnTopOfDeck
+						select: all(memory(revealedCard))
+						player: shadow
+						hand: freeps
+					}
+				]
+			}
+		]
 		gametext: To play, spot an [isengard] minion. Plays to your support area.<br><b>Shadow:</b> Spot 2 [isengard] minions and remove (2) to reveal a card at random from the Free Peoples player's hand. Place that card on top of that player's draw deck.
 		lore: "'Seven stars and seven stones....'"
 		promotext: ""

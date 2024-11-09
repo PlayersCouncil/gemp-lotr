@@ -46,7 +46,7 @@
 							}
 							effect: [
 								{
-								    type: disableWounds
+									type: disableWounds
 									select: choose(culture(isengard),minion)
 									until: regroup
 								}
@@ -247,6 +247,7 @@
 			}
 			{
 				type: Trigger
+				optional: false
 				trigger: {
 					type: Exerted
 					filter: bearer

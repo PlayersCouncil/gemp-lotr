@@ -19,20 +19,21 @@
 		strength: 9
 		vitality: 3
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: CanSpot
-                    filter: culture(Rohan),companion
-                    count: 2
-                }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: CanSpot
+					filter: culture(Rohan),companion
+					count: 2
+				}
+			}
 			{
 				type: PlayedInOtherPhase
 				phase: regroup
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self

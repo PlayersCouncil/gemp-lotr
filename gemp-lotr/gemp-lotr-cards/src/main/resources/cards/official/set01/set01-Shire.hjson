@@ -225,7 +225,7 @@
 		resistance: 10
 		canStartWithRing: true
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfTurn
@@ -575,7 +575,8 @@
 		vitality: 2
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfTurn
 				}
@@ -706,7 +707,7 @@
 			Support Area
 		]
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -930,7 +931,7 @@
 			Support Area
 		]
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -1008,7 +1009,8 @@
 		signet: Gandalf
 		resistance: 6
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: self

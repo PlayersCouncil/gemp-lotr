@@ -17,7 +17,8 @@
 		direction: Left
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				optional: false
 				trigger: {
 					type: movesTo
@@ -73,7 +74,8 @@
 		direction: Left
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				optional: false
 				trigger: {
 					type: movesTo

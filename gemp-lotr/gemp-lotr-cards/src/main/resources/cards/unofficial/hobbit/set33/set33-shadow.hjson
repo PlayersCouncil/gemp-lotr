@@ -238,7 +238,7 @@
 		keyword: fierce
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -354,7 +354,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: endOfPhase
@@ -444,7 +444,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: losesSkirmish
@@ -503,7 +503,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: aboutToDiscard
 					filter: self
@@ -617,7 +618,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -633,8 +634,8 @@
 						{
 							type: playCardFromDrawDeck
 							select: choose(culture(mirkwood),condition)
-                            showAll: true
-                            shuffle: true
+							showAll: true
+							shuffle: true
 						}
 						{
 							type: playCardFromDiscard
@@ -802,7 +803,7 @@
 		site: 4
 		keyword: archer
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -1165,10 +1166,10 @@
 		timeword: assignment
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: culture(sauron)
-            }
+			requires: {
+				type: canSpot
+				filter: culture(sauron)
+			}
 			effect: {
 				type: playCardFromDiscard
 				select: choose(orc)
@@ -1199,7 +1200,7 @@
 		vitality: 2
 		site: 5
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: endOfPhase
@@ -1361,11 +1362,11 @@
 		timeword: skirmish
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: culture(sauron),minion
-                count: 2
-            }
+			requires: {
+				type: canSpot
+				filter: culture(sauron),minion
+				count: 2
+			}
 			effect: [
 				{
 					type: shuffleCardsFromPlayIntoDrawDeck
@@ -1377,9 +1378,9 @@
 					type: modifyStrength
 					select: choose(orc)
 					 amount: {
-                        type: forEachInMemory
-                        memory: shuffledOrcs
-                        filter: orc
+						type: forEachInMemory
+						memory: shuffledOrcs
+						filter: orc
 						multiplier: 3
 					}
 				}

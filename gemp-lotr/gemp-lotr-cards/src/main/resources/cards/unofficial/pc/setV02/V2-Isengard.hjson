@@ -323,7 +323,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				optional: false
 				trigger: {
 					type: Played
@@ -612,7 +613,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				optional: false
 				trigger: {
 					type: Played
@@ -630,7 +632,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: [
 					{
 						type: LosesSkirmish
@@ -1063,6 +1066,7 @@
 		effects: [
 			{
 				type: Trigger
+				optional: false
 				trigger: {
 					type: AboutToTakeWound
 					filter: uruk-hai

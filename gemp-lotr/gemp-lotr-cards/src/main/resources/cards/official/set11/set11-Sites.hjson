@@ -54,7 +54,8 @@
 		keywords: River
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self
@@ -91,7 +92,8 @@
 		keywords: Mountain
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				trigger: {
 					type: startOfPhase
@@ -271,7 +273,8 @@
 		keywords: Mountain
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: self,regionNumber(2)
@@ -311,7 +314,8 @@
 		direction: Left
 		keywords: Marsh
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: startOfPhase
 				phase: fellowship
@@ -473,7 +477,8 @@
 		keywords: Forest
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self
@@ -547,7 +552,8 @@
 		keywords: Battleground
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self
@@ -589,7 +595,8 @@
 		keywords: Dwelling
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				trigger: {
 					type: startOfPhase
@@ -634,7 +641,8 @@
 		keywords: Plains
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: constantlyCheck
 				}
@@ -694,7 +702,7 @@
 		keywords: Battleground
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				player: free people
 				trigger: {
@@ -805,7 +813,8 @@
 		keywords: Underground
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				optional: true
 				trigger: {
@@ -883,7 +892,8 @@
 		keywords: Marsh
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self
@@ -960,7 +970,8 @@
 		keywords: Forest
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				optional: true
 				trigger: {
@@ -1000,7 +1011,8 @@
 		keywords: Battleground
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				optional: true
 				trigger: {
@@ -1077,7 +1089,8 @@
 		keywords: Plains
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				trigger: {
 					type: startOfPhase
@@ -1128,7 +1141,8 @@
 		keywords: Mountain
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				optional: true
 				trigger: {
@@ -1172,7 +1186,8 @@
 		keywords: Dwelling
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				optional: true
 				trigger: {
@@ -1253,7 +1268,8 @@
 		keywords: Battleground
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: killed
 					filter: companion
@@ -1288,7 +1304,8 @@
 		direction: Left
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				optional: true
 				trigger: {
@@ -1333,7 +1350,8 @@
 		keywords: Forest
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				optional: true
 				trigger: {
@@ -1375,7 +1393,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				trigger: {
 					type: movesTo
@@ -1452,7 +1471,8 @@
 		keywords: Underground
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: self
@@ -1489,7 +1509,8 @@
 		keywords: Dwelling
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				trigger: {
 					type: movesTo

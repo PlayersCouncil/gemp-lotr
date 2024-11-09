@@ -95,22 +95,22 @@
 			Fierce
 		]
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: culture(moria),orc
-                }
-		    }
-            {
-                type: modifyOwnCost
-                requires: {
-                    type: location
-                    filter: underground
-                }
-                amount: -3
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(moria),orc
+				}
+			}
+			{
+				type: modifyOwnCost
+				requires: {
+					type: location
+					filter: underground
+				}
+				amount: -3
+			}
+		]
 		gametext: <b>Damage +1</b>. <b>Fierce</b>. To play, spot a [moria] Orc.<br>At an underground site, Cave Troll of Moria's twilight cost is -3.
 		lore: "Frodo's quest nearly ended before his companions halted the Cave Troll's ferocious attack."
 		promotext: ""
@@ -418,7 +418,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: your,culture(moria),weapon
@@ -510,30 +511,31 @@
 			Support Area
 		]
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: culture(moria),minion
-                }
-		    }
-            {
-                type: trigger
-                trigger: {
-                    type: played
-                    filter: companion
-                    memorize: playedCompanion
-                }
-                requires: {
-                    type: location
-                    filter: siteBlock(fellowship),siteNumber(4-9)
-                }
-                effect: {
-                    type: exhaust
-                    select: memory(playedCompanion)
-                }
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(moria),minion
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: companion
+					memorize: playedCompanion
+				}
+				requires: {
+					type: location
+					filter: siteBlock(fellowship),siteNumber(4-9)
+				}
+				effect: {
+					type: exhaust
+					select: memory(playedCompanion)
+				}
+			}
+		]
 		gametext: <b>Search</b>. To play, spot a [moria] minion. Plays to your support area.<br>Each time a companion is played to site 4 or higher, that companion comes into play exhausted.
 		lore: "The once beautiful kingdom of Khazad-dûm has become Moria, the black pit."
 		promotext: ""
@@ -617,7 +619,8 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: self
@@ -655,7 +658,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -694,7 +697,7 @@
 		itemclass: Hand weapon
 		target: culture(moria),orc
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -732,7 +735,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -770,7 +773,8 @@
 		itemclass: Hand weapon
 		target: culture(moria),minion
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: killed
 				filter: companion
@@ -940,7 +944,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -1048,7 +1052,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: siteBlock(fellowship),siteNumber(4-5)
@@ -1215,7 +1220,8 @@
 		vitality: 2
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: self
@@ -1488,7 +1494,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: siteBlock(fellowship),siteNumber(4-6)

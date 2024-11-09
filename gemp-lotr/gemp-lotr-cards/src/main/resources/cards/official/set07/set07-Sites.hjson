@@ -181,7 +181,7 @@
 		direction: Left
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: movesFrom
@@ -225,7 +225,8 @@
 		direction: Left
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: constantlyCheck
 				}
@@ -654,7 +655,8 @@
 		direction: Left
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self
@@ -665,7 +667,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: self
@@ -703,7 +706,8 @@
 		keywords: Plains
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				optional: false
 				player: free peoples
 				trigger: {
@@ -757,7 +761,8 @@
 		keywords: Sanctuary
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				player: free people
 				trigger: {
 					type: movesFrom
@@ -801,7 +806,8 @@
 		keywords: Sanctuary
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: self
@@ -843,7 +849,8 @@
 		keywords: Sanctuary
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: self
@@ -885,7 +892,8 @@
 		keywords: Sanctuary
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: self
@@ -927,7 +935,8 @@
 		keywords: Sanctuary
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: self
@@ -969,7 +978,8 @@
 		keywords: Sanctuary
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: self
@@ -1011,7 +1021,8 @@
 		keywords: Sanctuary
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: self
@@ -1360,7 +1371,8 @@
 		keywords: Plains
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self
@@ -1474,7 +1486,8 @@
 		direction: Left
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: killed
 					filter: companion

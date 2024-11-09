@@ -21,7 +21,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -74,8 +75,8 @@
 						type: discardTopCardsFromDeck
 						forced: false
 						count: {
-                            type: fromMemory
-                            memory: chosenNumber
+							type: fromMemory
+							memory: chosenNumber
 							multiplier: 5
 						}
 					}

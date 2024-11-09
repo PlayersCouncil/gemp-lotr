@@ -207,7 +207,8 @@
 		keywords: Dwelling
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: self
@@ -370,7 +371,7 @@
 		keywords: Mountain
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish

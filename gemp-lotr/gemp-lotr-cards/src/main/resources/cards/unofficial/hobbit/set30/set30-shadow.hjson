@@ -64,8 +64,8 @@
 				effect: {
 					type: playCardFromDrawDeck
 					select: choose(minion)
-                    showAll: true
-                    shuffle: true
+					showAll: true
+					shuffle: true
 				}
 			}
 		]
@@ -172,7 +172,8 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				requires: {
 					type: HasCardInDeadPile
 					filter: culture(dwarven),companion
@@ -219,7 +220,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -312,7 +313,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -401,7 +402,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -436,7 +437,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: ConstantlyCheck
 					requires: {

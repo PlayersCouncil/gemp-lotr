@@ -26,7 +26,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -75,26 +76,26 @@
 		vitality: 3
 		site: 4
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: culture(orc),orc
-                }
-		    }
-            {
-                type: activated
-                phase: skirmish
-                cost: {
-                    type: removeThreats
-                }
-                effect: {
-                    type: modifyStrength
-                    select: choose(culture(orc),minion)
-                    amount: 2
-                }
-            }
-        ]
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),orc
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(orc),minion)
+					amount: 2
+				}
+			}
+		]
 		gametext: To play, spot an [orc] Orc.<br><b>Skirmish:</b> Remove a threat to make an [orc] minion strength +2.
 		lore: "Stones to move. Bridges to be rebuilt."
 		promotext: ""

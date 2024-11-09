@@ -74,7 +74,7 @@
 		site: 3
 		keywords: Enduring
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: assignedAgainst
@@ -125,7 +125,7 @@
 		site: 3
 		keywords: Enduring
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: assignedAgainst
@@ -174,7 +174,7 @@
 		site: 3
 		keywords: Enduring
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: assignedAgainst

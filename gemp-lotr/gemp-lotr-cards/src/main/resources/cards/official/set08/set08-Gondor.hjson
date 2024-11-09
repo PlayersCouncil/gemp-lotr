@@ -181,7 +181,7 @@
 		keywords: Knight
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -201,10 +201,21 @@
 						memorize: revealedCards
 					}
 					{
-						type: playCardFromDrawDeck
-						select: choose(memory(revealedCards),knight)
-						showAll: false
-						shuffle: true
+						type: Repeat
+						times: {
+							type: ForEachInMemory
+							memory: revealedCards
+							filter: knight
+						}
+						effect: {
+							type: playCardFromDrawDeck
+							select: choose(memory(revealedCards),knight)
+							showAll: false
+							shuffle: false
+						}
+					}
+					{
+						type: shuffleDeck
 					}
 				]
 			}
@@ -367,7 +378,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -475,7 +486,7 @@
 		keywords: Knight
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -515,7 +526,7 @@
 		target: knight
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -769,7 +780,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -858,7 +869,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -895,7 +906,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}

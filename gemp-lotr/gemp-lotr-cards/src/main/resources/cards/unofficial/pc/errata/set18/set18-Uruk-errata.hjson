@@ -14,23 +14,23 @@
 		timeword: skirmish
 		effects: {
 			type: event
-            requires: {
-                type: CanSpot
-                filter: your,Uruk-hai,InSkirmishAgainst(companion)
-            }
+			requires: {
+				type: CanSpot
+				filter: your,Uruk-hai,InSkirmishAgainst(companion)
+			}
 			effect: [
 				{
-                    type: setFPStrengthOverride
-                    amount: {
-                        type: forEachVitality
-                    }
-                }
-                {
-                    type: setShadowStrengthOverride
-                    amount: {
-                        type: forEachVitality
-                    }
-                }
+					type: setFPStrengthOverride
+					amount: {
+						type: forEachVitality
+					}
+				}
+				{
+					type: setShadowStrengthOverride
+					amount: {
+						type: forEachVitality
+					}
+				}
 				{
 					type: addModifier
 					modifier: {

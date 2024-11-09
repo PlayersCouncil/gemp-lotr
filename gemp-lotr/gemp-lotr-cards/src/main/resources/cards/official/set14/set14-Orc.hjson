@@ -17,7 +17,7 @@
 		vitality: 2
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfPhase

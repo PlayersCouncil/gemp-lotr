@@ -20,7 +20,8 @@
 		canStartWithRing: true
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				requires: {
 					type: canSpot
 					filter: self,ring bearer,inSkirmish
@@ -49,7 +50,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: self
@@ -157,7 +159,8 @@
 		canStartWithRing: true
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				requires: {
 					type: canSpot
 					filter: self,ring bearer,inSkirmish

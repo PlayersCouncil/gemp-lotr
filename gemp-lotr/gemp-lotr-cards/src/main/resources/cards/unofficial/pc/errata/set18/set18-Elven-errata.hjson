@@ -14,13 +14,13 @@
 		type: artifact
 		keyword: support area
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: or(title(Galadriel),title(Celeborn))
-                }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: or(title(Galadriel),title(Celeborn))
+				}
+			}
 			{
 				type: modifier
 				modifier: {
@@ -46,7 +46,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -95,14 +95,14 @@
 		vitality: 4
 		resistance: 7
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: elf,companion
-                    count:2
-                }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf,companion
+					count:2
+				}
+			}
 			{
 				type: activated
 				phase: maneuver

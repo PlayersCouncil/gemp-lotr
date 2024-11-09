@@ -130,12 +130,14 @@ public class Card_V1_050_Tests
 		assertEquals(3, scn.GetFreepsCardChoiceCount()); // coat, sting, and phial
 
 		scn.FreepsChooseCardBPFromSelection(sting);
+		scn.FreepsDismissRevealedCards();
 		assertEquals(Zone.ATTACHED, sting.getZone());
 		assertEquals(frodo, sting.getAttachedTo());
 
         assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		assertEquals(2, scn.GetFreepsCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(phial);
+		scn.FreepsDismissRevealedCards();
 		assertEquals(Zone.ATTACHED, phial.getZone());
 		assertEquals(frodo, phial.getAttachedTo());
 

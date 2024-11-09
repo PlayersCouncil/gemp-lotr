@@ -103,7 +103,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: discarded
@@ -268,10 +268,10 @@
 		timewords: Maneuver
 		effects: {
 			type: event
-            requires: {
-                type: canSpot
-                filter: dwarf,hasAttachedCount(2,item)
-            }
+			requires: {
+				type: canSpot
+				filter: dwarf,hasAttachedCount(2,item)
+			}
 			effect: [
 				{
 					type: chooseActiveCards
@@ -341,7 +341,7 @@
 		type: Condition
 		keywords: Support Area
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: moves

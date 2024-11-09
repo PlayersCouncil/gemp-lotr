@@ -18,7 +18,8 @@
 		block: Towers
 		direction: Right
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: startOfPhase
 				phase: skirmish

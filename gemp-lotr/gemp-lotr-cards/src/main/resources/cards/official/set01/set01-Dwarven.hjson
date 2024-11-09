@@ -242,7 +242,8 @@
 		itemclass: Hand weapon
 		target: dwarf
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: losesSkirmish
 				filter: minion
@@ -294,7 +295,8 @@
 		target: dwarf
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -319,7 +321,8 @@
 				]
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfTurn
 				}
@@ -607,7 +610,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: orc
@@ -860,7 +864,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: dwarf
@@ -872,7 +877,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: losesSkirmish
 					filter: dwarf

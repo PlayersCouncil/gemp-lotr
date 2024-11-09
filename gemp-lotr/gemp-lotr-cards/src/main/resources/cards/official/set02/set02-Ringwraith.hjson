@@ -35,7 +35,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: ConstantlyCheck
 					requires: {
@@ -323,7 +324,7 @@
 		site: 3
 		keywords: Twilight
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -364,7 +365,7 @@
 		site: 3
 		keywords: Twilight
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: winsSkirmish
@@ -502,7 +503,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish

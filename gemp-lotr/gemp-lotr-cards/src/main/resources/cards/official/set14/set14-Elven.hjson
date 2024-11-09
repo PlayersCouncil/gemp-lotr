@@ -77,7 +77,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: culture(elven),event
@@ -122,7 +123,8 @@
 		vitality: 3
 		resistance: 6
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: startOfPhase
 				phase: archery

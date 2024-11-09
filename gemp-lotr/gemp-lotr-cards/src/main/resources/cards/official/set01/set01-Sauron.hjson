@@ -281,7 +281,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: assignedToSkirmish
 					filter: bearer
@@ -497,7 +498,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: losesSkirmish
 					filter: your,culture(sauron),orc
@@ -627,7 +629,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: ConstantlyCheck
 					requires: [
@@ -876,7 +879,7 @@
 		vitality: 2
 		site: 6
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -954,7 +957,8 @@
 			Support Area
 		]
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: ConstantlyCheck
 				requires: [
@@ -1124,7 +1128,8 @@
 		type: Condition
 		keywords: Support Area
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: losesSkirmish
 				filter: or(companion,ally)
@@ -1245,7 +1250,8 @@
 		vitality: 2
 		site: 6
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: your,weapon
@@ -1333,7 +1339,7 @@
 		vitality: 3
 		site: 6
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -1600,7 +1606,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: ConstantlyCheck
 					requires: [
@@ -1821,7 +1828,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}
@@ -1872,7 +1880,8 @@
 		vitality: 3
 		site: 6
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: winsSkirmish
 				filter: self
@@ -1920,7 +1929,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}

@@ -89,7 +89,8 @@
 		direction: Right
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self
@@ -138,7 +139,7 @@
 		direction: Right
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				player: free people
 				trigger: {
@@ -184,7 +185,8 @@
 		keywords: Battleground
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self
@@ -223,7 +225,8 @@
 		keywords: Battleground
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: transferred
 					filter: follower
@@ -267,7 +270,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: constantlyCheck
 				}

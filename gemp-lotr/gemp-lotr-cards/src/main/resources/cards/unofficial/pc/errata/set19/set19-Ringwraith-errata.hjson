@@ -63,7 +63,8 @@
 		keyword: fierce
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -80,7 +81,8 @@
 				]
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: fpstartedassigning
 				}

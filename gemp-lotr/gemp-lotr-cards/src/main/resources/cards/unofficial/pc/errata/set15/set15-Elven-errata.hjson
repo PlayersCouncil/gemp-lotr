@@ -16,7 +16,8 @@
 		keyword: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsskirmish
 					filter: name(legolas)

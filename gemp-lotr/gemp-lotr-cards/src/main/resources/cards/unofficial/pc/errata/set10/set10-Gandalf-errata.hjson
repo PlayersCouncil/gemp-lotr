@@ -15,10 +15,10 @@
 		timeword: response
 		effects: {
 			type: responseEvent
-            requires: {
-                type: phase
-                phase: regroup
-            }
+			requires: {
+				type: phase
+				phase: regroup
+			}
 			trigger: {
 				type: moves
 			}

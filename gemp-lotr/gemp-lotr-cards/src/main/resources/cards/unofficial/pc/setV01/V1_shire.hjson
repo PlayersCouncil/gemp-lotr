@@ -80,7 +80,7 @@
 		vitality: 2
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -292,7 +292,7 @@
 	# 	resistance: 5
 	# 	effects: [
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
 	# 			optional: true
 	# 			trigger: {
 	# 				type: winsSkirmish
@@ -357,7 +357,7 @@
 		resistance: 5
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish

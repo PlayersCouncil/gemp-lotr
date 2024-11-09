@@ -16,7 +16,8 @@
 		target: culture(rohan),companion
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				text: Exert a minion
 				optional: true
 				trigger: {
@@ -375,7 +376,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played

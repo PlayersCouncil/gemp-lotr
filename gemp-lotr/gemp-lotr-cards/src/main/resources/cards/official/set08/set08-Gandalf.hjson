@@ -353,7 +353,8 @@
 		target: title(Gandalf)
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfPhase
 					phase: skirmish

@@ -15,7 +15,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: playerDrawsCard
@@ -289,7 +289,7 @@
 		itemclass: Ring
 		target: name(Gandalf)
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfTurn

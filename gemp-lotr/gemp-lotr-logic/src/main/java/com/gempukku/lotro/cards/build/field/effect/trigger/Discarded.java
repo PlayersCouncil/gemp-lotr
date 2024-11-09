@@ -19,7 +19,7 @@ public class Discarded implements TriggerCheckerProducer {
         FieldUtils.validateAllowedFields(value, "filter", "source", "player", "fromZone", "ignoreVoluntary", "memorize");
 
         final String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
-        final String source = FieldUtils.getString(value.get("source"), "source", "any");
+        final String source = FieldUtils.getString(value.get("source"), "source");
         final String discardingPlayer = FieldUtils.getString(value.get("player"), "player");
         Zone zone = FieldUtils.getEnum(Zone.class, value.get("fromZone"), "fromZone");
         final boolean ignoreVoluntary = FieldUtils.getBoolean(value.get("ignoreVoluntary"), "ignoreVoluntary", false);
@@ -88,13 +88,18 @@ public class Discarded implements TriggerCheckerProducer {
                         source = discardResult.getSource();
                         forced = discardResult.isForced();
                         //TODO: split owner and performing player properly
-                        performingPlayer = source.getOwner();
+                        if(source != null) {
+                            performingPlayer = source.getOwner();
+                        }
                         discardedCard = discardResult.getDiscardedCard();
                     }
                 }
 
+                if(discardedCard == null)
+                    return false;
+
                 if (result && bySource != null) {
-                    if (discardedCard == null || !Filters.accepts(actionContext.getGame(), bySource.getFilterable(actionContext), source))
+                    if (source == null || !Filters.accepts(actionContext.getGame(), bySource.getFilterable(actionContext), source))
                         result = false;
                 }
 

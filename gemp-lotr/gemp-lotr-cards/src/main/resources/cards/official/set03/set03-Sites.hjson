@@ -52,7 +52,8 @@
 		block: Fellowship
 		direction: Right
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			player: fp
 			trigger: {
 				type: movesTo
@@ -155,7 +156,7 @@
 		direction: Right
 		keywords: Sanctuary
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: movesTo

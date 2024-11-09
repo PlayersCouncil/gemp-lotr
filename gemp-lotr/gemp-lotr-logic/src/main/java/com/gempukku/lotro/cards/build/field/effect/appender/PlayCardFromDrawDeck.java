@@ -68,7 +68,7 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
                             final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(actionContext.getGame(), cardsToPlay.iterator().next(), costModifier, onFilterable, false);
                             return new StackActionEffect(playCardAction);
                         } else {
-                            // This will notify any effect that uses playing from deck as a cost, that the cost was not "payed"
+                            // This will notify any effect that uses playing from deck as a cost, that the cost was not "paid"
                             return new FailedEffect();
                         }
                     }

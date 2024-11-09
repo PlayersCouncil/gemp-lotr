@@ -23,7 +23,7 @@ public class TriggerEffectProcessor implements EffectProcessor {
         final JSONObject[] triggerArray = FieldUtils.getObjectArray(value.get("trigger"), "trigger");
         if (triggerArray.length == 0)
             throw new InvalidCardDefinitionException("Trigger effect without trigger definition");
-        final boolean optional = FieldUtils.getBoolean(value.get("optional"), "optional", false);
+        final boolean optional = FieldUtils.getBoolean(value.get("optional"), "optional");
         final int limitPerTurn = FieldUtils.getInteger(value.get("limitPerTurn"), "limitPerTurn", 0);
         final int limitPerPhase = FieldUtils.getInteger(value.get("limitPerPhase"), "limitPerPhase", 0);
         final Phase phase = FieldUtils.getEnum(Phase.class, value.get("phase"), "phase");

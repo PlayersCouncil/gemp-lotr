@@ -22,7 +22,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: addsBurden
 					filter: culture(wraith)
@@ -97,7 +98,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}
@@ -109,7 +111,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfPhase
 					phase: shadow
@@ -259,7 +262,7 @@
 		site: 3
 		keywords: Twilight
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: winsSkirmish

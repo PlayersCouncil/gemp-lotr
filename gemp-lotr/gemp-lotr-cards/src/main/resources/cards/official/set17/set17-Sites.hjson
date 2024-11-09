@@ -58,7 +58,8 @@
 		keywords: River
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self,regionNumber(2)
@@ -95,7 +96,8 @@
 		keywords: River
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self,sanctuary

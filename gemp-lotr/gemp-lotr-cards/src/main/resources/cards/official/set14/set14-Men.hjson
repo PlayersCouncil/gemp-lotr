@@ -62,7 +62,8 @@
 		vitality: 2
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: startOfPhase
 				phase: regroup

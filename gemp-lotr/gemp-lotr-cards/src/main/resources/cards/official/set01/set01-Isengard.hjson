@@ -467,7 +467,8 @@
 		type: Condition
 		keywords: Support Area
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: your,weather,condition
@@ -641,7 +642,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: hasAttached(self)
@@ -652,7 +654,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}
@@ -711,7 +714,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}
@@ -855,7 +859,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}
@@ -973,7 +978,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}
@@ -1060,7 +1066,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: ConstantlyCheck
 					requires: [
@@ -1429,7 +1436,8 @@
 		site: 5
 		keywords: Damage+1
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: winsSkirmish
 				filter: self
@@ -1584,7 +1592,7 @@
 		site: 5
 		keywords: Damage+1
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -1844,7 +1852,8 @@
 		itemclass: Hand weapon
 		target: uruk-hai
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: winsSkirmish
 				filter: bearer
@@ -1941,7 +1950,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: losesSkirmish
 					filter: or(companion,ally)

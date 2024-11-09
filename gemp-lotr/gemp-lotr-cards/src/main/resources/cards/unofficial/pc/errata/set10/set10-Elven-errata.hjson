@@ -19,14 +19,14 @@
 		vitality: 4
 		resistance: 6
 		effects: [
-		    {
-		        type: toPlay
-                requires: {
-                    type: canSpot
-                    filter: elf
-                    count: 2
-                }
-		    }
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+					count: 2
+				}
+			}
 			{
 				type: activated
 				phase: skirmish
@@ -106,7 +106,7 @@
 	# 			amount: -3
 	# 		}
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
 	# 			optional: true
 	# 			trigger: {
 	# 				type: startOfPhase
@@ -293,7 +293,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: losesInitiative

@@ -26,14 +26,15 @@
 		resistance: 6,
 		effects: [
 			{
-			    type: modifier
-			    modifier: {
-			        type: modifyMoveLimit
-			        amount: 1
-			    }
+				type: modifier
+				modifier: {
+					type: modifyMoveLimit
+					amount: 1
+				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}

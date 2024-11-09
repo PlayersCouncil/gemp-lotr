@@ -18,20 +18,20 @@
 		timeword: fellowship
 		effects: {
 			type: event
-            requires: {
-                type: or
-                requires: [
-                    {
-                        type: canSpot
-                        filter: name(smeagol)
-                    }
-                    {
-                        type: canSpot
-                        filter: ring bound,hobbit
-                        count: 2
-                    }
-                ]
-            }
+			requires: {
+				type: or
+				requires: [
+					{
+						type: canSpot
+						filter: name(smeagol)
+					}
+					{
+						type: canSpot
+						filter: ring bound,hobbit
+						count: 2
+					}
+				]
+			}
 			cost: {
 				type: addBurdens
 				amount: 2

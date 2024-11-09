@@ -13,7 +13,7 @@
 	# 	resistance: 6
 	# 	effects: [
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
 	# 			optional: true
 	# 			trigger: {
 	# 				type: played
@@ -68,7 +68,7 @@
 	# 	resistance: 6
 	# 	effects: [
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
 	# 			optional: true
 	# 			trigger: {
 	# 				type: played
@@ -154,7 +154,7 @@
 		resistance: 6
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -227,7 +227,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -335,7 +335,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				optional: false
 				trigger: {
 					type: killed
@@ -405,7 +406,7 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -499,7 +500,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: bearer

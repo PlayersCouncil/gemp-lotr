@@ -95,8 +95,8 @@
 		twilight: 6
 		type: Condition
 		keywords: [
-		    Support Area
-		    Toil 2
+			Support Area
+			Toil 2
 		]
 		effects: [
 			{
@@ -324,7 +324,7 @@
 		resistance: 7
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -375,7 +375,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: exertsToPlay
@@ -502,7 +502,8 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self

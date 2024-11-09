@@ -164,7 +164,7 @@
 	# 			}
 	# 		}
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
 	# 			optional: true
 	# 			trigger: {
 	# 				type: killed

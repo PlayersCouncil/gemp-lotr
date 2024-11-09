@@ -66,7 +66,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 						type: winsSkirmish
@@ -272,7 +272,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 						type: winsSkirmish
@@ -357,7 +357,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 						type: winsSkirmish
@@ -410,7 +410,8 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: optional
 				trigger: {
 						type: winsSkirmish
@@ -461,7 +462,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 						type: winsSkirmish
@@ -512,7 +513,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 						type: winsSkirmish
@@ -613,7 +614,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 						type: winsSkirmish
@@ -738,7 +739,7 @@
 		keywords: Support Area
 		effects: [
 				{
-						type: trigger
+						type: Trigger
 						optional: true
 						trigger: {
 								type: played
@@ -851,7 +852,7 @@
 		site: 3
 		effects: [
 				{
-						type: trigger
+						type: Trigger
 						optional: true
 						trigger: {
 								type: moves
@@ -959,7 +960,7 @@
 		site: 3
 		effects: [
 				{
-						type: trigger
+						type: Trigger
 						optional: true
 						trigger: {
 								type: winsSkirmish
@@ -1017,7 +1018,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 						type: winsSkirmish
@@ -1070,7 +1071,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 						type: winsSkirmish
@@ -1138,7 +1139,7 @@
 		keywords: Support Area
 		effects: [
 				{
-						type: trigger
+						type: Trigger
 						optional: true
 						trigger: {
 								type: winsSkirmish
@@ -1430,7 +1431,8 @@
 						}
 				}
 				{
-						type: trigger
+						type: Trigger
+						optional: false
 						trigger: {
 								type: moves
 						}
@@ -1484,7 +1486,7 @@
 		keywords: Support Area
 		effects: [
 				{
-						type: trigger
+						type: Trigger
 						optional: true
 						trigger: {
 										type: losesSkirmish
@@ -1585,7 +1587,7 @@
 		target: culture(dunland),man
 		effects: [
 				{
-						type: trigger
+						type: Trigger
 						optional: true
 						trigger: {
 								type: winsSkirmish
@@ -1674,7 +1676,7 @@
 		site: 3
 		effects: [
 				{
-						type: trigger
+						type: Trigger
 						optional: true
 						trigger: {
 								type: winsSkirmish

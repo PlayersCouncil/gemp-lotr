@@ -15,7 +15,8 @@
 		keywords: Underground
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: self,not(regionNumber(1))
@@ -55,7 +56,7 @@
 		keywords: Underground
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				player: free people
 				trigger: {
@@ -98,7 +99,7 @@
 		keywords: Battleground
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				player: free people
 				trigger: {
@@ -141,7 +142,7 @@
 		keywords: Dwelling
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				player: shadow
 				trigger: {
@@ -183,7 +184,7 @@
 		direction: Right
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				player: free people
 				trigger: {
@@ -375,7 +376,7 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				player: shadow
 				trigger: {

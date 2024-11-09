@@ -1,10 +1,11 @@
 package com.gempukku.lotro.cards.official.set09;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.ActivateCardAction;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -224,6 +225,7 @@ public class Card_09_001_Tests
 		scn.FreepsUseCardAction(ring);
 		assertEquals(2, scn.FreepsGetSelectableCount());
 		scn.FreepsChooseCardBPFromSelection(ring1);
+		scn.FreepsDismissRevealedCards();
 
 		assertEquals(3, scn.GetBurdens());
 		assertEquals(Zone.ATTACHED, ring1.getZone());

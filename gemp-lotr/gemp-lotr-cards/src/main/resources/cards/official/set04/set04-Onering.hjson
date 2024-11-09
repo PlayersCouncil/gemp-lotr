@@ -30,7 +30,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				requires: [
 					{
 						type: ringIsOn
@@ -96,7 +97,8 @@
 		strength: 1
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				requires: [
 					{
 						type: ringIsOn

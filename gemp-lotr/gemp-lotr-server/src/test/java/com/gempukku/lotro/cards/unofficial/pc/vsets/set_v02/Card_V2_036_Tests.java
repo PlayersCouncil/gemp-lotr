@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -133,6 +132,7 @@ public class Card_V2_036_Tests
 		assertEquals(3, scn.ShadowGetSelectableCount());
 		assertEquals(Zone.DECK, warg1.getZone());
 		scn.ShadowChooseCardBPFromSelection(warg1);
+		scn.ShadowDismissRevealedCards();
 		assertEquals(Zone.STACKED, warg1.getZone());
 		assertSame(pit, warg1.getStackedOn());
 
@@ -143,6 +143,7 @@ public class Card_V2_036_Tests
 		assertEquals(2, scn.ShadowGetSelectableCount());
 		assertEquals(Zone.DECK, warg2.getZone());
 		scn.ShadowChooseCardBPFromSelection(warg2);
+		scn.ShadowDismissRevealedCards();
 		assertEquals(Zone.STACKED, warg2.getZone());
 		assertSame(pit, warg2.getStackedOn());
 
@@ -177,6 +178,7 @@ public class Card_V2_036_Tests
 		assertEquals(1, scn.ShadowGetSelectableCount());
 		assertEquals(Zone.DECK, warg1.getZone());
 		scn.ShadowChooseCardBPFromSelection(warg1);
+		scn.ShadowDismissRevealedCards();
 		assertEquals(Zone.STACKED, warg1.getZone());
 		assertSame(pit, warg1.getStackedOn());
 
