@@ -458,7 +458,7 @@
 				}
 				effect: {
 					type: discard
-					select: choose(engine,machine,possession)
+					select: choose(or(engine,machine,possession))
 				}
 			}
 		]

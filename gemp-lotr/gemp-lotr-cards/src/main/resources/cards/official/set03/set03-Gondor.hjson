@@ -352,10 +352,21 @@
 					type: addTwilight
 					amount: 1
 				}
-				effect: {
-					type: putStackedCardsIntoHand
-					on: self
-				}
+				effect: [
+					{
+						type: ChooseCardsFromSingleStack
+						select: choose(any)
+						count: 1
+						on: self
+						memorize: chosenCard
+						text: Choose a card to take into hand
+					}
+					{
+						type: putStackedCardsIntoHand
+						select: memory(chosenCard)
+						on: self
+					}
+				]
 			}
 		]
 		gametext: Plays to your support area.<br><b>Fellowship:</b> Stack a [gondor] card from hand here.<br><b>Fellowship:</b> Add (1) to take a card stacked here into hand.
