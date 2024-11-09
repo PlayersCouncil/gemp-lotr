@@ -1462,6 +1462,7 @@
 	  }
 	  {
 		type: trigger
+		optional: false
 		requires: [
 		  {
 			type: ringIsOn

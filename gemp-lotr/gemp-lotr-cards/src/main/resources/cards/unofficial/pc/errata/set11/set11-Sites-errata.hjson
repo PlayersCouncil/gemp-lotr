@@ -68,7 +68,6 @@
 	# 	]
 	# 	effects: {
 	# 		type: Trigger
-		optional: false
 	# 		trigger: {
 	# 			type: startOfPhase
 	# 			phase: skirmish

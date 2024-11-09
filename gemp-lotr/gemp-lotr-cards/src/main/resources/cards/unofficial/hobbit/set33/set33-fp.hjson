@@ -421,7 +421,8 @@
 	keyword: support area
 	effects: [
 	  {
-		type: trigger
+		type: Trigger
+		optional: false
 		trigger: {
 		  type: played
 		  filter: self
@@ -465,7 +466,8 @@
 	vitality: 5
 	effects: [
 	  {
-		type: trigger
+		type: Trigger
+		optional: false
 		trigger: {
 		  type: moves
 		}

@@ -69,7 +69,6 @@
 	# 	target: dwarf
 	# 	effects: {
 	# 		type: Trigger
-		optional: false
 	# 		trigger: {
 	# 			type: losesSkirmish
 	# 			filter: minion

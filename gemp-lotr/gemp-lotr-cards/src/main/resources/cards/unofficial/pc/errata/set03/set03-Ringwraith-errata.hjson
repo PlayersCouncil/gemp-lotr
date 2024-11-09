@@ -106,7 +106,6 @@
 	# 		}
 	# 		{
 	# 			type: Trigger
-			optional: false
 	# 			trigger: {
 	# 				type: StartOfPhase
 	# 				phase: regroup

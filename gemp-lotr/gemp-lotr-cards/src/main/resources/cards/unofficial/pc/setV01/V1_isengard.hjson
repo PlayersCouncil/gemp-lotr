@@ -166,7 +166,6 @@
 	# 	effects: [
 	# 		{
 	# 			type: Trigger
-			optional: false
 	# 			trigger: {
 	# 				type: played
 	# 				filter: self

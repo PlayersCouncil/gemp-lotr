@@ -23,7 +23,6 @@
 	# 	effects: [
 	# 		{
 	# 			type: Trigger
-			optional: false
 	# 			optional: false
 	# 			trigger: {
 	# 				type: WinsSkirmish
@@ -37,7 +36,6 @@
 	# 		}
 	# 		{
 	# 			type: Trigger
-			optional: false
 	# 			trigger: {
 	# 				type: StartOfPhase
 	# 				phase: regroup
@@ -263,7 +261,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startofphase
 					phase: Shadow

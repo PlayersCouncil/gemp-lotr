@@ -594,7 +594,6 @@
 	# 		}
 	# 		{
 	# 			type: Trigger
-			optional: false
 	# 			trigger: {
 	# 				type: UsesSpecialAbility
 	# 				filter: bearer
@@ -854,7 +853,6 @@
 	# 		}
 	# 		{		
 	# 			type: Trigger
-			optional: false
 	# 			trigger: {
 	# 				type: UsesSpecialAbility
 	# 				filter: bearer

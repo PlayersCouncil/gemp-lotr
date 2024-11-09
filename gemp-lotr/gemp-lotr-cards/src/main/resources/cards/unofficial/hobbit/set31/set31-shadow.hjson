@@ -726,7 +726,8 @@
 			}
 		}
 	  {
-		type: trigger
+		type: Trigger
+		optional: false
 		trigger: {
 		  type: played
 		  filter: your,weapon
@@ -815,7 +816,8 @@
 	keyword: damage+1
 	effects: [
 	  {
-		type: trigger
+		type: Trigger
+		optional: false
 		trigger: {
 		  type: played
 		  filter: self
@@ -865,6 +867,7 @@
 	effects: [
 	  {
 		type: trigger
+		optional: false
 		requires: {
 		  type: location
 		  filter: siteNumber(7-9)
@@ -991,7 +994,8 @@
 	keyword: support area
 	effects: [
 	  {
-		type: trigger
+		type: Trigger
+		optional: false
 		trigger: {
 		  type: played
 		  filter: or(companion,follower)
@@ -1276,7 +1280,8 @@
 	keyword: support area
 	effects: [
 	  {
-		type: trigger
+		type: Trigger
+		optional: false
 		trigger: {
 		  type: winsSkirmish
 		  filter: name(Bilbo)
@@ -1351,7 +1356,8 @@
 		}
 	  }
 	  {
-		type: trigger
+		type: Trigger
+		optional: false
 		trigger: {
 		  type: losesSkirmish
 		  filter: companion

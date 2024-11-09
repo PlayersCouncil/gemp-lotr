@@ -14,7 +14,6 @@
 	# 	effects: [
 	# 		{
 	# 			type: Trigger
-			optional: false
 	# 			optional: true
 	# 			trigger: {
 	# 				type: played
@@ -70,7 +69,6 @@
 	# 	effects: [
 	# 		{
 	# 			type: Trigger
-			optional: false
 	# 			optional: true
 	# 			trigger: {
 	# 				type: played

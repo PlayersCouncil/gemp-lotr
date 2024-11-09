@@ -291,7 +291,7 @@
 		vitality: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfTurn
@@ -410,7 +410,7 @@
 		type: Condition
 		keywords: Support Area
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: moves
@@ -498,7 +498,7 @@
 		vitality: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfTurn
@@ -787,7 +787,7 @@
 		itemclass: Ring
 		target: name(Galadriel)
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfPhase
