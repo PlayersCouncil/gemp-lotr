@@ -17,8 +17,8 @@ public class Card_06_063_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "6_63");
-					// put other cards in here as needed for the test case
+					put("gnawing", "6_63");
+					put("artisan", "6_65");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -27,7 +27,7 @@ public class Card_06_063_Tests
 	}
 
 	@Test
-	public void GnawingBitingbrHackingBurningStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GnawingBitingHackingBurningStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 6
@@ -43,7 +43,7 @@ public class Card_06_063_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("gnawing");
 
 		assertEquals("Gnawing, Biting, Hacking, Burning", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,18 +55,44 @@ public class Card_06_063_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GnawingBitingbrHackingBurningTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GnawingBitingHackingBurningCatchesRegroupActionDiscards() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var gnawing = scn.GetShadowCard("gnawing");
+		var artisan = scn.GetShadowCard("artisan");
+		scn.ShadowMoveCharToTable(artisan);
+		scn.ShadowMoveCardToSupportArea(gnawing);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToPhase(Phase.REGROUP);
 
-		assertEquals(2, scn.GetTwilight());
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowActionAvailable(artisan));
+		scn.ShadowUseCardAction(artisan);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(Zone.STACKED, artisan.getZone());
+		assertEquals(gnawing, artisan.getStackedOn());
+	}
+
+	@Test
+	public void GnawingBitingHackingBurningDoesNotCatchTurnEndDiscards() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var gnawing = scn.GetShadowCard("gnawing");
+		var artisan = scn.GetShadowCard("artisan");
+		scn.ShadowMoveCharToTable(artisan);
+		scn.ShadowMoveCardToSupportArea(gnawing);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsChooseToStay();
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(Phase.FELLOWSHIP, scn.getPhase());
 	}
 }

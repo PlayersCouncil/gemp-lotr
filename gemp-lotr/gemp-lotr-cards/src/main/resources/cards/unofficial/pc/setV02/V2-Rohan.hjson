@@ -405,6 +405,16 @@
 						filter: culture(rohan), or(item, ally)
 					}
 					{
+						type: Discarded
+						fromZone: hand
+						filter: culture(rohan), or(item, ally)
+					}
+					{
+						type: Discarded
+						fromZone: deck
+						filter: culture(rohan), or(item, ally)
+					}
+					{
 						type: Killed
 						filter: culture(rohan), ally
 					}
