@@ -102,6 +102,7 @@ public class Card_18_096_ErrataTests
 
 		assertEquals(1, scn.GetWoundsOn(eomer));
         scn.FreepsChooseCardBPFromSelection(worker);
+		scn.FreepsDismissRevealedCards();
 		assertEquals(Zone.SUPPORT, worker.getZone());
 	}
 

@@ -20,6 +20,7 @@ public class Card_01_087_Tests
 					put("late", "1_87");
 					put("gandalf", "1_72");
 					put("bb", "1_70");
+					put("filler", "1_75");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -78,6 +79,9 @@ public class Card_01_087_Tests
 		assertEquals(2, scn.GetFreepsCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(gandalf);
 
+		assertTrue(scn.FreepsDecisionAvailable("You may inspect the contents of your deck while retrieving cards"));
+		scn.FreepsDismissRevealedCards();
+
 		assertEquals(Zone.FREE_CHARACTERS, gandalf.getZone());
 		assertEquals(Zone.DECK, bb.getZone());
 	}
@@ -103,6 +107,8 @@ public class Card_01_087_Tests
         assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		assertEquals(2, scn.GetFreepsCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(bb);
+		assertTrue(scn.FreepsDecisionAvailable("You may inspect the contents of your deck while retrieving cards"));
+		scn.FreepsDismissRevealedCards();
 
 		assertEquals(Zone.DECK, gandalf.getZone());
 		assertEquals(Zone.SUPPORT, bb.getZone());

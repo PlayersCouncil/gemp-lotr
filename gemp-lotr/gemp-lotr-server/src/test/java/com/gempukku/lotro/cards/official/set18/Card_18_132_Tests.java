@@ -184,6 +184,7 @@ public class Card_18_132_Tests
 
         assertEquals(2, scn.ShadowGetSelectableCount()); // orc + cantea, but not TWK
         scn.ShadowChooseCardBPFromSelection(orc);
+        scn.ShadowDismissRevealedCards();
 
         assertEquals(Zone.SHADOW_CHARACTERS, orc.getZone());
     }

@@ -100,6 +100,7 @@ public class Card_11_235_Tests
 		assertEquals(Zone.DECK, dontlook.getZone());
 		assertEquals(Zone.DECK, smeagol.getZone());
 		scn.FreepsChooseCardBPFromSelection(dontlook);
+		scn.FreepsDismissRevealedCards();
 
 		assertEquals(Zone.SUPPORT, dontlook.getZone());
 		assertEquals(Zone.DECK, smeagol.getZone());
