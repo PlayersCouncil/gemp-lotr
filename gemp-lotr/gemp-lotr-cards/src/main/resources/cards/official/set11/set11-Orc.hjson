@@ -1042,11 +1042,16 @@
 					type: assignedAgainst
 					filter: self
 					against: companion
-					memorizeAgainst: companion
+					memorizeAgainst: assignedComp
 				}
-				effect: {
-					type: exert
-					select: choose(memory(companion),companion)
+				effect: 
+				{
+					type: Optional
+					text: Would you like to exert {assignedComp}?
+					effect: {
+						type: exert
+						select: memory(assignedComp)
+					}
 				}
 			}
 		]
