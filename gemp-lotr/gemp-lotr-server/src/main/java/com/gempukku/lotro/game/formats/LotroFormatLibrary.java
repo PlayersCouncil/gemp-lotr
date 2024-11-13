@@ -120,6 +120,11 @@ public class LotroFormatLibrary {
                     _hallFormats.put(format.getCode(), format);
                 }
             }
+
+            for(var format : _hallFormats.values()) {
+                format.generateBlockFilter(_allFormats, _cardLibrary.getSetDefinitions());
+            }
+
             collectionReady.release();
         }
         catch (Exception exp) {

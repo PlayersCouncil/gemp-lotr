@@ -5,6 +5,7 @@ import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.*;
+import com.gempukku.lotro.game.packs.SetDefinition;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +36,7 @@ public class DefaultLotroFormat implements LotroFormat {
     private final List<String> _bannedCards = new ArrayList<>();
     private final List<String> _restrictedCards = new ArrayList<>();
     private final List<String> _validCards = new ArrayList<>();
-    private final List<Integer> _validSets = new ArrayList<>();
+    private final List<String> _validSets = new ArrayList<>();
     private final List<String> _restrictedCardNames = new ArrayList<>();
     private final String _surveyUrl;
     private final boolean _isPlaytest;
@@ -44,6 +45,9 @@ public class DefaultLotroFormat implements LotroFormat {
     private final List<String> _limit2Cards = new ArrayList<>();
     private final List<String> _limit3Cards = new ArrayList<>();
     private final Map<String,String> _errataCardMap = new TreeMap<>();
+
+    private final List<String> _blockDefs = new ArrayList<>();
+    private final List<JSONDefs.BlockFilter> _blockFilters = new ArrayList<>();
 
 
     public DefaultLotroFormat(AdventureLibrary adventureLibrary, LotroCardBlueprintLibrary library, JSONDefs.Format def) throws InvalidPropertiesFormatException{
@@ -68,8 +72,8 @@ public class DefaultLotroFormat implements LotroFormat {
         _isPlaytest = def.playtest;
         _hallVisible = def.hall;
 
-        if(def.set != null)
-            def.set.forEach(this::addValidSet);
+        if(def.sets != null)
+            def.sets.forEach(this::addValidSet);
         if(def.banned != null)
             def.banned.forEach(this::addBannedCard);
         if(def.restricted != null)
@@ -89,6 +93,58 @@ public class DefaultLotroFormat implements LotroFormat {
         }
         if(def.errata != null)
             def.errata.forEach(this::addCardErrata);
+
+        if(def.blocks != null)
+            this._blockDefs.addAll(def.blocks);
+    }
+
+    @Override
+    public void generateBlockFilter(Map<String, LotroFormat> allFormats, Map<String, SetDefinition> allSets) {
+        try {
+            for (String def : this._blockDefs) {
+                if (def == null || def.isEmpty())
+                    continue;
+
+                var filter = new JSONDefs.BlockFilter();
+
+                var format = allFormats.get(def);
+                if (format != null) {
+                    filter.name = format.getName();
+                    filter.filter = format.getCode();
+                    for (String setId : format.getValidSets()) {
+                        var set = allSets.get(setId);
+                        if (set == null)
+                            continue; // maybe throw?
+
+                        filter.setFilters.put(set.getSetName(), set.getSetId());
+                    }
+                    _blockFilters.add(filter);
+                    continue;
+                }
+
+                //Not a format, so we are splitting apart an ad-hoc definition in the form of:
+                // Additional Sets|Reflections:9,Expanded Middle-earth:14,The Wraith Collection:16
+                String filterList = "";
+
+                var blockInfo = def.split("\\|");
+                filter.name = blockInfo[0];
+
+                var sets = blockInfo[1].split(",");
+                for (String set : sets) {
+                    var setInfo = set.split(":");
+                    filter.setFilters.put(setInfo[0], setInfo[1]);
+
+                    filterList += setInfo[1] + ",";
+                }
+
+                filter.filter =  filterList.substring(0, filterList.length() - 1);
+
+                _blockFilters.add(filter);
+            }
+        }
+        catch(Exception ex) {
+            throw new IllegalArgumentException("Format " + _name + " has invalid block definition.", ex);
+        }
     }
 
     @Override
@@ -157,7 +213,7 @@ public class DefaultLotroFormat implements LotroFormat {
     }
 
     @Override
-    public List<Integer> getValidSets() {
+    public List<String> getValidSets() {
         return Collections.unmodifiableList(_validSets);
     }
 
@@ -248,8 +304,8 @@ public class DefaultLotroFormat implements LotroFormat {
             _validCards.add(baseBlueprintId);
     }
 
-    public void addValidSet(int setNo) {
-        _validSets.add(setNo);
+    public void addValidSet(Integer setNo) {
+        _validSets.add(String.valueOf(setNo));
     }
 
     //Additional Hobbit Draft card lists
@@ -322,7 +378,7 @@ public class DefaultLotroFormat implements LotroFormat {
     }
 
     private boolean isValidInSets(String blueprintId)  {
-        for (int validSet : _validSets)
+        for (String validSet : _validSets)
             if (blueprintId.startsWith(validSet + "_")
                     || _library.hasAlternateInSet(blueprintId, validSet))
                 return true;
@@ -803,7 +859,9 @@ public class DefaultLotroFormat implements LotroFormat {
             maximumSameName = _maximumSameName;
             mulliganRule = _mulliganRule;
             usesMaps = _usesMaps;
-            set = null;
+            sets = null;
+            blocks = null;
+            blockFilters = new ArrayList<>(_blockFilters);
             banned = null;
             restricted = null;
             valid = null;

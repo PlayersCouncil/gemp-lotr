@@ -9,112 +9,72 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_10_008_ErrataTests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
-                new HashMap<>() {{
-                    put("cirdan", "60_8");
-                    put("event1", "1_37");
-                    put("event2", "1_37");
-                    put("event3", "1_37");
-                    put("event4", "1_37");
 
-                    put("nazgul", "1_233");
-                }}
-        );
-    }
+	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new GenericCardTestHelper(
+				new HashMap<>()
+				{{
+					put("card", "60_8");
+					// put other cards in here as needed for the test case
+				}},
+				GenericCardTestHelper.FellowshipSites,
+				GenericCardTestHelper.FOTRFrodo,
+				GenericCardTestHelper.RulingRing
+		);
+	}
 
-    @Test
-    public void CirdanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void CirdanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
-        /**
-         * Set: 10E
-         * Title: Cirdan
-         * Subtitle: The Shipwright
-         * Side: Free Peoples
-         * Culture: Elven
-         * Twilight Cost: 4
-         * Type: Companion
-         * Race: Elf
-         * Strength: 7
-         * Vitality: 4
-         * Resistance: 6
-         * Signet: None
-         * Errata Game Text: To play, spot 2 Elves.
-         * Skirmish: Exert Cirdan to make a minion he is skirmishing strength -1 for each [ELVEN] event in your discard pile.
-         * If that minion is now strength 6 or less, remove 3 [ELVEN] events in your discard pile from the game.
-         */
+		/**
+		 * Set: 10
+		 * Name: Cirdan, The Shipwright
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 4
+		 * Type: Companion
+		 * Subtype: Elf
+		 * Strength: 7
+		 * Vitality: 4
+		 * Resistance: 6
+		 * Game Text: To play, spot 2 Elves.
+		 * <b>Skirmish:</b> Exert Cirdan to make a minion he is skirmishing strength -1 for each [elven] event in your discard pile. If that minion is overwhelmed, remove half of the [elven] events in your discard pile from the game (rounded down).
+		*/
 
-        //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-        PhysicalCardImpl cirdan = scn.GetFreepsCard("cirdan");
+		var card = scn.GetFreepsCard("card");
 
-        assertTrue(cirdan.getBlueprint().isUnique());
-        assertEquals(4, cirdan.getBlueprint().getTwilightCost());
-        assertEquals(CardType.COMPANION, cirdan.getBlueprint().getCardType());
-        assertEquals(Culture.ELVEN, cirdan.getBlueprint().getCulture());
-        assertEquals(Race.ELF, cirdan.getBlueprint().getRace());
-        assertEquals(7, cirdan.getBlueprint().getStrength());
-        assertEquals(4, cirdan.getBlueprint().getVitality());
-        assertEquals(6, cirdan.getBlueprint().getResistance());
-    }
+		assertEquals("Cirdan", card.getBlueprint().getTitle());
+		assertEquals("The Shipwright", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.ELF, card.getBlueprint().getRace());
+		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(7, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+	}
 
-    @Test
-    public void ReducesMinionStrengthAndRemovesEvents() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void CirdanTest1() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
 
-        PhysicalCardImpl cirdan = scn.GetFreepsCard("cirdan");
-        PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
-        scn.ShadowMoveCharToTable(cirdan);
-        scn.FreepsMoveCardToDiscard("event1");
-        scn.FreepsMoveCardToDiscard("event2");
-        scn.FreepsMoveCardToDiscard("event3");
-        scn.FreepsMoveCardToDiscard("event4");
+		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-        scn.ShadowMoveCharToTable(nazgul);
-
-        scn.StartGame();
-
-        scn.SkipToPhase(Phase.ASSIGNMENT);
-        scn.PassCurrentPhaseActions();
-        scn.FreepsAssignToMinions(cirdan, nazgul);
-
-        //this nazgul should be strength 10, -4 = 6, enough to trigger Cirdan's secondary effect
-        scn.FreepsResolveSkirmish(cirdan);
-        assertTrue(scn.FreepsActionAvailable("Use Cirdan"));
-        scn.FreepsUseCardAction(cirdan);
-
-        assertTrue(scn.FreepsDecisionAvailable("Choose card from discard"));
-        scn.FreepsChoose(scn.FreepsGetCardChoices().get(0), scn.FreepsGetCardChoices().get(1), scn.FreepsGetCardChoices().get(2));
-
-        assertEquals(6, scn.GetStrength(nazgul));
-        scn.ShadowPassCurrentPhaseAction();
-        scn.FreepsPassCurrentPhaseAction();
-
-        assertEquals(1, scn.GetWoundsOn(cirdan));
-        assertEquals(1, scn.GetWoundsOn(nazgul));
-
-        //fierce skirmish
-        scn.PassCurrentPhaseActions();
-        scn.FreepsAssignToMinions(cirdan, nazgul);
-        scn.FreepsResolveSkirmish(cirdan);
-
-        //There is now only one elven event in the discard pile, so cirdan's ability should only make
-        // the nazgul 10 - 1 = 9, not triggering the removal clause.
-        assertTrue(scn.FreepsActionAvailable("Use Cirdan"));
-        scn.FreepsUseCardAction(cirdan);
-
-        assertEquals(9, scn.GetStrength(nazgul));
-        assertFalse(scn.FreepsDecisionAvailable("Choose card from discard"));
-    }
-
-
+		assertEquals(4, scn.GetTwilight());
+	}
 }

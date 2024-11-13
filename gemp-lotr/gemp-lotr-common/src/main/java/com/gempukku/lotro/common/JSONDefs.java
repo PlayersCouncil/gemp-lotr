@@ -49,7 +49,9 @@ public class JSONDefs {
         public int maximumSameName = 4;
         public boolean mulliganRule = true;
         public boolean usesMaps = false;
-        public ArrayList<Integer> set;
+        public ArrayList<Integer> sets;
+        public ArrayList<String> blocks;
+        public ArrayList<BlockFilter> blockFilters;
         public ArrayList<String> banned = new ArrayList<>();
         public ArrayList<String> restricted = new ArrayList<>();
         public ArrayList<String> valid = new ArrayList<>();
@@ -60,6 +62,12 @@ public class JSONDefs {
         public Map<String, String> errata = new HashMap<>();
         public boolean hall = true;
 
+    }
+
+    public static class BlockFilter {
+        public String name;
+        public String filter;
+        public Map<String, String> setFilters = new HashMap<>();
     }
 
     public static class Set {

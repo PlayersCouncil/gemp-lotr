@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set04;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set05;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_04_276_ErrataTests
+public class Card_05_121_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "54_276");
+					put("card", "55_121");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,42 +28,47 @@ public class Card_04_276_ErrataTests
 	}
 
 	@Test
-	public void FortressNeverFallenStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void LegolasStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 4
-		 * Name: Fortress Never Fallen
+		 * Set: 5
+		 * Name: Legolas, Archer of Mirkwood
 		 * Unique: True
 		 * Side: Free Peoples
-		 * Culture: Rohan
+		 * Culture: Elven
 		 * Twilight Cost: 2
-		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: Fortification.
-		* 	Each time a [Rohan] Man wins a skirmish, you may place a [Rohan] token on this card.
-		* 	Regroup: Discard a Shadow condition
-		* 	for each [Rohan] token here (limit 4).
-		* 	Discard this condition.
+		 * Type: Companion
+		 * Subtype: Elf
+		 * Strength: 6
+		 * Vitality: 3
+		 * Resistance: 6
+		 * Signet: Theoden
+		 * Game Text: <b>Archer</b>. Valiant.<br>Each time Legolas wins a skirmish, you may heal a Dwarf companion or another Elf companion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Fortress Never Fallen", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
+		assertEquals("Legolas", card.getBlueprint().getTitle());
+		assertEquals("Archer of Mirkwood", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.FORTIFICATION));
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.ELF, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.ARCHER));
+		assertTrue(scn.hasKeyword(card, Keyword.VALIANT));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void FortressNeverFallenTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void LegolasTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
