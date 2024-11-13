@@ -32,7 +32,7 @@ public class SortAndFilterCards {
         var textWords = getWords(params.get("gametext"), false);
 
         var keywords = getEnumFilter(Keyword.values(), Keyword.class, params.get("keyword"), true);
-        var phases = getEnumFilter(Keyword.values(),Keyword.class, params.get("phase"), true);
+        var phases = getEnumFilter(Timeword.values(),Timeword.class, params.get("phase"), true);
         var races = getEnumFilter(Race.values(), Race.class, params.get("race"), true);
         var itemClasses = getEnumFilter(PossessionClass.values(), PossessionClass.class, params.get("itemclass"), true);
 
@@ -56,7 +56,7 @@ public class SortAndFilterCards {
 
         //In this giant loop, we will go through every item handed to us and see if it matches all of the above filter
         // conditions.  Whenever we fail a filter, we hit "continue" and move on to the next item to check.
-        for (T item : items) {
+        cardValidation: for (T item : items) {
             String blueprintId = item.getBlueprintId();
             String strippedId = BlueprintUtils.stripModifiers(blueprintId);
 
@@ -174,8 +174,18 @@ public class SortAndFilterCards {
                 continue;
 
             if(!phases.isEmpty()) {
-                if(card.getCardType() != CardType.EVENT || !containsAnyKeywords(card, phases))
-                    continue;
+                if(card.getCardType() == CardType.EVENT) {
+                    if(!containsAnyTimewords(card, phases))
+                        continue;
+                }
+                else {
+                    for(var timeword : phases) {
+                        String timephrase = StringUtils.capitalize(timeword.toString().toLowerCase() + ":");
+                        if(!containsAllWords(GameUtils.getFullText(card), Collections.singletonList(timephrase)))
+                            continue cardValidation;
+                    }
+                }
+
             }
 
             if(!itemClasses.isEmpty() && !containsAnyClasses(card, itemClasses))
@@ -340,6 +350,14 @@ public class SortAndFilterCards {
     private boolean containsAnyKeywords(LotroCardBlueprint blueprint, Set<Keyword> keywords) {
         for (Keyword keyword : keywords) {
             if (blueprint.hasKeyword(keyword))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean containsAnyTimewords(LotroCardBlueprint blueprint, Set<Timeword> timewords) {
+        for (Timeword timeword : timewords) {
+            if (blueprint.hasTimeword(timeword))
                 return true;
         }
         return false;
