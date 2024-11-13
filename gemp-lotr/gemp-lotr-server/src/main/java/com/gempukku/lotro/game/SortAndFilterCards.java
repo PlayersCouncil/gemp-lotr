@@ -18,7 +18,12 @@ public class SortAndFilterCards {
         var rarities = params.getOrDefault("rarity", new ArrayList<>());
         var side = Side.Parse(getSingleton(params.get("side")));
         var sort = params.getOrDefault("sort", new ArrayList<>());
+
+        var formats = params.getOrDefault("format", new ArrayList<>());
+        var blocks = params.getOrDefault("block", new ArrayList<>());
         var sets = params.getOrDefault("set", new ArrayList<>());
+
+
         var cardTypes = getEnumFilter(CardType.values(), CardType.class, params.get("cardtype"), false);
 
         var cultures = getEnumFilter(Culture.values(), Culture.class, params.get("culture"), true);
@@ -75,7 +80,16 @@ public class SortAndFilterCards {
             var card = cardBPCache.get(blueprintId);
             boolean valid = true;
 
-            if(!IsFlagAccepted(canStartWithRing, card.canStartWithRing()))
+            if(!formats.isEmpty() && !isInSetOrFormat(blueprintId, card, formats, cardLibrary, formatLibrary))
+                continue;
+
+            if(!blocks.isEmpty() && !isInSetOrFormat(blueprintId, card, blocks, cardLibrary, formatLibrary))
+                continue;
+
+            if(!sets.isEmpty() && !isInSetOrFormat(blueprintId, card, sets, cardLibrary, formatLibrary))
+                continue;
+
+            if(!isFlagAccepted(canStartWithRing, card.canStartWithRing()))
                 continue;
 
             if(product != null) {
@@ -117,9 +131,6 @@ public class SortAndFilterCards {
                         continue;
                 }
             }
-
-            if(!sets.isEmpty() && !isInSets(blueprintId, card, sets, cardLibrary, formatLibrary))
-                continue;
 
             if(!cardTypes.isEmpty() && !cardTypes.contains(card.getCardType()))
                 continue;
@@ -238,19 +249,28 @@ public class SortAndFilterCards {
         return result;
     }
 
-    private boolean isInSets(String blueprintId, LotroCardBlueprint card, List<String> setFilters, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
+    private boolean isInSetOrFormat(String blueprintId, LotroCardBlueprint card, List<String> setFilters, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
+        boolean isInAnySet = false;
+
         for (String set : setFilters) {
+            if(isJSInvalidString(set))
+                continue;
+
             LotroFormat format = formatLibrary.getFormat(set);
 
             if (format != null) {
+                String invalid = "";
                 if (card.getCardType() == CardType.SITE) {
-                    String invalid = format.validateSite(blueprintId);
-                    if(!StringUtils.isEmpty(invalid))
-                        return false;
+                    invalid = format.validateSite(blueprintId);
+                }
+                else {
+                    invalid = format.validateCard(blueprintId);
                 }
 
-                String invalid = format.validateCard(blueprintId);
-                return StringUtils.isEmpty(invalid);
+                if(StringUtils.isEmpty(invalid)) {
+                    isInAnySet = true;
+                }
+                continue;
             }
 
             if (set.contains("-")) {
@@ -258,17 +278,18 @@ public class SortAndFilterCards {
                 int min = Integer.parseInt(split[0]);
                 int max = Integer.parseInt(split[1]);
                 for (int setNo = min; setNo <= max; setNo++) {
-                    if (blueprintId.startsWith(setNo + "_") || library.hasAlternateInSet(blueprintId, setNo))
-                        return true;
+                    if (blueprintId.startsWith(setNo + "_") || library.hasAlternateInSet(blueprintId, String.valueOf(setNo))) {
+                        isInAnySet = true;
+                    }
                 }
             } else {
-                if (blueprintId.startsWith(set + "_") || library.hasAlternateInSet(blueprintId, Integer.parseInt(set)))
-                    return true;
+                if (blueprintId.startsWith(set + "_") || library.hasAlternateInSet(blueprintId, set)) {
+                    isInAnySet = true;
+                }
             }
         }
 
-
-        return false;
+        return isInAnySet;
     }
 
     private List<String> getWords(List<String> params, boolean sanitize) {
@@ -393,7 +414,7 @@ public class SortAndFilterCards {
         return result;
     }
 
-    private static boolean IsFlagAccepted(Boolean filterValue, Boolean blueprintValue) {
+    private static boolean isFlagAccepted(Boolean filterValue, Boolean blueprintValue) {
         if(filterValue == null)
             return true;
 
@@ -401,6 +422,10 @@ public class SortAndFilterCards {
             return false;
 
         return filterValue == blueprintValue;
+    }
+
+    private static boolean isJSInvalidString(String str) {
+        return str == null || str.isEmpty() || str.equals("null") || str.equals("undefined");
     }
 
 

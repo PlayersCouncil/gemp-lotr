@@ -108,13 +108,12 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                 json = JsonUtils.Serialize(data);
             }
             else {
-                Map<String, LotroFormat> formats = _formatLibrary.getHallFormats();
+                JSONDefs.FullFormatReadout data = new JSONDefs.FullFormatReadout();
+                data.Formats = _formatLibrary.getAllFormats().values().stream()
+                        .map(LotroFormat::Serialize)
+                        .collect(Collectors.toMap(x-> x.code, x-> x));
 
-                Object[] output = formats.entrySet().stream()
-                        .map(x -> new JSONDefs.ItemStub(x.getKey(), x.getValue().getName()))
-                        .toArray();
-
-                json = JsonUtils.Serialize(output);
+                json = JsonUtils.Serialize(data);
             }
 
             responseWriter.writeJsonResponse(json);

@@ -351,8 +351,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         result.append("<b>" + lotroFormat.getName() + "</b>");
         result.append("<ul>");
         result.append("<li>valid sets: ");
-        for (Integer integer : lotroFormat.getValidSets())
-            result.append(integer + ", ");
+        for (String setCode : lotroFormat.getValidSets())
+            result.append(setCode + ", ");
         result.append("</li>");
         result.append("<li>sites from block: " + lotroFormat.getSiteBlock().getHumanReadable() + "</li>");
         result.append("<li>Ring-bearer skirmish can be cancelled: " + (lotroFormat.canCancelRingBearerSkirmish() ? "yes" : "no") + "</li>");

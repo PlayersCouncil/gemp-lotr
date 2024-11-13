@@ -8,6 +8,14 @@
 	font-size: 80%;
 }
 
+.filterInput {
+	max-width: 100px;
+}
+
+#nameInput, #gametextInput {
+	max-width: 230px;
+}
+
 #resetAdvancedFiltersButton, #resetAllFiltersButton {
 	font-size: 95% !important;
 }

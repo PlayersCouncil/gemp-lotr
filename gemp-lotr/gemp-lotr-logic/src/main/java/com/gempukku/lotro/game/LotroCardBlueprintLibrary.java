@@ -328,7 +328,7 @@ public class LotroCardBlueprintLibrary {
         }
     }
 
-    public boolean hasAlternateInSet(String blueprintId, int setNo) {
+    public boolean hasAlternateInSet(String blueprintId, String setNo) {
         try {
             collectionReady.acquire();
             var alternatives = _fullBlueprintMapping.get(blueprintId);
