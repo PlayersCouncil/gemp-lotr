@@ -1,24 +1,24 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set05;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-public class Card_01_050_ErrataTests
+public class Card_05_007_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "51_50");
+					put("card", "55_7");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,45 +28,48 @@ public class Card_01_050_ErrataTests
 	}
 
 	@Test
-	public void LegolasStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GimliStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 1
-		 * Name: Legolas, Greenleaf
+		 * Set: 5
+		 * Name: Gimli, Skilled Defender
 		 * Unique: True
 		 * Side: Free Peoples
-		 * Culture: Elven
+		 * Culture: Dwarven
 		 * Twilight Cost: 2
 		 * Type: Companion
-		 * Subtype: Elf
+		 * Subtype: Dwarf
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 6
-		 * Signet: Frodo
-		 * Game Text: <b>Archery:</b> Exert Legolas to wound a minion. Exert him again unless he bears a ranged weapon or you can spot more minions than companions.
+		 * Signet: Theoden
+		 * Game Text: <b>Damage +1</b>. Valiant.<br>Each time Gimli wins a skirmish, you may wound a minion assigned to skirmish an unbound companion.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Legolas", card.getBlueprint().getTitle());
-		assertEquals("Greenleaf", card.getBlueprint().getSubtitle());
+		assertEquals("Gimli", card.getBlueprint().getTitle());
+		assertEquals("Skilled Defender", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.ELF, card.getBlueprint().getRace());
+		assertEquals(Race.DWARF, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(card, Keyword.VALIANT));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void LegolasTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GimliTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

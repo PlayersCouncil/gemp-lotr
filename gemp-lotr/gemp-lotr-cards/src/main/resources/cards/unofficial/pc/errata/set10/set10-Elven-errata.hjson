@@ -1,19 +1,95 @@
 {
 
+	# 60_8: {
+	# 	cardInfo: {
+	# 		//id: 0_8.1
+	# 		revision: 1
+	# 		image: errata/60_8.jpg
+	# 		collInfo: 10R8
+	# 		rarity: R
+	# 	}
+	# 	title: Cirdan
+	# 	subtitle: The Shipwright
+	# 	unique: true
+	# 	culture: Elven
+	# 	twilight: 4
+	# 	type: companion
+	# 	race: Elf
+	# 	strength: 7
+	# 	vitality: 4
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: toPlay
+	# 			requires: {
+	# 				type: canSpot
+	# 				filter: elf
+	# 				count: 2
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: skirmish
+	# 			cost: {
+	# 				type: exert
+	# 				select: self
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: modifyStrength
+	# 					select: choose(minion,inSkirmishAgainst(self))
+	# 					memorize: chosenMinion
+	# 					amount: {
+	# 						type: forEachInDiscard
+	# 						filter: your,culture(elven),event
+	# 						multiplier: -1
+	# 					}
+	# 				}
+	# 				{
+	# 					type: If
+	# 					check: {
+	# 						type: memorymatches
+	# 						memory: chosenMinion
+	# 						filter: maxStrength(6)
+	# 					}
+	# 					true: {
+	# 						type: removeCardsInDiscardFromGame
+	# 						count: 3
+	# 						select: choose(culture(elven),event)
+	# 					}
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: To play, spot 2 Elves.<br> <b>Skirmish:</b> Exert Cirdan to make a minion he is skirmishing strength -1 for each [elven] event in your discard pile. If that minion is now strength 6 or less, remove 3 [elven] events in your discard pile from the game.
+	# 	lore: "...he was grey and old, save that his eyes were keen as stars...."
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	60_8: {
 		cardInfo: {
-			//id: 0_8.1
-			revision: 1
-			image: errata/60_8.jpg
+			//id: 60_8.2
+			parent: 10_8
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 2
+			image: errata/LOTR-EN10E008.2_card.jpg
 			collInfo: 10R8
 			rarity: R
 		}
 		title: Cirdan
 		subtitle: The Shipwright
 		unique: true
+		side: Free Peoples
 		culture: Elven
 		twilight: 4
-		type: companion
+		type: Companion
 		race: Elf
 		strength: 7
 		vitality: 4
@@ -46,22 +122,28 @@
 						}
 					}
 					{
-						type: If
-						check: {
-							type: memorymatches
-							memory: chosenMinion
-							filter: maxStrength(6)
+						type: AddTrigger
+						trigger: {
+							type: losesSkirmish
+							overwhelm: true
+							filter: memory(chosenMinion)
+							against: self
 						}
-						true: {
+						effect: {
 							type: removeCardsInDiscardFromGame
-							count: 3
+							count: {
+								type: ForEachInDiscard
+								discard: you
+								filter: culture(elven),event
+								divider: 2
+							}
 							select: choose(culture(elven),event)
 						}
 					}
 				]
 			}
 		]
-		gametext: To play, spot 2 Elves.<br> <b>Skirmish:</b> Exert Cirdan to make a minion he is skirmishing strength -1 for each [elven] event in your discard pile. If that minion is now strength 6 or less, remove 3 [elven] events in your discard pile from the game.
+		gametext: To play, spot 2 Elves.<br> <b>Skirmish:</b> Exert Cirdan to make a minion he is skirmishing strength -1 for each [elven] event in your discard pile. If that minion is overwhelmed, remove half of the [elven] events in your discard pile from the game (rounded down).
 		lore: "...he was grey and old, save that his eyes were keen as stars...."
 		promotext: ""
 		alts: {

@@ -1,22 +1,99 @@
 {
 
+	# 54_276: {
+	# 	cardInfo: {
+	# 		//id: 4_276.1
+	# 		parent: 4_276
+	# 		variant: ERRATA
+	# 		variantPath: promos/pc
+	# 		revision: 1
+	# 		image: errata/54_276.jpg
+	# 		collInfo: 4U276
+	# 		rarity: U
+	# 	}
+	# 	title: Fortress Never Fallen
+	# 	unique: true
+	# 	culture: rohan
+	# 	twilight: 2
+	# 	type: condition
+	# 	keyword: support area
+	# 	effects: [
+	# 		{
+	# 			type: Trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: winsSkirmish
+	# 				filter: culture(rohan),man
+	# 			}
+	# 			effect: {
+	# 				type: AddCultureTokens
+	# 				culture: rohan
+	# 				select: self
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: regroup
+	# 			cost: [
+	# 				{
+	# 					type: memorizeNumber
+	# 					memory: numberOfTokens
+	# 					amount: {
+	# 						type: ForEachCultureToken
+	# 						culture: rohan
+	# 						filter: self
+	# 					}
+	# 				}
+	# 			]
+	# 			effect: [
+	# 				{
+	# 					type: discard
+	# 					select: choose(side(shadow),condition)
+	# 					count: {
+	# 						type: fromMemory
+	# 						memory: numberOfTokens
+	# 						limit: 4
+	# 					}
+	# 				}
+	# 				{
+	# 					type: discard
+	# 					select: self
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: Plays to your support area.<br>Each time a [Rohan] Man wins a skirmish, you may place a [Rohan] token on this card.<br>Regroup: Discard a Shadow condition<br>for each [Rohan] token here (limit 4).<br>Discard this condition.
+	# 	lore: "'...it was the spirit of your people that held it strong.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	54_276: {
 		cardInfo: {
-			//id: 4_276.1
+			//id: 54_276.2
 			parent: 4_276
 			variant: ERRATA
-			variantPath: promos/pc
-			revision: 1
-			image: errata/54_276.jpg
+			variantPath: errata/pc
+			revision: 2
+			image: errata/LOTR-EN04E276.2_card.jpg
 			collInfo: 4U276
 			rarity: U
 		}
 		title: Fortress Never Fallen
 		unique: true
-		culture: rohan
+		side: Free Peoples
+		culture: Rohan
 		twilight: 2
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: [
+			Fortification
+			Support Area
+		]
 		effects: [
 			{
 				type: Trigger
@@ -62,7 +139,7 @@
 				]
 			}
 		]
-		gametext: Plays to your support area.<br>Each time a [Rohan] Man wins a skirmish, you may place a [Rohan] token on this card.<br>Regroup: Discard a Shadow condition<br>for each [Rohan] token here (limit 4).<br>Discard this condition.
+		gametext: Fortification.<br>Each time a [Rohan] Man wins a skirmish, you may place a [Rohan] token on this card.<br>Regroup: Discard a Shadow condition<br>for each [Rohan] token here (limit 4).<br>Discard this condition.
 		lore: "'...it was the spirit of your people that held it strong.'"
 		promotext: ""
 		alts: {
@@ -72,4 +149,5 @@
 			}
 		}
 	}
+	
 }

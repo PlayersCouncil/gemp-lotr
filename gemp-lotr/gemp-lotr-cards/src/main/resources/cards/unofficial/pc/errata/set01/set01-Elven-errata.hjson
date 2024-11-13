@@ -353,7 +353,7 @@
 	
 	51_50: {
 		cardInfo: {
-			//id: 1_50.1
+			//id: 51_50.1
 			parent: 1_50
 			variant: ERRATA
 			variantPath: errata/pc
@@ -374,7 +374,6 @@
 		vitality: 3
 		signet: Frodo
 		resistance: 6
-		keywords: Archer
 		effects: {
 			type: activated
 			phase: archery
@@ -387,9 +386,36 @@
 					type: wound
 					select: choose(minion)
 				}
+				{
+					type: if
+					check: {
+						type: Or
+						requires: [
+							{
+								type: CanSpot
+								filter: ranged weapon,AttachedTo(self)
+							}
+							{
+								type: isGreaterThan
+								firstNumber: {
+									type: forEachYouCanSpot
+									filter: minion
+								}
+								secondNumber: {
+									type: forEachYouCanSpot
+									filter: companion
+								}
+							}
+						]
+					}
+					false: {
+						type: exert
+						select: self
+					}
+				}
 			]
 		}
-		gametext: <b>Archer</b>.<br><b>Archery:</b> Exert Legolas twice to wound a minion.
+		gametext: <b>Archery:</b> Exert Legolas to wound a minion. Exert him again unless he bears a ranged weapon or you can spot more minions than companions.
 		lore: And I too will go with him,' said Legolas. 'It would be faithless now to say farewell.'
 		promotext: ""
 		alts: {
