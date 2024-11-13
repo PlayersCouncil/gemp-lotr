@@ -926,6 +926,14 @@ var PCCards = {
 	'52_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E085.1_card.jpg',
 	// Legolas, Greenleaf (1R50) [Errata]
 	'51_50'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E050.1_card.jpg',
+	// Cirdan, The Shipwright (10R8) [Errata]
+	'60_8'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E008.2_card.jpg',
+	// Fortress Never Fallen (4U276) [Errata]
+	'54_276' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E276.2_card.jpg',
+	// Legolas, Archer of Mirkwood (5P121) [Errata]
+	'55_121' : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E121.1_card.jpg',
+	// Gimli, Skilled Defender (5R7) [Errata]
+	'55_7'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E007.1_card.jpg',
 	
 	//V1 additions:
 	// Sirannon Dam (V165) 
