@@ -267,6 +267,8 @@ var CardFilter = Class.extend({
 		this.itemClassLabel = $("<label for='itemClassSelect' class='filterLabel'>Item Class:</label>");
 		this.itemClassSelect = $("<select id='itemClassSelect' class='filterInput'>"
 			+ "<option value='' selected='selected'>Any</option>"
+			+ "<option value='CLASSLESS'>Classless</option>"
+			+ "<option value='SUPPORT_AREA'>Support Area</option>"
 			+ "<option value='ARMOR'>Armor</option>"
 			+ "<option value='BOX'>Box</option>"
 			+ "<option value='BRACERS'>Bracers</option>"
@@ -275,7 +277,6 @@ var CardFilter = Class.extend({
 			+ "<option value='GAUNTLETS'>Gauntlets</option>"
 			+ "<option value='HAND_WEAPON'>Hand Weapon</option>"
 			+ "<option value='HELM'>Helm</option>"
-			+ "<option value='HORN'>Horn</option>"
 			+ "<option value='MOUNT'>Mount</option>"
 			+ "<option value='PALANTIR'>Palantir</option>"
 			+ "<option value='PHIAL'>Phial</option>"
@@ -285,7 +286,7 @@ var CardFilter = Class.extend({
 			+ "<option value='RING'>Ring</option>"
 			+ "<option value='SHIELD'>Shield</option>"
 			+ "<option value='STAFF'>Staff</option>"
-			+ "<option value='CLASSLESS'>Classless</option>"
+			
 			+ "</select>");
 		
 		
