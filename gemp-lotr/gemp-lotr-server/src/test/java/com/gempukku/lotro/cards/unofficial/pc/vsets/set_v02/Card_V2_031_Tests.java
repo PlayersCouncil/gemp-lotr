@@ -1,9 +1,11 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -33,14 +35,14 @@ public class Card_V2_031_Tests
 		/**
 		 * Set: V2
 		 * Name: Trail of Savagery
-		 * Unique: True
+		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Isengard
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Each site you control gains <b>battleground</b>.
-		* 	Skirmish: Remove 2 [isengard] tokens from a machine to cancel a skirmish involving an Uruk-hai.
+		 * Skirmish: Remove 2 [isengard] tokens to cancel a skirmish involving an Uruk-hai.
 		*/
 
 		var scn = GetScenario();
@@ -49,7 +51,7 @@ public class Card_V2_031_Tests
 
 		assertEquals("Trail of Savagery", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());

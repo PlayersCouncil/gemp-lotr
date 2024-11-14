@@ -808,7 +808,7 @@
 			rarity: _
 		}
 		title: Trail of Savagery
-		unique: true
+		unique: false
 		side: Shadow
 		culture: Isengard
 		twilight: 1
@@ -831,10 +831,9 @@
 					filter: uruk-hai
 				}
 				cost: {
-					type: RemoveCultureTokens
+					type: RemoveTokensCumulative
 					culture: isengard
 					count: 2
-					select: choose(machine)
 				}
 				effect: {
 					type: CancelSkirmish
@@ -842,7 +841,7 @@
 				}
 			}
 		]
-		gametext: Each site you control gains <b>battleground</b>.<br>Skirmish: Remove 2 [isengard] tokens from a machine to cancel a skirmish involving an Uruk-hai.
+		gametext: Each site you control gains <b>battleground</b>.<br>Skirmish: Remove 2 [isengard] tokens to cancel a skirmish involving an Uruk-hai.
 		lore: "'They are burning or despoiling all that is left in the vale.'"
 		promotext: ""
 		alts: {
