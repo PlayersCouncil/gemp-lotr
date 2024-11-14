@@ -161,9 +161,8 @@
 					filter: self
 				}
 				effect: {
-					type: putCardsFromDeckIntoHand
+					type: PlayCardFromDrawDeck
 					select: choose(elf,maxTwilight(2))
-					reveal: true
 					shuffle: true
 					showAll: true
 				}
@@ -177,13 +176,27 @@
 					select: choose(culture(elven))
 				}
 				effect: {
-					type: ModifyStrength
-					select: self
-					amount: 1
+					type: Choice
+					texts: [
+						Make Aragorn strength +2
+						Make Aragorn damage +1
+					]
+					effects: [
+						{
+							type: ModifyStrength
+							select: self
+							amount: 2
+						}
+						{
+							type: AddKeyword
+							select: self
+							keyword: damage+1
+						}
+					]
 				}
 			}
 		]
-		gametext: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.<br>Skirmish: Discard an [elven] card from hand to make Aragorn strength +1.
+		gametext: When you play Aragorn (except in your starting fellowship), you may play an Elf with a twilight cost of 2 or less from your draw deck.<br>Skirmish: Discard an [elven] card from hand to make Aragorn strength +2 or <b>damage +1</b>.
 		lore: "'I gave Hope to the Dúnedain, I have kept no<br>hope for myself.'"
 		promotext: ""
 		alts: {

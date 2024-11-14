@@ -41,8 +41,8 @@
 						}
 					}
 					{
-						type: RemoveFromTheGame
-						select: self
+						type: removePlayedEventFromTheGame
+						filter: self
 					}
 				]
 			}

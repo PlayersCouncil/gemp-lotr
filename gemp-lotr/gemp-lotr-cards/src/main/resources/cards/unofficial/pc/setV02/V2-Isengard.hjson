@@ -262,8 +262,8 @@
 						select: all(character,MinTwilight(4))
 					}
 					{
-						type: RemoveFromTheGame
-						select: self
+						type: removePlayedEventFromTheGame
+						filter: self
 					}
 				]
 			}

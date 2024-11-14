@@ -31,8 +31,8 @@
 						count: 8
 					}
 					{
-						type: RemoveFromTheGame
-						select: self
+						type: removePlayedEventFromTheGame
+						filter: self
 					}
 				]
 			}

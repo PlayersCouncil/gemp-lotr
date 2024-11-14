@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_V1_019_Tests
 {
@@ -43,8 +43,8 @@ public class Card_V1_019_Tests
 		 * Vitality: 4
 		 * Resistance: 6
 		 * Signet: Gandalf
-		 * Game Text: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.
-		* 	Skirmish: Discard an [elven] card from hand to make Aragorn strength +1.
+		 * Game Text: When you play Aragorn (except in your starting fellowship), you may play an Elf with a twilight cost of 2 or less from your draw deck.
+		 * Skirmish: Discard an [elven] card from hand to make Aragorn strength +2 or <b>damage +1</b>.
 		*/
 
 		var scn = GetScenario();
