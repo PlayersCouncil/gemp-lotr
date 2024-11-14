@@ -31,8 +31,8 @@
 						amount: 0-9
 					}
 					{
-						type: RemoveFromTheGame
-						select: self
+						type: removePlayedEventFromTheGame
+						filter: self
 					}
 				]
 			}

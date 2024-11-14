@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,11 @@ public class Card_V2_022_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_22");
-					// put other cards in here as needed for the test case
+					put("folly", "102_22");
+					put("uruk", "1_151");
+
+					put("gandalf", "1_72");
+					put("sam", "1_311");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -44,7 +46,7 @@ public class Card_V2_022_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("folly");
 
 		assertEquals("Fell from Wisdom into Folly", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +58,124 @@ public class Card_V2_022_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FellfromWisdomintoFollyTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void FellfromWisdomintoFollyExertsOnceOrTwiceWhenPlayedFromHand() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var folly = scn.GetShadowCard("folly");
+		var uruk = scn.GetShadowCard("uruk");
+		scn.ShadowMoveCardToHand(folly);
+		scn.ShadowMoveCharToTable(uruk);
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCharToTable(sam, gandalf);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SetTwilight(20);
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertEquals(25, scn.GetTwilight());
+
+		assertTrue(scn.ShadowPlayAvailable(folly));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(uruk));
+
+		scn.ShadowPlayCard(folly);
+		assertEquals(15, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		//Gandalf costs 4 or more, so he gets 2
+		assertEquals(2, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetWoundsOn(uruk));
+
+		assertEquals(Zone.REMOVED, folly.getZone());
+	}
+
+	@Test
+	public void FellfromWisdomintoFollyFunctionsWhenPlayedFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var folly = scn.GetShadowCard("folly");
+		var uruk = scn.GetShadowCard("uruk");
+		scn.ShadowMoveCardToDiscard(folly);
+		scn.ShadowMoveCharToTable(uruk);
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCharToTable(sam, gandalf);
+
+		scn.StartGame();
+
+		scn.SetTwilight(20);
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertEquals(25, scn.GetTwilight());
+
+		//It's an ability being activated and not a "play", which is only true for cards
+		// currently in hand.
+		assertTrue(scn.ShadowActionAvailable(folly));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(uruk));
+
+		scn.ShadowUseCardAction(folly);
+		assertEquals(15, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		//Gandalf costs 4 or more, so he gets 2
+		assertEquals(2, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetWoundsOn(uruk));
+
+		assertEquals(Zone.REMOVED, folly.getZone());
+	}
+
+	@Test
+	public void FellfromWisdomintoFollyFunctionsWhenPlayedFromDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var folly = scn.GetShadowCard("folly");
+		var uruk = scn.GetShadowCard("uruk");
+		scn.ShadowMoveCardsToTopOfDeck(folly);
+		scn.ShadowMoveCharToTable(uruk);
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCharToTable(sam, gandalf);
+
+		scn.StartGame();
+
+		scn.SetTwilight(20);
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertEquals(25, scn.GetTwilight());
+
+		//It's an ability being activated and not a "play", which is only true for cards
+		// currently in hand.
+		assertTrue(scn.ShadowActionAvailable(folly));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(uruk));
+
+		scn.ShadowUseCardAction(folly);
+		assertEquals(15, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		//Gandalf costs 4 or more, so he gets 2
+		assertEquals(2, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetWoundsOn(uruk));
+
+		assertEquals(Zone.REMOVED, folly.getZone());
 	}
 }
