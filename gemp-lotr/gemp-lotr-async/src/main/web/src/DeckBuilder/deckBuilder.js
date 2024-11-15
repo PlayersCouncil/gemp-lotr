@@ -7,7 +7,7 @@ $(document).ready(
             onresize:function () {
                 ui.layoutUI(true);
             },
-            east__minSize:400,
+            east__minSize:410,
             east__maxSize:"50%"
         });
 
