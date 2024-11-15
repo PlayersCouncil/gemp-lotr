@@ -434,27 +434,50 @@ var CardFilter = Class.extend({
 
 		this.filterDiv = $("<div id='culture-buttons'></div>");
 
-		this.filterDiv.append("<div id='culture1'>"
+		this.filterDiv.append("<div id='culture_freeps_base1'>"
 			+ "<input type='checkbox' id='DWARVEN'/><label for='DWARVEN' id='labelDWARVEN' class='culture'><img src='images/cultures/dwarven.svg'/></label>"
 			+ "<input type='checkbox' id='ELVEN'/><label for='ELVEN' id='labelELVEN' class='culture'><img src='images/cultures/elven.svg'/></label>"
 			+ "<input type='checkbox' id='GANDALF'/><label for='GANDALF' id='labelGANDALF' class='culture'><img src='images/cultures/gandalf.svg'/></label>"
 			+ "<input type='checkbox' id='GONDOR'/><label for='GONDOR' id='labelGONDOR' class='culture'><img src='images/cultures/gondor.svg'/></label>"
-			+ "<input type='checkbox' id='ROHAN'/><label for='ROHAN' id='labelROHAN' class='culture'><img src='images/cultures/rohan.svg'/></label>"
-			+ "<input type='checkbox' id='SHIRE'/><label for='SHIRE' id='labelSHIRE' class='culture'><img src='images/cultures/shire.svg'/></label>"
-			+ "<input type='checkbox' id='GOLLUM'/><label for='GOLLUM' id='labelGOLLUM' class='culture'><img src='images/cultures/gollum.svg'/></label>"
-			+ "<input type='checkbox' id='DUNLAND'/><label for='DUNLAND' id='labelDUNLAND' class='culture'><img src='images/cultures/dunland.svg'/></label>"
-			+ "<input type='checkbox' id='ISENGARD'/><label for='ISENGARD' id='labelISENGARD' class='culture'><img src='images/cultures/isengard.svg'/></label>"
-			+ "<input type='checkbox' id='MEN'/><label for='MEN' id='labelMEN' class='culture'><img src='images/cultures/men.svg'/></label>"
-			+ "<input type='checkbox' id='MORIA'/><label for='MORIA' id='labelMORIA' class='culture'><img src='images/cultures/moria.svg'/></label>"
-			+ "<input type='checkbox' id='ORC'/><label for='ORC' id='labelORC' class='culture'><img src='images/cultures/orc.svg'/></label>"
-			+ "<input type='checkbox' id='RAIDER'/><label for='RAIDER' id='labelRAIDER' class='culture'><img src='images/cultures/raider.svg'/></label>"
-			+ "<input type='checkbox' id='SAURON'/><label for='SAURON' id='labelSAURON' class='culture'><img src='images/cultures/sauron.svg'/></label>"
-			+ "<input type='checkbox' id='URUK_HAI'/><label for='URUK_HAI' id='labelURUK_HAI' class='culture'><img src='images/cultures/uruk.svg'/></label>"
-			+ "<input type='checkbox' id='WRAITH'/><label for='WRAITH' id='labelWRAITH' class='culture'><img src='images/cultures/ringwraith.svg'/></label>"
 		);
-		//Additional Hobbit Draft cultures
-		//var hobbitFilterDiv = $("<div id='culture2' style='display:flex;flex-wrap:wrap;'></div>");
-		this.filterDiv.append("<div id='culture2'>"
+		
+		this.filterDiv.append("<div id='culture_freeps_movie1'>"
+			+ "<input type='checkbox' id='ROHAN'/><label for='ROHAN' id='labelROHAN' class='culture'><img src='images/cultures/rohan.svg'/></label>"
+		);
+		
+		this.filterDiv.append("<div id='culture_freeps_base2'>"
+			+ "<input type='checkbox' id='SHIRE'/><label for='SHIRE' id='labelSHIRE' class='culture'><img src='images/cultures/shire.svg'/></label>"
+		);
+		
+		this.filterDiv.append("<div id='culture_freeps_movie2'>"
+			+ "<input type='checkbox' id='GOLLUM'/><label for='GOLLUM' id='labelGOLLUM' class='culture'><img src='images/cultures/gollum.svg'/></label>"
+		);
+		
+		this.filterDiv.append("<div id='culture_shadow_movie1'>"
+			+ "<input type='checkbox' id='DUNLAND'/><label for='DUNLAND' id='labelDUNLAND' class='culture'><img src='images/cultures/dunland.svg'/></label>"
+		);
+		
+		this.filterDiv.append("<div id='culture_shadow_base1'>"
+      + "<input type='checkbox' id='ISENGARD'/><label for='ISENGARD' id='labelISENGARD' class='culture'><img src='images/cultures/isengard.svg'/></label>"
+			+ "<input type='checkbox' id='MORIA'/><label for='MORIA' id='labelMORIA' class='culture'><img src='images/cultures/moria.svg'/></label>"
+		);
+		
+		this.filterDiv.append("<div id='culture_shadow_movie2'>"
+			+ "<input type='checkbox' id='RAIDER'/><label for='RAIDER' id='labelRAIDER' class='culture'><img src='images/cultures/raider.svg'/></label>"		                      
+		);
+		
+		this.filterDiv.append("<div id='culture_shadow_base2'>"
+		  + "<input type='checkbox' id='WRAITH'/><label for='WRAITH' id='labelWRAITH' class='culture'><img src='images/cultures/ringwraith.svg'/></label>"
+			+ "<input type='checkbox' id='SAURON'/><label for='SAURON' id='labelSAURON' class='culture'><img src='images/cultures/sauron.svg'/></label>"
+		);
+		
+		this.filterDiv.append("<div id='culture_shadows'>"
+			+ "<input type='checkbox' id='MEN'/><label for='MEN' id='labelMEN' class='culture'><img src='images/cultures/men.svg'/></label>"
+			+ "<input type='checkbox' id='ORC'/><label for='ORC' id='labelORC' class='culture'><img src='images/cultures/orc.svg'/></label>"
+			+ "<input type='checkbox' id='URUK_HAI'/><label for='URUK_HAI' id='labelURUK_HAI' class='culture'><img src='images/cultures/uruk.svg'/></label>"
+		);
+		
+		this.filterDiv.append("<div id='culture_hobbit'>"
 			+ "<input type='checkbox' id='ESGAROTH'/><label for='ESGAROTH' id='labelESGAROTH' ><img src='images/cultures/esgaroth.png'/></label>"
 			+ "<input type='checkbox' id='GUNDABAD'/><label for='GUNDABAD' id='labelGUNDABAD' ><img src='images/cultures/gundabad.png'/></label>"
 			+ "<input type='checkbox' id='MIRKWOOD'/><label for='MIRKWOOD' id='labelMIRKWOOD' ><img src='images/cultures/mirkwood.png'/></label>"
@@ -542,11 +565,6 @@ var CardFilter = Class.extend({
 					  ", #MEN, #ORC, #URUK_HAI, #WRAITH" +
 					  ", #ESGAROTH, #GUNDABAD, #MIRKWOOD, #SMAUG, #SPIDER, #TROLL").change(() => this.setFilterChanged(that));
 		
-		// $("#labelDWARVEN, #labelELVEN, #labelGANDALF, #labelGONDOR, #labelROHAN, #labelSHIRE" +
-		//               ", #labelGOLLUM, #labelDUNLAND, #labelISENGARD, #labelMORIA, #labelRAIDER, #labelSAURON" +
-		//               ", #labelMEN, #labelORC, #labelURUK_HAI, #labelWRAITH" +
-		//               ", #labelESGAROTH, #labelGUNDABAD, #labelMIRKWOOD, #labelSMAUG, #labelSPIDER, #labelTROLL").click(setFilterChanged);
-		
 		this.collectionDiv = $("<div id='collection-display' style='display:flex;flex-direction:column;position:relative;'></div>");
 		//collection-display
 		pageElem.append(this.collectionDiv);
@@ -565,18 +583,73 @@ var CardFilter = Class.extend({
 		this[id + "ValueInput"] = $("<input id='" + id + "ValueInput' type='number' min = '0' max='12' class='filterInput' style='width: 35px;'>");
 	},
 	
+	movieBlocks: ["ttt_block", "king_block"],
+	expandedBlocks: ["war_block", "hunter_block"],
+	hobbitBlocks: ["hobbit"],
+	
 	setFilterChanged: function(that) {
-		if (that.blocks.find((x) => x.filter == "hobbit")) {
-			$("#culture2").show();
-		} else {
+		
+		//Show/hide Rohan
+		if (that.blocks.find((x) => that.movieBlocks.includes(x.filter)
+		                     || that.expandedBlocks.includes(x.filter))) {
+			$("#culture_freeps_movie1").show();
+		} 
+		else {
+			$("#labelROHAN-movie").removeClass("ui-state-active");
+			$("#culture_freeps_movie1").hide();
+		}
+		
+		//Show/hide Gollum
+		if (that.blocks.find((x) => that.movieBlocks.includes(x.filter)
+		                     || that.expandedBlocks.includes(x.filter)
+		                     || that.hobbitBlocks.includes(x.filter))) {
+			$("#culture_freeps_movie2").show();
+		} 
+		else {
+			$("#labelGOLLUM-movie").removeClass("ui-state-active");
+			$("#culture_freeps_movie2").hide();
+		}
+		
+		//Show/hide Movie-era Shadows
+		if (that.blocks.find((x) => that.movieBlocks.includes(x.filter))) {
+			$("#culture_shadow_movie1").show();
+			$("#culture_shadow_movie2").show();
+		} 
+		else {
+			$("#labelDUNLAND-movie").removeClass("ui-state-active");
+			$("#labelRAIDER-movie").removeClass("ui-state-active");
+			$("#culture_shadow_movie1").hide();
+			$("#culture_shadow_movie2").hide();
+		}
+		
+		//Show/hide Expanded-era Shadows
+		if (that.blocks.find((x) => that.expandedBlocks.includes(x.filter))) {
+			$("#culture_shadows").show();
+		} 
+		else {
+			$("#labelMEN-movie").removeClass("ui-state-active");
+			$("#labelORC-movie").removeClass("ui-state-active");
+			$("#labelURUK_HAI-movie").removeClass("ui-state-active");
+			$("#culture_shadows").hide();
+		}
+		
+		
+		//Show/hide Hobbit-only cultures
+		
+		if (that.blocks.find((x) => that.hobbitBlocks.includes(x.filter))) {
+			$("#culture_hobbit").show();
+		} 
+		else {
 			$("#labelESGAROTH").removeClass("ui-state-active");
 			$("#labelGUNDABAD").removeClass("ui-state-active");
 			$("#labelMIRKWOOD").removeClass("ui-state-active");
 			$("#labelSMAUG").removeClass("ui-state-active");
 			$("#labelSPIDER").removeClass("ui-state-active");
 			$("#labelTROLL").removeClass("ui-state-active");
-			$("#culture2").hide();
+			$("#culture_hobbit").hide();
 		}
+		
+		
 		return that.fullFilterChanged();
 	},
 
@@ -743,78 +816,6 @@ var CardFilter = Class.extend({
 			});
 		
 		this.blockSelect.change();
-		
-		// setSelect = $("<select id='setSelect' class='filterInput'></select>"
-		//     + "<option value='0-34,50-200' selected='selected'>All Sets</option>"
-		//     + "<option value='0-19'>Official Decipher Sets</option>"
-		//     + "<option value='30-33'>The Hobbit Sets</option>"
-		//     + "<option value='50-69,100'>Player's Council Errata</option>"
-		//     + "<option value='100-149'>Player's Council VSets</option>"
-		//     + "<option value='50-69,100-149'>All Player's Council Cards</option>"
-		//     + "<option disabled>----------</option>"
-		//     + "<option value='fotr_block'>Fellowship Block</option>"
-		//     + "<option value='pc_fotr_block'>Fellowship Block (PC)</option>"
-		//     + "<option value='ttt_block'>Towers Block</option>"
-		//     + "<option value='king_block'>King Block</option>"
-		//     + "<option value='war_block'>War of the Ring Block</option>"
-		//     + "<option value='hunter_block'>Hunters Block</option>"
-		//     + "<option value='towers_standard'>Towers Standard</option>"
-		//     + "<option value='ts_reflections'>Enhanced Towers Standard</option>"            
-		//     + "<option value='rotk_sta'>King Standard</option>"
-		//     + "<option value='movie'>Movie Block</option>"
-		//     + "<option value='pc_movie'>Movie Block (PC)</option>"
-		//     + "<option value='war_standard'>War of the Ring standard</option>"
-		//     + "<option value='standard'>Standard</option>"
-		//     + "<option value='expanded'>Expanded</option>"
-		//     + "<option value='pc_expanded'>Expanded (PC)</option>"
-		//     + "<option value='french'>French Format</option>"
-		//     + "<option disabled>----------</option>"
-		//     + "<option value='0'>00 - Promo</option>"
-		//     + "<option value='1'>01 - The Fellowship of the Ring</option>"
-		//     + "<option value='51'>01E - The Fellowship of the Ring (PC Errata)</option>"
-		//     + "<option value='2'>02 - Mines of Moria</option>"
-		//     + "<option value='52'>02E - Mines of Moria (PC Errata)</option>"
-		//     + "<option value='3'>03 - Realms of the Elf-lords</option>"
-		//     + "<option value='53'>03E - Realms of the Elf-lords (PC Errata)</option>"
-		//     + "<option value='4'>04 - The Two Towers</option>"
-		//     + "<option value='54'>04E - The Two Towers (PC Errata)</option>"
-		//     + "<option value='5'>05 - Battle of Helm's Deep</option>"
-		//     + "<option value='6'>06 - Ents of Fangorn</option>"
-		//     + "<option value='7'>07 - The Return of the King</option>"
-		//     + "<option value='57'>07E - The Return of the King (PC Errata)</option>"
-		//     + "<option value='8'>08 - Siege of Gondor</option>"
-		//     + "<option value='58'>08E - Siege of Gondor (PC Errata)</option>"
-		//     + "<option value='9'>09 - Reflections</option>"
-		//     + "<option value='59'>09E - Reflections (PC Errata)</option>"
-		//     + "<option value='10'>10 - Mount Doom</option>"
-		//     + "<option value='60'>10E - Mount Doom (PC Errata)</option>"
-		//     + "<option value='11'>11 - Shadows</option>"
-		//     + "<option value='61'>11E - Shadows (PC Errata)</option>"
-		//     + "<option value='12'>12 - Black Rider</option>"
-		//     + "<option value='13'>13 - Bloodlines</option>"
-		//     + "<option value='63'>13E - Bloodlines (PC Errata)</option>"
-		//     + "<option value='14'>14 - Expanded Middle-earth</option>"
-		//     + "<option value='15'>15 - The Hunters</option>"
-		//     + "<option value='65'>15E - The Hunters (PC Errata)</option>"
-		//     + "<option value='16'>16 - The Wraith Collection</option>"
-		//     + "<option value='17'>17 - Rise of Saruman</option>"
-		//     + "<option value='18'>18 - Treachery & Deceit</option>"
-		//     + "<option value='19'>19 - Ages End</option>"
-		//     + "<option value='69'>19E - Ages End (PC Errata)</option>"
-		//     + "<option value='101,151'>V1 - Shadow of the Past (PC)</option>"
-		//     + "<option value='102,152'>V2 - King of the Golden Hall (PC)</option>"
-		//     + "<option value='30'>30 - The Hobbit: Main Deck</option>"
-		//     + "<option value='31'>31 - The Hobbit: Expansion 1</option>"
-		//     + "<option value='32'>32 - The Hobbit: Expansion 2</option>"
-		//     + "<option value='33'>33 - The Hobbit: Expansion 3</option>"
-		//     + "<option disabled>----------</option>"
-		//     + "<option value='70-89,150-200'>All Player's Council Playtest Cards</option>"
-		//     //+ "<option value='151'>PLAYTEST - Shadow of the Past (PC)</option>"
-		//     + "<option value='test_pc_fotr_block'>PLAYTEST - Fellowship Block (PC)</option>"
-		//     + "<option value='test_pc_movie'>PLAYTEST - Movie Block (PC)</option>"
-		//     + "<option value='test_pc_expanded'>PLAYTEST - Expanded (PC)</option>"
-			
-		//     + "</select>");
 	},
 
 	layoutUi: function (x, y, width, height) {
