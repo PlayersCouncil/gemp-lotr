@@ -249,6 +249,11 @@ public class DefaultLotroFormat implements LotroFormat {
     }
 
     @Override
+    public boolean hasErrata() {
+        return !_errataCardMap.isEmpty();
+    }
+
+    @Override
     public Map<String,String> getErrataCardMap() {
         return Collections.unmodifiableMap(_errataCardMap);
     }

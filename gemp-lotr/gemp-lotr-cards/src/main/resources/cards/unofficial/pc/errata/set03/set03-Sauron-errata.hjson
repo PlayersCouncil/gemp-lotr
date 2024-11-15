@@ -734,7 +734,7 @@
 			}
 			effect: {
 				type: Preventable
-				text: Would you like to discard a companion to prevent wounding {target}?
+				text: Would you like to discard another companion to prevent wounding {target}?
 				player: freeps
 				effect: {
 					type: Wound
@@ -743,11 +743,11 @@
 				cost: {
 					type: Discard
 					player: freeps
-					select: choose(companion,not(ring-bearer))
+					select: choose(companion,not(ring-bearer),not(bearer))
 				}
 			}
 		}
-		gametext: If a companion or ally's special ability is used, you may spot a [sauron] card to wound that character.  The Free Peoples player may discard a companion to prevent this.
+		gametext: If a companion or ally's special ability is used, you may spot a [sauron] card to wound that character.  The Free Peoples player may discard another companion to prevent this.
 		lore: “‘In the place of the Dark Lord, you would have a Queen... All shall love me and despair!'”
 		promotext: ""
 		alts: {

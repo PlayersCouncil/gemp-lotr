@@ -20,6 +20,10 @@ public class SortAndFilterCards {
         var sort = params.getOrDefault("sort", new ArrayList<>());
 
         var formats = params.getOrDefault("format", new ArrayList<>());
+        LotroFormat currentFormat = null;
+        if(formats.size() == 1) {
+            currentFormat = formatLibrary.getFormat(formats.getFirst());
+        }
         var blocks = params.getOrDefault("block", new ArrayList<>());
         var sets = params.getOrDefault("set", new ArrayList<>());
 
@@ -80,13 +84,13 @@ public class SortAndFilterCards {
             var card = cardBPCache.get(blueprintId);
             boolean valid = true;
 
-            if(!formats.isEmpty() && !isInSetOrFormat(blueprintId, card, formats, cardLibrary, formatLibrary))
+            if(!formats.isEmpty() && !isInSetOrFormat(blueprintId, card, formats, currentFormat, cardLibrary, formatLibrary))
                 continue;
 
-            if(!blocks.isEmpty() && !isInSetOrFormat(blueprintId, card, blocks, cardLibrary, formatLibrary))
+            if(!blocks.isEmpty() && !isInSetOrFormat(blueprintId, card, blocks, currentFormat, cardLibrary, formatLibrary))
                 continue;
 
-            if(!sets.isEmpty() && !isInSetOrFormat(blueprintId, card, sets, cardLibrary, formatLibrary))
+            if(!sets.isEmpty() && !isInSetOrFormat(blueprintId, card, sets, currentFormat, cardLibrary, formatLibrary))
                 continue;
 
             if(!isFlagAccepted(canStartWithRing, card.canStartWithRing()))
@@ -259,7 +263,8 @@ public class SortAndFilterCards {
         return result;
     }
 
-    private boolean isInSetOrFormat(String blueprintId, LotroCardBlueprint card, List<String> setFilters, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
+    private boolean isInSetOrFormat(String blueprintId, LotroCardBlueprint card, List<String> setFilters,
+            LotroFormat currentFormat, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
         boolean isInAnySet = false;
 
         for (String set : setFilters) {
@@ -283,18 +288,30 @@ public class SortAndFilterCards {
                 continue;
             }
 
+            int min = 0;
+            int max = 0;
+
+            var errata = library.getErrata();
+
             if (set.contains("-")) {
                 final String[] split = set.split("-", 2);
-                int min = Integer.parseInt(split[0]);
-                int max = Integer.parseInt(split[1]);
-                for (int setNo = min; setNo <= max; setNo++) {
-                    if (blueprintId.startsWith(setNo + "_") || library.hasAlternateInSet(blueprintId, String.valueOf(setNo))) {
+                min = Integer.parseInt(split[0]);
+                max = Integer.parseInt(split[1]);
+            }
+            else {
+                min = Integer.parseInt(set);
+                max = min;
+            }
+
+            for (int setNo = min; setNo <= max; setNo++) {
+                if (blueprintId.startsWith(setNo + "_") || library.hasAlternateInSet(blueprintId, String.valueOf(setNo))) {
+                    isInAnySet = true;
+                }
+                else if (currentFormat != null && currentFormat.hasErrata()) {
+                    int errataSetNo = library.getErrataSet(setNo);
+                    if (blueprintId.startsWith(errataSetNo + "_") || library.hasAlternateInSet(blueprintId, String.valueOf(errataSetNo))) {
                         isInAnySet = true;
                     }
-                }
-            } else {
-                if (blueprintId.startsWith(set + "_") || library.hasAlternateInSet(blueprintId, set)) {
-                    isInAnySet = true;
                 }
             }
         }

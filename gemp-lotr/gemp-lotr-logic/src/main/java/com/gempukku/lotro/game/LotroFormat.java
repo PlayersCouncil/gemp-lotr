@@ -62,6 +62,7 @@ public interface LotroFormat {
 
     List<String> getRestrictedCardNames();
 
+    boolean hasErrata();
     Map<String,String> getErrataCardMap();
 
     String applyErrata(String bpID);

@@ -1,4 +1,3 @@
-
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
@@ -10,8 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_019_Tests
 {
@@ -20,6 +18,7 @@ public class Card_V1_019_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>() {{
 					put("aragorn", "101_19");
+					put("arwen", "1_30");
 					put("elrond", "1_40");
 					put("galadriel", "1_45");
 					put("celeborn", "1_34");
@@ -38,50 +37,49 @@ public class Card_V1_019_Tests
 	public void AragornStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V1
-		* Title: *Aragorn, Estel
-		* Side: Free Peoples
-		* Culture: gondor
-		* Twilight Cost: 4
-		* Type: companion
-		* Subtype: Man
-		* Strength: 8
-		* Vitality: 4
-		* Signet: Gandalf
-		* Game Text: When you play Aragorn, you may take an [elven] ally with a twilight cost of 2 or less into hand from your draw deck.
-		* 	Skirmish: Discard an [elven] skirmish event from hand to make Aragorn strength +2.
+		 * Set: V1
+		 * Name: Aragorn, Estel
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 4
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 8
+		 * Vitality: 4
+		 * Signet: Gandalf
+		 * Game Text: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.
+		* 	Maneuver: Discard an [elven] card from hand to make Aragorn <b>damage +1</b>, <b>archer</b>, or strength +2 until the regroup phase.
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
+		var card = scn.GetFreepsCard("aragorn");
 
-		assertTrue(aragorn.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, aragorn.getBlueprint().getSide());
-		assertEquals(Culture.GONDOR, aragorn.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, aragorn.getBlueprint().getCardType());
-		assertEquals(Race.MAN, aragorn.getBlueprint().getRace());
-		//assertTrue(scn.HasKeyword(aragorn, Keyword.SUPPORT_AREA)); // test for keywords as needed
-		assertEquals(4, aragorn.getBlueprint().getTwilightCost());
-		assertEquals(8, aragorn.getBlueprint().getStrength());
-		assertEquals(4, aragorn.getBlueprint().getVitality());
-		//assertEquals(, aragorn.getBlueprint().getResistance());
-		assertEquals(Signet.GANDALF, aragorn.getBlueprint().getSignet());
-		//assertEquals(, aragorn.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertEquals("Aragorn", card.getBlueprint().getTitle());
+		assertEquals("Estel", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(8, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
-	@Test
-	public void OnPlayTutorsAnElvenAllyOfCost2OrLess() throws DecisionResultInvalidException, CardNotFoundException {
+	//@Test
+	public void OnPlayTutorsAnElfOfCost2OrLess() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-		PhysicalCardImpl celeborn = scn.GetFreepsCard("celeborn");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var arwen = scn.GetFreepsCard("arwen");
+		var elrond = scn.GetFreepsCard("elrond");
+		var galadriel = scn.GetFreepsCard("galadriel");
+		var celeborn = scn.GetFreepsCard("celeborn");
+		var orophin = scn.GetFreepsCard("orophin");
 
 		scn.FreepsMoveCardToHand(aragorn);
 
@@ -90,7 +88,9 @@ public class Card_V1_019_Tests
 		scn.FreepsPlayCard(aragorn);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+
+		//Orophin, Celeborn, or Arwen, but not Elrond (4) or Galadriel (3)
+		assertEquals(3, scn.GetFreepsCardChoiceCount());
 		assertEquals(Zone.DECK, orophin.getZone());
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(6, scn.GetFreepsDeckCount());
@@ -101,22 +101,27 @@ public class Card_V1_019_Tests
 		assertEquals(5, scn.GetFreepsDeckCount());
 	}
 
-	@Test
-	public void SkirmishAbilityDiscardsElvenEventToPumpAragorn() throws DecisionResultInvalidException, CardNotFoundException {
+	//@Test
+	public void ManeuverAbilityCanDiscardsElvenCardToPumpAragornUntilRegroup() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-		PhysicalCardImpl defiance = scn.GetFreepsCard("defiance");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var defiance = scn.GetFreepsCard("defiance");
+		var arwen = scn.GetFreepsCard("arwen");
 
 		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToHand(defiance);
+		scn.FreepsMoveCardToHand(defiance, arwen);
 
-		PhysicalCardImpl runner = scn.GetShadowCard("runner");
+		var runner = scn.GetShadowCard("runner");
 
 		scn.ShadowMoveCharToTable(runner);
 
 		scn.StartGame();
+
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.FreepsActionAvailable(aragorn));
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
