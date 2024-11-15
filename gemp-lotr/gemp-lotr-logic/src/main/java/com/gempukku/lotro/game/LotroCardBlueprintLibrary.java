@@ -276,6 +276,28 @@ public class LotroCardBlueprintLibrary {
         }
     }
 
+    public String getErrataSet(String setNum) {
+        return String.valueOf(getErrataSet(Integer.parseInt(setNum)));
+    }
+
+    public int getErrataSet(int setNum) {
+        if(setNum > 19)
+            return setNum;
+
+        return setNum + 50;
+    }
+
+    public String getErrataBase(String setNum) {
+        return String.valueOf(getErrataBase(Integer.parseInt(setNum)));
+    }
+
+    public int getErrataBase(int setNum) {
+        if(setNum > 69 || setNum < 50)
+            return setNum;
+
+        return setNum - 50;
+    }
+
     private Map<String, JSONDefs.ErrataInfo> errataMappings = null;
 
     public Map<String, JSONDefs.ErrataInfo> getErrata() {

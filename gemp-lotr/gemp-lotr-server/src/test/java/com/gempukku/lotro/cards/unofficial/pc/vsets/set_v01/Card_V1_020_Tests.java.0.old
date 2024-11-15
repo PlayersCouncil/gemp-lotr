@@ -100,7 +100,7 @@ public class Card_V1_020_Tests
 	}
 
 	@Test
-	public void AssignmentActionSpotsAragornSignetToMakeBoromirDefenderPlus1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AssignmentActionExertsAragornSignetToMakeBoromirDefenderPlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		GenericCardTestHelper scn = GetScenario();
 
@@ -121,7 +121,7 @@ public class Card_V1_020_Tests
 		scn.FreepsAcceptOptionalTrigger();
 		assertTrue(scn.hasKeyword(boromir, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
-		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(sam));
 
 		scn.PassCurrentPhaseActions();
 		scn.FreepsAssignToMinions(boromir, nelya);

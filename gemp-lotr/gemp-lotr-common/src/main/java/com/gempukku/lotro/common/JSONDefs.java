@@ -92,6 +92,10 @@ public class JSONDefs {
         public String Name;
         public String LinkText;
         public Map<String, String> ErrataIDs;
+
+        public String getPCErrata() {
+            return ErrataIDs.get(PC_Errata);
+        }
     }
 
     public static class PlayHistoryStats {

@@ -207,11 +207,77 @@
 		}
 	}
 
+	# 101_20: {
+	# 	cardInfo: {
+	# 		//id: 101_20
+	# 		image: sets/vset1/LOTR-ENV1S020.0_card.jpg
+	# 		collInfo: V1R20
+	# 		rarity: R
+	# 	}
+	# 	title: Boromir
+	# 	subtitle: Redeemed
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Gondor
+	# 	twilight: 3
+	# 	type: Companion
+	# 	race: Man
+	# 	strength: 5
+	# 	vitality: 3
+	# 	signet: Aragorn
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: modifyStrength
+	# 				filter: name(Boromir)
+	# 				amount: {
+	# 					type: forEachYouCanSpot
+	# 					filter: minion,inSkirmishAgainst(name(Boromir))
+	# 					multiplier: 2
+	# 				}
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: startOfPhase
+	# 				phase: assignment
+	# 			}
+	# 			cost: {
+	# 				type: exert
+	# 				select: choose(another,companion,signet(aragorn))
+	# 			}
+	# 			effect: {
+	# 				type: addModifier
+	# 				modifier: {
+	# 					type: addKeyword
+	# 					filter: name(Boromir)
+	# 					keyword: defender+1
+	# 				}
+	# 				until: start(regroup)
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Boromir is strength +2 for each minion he is skirmishing.<br>At the start of each assignment phase, you may exert another companion with the Aragorn signet to make Boromir defender +1 until the regroup phase.
+	# 	lore: "'Few have gained such a victory. Be at peace!'" 
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	101_20: {
 		cardInfo: {
 			//id: 101_20
-			image: sets/vset1/LOTR-ENV1S020.0_card.jpg
+			image: sets/vset1/LOTR-ENV1S020.1_card.jpg
 			collInfo: V1R20
+			revision: 1
 			rarity: R
 		}
 		title: Boromir
@@ -247,8 +313,8 @@
 					phase: assignment
 				}
 				cost: {
-					type: exert
-					select: choose(another,companion,signet(aragorn))
+					type: Spot
+					filter: or(and(unbound,Hobbit),and(another,companion,signet(aragorn)))
 				}
 				effect: {
 					type: addModifier
@@ -261,7 +327,7 @@
 				}
 			}
 		]
-		gametext: Boromir is strength +2 for each minion he is skirmishing.<br>At the start of each assignment phase, you may exert another companion with the Aragorn signet to make Boromir defender +1 until the regroup phase.
+		gametext: Boromir is strength +2 for each minion he is skirmishing.<br>At the start of each assignment phase, make Boromir <b>defender +1</b> if you can spot an unbound Hobbit or another companion with the Aragorn signet.
 		lore: "'Few have gained such a victory. Be at peace!'" 
 		promotext: ""
 		alts: {
