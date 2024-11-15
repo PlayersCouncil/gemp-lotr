@@ -160,6 +160,13 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: not
+					requires: {
+						type: phase
+						phase: play starting fellowship
+					}
+				}
 				effect: {
 					type: PlayCardFromDrawDeck
 					select: choose(elf,maxTwilight(2))

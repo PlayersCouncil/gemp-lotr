@@ -935,7 +935,7 @@ var PCCards = {
 	// Gimli, Skilled Defender (5R7) [Errata]
 	'55_7'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E007.1_card.jpg',
 	// Boromir, Redeemed (V1 20) [Errata]
-	'101_20'   : 'https://i.lotrtcgpc.net/errata/LOTR-ENV1E020.1_card.jpg',
+	'101_20'   : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E020.1_card.jpg',
 	
 	//V1 additions:
 	// Sirannon Dam (V165) 
