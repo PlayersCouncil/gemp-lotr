@@ -66,6 +66,7 @@
 			fotr_block
 			Player's Council V-sets|V1 - Shadow of the Past:101
 			Player's Council Errata|The Fellowship of the Ring Errata:51,Mines of Moria Errata:52,Realms of the Elf-lords Errata:53
+			PC New Playtest Errata|New Playtest Errata:pc_errata
 		]
 		sets: [
 			1, 2, 3, 101
@@ -114,9 +115,22 @@
 			Additional Sets|Promotional:0,Reflections:9
 			Player's Council V-sets|V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102
 			Player's Council Errata|The Fellowship of the Ring Errata:51,Mines of Moria Errata:52,Realms of the Elf-lords Errata:53,The Two Towers Errata:54,Battle of Helm's Deep Errata:55,Ents of Fangorn Errata:56,Return of the King Errata:57,Siege of Gondor Errata:58,Reflections Errata:59,Mount Doom Errata:60
+			PC New Playtest Errata|New Playtest Errata:pc_errata
 		]
 		errataSets: [
 			51,52,53,54,55,56,57,58,59,60
+		]
+	}
+	{
+		name: PC New Playtest Errata
+		code: pc_errata
+		sites: MULTIPATH
+		# Fill this up with the current batch of errata for it to show up on the playtest server.
+		valid: [
+			"101_19", "101_20", "101_31", "101_33", "101_34", "101_52", "101_54", "101_61", "51_303", "51_310", "51_50", "51_63", "52_104", "52_110", "52_76", "52_85", "53_103", "53_14", "53_20", "53_25", "53_50", "53_7", "53_8", "53_80", "53_85", "54_276", "55_121", "55_7", "58_20", "59_32", "59_35", "60_28", "60_8"
+		]
+		sets: [
+			71
 		]
 	}
 	{
