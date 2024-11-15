@@ -724,6 +724,10 @@ var CardFilter = Class.extend({
 				$("#setSelect").html($("#setSelect option").sort(function (a, b) {
 					let av = a.value == "" ? 0 : parseInt(a.value, 10);
 					let bv = b.value == "" ? 0 : parseInt(b.value, 10);
+					if(a.value == "pc_errata")
+						av = 1000;
+					if(b.value == "pc_errata")
+						bv = 1000;
 					return av == bv ? 0 : av < bv ? -1 : 1
 				}));
 				
