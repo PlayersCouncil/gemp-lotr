@@ -107,6 +107,14 @@ var GempLotrDeckBuildingUI = Class.extend({
 						that.setMapVisibility(false);
 					}
 					
+					//PC format or Anything Goes
+					if(formatCode.includes("pc") || formatCode == "rev_tow_sta") {
+						$("#convertErrataBut").button("option", "disabled", false);
+					}
+					else {
+						$("#convertErrataBut").button("option", "disabled", true);
+					}
+					
 					that.cardFilter.updateFormat(formatCode, that.formats[formatCode].blockFilters);
 				});
 		
@@ -127,6 +135,8 @@ var GempLotrDeckBuildingUI = Class.extend({
 		var libraryListBut = $("#libraryListBut").button();
 
 		var deckListBut = $("#deckListBut").button();
+		
+		var convertErrataBut = $("#convertErrataBut").button();
 		
 		var notesBut = $("#notesBut").button();
 		
@@ -179,6 +189,11 @@ var GempLotrDeckBuildingUI = Class.extend({
 		deckListBut.click(
 				function () {
 					that.loadDeckList();
+				});
+		
+		convertErrataBut.click(
+				function () {
+					that.convertErrata();
 				});
 		
 		libraryListBut.click(
@@ -371,6 +386,22 @@ var GempLotrDeckBuildingUI = Class.extend({
 					}
 				});
 		}
+	},
+	
+	convertErrata:function() {		
+		var that = this;
+		var deckContents = this.getDeckContents();
+		this.comm.convertErrata(that.formatSelect.val(), deckContents, function (xml) {
+				that.setupDeck(xml, that.deckName);
+				that.deckModified(true);
+				$("#convertErrataBut").button("option", "disabled", true);
+			}, {
+				"400":function () {
+					$("#convertErrataBut").button("option", "disabled", false);
+					alert("Error processing errata conversion.");
+				}
+			});
+		//target format, current decklist, function that takes new decklist and replaces it
 	},
 
 	getCollectionType:function () {
