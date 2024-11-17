@@ -543,12 +543,12 @@
 					type: modifyStrength
 					select: choose(companion,signet(aragorn),inSkirmish)
 					amount: {
-						type: forEachInMemory
+						type: ForEachInMemory
 						memory: discardedCards
 						filter: any
-						limit: 3
 					}
-				}
+					limitPerCardThisPhase: 3
+				}	
 			}
 		]
 		gametext: Each time you play a skirmish event during a skirmish involving a companion with the Aragorn signet, you may spot Aragorn to stack that event here.<br>Skirmish: Spot Aragorn and discard X cards here to make a skirmishing companion with the Aragorn signet strength +X (limit +3).

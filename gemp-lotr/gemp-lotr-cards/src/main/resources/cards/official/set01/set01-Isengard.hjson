@@ -1555,12 +1555,8 @@
 			effect: {
 				type: modifyStrength
 				select: self
-				amount: {
-					type: cardAffectedLimitPerPhase
-					prefix: str-
-					source: 1
-					limit: 3
-				}
+				amount: 1
+				limitPerCardThisPhase: 3
 			}
 		}
 		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Remove (1) to make this minion strength +1 (limit +3).
