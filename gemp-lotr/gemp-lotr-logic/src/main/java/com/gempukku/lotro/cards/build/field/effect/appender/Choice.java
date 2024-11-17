@@ -53,16 +53,21 @@ public class Choice implements EffectAppenderProducer {
                     textIndex++;
                 }
 
-                if (playableEffectAppenders.size() == 0) {
-                    actionContext.setValueToMemory(memorize, "");
-                    return null;
-                }
-
                 if (playableEffectAppenders.size() == 1) {
                     SubAction subAction = new SubAction(action);
                     playableEffectAppenders.get(0).appendEffect(cost, subAction, delegateActionContext);
                     actionContext.setValueToMemory(memorize, textArray[0]);
                     return new StackActionEffect(subAction);
+                }
+
+                if (playableEffectAppenders.isEmpty()) {
+                    actionContext.setValueToMemory(memorize, "");
+                    textIndex = 0;
+                    for (EffectAppender possibleEffectAppender : possibleEffectAppenders) {
+                        playableEffectAppenders.add(possibleEffectAppender);
+                        effectTexts.add(GameUtils.substituteText(textArray[textIndex], actionContext));
+                        textIndex++;
+                    }
                 }
 
                 SubAction subAction = new SubAction(action);
