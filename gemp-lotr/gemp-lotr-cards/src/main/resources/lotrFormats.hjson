@@ -122,6 +122,7 @@
 		name: PC New Playtest Errata
 		code: pc_errata
 		sites: MULTIPATH
+		hall: false
 		# Fill this up with the current batch of errata for it to show up on the playtest server.
 		valid: [
 			"101_19", "101_20", "101_31", "101_33", "101_34", "101_52", "101_54", "101_61", "51_303", "51_310", "51_50", "51_63", "52_104", "52_110", "52_76", "52_85", "53_103", "53_14", "53_20", "53_25", "53_50", "53_7", "53_8", "53_80", "53_85", "54_276", "55_121", "55_7", "58_20", "59_32", "59_35", "60_28", "60_8"
