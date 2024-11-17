@@ -5,6 +5,7 @@ import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.db.DeckDAO;
+import com.gempukku.lotro.db.DeckSerialization;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -77,7 +78,9 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             getDeckStats(request, responseWriter);
         } else if (uri.equals("/formats") && request.method() == HttpMethod.POST) {
             getAllFormats(request, responseWriter);
-        } else {
+        } else if (uri.equals("/convert") && request.method() == HttpMethod.POST) {
+            convertErrata(request, responseWriter);
+        }else {
             throw new HttpProcessingException(404);
         }
     }
@@ -442,6 +445,24 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
         responseWriter.writeXmlResponse(serializeDeck(resourceOwner, deckName));
+    }
+
+    private void convertErrata(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException, ParserConfigurationException {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+
+            String targetFormat = getFormParameterSafely(postDecoder, "targetFormat");
+            String contents = getFormParameterSafely(postDecoder, "deckContents");
+
+            var format = validateFormat(targetFormat);
+            var originalDeck = DeckSerialization.buildDeckFromContents("", contents, format.getName(), "");
+
+            responseWriter.writeXmlResponse(serializeDeck(format.applyErrata(originalDeck)));
+        } finally {
+            postDecoder.destroy();
+        }
     }
 
     private void getLibraryDeck(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, ParserConfigurationException {

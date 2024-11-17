@@ -99,7 +99,7 @@ var CardFilter = Class.extend({
 		this.filter = this.calculateDeckFilter(this.overrideFilter);
 		this.start = 0;
 		$("#resetAllFiltersButton").click();
-		this.getCollection(); 
+		this.filterChanged(); 
 	},
 
 	setType: function (typeValue) {
@@ -495,10 +495,10 @@ var CardFilter = Class.extend({
 		$("#culture2").hide();
 
 		this.setSelect.change(() => this.setFilterChanged(that));
-		this.nameInput.change(this.fullFilterChanged);
-		this.gametextInput.change(this.fullFilterChanged);
-		this.sortSelect.change(this.fullFilterChanged);
-		this.raritySelect.change(this.fullFilterChanged);
+		this.nameInput.change(this.filterChanged);
+		this.gametextInput.change(this.filterChanged);
+		this.sortSelect.change(this.filterChanged);
+		this.raritySelect.change(this.filterChanged);
 
 		// Hide initially hidden fields
 		$("#twilightValueInput").prop("hidden", true);
@@ -521,7 +521,7 @@ var CardFilter = Class.extend({
 					  ", #siteNumberCompareSelect, #siteNumberValueInput" +
 					  ", #resistanceCompareSelect, #resistanceValueInput").val('').trigger('change');
 					that.pauseUpdates = false;
-					that.fullFilterChanged();
+					that.filterChanged();
 					
 					// $("#labelDWARVEN, #labelELVEN, #labelGANDALF, #labelGONDOR, #labelROHAN, #labelSHIRE" +
 					//   ", #labelGOLLUM, #labelDUNLAND, #labelISENGARD, #labelMORIA, #labelRAIDER, #labelSAURON" +
@@ -546,7 +546,7 @@ var CardFilter = Class.extend({
 					  ", #MEN, #ORC, #URUK_HAI, #WRAITH" +
 					  ", #ESGAROTH, #GUNDABAD, #MIRKWOOD, #SMAUG, #SPIDER, #TROLL").prop("checked", false).change();
 					that.pauseUpdates = false;
-					that.fullFilterChanged();
+					that.filterChanged();
 				});
 
 		// Triggers for filter fields changed
@@ -650,18 +650,7 @@ var CardFilter = Class.extend({
 		}
 		
 		
-		return that.fullFilterChanged();
-	},
-
-	fullFilterChanged: function() {
-		
-		if(this.initialStartup && !this.pauseUpdates) {
-			this.filter = this.calculateDeckFilter()
-			this.start = 0;
-			this.getCollection();
-		}
-		
-		return true;
+		return that.filterChanged();
 	},
 	
 	// Callback function for when the product filter is changed
