@@ -46,6 +46,7 @@
 						type: ForEachYouCanSpot
 						filter: hand weapon
 					}
+					limitPerCardThisPhase: 3
 				}
 			}
 		]

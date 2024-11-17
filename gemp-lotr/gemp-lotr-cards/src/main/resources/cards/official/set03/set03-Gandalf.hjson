@@ -338,10 +338,10 @@
 				type: modifyStrength
 				select: choose(companion)
 				amount: {
-					type: forEachYouCanSpot
-					filter: companion,signet(Gandalf)
-					limit: 3
-				}
+						type: ForEachYouCanSpot
+						filter: companion,signet(Gandalf)
+					}
+				limitPerCardThisPhase: 3
 			}
 		}
 		gametext: Plays to your support area.<br><b>Skirmish:</b> Exert Gandalf to make a companion strength +1 for each companion with the Gandalf signet you can spot (limit +3).
