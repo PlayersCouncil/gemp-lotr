@@ -90,28 +90,23 @@
 			}
 			cost: [
 				{
-					type: MemorizeNumber
-					amount: {
-						type: ForEachYouCanSpot
-						filter: HasCultureTokenCount(2,rohan)
-					}
-					memory: availableConditions
-				}
-				{
-					type: ChooseANumber
+					type: ChooseActiveCards
 					text: Choose how many {rohan} conditions to remove 2 tokens from.
-					from: 1
-					to: memory(availableConditions)
-					memorize: chosenNumber
+					count: {
+						type: Range
+						from: 1
+						to: {
+							type: ForEachYouCanSpot
+							filter: condition,HasCultureTokenCount(2,rohan)
+						}
+					}
+					select: choose(HasCultureTokenCount(2,rohan))
+					memorize: chosenConditions
 				}
 				{
-					type: Repeat
-					times: memory(chosenNumber)
-					effect: {
-						type: RemoveCultureTokens
-						select: choose(HasCultureTokenCount(2,rohan))
-						count: 2
-					}
+					type: RemoveCultureTokens
+					select: memory(chosenConditions)
+					count: 2
 				}				
 			]
 			effect: [
@@ -121,8 +116,8 @@
 					count: 3
 					until: start(regroup)
 					amount: {
-						type: FromMemory
-						memory: chosenNumber
+						type: ForEachInMemory
+						memory: chosenConditions
 					}
 				}
 			]
