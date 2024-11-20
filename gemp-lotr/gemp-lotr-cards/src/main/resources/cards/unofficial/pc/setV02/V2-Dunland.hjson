@@ -199,41 +199,86 @@
 		effects: [
 			{
 				type: event
-				requires: {
-					type: CanSpotTwilight
-					amount: 25
-				}
-				cost: {
-					type: RemoveTwilight
-					amount: 10
-				}
-				effect: [
-					{
-						type: TakeControlOfSite
-					}
-					{
-						type: TakeControlOfSite
-					}
-					{
-						type: TakeControlOfSite
-					}
-					{
-						type: removePlayedEventFromTheGame
-						filter: self
-					}
-				]
-			}
-			{
-				type: ActivatedInDiscard
-				phase: Shadow
-				requires: [
-					{
-						type: canSelfBePlayed
-					}
-				]
 				effect: {
-					type: playCardFromDiscard
-					select: self
+					type: Choice
+					texts: [
+						Remove (3) to draw 2 cards
+						Remove (9) to take control of 2 sites
+					]
+					effects: [
+						{
+							type: CostToEffect
+							requires: {
+								type: CanSpot
+								filter: your,minion
+							}
+							cost: {
+								type: RemoveTwilight
+								amount: 3
+							}
+							effect: [
+								{
+									type: DrawCards
+									count: 2
+								}
+							]
+						}
+						
+						{
+							type: CostToEffect
+							requires: {
+								type: Or
+								requires: [
+									{
+										type: And
+										requires: [
+											{
+												type: Location
+												filter: RegionNumber(3)
+											}
+											{
+												type: CanSpotTwilight
+												amount: 25
+											}
+										]
+									}
+									{
+										type: And
+										requires: [
+											{
+												type: Location
+												filter: RegionNumber(1-2)
+											}
+											{
+												type: CanSpotTwilight
+												amount: 18
+											}
+										]
+									}
+								]
+							}
+							cost: {
+								type: RemoveTwilight
+								amount: 9
+							}
+							effect: [
+								{
+									type: TakeControlOfSite
+								}
+								{
+									type: TakeControlOfSite
+								}
+								{
+									type: AddModifier
+									modifier: {
+										type: SiteControlCount
+										amount: +2
+									}
+									until: start(regroup)
+								}
+							]
+						}
+					]
 				}
 			}
 			{
@@ -242,6 +287,14 @@
 				requires: [
 					{
 						type: canSelfBePlayed
+					}
+					{
+						type: Location
+						filter: RegionNumber(1)
+					}
+					{
+						type: CanSpotTwilight
+						amount: 18
 					}
 				]
 				effect: {
@@ -252,7 +305,7 @@
 				}
 			}
 		]
-		gametext: Spot 25 twilight tokens and remove 10 to take control of 3 sites, then remove this from the game. This event may be played from your draw deck or discard pile.
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (9) to take control of 2 sites and make the count of sites you control +2 until the regroup phase. If in region 1, this action can be played from your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {

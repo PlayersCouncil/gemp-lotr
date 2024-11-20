@@ -15,48 +15,88 @@
 		type: Event
 		timewords: Shadow
 		effects: [
-			{
+						{
 				type: event
-				requires: {
-					type: CanSpotTwilight
-					amount: 25
-				}
-				cost: {
-					type: RemoveTwilight
-					amount: 10
-				}
-				effect: [
-					{
-						type: Repeat
-						times: 3
-						effect: {
-							type: Optional
-							text: Would you like to play another minion from your draw deck costing (5) or more?
-							effect: {
-								type: PlayCardFromDrawDeck
-								select: choose(minion,MinTwilight(5))
-								shuffle: true
-								showAll: true
-							}
-						}
-					}
-					{
-						type: removePlayedEventFromTheGame
-						filter: self
-					}
-				]
-			}
-			{
-				type: ActivatedInDiscard
-				phase: Shadow
-				requires: [
-					{
-						type: canSelfBePlayed
-					}
-				]
 				effect: {
-					type: playCardFromDiscard
-					select: self
+					type: Choice
+					texts: [
+						Remove (3) to draw 2 cards
+						Play up to 2 minions costing (5) or more from your draw deck
+					]
+					effects: [
+						{
+							type: CostToEffect
+							requires: {
+								type: CanSpot
+								filter: your,minion
+							}
+							cost: {
+								type: RemoveTwilight
+								amount: 3
+							}
+							effect: [
+								{
+									type: DrawCards
+									count: 2
+								}
+							]
+						}
+						
+						{
+							type: CostToEffect
+							requires: {
+								type: Or
+								requires: [
+									{
+										type: And
+										requires: [
+											{
+												type: Location
+												filter: RegionNumber(3)
+											}
+											{
+												type: CanSpotTwilight
+												amount: 25
+											}
+										]
+									}
+									{
+										type: And
+										requires: [
+											{
+												type: Location
+												filter: RegionNumber(1-2)
+											}
+											{
+												type: CanSpotTwilight
+												amount: 18
+											}
+										]
+									}
+								]
+							}
+							cost: {
+								type: RemoveTwilight
+								amount: 9
+							}
+							effect: [
+								{
+									type: Repeat
+									times: 2
+									effect: {
+										type: Optional
+										text: Would you like to play another minion from your draw deck costing (5) or more?
+										effect: {
+											type: PlayCardFromDrawDeck
+											select: choose(minion,MinTwilight(5))
+											shuffle: true
+											showAll: true
+										}
+									}
+								}
+							]
+						}
+					]
 				}
 			}
 			{
@@ -65,6 +105,14 @@
 				requires: [
 					{
 						type: canSelfBePlayed
+					}
+					{
+						type: Location
+						filter: RegionNumber(1)
+					}
+					{
+						type: CanSpotTwilight
+						amount: 18
 					}
 				]
 				effect: {
@@ -75,7 +123,7 @@
 				}
 			}
 		]
-		gametext: Spot 25 twilight tokens to play up to 3 minions from your draw deck costing (5) or more, then remove this from the game. This event may be played from your draw deck or discard pile.
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) to play up to 2 minions from your draw deck costing (5) or more. If in region 1, this action can be played from your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {
