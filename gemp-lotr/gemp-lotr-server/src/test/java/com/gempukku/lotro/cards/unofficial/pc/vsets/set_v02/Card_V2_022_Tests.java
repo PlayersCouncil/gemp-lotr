@@ -20,8 +20,14 @@ public class Card_V2_022_Tests
 					put("folly", "102_22");
 					put("uruk", "1_151");
 
-					put("gandalf", "1_72");
-					put("sam", "1_311");
+					put("item1", "1_160");
+					put("item2", "3_67");
+					put("item3", "4_142");
+					put("item4", "4_166");
+					put("item5", "5_59");
+
+					put("fpitem1", "1_31");
+					put("fpitem2", "3_23");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -59,7 +65,7 @@ public class Card_V2_022_Tests
 	}
 
 	@Test
-	public void FellfromWisdomintoFollyExertsOnceOrTwiceWhenPlayedFromHand() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FellfromWisdomintoFollySmallAbilitySpotsMinionAndRemoves3ToDraw2Cards() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -68,74 +74,56 @@ public class Card_V2_022_Tests
 		scn.ShadowMoveCardToHand(folly);
 		scn.ShadowMoveCharToTable(uruk);
 
-		var frodo = scn.GetRingBearer();
-		var sam = scn.GetFreepsCard("sam");
-		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCharToTable(sam, gandalf);
-
 		scn.StartGame();
 
-		scn.SetTwilight(20);
-
 		scn.FreepsPassCurrentPhaseAction();
-		assertEquals(25, scn.GetTwilight());
+		assertEquals(3, scn.GetTwilight());
 
 		assertTrue(scn.ShadowPlayAvailable(folly));
-		assertEquals(0, scn.GetWoundsOn(frodo));
-		assertEquals(0, scn.GetWoundsOn(sam));
-		assertEquals(0, scn.GetWoundsOn(gandalf));
-		assertEquals(0, scn.GetWoundsOn(uruk));
+		assertEquals(1, scn.GetShadowHandCount());
+		assertEquals(7, scn.GetShadowDeckCount());
 
 		scn.ShadowPlayCard(folly);
-		assertEquals(15, scn.GetTwilight());
-		assertEquals(1, scn.GetWoundsOn(frodo));
-		assertEquals(1, scn.GetWoundsOn(sam));
-		//Gandalf costs 4 or more, so he gets 2
-		assertEquals(2, scn.GetWoundsOn(gandalf));
-		assertEquals(1, scn.GetWoundsOn(uruk));
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(2, scn.GetShadowHandCount());
+		assertEquals(5, scn.GetShadowDeckCount());
 
-		assertEquals(Zone.REMOVED, folly.getZone());
+		assertEquals(Zone.DISCARD, folly.getZone());
 	}
 
 	@Test
-	public void FellfromWisdomintoFollyFunctionsWhenPlayedFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FellfromWisdomintoFollyTutors4ShadowItemsFromDrawDeckInRegion1If18Twilight() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var folly = scn.GetShadowCard("folly");
-		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCardToDiscard(folly);
-		scn.ShadowMoveCharToTable(uruk);
-
-		var frodo = scn.GetRingBearer();
-		var sam = scn.GetFreepsCard("sam");
-		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCharToTable(sam, gandalf);
+		var item1 = scn.GetShadowCard("item1");
+		var item2 = scn.GetShadowCard("item2");
+		var item3 = scn.GetShadowCard("item3");
+		var item4 = scn.GetShadowCard("item4");
+		scn.ShadowMoveCardToHand(folly);
 
 		scn.StartGame();
 
-		scn.SetTwilight(20);
+		scn.SetTwilight(15);
 
 		scn.FreepsPassCurrentPhaseAction();
-		assertEquals(25, scn.GetTwilight());
+		assertEquals(18, scn.GetTwilight());
 
-		//It's an ability being activated and not a "play", which is only true for cards
-		// currently in hand.
-		assertTrue(scn.ShadowActionAvailable(folly));
-		assertEquals(0, scn.GetWoundsOn(frodo));
-		assertEquals(0, scn.GetWoundsOn(sam));
-		assertEquals(0, scn.GetWoundsOn(gandalf));
-		assertEquals(0, scn.GetWoundsOn(uruk));
+		assertTrue(scn.ShadowPlayAvailable(folly));
+		assertEquals(1, scn.GetShadowHandCount());
+		assertEquals(8, scn.GetShadowDeckCount());
 
-		scn.ShadowUseCardAction(folly);
-		assertEquals(15, scn.GetTwilight());
-		assertEquals(1, scn.GetWoundsOn(frodo));
-		assertEquals(1, scn.GetWoundsOn(sam));
-		//Gandalf costs 4 or more, so he gets 2
-		assertEquals(2, scn.GetWoundsOn(gandalf));
-		assertEquals(1, scn.GetWoundsOn(uruk));
-
-		assertEquals(Zone.REMOVED, folly.getZone());
+		scn.ShadowPlayCard(folly);
+		//8 cards, 7 items, but 2 are free peoples
+		assertEquals(5, scn.GetShadowCardChoiceCount());
+		scn.ShadowDecisionAvailable("Choose cards from deck");
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(4, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCardBPFromSelection(item1, item2, item3, item4);
+		scn.ShadowDismissRevealedCards();
+		assertEquals(4, scn.GetShadowHandCount());
+		assertEquals(4, scn.GetShadowDeckCount());
 	}
 
 	@Test
@@ -144,38 +132,34 @@ public class Card_V2_022_Tests
 		var scn = GetScenario();
 
 		var folly = scn.GetShadowCard("folly");
-		var uruk = scn.GetShadowCard("uruk");
+		var item1 = scn.GetShadowCard("item1");
+		var item2 = scn.GetShadowCard("item2");
+		var item3 = scn.GetShadowCard("item3");
+		var item4 = scn.GetShadowCard("item4");
 		scn.ShadowMoveCardsToTopOfDeck(folly);
-		scn.ShadowMoveCharToTable(uruk);
-
-		var frodo = scn.GetRingBearer();
-		var sam = scn.GetFreepsCard("sam");
-		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCharToTable(sam, gandalf);
 
 		scn.StartGame();
 
-		scn.SetTwilight(20);
+		scn.SetTwilight(15);
 
 		scn.FreepsPassCurrentPhaseAction();
-		assertEquals(25, scn.GetTwilight());
+		assertEquals(18, scn.GetTwilight());
 
 		//It's an ability being activated and not a "play", which is only true for cards
 		// currently in hand.
 		assertTrue(scn.ShadowActionAvailable(folly));
-		assertEquals(0, scn.GetWoundsOn(frodo));
-		assertEquals(0, scn.GetWoundsOn(sam));
-		assertEquals(0, scn.GetWoundsOn(gandalf));
-		assertEquals(0, scn.GetWoundsOn(uruk));
+		assertEquals(0, scn.GetShadowHandCount());
+		assertEquals(9, scn.GetShadowDeckCount());
 
-		scn.ShadowUseCardAction(folly);
-		assertEquals(15, scn.GetTwilight());
-		assertEquals(1, scn.GetWoundsOn(frodo));
-		assertEquals(1, scn.GetWoundsOn(sam));
-		//Gandalf costs 4 or more, so he gets 2
-		assertEquals(2, scn.GetWoundsOn(gandalf));
-		assertEquals(1, scn.GetWoundsOn(uruk));
-
-		assertEquals(Zone.REMOVED, folly.getZone());
+		scn.ShadowPlayCard(folly);
+		//8 cards, 7 items, but 2 are free peoples
+		assertEquals(5, scn.GetShadowCardChoiceCount());
+		scn.ShadowDecisionAvailable("Choose cards from deck");
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(4, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCardBPFromSelection(item1, item2, item3, item4);
+		scn.ShadowDismissRevealedCards();
+		assertEquals(4, scn.GetShadowHandCount());
+		assertEquals(4, scn.GetShadowDeckCount());
 	}
 }

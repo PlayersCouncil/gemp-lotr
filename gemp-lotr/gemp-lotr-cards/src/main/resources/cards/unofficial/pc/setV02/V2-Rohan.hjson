@@ -562,34 +562,34 @@
 				}
 				effect: [
 					{
-						type: DiscardFromHand
-						forced: false
-						select: all(any)
-						memorize: discardedHand
-					}
-					{
 						type: Repeat
 						times: {
-							type: ForEachInMemory
-							memory: discardedHand
-							filter: side(shadow)
+							type: ForEachInHand
 						}
-						effect: {
-							type: Exert
-							select: choose(minion)
-						}
-					}
-					{
-						type: Repeat
-						times: {
-							type: ForEachInMemory
-							memory: discardedHand
-							filter: side(freeps)
-						}
-						effect: {
-							type: Heal
-							select: choose(companion,or(valiant,culture(rohan)))
-						}
+						effect: [
+							{
+								type: DiscardFromHand
+								forced: false
+								select: choose(any)
+								memorize: discardedCard
+							}
+							{
+								type: If
+								check: {
+									type: MemoryMatches
+									memory: discardedCard
+									filter: side(freeps)
+								}
+								true: {
+									type: Heal
+									select: choose(companion,or(valiant,culture(rohan)))
+								}
+								false: {
+									type: Exert
+									select: choose(minion)
+								}
+							}
+						]
 					}
 					{
 						type: addModifier

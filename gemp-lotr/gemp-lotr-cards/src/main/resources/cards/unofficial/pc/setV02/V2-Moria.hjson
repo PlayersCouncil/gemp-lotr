@@ -368,64 +368,82 @@
 		type: Event
 		timewords: Shadow
 		effects: [
-			{
+						{
 				type: event
-				requires: {
-					type: CanSpotTwilight
-					amount: 25
-				}
-				cost: {
-					type: RemoveTwilight
-					amount: 10
-				}
-				effect: [
-					{
-						type: Repeat
-						times: 4
-						effect: {
-							type: Choice
-							texts: [
-								Take a Shadow condition into hand from your draw deck
-								Take a Shadow condition into hand from your discard pile
-								Pass
+				effect: {
+					type: Choice
+					texts: [
+						Remove (3) to draw 2 cards
+						Remove (9) to take up to 4 conditions into hand from your deck
+					]
+					effects: [
+						{
+							type: CostToEffect
+							requires: {
+								type: CanSpot
+								filter: your,minion
+							}
+							cost: {
+								type: RemoveTwilight
+								amount: 3
+							}
+							effect: [
+								{
+									type: DrawCards
+									count: 2
+								}
 							]
-							effects: [
+						}
+						
+						{
+							type: CostToEffect
+							requires: {
+								type: Or
+								requires: [
+									{
+										type: And
+										requires: [
+											{
+												type: Location
+												filter: RegionNumber(3)
+											}
+											{
+												type: CanSpotTwilight
+												amount: 25
+											}
+										]
+									}
+									{
+										type: And
+										requires: [
+											{
+												type: Location
+												filter: RegionNumber(1-2)
+											}
+											{
+												type: CanSpotTwilight
+												amount: 18
+											}
+										]
+									}
+								]
+							}
+							cost: {
+								type: RemoveTwilight
+								amount: 9
+							}
+							effect: [
 								{
 									type: PutCardsFromDeckIntoHand
+									count: 0-4
 									select: choose(side(shadow),condition)
 									shuffle: true
 									reveal: true
 									showAll: true
 								}
-								{
-									type: PutCardsFromDiscardIntoHand
-									discard: you
-									select: choose(side(shadow),condition)
-								}
-								{
-									type: SendMessage
-									text: "{you} declines to take a Shadow condition into hand."
-								}
 							]
 						}
-					}
-					{
-						type: removePlayedEventFromTheGame
-						filter: self
-					}
-				]
-			}
-			{
-				type: ActivatedInDiscard
-				phase: Shadow
-				requires: [
-					{
-						type: canSelfBePlayed
-					}
-				]
-				effect: {
-					type: playCardFromDiscard
-					select: self
+					]
 				}
 			}
 			{
@@ -434,6 +452,14 @@
 				requires: [
 					{
 						type: canSelfBePlayed
+					}
+					{
+						type: Location
+						filter: RegionNumber(1)
+					}
+					{
+						type: CanSpotTwilight
+						amount: 18
 					}
 				]
 				effect: {
@@ -444,7 +470,7 @@
 				}
 			}
 		]
-		gametext: Spot 25 twilight tokens and remove 10 to take up to 4 Shadow conditions into hand from your draw deck or discard pile, then remove this from the game. This event may be played from your draw deck or discard pile.
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (9) to take up to 4 Shadow conditions into hand from your draw deck. If in region 1, this action can be played from your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {

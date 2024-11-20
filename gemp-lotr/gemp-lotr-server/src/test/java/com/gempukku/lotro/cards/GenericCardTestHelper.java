@@ -273,6 +273,11 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public List<String> FreepsGetCardChoices() { return GetADParamAsList(P1, "cardId"); }
     public List<String> ShadowGetCardChoices() { return GetADParamAsList(P2, "cardId"); }
 
+    public int FreepsGetChoiceMin() { return Integer.parseInt(FreepsGetFirstADParam("min")); }
+    public int FreepsGetChoiceMax() { return Integer.parseInt(FreepsGetFirstADParam("max")); }
+    public int ShadowGetChoiceMin() { return Integer.parseInt(ShadowGetFirstADParam("min")); }
+    public int ShadowGetChoiceMax() { return Integer.parseInt(ShadowGetFirstADParam("max")); }
+
     public int FreepsGetSelectableCount() {
         return GetADParamEqualsCount(P1, "selectable", "true");
     }
@@ -847,6 +852,9 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public int FreepsGetShadowAssignmentTargetCount() { return FreepsGetShadowAssignmentTargets().size(); }
     public int ShadowGetFreepsAssignmentTargetCount() { return ShadowGetFreepsAssignmentTargets().size(); }
     public int ShadowGetShadowAssignmentTargetCount() { return ShadowGetShadowAssignmentTargets().size(); }
+
+    public void FreepsChooseCardBPFromSelection(String name) throws DecisionResultInvalidException { ChooseCardBPFromSelection(P1, GetFreepsCard(name));}
+    public void ShadowChooseCardBPFromSelection(String name) throws DecisionResultInvalidException { ChooseCardBPFromSelection(P2, GetShadowCard(name));}
 
     public void FreepsChooseCardBPFromSelection(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCardBPFromSelection(P1, cards);}
     public void ShadowChooseCardBPFromSelection(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCardBPFromSelection(P2, cards);}
