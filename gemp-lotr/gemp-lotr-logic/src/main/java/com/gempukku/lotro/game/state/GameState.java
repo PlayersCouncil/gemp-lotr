@@ -254,7 +254,7 @@ public class GameState {
                         cardIterator.remove();
                     }
                 }
-            } while (cardsToSendAtLoopStart != cardsLeftToSent.size() && cardsLeftToSent.size() > 0);
+            } while (cardsToSendAtLoopStart != cardsLeftToSent.size() && !cardsLeftToSent.isEmpty());
 
             // Finally the stacked ones
             for (List<PhysicalCardImpl> physicalCards : _stacked.values())
@@ -271,11 +271,13 @@ public class GameState {
                 for (PhysicalCardImpl physicalCard : physicalCards)
                     listener.cardCreated(physicalCard);
 
-            List<PhysicalCardImpl> discard = _discards.get(playerId);
-            if (discard != null) {
-                for (PhysicalCardImpl physicalCard : discard)
+            for (List<PhysicalCardImpl> physicalCards : _removed.values())
+                for (PhysicalCardImpl physicalCard : physicalCards)
                     listener.cardCreated(physicalCard);
-            }
+
+            for (List<PhysicalCardImpl> physicalCards : _discards.values())
+                for (PhysicalCardImpl physicalCard : physicalCards)
+                    listener.cardCreated(physicalCard);
 
             List<PhysicalCardImpl> adventureDeck = _adventureDecks.get(playerId);
             if (adventureDeck != null) {
