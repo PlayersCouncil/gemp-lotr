@@ -1,0 +1,149 @@
+{
+
+	55_85: {
+		cardInfo: {
+			//id: 55_85.1
+			parent: 5_85
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN05E085.1_card.jpg
+			collInfo: 5C85
+			rarity: C
+		}
+		title: Let Us Be Swift
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: valiant,companion
+				count: 3
+			},
+			effect: [
+				{
+					type: discard
+					select: choose(condition)
+					count: 0-2
+				}
+				{
+					type: liberateSite
+				}
+			]
+		}
+		gametext: <b>Regroup:</b> Spot 3 valiant companions to discard up to 2 conditions and liberate a site.
+		lore: "'Let us drive through such foes as are already between us and the fastness.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	55_86: {
+		cardInfo: {
+			//id: 55_86.1
+			parent: 5_86
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN05E086.1_card.jpg
+			collInfo: 5R86
+			rarity: R
+		}
+		title: No Rest for the Weary
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: valiant,companion
+				count: 3
+			},
+			effect: [
+				{
+					type: addKeyword
+					select: choose(valiant,companion)
+					keyword: defender
+					amount: 1
+					until: regroup
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Spot 3 valiant companions to make one of those companions <b>defender +1</b> until the regroup phase.
+		lore: "'We must draw all our forces now behind the walls.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	55_92: {
+		cardInfo: {
+			//id: 55_92.1
+			parent: 5_92
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN05E092.1_card.jpg
+			collInfo: 5U92
+			rarity: U
+		}
+		title: Sigewulf
+		subtitle: Brave Volunteer
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Ally
+		allyHome: 4T
+		race: Man
+		strength: 4
+		vitality: 2
+		keywords: Villager
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: self
+				}
+				requires: {
+					type: canSpot
+					filter: valiant,companion
+					count: 5
+				}
+				effect: {
+					type: discard
+					select: choose(minion)
+				}
+			}
+		]
+		gametext: <b>Villager</b>.<br><b>Regroup:</b> Exert Sigewulf and spot 5 valiant companions to discard a minion.
+		lore: "The courage of Sigewulf and other Rohirrim like him will not be forgotten."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}
