@@ -584,6 +584,7 @@
 						select: all(memory(revealedCard))
 						player: shadow
 						hand: freeps
+						reveal: true
 					}
 				]
 			}

@@ -175,10 +175,12 @@
 									{
 										type: putCardsFromHandOnTopOfDeck
 										select: choose(culture(dwarven))
+										reveal: true
 									}
 									{
 										type: putCardsFromhandOnBottomOfDeck
 										select: choose(culture(dwarven))
+										reveal: true
 									}
 								]
 							}

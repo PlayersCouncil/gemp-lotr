@@ -138,6 +138,7 @@
 						effect: {
 							type: putCardsFromHandOnBottomOfDeck
 							select: choose(side(shadow))
+							reveal: true
 						}
 					}
 					{
