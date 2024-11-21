@@ -655,6 +655,7 @@ public class HallServer extends AbstractServer {
             CardCollection ownedCollection = _collectionsManager.getPlayerCollection(player, "permanent+trophy");
 
             LotroDeck filteredSpecialCardsDeck = new LotroDeck(lotroDeck.getDeckName());
+            filteredSpecialCardsDeck.setNotes(lotroDeck.getNotes());
             filteredSpecialCardsDeck.setTargetFormat(lotroDeck.getTargetFormat());
             if (lotroDeck.getRing() != null)
                 filteredSpecialCardsDeck.setRing(filterCard(lotroDeck.getRing(), ownedCollection));
