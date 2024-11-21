@@ -614,7 +614,7 @@
 				effect: [
 					{
 						type: discard
-						select: choose(side(free people),not(companion),printedTwilightCostFromMemory(tokenCount))
+						select: choose(side(free people),not(companion),minTwilight(memory(tokenCount)),maxTwilight(memory(tokenCount)))
 					}
 					{
 						type: discard

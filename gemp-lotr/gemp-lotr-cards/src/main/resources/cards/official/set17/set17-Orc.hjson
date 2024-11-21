@@ -148,6 +148,7 @@
 						player: free people
 						select: choose(memory(revealedCards),side(free people))
 						count: 2
+						reveal: true
 					}
 				]
 			}

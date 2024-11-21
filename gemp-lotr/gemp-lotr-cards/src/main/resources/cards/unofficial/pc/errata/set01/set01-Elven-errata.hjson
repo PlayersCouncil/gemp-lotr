@@ -509,6 +509,7 @@
 						select: choose(memory(revealedCards))
 						player: freeps
 						hand: shadow
+						reveal: true
 					}
 				]
 			}

@@ -198,6 +198,12 @@ var PCCards = {
 	'101_63': 'https://i.lotrtcgpc.net/sets/vset1/V1_063.jpg',
 	'101_64': 'https://i.lotrtcgpc.net/sets/vset1/V1_064.jpg',
 	
+	//2024 V1 additions:
+	// Sirannon Dam (V165) 
+	'101_65' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S065.0_card.jpg',
+	// Writhing Tentacle (V1C66) 
+	'101_66' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S066.0_card.jpg',
+	
 	// Christmas 2021 Errata
 
 	'51_7': 'https://i.lotrtcgpc.net/errata/balancing/51_007.jpg',
@@ -846,6 +852,22 @@ var PCCards = {
 	'68_9'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E009.1_card.jpg',
 	// Haldir, Warrior Messenger (18R14) [Errata]
 	'68_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN18E014.1_card.jpg',
+	// Legolas, Archer of Mirkwood (5P121) [Errata]
+	'55_121' : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E121.1_card.jpg',
+	// Gimli, Skilled Defender (5R7) [Errata]
+	'55_7'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E007.1_card.jpg',
+	// Herugrim (4U280) [Errata]
+	'54_280' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E280.1_card.jpg',
+	// Herugrim, Sword of the Mark (7R236) [Errata]
+	'57_236' : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E236.1_card.jpg',
+	// Simbelmyne (4R289) [Errata]
+	'54_289' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E289.1_card.jpg',
+	// No Rest for the Weary (5R86) [Errata]
+	'55_86'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E086.1_card.jpg',
+	// Let Us Be Swift (5C85) [Errata]
+	'55_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E085.1_card.jpg',
+	// Sigewulf, Brave Volunteer (5U92) [Errata]
+	'55_92'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E092.1_card.jpg',
 
 	//September 2024 Walk-on Qualifiers
 	//Legolas, Greenleaf FA
@@ -930,17 +952,9 @@ var PCCards = {
 	'60_8'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E008.2_card.jpg',
 	// Fortress Never Fallen (4U276) [Errata]
 	'54_276' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E276.2_card.jpg',
-	// Legolas, Archer of Mirkwood (5P121) [Errata]
-	'55_121' : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E121.1_card.jpg',
-	// Gimli, Skilled Defender (5R7) [Errata]
-	'55_7'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E007.1_card.jpg',
 	// Boromir, Redeemed (V1 20) [Errata]
-	'101_20'   : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E020.1_card.jpg',
+	'101_20'   : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E020.1_card.jpg'
 	
-	//V1 additions:
-	// Sirannon Dam (V165) 
-	'101_65' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S065.0_card.jpg',
-	// Writhing Tentacle (V1C66) 
-	'101_66' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E066.2_card.jpg'
+	
 }
 

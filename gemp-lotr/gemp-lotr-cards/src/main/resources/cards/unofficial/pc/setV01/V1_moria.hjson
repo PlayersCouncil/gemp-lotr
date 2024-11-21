@@ -643,7 +643,7 @@
 		cardInfo: {
 			//id: 101_66.1
 			revision: 1
-			image: sets/vset1/LOTR-ENV1E066.2_card.jpg
+			image: sets/vset1/LOTR-ENV1E066.1_card.jpg
 			collInfo: V1_66
 			rarity: C
 		}

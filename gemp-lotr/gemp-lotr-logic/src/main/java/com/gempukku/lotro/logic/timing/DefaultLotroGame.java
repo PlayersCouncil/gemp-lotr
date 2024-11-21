@@ -84,8 +84,8 @@ public class DefaultLotroGame implements LotroGame {
 
             var note = "Deck used: <a href='" + lotroDeck.getURL(playerId) + "' target='_blank'>" + lotroDeck.getDeckName() +
                     "</a> [" + lotroDeck.getTargetFormat() + "]<br/><br/>Deck Notes:<br/>";
-            if(lotroDeck.getNotes() != null) {
-                note += lotroDeck.getNotes();
+            if(lotroDeck.getNotes() != null && !lotroDeck.getNotes().equals("null")) {
+                note += lotroDeck.getNotes().replace("\n", "<br/>");
             }
             else {
                 note += "No deck notes.";

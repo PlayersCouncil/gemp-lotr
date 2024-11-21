@@ -29,7 +29,6 @@ public class PutCardsFromHandOnTopOfDeck implements EffectAppenderProducer {
         final String hand = FieldUtils.getString(effectObject.get("hand"), "hand", "you");
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final ValueSource count = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        // TODO - changed the default - have to go through all cards to check which should be revealed
         final boolean reveal = FieldUtils.getBoolean(effectObject.get("reveal"), "reveal", false);
 
         MultiEffectAppender result = new MultiEffectAppender();

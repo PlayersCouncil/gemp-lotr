@@ -537,6 +537,7 @@ public class DefaultLotroFormat implements LotroFormat {
     @Override
     public LotroDeck applyErrata(LotroDeck deck) {
         LotroDeck deckWithErrata = new LotroDeck(deck.getDeckName());
+        deckWithErrata.setNotes(deck.getNotes());
         deckWithErrata.setTargetFormat(deck.getTargetFormat());
         if (deck.getRingBearer() != null) {
             deckWithErrata.setRingBearer(applyErrata(deck.getRingBearer()));

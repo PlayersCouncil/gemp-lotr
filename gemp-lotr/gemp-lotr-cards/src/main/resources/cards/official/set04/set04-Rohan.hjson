@@ -1365,6 +1365,7 @@
 					{
 						type: putCardsFromHandOnBottomOfDeck
 						select: choose(villager)
+						reveal: true
 					}
 				]
 				effect: {

@@ -1157,7 +1157,7 @@
 				}
 			}
 		]
-		gametext: Machine.<br>While you can spot X [isengard] tokens here, each time an [isengard] Uruk-hai costing X is about to take a wound, exert it instead.<br>Maneuver: Exert an Uruk-hai to add an [isengard] token here.  
+		gametext: Machine. Each time an Uruk-hai costing X is about to take a wound (except during a skirmish), exert it instead, where X is the number of [isengard] tokens you can spot here.<br>Maneuver: Exert an Uruk-hai to add an [isengard] token here. 
 		lore: "They held their great shields above them like a roof..."
 		promotext: ""
 		alts: {

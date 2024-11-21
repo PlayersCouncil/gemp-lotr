@@ -902,10 +902,11 @@
 					{
 						type: heal
 						select: all(character,minResistance(5))
+						memorize: healedChars
 					}
 					{
 						type: exert
-						select: all(character,maxResistance(4))
+						select: all(character,not(memory(healedChars)))
 					}
 				]
 			}

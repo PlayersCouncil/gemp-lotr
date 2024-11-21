@@ -94,7 +94,7 @@
 					text: Choose how many {rohan} conditions to remove 2 tokens from.
 					count: {
 						type: Range
-						from: 1
+						from: 0
 						to: {
 							type: ForEachYouCanSpot
 							filter: condition,HasCultureTokenCount(2,rohan)
@@ -122,7 +122,7 @@
 				}
 			]
 		}
-		gametext: Remove 2 tokens from X [rohan] conditions to make 3 valiant companions strength +X until the regroup phase.
+		gametext: Spot X [rohan] conditions and remove 2 tokens from each to make 3 valiant companions strength +X until the regroup phase.
 		lore: "Captains and champions fell or fled before them. Neither orc nor man withstood them."
 		promotext: ""
 		alts: {

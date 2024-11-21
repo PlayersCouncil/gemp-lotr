@@ -1155,6 +1155,7 @@
 				{
 					type: putCardsFromHandOnBottomOfDeck
 					select: memory(revealedCards)
+					reveal: true
 				}
 			]
 		}
