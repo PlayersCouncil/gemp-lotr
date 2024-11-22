@@ -122,8 +122,8 @@ public class PlayerReconcilesAction implements Action {
                                     //We refresh the hand size here because effects could have reacted to the discard, causing
                                     // the previous hand size calculation to be stale.
                                     //See https://github.com/PlayersCouncil/gemp-lotr/issues/89
-                                    var currentCards = new HashSet<PhysicalCard>(gameState.getHand(_playerId));
-                                    int cardsInHandAfterDiscard = currentCards.size();
+                                    //As the discard selection is only queued, we need to subtract it from the current hand size.
+                                    int cardsInHandAfterDiscard = gameState.getHand(_playerId).size() - selectedCards.size();
                                     if (cardsInHandAfterDiscard < handSize) {
                                         _effectQueue.add(new DrawCardsEffect(PlayerReconcilesAction.this, _playerId, handSize - cardsInHandAfterDiscard));
                                     }
