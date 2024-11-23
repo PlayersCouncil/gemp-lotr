@@ -553,7 +553,7 @@ class Card {
             cardDiv.append(testingTextDiv);
         }
 
-        var borderDiv = $("<div class='borderOverlay'><img class='actionArea' src='/gemp-lotr/images/pixel.png' width='100%' height='100%'></div>");
+        var borderDiv = $("<div class='borderOverlay actionArea' width='100%' height='100%'></div>");
         if (noBorder)
             borderDiv.addClass("noBorder");
         cardDiv.append(borderDiv);

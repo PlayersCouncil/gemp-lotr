@@ -96,7 +96,6 @@ var CardFilter = Class.extend({
 		console.log("Override from deckbuilder");
 		this.initialStartup = true;
 		this.overrideFilter = override; 
-		this.filter = this.calculateDeckFilter(this.overrideFilter);
 		this.start = 0;
 		$("#resetAllFiltersButton").click();
 		this.filterChanged(); 

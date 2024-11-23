@@ -246,6 +246,10 @@
 			{
 				type: activated
 				phase: maneuver
+				requires: {
+					type: CanSpot
+					filter: self,Zone(SUPPORT)
+				}
 				cost: {
 					type: exert
 					select: choose(Nazgul)
