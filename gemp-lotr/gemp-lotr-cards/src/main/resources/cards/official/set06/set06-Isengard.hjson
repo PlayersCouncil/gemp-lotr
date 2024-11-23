@@ -79,7 +79,7 @@
 				}
 				effect: {
 					type: AddCultureTokens
-					culture: sauron
+					culture: isengard
 					select: self
 				}
 			}
