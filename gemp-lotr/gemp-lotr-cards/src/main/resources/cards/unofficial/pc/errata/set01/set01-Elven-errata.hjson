@@ -374,6 +374,7 @@
 		vitality: 3
 		signet: Frodo
 		resistance: 6
+		keywords: Archer
 		effects: {
 			type: activated
 			phase: archery
@@ -415,7 +416,7 @@
 				}
 			]
 		}
-		gametext: <b>Archery:</b> Exert Legolas to wound a minion. Exert him again unless he bears a ranged weapon or you can spot more minions than companions.
+		gametext: <b>Archer.</b><br/><b>Archery:</b> Exert Legolas to wound a minion. Exert him again unless he bears a ranged weapon or you can spot more minions than companions.
 		lore: And I too will go with him,' said Legolas. 'It would be faithless now to say farewell.'
 		promotext: ""
 		alts: {

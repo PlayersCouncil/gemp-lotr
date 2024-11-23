@@ -1,4 +1,66 @@
 {
+	
+	55_50: {
+		cardInfo: {
+			//id: 55_50.1
+			parent: 5_50
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN05E050.1_card.jpg
+			collInfo: 5R50
+			rarity: R
+		}
+		title: Foul Horde
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 4
+		keywords: Warg-rider
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,not(exhausted)
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,minVitality(3)
+					keyword: ambush
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,minVitality(4)
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Warg-rider</b>.<br>While Foul Horde is not exhausted, it is <b>fierce</b>.<br>While Foul Horde has at least 3 vitality, it is <b>ambush</b> (1).<br>While Foul Horde has at least 4 vitality, it is <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	55_57: {
 		cardInfo: {
 			//id: 5_57.1

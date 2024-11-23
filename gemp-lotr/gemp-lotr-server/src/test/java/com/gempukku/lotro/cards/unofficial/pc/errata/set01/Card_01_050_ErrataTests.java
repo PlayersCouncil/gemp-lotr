@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_01_050_ErrataTests
 {
@@ -43,7 +43,8 @@ public class Card_01_050_ErrataTests
 		 * Vitality: 3
 		 * Resistance: 6
 		 * Signet: Frodo
-		 * Game Text: <b>Archery:</b> Exert Legolas to wound a minion. Exert him again unless he bears a ranged weapon or you can spot more minions than companions.
+		 * Game Text: Archer.
+		* 	<b>Archery:</b> Exert Legolas to wound a minion. Exert him again unless he bears a ranged weapon or you can spot more minions than companions.
 		*/
 
 		var scn = GetScenario();
@@ -57,6 +58,7 @@ public class Card_01_050_ErrataTests
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.ELF, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.ARCHER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
