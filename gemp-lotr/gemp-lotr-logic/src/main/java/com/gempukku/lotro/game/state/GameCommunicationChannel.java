@@ -10,7 +10,6 @@ import com.gempukku.lotro.logic.timing.GameStats;
 import com.gempukku.polling.LongPollableResource;
 import com.gempukku.polling.WaitingRequest;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.gempukku.lotro.game.state.GameEvent.Type.*;
@@ -167,8 +166,10 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
     }
 
     @Override
-    public void setCurrentPlayerId(String currentPlayerId) {
-        appendEvent(new GameEvent(TURN_CHANGE).participantId(currentPlayerId));
+    public void setCurrentPlayerId(String currentPlayerId, Set<PhysicalCard> inactiveCards) {
+        appendEvent(new GameEvent(TURN_CHANGE)
+                .participantId(currentPlayerId)
+                .otherCardIds(getCardIds(inactiveCards)));
     }
 
     @Override

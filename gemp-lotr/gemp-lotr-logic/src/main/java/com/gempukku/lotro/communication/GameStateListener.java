@@ -8,7 +8,6 @@ import com.gempukku.lotro.logic.timing.GameStats;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public interface GameStateListener {
@@ -26,7 +25,7 @@ public interface GameStateListener {
 
     void setTwilight(int twilightPool);
 
-    void setCurrentPlayerId(String playerId);
+    void setCurrentPlayerId(String playerId, Set<PhysicalCard> inactiveCards);
     String getAssignedPlayerId();
 
     void setCurrentPhase(String currentPhase);

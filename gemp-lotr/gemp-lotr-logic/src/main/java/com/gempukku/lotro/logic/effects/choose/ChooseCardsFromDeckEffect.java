@@ -55,9 +55,31 @@ public abstract class ChooseCardsFromDeckEffect extends AbstractEffect {
         int minimum = Math.min(_minimum, cards.size());
 
         if (_maximum == 0) {
-            cardsSelected(game, Collections.emptySet());
+            if (showAll) {
+                game.getUserFeedback().sendAwaitingDecision(_playerId,
+                        new ArbitraryCardsSelectionDecision(2, "You may inspect the contents of your deck while retrieving cards", game.getGameState().getDeck(_deckId), new LinkedList<>(), 0, 0) {
+                            @Override
+                            public void decisionMade(String result2) throws DecisionResultInvalidException {
+                                cardsSelected(game, Collections.emptySet());
+                            }
+                        });
+            }
+            else {
+                cardsSelected(game, Collections.emptySet());
+            }
         } else if (cards.size() == minimum) {
-            cardsSelected(game, cards);
+            if (showAll) {
+                game.getUserFeedback().sendAwaitingDecision(_playerId,
+                        new ArbitraryCardsSelectionDecision(2, "You may inspect the contents of your deck while retrieving cards", game.getGameState().getDeck(_deckId), new LinkedList<>(), 0, 0) {
+                            @Override
+                            public void decisionMade(String result2) throws DecisionResultInvalidException {
+                                cardsSelected(game, cards);
+                            }
+                        });
+            }
+            else {
+                cardsSelected(game, cards);
+            }
         } else {
             game.getUserFeedback().sendAwaitingDecision(_playerId,
                     new ArbitraryCardsSelectionDecision(1, "Choose cards from deck", new LinkedList<>(cards), minimum, _maximum) {

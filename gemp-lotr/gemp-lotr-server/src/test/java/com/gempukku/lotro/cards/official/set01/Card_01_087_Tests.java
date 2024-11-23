@@ -131,7 +131,7 @@ public class Card_01_087_Tests
 		assertEquals(Zone.HAND, bb.getZone());
 
 		scn.FreepsPlayCard(late);
-
+		scn.FreepsDismissRevealedCards();
 		assertEquals(Zone.DISCARD, late.getZone());
 	}
 }

@@ -505,6 +505,7 @@ class Card {
         return foil;
     }
     
+    //Used for representing physical cards
     static CreateCardDiv(image, testingText, text, foil, tokens, noBorder, errata, incomplete) {
         var cardDiv = $("<div class='card'><img src='" + image + "' width='100%' height='100%'>" + ((text != null) ? text : "") + "</div>");
 
@@ -534,7 +535,7 @@ class Card {
 
         // var collapsedDiv = $("<div class='collapsedOverlay'><img src='https://res.starwarsccg.org/gemp/collapsed.jpg' width='100%' height='100%'></div>");
         // cardDiv.append(collapsedDiv);
-
+        
         if (tokens === undefined || tokens) {
             var overlayDiv = $("<div class='tokenOverlay'></div>");
             cardDiv.append(overlayDiv);
@@ -563,6 +564,7 @@ class Card {
         return cardDiv;
     }
 
+    //Used by non-game pages such as the deckbuilder and main hall
     static CreateFullCardDiv(image, testingText, foil, horizontal, noBorder) {
         var foilPresentation = Card.getFoilPresentation();
         
@@ -611,6 +613,7 @@ class Card {
         return cardDiv;
     }
 
+    //Used for ephemeral card displays such as event display or the "affected by card" effect
     static CreateSimpleCardDiv(image, testingText, foil, incomplete, borderWidth) {
         var cardDiv = $("<div class='card'><img src='" + image + "' width='100%' height='100%'></div>");
 

@@ -60,6 +60,9 @@ var GameAnimations = Class.extend({
             if (this.game.spectatorMode || this.game.replayMode || (participantId != this.game.bottomPlayerId)) {
                 var card = new Card(blueprintId, testingText, backSideTestingText, "ANIMATION", "anim", participantId);
                 var cardDiv = Card.CreateSimpleCardDiv(card.imageUrl, card.testingText, card.foil, card.incomplete, 16);
+                
+                // var display = new CardDisplay(card, $("#main").width() / 2, $("#main").width() / 2)
+                // var cardDiv = display.baseDiv;
 
                 $("#main").queue(
                     function (next) {
@@ -137,7 +140,10 @@ var GameAnimations = Class.extend({
 
                             var card = new Card(blueprintId, testingText, backSideTestingText, "ANIMATION", "anim" + i, participantId);
                             var cardDiv = Card.CreateSimpleCardDiv(card.imageUrl, card.testingText, card.foil, card.incomplete, 16);
-
+                
+                            // var display = new CardDisplay(card, $("#main").width() / 2, $("#main").width() / 2)
+                            // var cardDiv = display.baseDiv;
+                                                        
                             var targetCard = $(".card:cardId(" + targetCardId + ")");
                             if (targetCard.length > 0) {
                                 cardDiv.data("card", card);
@@ -433,10 +439,13 @@ var GameAnimations = Class.extend({
 
                     if (card.length > 0) {
                         var cardData = card.data("card");
+                        
                         if (cardData.zone == "ATTACHED" || cardData.zone == "STACKED") {
                             $(".card").each(
                                 function () {
                                     var cardData = $(this).data("card");
+                                    if(!cardData || !cardData.attachedCards)
+                                        return;
                                     var index = -1;
                                     for (var i = 0; i < cardData.attachedCards.length; i++)
                                         if (cardData.attachedCards[i].data("card").cardId == cardId) {
@@ -493,6 +502,7 @@ var GameAnimations = Class.extend({
         var that = this;
         $("#main").queue(
             function (next) {
+                var inactiveCardIds = element.getAttribute("otherCardIds");
                 var playerId = element.getAttribute("participantId");
                 var playerIndex = that.game.getPlayerIndex(playerId);
 
@@ -505,6 +515,20 @@ var GameAnimations = Class.extend({
                         $(this).removeClass("current");
                 });
                 that.game.advPathGroup.setCurrentPlayerIndex(playerIndex);
+                
+                if(inactiveCardIds) {
+                    var ids = inactiveCardIds.split(",");
+                    
+                    $(".card").each(function () {
+                        var cardData = $(this).data("card");
+                        if ($.inArray(cardData.cardId, ids) > -1) {
+                            $(this).addClass("inactive");
+                        }
+                        else {
+                            $(this).removeClass("inactive");
+                        }
+                    });
+                }
 
                 next();
             });
@@ -658,7 +682,7 @@ var GameAnimations = Class.extend({
 
                 $(".card").each(function () {
                     var cardData = $(this).data("card");
-                    if (cardData.skirmish == true) {
+                    if (cardData && cardData.skirmish == true) {
                         delete cardData.skirmish;
                     }
                 });
