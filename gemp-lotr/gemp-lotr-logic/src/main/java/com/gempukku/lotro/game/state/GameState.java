@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class GameState {
     private static final Logger _log = LogManager.getLogger(GameState.class);
@@ -230,7 +231,7 @@ public class GameState {
         if (_playerOrder != null) {
             listener.initializeBoard(_playerOrder.getAllPlayers(), _format.discardPileIsPublic());
             if (_currentPlayerId != null)
-                listener.setCurrentPlayerId(_currentPlayerId);
+                listener.setCurrentPlayerId(_currentPlayerId, Collections.emptySet());
             if (_currentPhase != null)
                 listener.setCurrentPhase(getPhaseString());
             listener.setTwilight(_twilightPool);
@@ -301,6 +302,9 @@ public class GameState {
             }
 
             listener.sendGameStats(gameStats);
+
+            if (_currentPlayerId != null)
+                listener.setCurrentPlayerId(_currentPlayerId, getInactiveCards());
         }
 
         for (String lastMessage : _lastMessages)
@@ -821,8 +825,15 @@ public class GameState {
         _moveCount = 0;
         _fierceSkirmishes = false;
 
-        for (GameStateListener listener : getAllGameStateListeners())
-            listener.setCurrentPlayerId(_currentPlayerId);
+        for (var listener : getAllGameStateListeners()) {
+            listener.setCurrentPlayerId(_currentPlayerId, getInactiveCards());
+        }
+    }
+
+    public Set<PhysicalCard> getInactiveCards() {
+        return _inPlay.stream()
+                .filter(x -> !isCardInPlayActive(x))
+                .collect(Collectors.toSet());
     }
 
     public int getTurnNumber() {

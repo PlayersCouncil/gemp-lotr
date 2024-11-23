@@ -474,3 +474,11 @@ ul.ui-tabs-nav {
 .ui-button-icon-primary.ui-icon.ui-icon-circle-close {
     margin-left:4px;
 }
+
+.card.inactive img {
+    filter: grayscale(0.7) contrast(0.5) brightness(0.6);
+}
+
+.card.inactive tokenOverlay {
+    color: #777777;
+}

@@ -38,6 +38,7 @@ public class RemoveFromGameAtTest extends AbstractAtTest {
         pass(P2);
         selectYes(P1);
         selectCardAction(P2, grond);
+        pass(P2); //dismiss revealed deck cards
         assertEquals(Zone.REMOVED, gimliInDeck.getZone());
         assertEquals(Zone.REMOVED, aragornInDeck.getZone());
     }

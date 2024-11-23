@@ -97,6 +97,9 @@ class CardDisplay {
 		if(card !== undefined && maxWidth !== undefined && maxHeight !== undefined) {
 			this.reloadFromCard(card, maxWidth, maxHeight);
 		}
+		else {
+			this.baseDiv.data("card", {});
+		}
 	}
 
 	clear() {
@@ -115,6 +118,7 @@ class CardDisplay {
 	}
 
 	reloadFromCard(card, maxWidth, maxHeight, noborder) {
+		this.baseDiv.data("card", card);
 		this.currentBP = card.blueprintId;
 		this.frontside = card.imageUrl;
 		if(!this.frontside) {
