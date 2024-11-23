@@ -868,6 +868,8 @@ var PCCards = {
 	'55_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E085.1_card.jpg',
 	// Sigewulf, Brave Volunteer (5U92) [Errata]
 	'55_92'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E092.1_card.jpg',
+	// Foul Horde (5R50) [Errata]
+	'55_50'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E050.1_card.jpg',
 
 	//September 2024 Walk-on Qualifiers
 	//Legolas, Greenleaf FA
