@@ -83,6 +83,7 @@
 				amount: {
 					type: ForEachYouCanSpot
 					filter: culture(elven),ally,allyHome(Fellowship,3)
+					multiplier: -1
 					limit: 4
 				}
 			}
