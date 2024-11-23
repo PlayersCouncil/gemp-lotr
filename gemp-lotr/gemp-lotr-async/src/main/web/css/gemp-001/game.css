@@ -483,6 +483,9 @@ ul.ui-tabs-nav {
     border: solid #333;
 }
 
-.card.inactive tokenOverlay {
+.card.inactive .cardStrength, 
+.card.inactive .cardVitality, 
+.card.inactive .cardSiteNumber, 
+.card.inactive .cardResistance {
     color: #777777;
 }
