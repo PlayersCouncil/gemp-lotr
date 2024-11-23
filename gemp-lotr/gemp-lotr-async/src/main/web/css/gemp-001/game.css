@@ -479,6 +479,10 @@ ul.ui-tabs-nav {
     filter: grayscale(0.7) contrast(0.5) brightness(0.6);
 }
 
+.card.inactive .borderOverlay {
+    border: solid #333;
+}
+
 .card.inactive tokenOverlay {
     color: #777777;
 }
