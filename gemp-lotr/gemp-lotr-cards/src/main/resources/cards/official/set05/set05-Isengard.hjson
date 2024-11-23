@@ -339,7 +339,7 @@
 				phase: maneuver
 				requires: {
 					type: canSpot
-					filter: self,HasCultureTokenCount(5,isengard)
+					filter: self,HasCultureTokenCount(8,isengard)
 				}
 				effect: [
 					{
