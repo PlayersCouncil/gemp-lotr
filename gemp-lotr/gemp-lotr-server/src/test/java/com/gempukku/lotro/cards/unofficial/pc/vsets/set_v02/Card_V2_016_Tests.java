@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -45,7 +44,7 @@ public class Card_V2_016_Tests
 		 * Twilight Cost: 4
 		 * Type: Companion
 		 * Subtype: Man
-		 * Strength: 7
+		 * Strength: 8
 		 * Vitality: 4
 		 * Resistance: 6
 		 * Signet: Gandalf
@@ -67,7 +66,7 @@ public class Card_V2_016_Tests
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
 		assertTrue(scn.hasKeyword(card, Keyword.VALIANT));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(7, card.getBlueprint().getStrength());
+		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
