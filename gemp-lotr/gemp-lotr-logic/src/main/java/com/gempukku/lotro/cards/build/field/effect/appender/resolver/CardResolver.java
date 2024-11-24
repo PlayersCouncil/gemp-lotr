@@ -111,14 +111,18 @@ public class CardResolver {
     }
 
     public static EffectAppender resolveCardsInHand(String type, ValueSource countSource, String memory, String choicePlayer, String handPlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        return resolveCardsInHand(type, null, countSource, memory, choicePlayer, handPlayer, choiceText, false, environment);
+        return resolveCardsInHand(type, null, null, countSource, memory, choicePlayer, handPlayer, choiceText, false, environment);
     }
 
     public static EffectAppender resolveCardsInHand(String type, ValueSource countSource, String memory, String choicePlayer, String handPlayer, String choiceText, boolean showMatchingOnly, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        return resolveCardsInHand(type, null, countSource, memory, choicePlayer, handPlayer, choiceText, showMatchingOnly, environment);
+        return resolveCardsInHand(type, null, null, countSource, memory, choicePlayer, handPlayer, choiceText, showMatchingOnly, environment);
     }
 
-    public static EffectAppender resolveCardsInHand(String type, FilterableSource additionalFilter, ValueSource countSource, String memory, String choicePlayer, String handPlayer, String choiceText, boolean showMatchingOnly, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public static EffectAppender resolveCardsInHand(String type, FilterableSource choiceFilter, ValueSource countSource, String memory, String choicePlayer, String handPlayer, String choiceText, boolean showMatchingOnly, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        return resolveCardsInHand(type, choiceFilter, choiceFilter, countSource, memory, choicePlayer, handPlayer, choiceText, showMatchingOnly, environment);
+    }
+
+    public static EffectAppender resolveCardsInHand(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String handPlayer, String choiceText, boolean showMatchingOnly, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         final PlayerSource handSource = PlayerResolver.resolvePlayer(handPlayer);
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
             String handPlayer1 = handSource.getPlayer(actionContext);
@@ -148,11 +152,11 @@ public class CardResolver {
                 }
             };
         } else if (type.equals("self")) {
-            return resolveSelf(additionalFilter, additionalFilter, countSource, memory, cardSource);
+            return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, additionalFilter, additionalFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
-            return resolveAllCards(type, additionalFilter, memory, environment, cardSource);
+            return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
             final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
             ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
@@ -181,7 +185,7 @@ public class CardResolver {
                 }
             };
 
-            return resolveChoiceCards(type, additionalFilter, additionalFilter, countSource, environment, cardSource, effectSource);
+            return resolveChoiceCards(type, choiceFilter, playabilityFilter, countSource, environment, cardSource, effectSource);
         }
         throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type);
     }

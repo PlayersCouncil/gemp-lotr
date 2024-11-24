@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.official.set02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -20,8 +17,12 @@ public class Card_02_070_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "2_70");
-					// put other cards in here as needed for the test case
+					put("power", "2_70");
+					put("balrog", "6_76");
+
+					put("orc1", "1_178");
+					put("orc2", "1_179");
+					put("orc3", "1_181");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +47,7 @@ public class Card_02_070_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("power");
 
 		assertEquals("Power and Terror", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +59,36 @@ public class Card_02_070_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void PowerandTerrorTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void PowerandTerrorPlaysTheBalrogEvenWhenOnlyPlayableViaDisount() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var power = scn.GetShadowCard("power");
+		var balrog = scn.GetShadowCard("balrog");
+		var orc1 = scn.GetShadowCard("orc1");
+		var orc2 = scn.GetShadowCard("orc2");
+		var orc3 = scn.GetShadowCard("orc3");
+		scn.ShadowMoveCardToHand(power, balrog, orc1, orc2, orc3);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(7);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.FreepsPassCurrentPhaseAction();
+
+		// Starting 7 + 1 companion + 2 from site = 10
+		assertEquals(10, scn.GetTwilight());
+		assertEquals(14, balrog.getBlueprint().getTwilightCost());
+
+		// With 3 moria orcs in hand, the maximum discount that Power and Terror can give is -6.
+		// 14 - 6 + 2 (roaming) = 10, which is exactly what's on the table.  P&T should thus permit the play.
+		assertTrue(scn.ShadowPlayAvailable(power));
+
+		assertEquals(Zone.HAND, balrog.getZone());
+		scn.ShadowPlayCard(power);
+		assertEquals(3, scn.GetShadowCardChoiceCount());
+		scn.ShadowChooseCards(orc1, orc2, orc3);
+		scn.FreepsDismissRevealedCards();
+		assertEquals(Zone.SHADOW_CHARACTERS, balrog.getZone());
 	}
 }

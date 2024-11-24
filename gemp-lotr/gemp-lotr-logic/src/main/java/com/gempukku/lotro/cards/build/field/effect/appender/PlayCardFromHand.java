@@ -24,11 +24,12 @@ import java.util.Collection;
 public class PlayCardFromHand implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "removedTwilight", "ignoreInDeadPile", "ignoreRoamingPenalty", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "maxDiscount", "removedTwilight", "ignoreInDeadPile", "ignoreRoamingPenalty", "memorize");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
         final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("discount"), 0, environment);
+        final ValueSource maxDiscountSource = effectObject.get("maxDiscount") == null ? costModifierSource : ValueResolver.resolveEvaluator(effectObject.get("maxDiscount"), 0, environment);
         final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
         final boolean ignoreInDeadPile = FieldUtils.getBoolean(effectObject.get("ignoreInDeadPile"), "ignoreInDeadPile", false);
         final boolean ignoreRoamingPenalty = FieldUtils.getBoolean(effectObject.get("ignoreRoamingPenalty"), "ignoreRoamingPenalty", false);
@@ -49,6 +50,15 @@ public class PlayCardFromHand implements EffectAppenderProducer {
                                 return Filters.and(Filters.playable(game, costModifier, ignoreRoamingPenalty, ignoreInDeadPile), ExtraFilters.attachableTo(game, costModifier, onFilterable));
                             }
                             return Filters.playable(game, removedTwilight, costModifier, ignoreRoamingPenalty, ignoreInDeadPile, true);
+                        },
+                        (actionContext) -> {
+                            final LotroGame game = actionContext.getGame();
+                            final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
+                            if (onFilterableSource != null) {
+                                final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
+                                return Filters.and(Filters.playable(game, maxDiscountModifier, ignoreRoamingPenalty, ignoreInDeadPile), ExtraFilters.attachableTo(game, maxDiscountModifier, onFilterable));
+                            }
+                            return Filters.playable(game, removedTwilight, maxDiscountModifier, ignoreRoamingPenalty, ignoreInDeadPile, true);
                         },
                         actionContext -> new ConstantEvaluator(1), memorize, "you", "you", "Choose card to play from hand", false, environment));
         result.addEffectAppender(
