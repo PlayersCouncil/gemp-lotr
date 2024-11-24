@@ -81,6 +81,8 @@ var GempLotrGameUI = Class.extend({
     decisionTime: 0,
     totalTime: 0,
     countdownIntervalId: 0,
+    
+    escFunction: null,
 
     init: function (url, replayMode) {
         this.replayMode = replayMode;
@@ -121,6 +123,15 @@ var GempLotrGameUI = Class.extend({
             var cardData = $(obj).data("card");
             return (cardData != null && ($.inArray(cardData.cardId, cardIds) > -1));
         };
+        
+        if(!this.replayMode) {
+            $(document).keydown(function(e) {
+                //console.log(e.keyCode);
+                if(e.keyCode == 27 && that.escFunction != null) {
+                    that.escFunction();
+                }
+            });
+        }
 
         if (this.replayMode) {
             var replayDiv = $("<div class='replay' style='position:absolute'></div>");
@@ -1915,7 +1926,7 @@ var GempLotrGameUI = Class.extend({
         this.cardActionDialog
             .html("<div id='arbitraryChoice'></div>")
             .dialog("option", "title", text);
-
+            
         // Create the action cards and fill the dialog with them
         for (var i = 0; i < blueprintIds.length; i++) {
             var cardId = cardIds[i];
@@ -1941,11 +1952,18 @@ var GempLotrGameUI = Class.extend({
         }
 
         var finishChoice = function () {
+            if (selectedCardIds.length < min)
+                return;
+            
             that.cardActionDialog.dialog("close");
             $("#arbitraryChoice").html("");
             that.clearSelection();
             that.decisionFunction(id, "" + selectedCardIds);
+            
+            that.escFunction = null;
         };
+        
+        this.escFunction = finishChoice;
 
         var resetChoice = function () {
             selectedCardIds = new Array();

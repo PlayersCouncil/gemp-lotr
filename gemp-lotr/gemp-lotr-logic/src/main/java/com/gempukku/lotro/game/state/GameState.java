@@ -14,6 +14,7 @@ import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GameState {
     private static final Logger _log = LogManager.getLogger(GameState.class);
@@ -831,7 +832,7 @@ public class GameState {
     }
 
     public Set<PhysicalCard> getInactiveCards() {
-        return _inPlay.stream()
+        return Stream.concat(_inPlay.stream(), _stacked.values().stream().flatMap(Collection::stream))
                 .filter(x -> !isCardInPlayActive(x))
                 .collect(Collectors.toSet());
     }
@@ -870,14 +871,17 @@ public class GameState {
         if (card.getBlueprint().getCardType() == CardType.THE_ONE_RING)
             return card.getOwner().equals(_currentPlayerId);
 
+        if (card.getAttachedTo() != null)
+            return isCardInPlayActive(card.getAttachedTo());
+
+        if(card.getStackedOn() != null)
+            return isCardInPlayActive(card.getStackedOn());
+
         if (card.getOwner().equals(_currentPlayerId) && side == Side.SHADOW)
             return false;
 
         if (!card.getOwner().equals(_currentPlayerId) && side == Side.FREE_PEOPLE)
             return false;
-
-        if (card.getAttachedTo() != null)
-            return isCardInPlayActive(card.getAttachedTo());
 
         return true;
     }
