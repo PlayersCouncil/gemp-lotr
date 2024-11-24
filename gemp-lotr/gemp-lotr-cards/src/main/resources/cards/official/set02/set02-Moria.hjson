@@ -1046,6 +1046,15 @@
 					memory: revealedCards
 					multiplier: -2
 				}
+				//As a play-from-hand effect, this has to be checked for playability before
+				// the event resolves, even tho it's an effect and not a cost.  Thus we have to
+				// provide the maximum theoretical discount so we can play this card even if 
+				// there is less twilight in the pool than the Balrog costs. 
+				maxDiscount: {
+					type: ForEachInHand
+					filter: culture(moria),orc
+					multiplier: -2
+				}
 			}
 		}
 		gametext: <b>Shadow:</b> Reveal any number of [moria] Orcs from your hand to play The Balrog. Its twilight cost is -2 for each Orc revealed.
