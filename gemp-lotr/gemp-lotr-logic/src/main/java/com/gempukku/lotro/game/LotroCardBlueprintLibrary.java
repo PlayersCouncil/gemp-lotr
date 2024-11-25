@@ -376,10 +376,19 @@ public class LotroCardBlueprintLibrary {
             if (_blueprints.containsKey(blueprintId)) {
                 bp = _blueprints.get(blueprintId);
             }
-            collectionReady.release();
 
-            if (bp == null)
-                throw new CardNotFoundException(blueprintId);
+            if(bp == null) {
+                if(_blueprintMapping.containsKey(blueprintId)) {
+                    bp = _blueprints.get(_blueprintMapping.get(blueprintId));
+                }
+                else {
+                    collectionReady.release();
+                    throw new CardNotFoundException(blueprintId);
+                }
+
+            }
+
+            collectionReady.release();
 
             return bp;
         } catch (InterruptedException exp) {

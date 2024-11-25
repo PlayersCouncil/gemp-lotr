@@ -6,6 +6,8 @@ class CardInfoDialog {
 	imageDiv = null;
 	detailsDiv = null;
 	hasDetails = false;
+	footerDiv = null;
+	hasFooter = false;
 
 	cardDisplay = null;
 
@@ -20,6 +22,7 @@ class CardInfoDialog {
 
 	static DetailsWidth = 400;
 	static DialogPadding = 25;
+	static FooterHeight = 20;
 	//Any narrower than this and the title wraps
 	static MinWidth = 175;
 
@@ -107,6 +110,15 @@ class CardInfoDialog {
 			"flex-grow": "1",
 			padding: 20
 		}).appendTo(inner);
+		
+		
+		this.footerDiv = $("<div>", {
+			class: "card-info-footer"
+		}).css({
+			"flex-grow": "0",
+			padding: 5,
+			"text-align": "center"
+		}).appendTo(this.outerDiv);
 
 		var swipeOptions = {
 			threshold: 20,
@@ -167,7 +179,7 @@ class CardInfoDialog {
 		let width = this.cardDisplay.width() + CardInfoDialog.DialogPadding + (this.hasDetails ? CardInfoDialog.DetailsWidth : 0)
 		width = Math.max(width, CardInfoDialog.MinWidth);
 
-		let height = this.cardDisplay.height() + (CardInfoDialog.DialogPadding * 2);
+		let height = this.cardDisplay.height() + (CardInfoDialog.DialogPadding * 2)  + (this.hasFooter ? CardInfoDialog.FooterHeight : 0);
 		//height = Math.min(height, maxLong);
 
 		this.infoDialog.dialog({ 
@@ -189,12 +201,25 @@ class CardInfoDialog {
 		}
 	}
 
-	setDetails(html) {
+	setDetails(html) {		
 		this.detailsDiv.html(html);
 		this.detailsDiv.css({
 			padding: 20
 		});
 		this.hasDetails = true;
+	}
+	
+	setFooter() {
+		if(this.card && this.card.hasWikiInfo()) {			
+			this.footerDiv.html("<div><a href='" + this.card.getWikiLink() + "' target='_blank'>Go to Wiki Page</a></div>");
+			this.footerDiv.show();
+			this.hasFooter = true;
+		}
+		else {
+			this.footerDiv.html("");
+			this.footerDiv.hide();
+			this.hasFooter = false;
+		}
 	}
 
 	isOpen() {
@@ -231,6 +256,7 @@ class CardInfoDialog {
 
 	setCard(card) {
 		this.card = card;
+		this.setFooter();
 
 		this.cardDisplay.reloadFromCard(card, this.maxWidth, this.maxHeight);
 
