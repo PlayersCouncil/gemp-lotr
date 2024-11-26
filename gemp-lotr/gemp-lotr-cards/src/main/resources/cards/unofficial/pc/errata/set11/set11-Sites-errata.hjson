@@ -240,8 +240,13 @@
 				}
 				effect: [
 					{
+						type: memorize
+						filter: character,minResistance(5)
+						memorize: healedChars
+					}
+					{
 						type: heal
-						select: all(character,minResistance(5))
+						select: all(memory(healedChars))
 						memorize: healedChars
 					}
 					{
