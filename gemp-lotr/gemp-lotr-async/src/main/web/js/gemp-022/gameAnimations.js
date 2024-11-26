@@ -835,6 +835,34 @@ var GameAnimations = Class.extend({
                     $(".shadowArchery").html(shadowArchery);
 
                 $(".move").html(moveCount + "/" + moveLimit);
+                
+                var initiative = element.getAttribute("initiative");
+                var ruleof4 = element.getAttribute("ruleof4");
+                
+                if(initiative == "FREE_PEOPLE") {
+                    $("#initiative-player").html("Free Peoples");
+                }
+                else {
+                    $("#initiative-player").html("<b>Shadow</b>");
+                }
+                
+                if(ruleof4 == null || ruleof4 == "-1") {
+                    $("#ruleof4").hide();
+                }
+                else {
+                    $("#ruleof4").show();
+                    $("#ruleof4-count").html(ruleof4);
+                    if(ruleof4 >= "4") {
+                        $("#ruleof4-status").html(" cards.<br/><b>(Rule of 4 limit reached!)</b>");
+                    }
+                    else if(ruleof4 == "1"){
+                        $("#ruleof4-status").html(" card");
+                    }
+                    else {
+                        $("#ruleof4-status").html(" card");
+                    }
+                }
+                
 
                 var playerZones = element.getElementsByTagName("playerZones");
                 for (var i = 0; i < playerZones.length; i++) {

@@ -1,9 +1,6 @@
 package com.gempukku.lotro.logic.timing;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.Signet;
-import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -23,6 +20,9 @@ public class GameStats {
 
     private int _moveLimit;
     private int _moveCount;
+
+    private Side _initiative = Side.FREE_PEOPLE;
+    private int _fellowshipCardsDrawn;
 
     private int _fellowshipSkirmishStrength;
     private int _shadowSkirmishStrength;
@@ -85,6 +85,23 @@ public class GameStats {
         if (newMoveCount != _moveCount) {
             changed = true;
             _moveCount = newMoveCount;
+        }
+
+        if(playerOrder != null) {
+            Side newInitiative = game.getModifiersQuerying().hasInitiative(game);
+            if(newInitiative != _initiative) {
+                changed = true;
+                _initiative = newInitiative;
+            }
+        }
+
+        int newFellowshipCardsDrawn = game.getModifiersQuerying().getFellowshipDrawnCards(game);
+        if(game.getGameState().getCurrentPhase() != Phase.FELLOWSHIP) {
+            newFellowshipCardsDrawn = -1;
+        }
+        if(newFellowshipCardsDrawn != _fellowshipCardsDrawn) {
+            changed = true;
+            _fellowshipCardsDrawn = newFellowshipCardsDrawn;
         }
 
         int newFellowshipStrength = RuleUtils.getFellowshipSkirmishStrength(game);
@@ -231,6 +248,9 @@ public class GameStats {
         return _moveCount;
     }
 
+    public Side getInitiativeSide() { return _initiative; }
+    public int getFellowshipCardsDrawn() { return _fellowshipCardsDrawn; }
+
     public int getFellowshipSkirmishStrength() {
         return _fellowshipSkirmishStrength;
     }
@@ -283,6 +303,8 @@ public class GameStats {
         copy._fellowshipSkirmishDamageBonus = _fellowshipSkirmishDamageBonus;
         copy._moveCount = _moveCount;
         copy._moveLimit = _moveLimit;
+        copy._initiative = _initiative;
+        copy._fellowshipCardsDrawn = _fellowshipCardsDrawn;
         copy._shadowArchery = _shadowArchery;
         copy._shadowSkirmishStrength = _shadowSkirmishStrength;
         copy._shadowSkirmishDamageBonus = _shadowSkirmishDamageBonus;

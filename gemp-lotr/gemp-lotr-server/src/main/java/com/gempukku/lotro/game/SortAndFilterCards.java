@@ -40,7 +40,7 @@ public class SortAndFilterCards {
         var races = getEnumFilter(Race.values(), Race.class, params.get("race"), true);
         var itemClasses = getEnumFilter(PossessionClass.values(), PossessionClass.class, params.get("itemclass"), true);
 
-        var twilight = getStat(params.get("sitenumber"));
+        var twilight = getStat(params.get("twilight"));
         var twilightComparator = getSingleton(params.get("twilightcompare"));
         var siteNumber = getStat(params.get("sitenumber"));
         var siteNumberComparator = getSingleton(params.get("sitenumbercompare"));

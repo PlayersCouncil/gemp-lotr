@@ -918,6 +918,14 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         return true;
     }
 
+    @Override
+    public int getFellowshipDrawnCards(LotroGame game) {
+        if(game.getGameState().getCurrentPhase() != Phase.FELLOWSHIP)
+            return 0;
+
+        return _drawnThisPhaseCount;
+    }
+
     /**
      * Rule of 4. "You cannot draw (or take into hand) more than 4 cards during your fellowship phase."
      *
