@@ -277,9 +277,9 @@ gl_theOneRing,1_2
 #Aragorn's Bow, Ranger's Longbow MW
 15_208,15_56
 #Boromir, Redeemed FA (V1_20)
-101_65,101_20
+101_101,101_20
 #I See You FA (V1_46)
-101_66,101_46
+101_102,101_46
 #Gimli ARB Masterwork
 9_56,9_4
 #Desert Lord FA
@@ -333,7 +333,7 @@ gl_theOneRing,1_2
 #Saruman, Servant of Sauron FA
 17_158,17_38
 #Gimli, Vengeful Longbeard MW
-101_67,101_3
+101_103,101_3
 #Cave Troll of Moria, Scourge of the Black Pit FA
 1_380,1_165
 #The Tale of the Great Ring MW

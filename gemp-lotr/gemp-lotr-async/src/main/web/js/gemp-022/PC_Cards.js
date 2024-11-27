@@ -56,18 +56,6 @@ var PCCards = {
 	'53_42': 'https://i.lotrtcgpc.net/errata/xlist/53_042.jpg',
 	//'53_68': 'https://i.lotrtcgpc.net/errata/xlist/53_068.jpg',
 	
-	// May 2021 VPack1
-	'101_1': 'https://i.lotrtcgpc.net/sets/vset1/vpack1/v1_001.jpg',
-	'101_2': 'https://i.lotrtcgpc.net/sets/vset1/vpack1/v1_002.jpg',
-	'101_3': 'https://i.lotrtcgpc.net/sets/vset1/vpack1/v1_003.jpg',
-	'101_4': 'https://i.lotrtcgpc.net/sets/vset1/vpack1/v1_004.jpg',
-	'101_5': 'https://i.lotrtcgpc.net/sets/vset1/vpack1/v1_005.jpg',
-	'101_6': 'https://i.lotrtcgpc.net/sets/vset1/vpack1/v1_006.jpg',
-	'101_7': 'https://i.lotrtcgpc.net/sets/vset1/vpack1/v1_007.jpg',
-	'101_8': 'https://i.lotrtcgpc.net/sets/vset1/vpack1/v1_008.jpg',
-	'101_9': 'https://i.lotrtcgpc.net/sets/vset1/vpack1/v1_009.jpg',
-	'101_10': 'https://i.lotrtcgpc.net/sets/vset1/vpack1/v1_010.jpg',
-	
 	// May 2021 Errata Batch
 	'51_45': 'https://i.lotrtcgpc.net/errata/xlist/51_045.jpg',
 	//'51_80': 'https://i.lotrtcgpc.net/errata/xlist/51_080.jpg',
@@ -286,9 +274,9 @@ var PCCards = {
 	
 	//August Weekend League Promos
 	// Boromir, Redeemed FA (V1_20)
-	'101_65': 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U020.0_card.jpg',
+	'101_101': 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U020.0_card.jpg',
 	// I See You FA (V1_46)
-	'101_66': 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U046.0_card.jpg',
+	'101_102': 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U046.0_card.jpg',
 	
 	//September 2022 Weekend League Promos
 	//Gimli ARB Masterwork (9R+4)
@@ -457,7 +445,7 @@ var PCCards = {
 	
 	//May 2023 Gala
 	//Gimli, Vengeful Longbeard MW
-	'101_67': 'https://i.lotrtcgpc.net/promos/LOTR-ENV1O003.0_card.jpg',
+	'101_103': 'https://i.lotrtcgpc.net/promos/LOTR-ENV1O003.0_card.jpg',
 	//Cave Troll of Moria, Scourge of the Black Pit FA
 	'1_380': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U165.0_card.jpg',
 	
