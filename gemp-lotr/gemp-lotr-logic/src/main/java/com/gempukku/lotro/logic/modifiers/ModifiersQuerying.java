@@ -133,6 +133,7 @@ public interface ModifiersQuerying {
     boolean canDrawCardNoIncrement(LotroGame game, String playerId);
 
     boolean canDrawCardAndIncrementForRuleOfFour(LotroGame game, String playerId);
+    int getFellowshipDrawnCards(LotroGame game);
 
     boolean canLookOrRevealCardsInHand(LotroGame game, String revealingPlayerId, String performingPlayerId);
 

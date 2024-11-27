@@ -21,7 +21,19 @@ public class KillEffect extends AbstractSuccessfulEffect {
     private final Cause _cause;
 
     public enum Cause {
-        WOUNDS, OVERWHELM, CARD_EFFECT
+        WOUNDS, OVERWHELM, CARD_EFFECT;
+
+        public static Cause parse(String name) {
+            String nameCaps = name.toUpperCase().trim()
+                    .replace(' ', '_')
+                    .replace('-', '_');
+
+            for (Cause cause : values()) {
+                if (cause.toString().equals(nameCaps))
+                    return cause;
+            }
+            return null;
+        }
     }
 
     public KillEffect(PhysicalCard card, PhysicalCard killer, Cause cause) {

@@ -818,7 +818,7 @@
 				player: free people
 				optional: true
 				trigger: {
-					type: movesTo
+					type: movesFrom
 					filter: self
 				}
 				requires: {
@@ -900,9 +900,13 @@
 				}
 				effect: [
 					{
+						type: memorize
+						filter: character,minResistance(5)
+						memory: healedChars
+					}
+					{
 						type: heal
-						select: all(character,minResistance(5))
-						memorize: healedChars
+						select: all(memory(healedChars))
 					}
 					{
 						type: exert

@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.timing.GameStats;
 import com.gempukku.lotro.logic.vo.LotroDeck;
-import com.mysql.cj.LicenseConfiguration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -157,6 +156,11 @@ public class EventSerializer {
         eventElem.setAttribute("moveLimit", String.valueOf(gameStats.getMoveLimit()));
         eventElem.setAttribute("moveCount", String.valueOf(gameStats.getMoveCount()));
 
+        eventElem.setAttribute("initiative", String.valueOf(gameStats.getInitiativeSide()));
+        if(gameStats.getFellowshipCardsDrawn() != -1) {
+            eventElem.setAttribute("ruleof4", String.valueOf(gameStats.getFellowshipCardsDrawn()));
+        }
+
         for (Map.Entry<String, Map<Zone, Integer>> playerZoneSizes : gameStats.getZoneSizes().entrySet()) {
             final Element playerZonesElem = doc.createElement("playerZones");
 
@@ -188,10 +192,10 @@ public class EventSerializer {
             else if (charResistances.containsKey(charCardId))
                 charStr.append("|R").append(charResistances.get(charCardId));
         }
-        if (charStr.length() > 0)
+        if (!charStr.isEmpty())
             charStr.delete(0, 1);
 
-        if (charStr.length() > 0)
+        if (!charStr.isEmpty())
             eventElem.setAttribute("charStats", charStr.toString());
     }
 
