@@ -152,21 +152,13 @@
 				}
 				effect: [
 					{
-						type: optional
-						text: Would you like to reinforce a culture token
-						player: free people
+						type: ForEachPlayer
 						effect: {
-							type: reinforceTokens
-							player: free people
-						}
-					}
-					{
-						type: optional
-						text: Would you like to reinforce a culture token
-						player: shadow
-						effect: {
-							type: reinforceTokens
-							player: shadow
+							type: optional
+							text: Would you like to reinforce a culture token
+							effect: {
+								type: reinforceTokens
+							}
 						}
 					}
 				]

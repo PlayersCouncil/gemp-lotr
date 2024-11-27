@@ -83,6 +83,7 @@
 						type: CostToEffect
 						cost: {
 							type: Discard
+							player: freeps
 							select: choose(tentacle)
 						}
 						effect: {
@@ -369,11 +370,18 @@
 			{
 				type: Trigger
 				optional: true
-				trigger: {
-					type: TakesWound
-					filter: tentacle
-					memorize: woundedTentacle
-				}
+				trigger: [
+					{
+						type: TakesWound
+						filter: tentacle
+						memorize: woundedTentacle
+					}
+					{
+						type: Killed
+						filter: tentacle
+						cause: wounds
+					}
+				]
 				effect: {
 					type: StackCardsFromPlay
 					select: memory(woundedTentacle)

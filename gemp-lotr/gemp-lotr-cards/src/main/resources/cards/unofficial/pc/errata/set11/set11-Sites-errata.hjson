@@ -242,12 +242,11 @@
 					{
 						type: memorize
 						filter: character,minResistance(5)
-						memorize: healedChars
+						memory: healedChars
 					}
 					{
 						type: heal
 						select: all(memory(healedChars))
-						memorize: healedChars
 					}
 					{
 						type: exert

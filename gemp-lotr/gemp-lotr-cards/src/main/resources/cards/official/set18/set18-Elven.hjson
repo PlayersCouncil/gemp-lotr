@@ -179,6 +179,7 @@
 				type: aidCost
 				cost: {
 					type: addTwilight
+					amount: 2
 				}
 			}
 			{

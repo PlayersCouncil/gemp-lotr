@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.logic.effects.KillEffect;
 import com.gempukku.lotro.logic.timing.TriggerConditions;
 import com.gempukku.lotro.logic.timing.results.ForEachKilledResult;
 import org.json.simple.JSONObject;
@@ -14,12 +15,13 @@ import org.json.simple.JSONObject;
 public class Killed implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "filter", "killer", "inSkirmish", "memorize");
+        FieldUtils.validateAllowedFields(value, "filter", "killer", "inSkirmish", "cause", "memorize");
 
         final String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
         final String byFilter = FieldUtils.getString(value.get("killer"), "killer", "any");
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");
         final boolean inSkirmish = FieldUtils.getBoolean(value.get("inSkirmish"), "inSkirmish", false);
+        final KillEffect.Cause cause = FieldUtils.getEnum(KillEffect.Cause.class, value.get("cause"), "cause");
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final FilterableSource byFilterableSource = environment.getFilterFactory().generateFilter(byFilter, environment);
@@ -37,10 +39,10 @@ public class Killed implements TriggerCheckerProducer {
                 boolean result = false;
 
                 if(inSkirmish) {
-                    result = TriggerConditions.forEachKilledInASkirmish(actionContext.getGame(), actionContext.getEffectResult(), byFilterable, filterable);
+                    result = TriggerConditions.forEachKilledInASkirmish(actionContext.getGame(), actionContext.getEffectResult(), byFilterable, cause, filterable);
                 }
                 else {
-                    result = TriggerConditions.forEachKilledBy(actionContext.getGame(), actionContext.getEffectResult(), byFilterable, filterable);
+                    result = TriggerConditions.forEachKilledBy(actionContext.getGame(), actionContext.getEffectResult(), byFilterable, cause, filterable);
                 }
 
                 if (result && memorize != null) {

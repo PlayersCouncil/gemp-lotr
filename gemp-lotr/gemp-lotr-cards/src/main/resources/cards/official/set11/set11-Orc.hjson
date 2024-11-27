@@ -1040,7 +1040,7 @@
 				optional: true
 				trigger: {
 					type: assignedAgainst
-					filter: self
+					filter: bearer
 					against: companion
 					memorizeAgainst: assignedComp
 				}

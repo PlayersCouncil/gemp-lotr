@@ -297,14 +297,14 @@ public class TriggerConditions {
     }
 
     public static boolean forEachKilled(LotroGame game, EffectResult effectResult, Filterable... filters) {
-        return forEachKilledBy(game, effectResult, Filters.any, filters);
+        return forEachKilledBy(game, effectResult, Filters.any, null, filters);
     }
 
-    public static boolean forEachKilledBy(LotroGame game, EffectResult effectResult, Filterable killedBy, Filterable... killed) {
+    public static boolean forEachKilledBy(LotroGame game, EffectResult effectResult, Filterable killedBy, KillEffect.Cause cause, Filterable... killed) {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
             return forEachMortallyWoundedBy(game, effectResult, killedBy, killed);
         } else if (effectResult.getType() == EffectResult.Type.FOR_EACH_KILLED) {
-            if (forEachKilledInASkirmish(game, effectResult, killedBy, killed))
+            if (forEachKilledInASkirmish(game, effectResult, killedBy, cause, killed))
                 return true;
 
             ForEachKilledResult killResult = (ForEachKilledResult) effectResult;
@@ -319,11 +319,14 @@ public class TriggerConditions {
         return false;
     }
 
-    public static boolean forEachKilledInASkirmish(LotroGame game, EffectResult effectResult, Filterable killedBy, Filterable... killed) {
+    public static boolean forEachKilledInASkirmish(LotroGame game, EffectResult effectResult, Filterable killedBy, KillEffect.Cause cause, Filterable... killed) {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_KILLED
                 && game.getGameState().getCurrentPhase() == Phase.SKIRMISH
                 && Filters.countActive(game, Filters.inSkirmish, killedBy) > 0) {
             ForEachKilledResult killResult = (ForEachKilledResult) effectResult;
+
+            if(cause != null && killResult.getCause() != cause)
+                return false;
 
             return Filters.and(killed).accepts(game, killResult.getKilledCard());
         }
