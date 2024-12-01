@@ -1,7 +1,8 @@
 package com.gempukku.lotro.common;
 
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class DBDefs {
@@ -170,6 +171,37 @@ public class DBDefs {
         }
         public ZonedDateTime GetUTCEnd() {
             return DateUtils.ParseDate(end_date);
+        }
+    }
+
+    public static class Transfer {
+        public int id;
+        public boolean notify;
+        public String player; //45
+        public String reason; //255
+        public String collection; //255
+        public int currency;
+        public String contents; //text
+        public LocalDateTime date_recorded;
+        public String direction; //45
+
+        public ZonedDateTime GetUTCDateRecorded() {
+            return DateUtils.ParseDate(date_recorded);
+        }
+    }
+
+    public static class Announcement {
+        public int id;
+        public String title; //255
+        public String content; //text
+        public LocalDateTime start;
+        public LocalDateTime until;
+
+        public ZonedDateTime GetUTCStart() {
+            return DateUtils.ParseDate(start);
+        }
+        public ZonedDateTime GetUTCUntil() {
+            return DateUtils.ParseDate(until);
         }
     }
 }

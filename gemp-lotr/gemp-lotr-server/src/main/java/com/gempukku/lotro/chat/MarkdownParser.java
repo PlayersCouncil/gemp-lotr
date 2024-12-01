@@ -31,7 +31,6 @@ public class MarkdownParser {
                 .build();
 
         _markdownRenderer = HtmlRenderer.builder()
-                .nodeRendererFactory(htmlContext -> new LinkShredder(htmlContext))
                 .extensions(extensions)
                 .escapeHtml(true)
                 .sanitizeUrls(true)
@@ -39,6 +38,7 @@ public class MarkdownParser {
                 .build();
 
         _noHiddenLinksRenderer = HtmlRenderer.builder()
+                .nodeRendererFactory(htmlContext -> new LinkShredder(htmlContext))
                 .extensions(extensions)
                 .escapeHtml(true)
                 .sanitizeUrls(true)

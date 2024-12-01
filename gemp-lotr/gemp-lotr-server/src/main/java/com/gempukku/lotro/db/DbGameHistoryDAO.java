@@ -4,14 +4,12 @@ import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.game.Player;
 import org.sql2o.Query;
-import org.sql2o.Sql2o;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -49,8 +47,8 @@ public class DbGameHistoryDAO implements GameHistoryDAO {
                         .addParameter("tournament", tournament)
                         .addParameter("winner_deck_name", winnerDeckName)
                         .addParameter("loser_deck_name", loserDeckName)
-                        .addParameter("start_date", startDate.format(DateUtils.DateTimeFormat))
-                        .addParameter("end_date", endDate.format(DateUtils.DateTimeFormat))
+                        .addParameter("start_date", DateUtils.FormatDateTime(startDate))
+                        .addParameter("end_date", DateUtils.FormatDateTime(endDate))
                         .addParameter("version", replayVersion);
 
                 int id = query.executeUpdate()

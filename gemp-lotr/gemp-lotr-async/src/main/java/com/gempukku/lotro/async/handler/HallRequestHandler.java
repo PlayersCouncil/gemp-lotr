@@ -533,7 +533,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
                     doc.appendChild(hall);
 
                     Map<String, String> headers = new HashMap<>();
-                    processDeliveryServiceNotification(_request, headers);
+                    processDeliveryServiceNotification(_resourceOwner, headers);
 
                     _responseWriter.writeXmlResponse(doc, headers);
                 } catch (Exception exp) {

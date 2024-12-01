@@ -92,7 +92,10 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
     
     private void importCollection(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
+        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
         String rawDecklist = getQueryParameterSafely(queryDecoder, "decklist");
+
+        Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
         List<CardCollection.Item> importResult = _importCards.process(rawDecklist, _library);
 
@@ -119,7 +122,6 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
         }
 
         Map<String, String> headers = new HashMap<>();
-        processDeliveryServiceNotification(request, headers);
 
         responseWriter.writeXmlResponse(doc, headers);
     }
@@ -180,7 +182,7 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
         }
 
         Map<String, String> headers = new HashMap<>();
-        processDeliveryServiceNotification(request, headers);
+        processDeliveryServiceNotification(resourceOwner, headers);
 
         responseWriter.writeXmlResponse(doc, headers);
     }
@@ -192,43 +194,43 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
     private void openPack(HttpRequest request, String collectionType, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
-        String selection = getFormParameterSafely(postDecoder, "selection");
-        String packId = getFormParameterSafely(postDecoder, "pack");
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+            String selection = getFormParameterSafely(postDecoder, "selection");
+            String packId = getFormParameterSafely(postDecoder, "pack");
 
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
-        CollectionType collectionTypeObj = createCollectionType(collectionType);
-        CardCollection packContents = _collectionsManager.openPackInPlayerCollection(resourceOwner, collectionTypeObj, selection, _productLibrary, packId);
+            CollectionType collectionTypeObj = createCollectionType(collectionType);
+            CardCollection packContents = _collectionsManager.openPackInPlayerCollection(resourceOwner, collectionTypeObj, selection, _productLibrary, packId);
 
-        if (packContents == null)
-            throw new HttpProcessingException(404);
+            if (packContents == null)
+                throw new HttpProcessingException(404);
 
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
-        Document doc = documentBuilder.newDocument();
+            Document doc = documentBuilder.newDocument();
 
-        Element collectionElem = doc.createElement("pack");
-        doc.appendChild(collectionElem);
+            Element collectionElem = doc.createElement("pack");
+            doc.appendChild(collectionElem);
 
-        for (CardCollection.Item item : packContents.getAll()) {
-            String blueprintId = item.getBlueprintId();
-            if (item.getType() == CardCollection.Item.Type.CARD) {
-                Element card = doc.createElement("card");
-                card.setAttribute("count", String.valueOf(item.getCount()));
-                card.setAttribute("blueprintId", blueprintId);
-                appendCardSide(card, _library.getLotroCardBlueprint(blueprintId));
-                collectionElem.appendChild(card);
-            } else {
-                Element pack = doc.createElement("pack");
-                pack.setAttribute("count", String.valueOf(item.getCount()));
-                pack.setAttribute("blueprintId", blueprintId);
-                collectionElem.appendChild(pack);
+            for (CardCollection.Item item : packContents.getAll()) {
+                String blueprintId = item.getBlueprintId();
+                if (item.getType() == CardCollection.Item.Type.CARD) {
+                    Element card = doc.createElement("card");
+                    card.setAttribute("count", String.valueOf(item.getCount()));
+                    card.setAttribute("blueprintId", blueprintId);
+                    appendCardSide(card, _library.getLotroCardBlueprint(blueprintId));
+                    collectionElem.appendChild(card);
+                } else {
+                    Element pack = doc.createElement("pack");
+                    pack.setAttribute("count", String.valueOf(item.getCount()));
+                    pack.setAttribute("blueprintId", blueprintId);
+                    collectionElem.appendChild(pack);
+                }
             }
-        }
 
-        responseWriter.writeXmlResponse(doc);
+            responseWriter.writeXmlResponse(doc);
         } finally {
             postDecoder.destroy();
         }

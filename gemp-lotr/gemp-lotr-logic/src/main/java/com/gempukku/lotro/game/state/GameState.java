@@ -871,10 +871,10 @@ public class GameState {
         if (card.getBlueprint().getCardType() == CardType.THE_ONE_RING)
             return card.getOwner().equals(_currentPlayerId);
 
-        if (card.getAttachedTo() != null)
+        if (card.getAttachedTo() != null && card.getAttachedTo().getBlueprint().getCardType() != CardType.SITE)
             return isCardInPlayActive(card.getAttachedTo());
 
-        if(card.getStackedOn() != null)
+        if(card.getStackedOn() != null && card.getStackedOn().getBlueprint().getCardType() != CardType.SITE)
             return isCardInPlayActive(card.getStackedOn());
 
         if (card.getOwner().equals(_currentPlayerId) && side == Side.SHADOW)
