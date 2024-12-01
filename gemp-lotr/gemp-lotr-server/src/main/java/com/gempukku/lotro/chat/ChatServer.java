@@ -10,18 +10,18 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatServer extends AbstractServer {
-    private final IgnoreDAO ignoreDAO;
-    private final PlayerDAO playerDAO;
+    private final IgnoreDAO _ignoreDAO;
+    private final PlayerDAO _playerDAO;
     private final Map<String, ChatRoomMediator> _chatRooms = new ConcurrentHashMap<>();
 
     public ChatServer(IgnoreDAO ignoreDAO, PlayerDAO playerDAO) {
-        this.ignoreDAO = ignoreDAO;
-        this.playerDAO = playerDAO;
+        _ignoreDAO = ignoreDAO;
+        _playerDAO = playerDAO;
     }
 
     public ChatRoomMediator createChatRoom(String name, boolean muteJoinPartMessages, int secondsTimeoutPeriod,
             boolean allowIncognito, String welcomeMessage) {
-        ChatRoomMediator chatRoom = new ChatRoomMediator(ignoreDAO, playerDAO, name, muteJoinPartMessages, secondsTimeoutPeriod, allowIncognito, welcomeMessage);
+        ChatRoomMediator chatRoom = new ChatRoomMediator(_ignoreDAO, _playerDAO, name, muteJoinPartMessages, secondsTimeoutPeriod, allowIncognito, welcomeMessage);
         try {
             chatRoom.sendMessage("System", "Welcome to room: " + name, true);
         } catch (PrivateInformationException exp) {
@@ -34,7 +34,7 @@ public class ChatServer extends AbstractServer {
     }
 
     public ChatRoomMediator createPrivateChatRoom(String name, boolean muteJoinPartMessages, Set<String> allowedUsers, int secondsTimeoutPeriod) {
-        ChatRoomMediator chatRoom = new ChatRoomMediator(ignoreDAO, playerDAO, name, muteJoinPartMessages, secondsTimeoutPeriod, allowedUsers, false);
+        ChatRoomMediator chatRoom = new ChatRoomMediator(_ignoreDAO, _playerDAO, name, muteJoinPartMessages, secondsTimeoutPeriod, allowedUsers, false);
         try {
             chatRoom.sendMessage("System", "Welcome to private room: " + name, true);
         } catch (PrivateInformationException exp) {

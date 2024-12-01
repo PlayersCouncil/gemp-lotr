@@ -1,6 +1,7 @@
 package com.gempukku.lotro.builder;
 
 import com.gempukku.lotro.chat.ChatServer;
+import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.collection.CollectionSerializer;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.collection.TransferDAO;
@@ -32,6 +33,9 @@ public class ServerBuilder {
 
         CollectionSerializer collectionSerializer = new CollectionSerializer();
         objectMap.put(CollectionSerializer.class, collectionSerializer);
+
+        MarkdownParser parser = new MarkdownParser();
+        objectMap.put(MarkdownParser.class, parser);
     }
 
     public static void CreateServices(Map<Type, Object> objectMap) {
