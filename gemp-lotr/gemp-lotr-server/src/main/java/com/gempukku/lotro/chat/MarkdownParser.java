@@ -20,24 +20,33 @@ public class MarkdownParser {
 
     private final Parser _markdownParser;
     private final HtmlRenderer _markdownRenderer;
+    private final HtmlRenderer _noHiddenLinksRenderer;
 
     private static Pattern QuoteExtender = Pattern.compile("^([ \t]*>[ \t]*.+)(?=\n[ \t]*[^>])", Pattern.MULTILINE);
 
     public MarkdownParser() {
-        List<Extension> adminExt = Arrays.asList(StrikethroughExtension.create(), AutolinkExtension.create());
+        List<Extension> extensions = Arrays.asList(StrikethroughExtension.create(), AutolinkExtension.create());
         _markdownParser = Parser.builder()
-                .extensions(adminExt)
+                .extensions(extensions)
                 .build();
+
         _markdownRenderer = HtmlRenderer.builder()
                 .nodeRendererFactory(htmlContext -> new LinkShredder(htmlContext))
-                .extensions(adminExt)
+                .extensions(extensions)
+                .escapeHtml(true)
+                .sanitizeUrls(true)
+                .softbreak("<br />")
+                .build();
+
+        _noHiddenLinksRenderer = HtmlRenderer.builder()
+                .extensions(extensions)
                 .escapeHtml(true)
                 .sanitizeUrls(true)
                 .softbreak("<br />")
                 .build();
     }
 
-    public String renderMarkdown(String markdown) {
+    public String renderMarkdown(String markdown, boolean shredLinks) {
         String newMsg = markdown.trim().replaceAll("\n\n\n+", "\n\n\n");
         newMsg = QuoteExtender.matcher(newMsg).replaceAll("$1\n");
         //Escaping underscores so that URLs with lots of underscores (i.e. wiki links) aren't mangled
@@ -45,13 +54,23 @@ public class MarkdownParser {
         newMsg = newMsg.replace("_", "\\_");
 
         //Need to preserve any commands being made
-        if(!newMsg.startsWith("/")) {
-            newMsg = _markdownRenderer.render(_markdownParser.parse(newMsg));
-            // Prevent quotes with newlines from displaying side-by-side
-            newMsg = newMsg.replaceAll("</blockquote>[\n \t]*<blockquote>", "</blockquote><br /><blockquote>");
-            //Make all links open in a new tab
-            newMsg = newMsg.replaceAll("<(a href=\".*?\")>", "<$1 target=\"_blank\">");
+        if(newMsg.startsWith("/"))
+            return newMsg;
+
+
+        if(shredLinks) {
+            newMsg = _noHiddenLinksRenderer.render(_markdownParser.parse(newMsg));
         }
+        else {
+            newMsg = _markdownRenderer.render(_markdownParser.parse(newMsg));
+        }
+
+        // Prevent quotes with newlines from displaying side-by-side
+        newMsg = newMsg.replaceAll("</blockquote>[\n \t]*<blockquote>", "</blockquote><br /><blockquote>");
+        //Make all links open in a new tab
+        newMsg = newMsg.replaceAll("<(a href=\".*?\")>", "<$1 target=\"_blank\">");
+        //Finally, make all newlines into html breaks
+        newMsg = newMsg.replaceAll("\n", "<br/>");
 
         return newMsg;
     }

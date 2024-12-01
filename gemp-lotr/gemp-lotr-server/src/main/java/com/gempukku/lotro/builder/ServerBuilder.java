@@ -114,7 +114,8 @@ public class ServerBuilder {
                         extract(objectMap, DeckDAO.class),
                         extract(objectMap, LotroCardBlueprintLibrary.class),
                         extract(objectMap, ChatServer.class),
-                        extract(objectMap, GameRecorder.class)));
+                        extract(objectMap, GameRecorder.class),
+                        extract(objectMap, MarkdownParser.class)));
 
         objectMap.put(HallServer.class,
                 new HallServer(

@@ -66,7 +66,7 @@ public class ChatRequestHandler extends LotroServerRequestHandler implements Uri
                 final boolean admin = resourceOwner.hasType(Player.Type.ADMIN);
                 final boolean leagueAdmin = resourceOwner.hasType(Player.Type.LEAGUE_ADMIN);
                 if (message != null && !message.trim().isEmpty()) {
-                    String newMsg = _markdownParser.renderMarkdown(message);
+                    String newMsg = _markdownParser.renderMarkdown(message, true);
                     chatRoom.sendMessage(resourceOwner.getName(), newMsg, admin);
                     responseWriter.writeXmlResponse(null);
                 } else {
