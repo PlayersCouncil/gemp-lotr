@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_V2_015_Tests
+public class Card_01_260_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_15");
+					put("card", "51_260");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,38 +28,38 @@ public class Card_V2_015_Tests
 	}
 
 	@Test
-	public void WatchingandWaitingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheNumberMustBeFewStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: V2
-		 * Name: Watching and Waiting
+		 * Set: 1
+		 * Name: The Number Must Be Few
 		 * Unique: False
 		 * Side: Shadow
-		 * Culture: Gollum
-		 * Twilight Cost: 0
-		 * Type: Event
-		 * Subtype: Shadow
-		 * Game Text: Shadow: Spot your minion and remove (3) to draw 2 cards.
-		* 	Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (3) to draw 8 cards. If in region 1, this action can be played from your draw deck.
+		 * Culture: Sauron
+		 * Twilight Cost: 2
+		 * Type: Condition
+		 * Subtype: 
+		 * Game Text: <b>Search</b>. Plays to your support area.<br>While you can spot 7 companions, the move limit for this turn is -1 (to a minimum of 1).  When this card leaves play, this penalty is immediately lost.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Watching and Waiting", card.getBlueprint().getTitle());
+		assertEquals("The Number Must Be Few", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SEARCH));
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void WatchingandWaitingTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheNumberMustBeFewTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -69,6 +69,6 @@ public class Card_V2_015_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

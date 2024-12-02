@@ -3,6 +3,7 @@ package com.gempukku.lotro.game;
 import com.gempukku.lotro.PrivateInformationException;
 import com.gempukku.lotro.SubscriptionConflictException;
 import com.gempukku.lotro.SubscriptionExpiredException;
+import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.communication.GameStateListener;
 import com.gempukku.lotro.filters.Filters;
@@ -48,7 +49,7 @@ public class LotroGameMediator {
 
     public LotroGameMediator(String gameId, LotroFormat lotroFormat, LotroGameParticipant[] participants, LotroCardBlueprintLibrary library,
                              GameTimer gameTimer, boolean allowSpectators, boolean cancellable, boolean showInGameHall,
-                             String tournamentName) {
+                             String tournamentName, MarkdownParser parser) {
         _gameId = gameId;
         _timeSettings = gameTimer;
         _allowSpectators = allowSpectators;
@@ -59,14 +60,16 @@ public class LotroGameMediator {
 
         for (LotroGameParticipant participant : participants) {
             String participantId = participant.getPlayerId();
-            _playerDecks.put(participantId, participant.getDeck());
+            var deck = participant.getDeck();
+            deck.setNotes(parser.renderMarkdown(deck.getNotes(), true));
+            _playerDecks.put(participantId, deck);
             _playerClocks.put(participantId, 0);
             _playersPlaying.add(participantId);
         }
 
         _userFeedback = new DefaultUserFeedback();
-        _lotroGame = new DefaultLotroGame(lotroFormat, _playerDecks, _userFeedback, library, _timeSettings.toString(), _allowSpectators,
-                tournamentName);
+        _lotroGame = new DefaultLotroGame(lotroFormat, _playerDecks, _userFeedback, library, _timeSettings.toString(),
+                _allowSpectators, tournamentName);
         _userFeedback.setGame(_lotroGame);
     }
 

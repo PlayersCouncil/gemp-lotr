@@ -1,7 +1,7 @@
 
 SELECT *
 FROM transfer t
-WHERE collection RLIKE('(101_65|101_66|101_67)')
+# WHERE collection RLIKE('(101_65|101_66|101_67)')
 ORDER BY id DESC;
 
 SELECT *
@@ -11,6 +11,7 @@ WHERE product IN ('101_65', '101_66', '101_67');
 SELECT *
 FROM deck d
 WHERE contents RLIKE('(101_65|101_66|101_67)');
+
 
 -- SELECT *
 -- FROM collection c 

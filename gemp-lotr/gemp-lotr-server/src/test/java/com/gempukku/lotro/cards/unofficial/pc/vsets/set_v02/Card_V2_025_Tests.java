@@ -42,7 +42,7 @@ public class Card_V2_025_Tests
 		 * Strength: 7
 		 * Vitality: 3
 		 * Site Number: 4
-		 * Game Text: When you play this minion, you may play an [isengard] orc from your discard pile; it is strength +1 until the regroup phase.
+		 * Game Text: When you play this minion, you may play an [isengard] Orc from your discard pile; it is strength +1 until the regroup phase.
 		* 	Regroup: Discard this minion to add two threats.
 		*/
 

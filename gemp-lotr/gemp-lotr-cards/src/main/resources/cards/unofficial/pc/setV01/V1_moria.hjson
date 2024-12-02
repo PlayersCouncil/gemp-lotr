@@ -380,6 +380,7 @@
 						type: Killed
 						filter: tentacle
 						cause: wounds
+						memorize: woundedTentacle
 					}
 				]
 				effect: {

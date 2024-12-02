@@ -276,6 +276,52 @@
 		}
 	}
 	
+	51_260: {
+		cardInfo: {
+			//id: 51_260.1
+			parent: 1_260
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E260.1_card.jpg
+			collInfo: 1U260
+			rarity: U
+		}
+		title: The Number Must Be Few
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyMoveLimit
+					amount: 1
+					requires: {
+						type: canSpot
+						count: 7
+						filter: companion
+					}
+				}
+			}
+		]
+		gametext: <b>Search</b>.<br>While you can spot 7 companions, the move limit for this turn is -1 (to a minimum of 1).  When you can no longer spot 7 companions or this card leaves play, this penalty is immediately lost.
+		lore: "'The number must be few, since your hope is in speed and secrecy.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	51_265: {
 		cardInfo: {
 			//id: 1_265.1

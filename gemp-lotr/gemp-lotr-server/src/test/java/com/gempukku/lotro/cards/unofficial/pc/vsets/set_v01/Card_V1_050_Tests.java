@@ -125,6 +125,7 @@ public class Card_V1_050_Tests
 		assertEquals(0, scn.GetWoundsOn(bilbo));
 
 		scn.FreepsUseCardAction(bilbo);
+		scn.FreepsDismissRevealedCards();
 		assertEquals(2, scn.GetWoundsOn(bilbo));
         assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		assertEquals(3, scn.GetFreepsCardChoiceCount()); // coat, sting, and phial
@@ -137,7 +138,6 @@ public class Card_V1_050_Tests
         assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		assertEquals(2, scn.GetFreepsCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(phial);
-		scn.FreepsDismissRevealedCards();
 		assertEquals(Zone.ATTACHED, phial.getZone());
 		assertEquals(frodo, phial.getAttachedTo());
 

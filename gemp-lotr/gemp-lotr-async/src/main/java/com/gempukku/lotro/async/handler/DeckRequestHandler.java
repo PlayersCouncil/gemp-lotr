@@ -2,6 +2,7 @@ package com.gempukku.lotro.async.handler;
 
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
+import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.db.DeckDAO;
@@ -39,6 +40,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private final LotroFormatLibrary _formatLibrary;
     private final SoloDraftDefinitions _draftLibrary;
     private final LotroServer _lotroServer;
+    private final MarkdownParser _markdownParser;
 
     private static final Logger _log = LogManager.getLogger(DeckRequestHandler.class);
 
@@ -50,6 +52,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         _formatLibrary = extractObject(context, LotroFormatLibrary.class);
         _lotroServer = extractObject(context, LotroServer.class);
         _draftLibrary = extractObject(context, SoloDraftDefinitions.class);
+        _markdownParser = extractObject(context, MarkdownParser.class);
     }
 
     @Override
@@ -395,7 +398,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         for (CardCollection.Item item : _sortAndFilterCards.process("side:SHADOW sort:cardType,culture,name", deckCards.getAll(), _library, _formatLibrary))
             result.append(item.getCount() + "x " + generateCardTooltip(item) + "<br/>");
 
-        result.append("<h3>Notes</h3><br>" + deck.getNotes().replace("\n", "<br/>"));
+        result.append("<h3>Notes</h3><br>" + _markdownParser.renderMarkdown(deck.getNotes(), true));
 
         result.append("</body></html>");
 

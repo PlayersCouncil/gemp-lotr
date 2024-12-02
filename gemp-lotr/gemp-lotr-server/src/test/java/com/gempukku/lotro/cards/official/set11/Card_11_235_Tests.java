@@ -91,6 +91,7 @@ public class Card_11_235_Tests
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsDismissRevealedCards();
 
 		//Not Listening is a response event, it shouldn't show up
 		//Clever Hobbits is a skirmish event, also shouldn't show
@@ -100,7 +101,6 @@ public class Card_11_235_Tests
 		assertEquals(Zone.DECK, dontlook.getZone());
 		assertEquals(Zone.DECK, smeagol.getZone());
 		scn.FreepsChooseCardBPFromSelection(dontlook);
-		scn.FreepsDismissRevealedCards();
 
 		assertEquals(Zone.SUPPORT, dontlook.getZone());
 		assertEquals(Zone.DECK, smeagol.getZone());

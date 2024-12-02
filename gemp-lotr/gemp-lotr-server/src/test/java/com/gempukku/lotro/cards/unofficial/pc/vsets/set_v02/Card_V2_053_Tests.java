@@ -55,7 +55,7 @@ public class Card_V2_053_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Maneuver: Spot 3 valiant companions to discard your hand. For each Shadow card discarded, exert a minion. For each Free Peoples card discarded, heal a valiant or [rohan] companion. You may not make any more Maneuver actions.
+		 * Game Text: Maneuver: Spot 3 valiant companions to discard your hand. For each Shadow card discarded, exert a minion. For each Free Peoples card discarded, heal a valiant or [rohan] companion. You cannot make any more Maneuver actions.
 		*/
 
 		var scn = GetScenario();

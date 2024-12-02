@@ -115,9 +115,10 @@ public class Card_02_045_ErrataTests
 		assertEquals(Zone.DECK,  sauron.getZone());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
+		scn.ShadowDismissRevealedCards();
 		assertEquals(3, scn.GetShadowCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(sauron);
-		scn.ShadowDismissRevealedCards();
+
 		//Decline the prevention
 		scn.FreepsChooseNo();
 		assertEquals(Zone.DISCARD,  attention.getZone());
@@ -154,12 +155,12 @@ public class Card_02_045_ErrataTests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(3, scn.GetShadowCardChoiceCount());
+		scn.ShadowDismissRevealedCards();
 		scn.ShadowChooseCardBPFromSelection(sauron);
 
 		//Accept the prevention
 		assertEquals(7, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
-		scn.ShadowDismissRevealedCards();
 		scn.FreepsChooseYes();
 		assertEquals(1, scn.GetFreepsDeckCount());
 		assertEquals(6, scn.GetFreepsDiscardCount());

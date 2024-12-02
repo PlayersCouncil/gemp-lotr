@@ -55,15 +55,24 @@ public class Choice implements EffectAppenderProducer {
 
                 if (playableEffectAppenders.size() == 1) {
                     SubAction subAction = new SubAction(action);
-                    playableEffectAppenders.get(0).appendEffect(cost, subAction, delegateActionContext);
+                    playableEffectAppenders.getFirst().appendEffect(cost, subAction, delegateActionContext);
                     actionContext.setValueToMemory(memorize, textArray[0]);
                     return new StackActionEffect(subAction);
                 }
 
                 if (playableEffectAppenders.isEmpty()) {
                     actionContext.setValueToMemory(memorize, "");
+
+                    // Costs that are a choice should not let the player pick freely, else it effectively results in there
+                    // being no cost at all.
+                    if(cost)
+                        return null;
+
+                    // If we are an effect however, then we will let "no valid choices" default to the player choosing
+                    // which fork to go down; this should eliminate situations like Here Lies Balin doing nothing
+                    // if there is a single 1-vitality Orc on the field
                     textIndex = 0;
-                    for (EffectAppender possibleEffectAppender : possibleEffectAppenders) {
+                    for (var possibleEffectAppender : possibleEffectAppenders) {
                         playableEffectAppenders.add(possibleEffectAppender);
                         effectTexts.add(GameUtils.substituteText(textArray[textIndex], actionContext));
                         textIndex++;

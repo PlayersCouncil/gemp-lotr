@@ -39,7 +39,7 @@ public class Card_03_103_ErrataTests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Response
-		 * Game Text: If a companion or ally's special ability is used, you may spot a [sauron] card to wound that character.  The Free Peoples player may discard a companion to prevent this.
+		 * Game Text: If a companion or ally's special ability is used, you may spot a [sauron] card to wound that character.  The Free Peoples player may discard another companion to prevent this.
 		*/
 
 		var scn = GetScenario();

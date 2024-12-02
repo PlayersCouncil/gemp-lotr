@@ -41,7 +41,7 @@ public class Card_V2_024_Tests
 		 * Subtype: Mount
 		 * Strength: 1
 		 * Vitality: 1
-		 * Game Text: Bearer must be a warg-rider&nbsp;.<br>When you play this possession from hand, you may take an [isengard] skirmish event into hand from your discard pile.
+		 * Game Text: Bearer must be a warg-rider&nbsp;.<br>When you play this possession, you may take an [isengard] skirmish event into hand from your discard pile.
 		*/
 
 		var scn = GetScenario();

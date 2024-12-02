@@ -254,38 +254,41 @@
 				}
 				effect: [
 					{
-						# We do this just to make the option prompt a
-						# little more elegant.
+						# We do this just to make the option prompt a little more elegant.
 						type: Memorize
 						filter: bearer
 						memory: bearer
 					}
 					{
-						type: If
-						check: {
-							type: HasCardInHand
-							player: freeps
-							count: 1
-							filter: CultureFromMemory(bearer)
-						}
-						true: {
+						type: Preventable
+						text: Would you like to discard a card from hand sharing a culture with {bearer}?
+						player: Freeps
+						cost: {
 							type: DiscardFromHand
 							player: freeps
 							hand: freeps
-							forced: true
-							count: 1
 							select: choose(CultureFromMemory(bearer))
+							forced: false
 						}
-						false: {
-							type: RevealHand
-							hand: freeps
-						}
-					}
-					
+						effect: [
+							{
+								type: revealHand
+								hand: freeps
+								memorize: revealedCards
+							}
+							{
+								type: discardFromHand
+								hand: freeps
+								forced: true
+								player: you
+								select: choose(memory(revealedCards),side(free peoples))
+							}
+						]
+					}					
 				]
 			}
 		]
-		gametext: To play, exert a [ringwraith] minion. Bearer must<br>be a companion or ally.<br>Each time bearer exerts, the Free Peoples player must discard a card from hand of bearer's culture (or reveal their hand if they cannot).  
+		gametext: To play, exert a [ringwraith] minion. Bearer must\be a companion or ally.\Each time bearer exerts, the Free Peoples player may discard a card from hand of bearer's culture.  If they do not, reveal their hand and discard 1 revealed Free Peoples card.
 		lore: “‘I do not wish to become like the Dark Lord himself.'”
 		promotext: ""
 		alts: {

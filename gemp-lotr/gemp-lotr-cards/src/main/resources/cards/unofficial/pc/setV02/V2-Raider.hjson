@@ -15,13 +15,13 @@
 		type: Event
 		timewords: Shadow
 		effects: [
-						{
+			{
 				type: event
 				effect: {
 					type: Choice
 					texts: [
 						Remove (3) to draw 2 cards
-						Remove (9) to take up to 4 events into hand from your deck
+						Remove (4) to take up to 4 events into hand from your deck
 					]
 					effects: [
 						{
@@ -77,7 +77,7 @@
 							}
 							cost: {
 								type: RemoveTwilight
-								amount: 9
+								amount: 4
 							}
 							effect: [
 								{
@@ -117,7 +117,7 @@
 				}
 			}
 		]
-		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (9) to take up to 4 Shadow events into hand from your draw deck. If in region 1, this action can be played from your draw deck.
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.\Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (4) to take up to 4 Shadow events into hand from your draw deck. If in region 1, this action can be played from your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {

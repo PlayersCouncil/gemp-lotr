@@ -28,37 +28,39 @@ public class Card_V2_005_Tests
 	}
 
 	@Test
-	public void NoMoreShallWeWaitStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RitualOathofEnmityStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: No More Shall We Wait
+		 * Name: Ritual Oath of Enmity
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Dunland
 		 * Twilight Cost: 0
-		 * Type: Event
-		 * Subtype: Response
-		 * Game Text: At the start of the Shadow phase, spot 25 twilight tokens and remove 10 to take control of 3 sites, then remove this from the game. This event may be played from your draw deck or discard pile.
+		 * Type: Artifact
+		 * Subtype: Support area
+		 * Game Text: While you can spot 18 twilight tokens in region 1, this card can be played from your draw deck.
+		* 	Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (7) to add a [dunland] token here.
+		* 	Shadow: Spot a [dunland] token here to take control of 2 sites.  Discard this artifact.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("No More Shall We Wait", card.getBlueprint().getTitle());
+		assertEquals("Ritual Oath of Enmity", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.DUNLAND, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void NoMoreShallWeWaitTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RitualOathofEnmityTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

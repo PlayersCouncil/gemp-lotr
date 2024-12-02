@@ -36,10 +36,10 @@ public class Card_08_020_ErrataTests
 		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Gandalf
-		 * Twilight Cost: 5
+		 * Twilight Cost: 3
 		 * Type: Event
 		 * Subtype: Fellowship
-		 * Game Text: Spot Gandalf and place a companion (except the Ring-bearer) in the dead pile to take up to 3 cards from that companion's culture into hand from your draw deck. Shuffle your draw deck.
+		 * Game Text: Spot Gandalf and place a companion (except the Ring-bearer) in the dead pile to take up to X cards from that companion's culture into hand from your draw deck, where X is the current region number +1.
 		*/
 
 		var scn = GetScenario();
@@ -53,7 +53,7 @@ public class Card_08_020_ErrataTests
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.hasTimeword(card, Timeword.FELLOWSHIP));
-		assertEquals(5, card.getBlueprint().getTwilightCost());
+		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
@@ -68,6 +68,6 @@ public class Card_08_020_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(5, scn.GetTwilight());
+		assertEquals(3, scn.GetTwilight());
 	}
 }

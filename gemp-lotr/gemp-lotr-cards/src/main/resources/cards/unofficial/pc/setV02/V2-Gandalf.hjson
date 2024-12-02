@@ -45,7 +45,7 @@
 				cost: [
 					{
 						type: Spot
-						count: 2
+						count: 3
 						filter: valiant, companion
 					}
 					{
@@ -66,7 +66,7 @@
 				]
 			}
 		]
-		gametext: Each mounted companion gains <b>valiant</b>.<br>Response: If a minion's special ability is used (except during a skirmish), spot 2 valiant companions and exert Gandalf to prevent that and wound that minion. 
+		gametext: Each mounted companion gains <b>valiant</b>.<br>Response: If a minion's special ability is used (except during a skirmish), spot 3 valiant companions and exert Gandalf to prevent that and wound that minion. 
 		lore: "'No counsel have I to give to those that despair. Yet counsel I could give, and words I could speak to you.'"
 		promotext: ""
 		alts: {

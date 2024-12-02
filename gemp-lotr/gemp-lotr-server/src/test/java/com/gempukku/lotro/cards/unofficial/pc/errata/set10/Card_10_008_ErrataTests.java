@@ -43,7 +43,7 @@ public class Card_10_008_ErrataTests
 		 * Vitality: 4
 		 * Resistance: 6
 		 * Game Text: To play, spot 2 Elves.
-		 * <b>Skirmish:</b> Exert Cirdan to make a minion he is skirmishing strength -1 for each [elven] event in your discard pile. If that minion is overwhelmed, remove half of the [elven] events in your discard pile from the game (rounded down).
+		* 	 <b>Skirmish:</b> Exert Cirdan to make a minion he is skirmishing strength -1 for each [elven] event in your discard pile. If that minion is overwhelmed, remove half of the [elven] events in your discard pile from the game.
 		*/
 
 		var scn = GetScenario();

@@ -39,7 +39,7 @@ public class Card_V2_009_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Archery
-		 * Game Text: Spot 2 valiant elves to wound a minion (or wound a minion twice if each of those elves bears a ranged weapon).
+		 * Game Text: Spot 2 valiant Elves to wound a minion (or wound a minion twice if each of those elves bears a ranged weapon).
 		*/
 
 		var scn = GetScenario();

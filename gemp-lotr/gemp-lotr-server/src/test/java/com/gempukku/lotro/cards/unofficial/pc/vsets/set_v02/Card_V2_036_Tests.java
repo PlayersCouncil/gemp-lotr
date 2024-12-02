@@ -128,22 +128,22 @@ public class Card_V2_036_Tests
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
 		scn.ShadowChooseMultipleChoiceOption("deck");
+		scn.ShadowDismissRevealedCards();
 
 		assertEquals(3, scn.ShadowGetSelectableCount());
 		assertEquals(Zone.DECK, warg1.getZone());
 		scn.ShadowChooseCardBPFromSelection(warg1);
-		scn.ShadowDismissRevealedCards();
 		assertEquals(Zone.STACKED, warg1.getZone());
 		assertSame(pit, warg1.getStackedOn());
 
 		//We now optionally do it all again a second time
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
 		scn.ShadowChooseMultipleChoiceOption("deck");
+		scn.ShadowDismissRevealedCards();
 
 		assertEquals(2, scn.ShadowGetSelectableCount());
 		assertEquals(Zone.DECK, warg2.getZone());
 		scn.ShadowChooseCardBPFromSelection(warg2);
-		scn.ShadowDismissRevealedCards();
 		assertEquals(Zone.STACKED, warg2.getZone());
 		assertSame(pit, warg2.getStackedOn());
 
@@ -174,11 +174,11 @@ public class Card_V2_036_Tests
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
 		scn.ShadowChooseMultipleChoiceOption("deck");
+		scn.ShadowDismissRevealedCards();
 
 		assertEquals(1, scn.ShadowGetSelectableCount());
 		assertEquals(Zone.DECK, warg1.getZone());
 		scn.ShadowChooseCardBPFromSelection(warg1);
-		scn.ShadowDismissRevealedCards();
 		assertEquals(Zone.STACKED, warg1.getZone());
 		assertSame(pit, warg1.getStackedOn());
 

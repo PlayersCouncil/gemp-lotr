@@ -374,7 +374,7 @@
 					type: Choice
 					texts: [
 						Remove (3) to draw 2 cards
-						Remove (9) to take up to 4 conditions into hand from your deck
+						Remove (6) to take up to 4 conditions into hand from your deck
 					]
 					effects: [
 						{
@@ -430,7 +430,7 @@
 							}
 							cost: {
 								type: RemoveTwilight
-								amount: 9
+								amount: 6
 							}
 							effect: [
 								{
@@ -470,7 +470,7 @@
 				}
 			}
 		]
-		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (9) to take up to 4 Shadow conditions into hand from your draw deck. If in region 1, this action can be played from your draw deck.
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (6) to take up to 4 Shadow conditions into hand from your draw deck. If in region 1, this action can be played from your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {

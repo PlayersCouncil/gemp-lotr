@@ -85,10 +85,21 @@ public class LotroServerRequestHandler {
         return null;
     }
 
-    protected final void processDeliveryServiceNotification(HttpRequest request, Map<String, String> headersToAdd) {
-        String logged = getLoggedUser(request);
-        if (logged != null && _transferDAO.hasUndeliveredPackages(logged))
+    protected final void processDeliveryServiceNotification(Player player, Map<String, String> headersToAdd) {
+        if(player == null)
+            return;
+
+        if (_transferDAO.hasUndeliveredPackages(player)) {
             headersToAdd.put("Delivery-Service-Package", "true");
+        }
+
+        if (_transferDAO.hasUndeliveredSealedContents(player)) {
+            headersToAdd.put("Delivery-Service-Opened-Pack", "true");
+        }
+
+        if (_transferDAO.hasUndeliveredAnnouncement(player)) {
+            headersToAdd.put("Delivery-Service-Announcement", "true");
+        }
     }
 
     protected final Player getResourceOwnerSafely(HttpRequest request, String participantId) throws HttpProcessingException {
@@ -104,7 +115,7 @@ public class LotroServerRequestHandler {
         if (resourceOwner == null)
             throw new HttpProcessingException(401);
 
-        if (resourceOwner.hasType(Player.Type.ADMIN) && participantId != null && !participantId.equals("null") && !participantId.equals("")) {
+        if (resourceOwner.hasType(Player.Type.ADMIN) && participantId != null && !participantId.equals("null") && !participantId.isEmpty()) {
             resourceOwner = _playerDao.getPlayer(participantId);
             if (resourceOwner == null)
                 throw new HttpProcessingException(401);

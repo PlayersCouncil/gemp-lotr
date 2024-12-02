@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set04;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_V2_043_Tests
+public class Card_04_245_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_43");
+					put("card", "54_245");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,38 +28,45 @@ public class Card_V2_043_Tests
 	}
 
 	@Test
-	public void AllHopeofSecrecyLostStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SouthronArcherStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: V2
-		 * Name: All Hope of Secrecy Lost
-		 * Unique: False
+		 * Set: 4
+		 * Name: Southron Archer
+		 * Unique: True
 		 * Side: Shadow
 		 * Culture: Raider
-		 * Twilight Cost: 0
-		 * Type: Event
-		 * Subtype: Shadow
-		 * Game Text: Shadow: Spot your minion and remove (3) to draw 2 cards.
-		* 	Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (4) to take up to 4 Shadow events into hand from your draw deck. If in region 1, this action can be played from your draw deck.
+		 * Twilight Cost: 3
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 6
+		 * Vitality: 2
+		 * Site Number: 4
+		 * Game Text: <b>Southron</b>. <b>Archer</b>.<br>While you can spot another Southron, the minion archery total is +1 for each site you control.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("All Hope of Secrecy Lost", card.getBlueprint().getTitle());
+		assertEquals("Southron Archer", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.SOUTHRON));
+		assertTrue(scn.hasKeyword(card, Keyword.ARCHER));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void AllHopeofSecrecyLostTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SouthronArcherTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -69,6 +76,6 @@ public class Card_V2_043_Tests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(3, scn.GetTwilight());
 	}
 }

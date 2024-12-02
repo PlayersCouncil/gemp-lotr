@@ -43,7 +43,7 @@ public class Card_10_028_ErrataTests
 		 * Vitality: 3
 		 * Resistance: 6
 		 * Signet: Aragorn
-		 * Game Text: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> If at a sanctuary, exert Denethor to take a [gondor] condition or possession into hand from your draw deck. Choose an opponent who may draw 2 cards.
+		 * Game Text: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> If at a sanctuary, exert Denethor to take a [gondor] item or condition into hand from your draw deck. Choose an opponent who may draw a card.
 		*/
 
 		var scn = GetScenario();

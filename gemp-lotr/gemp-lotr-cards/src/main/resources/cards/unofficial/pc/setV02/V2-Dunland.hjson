@@ -189,97 +189,83 @@
 			collInfo: V2_5
 			rarity: _
 		}
-		title: No More Shall We Wait
+		title: Ritual Oath of Enmity
 		unique: false
 		side: Shadow
 		culture: Dunland
 		twilight: 0
-		type: Event
-		timewords: Shadow
+		type: Artifact
+		keywords: Support Area
 		effects: [
 			{
-				type: event
-				effect: {
-					type: Choice
-					texts: [
-						Remove (3) to draw 2 cards
-						Remove (9) to take control of 2 sites
-					]
-					effects: [
+				type: Activated
+				text: Remove (7) to add a {Dunland} token here.
+				phase: Shadow
+				requires: {
+					type: Or
+					requires: [
 						{
-							type: CostToEffect
-							requires: {
-								type: CanSpot
-								filter: your,minion
-							}
-							cost: {
-								type: RemoveTwilight
-								amount: 3
-							}
-							effect: [
+							type: And
+							requires: [
 								{
-									type: DrawCards
-									count: 2
+									type: Location
+									filter: RegionNumber(3)
+								}
+								{
+									type: CanSpotTwilight
+									amount: 25
 								}
 							]
 						}
-						
 						{
-							type: CostToEffect
-							requires: {
-								type: Or
-								requires: [
-									{
-										type: And
-										requires: [
-											{
-												type: Location
-												filter: RegionNumber(3)
-											}
-											{
-												type: CanSpotTwilight
-												amount: 25
-											}
-										]
-									}
-									{
-										type: And
-										requires: [
-											{
-												type: Location
-												filter: RegionNumber(1-2)
-											}
-											{
-												type: CanSpotTwilight
-												amount: 18
-											}
-										]
-									}
-								]
-							}
-							cost: {
-								type: RemoveTwilight
-								amount: 9
-							}
-							effect: [
+							type: And
+							requires: [
 								{
-									type: TakeControlOfSite
+									type: Location
+									filter: RegionNumber(1-2)
 								}
 								{
-									type: TakeControlOfSite
-								}
-								{
-									type: AddModifier
-									modifier: {
-										type: SiteControlCount
-										amount: +2
-									}
-									until: start(regroup)
+									type: CanSpotTwilight
+									amount: 18
 								}
 							]
 						}
 					]
 				}
+				cost: {
+					type: RemoveTwilight
+					amount: 7
+				}
+				effect: [
+					{
+						type: AddCultureTokens
+						culture: dunland
+						select: self
+						count: 1
+					}
+				]
+			}
+			{
+				type: Activated
+				text: Discard this to take control of 2 sites.
+				phase: Shadow
+				requires: {
+					type: CanSpotCultureTokens
+					culture: dunland
+					filter: self
+				}
+				effect: [
+					{
+						type: TakeControlOfSite
+					}
+					{
+						type: TakeControlOfSite
+					}
+					{
+						type: Discard
+						select: self
+					}
+				]
 			}
 			{
 				type: ActivatedInDrawDeck
@@ -297,15 +283,17 @@
 						amount: 18
 					}
 				]
-				effect: {
-					type: PlayCardFromDrawDeck
-					select: self
-					shuffle: true
-					showAll: true
-				}
+				effect: [
+					{
+						type: PlayCardFromDrawDeck
+						select: self
+						shuffle: true
+						showAll: true
+					}
+				]
 			}
 		]
-		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (9) to take control of 2 sites and make the count of sites you control +2 until the regroup phase. If in region 1, this action can be played from your draw deck.
+		gametext: While you can spot 18 twilight tokens in region 1, this card can be played from your draw deck.<br/>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (7) to add a [dunland] token here.<br/>Shadow: Spot a [dunland] token here to take control of 2 sites.  Discard this artifact.
 		lore: ""
 		promotext: ""
 		alts: {

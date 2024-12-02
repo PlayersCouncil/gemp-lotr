@@ -223,9 +223,9 @@ public class Card_09_001_Tests
 		assertTrue(scn.FreepsActionAvailable(ring));
 
 		scn.FreepsUseCardAction(ring);
+		scn.FreepsDismissRevealedCards();
 		assertEquals(2, scn.FreepsGetSelectableCount());
 		scn.FreepsChooseCardBPFromSelection(ring1);
-		scn.FreepsDismissRevealedCards();
 
 		assertEquals(3, scn.GetBurdens());
 		assertEquals(Zone.ATTACHED, ring1.getZone());

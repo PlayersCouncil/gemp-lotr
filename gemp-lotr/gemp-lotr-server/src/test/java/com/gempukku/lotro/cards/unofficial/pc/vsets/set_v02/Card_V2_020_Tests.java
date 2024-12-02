@@ -43,7 +43,7 @@ public class Card_V2_020_Tests
 		 * Vitality: 3
 		 * Site Number: 5
 		 * Game Text: Damage +1. 
-		* 	The minion is strength+1 for each wound on each character in its skirmish.
+		* 	This minion is strength +1 for each wound on each character in its skirmish.
 		* 	When this minion dies in a skirmish, you may remove 2 [isengard] tokens from a machine to wound a character it was skirmishing. 
 		*/
 

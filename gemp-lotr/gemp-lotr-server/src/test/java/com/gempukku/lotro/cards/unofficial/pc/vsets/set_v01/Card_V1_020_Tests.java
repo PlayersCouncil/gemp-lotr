@@ -38,38 +38,39 @@ public class Card_V1_020_Tests
 	public void BoromirStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V1
-		* Title: *Boromir, Redeemed
-		* Side: Free Peoples
-		* Culture: gondor
-		* Twilight Cost: 3
-		* Type: companion
-		* Subtype: Man
-		* Strength: 5
-		* Vitality: 3
-		* Signet: Aragorn
-		* Game Text: Boromir is strength +2 for each minion he is skirmishing.
-		* 	At the start of the assignment phase, you may exert another companion with the Aragorn signet to make Boromir defender +1 until the regroup phase.
+		 * Set: V1
+		 * Name: Boromir, Redeemed
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 3
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 5
+		 * Vitality: 3
+		 * Resistance: 6
+		 * Signet: Aragorn
+		 * Game Text: Boromir is strength +2 for each minion he is skirmishing.
+		* 	At the start of each assignment phase, make Boromir <b>defender +1</b> if you can spot an unbound Hobbit or another companion with the Aragorn signet.
 		*/
 
 		//Pre-game setup
 		GenericCardTestHelper scn = GetScenario();
 
-		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
+		PhysicalCardImpl card = scn.GetFreepsCard("boromir");
 
-		assertTrue(boromir.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, boromir.getBlueprint().getSide());
-		assertEquals(Culture.GONDOR, boromir.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, boromir.getBlueprint().getCardType());
-		assertEquals(Race.MAN, boromir.getBlueprint().getRace());
-		//assertTrue(scn.HasKeyword(boromir, Keyword.SUPPORT_AREA)); // test for keywords as needed
-		assertEquals(3, boromir.getBlueprint().getTwilightCost());
-		assertEquals(5, boromir.getBlueprint().getStrength());
-		assertEquals(3, boromir.getBlueprint().getVitality());
-		//assertEquals(, boromir.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, boromir.getBlueprint().getSignet());
-		//assertEquals(, boromir.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertEquals("Boromir", card.getBlueprint().getTitle());
+		assertEquals("Redeemed", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(5, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet());
 	}
 
 	@Test
