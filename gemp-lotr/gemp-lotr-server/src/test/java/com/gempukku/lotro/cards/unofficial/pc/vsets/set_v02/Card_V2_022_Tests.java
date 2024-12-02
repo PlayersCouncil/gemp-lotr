@@ -116,13 +116,13 @@ public class Card_V2_022_Tests
 		assertEquals(8, scn.GetShadowDeckCount());
 
 		scn.ShadowPlayCard(folly);
+		scn.ShadowDismissRevealedCards();
 		//8 cards, 7 items, but 2 are free peoples
 		assertEquals(5, scn.GetShadowCardChoiceCount());
 		scn.ShadowDecisionAvailable("Choose cards from deck");
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(4, scn.ShadowGetChoiceMax());
 		scn.ShadowChooseCardBPFromSelection(item1, item2, item3, item4);
-		scn.ShadowDismissRevealedCards();
 		assertEquals(4, scn.GetShadowHandCount());
 		assertEquals(4, scn.GetShadowDeckCount());
 	}
@@ -153,13 +153,13 @@ public class Card_V2_022_Tests
 		assertEquals(9, scn.GetShadowDeckCount());
 
 		scn.ShadowPlayCard(folly);
+		scn.ShadowDismissRevealedCards();
 		//8 cards, 7 items, but 2 are free peoples
 		assertEquals(5, scn.GetShadowCardChoiceCount());
 		scn.ShadowDecisionAvailable("Choose cards from deck");
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(4, scn.ShadowGetChoiceMax());
 		scn.ShadowChooseCardBPFromSelection(item1, item2, item3, item4);
-		scn.ShadowDismissRevealedCards();
 		assertEquals(4, scn.GetShadowHandCount());
 		assertEquals(4, scn.GetShadowDeckCount());
 	}

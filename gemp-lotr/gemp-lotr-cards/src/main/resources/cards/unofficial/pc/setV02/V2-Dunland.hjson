@@ -193,7 +193,7 @@
 		unique: false
 		side: Shadow
 		culture: Dunland
-		twilight: 7
+		twilight: 0
 		type: Artifact
 		keywords: Support Area
 		effects: [

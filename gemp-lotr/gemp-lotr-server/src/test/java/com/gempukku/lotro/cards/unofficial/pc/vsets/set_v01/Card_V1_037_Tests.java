@@ -96,9 +96,9 @@ public class Card_V1_037_Tests
 
 		assertTrue(scn.ShadowPlayAvailable(fell2));
 		scn.ShadowPlayCard(fell2);
+		scn.ShadowDismissRevealedCards();
 
         scn.ShadowChooseCardBPFromSelection(blade);
-		scn.ShadowDismissRevealedCards();
 		assertEquals(Zone.ATTACHED, blade.getZone());
 		assertEquals(nazgul, blade.getAttachedTo());
 

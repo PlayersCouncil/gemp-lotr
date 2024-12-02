@@ -89,9 +89,9 @@ public class Card_V1_057_Tests
 		assertEquals(Zone.DECK, cond.getZone());
 
 		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsDismissRevealedCards();
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		scn.FreepsChooseCardBPFromSelection(cond);
-		scn.FreepsDismissRevealedCards();
 		assertEquals(Zone.ATTACHED, cond.getZone());
 	}
 
