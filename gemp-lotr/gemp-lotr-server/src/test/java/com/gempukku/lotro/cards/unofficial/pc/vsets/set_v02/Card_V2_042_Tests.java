@@ -38,8 +38,9 @@ public class Card_V2_042_Tests
 		 * Culture: Moria
 		 * Twilight Cost: 0
 		 * Type: Event
-		 * Subtype: Response
-		 * Game Text: At the start of the Shadow phase, spot 25 twilight tokens and remove 10 to take up to 4 Shadow conditions into hand from your draw deck or discard pile, then remove this from the game. This event may be played from your draw deck or discard pile.
+		 * Subtype: Shadow
+		 * Game Text: Shadow: Spot your minion and remove (3) to draw 2 cards.
+		* 	Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (6) to take up to 4 Shadow conditions into hand from your draw deck. If in region 1, this action can be played from your draw deck.
 		*/
 
 		var scn = GetScenario();

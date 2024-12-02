@@ -38,8 +38,9 @@ public class Card_V2_057_Tests
 		 * Culture: Sauron
 		 * Twilight Cost: 0
 		 * Type: Event
-		 * Subtype: Response
-		 * Game Text: At the start of the Shadow phase, spot 25 twilight tokens to play up to 3 minions from your draw deck costing (5) or more, then remove this from the game. This event may be played from your draw deck or discard pile.
+		 * Subtype: Shadow
+		 * Game Text: Shadow: Spot your minion and remove (3) to draw 2 cards.
+		* 	Shadow: Spot 18 twilight tokens (or 25 if in region 3) to play up to 2 minions from your draw deck costing (5) or more. If in region 1, this action can be played from your draw deck.
 		*/
 
 		var scn = GetScenario();

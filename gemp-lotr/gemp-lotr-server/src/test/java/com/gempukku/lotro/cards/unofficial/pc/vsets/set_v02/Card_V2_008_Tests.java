@@ -43,7 +43,7 @@ public class Card_V2_008_Tests
 		 * Vitality: 3
 		 * Resistance: 6
 		 * Game Text: Valiant. 
-		* 	While Haldir bears a ranged weapon, each valiant Elf is strength +1 and does not add to the fellowship archery total.
+		* 	While Haldir bears a ranged weapon, each valiant Elf is strength +1 and each valiant Elf does not add to the fellowship archery total.
 		* 	Each time an [elven] possession is about to be discarded by a card effect, you may exert Haldir to prevent that.
 		*/
 

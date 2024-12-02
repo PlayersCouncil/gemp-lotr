@@ -28,11 +28,11 @@ public class Card_V2_048_Tests
 	}
 
 	@Test
-	public void FortressofMyFathersStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void StrongholdofMyFathersStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Fortress of My Fathers
+		 * Name: Stronghold of My Fathers
 		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Rohan
@@ -47,7 +47,7 @@ public class Card_V2_048_Tests
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Fortress of My Fathers", card.getBlueprint().getTitle());
+		assertEquals("Stronghold of My Fathers", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
@@ -60,7 +60,7 @@ public class Card_V2_048_Tests
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void FortressofMyFathersTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void StrongholdofMyFathersTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 

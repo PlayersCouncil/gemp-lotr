@@ -39,9 +39,10 @@ public class Card_V2_035_Tests
 		 * Twilight Cost: 1
 		 * Type: Possession
 		 * Subtype: Support area
-		 * Game Text: Machine.
-		* 	While you can spot X [isengard] tokens here, each time an [isengard] Uruk-hai costing X is about to take a wound, exert it instead.
-		* 	Maneuver: Exert an Uruk-hai to add an [isengard] token here.  
+		 * Game Text: Machine. Each time an Uruk-hai costing
+		* 	X is about to take a wound (except during a skirmish), prevent that and exert it. X is the number of [isengard] tokens you can spot here.
+		* 	Maneuver: Exert an Uruk-hai to add an
+		* 	[isengard] token here.  
 		*/
 
 		var scn = GetScenario();

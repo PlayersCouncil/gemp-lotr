@@ -21,7 +21,7 @@
 					type: Choice
 					texts: [
 						Remove (3) to draw 2 cards
-						Remove (9) to draw 8 cards
+						Remove (3) to draw 8 cards
 					]
 					effects: [
 						{
@@ -77,7 +77,7 @@
 							}
 							cost: {
 								type: RemoveTwilight
-								amount: 9
+								amount: 3
 							}
 							effect: [
 								{

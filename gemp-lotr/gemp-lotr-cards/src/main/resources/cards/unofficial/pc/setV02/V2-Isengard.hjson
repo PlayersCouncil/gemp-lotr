@@ -242,13 +242,13 @@
 		type: Event
 		timewords: Shadow
 		effects: [
-						{
+			{
 				type: event
 				effect: {
 					type: Choice
 					texts: [
 						Remove (3) to draw 2 cards
-						Remove (9) to take up to 4 items into hand from your deck
+						Remove (5) to take up to 4 items into hand from your deck
 					]
 					effects: [
 						{
@@ -304,7 +304,7 @@
 							}
 							cost: {
 								type: RemoveTwilight
-								amount: 9
+								amount: 5
 							}
 							effect: [
 								{
@@ -344,7 +344,7 @@
 				}
 			}
 		]
-		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (9) to take up to 4 Shadow items into hand from your draw deck. If in region 1, this action can be played from your draw deck.
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (5) to take up to 4 Shadow items into hand from your draw deck. If in region 1, this action can be played from your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -463,7 +463,6 @@
 				trigger: {
 					type: Played
 					filter: self
-					fromZone: hand
 				}
 				effect: {
 					type: PutCardsFromDiscardIntoHand
@@ -471,7 +470,7 @@
 				}
 			}
 		]
-		gametext: Bearer must be a warg-rider&nbsp;.<br>When you play this possession from hand, you may take an [isengard] skirmish event into hand from your discard pile.
+		gametext: Bearer must be a warg-rider&nbsp;.<br>When you play this possession, you may take an [isengard] skirmish event into hand from your discard pile.
 		lore: "'He has taken Orcs into his service, and Wolf-riders, and evil Men...'"
 		promotext: ""
 		alts: {
@@ -1133,7 +1132,7 @@
 				}
 				effect: [
 					{
-						type: negateWound
+						type: PreventWound
 						select: memory(woundedUruk)
 					}
 					{
@@ -1157,7 +1156,7 @@
 				}
 			}
 		]
-		gametext: Machine. Each time an Uruk-hai costing X is about to take a wound (except during a skirmish), exert it instead, where X is the number of [isengard] tokens you can spot here.<br>Maneuver: Exert an Uruk-hai to add an [isengard] token here. 
+		gametext: <b>Machine</b>. Each time an Uruk-hai costing X is about to take a wound (except during a skirmish), prevent that and exert it. X is the number of [isengard] tokens you can spot here.<br/><b>Maneuver</b>: Exert an Uruk-hai to add an [isengard] token here.  
 		lore: "They held their great shields above them like a roof..."
 		promotext: ""
 		alts: {

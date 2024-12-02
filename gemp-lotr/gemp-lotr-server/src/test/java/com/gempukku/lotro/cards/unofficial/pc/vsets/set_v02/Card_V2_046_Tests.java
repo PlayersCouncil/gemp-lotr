@@ -39,7 +39,7 @@ public class Card_V2_046_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-		 * Game Text: Remove 2 tokens from X [rohan] conditions to make 3 valiant companions strength +X until the regroup phase.
+		 * Game Text: Spot X [rohan] conditions and remove 2 tokens from each to make 3 valiant companions strength +X until the regroup phase.
 		*/
 
 		var scn = GetScenario();
