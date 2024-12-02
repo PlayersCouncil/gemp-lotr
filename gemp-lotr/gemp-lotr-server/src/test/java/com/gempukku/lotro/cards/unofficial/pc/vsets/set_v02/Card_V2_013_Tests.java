@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_V2_013_Tests
 {
@@ -18,7 +18,7 @@ public class Card_V2_013_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_13");
+					put("gandalf", "102_13");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -44,12 +44,13 @@ public class Card_V2_013_Tests
 		 * Resistance: 6
 		 * Signet: Theoden
 		 * Game Text: Each mounted companion gains <b>valiant</b>.
-		* 	Response: If a minion's special ability is used (except during a skirmish), spot 2 valiant companions and exert Gandalf to prevent that and wound that minion. 
+		* 	Response: If a minion's special ability is used (except during a skirmish), spot 3 valiant companions and
+		 * 	exert Gandalf to prevent that and wound that minion.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("gandalf");
 
 		assertEquals("Gandalf", card.getBlueprint().getTitle());
 		assertEquals("Lathspell", card.getBlueprint().getSubtitle());

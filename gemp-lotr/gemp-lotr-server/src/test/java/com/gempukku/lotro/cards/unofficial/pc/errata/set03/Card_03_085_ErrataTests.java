@@ -41,7 +41,7 @@ public class Card_03_085_ErrataTests
 		 * Subtype: 
 		 * Game Text: To play, exert a [ringwraith] minion. Bearer must
 		* 	be a companion or ally.
-		* 	Each time bearer exerts, the Free Peoples player must discard a card from hand of bearer's culture (or reveal their hand if they cannot).  
+		* 	Each time bearer exerts, the Free Peoples player may discard a card from hand of bearer's culture.  If they do not, reveal their hand and discard 1 revealed Free Peoples card.
 		*/
 
 		var scn = GetScenario();

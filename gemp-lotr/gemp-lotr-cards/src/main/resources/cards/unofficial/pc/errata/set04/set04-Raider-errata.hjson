@@ -1,0 +1,55 @@
+{
+
+	54_245: {
+		cardInfo: {
+			//id: 54_245.1
+			parent: 4_245
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E245.1_card.jpg
+			collInfo: 4R245
+			rarity: R
+		}
+		title: Southron Archer
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 6
+		vitality: 2
+		site: 4
+		keywords: [
+			Southron
+			Archer
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					requires: {
+						type: canSpot
+						filter: another,southron
+					}
+					side: shadow
+					amount: {
+						type: ForEachSiteYouControl
+					}
+				}
+			}
+		]
+		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you can spot another Southron, the minion archery total is +1 for each site you control.
+		lore: "'They have passed on to the Black Gate; but more may follow.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

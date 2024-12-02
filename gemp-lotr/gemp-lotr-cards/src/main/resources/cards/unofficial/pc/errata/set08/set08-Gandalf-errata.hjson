@@ -14,7 +14,7 @@
 		unique: false
 		side: Free Peoples
 		culture: Gandalf
-		twilight: 5
+		twilight: 3
 		type: Event
 		timewords: Fellowship
 		effects: {
@@ -32,7 +32,19 @@
 				{
 					type: putCardsFromDeckIntoHand
 					select: choose(cultureFromMemory(killedCompanion))
-					count: 0-3
+					count: {
+						type: Range
+						from: 0
+						to: {
+							type: Sum
+							source: [
+								{
+									type: RegionNumber
+								}
+								1
+							]
+						}
+					}
 					reveal: true
 					shuffle: true
 					showAll: true
@@ -42,7 +54,7 @@
 				}
 			]
 		}
-		gametext: Spot Gandalf and place a companion (except the Ring-bearer) in the dead pile to take up to 3 cards from that companion's culture into hand from your draw deck. Shuffle your draw deck.
+		gametext: Spot Gandalf and place a companion (except the Ring-bearer) in the dead pile to take up to X cards from that companion's culture into hand from your draw deck, where X is the current region number +1.
 		lore: "'...we will bear Faramir, Steward of Gondor, to a place where he can sleep in peace....'"
 		promotext: ""
 		alts: {

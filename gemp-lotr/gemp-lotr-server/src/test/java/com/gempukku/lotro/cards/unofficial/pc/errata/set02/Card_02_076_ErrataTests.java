@@ -40,7 +40,7 @@ public class Card_02_076_ErrataTests
 		 * Type: Condition
 		 * Subtype: Support area
 		 * Game Text: Bearer's special abilities cannot be used.
-		* 	Maneuver: Exert a Nazgul to transfer this from your support area to a Ring-bound companion.
+		* 	Maneuver: If this is in your support area, exert a Nazgul to transfer this to a Ring-bound companion.
 		*/
 
 		var scn = GetScenario();
