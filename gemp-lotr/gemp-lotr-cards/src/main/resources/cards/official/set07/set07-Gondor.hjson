@@ -96,10 +96,7 @@
 					type: addKeyword
 					filter: self
 					requires: {
-						type: not
-						requires: {
-							type: canSpotThreats
-						}
+						type: CantSpotThreats
 					}
 					keyword: defender
 					amount: 1

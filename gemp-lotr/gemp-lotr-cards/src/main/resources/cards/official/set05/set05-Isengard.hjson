@@ -19,6 +19,19 @@
 		effects: [
 			{
 				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: choose(urukHai)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: isengard
+					select: self
+				}
+			}
+			{
+				type: activated
 				phase: skirmish
 				requires: [
 					{
