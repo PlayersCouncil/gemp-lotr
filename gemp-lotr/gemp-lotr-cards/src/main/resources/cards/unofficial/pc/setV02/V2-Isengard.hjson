@@ -627,8 +627,8 @@
 					filter: any
 					phase: skirmish
 					requires: {
-						type: CanSpot
-						filter: SiteYouControl, battleground
+						type: Location
+						filter: battleground
 					}
 				}
 			}
