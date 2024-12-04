@@ -194,7 +194,7 @@
 			rarity: _
 		}
 		title: Stronghold of My Fathers
-		unique: false
+		unique: true
 		side: Free Peoples
 		culture: Rohan
 		twilight: 1
@@ -231,7 +231,7 @@
 				cost: {
 					type: Choice
 					texts: [
-						Discard Fortress of My Fathers
+						Discard Stronghold of My Fathers
 						Discard 2 other {rohan} possessions
 					]
 					effects: [
@@ -654,11 +654,8 @@
 			{
 				type: Activated
 				phase: Skirmish
+				limitPerPhase: 1
 				requires: [
-					{
-						type: PerPhaseLimit
-						limit: 1
-					}
 					{
 						type: CanSpot
 						filter: InSkirmish, Hobbit, companion
