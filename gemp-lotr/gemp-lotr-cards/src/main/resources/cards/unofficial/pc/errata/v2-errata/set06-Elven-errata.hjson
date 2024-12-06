@@ -1,0 +1,140 @@
+{
+
+	56_22: {
+		cardInfo: {
+			//id: 6_22.1
+			parent: 6_22
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN06E022.1_card.jpg
+			collInfo: 6U22
+			rarity: U
+		}
+		title: Naith Troop
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 3
+		type: Companion
+		race: Elf
+		strength: 8
+		vitality: 3
+		resistance: 6
+		keywords: Valiant
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf,companion
+					count: 3
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: discardTopCardsFromDeck
+						forced: false
+						memorize: discardedCard
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: discardedCard
+							filter: culture(elven)
+						}
+						true: {
+							type: modifyStrength
+							select: choose(minion,inSkirmishAgainst(self))
+							amount: -2
+						}
+					}
+				]
+			}
+		]
+		gametext: <b>Valiant.</b> <br>To play, spot 3 Elf companions. <b>Skirmish:</b> Exert Naith Troop to discard the top card of your draw deck. If it is an [elven] card, make a minion skirmishing Naith Troop strength –2.
+		lore: Now only the bow and the sword can forestall the coming of the Shadow.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	56_23: {
+		cardInfo: {
+			//id: 6_23.1
+			parent: 6_23
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN06E023.1_card.jpg
+			collInfo: 6R23
+			rarity: R
+		}
+		title: Naith Warband
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 4
+		type: Companion
+		race: Elf
+		strength: 9
+		vitality: 3
+		resistance: 6
+		keywords: Valiant
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf,companion
+					count: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeMoreWoundsThan
+					requires: {
+						type: canSpot
+						filter: self,hasAttached(ranged weapon)
+					}
+					filter: self
+					phase: skirmish
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: doesNotAddToArcheryTotal
+					requires: {
+						type: canSpot
+						filter: self,hasAttached(ranged weapon)
+					}
+					filter: self
+				}
+			}
+		]
+		gametext: <b>Valiant.</b> <br>To play, spot 3 Elf companions. While Naith Warband bears a ranged weapon, it takes no more than 1 wound during each skirmish phase and does not add to the fellowship archery total.
+		lore: “‘But do not think that only by singing amid the trees... is Lothlórien maintained and defended....'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

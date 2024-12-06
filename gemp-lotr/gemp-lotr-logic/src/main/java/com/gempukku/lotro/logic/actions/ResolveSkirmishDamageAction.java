@@ -42,7 +42,7 @@ public class ResolveSkirmishDamageAction extends RequiredTriggerAction {
                     new Filter() {
                         @Override
                         public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                            return game.getModifiersQuerying().canTakeWoundsFromLosingSkirmish(game, physicalCard, _skirmishResult.getWinners());
+                            return game.getModifiersQuerying().canTakeWoundsFromLosingSkirmish(game, physicalCard);
                         }
                     });
         }

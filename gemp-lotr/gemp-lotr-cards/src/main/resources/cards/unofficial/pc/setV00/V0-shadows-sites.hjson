@@ -2,17 +2,10 @@
 	
 	100_1: {
 		cardInfo: {
-			imagePath: errata/LOTR-ENV0E001.0.jpg
-			javaClass: false
-			parent: 18_139
-			parentPath: errata/pc
-			version: 1
+			//id: 101_57
+			image: errata/LOTR-ENV0E001.0.jpg
 			collInfo: 18U139+
 			rarity: U
-			setNum: "18"
-			cardNum: 139
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Rath Dínen
 		unique: false

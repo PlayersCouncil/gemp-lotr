@@ -1,0 +1,55 @@
+{
+
+	55_121: {
+		cardInfo: {
+			//id: 55_121.1
+			parent: 5_121
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN05E121.1_card.jpg
+			collInfo: 5P121
+			rarity: P
+		}
+		title: Legolas
+		subtitle: Archer of Mirkwood
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		keywords: [
+			Archer
+			Valiant
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: heal
+					select: choose(another,or(dwarf,elf),companion)
+				}
+			}
+		]
+		gametext: <b>Archer</b>. Valiant.<br>Each time Legolas wins a skirmish, you may heal a Dwarf companion or another Elf companion.
+		lore: "'...even more would I give for a hundred good archers of Mirkwood. We shall need them.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

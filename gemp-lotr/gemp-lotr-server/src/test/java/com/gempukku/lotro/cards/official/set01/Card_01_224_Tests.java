@@ -58,7 +58,7 @@ public class Card_01_224_Tests
         assertEquals(Side.SHADOW, card.getBlueprint().getSide());
         assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
         assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.HasKeyword(card, Keyword.RESPONSE));
+        assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
         assertEquals(0, card.getBlueprint().getTwilightCost());
     }
 
@@ -74,7 +74,7 @@ public class Card_01_224_Tests
         scn.ShadowMoveCharToTable(enquea, twk);
 
         var frodo = scn.GetRingBearer();
-        var onering = scn.GetOneRing();
+        var onering = scn.GetFreepsRing();
         var guard = scn.GetFreepsCard("guard");
         scn.FreepsMoveCharToTable(guard);
 

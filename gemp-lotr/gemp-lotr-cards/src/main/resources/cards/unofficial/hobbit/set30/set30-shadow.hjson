@@ -1,18 +1,23 @@
 {
 	30_32: {
+		cardInfo: {
+			image: hobbit/HDG3032.jpg
+			collInfo: 30_32
+			rarity: _
+		}
 		title: Anger
 		culture: gundabad
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
 				type: modifyStrength
-				filter: choose(minion)
+				select: choose(minion)
 				memorize: chosenMinion
 				amount: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: memoryMatches
 						memory: chosenMinion
@@ -25,6 +30,11 @@
 		}
 	}
 	30_33: {
+		cardInfo: {
+			image: hobbit/HDG3033.jpg
+			collInfo: 30_33
+			rarity: _
+		}
 		title: Fimbul
 		subtitle: Orkish Assassin
 		unique: true
@@ -41,7 +51,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(orc)
+					select: choose(orc)
 				}
 			}
 			{
@@ -49,16 +59,23 @@
 				phase: shadow
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: playCardFromDrawDeck
-					filter: choose(minion)
+					select: choose(minion)
+					showAll: true
+					shuffle: true
 				}
 			}
 		]
 	}
 	30_34: {
+		cardInfo: {
+			image: hobbit/HDG3034.jpg
+			collInfo: 30_34
+			rarity: _
+		}
 		title: Hatred Rekindled
 		culture: gundabad
 		twilight: 3
@@ -70,30 +87,40 @@
 			cost: {
 				type: discardFromHand
 				forced: false
-				filter: choose(any)
+				select: choose(any)
 				count: 3
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(orc)
+				select: choose(orc)
 			}
 		}
 	}
 	30_35: {
+		cardInfo: {
+			image: hobbit/HDG3035.jpg
+			collInfo: 30_35
+			rarity: _
+		}
 		title: Host of Thousands
 		culture: gundabad
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(orc)
+				select: choose(orc)
 			}
 		}
 	}
 	30_36: {
+		cardInfo: {
+			image: hobbit/HDG3036.jpg
+			collInfo: 30_36
+			rarity: _
+		}
 		title: Narzug
 		subtitle: Orkish Assassin
 		unique: true
@@ -126,12 +153,17 @@
 			}
 			effect: {
 				type: wound
-				filter: choose(ally)
+				select: choose(ally)
 				times: 2
 			}
 		}
 	}
 	30_37: {
+		cardInfo: {
+			image: hobbit/HDG3037.jpg
+			collInfo: 30_37
+			rarity: _
+		}
 		title: Not at Home
 		unique: true
 		culture: gundabad
@@ -140,7 +172,8 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				requires: {
 					type: HasCardInDeadPile
 					filter: culture(dwarven),companion
@@ -152,7 +185,7 @@
 				}
 				effect: {
 					type: exhaust
-					filter: memory(playedCompanion)
+					select: memory(playedCompanion)
 				}
 			}
 			{
@@ -161,17 +194,22 @@
 				effect: [
 					{
 						type: putCardsFromDiscardOnTopOfDeck
-						filter: choose(side(shadow),not(name(Smaug)))
+						select: choose(side(shadow),not(name(Smaug)))
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}
 		]
 	}
 	30_38: {
+		cardInfo: {
+			image: hobbit/HDG3038.jpg
+			collInfo: 30_38
+			rarity: _
+		}
 		title: Orkish Marauder
 		culture: gundabad
 		twilight: 3
@@ -182,7 +220,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -195,7 +233,7 @@
 				}
 				effect: {
 					type: exhaust
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 				}
 			}
 			{
@@ -212,12 +250,17 @@
 				}
 				effect: {
 					type: wound
-					filter: choose(companion,not(name(Bilbo)))
+					select: choose(companion,not(name(Bilbo)))
 				}
 			}
 		]
 	}
 	30_39: {
+		cardInfo: {
+			image: hobbit/HDG3039.jpg
+			collInfo: 30_39
+			rarity: _
+		}
 		title: Orkish Aggressor
 		culture: gundabad
 		twilight: 2
@@ -233,7 +276,7 @@
 				{
 					type: assignFpCharacterToSkirmish
 					fpCharacter: choose(name(Bilbo))
-					against: self
+					minion: self
 				}
 				{
 					type: optional
@@ -247,7 +290,7 @@
 						}
 						effect: {
 							type: discard
-							filter: self
+							select: self
 						}
 					}
 				}
@@ -255,6 +298,11 @@
 		}
 	}
 	30_40: {
+		cardInfo: {
+			image: hobbit/HDG3040.jpg
+			collInfo: 30_40
+			rarity: _
+		}
 		title: Watchful Orc
 		culture: gundabad
 		twilight: 4
@@ -265,7 +313,7 @@
 		site: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -280,18 +328,23 @@
 				phase: shadow
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: [
 					{
 						type: chooseAKeyword
-						keywords: Battleground,Mountain,Forest,Underground
+						keywords: [
+							Battleground
+							Mountain
+							Forest
+							Underground
+						]
 						memorize: keywordSelected
 					}
 					{
 						type: addKeyword
-						filter: all(site)
+						select: all(site)
 						keyword: fromMemory(keywordSelected)
 						until: endOfTurn
 					}
@@ -300,6 +353,11 @@
 		]
 	}
 	30_41: {
+		cardInfo: {
+			image: hobbit/HDG3041.jpg
+			collInfo: 30_41
+			rarity: _
+		}
 		title: Yazneg
 		subtitle: Orkish Assassin
 		unique: true
@@ -320,16 +378,21 @@
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: {
 				type: discard
-				filter: choose(follower)
+				select: choose(follower)
 			}
 		}
 	}
 	30_42: {
+		cardInfo: {
+			image: hobbit/HDG3042.jpg
+			collInfo: 30_42
+			rarity: _
+		}
 		title: Goblin Footman
 		culture: moria
 		twilight: 3
@@ -339,7 +402,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -347,12 +410,17 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(possession)
+				select: choose(possession)
 				on: minion
 			}
 		}
 	}
 	30_66: {
+		cardInfo: {
+			image: hobbit/HDG3066.jpg
+			collInfo: 30_66
+			rarity: _
+		}
 		title: Smaug
 		subtitle: The Golden
 		unique: true
@@ -369,7 +437,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: ConstantlyCheck
 					requires: {
@@ -379,7 +448,7 @@
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -396,16 +465,16 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 					}
 					{
 						type: discard
-						filter: choose(another,minion)
+						select: choose(another,minion)
 					}
 				]
 				effect: {
 					type: discard
-					filter: choose(side(free people),not(or(companion,name(Bard),ring)))
+					select: choose(side(free people),not(or(companion,name(Bard),ring)))
 				}
 			}
 		]

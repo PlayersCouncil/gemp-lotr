@@ -1,28 +1,25 @@
 {
 	52_59: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E059.1.jpg
-			javaClass: false
+			//id: 2_59.1
 			parent: 2_59
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN02E059.1.jpg
 			collInfo: 2U59
 			rarity: U
-			setNum: "2"
-			cardNum: 59
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Foul Things
 		culture: moria
 		twilight: 2
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(culture(moria),not(title(Foul Things)),not(event,response))
+				select: choose(culture(moria),not(title(Foul Things)),not(event,timeword(response)))
 			}
 		}
 		gametext: <b>Shadow</b>: Play a [Moria] card from your discard pile.

@@ -1,0 +1,59 @@
+{
+
+	9_2: {
+		cardInfo: {
+			image: decipher/LOTR09002.jpg
+			collInfo: 9R+2
+			rarity: R+
+		}
+		title: Freca
+		subtitle: Hungry Savage
+		unique: true
+		side: Shadow
+		culture: Dunland
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(dunland),man
+				}
+				effect: {
+					type: takeControlOfSite
+				}
+			}
+			{
+				type: killedTrigger
+				optional: true
+				requires: {
+					type: isSide
+					side: free people
+				}
+				effect: {
+					type: liberateSite
+				}
+			}
+		]
+		gametext: When you play Freca, you may spot another [dunland] Man to take control of a site.<br>When Freca is killed, the Free Peoples player may liberate a site.
+		lore: "'We will die for Saruman.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

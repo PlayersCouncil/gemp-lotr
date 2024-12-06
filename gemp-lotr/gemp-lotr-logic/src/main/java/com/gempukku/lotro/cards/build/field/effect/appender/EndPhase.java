@@ -8,7 +8,7 @@ import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.AddUntilEndOfPhaseModifierEffect;
-import com.gempukku.lotro.logic.modifiers.PlayersCantPlayPhaseEventsOrPhaseSpecialAbilitiesModifier;
+import com.gempukku.lotro.logic.modifiers.CantPlayPhaseEventsOrphaseSpecialAbilitiesModifier;
 import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
@@ -21,7 +21,7 @@ public class EndPhase implements EffectAppenderProducer {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 return new AddUntilEndOfPhaseModifierEffect(
-                        new PlayersCantPlayPhaseEventsOrPhaseSpecialAbilitiesModifier(actionContext.getSource(), actionContext.getGame().getGameState().getCurrentPhase()));
+                        new CantPlayPhaseEventsOrphaseSpecialAbilitiesModifier(actionContext.getSource(), null, actionContext.getGame().getGameState().getCurrentPhase(), null));
             }
         };
     }

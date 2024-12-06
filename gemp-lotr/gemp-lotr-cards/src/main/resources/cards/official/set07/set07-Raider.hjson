@@ -1,0 +1,2309 @@
+{
+
+	7_129: {
+		cardInfo: {
+			image: decipher/LOTR07129.jpg
+			collInfo: 7R129
+			rarity: R
+		}
+		title: Bold Men and Grim
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+					count: 2
+				}
+			}
+			{
+				type: extraCost
+				cost: {
+					type: addThreats
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: aboutToBeKilled
+					filter: companion
+				}
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: discard
+					select: choose(companion,not(ringBearer))
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: To play, spot 2 [raider] Men and add a threat.<br>Each time a companion is about to be killed, you may remove a threat to discard a companion (except the Ring-bearer).<br>Discard this condition at the start of the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_130: {
+		cardInfo: {
+			image: decipher/LOTR07130.jpg
+			collInfo: 7C130
+			rarity: C
+		}
+		title: Dark Tidings
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+					count: 2
+				}
+				limitPerPhase: 1
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+		]
+		gametext: <b>Regroup:</b> Spot 2 [raider] Men and remove (3) to add a threat (limit 1).
+		lore: "'...yet not all unguessed.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_131: {
+		cardInfo: {
+			image: decipher/LOTR07131.jpg
+			collInfo: 7C131
+			rarity: C
+		}
+		title: Desert Fighter
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				cost: {
+					type: removeTwilight
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (1) to add a threat.
+		lore: "...the great monsters were unfought...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_132: {
+		cardInfo: {
+			image: decipher/LOTR07132.jpg
+			collInfo: 7C132
+			rarity: C
+		}
+		title: Desert Nomad
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 2
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br>While you can spot 2 threats, this minion is <b>damage +1</b>.
+		lore: "'In the South the Haradrim are moving....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_133: {
+		cardInfo: {
+			image: decipher/LOTR07133.jpg
+			collInfo: 7C133
+			rarity: C
+		}
+		title: Desert Runner
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 6
+		vitality: 2
+		site: 4
+		keywords: [
+			Southron
+			Ambush 1
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: assignedToSkirmish
+					side: free people
+					filter: self
+				}
+				requires: {
+					type: haveInitiative
+					side: shadow
+				}
+				effect: {
+					type: wound
+					select: choose(character,assignedToSkirmish(self))
+				}
+			}
+		]
+		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
+		lore: "New forces of the enemy were hastening up the road from the River...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_134: {
+		cardInfo: {
+			image: decipher/LOTR07134.jpg
+			collInfo: 7U134
+			rarity: U
+		}
+		title: Desert Scout
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: [
+			Southron
+			Ambush 1
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: assignedToSkirmish
+					side: free people
+					filter: self
+				}
+				requires: {
+					type: haveInitiative
+					side: shadow
+				}
+				effect: {
+					type: wound
+					select: choose(character,assignedToSkirmish(self))
+				}
+			}
+		]
+		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
+		lore: "...and the Haradrim rallied about them."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_135: {
+		cardInfo: {
+			image: decipher/LOTR07135.jpg
+			collInfo: 7C135
+			rarity: C
+		}
+		title: Desert Sneak
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Minion
+		race: Man
+		strength: 5
+		vitality: 2
+		site: 4
+		keywords: [
+			Southron
+			Ambush 1
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: assignedToSkirmish
+					side: free people
+					filter: self
+				}
+				requires: {
+					type: haveInitiative
+					side: shadow
+				}
+				effect: {
+					type: wound
+					select: choose(character,assignedToSkirmish(self))
+				}
+			}
+		]
+		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br>When the Free Peoples player assigns this minion to a character and you have initiative, you may wound that character.
+		lore: "...from the southward fields came the footmen of Harad...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_136: {
+		cardInfo: {
+			image: decipher/LOTR07136.jpg
+			collInfo: 7U136
+			rarity: U
+		}
+		title: Desert Soldier
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: wound
+					select: choose(or(companion,ally),inSkirmishAgainst(self))
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (3) to wound a companion or ally he is skirmishing.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_137: {
+		cardInfo: {
+			image: decipher/LOTR07137.jpg
+			collInfo: 7C137
+			rarity: C
+		}
+		title: Desert Spearman
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: wound
+					select: choose(or(companion,ally),inSkirmishAgainst(self))
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (3) to wound a companion or ally he is skirmishing.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_138: {
+		cardInfo: {
+			image: decipher/LOTR07138.jpg
+			collInfo: 7U138
+			rarity: U
+		}
+		title: Desert Villain
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				cost: {
+					type: removeTwilight
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br>At the start of each skirmish involving this minion, you may remove (1) to add a threat.
+		lore: "...with red banners...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_139: {
+		cardInfo: {
+			image: decipher/LOTR07139.jpg
+			collInfo: 7C139
+			rarity: C
+		}
+		title: Easterling Aggressor
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: Easterling
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: or
+					requires: [
+						{
+							type: haveInitiative
+							side: shadow
+						}
+						{
+							type: canSpot
+							filter: easterling
+							count: 3
+						}
+					]
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: heal
+					select: choose(another,easterling)
+				}
+			}
+		]
+		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> If you have initiative or you spot 3 Easterlings, discard 2 cards from hand to heal another Easterling.
+		lore: "...others held westward to hold off the forces of Gondor...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_140: {
+		cardInfo: {
+			image: decipher/LOTR07140.jpg
+			collInfo: 7C140
+			rarity: C
+		}
+		title: Easterling Assailant
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		keywords: Easterling
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: removeBurdens
+					}
+					{
+						type: exert
+						select: self
+					}
+				]
+				effect: {
+					type: heal
+					select: choose(another,easterling)
+					count: {
+						type: Conditional
+						requires: {
+							type: haveInitiative
+							side: shadow
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+		]
+		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Remove a burden and exert this minion to heal another Easterling (or 2 Easterlings if you have initiative).
+		lore: "'The new host that we had tidings of has come first....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_141: {
+		cardInfo: {
+			image: decipher/LOTR07141.jpg
+			collInfo: 7C141
+			rarity: C
+		}
+		title: Easterling Attacker
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 6
+		vitality: 2
+		site: 4
+		keywords: Easterling
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Exert this minion to make him <b>damage +1</b>.
+		lore: "'Soon there will be battle on the fields.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_142: {
+		cardInfo: {
+			image: decipher/LOTR07142.jpg
+			collInfo: 7C142
+			rarity: C
+		}
+		title: Easterling Blademaster
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: Easterling
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Exert this minion to make him <b>damage +1</b>.
+		lore: "...great forces were flowing in from the East."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_143: {
+		cardInfo: {
+			image: decipher/LOTR07143.jpg
+			collInfo: 7R143
+			rarity: R
+		}
+		title: Easterling Footman
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		keywords: Easterling
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				requires: [
+					{
+						type: not
+						requires: {
+							type: canSpotBurdens
+							amount: 2
+						}
+					}
+					{
+						type: canSpot
+						filter: another,easterling
+					}
+				]
+				cost: {
+					type: discardFromHand
+					forced: false
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+		]
+		gametext: <b>Easterling</b>.<br><b>Maneuver:</b> If you cannot spot 2 burdens, spot another Easterling and discard a card from hand to add a burden.
+		lore: "'...and so have many also in the East.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_144: {
+		cardInfo: {
+			image: decipher/LOTR07144.jpg
+			collInfo: 7C144
+			rarity: C
+		}
+		title: Easterling Ransacker
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		keywords: Easterling
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Exert this minion to make him <b>damage +1</b>.
+		lore: "...forces ten times, and more than ten times...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_145: {
+		cardInfo: {
+			image: decipher/LOTR07145.jpg
+			collInfo: 7R145
+			rarity: R
+		}
+		title: Easterling Regiment
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		keywords: [
+			Easterling
+			Fierce
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachBurden
+					}
+				}
+			}
+		]
+		gametext: <b>Easterling</b>. <b>Fierce</b>.<br>Each time Easterling Regiment wins a skirmish, you may add (1) for each burden.
+		lore: "...there marched up an army of Easterlings...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_146: {
+		cardInfo: {
+			image: decipher/LOTR07146.jpg
+			collInfo: 7U146
+			rarity: U
+		}
+		title: Easterling Sergeant
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: Easterling
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				requires: [
+					{
+						type: not
+						requires: {
+							type: canSpotBurdens
+							amount: 1
+						}
+					}
+					{
+						type: canSpot
+						filter: another,easterling
+					}
+				]
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+		]
+		gametext: <b>Easterling</b>.<br><b>Maneuver:</b> If you cannot spot a burden, spot another Easterling and exert this minion to add a burden.
+		lore: "...Easterlings with axes...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_147: {
+		cardInfo: {
+			image: decipher/LOTR07147.jpg
+			collInfo: 7U147
+			rarity: U
+		}
+		title: Easterling Veteran
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 3
+		site: 4
+		keywords: Easterling
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeBurdens
+					amount: 2
+				}
+				effect: {
+					type: heal
+					select: choose(another,easterling)
+				}
+			}
+		]
+		gametext: <b>Easterling</b>.<br><b>Skirmish:</b> Remove 2 burdens to heal another Easterling.
+		lore: "...enclosed in a ring of foes."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_148: {
+		cardInfo: {
+			image: decipher/LOTR07148.jpg
+			collInfo: 7R148
+			rarity: R
+		}
+		title: Fierce in Despair
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 7
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(raider),man
+				count: 2
+			},
+			effect: [
+				{
+					type: discard
+					select: choose(companion,not(ringBearer))
+				}
+			]
+		}
+		gametext: Spot 2 [raider] Men to discard a companion (except the Ring-bearer).
+		lore: "...displaying his standard, black serpent upon scarlet...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_149: {
+		cardInfo: {
+			image: decipher/LOTR07149.jpg
+			collInfo: 7C149
+			rarity: C
+		}
+		title: Great Beasts
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+					count: 3
+				}
+				cost: {
+					type: removeTwilight
+					amount: 9
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: -1
+					}
+					until: endOfTurn
+				}
+			}
+		]
+		gametext: To play, spot a [raider] Man.<br><b>Regroup:</b> Remove (9) and spot 3 [raider] Men to make the move limit -1.
+		lore: "...like moving houses in the red and fitful light...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_150: {
+		cardInfo: {
+			image: decipher/LOTR07150.jpg
+			collInfo: 7C150
+			rarity: C
+		}
+		title: Harsh Tongues
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: raider
+					select: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: shadowHasInitiative
+					requires: {
+						type: canSpotCultureTokens
+						culture: raider
+						filter: self
+						amount: 3
+					}
+				}
+			}
+		]
+		gametext: To play, spot a [raider] Man.<br><b>Regroup:</b> Remove (3) and spot a [raider] Man to place a [raider] token here.<br>While there are 3 [raider] tokens here, the Shadow has initiative regardless of the Free Peoples player's hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_151: {
+		cardInfo: {
+			image: decipher/LOTR07151.jpg
+			collInfo: 7U151
+			rarity: U
+		}
+		title: Hosts Still Unfought
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(raider),man
+				count: 2
+			},
+			effect: [
+				{
+					type: discardFromHand
+					forced: false
+					count: any
+					memorize: shadowDiscardedCards
+				}
+				{
+					type: discardFromHand
+					forced: false
+					hand: fp
+					player: fp
+					count: any
+					memorize: freeDiscardedCards
+				}
+				{
+					type: addTwilight
+					amount: {
+						type: subtract
+						firstNumber: {
+							type: forEachInMemory
+							memory: shadowDiscardedCards
+						}
+						secondNumber: {
+							type: forEachInMemory
+							memory: freeDiscardedCards
+						}
+					}
+				}
+			]
+		}
+		gametext: To play, spot 2 [raider] Men.<br>Discard any number of cards from hand. The Free Peoples player then discards any number of cards from hand. For each card you discarded more than the Free Peoples player, add (1).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_152: {
+		cardInfo: {
+			image: decipher/LOTR07152.jpg
+			collInfo: 7R152
+			rarity: R
+		}
+		title: Mûmak Commander
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 8
+		type: Minion
+		race: Man
+		strength: 16
+		vitality: 4
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				requires: {
+					type: canSpotThreats
+					amount: 6
+				}
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: kill
+					select: choose(companion,inSkirmishAgainst(self))
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br>To play, spot a [raider] Man.<br>While you can spot 6 threats, each time this minion wins a skirmish, the companion he was skirmishing is killed.
+		lore: "Great was the clash of their meeting."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_153: {
+		cardInfo: {
+			image: decipher/LOTR07153.jpg
+			collInfo: 7C153
+			rarity: C
+		}
+		title: Mûmakil of the Harad
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(raider),minion
+			},
+			effect: [
+				{
+					type: addTwilight
+					amount: {
+						type: forEachThreat
+						multiplier: 2
+					}
+				}
+			]
+		}
+		gametext: Spot a [raider] minion to add (2) for each threat.
+		lore: "...dragging through the lanes amid the fires...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_154: {
+		cardInfo: {
+			image: decipher/LOTR07154.jpg
+			collInfo: 7C154
+			rarity: C
+		}
+		title: New Strength Came Now
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(raider),man)
+					amount: {
+						type: Conditional
+						requires: {
+							type: haveInitiative
+							side: shadow
+						}
+						true: 6
+						false: 3
+					}
+				}
+			]
+		}
+		gametext: Make a [raider] Man strength +3 (or +6 if you have initiative).
+		lore: "...Southrons in scarlet...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_155: {
+		cardInfo: {
+			image: decipher/LOTR07155.jpg
+			collInfo: 7C155
+			rarity: C
+		}
+		title: Raider Bow
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Possession
+		itemclass: Ranged weapon
+		target: culture(raider),man
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: archer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: ambush
+					amount: 5
+				}
+			}
+		]
+		gametext: Bearer must be a [raider] Man.<br>Bearer is an <b>archer</b> and <b>ambush</b> (5).
+		lore: "Neither Hirluin the fair would return to Pinnath Gelin, nor Grimbold to Grimslade...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_156: {
+		cardInfo: {
+			image: decipher/LOTR07156.jpg
+			collInfo: 7C156
+			rarity: C
+		}
+		title: Raider Halberd
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(raider),man
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+		]
+		gametext: Bearer must be a [raider] Man.<br><b>Skirmish:</b> Exert bearer to add (2).
+		lore: "...the drawing of the scimitars of the Southrons was like a glitter of stars."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_157: {
+		cardInfo: {
+			image: decipher/LOTR07157.jpg
+			collInfo: 7U157
+			rarity: U
+		}
+		title: Red Wrath
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(culture(raider),man)
+				memorize: exertedMan
+			},
+			effect: [
+				{
+					type: wound
+					select: choose(companion,inSkirmishAgainst(memory(exertedMan)))
+					times: 2
+				}
+			]
+		}
+		gametext: Exert a [raider] Man to wound a companion he is skirmishing twice.
+		lore: "...he came against the white horse and the green with great press of men...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_158: {
+		cardInfo: {
+			image: decipher/LOTR07158.jpg
+			collInfo: 7R158
+			rarity: R
+		}
+		title: Rout
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: haveInitiative
+					side: shadow
+				}
+				effect: {
+					type: exert
+					player: fp
+					select: choose(companion)
+					count: 2
+				}
+			}
+		]
+		gametext: To play, spot a [raider] Man.<br>Each time the fellowship moves, the Free Peoples player must exert 2 companions, if you have initiative.
+		lore: "Already men were breaking away, flying wild and witless here and there...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_159: {
+		cardInfo: {
+			image: decipher/LOTR07159.jpg
+			collInfo: 7R159
+			rarity: R
+		}
+		title: Small Hope
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: not
+					requires: {
+						type: canSpotBurdens
+						amount: 2
+					}
+				}
+				cost: {
+					type: exert
+					select: choose(easterling)
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(easterling)
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Maneuver:</b> If you cannot spot 2 burdens, exert an Easterling to add a burden.<br><b>Skirmish:</b> Discard this condition to make an Easterling strength +2.
+		lore: "...had any now that Faramir could hold the fords for longs."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_160: {
+		cardInfo: {
+			image: decipher/LOTR07160.jpg
+			collInfo: 7U160
+			rarity: U
+		}
+		title: Southron Bandit
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: preventable
+					text: Would you like to add a threat to prevent adding (5) twilight?
+					player: fp
+					cost: {
+						type: addThreats
+					}
+					effect: {
+						type: addTwilight
+						amount: 5
+					}
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br><b>Maneuver:</b> Exert this minion to add (5). The Free Peoples player may add a threat to prevent this.
+		lore: "...wild Southron men...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_161: {
+		cardInfo: {
+			image: decipher/LOTR07161.jpg
+			collInfo: 7C161
+			rarity: C
+		}
+		title: Southron Brigand
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+					count: 3
+				}
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: addKeyword
+					select: choose(culture(raider),man)
+					keyword: damage
+					amount: 1
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br><b>Shadow:</b> Remove (3) and spot 3 [raider] Men to make one of those Men <b>damage +1</b> until the regroup phase.
+		lore: "...gathered about the standard of their chieftain."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_162: {
+		cardInfo: {
+			image: decipher/LOTR07162.jpg
+			collInfo: 7U162
+			rarity: U
+		}
+		title: Southron Captain
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Minion
+		race: Man
+		strength: 13
+		vitality: 3
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 4
+					}
+					filter: self
+					keyword: damage
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br>While you can spot 4 threats, this minion is <b>damage +2</b>.
+		lore: "...a mounted champion of Harad...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_163: {
+		cardInfo: {
+			image: decipher/LOTR07163.jpg
+			collInfo: 7R163
+			rarity: R
+		}
+		title: Southron Chieftain
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 2
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: assignedToSkirmish
+					filter: self
+					side: free people
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: shadowHasInitiative
+					}
+					until: endOfTurn
+				}
+			}
+		]
+		gametext: <b>Southron</b>. To play, spot a [raider] Man.<br>Each time the Free Peoples player assigns this minion to a character, the Shadow has initiative until the end of the turn.
+		lore: "...regiments from the South...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_164: {
+		cardInfo: {
+			image: decipher/LOTR07164.jpg
+			collInfo: 7R164
+			rarity: R
+		}
+		title: Southron Conqueror
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 3
+		site: 4
+		keywords: [
+			Southron
+			Archer
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotTwilight
+						amount: 6
+					}
+					filter: other,culture(raider),man
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotTwilight
+						amount: 9
+					}
+					filter: other,culture(raider),man
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you can spot 6 twilight tokens, other [raider] Men are <b>damage +1</b>.<br>While you can spot 9 twilight tokens, other [raider] Men are <b>damage +1</b>.
+		lore: "...company upon company of the enemy pressed to the walls."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_165: {
+		cardInfo: {
+			image: decipher/LOTR07165.jpg
+			collInfo: 7R165
+			rarity: R
+		}
+		title: Southron Intruder
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		keywords: [
+			Southron
+			Archer
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotTwilight
+						amount: 3
+					}
+					filter: culture(raider),man
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotTwilight
+						amount: 6
+					}
+					filter: culture(raider),man
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotTwilight
+						amount: 9
+					}
+					filter: culture(raider),man
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you can spot 3 twilight tokens, all [raider] Men are strength +1.<br>While you can spot 6 twilight tokens, all [raider] Men are strength +1.<br>While you can spot 9 twilight tokens, all [raider] Men are strength +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_166: {
+		cardInfo: {
+			image: decipher/LOTR07166.jpg
+			collInfo: 7R166
+			rarity: R
+		}
+		title: Southron Leader
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 3
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: activated
+				phase: archery
+				requires: {
+					type: canSpotFPCultures
+					amount: 4
+				}
+				cost: {
+					type: choice
+					texts: [
+						Exert this minion
+						Remove a threat
+					]
+					effects: [
+						{
+							type: exert
+							select: self
+						}
+						{
+							type: removeThreats
+						}
+					]
+				}
+				effect: {
+					type: wound
+					select: choose(companion,not(ringBearer))
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br><b>Archery:</b> Spot 4 Free Peoples cultures and either exert this minion or remove a threat to wound a companion (except the Ring-bearer).
+		lore: "...Haradrim, cruel and tall."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_167: {
+		cardInfo: {
+			image: decipher/LOTR07167.jpg
+			collInfo: 7R167
+			rarity: R
+		}
+		title: Southron Marksmen
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 3
+		site: 4
+		keywords: [
+			Southron
+			Archer
+			Fierce
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(raider),man
+				}
+			}
+			{
+				type: activated
+				phase: archery
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: removeThreats
+					}
+				]
+				effect: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Southron</b>. <b>Archer</b>. <b>Fierce</b>. To play, spot a [raider] Man.<br><b>Archery:</b> Exert this minion and remove a threat to make the minion archery total +1.
+		lore: "Southward beyond the road lay the main force of the Haradrim...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_168: {
+		cardInfo: {
+			image: decipher/LOTR07168.jpg
+			collInfo: 7U168
+			rarity: U
+		}
+		title: Southron Thief
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: activated
+				phase: archery
+				requires: [
+					{
+						type: canSpot
+						filter: culture(raider),man
+					}
+					{
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+				]
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: exert
+					select: choose(companion)
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br><b>Archery:</b> Spot another [raider] Man, spot 6 companions, and remove a threat to exert a companion.
+		lore: "...the red southland swords that would have hewed him as he lay."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_169: {
+		cardInfo: {
+			image: decipher/LOTR07169.jpg
+			collInfo: 7R169
+			rarity: R
+		}
+		title: Surging Up
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: exert
+						select: choose(easterling)
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: preventable
+					player: fp
+					text: Would you like to add 2 burdens to prevent reducing the move limit for this turn by 1?
+					cost: {
+						type: addBurdens
+						amount: 2
+					}
+					effect: {
+						type: addModifier
+						modifier: {
+							type: modifyMoveLimit
+							amount: -1
+						}
+						until: endOfTurn
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: heal
+					select: choose(easterling)
+				}
+			}
+		]
+		gametext: <b>Regroup:</b> Exert an Easterling and discard this condition to make the move limit -1 for this turn. The Free Peoples player may add 2 burdens to prevent this.<br><b>Skirmish:</b> Discard this condition to heal an Easterling.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_170: {
+		cardInfo: {
+			image: decipher/LOTR07170.jpg
+			collInfo: 7R170
+			rarity: R
+		}
+		title: Suzerain of Harad
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		keywords: [
+			Southron
+			Archer
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: [
+						{
+							type: haveInitiative
+							side: shadow
+						}
+						{
+							type: phase
+							phase: archery
+						}
+					]
+					filter: ringBearer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: self
+					keyword: ambush
+					amount: 8
+				}
+			}
+		]
+		gametext: <b>Southron</b>. <b>Archer</b>.<br>While you have initiative, the Ring-bearer cannot take wounds during the archery phase and this minion is <b>ambush</b> (8).
+		lore: "...there came flying a deadly dart...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_171: {
+		cardInfo: {
+			image: decipher/LOTR07171.jpg
+			collInfo: 7U171
+			rarity: U
+		}
+		title: Thrice Outnumbered
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			requires: {
+				type: canSpotThreats
+			}
+			cost: {
+				type: chooseHowManyToSpot
+				filter: culture(raider),man
+				text: How many {raider} Men would you like to spot?
+				memorize: spotCount
+			}
+			effect: [
+				{
+					type: exert
+					player: fp
+					select: choose(companion)
+					count: {
+						type: fromMemory
+						memory: spotCount
+						limit: 3
+					}
+				}
+			]
+		}
+		gametext: Spot a threat and X [raider] Men to make the Free Peoples player exert X companions (limit 3).
+		lore: "Southward beyond the road lay the main force of the Haradrim...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_172: {
+		cardInfo: {
+			image: decipher/LOTR07172.jpg
+			collInfo: 7C172
+			rarity: C
+		}
+		title: Troop of Haradrim
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 3
+		site: 4
+		keywords: Southron
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 2
+					}
+					filter: self
+					keyword: archer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 3
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 4
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Southron</b>.<br>While you can spot 2 threats, this minion is an <b>archer</b>.<br>While you can spot 3 threats, this minion is <b>fierce</b>.<br>While you can spot 4 threats, this minion is <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_173: {
+		cardInfo: {
+			image: decipher/LOTR07173.jpg
+			collInfo: 7C173
+			rarity: C
+		}
+		title: War Towers
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(raider),minion
+			},
+			effect: [
+				{
+					type: addThreats
+				}
+				{
+					type: addThreats
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+					}
+				}
+			]
+		}
+		gametext: Spot a [raider] minion to add a threat. Add an additional threat for each companion over 4.
+		lore: "...behind them rose the huge backs of the mûmakil...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

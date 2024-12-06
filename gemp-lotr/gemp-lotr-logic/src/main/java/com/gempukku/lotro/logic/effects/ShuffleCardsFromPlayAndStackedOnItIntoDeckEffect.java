@@ -14,9 +14,9 @@ import java.util.Set;
 public class ShuffleCardsFromPlayAndStackedOnItIntoDeckEffect extends AbstractEffect {
     private final PhysicalCard _source;
     private final String _playerDeck;
-    private final Collection<PhysicalCard> _cards;
+    private final Collection<? extends PhysicalCard> _cards;
 
-    public ShuffleCardsFromPlayAndStackedOnItIntoDeckEffect(PhysicalCard source, String playerDeck, Collection<PhysicalCard> cards) {
+    public ShuffleCardsFromPlayAndStackedOnItIntoDeckEffect(PhysicalCard source, String playerDeck, Collection<? extends PhysicalCard> cards) {
         _source = source;
         _playerDeck = playerDeck;
         _cards = cards;

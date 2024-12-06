@@ -22,7 +22,8 @@ public class FellowshipPlayerChoosesToMoveOrStayGameProcess implements GameProce
     public void process(final LotroGame game) {
         final GameState gameState = game.getGameState();
         final String currentPlayerId = gameState.getCurrentPlayerId();
-        if (gameState.getMoveCount() < RuleUtils.calculateMoveLimit(game)) {
+        if (!game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_MOVE)
+                && gameState.getMoveCount() < RuleUtils.calculateMoveLimit(game)) {
             if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.HAS_TO_MOVE_IF_POSSIBLE)) {
                 playerMoves(game);
             } else {

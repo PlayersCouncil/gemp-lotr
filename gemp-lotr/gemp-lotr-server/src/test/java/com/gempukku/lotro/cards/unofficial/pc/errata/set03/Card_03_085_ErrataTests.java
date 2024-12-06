@@ -36,10 +36,12 @@ public class Card_03_085_ErrataTests
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Wraith
-		 * Twilight Cost: 0
-		 * Type: Event
-		 * Subtype: Maneuver
-		 * Game Text: Spot a Nazgûl to wound Gandalf twice. The Free Peoples player may discard 2 [gandalf] cards from hand to prevent this. 
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: 
+		 * Game Text: To play, exert a [ringwraith] minion. Bearer must
+		* 	be a companion or ally.
+		* 	Each time bearer exerts, the Free Peoples player may discard a card from hand of bearer's culture.  If they do not, reveal their hand and discard 1 revealed Free Peoples card.
 		*/
 
 		var scn = GetScenario();
@@ -51,9 +53,8 @@ public class Card_03_085_ErrataTests
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
@@ -68,6 +69,6 @@ public class Card_03_085_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

@@ -1,0 +1,2794 @@
+{
+
+	7_262: {
+		cardInfo: {
+			image: decipher/LOTR07262.jpg
+			collInfo: 7C262
+			rarity: C
+		}
+		title: Above the Battlement
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			cost: {
+				type: choice
+				texts: [
+					Play a besieger stacked on a site you control
+					Remove a burden
+				]
+				effects: [
+					{
+						type: playCardFromStacked
+						select: choose(besieger)
+						on: controlledSite
+					}
+					{
+						type: removeBurdens
+					}
+				]
+			},
+			effect: [
+				{
+					type: playCardFromDiscard
+					select: choose(culture(sauron),orc)
+				}
+			]
+		}
+		gametext: Play a besieger stacked on a site you control or remove a burden to play a [sauron] Orc from your discard pile.
+		lore: "...they began to throw missiles marvellously high...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_263: {
+		cardInfo: {
+			image: decipher/LOTR07263.jpg
+			collInfo: 7C263
+			rarity: C
+		}
+		title: Anguish
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: removeThreats
+				amount: 3
+			},
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(character,inSkirmishAgainst(culture(moria),orc))
+					amount: -3
+				}
+			]
+		}
+		gametext: Remove 3 threats to make a character skirmishing a [sauron] Orc strength -3.
+		lore: "'...the Rammas is breached far and wide....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_264: {
+		cardInfo: {
+			image: decipher/LOTR07264.jpg
+			collInfo: 7U264
+			rarity: U
+		}
+		title: Army of Udûn
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 9
+		type: Minion
+		race: Orc
+		strength: 19
+		vitality: 5
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: discard
+					select: choose(culture(sauron),orc)
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: discard
+						select: self
+					}
+					{
+						type: discard
+						select: choose(other,culture(sauron),orc)
+						count: any
+						memorize: discardedOrcs
+					}
+					{
+						type: addThreats
+						amount: {
+							type: forEachInMemory
+							memory: discardedOrcs
+						}
+					}
+				]
+			}
+		]
+		gametext: <b>Shadow:</b> Discard a [sauron] Orc to add a threat.<br><b>Skirmish:</b> Remove a threat to make Army of Udûn strength +1.<br><b>Regroup:</b> Discard Army of Udûn and X other [sauron] Orcs to add X threats.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_265: {
+		cardInfo: {
+			image: decipher/LOTR07265.jpg
+			collInfo: 7C265
+			rarity: C
+		}
+		title: Besieging Pike
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(sauron),orc
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: self
+					amount: 3
+				}
+			}
+		]
+		gametext: Bearer must be a [sauron] Orc.<br>If you have initiative, bearer is strength +3.
+		lore: "...all day more force and gear of war had poured across."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_266: {
+		cardInfo: {
+			image: decipher/LOTR07266.jpg
+			collInfo: 7R266
+			rarity: R
+		}
+		title: Breached
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			cost: {
+				type: removeThreats
+				amount: 4
+			}
+			requires: {
+				type: canSpot
+				filter: culture(sauron),orc
+				count: 2
+			}
+			effect: [
+				{
+					type: kill
+					player: free people
+					select: choose(companion)
+				}
+			]
+		}
+		gametext: Remove 4 threats and spot 2 [sauron] Orcs to make the Free Peoples player spot a companion and place that companion in the dead pile.
+		lore: "'Yet now under the Lord of Barad-dûr the most fell of all his captains is already master of your outer walls....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_267: {
+		cardInfo: {
+			image: decipher/LOTR07267.jpg
+			collInfo: 7R267
+			rarity: R
+		}
+		title: Din of Arms
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			effect: [
+				{
+					type: discardTopCardsFromDeck
+					forced: true
+					deck: free people
+					memorize: discardedCard
+				}
+				{
+					type: If
+					check: {
+						type: memoryMatches
+						memory: discardedCard
+						filter: any
+					}
+					true: [
+						{
+							type: chooseHowManyToSpot
+							filter: besieger
+							memorize: spotCount
+						}
+						{
+							type: if
+							check: {
+								type: memoryMatches
+								memory: discardedCard
+								filter: minTwilight(memory(spotCount))
+							}
+							false: {
+								type: takeControlOfSite
+							}
+							true: {
+								type: modifyStrength
+								until: regroup
+								select: all(besieger)
+								amount: 3
+							}
+						}
+					]
+				}
+			]
+		}
+		gametext: Choose an opponent to discard the top card of his or her draw deck. If the twilight cost of that card is less than the number of besiegers you spot, take control of a site and all besiegers are strength +3 until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_268: {
+		cardInfo: {
+			image: decipher/LOTR07268.jpg
+			collInfo: 7R268
+			rarity: R
+		}
+		title: Encirclement
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: your,culture(sauron)
+					amount: {
+						type: ForEachSiteYouControl
+						divider: 2
+						multiplier: -1
+					}
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: spot
+					select: choose(culture(sauron),minion)
+					memorize: spottedMinion
+				}
+				effect: [
+					{
+						type: drawCards
+						count: {
+							type: Conditional
+							requires: {
+								type: memoryMatches
+								memory: spottedMinion
+								filter: besieger
+							}
+							true: 2
+							false: 1
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: For each 2 sites you control, the twilight cost of each of your [sauron] cards is -1.<br><b>Regroup:</b> Spot a [sauron] minion to draw a card (or draw 2 cards instead if that minion is a besieger). Discard this condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_269: {
+		cardInfo: {
+			image: decipher/LOTR07269.jpg
+			collInfo: 7R269
+			rarity: R
+		}
+		title: Fires Raged Unchecked
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					filter: culture(sauron),orc
+					amount: {
+						type: forEachThreat
+						multiplier: -1
+					}
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotThreats
+						amount: 3
+					}
+					filter: culture(sauron),orc
+					amount: 1
+				}
+			}
+		]
+		gametext: The site number of each [sauron] Orc is -1 for each threat.<br>While you can spot 3 threats, each [sauron] Orc that is not roaming is strength +1.
+		lore: "And so slowly they passed out of a dim day of fears into the darkness of a desperate night."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_270: {
+		cardInfo: {
+			image: decipher/LOTR07270.jpg
+			collInfo: 7U270
+			rarity: U
+		}
+		title: Gorgoroth Attacker
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: Besieger
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+					from: controlledSite
+					fromZone: stacked
+				}
+				effect: {
+					type: addBurdens
+					amount: {
+						type: ForEachSiteYouControl
+					}
+				}
+			}
+		]
+		gametext: <b>Besieger</b>.<br>When you play this minion from a site you control, add a burden for each site you control.
+		lore: "...the weakest point in all that high and impenetrable wall."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_271: {
+		cardInfo: {
+			image: decipher/LOTR07271.jpg
+			collInfo: 7U271
+			rarity: U
+		}
+		title: Gorgoroth Axeman
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: Besieger
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(sauron),minion)
+					amount: {
+						type: ForEachSiteYouControl
+						multiplier: {
+							type: Conditional
+							requires: {
+								type: haveInitiative
+								side: shadow
+							}
+							true: 2
+							false: 1
+						}
+					}
+				}
+			}
+		]
+		gametext: <b>Besieger</b>.<br><b>Skirmish:</b> Discard this minion to make a [sauron] minion strength +1 for each site you control (or +2 if you have initiative).
+		lore: "Down from the hills... poured Orcs innumerable."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_272: {
+		cardInfo: {
+			image: decipher/LOTR07272.jpg
+			collInfo: 7U272
+			rarity: U
+		}
+		title: Gorgoroth Engineer
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: Besieger
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+					from: controlledSite
+					fromZone: stacked
+				}
+				effect: {
+					type: addThreats
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Besieger</b>.<br>When you play this minion from a site you control, add 2 threats.
+		lore: "From behind the battle the River had been swiftly bridged...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_273: {
+		cardInfo: {
+			image: decipher/LOTR07273.jpg
+			collInfo: 7C273
+			rarity: C
+		}
+		title: Gorgoroth Garrison
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: Besieger
+		effects: [
+			{
+				type: activated
+				text: Stack a besieger
+				phase: regroup
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 1
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: choose(culture(sauron),orc,besieger)
+					where: choose(controlledSite)
+				}
+			}
+			{
+				type: activated
+				text: Stack a non-besieger
+				phase: regroup
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: choose(culture(sauron),orc,not(besieger))
+					where: choose(controlledSite)
+				}
+			}
+		]
+		gametext: <b>Besieger</b>.<br><b>Regroup:</b> Discard 2 cards from hand to stack a [sauron] Orc on a site you control (or discard 1 card from hand if that Orc is a besieger).
+		lore: "...their purpose was only to test the strength of the defence...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_274: {
+		cardInfo: {
+			image: decipher/LOTR07274.jpg
+			collInfo: 7R274
+			rarity: R
+		}
+		title: Gorgoroth Officer
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 12
+		vitality: 2
+		site: 5
+		keywords: Besieger
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: [
+					{
+						type: playCardFromStacked
+						select: choose(culture(sauron),orc)
+						on: controlledSite
+						memorize: playedOrc
+					}
+					{
+						type: modifyStrength
+						select: memory(playedOrc)
+						amount: 6
+						until: regroup
+					}
+					{
+						type: addKeyword
+						select: memory(playedOrc)
+						keyword: fierce
+						until: regroup
+					}
+				]
+			}
+		]
+		gametext: <b>Besieger</b>.<br><b>Skirmish:</b> Discard 2 cards from hand to play a [sauron] Orc stacked on a site you control. That Orc is <b>fierce</b> and strength +6 until the regroup phase.
+		lore: "The drums rolled louder. Fires leaped up."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_275: {
+		cardInfo: {
+			image: decipher/LOTR07275.jpg
+			collInfo: 7C275
+			rarity: C
+		}
+		title: Gorgoroth Pillager
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 10
+		vitality: 2
+		site: 5
+		keywords: Besieger
+		effects: [
+			{
+				type: stackedOnModifier
+				on: controlledSite
+				modifier: {
+					type: addKeyword
+					filter: besieger
+					keyword: fierce
+				}
+			}
+		]
+		gametext: <b>Besieger</b>.<br>While this minion is stacked on a site you control, besiegers are <b>fierce</b>.
+		lore: "Great engines crawled across the field...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_276: {
+		cardInfo: {
+			image: decipher/LOTR07276.jpg
+			collInfo: 7C276
+			rarity: C
+		}
+		title: Gorgoroth Ransacker
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 10
+		vitality: 2
+		site: 5
+		keywords: Besieger
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardStackedCards
+					select: self
+					on: controlledSite
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(sauron),orc)
+					amount: {
+						type: Conditional
+						requires: {
+							type: haveInitiative
+							side: shadow
+						}
+						true: 10
+						false: 5
+					}
+				}
+			}
+		]
+		gametext: <b>Besieger</b>.<br><b>Skirmish:</b> If this minion is stacked on a site you control, discard him to make a [sauron] Orc strength +5 (or +10 if you have initiative).
+		lore: "...company upon company of the enemy pressed to the walls."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_277: {
+		cardInfo: {
+			image: decipher/LOTR07277.jpg
+			collInfo: 7C277
+			rarity: C
+		}
+		title: Gorgoroth Sapper
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: Besieger
+		effects: [
+			{
+				type: activated
+				text: Play a besieger
+				phase: shadow
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 1
+				}
+				effect: {
+					type: playCardFromStacked
+					select: choose(culture(sauron),orc,besieger)
+					on: controlledSite
+				}
+			}
+			{
+				type: activated
+				text: Play a non-besieger
+				phase: shadow
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: playCardFromStacked
+					select: choose(culture(sauron),orc,not(besieger))
+					on: controlledSite
+				}
+			}
+		]
+		gametext: <b>Besieger</b>.<br><b>Shadow:</b> Discard 2 cards from hand to play a [sauron] Orc stacked on a site you control (discard 1 card from hand instead if that Orc is a besieger).
+		lore: "It was against the Gate that he would throw his heaviest weight."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_278: {
+		cardInfo: {
+			image: decipher/LOTR07278.jpg
+			collInfo: 7U278
+			rarity: U
+		}
+		title: Gorgoroth Soldier
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: Besieger
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: besieger
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: preventWound
+					select: choose(besieger)
+				}
+			}
+		]
+		gametext: <b>Besieger</b>.<br><b>Response:</b> If a besieger is about to take a wound, discard 2 cards from hand to prevent it.
+		lore: "Ever since the middle night the great assault had gone on."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_279: {
+		cardInfo: {
+			image: decipher/LOTR07279.jpg
+			collInfo: 7R279
+			rarity: R
+		}
+		title: Gorgoroth Troop
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 6
+		type: Minion
+		race: Orc
+		strength: 14
+		vitality: 4
+		site: 5
+		keywords: Besieger
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: StackCardsFromPlay
+					select: choose(besieger)
+					where: choose(controlledSite)
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Besieger</b>.<br><b>Skirmish:</b> Stack your besieger on a site you control to make Gorgoroth Troop strength +2.
+		lore: "'They are strong: battalions of Orcs of the Eye....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_280: {
+		cardInfo: {
+			image: decipher/LOTR07280.jpg
+			collInfo: 7U280
+			rarity: U
+		}
+		title: Great Peril of Fire
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: ControlsSite
+						}
+						{
+							type: canSpot
+							filter: besieger
+						}
+					]
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: discard
+					select: choose(engine)
+				}
+				effect: {
+					type: discard
+					select: choose(condition,side(free people),zone(support))
+				}
+			}
+		]
+		gametext: To play, spot a besieger or a site you control.<br><b>Maneuver:</b> Discard an engine to discard a condition from the Free Peoples support area.
+		lore: "...all who could be spared were busy quelling the flames that sprang up in many places."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_281: {
+		cardInfo: {
+			image: decipher/LOTR07281.jpg
+			collInfo: 7U281
+			rarity: U
+		}
+		title: Great Siege-towers
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: [
+			Engine
+			Support Area
+		]
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: PlayCardFromHand
+					select: choose(besieger)
+				}
+				effect: {
+					type: AddCultureTokens
+					select: self
+					culture: sauron
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					select: choose(condition)
+					culture: sauron
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(sauron),orc)
+					amount: 1
+					limitPerCardThisPhase: 2
+				}
+			}
+		]
+		gametext: <b>Engine</b>.<br><b>Shadow:</b> Play a besieger to place a [sauron] token here.<br><b>Skirmish:</b> Remove a [sauron] token from a condition to make a [sauron] Orc strength +1 (limit +2).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_282: {
+		cardInfo: {
+			image: decipher/LOTR07282.jpg
+			collInfo: 7U282
+			rarity: U
+		}
+		title: Host of Udûn
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 10
+		type: Minion
+		race: Orc
+		strength: 21
+		vitality: 5
+		site: 6
+		effects: [
+			{
+				type: discount
+				discount: {
+					type: perThreatRemoved
+				}
+			}
+		]
+		gametext: When you play Host of Udûn, you may remove X threats to make its twilight cost -X.
+		lore: "The great doors of the Black Gate swung back wide. Out of it streamed a great host as swiftly as swirling waters when a sluice is lifted."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_283: {
+		cardInfo: {
+			image: decipher/LOTR07283.jpg
+			collInfo: 7R283
+			rarity: R
+		}
+		title: Legions of Morgul
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc
+					count: 2
+				}
+			}
+			{
+				type: extraCost
+				skipValidate: true
+				cost: [
+					{
+						type: addThreats
+						amount: 0-3
+					}
+				]
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: aboutToBeKilled
+					filter: companion
+				}
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: addKeyword
+					select: all(minion)
+					keyword: fierce
+					until: regroup
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: [
+					{
+						type: discard
+						select: self
+					}
+					{
+						type: removeThreats
+						amount: 3
+					}
+				]
+			}
+		]
+		gametext: To play, spot 2 [sauron] Orcs and add up to 3 threats.<br>Each time a companion is about to be killed, you may remove a threat to make all minions <b>fierce</b> until the regroup phase.<br>Discard this condition and remove 3 threats at the start of the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_284: {
+		cardInfo: {
+			image: decipher/LOTR07284.jpg
+			collInfo: 7R284
+			rarity: R
+		}
+		title: Mordor Assassin
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: beforeThreatWounds
+					filter: companion
+					deathCause: overwhelm
+				}
+				requires: [
+					{
+						type: canSpot
+						filter: culture(sauron),orc,inSkirmish
+					}
+					// 4bc90765940487de4959dfcee32ad8c130427016
+					// "Mordor Assassin no longer crashes the game if the RB is overwhelmed"
+					{
+						type: canSpot
+						filter: ringBearer
+					}
+				]
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: assignFpCharacterToSkirmish
+					fpCharacter: choose(ringBearer)
+					minion: self
+					ignoreExistingAssignments: true
+				}
+			}
+		]
+		gametext: <b>Response:</b> If a companion is overwhelmed during a skirmish involving a [sauron] Orc and threat wounds are about to be placed, remove a threat to assign this minion to the Ring-bearer (even if the Ring-bearer is already assigned).
+		lore: "Drums rolled and fires leaped up."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_285: {
+		cardInfo: {
+			image: decipher/LOTR07285.jpg
+			collInfo: 7C285
+			rarity: C
+		}
+		title: Mordor Defender
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(sauron),minion
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Exert this minion and spot another [sauron] minion to add a threat.
+		lore: "...towards Mordor where the first bitter assault would come...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_286: {
+		cardInfo: {
+			image: decipher/LOTR07286.jpg
+			collInfo: 7R286
+			rarity: R
+		}
+		title: Mordor Fighter
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: shadowHasInitiative
+					requires: [
+						{
+							type: canSpotThreats
+						}
+						{
+							type: canSpot
+							filter: another,culture(sauron),orc
+						}
+					]
+				}
+			}
+		]
+		gametext: While you can spot a threat and another [sauron] Orc, the Shadow has initiative, regardless of the Free People player's hand.
+		lore: "The men of the West were trapped...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_287: {
+		cardInfo: {
+			image: decipher/LOTR07287.jpg
+			collInfo: 7C287
+			rarity: C
+		}
+		title: Mordor Guard
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(culture(sauron),orc)
+					count: 3
+				}
+				effect: {
+					type: addThreats
+					amount: 3
+				}
+			}
+			{
+				type: discardedFromPlayTrigger
+				optional: false
+				effect: {
+					type: removeThreats
+					amount: 3
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Exert 3 [sauron] Orcs to add 3 threats.<br>When this minion is discarded, remove 3 threats.
+		lore: "...from the host of Mordor there went up a jeering yell."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_288: {
+		cardInfo: {
+			image: decipher/LOTR07288.jpg
+			collInfo: 7C288
+			rarity: C
+		}
+		title: Mordor Regular
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(sauron),minion
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Exert this minion and spot another [sauron] minion to add a threat.
+		lore: "...but the sun now climbing towards the South was veiled in the reeks of Mordor...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_289: {
+		cardInfo: {
+			image: decipher/LOTR07289.jpg
+			collInfo: 7U289
+			rarity: U
+		}
+		title: Mordor Savage
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 10
+		vitality: 2
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(sauron),minion
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Exert this minion and spot another [sauron] minion to add a threat.
+		lore: "...he watched the enemy come charging to the assault."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_290: {
+		cardInfo: {
+			image: decipher/LOTR07290.jpg
+			collInfo: 7C290
+			rarity: C
+		}
+		title: Mordor Soldier
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Minion
+		race: Orc
+		strength: 3
+		vitality: 2
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 4
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Remove a threat to make this minion strength +4.
+		lore: "...or the end maybe of all the world of light."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_291: {
+		cardInfo: {
+			image: decipher/LOTR07291.jpg
+			collInfo: 7C291
+			rarity: C
+		}
+		title: Mordor Trooper
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 2
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeThreats
+					amount: 2
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(sauron),orc)
+					amount: 6
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Remove 2 threats to make a [sauron] Orc strength +6.
+		lore: "...and then all hope was quenched."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_292: {
+		cardInfo: {
+			image: decipher/LOTR07292.jpg
+			collInfo: 7U292
+			rarity: U
+		}
+		title: Mordor Veteran
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeThreats
+					amount: 3
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(sauron),minion)
+					amount: 8
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Remove 3 threats to make a [sauron] minion strength +8.
+		lore: "...the first assault crashed into them."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_293: {
+		cardInfo: {
+			image: decipher/LOTR07293.jpg
+			collInfo: 7U293
+			rarity: U
+		}
+		title: Mordor Warrior
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(companion,inSkirmishAgainst(self))
+					amount: -1
+					limitPerCardThisPhase: 3
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Discard a card from your hand to make a companion skirmishing this minion strength -1 for each other [sauron] Orc you spot (limit -3).
+		lore: "Sauron had taken the proffered bait in jaws of steel."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_294: {
+		cardInfo: {
+			image: decipher/LOTR07294.jpg
+			collInfo: 7U294
+			rarity: U
+		}
+		title: Orc Archer Troop
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 6
+		type: Minion
+		race: Orc
+		strength: 15
+		vitality: 4
+		site: 6
+		keywords: Archer
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					side: shadow
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+		]
+		gametext: <b>Archer</b>.<br>If you have initiative, the minion archery total is +1 and Orc Archer Troop is <b>fierce</b>.
+		lore: "The wind blew, and the trumpets sang, and arrows whined...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_295: {
+		cardInfo: {
+			image: decipher/LOTR07295.jpg
+			collInfo: 7U295
+			rarity: U
+		}
+		title: Orc Assault Band
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 10
+		vitality: 3
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: companion
+					count: 6
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(another,culture(sauron),orc)
+					amount: 6
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Spot 6 companions and exert this minion to make another [sauron] Orc strength +6.
+		lore: "The plain was dark with their marching companies...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_296: {
+		cardInfo: {
+			image: decipher/LOTR07296.jpg
+			collInfo: 7C296
+			rarity: C
+		}
+		title: Orc Brood
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 3
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 3
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Discard 3 cards from hand to make this minion strength +3.
+		lore: "...the vomit of the maggot-folk of Mordor."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_297: {
+		cardInfo: {
+			image: decipher/LOTR07297.jpg
+			collInfo: 7C297
+			rarity: C
+		}
+		title: Orc Butcher
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 2
+		site: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: culture(sauron),condition
+					}
+				}
+			}
+		]
+		gametext: For each [sauron] condition you can spot, this minion is strength +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_298: {
+		cardInfo: {
+			image: decipher/LOTR07298.jpg
+			collInfo: 7C298
+			rarity: C
+		}
+		title: Orc Chaser
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 2
+		site: 6
+		keywords: Tracker
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					filter: culture(sauron),orc
+					amount: -1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: self
+					amount: 6
+				}
+			}
+		]
+		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>While you have initiative, this minion is strength +6.
+		lore: "But still the Enemy made no sign."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_299: {
+		cardInfo: {
+			image: decipher/LOTR07299.jpg
+			collInfo: 7C299
+			rarity: C
+		}
+		title: Orc Destroyer
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc
+					count: 3
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> Remove (3) and spot 3 [sauron] Orcs to draw a card.
+		lore: "...all the hills and rocks about the Morannon were filled with hidden foes...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_300: {
+		cardInfo: {
+			image: decipher/LOTR07300.jpg
+			collInfo: 7C300
+			rarity: C
+		}
+		title: Orc Fanatic
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(another,culture(sauron),orc)
+					amount: 3
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Discard this minion to make another [sauron] Orc strength +3.
+		lore: "...far away he saw fires spring up...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_301: {
+		cardInfo: {
+			image: decipher/LOTR07301.jpg
+			collInfo: 7U301
+			rarity: U
+		}
+		title: Orc Marauder
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 11
+		vitality: 3
+		site: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: another,culture(sauron),orc
+						count: 3
+					}
+					filter: self
+					amount: 5
+				}
+			}
+		]
+		gametext: While you can spot 3 other [sauron] Orcs, this minion is strength +5.
+		lore: "...their bodies were cast aside... and others took their place."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_302: {
+		cardInfo: {
+			image: decipher/LOTR07302.jpg
+			collInfo: 7U302
+			rarity: U
+		}
+		title: Orc Officer
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: losesSkirmish
+					overwhelm: true
+					filter: companion
+					against: culture(sauron),orc
+				}
+				effect: {
+					type: addBurdens
+					amount: 3
+				}
+			}
+		]
+		gametext: Each time a companion is overwhelmed in a skirmish that involves a [sauron] Orc, add 3 burdens.
+		lore: "...and the shadowy defile beyond was bored and tunnelled by teeming broods of evil things."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_303: {
+		cardInfo: {
+			image: decipher/LOTR07303.jpg
+			collInfo: 7C303
+			rarity: C
+		}
+		title: Orc Pursuer(2)
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Minion
+		race: Orc
+		strength: 5
+		vitality: 2
+		site: 6
+		keywords: Tracker
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					filter: culture(sauron),orc
+					amount: -1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: self
+					amount: 5
+				}
+			}
+		]
+		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>While you have initiative, this minion is strength +5.
+		lore: "...and they knew that they were watched."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_304: {
+		cardInfo: {
+			image: decipher/LOTR07304.jpg
+			collInfo: 7C304
+			rarity: C
+		}
+		title: Orc Rager
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(another,culture(sauron),orc)
+					amount: 4
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Discard this minion to make another [sauron] Orc strength +4.
+		lore: "The drums rolled and rattled."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_305: {
+		cardInfo: {
+			image: decipher/LOTR07305.jpg
+			collInfo: 7U305
+			rarity: U
+		}
+		title: Orc Savage
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: [
+						{
+							type: canSpot
+							filter: companion
+							count: 6
+						}
+						{
+							type: canSpot
+							filter: another,culture(sauron),orc
+						}
+					]
+					filter: self
+					amount: 9
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: [
+						{
+							type: canSpot
+							filter: companion
+							count: 6
+						}
+						{
+							type: canSpot
+							filter: another,culture(sauron),orc
+						}
+					]
+					filter: self
+					keyword: fierce
+				}
+			}
+		]
+		gametext: While you can spot 6 companions and another [sauron] Orc, this minion is strength +9 and <b>fierce</b>.
+		lore: "North amid the noisome pits lay the first of the great heaps and hills of slag...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_306: {
+		cardInfo: {
+			image: decipher/LOTR07306.jpg
+			collInfo: 7R306
+			rarity: R
+		}
+		title: Orc Seeker
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 11
+		vitality: 3
+		site: 6
+		keywords: Tracker
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					filter: culture(sauron),orc
+					amount: -1
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: [
+					{
+						type: haveInitiative
+						side: shadow
+					}
+					{
+						type: canSpot
+						filter: another,culture(sauron),orc
+					}
+				]
+				effect: {
+					type: drawCards
+					count: 2
+				}
+			}
+		]
+		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>If you have initiative when you play this minion, you may spot another [sauron] Orc to draw 2 cards.
+		lore: "...even before they came to the gate Sauron sprang his trap."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_307: {
+		cardInfo: {
+			image: decipher/LOTR07307.jpg
+			collInfo: 7U307
+			rarity: U
+		}
+		title: Orc Stalker
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 6
+		keywords: Tracker
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					filter: culture(sauron),orc
+					amount: -1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: self
+					amount: 8
+				}
+			}
+		]
+		gametext: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>While you have initiative, this minion is strength +8.
+		lore: "...his soldiers blew their horns in a signal long arranged...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_308: {
+		cardInfo: {
+			image: decipher/LOTR07308.jpg
+			collInfo: 7R308
+			rarity: R
+		}
+		title: Rally the Host
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc
+					count: 2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: exert
+						select: choose(culture(sauron),orc)
+					}
+					{
+						type: removeThreats
+					}
+				]
+				effect: {
+					type: shuffleCardsFromPlayIntoDrawDeck
+					select: choose(culture(sauron),orc)
+				}
+			}
+		]
+		gametext: To play, spot 2 [sauron] Orcs.<br><b>Regroup:</b> Exert a [sauron] Orc and remove a threat to shuffle a [sauron] Orc from play into your draw deck.
+		lore: "And now the fighting waxed furious on the fields of the Pelennor...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_309: {
+		cardInfo: {
+			image: decipher/LOTR07309.jpg
+			collInfo: 7U309
+			rarity: U
+		}
+		title: Rope and Winch
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(sauron),orc
+				count: 2
+			}
+			effect: [
+				{
+					type: discardFromHand
+					forced: false
+					count: any
+					memorize: shadowDiscardedCards
+				}
+				{
+					type: discardFromHand
+					forced: false
+					hand: fp
+					player: fp
+					count: any
+					memorize: freeDiscardedCards
+				}
+				{
+					type: repeat
+					times: {
+						type: subtract
+						firstNumber: {
+							type: forEachInMemory
+							memory: shadowDiscardedCards
+						}
+						secondNumber: {
+							type: forEachInMemory
+							memory: freeDiscardedCards
+						}
+					}
+					effect: {
+						type: modifyStrength
+						select: choose(culture(sauron),orc)
+						amount: 2
+					}
+				}
+			]
+		}
+		gametext: To play, spot 2 [sauron] Orcs.<br>Discard any number of cards from hand. The Free Peoples player then discards any number of cards from hand. For each card you discarded more than the Free Peoples player, make a [sauron] Orc strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_310: {
+		cardInfo: {
+			image: decipher/LOTR07310.jpg
+			collInfo: 7U310
+			rarity: U
+		}
+		title: Sauron's Hatred
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: PlayCardFromHand
+					select: choose(culture(sauron),orc)
+					ignoreRoamingPenalty: true
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc
+				}
+				cost: {
+					type: removeTwilight
+					amount: 4
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+		]
+		gametext: To play, spot a [sauron] Orc.<br><b>Shadow:</b> Remove a threat to play a [sauron] Orc without paying any roaming penalty.<br><b>Regroup:</b> Spot a [sauron] Orc and remove (4) to add a threat.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_311: {
+		cardInfo: {
+			image: decipher/LOTR07311.jpg
+			collInfo: 7R311
+			rarity: R
+		}
+		title: Siege Commander
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 12
+		vitality: 3
+		site: 5
+		keywords: Besieger
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: addKeyword
+					select: choose(besieger)
+					keyword: fierce
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Besieger</b>.<br><b>Skirmish:</b> Discard 2 cards from hand to make a besieger <b>fierce</b> until the regroup phase.
+		lore: "'They have taken the wall!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_312: {
+		cardInfo: {
+			image: decipher/LOTR07312.jpg
+			collInfo: 7C312
+			rarity: C
+		}
+		title: Siegecraft
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: your,culture(sauron),orc
+			}
+			effect: [
+				{
+					type: addKeyword
+					select: all(your,culture(sauron),orc)
+					keyword: fierce
+					until: regroup
+				}
+			]
+		}
+		gametext: If your [sauron] Orc wins a skirmish, make all your [sauron] Orcs <b>fierce</b> until the regroup phase.
+		lore: "'They are blasting breaches in it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_313: {
+		cardInfo: {
+			image: decipher/LOTR07313.jpg
+			collInfo: 7C313
+			rarity: C
+		}
+		title: Some Secret Art of Flame
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: PlayCardFromHand
+					select: choose(culture(sauron),condition)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: sauron
+					select: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: shadowHasInitiative
+					requires: {
+						type: canSpotCultureTokens
+						culture: sauron
+						filter: self
+						amount: 3
+					}
+				}
+			}
+		]
+		gametext: To play, spot a [sauron] Orc.<br><b>Regroup:</b> Play a [sauron] condition to place a [sauron] token on this card.<br>While there are 3 tokens on this card, the Shadow has initiative, regardless of the Free Peoples player's hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_314: {
+		cardInfo: {
+			image: decipher/LOTR07314.jpg
+			collInfo: 7R314
+			rarity: R
+		}
+		title: Stronghold of Cirith Ungol
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: winsSkirmish
+					filter: your,culture(sauron),minion
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: sauron
+					select: self
+				}
+				limitPerPhase: 1
+				phase: regroup
+			}
+			{
+				type: activated
+				phase: regroup
+				effect: [
+					{
+						type: addTwilight
+						amount: {
+							type: ForEachCultureToken
+							culture: sauron
+							filter: self
+							multiplier: 2
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: <b>Response:</b> If your [sauron] minion wins a skirmish, place a [sauron] token here (limit 1 per site).<br><b>Regroup:</b> Add (2) for each token here. Discard this condition.
+		lore: "In the Land of Mordor where the Shadows lie."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_315: {
+		cardInfo: {
+			image: decipher/LOTR07315.jpg
+			collInfo: 7C315
+			rarity: C
+		}
+		title: Tower Walkway
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: [
+			Engine
+			Support Area
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: besieger
+					amount: {
+						type: ForEachSiteYouControl
+					}
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: choose(culture(sauron),orc)
+					count: 3
+				}
+				effect: [
+					{
+						type: takeControlOfSite
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: <b>Engine</b>. To play, spot a [sauron] Orc.<br>Each besieger is strength +1 for each site you control.<br><b>Regroup:</b> Discard 3 [sauron] Orcs to take control of a site. Discard this condition.
+		lore: "...the hidden Captain put forth his strength."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_316: {
+		cardInfo: {
+			image: decipher/LOTR07316.jpg
+			collInfo: 7R316
+			rarity: R
+		}
+		title: Troop Tower
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: [
+			Engine
+			Support Area
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: culture(sauron),orc
+					amount: {
+						type: forEachStacked
+						filter: besieger
+						on: site
+					}
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: choose(besieger)
+				}
+				effect: [
+					{
+						type: takeControlOfSite
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: <b>Engine</b>. To play, spot a [sauron] Orc.<br>All [sauron] Orcs are strength +1 for each besieger stacked on a site.<br><b>Regroup:</b> Discard a besieger to take control of a site. Discard this condition.
+		lore: "Slowly the great siege-towers built in Osgiliath rolled forward through the dark."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

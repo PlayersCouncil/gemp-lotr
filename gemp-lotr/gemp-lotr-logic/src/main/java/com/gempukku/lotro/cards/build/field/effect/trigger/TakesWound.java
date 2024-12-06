@@ -38,7 +38,7 @@ public class TakesWound implements TriggerCheckerProducer {
                 final boolean result = TriggerConditions.forEachWounded(actionContext.getGame(), actionContext.getEffectResult(), filterable);
                 if(result && !source.equals("any")) {
                     var sources = ((WoundResult) actionContext.getEffectResult()).getSources();
-                    if(sources.stream().noneMatch(x -> Filters.and(sourceFilterable).accepts(actionContext.getGame(), x))) {
+                    if (sources.stream().noneMatch(woundSource -> Filters.accepts(actionContext.getGame(), sourceFilterable, woundSource))) {
                         return false;
                     }
                 }

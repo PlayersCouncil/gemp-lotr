@@ -15,7 +15,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 9R+12
 	# 		rarity: R+
 	# 		setNum: "9"
@@ -47,7 +47,7 @@
 	# 			}
 	# 		},
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
 	# 			optional: true,
 	# 			trigger: {
 	# 				type: winsSkirmish
@@ -55,7 +55,7 @@
 	# 			},
 	# 			effect: {
 	# 				type: wound
-	# 				filter: choose(orc)
+	# 				select: choose(orc)
 	# 			}
 	# 		}
 	# 	]
@@ -74,17 +74,14 @@
 	
 	59_14: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN09E014.1_card.jpg
-			javaClass: false
+			//id: 9_14.1
 			parent: 9_14
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN09E014.1_card.jpg
 			collInfo: 9R+14
 			rarity: R+
-			setNum: "9"
-			cardNum: 14
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Galadriel
 		subtitle: Bearer of Wisdom
@@ -97,7 +94,7 @@
 		strength: 3
 		vitality: 3
 		resistance: 4
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: {
 			type: modifier
 			modifier: {
@@ -122,17 +119,14 @@
 
 	59_16: {
 		cardInfo: {
-			imagePath: errata/59_16.jpg
-			javaClass: false
+			//id: 9_16.1
 			parent: 9_16
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/59_16.jpg
 			collInfo: 9R+16
 			rarity: R+
-			setNum: "9"
-			cardNum: 16
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Glorfindel
 		subtitle: Revealed in Wrath
@@ -162,11 +156,11 @@
 							type: costToEffect
 							cost: {
 								type: exert
-								filter: self
+								select: self
 							}
 							effect: {
 								type: modifyStrength
-								filter: choose(nazgul,inSkirmishAgainst(self))
+								select: choose(nazgul,inSkirmishAgainst(self))
 								amount: {
 									type: twilightCostInMemory
 									memory: revealedCard

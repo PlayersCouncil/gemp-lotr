@@ -1,17 +1,11 @@
 {
 	65_148: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN15E148.1.jpg
-			javaClass: false
-			parent: 15_148
-			parentPath: errata/pc
-			version: 1
+			//id: 5_148.1
+			revision: 1
+			image: errata/LOTR-EN15E148.1.jpg
 			collInfo: 15R148
 			rarity: R
-			setNum: "15"
-			cardNum: 148
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Little Golden Flower
 		unique: true

@@ -1,0 +1,492 @@
+{
+
+	2_21: {
+		cardInfo: {
+			image: decipher/LOTR02021.jpg
+			collInfo: 2C21
+			rarity: C
+		}
+		title: Erland
+		subtitle: Advisor to Brand
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Ally
+		allyHome: 3F
+		race: Man
+		strength: 5
+		vitality: 2
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantLookOrRevealHand
+					player: shadowPlayer
+					hand: owner
+				}
+			}
+		]
+		gametext: To play, spot Gandalf.<br>Shadow players may not look at or reveal cards in your hand.
+		lore: "'They are good folk the Bardings. The grandson of Bard the Bowman rules them, Brand son of Bain son of Bard.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_22: {
+		cardInfo: {
+			image: decipher/LOTR02022.jpg
+			collInfo: 2R22
+			rarity: R
+		}
+		title: Gandalf's Staff
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Artifact
+		vitality: 1
+		itemclass: Staff
+		target: name(Gandalf)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: culture(gandalf),spell
+					amount: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(name(Gandalf))
+					times: 2
+				}
+				effect: {
+					type: cancelSkirmish
+					filter: name(Gandalf)
+				}
+			}
+		]
+		gametext: Bearer must be Gandalf.<br>The twilight cost of each [gandalf] spell is -1.<br><b>Skirmish:</b> Exert Gandalf twice to cancel a skirmish involving him.
+		lore: "As the wizard passed on ahead up the great steps, he held his staff aloft, and from its tip there came a faint radiance."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_23: {
+		cardInfo: {
+			image: decipher/LOTR02023.jpg
+			collInfo: 2C23
+			rarity: C
+		}
+		title: Gandalf's Wisdom
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyPlayOnCost
+				filter: or(possession,artifact)
+				on: or(name(Gandalf),and(character,signet(gandalf)))
+				amount: -1
+			}
+		}
+		gametext: Plays to your support area.<br>The twilight cost of each possession or artifact played on Gandalf or a character who has the Gandalf signet is -1.
+		lore: "Now as the companions sat or walked together they spoke of Gandalf, and all that each had known and seen of him came clear before their minds."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_24: {
+		cardInfo: {
+			image: decipher/LOTR02024.jpg
+			collInfo: 2C24
+			rarity: C
+		}
+		title: Hugin
+		subtitle: Emissary from Laketown
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Ally
+		allyHome: 3F
+		race: Man
+		strength: 4
+		vitality: 2
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: chooseCardsFromDiscard
+						select: choose(side(free people))
+						memorize: chosenCard
+						text: Choose card to reveal and put beneath your deck
+					}
+					{
+						type: revealCards
+						select: memory(chosenCard)
+					}
+					{
+						type: putCardsFromDiscardOnBottomOfDeck
+						select: memory(chosenCard)
+					}
+				]
+			}
+		]
+		gametext: To play, spot Gandalf.<br><b>Fellowship:</b> Exert Hugin to reveal a Free Peoples card from your discard pile and place it beneath your draw deck.
+		lore: "Several wise Bardings were sent to Elrond to tell of the Dark Lord's new offer."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_25: {
+		cardInfo: {
+			image: decipher/LOTR02025.jpg
+			collInfo: 2R25
+			rarity: R
+		}
+		title: Járnsmid
+		subtitle: Merchant from Dale
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Ally
+		allyHome: 3F
+		race: Man
+		strength: 4
+		vitality: 2
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					amount: -1
+					filter: your,or(shield,armor,helm,hand weapon)
+				}
+			}
+		]
+		gametext: To play, spot Gandalf.<br>Each time you play a shield, armor, helm, or hand weapon, its twilight cost is -1.
+		lore: "The Men of Dale freely traded with the Dwarves of the Lonely Mountain for fine metalwork."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_26: {
+		cardInfo: {
+			image: decipher/LOTR02026.jpg
+			collInfo: 2C26
+			rarity: C
+		}
+		title: Speak "Friend" and Enter
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			effect: [
+				{
+					type: playNextSite
+					memorize: playedSite
+				}
+				{
+					type: If
+					check: {
+						type: memoryMatches
+						memory: playedSite
+						filter: underground
+					}
+					true: {
+						type: drawCards
+					}
+				}
+			]
+		}
+		gametext: <b>Fellowship</b> <i>or</i> <b>Regroup:</b> Spot Gandalf to play the fellowship's next site (replacing opponent's site if necessary). Draw a card if you play an underground site.
+		lore: "Picking up his staff he stood before the rock and said in a clear voice: Mellon!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_27: {
+		cardInfo: {
+			image: decipher/LOTR02027.jpg
+			collInfo: 2R27
+			rarity: R
+		}
+		title: Staff Asunder
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		keywords: Spell
+		effects: {
+			type: event
+			cost: [
+				{
+					type: discard
+					select: choose(staff,attachedTo(name(Gandalf)))
+				}
+				{
+					type: exert
+					times: 2
+					select: choose(name(Gandalf))
+				}
+			]
+			effect: {
+				type: discard
+				select: choose(minion,inSkirmishAgainst(name(Gandalf)))
+			}
+		}
+		gametext: <b>Spell</b>.<br><b>Skirmish:</b> Discard a staff Gandalf is bearing and then exert him twice to discard a minion he is skirmishing.
+		lore: "At that moment Gandalf lifted his staff, and crying aloud he smote the bridge before him."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_28: {
+		cardInfo: {
+			image: decipher/LOTR02028.jpg
+			collInfo: 2U28
+			rarity: U
+		}
+		title: Wielder of the Flame
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		keywords: Spell
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			effect: {
+				type: preventable
+				text: Remove (3) to prevent giving companion Defender +1
+				player: shadowPlayer
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: addKeyword
+					until: start(regroup)
+					select: choose(companion)
+					keyword: defender+1
+				}
+			}
+		}
+		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Spot Gandalf to make a companion <b>defender +1</b> until the regroup phase. Any Shadow player may remove (3) to prevent this.
+		lore: "The Balrog made no answer. The fire in it seemed to die, but the darkness grew."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_29: {
+		cardInfo: {
+			image: decipher/LOTR02029.jpg
+			collInfo: 2C29
+			rarity: C
+		}
+		title: Wizard Staff
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		strength: 1
+		itemclass: Staff
+		target: wizard
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: exert
+				times: 2
+				select: bearer
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(minion)
+				amount: -3
+			}
+		}
+		gametext: Bearer must be a Wizard.<br><b>Skirmish:</b> Exert bearer twice to make a minion strength -3.
+		lore: "'We must have power – power to order things as we will for that Good which only the Wise can see.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_30: {
+		cardInfo: {
+			image: decipher/LOTR02030.jpg
+			collInfo: 2U30
+			rarity: U
+		}
+		title: You Cannot Pass!
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		keywords: Spell
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf),hasAttached(staff)
+			}
+			effect: {
+				type: removeKeyword
+				keyword: fierce
+				until: start(regroup)
+				select: choose(minion)
+			}
+		}
+		gametext: <b>Spell</b>.<br><b>Maneuver:</b> Spot Gandalf bearing a staff to prevent a minion from being <b>fierce</b> until the regroup phase.
+		lore: "The Balrog fell back and its sword flew up in molten fragments. The wizard swayed on the bridge, stepped back a pace, and then again stood still."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_122: {
+		cardInfo: {
+			image: decipher/LOTR02122.jpg
+			collInfo: 2P122
+			rarity: P
+		}
+		title: Gandalf
+		subtitle: The Grey Pilgrim
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 7
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: startOfTurn
+			}
+			optional: true
+			effect: {
+				type: drawCards
+			}
+		}
+		gametext: At the start of each of your turns, you may draw a card.
+		lore: "'When evening in the Shire was grey / his footsteps on the Hill were heard; / before the dawn he went away / on journey long without a word.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

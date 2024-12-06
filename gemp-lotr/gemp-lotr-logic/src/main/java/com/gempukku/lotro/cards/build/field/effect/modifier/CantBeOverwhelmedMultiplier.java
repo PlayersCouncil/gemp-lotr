@@ -24,7 +24,7 @@ public class CantBeOverwhelmedMultiplier implements ModifierSourceProducer {
                     public Modifier getModifier(ActionContext actionContext) {
                         final Filterable filterable = filterableSource.getFilterable(actionContext);
                         return new OverwhelmedByMultiplierModifier(actionContext.getSource(), filterable,
-                                new RequirementCondition(requirements, actionContext),
+                                RequirementCondition.createCondition(requirements, actionContext),
                                 multiplier);
                     }
         };

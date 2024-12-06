@@ -63,8 +63,7 @@ public class Card_V1_051_Tests
 		assertEquals(2, griffo.getBlueprint().getVitality());
 		//assertEquals(, griffo.getBlueprint().getResistance());
 		//assertEquals(Signet., griffo.getBlueprint().getSignet());
-		assertEquals(1, griffo.getBlueprint().getAllyHomeSiteNumbers()[0]); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertTrue(griffo.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 1)));
 	}
 
 	@Test

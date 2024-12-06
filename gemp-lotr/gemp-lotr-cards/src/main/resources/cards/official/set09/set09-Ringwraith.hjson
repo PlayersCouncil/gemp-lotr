@@ -1,0 +1,154 @@
+{
+
+	9_42: {
+		cardInfo: {
+			image: decipher/LOTR09042.jpg
+			collInfo: 9R42
+			rarity: R
+		}
+		title: Ring of Asperity
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Artifact
+		strength: 1
+		itemclass: Ring
+		target: nazgul
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: wound
+					select: choose(unwounded,companion)
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: reconciles
+				}
+				effect: {
+					type: returnToHand
+					select: bearer
+				}
+			}
+		]
+		gametext: Bearer must be a Nazgûl.<br>When you play this artifact, you may wound an unwounded companion.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
+		lore: "'The Nine, the Seven, and the Three... had each their proper gem.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_43: {
+		cardInfo: {
+			image: decipher/LOTR09043.jpg
+			collInfo: 9R+43
+			rarity: R+
+		}
+		title: Ring of Ire
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Artifact
+		strength: 1
+		itemclass: Ring
+		target: name(The Witch-king)
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: bearer
+					times: 2
+				}
+				effect: {
+					type: addKeyword
+					select: choose(culture(wraith),minion)
+					keyword: damage+1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: reconciles
+				}
+				effect: {
+					type: returnToHand
+					select: bearer
+				}
+			}
+		]
+		gametext: Bearer must be The Witch-king.<br><b>Skirmish:</b> Exert bearer twice to make a [wraith] minion <b>damage +1</b>.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
+		lore: "'Nine he gave to Mortal Men, proud and great, and so ensnared them.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_44: {
+		cardInfo: {
+			image: decipher/LOTR09044.jpg
+			collInfo: 9R44
+			rarity: R
+		}
+		title: Ring of Rancor
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Artifact
+		vitality: 1
+		itemclass: Ring
+		target: nazgul
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: removeBurdens
+				}
+				effect: {
+					type: heal
+					select: all(nazgul)
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: reconciles
+				}
+				effect: {
+					type: returnToHand
+					select: bearer
+				}
+			}
+		]
+		gametext: Bearer must be a Nazgûl.<br><b>Maneuver:</b> Remove a burden to heal each Nazgûl.<br><b>Response:</b> If a player reconciles, return bearer to his owner's hand.
+		lore: "'So it is now: the Nine he has gathered to himself....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

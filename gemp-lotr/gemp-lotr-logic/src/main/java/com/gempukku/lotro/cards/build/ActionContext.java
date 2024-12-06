@@ -12,6 +12,8 @@ public interface ActionContext {
 
     String getValueFromMemory(String memory);
 
+    String getValueFromMemory(String memory, String defaultValue);
+
     void setCardMemory(String memory, PhysicalCard card);
 
     void setCardMemory(String memory, Collection<? extends PhysicalCard> cards);

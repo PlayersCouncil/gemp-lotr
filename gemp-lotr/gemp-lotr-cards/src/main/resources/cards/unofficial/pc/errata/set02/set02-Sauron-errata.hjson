@@ -1,30 +1,27 @@
 {
 	52_91: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN02E091.1.jpg
-			javaClass: false
+			//id: 2_91.1
 			parent: 2_91
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN02E091.1.jpg
 			collInfo: 2C91
 			rarity: C
-			setNum: "2"
-			cardNum: 91
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		side: shadow
 		twilight: 0
 		culture: Sauron
 		title: Southern Spies
 		type: event
-		keyword: Response
-		requires: {
-			type: canSpot
-			filter: culture(sauron),minion
-		}
+		timeword: response
 		effects: {
 			type: responseEvent
+			requires: {
+				type: canSpot
+				filter: culture(sauron),minion
+			}
 			trigger: {
 				type: putsOnRing
 			}

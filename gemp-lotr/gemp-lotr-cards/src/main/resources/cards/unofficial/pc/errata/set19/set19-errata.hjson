@@ -1,17 +1,11 @@
 {
 	69_1: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN19E001.1.jpg
-			javaClass: false
-			parent: 19_1
-			parentPath: errata/pc
-			version: 1
+			//id: 9_1.1
+			revision: 1
+			image: errata/LOTR-EN19E001.1.jpg
 			collInfo: 19P1
 			rarity: P
-			setNum: "19"
-			cardNum: 1
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The One Ring
 		subtitle: The Great Ring
@@ -35,7 +29,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				requires: [
 					{
 						type: ringIsOn
@@ -51,7 +46,7 @@
 				effect: [
 					{
 						type: negateWound
-						filter: all(bearer)
+						select: all(bearer)
 					}
 					{
 						type: addBurdens
@@ -84,7 +79,7 @@
 				}
 				effect: {
 					type: modifyStrength
-					filter: bearer
+					select: bearer
 					amount: 3
 				}
 			}
@@ -102,17 +97,11 @@
 	
 	69_24: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN19E024.1.jpg
-			javaClass: false
-			parent: 19_24
-			parentPath: errata/pc
-			version: 1
+			//id: 9_24.1
+			revision: 1
+			image: errata/LOTR-EN19E024.1.jpg
 			collInfo: 19P24
 			rarity: P
-			setNum: "19"
-			cardNum: 24
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Brought Down From Inside
 		unique: true
@@ -123,7 +112,7 @@
 		target: culture(rohan),man
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -131,12 +120,14 @@
 				}
 				effect: {
 					type: transfer
-					filter: self
+					select: self
 					where: choose(another,culture(rohan),man)
+					checkTarget: true
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}
@@ -149,7 +140,7 @@
 				}
 				effect: {
 					type: returnToHand
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -166,17 +157,11 @@
 	
 	69_30: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN19E030.1.jpg
-			javaClass: false
-			parent: 19_30
-			parentPath: errata/pc
-			version: 1
+			//id: 9_30.1
+			revision: 1
+			image: errata/LOTR-EN19E030.1.jpg
 			collInfo: 19P30
 			rarity: P
-			setNum: "19"
-			cardNum: 30
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Pippin
 		subtitle: Steadfast Friend

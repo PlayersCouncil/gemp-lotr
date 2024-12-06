@@ -1,0 +1,1029 @@
+{
+	40_3: {
+		title: Balin's Lament
+		culture: dwarven
+		twilight: 2
+		type: Condition
+		keyword: [
+			support area
+			tale
+		]
+		gametext: [
+			\[uKeyword]Tale.[/uKeyword] When you play this condition, stack the top card of your draw deck here.
+			\[keyword]Response:[/keyword] If a Shadow card is about to discard any number of your {dwarven} conditions, discard this condition to prevent that.
+		]
+		lore: “Here lies Balin, son of Fundin, Lord of Moria.”
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: stackTopCardsOfDrawDeck
+					where: self
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToDiscard
+					source: side(shadow)
+					filter: your,culture(dwarven),condition
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: preventDiscard
+					select: choose(your,culture(dwarven),condition)
+				}
+			}
+		]
+	}
+	40_4: {
+		title: Balin's Revenge
+		culture: dwarven
+		twilight: 0
+		type: event
+		timeword: skirmish
+		gametext: [
+			Exert a Dwarf to wound up to 2 Goblins.
+		]
+		lore: “There is one Dwarf yet in Moria who still draws breath!”
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(dwarf)
+			}
+			effect: {
+				type: wound
+				count: 0-2
+				select: choose(goblin)
+			}
+		}
+	}
+	40_5: {
+		title: Battle Fever
+		culture: dwarven
+		twilight: 2
+		type: event
+		timeword: skirmish
+		gametext: [
+			If Gimli is not assigned to skirmish, exert him and discard 2 cards stacked on a {dwarven} condition to have him replace another Dwarf in skirmish. Gimli is strength +2 and \[keyword]damage +1[/keyword] while in that skirmish.
+		]
+		lore: Gimli's despair over Balin's death was quickly replaced by fury.
+		effects: {
+			type: event
+			cost: [
+				{
+					type: exert
+					select: choose(name(Gimli),notAssignedToSkirmish)
+					memorize: exertedGimli
+				}
+				{
+					type: discardStackedCards
+					count: 2
+					on: culture(dwarven),condition
+				}
+			]
+			effect: [
+				{
+					type: replaceInSkirmish
+					filter: dwarf,not(name(Gimli))
+					with: memory(exertedGimli)
+				}
+				{
+					type: modifyStrength
+					select: memory(exertedGimli)
+					amount: 2
+				}
+				{
+					type: addKeyword
+					select: memory(exertedGimli)
+					keyword: damage+1
+				}
+			]
+		}
+	}
+	40_6: {
+		title: Battle Tested
+		culture: dwarven
+		twilight: 0
+		type: event
+		timeword: skirmish
+		gametext: [
+			Stack the top 3 cards of your draw deck on a {dwarven} support area condition to make a Dwarf take no more than one wound in a skirmish.
+		]
+		lore: The Dwarves of the Mountain Races cut their teeth in battle at an early age.
+		effects: {
+			type: event
+			cost: {
+				type: stackTopCardsOfDrawDeck
+				deck: owner
+				where: choose(culture(dwarven),support area,condition)
+				count: 3
+			}
+			effect: {
+				type: DisableWoundsOver
+				select: choose(dwarf)
+				wounds: 1
+			}
+		}
+	}
+	40_7: {
+		title: Brothers in Arms
+		culture: dwarven
+		twilight: 0
+		type: event
+		timeword: skirmish
+		gametext: [
+			To play, exert 2 Dwarves and discard 2 cards stacked on a {dwarven} condition.
+			Each exerted Dwarf is strength +2 until the regroup phase.
+		]
+		lore: Dwarves are renowned for their fierce loyalty to one another.
+		effects: {
+			type: event
+			cost: [
+				{
+					type: exert
+					count: 2
+					select: choose(dwarf)
+					memorize: exertedDwarves
+				}
+				{
+					type: discardStackedCards
+					on: culture(dwarven),condition
+					count: 2
+				}
+			]
+			effect: {
+				type: modifyStrength
+				select: memory(exertedDwarves)
+				amount: 2
+				until: start(regroup)
+			}
+		}
+	}
+	40_8: {
+		title: Crushing Blow
+		culture: dwarven
+		twilight: 0
+		type: event
+		timeword: skirmish
+		gametext: [
+			Make a Dwarf strength +2 (or +3 if there is a card stacked on a {dwarven} condition.)
+		]
+		lore: Gimli's axe struck true in the skulls of many Orcs and Uruk-hai.
+		effects: {
+			type: event
+			effect: {
+				type: modifyStrength
+				select: choose(dwarf)
+				amount: {
+					type: Conditional
+					requires: {
+						type: canSpot
+						filter: culture(dwarven),condition,hasStacked(any)
+					}
+					true: 3
+					false: 2
+				}
+			}
+		}
+	}
+	40_9: {
+		title: Dwarf Soldier
+		culture: dwarven
+		twilight: 2
+		type: companion
+		race: dwarf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		keyword: damage+1
+		gametext: [
+			\[keyword]Damage +1.[/keyword]
+			\[keyword]Skirmish:[/keyword] Discard a card stacked on a {dwarven} condition to make this companion strength +1.
+		]
+		lore: The mountain-folk are known throughout Middle-earth as fierce warriors.
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: discardStackedCards
+				count: 1
+				on: culture(dwarven),condition
+			}
+			effect: {
+				type: modifyStrength
+				select: self
+				amount: 1
+			}
+		}
+	}
+	40_10: {
+		title: Dwarven Battle Axe
+		culture: dwarven
+		type: possession
+		itemclass: hand weapon
+		twilight: 1
+		strength: 1
+		vitality: 1
+		target: dwarf
+		gametext: [
+			Bearer must be a Dwarf.
+			Each time bearer wins a skirmish, you may discard a card stacked on a {dwarven} condition to wound a minion.
+		]
+		lore: An axe is not just a weapon, it is part of each Dwarf.
+		effects: {
+			type: trigger
+			trigger: {
+				type: winsSkirmish
+				filter: bearer
+			}
+			cost: {
+				type: discardStackedCards
+				on: culture(dwarven),condition
+				count: 1
+			}
+			effect: {
+				type: wound
+				select: choose(minion)
+			}
+		}
+	}
+	40_11: {
+		title: Dwarven Bracers
+		culture: dwarven
+		twilight: 1
+		type: possession
+		itemclass: bracers
+		strength: 1
+		target: dwarf
+		gametext: [
+			Bearer must be a Dwarf.
+			\[keyword]Response:[/keyword] If bearer is about to take a wound, discard this possession to prevent that wound.
+		]
+		lore: Dwarven-smiths forge bracers for fit and agility.
+		effects: {
+			type: Response
+			trigger: {
+				type: aboutToTakeWound
+				filter: bearer
+			}
+			cost: [
+				{
+					type: memorize
+					filter: bearer
+					memory: bearer
+				}
+				{
+					type: discard
+					select: self
+				}
+			]
+			effect: {
+				type: preventWound
+				select: memory(bearer)
+			}
+		}
+	}
+	40_12: {
+		title: Dwarven Frenzy
+		culture: dwarven
+		twilight: 1
+		type: event
+		timeword: maneuver
+		gametext: Exert X Dwarves twice to take X {dwarven} cards stacked on {dwarven} condition into hand (and draw X cards if the fellowship is at a mountain or underground site.)
+		lore: Rage often grips Dwarves in the heat of battle.
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				count: any
+				times: 2
+				select: choose(dwarf)
+				memorize: exertedDwarves
+			}
+			effect: [
+				{
+					type: putStackedCardsIntoHand
+					count: {
+						type: forEachInMemory
+						memory: exertedDwarves
+					}
+					select: choose(culture(dwarven))
+					on: culture(dwarven),condition
+				}
+				{
+					type: If
+					check: {
+						type: location
+						filter: or(mountain,underground)
+					}
+					true: {
+						type: drawCards
+						count: {
+							type: forEachInMemory
+							memory: exertedDwarves
+						}
+					}
+				}
+			]
+		}
+	}
+	40_13: {
+		title: Dwarven Ire
+		unique: true
+		culture: dwarven
+		twilight: 2
+		type: condition
+		keyword: support area
+		gametext: Each Dwarf is \[keyword]damage +1[/keyword] for each card stacked on this condition (limit +2).
+		lore: When a Dwarf hits boiling point, his foes are the ones who suffer.
+		effects: {
+			type: modifier
+			modifier: {
+				type: addKeyword
+				filter: dwarf
+				keyword: damage
+				amount: {
+                    type: forEachStacked
+                    on: self
+                    limit: 2
+				}
+			}
+		}
+	}
+	40_14: {
+		title: Dwarven Vigor
+		unique: true
+		culture: dwarven
+		twilight: 1
+		type: condition
+		keyword: support area
+		gametext: While a {dwarven} card is stacked on this condition, each Dwarf is strength +1 for each point of vitality over 3 he has.
+		lore: When a Dwarf hits boiling point, his foes are the ones who suffer.
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				requires: {
+					type: canSpot
+					filter: self,hasStacked(culture(dwarven))
+				}
+				filter: dwarf
+				amount: {
+					type: forEachVitality
+					over: 3
+				}
+			}
+		}
+	}
+	40_15: {
+		title: Endurance of Dwarves
+		culture: dwarven
+		twilight: 1
+		type: condition
+		vitality: 1
+		target: dwarf
+		gametext: [
+			Bearer must be a Dwarf.
+			\[keyword]Skirmish:[/keyword] Discard this condition to make bearer strength +1.
+		]
+		lore: “Dwarves too can go swiftly, and they do not tire sooner than Orcs.”
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: [
+				{
+					type: memorize
+					filter: bearer
+					memory: bearer
+				}
+				{
+					type: discard
+					select: self
+				}
+			]
+			effect: {
+				type: modifyStrength
+				select: memory(bearer)
+				amount: 1
+			}
+		}
+	}
+	40_16: {
+		title: Festive Folk
+		culture: dwarven
+		twilight: 1
+		type: event
+		timeword: fellowship
+		gametext: Exert a Dwarf and discard a card stacked on a {dwarven} condition to remove a burden.
+		lore: Many songs were sung in the grand halls of the Dwarves.
+		effects: {
+			type: event
+			cost: [
+				{
+					type: exert
+					select: choose(dwarf)
+				}
+				{
+					type: discardStackedCards
+					count: 1
+					on: culture(dwarven),condition
+				}
+			]
+			effect: {
+				type: removeBurdens
+				amount: 1
+			}
+		}
+	}
+	40_17: {
+		title: Gimli
+		subtitle: Dwarven Emissary
+		unique: true
+		culture: dwarven
+		twilight: 3
+		type: companion
+		race: dwarf
+		strength: 6
+		vitality: 4
+		resistance: 7
+		keyword: damage+1
+		gametext: [
+			\[keyword]Damage +1.[/keyword]
+			While in your starting fellowship, Gimli's twilight cost is -1.
+			At the beginning of the fellowship phase, you may stack a Free Peoples card from hand on a {dwarven} support area condition to take a {dwarven} event from your discard pile into hand.
+		]
+		lore: What are we waiting for?!
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: phase
+					phase: play starting fellowship
+				}
+				amount: -1
+			}
+			{
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				optional: true
+				cost: {
+					type: stackCardsFromHand
+					where: choose(culture(dwarven),support area,condition)
+					select: choose(side(free people))
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(dwarven),event)
+				}
+			}
+		]
+	}
+	40_18: {
+		title: Gimli
+		subtitle: Stalwart Protector
+		unique: true
+		culture: dwarven
+		twilight: 3
+		type: companion
+		race: dwarf
+		strength: 6
+		vitality: 4
+		resistance: 7
+		keyword: damage+1
+		gametext: [
+			\[keyword]Damage +1.[/keyword]
+			While in your starting fellowship, Gimli's twilight cost is -1.
+			While at a mountain or underground site, Gimli is strength +2 and takes no more than one wound in a skirmish.
+		]
+		lore: “Faithless is he that says farewell when the road darkens.”
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: phase
+					phase: play starting fellowship
+				}
+				amount: -1
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: or(mountain,underground)
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: canttakemorewoundsthan
+					requires: {
+						type: location
+						filter: or(mountain,underground)
+					}
+					phase: skirmish
+					filter: self
+					amount: 1
+				}
+			}
+		]
+	}
+	40_19: {
+		title: Gimli's Battle Axe
+		subtitle: Weapon of Erebor
+		unique: true
+		culture: dwarven
+		twilight: 2
+		type: possession
+		itemclass: hand weapon
+		strength: 2
+		target: dwarf
+		gametext: [
+			Bearer must be a Dwarf.
+			If bearer is Gimli, he is \[keyword]damage +1[/keyword].
+			Each time bearer wins a skirmish, you may stack a {dwarven} event from your discard pile on a {dwarven} support area condition.
+		]
+		lore: Gimli masterfully wielded his axe in combat.
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,name(Gimli)
+					keyword: damage+1
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: stackCardsFromDiscard
+					where: choose(culture(dwarven),support area,condition)
+					select: choose(culture(dwarven),event)
+				}
+			}
+		]
+	}
+	40_20: {
+		title: Glóin
+		subtitle: Venerable Dwarf
+		unique: true
+		culture: dwarven
+		twilight: 3
+		type: companion
+		race: dwarf
+		strength: 5
+		vitality: 4
+		resistance: 6
+		keyword: damage+1
+		gametext: [
+			\[keyword]Damage +1[/keyword]
+			While you can spot Gimli, Glóin is strength +1 and his twilight cost is -1.
+			\[keyword]Skirmish:[/keyword] Exert Glóin to make another Dwarf strength +1 (and \[keyword]damage +1[/keyword] if at an underground site).
+		]
+		lore: In Rivendell, Glóin told Frodo the tale of the Lonely Mountain.
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					requires: {
+						type: canSpot
+						filter: name(Gimli)
+					}
+					filter: self
+					type: modifyStrength
+					amount: 1
+				}
+			}
+			{
+				requires: {
+					type: canSpot
+					filter: name(Gimli)
+				}
+				type: modifyOwnCost
+				amount: -1
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(dwarf)
+						amount: 1
+						memorize: chosenDwarf
+					}
+					{
+						type: If
+						check: {
+							type: location
+							filter: underground
+						}
+						true: {
+							type: addKeyword
+							select: memory(chosenDwarf)
+							keyword: damage+1
+						}
+					}
+				]
+			}
+		]
+	}
+	40_21: {
+		title: Killing Blow
+		culture: dwarven
+		twilight: 2
+		type: event
+		timeword: skirmish
+		gametext: Make a Dwarf strength +2 (and \[keyword]damage +1[/keyword] if you can spot a card stacked on a {dwarven} condition.)
+		lore: Gimli slew many Orcs and other fell creatures during his battles.
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					amount: 2
+					select: choose(dwarf)
+					memorize: dwarf
+				}
+				{
+					type: If
+					check: {
+						type: canSpot
+						filter: culture(dwarven),condition,hasStacked(any)
+					}
+					true: {
+						type: addKeyword
+						select: memory(dwarf)
+						keyword: damage+1
+					}
+				}
+			]
+		}
+	}
+	40_22: {
+		title: Lethal Strike
+		culture: dwarven
+		twilight: 1
+		type: event
+		timeword: skirmish
+		gametext: Exert a Dwarf to make him strength +3 and \[keyword]damage +1[/keyword].
+		lore: Dwarves strike with brute force, crushing their foes beneath the weight of heavy axes.
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(dwarf)
+				memorize: dwarf
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: memory(dwarf)
+					amount: 3
+				}
+				{
+					type: addKeyword
+					select: memory(dwarf)
+					keyword: damage+1
+				}
+			]
+		}
+	}
+	40_23: {
+		title: Memories of Khazad-dum
+		culture: dwarven
+		twilight: 2
+		type: condition
+		keyword: support area
+		gametext: [
+			When you play this condition, stack the top card of your draw deck here.
+			\[keyword]Skirmish:[/keyword] Discard a Free People card stacked here to make a Dwarf strength +1.
+		]
+		lore: Despite warnings, Balin was determined to retake Moria... but he ultimately failed.
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: stackTopCardsOfDrawDeck
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardStackedCards
+					on: self
+					select: choose(side(free people))
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(dwarf)
+					amount: 1
+				}
+			}
+		]
+	}
+	40_24: {
+		title: Miners of Mithril
+		culture: dwarven
+		twilight: 0
+		type: event
+		timeword: fellowship
+    gametext: Stack a Free Peoples card from hand on a {dwarven} support are condition to draw a card.
+    lore: “The wealth of Moria was not in gold, or jewels, but in mithril.”
+    effects: {
+      type: event
+      cost: {
+        type: stackCardsFromHand
+        where: choose(culture(dwarven),support area,condition)
+        select: choose(side(free people))
+      }
+      effect: {
+        type: drawCards
+      }
+    }
+  }
+  40_25: {
+    title: Resourcefulness
+    culture: dwarven
+    twilight: 2
+    type: event
+    timeword: maneuver
+    gametext: Until the start of the regroup phase, each time you play a {dwarven} event, stack that event on a {dwarven} support area condition.
+    lore: “Stay close young Hobbits!”
+    effects: {
+      type: event
+      effect: {
+        type: addTrigger
+        until: start(regroup)
+        trigger: {
+          type: played
+          filter: culture(dwarven),timeword(skirmish),event
+        }
+        effect: {
+          type: stackPlayedEvent
+          where: choose(culture(dwarven),support area,condition)
+        }
+      }
+    }
+  }
+  40_26: {
+    title: Retribution
+    culture: dwarven
+    twilight: 0
+    type: event
+    timeword: skirmish
+    gametext: [
+      Make a Dwarf strength +1.
+      If that Dwarf wins a skirmish, the Shadow player must discard a Shadow condition or Shadow possession.
+    ]
+    lore: Gimli was eager to avenge his people against the denizens of Moria.
+    effects: {
+      type: event
+      effect: [
+        {
+          type: modifyStrength
+          select: choose(dwarf)
+          amount: 1
+          memorize: chosenDwarf
+        }
+        {
+          type: addTrigger
+          trigger: {
+            type: winsSkirmish
+            filter: memory(chosenDwarf)
+          }
+          effect: {
+            type: discard
+            player: shadowPlayer
+            select: choose(side(shadow),or(condition,possession))
+          }
+        }
+      ]
+    }
+  }
+  40_27: {
+    title: Second Wind
+		unique: true
+    culture: dwarven
+    twilight: 2
+    type: condition
+    keyword: support area
+    gametext: At the beginning of the maneuver phase, you may discard a card stacked on this condition to heal a Dwarf companion.
+    lore: “Three days and nights pursuit...”
+    effects: {
+      type: trigger
+      trigger: {
+        type: startOfPhase
+        phase: maneuver
+      }
+      optional: true
+      cost: {
+        type: discardStackedCards
+        on: self
+      }
+      effect: {
+        type: heal
+        select: choose(dwarf,companion)
+      }
+    }
+  }
+  40_28: {
+    title: Seven for the Dwarf-lords
+		unique: true
+    culture: dwarven
+    twilight: 0
+    type: artifact
+    keyword: support area
+    gametext: [
+      \[keyword]Fellowship:[/keyword] Stack a {dwarven} card from hand here.
+      \[keyword]Skirmish:[/keyword] Discard 2 cards stacked here to play a {dwarven} skirmish event from your discard pile.
+      \[keyword]Regroup:[/keyword] Discard 3 cards stacked here and exert a Dwarf who is damage +X to draw X cards (limit once per phase).
+    ]
+    lore: “Seven for the Dwarf-lords in their halls of stone...”
+    effects: [
+      {
+        type: activated
+        phase: fellowship
+        effect: {
+          type: stackCardsFromHand
+          where: self
+          select: choose(culture(dwarven))
+        }
+      }
+      {
+        type: activated
+        phase: skirmish
+        cost: {
+          type: discardStackedCards
+          on: self
+          count: 2
+        }
+        effect: {
+          type: playCardFromDiscard
+          select: choose(culture(dwarven),timeword(skirmish),event)
+        }
+      }
+      {
+        type: activated
+        phase: regroup
+        limitPerPhase: 1
+        cost: [
+          {
+            type: discardStackedCards
+            on: self
+            count: 3
+          }
+          {
+            type: exert
+            select: choose(dwarf)
+            times: 2
+            memorize: exertedDwarf
+          }
+        ]
+        effect: {
+          type: drawCards
+          count: {
+            type: forEachKeywordOnCardInMemory
+            memory: exertedDwarf
+            keyword: damage
+          }
+        }
+      }
+    ]
+  }
+  40_29: {
+    title: Staunch Defenders
+		unique: true
+    culture: dwarven
+    twilight: 2
+    type: condition
+    keyword: support area
+    gametext: While you can spot 3 cards stacked on this condition, Dwarves may not be exerted by Shadow cards.
+    lore: The Dwarven craftsmen were adept at building easily defensible structures.
+    effects: {
+      type: modifier
+      modifier: {
+        type: cantBeExerted
+        requires: {
+          type: canSpot
+          filter: self,hasStackedCount(3,any)
+        }
+        filter: dwarf
+        by: side(shadow)
+      }
+    }
+  }
+  40_30: {
+    title: Take Cover!
+    culture: dwarven
+    twilight: 2
+    type: event
+    timeword: archery
+    gametext: Discard a {dwarven} condition to make the minion archery total -X, where X is the number of cards that were stacked on that condition.
+    lore: Arrows are of little avail against the stone structures of the Dwarves.
+    effects: {
+      type: event
+      cost: {
+        type: discard
+        select: choose(culture(dwarven),condition)
+        memorizeStackedCards: stackedCards
+      }
+      effect: {
+        type: modifyArcheryTotal
+        side: shadow
+        amount: {
+            type: forEachInMemory
+            memory: stackedCards
+            multiplier: -1
+        }
+      }
+    }
+  }
+  40_31: {
+    title: Thorin III
+    subtitle: Lord of the Longbeards
+		unique: true
+    culture: dwarven
+    twilight: 2
+    type: companion
+    race: dwarf
+    strength: 6
+    vitality: 3
+    resistance: 6
+    keyword: damage+1
+    gametext: [
+      \[keyword]Damage +1.[/keyword]
+      While there are 3 {dwarven} cards stacked on {dwarven} conditions, Thorin is strength +2.
+    ]
+    lore: The son of Dáin Ironfoot defended Erebor from an Easterling siege during the War of the Ring.
+    effects: {
+      type: modifier
+      modifier: {
+        type: modifyStrength
+        filter: self
+        amount: 2
+        requires: {
+          type: canSpot
+          filter: culture(dwarven),condition,hasStackedCount(3,culture(dwarven))
+        }
+      }
+    }
+  }
+  40_32: {
+    title: Well Prepared
+		unique: true
+    culture: dwarven
+    twilight: 1
+    type: condition
+    keyword: support area
+    gametext: While there are 3 cards stacked on this condition, each time a Shadow event is played the Shadow player must exert a minion.
+    lore: Durin's folk were known for their meticulous preparation for battle.
+    effects: {
+      type: trigger
+      trigger: {
+        type: played
+        filter: side(shadow),event
+      }
+      requires: {
+        type: canSpot
+        filter: self,hasStackedCount(3,any)
+      }
+      effect: {
+        type: exert
+        player: shadowPlayer
+        select: choose(minion)
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@ import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
+import com.gempukku.lotro.logic.timing.results.SiteLiberatedResult;
 
 import java.util.HashSet;
 import java.util.List;
@@ -85,6 +86,7 @@ public class LiberateASiteEffect extends AbstractEffect {
 
                 game.getGameState().sendMessage(_liberatingPlayer + " liberated a " + GameUtils.getCardLink(siteToLiberate) + " using " + GameUtils.getCardLink(_source));
 
+                game.getActionsEnvironment().emitEffectResult(new SiteLiberatedResult(_liberatingPlayer));
                 liberatedSiteCallback(siteToLiberate);
 
                 return new FullEffectResult(true);

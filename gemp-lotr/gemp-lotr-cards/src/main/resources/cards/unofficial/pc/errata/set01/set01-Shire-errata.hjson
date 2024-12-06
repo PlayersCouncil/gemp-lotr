@@ -1,5 +1,116 @@
 {
-
+	
+	51_303: {
+		cardInfo: {
+			//id: 1_303.1
+			parent: 1_303
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E303.1_card.jpg
+			collInfo: 1C303
+			rarity: C
+		}
+		title: Merry
+		subtitle: From O'er the Brandywine
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,hasAttached(weapon)
+					amount: 2
+				}
+			}
+			{
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					type: ModifyStrength
+					select: self
+					amount: {
+						type: ForEachYouCanSpot
+						filter: hand weapon
+					}
+					limitPerCardThisPhase: 3
+				}
+			}
+		]
+		gametext: While Merry bears a weapon, he is strength +2.<br>Skirmish: Exert Merry to make him strength +1 for each hand weapon you can spot (limit +3).
+		lore: "'I don't know why he's so upset, it's only a few carrots... my point is, he's overreacting.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+		51_310: {
+		cardInfo: {
+			//id: 1_310.1
+			parent: 1_310
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E310.1_card.jpg
+			collInfo: 1R310
+			rarity: R
+		}
+		title: Sam
+		subtitle: Faithful Companion
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Frodo
+		resistance: 5
+		effects: {
+			type: activated
+			limitPerTurn: 1
+			phase: fellowship
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: PutCardsFromDeckIntoHand
+				select: choose(culture(shire),item)
+				reveal: true
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert Sam to take a [shire] item into hand from your draw deck (limit once per turn).<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
+		lore: Mr. Frodo's not going anywhere without me!'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	# 51_311: {
 	# 	cardInfo: {
 	# 	# 		imagePath: errata/51_311.jpg
@@ -15,7 +126,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 1?
+	# 		revision: 1
 	# 		collInfo: 1C311
 	# 		rarity: C
 	# 		setNum: "1"
@@ -45,7 +156,7 @@
 	# 				}
 	# 				{
 	# 					type: exert
-	# 					filter: choose(another,companion)
+	# 					select: choose(another,companion)
 	# 				}
 	# 			]
 	# 			effect: {
@@ -54,7 +165,7 @@
 	# 			}
 	# 		}
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
 	# 			optional: true
 	# 			trigger: {
 	# 				type: killed
@@ -80,17 +191,14 @@
 	
 	51_311: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01S311.2_card.jpg
-			javaClass: false
+			//id: 1_311.2
 			parent: 1_311
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN01S311.2_card.jpg
 			collInfo: 1C311
 			rarity: C
-			setNum: "1"
-			cardNum: 311
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Sam
 		subtitle: Son of Hamfast
@@ -112,11 +220,11 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 					}
 					{
 						type: exert
-						filter: choose(another,companion)
+						select: choose(another,companion)
 					}
 				]
 				effect: [
@@ -125,8 +233,8 @@
 						amount: 1
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: not
 							requires: {
 								type: or
@@ -144,15 +252,15 @@
 								]
 							}
 						}
-						effect: {
+						true: {
 							type: exert
-							filter: self
+							select: self
 						}
 					}
 				]
 			}
 			{
-				type: ActivatedTrigger
+				type: Response
 				trigger: {
 					type: killed
 					filter: name(Frodo),ring bearer
@@ -175,17 +283,14 @@
 
 	51_313: {
 		cardInfo: {
-			imagePath: errata/51_313.jpg
-			javaClass: false
+			//id: 1_313.1
 			parent: 1_313
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_313.jpg
 			collInfo: 1R313
 			rarity: R
-			setNum: "1"
-			cardNum: 313
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Sting
 		unique: true
@@ -203,7 +308,7 @@
 			]
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: [
 				{
@@ -219,10 +324,9 @@
 						type: cardPhaseLimit
 						limit: 2
 						amount: {
-							type: forEachMatchingInMemory
+							type: forEachInMemory
 							memory: revealedCards
 							filter: orc
-							limit: 2
 						}
 					}
 				}
@@ -241,17 +345,14 @@
 
 	51_316: {
 		cardInfo: {
-			imagePath: errata/51_316.jpg
-			javaClass: false
+			//id: 1_316.1
 			parent: 1_316
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_316.jpg
 			collInfo: 1U316
 			rarity: U
-			setNum: "1"
-			cardNum: 316
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: A Talent for Not Being Seen
 		culture: shire
@@ -295,7 +396,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 2
+	# 		revision: 2
 	# 		collInfo: 1U316
 	# 		rarity: U
 	# 		setNum: "1"
@@ -318,7 +419,7 @@
 	# 			type: ExtraCost
 	# 			cost: {
 	# 				type: exert
-	# 				filter: choose(or(title(Merry),title(Pippin)))
+	# 				select: choose(or(title(Merry),title(Pippin)))
 	# 			}
 	# 		}
 	# 		{

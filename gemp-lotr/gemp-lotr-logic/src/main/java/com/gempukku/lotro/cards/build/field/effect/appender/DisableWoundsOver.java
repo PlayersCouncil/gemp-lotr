@@ -23,10 +23,10 @@ import java.util.Collection;
 public class DisableWoundsOver implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "wounds", "memorize", "phase", "until");
+        FieldUtils.validateAllowedFields(effectObject, "select", "wounds", "memorize", "phase", "until");
 
         final int wounds = FieldUtils.getInteger(effectObject.get("wounds"), "wounds", 1);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final Phase phase = FieldUtils.getEnum(Phase.class, effectObject.get("phase"), "phase");
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
@@ -34,7 +34,7 @@ public class DisableWoundsOver implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter, new ConstantEvaluator(1), memory, "you", "Choose cards to make take no more than " + wounds + " wound(s)", environment));
+                CardResolver.resolveCards(select, actionContext -> new ConstantEvaluator(1), memory, "you", "Choose cards to make take no more than " + wounds + " wound(s)", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -42,7 +42,7 @@ public class DisableWoundsOver implements EffectAppenderProducer {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
                         Phase resultPhase = (phase != null) ? phase : actionContext.getGame().getGameState().getCurrentPhase();
                         return new AddUntilModifierEffect(
-                                new CantTakeMoreThanXWoundsModifier(actionContext.getSource(), resultPhase, wounds, Filters.in(cardsFromMemory)),
+                                new CantTakeMoreThanXWoundsModifier(actionContext.getSource(), resultPhase, wounds, null, Filters.in(cardsFromMemory)),
                                 until);
                     }
                 });

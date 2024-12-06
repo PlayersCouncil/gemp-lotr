@@ -6,11 +6,9 @@ import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
-import java.awt.geom.Path2D;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
@@ -67,7 +65,7 @@ public class Card_18_134_ErrataTests
 
 		assertFalse(doorway.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, doorway.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(doorway, Keyword.MOUNTAIN));
+		assertTrue(scn.hasKeyword(doorway, Keyword.MOUNTAIN));
 		assertEquals(1, doorway.getBlueprint().getTwilightCost());
 		assertEquals(SitesBlock.SHADOWS, doorway.getBlueprint().getSiteBlock());
 		assertEquals(0, doorway.getBlueprint().getSiteNumber());

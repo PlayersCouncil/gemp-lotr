@@ -1,37 +1,111 @@
 {
 
+	# 54_276: {
+	# 	cardInfo: {
+	# 		//id: 4_276.1
+	# 		parent: 4_276
+	# 		variant: ERRATA
+	# 		variantPath: promos/pc
+	# 		revision: 1
+	# 		image: errata/54_276.jpg
+	# 		collInfo: 4U276
+	# 		rarity: U
+	# 	}
+	# 	title: Fortress Never Fallen
+	# 	unique: true
+	# 	culture: rohan
+	# 	twilight: 2
+	# 	type: condition
+	# 	keyword: support area
+	# 	effects: [
+	# 		{
+	# 			type: Trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: winsSkirmish
+	# 				filter: culture(rohan),man
+	# 			}
+	# 			effect: {
+	# 				type: AddCultureTokens
+	# 				culture: rohan
+	# 				select: self
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: regroup
+	# 			cost: [
+	# 				{
+	# 					type: memorizeNumber
+	# 					memory: numberOfTokens
+	# 					amount: {
+	# 						type: ForEachCultureToken
+	# 						culture: rohan
+	# 						filter: self
+	# 					}
+	# 				}
+	# 			]
+	# 			effect: [
+	# 				{
+	# 					type: discard
+	# 					select: choose(side(shadow),condition)
+	# 					count: {
+	# 						type: fromMemory
+	# 						memory: numberOfTokens
+	# 						limit: 4
+	# 					}
+	# 				}
+	# 				{
+	# 					type: discard
+	# 					select: self
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: Plays to your support area.<br>Each time a [Rohan] Man wins a skirmish, you may place a [Rohan] token on this card.<br>Regroup: Discard a Shadow condition<br>for each [Rohan] token here (limit 4).<br>Discard this condition.
+	# 	lore: "'...it was the spirit of your people that held it strong.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	54_276: {
 		cardInfo: {
-			imagePath: errata/54_276.jpg
-			javaClass: false
+			//id: 54_276.2
 			parent: 4_276
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 2
+			image: errata/LOTR-EN04E276.2_card.jpg
 			collInfo: 4U276
 			rarity: U
-			setNum: "4"
-			cardNum: 276
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Fortress Never Fallen
 		unique: true
-		culture: rohan
+		side: Free Peoples
+		culture: Rohan
 		twilight: 2
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: [
+			Fortification
+			Support Area
+		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
 					filter: culture(rohan),man
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: rohan
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -42,7 +116,7 @@
 						type: memorizeNumber
 						memory: numberOfTokens
 						amount: {
-							type: forEachToken
+							type: ForEachCultureToken
 							culture: rohan
 							filter: self
 						}
@@ -51,7 +125,7 @@
 				effect: [
 					{
 						type: discard
-						filter: choose(side(shadow),condition)
+						select: choose(side(shadow),condition)
 						count: {
 							type: fromMemory
 							memory: numberOfTokens
@@ -60,12 +134,12 @@
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}
 		]
-		gametext: Plays to your support area.<br>Each time a [Rohan] Man wins a skirmish, you may place a [Rohan] token on this card.<br>Regroup: Discard a Shadow condition<br>for each [Rohan] token here (limit 4).<br>Discard this condition.
+		gametext: Fortification.<br>Each time a [Rohan] Man wins a skirmish, you may place a [Rohan] token on this card.<br>Regroup: Discard a Shadow condition<br>for each [Rohan] token here (limit 4).<br>Discard this condition.
 		lore: "'...it was the spirit of your people that held it strong.'"
 		promotext: ""
 		alts: {
@@ -75,4 +149,102 @@
 			}
 		}
 	}
+	
+	54_280: {
+		cardInfo: {
+			//id: 54_280.1
+			parent: 4_280
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E280.1_card.jpg
+			collInfo: 4U280
+			rarity: U
+		}
+		title: Herugrim
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Artifact
+		strength: 2
+		vitality: 1
+		itemclass: Hand weapon
+		target: title(Théoden)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be Théoden.<br>He is <b>damage +1</b>.
+		lore: "'Here, lord, is Herugrim, your ancient blade....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	54_289: {
+		cardInfo: {
+			//id: 54_289.1
+			parent: 4_289
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E289.1_card.jpg
+			collInfo: 4R289
+			rarity: R
+		}
+		title: Simbelmynë
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: or
+				requires: [
+					{
+						type: canSpot
+						filter: culture(rohan),man
+						count: 2
+					}
+					{
+						type: canSpot
+						filter: valiant,culture(rohan),man
+					}
+				]
+			},
+			effect: [
+				{
+					type: playCardFromDrawDeck
+					select: choose(culture(rohan),or(character,item))
+					showAll: true
+					shuffle: true
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Spot 2 [rohan] Men (or 1 valiant [rohan] Man) to play a [rohan] character or [rohan] item from your draw deck.
+		lore: "'How fair are the bright eyes in the grass! Evermind they are called... for they blossom in all seasons of the year, and grow where dead men rest.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 }

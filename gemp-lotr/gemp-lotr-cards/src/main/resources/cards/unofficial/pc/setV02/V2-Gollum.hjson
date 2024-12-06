@@ -1,0 +1,144 @@
+{
+
+	102_15: {
+		cardInfo: {
+			//id: 102_15
+			image: sets/V2/LOTR-ENV2S015.0_card.jpg
+			collInfo: V2_15
+			rarity: _
+		}
+		title: Watching and Waiting
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: [
+			{
+				type: event
+				effect: {
+					type: Choice
+					texts: [
+						Remove (3) to draw 2 cards
+						Remove (3) to draw 8 cards
+					]
+					effects: [
+						{
+							type: CostToEffect
+							requires: [
+								{
+									type: CanSpot
+									filter: your,minion
+								}
+								{
+									type: Not
+									requires: {
+										type: MemoryIs
+										memory: PlayedFromDeck
+										value: 1
+									}
+								}
+							]
+							cost: {
+								type: RemoveTwilight
+								amount: 3
+							}
+							effect: [
+								{
+									type: DrawCards
+									count: 2
+								}
+							]
+						}
+						
+						{
+							type: CostToEffect
+							requires: {
+								type: Or
+								requires: [
+									{
+										type: And
+										requires: [
+											{
+												type: Location
+												filter: RegionNumber(3)
+											}
+											{
+												type: CanSpotTwilight
+												amount: 25
+											}
+										]
+									}
+									{
+										type: And
+										requires: [
+											{
+												type: Location
+												filter: RegionNumber(1-2)
+											}
+											{
+												type: CanSpotTwilight
+												amount: 18
+											}
+										]
+									}
+								]
+							}
+							cost: {
+								type: RemoveTwilight
+								amount: 3
+							}
+							effect: [
+								{
+									type: DrawCards
+									count: 8
+								}
+							]
+						}
+					]
+				}
+			}
+			{
+				type: ActivatedInDrawDeck
+				phase: Shadow
+				requires: [
+					{
+						type: canSelfBePlayed
+					}
+					{
+						type: Location
+						filter: RegionNumber(1)
+					}
+					{
+						type: CanSpotTwilight
+						amount: 18
+					}
+				]
+				effect: [
+					{
+						type: MemorizeNumber
+						amount: 1
+						memory: PlayedFromDeck
+					}
+					{
+						type: PlayCardFromDrawDeck
+						select: self
+						shuffle: true
+						showAll: true
+					}
+				]
+			}
+		]
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (9) to draw 8 cards. If in region 1, this action can be performed from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

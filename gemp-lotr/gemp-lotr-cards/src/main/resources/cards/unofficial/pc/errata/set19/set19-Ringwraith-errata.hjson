@@ -2,17 +2,11 @@
 	
 	69_37: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN19E037.1.jpg
-			javaClass: false
-			parent: 19_37
-			parentPath: errata/pc
-			version: 1
+			//id: 9_37.1
+			revision: 1
+			image: errata/LOTR-EN19E037.1.jpg
 			collInfo: 19P37
 			rarity: P
-			setNum: "19"
-			cardNum: 37
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Úlairë Lemenya
 		subtitle: Dark Enemy
@@ -50,17 +44,11 @@
 
 	69_38: {
 		cardInfo: {
-			imagePath: errata/69_38.jpg
-			javaClass: false
-			parent: 19_38
-			parentPath: errata/pc
-			version: 1?
+			//id: 9_38.1
+			revision: 1
+			image: errata/69_38.jpg
 			collInfo: 19P38
 			rarity: P
-			setNum: "19"
-			cardNum: 38
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Ulaire Nertea
 		subtitle: Dark Horseman
@@ -75,7 +63,8 @@
 		keyword: fierce
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -92,7 +81,8 @@
 				]
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: fpstartedassigning
 				}
@@ -104,13 +94,13 @@
 						memorize: choice
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryIs
 							memory: choice
 							value: no
 						}
-						effect: {
+						true: {
 							type: addmodifier
 							until: start(skirmish)
 							modifier: {
@@ -122,13 +112,13 @@
 						}
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryIs
 							memory: choice
 							value: yes
 						}
-						effect: {
+						true: {
 							type: addBurdens
 							amount: 1
 						}

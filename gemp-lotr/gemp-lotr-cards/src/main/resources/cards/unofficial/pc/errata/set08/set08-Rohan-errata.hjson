@@ -1,17 +1,14 @@
 {
 	58_91: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN08E091.1.jpg
-			javaClass: false
+			//id: 8_91.1
 			parent: 8_91
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN08E091.1.jpg
 			collInfo: 8R91
 			rarity: R
-			setNum: "8"
-			cardNum: 91
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Rohirrim Army
 		unique: true
@@ -21,25 +18,29 @@
 		race: man
 		strength: 9
 		vitality: 3
-		requires: {
-			type: CanSpot
-			filter: culture(Rohan),companion
-			count: 2
-		}
 		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: CanSpot
+					filter: culture(Rohan),companion
+					count: 2
+				}
+			}
 			{
 				type: PlayedInOtherPhase
 				phase: regroup
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
 				}
 				effect: {
 					type: discard
-					filter: choose(minion)
+					select: choose(minion)
 					count: 0-1
 				}
 			}

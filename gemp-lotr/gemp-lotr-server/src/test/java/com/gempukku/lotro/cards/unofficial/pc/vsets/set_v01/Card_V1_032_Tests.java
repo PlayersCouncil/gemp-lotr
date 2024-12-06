@@ -49,7 +49,7 @@ public class Card_V1_032_Tests
 		PhysicalCardImpl terror = scn.GetFreepsCard("terror");
 
 		assertTrue(terror.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(terror, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(terror, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(0, terror.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, terror.getBlueprint().getCardType());
 		assertEquals(Culture.MORIA, terror.getBlueprint().getCulture());

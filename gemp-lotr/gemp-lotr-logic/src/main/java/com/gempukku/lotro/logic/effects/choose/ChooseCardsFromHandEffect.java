@@ -38,12 +38,12 @@ public abstract class ChooseCardsFromHandEffect extends AbstractEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return Filters.filter(game.getGameState().getHand(_playerId), game, _filter).size() >= _minimum;
+        return Filters.filter(game, game.getGameState().getHand(_playerId), _filter).size() >= _minimum;
     }
 
     @Override
     protected FullEffectResult playEffectReturningResult(final LotroGame game) {
-        final Collection<PhysicalCard> selectableCards = Filters.filter(game.getGameState().getHand(_playerId), game, _filter);
+        final Collection<PhysicalCard> selectableCards = Filters.filter(game, game.getGameState().getHand(_playerId), _filter);
         int maximum = Math.min(_maximum, selectableCards.size());
 
         boolean success = selectableCards.size() >= _minimum;

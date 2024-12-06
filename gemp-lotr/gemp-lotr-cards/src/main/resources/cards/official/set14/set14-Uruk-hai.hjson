@@ -1,0 +1,124 @@
+{
+
+	14_14: {
+		cardInfo: {
+			image: decipher/LOTR14014.jpg
+			collInfo: 14R14
+			rarity: R
+		}
+		title: Uruk-hai Healer
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: startOfPhase
+				phase: assignment
+			}
+			effect: {
+				type: repeat
+				effect: {
+					type: heal
+					select: choose(uruk-hai)
+					count: 0-1
+				}
+				times: {
+					type: forEachYouCanSpot
+					filter: companion
+				}
+			}
+		}
+		gametext: <b>Damage +1</b>.<br>At the start of each assignment phase, you may heal an Uruk-hai for each companion you can spot.
+		lore: "Restoratives were in short supply within the ranks of the White Hand."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	14_15: {
+		cardInfo: {
+			image: decipher/LOTR14015.jpg
+			collInfo: 14R15
+			rarity: R
+		}
+		title: Uruk-hai Scout
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 8
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: played
+				filter: self
+			}
+			effect: [
+				{
+					type: choice
+					texts: [
+						Choose keyword - Battleground
+						Choose keyword - Mountain
+						Choose keyword - Plains
+						Choose keyword - Underground
+					]
+					effects: [
+						{
+							type: addKeyword
+							select: choose(currentSite)
+							keyword: battleground
+							until: endOfTurn
+						}
+						{
+							type: addKeyword
+							select: choose(currentSite)
+							keyword: mountain
+							until: endOfTurn
+						}
+						{
+							type: addKeyword
+							select: choose(currentSite)
+							keyword: plains
+							until: endOfTurn
+						}
+						{
+							type: addKeyword
+							select: choose(currentSite)
+							keyword: underground
+							until: endOfTurn
+						}
+					]
+				}
+			]
+		}
+		gametext: <b>Damage +1</b>.<br>When you play this, choose one of the following keywords: battleground, mountain, plains, or underground. The fellowship's current site gains that keyword until the end of the turn.
+		lore: "...swart, slant-eyed, with thick legs and large hands."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

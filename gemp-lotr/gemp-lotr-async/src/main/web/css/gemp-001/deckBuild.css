@@ -32,10 +32,6 @@ body {
     opacity: 0.7;
 }
 
-.ui-layout-east {
-    width: 350px;
-}
-
 #manageDecks {
     color: #ffffff;
     font-size: 180%;
@@ -137,6 +133,8 @@ button.navigation-butt {
 #auto-zoom-toggle {
     width: 27px;
     height: 23px;
+    float: right;
+    margin-top: auto;
 }
 
 
@@ -155,4 +153,37 @@ button.navigation-butt {
     -webkit-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
+}
+
+.filterLabel {
+    color: #ffffff;
+    font-weight: bolder;
+    font-size: 110%;
+    padding-right: 5px;
+}
+
+.filterInput {
+    font-size: 80%;
+    padding-right: 5px;
+}
+
+.cardFilterText {
+    color: #ffffff;
+    padding-top: 5px;
+    text-align: center;
+    font-size: 90%;
+}
+
+.buttonHolder {
+    padding-top: 10px;
+    text-align: center;
+}
+
+.culture img {
+    /*
+    This incredible showing of hoop-jumping is to change a black svg to a white svg.
+    Yes, seriously.
+    */
+    height: 20px;
+    filter: invert(89%) sepia(64%) saturate(0%) hue-rotate(145deg) brightness(116%) contrast(101%);
 }

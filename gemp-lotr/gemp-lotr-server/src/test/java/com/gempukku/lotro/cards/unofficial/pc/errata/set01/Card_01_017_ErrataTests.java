@@ -63,8 +63,7 @@ public class Card_01_017_ErrataTests
 		assertEquals(1, grimir.getBlueprint().getTwilightCost());
 		assertEquals(3, grimir.getBlueprint().getStrength());
 		assertEquals(3, grimir.getBlueprint().getVitality());
-		assertEquals(3, grimir.getBlueprint().getAllyHomeSiteNumbers()[0]);
-		assertEquals(SitesBlock.FELLOWSHIP, grimir.getBlueprint().getAllyHomeSiteBlock());
+		assertTrue(grimir.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
 	@Test

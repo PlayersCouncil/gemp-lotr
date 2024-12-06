@@ -9,21 +9,15 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class IndividualCardAtTest extends AbstractAtTest {
-
-
-
-
     @Test
     public void bilboRingBearerWithConsortingAndMorgulBrute() throws DecisionResultInvalidException, CardNotFoundException {
         Map<String, LotroDeck> decks = new HashMap<>();
@@ -392,7 +386,7 @@ public class IndividualCardAtTest extends AbstractAtTest {
         // End fellowship
         playerDecided(P2, "");
 
-        assertEquals(8, _game.getModifiersQuerying().getTwilightCost(_game, attea, null, 0, false));
+        assertEquals(8, _game.getModifiersQuerying().getTwilightCostToPlay(_game, attea, null, 0, false));
     }
 
     @Test
@@ -572,7 +566,7 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         assertEquals(Zone.DISCARD, goblinRunner.getZone());
         AwaitingDecision playMoreYetToCome = _userFeedback.getAwaitingDecision(P1);
-        playerDecided(P1, getCardActionId(playMoreYetToCome, "Play More"));
+        playerDecided(P1, getCardActionId(playMoreYetToCome, moreYetToCome));
 
         assertEquals(Zone.DISCARD, goblinRunner2.getZone());
     }
@@ -720,44 +714,11 @@ public class IndividualCardAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void trollMonstrousFiend() throws CardNotFoundException, DecisionResultInvalidException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl troll = createCard(P2, "40_157");
-        PhysicalCardImpl runner1 = createCard(P2, "40_169");
-        PhysicalCardImpl runner2 = createCard(P2, "40_169");
-        PhysicalCardImpl runner3 = createCard(P2, "40_169");
-        PhysicalCardImpl runner4 = createCard(P2, "40_169");
-
-        skipMulligans();
-
-        _game.getGameState().addCardToZone(_game, troll, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, runner1, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, runner2, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, runner3, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, runner4, Zone.HAND);
-
-        _game.getGameState().addTwilight(7);
-
-        // End fellowship
-        playerDecided(P1, "");
-
-        assertEquals(9, _game.getGameState().getTwilightPool());
-
-        final AwaitingDecision playShadowAction = _userFeedback.getAwaitingDecision(P2);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, playShadowAction.getDecisionType());
-        playerDecided(P2, getCardActionId(playShadowAction, "Play Cave"));
-
-        final AwaitingDecision discardGoblins = _userFeedback.getAwaitingDecision(P2);
-        assertEquals("3", discardGoblins.getDecisionParameters().get("min")[0]);
-    }
-
-    @Test
-    public void exertingEhaustedFrodo() throws CardNotFoundException, DecisionResultInvalidException {
+    public void cannotExertExhaustedFrodoToPayForCost() throws CardNotFoundException, DecisionResultInvalidException {
         Map<String, LotroDeck> decks = new HashMap<>();
         LotroDeck lotroDeck = new LotroDeck("Some deck");
         lotroDeck.setRingBearer("10_121");
-        lotroDeck.setRing("40_1");
+        lotroDeck.setRing("9_1");
         // 7_330,7_336,8_117,7_342,7_345,7_350,8_120,10_120,7_360
         lotroDeck.addSite("1_323");
         lotroDeck.addSite("7_335");
@@ -780,8 +741,8 @@ public class IndividualCardAtTest extends AbstractAtTest {
         _userFeedback.setGame(_game);
         _game.startGame();
 
-        PhysicalCardImpl cheapMinion = createCard(P2, "40_165");
-        PhysicalCardImpl randomCard1 = createCard(P1, "40_169");
+        PhysicalCardImpl cheapMinion = createCard(P2, "1_174");
+        PhysicalCardImpl randomCard1 = createCard(P1, "2_65");
 
         // Bidding
         playerDecided(P1, "1");
@@ -809,8 +770,67 @@ public class IndividualCardAtTest extends AbstractAtTest {
         playerDecided(P2, "");
 
         // Put on the ring
+        var actions = _userFeedback.getAwaitingDecision(P1).getDecisionParameters().get("actionText");
+        assertFalse(Arrays.stream(actions).anyMatch(x -> x.toLowerCase().contains("use the one ring")));
+    }
+
+    @Test
+    public void burdensAreAddedFromOneRingEffect() throws CardNotFoundException, DecisionResultInvalidException {
+        Map<String, LotroDeck> decks = new HashMap<>();
+        LotroDeck lotroDeck = new LotroDeck("Some deck");
+        lotroDeck.setRingBearer("10_121");
+        lotroDeck.setRing("9_1");
+        // 7_330,7_336,8_117,7_342,7_345,7_350,8_120,10_120,7_360
+        lotroDeck.addSite("1_323");
+        lotroDeck.addSite("7_335");
+        lotroDeck.addSite("8_117");
+        lotroDeck.addSite("7_342");
+        lotroDeck.addSite("7_345");
+        lotroDeck.addSite("7_350");
+        lotroDeck.addSite("8_120");
+        lotroDeck.addSite("10_120");
+        lotroDeck.addSite("7_360");
+        decks.put(P1, lotroDeck);
+        decks.put(P2, createSimplestDeck());
+
+        _userFeedback = new DefaultUserFeedback();
+
+        LotroFormatLibrary formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
+        LotroFormat format = formatLibrary.getFormat("movie");
+
+        _game = new DefaultLotroGame(format, decks, _userFeedback, _cardLibrary);
+        _userFeedback.setGame(_game);
+        _game.startGame();
+
+        PhysicalCardImpl cheapMinion = createCard(P2, "1_174");
+        PhysicalCardImpl randomCard1 = createCard(P1, "2_65");
+
+        // Bidding
+        playerDecided(P1, "1");
+        playerDecided(P2, "0");
+
+        // Seating choice
         playerDecided(P1, "0");
-        assertEquals(Zone.DISCARD, randomCard1.getZone());
+
+        // Mulligans
+        playerDecided(P1, "0");
+        playerDecided(P2, "0");
+
+        final PhysicalCard frodo = _game.getGameState().getRingBearer(P1);
+        _game.getGameState().addCardToZone(_game, cheapMinion, Zone.HAND);
+        _game.getGameState().addCardToZone(_game, randomCard1, Zone.HAND);
+
+        _game.getGameState().addTwilight(3);
+
+        // Pass in fellowship
+        playerDecided(P1, "");
+
+        // Play minion
+        playerDecided(P2, "0");
+        playerDecided(P2, "");
+
+        // Put on the ring
+        playerDecided(P1, "0");
 
         // Pass in maneuver
         playerDecided(P2, "");
@@ -837,51 +857,7 @@ public class IndividualCardAtTest extends AbstractAtTest {
         playerDecided(P2, "");
 
         assertEquals(burdensBefore + 1, _game.getGameState().getBurdens());
-        assertEquals(4, _game.getGameState().getWounds(frodo));
-    }
-
-    @Test
-    public void orcMarksmanUnique() throws CardNotFoundException, DecisionResultInvalidException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl marksman1 = new PhysicalCardImpl(100, "40_227", P2, _cardLibrary.getLotroCardBlueprint("40_227"));
-        PhysicalCardImpl marksman2 = new PhysicalCardImpl(101, "40_227", P2, _cardLibrary.getLotroCardBlueprint("40_227"));
-
-        skipMulligans();
-
-        _game.getGameState().addCardToZone(_game, marksman1, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, marksman2, Zone.HAND);
-
-        _game.getGameState().addTwilight(10);
-
-        // End fellowship
-        playerDecided(P1, "");
-
-        playerDecided(P2, "0");
-        assertNull(getCardActionId(_userFeedback.getAwaitingDecision(P2), "Play Orc Mark"));
-    }
-
-    @Test
-    public void frodosPipeOncePerPhase() throws CardNotFoundException, DecisionResultInvalidException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl frodosPipe = new PhysicalCardImpl(100, "40_250", P1, _cardLibrary.getLotroCardBlueprint("40_250"));
-        PhysicalCardImpl pipeweed1 = new PhysicalCardImpl(101, "40_255", P1, _cardLibrary.getLotroCardBlueprint("40_255"));
-        PhysicalCardImpl pipeweed2 = new PhysicalCardImpl(102, "40_255", P1, _cardLibrary.getLotroCardBlueprint("40_255"));
-
-        _game.getGameState().addCardToZone(_game, frodosPipe, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, pipeweed1, Zone.SUPPORT);
-        _game.getGameState().addCardToZone(_game, pipeweed2, Zone.SUPPORT);
-
-        skipMulligans();
-
-        playerDecided(P1, getCardActionId(_userFeedback.getAwaitingDecision(P1), "Play Frodo's Pipe"));
-        playerDecided(P1, getCardActionId(_userFeedback.getAwaitingDecision(P1), "Use Frodo's Pipe"));
-
-        playerDecided(P1, String.valueOf(pipeweed1.getCardId()));
-        playerDecided(P1, "1");
-
-        assertNull(getCardActionId(_userFeedback.getAwaitingDecision(P1), "Use Frodo's Pipe"));
+        assertEquals(1, _game.getGameState().getWounds(frodo));
     }
 
     @Test
@@ -918,6 +894,9 @@ public class IndividualCardAtTest extends AbstractAtTest {
         playerDecided(P1, getCardActionId(P1, "Use Athelas"));
 
         assertEquals(Zone.DISCARD, athelas.getZone());
+
+        //Choices now ask the player which to perform if neither are possible:
+        playerDecided(P1, "0");
 
         // Pass
         playerDecided(P1, "");
@@ -1202,5 +1181,98 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         assertEquals(Zone.DISCARD, morgulBlade.getZone());
         assertEquals(Zone.ATTACHED, bladeTip.getZone());
+    }
+
+    @Test
+    public void sarumanOfManyColors() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard sarumanOfManyColors = addToZone(createCard(P2, "12_54"), Zone.HAND);
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+
+        passUntil(Phase.FELLOWSHIP);
+        setTwilightPool(10);
+        passUntil(Phase.SHADOW);
+        assertEquals(4, getStrength(ringBearer));
+        selectCardAction(P2, sarumanOfManyColors);
+        playerDecided(P2, getMultipleDecisionIndex(getAwaitingDecision(P2), "Shire"));
+        assertEquals(3, getStrength(ringBearer));
+    }
+
+    @Test
+    public void putForthItsStrength() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard putForthHisStrength = addToZone(createCard(P2, "7_205"), Zone.SUPPORT);
+        PhysicalCard attea = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
+        for (int i = 0; i < 3; i++) {
+            addToZone(createCard(P1, "1_12"), Zone.DEAD);
+        }
+
+        passUntil(Phase.FELLOWSHIP);
+        addBurdens(3);
+        addThreats(P1, 3);
+
+        passUntil(Phase.SHADOW);
+        selectCardAction(P2, putForthHisStrength);
+        assertTrue(_game.isFinished());
+        assertEquals(P2, _game.getWinnerPlayerId());
+    }
+
+    @Test
+    public void reorderTopCardsOfDrawDeck() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard gandalf = addToZone(createCard(P1, "1_72"), Zone.FREE_CHARACTERS);
+        PhysicalCard discoveries = addToZone(createCard(P1, "12_26"), Zone.HAND);
+        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
+
+        passUntil(Phase.FELLOWSHIP);
+        PhysicalCard topCard = addToZone(createCard(P1, "1_3"), Zone.DECK);
+        PhysicalCard middleCard = addToZone(createCard(P1, "1_4"), Zone.DECK);
+        PhysicalCard bottomCard = addToZone(createCard(P1, "1_5"), Zone.DECK);
+        selectCardAction(P1, discoveries);
+        pass(P1);
+        playerDecided(P1, "3");
+        selectArbitraryCards(P1, getArbitraryCardId(P1, "1_3"));
+
+        List<? extends PhysicalCard> deck = _game.getGameState().getDeck(P1);
+        assertEquals(middleCard, deck.get(0));
+        assertEquals(topCard, deck.get(1));
+        assertEquals(bottomCard, deck.get(2));
+    }
+
+    @Test
+    public void setStrengthOverride() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard ringBearer = getRingBearer(P1);
+        PhysicalCard finalTriumph = addToZone(createCard(P2, "18_115"), Zone.HAND);
+        PhysicalCard whiteHandExorciser = addToZone(createCard(P2, "18_125"), Zone.SHADOW_CHARACTERS);
+
+        passUntil(Phase.ASSIGNMENT);
+        pass(P1);
+        pass(P2);
+        setTwilightPool(4);
+        playerDecided(P1, ringBearer.getCardId()+" "+whiteHandExorciser.getCardId());
+        selectCard(P1, ringBearer);
+        pass(P1);
+        selectCardAction(P2, finalTriumph);
+        assertEquals(4, RuleUtils.getFellowshipSkirmishStrength(_game));
+        assertEquals(1, RuleUtils.getShadowSkirmishStrength(_game));
+    }
+
+    @Test
+    public void shuffleCardsFromPlayIntoDrawDeck() throws Exception {
+        initializeSimplestGame();
+
+        PhysicalCard restByBlindNight = addToZone(createCard(P1, "4_54"), Zone.HAND);
+        PhysicalCard stoutAndStrong = addToZone(createCard(P1, "4_57"), Zone.SUPPORT);
+
+        passUntil(Phase.REGROUP);
+        selectCardAction(P1, restByBlindNight);
+        selectCard(P1, stoutAndStrong);
+        assertEquals(Zone.DECK, stoutAndStrong.getZone());
     }
 }

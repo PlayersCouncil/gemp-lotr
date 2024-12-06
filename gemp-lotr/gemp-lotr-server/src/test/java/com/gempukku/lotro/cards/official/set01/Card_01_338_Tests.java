@@ -66,8 +66,8 @@ public class Card_01_338_Tests
         assertNull(card.getBlueprint().getSubtitle());
         assertFalse(card.getBlueprint().isUnique());
         assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-        assertTrue(scn.HasKeyword(card, Keyword.RIVER));
-        assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
+        assertTrue(scn.hasKeyword(card, Keyword.RIVER));
+        assertTrue(scn.hasKeyword(card, Keyword.SANCTUARY));
         assertEquals(0, card.getBlueprint().getTwilightCost());
         assertEquals(3, card.getBlueprint().getSiteNumber());
     }

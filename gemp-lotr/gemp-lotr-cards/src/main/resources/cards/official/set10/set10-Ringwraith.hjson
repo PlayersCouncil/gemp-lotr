@@ -1,0 +1,971 @@
+{
+
+	10_53: {
+		cardInfo: {
+			image: decipher/LOTR10053.jpg
+			collInfo: 10U53
+			rarity: U
+		}
+		title: Black Marshal
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: exert
+						select: choose(nazgul)
+					}
+					{
+						type: PlayCardFromHand
+						select: choose(culture(wraith),minion)
+					}
+				]
+				effect: {
+					type: addTwilight
+					amount: {
+						type: Conditional
+						requires: {
+							type: haveInitiative
+							side: shadow
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> Exert a Nazgûl and play a [wraith] minion to add (1) (or (2) if you have initiative).
+		lore: "...at their head was one greater than all the rest: a Rider, all black...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_54: {
+		cardInfo: {
+			image: decipher/LOTR10054.jpg
+			collInfo: 10U54
+			rarity: U
+		}
+		title: Cirith Ungol Scavenger
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(possession,attachedTo(character,inSkirmishAgainst(self)))
+				}
+			}
+		]
+		gametext: Each time this minion wins a skirmish, you may exert it to discard a possession borne by a character this minion is skirmishing.
+		lore: "A noise of tramping feet and harsh shouts: Orcs were coming up to the Cleft from the far side...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_55: {
+		cardInfo: {
+			image: decipher/LOTR10055.jpg
+			collInfo: 10C55
+			rarity: C
+		}
+		title: Cirith Ungol Soldier
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: possession
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: fierce
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> Spot a possession to make this minion <b>fierce</b> until the regroup phase.
+		lore: "...not even the black shadows, lying deep where the red glow could not reach, would shield him long from the night-eyed orcs."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_56: {
+		cardInfo: {
+			image: decipher/LOTR10056.jpg
+			collInfo: 10C56
+			rarity: C
+		}
+		title: Cirith Ungol Warrior
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: possession
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: fierce
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> Spot a possession to make this minion <b>fierce</b> until the regroup phase.
+		lore: "...deafening, roaring in his ears, the crash of the feet and the rending clamour of the Orcs before him."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_57: {
+		cardInfo: {
+			image: decipher/LOTR10057.jpg
+			collInfo: 10U57
+			rarity: U
+		}
+		title: Cirith Ungol Watchman
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cancelStrengthBonus
+					filter: companion,inSkirmishAgainst(self)
+					from: possession
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cancelKeywordBonus
+					filter: companion,inSkirmishAgainst(self)
+					keyword: damage
+					from: possession
+				}
+			}
+		]
+		gametext: Each companion skirmishing this minion loses all <b>damage</b> and strength bonuses from possessions.
+		lore: "Sam looked up towards the orc-tower, and suddenly from its narrow windows lights stared out like small red eyes."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_58: {
+		cardInfo: {
+			image: decipher/LOTR10058.jpg
+			collInfo: 10R58
+			rarity: R
+		}
+		title: Dark Swooping Shadows
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: heal
+				select: choose(enduring,culture(wraith),minion)
+			},
+			effect: [
+				{
+					type: choice
+					texts: [
+						Add a burden
+						Add 2 threats
+					]
+					effects: [
+						{
+							type: addBurdens
+						}
+						{
+							type: addThreats
+							amount: 2
+						}
+					]
+				}
+			]
+		}
+		gametext: Heal an enduring [wraith] minion to add a burden or 2 threats.
+		lore: "'...how can he win to the Gate, if these foul hell-hawks have other weapons than fear?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_59: {
+		cardInfo: {
+			image: decipher/LOTR10059.jpg
+			collInfo: 10R59
+			rarity: R
+		}
+		title: Gorbag
+		subtitle: Covetous Captain
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 11
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: culture(wraith),orc
+					amount: {
+						type: forEachWound
+						filter: ringBearer
+					}
+				}
+			}
+		]
+		gametext: For each wound on the Ring-bearer, each [wraith] Orc is strength +1.
+		lore: "'I tell you, it's no game serving down in the city.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_60: {
+		cardInfo: {
+			image: decipher/LOTR10060.jpg
+			collInfo: 10R60
+			rarity: R
+		}
+		title: Gorbag's Sword
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(wraith),orc
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: [
+					{
+						type: chooseActiveCards
+						text: Choose card to discard
+						select: choose(possession,canBeDiscarded)
+						memorize: chosenPossession
+					}
+					{
+						type: choice
+						player: ownerFromMemory(chosenPossession)
+						texts: [
+							Discard {chosenPossession}
+							Put {chosenPossession} on top of deck
+						]
+						effects: [
+							{
+								type: discard
+								player: shadow
+								select: memory(chosenPossession)
+							}
+							{
+								type: putCardsFromPlayOnTopOfDeck
+								select: memory(chosenPossession)
+							}
+						]
+					}
+				]
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,name(Gorbag)
+					keyword: fierce
+				}
+			}
+		]
+		gametext: Bearer must be a [wraith] Orc.<br>When you play this possession, you may discard a possession. Its owner may place it on top of his or her draw deck instead.<br>If bearer is Gorbag, he is <b>fierce</b>.
+		lore: "'You touch it and I'll stick this blade in your gut.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_61: {
+		cardInfo: {
+			image: decipher/LOTR10061.jpg
+			collInfo: 10C61
+			rarity: C
+		}
+		title: Houses of Lamentation
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(wraith),minion)
+					memorize: chosenMinion
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenMinion
+							filter: inSkirmishAgainst(cultureInDeadPile)
+						}
+						true: 4
+						false: 2
+					}
+				}
+			]
+		}
+		gametext: Make a [wraith] minion strength +2 (or +4 if skirmishing a companion of the same culture as a card in the dead pile).
+		lore: "'...thy shrivelled mind be left naked to the Lidless Eye.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_62: {
+		cardInfo: {
+			image: decipher/LOTR10062.jpg
+			collInfo: 10C62
+			rarity: C
+		}
+		title: Morgul Banner-bearer
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: isLessThanOrEqual
+						firstNumber: {
+							type: sum
+							source: [
+								{
+									type: forEachYouCanSpot
+									filter: other,minion
+								}
+								twilightCount
+							]
+						}
+						secondNumber: 3
+					}
+					filter: self
+					amount: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: isLessThanOrEqual
+						firstNumber: {
+							type: sum
+							source: [
+								{
+									type: forEachYouCanSpot
+									filter: other,minion
+								}
+								twilightCount
+							]
+						}
+						secondNumber: 3
+					}
+					filter: self
+					keyword: archer
+				}
+			}
+		]
+		gametext: While the total number of other minions and twilight tokens is 3 or fewer, this minion is strength +3 and an <b>archer</b>.
+		lore: "So great an army had never issued from that vale since the days of Isildur's might...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_63: {
+		cardInfo: {
+			image: decipher/LOTR10063.jpg
+			collInfo: 10R63
+			rarity: R
+		}
+		title: Morgul Vanguard
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Orc
+		strength: 12
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: activated
+				phase: assignment
+				effect: {
+					type: assignFpCharacterToSkirmish
+					fpCharacter: choose(unbound,companion,hasAttached(hand weapon))
+					minion: self
+				}
+			}
+		]
+		gametext: <b>Assignment:</b> Assign this minion to an unbound companion bearing a hand weapon.
+		lore: "'...soon the host of Morgul will enter in at many points.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_64: {
+		cardInfo: {
+			image: decipher/LOTR10064.jpg
+			collInfo: 10C64
+			rarity: C
+		}
+		title: Stooping to the Kill
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: haveInitiative
+						side: shadow
+					}
+					filter: your,culture(wraith),minion
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(wraith),minion)
+					amount: 2
+				}
+			}
+		]
+		gametext: While you have initiative, each of your [wraith] minions is <b>damage +1</b>.<br><b>Skirmish:</b> Discard this condition to make a [wraith] minion strength +2.
+		lore: "And with a piercing cry out of the dim sky fell the winged shadows...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_65: {
+		cardInfo: {
+			image: decipher/LOTR10065.jpg
+			collInfo: 10C65
+			rarity: C
+		}
+		title: Swarming Like Beetles
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: culture(wraith),orc
+				}
+				cost: {
+					type: removeThreats
+				}
+				effect: {
+					type: wound
+					select: choose(unwounded,companion)
+				}
+			}
+		]
+		gametext: <b>Maneuver:</b> Spot a [wraith] Orc and remove a threat to wound an unwounded companion.
+		lore: "'...in secret they have long been building floats and barges in great number in East Osgiliath.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_66: {
+		cardInfo: {
+			image: decipher/LOTR10066.jpg
+			collInfo: 10C66
+			rarity: C
+		}
+		title: Ten Times Outnumbered
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(wraith),orc)
+					amount: {
+						type: forEachWound
+						filter: ringBearer
+						multiplier: 2
+					}
+				}
+			]
+		}
+		gametext: Make a [wraith] Orc strength +2 for each wound on the Ring-bearer.
+		lore: "The passage of Anduin was won by the Enemy."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_67: {
+		cardInfo: {
+			image: decipher/LOTR10067.jpg
+			collInfo: 10R67
+			rarity: R
+		}
+		title: Úlairë Cantëa
+		subtitle: Thrall of The One
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgul
+		strength: 10
+		vitality: 3
+		site: 3
+		keywords: [
+			Enduring
+			Fierce
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeExerted
+					requires: {
+						type: phase
+						phase: skirmish
+					}
+					filter: self
+					by: side(shadow)
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: heal
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(possession,attachedTo(character,inSkirmishAgainst(self)))
+				}
+			}
+		]
+		gametext: <b>Enduring</b>. <b>Fierce</b>.<br>Shadow cards cannot exert Úlairë Cantëa during a skirmish phase.<br><b>Skirmish:</b> Heal Úlairë Cantëa to discard a possession borne by a character he is skirmishing.
+		lore: "...the shadows of death fell dark upon the earth."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_68: {
+		cardInfo: {
+			image: decipher/LOTR10068.jpg
+			collInfo: 10R68
+			rarity: R
+		}
+		title: Úlairë Enquëa
+		subtitle: Thrall of The One
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgul
+		strength: 11
+		vitality: 4
+		site: 3
+		keywords: Enduring
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeExerted
+					requires: {
+						type: phase
+						phase: skirmish
+					}
+					filter: self
+					by: side(shadow)
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
+				cost: {
+					type: heal
+					select: self
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+		]
+		gametext: <b>Enduring</b>.<br>Shadow cards cannot exert Úlairë Enquëa during a skirmish phase.<br><b>Skirmish:</b> If Úlairë Enqueä is skirmishing, heal him to add a burden.
+		lore: "Ever they circled above the City, like vultures that expect their fill of doomed men's flesh."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_69: {
+		cardInfo: {
+			image: decipher/LOTR10069.jpg
+			collInfo: 10U69
+			rarity: U
+		}
+		title: Úlairë Lemenya
+		subtitle: Thrall of The One
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgul
+		strength: 9
+		vitality: 2
+		site: 3
+		keywords: [
+			Enduring
+			Fierce
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeExerted
+					requires: {
+						type: phase
+						phase: skirmish
+					}
+					filter: self
+					by: side(shadow)
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: heal
+					select: self
+				}
+				effect: {
+					type: wound
+					select: choose(culture(wraith),minion)
+					count: 0-3
+				}
+			}
+		]
+		gametext: <b>Enduring</b>. <b>Fierce</b>.<br>Shadow cards cannot exert Úlairë Lemenya during a skirmish phase.<br><b>Skirmish:</b> Heal Úlairë Lemenya to wound up to 3 other [wraith] minions.
+		lore: "It was no brigand or orc-chieftain that ordered the assault upon the Lord of Mordor's greatest foe."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_70: {
+		cardInfo: {
+			image: decipher/LOTR10070.jpg
+			collInfo: 10U70
+			rarity: U
+		}
+		title: Úlairë Nelya
+		subtitle: Thrall of The One
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgul
+		strength: 10
+		vitality: 3
+		site: 2
+		keywords: [
+			Enduring
+			Fierce
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeExerted
+					requires: {
+						type: phase
+						phase: skirmish
+					}
+					filter: self
+					by: side(shadow)
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: heal
+					select: self
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachBurden
+					}
+				}
+			}
+		]
+		gametext: <b>Enduring</b>. <b>Fierce</b>.<br>Shadow cards cannot exert Úlairë Nelya during a skirmish phase.<br><b>Skirmish:</b> Heal Úlairë Nelya to add (1) for each burden.
+		lore: "Perching now on the wall beside the ruined gate the Nazgûl sent out its deadly cries. All the cliffs echoed."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_71: {
+		cardInfo: {
+			image: decipher/LOTR10071.jpg
+			collInfo: 10R71
+			rarity: R
+		}
+		title: Úlairë Toldëa
+		subtitle: Thrall of The One
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgul
+		strength: 12
+		vitality: 3
+		site: 3
+		keywords: Enduring
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeExerted
+					requires: {
+						type: phase
+						phase: skirmish
+					}
+					filter: self
+					by: side(shadow)
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: heal
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Enduring</b>.<br>Shadow cards cannot exert Úlairë Toldëa during a skirmish phase.<br><b>Skirmish:</b> Heal Úlairë Toldëa to make him <b>damage +1</b>.
+		lore: "...like shadows of untimely night, he saw in the middle airs below him five birdlike forms...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

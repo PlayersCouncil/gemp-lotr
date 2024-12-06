@@ -21,10 +21,6 @@ public abstract class ChooseCardsFromDiscardEffect extends AbstractEffect {
     private final int _maximum;
     private final Filter _filter;
 
-    public ChooseCardsFromDiscardEffect(String playerId, int minimum, int maximum, Filterable... filters) {
-        this(playerId, playerId, minimum, maximum, filters);
-    }
-
     public ChooseCardsFromDiscardEffect(String playerId, String targetPlayerDiscardId, int minimum, int maximum, Filterable... filters) {
         _playerId = playerId;
         _targetPlayerDiscardId = targetPlayerDiscardId;
@@ -45,13 +41,13 @@ public abstract class ChooseCardsFromDiscardEffect extends AbstractEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        Collection<PhysicalCard> cards = Filters.filter(game.getGameState().getDiscard(_targetPlayerDiscardId), game, _filter);
+        Collection<PhysicalCard> cards = Filters.filter(game, game.getGameState().getDiscard(_targetPlayerDiscardId), _filter);
         return cards.size() >= _minimum;
     }
 
     @Override
     protected FullEffectResult playEffectReturningResult(final LotroGame game) {
-        Collection<PhysicalCard> cards = Filters.filter(game.getGameState().getDiscard(_targetPlayerDiscardId), game, _filter);
+        Collection<PhysicalCard> cards = Filters.filter(game, game.getGameState().getDiscard(_targetPlayerDiscardId), _filter);
 
         boolean success = cards.size() >= _minimum;
 

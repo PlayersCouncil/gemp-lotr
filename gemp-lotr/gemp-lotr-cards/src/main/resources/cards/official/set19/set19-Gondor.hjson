@@ -1,0 +1,224 @@
+{
+
+	19_12: {
+		cardInfo: {
+			image: decipher/LOTR19012.jpg
+			collInfo: 19P12
+			rarity: P
+		}
+		title: Aragorn
+		subtitle: Well-traveled Guide
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		resistance: 8
+		keywords: [
+			Fellowship
+			Ranger
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: cantSpot
+						filter: companion,not(self),not(ring bearer)
+					}
+					filter: self
+					keyword: archer
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: cantSpot
+						filter: companion,not(self),not(ring bearer)
+					}
+					filter: self
+					keyword: defender+1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeMoreWoundsThan
+					requires: {
+						type: cantSpot
+						filter: companion,not(self),not(ring bearer)
+					}
+					filter: self
+					phase: skirmish
+				}
+			}
+		]
+		gametext: <b>Fellowship</b>. <b>Ranger</b>.<br>While the Ring-bearer is the only other companion you can spot, Aragorn is an <b>archer</b>, <b>defender +1</b>, and can take no more than 1 wound each skirmish.
+		lore: "The skill of the Elves can reforge the sword of Kings, but only you have the power to wield it."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_13: {
+		cardInfo: {
+			image: decipher/LOTR19013.jpg
+			collInfo: 19P13
+			rarity: P
+		}
+		title: Boromir
+		subtitle: Destined Guide
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 5
+		keywords: [
+			Fellowship
+			Ranger
+		]
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					count: 2
+					filter: unbound,hobbit
+				}
+				amount: -1
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				cost: {
+					type: exert
+					select: choose(unbound,hobbit)
+				}
+				effect: {
+					type: discard
+					select: all(minion,inSkirmish)
+				}
+			}
+		]
+		gametext: <b>Fellowship</b>. <b>Ranger</b>.<br>While you can spot two unbound Hobbits, Boromir's twilight cost is -1.<br>Each time Boromir wins a skirmish, you may exert an unbound Hobbit to discard each minion he is skirmishing from play.
+		lore: "In a dream, I saw the eastern sky grow dark."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_14: {
+		cardInfo: {
+			image: decipher/LOTR19014.jpg
+			collInfo: 19P14
+			rarity: P
+		}
+		title: Not Bound to His Fate
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		strength: 1
+		target: culture(gondor),man
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: transfer
+					select: self
+					where: choose(culture(gondor),man)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: endOfTurn
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,not(name(Aragorn))
+				}
+				effect: {
+					type: returnToHand
+					select: self
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] Man.<br>Each time bearer wins a skirmish, you may transfer this condition to another [gondor] Man.<br>At the end of each turn, if bearer is not Aragorn, return this condition to hand.
+		lore: "Your time will come. You will face the same evil...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_15: {
+		cardInfo: {
+			image: decipher/LOTR19015.jpg
+			collInfo: 19P15
+			rarity: P
+		}
+		title: Strength in My Blood
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		strength: 1
+		target: fellowship,companion
+		effects: {
+			type: modifier
+			modifier: {
+				type: addKeyword
+				filter: bearer
+				requires: {
+					type: canSpot
+					filter: bearer,culture(gondor),companion
+				}
+				keyword: damage+1
+			}
+		}
+		gametext: Bearer must be a fellowship companion.<br>While bearer is a [gondor] companion, he or she is <b>damage +1</b>.
+		lore: "I would have followed you my Brother... my Captain... my King!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

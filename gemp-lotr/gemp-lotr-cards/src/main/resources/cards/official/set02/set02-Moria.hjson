@@ -1,0 +1,1276 @@
+{
+
+	2_49: {
+		cardInfo: {
+			image: decipher/LOTR02049.jpg
+			collInfo: 2R49
+			rarity: R
+		}
+		title: Archer Commander
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: Archer
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: another,culture(moria),archer
+				amount: 2
+			}
+		}
+		gametext: <b>Archer</b>.<br>Each other [moria] archer is strength +2.
+		lore: "Their commander led the Goblin bowmen to the highest rise across the gap."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_50: {
+		cardInfo: {
+			image: decipher/LOTR02050.jpg
+			collInfo: 2R50
+			rarity: R
+		}
+		title: The Balrog's Sword
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Artifact
+		strength: 3
+		itemclass: Hand weapon
+		target: name(The Balrog)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage+1
+				}
+			}
+			{
+				type: extraPossessionClass
+			}
+		]
+		gametext: Bearer must be The Balrog.<br>It is <b>damage +1</b>.<br>This weapon may be borne in addition to 1 other hand weapon.
+		lore: "In its right hand was a blade like a stabbing tongue of fire...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_51: {
+		cardInfo: {
+			image: decipher/LOTR02051.jpg
+			collInfo: 2C51
+			rarity: C
+		}
+		title: The Balrog
+		subtitle: Durin's Bane
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 12
+		type: Minion
+		race: Balrog
+		strength: 17
+		vitality: 5
+		site: 4
+		keywords: [
+			Damage+1
+			Fierce
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: canSpot
+						filter: another,minion
+					}
+				}
+				effect: {
+					type: discard
+					select: all(another,minion)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: skipPhase
+					phase: archery
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: not
+						requires: {
+							type: location
+							filter: underground
+						}
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>. <b>Fierce</b>.<br>While you can spot The Balrog, discard all other minions. Skip the archery phase.<br>Discard The Balrog if not underground.
+		lore: "'Indeed I saw upon the bridge that which haunts our darkest dreams....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_52: {
+		cardInfo: {
+			image: decipher/LOTR02052.jpg
+			collInfo: 2R52
+			rarity: R
+		}
+		title: The Balrog
+		subtitle: Flame of Udûn
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 14
+		type: Minion
+		race: Balrog
+		strength: 17
+		vitality: 5
+		site: 4
+		keywords: [
+			Damage+1
+			Fierce
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(moria),orc
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: 
+				{
+					type: ConstantlyCheck
+					requires: {
+						type: not
+						requires: {
+							type: location
+							filter: underground
+						}
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: removeTwilight
+						amount: 2
+					}
+				]
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(moria),orc)
+					removedTwilight: 2
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>. <b>Fierce</b>. To play, spot a [moria] Orc. Discard The Balrog if not underground.<br><b>Shadow:</b> Exert The Balrog and remove (2) to play a [moria] Orc from your discard pile.
+		lore: "...suddenly it drew itself up to a great height, and its wings were spread from wall to wall...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_53: {
+		cardInfo: {
+			image: decipher/LOTR02053.jpg
+			collInfo: 2R53
+			rarity: R
+		}
+		title: Cave Troll's Chain
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Possession
+		strength: 2
+		target: name(Cave Troll of Moria)
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: endOfPhase
+					phase: maneuver
+				}
+				effect: [
+					{
+						type: chooseYesOrNo
+						player: fp
+						text: Would you like to skip the Archery phase?
+						memorize: choice
+					}
+					{
+						type: If
+						check: {
+							type: memoryIs
+							memory: choice
+							value: yes
+						}
+						true: {
+							type: addModifier
+							until: start(regroup)
+							modifier: {
+								type: skipPhase
+								phase: archery
+							}
+						}
+					}
+				]
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: takesWound
+					filter: bearer
+				}
+				requires: {
+					type: phase
+					phase: archery
+				}
+				optional: true
+				effect: {
+					type: wound
+					select: choose(archer,companion)
+				}
+			}
+		]
+		gametext: Bearer must be Cave Troll of Moria.<br>The Free Peoples player may choose for the archery phase to be skipped.<br>Each time Cave Troll of Moria takes a wound during the archery phase, you may wound an archer companion.
+		lore: "'They have a Cave Troll!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_54: {
+		cardInfo: {
+			image: decipher/LOTR02054.jpg
+			collInfo: 2U54
+			rarity: U
+		}
+		title: Dark Fire
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Condition
+		strength: -2
+		target: name(Gandalf)
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(The Balrog)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: exert
+					select: all(name(Gandalf))
+				}
+			}
+		]
+		gametext: To play, spot The Balrog. Plays on Gandalf.<br>Each time the fellowship moves, Gandalf must exert.
+		lore: "...he seemed small, and altogether alone: grey and bent, like a wizened tree before the onset of a storm."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_55: {
+		cardInfo: {
+			image: decipher/LOTR02055.jpg
+			collInfo: 2C55
+			rarity: C
+		}
+		title: Dark Places
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: unique,culture(moria),minion
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: canSpot
+					filter: not(your),site
+				}
+				effect: [
+					{
+						type: chooseActiveCards
+						text: Choose opponent's site
+						select: choose(not(your),site)
+						memorize: chosenSite
+					}
+					{
+						type: playSite
+						block: fellowship
+						number: {
+							type: siteNumberInMemory
+							memory: chosenSite
+						}
+						filter: or(marsh,underground)
+					}
+				]
+			}
+		]
+		gametext: Plays to your support area.<br>Each unique [moria] minion is strength +1.<br><b>Shadow:</b> Spot an opponent's site to replace it with your marsh or underground site of the same number.
+		lore: "'There is some new devilry here... devised for our welcome, no doubt.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_56: {
+		cardInfo: {
+			image: decipher/LOTR02056.jpg
+			collInfo: 2U56
+			rarity: U
+		}
+		title: Fill With Fear
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+			type: modifier
+			modifier: {
+				type: skipPhase
+				phase: archery
+				requires: {
+				type: canSpot
+				filter: name(The Balrog)
+				}
+			}
+			}
+			{
+			type: activated
+			phase: maneuver
+			cost: {
+				type: exert
+				select: choose(name(The Balrog))
+			}
+			effect: {
+				type: discard
+				select: choose(rangedweapon)
+			}
+			}
+		]
+		gametext: Plays to your support area.<br>While you can spot The Balrog, skip the archery phase.<br><b>Maneuver:</b> Exert The Balrog to discard a ranged weapon.
+		lore: "He drew, but his hand fell, and the arrow slipped to the ground. He gave a cry of dismay and fear."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_57: {
+		cardInfo: {
+			image: decipher/LOTR02057.jpg
+			collInfo: 2R57
+			rarity: R
+		}
+		title: Final Cry
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: skirmishabouttoend
+				involving: name(The Balrog),hasAttached(name(Whip of Many Thongs))
+			}
+			effect: {
+				type: wound
+				select: choose(companion,inskirmish)
+				times: 2
+			}
+		}
+		gametext: <b>Response:</b> If a skirmish that involved The Balrog bearing Whip of Many Thongs is about to end, wound a companion in that skirmish twice.
+		lore: "...it swung its whip, and the thongs lashed and curled about the wizard's knees, dragging him to the brink."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_58: {
+		cardInfo: {
+			image: decipher/LOTR02058.jpg
+			collInfo: 2C58
+			rarity: C
+		}
+		title: Foul Tentacle
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Minion
+		race: Creature
+		strength: 4
+		vitality: 1
+		site: 4
+		keywords: Tentacle
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(tentacle)
+					showAll: true
+					shuffle: true
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBear
+					filter: self
+					cardFilter: possession
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: location
+						filter: not(marsh)
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: <b>Tentacle</b>.<br>When you play this minion, you may play a tentacle from your draw deck. This minion may not bear possessions and is discarded if not at a marsh.
+		lore: "Its fingered end had hold of Frodo's foot, and was dragging him into the water."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_59: {
+		cardInfo: {
+			image: decipher/LOTR02059.jpg
+			collInfo: 2U59
+			rarity: U
+		}
+		title: Foul Things
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			effect: {
+				type: playCardFromDiscard
+				select: choose(culture(moria),minion)
+			}
+		}
+		gametext: <b>Shadow:</b> Play a [moria] minion from your discard pile.
+		lore: "'Something has crept, or has been driven out of dark waters under the mountains.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_60: {
+		cardInfo: {
+			image: decipher/LOTR02060.jpg
+			collInfo: 2C60
+			rarity: C
+		}
+		title: Goblin Bowman
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 4
+		vitality: 1
+		site: 4
+		keywords: Archer
+
+		gametext: <b>Archer</b>.
+		lore: "The crude arrows of the Goblins served notice of the dangers of Moria."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_61: {
+		cardInfo: {
+			image: decipher/LOTR02061.jpg
+			collInfo: 2C61
+			rarity: C
+		}
+		title: Goblin Flankers
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 11
+		vitality: 3
+		site: 4
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: self
+			}
+			requires: {
+				type: moveCountMinimum
+				amount: 2
+			}
+			effect: {
+				type: addTwilight
+				amount: 3
+			}
+		}
+		gametext: When you play this minion, you may add (3) if the fellowship has moved more than once this turn.
+		lore: "'There are Orcs, very many of them.... And some are large and evil....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_62: {
+		cardInfo: {
+			image: decipher/LOTR02062.jpg
+			collInfo: 2C62
+			rarity: C
+		}
+		title: Goblin Pursuer
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 1
+		site: 4
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				requires: {
+					type: moveCountMinimum
+					amount: 2
+				}
+				filter: self
+				amount: 3
+			}
+		}
+		gametext: If the fellowship has moved more than once this turn, this minion is strength +3.
+		lore: "Had the fellowship remained in Dimrill Dale, pursuers from Moria would have overwhelmed them."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_63: {
+		cardInfo: {
+			image: decipher/LOTR02063.jpg
+			collInfo: 2C63
+			rarity: C
+		}
+		title: Goblin Reinforcements
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 1
+		site: 4
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: self
+			}
+			effect: {
+				type: heal
+				select: choose(culture(moria),minion)
+			}
+		}
+		gametext: When you play this minion, you may heal a [moria] minion.
+		lore: "'We don't have a moment! Come nightfall these hills will swarm with Orcs!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_64: {
+		cardInfo: {
+			image: decipher/LOTR02064.jpg
+			collInfo: 2C64
+			rarity: C
+		}
+		title: Goblin Scrabbler
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Minion
+		race: Orc
+		strength: 4
+		vitality: 1
+		site: 4
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: choose(culture(elven),condition)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyRoamingPenalty
+					filter: culture(moria),orc
+					amount: -1
+				}
+			}
+		]
+		gametext: When you play this minion, you may discard an [elven] condition.<br>The roaming penalty for each [moria] Orc you play is -1.
+		lore: "Orcs were as keen as hounds on a scent, it was said, but they could also climb."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_65: {
+		cardInfo: {
+			image: decipher/LOTR02065.jpg
+			collInfo: 2C65
+			rarity: C
+		}
+		title: Goblin Spearman
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 1
+		site: 4
+		effects: {
+			type: modifier
+			modifier: {
+				type: addKeyword
+				filter: self,hasAttached(name(Goblin Spear))
+				keyword: damage
+				amount: 2
+			}
+		}
+		gametext: While bearing a Goblin Spear, this minion is <b>damage +2</b>.
+		lore: "...with the speed of a striking snake, he charged into the Company and thrust with his spear...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_66: {
+		cardInfo: {
+			image: decipher/LOTR02066.jpg
+			collInfo: 2R66
+			rarity: R
+		}
+		title: Huge Tentacle
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Minion
+		race: Creature
+		strength: 7
+		vitality: 2
+		site: 4
+		keywords: [
+			Tentacle
+			Damage+1
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(name(Watcher in the Water))
+					showAll: true
+					shuffle: true
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBear
+					filter: self
+					cardFilter: possession
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: location
+						filter: not(marsh)
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: <b>Tentacle</b>. <b>Damage +1</b>.<br>When you play this minion, you may play Watcher in the Water from your draw deck.<br>This minion may not bear possessions and is discarded if not at a marsh.
+		lore: "Out from the water a long sinuous tentacle had crawled; it was pale-green and luminous and wet."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_67: {
+		cardInfo: {
+			image: decipher/LOTR02067.jpg
+			collInfo: 2U67
+			rarity: U
+		}
+		title: Moria Archer Troop
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 6
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 3
+		site: 4
+		keywords: Archer
+		effects: {
+			type: modifier
+			modifier: {
+				type: ModifyArcheryTotal
+				requires: {
+					type: canSpot
+					filter: another,culture(moria),archer
+				}
+				side: shadow
+				amount: 1
+			}
+		}
+		gametext: <b>Archer</b>.<br>While you can spot another [moria] archer, add 1 to the minion archery total.
+		lore: "Most of the Goblin arrows flew harmlessly into the chasm, but there were so many!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_68: {
+		cardInfo: {
+			image: decipher/LOTR02068.jpg
+			collInfo: 2U68
+			rarity: U
+		}
+		title: Must Do Without Hope
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(name(The Balrog))
+			}
+			effect: {
+				type: addBurdens
+				amount: 1
+			}
+		}
+		gametext: <b>Maneuver:</b> Exert The Balrog to add a burden.
+		lore: "His enemy halted again, facing him, and the shadow about it reached out like two vast wings."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_69: {
+		cardInfo: {
+			image: decipher/LOTR02069.jpg
+			collInfo: 2C69
+			rarity: C
+		}
+		title: Old Differences
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: {
+				type: modifyStrength
+				select: choose(or(Elf,Dwarf))
+				amount: {
+					type: Conditional
+					requires: [
+						{
+							type: canSpot
+							filter: Elf
+						}
+						{
+							type: canSpot
+							filter: Dwarf
+						}
+					]
+					true: -3
+					false: -1
+				}
+			}
+		}
+		gametext: <b>Skirmish:</b> Make an Elf or Dwarf skirmishing a [moria] Orc strength -1 (or -3 if you spot an Elf and a Dwarf).
+		lore: "'I'll be dead before I see the Ring in the hands of an Elf!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_70: {
+		cardInfo: {
+			image: decipher/LOTR02070.jpg
+			collInfo: 2U70
+			rarity: U
+		}
+		title: Power and Terror
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			cost: {
+				type: revealCardsFromHand
+				count: any
+				select: choose(culture(moria),orc)
+				memorize: revealedCards
+			}
+			effect: {
+				type: PlayCardFromHand
+				select: choose(name(The Balrog))
+				discount: {
+					type: forEachInMemory
+					memory: revealedCards
+					multiplier: -2
+				}
+				//As a play-from-hand effect, this has to be checked for playability before
+				// the event resolves, even tho it's an effect and not a cost.  Thus we have to
+				// provide the maximum theoretical discount so we can play this card even if 
+				// there is less twilight in the pool than the Balrog costs. 
+				maxDiscount: {
+					type: ForEachInHand
+					filter: culture(moria),orc
+					multiplier: -2
+				}
+			}
+		}
+		gametext: <b>Shadow:</b> Reveal any number of [moria] Orcs from your hand to play The Balrog. Its twilight cost is -2 for each Orc revealed.
+		lore: "The ranks of the orcs had opened, and they crowded away, as if they themselves were afraid."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_71: {
+		cardInfo: {
+			image: decipher/LOTR02071.jpg
+			collInfo: 2U71
+			rarity: U
+		}
+		title: Throw Yourself in Next Time
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Condition
+		target: hobbit,companion
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(moria),orc
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBeExerted
+					filter: bearer
+					by: side(Free People)
+				}
+			}
+		]
+		gametext: To play, spot a [moria] Orc. Plays on a Hobbit companion.<br>Bearer may be exerted only by Shadow cards.
+		lore: "'This is a serious journey, not a hobbit walking- party.... Now be quiet!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_72: {
+		cardInfo: {
+			image: decipher/LOTR02072.jpg
+			collInfo: 2U72
+			rarity: U
+		}
+		title: Troubled Mountains
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(culture(moria),minion)
+			}
+			effect: {
+				type: addTwilight
+				amount: {
+					type: min
+					firstNumber: 5
+					secondNumber: {
+						type: forEachBurden
+					}
+				}
+			}
+		}
+		gametext: <b>Shadow:</b> Exert a [moria] minion and spot X burdens to add (X) (limit (5)).
+		lore: "'The Dimrill Dale is full of vapour and clouds of smoke.... There are noises in the deeps of the earth.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_73: {
+		cardInfo: {
+			image: decipher/LOTR02073.jpg
+			collInfo: 2R73
+			rarity: R
+		}
+		title: Watcher in the Water
+		subtitle: Keeper of Westgate
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 4
+		type: Minion
+		race: Creature
+		strength: 11
+		vitality: 4
+		site: 4
+		keywords: Damage+1
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: canSpot
+						filter: another,minion,not(Tentacle)
+					}
+				}
+				effect: {
+					type: discard
+					select: all(another,minion,not(Tentacle))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: Tentacle
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: Tentacle
+					keyword: Damage
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBear
+					filter: self
+					cardFilter: possession
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: location
+						filter: not(marsh)
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>.<br>While you can spot Watcher in the Water, discard all other minions (except tentacles).<br>Each tentacle is strength +2 and <b>damage</b> <b>+1</b>. This minion may not bear possessions and is discarded if not at a marsh.
+		lore: "The dark water boiled... there was a hideous stench."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_74: {
+		cardInfo: {
+			image: decipher/LOTR02074.jpg
+			collInfo: 2R74
+			rarity: R
+		}
+		title: Whip of Many Thongs
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 1
+		type: Artifact
+		strength: 1
+		itemclass: Hand weapon
+		target: title(The Balrog)
+		effects: {
+			type: activated
+			phase: Skirmish
+			cost: {
+				type: exert
+				select: bearer
+			}
+			effect: {
+				type: discard
+				select: choose(or(helm,shield,armor),attachedTo(inSkirmishAgainst(bearer)))
+			}
+		}
+		gametext: Bearer must be The Balrog.<br><b>Skirmish:</b> Exert The Balrog to discard a helm, shield, or armor borne by a character The Balrog is skirmishing.
+		lore: "It raised the whip, and the thongs whined and cracked."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

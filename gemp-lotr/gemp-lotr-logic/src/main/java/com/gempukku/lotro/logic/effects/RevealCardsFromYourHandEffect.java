@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.PlayOrder;
 import com.gempukku.lotro.logic.decisions.ArbitraryCardsSelectionDecision;
-import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.results.RevealCardFromHandResult;
@@ -18,10 +17,6 @@ public class RevealCardsFromYourHandEffect extends AbstractEffect {
     private final PhysicalCard _source;
     private final String _handPlayerId;
     private final Collection<? extends PhysicalCard> _cards;
-
-    public RevealCardsFromYourHandEffect(PhysicalCard source, String handPlayerId, PhysicalCard card) {
-        this(source, handPlayerId, Collections.singleton(card));
-    }
 
     public RevealCardsFromYourHandEffect(PhysicalCard source, String handPlayerId, Collection<? extends PhysicalCard> cards) {
         _source = source;

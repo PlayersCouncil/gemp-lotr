@@ -2,17 +2,14 @@
 	
 	58_43: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN08E043.1_card.jpg
-			javaClass: false
+			//id: 8_43.1
 			parent: 8_43
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN08E043.1_card.jpg
 			collInfo: 8R43
 			rarity: R
-			setNum: "8"
-			cardNum: 43
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Shadow Host
 		unique: true
@@ -26,12 +23,15 @@
 		vitality: 3
 		signet: Aragorn
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: culture(gondor),wraith
-			count: 2
-		}
 		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gondor),wraith
+					count: 2
+				}
+			}
 			{
 				type: ExtraCost
 				cost: {
@@ -65,17 +65,14 @@
 	
 	58_48: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN08E048.1.jpg
-			javaClass: false
+			//id: 8_48.1
 			parent: 8_48
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN08E048.1.jpg
 			collInfo: 8C48
 			rarity: C
-			setNum: "8"
-			cardNum: 48
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Swept Away
 		unique: false
@@ -87,7 +84,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				optional: false
 				trigger: {
 					type: moves
@@ -105,7 +103,7 @@
 						}
 						{
 							type: discard
-							filter: self
+							select: self
 						}
 					]
 				}
@@ -122,7 +120,7 @@
 				}
 			}
 			{
-				type: ActivatedTrigger
+				type: Response
 				trigger: {
 					type: AboutToDiscard
 					filter: self
@@ -135,7 +133,7 @@
 				}
 				effect: {
 					type: PreventDiscard
-					filter: self
+					select: self
 				}
 			}
 		]

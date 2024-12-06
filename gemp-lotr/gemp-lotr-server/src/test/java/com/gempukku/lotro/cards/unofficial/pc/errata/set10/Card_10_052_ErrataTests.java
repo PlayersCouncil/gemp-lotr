@@ -63,7 +63,7 @@ public class Card_10_052_ErrataTests
 		assertEquals(Side.SHADOW, underfoot.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, underfoot.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, underfoot.getBlueprint().getCardType());;
-		assertTrue(scn.HasKeyword(underfoot, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(underfoot, Keyword.SUPPORT_AREA));
 		assertEquals(1, underfoot.getBlueprint().getTwilightCost());
 	}
 

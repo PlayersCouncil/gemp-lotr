@@ -1,0 +1,290 @@
+{
+
+	8_9: {
+		cardInfo: {
+			image: decipher/LOTR08009.jpg
+			collInfo: 8U9
+			rarity: U
+		}
+		title: A Grey Ship
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		timewords: Archery
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: elf,companion
+			}
+			cost: [
+				{
+					type: chooseANumber
+					text: Choose X (reduce fellowship archery total)
+					from: 0
+					to: {
+						type: archeryTotal
+						side: free people
+					}
+					memorize: x
+				}
+				{
+					type: modifyArcheryTotal
+					side: free people
+					amount: {
+						type: fromMemory
+						memory: x
+						multiplier: -1
+					}
+				}
+			]
+			effect: [
+				{
+					type: heal
+					select: choose(unbound,companion)
+					count: {
+						type: fromMemory
+						memory: x
+					}
+				}
+				{
+					type: addModifier
+					modifier: {
+						type: CantUseSpecialAbilities
+						player: you
+						phase: archery
+					}
+				}
+			]
+		}
+		gametext: Spot an Elf companion and make the fellowship archery total -X (to a minimum of 0) to heal X unbound companions. You cannot use archery special abilities.
+		lore: "'...full of ghosts.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_10: {
+		cardInfo: {
+			image: decipher/LOTR08010.jpg
+			collInfo: 8C10
+			rarity: C
+		}
+		title: Legolas
+		subtitle: Elven Stalwart
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		keywords: Archer
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: wounded,minion
+						count: 3
+					}
+					filter: minion,inSkirmishAgainst(self)
+					amount: -3
+				}
+			}
+		]
+		gametext: <b>Archer</b>.<br>While you can spot 3 wounded minions, each minion skirmishing Legolas is strength -3.
+		lore: "...Legolas of the Elves, for whom the ghosts of Men have no terror."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_11: {
+		cardInfo: {
+			image: decipher/LOTR08011.jpg
+			collInfo: 8R11
+			rarity: R
+		}
+		title: Life of the Eldar
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: elf
+				count: 2
+			}
+			cost: {
+				type: discard
+				select: choose(elf)
+			}
+			effect: [
+				{
+					type: drawCards
+					count: 3
+				}
+			]
+		}
+		gametext: To play, spot 2 Elves.<br>Discard an Elf to draw 3 cards.
+		lore: "'Your hands are cold....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_12: {
+		cardInfo: {
+			image: decipher/LOTR08012.jpg
+			collInfo: 8R12
+			rarity: R
+		}
+		title: Reckless We Rode
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		timewords: Archery
+		effects: {
+			type: event
+			cost: [
+				{
+					type: exert
+					select: choose(elf,companion)
+				}
+				{
+					type: chooseANumber
+					text: Choose X (reduce fellowship archery total)
+					from: 0
+					to: {
+						type: archeryTotal
+						side: free people
+					}
+					memorize: x
+				}
+				{
+					type: modifyArcheryTotal
+					side: free people
+					amount: {
+						type: fromMemory
+						memory: x
+						multiplier: -1
+					}
+				}
+			],
+			effect: [
+				{
+					type: wound
+					select: choose(minion)
+					times: {
+						type: fromMemory
+						memory: x
+					}
+				}
+				{
+					type: addModifier
+					modifier: {
+						type: CantUseSpecialAbilities
+						player: you
+						phase: archery
+					}
+				}
+			]
+		}
+		gametext: Exert an Elf companion and make the fellowship archery total -X (to a minimum of 0) to wound a minion X times. You cannot use archery special abilities.
+		lore: "'...driving them like leaves....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_13: {
+		cardInfo: {
+			image: decipher/LOTR08013.jpg
+			collInfo: 8U13
+			rarity: U
+		}
+		title: Shake Off the Shadow
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: exert
+						select: choose(elf,companion)
+					}
+					{
+						type: exert
+						select: choose(or(culture(gandalf),culture(dwarven)),companion)
+					}
+				]
+				effect: {
+					type: AddCultureTokens
+					culture: elven
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: RemoveCultureTokens
+					culture: elven
+					select: self
+				}
+				effect: {
+					type: modifyArcheryTotal
+					side: free people
+					amount: 1
+				}
+				limitPerPhase: 2
+			}
+		]
+		gametext: <b>Fellowship:</b> Exert an Elf companion and either a [gandalf] companion or a [dwarven] companion to add an [elven] token here.<br><b>Archery:</b> Remove an [elven] token here to make the fellowship archery total +1 (limit +2).
+		lore: "'Speak and be comforted....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

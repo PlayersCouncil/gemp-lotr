@@ -38,8 +38,8 @@ public class Card_03_103_ErrataTests
 		 * Culture: Sauron
 		 * Twilight Cost: 0
 		 * Type: Event
-		 * Subtype: Maneuver
-		 * Game Text: Spot a [sauron] minion to wound Galadriel three times (or exhaust her if Galadriel is the Ring-bearer). The Free Peoples player may discard two elves to prevent this. 
+		 * Subtype: Response
+		 * Game Text: If a companion or ally's special ability is used, you may spot a [sauron] card to wound that character.  The Free Peoples player may discard another companion to prevent this.
 		*/
 
 		var scn = GetScenario();
@@ -52,7 +52,7 @@ public class Card_03_103_ErrataTests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 

@@ -16,6 +16,17 @@ public interface LotroCardBlueprint {
         LEFT, RIGHT
     }
 
+    default LotroCardBlueprint getParent() {
+        return this;
+    }
+
+    String getId();
+
+    boolean canStartWithRing();
+
+    //This isn't ideal, but there's 2,000 java cards that already exist.
+    // Adding the argument to their constructors would be a chore.
+    void setId(String id);
     Side getSide();
 
     CardType getCardType();
@@ -28,14 +39,23 @@ public interface LotroCardBlueprint {
 
     String getTitle();
     String getSanitizedTitle();
+    String getFullName();
+    String getSanitizedFullName();
 
     String getSubtitle();
+    String getGameText();
+    String getFormattedGameText();
+    String getLore();
+    String getPromoText();
+    CardInfo getCardInfo();
 
     Signet getSignet();
 
     boolean hasKeyword(Keyword keyword);
 
     int getKeywordCount(Keyword keyword);
+
+    boolean hasTimeword(Timeword timeword);
 
     Filterable getValidTargetFilter(String playerId, LotroGame game, PhysicalCard self);
 
@@ -49,9 +69,8 @@ public interface LotroCardBlueprint {
 
     int getResistance();
 
-    int[] getAllyHomeSiteNumbers();
-
-    SitesBlock getAllyHomeSiteBlock();
+    Set<AllyHome> getAllyHomes();
+    boolean hasAllyHome(AllyHome home);
 
     PlayEventAction getPlayEventCardAction(String playerId, LotroGame game, PhysicalCard self);
 
@@ -69,6 +88,8 @@ public interface LotroCardBlueprint {
     List<? extends Action> getPhaseActionsInHand(String playerId, LotroGame game, PhysicalCard self);
 
     List<? extends Action> getPhaseActionsFromDiscard(String playerId, LotroGame game, PhysicalCard self);
+
+    List<? extends Action> getPhaseActionsFromDrawDeck(String playerId, LotroGame game, PhysicalCard self);
 
     List<? extends ActivateCardAction> getPhaseActionsInPlay(String playerId, LotroGame game, PhysicalCard self);
 

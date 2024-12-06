@@ -16,6 +16,7 @@ import com.gempukku.lotro.logic.effects.StackActionEffect;
 import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.ExtraFilters;
+import com.gempukku.lotro.logic.timing.FailedEffect;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
@@ -23,23 +24,16 @@ import java.util.Collection;
 public class PlayCardFromHand implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "on", "cost", "ignoreInDeadPile", "memorize", "nocheck");
+        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "maxDiscount", "removedTwilight", "ignoreInDeadPile", "ignoreRoamingPenalty", "memorize");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
-        final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("cost"), 0, environment);
+        final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("discount"), 0, environment);
+        final ValueSource maxDiscountSource = effectObject.get("maxDiscount") == null ? costModifierSource : ValueResolver.resolveEvaluator(effectObject.get("maxDiscount"), 0, environment);
+        final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
         final boolean ignoreInDeadPile = FieldUtils.getBoolean(effectObject.get("ignoreInDeadPile"), "ignoreInDeadPile", false);
+        final boolean ignoreRoamingPenalty = FieldUtils.getBoolean(effectObject.get("ignoreRoamingPenalty"), "ignoreRoamingPenalty", false);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
-        final boolean noCheck = FieldUtils.getBoolean(effectObject.get("nocheck"), "nocheck", false);
-
-        ValueSource countSource = new ConstantEvaluator(1);
-        if(noCheck)
-        {
-            //This range will cause choice checks to succeed even if no valid choices are found (which is how draw deck
-            // searching is supposed to work RAW).  However we don't want this to be the default, else dual-choice cards
-            // that play "from draw deck or discard pile" would allow empty sources to be chosen, which is NPE.
-            countSource = ValueResolver.resolveEvaluator("0-1", 1, environment);
-        }
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 
@@ -47,17 +41,26 @@ public class PlayCardFromHand implements EffectAppenderProducer {
         result.setPlayabilityCheckedForEffect(true);
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInHand(filter,
+                CardResolver.resolveCardsInHand(select,
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(game, costModifier, false, ignoreInDeadPile), ExtraFilters.attachableTo(game, onFilterable));
+                                return Filters.and(Filters.playable(game, costModifier, ignoreRoamingPenalty, ignoreInDeadPile), ExtraFilters.attachableTo(game, costModifier, onFilterable));
                             }
-                            return Filters.playable(game, costModifier, false, ignoreInDeadPile);
+                            return Filters.playable(game, removedTwilight, costModifier, ignoreRoamingPenalty, ignoreInDeadPile, true);
                         },
-                        countSource, memorize, "you", "you", "Choose card to play from hand", false, environment));
+                        (actionContext) -> {
+                            final LotroGame game = actionContext.getGame();
+                            final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
+                            if (onFilterableSource != null) {
+                                final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
+                                return Filters.and(Filters.playable(game, maxDiscountModifier, ignoreRoamingPenalty, ignoreInDeadPile), ExtraFilters.attachableTo(game, maxDiscountModifier, onFilterable));
+                            }
+                            return Filters.playable(game, removedTwilight, maxDiscountModifier, ignoreRoamingPenalty, ignoreInDeadPile, true);
+                        },
+                        actionContext -> new ConstantEvaluator(1), memorize, "you", "you", "Choose card to play from hand", false, environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -69,10 +72,10 @@ public class PlayCardFromHand implements EffectAppenderProducer {
 
                             Filterable onFilterable = (onFilterableSource != null) ? onFilterableSource.getFilterable(actionContext) : Filters.any;
 
-                            final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(game, cardsToPlay.iterator().next(), costModifier, onFilterable, false);
+                            final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(game, cardsToPlay.iterator().next(), costModifier, onFilterable, ignoreRoamingPenalty);
                             return new StackActionEffect(playCardAction);
                         } else {
-                            return null;
+                            return new FailedEffect();
                         }
                     }
                 });

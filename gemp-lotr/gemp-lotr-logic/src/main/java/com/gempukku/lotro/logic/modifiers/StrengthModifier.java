@@ -10,10 +10,6 @@ public class StrengthModifier extends AbstractModifier {
     private final Evaluator _evaluator;
     private final boolean _nonCardTextModifier;
 
-    public StrengthModifier(PhysicalCard source, Filterable affectFilter, int modifier) {
-        this(source, affectFilter, null, modifier);
-    }
-
     public StrengthModifier(PhysicalCard source, Filterable affectFilter, Condition condition, int modifier) {
         this(source, affectFilter, condition, new ConstantEvaluator(modifier));
     }

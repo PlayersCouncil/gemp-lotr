@@ -1,17 +1,11 @@
 {
 	67_10: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN17E010.1.jpg
-			javaClass: false
-			parent: 17_10
-			parentPath: errata/pc
-			version: 1
+			//id: 7_10.1
+			revision: 1
+			image: errata/LOTR-EN17E010.1.jpg
 			collInfo: 17U10
 			rarity: U
-			setNum: "17"
-			cardNum: 10
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Namárië
 		unique: true
@@ -23,16 +17,17 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: elven
-					filter: self
-					amount: {
+					select: self
+					count: {
 						type: ForEachYouCanSpot
 						limit: 3
 						filter: hunter
@@ -51,31 +46,31 @@
 						]
 						effects: [
 							{
-								type: conditional
-								requires: {
+								type: If
+								check: {
 									type: cantSpot
 									count: 1
-									filter: HasAnyTokens,self
+									filter: HasAnyCultureTokens,self
 								}
-								effect: [
+								true: [
 									{
 										type: discard
-										filter: self
+										select: self
 									}
 								]
 							}
 							{
-								type: conditional
-								requires: {
+								type: If
+								check: {
 									type: canSpot
 									count: 1
-									filter: HasAnyTokens,self
+									filter: HasAnyCultureTokens,self
 								}
-								effect: [
+								true: [
 									{
-										type: removeTokens
+										type: RemoveCultureTokens
 										count: 1
-										filter: self
+										select: self
 									}
 								]
 							}
@@ -91,7 +86,7 @@
 				]
 				effect: {
 					type: discard
-					filter: choose(condition)
+					select: choose(condition)
 				}
 			}
 		]

@@ -8,8 +8,8 @@ import com.gempukku.lotro.game.state.LotroGame;
 public class PossessionClassSpotModifier extends AbstractModifier {
     private final PossessionClass _possessionClass;
 
-    public PossessionClassSpotModifier(PhysicalCard source, PossessionClass possessionClass) {
-        super(source, "Spotting modifier", null, ModifierEffect.SPOT_MODIFIER);
+    public PossessionClassSpotModifier(PhysicalCard source, Condition condition, PossessionClass possessionClass) {
+        super(source, "Spotting modifier", null, condition, ModifierEffect.SPOT_MODIFIER);
         _possessionClass = possessionClass;
     }
 

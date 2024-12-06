@@ -2,17 +2,11 @@
 
 	65_15: {
 		cardInfo: {
-			imagePath: errata/65_15.jpg
-			javaClass: false
-			parent: 15_15
-			parentPath: errata/pc
-			version: 1?
+			//id: 5_15.1
+			revision: 1
+			image: errata/65_15.jpg
 			collInfo: 15C15
 			rarity: C
-			setNum: "15"
-			cardNum: 15
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Focus
 		unique: true
@@ -22,14 +16,15 @@
 		keyword: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsskirmish
 					filter: name(legolas)
 				}
 				effect: {
 					type: heal
-					filter: choose(or(and(culture(dwarven),Dwarf,hunter),and(culture(gondor),man,hunter)))
+					select: choose(or(and(culture(dwarven),Dwarf,hunter),and(culture(gondor),man,hunter)))
 				}
 			}
 			{
@@ -37,11 +32,11 @@
 				phase: skirmish
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(culture(elven),elf)
+					select: choose(culture(elven),elf)
 					amount: 2
 				}
 			}

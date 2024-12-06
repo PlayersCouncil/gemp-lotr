@@ -387,7 +387,7 @@ table.tables tr.privateForPlayer {
 	top:  0 !important;
 }
 
-.ui-resizable-handle {
+.ui-resizable-handle, .ui-layout-resizer{
 	background-color: #777777;
 	height: 7px;
 	top: -1px;

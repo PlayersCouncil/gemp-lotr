@@ -2,19 +2,10 @@ package com.gempukku.lotro.logic.modifiers;
 
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
-import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 
 public class FPCulturesSpotCountModifier extends AbstractModifier {
     private final Evaluator _valueEvaluator;
-
-    public FPCulturesSpotCountModifier(PhysicalCard source, int value) {
-        this(source, null, new ConstantEvaluator(value));
-    }
-
-    public FPCulturesSpotCountModifier(PhysicalCard source, Condition condition, int value) {
-        this(source, condition, new ConstantEvaluator(value));
-    }
 
     public FPCulturesSpotCountModifier(PhysicalCard source, Condition condition, Evaluator value) {
         super(source, "Modifies FP culture count", null, condition, ModifierEffect.SPOT_MODIFIER);

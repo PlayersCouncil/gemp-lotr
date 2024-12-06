@@ -1,0 +1,704 @@
+{
+
+	11_161: {
+		cardInfo: {
+			image: decipher/LOTR11161.jpg
+			collInfo: 11S161
+			rarity: S
+		}
+		title: Concerning Hobbits
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(hobbit)
+					amount: {
+						type: forEachYouCanSpot
+						filter: or(dwelling,forest),zone(adventure path)
+					}
+				}
+			]
+		}
+		gametext: For each dwelling and forest site on the adventure path, make a Hobbit strength +1.
+		lore: "...they love peace and quiet and good tilled earth; a well-ordered and well-farmed countryside was their favorite haunt."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_162: {
+		cardInfo: {
+			image: decipher/LOTR11162.jpg
+			collInfo: 11C162
+			rarity: C
+		}
+		title: Crouched Down
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		keywords: Stealth
+		effects: {
+			type: event
+			effect: [
+				{
+					type: memorizeNumber
+					memory: hobbitResistance
+					amount: {
+						type: Subtract
+						firstNumber: {
+							type: forEachResistance
+							filter: hobbit,inSkirmish
+						}
+						secondNumber: 1
+					}
+				}
+				{
+					type: cancelSkirmish
+					filter: hobbit,inSkirmishAgainst(minion,MaxStrength(memory(hobbitResistance)))
+				}
+			]
+		}
+		gametext: <b>Stealth</b>.<br>Cancel a skirmish involving a Hobbit and a minion whose strength is lower than that Hobbit's resistance.
+		lore: "Frodo felt a sudden chill running through him and clutching at his heart...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_163: {
+		cardInfo: {
+			image: decipher/LOTR11163.jpg
+			collInfo: 11U163
+			rarity: U
+		}
+		title: Farmer Maggot
+		subtitle: Hobbit of the Marish
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 3
+		resistance: 8
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: or(dwelling,forest)
+					}
+					filter: self
+					amount: 4
+				}
+			}
+		]
+		gametext: While Farmer Maggot is at a dwelling or forest site, he is strength +4.
+		lore: "'I didn't like the looks of him; and when Grip came out, he took one sniff and let out a yelp as if he had been stung....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_164: {
+		cardInfo: {
+			image: decipher/LOTR11164.jpg
+			collInfo: 11S164
+			rarity: S
+		}
+		title: Frodo
+		subtitle: Protected by Many
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 10
+		canStartWithRing: true
+		keywords: [
+			Ring-bearer
+			Ring-bound
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: muster
+				}
+			}
+		]
+		gametext: <b>Ring-bearer</b>. <b>Ring-bound</b>.<br>At the start of the regroup phase, you may exert Frodo to make him gain <b>muster</b> until the end of the regroup phase. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
+		lore: "'I will take the Ring... though I do not know the way.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_165: {
+		cardInfo: {
+			image: decipher/LOTR11165.jpg
+			collInfo: 11R165
+			rarity: R
+		}
+		title: Habits of Home
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 4
+		type: Condition
+		target: hobbit,not(hasAttached(title(Habits of Home)))
+		keywords: Toil 2
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesFrom
+					filter: or(dwelling,forest)
+				}
+				effect: {
+					type: removeTwilight
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Toil 2</b>. <helper>(For each [shire] character you exert when playing this, its twilight cost is -2.)</helper><br>Bearer must be a Hobbit. Limit 1 per bearer.<br>Each time the fellowship moves from a dwelling or forest site, remove (1).
+		lore: "'What about second breakfast?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_166: {
+		cardInfo: {
+			image: decipher/LOTR11166.jpg
+			collInfo: 11S166
+			rarity: S
+		}
+		title: Hobbit Sword
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: hobbit
+
+		gametext: Bearer must be a Hobbit.
+		lore: "'Strap these on....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_167: {
+		cardInfo: {
+			image: decipher/LOTR11167.jpg
+			collInfo: 11C167
+			rarity: C
+		}
+		title: Incognito
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		keywords: Stealth
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(hobbit)
+				count: 2
+			}
+			effect: [
+				{
+					type: if
+					check: {
+						type: location
+						filter: dwelling
+					}
+					true: {
+						type: cancelSkirmish
+						filter: hobbit
+					}
+					false: {
+						type: modifyStrength
+						select: choose(hobbit)
+						amount: 3
+					}
+				}
+			]
+		}
+		gametext: <b>Stealth</b>.<br>If the fellowship is at a dwelling site, exert 2 Hobbits to cancel a skirmish involving a Hobbit.<br>At any other site, exert 2 Hobbits to make a Hobbit strength +3.
+		lore: "'I am Mr. Underhill, if any name must be given.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_168: {
+		cardInfo: {
+			image: decipher/LOTR11168.jpg
+			collInfo: 11C168
+			rarity: C
+		}
+		title: Merry
+		subtitle: Loyal Companion
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 9
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: other,unbound,companion,assignedToSkirmish(any)
+						multiplier: 2
+					}
+				}
+			}
+		]
+		gametext: For each other unbound companion assigned to a skirmish, Merry is strength +2.
+		lore: "'We can't leave Frodo! Pippin and I always intended to go wherever he went, and we still do.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_169: {
+		cardInfo: {
+			image: decipher/LOTR11169.jpg
+			collInfo: 11C169
+			rarity: C
+		}
+		title: The More, The Merrier
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 6
+		type: Event
+		timewords: Fellowship
+		keywords: Toil 2
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(shire),companion
+				count: 2
+			}
+			effect: [
+				{
+					type: removeBurdens
+					amount: 2
+				}
+			]
+		}
+		gametext: <b>Toil 2</b>. <helper>(For each [shire] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot 2 [shire] companions to remove 2 burdens.
+		lore: "'This, my friend, is a pint!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_170: {
+		cardInfo: {
+			image: decipher/LOTR11170.jpg
+			collInfo: 11R170
+			rarity: R
+		}
+		title: Pippin
+		subtitle: Brave Decoy
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 9
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: [
+					{
+						type: canSpot
+						filter: self,notAssignedToSkirmish
+					}
+					{
+						type: canSpot
+						filter: unbound, companion, InSkirmish, resistanceLessThanFilter(self)
+					}
+				]
+				effect: {
+					type: replaceInSkirmish
+					filter: unbound, companion, InSkirmish, resistanceLessThanFilter(self)
+					with: self
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> If Pippin is not assigned to a skirmish, spot an unbound companion who has less resistance than Pippin to have Pippin replace him or her in a skirmish.
+		lore: "Merry and he had drawn their swords, but the Orcs did not wish to fight...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_171: {
+		cardInfo: {
+			image: decipher/LOTR11171.jpg
+			collInfo: 11R171
+			rarity: R
+		}
+		title: Salt from the Shire
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		resistance: 2
+		itemclass: Box
+		target: hobbit
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: bearer,unbound,hobbit
+				}
+				cost: [
+					{
+						type: memorizeActive
+						memory: bearer
+						filter: bearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: alterOverwhelmMultiplier
+					select: memory(bearer)
+					multiplier: 3
+				}
+			}
+		]
+		gametext: Bearer must be a Hobbit.<br><b>Fellowship:</b> Discard this possession to remove a burden.<br><b>Skirmish:</b> If bearer is an unbound Hobbit, discard this possession to prevent him or her from being overwhelmed unless his or her strength is tripled.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_172: {
+		cardInfo: {
+			image: decipher/LOTR11172.jpg
+			collInfo: 11U172
+			rarity: U
+		}
+		title: Sam
+		subtitle: Steadfast Friend
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 10
+		keywords: Ring-bound
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: other,companion
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Ring-bound</b>.<br>Each other companion is resistance +1.
+		lore: "'I'm coming too, or neither of us is going. I'll knock holes in all the boats first.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_173: {
+		cardInfo: {
+			image: decipher/LOTR11173.jpg
+			collInfo: 11R173
+			rarity: R
+		}
+		title: Sting
+		subtitle: Weapon of Heritage
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: or(title(Bilbo),title(Frodo),title(Sam))
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: bearer,or(title(Bilbo),title(Frodo))
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: modifyResistance
+					select: choose(not(bearer),companion)
+					amount: 2
+					until: regroup
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer,title(Sam)
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
+		]
+		gametext: Bearer must be Bilbo, Frodo, or Sam.<br><b>Maneuver:</b> If bearer is Bilbo or Frodo, exert him to make another companion resistance +2 until the regroup phase. If bearer is Sam, each time he wins a skirmish, you may remove a burden.
+		lore: "This blade has dealt many wounds, by many hands."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_174: {
+		cardInfo: {
+			image: decipher/LOTR11174.jpg
+			collInfo: 11S174
+			rarity: S
+		}
+		title: Sworn Companion
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(hobbit)
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion,minResistance(7)
+					}
+				}
+			]
+		}
+		gametext: Make a Hobbit strength +1 for each companion who has resistance 7 or more.
+		lore: "'It's just something Gandalf said. ... \"Don't you lose him, Samwise Gamgee.\" And I don't mean to.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_175: {
+		cardInfo: {
+			image: decipher/LOTR11175.jpg
+			collInfo: 11U175
+			rarity: U
+		}
+		title: A Task Now to Be Done
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: chooseHowManyToSpot
+					filter: hobbit
+					memorize: spotCount
+				}
+				{
+					type: modifyResistance
+					select: choose(unbound,hobbit)
+					amount: memory(spotCount)
+				}
+			]
+		}
+		gametext: Spot X Hobbits to make an unbound Hobbit resistance +X.
+		lore: "Another opportunity for one of the shire-folk to prove their great worth. You must not fail me."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_176: {
+		cardInfo: {
+			image: decipher/LOTR11176.jpg
+			collInfo: 11S176
+			rarity: S
+		}
+		title: Unharmed
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			effect: [
+				{
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: minion
+					}
+					effect: {
+						type: heal
+						select: choose(hobbit)
+						count: 0-1
+					}
+				}
+			]
+		}
+		gametext: Heal a Hobbit for each minion you spot.
+		lore: "'So far so good; but how are we to avoid being spitted?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

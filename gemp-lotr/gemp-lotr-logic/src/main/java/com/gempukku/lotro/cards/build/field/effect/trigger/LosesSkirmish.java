@@ -12,11 +12,12 @@ import org.json.simple.JSONObject;
 public class LosesSkirmish implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "filter", "against", "memorize");
+        FieldUtils.validateAllowedFields(value, "filter", "against", "memorize", "overwhelm");
 
         String loser = FieldUtils.getString(value.get("filter"), "filter", "any");
         String against = FieldUtils.getString(value.get("against"), "against", "any");
         String memorize = FieldUtils.getString(value.get("memorize"), "memorize");
+        boolean overwhelm = FieldUtils.getBoolean(value.get("overwhelm"), "overwhelm", false);
 
         final FilterableSource loserFilter = environment.getFilterFactory().generateFilter(loser, environment);
         final FilterableSource againstFilter = environment.getFilterFactory().generateFilter(against, environment);
@@ -27,10 +28,14 @@ public class LosesSkirmish implements TriggerCheckerProducer {
                 final boolean result = TriggerConditions.losesSkirmishInvolving(actionContext.getGame(), actionContext.getEffectResult(),
                         loserFilter.getFilterable(actionContext),
                         againstFilter.getFilterable(actionContext));
-                if (result && memorize != null) {
+                if (result) {
                     CharacterLostSkirmishResult lostResult = (CharacterLostSkirmishResult) actionContext.getEffectResult();
+                    if (overwhelm && lostResult.getSkirmishType() != CharacterLostSkirmishResult.SkirmishType.OVERWHELM)
+                        return false;
 
-                    actionContext.setCardMemory(memorize, lostResult.getLoser());
+                    if (memorize != null) {
+                        actionContext.setCardMemory(memorize, lostResult.getLoser());
+                    }
                 }
                 return result;
             }

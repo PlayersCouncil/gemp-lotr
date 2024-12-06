@@ -2,8 +2,10 @@ package com.gempukku.lotro.cards.build.field.effect.modifier;
 
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.modifiers.RoamingPenaltyModifier;
+import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import org.json.simple.JSONObject;
 
 public class ModifyRoamingPenalty implements ModifierSourceProducer {
@@ -11,7 +13,7 @@ public class ModifyRoamingPenalty implements ModifierSourceProducer {
     public ModifierSource getModifierSource(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(object, "filter", "requires", "amount");
 
-        final int amount = FieldUtils.getInteger(object.get("amount"), "amount");
+        final ValueSource valueSource = ValueResolver.resolveEvaluator(object.get("amount"), environment);
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
         final String filter = FieldUtils.getString(object.get("filter"), "filter");
 
@@ -21,9 +23,10 @@ public class ModifyRoamingPenalty implements ModifierSourceProducer {
         return new ModifierSource() {
                     @Override
                     public Modifier getModifier(ActionContext actionContext) {
+                        final Evaluator evaluator = valueSource.getEvaluator(actionContext);
                         return new RoamingPenaltyModifier(actionContext.getSource(),
                                 filterableSource.getFilterable(actionContext),
-                                new RequirementCondition(requirements, actionContext), amount);
+                                RequirementCondition.createCondition(requirements, actionContext), evaluator);
                     }
         };
     }

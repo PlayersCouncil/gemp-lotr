@@ -1,0 +1,1138 @@
+{
+	40_63: {
+		title: Albert Dreary
+		subtitle: Entertainer from Bree
+		unique: true
+		culture: gandalf
+		twilight: 1
+		type: ally
+		race: man
+		keyword: bree
+		strength: 3
+		vitality: 3
+		allyHome: 2E
+		gametext: [
+			To play, spot Gandalf.
+			\[keyword]Maneuver:[/keyword] Exert Albert Dreary to discard an {isengard} or {moria} condition.
+		]
+		lore: Typical of Bree-folk, Albert is a plain but stout-hearted fellow. He does not seek trouble, but he is willing to protect his home.
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+		    }
+            {
+                type: activated
+                phase: maneuver
+                cost: {
+                    type: exert
+                    select: self
+                }
+                effect: {
+                    type: discard
+                    select: choose(or(culture(isengard),culture(moria)),condition)
+                }
+            }
+        ]
+	}
+	40_64: {
+		title: Answers in the Fire
+		culture: gandalf
+		twilight: 0
+		type: event
+		timeword: skirmish
+		gametext: [
+			Make Gandalf strength +1.
+			If Gandalf wins this skirmish, you may draw 2 cards.
+		]
+		lore: \This is The One Ring...\
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(name(Gandalf))
+					memorize: chosenGandalf
+					amount: 1
+				}
+				{
+					type: addTrigger
+					trigger: {
+						type: winsSkirmish
+						filter: memory(chosenGandalf)
+					}
+					optional: true
+					effect: {
+						type: drawCards
+						count: 2
+					}
+				}
+			]
+		}
+	}
+	40_65: {
+		title: Barliman Butterbur
+		subtitle: Forgetful Innkeep
+		unique: true
+		culture: gandalf
+		twilight: 0
+		type: ally
+		race: man
+		keyword: bree
+		strength: 1
+		vitality: 2
+		allyHome: 2E
+		gametext: [
+			To play, spot Gandalf.
+			\[keyword]Maneuver or Regroup:[/keyword] Exert Barliman Butterbur to heal a companion.
+		]
+		lore: Barliman was good-hearted but notorious for his terrible memory.
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+		    }
+            {
+                type: activated
+                phase: [
+                    maneuver
+                    regroup
+                ]
+                cost: {
+                    type: exert
+                    select: self
+                }
+                effect: {
+                    type: heal
+                    select: choose(companion)
+                }
+            }
+        ]
+	}
+	40_66: {
+		title: Binding Light
+		culture: gandalf
+		twilight: 3
+		type: event
+		timeword: skirmish
+		keyword: [
+			spell
+		]
+		gametext: [
+			\[uKeyword]Spell.[/uKeyword] To play, spot Gandalf and another unbound companion.
+			The Shadow player may not play skirmish events or use skirmish special abilities during that companion's skirmish.
+		]
+		lore: \... wielder of the flame of Anor.\
+		effects: {
+			type: event
+            requires: {
+                type: canSpot
+                filter: name(Gandalf)
+            }
+			cost: {
+				type: spot
+				select: choose(not(name(Gandalf)),unbound,companion)
+				memorize: unboundCompanion
+			}
+			effect: {
+				type: addModifier
+				modifier: {
+				    type: cantPlayPhaseEventsOrPhaseSpecialAbilities
+                    requires: {
+                        type: canSpot
+                        filter: memory(unboundCompanion),inSkirmish
+                    }
+				    player: shadow
+				    phase: skirmish
+				}
+			}
+		}
+	}
+	40_67: {
+		title: Bolstered Spirits
+		culture: gandalf
+		twilight: 1
+		type: event
+		timeword: skirmish
+		keyword: [
+			spell
+		]
+		gametext: [
+			\[uKeyword]Spell.[/uKeyword]
+			Spot Gandalf to make an unbound companions strength +2 (or strength +3 if that companion has 4 or more resistance).
+		]
+		lore: \I hear it's going to be a party of special magnificence.\
+		effects: {
+			type: event
+            requires: {
+                type: canSpot
+                filter: name(Gandalf)
+            }
+			effect: {
+				type: modifyStrength
+				select: choose(unbound,companion)
+				memorize: unboundCompanion
+				amount: {
+					type: Conditional
+					requires: {
+						type: memoryMatches
+						memory: unboundCompanion
+						filter: maxResistance(3)
+					}
+					true: 2
+					false: 3
+				}
+			}
+		}
+	}
+	40_68: {
+		title: Discernment
+		culture: gandalf
+		twilight: 0
+		type: event
+		timeword: fellowship
+		keyword: [
+			spell
+		]
+		gametext: [
+			\[uKeyword]Spell.[/uKeyword]
+			Exert Gandalf and add {X} to discard up to two Shadow conditions with a combined twilight cost of X or less.
+		]
+		lore: \Riddles in the dark...\
+		effects: {
+			type: event
+			cost: [
+				{
+					type: exert
+					select: choose(name(Gandalf))
+				}
+				{
+					type: addTwilight
+					amount: any
+					memorize: addedTwilight
+				}
+			]
+			effect: [
+				{
+					type: discard
+					count: 0-1
+					select: choose(side(shadow),condition,maxTwilight(memory(addedTwilight)))
+					memorize: discardedCondition
+				}
+				{
+					type: memorizeNumber
+					memory: remainingTwilight
+					amount: {
+						type: subtract
+						firstNumber: {
+							type: fromMemory
+							memory: addedTwilight
+						}
+						secondNumber: {
+							type: twilightCostInMemory
+							memory: discardedCondition
+						}
+					}
+				}
+				{
+					type: discard
+					count: 0-1
+					select: choose(side(shadow),condition,maxTwilight(memory(remainingTwilight)))
+				}
+			]
+		}
+	}
+	40_69: {
+		title: Gandalf
+		subtitle: Disturber of the Peace
+		unique: true
+		culture: gandalf
+		twilight: 4
+		type: companion
+		race: wizard
+		strength: 6
+		vitality: 4
+		resistance: 8
+		gametext: Gandalf is strength +1 for each Hobbit companion you can spot.
+		lore: \You've officially been labeled a disturber of the peace.\
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: self
+				amount: {
+					type: forEachYouCanSpot
+					filter: hobbit,companion
+				}
+			}
+		}
+	}
+	40_70: {
+		title: Gandalf
+		subtitle: Wisest of the Istari
+		unique: true
+		culture: gandalf
+		twilight: 4
+		type: companion
+		race: wizard
+		strength: 7
+		vitality: 4
+		resistance: 8
+		gametext: Each time you play a {gandalf} spell, you may draw a card.
+		lore: \He had a long white beard and bushy eyebrows that stuck out beyond the brim of his hat.\
+		effects: {
+			type: trigger
+			trigger: {
+				type: played
+				filter: culture(gandalf),spell
+			}
+			optional: true
+			effect: {
+				type: drawCards
+			}
+		}
+	}
+	40_71: {
+		title: Gandalf's Pipe
+		unique: true
+		culture: gandalf
+		twilight: 1
+		type: possession
+		itemclass: pipe
+		target: name(Gandalf)
+		gametext: [
+			Bearer must be Gandalf.
+			\[keyword]Maneuver:[/keyword] Discard a pipeweed possession and spot X pipes to draw X cards (limit once per phase).
+		]
+		lore: Gandalf learned to smoke pipe-weed from the Hobbits and is known to blow elaborate smoke-rings.
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: [
+				{
+					type: discard
+					select: choose(pipeweed,possession)
+				}
+				{
+					type: chooseHowManyToSpot
+					filter: pipe
+					memorize: numberOfPipes
+				}
+			]
+			effect: {
+				type: drawCards
+				count: {
+					type: fromMemory
+					memory: numberOfPipes
+				}
+			}
+			limitPerPhase: 1
+		}
+	}
+	40_72: {
+		title: Gandalf's Staff
+		subtitle: Dispeller of Darkness
+		unique: true
+		culture: gandalf
+		twilight: 2
+		type: artifact
+		itemclass: staff
+		vitality: 1
+		resistance: 1
+		target: name(Gandalf)
+		gametext: [
+			Bearer must be Gandalf.
+			During the turn Gandalf's Staff is played, the Shadow player may not have initiative.
+			\[keyword]Maneuver:[/keyword] Exert Gandalf twice to discard a Shadow condition.
+		]
+		lore: The staff of Gandalf the Grey was made of brown wood with a jewel fixed at the top.
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: shadowCantHaveInitiative
+					until: endOfTurn
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: bearer
+					times: 2
+				}
+				effect: {
+					type: discard
+					select: choose(side(shadow),condition)
+				}
+			}
+		]
+	}
+	40_73: {
+		title: Glamdring
+		subtitle: Turgon's Blade
+		unique: true
+		culture: gandalf
+		twilight: 2
+		type: possession
+		itemclass: hand weapon
+		strength: 2
+		target: name(Gandalf)
+		gametext: [
+			Bearer must be Gandalf.
+			While skirmishing an Orc or Goblin, Gandalf is strength +2 and \[keyword]damage +1[/keyword].
+		]
+		lore: Glamdring was used by Gandalf to slay the Great Goblin.
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: name(Gandalf),inSkirmishAgainst(or(orc,goblin))
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: name(Gandalf),inSkirmishAgainst(or(orc,goblin))
+					keyword: damage+1
+				}
+			}
+		]
+	}
+	40_74: {
+		title: Grace of the Valar
+		unique: true
+		culture: gandalf
+		twilight: 1
+		type: condition
+		strength: 1
+		keyword: spell
+		target: name(Gandalf)
+		gametext: [
+			\[uKeyword]Spell.[/uKeyword] Bearer must be Gandalf.
+			Gandalf takes no more than one wound in a skirmish.
+			If you lose initiative, discard this condition and wound Gandalf.
+		]
+		lore: The Valar sent Olórin to Middle-earth, to counsel and assist all those who opposed the Dark Lord Sauron.
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeMoreWoundsThan
+					filter: name(Gandalf)
+					amount: 1
+					phase: skirmish
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: losesInitiative
+					side: free people
+				}
+				effect: [
+					{
+						type: discard
+						select: self
+					}
+					{
+						type: wound
+						select: choose(name(Gandalf))
+					}
+				]
+			}
+		]
+	}
+	40_75: {
+		title: Gwaihir
+		subtitle: Great Eagle
+		unique: true
+		culture: gandalf
+		twilight: 4
+		type: ally
+		race: eagle
+		strength: 7
+		vitality: 4
+		gametext: [
+			To play, spot Gandalf.
+			\[keyword]Maneuver:[/keyword] At sites 1-5, exert Gandalf twice to make Gwaihir strength +3 and allow him to participate in archery fire and skirmishes.
+			\[keyword]Skirmish:[/keyword] At sites 6-9, exert Gwaihir twice to cancel a skirmish involving Gandalf.
+		]
+		lore: \Gwaihir was descended from Thorondor, the greatest Eagle.\
+		effects: [
+		    {
+		        type: toPlay
+                requires: {
+                    type: canSpot
+                    filter: name(Gandalf)
+                }
+		    }
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: location
+					filter: siteNumber(1-5)
+				}
+				cost: {
+					type: exert
+					select: choose(name(Gandalf))
+					times: 2
+				}
+				effect: [
+					{
+						type: modifyStrength
+						select: self
+						amount: 3
+						until: endOfTurn
+					}
+					{
+						type: EnableParticipationInArcheryFireAndSkirmishes
+						select: self
+						until: endOfTurn
+					}
+				]
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: location
+					filter: siteNumber(6-9)
+				}
+				cost: {
+					type: exert
+					select: self
+					times: 2
+				}
+				effect: {
+					type: cancelSkirmish
+					filter: name(Gandalf)
+				}
+			}
+		]
+	}
+	40_76: {
+		title: He's Remembered!
+		culture: gandalf
+		twilight: 0
+		type: event
+		timeword: regroup
+		keyword: [
+			spell
+		]
+		gametext: [
+			\[uKeyword]Spell.[/uKeyword]
+			Exert Gandalf to take a {gandalf} card from your discard pile into hand.
+		]
+		lore: \If in doubt, Meriadoc, always follow your nose.\
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(name(Gandalf))
+			}
+			effect: {
+				type: putCardsFromDiscardIntoHand
+				select: choose(culture(Gandalf))
+			}
+		}
+	}
+	40_77: {
+		title: I Will Help You Bear This Burden
+		culture: gandalf
+		twilight: 2
+		type: condition
+		strength: 1
+		resistance: 1
+		keyword: spell
+		target: name(Frodo)
+		gametext: [
+			\[uKeyword]Spell.[/uKeyword]
+			To play, exert Gandalf. Plays on Frodo.
+			\[keyword]Fellowship or Regroup:[/keyword] Discard 2 {gandalf} cards from hand to remove a burden.
+		]
+		lore: \... as long as it is yours to bear.\
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(name(Gandalf))
+				}
+			}
+			{
+				type: activated
+				phase: [
+					fellowship
+					regroup
+				]
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+					select: choose(culture(Gandalf))
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
+		]
+	}
+	40_78: {
+		title: Illuminate
+		culture: gandalf
+		twilight: 1
+		type: event
+		timeword: maneuver
+		keyword: [
+			spell
+		]
+		gametext: [
+			\[uKeyword]Spell.[/uKeyword]
+			Spot Gandalf to reveal a card at random from your opponent's hand. If it is a Free Peoples card, heal a companion or ally. If it is a Shadow card, exert a minion.
+		]
+		lore: \Let us risk a little light!\
+		effects: {
+			type: event
+            requires: {
+                type: canSpot
+                filter: name(Gandalf)
+            }
+			effect: [
+				{
+					type: revealRandomCardsFromHand
+					hand: shadowPlayer
+					forced: true
+					memorize: revealedCard
+				}
+				{
+					type: If
+					check: {
+						type: memoryMatches
+						memory: revealedCard
+						filter: side(free people)
+					}
+					true: {
+						type: heal
+						select: choose(companion)
+					}
+				}
+				{
+					type: If
+					check: {
+						type: memoryMatches
+						memory: revealedCard
+						filter: side(shadow)
+					}
+					true: {
+						type: exert
+						select: choose(minion)
+					}
+				}
+			]
+		}
+	}
+	40_79: {
+		title: Introspection
+		culture: gandalf
+		twilight: 2
+		type: condition
+		keyword: support area
+		gametext: [
+			At the start of each of your turns, you may spot Gandalf to draw a card.
+			\[keyword]Fellowship:[/keyword] Exert Gandalf to take a {gandalf} card from your draw deck into hand. Discard this condition.
+		]
+		lore: \There are questions that need answering.\
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: startOfTurn
+				}
+				optional: true
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: choose(name(Gandalf))
+				}
+				effect: [
+					{
+						type: putCardsFromDeckIntoHand
+						select: choose(culture(Gandalf))
+                        reveal: true
+                        shuffle: true
+                        showAll: true
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+	}
+	40_80: {
+		title: Keep it Secret, Keep it Safe
+		culture: gandalf
+		twilight: 1
+		type: condition
+		keyword: support area
+		gametext: [
+			To play, exert Gandalf.
+			While you can spot Gandalf and have initiative, the twilight cost of each Free Peoples artifact, condition, and possession is -1.
+			Discard this condition if you lose initiative.
+		]
+		lore: \The enemy has many spies.\
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(name(Gandalf))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: [
+						{
+							type: canSpot
+							filter: name(Gandalf)
+						}
+						{
+							type: haveInitiative
+							side: free people
+						}
+					]
+					filter: side(free people),or(artifact,condition,possession)
+					amount: -1
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: losesInitiative
+					side: free people
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+	}
+	40_81: {
+		title: Might of the Maiar
+		unique: true
+		culture: gandalf
+		twilight: 1
+		type: condition
+		strength: 1
+		keyword: spell
+		target: name(Gandalf)
+		gametext: [
+			\[uKeyword]Spell.[/uKeyword]
+			Bearer must be Gandalf. He is \[keyword]damage +1[/keyword].
+			If you lose initiative, discard this condition and make Gandalf strength -2 until the regroup phase.
+		]
+		lore: Olórin, like the other Wizards, took the shape of an old man.
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage+1
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: losesInitiative
+			    side: free people
+        }
+        effect: [
+          {
+            type: discard
+            select: self
+          }
+          {
+            type: modifyStrength
+            select: all(name(Gandalf))
+            amount: -2
+            until: start(regroup)
+          }
+        ]
+      }
+    ]
+  }
+  40_82: {
+    title: Mithrandir's Touch
+		unique: true
+    culture: gandalf
+    twilight: 1
+    type: condition
+    vitality: 1
+    target: unbound,companion,not(name(Gandalf))
+    gametext: [
+      To play, spot Gandalf. Bearer must be an unbound companion (except Gandalf).
+      \[keyword]Response:[/keyword] If bearer is about to take a wound in a skirmish, discard 2 {gandalf} cards from hand to prevent that wound.
+    ]
+    lore: \Stay close to Gandalf!\
+    effects: [
+        {
+            type: toPlay
+            requires: {
+              type: canSpot
+              filter: name(Gandalf)
+            }
+        }
+        {
+          type: Response
+          requires: {
+            type: phase
+            phase: skirmish
+          }
+          trigger: {
+            type: aboutToTakeWound
+            filter: bearer
+          }
+          cost: {
+            type: discardFromHand
+            forced: false
+            count: 2
+            select: choose(culture(gandalf))
+          }
+          effect: {
+            type: preventWound
+            select: bearer
+          }
+        }
+    ]
+  }
+  40_83: {
+    title: My Brave Hobbits
+    culture: gandalf
+    twilight: 2
+    type: event
+    timeword: maneuver
+    keyword: [
+      spell
+    ]
+    gametext: [
+      \[uKeyword]Spell.[/uKeyword]
+      To play, spot 2 Hobbit companions and exert Gandalf twice.
+      Until the regroup phase, Hobbit companions are strength +3 and take no more than one wound in a skirmish.
+    ]
+    lore: \Hobbits really are amazing creatures...\
+    effects: {
+      type: event
+        requires: {
+          type: canSpot
+          count: 2
+          filter: hobbit,companion
+        }
+      cost: {
+        type: exert
+        select: choose(name(Gandalf))
+        times: 2
+      }
+      effect: [
+        {
+          type: addModifier
+          modifier: {
+            type: modifyStrength
+            amount: 3
+            filter: hobbit,companion
+          }
+          until: start(regroup)
+        }
+        {
+          type: addModifier
+          modifier: {
+            type: cantTakeMoreWoundsThan
+            filter: hobbit,companion
+          }
+          until: start(regroup)
+        }
+      ]
+    }
+  }
+  40_84: {
+    title: Mysterious Wizard
+    culture: gandalf
+    twilight: 2
+    type: event
+    timeword: skirmish
+    keyword: [
+      spell
+    ]
+    gametext: [
+      \[uKeyword]Spell.[/uKeyword]
+      Make Gandalf strength +2 (or +4 if you can spot 4 or fewer burdens.)
+    ]
+    lore: A legend says that Gandalf was given by Yavanna the Elfstone of Eärendil, to bring to the peoples of Middle-earth as a token that the Valar had not forsaken them.
+    effects: {
+      type: event
+      effect: {
+        type: modifyStrength
+        select: choose(name(Gandalf))
+        amount: {
+          type: Conditional
+          requires: {
+            type: canSpotBurdens
+            amount: 5
+          }
+          true: 2
+          false: 4
+        }
+      }
+    }
+  }
+  40_86: {
+    title: Protector of the West
+    culture: gandalf
+    twilight: 2
+    type: event
+    timeword: skirmish
+    gametext: If Gandalf is not assigned to a skirmish, have him replace another unbound companion in a skirmish. Gandalf is strength +2 while in that skirmish.
+    lore: \The Black Speech of Mordor may yet be heard in every corner of the West!\
+    effects: {
+      type: event
+      cost: {
+        type: spot
+        select: choose(name(Gandalf),notAssignedToSkirmish)
+        memorize: gandalf
+      }
+      effect: [
+        {
+          type: replaceInSkirmish
+          filter: unbound,companion,not(name(Gandalf))
+          with: memory(gandalf)
+        }
+        {
+          type: modifyStrength
+          select: memory(gandalf)
+          amount: 2
+        }
+      ]
+    }
+  }
+  40_87: {
+    title: Roll of Thunder
+    culture: gandalf
+    twilight: 3
+    type: event
+    timeword: [
+      fellowship
+      maneuver
+    ]
+    gametext: Spot Gandalf to discard a Shadow possession or Shadow artifact.
+    lore: \I have not passed through fire and death to bandy crooked words with a serving-man till the lightning falls.\
+    effects: {
+      type: event
+        requires: {
+          type: canSpot
+          filter: name(Gandalf)
+        }
+      effect: {
+        type: discard
+        select: choose(side(shadow),or(possession,artifact))
+      }
+    }
+  }
+  40_88: {
+    title: Speak \Friend\ and Enter
+    culture: gandalf
+    twilight: 1
+    type: event
+    timeword: [
+      fellowship
+      regroup
+    ]
+    gametext: [
+      Spot Gandalf to play the fellowship's next site (replacing opponent's site if necessary).
+      Draw a card if you play an underground site.
+    ]
+    lore: \Picking up his staff he stood before the rock and said in a clear voice: Mellon!\
+    effects: {
+      type: event
+        requires: {
+          type: canSpot
+          filter: name(Gandalf)
+        }
+      effect: [
+        {
+          type: playNextSite
+          memorize: playedSite
+        }
+        {
+          type: If
+          check: {
+            type: memoryMatches
+            memory: playedSite
+            filter: underground
+          }
+          true: {
+            type: drawCards
+          }
+        }
+      ]
+    }
+  }
+  40_89: {
+    title: Trusted Advisor
+    culture: gandalf
+    twilight: 1
+    type: event
+    timeword: fellowship
+    gametext: Spot Gandalf and exert a companion of another culture to take a card from that companion's culture into hand from your draw deck.
+    lore: Gandalf often offered counsel to the leaders of Free Peoples.
+    effects: {
+      type: event
+        requires: {
+          type: canSpot
+          filter: name(Gandalf)
+        }
+      cost: {
+        type: exert
+        select: choose(companion,not(culture(gandalf)))
+        memorize: exertedCompanion
+      }
+      effect: {
+        type: putCardsFromDeckIntoHand
+        select: choose(cultureFromMemory(exertedCompanion))
+        reveal: true
+        shuffle: true
+        showAll: true
+      }
+    }
+  }
+  40_90: {
+    title: A Wizard is Never Late
+    culture: gandalf
+    twilight: 1
+    type: event
+    timeword: fellowship
+    gametext: Play a {gandalf} character from your draw deck.
+    lore: \A wizard is never late, Frodo Baggins, nor is he early. He arrives precisely when he means to.\
+    effects: {
+      type: event
+      effect: {
+        type: playCardFromDrawDeck
+        select: choose(culture(gandalf),character)
+        showAll: true
+        shuffle: true
+      }
+    }
+  }
+  40_91: {
+    title: Wizard Staff
+    culture: gandalf
+    twilight: 2
+    type: possession
+    itemclass: staff
+    strength: 1
+    target: wizard
+    gametext: [
+      Bearer must be a Wizard.
+      \[keyword]Skirmish:[/keyword] Exert bearer twice to make a minion strength -3.
+    ]
+    lore: \We must have power - power to order things as we will for that Good which only the Wise can see.\
+    effects: {
+      type: activated
+      phase: skirmish
+      cost: {
+        type: exert
+        select: bearer
+      }
+      effect: {
+        type: modifyStrength
+        select: choose(minion)
+        amount: -3
+      }
+    }
+  }
+  40_311: {
+    title: Gandalf
+    subtitle: Wisest of the Istari
+		unique: true
+    culture: gandalf
+    twilight: 4
+    type: companion
+    race: wizard
+    strength: 7
+    vitality: 4
+    resistance: 8
+    gametext: Each time you play a {gandalf} spell, you may draw a card.
+    lore: \He had a long white beard and bushy eyebrows that stuck out beyond the brim of his hat.\
+    effects: {
+      type: trigger
+      trigger: {
+        type: played
+        filter: culture(gandalf),spell
+      }
+      optional: true
+      effect: {
+        type: drawCards
+      }
+    }
+  }
+  40_312: {
+    title: Go Back to the Shadow!
+    culture: gandalf
+    twilight: 1
+    type: event
+    timeword: skirmish
+    gametext: Spot Gandalf to make a minion strength -2 (or -3 if it is skirmishing a companion with 5 or more resistance.)
+    lore: \The Dark Fire will not avail you, Flame of Udûn!\
+    effects: {
+      type: event
+        requires: {
+          type: canSpot
+          filter: name(Gandalf)
+        }
+      effect: {
+        type: modifyStrength
+        select: choose(minion)
+        memorize: chosenMinion
+        amount: {
+          type: Conditional
+          requires: {
+            type: memoryMatches
+            memory: chosenMinion
+            filter: inSkirmishAgainst(companion,not(maxResistance(4)))
+          }
+          true: -3
+          false: -2
+        }
+      }
+    }
+  }
+}

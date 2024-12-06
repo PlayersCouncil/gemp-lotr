@@ -56,12 +56,12 @@ public class RemoveCardsFromDiscardDiscountEffect implements DiscountEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return Filters.filter(game.getGameState().getDiscard(_playerId), game, _cardFilter).size() >= _count;
+        return Filters.filter(game, game.getGameState().getDiscard(_playerId), _cardFilter).size() >= _count;
     }
 
     @Override
     public int getMaximumPossibleDiscount(LotroGame game) {
-        return Filters.filter(game.getGameState().getDiscard(_playerId), game, _cardFilter).size();
+        return Filters.filter(game, game.getGameState().getDiscard(_playerId), _cardFilter).size();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class RemoveCardsFromDiscardDiscountEffect implements DiscountEffect {
     }
 
     private void proceedDiscount(final LotroGame game) {
-        final Collection<PhysicalCard> removableCards = Filters.filter(game.getGameState().getDiscard(_playerId), game, _cardFilter);
+        final Collection<PhysicalCard> removableCards = Filters.filter(game, game.getGameState().getDiscard(_playerId), _cardFilter);
         game.getUserFeedback().sendAwaitingDecision(_playerId,
                 new ArbitraryCardsSelectionDecision(1, "Choose cards to remove", removableCards, _count, _count) {
                     @Override

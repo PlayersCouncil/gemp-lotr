@@ -61,8 +61,7 @@ public class Card_01_080_ErrataTests
 		assertEquals(1, ottar.getBlueprint().getTwilightCost());
 		assertEquals(2, ottar.getBlueprint().getStrength());
 		assertEquals(4, ottar.getBlueprint().getVitality());
-		assertEquals(3, ottar.getBlueprint().getAllyHomeSiteNumbers()[0]);
-		assertEquals(SitesBlock.FELLOWSHIP, ottar.getBlueprint().getAllyHomeSiteBlock());
+		assertTrue(ottar.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
 	@Test

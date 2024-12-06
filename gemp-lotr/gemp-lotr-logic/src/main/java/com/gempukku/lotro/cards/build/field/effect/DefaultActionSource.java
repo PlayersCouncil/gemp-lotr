@@ -2,6 +2,7 @@ package com.gempukku.lotro.cards.build.field.effect;
 
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.ActionSource;
+import com.gempukku.lotro.cards.build.PlayerSource;
 import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
@@ -15,8 +16,13 @@ public class DefaultActionSource implements ActionSource {
     private final List<EffectAppender> costs = new LinkedList<>();
     private final List<EffectAppender> effects = new LinkedList<>();
 
+    private PlayerSource playingPlayer;
     private boolean requiresRanger;
     private String text;
+
+    public void setPlayingPlayer(PlayerSource playingPlayer) {
+        this.playingPlayer = playingPlayer;
+    }
 
     public void setRequiresRanger(boolean requiresRanger) {
         this.requiresRanger = requiresRanger;
@@ -39,12 +45,20 @@ public class DefaultActionSource implements ActionSource {
     }
 
     @Override
+    public PlayerSource getPlayer() {
+        return playingPlayer;
+    }
+
+    @Override
     public boolean requiresRanger() {
         return requiresRanger;
     }
 
     @Override
     public boolean isValid(ActionContext actionContext) {
+        if (playingPlayer != null && !playingPlayer.getPlayer(actionContext).equals(actionContext.getPerformingPlayer()))
+            return false;
+
         for (Requirement requirement : requirements) {
             if (!requirement.accepts(actionContext))
                 return false;
@@ -55,7 +69,7 @@ public class DefaultActionSource implements ActionSource {
     @Override
     public void createAction(CostToEffectAction action, ActionContext actionContext) {
         if (text != null)
-            action.setText(GameUtils.SubstituteText(text, actionContext));
+            action.setText(GameUtils.substituteText(text, actionContext));
 
         for (EffectAppender cost : costs)
             cost.appendEffect(true, action, actionContext);

@@ -1,0 +1,77 @@
+{
+
+	19_1: {
+		cardInfo: {
+			image: decipher/LOTR19001.jpg
+			collInfo: 19P1
+			rarity: P
+		}
+		title: The One Ring
+		subtitle: The Great Ring
+		unique: true
+		twilight: 0
+		type: The One Ring
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+			{
+				type: activated
+				requires: {
+					type: ringIsActive
+				}
+				phase: maneuver
+				effect: {
+					type: putOnRing
+				}
+			}
+			{
+				type: activated
+				requires: {
+					type: ringIsActive
+				}
+				phase: skirmish
+				cost: {
+					type: addBurdens
+				}
+				effect: {
+					type: modifyStrength
+					select: bearer
+					amount: 3
+				}
+			}
+		]
+		gametext: While wearing The One Ring, each time bearer is about to take a wound, add a burden instead.<br><b>Maneuver:</b> Wear The One Ring until the regroup phase.<br><b>Skirmish:</b> Add a burden to make the Ring-bearer strength +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

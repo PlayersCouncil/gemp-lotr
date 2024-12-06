@@ -23,7 +23,7 @@ public class ModifyResistance implements ModifierSourceProducer {
             final Evaluator evaluator = valueSource.getEvaluator(actionContext);
             return new ResistanceModifier(actionContext.getSource(),
                     filterableSource.getFilterable(actionContext),
-                    new RequirementCondition(requirements, actionContext), evaluator);
+                    RequirementCondition.createCondition(requirements, actionContext), evaluator);
         };
     }
 }

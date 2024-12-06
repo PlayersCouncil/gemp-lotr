@@ -53,7 +53,7 @@ public class Card_02_108_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, elbereth.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, elbereth.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, elbereth.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(elbereth, Keyword.TALE));
+		assertTrue(scn.hasKeyword(elbereth, Keyword.TALE));
 		assertEquals(1, elbereth.getBlueprint().getTwilightCost());
 		assertEquals(1, elbereth.getBlueprint().getStrength());
 	}

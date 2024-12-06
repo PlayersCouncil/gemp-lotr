@@ -1,0 +1,720 @@
+	{
+
+	6_12: {
+		cardInfo: {
+			image: decipher/LOTR06012.jpg
+			collInfo: 6C12
+			rarity: C
+		}
+		title: Agility
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: elven
+					select: self
+					count: 2
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Discard an {elven} token from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: elven
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(elf))
+					amount: -1
+				}
+			}
+		]
+		gametext: Plays to your support area. When you play this condition, you may spot an Elf to place 2 [elven] tokens here.<br><b>Skirmish:</b> Discard this condition or remove an [elven] token from here to make a minion skirmishing an Elf strength -1.
+		lore: "Elves rely upon more than strength in combat."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_13: {
+		cardInfo: {
+			image: decipher/LOTR06013.jpg
+			collInfo: 6U13
+			rarity: U
+		}
+		title: Arwen
+		subtitle: Evenstar of Her People
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(elf)
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(self))
+					amount: -1
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Exert an Elf to make a minion skirmishing Arwen strength -1.
+		lore: "'If you trust nothing else, trust this... trust us.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_14: {
+		cardInfo: {
+			image: decipher/LOTR06014.jpg
+			collInfo: 6U14
+			rarity: U
+		}
+		title: Banner of Elbereth
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		itemclass: Hand weapon
+		target: elf,companion
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: liberateSite
+				}
+			}
+		]
+		gametext: Bearer must be an Elf companion.<br>Each time bearer wins a skirmish, you may draw a card.<br><b>Response:</b> If bearer wins a skirmish, discard this possession to liberate a site.
+		lore: "'First name the four, the free peoples: / Eldest of all, the elf-children...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_15: {
+		cardInfo: {
+			image: decipher/LOTR06015.jpg
+			collInfo: 6R15
+			rarity: R
+		}
+		title: Elrond
+		subtitle: Keeper of Vilya
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 4
+		type: Ally
+		allyHome: 3F
+		race: Elf
+		strength: 8
+		vitality: 4
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfTurn
+				}
+				effect: {
+					type: heal
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: discardTopCardsFromDeck
+						forced: false
+						memorize: discardedCard
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: discardedCard
+							filter: culture(elven)
+						}
+						true: {
+							type: optional
+							text: Would you like to put {discardedCard} into hand and heal an Elf companion?
+							effect: [
+								{
+									type: putCardsFromDiscardIntoHand
+									select: memory(discardedCard)
+								}
+								{
+									type: heal
+									select: choose(elf,companion)
+								}
+							]
+						}
+					}
+				]
+			}
+		]
+		gametext: At the start of each turn, heal Elrond.<br><b>Fellowship:</b> Exert Elrond to discard the top card of your draw deck. If it is an [elven] card, you may take it into hand and heal an Elf companion.
+		lore: "'You have forseen it. War is coming... many will die.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_16: {
+		cardInfo: {
+			image: decipher/LOTR06016.jpg
+			collInfo: 6U16
+			rarity: U
+		}
+		title: Forearmed
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: revealTopCardsOfDrawDeck
+				memorize: revealedCard
+			},
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(elf))
+					amount: {
+						type: twilightCostInMemory
+						memory: revealedCard
+						multiplier: -1
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Reveal the top card of your draw deck to make a minion skirmishing an Elf strength -X, where X is the twilight cost of the revealed card.
+		lore: "'Give them a volley.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_17: {
+		cardInfo: {
+			image: decipher/LOTR06017.jpg
+			collInfo: 6C17
+			rarity: C
+		}
+		title: Forewarned
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+					count: 2
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: addTwilight
+					amount: 1
+				}
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						memorize: revealedCard
+					}
+					{
+						type: optional
+						text: Would you like to discard Forewarned to discard {revealedCard}?
+						effect: {
+							type: costToEffect
+							cost: {
+								type: discard
+								select: self
+							}
+							effect: {
+								type: discardCardsFromDrawDeck
+								select: memory(revealedCard)
+								showAll: false
+								shuffle: false
+							}
+						}
+					}
+				]
+			}
+		]
+		gametext: To play, spot 2 Elves. Plays to your support area.<br><b>Fellowship:</b> Add (1) to look at the top card of your draw deck. You may discard this condition to discard that card.
+		lore: "'Whether by the sword or the slow decay of time, Aragorn will die.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_18: {
+		cardInfo: {
+			image: decipher/LOTR06018.jpg
+			collInfo: 6R18
+			rarity: R
+		}
+		title: Galadriel
+		subtitle: Keeper of Nenya
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 3
+		type: Ally
+		allyHome: 6F
+		race: Elf
+		strength: 3
+		vitality: 3
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfTurn
+				}
+				effect: {
+					type: heal
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: discardTopCardsFromDeck
+						forced: false
+						memorize: discardedCard
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: discardedCard
+							filter: side(shadow)
+						}
+						true: {
+							type: modifyStrength
+							select: choose(minion,inSkirmishAgainst(elf))
+							amount: -3
+						}
+					}
+				]
+			}
+		]
+		gametext: At the start of each turn, heal Galadriel.<br><b>Skirmish:</b> Exert Galadriel to discard the top card of your draw deck. If it is a Shadow card, make a minion skirmishing an Elf strength -3.
+		lore: "'In Dwimordene, in Lórien / More fair than thoughts of Mortal Men.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_19: {
+		cardInfo: {
+			image: decipher/LOTR06019.jpg
+			collInfo: 6U19
+			rarity: U
+		}
+		title: Gift of Foresight
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: elf
+			}
+			effect: [
+				{
+					type: revealTopCardsOfDrawDeck
+					memorize: revealedCard
+				}
+				{
+					type: choice
+					texts: [
+						Discard {revealedCard}
+						Return {revealedCard} to top of deck
+						Take {revealedCard} into hand
+					]
+					effects: [
+						{
+							type: discardCardsFromDrawDeck
+							select: memory(revealedCard)
+							showAll: false
+							shuffle: false
+						}
+						{
+							type: multiple
+						}
+						{
+							type: putCardsFromDeckIntoHand
+							select: memory(revealedCard)
+							reveal: true
+							shuffle: false
+							showAll: false
+						}
+					]
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Spot an Elf to reveal the top card of your draw deck. You may discard it, return it to the top of your draw deck, or take it into hand.
+		lore: "'Here you will dwell, bound to your grief, under the fading trees.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_20: {
+		cardInfo: {
+			image: decipher/LOTR06020.jpg
+			collInfo: 6U20
+			rarity: U
+		}
+		title: Must Be a Dream
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: elf
+			},
+			effect: [
+				{
+					type: revealTopCardsOfDrawDeck
+					memorize: revealedCard
+				}
+				{
+					type: heal
+					select: choose(companion,cultureFromMemory(revealedCard))
+					count: 0-2
+				}
+				{
+					type: optional
+					text: Would you like to discard {revealedCard}?
+					effect: {
+						type: discardCardsFromDrawDeck
+						select: memory(revealedCard)
+						showAll: false
+						shuffle: false
+					}
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Spot an Elf to reveal the top card of your draw deck. Heal up to 2 companions whose culture matches the revealed card. You may discard the revealed card.
+		lore: "'May the Grace of the Valar protect you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_21: {
+		cardInfo: {
+			image: decipher/LOTR06021.jpg
+			collInfo: 6C21
+			rarity: C
+		}
+		title: Naith Longbow
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Ranged weapon
+		target: elf,companion
+		effects: [
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: [
+					{
+						type: discardTopCardsFromDeck
+						forced: false
+						memorize: discardedCard
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: discardedCard
+							filter: culture(elven)
+						}
+						true: {
+							type: exert
+							select: choose(minion)
+						}
+					}
+				]
+			}
+		]
+		gametext: Bearer must be an Elf companion.<br><b>Archery:</b> Exert bearer to discard the top card of your draw deck. If it is an [elven] card, exert a minion.
+		lore: "'Show them no mercy, for you shall receive none.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_22: {
+		cardInfo: {
+			image: decipher/LOTR06022.jpg
+			collInfo: 6U22
+			rarity: U
+		}
+		title: Naith Troop
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 3
+		type: Companion
+		race: Elf
+		strength: 8
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf,companion
+					count: 3
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: discardTopCardsFromDeck
+						forced: false
+						memorize: discardedCard
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: discardedCard
+							filter: culture(elven)
+						}
+						true: {
+							type: modifyStrength
+							select: choose(minion,inSkirmishAgainst(self))
+							amount: -2
+						}
+					}
+				]
+			}
+		]
+		gametext: To play, spot 3 Elf companions.<br><b>Skirmish:</b> Exert Naith Troop to discard the top card of your draw deck. If it is an [elven] card, make a minion skirmishing Naith Troop strength -2.
+		lore: "Now only the bow and the sword can forestall the coming of the Shadow."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_23: {
+		cardInfo: {
+			image: decipher/LOTR06023.jpg
+			collInfo: 6R23
+			rarity: R
+		}
+		title: Naith Warband
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 4
+		type: Companion
+		race: Elf
+		strength: 9
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf,companion
+					count: 3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeMoreWoundsThan
+					requires: {
+						type: canSpot
+						filter: self,hasAttached(ranged weapon)
+					}
+					filter: self
+					phase: skirmish
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: doesNotAddToArcheryTotal
+					requires: {
+						type: canSpot
+						filter: self,hasAttached(ranged weapon)
+					}
+					filter: self
+				}
+			}
+		]
+		gametext: To play, spot 3 Elf companions.<br>While Naith Warband bears a ranged weapon, it takes no more than 1 wound during each skirmish phase and does not add to the fellowship archery total.
+		lore: "'But do not think that only by singing amid the trees... is Lothlórien maintained and defended....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

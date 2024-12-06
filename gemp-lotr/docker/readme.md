@@ -70,6 +70,12 @@ gemp_app is slightly more complicated.  Gemp is a Java server, is built using Ma
 
 At this point, editing the code is a matter of changing the files on your local machine and either re-running step 9, or re-compiling the code base in your IDE of choice.  
 
+Run the following commands to ensure that you don't have local configuration showing up in your commits:
 
+1. `git update-index --assume-unchanged ./logs/nohup.out`
+2. `git update-index --assume-unchanged ./gemp-lotr/docker/docker-compose.yml`
+3. `git update-index --assume-unchanged ./gemp-lotr/docker/gemp_app.Dockerfile`
+
+(If you do indeed need to alter those files, repeat the above commands but use the `--no-assume-unchanged` flag instead.)
 
 

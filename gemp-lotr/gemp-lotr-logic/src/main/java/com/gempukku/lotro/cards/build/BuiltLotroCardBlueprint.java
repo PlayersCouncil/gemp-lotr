@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.ExtraPlayCost;
@@ -14,13 +15,24 @@ import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.google.common.collect.Sets;
 
 import java.util.*;
 
 public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
+    private String id;
+
+    private CardInfo info;
+
+    //Sanitized versions of text are used for searching and comparisons, as opposed
+    // to the regular display versions which can have capitalization, spaces, accents, etc.
     private String title;
     private String sanitizedTitle;
     private String subtitle;
+    private String sanitizedSubtitle;
+    private String fullName;
+    private String sanitizedFullName;
+    private boolean canStartWithRing;
     private boolean unique;
     private Side side;
     private CardType cardType;
@@ -28,6 +40,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private Race race;
     private Signet signet;
     private Map<Keyword, Integer> keywords;
+    private Set<Timeword> timewords;
     private int cost = -1;
     private int strength;
     private int vitality;
@@ -36,8 +49,13 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private int siteNumber;
     private Set<PossessionClass> possessionClasses;
     private Direction direction;
-    private SitesBlock allyHomeBlock;
-    private int[] allyHomeSites = new int[0];
+    private final Set<AllyHome> allyHomeSites = new HashSet<>();
+
+    private String gameText;
+    private String formattedGameText;
+    private String loreText;
+    private String promoText;
+    private String displayableInformation;
 
     private List<Requirement> requirements;
     private List<FilterableSource> targetFilters;
@@ -57,6 +75,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     private List<ActionSource> inPlayPhaseActions;
     private List<ActionSource> inDiscardPhaseActions;
+    private List<ActionSource> inDrawDeckPhaseActions;
     private List<ActionSource> fromStackedPhaseActions;
 
     private List<ModifierSource> inPlayModifiers;
@@ -70,7 +89,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private List<ExtraPlayCostSource> extraPlayCosts;
     private List<DiscountSource> discountSources;
 
-    private List<Requirement> playInOtherPhaseConditions;
+    private Map<Requirement, EffectAppender[]> playInOtherPhaseConditions;
     private List<FilterableSource> copiedFilters;
 
     private ActionSource playEventAction;
@@ -85,15 +104,31 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     private PreGameDeckValidation deckValidation;
 
+//    //Constructor used when creating a raw blueprint from scratch
+//    public BuiltLotroCardBlueprint() { }
+//
+//    //Used when creating an errata copy that is mostly the same and only
+//    // changes a few pieces.
+//    public BuiltLotroCardBlueprint(BuiltLotroCardBlueprint other) {
+//
+//    }
+
     // Building methods
+
+    public void setBlueprintId(String id) {
+        this.id = id;
+    }
+
+    public void setCanStartWithRing(boolean canStartWithRing) {
+        this.canStartWithRing = canStartWithRing;
+    }
 
     public void setDeckValidation(PreGameDeckValidation validation) {
         this.deckValidation = validation;
     }
 
-    public void setAllyHomeSites(SitesBlock block, int[] numbers) {
-        this.allyHomeBlock = block;
-        this.allyHomeSites = numbers;
+    public void setAllyHomeSites(AllyHome home) {
+        this.allyHomeSites.add(home);
     }
 
     public void setExtraPossessionClassTest(ExtraPossessionClassTest extraPossessionClassTest) {
@@ -106,10 +141,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         copiedFilters.add(filterableSource);
     }
 
-    public void appendPlayInOtherPhaseCondition(Requirement requirement) {
+    public void appendPlayInOtherPhaseCondition(Requirement requirement, EffectAppender[] costAppenders) {
         if (playInOtherPhaseConditions == null)
-            playInOtherPhaseConditions = new LinkedList<>();
-        playInOtherPhaseConditions.add(requirement);
+            playInOtherPhaseConditions = new LinkedHashMap<>();
+        playInOtherPhaseConditions.put(requirement, costAppenders);
     }
 
     public void appendDiscountSource(DiscountSource discountSource) {
@@ -214,9 +249,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         permanentSiteModifiers.add(modifierSource);
     }
 
-    public void appendTargetFilter(FilterableSource targetFilter) {
-        if (targetFilters == null)
-            targetFilters = new LinkedList<>();
+    public void setTargetFilter(FilterableSource targetFilter) {
+        targetFilters = new LinkedList<>();
         targetFilters.add(targetFilter);
     }
 
@@ -232,6 +266,12 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         inDiscardPhaseActions.add(actionSource);
     }
 
+    public void appendInDrawDeckPhaseAction(ActionSource actionSource) {
+        if (inDrawDeckPhaseActions == null)
+            inDrawDeckPhaseActions = new LinkedList<>();
+        inDrawDeckPhaseActions.add(actionSource);
+    }
+
     public void appendFromStackedPhaseAction(ActionSource actionSource) {
         if (fromStackedPhaseActions == null)
             fromStackedPhaseActions = new LinkedList<>();
@@ -245,6 +285,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     public void setPlayEventAction(ActionSource playEventAction) {
+        if (this.playEventAction != null)
+            throw new RuntimeException("Cant set play event action more than once");
         this.playEventAction = playEventAction;
     }
 
@@ -271,10 +313,41 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     public void setTitle(String title) {
         this.title = title;
         this.sanitizedTitle = Names.SanitizeName(title);
+        setFullName();
     }
 
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
+        this.sanitizedSubtitle = Names.SanitizeName(subtitle);
+        setFullName();
+    }
+
+    private void setFullName() {
+        if(subtitle != null) {
+            this.fullName = title + ", " + subtitle;
+            this.sanitizedFullName = sanitizedTitle + ", " + sanitizedSubtitle;
+        }
+        else {
+            this.fullName = title;
+            this.sanitizedFullName = sanitizedTitle;
+        }
+    }
+
+    public void setGameText(String text) {
+        this.formattedGameText = GameText.ConvertTextToHTML(text.trim());
+        this.gameText = GameText.SanitizeHTMLToSearchText(formattedGameText);
+    }
+
+    public void setLore(String text) {
+        this.loreText = GameText.ConvertTextToHTML(text.trim());
+    }
+
+    public void setPromoText(String text) {
+        this.promoText = GameText.ConvertTextToHTML(text.trim());
+    }
+
+    public void setInfo(CardInfo info) {
+        this.info = info;
     }
 
     public void setUnique(boolean unique) {
@@ -303,6 +376,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     public void setKeywords(Map<Keyword, Integer> keywords) {
         this.keywords = keywords;
+    }
+
+    public void setTimewords(Set<Timeword> timewords) {
+        this.timewords = timewords;
     }
 
     public void setCost(int cost) {
@@ -337,7 +414,25 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         this.direction = direction;
     }
 
+    public void setDisplayableInformation(String value) {
+        this.displayableInformation = value;
+    }
+
     // Implemented methods
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        if (this.id != null)
+            throw new UnsupportedOperationException("Id for this blueprint has already been set");
+
+        this.id = id;
+        info = new CardInfo(id);
+    }
 
     @Override
     public Result validatePreGameDeckCheck(List<PhysicalCardImpl> freeps, List<PhysicalCardImpl> shadow,
@@ -347,6 +442,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
         return new Result(true, null);
     }
+
     @Override
     public Side getSide() {
         return side;
@@ -381,6 +477,33 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     @Override
     public String getSubtitle() {
         return subtitle;
+    }
+
+    @Override
+    public String getFullName() { return fullName; }
+
+    @Override
+    public String getSanitizedFullName() { return sanitizedFullName; }
+
+    @Override
+    public String getGameText() { return gameText; }
+
+    @Override
+    public String getFormattedGameText() { return formattedGameText; }
+    @Override
+    public String getLore()  { return loreText; }
+    @Override
+    public String getPromoText() { return promoText; }
+
+
+    @Override
+    public CardInfo getCardInfo() {
+        return info;
+    }
+
+    @Override
+    public boolean canStartWithRing() {
+        return canStartWithRing;
     }
 
     @Override
@@ -419,13 +542,13 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     @Override
-    public int[] getAllyHomeSiteNumbers() {
+    public Set<AllyHome> getAllyHomes() {
         return allyHomeSites;
     }
 
     @Override
-    public SitesBlock getAllyHomeSiteBlock() {
-        return allyHomeBlock;
+    public boolean hasAllyHome(AllyHome home) {
+        return allyHomeSites.stream().anyMatch(x -> x.equals(home));
     }
 
     @Override
@@ -441,6 +564,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     @Override
     public boolean hasKeyword(Keyword keyword) {
         return keywords != null && keywords.containsKey(keyword);
+    }
+
+    @Override
+    public boolean hasTimeword(Timeword timeword) {
+        return timewords != null && timewords.contains(timeword);
     }
 
     @Override
@@ -460,9 +588,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             return null;
 
         Filterable[] result = new Filterable[targetFilters.size()];
+        var actionContext = new DefaultActionContext(self.getOwner(), game, self, null, null);
         for (int i = 0; i < result.length; i++) {
             final FilterableSource filterableSource = targetFilters.get(i);
-            result[i] = filterableSource.getFilterable(null);
+            result[i] = filterableSource.getFilterable(actionContext);
         }
 
         return Filters.and(result);
@@ -471,6 +600,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     @Override
     public List<? extends Action> getPhaseActionsFromDiscard(String playerId, LotroGame game, PhysicalCard self) {
         return getActivatedActions(playerId, game, self, inDiscardPhaseActions);
+    }
+
+    @Override
+    public List<? extends Action> getPhaseActionsFromDrawDeck(String playerId, LotroGame game, PhysicalCard self) {
+        return getActivatedActions(playerId, game, self, inDrawDeckPhaseActions);
     }
 
     @Override
@@ -582,6 +716,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             result = new LinkedList<>();
             for (ActionSource requiredBeforeTrigger : requiredBeforeTriggers) {
                 DefaultActionContext actionContext = new DefaultActionContext(self.getOwner(), game, self, null, effect);
+
+                if(requiredBeforeTrigger.getPlayer() != null) {
+                    actionContext = new DefaultActionContext(requiredBeforeTrigger.getPlayer().getPlayer(actionContext), game, self, null, effect);
+                }
+
                 if (requiredBeforeTrigger.isValid(actionContext)) {
                     RequiredTriggerAction action = new RequiredTriggerAction(self);
                     requiredBeforeTrigger.createAction(action, actionContext);
@@ -611,7 +750,13 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (requiredAfterTriggers != null) {
             result = new LinkedList<>();
             for (ActionSource requiredAfterTrigger : requiredAfterTriggers) {
-                DefaultActionContext actionContext = new DefaultActionContext(self.getOwner(), game, self, effectResult, null);
+                var player = self.getOwner();
+                var actionContext = new DefaultActionContext(player, game, self, effectResult, null);
+
+                if(requiredAfterTrigger.getPlayer() != null) {
+                    actionContext = new DefaultActionContext(requiredAfterTrigger.getPlayer().getPlayer(actionContext), game, self, effectResult, null);
+                }
+
                 if (requiredAfterTrigger.isValid(actionContext)) {
                     RequiredTriggerAction action = new RequiredTriggerAction(self);
                     requiredAfterTrigger.createAction(action, actionContext);
@@ -641,7 +786,12 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (optionalBeforeTriggers != null) {
             result = new LinkedList<>();
             for (ActionSource optionalBeforeTrigger : optionalBeforeTriggers) {
-                DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, effect);
+                var actionContext = new DefaultActionContext(playerId, game, self, null, effect);
+
+                if(optionalBeforeTrigger.getPlayer() != null) {
+                    actionContext = new DefaultActionContext(optionalBeforeTrigger.getPlayer().getPlayer(actionContext), game, self, null, effect);
+                }
+
                 if (optionalBeforeTrigger.isValid(actionContext)) {
                     OptionalTriggerAction action = new OptionalTriggerAction(self);
                     optionalBeforeTrigger.createAction(action, actionContext);
@@ -672,6 +822,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             result = new LinkedList<>();
             for (ActionSource optionalAfterTrigger : optionalAfterTriggers) {
                 DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, effectResult, null);
+
+                if(optionalAfterTrigger.getPlayer() != null) {
+                    actionContext = new DefaultActionContext(optionalAfterTrigger.getPlayer().getPlayer(actionContext), game, self, effectResult, null);
+                }
+
                 if (optionalAfterTrigger.isValid(actionContext)) {
                     OptionalTriggerAction action = new OptionalTriggerAction(self);
                     optionalAfterTrigger.createAction(action, actionContext);
@@ -702,8 +857,14 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             result = new LinkedList<>();
             for (ActionSource beforeActivatedTrigger : beforeActivatedTriggers) {
                 DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, effect);
+
+                if(beforeActivatedTrigger.getPlayer() != null) {
+                    actionContext = new DefaultActionContext(beforeActivatedTrigger.getPlayer().getPlayer(actionContext), game, self, null, effect);
+                }
+
                 if (beforeActivatedTrigger.isValid(actionContext)) {
                     ActivateCardAction action = new ActivateCardAction(self);
+                    action.setActionTimeword(Timeword.RESPONSE);
                     beforeActivatedTrigger.createAction(action, actionContext);
                     result.add(action);
                 }
@@ -732,8 +893,14 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             result = new LinkedList<>();
             for (ActionSource afterActivatedTrigger : afterActivatedTriggers) {
                 DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, effectResult, null);
+
+                if(afterActivatedTrigger.getPlayer() != null) {
+                    actionContext = new DefaultActionContext(afterActivatedTrigger.getPlayer().getPlayer(actionContext), game, self, effectResult, null);
+                }
+
                 if (afterActivatedTrigger.isValid(actionContext)) {
                     ActivateCardAction action = new ActivateCardAction(self);
+                    action.setActionTimeword(Timeword.RESPONSE);
                     afterActivatedTrigger.createAction(action, actionContext);
                     result.add(action);
                 }
@@ -762,6 +929,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         List<PlayEventAction> result = new LinkedList<>();
         for (ActionSource optionalInHandBeforeAction : optionalInHandBeforeActions) {
             DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, effect);
+
+            if(optionalInHandBeforeAction.getPlayer() != null) {
+                actionContext = new DefaultActionContext(optionalInHandBeforeAction.getPlayer().getPlayer(actionContext), game, self, null, effect);
+            }
+
             if (optionalInHandBeforeAction.isValid(actionContext)) {
                 PlayEventAction action = new PlayEventAction(self);
                 optionalInHandBeforeAction.createAction(action, actionContext);
@@ -780,6 +952,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         List<PlayEventAction> result = new LinkedList<>();
         for (ActionSource optionalInHandAfterAction : optionalInHandAfterActions) {
             DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, effectResult, null);
+
+            if(optionalInHandAfterAction.getPlayer() != null) {
+                actionContext = new DefaultActionContext(optionalInHandAfterAction.getPlayer().getPlayer(actionContext), game, self, effectResult, null);
+            }
+
             if (optionalInHandAfterAction.isValid(actionContext)) {
                 PlayEventAction action = new PlayEventAction(self);
                 optionalInHandAfterAction.createAction(action, actionContext);
@@ -798,6 +975,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         List<OptionalTriggerAction> result = new LinkedList<>();
         for (ActionSource optionalInHandAfterTrigger : optionalInHandAfterTriggers) {
             DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, effectResult, null);
+
+            if(optionalInHandAfterTrigger.getPlayer() != null) {
+                actionContext = new DefaultActionContext(optionalInHandAfterTrigger.getPlayer().getPlayer(actionContext), game, self, effectResult, null);
+            }
+
             if (optionalInHandAfterTrigger.isValid(actionContext)) {
                 OptionalTriggerAction action = new OptionalTriggerAction(self);
                 optionalInHandAfterTrigger.createAction(action, actionContext);
@@ -829,11 +1011,26 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             return null;
 
         List<Action> playCardActions = new LinkedList<>();
-        for (Requirement playInOtherPhaseCondition : playInOtherPhaseConditions) {
+        for (Map.Entry<Requirement, EffectAppender[]> playInOtherPhaseCondition : playInOtherPhaseConditions.entrySet()) {
+            Requirement condition = playInOtherPhaseCondition.getKey();
+            EffectAppender[] additionalCosts = playInOtherPhaseCondition.getValue();
+
             DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, null);
-            if (playInOtherPhaseCondition.accepts(actionContext)
-                    && PlayUtils.checkPlayRequirements(game, self, Filters.any, 0, 0, false, false, false))
-                playCardActions.add(PlayUtils.getPlayCardAction(game, self, 0, Filters.any, false));
+            if (condition.accepts(actionContext)
+                    && PlayUtils.checkPlayRequirements(game, self, Filters.any, 0, 0, false, false, false)) {
+                boolean canPayExtraCosts = true;
+                for (EffectAppender additionalCost : additionalCosts) {
+                    canPayExtraCosts &= additionalCost.isPlayableInFull(actionContext);
+                }
+
+                if (canPayExtraCosts) {
+                    CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(game, self, 0, Filters.any, false);
+                    for (EffectAppender additionalCost : additionalCosts) {
+                        additionalCost.appendEffect(true, playCardAction, actionContext);
+                    }
+                    playCardActions.add(playCardAction);
+                }
+            }
         }
 
         return playCardActions;
@@ -930,6 +1127,14 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public String getDisplayableInformation(PhysicalCard self) {
+        if (displayableInformation != null) {
+            PhysicalCard.WhileInZoneData whileInZoneData = self.getWhileInZoneData();
+            if (whileInZoneData != null) {
+                return displayableInformation.replace("{stored}", whileInZoneData.getHumanReadable());
+            } else {
+                return displayableInformation;
+            }
+        }
         return null;
     }
 
@@ -962,9 +1167,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             return null;
 
         List<Modifier> result = new LinkedList<>();
-        for (ModifierSource inPlayModifier : sources) {
+        for (ModifierSource source : sources) {
             ActionContext actionContext = new DefaultActionContext(self.getOwner(), game, self, null, null);
-            result.add(inPlayModifier.getModifier(actionContext));
+            result.add(source.getModifier(actionContext));
         }
         return result;
     }
@@ -985,6 +1190,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         return result;
     }
 
+    private static Set<String> frodosThatCantStartWithRing = Sets.newHashSet("Frenzied Fighter");
+    private static Set<String> frodosWithNon10Resistance = Sets.newHashSet("Resolute Hobbit", "Frenzied Fighter");
+    private static Set<String> samsWithNon5Resistance = Sets.newHashSet("Loyal Friend", "Dropper of Eaves", "Humble Halfling", "Steadfast Friend", "Innocent Traveler");
+
     public void validateConsistency() throws InvalidCardDefinitionException {
         if (title == null)
             throw new InvalidCardDefinitionException("Card has to have a title");
@@ -996,16 +1205,17 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new InvalidCardDefinitionException("All cards except The One Ring, Sites, and Maps have a culture defined");
         if (siteNumber != 0
                 && cardType != CardType.SITE
-                && cardType != CardType.MINION)
-            throw new InvalidCardDefinitionException("Only minions and sites have a site number, use siteHome for allies");
+                && cardType != CardType.MINION
+                && cardType != CardType.CONDITION)
+            throw new InvalidCardDefinitionException("Only minions, sites, and conditions have a site number, use siteHome for allies");
         if (cardType == CardType.EVENT) {
-            List<Keyword> requiredKeywords = Arrays.asList(
-                    Keyword.RESPONSE, Keyword.FELLOWSHIP, Keyword.SHADOW, Keyword.MANEUVER, Keyword.ARCHERY, Keyword.ASSIGNMENT,
-                    Keyword.SKIRMISH, Keyword.REGROUP);
-            if (keywords == null || Collections.disjoint(keywords.keySet(), requiredKeywords))
-                throw new InvalidCardDefinitionException("Events have to have a response or phase keyword");
+            List<Timeword> requiredTimewords = Arrays.asList(
+                    Timeword.RESPONSE, Timeword.FELLOWSHIP, Timeword.SHADOW, Timeword.MANEUVER, Timeword.ARCHERY, Timeword.ASSIGNMENT,
+                    Timeword.SKIRMISH, Timeword.REGROUP);
+            if (timewords == null || Collections.disjoint(timewords, requiredTimewords))
+                throw new InvalidCardDefinitionException("Events have to have a timeword(s)");
 
-            if (keywords.containsKey(Keyword.RESPONSE)) {
+            if (timewords.contains(Timeword.RESPONSE)) {
                 if (optionalInHandBeforeActions == null && optionalInHandAfterActions == null)
                     throw new InvalidCardDefinitionException("Response events have to have responseEvent type effect");
             } else {
@@ -1013,6 +1223,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                     throw new InvalidCardDefinitionException("Events have to have an event type effect");
             }
         }
+        if (timewords != null && cardType != CardType.EVENT)
+            throw new InvalidCardDefinitionException("Only events should have timewords");
         if (cardType != CardType.EVENT && playEventAction != null)
             throw new InvalidCardDefinitionException("Only events should have an event type effect");
         if (cost == -1)
@@ -1020,7 +1232,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (Arrays.asList(CardType.MINION, CardType.COMPANION, CardType.ALLY).contains(cardType)) {
             if (vitality == 0)
                 throw new InvalidCardDefinitionException("Character has 0 vitality");
-            if (strength == 0)
+            if (strength == 0 && !id.equals("15_43"))
                 throw new InvalidCardDefinitionException("Character has 0 strength");
         }
         if (cardType == CardType.SITE && siteBlock == null)
@@ -1036,5 +1248,14 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new InvalidCardDefinitionException("Possession, condition or artifact without a filter needs a SUPPORT_AREA keyword");
         if (cardType == CardType.FOLLOWER && aidCostSource == null)
             throw new InvalidCardDefinitionException("Follower requires an aid cost");
+        if (title.equals("Frodo") && !canStartWithRing && !frodosThatCantStartWithRing.contains(subtitle)) {
+            throw new InvalidCardDefinitionException("Frodo (except some permitted) must be able to start with ring");
+        }
+        if (title.equals("Frodo") && resistance != 10 && !frodosWithNon10Resistance.contains(subtitle)) {
+            throw new InvalidCardDefinitionException("Frodo (except some permitted) needs to have resistance of 10");
+        }
+        if (title.equals("Sam") && resistance != 5 && !samsWithNon5Resistance.contains(subtitle)) {
+            throw new InvalidCardDefinitionException("Sam (except some permitted) needs to have resistance of 5");
+        }
     }
 }

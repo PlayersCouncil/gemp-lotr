@@ -17,6 +17,7 @@ import com.gempukku.lotro.logic.timing.rules.CharacterDeathRule;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.util.*;
 
 public class DefaultLotroGame implements LotroGame {
@@ -50,7 +51,7 @@ public class DefaultLotroGame implements LotroGame {
     }
 
     public DefaultLotroGame(LotroFormat format, Map<String, LotroDeck> decks, UserFeedback userFeedback, final LotroCardBlueprintLibrary library,
-            String timerInfo, boolean allowSpectators, String tournamentName ) {
+            String timerInfo, boolean allowSpectators, String tournamentName) {
         _library = library;
         _adventure = format.getAdventure();
         _format = format;
@@ -84,7 +85,7 @@ public class DefaultLotroGame implements LotroGame {
 
             var note = "Deck used: <a href='" + lotroDeck.getURL(playerId) + "' target='_blank'>" + lotroDeck.getDeckName() +
                     "</a> [" + lotroDeck.getTargetFormat() + "]<br/><br/>Deck Notes:<br/>";
-            if(lotroDeck.getNotes() != null) {
+            if(lotroDeck.getNotes() != null && !lotroDeck.getNotes().equals("null")) {
                 note += lotroDeck.getNotes();
             }
             else {

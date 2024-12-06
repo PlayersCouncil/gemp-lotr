@@ -14,7 +14,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 5U8
 	# 		rarity: U
 	# 		setNum: "5"
@@ -55,7 +55,7 @@
 	# 			phase: maneuver
 	# 			cost: {
 	# 				type: exert
-	# 				filter: choose(Dwarf,companion)
+	# 				select: choose(Dwarf,companion)
 	# 			}
 	# 			effect: {
 	# 				type: addModifier
@@ -84,4 +84,54 @@
 	# 		}
 	# 	}
 	# }
+	
+	55_7: {
+		cardInfo: {
+			//id: 55_7.1
+			parent: 5_7
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN05E007.1_card.jpg
+			collInfo: 5R7
+			rarity: R
+		}
+		title: Gimli
+		subtitle: Skilled Defender
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		keywords: [
+			Damage+1
+			Valiant
+		]
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: winsSkirmish
+				filter: self
+			}
+			effect: {
+				type: wound
+				select: choose(minion,assignedToSkirmish(unbound,companion))
+			}
+		}
+		gametext: <b>Damage +1</b>. Valiant.<br>Each time Gimli wins a skirmish, you may wound a minion assigned to skirmish an unbound companion.
+		lore: "Despite Théoden's preparations, Gimli found it necessary to warn him of the advancing Uruk army."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 }

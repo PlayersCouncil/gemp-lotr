@@ -59,7 +59,7 @@ public class Card_V1_010_Tests
 		PhysicalCardImpl darts = scn.GetFreepsCard("darts");
 
 		assertFalse(darts.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(darts, Keyword.TALE)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(darts, Keyword.TALE)); // test for keywords as needed
 		assertEquals(1, darts.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, darts.getBlueprint().getCardType());
 		assertEquals(Culture.ELVEN, darts.getBlueprint().getCulture());
@@ -113,27 +113,27 @@ public class Card_V1_010_Tests
 		assertEquals(0, scn.GetWoundsOn(greenleaf));
 		//1 each from greenleaf, lorien elf + bow, aragorn + bow (galadriel doesn't count)
 		assertEquals(3, scn.GetFreepsArcheryTotal());
-		assertTrue(scn.HasKeyword(greenleaf, Keyword.ARCHER));
-		assertTrue(scn.HasKeyword(galadriel, Keyword.ARCHER));
-		assertTrue(scn.HasKeyword(aragorn, Keyword.ARCHER));
-		assertTrue(scn.HasKeyword(lorien, Keyword.ARCHER));
-		assertFalse(scn.HasKeyword(greenleaf, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(galadriel, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(lorien, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(greenleaf, Keyword.ARCHER));
+		assertTrue(scn.hasKeyword(galadriel, Keyword.ARCHER));
+		assertTrue(scn.hasKeyword(aragorn, Keyword.ARCHER));
+		assertTrue(scn.hasKeyword(lorien, Keyword.ARCHER));
+		assertFalse(scn.hasKeyword(greenleaf, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(galadriel, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(aragorn, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(lorien, Keyword.DAMAGE));
 
 		assertTrue(scn.FreepsActionAvailable("let fly the darts"));
 		scn.FreepsUseCardAction(darts);
 
 		assertEquals(0, scn.GetFreepsArcheryTotal());
-		assertFalse(scn.HasKeyword(greenleaf, Keyword.ARCHER));
-		assertFalse(scn.HasKeyword(galadriel, Keyword.ARCHER));
-		assertFalse(scn.HasKeyword(aragorn, Keyword.ARCHER));
-		assertFalse(scn.HasKeyword(lorien, Keyword.ARCHER));
-		assertTrue(scn.HasKeyword(greenleaf, Keyword.DAMAGE));
-		assertTrue(scn.HasKeyword(galadriel, Keyword.DAMAGE));
-		assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));
-		assertTrue(scn.HasKeyword(lorien, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(greenleaf, Keyword.ARCHER));
+		assertFalse(scn.hasKeyword(galadriel, Keyword.ARCHER));
+		assertFalse(scn.hasKeyword(aragorn, Keyword.ARCHER));
+		assertFalse(scn.hasKeyword(lorien, Keyword.ARCHER));
+		assertTrue(scn.hasKeyword(greenleaf, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(galadriel, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(aragorn, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(lorien, Keyword.DAMAGE));
 
 		assertEquals(1, scn.GetWoundsOn(greenleaf));
 
@@ -152,14 +152,14 @@ public class Card_V1_010_Tests
 		assertEquals(2, scn.GetWoundsOn(archer));
 
 		//Regroup
-		assertTrue(scn.HasKeyword(greenleaf, Keyword.ARCHER));
-		assertTrue(scn.HasKeyword(galadriel, Keyword.ARCHER));
-		assertTrue(scn.HasKeyword(aragorn, Keyword.ARCHER));
-		assertTrue(scn.HasKeyword(lorien, Keyword.ARCHER));
-		assertFalse(scn.HasKeyword(greenleaf, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(galadriel, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(lorien, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(greenleaf, Keyword.ARCHER));
+		assertTrue(scn.hasKeyword(galadriel, Keyword.ARCHER));
+		assertTrue(scn.hasKeyword(aragorn, Keyword.ARCHER));
+		assertTrue(scn.hasKeyword(lorien, Keyword.ARCHER));
+		assertFalse(scn.hasKeyword(greenleaf, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(galadriel, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(aragorn, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(lorien, Keyword.DAMAGE));
 	}
 
 

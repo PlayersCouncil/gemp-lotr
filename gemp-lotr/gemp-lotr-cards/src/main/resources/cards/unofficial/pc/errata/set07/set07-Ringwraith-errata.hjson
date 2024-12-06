@@ -2,17 +2,14 @@
 
 	57_190: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN07E190.1_card.jpg
-			javaClass: false
+			//id: 7_190.1
 			parent: 7_190
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN07E190.1_card.jpg
 			collInfo: 7U190
 			rarity: U
-			setNum: "7"
-			cardNum: 190
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Morgul Destroyer
 		unique: false
@@ -26,7 +23,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				text: Would you like to spot a Nazgul to add 1 threat?
 				requires: {
@@ -45,7 +42,7 @@
 						type: wound
 						player: shadow
 						times: 1
-						filter: choose(companion)
+						select: choose(companion)
 					}
 					text: Make the Shadow player wound a companion to prevent adding a threat?
 					effect: {
@@ -63,7 +60,7 @@
 				}
 				effect: {
 					type: ModifyStrength
-					filter: self
+					select: self
 					amount: 3
 				}
 			}

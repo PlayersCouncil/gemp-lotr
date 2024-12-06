@@ -1,7 +1,5 @@
 package com.gempukku.lotro.at;
 
-import com.gempukku.lotro.logic.modifiers.MinionSiteNumberModifier;
-import com.gempukku.lotro.logic.modifiers.RoamingPenaltyModifier;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Zone;
@@ -10,16 +8,16 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.MinionSiteNumberModifier;
 import com.gempukku.lotro.logic.modifiers.RemoveKeywordModifier;
+import com.gempukku.lotro.logic.modifiers.RoamingPenaltyModifier;
 import org.junit.Test;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class RoamingAtTest extends AbstractAtTest {
     @Test
@@ -86,7 +84,7 @@ public class RoamingAtTest extends AbstractAtTest {
 
         _game.getGameState().addCardToZone(_game, orcChieftain, Zone.HAND);
         _game.getModifiersEnvironment().addUntilEndOfTurnModifier(
-                new RoamingPenaltyModifier(orcChieftain, Culture.SAURON, -1));
+                new RoamingPenaltyModifier(orcChieftain, Culture.SAURON, null, -1));
         _game.getGameState().addTwilight(2);
 
         // End fellowship phase
@@ -117,7 +115,7 @@ public class RoamingAtTest extends AbstractAtTest {
 
         _game.getGameState().addCardToZone(_game, orcChieftain, Zone.HAND);
         _game.getModifiersEnvironment().addUntilEndOfTurnModifier(
-                new RemoveKeywordModifier(orcChieftain, Culture.SAURON, Keyword.ROAMING));
+                new RemoveKeywordModifier(orcChieftain, Culture.SAURON, null, Keyword.ROAMING));
         _game.getGameState().addTwilight(2);
 
         // End fellowship phase

@@ -1,0 +1,425 @@
+{
+
+	2_87: {
+		cardInfo: {
+			image: decipher/LOTR02087.jpg
+			collInfo: 2U87
+			rarity: U
+		}
+		title: The Eye of Sauron
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			cost: [
+				{
+					type: exert
+					select: choose(culture(sauron),orc)
+				}
+				{
+					type: chooseHowManyBurdensToSpot
+					memorize: spottedBurdens
+				}
+			]
+			effect: {
+				type: drawCards
+				count: {
+					type: fromMemory
+					memory: spottedBurdens
+					limit: 5
+				}
+			}
+		}
+		gametext: <b>Shadow:</b> Exert a [sauron] Orc and spot X burdens to draw X cards (limit 5).
+		lore: "'...he has indeed arisen again and left his hold in Mirkwood and returned to his ancient fastness in the Dark Tower of Mordor.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_88: {
+		cardInfo: {
+			image: decipher/LOTR02088.jpg
+			collInfo: 2C88
+			rarity: C
+		}
+		title: Memory of Many Things
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+			type: exert
+			select: choose(culture(sauron),orc)
+			}
+			effect: {
+			type: choice
+			texts: [
+				Discard an ally
+				Discard 2 ELVEN allies
+			]
+			effects:
+			[
+				{
+					type: discard
+					select: choose(ally)
+				}
+				{
+					type: discard
+					select: choose(culture(elven),ally)
+					count: 2
+				}
+			]
+			}
+		}
+		gametext: <b>Maneuver:</b> Exert a [sauron] Orc to discard an ally (or 2 [elven] allies).
+		lore: "'But my memory reaches back even to the Elder Days.... I have seen three ages in the West of the world, and many defeats, and many fruitless victories.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_89: {
+		cardInfo: {
+			image: decipher/LOTR02089.jpg
+			collInfo: 2C89
+			rarity: C
+		}
+		title: Orc Scout
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 2
+		site: 6
+		keywords: Tracker
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyRoamingPenalty
+					filter: culture(sauron),minion
+					amount: -1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: played
+					filter: event
+					exertsRanger: true
+				}
+				cost: {
+					type: choice
+					texts: [
+						Exert this minion
+						Discard this minion
+					]
+					effects: [
+						{
+							type: exert
+							select: self
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: cancelEvent
+				}
+			}
+		]
+		gametext: <b>Tracker</b>.<br>The roaming penalty for each [sauron] minion you play is -1.<br><b>Response:</b> If an event is played that spots or exerts a ranger, exert or discard this minion to cancel that event.
+		lore: "'Orc!... Not very near, and yet too near, it seems.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_90: {
+		cardInfo: {
+			image: decipher/LOTR02090.jpg
+			collInfo: 2C90
+			rarity: C
+		}
+		title: Orc Taskmaster
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 3
+		site: 6
+		effects: {
+			type: activated
+			phase: shadow
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: addTwilight
+				amount: 1
+			}
+		}
+		gametext: <b>Shadow:</b> Exert this minion to add (1).
+		lore: "An Orc acts when the taskmaster promises reward or the whip."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_91: {
+		cardInfo: {
+			image: decipher/LOTR02091.jpg
+			collInfo: 2C91
+			rarity: C
+		}
+		title: Southern Spies
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: putsOnRing
+			}
+			requires: {
+				type: canSpot
+				filter: culture(sauron),minion
+			}
+			effect: {
+				type: discardFromHand
+				hand: fp
+				player: you
+				forced: true
+				select: all(any)
+			}
+		}
+		gametext: <b>Response:</b> If the Ring-bearer puts on The One Ring, spot a [sauron] minion to make the Free Peoples player discard his or her hand.
+		lore: "'They will know all the news now, for they have visited Bill Ferny; and probably that Southerner was a spy as well.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_92: {
+		cardInfo: {
+			image: decipher/LOTR02092.jpg
+			collInfo: 2U92
+			rarity: U
+		}
+		title: Spies of Mordor
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+				type: canSpot
+				filter: culture(sauron),orc
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: drawCards
+					count: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: culture(sauron),tracker
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+		]
+		gametext: <b>Search</b>. To play, spot a [sauron] Orc. Plays to your support area.<br>Each time the fellowship moves during the regroup phase, you may draw a card (or 2 cards if you can spot a [sauron] tracker).
+		lore: "'Mordor Orcs patrol the Eastern Shore. We must wait for the cover of darkness.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_93: {
+		cardInfo: {
+			image: decipher/LOTR02093.jpg
+			collInfo: 2R93
+			rarity: R
+		}
+		title: Tower Assassin
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 11
+		vitality: 3
+		site: 6
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: wound
+				select: choose(ally)
+			}
+		}
+		gametext: <b>Maneuver:</b> Exert Tower Assassin to wound an ally.
+		lore: "A Ring of Power would not stop the blade of an assassin lying in wait."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_94: {
+		cardInfo: {
+			image: decipher/LOTR02094.jpg
+			collInfo: 2R94
+			rarity: R
+		}
+		title: Verily I Come
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		target: ringBearer
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(sauron),orc)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: playerDrawsCard
+					player: fp
+				}
+				requires: {
+					type: phase
+					phase: fellowship
+				}
+				effect: {
+					type: addBurdens
+					amount: 1
+				}
+			}
+		]
+		gametext: To play, exert a [sauron] Orc. Plays on the Ring-bearer.<br>Each time the Free Peoples player draws a card (or takes a card into hand) during the fellowship phase, add a burden.
+		lore: "There was an eye in the Dark Tower that did not sleep. He knew that it had become aware of his gaze."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_95: {
+		cardInfo: {
+			image: decipher/LOTR02095.jpg
+			collInfo: 2C95
+			rarity: C
+		}
+		title: Vile Blade
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(sauron),orc
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: bearer,inSkirmishAgainst(or(man,elf))
+				amount: 2
+			}
+		}
+		gametext: Bearer must be a [sauron] Orc.<br>Bearer is strength +2 while skirmishing a Man or Elf.
+		lore: "The blood of enemies slain that day blackened the edge of the commanders blade."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -1,0 +1,292 @@
+{
+
+	3_81: {
+		cardInfo: {
+			image: decipher/LOTR03081.jpg
+			collInfo: 3R81
+			rarity: R
+		}
+		title: Gates of the Dead City
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: addsBurden
+					filter: culture(wraith)
+				}
+				effect: {
+					type: exert
+					player: fp
+					select: choose(companion)
+				}
+			}
+		]
+		gametext: To play, spot a Nazgûl. Plays to your support area.<br>Each time a [wraith] card adds a burden, the Free Peoples player must exert a companion.
+		lore: "'...and they took Minas Ithil and abode in it, and they made it into a place of dread....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_82: {
+		cardInfo: {
+			image: decipher/LOTR03082.jpg
+			collInfo: 3U82
+			rarity: U
+		}
+		title: News of Mordor
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(isengard),minion
+			}
+			effect: {
+				type: addKeyword
+				select: choose(nazgul)
+				keyword: damage
+				amount: 1
+			}
+		}
+		gametext: <b>Skirmish:</b> Spot an [isengard] minion to make a Nazgûl <b>damage +1</b>.
+		lore: "'Build me an army worthy of Mordor.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_83: {
+		cardInfo: {
+			image: decipher/LOTR03083.jpg
+			collInfo: 3U83
+			rarity: U
+		}
+		title: The Ring Draws Them
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachBurden
+					}
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: endOfPhase
+					phase: shadow
+				}
+				effect: {
+					type: choice
+					texts: [
+						Exert a Nazgul
+						Discard The Ring Draws Them
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(nazgul)
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+			}
+		]
+		gametext: Plays to your support area.<br>Each time the fellowship moves, add (1) for each burden you can spot.<br>At the end of each of your Shadow phases, exert a Nazgûl or discard this condition.
+		lore: "'If I move I shall be seen and hunted!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_84: {
+		cardInfo: {
+			image: decipher/LOTR03084.jpg
+			collInfo: 3C84
+			rarity: C
+		}
+		title: They Will Never Stop Hunting You
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: nazgul
+			}
+			effect: [
+				{
+					type: revealRandomCardsFromHand
+					forced: true
+					hand: fp
+					memorize: revealedCard
+				}
+				{
+					type: exert
+					select: choose(companion,hasAttached(ranged weapon))
+					times: {
+						type: twilightCostInMemory
+						memory: revealedCard
+					}
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Spot a Nazgûl to reveal a card at random from the Free Peoples player's hand. Exert a companion bearing a ranged weapon X times, where X is the twilight cost of the card revealed.
+		lore: "'They're looking for Baggins, and if they mean well, then I'm a hobbit.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_85: {
+		cardInfo: {
+			image: decipher/LOTR03085.jpg
+			collInfo: 3R85
+			rarity: R
+		}
+		title: Too Great and Terrible
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: nazgul
+			}
+			effect: {
+				type: preventable
+				text: Would you like to discard 2 GANDALF cards from hand to prevent wounding Gandalf twice?
+				player: fp
+				cost: {
+					type: discardFromHand
+					forced: false
+					hand: fp
+					player: fp
+					select: choose(culture(gandalf))
+					count: 2
+				}
+				effect: {
+					type: wound
+					select: choose(name(Gandalf))
+					times: 2
+				}
+			}
+		}
+		gametext: <b>Maneuver:</b> Spot a Nazgûl to wound Gandalf twice. The Free Peoples player may discard 2 [gandalf] cards from hand to prevent this.
+		lore: "'His eyes flashed and his face was lit as by a fire within. 'Do not tempt me! For I do not wish to become like the Dark Lord himself.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	3_86: {
+		cardInfo: {
+			image: decipher/LOTR03086.jpg
+			collInfo: 3U86
+			rarity: U
+		}
+		title: Úlairë Otsëa
+		subtitle: Ringwraith in Twilight
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgul
+		strength: 9
+		vitality: 3
+		site: 3
+		keywords: Twilight
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: winsSkirmish
+				filter: self
+			}
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: transfer
+				select: choose(name(Blade Tip),zone(support))
+				where: choose(ringBearer)
+			}
+		}
+		gametext: <b>Twilight</b>.<br>Each time Úlairë Otsëa wins a skirmish, you may exert him to transfer Blade Tip from your support area to the Ring-bearer.
+		lore: "'...at all times they smell the blood of living things, desiring and hating it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

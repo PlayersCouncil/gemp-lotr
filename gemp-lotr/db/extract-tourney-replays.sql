@@ -33,7 +33,7 @@
 
 
 
-SET @player = 'sempolPL', @rank=0;
+SET @player = 'basmelis', @rank=0;
 
 SELECT 
 	 @player AS player
@@ -42,6 +42,11 @@ SELECT
 			WHEN winner = @player THEN CONCAT(REPLACE(winner, '_', '%5F'), '$', win_recording_id)  
 			ELSE CONCAT(REPLACE(loser, '_', '%5F'), '$', lose_recording_id) 
 		END, ']',  @rank:=@rank+1,'[/url] • ') AS URL
+	,CONCAT('https://play.lotrtcgpc.net/share/deck?id=',
+		CASE 
+			WHEN winner = @player THEN TO_BASE64(CONCAT(winner, '|', winner_deck_name))
+			ELSE TO_BASE64(CONCAT(loser, '|', loser_deck_name)) 
+		END) AS DeckURL
 FROM game_history gh 
 INNER JOIN player p 
 	ON p.name = @player

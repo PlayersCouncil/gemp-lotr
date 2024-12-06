@@ -2,17 +2,11 @@
 
 	61_227: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN11E227.1.jpg
-			javaClass: false
-			parent: 11_227
-			parentPath: errata/pc
-			version: 1
+			//id: 1_227.1
+			revision: 1
+			image: errata/LOTR-EN11E227.1.jpg
 			collInfo: 11U227
 			rarity: U
-			setNum: "11"
-			cardNum: 227
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Anduin Banks
 		unique: false
@@ -28,12 +22,9 @@
 					type: modifyArcheryTotal
 					side: shadow
 					amount: {
-						type: multiply
-						source: {
-							type: forEachYouCanSpot
-							filter: companion
-							over: 5
-						}
+						type: forEachYouCanSpot
+						filter: companion
+						over: 5
 						multiplier: {
 							type: regionNumber
 						}
@@ -58,7 +49,7 @@
 	# 		javaClass: false
 	# 		parent: 11_232
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 11S232
 	# 		rarity: S
 	# 		setNum: "11"
@@ -76,7 +67,7 @@
 	# 		underground
 	# 	]
 	# 	effects: {
-	# 		type: trigger
+	# 		type: Trigger
 	# 		trigger: {
 	# 			type: startOfPhase
 	# 			phase: skirmish
@@ -108,7 +99,7 @@
 	# 									type: CostToEffect
 	# 									cost: {
 	# 										type: exert
-	# 										filter: choose(your,character,InSkirmish)
+	# 										select: choose(your,character,InSkirmish)
 	# 									}
 	# 									effect: [
 	# 										{
@@ -141,17 +132,11 @@
 
 61_232: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN11E232.1.jpg
-			javaClass: false
-			parent: 11_232
-			parentPath: errata/pc
-			version: 2
+			//id: 1_232.2
+			revision: 2
+			image: errata/LOTR-EN11E232.1.jpg
 			collInfo: 11S232
 			rarity: S
-			setNum: "11"
-			cardNum: 232
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Cavern Entrance
 		unique: false
@@ -160,7 +145,8 @@
 		block: Shadows
 		direction: Right
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: startOfPhase
 				phase: skirmish
@@ -170,29 +156,29 @@
 					type: ForEachPlayer
 					effect: [
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: CanSpot
 								filter: your,InSkirmish,character,not(exhausted)
 							}
-							effect: [
+							true: [
 								{
 									type: chooseYesOrNo
 									text: Would you like to exert your skirmishing character to prevent all special abilities from being used this skirmish?
 									memorize: choice
 								}
 								{
-									type: conditional
-									requires: {
+									type: If
+									check: {
 										type: memoryIs
 										memory: choice
 										value: yes
 									}
-									effect: {
+									true: {
 										type: CostToEffect
 										cost: {
 											type: exert
-											filter: choose(your,character,InSkirmish)
+											select: choose(your,character,InSkirmish)
 										}
 										effect: [
 											{
@@ -225,17 +211,11 @@
 	
 	61_249: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN11E249.1.jpg
-			javaClass: false
-			parent: 11_249
-			parentPath: errata/pc
-			version: 1
+			//id: 1_249.1
+			revision: 1
+			image: errata/LOTR-EN11E249.1.jpg
 			collInfo: 11S249
 			rarity: S
-			setNum: "11"
-			cardNum: 249
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Neekerbreekers' Bog
 		unique: false
@@ -248,7 +228,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self
@@ -259,12 +240,17 @@
 				}
 				effect: [
 					{
+						type: memorize
+						filter: character,minResistance(5)
+						memory: healedChars
+					}
+					{
 						type: heal
-						filter: all(character,ResistanceMoreThan(4))
+						select: all(memory(healedChars))
 					}
 					{
 						type: exert
-						filter: all(character,ResistanceLessThan(5))
+						select: all(character,not(memory(healedChars)))
 					}
 				]
 			}

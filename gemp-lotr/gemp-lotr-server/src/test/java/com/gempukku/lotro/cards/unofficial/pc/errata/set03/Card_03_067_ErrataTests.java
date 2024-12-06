@@ -52,7 +52,7 @@ public class Card_03_067_ErrataTests
 		assertEquals(Side.SHADOW, palantir.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, palantir.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, palantir.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(palantir, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(palantir, Keyword.SUPPORT_AREA));
 		assertTrue(palantir.getBlueprint().getPossessionClasses().contains(PossessionClass.PALANTIR));
 		assertEquals(0, palantir.getBlueprint().getTwilightCost());
 	}

@@ -2,6 +2,7 @@ package com.gempukku.lotro.game;
 
 import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.common.SitesBlock;
+import com.gempukku.lotro.game.packs.SetDefinition;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 
 import java.util.List;
@@ -40,13 +41,14 @@ public interface LotroFormat {
     int getOrder();
 
     String validateCard(String cardId);
+    String validateSite(String cardId);
 
     List<String> validateDeck(LotroDeck deck);
     String validateDeckForHall(LotroDeck deck);
 
     LotroDeck applyErrata(LotroDeck deck);
 
-    List<Integer> getValidSets();
+    List<String> getValidSets();
 
     List<String> getBannedCards();
 
@@ -60,6 +62,7 @@ public interface LotroFormat {
 
     List<String> getRestrictedCardNames();
 
+    boolean hasErrata();
     Map<String,String> getErrataCardMap();
 
     String applyErrata(String bpID);
@@ -74,4 +77,5 @@ public interface LotroFormat {
 
     Adventure getAdventure();
     JSONDefs.Format Serialize();
+    void generateBlockFilter(Map<String, LotroFormat> allFormats, Map<String, SetDefinition> allSets);
 }

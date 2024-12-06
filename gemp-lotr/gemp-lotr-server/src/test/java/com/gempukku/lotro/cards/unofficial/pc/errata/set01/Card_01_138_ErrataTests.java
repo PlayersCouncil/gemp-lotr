@@ -6,14 +6,12 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_01_138_ErrataTests
 {
@@ -57,8 +55,8 @@ public class Card_01_138_ErrataTests
         assertEquals(Culture.ISENGARD, snows.getBlueprint().getCulture());
         assertEquals(CardType.CONDITION, snows.getBlueprint().getCardType());
         assertEquals(Culture.ISENGARD, snows.getBlueprint().getCulture());
-        assertTrue(scn.HasKeyword(snows, Keyword.SPELL));
-        assertTrue(scn.HasKeyword(snows, Keyword.WEATHER));
+        assertTrue(scn.hasKeyword(snows, Keyword.SPELL));
+        assertTrue(scn.hasKeyword(snows, Keyword.WEATHER));
     }
 
     @Test
@@ -151,7 +149,7 @@ public class Card_01_138_ErrataTests
         scn.FreepsPassCurrentPhaseAction();
         scn.ShadowPlayCard(snows);
         scn.ShadowChoose(String.valueOf(scn.GetCurrentSite().getCardId())); //Should be site 2
-        scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.name("Uruk Savage"), Keyword.FIERCE));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("Uruk Savage"), null, Keyword.FIERCE));
 
         scn.SkipToPhase(Phase.ASSIGNMENT);
         scn.PassCurrentPhaseActions();

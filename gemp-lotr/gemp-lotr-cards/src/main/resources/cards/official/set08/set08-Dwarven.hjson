@@ -1,0 +1,396 @@
+{
+
+	8_1: {
+		cardInfo: {
+			image: decipher/LOTR08001.jpg
+			collInfo: 8C1
+			rarity: C
+		}
+		title: Aggression
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: haveInitiative
+						side: free people
+					}
+					filter: dwarf
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: spot
+					text: Choose a Dwarf to spot
+					select: choose(dwarf)
+					memorize: chosenDwarf
+				}
+				effect: [
+					{
+						type: drawCards
+						count: {
+							type: forEachKeywordOnCardInMemory
+							memory: chosenDwarf
+							keyword: damage
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: While you have initiative, each Dwarf is <b>damage +1</b>.<br><b>Fellowship:</b> Spot a Dwarf who is damage +X to draw X cards. Discard this condition.
+		lore: "'Certainty of death, small chance of success....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_2: {
+		cardInfo: {
+			image: decipher/LOTR08002.jpg
+			collInfo: 8R2
+			rarity: R
+		}
+		title: Battle in Earnest
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			cost: {
+				type: spot
+				text: Choose a Dwarf to spot
+				select: choose(dwarf)
+				memorize: chosenDwarf
+			}
+			effect: [
+				{
+					type: repeat
+					times: {
+						type: forEachKeywordOnCardInMemory
+						memory: chosenDwarf
+						keyword: damage
+					}
+					effect: {
+						type: wound
+						select: choose(minion)
+					}
+				}
+			]
+		}
+		gametext: Spot a Dwarf who is damage +X to place X wounds on minions.
+		lore: "'...they laughed when they looked on us, for they were a great army still.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_3: {
+		cardInfo: {
+			image: decipher/LOTR08003.jpg
+			collInfo: 8R3
+			rarity: R
+		}
+		title: Blood Runs Chill
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(dwarf)
+				times: 2
+				memorize: exertedDwarf
+			},
+			effect: [
+				{
+					type: Discard
+					player: shadow
+					select: choose(side(shadow))
+					count: {
+						type: forEachKeywordOnCardInMemory
+						memory: exertedDwarf
+						keyword: damage
+					}
+				}
+			]
+		}
+		gametext: Spot a Dwarf who is damage +X and exert that Dwarf twice to make an opponent discard X Shadow cards.
+		lore: "...the Dark Door gaped before them like the mouth of night."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_4: {
+		cardInfo: {
+			image: decipher/LOTR08004.jpg
+			collInfo: 8U4
+			rarity: U
+		}
+		title: Counts But One
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gimli),notAssignedToSkirmish
+			}
+			cost: {
+				type: addThreats
+			},
+			effect: [
+				{
+					type: replaceInSkirmish
+					filter: unbound,companion,not(name(Gimli))
+					with: choose(name(Gimli))
+				}
+			]
+		}
+		gametext: If Gimli is not assigned to a skirmish, add a threat to have him replace an unbound companion in a skirmish.
+		lore: "'...no matter how big.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_5: {
+		cardInfo: {
+			image: decipher/LOTR08005.jpg
+			collInfo: 8C5
+			rarity: C
+		}
+		title: Gimli
+		subtitle: Counter of Foes
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		keywords: Damage+1
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachWound
+						filter: self
+					}
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self
+					keyword: damage
+					amount: {
+						type: forEachWound
+						filter: self
+					}
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>.<br>For each wound on Gimli, he is strength +1 and <b>damage +1</b>.
+		lore: "Twenty, twenty-one, twenty-two...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_6: {
+		cardInfo: {
+			image: decipher/LOTR08006.jpg
+			collInfo: 8C6
+			rarity: C
+		}
+		title: Honed
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(dwarf)
+					memorize: chosenDwarf
+					amount: {
+						type: forEachKeywordOnCardInMemory
+						memory: chosenDwarf
+						keyword: damage
+					}
+				}
+			]
+		}
+		gametext: Spot a Dwarf who is damage +X to make him strength +X.
+		lore: "'What are we waiting for?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_7: {
+		cardInfo: {
+			image: decipher/LOTR08007.jpg
+			collInfo: 8R7
+			rarity: R
+		}
+		title: Unheard of
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: dwarf
+				memorize: winningDwarf
+			}
+			effect: [
+				{
+					type: wound
+					select: choose(minion,notAssignedToSkirmish)
+					times: {
+						type: forEachKeywordOnCardInMemory
+						memory: winningDwarf
+						keyword: damage
+					}
+				}
+			]
+		}
+		gametext: If a Dwarf who is damage +X wins a skirmish, wound a minion not assigned to a skirmish X times.
+		lore: "'...an Elf will go underground and a Dwarf dare not.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_8: {
+		cardInfo: {
+			image: decipher/LOTR08008.jpg
+			collInfo: 8U8
+			rarity: U
+		}
+		title: Wish For Our Kinfolk
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: exert
+						select: choose(dwarf)
+					}
+					{
+						type: exert
+						select: choose(or(and(culture(elven),companion),and(culture(gondor),man)))
+					}
+				]
+				effect: {
+					type: AddCultureTokens
+					culture: dwarven
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					culture: dwarven
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: choose(companion)
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Fellowship:</b> Exert a Dwarf companion and either an [elven] companion or a [gondor] Man to add a [dwarven] token here.<br><b>Skirmish:</b> Remove a [dwarven] token here to make a companion <b>damage +1</b>.
+		lore: "'...war already marches on their own lands.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

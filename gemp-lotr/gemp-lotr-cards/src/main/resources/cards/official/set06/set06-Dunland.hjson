@@ -1,0 +1,410 @@
+{
+
+	6_1: {
+		cardInfo: {
+			image: decipher/LOTR06001.jpg
+			collInfo: 6C1
+			rarity: C
+		}
+		title: Bound By Rage
+		unique: true
+		side: Shadow
+		culture: Dunland
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: culture(dunland),man
+					count: 2
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: dunland
+					select: self
+					count: 2
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(dunland),man
+				}
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Remove a {dunland} token from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: dunland
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: preventWound
+					select: choose(culture(dunland),man)
+				}
+			}
+		]
+		gametext: Plays to your support area. When you play this condition, you may spot 2 [dunland] Men to place 2 [dunland] tokens here.<br><b>Response:</b> If a [dunland] Man is about to take a wound, discard this condition or remove a [dunland] token from here to prevent that wound.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_2: {
+		cardInfo: {
+			image: decipher/LOTR06002.jpg
+			collInfo: 6C2
+			rarity: C
+		}
+		title: Dunlending Elder
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 7
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					requires: {
+						type: ControlsSite
+						count: 2
+					}
+					amount: 5
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self
+					requires: {
+						type: ControlsSite
+						count: 2
+					}
+					keyword: fierce
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self
+					requires: {
+						type: ControlsSite
+						count: 2
+					}
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: While you control 2 sites, this minion is strength +5, <b>fierce</b> and <b>damage +1</b>.
+		lore: "Hatred of the Rohirrim is passed from generation to generation."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_3: {
+		cardInfo: {
+			image: decipher/LOTR06003.jpg
+			collInfo: 6C3
+			rarity: C
+		}
+		title: Dunlending Footmen
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 2
+		site: 3
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: phase
+					phase: skirmish
+				}
+				amount: -2
+			}
+		]
+		gametext: The twilight cost of this minion during a skirmish phase is -2.
+		lore: "Driven by Saruman's ranting, waves of Dunlendings descended upon the holdings of Rohan."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_4: {
+		cardInfo: {
+			image: decipher/LOTR06004.jpg
+			collInfo: 6C4
+			rarity: C
+		}
+		title: Dunlending Headman
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: another,culture(dunland),man
+					count: 2
+				}
+				effect: {
+					type: preventable
+					player: fp
+					text: Would you like to discard 2 cards from hand to prevent taking control of a site?
+					cost: {
+						type: discardFromHand
+						player: fp
+						forced: false
+						count: 2
+					}
+					effect: {
+						type: takeControlOfSite
+					}
+				}
+			}
+		]
+		gametext: When you play this minion, you may spot 2 other [dunland] Men to take control of a site. The Free Peoples player may discard 2 cards from hand to prevent this.
+		lore: "The diminished Rohirrim offered little resistance to the advancing Dunland horde."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_5: {
+		cardInfo: {
+			image: decipher/LOTR06005.jpg
+			collInfo: 6C5
+			rarity: C
+		}
+		title: Dunlending Reserve
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 4
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: phase
+					phase: skirmish
+				}
+				amount: -2
+			}
+		]
+		gametext: The twilight cost of this minion during a skirmish phase is -2.
+		lore: "The relentless campaign of the hillmen drove citizens of the Westfold to the shelter of their capital."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_6: {
+		cardInfo: {
+			image: decipher/LOTR06006.jpg
+			collInfo: 6R6
+			rarity: R
+		}
+		title: Hill Clan
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 8
+		type: Minion
+		race: Man
+		strength: 17
+		vitality: 2
+		site: 3
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: [
+					{
+						type: PlayCardFromHand
+						select: choose(culture(dunland),man)
+						memorize: playedMan
+					}
+					{
+						type: addKeyword
+						select: memory(playedMan)
+						keyword: fierce
+						until: regroup
+					}
+					{
+						type: addKeyword
+						select: memory(playedMan)
+						keyword: damage
+						amount: 1
+						until: regroup
+					}
+				]
+			}
+		]
+		gametext: Each time this minion wins a skirmish, you may play a [dunland] Man from hand. That Man is <b>fierce</b> and <b>damage +2</b> until the regroup phase.
+		lore: "'We will take their king.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_7: {
+		cardInfo: {
+			image: decipher/LOTR06007.jpg
+			collInfo: 6R7
+			rarity: R
+		}
+		title: Ready to Fall
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: ControlsSite
+					count: 2
+				}
+				cost: {
+					type: removeTwilight
+					amount: 2
+				}
+				effect: {
+					type: playCardFromDiscard
+					removedTwilight: 2
+					select: choose(culture(dunland),man)
+				}
+			}
+		]
+		gametext: Plays to your support area.<br><b>Shadow:</b> Spot 2 sites you control and remove (2) to play a [dunland] Man from your discard pile.
+		lore: "'Why do you lay these troubles on an already troubled mind?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_8: {
+		cardInfo: {
+			image: decipher/LOTR06008.jpg
+			collInfo: 6U8
+			rarity: U
+		}
+		title: Too Long Have These Peasants Stood
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 2
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: culture(dunland),man
+			}
+			effect: [
+				{
+					type: discard
+					select: all(condition)
+				}
+			]
+		}
+		gametext: <b>Response:</b> If a [dunland] Man wins a skirmish, discard all conditions.
+		lore: "The rabble of Dunland pillaged their way across the Mark."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

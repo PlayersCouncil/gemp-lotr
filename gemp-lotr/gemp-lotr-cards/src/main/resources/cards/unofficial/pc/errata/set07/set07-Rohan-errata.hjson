@@ -1,37 +1,98 @@
 {
+	
+	57_236: {
+		cardInfo: {
+			//id: 57_236.1
+			parent: 7_236
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN07E236.1_card.jpg
+			collInfo: 7R236
+			rarity: R
+		}
+		title: Herugrim
+		subtitle: Sword of the Mark
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Artifact
+		strength: 2
+		vitality: 1
+		itemclass: Hand weapon
+		target: title(Théoden)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				requires: {
+					type: cantSpotThreats
+					amount: 3
+				}
+				cost: {
+					type: addThreats
+					amount: 2
+				}
+				effect: {
+					type: preventWound
+					select: bearer
+				}
+			}
+		]
+		gametext: Bearer must be Théoden.<br>He is <b>damage +1</b>.<br><b>Response:</b> If Théoden is about to take a wound and you cannot spot 3 threats, add 2 threats to prevent that wound.
+		lore: "Out swept his sword, and he spurred to the standard, hewed staff and bearer...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	57_256: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN07E256.1.jpg
-			javaClass: false
+			//id: 7_256.1
 			parent: 7_256
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN07E256.1.jpg
 			collInfo: 7C256
 			rarity: C
-			setNum: "7"
-			cardNum: 256
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: They Sang as They Slew
 		culture: rohan
 		twilight: 1
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
 				type: Exert
-				filter: choose(mounted,companion)
+				select: choose(mounted,companion)
 				count: {
 					type: range
 					from: 0
 					to: {
 						type: max
-						first: {
+						firstNumber: {
 							type: ForEachBurden
 						}
-						second: {
+						secondNumber: {
 							type: ForEachYouCanSpot
 							filter: minion
 						}
@@ -42,7 +103,7 @@
 			effect: [
 				{
 					type: Wound
-					filter: choose(minion)
+					select: choose(minion)
 					count: {
 						type: ForEachInMemory
 						memory: exertedComps

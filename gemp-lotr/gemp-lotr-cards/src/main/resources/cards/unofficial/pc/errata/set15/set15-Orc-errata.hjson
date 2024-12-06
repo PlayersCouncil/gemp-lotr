@@ -2,17 +2,11 @@
 
 	65_112: {
 		cardInfo: {
-			imagePath: errata/65_112.jpg
-			javaClass: false
-			parent: 15_112
-			parentPath: errata/pc
-			version: 1?
+			//id: 5_112.1
+			revision: 1
+			image: errata/65_112.jpg
 			collInfo: 15R112
 			rarity: R
-			setNum: "15"
-			cardNum: 112
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Mountain-troll
 		unique: false
@@ -26,7 +20,7 @@
 		site: 5
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true,
 				trigger: {
 					type: played
@@ -35,19 +29,19 @@
 				cost: {
 					type: discard
 					count: 5
-					filter: choose(culture(orc), minion, another)
+					select: choose(culture(orc), minion, another)
 				}
 				effect: [
 					{
 						type: addKeyword
 						keyword: fierce
-						filter: self
+						select: self
 						until: endofturn
 					}
 					{
 						type: modifystrength
 						amount: 10
-						filter: self
+						select: self
 						until: endofturn
 					}
 				]
@@ -63,12 +57,12 @@
 					{
 						type: playCardFromDiscard
 						removedTwilight: 2
-						filter: choose(culture(orc), orc)
+						select: choose(culture(orc), orc)
 						memorize: PlayedOrc
 					}
 					{
 						type: exhaust
-						filter: memory(PlayedOrc)
+						select: memory(PlayedOrc)
 					}
 				]
 			}

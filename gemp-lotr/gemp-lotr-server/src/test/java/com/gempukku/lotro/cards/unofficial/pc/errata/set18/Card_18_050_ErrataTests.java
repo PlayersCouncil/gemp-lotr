@@ -52,8 +52,8 @@ public class Card_18_050_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, stone.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, stone.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, stone.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(stone, Keyword.SUPPORT_AREA));
-		assertTrue(scn.HasKeyword(stone, Keyword.TALE));
+		assertTrue(scn.hasKeyword(stone, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(stone, Keyword.TALE));
 		assertEquals(3, stone.getBlueprint().getTwilightCost());
 	}
 

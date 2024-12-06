@@ -1,28 +1,25 @@
 {
 	51_126: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E126.1.jpg
-			javaClass: false
+			//id: 1_126.1
 			parent: 1_126
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E126.1.jpg
 			collInfo: 1C126
 			rarity: U
-			setNum: "1"
-			cardNum: 126
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Hunt Them Down!
 		culture: isengard
 		twilight: 2
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: {
 			type: event
 			effect: {
 				type: addKeyword
-				filter: choose(uruk-hai)
+				select: choose(uruk-hai)
 				keyword: fierce
 				until: start(regroup)
 			}
@@ -40,17 +37,14 @@
 	
 	51_138: {
 		cardInfo: {
-			imagePath: errata/51_138.jpg
-			javaClass: false
+			//id: 1_138.1
 			parent: 1_138
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_138.jpg
 			collInfo: 1C138
 			rarity: C
-			setNum: "1"
-			cardNum: 138
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Saruman's Snows
 		culture: isengard
@@ -66,7 +60,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(isengard),minion)
+					select: choose(culture(isengard),minion)
 				}
 			}
 			{
@@ -87,13 +81,14 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 		]
@@ -123,7 +118,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 1R139
 	# 		rarity: R
 	# 		setNum: "1"
@@ -135,7 +130,7 @@
 	# 	culture: isengard
 	# 	twilight: 0
 	# 	type: event
-	# 	keyword: skirmish
+	# 	timeword: skirmish
 	# 	effects: {
 	# 		type: event
 	# 		effect: {
@@ -147,7 +142,7 @@
 	# 			effects: [
 	# 				{
 	# 					type: modifyStrength
-	# 					filter: choose(uruk-hai)
+	# 					select: choose(uruk-hai)
 	# 					amount: 2
 	# 				}
 	# 				{
@@ -160,13 +155,13 @@
 	# 					effect: [
 	# 						{
 	# 							type: modifyStrength
-	# 							filter: choose(uruk-hai)
+	# 							select: choose(uruk-hai)
 	# 							amount: 3
 	# 							memorize: chosenUrukHai
 	# 						}
 	# 						{
 	# 							type: addKeyword
-	# 							filter: memory(chosenUrukHai)
+	# 							select: memory(chosenUrukHai)
 	# 							keyword: fierce
 	# 							until: start(regroup)
 	# 						}
@@ -190,23 +185,20 @@
 	
 	51_139: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E139.2.jpg
-			javaClass: false
+			//id: 1_139.3
 			parent: 1_139
-			parentPath: errata/pc
-			version: 3
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 3
+			image: errata/LOTR-EN01E139.2.jpg
 			collInfo: 1R139
 			rarity: R
-			setNum: "1"
-			cardNum: 139
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Savagery To Match Their Numbers
 		culture: isengard
 		twilight: 1
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -218,32 +210,32 @@
 				effects: [
 					{
 						type: modifyStrength
-						filter: choose(uruk-hai)
+						select: choose(uruk-hai)
 						amount: 2
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpot
 							count: 5
 							filter: companion
 						}
-						effect: [
+						true: [
 							{
 								type: modifyStrength
-								filter: choose(uruk-hai)
+								select: choose(uruk-hai)
 								amount: 2
 								memorize: chosenUrukHai
 							}
 							{
 								type: modifyStrength
-								filter: memory(chosenUrukHai)
+								select: memory(chosenUrukHai)
 								amount: 2
 								until: start(regroup)
 							}
 							{
 								type: addKeyword
-								filter: memory(chosenUrukHai)
+								select: memory(chosenUrukHai)
 								keyword: fierce
 								until: start(regroup)
 							}
@@ -265,17 +257,14 @@
 	
 	51_150: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E150.1.jpg
-			javaClass: false
+			//id: 1_150.1
 			parent: 1_150
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E150.1.jpg
 			collInfo: 1C150
 			rarity: C
-			setNum: "1"
-			cardNum: 150
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Uruk Rager
 		culture: isengard
@@ -287,7 +276,8 @@
 		site: 5
 		keyword: damage+1
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: winsSkirmish
 				filter: self
@@ -302,7 +292,7 @@
 				effects: [
 					{
 						type: exert
-						filter: choose(companion)
+						select: choose(companion)
 					}
 					{
 						type: discardTopCardsFromDeck
@@ -326,17 +316,14 @@
 	
 	51_154: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E154.1.jpg
-			javaClass: false
+			//id: 1_154.1
 			parent: 1_154
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E154.1.jpg
 			collInfo: 1C154
 			rarity: C
-			setNum: "1"
-			cardNum: 154
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Uruk Soldier
 		culture: isengard
@@ -348,7 +335,8 @@
 		site: 5
 		keyword: damage+1
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			optional: false
 			trigger: {
 				type: played
@@ -357,7 +345,7 @@
 			effect: [
 				{
 					type: chooseActiveCards
-					filter: choose(companion)
+					select: choose(companion)
 					memorize: chosenComp
 					text: Choose a companion to exert
 				}
@@ -373,7 +361,7 @@
 					text: Would you like to discard the top 2 cards of your deck to prevent the exertion of {chosenComp}?
 					effect: {
 						type: exert
-						filter: memory(chosenComp)
+						select: memory(chosenComp)
 					}
 				}
 			]
@@ -391,17 +379,14 @@
 	
 	51_160: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E160.1.jpg
-			javaClass: false
+			//id: 1_160.1
 			parent: 1_160
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E160.1.jpg
 			collInfo: 1C160
 			rarity: C
-			setNum: "1"
-			cardNum: 160
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Uruk-hai Sword
 		culture: isengard
@@ -411,7 +396,8 @@
 		strength: 2
 		target: uruk-hai
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: winsSkirmish
 				filter: bearer
@@ -426,7 +412,7 @@
 				effects: [
 					{
 						type: exert
-						filter: choose(companion)
+						select: choose(companion)
 					}
 					{
 						type: discardTopCardsFromDeck

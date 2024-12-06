@@ -21,17 +21,17 @@ import java.util.Collection;
 public class Exhaust implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "count", "filter", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "player", "count", "select", "memorize");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter,
+                CardResolver.resolveCards(select,
                         valueSource, memory, player, "Choose cards to exhaust", environment));
         result.addEffectAppender(
                 new DelayedAppender() {

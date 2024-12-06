@@ -21,19 +21,21 @@ import java.util.List;
 public class DiscardFromPlay implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "count", "filter", "memorize", "memorizeStackedCards");
+        FieldUtils.validateAllowedFields(effectObject, "player", "count", "select", "memorize", "memorizeStackedCards");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
-        final PlayerSource discardingPlayer = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource discardingPlayer = PlayerResolver.resolvePlayer(player);
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
+        if (select == null)
+            throw new InvalidCardDefinitionException("'select' is required for Discard effect.");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final String stackedCardsMemory = FieldUtils.getString(effectObject.get("memorizeStackedCards"), "memorizeStackedCards");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(filter,
+                CardResolver.resolveCards(select,
                         (actionContext) -> Filters.canBeDiscarded(actionContext.getPerformingPlayer(), actionContext.getSource()),
                         valueSource, memory, player, "Choose cards to discard", environment));
         result.addEffectAppender(

@@ -2,41 +2,35 @@
 
 	60_17: {
 		cardInfo: {
-			imagePath: errata/60_17.jpg
-			javaClass: false
-			parent: 10_17
-			parentPath: errata/pc
-			version: 1?
+			//id: 0_17.1
+			revision: 1
+			image: errata/60_17.jpg
 			collInfo: 10R17
 			rarity: R
-			setNum: "10"
-			cardNum: 17
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Out of the High Airs
 		twilight: 3
 		culture: Gandalf
 		type: event
-		keyword: response
-		requires: {
-			type: phase
-			phase: regroup
-		}
+		timeword: response
 		effects: {
 			type: responseEvent
+			requires: {
+				type: phase
+				phase: regroup
+			}
 			trigger: {
 				type: moves
 			}
 			cost: {
 				type: exert
-				filter: choose(your,wizard)
+				select: choose(your,wizard)
 				times: 2
 			}
 			effect: {
 				type: discard
 				count: 0-3
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 		gametext: If the fellowship moves during the regroup phase, exert your Wizard twice to discard up to 3 minions.

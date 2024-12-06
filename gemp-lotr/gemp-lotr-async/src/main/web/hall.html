@@ -33,14 +33,19 @@
 	<script type="text/javascript" src="js/gemp-022/chat.js"></script>
 	<script type="text/javascript" src="js/gemp-022/communication.js"></script>
 	<script type="text/javascript" src="js/gemp-022/deliveryService.js"></script>
+	<script type="text/javascript" src="js/gemp-022/announcementDeliveryService.js"></script>
 	<script type="text/javascript" src="js/gemp-022/commonUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/cardFilter.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/CardFilter.js"></script>
 
-	<script type="text/javascript" src="js/gemp-022/jCardGroup.js"></script>
+  <script type="text/javascript" src="js/gemp-022/cards/CardGroup.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/Card.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/CardDisplay.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/CardInfoDialog.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/CardImages.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/PackImages.js"></script>
 	<script type="text/javascript" src="js/gemp-022/hobbit.js"></script>
 	<script type="text/javascript" src="js/gemp-022/set40.js"></script>
 	<script type="text/javascript" src="js/gemp-022/PC_Cards.js"></script>
-	<script type="text/javascript" src="js/gemp-022/jCards.js"></script>
 
 	<script type="text/javascript" src="js/gemp-022/hallUi.js"></script>
 	<script type="text/javascript" src="js/gemp-022/leagueResultsUi.js"></script>
@@ -98,7 +103,7 @@
 						</button>
 					</a>
 					
-					<a href="https://lotrtcgwiki.com/forums/index.php?topic=7592.2610#new" target="_blank">
+					<a href="https://forms.gle/pks6CHMWcpBsTcwv9" target="_blank">
 						<button id="bug-button" class="toolbar-button">
 							<span class="custom-icon icon-bug"></span><span>Report a Bug</span>
 						</button>
@@ -246,10 +251,11 @@
 			<select id="supportedFormatsSelect" ></select>
 			<select id="decksSelect" ></select>
 			<select id="timerSelect">
-				<option value="default">Default (80m/5m)</option>
-				<option value="blitz">Blitz! (30m/5m)</option>
-				<option value="slow">Slow (2h/10m)</option>
-				<option value="glacial">Glacial (3d/1d)</option>
+				<option value="default">Default (45m/6m)</option>
+				<option value="blitz">Blitz! (25m/3m)</option>
+				<option value="WC">Championship (20m/10m)</option>
+				<option value="slow">Slow (80m/10m)</option>
+				<option value="glacial">Glacial (1d/1d)</option>
 			</select>
 			<input id='tableDescInput' type='text' maxlength='100' placeHolder='Description (or player to invite)'>
 			<div class="checkboxes">

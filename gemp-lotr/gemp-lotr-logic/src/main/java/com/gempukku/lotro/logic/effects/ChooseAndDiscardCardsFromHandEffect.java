@@ -39,18 +39,6 @@ public class ChooseAndDiscardCardsFromHandEffect extends AbstractSubActionEffect
         this(action, playerId, forced, new ConstantEvaluator(minimum), new ConstantEvaluator(maximum), filters);
     }
 
-    public ChooseAndDiscardCardsFromHandEffect(Action action, String playerId, boolean forced, int count, Filterable... filters) {
-        this(action, playerId, forced, count, count, filters);
-    }
-
-    public ChooseAndDiscardCardsFromHandEffect(Action action, String playerId, boolean forced, int count) {
-        this(action, playerId, forced, count, Filters.any);
-    }
-
-    public ChooseAndDiscardCardsFromHandEffect(Action action, String playerId, boolean forced) {
-        this(action, playerId, forced, 1);
-    }
-
     public void setText(String text) {
         _text = text;
     }
@@ -67,7 +55,7 @@ public class ChooseAndDiscardCardsFromHandEffect extends AbstractSubActionEffect
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return Filters.filter(game.getGameState().getHand(_playerId), game, _filter).size()
+        return Filters.filter(game, game.getGameState().getHand(_playerId), _filter).size()
                 >= _minimum.evaluateExpression(game, null);
     }
 
@@ -76,7 +64,7 @@ public class ChooseAndDiscardCardsFromHandEffect extends AbstractSubActionEffect
         if (_forced && !game.getModifiersQuerying().canDiscardCardsFromHand(game, _playerId, _action.getActionSource()))
             return;
 
-        Collection<PhysicalCard> hand = Filters.filter(game.getGameState().getHand(_playerId), game, _filter);
+        Collection<PhysicalCard> hand = Filters.filter(game, game.getGameState().getHand(_playerId), _filter);
         int maximum = Math.min(_maximum.evaluateExpression(game, null), hand.size());
 
         int minimum = _minimum.evaluateExpression(game, null);

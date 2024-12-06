@@ -19,9 +19,9 @@ import java.util.Arrays;
 public class Repeat implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "amount", "effect");
+        FieldUtils.validateAllowedFields(effectObject, "times", "effect");
 
-        final ValueSource amountSource = ValueResolver.resolveEvaluator(effectObject.get("amount"), environment);
+        final ValueSource timesSource = ValueResolver.resolveEvaluator(effectObject.get("times"), environment);
         final JSONObject[] effectArray = FieldUtils.getObjectArray(effectObject.get("effect"), "effect");
 
         final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
@@ -29,10 +29,10 @@ public class Repeat implements EffectAppenderProducer {
         return new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                final int count = amountSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                if (count > 0) {
+                final int times = timesSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                if (times > 0) {
                     SubAction subAction = new SubAction(action);
-                    for (int i = 0; i < count; i++) {
+                    for (int i = 0; i < times; i++) {
                         for (EffectAppender effectAppender : effectAppenders)
                             effectAppender.appendEffect(false, subAction, actionContext);
                     }

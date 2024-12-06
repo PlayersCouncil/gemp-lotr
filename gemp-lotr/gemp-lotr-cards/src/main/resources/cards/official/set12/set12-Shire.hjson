@@ -1,0 +1,711 @@
+{
+
+	12_119: {
+		cardInfo: {
+			image: decipher/LOTR12119.jpg
+			collInfo: 12R119
+			rarity: R
+		}
+		title: Bilbo
+		subtitle: Melancholy Hobbit
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 8
+		keywords: Ring-bound
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfSkirmishInvolving
+					filter: self
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(shire),timeword(skirmish),event)
+				}
+			}
+		]
+		gametext: <b>Ring-bound</b>.<br>At the start of each skirmish involving Bilbo, you may exert him to take a [shire] skirmish event into hand from your discard pile.
+		lore: "'I want to see the wild country again before I die, and the Mountains....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_120: {
+		cardInfo: {
+			image: decipher/LOTR12120.jpg
+			collInfo: 12R120
+			rarity: R
+		}
+		title: Diversion
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Regroup
+		effects: [
+			{
+				type: event
+				cost: {
+					type: discard
+					select: choose(hobbit,notAssignedToSkirmish)
+				}
+				effect: [
+					{
+						type: discard
+						select: choose(minion)
+					}
+				]
+			}
+			{
+				type: playedInOtherPhase
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: hobbit,inSkirmish
+				}
+				cost: {
+					type: addBurdens
+					amount: 2
+				}
+			}
+		]
+		gametext: Discard a Hobbit not assigned to a skirmish from play to discard a minion from play.<br>If the fellowship is at a battleground site, you may add 2 burdens to play this event during a skirmish involving a Hobbit.
+		lore: "Each member of the fellowship was willing to make any sacrifice to safeguard the Quest."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_121: {
+		cardInfo: {
+			image: decipher/LOTR12121.jpg
+			collInfo: 12C121
+			rarity: C
+		}
+		title: Flotsam and Jetsam
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: companion,not(hobbit)
+			}
+			effect: [
+				{
+					type: heal
+					select: choose(hobbit)
+				}
+			]
+		}
+		gametext: If a companion (except a Hobbit) wins a skirmish, heal a Hobbit.
+		lore: "'Welcome, my lords, to Isengard!' he said. 'We are the doorwardens.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_122: {
+		cardInfo: {
+			image: decipher/LOTR12122.jpg
+			collInfo: 12C122
+			rarity: C
+		}
+		title: Home and Hearth
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: hobbit
+				}
+				effect: [
+					{
+						type: removeBurdens
+					}
+					{
+						type: If
+						check: {
+							type: location
+							filter: dwelling
+						}
+						true: {
+							type: heal
+							select: choose(ringBearer)
+						}
+					}
+				]
+			}
+		]
+		gametext: Each time you play a Hobbit, you may remove a burden. Then, if the fellowship is at dwelling site, heal the Ring-bearer.
+		lore: "He drew a deep breath. 'Well, I'm back,' he said."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_123: {
+		cardInfo: {
+			image: decipher/LOTR12123.jpg
+			collInfo: 12C123
+			rarity: C
+		}
+		title: Hope is Kindled
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(hobbit)
+					amount: 2
+					memorize: chosenHobbit
+				}
+				{
+					type: addTrigger
+					optional: true
+					trigger: {
+						type: winsSkirmish
+						filter: memory(chosenHobbit)
+					}
+					effect: {
+						type: removeBurdens
+					}
+				}
+			]
+		}
+		gametext: Make a Hobbit strength +2. If that Hobbit wins this skirmish, you may remove a burden.
+		lore: "'Soft as butter they can be, and yet sometimes as tough as old tree-roots.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_124: {
+		cardInfo: {
+			image: decipher/LOTR12124.jpg
+			collInfo: 12R124
+			rarity: R
+		}
+		title: Long Live the Halflings
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: hobbit
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: ringBearer,assignedToSkirmish(any)
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: all(companion,minResistance(7))
+					amount: 2
+					until: regroup
+				}
+			}
+		]
+		gametext: To play, spot a Hobbit.<br><b>Skirmish:</b> If your Ring-bearer is assigned to a skirmish, discard this condition to make each companion who has resistance 7 or more strength +2 until the regroup phase.
+		lore: "'My friends, you bow to no one.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_125: {
+		cardInfo: {
+			image: decipher/LOTR12125.jpg
+			collInfo: 12S125
+			rarity: S
+		}
+		title: Measure of Comfort
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					requires: {
+						type: canSpot
+						filter: hobbit
+					}
+					filter: unbound,companion
+					amount: 1
+				}
+			}
+		]
+		gametext: While you can spot a Hobbit, each unbound companion is resistance +1.
+		lore: "Though fate had it that the fellowship would not accompany Frodo to his final goal, some reassurance came in knowing he did not have to make the journey alone."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_126: {
+		cardInfo: {
+			image: decipher/LOTR12126.jpg
+			collInfo: 12S126
+			rarity: S
+		}
+		title: No Worse for Wear
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: alterOverwhelmMultiplier
+					select: choose(hobbit)
+					multiplier: 3
+				}
+				{
+					type: If
+					check: {
+						type: location
+						filter: dwelling
+					}
+					true: {
+						type: optional
+						text: Would you like to discard 2 cards to return this event to your hand?
+						effect: {
+							type: costToEffect
+							cost: {
+								type: discardFromHand
+								forced: false
+								count: 2
+							}
+							effect: {
+								type: putPlayedEventIntoHand
+							}
+						}
+					}
+				}
+			]
+		}
+		gametext: Prevent a Hobbit from being overwhelmed unless his or her strength is tripled. Then, if the fellowship is at a dwelling site, you may discard 2 cards from hand to return this event to your hand.
+		lore: "'That was good.'\"<br>\"'Let's get another one!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_127: {
+		cardInfo: {
+			image: decipher/LOTR12127.jpg
+			collInfo: 12R127
+			rarity: R
+		}
+		title: Pippin
+		subtitle: Hobbit of Some Intelligence
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 6
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: choice
+					texts: [
+						Remove a burden
+						Heal a companion
+					]
+					effects: [
+						{
+							type: removeBurdens
+						}
+						{
+							type: heal
+							select: choose(companion)
+						}
+					]
+				}
+			}
+		]
+		gametext: When you play Pippin, remove a burden or heal a companion.
+		lore: "'Anyway, you need people of intelligence on this sort of mission... quest... thing.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_128: {
+		cardInfo: {
+			image: decipher/LOTR12128.jpg
+			collInfo: 12R128
+			rarity: R
+		}
+		title: A Promise
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: [
+						{
+							type: canSpot
+							filter: name(Frodo)
+						}
+						{
+							type: canSpot
+							filter: name(Sam)
+						}
+					]
+					filter: or(name(Frodo),name(Sam))
+					amount: 1
+				}
+			}
+		]
+		gametext: While you can spot Frodo and Sam and neither is exhausted, each is strength +1.
+		lore: "'But I'm glad, Sam. I cannot tell you how glad. Come along! It is plain that we were meant to go together.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_129: {
+		cardInfo: {
+			image: decipher/LOTR12129.jpg
+			collInfo: 12R129
+			rarity: R
+		}
+		title: Rosie Cotton
+		subtitle: Barmaid
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 2
+		vitality: 3
+		resistance: 8
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeOverwhelmedMultiplier
+					filter: name(Sam)
+					multiplier: 3
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: assignedToSkirmish
+					side: free people
+					filter: self
+				}
+				effect: {
+					type: addBurdens
+					amount: 2
+				}
+			}
+		]
+		gametext: Sam cannot be overwhelmed unless his strength is tripled.<br>Each time the Free Peoples player assigns Rosie Cotton to a skirmish, add 2 burdens.
+		lore: "'It seems she didn't like my going abroad at all....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_130: {
+		cardInfo: {
+			image: decipher/LOTR12130.jpg
+			collInfo: 12U130
+			rarity: U
+		}
+		title: Simple Living
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: played
+					filter: your,culture(shire),event
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: heal
+					select: all(hobbit)
+				}
+			}
+		]
+		gametext: <b>Response:</b> If you play a [shire] event, discard this condition to heal each Hobbit.
+		lore: "They do not and did not understand or like machines more complicated than a forge-bellows, a water-mill, or a hand-loom...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_131: {
+		cardInfo: {
+			image: decipher/LOTR12131.jpg
+			collInfo: 12U131
+			rarity: U
+		}
+		title: Stand Together
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: winsSkirmish
+					filter: hobbit
+					memorize: winner
+				}
+				effect: {
+					type: addKeyword
+					select: memory(winner)
+					keyword: muster
+					until: endOfTurn
+				}
+			}
+		]
+		gametext: Each time a Hobbit wins a skirmish, he or she gains <b>muster</b> until the end of the turn. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>
+		lore: "'For a breathless time they sat there, silent and alert....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_132: {
+		cardInfo: {
+			image: decipher/LOTR12132.jpg
+			collInfo: 12U132
+			rarity: U
+		}
+		title: Sudden Fury
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: losesSkirmish
+					filter: culture(shire),companion
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: shire
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					culture: shire
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(shire),companion)
+					amount: 1
+				}
+			}
+		]
+		gametext: Each time a [shire] companion loses a skirmish, add a [shire] token here.<br><b>Skirmish:</b> Remove a [shire] token from here to make a [shire] companion strength +1.
+		lore: "It raised a whip a second time, but the blow never fell."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_133: {
+		cardInfo: {
+			image: decipher/LOTR12133.jpg
+			collInfo: 12S133
+			rarity: S
+		}
+		title: Tolman Cotton
+		subtitle: Farmer of Bywater
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 4
+		vitality: 4
+		resistance: 8
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToAddBurden
+					filter: side(shadow)
+				}
+				requires: {
+					type: canSpot
+					filter: another,hobbit
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: preventEffect
+				}
+			}
+		]
+		gametext: <b>Response:</b> If a burden is about to be added by a Shadow card, spot another Hobbit and exert Tolman Cotton to prevent that.
+		lore: "The land was rich and kindly, and though it had been long deserted when they entered it, it had before been well tilled...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -49,12 +49,12 @@
 	# 				effects: [
 	# 					{
 	# 						type: putCardsFromDeckOnTopOfDeck
-	# 						filter: choose(culture(isengard),weather)
+	# 						select: choose(culture(isengard),weather)
 	# 						count: 1
 	# 					}
 	# 					{
 	# 						type: putCardsFromDiscardOnTopOfDeck
-	# 						filter: choose(culture(isengard),weather)
+	# 						select: choose(culture(isengard),weather)
 	# 						count: 1
 	# 					}
 	# 				]
@@ -65,17 +65,10 @@
 	
 	101_25: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S025.1_card.jpg
-			javaClass: false
-			parent: 101_25
-			parentPath: errata/pc
-			version: 1
+			//id: 101_25
+			image: sets/vset1/LOTR-ENV1S025.1_card.jpg
 			collInfo: V1C25
 			rarity: C
-			setNum: "V1"
-			cardNum: 25
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Crebain Flock
 		unique: false
@@ -130,12 +123,15 @@
 						effects: [
 							{
 								type: PutCardsFromDeckIntoHand
-								filter: choose(culture(isengard),weather)
+								select: choose(culture(isengard),weather)
 								count: 1
+								reveal: true
+								shuffle: true
+								showAll: true
 							}
 							{
 								type: PutCardsFromDiscardIntoHand
-								filter: choose(culture(isengard),weather)
+								select: choose(culture(isengard),weather)
 								count: 1
 							}
 						]
@@ -158,7 +154,6 @@
 		}
 	}
 
-
 	# 101_26: {
 	# 	title: Crows of Isengard
 	# 	culture: isengard
@@ -170,7 +165,7 @@
 	# 	site: 4
 	# 	effects: [
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
 	# 			trigger: {
 	# 				type: played
 	# 				filter: self
@@ -178,7 +173,7 @@
 	# 			effect: [
 	# 				{
 	# 					type: spot
-	# 					filter: choose(companion)
+	# 					select: choose(companion)
 	# 					memorize: spottedComp
 	# 				}
 	# 				{
@@ -229,12 +224,12 @@
 	# 				effects: [
 	# 					{
 	# 						type: putCardsFromDeckOnTopOfDeck
-	# 						filter: choose(culture(isengard),item)
+	# 						select: choose(culture(isengard),item)
 	# 						count: 1
 	# 					}
 	# 					{
 	# 						type: putCardsFromDiscardOnTopOfDeck
-	# 						filter: choose(culture(isengard),item)
+	# 						select: choose(culture(isengard),item)
 	# 						count: 1
 	# 					}
 	# 				]
@@ -245,17 +240,10 @@
 	
 	101_26: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S026.1_card.jpg
-			javaClass: false
-			parent: 101_26
-			parentPath: errata/pc
-			version: 1
+			//id: 101_26
+			image: sets/vset1/LOTR-ENV1S026.1_card.jpg
 			collInfo: V1C26
 			rarity: C
-			setNum: "V1"
-			cardNum: 26
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Crows of Isengard
 		unique: false
@@ -269,7 +257,8 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -277,7 +266,7 @@
 				effect: [
 					{
 						type: spot
-						filter: choose(companion)
+						select: choose(companion)
 						memorize: spottedComp
 					}
 					{
@@ -330,12 +319,15 @@
 						effects: [
 							{
 								type: PutCardsFromDeckIntoHand
-								filter: choose(culture(isengard),item)
+								select: choose(culture(isengard),item)
 								count: 1
+								reveal: true
+								shuffle: true
+								showAll: true
 							}
 							{
 								type: PutCardsFromDiscardIntoHand
-								filter: choose(culture(isengard),item)
+								select: choose(culture(isengard),item)
 								count: 1
 							}
 						]
@@ -358,21 +350,31 @@
 		}
 	}
 
-
 	101_27: {
-		title: Frostbite
-		culture: isengard
-		twilight: 1
-		type: condition
-		target: companion,not(hasAttached(name(Frostbite)))
-		requires: {
-			type: canSpot
-			filter: weather,condition
+		cardInfo: {
+			//id: 101_27
+			image: sets/vset1/LOTR-ENV1S027.0_card.jpg
+			collInfo: V1U27
+			rarity: U
 		}
+		title: Frostbite
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		target: companion,not(hasAttached(name(Frostbite)))
 		effects: [
-
 			{
-				type: trigger
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: weather,condition
+				}
+			}
+			{
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: weather
@@ -383,7 +385,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: aboutToDiscard
 					filter: self
@@ -391,10 +394,19 @@
 				}
 				effect:	{
 					type: wound
-					filter: bearer
+					select: bearer
 				}
 			}
 		]
+		gametext: To play, spot a weather condition.  Plays on a companion. Limit 1 per bearer.<br>Each time a weather card is played, add (2). <br>When this condition is discarded by a Free Peoples card, wound bearer.
+		lore: "'Gandalf, we must turn back!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 
@@ -421,12 +433,12 @@
 	# 				effects: [
 	# 					{
 	# 						type: putCardsFromDeckOnTopOfDeck
-	# 						filter: choose(title(Saruman))
+	# 						select: choose(title(Saruman))
 	# 						count: 1
 	# 					}
 	# 					{
 	# 						type: putCardsFromDiscardOnTopOfDeck
-	# 						filter: choose(title(Saruman))
+	# 						select: choose(title(Saruman))
 	# 						count: 1
 	# 					}
 	# 				]
@@ -434,7 +446,7 @@
 	# 			{
 	# 				type: DiscardFromHand
 	# 				forced: false
-	# 				filter: choose(any)
+	# 				select: choose(any)
 	# 				count: {
 	# 					type: range
 	# 					from: 0
@@ -450,17 +462,10 @@
 
 	101_28: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S028.1_card.jpg
-			javaClass: false
-			parent: 101_28
-			parentPath: errata/pc
-			version: 1
+			//id: 101_28
+			image: sets/vset1/LOTR-ENV1S028.1_card.jpg
 			collInfo: V1C28
 			rarity: C
-			setNum: "V1"
-			cardNum: 28
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Just a Wisp of Cloud
 		unique: false
@@ -468,17 +473,17 @@
 		culture: Isengard
 		twilight: 0
 		type: Event
-		keyword: [
-			shadow
-			spell
-			weather
+		timewords: Shadow
+		keywords: [
+			Spell
+			Weather
 		]
 		effects: {
 			type: event
 			cost: {
 				type: DiscardFromHand
 				forced: false
-				filter: choose(side(freeps))
+				select: choose(side(freeps))
 				count: 1
 			}
 			effect: [
@@ -491,19 +496,19 @@
 					effects: [
 						{
 							type: PlayCardFromDrawDeck
-							filter: choose(title(Saruman))
-							cost: {
+							select: choose(title(Saruman))
+							discount: {
 								type: ForEachYouCanSpot
 								filter: Crow
 								multiplier: -1
 							}
-							#Have to have this true for "deck or discard" choices
-							nocheck: true
+							showAll: true
+							shuffle: true
 						}
 						{
 							type: PlayCardFromDiscard
-							filter: choose(title(Saruman))
-							cost: {
+							select: choose(title(Saruman))
+							discount: {
 								type: ForEachYouCanSpot
 								filter: Crow
 								multiplier: -1
@@ -574,12 +579,12 @@
 	# 				effects: [
 	# 					{
 	# 						type: putCardsFromDeckOnTopOfDeck
-	# 						filter: choose(culture(isengard),condition)
+	# 						select: choose(culture(isengard),condition)
 	# 						count: 1
 	# 					}
 	# 					{
 	# 						type: putCardsFromDiscardOnTopOfDeck
-	# 						filter: choose(culture(isengard),condition)
+	# 						select: choose(culture(isengard),condition)
 	# 						count: 1
 	# 					}
 	# 				]
@@ -590,17 +595,10 @@
 	
 	101_29: {
 		cardInfo: {
-			imagePath: sets/vset1/LOTR-ENV1S029.1_card.jpg
-			javaClass: false
-			parent: 101_29
-			parentPath: errata/pc
-			version: 1
+			//id: 101_29
+			image: sets/vset1/LOTR-ENV1S029.1_card.jpg
 			collInfo: V1R29
 			rarity: R
-			setNum: "V1"
-			cardNum: 29
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Murder of Crows
 		unique: true
@@ -655,12 +653,15 @@
 						effects: [
 							{
 								type: PutCardsFromDeckIntoHand
-								filter: choose(culture(isengard),condition)
+								select: choose(culture(isengard),condition)
 								count: 1
+								reveal: true
+								shuffle: true
+								showAll: true
 							}
 							{
 								type: PutCardsFromDiscardIntoHand
-								filter: choose(culture(isengard),condition)
+								select: choose(culture(isengard),condition)
 								count: 1
 							}
 						]
@@ -684,13 +685,20 @@
 	}
 
 	101_30: {
+		cardInfo: {
+			//id: 101_30
+			image: sets/vset1/LOTR-ENV1S030.0_card.jpg
+			collInfo: V1R30
+			rarity: R
+		}
 		title: Saruman
 		subtitle: Fell Voice
 		unique: true
-		culture: isengard
+		side: Shadow
+		culture: Isengard
 		twilight: 4
-		type: minion
-		race: wizard
+		type: Minion
+		race: Wizard
 		strength: 6
 		vitality: 4
 		site: 4
@@ -744,22 +752,30 @@
 				}
 			}
 			{
-				type: activatedtrigger
+				type: Response
 				trigger: {
 					type: movesFrom
 					filter: site,hasAttached(weather,condition)
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: exert
-					filter: all(companion)
+					select: all(companion)
 				}
 			}
 		]
+		gametext: While you cannot spot a weather, Saruman may not take wounds in the archery phase and may not be assigned to a skirmish.<br>While at a site bearing a weather, each [isengard] minion is strength +2.<br>Response: If the fellowship moves from a site bearing a weather, discard this minion to exert each companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 
 }
-

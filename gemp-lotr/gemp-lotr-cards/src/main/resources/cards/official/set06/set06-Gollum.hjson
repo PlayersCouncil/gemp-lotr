@@ -1,0 +1,477 @@
+{
+
+	6_38: {
+		cardInfo: {
+			image: decipher/LOTR06038.jpg
+			collInfo: 6C38
+			rarity: C
+		}
+		title: Don't Follow the Lights
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: name(Sméagol)
+			}
+			cost: {
+				type: addBurdens
+			},
+			effect: [
+				{
+					type: discard
+					select: choose(minion)
+				}
+			]
+		}
+		gametext: <b>Response:</b> If Sméagol wins a skirmish, add a burden to discard a minion.
+		lore: "'Careful, careful now or Hobbits go down to join the dead ones and light little candles.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_39: {
+		cardInfo: {
+			image: decipher/LOTR06039.jpg
+			collInfo: 6R39
+			rarity: R
+		}
+		title: Don't Look at Them
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: name(Sméagol)
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 3
+				}
+				effect: {
+					type: wound
+					select: choose(minion,inSkirmishAgainst(name(Sméagol)))
+					memorize: chosenMinion
+					times: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenMinion
+							filter: culture(wraith),minion
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+		]
+		gametext: Plays to your support area.<br><b>Skirmish:</b> Spot Sméagol and discard 3 cards from hand to wound a minion Sméagol is skirmishing once (or twice if that minion is a [wraith] minion).
+		lore: "'You should not look in when the candles are lit.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_40: {
+		cardInfo: {
+			image: decipher/LOTR06040.jpg
+			collInfo: 6C40
+			rarity: C
+		}
+		title: Gollum
+		subtitle: Old Villain
+		unique: true
+		side: Shadow
+		culture: Gollum
+		twilight: 2
+		type: Minion
+		strength: 5
+		vitality: 4
+		site: 3
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: self,inSkirmishAgainst(ringBound,companion)
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Discard a card from hand to make Gollum strength +1 (or +2 if skirmishing a Ring-bound companion).
+		lore: "'Must take it. The Wraiths are searching. Must take it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_41: {
+		cardInfo: {
+			image: decipher/LOTR06041.jpg
+			collInfo: 6R41
+			rarity: R
+		}
+		title: Master Broke His Promise
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 5
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(name(Gollum))
+				times: 3
+			},
+			effect: [
+				{
+					type: wound
+					select: all(companion)
+				}
+				{
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: -1
+					}
+					until: endOfTurn
+				}
+			]
+		}
+		gametext: <b>Regroup:</b> Exert Gollum 3 times to wound each companion. The move limit for this turn is -1.
+		lore: "'Kill them! Kill them! Kill them both! And then we take the Precious! We be the Master!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_42: {
+		cardInfo: {
+			image: decipher/LOTR06042.jpg
+			collInfo: 6C42
+			rarity: C
+		}
+		title: Nasty, Foul Hobbitses
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: name(Gollum)
+			}
+			effect: [
+				{
+					type: addBurdens
+				}
+			]
+		}
+		gametext: <b>Response:</b> If Gollum wins a skirmish, add a burden.
+		lore: "'We ought to wring their filthy little necks!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_43: {
+		cardInfo: {
+			image: decipher/LOTR06043.jpg
+			collInfo: 6C43
+			rarity: C
+		}
+		title: Not Listening
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: name(Sméagol)
+				memorize: winner
+			}
+			effect: [
+				{
+					type: heal
+					select: memory(winner)
+				}
+				{
+					type: removeBurdens
+					amount: 2
+				}
+			]
+		}
+		gametext: <b>Response:</b> If Sméagol wins a skirmish, heal him and remove 2 burdens.
+		lore: "'They'll wake too quick and kill us... Not now. Not Yet.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_44: {
+		cardInfo: {
+			image: decipher/LOTR06044.jpg
+			collInfo: 6R44
+			rarity: R
+		}
+		title: Safe Paths
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 5
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			cost: [
+				{
+					type: exert
+					select: choose(name(Sméagol))
+					times: 3
+					memorize: smeagol
+				}
+				{
+					type: discard
+					select: memory(smeagol)
+				}
+			]
+			effect: [
+				{
+					type: wound
+					select: all(minion)
+				}
+				{
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: 1
+					}
+					until: endOfTurn
+				}
+				{
+					type: addTrigger
+					trigger: {
+						type: moves
+					}
+					effect: {
+						type: putCardsFromDiscardIntoHand
+						player: shadow
+						select: choose(side(shadow))
+						count: 0-3
+					}
+				}
+			]
+		}
+		gametext: <b>Regroup:</b> Exert Sméagol 3 times and discard him to wound each minion. The move limit for this turn is +1. If the fellowship moves, each Shadow player may take up to 3 Shadow cards into hand from his or her discard pile.
+		lore: "'Soft and quick as shadows we must be!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_45: {
+		cardInfo: {
+			image: decipher/LOTR06045.jpg
+			collInfo: 6C45
+			rarity: C
+		}
+		title: Sméagol
+		subtitle: Poor Creature
+		unique: true
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Companion
+		strength: 3
+		vitality: 4
+		signet: Frodo
+		resistance: 6
+		keywords: Ring-bound
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: addBurdens
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Ring-bound</b>. To play, add a burden.<br><b>Skirmish:</b> Discard a card from hand to make Sméagol strength +1.
+		lore: "'And we're so lonely... We'll be nice to them, very nice, if they'll be nice to us, won't we, yes, yess.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_46: {
+		cardInfo: {
+			image: decipher/LOTR06046.jpg
+			collInfo: 6R46
+			rarity: R
+		}
+		title: They Stole It
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: name(Gollum)
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 3
+				}
+				effect: {
+					type: wound
+					select: choose(companion,inSkirmishAgainst(name(Gollum)))
+					memorize: chosenCompanion
+					times: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenCompanion
+							filter: culture(shire),companion
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+		]
+		gametext: Plays to your support area.<br><b>Skirmish:</b> Spot Gollum and discard 3 cards from hand to wound a companion Gollum is skirmishing once (or twice if that companion is a [shire] companion).
+		lore: "'Where iss it, where iss it: my precious....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	6_47: {
+		cardInfo: {
+			image: decipher/LOTR06047.jpg
+			collInfo: 6C47
+			rarity: C
+		}
+		title: You're a Liar and a Thief
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: name(Gollum)
+			}
+			effect: [
+				{
+					type: wound
+					select: choose(companion,not(ringBearer))
+				}
+			]
+		}
+		gametext: <b>Response:</b> If Gollum wins a skirmish, wound a companion (except the Ring- bearer).
+		lore: "'No, sweet one. See, my precious: if we has it, then we can escape, even from Him, eh?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

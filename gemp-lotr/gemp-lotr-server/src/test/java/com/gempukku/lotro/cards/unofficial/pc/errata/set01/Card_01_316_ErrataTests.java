@@ -52,8 +52,8 @@ public class Card_01_316_ErrataTests
         assertEquals(CardType.CONDITION, talent.getBlueprint().getCardType());
         assertEquals(0, talent.getBlueprint().getTwilightCost());
 
-        assertTrue(scn.HasKeyword(talent, Keyword.STEALTH));
-        assertFalse(scn.HasKeyword(talent, Keyword.SUPPORT_AREA));
+        assertTrue(scn.hasKeyword(talent, Keyword.STEALTH));
+        assertFalse(scn.hasKeyword(talent, Keyword.SUPPORT_AREA));
     }
 
     @Test

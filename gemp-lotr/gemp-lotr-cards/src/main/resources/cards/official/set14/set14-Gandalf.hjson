@@ -1,0 +1,141 @@
+{
+
+	14_5: {
+		cardInfo: {
+			image: decipher/LOTR14005.jpg
+			collInfo: 14R5
+			rarity: R
+		}
+		title: Brand
+		subtitle: King of Dale
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: or(dwarf,and(another,culture(gandalf),man))
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					requires: {
+						type: isGreaterThan
+						firstNumber: {
+							type: forEachYouCanSpot
+							filter: minion
+						}
+						secondNumber: {
+							type: forEachYouCanSpot
+							filter: companion
+						}
+					}
+					side: free people
+					amount: {
+						type: subtract
+						firstNumber: {
+							type: forEachYouCanSpot
+							filter: minion
+						}
+						secondNumber: {
+							type: forEachYouCanSpot
+							filter: companion
+						}
+					}
+				}
+			}
+		]
+		gametext: Each of your Dwarves and other [gandalf] Men is strength +1.<br>While you can spot more minions than companions, the fellowship archery total is +X, where X is the number of minions minus the number of companions.
+		lore: "...he had the aid of the Dwarves of Erebor."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	14_6: {
+		cardInfo: {
+			image: decipher/LOTR14006.jpg
+			collInfo: 14R6
+			rarity: R
+		}
+		title: Grimbeorn
+		subtitle: Beorning Chieftain
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 4
+		vitality: 5
+		resistance: 6
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfTurn
+				}
+				effect: {
+					type: heal
+					select: self
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				cost: [
+					{
+						type: exert
+						select: self
+						times: 2
+					}
+					{
+						type: discardFromHand
+						forced: false
+						select: choose(minion)
+						memorize: discardedCard
+					}
+				]
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: {
+						type: printedStrengthFromMemory
+						memory: discardedCard
+					}
+					until: start(regroup)
+				}
+			}
+		]
+		gametext: At the start of each turn, heal Grimbeorn.<br>At the start of the maneuver phase, you may exert Grimbeorn twice and discard a minion from hand to make Grimbeorn strength +X until the regroup phase, where X is that minion's strength.
+		lore: "He was perhaps a shape-shifter like his father."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

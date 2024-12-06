@@ -1,0 +1,67 @@
+{
+	58_20: {
+		cardInfo: {
+			//id: 8_20.1
+			parent: 8_20
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN08E020.1_card.jpg
+			collInfo: 8R20
+			rarity: R
+		}
+		title: Saved From the Fire
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			cost: {
+				type: kill
+				select: choose(companion,not(ringBearer))
+				memorize: killedCompanion
+			},
+			effect: [
+				{
+					type: putCardsFromDeckIntoHand
+					select: choose(cultureFromMemory(killedCompanion))
+					count: {
+						type: Range
+						from: 0
+						to: {
+							type: Sum
+							source: [
+								{
+									type: RegionNumber
+								}
+								1
+							]
+						}
+					}
+					reveal: true
+					shuffle: true
+					showAll: true
+				}
+				{
+					type: shuffleDeck
+				}
+			]
+		}
+		gametext: Spot Gandalf and place a companion (except the Ring-bearer) in the dead pile to take up to X cards from that companion's culture into hand from your draw deck, where X is the current region number +1.
+		lore: "'...we will bear Faramir, Steward of Gondor, to a place where he can sleep in peace....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

@@ -55,7 +55,7 @@ public class Card_V1_002_Tests
 
         PhysicalCardImpl deep = scn.GetFreepsCard("deep");
 
-        assertTrue(scn.HasKeyword(deep, Keyword.SUPPORT_AREA));
+        assertTrue(scn.hasKeyword(deep, Keyword.SUPPORT_AREA));
         assertEquals(1, deep.getBlueprint().getTwilightCost());
         assertTrue(deep.getBlueprint().isUnique());
     }

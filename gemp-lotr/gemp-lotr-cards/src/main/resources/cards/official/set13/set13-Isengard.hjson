@@ -1,0 +1,242 @@
+{
+
+	13_78: {
+		cardInfo: {
+			image: decipher/LOTR13078.jpg
+			collInfo: 13R78
+			rarity: R
+		}
+		title: Alatar Deceived
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: winsSkirmish
+					filter: wizard
+				}
+				requires: {
+					type: canSpot
+					filter: self,zone(support)
+				}
+				effect: [
+					{
+						type: turnIntoMinion
+						select: self
+						strength: 11
+						vitality: 1
+						keywords: fierce
+						until: regroup
+					}
+					{
+						type: disableWounds
+						select: self
+						until: regroup
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: cantBear
+							filter: self
+						}
+						until: regroup
+					}
+				]
+			}
+		]
+		gametext: Each time a Wizard wins a skirmish, this condition becomes a <b>fierce</b>, <b>damage +1</b> Wizard minion until the start of the regroup phase that has 11 strength and 1 vitality, and cannot take wounds or bear other cards. This card is still a condition.
+		lore: "'...the world of Men, which We must rule.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_79: {
+		cardInfo: {
+			image: decipher/LOTR13079.jpg
+			collInfo: 13U79
+			rarity: U
+		}
+		title: Pallando Deceived
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				cost: {
+					type: exert
+					select: choose(wizard)
+				}
+				requires: {
+					type: canSpot
+					filter: self,zone(support)
+				}
+				effect: [
+					{
+						type: turnIntoMinion
+						select: self
+						strength: 10
+						vitality: 1
+						keywords: fierce
+						until: regroup
+					}
+					{
+						type: disableWounds
+						select: self
+						until: regroup
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: cantBear
+							filter: self
+						}
+						until: regroup
+					}
+				]
+			}
+		]
+		gametext: At the start of the maneuver phase, you may exert a Wizard to make this condition a <b>fierce</b> Wizard minion until the start of the regroup phase that has 10 strength and 1 vitality, and cannot take wounds or bear other cards. This card is still a condition.
+		lore: "'We may join with that Power.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_80: {
+		cardInfo: {
+			image: decipher/LOTR13080.jpg
+			collInfo: 13R80
+			rarity: R
+		}
+		title: Radagast Deceived
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: heals
+					filter: wizard
+				}
+				requires: {
+					type: canSpot
+					filter: self,zone(support)
+				}
+				effect: [
+					{
+						type: turnIntoMinion
+						select: self
+						strength: 12
+						vitality: 1
+						keywords: fierce
+						until: regroup
+					}
+					{
+						type: disableWounds
+						select: self
+						until: regroup
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: cantBear
+							filter: self
+						}
+						until: regroup
+					}
+				]
+			}
+		]
+		gametext: Each time a Wizard heals, this condition becomes a <b>fierce</b> Wizard minion until the start of the regroup phase that has 12 strength and 1 vitality, and cannot take wounds or bear other cards. This card is still a condition.
+		lore: "'Radagast the Simple! Radagast the Fool!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_81: {
+		cardInfo: {
+			image: decipher/LOTR13081.jpg
+			collInfo: 13R81
+			rarity: R
+		}
+		title: Staff of Saruman
+		subtitle: Fallen Istar's Stave
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Artifact
+		strength: 2
+		vitality: 1
+		itemclass: Staff
+		target: wizard
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				requires: [
+					{
+						type: canSpot
+						filter: name(Saruman)
+					}
+					{
+						type: cantSpot
+						filter: minion,not(name(Saruman))
+					}
+				]
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: returnToHand
+					select: choose(name(Saruman))
+				}
+			}
+		]
+		gametext: Bearer must be a Wizard.<br><b>Regroup:</b> If Saruman is the only minion you can spot, discard this artifact from play to return him to your hand.
+		lore: "He raised his staff and it engulfed Gandalf in flames."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

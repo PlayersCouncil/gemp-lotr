@@ -1,0 +1,737 @@
+{
+
+	12_1: {
+		cardInfo: {
+			image: decipher/LOTR12001.jpg
+			collInfo: 12U1
+			rarity: U
+		}
+		title: Argument Ready to Hand
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: dwarf
+			},
+			effect: [
+				{
+					type: chooseActiveCards
+					text: Choose a race to spare, all other will be discarded
+					select: choose(minion,hasRace)
+					memorize: chosenMinion
+				}
+				{
+					type: discard
+					select: all(minion,not(race(memory(chosenMinion))))
+				}
+			]
+		}
+		gametext: Spot a Dwarf to choose a Shadow player who must spot a race. Discard from play all minions of all other races.
+		lore: "'And you, Master Dwarf, pray take your hand from your axe-haft, till I am up! You will not need such arguments.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_2: {
+		cardInfo: {
+			image: decipher/LOTR12002.jpg
+			collInfo: 12U2
+			rarity: U
+		}
+		title: Belt of Erebor
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Possession
+		itemclass: Armor
+		target: dwarf
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: removeKeyword
+					filter: minion,inSkirmishAgainst(bearer)
+					keyword: damage
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: memorizeActive
+						filter: bearer
+						memory: bearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: transfer
+					select: choose(possession,attachedTo(memory(bearer)))
+					where: choose(character)
+					checkTarget: true
+				}
+			}
+		]
+		gametext: Bearer must be a Dwarf.<br>Each minion skirmishing bearer loses all <b>damage</b> bonuses.<br><b>Skirmish:</b> Discard this possession to transfer one of bearer's possessions to another eligible bearer.
+		lore: "'We make good armour and keen swords....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_3: {
+		cardInfo: {
+			image: decipher/LOTR12003.jpg
+			collInfo: 12U3
+			rarity: U
+		}
+		title: A Clamour of Many Voices
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: dwarf
+				}
+				requires: {
+					type: playedCardThisPhase
+					filter: your,culture(dwarven),event
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+		]
+		gametext: Each time a Dwarf wins a skirmish in which you played a [dwarven] event, you may draw a card.
+		lore: "...crying strange news in the dawn."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_4: {
+		cardInfo: {
+			image: decipher/LOTR12004.jpg
+			collInfo: 12C4
+			rarity: C
+		}
+		title: Durability
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(dwarf)
+					amount: 2
+				}
+				{
+					type: If
+					check: {
+						type: location
+						filter: or(battleground,mountain)
+					}
+					true: {
+						type: drawCards
+					}
+				}
+			]
+		}
+		gametext: Make a Dwarf strength +2. Then, if that Dwarf is at a battleground or mountain site, draw a card.
+		lore: "Gimli unexpectedly faced another test of Dwarven endurance."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_5: {
+		cardInfo: {
+			image: decipher/LOTR12005.jpg
+			collInfo: 12U5
+			rarity: U
+		}
+		title: Dwarven Bracers
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Bracers
+		target: dwarf
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				cost: [
+					{
+						type: memorizeActive
+						filter: bearer
+						memory: bearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: preventWound
+					select: memory(bearer)
+				}
+			}
+		]
+		gametext: Bearer must be a Dwarf.<br><b>Response:</b> If bearer is about to take a wound, discard this possession to prevent that wound.
+		lore: "Dwarven-smiths forge bracers for fit and agility."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_6: {
+		cardInfo: {
+			image: decipher/LOTR12006.jpg
+			collInfo: 12C6
+			rarity: C
+		}
+		title: Dwarven Skill
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 3
+		type: Condition
+		keywords: [
+			Toil 2
+			Support Area
+		]
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(dwarf)
+					memorize: chosenDwarf
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							filter: minResistance(4)
+						}
+						true: 4
+						false: 3
+					}
+				}
+			}
+		]
+		gametext: <b>Toil 2</b>. <helper>(For each [dwarven] character you exert when playing this, its twilight cost is -2.)</helper><br><b>Skirmish:</b> Discard this condition to make a Dwarf strength +3 (or +4 if he has resistance 4 or more).
+		lore: "Gimli's axe-work on the Amon Hen hewed a mighty path through the Uruk-hai."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_7: {
+		cardInfo: {
+			image: decipher/LOTR12007.jpg
+			collInfo: 12C7
+			rarity: C
+		}
+		title: Dwarven Warrior
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: phase
+					phase: fellowship
+				}
+				effect: {
+					type: discardTopCardsFromDeck
+					forced: true
+					deck: shadow
+					count: 2
+				}
+			}
+		]
+		gametext: When you play this companion during the fellowship phase, choose a Shadow player who must discard the top 2 cards of his or her draw deck.
+		lore: "Though Dáin rules Erebor as King Under the Mountain, many of his kindred continue to dwell in the Iron Hills."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_8: {
+		cardInfo: {
+			image: decipher/LOTR12008.jpg
+			collInfo: 12C8
+			rarity: C
+		}
+		title: His Father's Charge
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(dwarf)
+					memorize: chosenDwarf
+					amount: {
+						type: sum
+						source: [
+							{
+								type: Conditional
+								requires: {
+									type: location
+									filter: or(mountain,underground)
+								}
+								true: 1
+								false: 0
+							}
+							{
+								type: Conditional
+								requires: {
+									type: memoryMatches
+									memory: chosenDwarf
+									filter: minResistance(3)
+								}
+								true: 1
+								false: 0
+							}
+							{
+								type: Conditional
+								requires: {
+									type: memoryMatches
+									memory: chosenDwarf
+									filter: hasAttached(possession)
+								}
+								true: 1
+								false: 0
+							}
+							{
+								type: Conditional
+								requires: {
+									type: memoryMatches
+									memory: chosenDwarf
+									filter: inSkirmishAgainst(fierce,minion)
+								}
+								true: 1
+								false: 0
+							}
+						]
+					}
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Discard this condition to make a Dwarf strength +1 for each of the following that is true: he is at a mountain or underground site; he has resistance 3 or more; he is bearing a possession; he is skirmishing a fierce minion.
+		lore: "A sharpened axe does well to protect Dwarven honor."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_9: {
+		cardInfo: {
+			image: decipher/LOTR12009.jpg
+			collInfo: 12R9
+			rarity: R
+		}
+		title: Loud and Strong
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(culture(dwarven))
+				}
+				requires: {
+					type: canSpot
+					filter: minion,inSkirmishAgainst(dwarf)
+				}
+				effect: {
+					type: addKeyword
+					select: choose(minion,inSkirmishAgainst(dwarf))
+					keyword: fierce
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Discard a [dwarven] card from hand and spot a minion skirmishing a Dwarf to make that minion <b>fierce</b> until the regroup phase.
+		lore: "'Alas! My axe is notched: the forty-second had an iron collar on his neck.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_10: {
+		cardInfo: {
+			image: decipher/LOTR12010.jpg
+			collInfo: 12R10
+			rarity: R
+		}
+		title: No Pauses, No Spills
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 4
+		type: Event
+		timewords: Fellowship
+		keywords: Toil 2
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: dwarf
+				count: 2
+			}
+			effect: [
+				{
+					type: chooseANumber
+					text: Choose how many cards to draw
+					from: 0
+					to: 4
+					memorize: chosenNumber
+				}
+				{
+					type: drawCards
+					count: {
+						type: fromMemory
+						memory: chosenNumber
+					}
+				}
+			]
+		}
+		gametext: <b>Toil 2</b>. <helper>(For each [dwarven] character you exert when playing this, its twilight cost is -2.)</helper><br>Spot 2 Dwarves to draw up to 4 cards.
+		lore: "And no regurgitation!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_11: {
+		cardInfo: {
+			image: decipher/LOTR12011.jpg
+			collInfo: 12U11
+			rarity: U
+		}
+		title: Nobody Tosses a Dwarf
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timeword: response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: dwarf
+			}
+			effect: [
+				{
+					type: discardTopCardsFromDeck
+					forced: true
+					deck: shadow
+					count: 3
+				}
+			]
+		}
+		gametext: If a Dwarf wins a skirmish, make an opponent discard 3 cards from the top of his or her draw deck.
+		lore: "'My folk have never had dealings with any of the servants of the Enemy.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_12: {
+		cardInfo: {
+			image: decipher/LOTR12012.jpg
+			collInfo: 12U12
+			rarity: U
+		}
+		title: Proud and Able
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: dwarf
+					keyword: damage
+					amount: {
+						type: forEachHasAttached
+						filter: possession
+					}
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(dwarven),possession)
+				}
+			}
+		]
+		gametext: Each Dwarf is <b>damage +1</b> for each possession he bears.<br><b>Fellowship:</b> Discard this condition to play a [dwarven] possession from your discard pile.
+		lore: "'Dwarves' tongues run on when speaking of their handiwork, they say.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_13: {
+		cardInfo: {
+			image: decipher/LOTR12013.jpg
+			collInfo: 12U13
+			rarity: U
+		}
+		title: Sharp Defense
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(dwarf)
+					memorize: chosenDwarf
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenDwarf
+							filter: minResistance(4)
+						}
+						true: {
+							type: forEachHasAttached
+							filter: possession
+							multiplier: 2
+						}
+						false: 2
+					}
+				}
+			]
+		}
+		gametext: Make a Dwarf strength +2 (or +2 for each possession he bears if he has resistance 4 or more).
+		lore: "Gimli hewed the legs from under another that had sprung up on Balin's Tomb."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_14: {
+		cardInfo: {
+			image: decipher/LOTR12014.jpg
+			collInfo: 12U14
+			rarity: U
+		}
+		title: Stalwart Support
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: dwarf
+					keyword: muster
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesFrom
+					filter: plains
+				}
+				effect: {
+					type: discardFromHand
+					forced: true
+				}
+			}
+		]
+		gametext: Each Dwarf gains <b>muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper><br>Each time the fellowship moves from a plains site, discard a card from your hand.
+		lore: "'...I am glad to have you standing nigh....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	12_15: {
+		cardInfo: {
+			image: decipher/LOTR12015.jpg
+			collInfo: 12U15
+			rarity: U
+		}
+		title: Thrarin
+		subtitle: Smith of Erebor
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 3
+		type: Companion
+		race: Dwarf
+		strength: 7
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self
+					keyword: damage
+					amount: {
+						type: forEachHasAttached
+						filter: or(artifact,possession)
+					}
+				}
+			}
+		]
+		gametext: For each artifact and possession Thrarin bears, he is <b>damage +1</b>.
+		lore: "Like many other representatives who have come to Rivendell, Thrarin the smith brings troubling news from the East."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

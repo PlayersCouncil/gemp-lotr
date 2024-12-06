@@ -1,6 +1,7 @@
 package com.gempukku.lotro.builder;
 
 import com.gempukku.lotro.cache.CacheManager;
+import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.collection.CachedCollectionDAO;
 import com.gempukku.lotro.collection.CachedTransferDAO;
 import com.gempukku.lotro.collection.CollectionSerializer;
@@ -8,7 +9,6 @@ import com.gempukku.lotro.collection.TransferDAO;
 import com.gempukku.lotro.db.*;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.log.LoggingProxy;
-import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.tournament.TournamentDAO;
 import com.gempukku.lotro.tournament.TournamentMatchDAO;
 import com.gempukku.lotro.tournament.TournamentPlayerDAO;
@@ -50,7 +50,7 @@ public class DaoBuilder {
         objectMap.put(PlayerDAO.class, playerDao);
 
         TransferDAO dbTransferDao = LoggingProxy.createLoggingProxy(TransferDAO.class, new DbTransferDAO(dbAccess));
-        CachedTransferDAO transferDao = new CachedTransferDAO(dbTransferDao);
+        CachedTransferDAO transferDao = new CachedTransferDAO(dbTransferDao, extract(objectMap, MarkdownParser.class));
         objectMap.put(TransferDAO.class, transferDao);
 
         IpBanDAO dbIpBanDao = LoggingProxy.createLoggingProxy(IpBanDAO.class, new DbIpBanDAO(dbAccess));

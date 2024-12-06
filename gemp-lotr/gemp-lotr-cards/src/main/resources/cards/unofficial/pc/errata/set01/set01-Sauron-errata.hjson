@@ -1,17 +1,14 @@
 {
 	51_240: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E240.1.jpg
-			javaClass: false
+			//id: 1_240.1
 			parent: 1_240
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E240.1.jpg
 			collInfo: 1R240
 			rarity: R
-			setNum: "1"
-			cardNum: 240
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Band of the Eye
 		culture: sauron
@@ -22,7 +19,7 @@
 		vitality: 3
 		site: 6
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: winsSkirmish
@@ -62,29 +59,26 @@
 	
 	51_245: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E245.1.jpg
-			javaClass: false
+			//id: 1_245.1
 			parent: 1_245
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E245.1.jpg
 			collInfo: 1R245
 			rarity: R
-			setNum: "1"
-			cardNum: 245
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Desperate Measures
 		culture: sauron
 		twilight: 2
 		type: event
-		keyword: maneuver
-		requires: {
-			type: canSpot
-			filter: culture(sauron),orc
-		}
+		timeword: maneuver
 		effects: {
 			type: event
+			requires: {
+				type: canSpot
+				filter: culture(sauron),orc
+			}
 			cost: {
 				type: removeBurdens
 				amount: 1
@@ -92,7 +86,7 @@
 			effect: [
 				{
 					type: ChooseCardsFromDiscard
-					filter: choose(culture(sauron))
+					select: choose(culture(sauron))
 					memorize: chosenCard
 					text: Choose a [Sauron] card to take into hand from your discard pile
 				}
@@ -108,7 +102,7 @@
 					text: Discard the top 8 cards of your deck to prevent your opponent taking {chosenCard} into hand from their discard pile
 					effect: {
 						type: PutCardsFromDiscardIntoHand
-						filter: memory(chosenCard)
+						select: memory(chosenCard)
 					}
 				}
 			]
@@ -126,28 +120,25 @@
 	
 	51_248: {
 		cardInfo: {
-			imagePath: errata/51_248.jpg
-			javaClass: false
+			//id: 1_248.1
 			parent: 1_248
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_248.jpg
 			collInfo: 1C248
 			rarity: C
-			setNum: "1"
-			cardNum: 248
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Forces of Mordor
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: shadow
+		timeword: shadow
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(culture(sauron),minion)
+				select: choose(culture(sauron),minion)
 			}
 			effect: {
 				type: addTwilight
@@ -171,17 +162,14 @@
 	
 	51_252: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E252.1.jpg
-			javaClass: false
+			//id: 1_252.1
 			parent: 1_252
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E252.1.jpg
 			collInfo: 1R252
 			rarity: R
-			setNum: "1"
-			cardNum: 252
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The Irresistible Shadow
 		unique: true
@@ -194,7 +182,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 			}
 			{
@@ -238,17 +226,14 @@
 	
 	51_254: {
 		cardInfo: {
-			imagePath: errata/51_254.jpg
-			javaClass: false
+			//id: 1_254.1
 			parent: 1_254
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_254.jpg
 			collInfo: 1R254
 			rarity: R
-			setNum: "1"
-			cardNum: 254
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Mordor Enraged
 		culture: sauron
@@ -260,11 +245,12 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),minion)
+					select: choose(culture(sauron),minion)
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: usesspecialability
 					filter: side(free people)
@@ -275,7 +261,7 @@
 				}
 				effect: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 			}
 		]
@@ -290,25 +276,68 @@
 		}
 	}
 	
+	51_260: {
+		cardInfo: {
+			//id: 51_260.1
+			parent: 1_260
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E260.1_card.jpg
+			collInfo: 1U260
+			rarity: U
+		}
+		title: The Number Must Be Few
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyMoveLimit
+					amount: 1
+					requires: {
+						type: canSpot
+						count: 7
+						filter: companion
+					}
+				}
+			}
+		]
+		gametext: <b>Search</b>.<br>While you can spot 7 companions, the move limit for this turn is -1 (to a minimum of 1).  When you can no longer spot 7 companions or this card leaves play, this penalty is immediately lost.
+		lore: "'The number must be few, since your hope is in speed and secrecy.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	51_265: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E265.1.jpg
-			javaClass: false
+			//id: 1_265.1
 			parent: 1_265
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E265.1.jpg
 			collInfo: 1R265
 			rarity: R
-			setNum: "1"
-			cardNum: 265
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Orc Butchery
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: [
 			{
 				type: responseEvent
@@ -322,7 +351,7 @@
 				}
 				effect: {
 					type: repeat
-					amount: {
+					times: {
 						type: ForEachInDeadPile
 						filter: any
 					}
@@ -362,7 +391,7 @@
 				}
 				effect: {
 					type: repeat
-					amount: {
+					times: {
 						type: ForEachInDeadPile
 						filter: any
 					}
@@ -403,17 +432,14 @@
 	
 	51_268: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E268.1.jpg
-			javaClass: false
+			//id: 1_268.1
 			parent: 1_268
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E268.1.jpg
 			collInfo: 1C268
 			rarity: C
-			setNum: "1"
-			cardNum: 268
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Orc Inquisitor
 		culture: sauron
@@ -424,7 +450,7 @@
 		vitality: 3
 		site: 6
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -458,17 +484,14 @@
 	
 	51_280: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E280.1.jpg
-			javaClass: false
+			//id: 1_280.1
 			parent: 1_280
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E280.1.jpg
 			collInfo: 1U280
 			rarity: U
-			setNum: "1"
-			cardNum: 280
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Tower Lieutenant
 		unique: true
@@ -480,7 +503,7 @@
 		vitality: 3
 		site: 6
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: winsSkirmish
@@ -489,7 +512,7 @@
 			effect: [
 				{
 					type: chooseActiveCards
-					filter: choose(companion,not(exhausted),not(Ring-bearer))
+					select: choose(companion,not(exhausted),not(Ring-bearer))
 					memorize: chosenComp
 					text: Choose a companion to exhaust
 				}
@@ -505,7 +528,7 @@
 					text: Discard 2 cards at random from hand to prevent exhausting {chosenComp}
 					effect: {
 						type: exhaust
-						filter: memory(chosenComp)
+						select: memory(chosenComp)
 					}
 				}
 			]
@@ -523,17 +546,14 @@
 
 	51_282: {
 		cardInfo: {
-			imagePath: errata/51_282.jpg
-			javaClass: false
+			//id: 1_282.1
 			parent: 1_282
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_282.jpg
 			collInfo: 1R282
 			rarity: R
-			setNum: "1"
-			cardNum: 282
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The Weight of a Legacy
 		culture: sauron
@@ -546,7 +566,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(sauron),orc)
+					select: choose(culture(sauron),orc)
 				}
 			}
 			{

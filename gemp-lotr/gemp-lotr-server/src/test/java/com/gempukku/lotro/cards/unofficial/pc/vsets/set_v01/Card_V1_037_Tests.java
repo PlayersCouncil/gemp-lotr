@@ -10,9 +10,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_037_Tests
 {
@@ -56,7 +54,7 @@ public class Card_V1_037_Tests
 		assertEquals(Culture.WRAITH, fell.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, fell.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, fell.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(fell, Keyword.SHADOW)); // test for keywords as needed
+        assertTrue(scn.hasTimeword(fell, Timeword.SHADOW)); // test for keywords as needed
 		assertEquals(0, fell.getBlueprint().getTwilightCost());
 		//assertEquals(, fell.getBlueprint().getStrength());
 		//assertEquals(, fell.getBlueprint().getVitality());
@@ -98,7 +96,9 @@ public class Card_V1_037_Tests
 
 		assertTrue(scn.ShadowPlayAvailable(fell2));
 		scn.ShadowPlayCard(fell2);
+		scn.ShadowDismissRevealedCards();
 
+        scn.ShadowChooseCardBPFromSelection(blade);
 		assertEquals(Zone.ATTACHED, blade.getZone());
 		assertEquals(nazgul, blade.getAttachedTo());
 

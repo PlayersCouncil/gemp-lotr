@@ -2,17 +2,14 @@
 
 	57_49: {
 		cardInfo: {
-			imagePath: errata/57_49.jpg
-			javaClass: false
+			//id: 7_49.1
 			parent: 7_49
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/57_49.jpg
 			collInfo: 7U49
 			rarity: U
-			setNum: "7"
-			cardNum: 49
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Steadfast Champion
 		unique: true
@@ -31,12 +28,12 @@
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(name(gandalf))
-						against: self
+						minion: self
 					}
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -44,16 +41,16 @@
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: discard
-						filter: choose(minion)
+						select: choose(minion)
 					}
 					{
 						type: heal
-						filter: choose(companion)
+						select: choose(companion)
 						times: 3
 					}
 				]

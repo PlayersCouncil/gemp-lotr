@@ -1,17 +1,14 @@
 {
 	59_31: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN09E031.1_card.jpg
-			javaClass: false
+			//id: 9_31.1
 			parent: 9_31
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN09E031.1_card.jpg
 			collInfo: 9R+31
 			rarity: R+
-			setNum: "9"
-			cardNum: 31
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Boromir
 		subtitle: Bearer of Council
@@ -24,10 +21,11 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				requires: {
 					type: canSpot
 					filter: self,ring bearer,inSkirmish
@@ -49,21 +47,22 @@
 						}
 						{
 							type: wound
-							filter: self
+							select: self
 							times: 2
 						}
 					]
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: self
 				}
 				effect: {
 					type: discard
-					filter: all(minion,inSkirmish)
+					select: all(minion,inSkirmish)
 				}
 			}
 		]
@@ -77,20 +76,88 @@
 			}
 		}
 	}
+	
+	59_32: {
+		cardInfo: {
+			//id: 9_32.1
+			parent: 9_32
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN09E032.1_card.jpg
+			collInfo: 9R+32
+			rarity: R+
+		}
+		title: Elendil
+		subtitle: The Tall
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 5
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 5
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+					requires: {
+						type: canSpot
+						count: 2
+						filter: culture(gondor),man
+					}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: PlayCardFromHand
+					select: choose(artifact)
+					on: self
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: 1
+					}
+					until: endOfTurn
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: choose(culture(gondor),artifact,AttachedTo(companion))
+				}
+				effect: {
+					type: liberateSite
+				}
+			}
+		]
+		gametext: To play, spot 2 [gondor] Men.<br><b>Fellowship:</b> Play an artifact on Elendil to make the move limit +1 for this turn.<br><b>Regroup:</b> Discard a [gondor] artifact borne by a companion to liberate a site.
+		lore: "...and the North-realm they made in Arnor, and the South-realm in Gondor...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 
 	59_33: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN09E033.1_card.jpg
-			javaClass: false
+			//id: 9_33.1
 			parent: 9_33
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN09E033.1_card.jpg
 			collInfo: 9R+33
 			rarity: R+
-			setNum: "9"
-			cardNum: 33
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Isildur
 		subtitle: Bearer of Heirlooms
@@ -103,10 +170,11 @@
 		strength: 7
 		vitality: 3
 		resistance: 7
-		keyword: can start with ring
+		canStartWithRing: true
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				requires: {
 					type: canSpot
 					filter: self,ring bearer,inSkirmish
@@ -129,7 +197,7 @@
 						{
 							type: exert
 							count: 3
-							filter: choose(companion)
+							select: choose(companion)
 						}
 					]
 				}
@@ -149,6 +217,67 @@
 		]
 		gametext: While Isildur is the Ring-bearer, at the start of each skirmish involving him, add 2 burdens or exert 3 companions. <br>While Isildur bears The One Ring or an artifact, each [gondor] knight is strength +1.
 		lore: “‘“But for my part I will risk no hurt to this thing: of all the works of Sauron the only fair.”'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	59_35: {
+		cardInfo: {
+			//id: 9_35.1
+			parent: 9_35
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN09E035.1_card.jpg
+			collInfo: 9R35
+			rarity: R
+		}
+		title: Sapling of the White Tree
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Artifact
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: unbound,culture(gondor),man
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(gondor),man
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: preventWound
+						select: choose(culture(gondor),man)
+						memorize: protectedMan
+					}
+					{
+						type: Heal
+						select: memory(protectedMan)
+					}
+				]
+				
+			}
+		]
+		gametext: To play, spot an unbound [gondor] Man.<br><b>Response:</b> If a [gondor] Man is about to take a wound, discard this artifact to prevent that wound and heal that Man.
+		lore: "'Verily this is a sapling of the line of Nimloth the fair; and that was a seedling of Galathilion, and that a fruit of Telperion of many names, Eldest of Trees.'"
 		promotext: ""
 		alts: {
 			promos: {

@@ -444,6 +444,11 @@ body {
     float: right;
 }
 
+#auto-zoom-li > span {
+    position: relative;
+    top: -20px;
+}
+
 ul.ui-tabs-nav {
     height: 14px;
 }
@@ -451,12 +456,36 @@ ul.ui-tabs-nav {
 #auto-zoom-toggle {
     width: 25px;
     height: 20px;
-    padding: 0px;
     margin-top:-5px;
     margin-right: -5px;
+}
+
+#auto-zoom-message {
+    position: relative;
+    bottom: 0em;
+    color: #FFFF00;
+    background-color: #000000;
+    text-align: center;
+    width: fit-content;
+    margin: 0 auto;
 }
 
 .ui-button-icon-primary.ui-icon.ui-icon-search,
 .ui-button-icon-primary.ui-icon.ui-icon-circle-close {
     margin-left:4px;
+}
+
+.card.inactive img {
+    filter: grayscale(0.7) contrast(0.5) brightness(0.6);
+}
+
+.card.inactive .borderOverlay {
+    border: solid #333;
+}
+
+.card.inactive .cardStrength, 
+.card.inactive .cardVitality, 
+.card.inactive .cardSiteNumber, 
+.card.inactive .cardResistance {
+    color: #777777;
 }

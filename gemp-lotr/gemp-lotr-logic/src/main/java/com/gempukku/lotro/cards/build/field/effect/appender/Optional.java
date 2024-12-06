@@ -26,7 +26,7 @@ public class Optional implements EffectAppenderProducer {
         if (text == null)
             throw new InvalidCardDefinitionException("There is a text required for optional effects");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
         final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
 
         return new DelayedAppender() {
@@ -36,7 +36,7 @@ public class Optional implements EffectAppenderProducer {
                 SubAction subAction = new SubAction(action);
                 subAction.appendCost(
                         new PlayoutDecisionEffect(choosingPlayer,
-                        new YesNoDecision(GameUtils.SubstituteText(text, actionContext)) {
+                                new YesNoDecision(GameUtils.substituteText(text, actionContext)) {
                             @Override
                             protected void yes() {
                                 ActionContext delegate = new DelegateActionContext(actionContext,

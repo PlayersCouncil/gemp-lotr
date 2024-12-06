@@ -93,12 +93,11 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
             }
         } catch (HttpProcessingException exp) {
             int code = exp.getStatus();
-            //401, 403, 404, and other 400 errors should just do minimal logging,
-            // but 400 itself should error out
+            //401, 403, 404, and other 400-series errors should just do minimal logging,
             if(code % 400 < 100 && code != 400) {
                 _log.debug("HTTP " + code + " response for " + requestInformation.remoteIp + ": " + requestInformation.uri);
             }
-            // record an HTTP 400
+            // but 400 itself should error out
             else if(code == 400 || code % 500 < 100) {
                 _log.error("HTTP code " + code + " response for " + requestInformation.remoteIp + ": " + requestInformation.uri, exp);
             }

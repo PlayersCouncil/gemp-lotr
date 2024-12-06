@@ -2,7 +2,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -10,9 +13,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_056_Tests
 {
@@ -55,7 +56,7 @@ public class Card_V1_056_Tests
 		assertEquals(Culture.SHIRE, coming.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, coming.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, coming.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(coming, Keyword.FELLOWSHIP)); // test for keywords as needed
+        assertTrue(scn.hasTimeword(coming, Timeword.FELLOWSHIP)); // test for keywords as needed
 		assertEquals(2, coming.getBlueprint().getTwilightCost());
 		//assertEquals(, coming.getBlueprint().getStrength());
 		//assertEquals(, coming.getBlueprint().getVitality());

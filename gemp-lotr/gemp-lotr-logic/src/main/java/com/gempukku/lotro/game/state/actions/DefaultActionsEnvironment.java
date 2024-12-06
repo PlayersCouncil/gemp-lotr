@@ -1,6 +1,7 @@
 package com.gempukku.lotro.game.state.actions;
 
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.ActionProxy;
 import com.gempukku.lotro.game.ActionsEnvironment;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -12,6 +13,7 @@ import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.util.*;
 
 public class DefaultActionsEnvironment implements ActionsEnvironment {
@@ -230,13 +232,13 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
     public List<Action> getPhaseActions(String playerId) {
         List<Action> result = new LinkedList<>();
 
-        final Phase currentPhase = _lotroGame.getGameState().getCurrentPhase();
+        final Timeword timeword = Timeword.findByPhase(_lotroGame.getGameState().getCurrentPhase());
         for (ActionProxy actionProxy : _actionProxies) {
             List<? extends Action> actions = actionProxy.getPhaseActions(playerId, _lotroGame);
             if (actions != null) {
                 for (Action action : actions) {
                     action.setPerformingPlayer(playerId);
-                    action.setActionTimeword(currentPhase);
+                    action.setActionTimeword(timeword);
                     if (_lotroGame.getModifiersQuerying().canPlayAction(_lotroGame, playerId, action))
                         result.add(action);
                 }

@@ -1,0 +1,985 @@
+{
+
+	1_69: {
+		cardInfo: {
+			image: decipher/LOTR01069.jpg
+			collInfo: 1R69
+			rarity: R
+		}
+		title: Albert Dreary
+		subtitle: Entertainer from Bree
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Ally
+		allyHome: 1F
+		race: Man
+		strength: 3
+		vitality: 3
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(condition,or(culture(isengard),culture(moria)))
+				}
+			}
+		]
+		gametext: To play, spot Gandalf.<br><b>Maneuver:</b> Exert Albert Dreary to discard an [isengard] or [moria] condition.
+		lore: "Typical of Bree-folk, Albert is a plain but stout- hearted fellow. He does not seek trouble, but he is willing to protect his home."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_70: {
+		cardInfo: {
+			image: decipher/LOTR01070.jpg
+			collInfo: 1U70
+			rarity: U
+		}
+		title: Barliman Butterbur
+		subtitle: Prancing Pony Proprietor
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Ally
+		allyHome: 1F
+		race: Man
+		strength: 1
+		vitality: 2
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: putCardsFromDiscardIntoHand
+				select: choose(culture(gandalf),event)
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert Barliman Butterbur to take a [gandalf] event into hand from your discard pile.
+		lore: "'You don't know much even about them, if you think old Barliman is stupid,' said Gandalf. 'He is wise enough on his own ground.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_71: {
+		cardInfo: {
+			image: decipher/LOTR01071.jpg
+			collInfo: 1R71
+			rarity: R
+		}
+		title: Durin's Secret
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: [
+				{
+					type: canSpot
+					filter: name(Gandalf)
+				}
+				{
+					type: canSpot
+					filter: dwarf
+				}
+				{
+					type: canSpot
+					filter: elf
+				}
+			]
+			effect: {
+				type: addModifier
+				modifier: {
+					type: modifyMoveLimit
+					amount: 1
+				}
+				until: endOfTurn
+			}
+		}
+		gametext: <b>Fellowship:</b> Spot Gandalf, a Dwarf, and an Elf to make the move limit for this turn +1.
+		lore: They are wrought of ithildin that mirrors only starlight and moonlight, and sleeps until it is touched by one who speaks words now long forgotten in 'Middle-earth.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_72: {
+		cardInfo: {
+			image: decipher/LOTR01072.jpg
+			collInfo: 1R72
+			rarity: R
+		}
+		title: Gandalf
+		subtitle: Friend of the Shirefolk
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 6
+		vitality: 4
+		signet: Frodo
+		resistance: 6
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: self
+				amount: {
+					type: sum
+					source: [
+						{
+							type: Conditional
+							requires: {
+								type: canSpot
+								filter: hobbit,companion
+							}
+							true: 1
+							false: 0
+						}
+						{
+							type: Conditional
+							requires: {
+								type: canSpot
+								filter: dwarf,companion
+							}
+							true: 1
+							false: 0
+						}
+						{
+							type: Conditional
+							requires: {
+								type: canSpot
+								filter: elf,companion
+							}
+							true: 1
+							false: 0
+						}
+						{
+							type: Conditional
+							requires: {
+								type: canSpot
+								filter: man,companion
+							}
+							true: 1
+							false: 0
+						}
+					]
+				}
+			}
+		}
+		gametext: Gandalf is strength +1 for each of these races you can spot in the fellowship: Hobbit, Dwarf, Elf, and Man.
+		lore: "'Among the Wise I am the only one that goes in for hobbit-lore: an obscure branch of knowledge, but full of surprises.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_73: {
+		cardInfo: {
+			image: decipher/LOTR01073.jpg
+			collInfo: 1U73
+			rarity: U
+		}
+		title: Gandalf's Cart
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Possession
+		#target: 
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: fellowship
+			requires: {
+				type: Or
+				requires: [
+					{
+						type: HasCardInHand
+						player: you
+						count: 1
+						filter: side(free people),or(artifact,possession)
+					}
+					{
+						type: HasCardStacked
+						filter: playable
+						on: self
+					}
+				]
+			}
+			effect: {
+				type: choice
+				texts: [
+					Stack a Free Peoples artifact (or possession) here
+					Play a card stacked here
+				]
+				
+				effects: [
+					{
+						type: If
+						check: {
+							type: HasCardInHand
+							player: you
+							count: 1
+							filter: side(free people),or(artifact,possession)
+						}
+						true: {
+							type: StackCardsFromHand
+							select: choose(side(free people),or(artifact,possession))
+							where: self
+						}
+					}
+					{
+						//Strictly speaking these are not cost-effect related,
+						// but gemp was choking on the PlayCardFromStacked effect
+						// whenever the memory isn't set (i.e. nearly always)
+						type: CostToEffect
+						requires: {
+							type: HasCardStacked
+							filter: playable
+							on: self
+						}
+						cost: {
+							type: ChooseCardsFromSingleStack
+							select: choose(playable)
+							count: 1
+							on: self
+							memorize: chosenCard
+							text: Choose a card to play as if from hand.
+						}
+						effect: {
+							type: PlayCardFromStacked
+							select: memory(chosenCard)
+							on: self
+							assumePlayable: true
+						}
+					}
+				]
+			}
+		}
+		gametext: Plays to your support area.<br><b>Fellowship:</b> Stack a Free Peoples artifact (or possession) from hand on this card, or play a card stacked here as if played from hand.
+		lore: "...a cart came in through Bywater... An old man was driving it all alone."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_74: {
+		cardInfo: {
+			image: decipher/LOTR01074.jpg
+			collInfo: 1U74
+			rarity: U
+		}
+		title: Gandalf's Pipe
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Possession
+		itemclass: Pipe
+		target: name(Gandalf)
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: [
+				{
+					type: discard
+					select: choose(pipeweed,possession)
+				}
+				{
+					type: chooseHowManyToSpot
+					filter: pipe
+					memorize: spottedPipes
+				}
+			]
+			effect: {
+				type: removeBurdens
+				amount: {
+					type: fromMemory
+					memory: spottedPipes
+				}
+			}
+		}
+		gametext: Bearer must be Gandalf.<br><b>Fellowship:</b> Discard a pipeweed possession and spot X pipes to remove X burdens.
+		lore: "'I know what is the matter with me,' he muttered, as he sat down by the door. 'I need smoke!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_75: {
+		cardInfo: {
+			image: decipher/LOTR01075.jpg
+			collInfo: 1R75
+			rarity: R
+		}
+		title: Glamdring
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: name(Gandalf)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage+1
+				}
+			}
+			{
+				type: activated
+				phase: [
+					fellowship
+					regroup
+				]
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: [
+					{
+						type: revealHand
+						hand: shadowPlayer
+						memorize: revealedCards
+					}
+					{
+						type: removeTwilight
+						amount: {
+							type: forEachInMemory
+							memory: revealedCards
+							filter: orc
+						}
+					}
+				]
+			}
+		]
+		gametext: Bearer must be Gandalf.<br>He is <b>damage +1</b>.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Exert Gandalf to reveal an opponent's hand. Remove (1) for each Orc revealed.
+		lore: "...in his other hand Glamdring gleamed, cold and white."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_76: {
+		cardInfo: {
+			image: decipher/LOTR01076.jpg
+			collInfo: 1C76
+			rarity: C
+		}
+		title: Intimidate
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		timewords: Response
+		keywords: Spell
+		effects: {
+			type: responseEvent
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			trigger: {
+				type: aboutToTakeWound
+				filter: companion
+			}
+			effect: {
+				type: preventWound
+				select: choose(companion)
+			}
+		}
+		gametext: <b>Spell</b>.<br><b>Response:</b> If a companion is about to take a wound, spot Gandalf to prevent that wound.
+		lore: "'Go back to the Shadow!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_77: {
+		cardInfo: {
+			image: decipher/LOTR01077.jpg
+			collInfo: 1U77
+			rarity: U
+		}
+		title: Let Folly Be Our Cloak
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(companion)
+				count: any
+				memorize: exertedCompanions
+			}
+			effect: {
+				type: removeTwilight
+				amount: {
+					type: forEachInMemory
+					memory: exertedCompanions
+				}
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert X companions to remove (X).
+		lore: Well, let folly be our cloak, a veil before the eyes of the Enemy!... Into his heart the thought will not enter that any will refuse it, that having the Ring 'we may seek to destroy it.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_78: {
+		cardInfo: {
+			image: decipher/LOTR01078.jpg
+			collInfo: 1C78
+			rarity: C
+		}
+		title: Mysterious Wizard
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		keywords: Spell
+		effects: {
+			type: event
+			effect: {
+				type: modifyStrength
+				select: choose(name(Gandalf))
+				amount: {
+					type: Conditional
+					requires: {
+						type: canSpotBurdens
+						amount: 5
+					}
+					true: 2
+					false: 4
+				}
+			}
+		}
+		gametext: <b>Spell</b>.<br><b>Skirmish:</b> Make Gandalf strength +2 (or +4 if there are 4 or fewer burdens on the Ring-bearer).
+		lore: "'...there are older and fouler things than Orcs in the deep places of the world.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_79: {
+		cardInfo: {
+			image: decipher/LOTR01079.jpg
+			collInfo: 1R79
+			rarity: R
+		}
+		title: The Nine Walkers
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: companion,race(cannotSpot)
+					amount: -2
+				}
+			}
+		]
+		gametext: To play, spot Gandalf. Plays to your support area.<br>Each time you play a companion whose race you cannot spot, that companion's twilight cost is -2.
+		lore: "'Nine companions to match the Nine Ringwraiths... So be it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_80: {
+		cardInfo: {
+			image: decipher/LOTR01080.jpg
+			collInfo: 1R80
+			rarity: R
+		}
+		title: Ottar
+		subtitle: Man of Laketown
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Ally
+		allyHome: 3F
+		race: Man
+		strength: 2
+		vitality: 2
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: discardFromHand
+						forced: false
+						count: 0-3
+						memorize: discardedCards
+					}
+					{
+						type: drawCards
+						count: {
+							type: forEachInMemory
+							memory: discardedCards
+						}
+					}
+				]
+			}
+		]
+		gametext: To play, spot Gandalf.<br><b>Fellowship:</b> Exert Ottar to discard up to 3 cards from hand and draw an equal number of cards.
+		lore: "The Men of Laketown come from the North, where they trade with the Dwarves of the Lonely Mountain."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_81: {
+		cardInfo: {
+			image: decipher/LOTR01081.jpg
+			collInfo: 1R81
+			rarity: R
+		}
+		title: Questions That Need Answering
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		timewords: Fellowship
+		keywords: Spell
+		effects: {
+			type: event
+			requires: [
+				{
+					type: twilightPoolLessThan
+					amount: 3
+				}
+				{
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			]
+			effect: [
+				{
+					type: LookAtTopCardsOfDrawDeck
+					count: 4
+					memorize: cardsOnTop
+				}
+				{
+					type: PutCardsFromDeckIntoHand
+					count: 2
+					select: choose(memory(cardsOnTop))
+					reveal: true
+					shuffle: false
+					showAll: false
+				}
+				{
+					type: DiscardCardsFromDrawDeck
+					select: all(memory(cardsOnTop),zone(deck))
+					showAll: false
+					shuffle: false
+				}
+			]
+		}
+		gametext: <b>Spell</b>.<br><b>Fellowship:</b> If the twilight pool has fewer than 3 twilight tokens, spot Gandalf to look at the top 4 cards of your draw deck. Take 2 of those cards into hand and discard the rest.
+		lore: "'There are some things that I must see to....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_82: {
+		cardInfo: {
+			image: decipher/LOTR01082.jpg
+			collInfo: 1C82
+			rarity: C
+		}
+		title: Risk a Little Light
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		keywords: Spell
+		effects: {
+			type: event
+			requires: [
+				{
+					type: twilightPoolLessThan
+					amount: 2
+				}
+				{
+					type: canSpot
+					filter: name(Gandalf)
+				}
+			]
+			effect: [
+				{
+					type: LookAtTopCardsOfDrawDeck
+					count: 2
+					memorize: cardsOnTop
+				}
+				{
+					type: PutCardsFromDeckIntoHand
+					count: 1
+					select: choose(memory(cardsOnTop))
+					reveal: true
+					shuffle: false
+					showAll: false
+				}
+				{
+					type: DiscardCardsFromDrawDeck
+					select: all(memory(cardsOnTop),zone(deck))
+					showAll: false
+					shuffle: false
+				}
+			]
+		}
+		gametext: <b>Spell</b>.<br><b>Fellowship:</b> If the twilight pool has fewer than 2 twilight tokens, spot Gandalf to look at the top 2 cards of your draw deck. Take one into hand and discard the other.
+		lore: "'Let me risk a little more light.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_83: {
+		cardInfo: {
+			image: decipher/LOTR01083.jpg
+			collInfo: 1R83
+			rarity: R
+		}
+		title: Servant of the Secret Fire
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		keywords: Spell
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(minion)
+				amount: -3
+			}
+		}
+		gametext: <b>Spell</b>.<br><b>Skirmish:</b> Spot Gandalf to make a minion strength -3.
+		lore: "'I am a servant of the Secret Fire, wielder of the flame of Anor. You cannot pass.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_84: {
+		cardInfo: {
+			image: decipher/LOTR01084.jpg
+			collInfo: 1C84
+			rarity: C
+		}
+		title: Sleep, Caradhras
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		timewords: Fellowship
+		keywords: Spell
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(name(Gandalf))
+			}
+			effect: {
+				type: discard
+				select: all(condition)
+			}
+		}
+		gametext: <b>Spell</b>.<br><b>Fellowship:</b> Exert Gandalf to discard every condition.
+		lore: "'Losto Caradhras, sedho, hodo, nuitho i ruith.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_85: {
+		cardInfo: {
+			image: decipher/LOTR01085.jpg
+			collInfo: 1C85
+			rarity: C
+		}
+		title: Strength of Spirit
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Response
+		keywords: Spell
+		effects: {
+			type: responseEvent
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			trigger: {
+				type: aboutToExert
+				filter: companion
+			}
+			effect: {
+				type: placeNoWoundForExert
+				select: choose(companion)
+			}
+		}
+		gametext: <b>Spell</b>.<br><b>Response:</b> If a companion is about to exert, spot Gandalf to place no token for that exertion.
+		lore: "'There are many powers in the world, for good or for evil. Some are greater than I am. Against some I have not yet been measured. But my time is coming.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_86: {
+		cardInfo: {
+			image: decipher/LOTR01086.jpg
+			collInfo: 1C86
+			rarity: C
+		}
+		title: Treachery Deeper Than You Know
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		keywords: Spell
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			effect: {
+				type: revealHand
+				hand: shadowPlayer
+			}
+		}
+		gametext: <b>Spell</b>.<br><b>Fellowship:</b> Spot Gandalf to reveal an opponent's hand.
+		lore: "'By foul craft, Saruman has crossed Orcs with Goblin Men – he is breeding an army in the Caverns of Isengard.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_87: {
+		cardInfo: {
+			image: decipher/LOTR01087.jpg
+			collInfo: 1R87
+			rarity: R
+		}
+		title: A Wizard Is Never Late
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(culture(gandalf),character)
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Fellowship:</b> Play a [gandalf] character from your draw deck.
+		lore: "'A wizard is never late, Frodo Baggins, nor is he early. He arrives precisely when he means to.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_364: {
+		cardInfo: {
+			image: decipher/LOTR01364.jpg
+			collInfo: 1P364
+			rarity: P
+		}
+		title: Gandalf
+		subtitle: The Grey Wizard
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 7
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: PlayCardFromHand
+				select: choose(companion,signet(Gandalf))
+				discount: -2
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert Gandalf to play a companion who has the Gandalf signet. The twilight cost of that companion is -2.
+		lore: "...his long white hair, his sweeping silver beard, and his broad shoulders, made him look like some wise king of ancient legend."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

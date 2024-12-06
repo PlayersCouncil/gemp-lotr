@@ -2,17 +2,11 @@
 
 	60_68: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN10S068.1_card.jpg
-			javaClass: false
-			parent: 10_68
-			parentPath: errata/pc
-			version: 1
+			//id: 0_68.1
+			revision: 1
+			image: errata/LOTR-EN10S068.1_card.jpg
 			collInfo: 10R68
 			rarity: R
-			setNum: "10"
-			cardNum: 68
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Ulaire Enquea
 		subtitle: Thrall of The One
@@ -53,7 +47,7 @@
 					}
 					{
 						type: heal
-						filter: self
+						select: self
 					}
 				]
 				effect: {

@@ -60,7 +60,7 @@ public class Card_03_038_ErrataTests
         assertEquals(6, aragorn.getBlueprint().getResistance());
         assertEquals(Signet.FRODO, aragorn.getBlueprint().getSignet());
 
-        assertTrue(scn.HasKeyword(aragorn, Keyword.RANGER));
+        assertTrue(scn.hasKeyword(aragorn, Keyword.RANGER));
     }
 
 

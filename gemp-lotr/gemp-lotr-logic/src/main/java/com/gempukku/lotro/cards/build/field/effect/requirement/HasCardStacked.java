@@ -1,11 +1,17 @@
 package com.gempukku.lotro.cards.build.field.effect.requirement;
 
-import com.gempukku.lotro.cards.build.*;
+import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
+import com.gempukku.lotro.cards.build.FilterableSource;
+import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
+import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
-import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.common.Filterable;
-import com.gempukku.lotro.logic.timing.PlayConditions;
+import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.state.LotroGame;
 import org.json.simple.JSONObject;
+
+import java.util.Collection;
 
 public class HasCardStacked implements RequirementProducer {
     @Override
@@ -21,7 +27,13 @@ public class HasCardStacked implements RequirementProducer {
         return (actionContext) -> {
             final Filterable filterable = filterableSource.getFilterable(actionContext);
             final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-            return PlayConditions.hasCardsStacked(actionContext.getGame(), onFilterable, count, filterable);
+            LotroGame game = actionContext.getGame();
+            final Collection<PhysicalCard> matchingStackedOn = Filters.filterActive(game, onFilterable);
+            for (PhysicalCard stackedOnCard : matchingStackedOn) {
+                if (Filters.filter(game, game.getGameState().getStackedCards(stackedOnCard), new Filterable[]{filterable}).size() >= count)
+                    return true;
+            }
+            return false;
         };
     }
 }

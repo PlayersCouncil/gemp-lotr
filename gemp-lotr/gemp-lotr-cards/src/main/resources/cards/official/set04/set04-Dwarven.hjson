@@ -1,0 +1,853 @@
+{
+
+	4_41: {
+		cardInfo: {
+			image: decipher/LOTR04041.jpg
+			collInfo: 4R41
+			rarity: R
+		}
+		title: Axe of Erebor
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: name(Gimli)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						"Discard a DWARVEN condition"
+						"Discard a card stacked on a DWARVEN condition"
+					]
+					effects: [
+						{
+							type: discard
+							select: choose(culture(dwarven),condition)
+						}
+						{
+							type: discardStackedCards
+							on: culture(dwarven),condition
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: bearer
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be Gimli.<br>He is <b>damage +1</b>.<br><b>Skirmish:</b> Discard a [dwarven] condition or a card stacked on a [dwarven] condition to make Gimli strength +1.
+		lore: "'...wherever thou goest my thought goes with thee. But have a care to lay thine axe to the right tree!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_42: {
+		cardInfo: {
+			image: decipher/LOTR04042.jpg
+			collInfo: 4C42
+			rarity: C
+		}
+		title: Best Company
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(dwarf)
+					amount: {
+						type: Conditional
+						requires: {
+							type: location
+							filter: battleground
+						}
+						true: 4
+						false: 2
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make a Dwarf strength +2 (or +4 if at a battleground).
+		lore: "An axe swung and swept back. Two Orcs fell headless. The rest fled."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_43: {
+		cardInfo: {
+			image: decipher/LOTR04043.jpg
+			collInfo: 4U43
+			rarity: U
+		}
+		title: Come Here Lad
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			effect: [
+				{
+					type: stackTopCardsOfDrawDeck
+					where: choose(culture(dwarven),condition,hasStacked(any))
+					count: 2
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Stack the top 2 cards from your draw deck on a [dwarven] condition that has a card already stacked on it.
+		lore: "'You are the canniest, luckiest, most reckless fool I've ever met! Bless you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_44: {
+		cardInfo: {
+			image: decipher/LOTR04044.jpg
+			collInfo: 4C44
+			rarity: C
+		}
+		title: Courtesy of My Hall
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: stackCardsFromDiscard
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discardStackedCards
+					on: self
+				}
+				effect: {
+					type: heal
+					select: choose(dwarf)
+				}
+			}
+		]
+		gametext: Plays to your support area. When you play this condition, stack a card from your discard pile here.<br><b>Fellowship:</b> Discard a Free Peoples card stacked here to heal a Dwarf.
+		lore: "'Now my guests, come!... Come and take such refreshment as haste allows.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_45: {
+		cardInfo: {
+			image: decipher/LOTR04045.jpg
+			collInfo: 4R45
+			rarity: R
+		}
+		title: Dwarven Foresight
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: dwarf
+			}
+			effect: [
+				{
+					type: putStackedCardsIntoHand
+					select: choose(side(free))
+					on: culture(dwarven),condition
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Spot a Dwarf to take a Free Peoples card stacked on a [dwarven] condition into hand.
+		lore: "'I would guess that the burned bones of the hobbits are now mingled with the Orcs'.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_46: {
+		cardInfo: {
+			image: decipher/LOTR04046.jpg
+			collInfo: 4R46
+			rarity: R
+		}
+		title: Ever My Heart Rises
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 3
+		type: Condition
+		keywords: [
+			Tale
+			Support Area
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: stackTopCardsOfDrawDeck
+					count: 6
+					where: self
+				}
+			}
+			{
+				type: activated
+				text: Discard 1 card from the top of your draw deck to take a Free Peoples card stacked here into hand.
+				phase: fellowship
+				requires: [
+					{
+						type: canSpot
+						filter: dwarf
+					}
+				]
+				cost: {
+					type: discardTopCardsFromDeck
+					count: 1
+					forced: false
+				}
+				effect: {
+					type: putStackedCardsIntoHand
+					select: choose(side(free people))
+					on: self
+				}
+			}
+			{
+				type: activated
+				text: Discard cards from the top of your deck to no effect.
+				phase: fellowship
+				requires: [
+					{
+						type: canSpot
+						filter: dwarf
+					}
+				]
+				effect: [
+					{
+						type: chooseANumber
+						from: 0
+						text: Choose how many times to discard 5 cards from draw deck
+						memorize: chosenNumber
+					}
+					{
+						type: discardTopCardsFromDeck
+						forced: false
+						count: {
+							type: fromMemory
+							memory: chosenNumber
+							multiplier: 5
+						}
+					}
+				]
+			}
+		]
+		gametext: <b>Tale</b>. Plays to your support area.<br>When you play this condition, reveal the top 6 cards of your draw deck and stack them here.<br><b>Fellowship:</b> Spot a Dwarf and discard the top card of your draw deck to take a Free Peoples card stacked here into hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_47: {
+		cardInfo: {
+			image: decipher/LOTR04047.jpg
+			collInfo: 4U47
+			rarity: U
+		}
+		title: From the Armory
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: exert
+						select: choose(dwarf)
+						memorize: exertedDwarf
+					}
+					{
+						type: stackCardsFromHand
+						select: choose(side(free))
+						where: self
+					}
+				]
+				effect: {
+					type: preventAllWounds
+					select: memory(exertedDwarf)
+				}
+			}
+		]
+		gametext: Plays to your support area.<br><b>Skirmish:</b> Exert a Dwarf and stack a Free Peoples card from hand here to prevent all wounds to that Dwarf.
+		lore: "'It's a bit tight around the chest.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_48: {
+		cardInfo: {
+			image: decipher/LOTR04048.jpg
+			collInfo: 4R48
+			rarity: R
+		}
+		title: Gimli
+		subtitle: Lockbearer
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		keywords: Damage+1
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: unbound,hobbit,companion
+					}
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>.<br>Gimli is strength +1 for each unbound Hobbit companion you can spot.
+		lore: "'You speak evil of that which is fair beyond the reach of your thought, and only little wit can excuse you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_49: {
+		cardInfo: {
+			image: decipher/LOTR04049.jpg
+			collInfo: 4C49
+			rarity: C
+		}
+		title: Gimli
+		subtitle: Unbidden Guest
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		keywords: Damage+1
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(unbound,companion)
+					memorize: chosenCompanion
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenCompanion
+							filter: name(Legolas)
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert Gimli to make an unbound companion strength +1 (or +2 if that companion is Legolas).
+		lore: "But a small dark figure that none had observed sprang out of the shadows and gave a hoarse shout: Baruk Khazâd!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_50: {
+		cardInfo: {
+			image: decipher/LOTR04050.jpg
+			collInfo: 4C50
+			rarity: C
+		}
+		title: Here Is Good Rock
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		keywords: [
+			Tale
+			Support Area
+		]
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: stackCardsFromHand
+					select: choose(side(free))
+					where: self
+				}
+				effect: {
+					type: addKeyword
+					select: choose(dwarf)
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Tale</b>. Plays to your support area.<br><b>Skirmish:</b> Stack a Free Peoples card from hand here to make a Dwarf <b>damage</b> <b>+1</b>.
+		lore: "'Give me a year and a hundred of my kin and I would make this a place that armies would break upon like water.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_51: {
+		cardInfo: {
+			image: decipher/LOTR04051.jpg
+			collInfo: 4C51
+			rarity: C
+		}
+		title: Khazâd Ai-mênu
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: if
+					check: {
+						type: canSpot
+						filter: name(Legolas)
+					}
+					true: [
+						{
+							type: modifyStrength
+							select: choose(dwarf)
+							amount: 3
+							memorize: chosenDwarf
+						}
+						{
+							type: addKeyword
+							select: memory(chosenDwarf)
+							keyword: damage
+							amount: 1
+						}
+					]
+					false: {
+						type: modifyStrength
+						select: choose(dwarf)
+						amount: 2
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make a Dwarf strength +2 (or strength +3 and <b>damage +1</b> if you spot Legolas).
+		lore: "'The Orcs are behind the wall. Ai-oi! Come, Legolas! There are enough for both of us.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_52: {
+		cardInfo: {
+			image: decipher/LOTR04052.jpg
+			collInfo: 4R52
+			rarity: R
+		}
+		title: My Axe Is Notched
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: winsSkirmish
+					filter: name(Gimli)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: dwarven
+					select: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: name(Gimli)
+					amount: {
+						type: min
+						firstNumber: {
+							type: ForEachCultureToken
+							filter: self
+							culture: dwarven
+							limit: 3
+						}
+						secondNumber: {
+							type: ForEachCultureToken
+							filter: name(Final Count)
+							culture: elven
+							limit: 3
+						}
+					}
+				}
+			}
+		]
+		gametext: Plays to your support area.<br>Each time Gimli wins a skirmish, place a [dwarven] token on this card.<br>While you can spot X [dwarven] tokens on this card and the same number of [elven] tokens on Final Count, Gimli is strength +X (limit +3).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_53: {
+		cardInfo: {
+			image: decipher/LOTR04053.jpg
+			collInfo: 4U53
+			rarity: U
+		}
+		title: Quick As May Be
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: [
+				{
+					type: canSpot
+					filter: dwarf,companion
+				}
+				{
+					type: canSpot
+					filter: elf,companion
+				}
+			]
+			effect: [
+				{
+					type: wound
+					select: choose(minion)
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Spot a Dwarf companion and an Elf companion to wound a minion.
+		lore: "'I think, nonetheless, that we no longer need any trail to tell us which way to go.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_54: {
+		cardInfo: {
+			image: decipher/LOTR04054.jpg
+			collInfo: 4R54
+			rarity: R
+		}
+		title: Rest by Blind Night
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			effect: [
+				{
+					type: ShuffleCardsFromPlayIntoDrawDeck
+					select: choose(culture(dwarven),condition)
+					includeStacked: true
+					count: any
+				}
+			]
+		}
+		gametext: <b>Regroup:</b> Shuffle any number of [dwarven] conditions (and all cards stacked on them) into your draw deck.
+		lore: "'And yet even I, Dwarf of many journeys... cannot run all the way to Isengard without any pause....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_55: {
+		cardInfo: {
+			image: decipher/LOTR04055.jpg
+			collInfo: 4R55
+			rarity: R
+		}
+		title: Restless Axe
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(dwarf)
+			},
+			effect: [
+				{
+					type: ShuffleCardsFromPlayIntoDrawDeck
+					select: choose(culture(dwarven),condition)
+					includeStacked: true
+					memorizeStacked: stackedCards
+				}
+				{
+					type: repeat
+					times: {
+						type: forEachInMemory
+						memory: stackedCards
+					}
+					effect: {
+						type: exert
+						select: choose(minion)
+					}
+				}
+			]
+		}
+		gametext: <b>Regroup:</b> Exert a Dwarf to shuffle a [dwarven] condition (and all cards stacked on it) into your draw deck. Exert a minion for each card shuffled into your draw deck.
+		lore: "'Give me a row of orc-necks and room to swing and all weariness will fall from me!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_56: {
+		cardInfo: {
+			image: decipher/LOTR04056.jpg
+			collInfo: 4C56
+			rarity: C
+		}
+		title: Search Far and Wide
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: dwarf
+			}
+			cost: {
+				type: discardTopCardsFromDeck
+				forced: false
+			},
+			effect: [
+				{
+					type: drawCards
+					count: 2
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Spot a Dwarf and discard the top card of your draw deck to draw 2 cards.
+		lore: "'We have been set many riddles since we came to Tol Brandir, but this is the hardest to unravel.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	4_57: {
+		cardInfo: {
+			image: decipher/LOTR04057.jpg
+			collInfo: 4U57
+			rarity: U
+		}
+		title: Stout and Strong
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: dwarf
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: dwarven
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(unbound,companion)
+						amount: {
+							type: ForEachCultureToken
+							culture: dwarven
+							filter: self
+							limit: 3
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: Plays to your support area.<br>Each time a Dwarf wins a skirmish, you may place a [dwarven] token on this card.<br><b>Skirmish:</b> Make an unbound companion strength +1 for each [dwarven] token here (limit +3). Discard this condition.
+		lore: "'Never did I see an axe so wielded.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -1,0 +1,307 @@
+{
+
+	102_1: {
+		cardInfo: {
+			//id: 102_1
+			image: sets/V2/LOTR-ENV2S001.0_card.jpg
+			collInfo: V2_1
+			rarity: _
+		}
+		title: Driven into the Hills
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: culture(Dunland), minion
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: ModifyInitiativeHandSize
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+					}
+				}
+			}
+		]
+		gametext: To play, spot a [Dunland] minion.<br>For each companion you can spot over 4, the Free Peoples player must have an additional card in hand to have initiative.
+		lore: "'Not in half a thousand years have they forgotten their grievance that the lords of Gondor gave the Mark to Eorl the Young and made alliance with him.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_2: {
+		cardInfo: {
+			//id: 102_2
+			image: sets/V2/LOTR-ENV2S002.0_card.jpg
+			collInfo: V2_2
+			rarity: _
+		}
+		title: Dunlending Raider
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 1
+		site: 3
+		effects: {
+			type: ModifyOwnCost
+			amount: -1
+			requires: {
+				type: HaveInitiative
+				side: Shadow
+			}
+		}
+		gametext: While you have initiative, this minion's twilight cost is -2.
+		lore: "'They bring fire...and are burning as they come, rick, cot, and tree.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_3: {
+		cardInfo: {
+			//id: 102_3
+			image: sets/V2/LOTR-ENV2S003.0_card.jpg
+			collInfo: V2_3
+			rarity: _
+		}
+		title: Dunlending Reaver
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 1
+		site: 3
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: 3
+					requires: {
+						type: HaveInitiative
+						side: Shadow
+					}
+				}
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: self
+					keyword: damage+1
+					requires: {
+						type: HaveInitiative
+						side: Shadow
+					}
+				}
+			}
+		]
+		gametext: While you have initiative, this minion is strength +3 and damage +1.
+		lore: "Now they could hear, borne over the dark, the sound of harsh singing..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_4: {
+		cardInfo: {
+			//id: 102_4
+			image: sets/V2/LOTR-ENV2S004.0_card.jpg
+			collInfo: V2_4
+			rarity: _
+		}
+		title: Horsemen Took Your Lands
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 1
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: Event
+			effect: [
+				{
+					type: playCardFromDiscard
+					select: choose(culture(dunland), minion, not(unique))
+					memorize: playedDunlending
+					extraEffects: {
+						type: If
+						check: {
+							type: HaveInitiative
+							side: Shadow
+						}
+						true: {
+							type: playCardFromDiscard
+							select: choose(culture(dunland), possession)
+							on: Memory(playedDunlending)
+						}
+					}
+				}
+			]
+		}
+		gametext: Play a non-unique [Dunland] minion from your discard pile. If you have initiative, you may play a [dunland] possession on that minion from your discard pile.
+		lore: "They will not give way now for dusk or dawn..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_5: {
+		cardInfo: {
+			//id: 102_5
+			image: sets/V2/LOTR-ENV2S005.0_card.jpg
+			collInfo: V2_5
+			rarity: _
+		}
+		title: Ritual Oath of Enmity
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 0
+		type: Artifact
+		keywords: Support Area
+		effects: [
+			{
+				type: Activated
+				text: Remove (7) to add a {Dunland} token here.
+				phase: Shadow
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: And
+							requires: [
+								{
+									type: Location
+									filter: RegionNumber(3)
+								}
+								{
+									type: CanSpotTwilight
+									amount: 25
+								}
+							]
+						}
+						{
+							type: And
+							requires: [
+								{
+									type: Location
+									filter: RegionNumber(1-2)
+								}
+								{
+									type: CanSpotTwilight
+									amount: 18
+								}
+							]
+						}
+					]
+				}
+				cost: {
+					type: RemoveTwilight
+					amount: 7
+				}
+				effect: [
+					{
+						type: AddCultureTokens
+						culture: dunland
+						select: self
+						count: 1
+					}
+				]
+			}
+			{
+				type: Activated
+				text: Discard this to take control of 2 sites.
+				phase: Shadow
+				requires: {
+					type: CanSpotCultureTokens
+					culture: dunland
+					filter: self
+				}
+				effect: [
+					{
+						type: TakeControlOfSite
+					}
+					{
+						type: TakeControlOfSite
+					}
+					{
+						type: Discard
+						select: self
+					}
+				]
+			}
+			{
+				type: ActivatedInDrawDeck
+				phase: Shadow
+				requires: [
+					{
+						type: canSelfBePlayed
+					}
+					{
+						type: Location
+						filter: RegionNumber(1)
+					}
+					{
+						type: CanSpotTwilight
+						amount: 18
+					}
+				]
+				effect: [
+					{
+						type: PlayCardFromDrawDeck
+						select: self
+						shuffle: true
+						showAll: true
+					}
+				]
+			}
+		]
+		gametext: While you can spot 18 twilight tokens in region 1, this card can be played from your draw deck.<br/>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (7) to add a [dunland] token here.<br/>Shadow: Spot a [dunland] token here to take control of 2 sites.  Discard this artifact.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

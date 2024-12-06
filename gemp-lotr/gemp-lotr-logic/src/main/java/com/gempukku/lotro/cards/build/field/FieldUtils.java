@@ -2,13 +2,13 @@ package com.gempukku.lotro.cards.build.field;
 
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.SitesBlock;
 import org.hjson.JsonValue;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.Map;
 import java.util.Set;
 
 public class FieldUtils {
@@ -70,11 +70,27 @@ public class FieldUtils {
         if (value == null)
             return null;
         final String string = getString(value, key);
-        return Enum.valueOf(enumClass, string.toUpperCase().replace(' ', '_').replace('-', '_'));
+        try {
+            return Enum.valueOf(enumClass, string.toUpperCase().replace(' ', '_').replace('-', '_'));
+        } catch (IllegalArgumentException exp) {
+            throw new InvalidCardDefinitionException("Unknown enum value - " + string + ", in " + key + " field");
+        }
+    }
+
+    public static SitesBlock getBlock(Object value, String key) throws InvalidCardDefinitionException {
+        final String string = getString(value, key);
+        if (string == null)
+            throw new InvalidCardDefinitionException("Unknown block '" + string + "' in " + key + " field");
+        final SitesBlock block = SitesBlock.findBlock(string);
+        if (block == null)
+            throw new InvalidCardDefinitionException("Unknown block '" + string + "' in " + key + " field");
+        return block;
     }
 
     public static Side getSide(Object value, String key) throws InvalidCardDefinitionException {
         final String string = getString(value, key);
+        if (string == null)
+            throw new InvalidCardDefinitionException("Unknown side '" + string + "' in " + key + " field");
         final Side side = Side.Parse(string);
         if (side == null)
             throw new InvalidCardDefinitionException("Unknown side '" + string + "' in " + key + " field");
@@ -113,6 +129,7 @@ public class FieldUtils {
     }
 
     private static final JSONParser parser = new JSONParser();
+
     public static JSONObject parseSubObject(String jsonString) throws ParseException {
         String json = JsonValue.readHjson(jsonString).toString();
         var subObject = (JSONObject) parser.parse(json);

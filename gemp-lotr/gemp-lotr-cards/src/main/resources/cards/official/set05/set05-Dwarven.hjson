@@ -1,0 +1,236 @@
+{
+
+	5_5: {
+		cardInfo: {
+			image: decipher/LOTR05005.jpg
+			collInfo: 5R5
+			rarity: R
+		}
+		title: Baruk Khazâd
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(dwarf)
+			},
+			effect: [
+				{
+					type: wound
+					select: choose(minion)
+				}
+				{
+					type: canPlayNextAction
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Exert a Dwarf to wound a minion. You may take the next maneuver action.
+		lore: "...a small dark figure that none had observed sprang out of the shadows and gave a hoarse shout...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_6: {
+		cardInfo: {
+			image: decipher/LOTR05006.jpg
+			collInfo: 5C6
+			rarity: C
+		}
+		title: Defending the Keep
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: dwarf
+			}
+			effect: [
+				{
+					type: choice
+					texts: [
+						Draw a card
+						Play a {dwarven} condition from your discard pile
+					]
+					effects: [
+						{
+							type: drawCards
+						}
+						{
+							type: playCardFromDiscard
+							select: choose(culture(dwarven),condition)
+						}
+					]
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Spot a Dwarf to draw a card or play a [dwarven] condition from your discard pile.
+		lore: "'I have fought many wars, master Dwarf. I know how to defend my own Keep.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_7: {
+		cardInfo: {
+			image: decipher/LOTR05007.jpg
+			collInfo: 5R7
+			rarity: R
+		}
+		title: Gimli
+		subtitle: Skilled Defender
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		keywords: Damage+1
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: winsSkirmish
+				filter: self
+			}
+			effect: {
+				type: wound
+				select: choose(minion,assignedToSkirmish(unbound,companion))
+			}
+		}
+		gametext: <b>Damage +1</b>.<br>Each time Gimli wins a skirmish, you may wound a minion assigned to skirmish an unbound companion.
+		lore: "Despite Théoden's preparations, Gimli found it necessary to warn him of the advancing Uruk army."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_8: {
+		cardInfo: {
+			image: decipher/LOTR05008.jpg
+			collInfo: 5U8
+			rarity: U
+		}
+		title: Horn of Helm
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Possession
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: choose(dwarf,companion)
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: removeKeyword
+						filter: minion
+						requires: {
+							type: location
+							filter: battleground
+						}
+						keyword: damage
+					}
+					until: regroup
+				}
+			}
+		]
+		gametext: Plays to your support area.<br><b>Maneuver:</b> Exert a Dwarf companion to make each minion at a battleground lose all <b>damage</b> bonuses until the regroup phase.
+		lore: "...sudden and terrible, from the tower above, the sound of the great horn of Helm rang out."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_9: {
+		cardInfo: {
+			image: decipher/LOTR05009.jpg
+			collInfo: 5U9
+			rarity: U
+		}
+		title: More to My Liking
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				text: Stack top card from draw deck
+				limitPerPhase: 1
+				effect: {
+					type: stackTopCardsOfDrawDeck
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				text: Take a Free Peoples card stacked here into hand
+				requires: {
+					type: canSpot
+					filter: dwarf
+				}
+				cost: {
+					type: discardStackedCards
+					on: culture(dwarven),condition
+				}
+				effect: {
+					type: putStackedCardsIntoHand
+					select: choose(side(free people))
+					on: self
+				}
+			}
+		]
+		gametext: Plays to your support area.<br><b>Maneuver:</b> Stack the top card from your draw deck here (limit once per phase).<br><b>Maneuver:</b> Spot a Dwarf and discard a card stacked on a [dwarven] condition to take a Free Peoples card stacked here into hand.
+		lore: "'This country has tough bones.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

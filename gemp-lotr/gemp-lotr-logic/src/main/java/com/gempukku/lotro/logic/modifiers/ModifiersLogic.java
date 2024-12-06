@@ -137,7 +137,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         else {
             LinkedList<Modifier> liveModifiers = new LinkedList<>();
             for (Modifier modifier : modifiers) {
-                if (keyword == null || ((KeywordAffectingModifier) modifier).getKeyword() == keyword) {
+                if (keyword == null || ((KeywordAffectingModifier) modifier).getKeyword() == keyword || ((KeywordAffectingModifier) modifier).getKeyword() == null) {
                     if (!_skipSet.contains(modifier)) {
                         _skipSet.add(modifier);
                         Condition condition = modifier.getCondition();
@@ -307,9 +307,19 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                 return true;
 
             for (Modifier modifier : getKeywordModifiersAffectingCard(game, ModifierEffect.GIVE_KEYWORD_MODIFIER, keyword, physicalCard)) {
-                if (appliesKeywordModifier(game, physicalCard, modifier.getSource(), keyword))
-                    if (modifier.hasKeyword(game, physicalCard, keyword))
-                        return true;
+                if (appliesKeywordModifier(game, physicalCard, modifier.getSource(), keyword)) {
+                    if (!_skipSet.contains(modifier)) {
+                        _skipSet.add(modifier);
+                        try {
+                            if (modifier.hasKeyword(game, physicalCard, keyword))
+                                return true;
+                        } finally {
+                            _skipSet.remove(modifier);
+                        }
+                    } else {
+                        return false;
+                    }
+                }
             }
             return false;
         } finally {
@@ -342,11 +352,11 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     private boolean isCandidateForKeywordRemovalWithTextRemoval(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
-        if (keyword == Keyword.ROAMING)
+        if (!keyword.isRealKeyword())
             return false;
-        if (keyword == Keyword.RING_BOUND)
-            if (game.getGameState().getRingBearer(physicalCard.getOwner()) == physicalCard)
-                return false;
+        // Ring-bearer is ALWAYS Ring-bound and cannot lose that
+        if (keyword == Keyword.RING_BOUND && game.getGameState().getRingBearer(physicalCard.getOwner()) == physicalCard)
+            return false;
         return true;
     }
 
@@ -419,16 +429,10 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean appliesStrengthBonusModifier(LotroGame game, PhysicalCard modifierSource, PhysicalCard modifierTarget) {
-        if (modifierSource != null)
-            for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.STRENGTH_BONUS_SOURCE_MODIFIER, modifierSource)) {
-                if (!modifier.appliesStrengthBonusModifier(game, modifierSource, modifierTarget))
-                    return false;
-            }
-        if (modifierTarget != null)
-            for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.STRENGTH_BONUS_TARGET_MODIFIER, modifierTarget)) {
-                if (!modifier.appliesStrengthBonusModifier(game, modifierSource, modifierTarget))
-                    return false;
-            }
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.STRENGTH_BONUS_MODIFIER, modifierTarget)) {
+            if (!modifier.appliesStrengthBonusModifier(game, modifierSource, modifierTarget))
+                return false;
+        }
         return true;
     }
 
@@ -478,7 +482,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
-    public int getTwilightCost(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, int twilightCostModifier, boolean ignoreRoamingPenalty) {
+    public int getTwilightCostToPlay(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, int twilightCostModifier, boolean ignoreRoamingPenalty) {
         LoggingThreadLocal.logMethodStart(physicalCard, "getTwilightCost");
         try {
             int result = physicalCard.getBlueprint().getTwilightCost() + twilightCostModifier;
@@ -560,11 +564,11 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
-    public boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard card, Set<PhysicalCard> winners) {
+    public boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard card) {
         LoggingThreadLocal.logMethodStart(card, "canTakeWound");
         try {
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.WOUND_MODIFIER, card)) {
-                if (!modifier.canTakeWoundsFromLosingSkirmish(game, card, winners))
+                if (!modifier.canTakeWoundsFromLosingSkirmish(game, card))
                     return false;
             }
             return true;
@@ -914,6 +918,14 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         return true;
     }
 
+    @Override
+    public int getFellowshipDrawnCards(LotroGame game) {
+        if(game.getGameState().getCurrentPhase() != Phase.FELLOWSHIP)
+            return 0;
+
+        return _drawnThisPhaseCount;
+    }
+
     /**
      * Rule of 4. "You cannot draw (or take into hand) more than 4 cards during your fellowship phase."
      *
@@ -1020,6 +1032,17 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         return result;
     }
 
+    @Override
+    public int getNumberOfSpottableControlledSites(LotroGame game, String playerId) {
+        int result = Filters.filterActive(game, Filters.siteControlledByPlayer(playerId)).size();
+
+        for (Modifier modifier : getModifiers(game, ModifierEffect.SPOT_MODIFIER)) {
+            result += modifier.getSiteControlledSpotCountModifier(game, playerId);
+        }
+
+        return result;
+    }
+
     private boolean canPlayerSpotCulture(LotroGame game, String playerId, Culture culture) {
         for (Modifier modifier : getModifiers(game, ModifierEffect.SPOT_MODIFIER))
             if (!modifier.canSpotCulture(game, culture, playerId))
@@ -1078,6 +1101,14 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                 return false;
 
         return true;
+    }
+
+    @Override
+    public boolean assignmentCostWasPaid(LotroGame game, PhysicalCard card) {
+        for (Modifier modifier : getModifiers(game, ModifierEffect.PAID_ASSIGNMENT_COST_MODIFIER))
+            if (modifier.isAssignmentCostPaid(game, card))
+                return true;
+        return false;
     }
 
     @Override

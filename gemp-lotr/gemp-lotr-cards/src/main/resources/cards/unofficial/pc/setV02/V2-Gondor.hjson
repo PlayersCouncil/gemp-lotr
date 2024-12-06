@@ -1,0 +1,122 @@
+{
+
+	102_16: {
+		cardInfo: {
+			//id: 102_16
+			image: sets/V2/LOTR-ENV2S016.0_card.jpg
+			collInfo: V2_16
+			rarity: _
+		}
+		title: Aragorn
+		subtitle: Last Hope of Men
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		keywords: valiant
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: StartOfTurn
+				}
+				optional: true
+				requires: {
+					type: CanSpot
+					filter: another,valiant,companion
+				}
+				effect: {
+					type: DrawCards
+					count: 1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(valiant,companion,inSkirmish)
+					memorize: chosenCompanion
+					amount: 2
+				}
+			}
+		]
+		gametext: Valiant.<br>At the start of each turn you may spot another valiant companion to draw a card.<br>Skirmish: Exert Aragorn to make a skirmishing valiant companion strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_17: {
+		cardInfo: {
+			//id: 102_17
+			image: sets/V2/LOTR-ENV2S017.0_card.jpg
+			collInfo: V2_17
+			rarity: _
+		}
+		title: I Will Die as One of Them
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(name(Aragorn))
+				memorize: exertedCompanion
+				times: 3
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: all(valiant,companion)
+					until: start(regroup)
+					amount: 2
+				}
+				{
+					type: addTrigger
+					until: endOfTurn
+					trigger: {
+						type: killed
+						filter: name(Aragorn)
+					}
+					effect: {
+						type: modifyStrength
+						select: all(valiant,companion)
+						until: endOfTurn
+						amount: 1
+					}
+				}
+			]
+		}
+		gametext: Exert Aragorn three times to make each valiant companion strength +2 until the regroup phase. <br>If Aragorn dies during this turn, make each valiant companion strength +1 for the rest of the turn. 
+		lore: "'Andúril! Andúril goes to war. The Blade that was Broken shines again!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

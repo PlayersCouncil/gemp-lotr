@@ -1,554 +1,588 @@
 [
-  {
-    setId: 0
-    setName: Promotional
-    rarityFile: /set0-rarity.txt
-    needsLoading: false
-  }
-  {
-    setId: 1
-    setName: The Fellowship of the Ring
-    rarityFile: /set1-rarity.txt
-    needsLoading: false
-  }
-  {
-    setId: 2
-    setName: Mines of Moria
-    rarityFile: /set2-rarity.txt
-  }
-  {
-    setId: 3
-    setName: Realms of the Elf-lords
-    rarityFile: /set3-rarity.txt
-  }
-  {
-    setId: 4
-    setName: The Two Towers
-    rarityFile: /set4-rarity.txt
-  }
-  {
-    setId: 5
-    setName: Battle of Helm's Deep
-    rarityFile: /set5-rarity.txt
-  }
-  {
-    setId: 6
-    setName: Ents of Fangorn
-    rarityFile: /set6-rarity.txt
-  }
-  {
-    setId: 7
-    setName: The Return of the King
-    rarityFile: /set7-rarity.txt
-  }
-  {
-    setId: 8
-    setName: Siege of Gondor
-    rarityFile: /set8-rarity.txt
-  }
-  {
-    setId: 9
-    setName: Reflections
-    rarityFile: /set9-rarity.txt
-    needsLoading: false
-  }
-  {
-    setId: 10
-    setName: Mount Doom
-    rarityFile: /set10-rarity.txt
-  }
-  {
-    setId: 11
-    setName: Shadows
-    rarityFile: /set11-rarity.txt
-  }
-  {
-    setId: 12
-    setName: Black Rider
-    rarityFile: /set12-rarity.txt
-  }
-  {
-    setId: 13
-    setName: Bloodlines
-    rarityFile: /set13-rarity.txt
-  }
-  {
-    setId: 14
-    setName: Expanded Middle-earth
-    rarityFile: /set14-rarity.txt
-    needsLoading: false
-  }
-  {
-    setId: 15
-    setName: The Hunters
-    rarityFile: /set15-rarity.txt
-  }
-  {
-    setId: 16
-    setName: The Wraith Collection
-    rarityFile: /set16-rarity.txt
-    needsLoading: false
-  }
-  {
-    setId: 17
-    setName: Rise of Saruman
-    rarityFile: /set17-rarity.txt
-  }
-  {
-    setId: 18
-    setName: Treachery & Deceit
-    rarityFile: /set18-rarity.txt
-  }
-  {
-    setId: 19
-    setName: Ages End
-    rarityFile: /set19-rarity.txt
-    needsLoading: false
-  }
-  {
-    setId: 30
-    setName: Main Deck
-    rarityFile: /set30-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-  }
-  {
-    setId: 31
-    setName: The Short Rest
-    rarityFile: /set31-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-  }
-  {
-    setId: 32
-    setName: The Clouds Burst
-    rarityFile: /set32-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-  }
-  {
-    setId: 33
-    setName: Fire and Water
-    rarityFile: /set33-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-  }
-  {
-    setId: 40
-    setName: Second Edition
-    rarityFile: /set40-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: false
-  }
+	{
+		setId: 0
+		setName: Promotional
+		rarityFile: /set0-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 1
+		setName: The Fellowship of the Ring
+		rarityFile: /set1-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 2
+		setName: Mines of Moria
+		rarityFile: /set2-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 3
+		setName: Realms of the Elf-lords
+		rarityFile: /set3-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 4
+		setName: The Two Towers
+		rarityFile: /set4-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 5
+		setName: Battle of Helm's Deep
+		rarityFile: /set5-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 6
+		setName: Ents of Fangorn
+		rarityFile: /set6-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 7
+		setName: The Return of the King
+		rarityFile: /set7-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 8
+		setName: Siege of Gondor
+		rarityFile: /set8-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 9
+		setName: Reflections
+		rarityFile: /set9-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 10
+		setName: Mount Doom
+		rarityFile: /set10-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 11
+		setName: Shadows
+		rarityFile: /set11-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 12
+		setName: Black Rider
+		rarityFile: /set12-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 13
+		setName: Bloodlines
+		rarityFile: /set13-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 14
+		setName: Expanded Middle-earth
+		rarityFile: /set14-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 15
+		setName: The Hunters
+		rarityFile: /set15-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 16
+		setName: The Wraith Collection
+		rarityFile: /set16-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 17
+		setName: Rise of Saruman
+		rarityFile: /set17-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 18
+		setName: Treachery & Deceit
+		rarityFile: /set18-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 19
+		setName: Ages End
+		rarityFile: /set19-rarity.txt
+		needsLoading: false
+	}
+	{
+		setId: 30
+		setName: Main Deck
+		rarityFile: /set30-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+	}
+	{
+		setId: 31
+		setName: The Short Rest
+		rarityFile: /set31-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+	}
+	{
+		setId: 32
+		setName: The Clouds Burst
+		rarityFile: /set32-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+	}
+	{
+		setId: 33
+		setName: Fire and Water
+		rarityFile: /set33-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+	}
+	# {
+	#   setId: 40
+	#   setName: Second Edition
+	#   rarityFile: /set40-rarity.txt
+	#   originalSet: false
+	#   merchantable: false
+	#   needsLoading: false
+	#   playable: false
+	# }
 
 
-  {
-    setId: 50
-    setName: PC Promo Errata
-    rarityFile: /errata/set50-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 51
-    setName: PC FotR Errata
-    rarityFile: /errata/set51-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 52
-    setName: PC MoM Errata
-    rarityFile: /errata/set52-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 53
-    setName: PC RotEL Errata
-    rarityFile: /errata/set53-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 54
-    setName: PC TTT Errata
-    rarityFile: /errata/set54-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 55
-    setName: PC BoHD Errata
-    rarityFile: /errata/set55-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 56
-    setName: PC EoF Errata
-    rarityFile: /errata/set56-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 57
-    setName: PC RotK Errata
-    rarityFile: /errata/set57-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 58
-    setName: PC SoG Errata
-    rarityFile: /errata/set58-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 59
-    setName: PC Reflections Errata
-    rarityFile: /errata/set59-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
+	{
+		setId: 50
+		setName: PC Promo Errata
+		rarityFile: /errata/set50-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 51
+		setName: PC FotR Errata
+		rarityFile: /errata/set51-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 52
+		setName: PC MoM Errata
+		rarityFile: /errata/set52-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 53
+		setName: PC RotEL Errata
+		rarityFile: /errata/set53-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 54
+		setName: PC TTT Errata
+		rarityFile: /errata/set54-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 55
+		setName: PC BoHD Errata
+		rarityFile: /errata/set55-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 56
+		setName: PC EoF Errata
+		rarityFile: /errata/set56-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 57
+		setName: PC RotK Errata
+		rarityFile: /errata/set57-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 58
+		setName: PC SoG Errata
+		rarityFile: /errata/set58-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 59
+		setName: PC Reflections Errata
+		rarityFile: /errata/set59-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
 
 
-  {
-    setId: 80
-    setName: PC MD Errata
-    rarityFile: /errata/set80-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 81
-    setName: PC Shadows Errata
-    rarityFile: /errata/set81-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 82
-    setName: PC BR Errata
-    rarityFile: /errata/set82-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 83
-    setName: PC Bloodlines Errata
-    rarityFile: /errata/set83-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 84
-    setName: PC EMM Errata
-    rarityFile: /errata/set84-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 85
-    setName: PC Hunters Errata
-    rarityFile: /errata/set85-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 86
-    setName: PC TWC Errata
-    rarityFile: /errata/set86-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 87
-    setName: PC RoS Errata
-    rarityFile: /errata/set87-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 88
-    setName: PC T&D Errata
-    rarityFile: /errata/set88-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 89
-    setName: PC AE Errata
-    rarityFile: /errata/set89-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 70
-    setName: TEST-PC Promo Errata
-    rarityFile: /errata/set70-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 71
-    setName: TEST-PC FotR Errata
-    rarityFile: /errata/set71-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 72
-    setName: TEST-PC MoM Errata
-    rarityFile: /errata/set72-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 73
-    setName: TEST-PC RotEL Errata
-    rarityFile: /errata/set73-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 74
-    setName: TEST-PC TTT Errata
-    rarityFile: /errata/set74-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 75
-    setName: TEST-PC BoHD Errata
-    rarityFile: /errata/set75-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 76
-    setName: TEST-PC EoF Errata
-    rarityFile: /errata/set76-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 77
-    setName: TEST-PC RotK Errata
-    rarityFile: /errata/set77-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 78
-    setName: TEST-PC SoG Errata
-    rarityFile: /errata/set78-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 79
-    setName: TEST-PC Reflections Errata
-    rarityFile: /errata/set79-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 80
-    setName: TEST-PC MD Errata
-    rarityFile: /errata/set80-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 81
-    setName: TEST-PC Shadows Errata
-    rarityFile: /errata/set81-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 82
-    setName: TEST-PC BR Errata
-    rarityFile: /errata/set82-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 83
-    setName: TEST-PC Bloodlines Errata
-    rarityFile: /errata/set83-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 84
-    setName: TEST-PC EMM Errata
-    rarityFile: /errata/set84-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 85
-    setName: TEST-PC Hunters Errata
-    rarityFile: /errata/set85-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 86
-    setName: TEST-PC TWC Errata
-    rarityFile: /errata/set86-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 87
-    setName: TEST-PC RoS Errata
-    rarityFile: /errata/set87-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 88
-    setName: TEST-PC T&D Errata
-    rarityFile: /errata/set88-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
-  {
-    setId: 89
-    setName: TEST-PC AE Errata
-    rarityFile: /errata/set89-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
+	{
+		setId: 80
+		setName: PC MD Errata
+		rarityFile: /errata/set80-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 81
+		setName: PC Shadows Errata
+		rarityFile: /errata/set81-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 82
+		setName: PC BR Errata
+		rarityFile: /errata/set82-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 83
+		setName: PC Bloodlines Errata
+		rarityFile: /errata/set83-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 84
+		setName: PC EMM Errata
+		rarityFile: /errata/set84-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 85
+		setName: PC Hunters Errata
+		rarityFile: /errata/set85-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 86
+		setName: PC TWC Errata
+		rarityFile: /errata/set86-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 87
+		setName: PC RoS Errata
+		rarityFile: /errata/set87-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 88
+		setName: PC T&D Errata
+		rarityFile: /errata/set88-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 89
+		setName: PC AE Errata
+		rarityFile: /errata/set89-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 70
+		setName: TEST-PC Promo Errata
+		rarityFile: /errata/set70-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 71
+		setName: TEST-PC FotR Errata
+		rarityFile: /errata/set71-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 72
+		setName: TEST-PC MoM Errata
+		rarityFile: /errata/set72-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 73
+		setName: TEST-PC RotEL Errata
+		rarityFile: /errata/set73-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 74
+		setName: TEST-PC TTT Errata
+		rarityFile: /errata/set74-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 75
+		setName: TEST-PC BoHD Errata
+		rarityFile: /errata/set75-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 76
+		setName: TEST-PC EoF Errata
+		rarityFile: /errata/set76-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 77
+		setName: TEST-PC RotK Errata
+		rarityFile: /errata/set77-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 78
+		setName: TEST-PC SoG Errata
+		rarityFile: /errata/set78-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 79
+		setName: TEST-PC Reflections Errata
+		rarityFile: /errata/set79-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 80
+		setName: TEST-PC MD Errata
+		rarityFile: /errata/set80-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 81
+		setName: TEST-PC Shadows Errata
+		rarityFile: /errata/set81-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 82
+		setName: TEST-PC BR Errata
+		rarityFile: /errata/set82-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 83
+		setName: TEST-PC Bloodlines Errata
+		rarityFile: /errata/set83-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 84
+		setName: TEST-PC EMM Errata
+		rarityFile: /errata/set84-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 85
+		setName: TEST-PC Hunters Errata
+		rarityFile: /errata/set85-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 86
+		setName: TEST-PC TWC Errata
+		rarityFile: /errata/set86-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 87
+		setName: TEST-PC RoS Errata
+		rarityFile: /errata/set87-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 88
+		setName: TEST-PC T&D Errata
+		rarityFile: /errata/set88-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	{
+		setId: 89
+		setName: TEST-PC AE Errata
+		rarityFile: /errata/set89-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
 
-  {
-    setId: 100
-    setName: PC Supplements
-    rarityFile: /set100-rarity.txt
-    originalSet: false
-    merchantable: true
-    needsLoading: false
-    playable: true
-  }
+	{
+		setId: 100
+		setName: PC Supplements
+		rarityFile: /set100-rarity.txt
+		originalSet: false
+		merchantable: true
+		needsLoading: false
+		playable: true
+	}
 
-  {
-    setId: 101
-    setName: Shadow of the Past
-    rarityFile: /set101-rarity.txt
-    originalSet: false
-    merchantable: true
-    needsLoading: false
-    playable: true
-  }
+	{
+		setId: 101
+		setName: Shadow of the Past
+		rarityFile: /set101-rarity.txt
+		originalSet: false
+		merchantable: true
+		needsLoading: false
+		playable: true
+	}
+	
+	{
+		setId: 102
+		setName: King of the Golden Hall
+		rarityFile: /set102-rarity.txt
+		originalSet: false
+		merchantable: true
+		needsLoading: false
+		playable: true
+	}
 
-  {
-    setId: 150
-    setName: TEST-PC Supplements
-    rarityFile: /set150-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
+	{
+		setId: 150
+		setName: TEST-PC Supplements
+		rarityFile: /set150-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
 
-  {
-    setId: 151
-    setName: TEST-Shadow of the Past
-    rarityFile: /set151-rarity.txt
-    originalSet: false
-    merchantable: false
-    needsLoading: false
-    playable: true
-  }
+	{
+		setId: 151
+		setName: TEST-Shadow of the Past
+		rarityFile: /set151-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
+	
+	{
+		setId: 152
+		setName: TEST-King of the Golden Hall
+		rarityFile: /set152-rarity.txt
+		originalSet: false
+		merchantable: false
+		needsLoading: false
+		playable: true
+	}
 
 ]

@@ -1,5 +1,10 @@
 {
 	33_1: {
+		cardInfo: {
+			image: hobbit/HDG331.jpg
+			collInfo: 33_1
+			rarity: _
+		}
 		title: Ancient Forges
 		unique: true
 		culture: dwarven
@@ -14,7 +19,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 				}
 			}
 			{
@@ -39,33 +44,38 @@
 				cost: [
 					{
 						type: exert
-						filter: choose(name(Balin))
+						select: choose(name(Balin))
 					}
 					{
 						type: discard
-						filter: choose(culture(dwarven),fortification)
+						select: choose(culture(dwarven),fortification)
 					}
 				]
 				effect: {
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 					times: 2
 				}
 			}
 		]
 	}
 	33_2: {
+		cardInfo: {
+			image: hobbit/HDG332.jpg
+			collInfo: 33_2
+			rarity: _
+		}
 		title: At Your Service!
 		culture: dwarven
 		twilight: 2
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: [
 				{
 					type: exert
-					filter: choose(name(Bilbo))
+					select: choose(name(Bilbo))
 				}
 				{
 					type: addBurdens
@@ -74,11 +84,18 @@
 			]
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(culture(dwarven),or(possession,follower))
+				select: choose(culture(dwarven),or(possession,follower))
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
 	33_3: {
+		cardInfo: {
+			image: hobbit/HDG333.jpg
+			collInfo: 33_3
+			rarity: _
+		}
 		title: Balin's Armor
 		unique: true
 		culture: dwarven
@@ -89,7 +106,7 @@
 		target: name(Balin)
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -97,7 +114,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(name(Balin))
+					select: choose(name(Balin))
 				}
 			}
 			{
@@ -105,21 +122,29 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: choose(name(Balin))
+					select: choose(name(Balin))
 				}
 				effect: {
 					type: putCardsFromDeckIntoHand
-					filter: choose(culture(dwarven),skirmish,event)
+					select: choose(culture(dwarven),timeword(skirmish),event)
+					reveal: true
+					shuffle: true
+					showAll: true
 				}
 			}
 		]
 	}
 	33_4: {
+		cardInfo: {
+			image: hobbit/HDG334.jpg
+			collInfo: 33_4
+			rarity: _
+		}
 		title: Blunt the Knives!
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			effect: {
@@ -136,7 +161,9 @@
 					}
 					{
 						type: playCardFromDrawDeck
-						filter: choose(name(Balin))
+						select: choose(name(Balin))
+						showAll: true
+						shuffle: true
 					}
 					{
 						type: putCardsFromDiscardOnBottomOfDeck
@@ -147,6 +174,11 @@
 		}
 	}
 	33_5: {
+		cardInfo: {
+			image: hobbit/HDG335.jpg
+			collInfo: 33_5
+			rarity: _
+		}
 		title: Dwarven Cooking Pot
 		unique: true
 		culture: dwarven
@@ -155,16 +187,16 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
 					filter: or(name(bifur),name(bofur),name(bombur))
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: dwarven
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -174,725 +206,738 @@
 					regroup
 				]
 				cost: {
-					type: removeTokens
+					type: RemoveCultureTokens
 					culture: dwarven
-					filter: self
+					select: self
 				}
-        limitPerPhase: 1
-        effect: {
-          type: putCardsFromDiscardIntoHand
-          filter: choose(culture(dwarven),event,minTwilight(1),maxTwilight(1))
-        }
-      }
-    ]
+		limitPerPhase: 1
+		effect: {
+		  type: putCardsFromDiscardIntoHand
+		  select: choose(culture(dwarven),event,minTwilight(1),maxTwilight(1))
+		}
+	  }
+	]
   }
   33_6: {
-    title: Dwarven Ponies
+	title: Dwarven Ponies
 		unique: true
-    culture: dwarven
-    twilight: 1
-    type: possession
-    keyword: support area
-    effects: [
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: played
-          filter: or(name(bifur),name(bofur),name(bombur))
-        }
-        effect: {
-          type: drawCards
-          count: 2
-        }
-      }
-      {
-        type: activated
-        phase: fellowship
-        cost: {
-          type: addTwilight
-          amount: 2
-        }
-        effect: {
-          type: putCardsFromHandOnBottomOfDeck
-        }
-        limitPerTurn: 1
-      }
-    ]
+	culture: dwarven
+	twilight: 1
+	type: possession
+	keyword: support area
+	effects: [
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: played
+		  filter: or(name(bifur),name(bofur),name(bombur))
+		}
+		effect: {
+		  type: drawCards
+		  count: 2
+		}
+	  }
+	  {
+		type: activated
+		phase: fellowship
+		cost: {
+		  type: addTwilight
+		  amount: 2
+		}
+		effect: {
+		  type: putCardsFromHandOnBottomOfDeck
+		}
+		limitPerTurn: 1
+	  }
+	]
   }
   33_7: {
-    title: Dwarven Warhammer
-    culture: dwarven
-    twilight: 2
-    type: possession
-    itemclass: hand weapon
-    strength: 2
-    target: culture(dwarven),companion
-    effects: {
-      type: activated
-      phase: maneuver
-      cost: {
-        type: discardFromHand
-        count: 2
-        forced: false
-      }
-      effect: {
-        type: transfer
-        filter: choose(culture(dwarven),follower,zone(support))
-        where: choose(bearer)
-      }
-    }
+	title: Dwarven Warhammer
+	culture: dwarven
+	twilight: 2
+	type: possession
+	itemclass: hand weapon
+	strength: 2
+	target: culture(dwarven),companion
+	effects: {
+	  type: activated
+	  phase: maneuver
+	  cost: {
+		type: discardFromHand
+		count: 2
+		forced: false
+	  }
+	  effect: {
+		type: transfer
+		select: choose(culture(dwarven),follower,zone(support))
+		where: choose(bearer)
+	  }
+	}
   }
   33_8: {
-    title: Eager to Brawl
-    culture: dwarven
-    twilight: 1
-    type: event
-    keyword: response
-    requires: [
-      {
-        type: canSpot
-        filter: culture(dwarven),follower
-      }
-      {
-        type: phase
-        phase: regroup
-      }
-    ]
-    effects: {
-      type: responseEvent
-      trigger: {
-        type: moves
-      }
-      cost: {
-        type: spot
-        filter: choose(culture(dwarven),follower)
-        memorize: spottedFollower
-      }
-      effect: [
-        {
-          type: addTwilight
-          amount: {
-            type: twilightCostInMemory
-            memory: spottedFollower
-          }
-        }
-        {
-          type: discard
-          filter: choose(minion,not(name(Smaug)))
-          count: {
-            type: range
-            from: 0
-            to: {
-              type: twilightCostInMemory
-              memory: spottedFollower
-            }
-          }
-        }
-      ]
-    }
+	title: Eager to Brawl
+	culture: dwarven
+	twilight: 1
+	type: event
+	timeword: response
+	effects: {
+	  type: responseEvent
+		requires: [
+		  {
+			type: canSpot
+			filter: culture(dwarven),follower
+		  }
+		  {
+			type: phase
+			phase: regroup
+		  }
+		]
+	  trigger: {
+		type: moves
+	  }
+	  cost: {
+		type: spot
+		select: choose(culture(dwarven),follower)
+		memorize: spottedFollower
+	  }
+	  effect: [
+		{
+		  type: addTwilight
+		  amount: {
+			type: twilightCostInMemory
+			memory: spottedFollower
+		  }
+		}
+		{
+		  type: discard
+		  select: choose(minion,not(name(Smaug)))
+		  count: {
+			type: range
+			from: 0
+			to: {
+			  type: twilightCostInMemory
+			  memory: spottedFollower
+			}
+		  }
+		}
+	  ]
+	}
   }
   33_9: {
-    title: Horn of Erebor
+	title: Horn of Erebor
 		unique: true
-    culture: dwarven
-    twilight: 2
-    type: possession
-    keyword: [
-      support area
-      fortification
-    ]
-    requires: {
-      type: canSpot
-      count: 2
-      filter: culture(dwarven),follower
-    }
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: modifyStrength
-          filter: culture(dwarven),companion,hasAttached(follower)
-          requires: {
-            type: location
-            filter: siteNumber(7-8)
-          }
-          amount: 2
-        }
-      }
-      {
-        type: activated
-        phase: fellowship
-        cost: {
-          type: discard
-          filter: choose(culture(dwarven),fortification)
-        }
-        effect: {
-          type: drawCards
-          count: 2
-        }
-      }
-    ]
+	culture: dwarven
+	twilight: 2
+	type: possession
+	keyword: [
+	  support area
+	  fortification
+	]
+	effects: [
+		{
+			type: toPlay
+			requires: {
+			  type: canSpot
+			  count: 2
+			  filter: culture(dwarven),follower
+			}
+		}
+	  {
+		type: modifier
+		modifier: {
+		  type: modifyStrength
+		  filter: culture(dwarven),companion,hasAttached(follower)
+		  requires: {
+			type: location
+			filter: siteNumber(7-8)
+		  }
+		  amount: 2
+		}
+	  }
+	  {
+		type: activated
+		phase: fellowship
+		cost: {
+		  type: discard
+		  select: choose(culture(dwarven),fortification)
+		}
+		effect: {
+		  type: drawCards
+		  count: 2
+		}
+	  }
+	]
   }
   33_10: {
-    title: Iron Hills Chariot
+	title: Iron Hills Chariot
 		unique: true
-    culture: dwarven
-    twilight: 1
-    type: possession
-    keyword: support area
-    effects: [
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: exertedBy
-          filter: name(Balin)
-          by: culture(dwarven),event
-        }
-        effect: {
-          type: heal
-          filter: choose(name(Balin))
-        }
-      }
-      {
-        type: activated
-        phase: skirmish
-        cost: {
-          type: exert
-          filter: choose(name(Balin))
-        }
-        effect: {
-          type: modifyStrength
-          filter: choose(culture(dwarven),companion)
-          amount: {
-            type: multiply
-            multiplier: 1
-            source: {
-              type: cardAffectedLimitPerPhase
-              limit: 4
-              source: {
-                type: forEachInDiscard
-                filter: event,skirmish,maxTwilight(0)
-              }
-            }
-          }
-        }
-      }
-    ]
+	culture: dwarven
+	twilight: 1
+	type: possession
+	keyword: support area
+	effects: [
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: exerted
+		  filter: name(Balin)
+		  source: culture(dwarven),event
+		}
+		effect: {
+		  type: heal
+		  select: choose(name(Balin))
+		}
+	  }
+	  {
+		type: activated
+		phase: skirmish
+		cost: {
+		  type: exert
+		  select: choose(name(Balin))
+		}
+		effect: {
+		  type: modifyStrength
+		  select: choose(culture(dwarven),companion)
+		  amount: {
+			  type: cardAffectedLimitPerPhase
+			  limit: 4
+			  source: {
+				type: forEachInDiscard
+				filter: event,timeword(skirmish),maxTwilight(0)
+			  }
+		  }
+		}
+	  }
+	]
   }
   33_11: {
-    title: Ori's Slingshot
+	title: Ori's Slingshot
 		unique: true
-    culture: dwarven
-    twilight: 0
-    type: possession
-    keyword: support area
-    effects: [
-      {
-        type: trigger
-        trigger: {
-          type: played
-          filter: self
-        }
-        effect: {
-          type: optional
-          text: Would you like to play Ori from your draw deck?
-          effect: {
-            type: playCardFromDrawDeck
-            filter: choose(name(Ori))
-          }
-        }
-      }
-      {
-        type: activated
-        phase: archery
-        cost: {
-          type: discard
-          filter: choose(name(Ori))
-        }
-        effect: {
-          type: modifyStrength
-          filter: choose(minion)
-          amount: -3
-          until: start(regroup)
-        }
-      }
-    ]
+	culture: dwarven
+	twilight: 0
+	type: possession
+	keyword: support area
+	effects: [
+	  {
+		type: Trigger
+		optional: false
+		trigger: {
+		  type: played
+		  filter: self
+		}
+		effect: {
+		  type: optional
+		  text: Would you like to play Ori from your draw deck?
+		  effect: {
+			type: playCardFromDrawDeck
+			select: choose(name(Ori))
+			showAll: true
+			shuffle: true
+		  }
+		}
+	  }
+	  {
+		type: activated
+		phase: archery
+		cost: {
+		  type: discard
+		  select: choose(name(Ori))
+		}
+		effect: {
+		  type: modifyStrength
+		  select: choose(minion)
+		  amount: -3
+		  until: start(regroup)
+		}
+	  }
+	]
   }
   33_12: {
-    title: Thror
-    subtitle: Overthrown King
+	title: Thror
+	subtitle: Overthrown King
 		unique: true
-    culture: dwarven
-    twilight: 0
-    type: companion
-    race: dwarf
-    strength: 7
-    vitality: 5
-    effects: [
-      {
-        type: trigger
-        trigger: {
-          type: moves
-        }
-        effect: {
-          type: kill
-          filter: self
-        }
-      }
-      {
-        type: activated
-        phase: fellowship
-        cost: {
-          type: kill
-          count: 2
-          filter: choose(culture(dwarven),companion)
-        }
-        effect: {
-          type: putCardsFromDeckIntoHand
-          count: 3
-          filter: choose(culture(dwarven))
-        }
-      }
-    ]
+	culture: dwarven
+	twilight: 0
+	type: companion
+	race: dwarf
+	strength: 7
+	vitality: 5
+	effects: [
+	  {
+		type: Trigger
+		optional: false
+		trigger: {
+		  type: moves
+		}
+		effect: {
+		  type: kill
+		  select: self
+		}
+	  }
+	  {
+		type: activated
+		phase: fellowship
+		cost: {
+		  type: kill
+		  count: 2
+		  select: choose(culture(dwarven),companion)
+		}
+		effect: {
+		  type: putCardsFromDeckIntoHand
+		  count: 3
+		  select: choose(culture(dwarven))
+			reveal: true
+			shuffle: true
+			showAll: true
+		}
+	  }
+	]
   }
   33_13: {
-    title: Hadafang
+	title: Hadafang
 		unique: true
-    culture: elven
-    twilight: 1
-    type: artifact
-    itemclass: hand weapon
-    strength: 2
-    target: name(elrond)
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: allyCanParticipateInSkirmishes
-          filter: hasAttached(self)
-          requires: [
-            {
-              type: location
-              filter: siteNumber(5)
-            }
-            {
-              type: cantSpot
-              filter: name(Gandalf)
-            }
-          ]
-        }
-      }
-      {
-        type: activated
-        phase: fellowship
-        cost: {
-          type: discard
-          filter: self
-        }
-        effect: {
-          type: choice
-          texts: [
-            Play from your draw deck
-            Play from your discard pile
-          ]
-          effects: [
-            {
-              type: playCardFromDrawDeck
-              filter: choose(name(Glamdring))
-            }
-            {
-              type: playCardFromDiscard
-              filter: choose(name(Glamdring))
-            }
-          ]
-        }
-      }
-    ]
+	culture: elven
+	twilight: 1
+	type: artifact
+	itemclass: hand weapon
+	strength: 2
+	target: name(elrond)
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: allyCanParticipateInSkirmishes
+		  filter: hasAttached(self)
+		  requires: [
+			{
+			  type: location
+			  filter: siteNumber(5)
+			}
+			{
+			  type: cantSpot
+			  filter: name(Gandalf)
+			}
+		  ]
+		}
+	  }
+	  {
+		type: activated
+		phase: fellowship
+		cost: {
+		  type: discard
+		  select: self
+		}
+		effect: {
+		  type: choice
+		  texts: [
+			Play from your draw deck
+			Play from your discard pile
+		  ]
+		  effects: [
+			{
+			  type: playCardFromDrawDeck
+			  select: choose(name(Glamdring))
+				showAll: true
+				shuffle: true
+			}
+			{
+			  type: playCardFromDiscard
+			  select: choose(name(Glamdring))
+			}
+		  ]
+		}
+	  }
+	]
   }
   33_14: {
-    title: Lindir
-    subtitle: Elven Minstrel
+	title: Lindir
+	subtitle: Elven Minstrel
 		unique: true
-    culture: elven
-    twilight: 2
-    type: ally
-    allyHome: hobbit,3
-    race: elf
-    strength: 5
-    vitality: 4
-    effects: [
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: moves
-        }
-        effect: {
-          type: heal
-          filter: choose(culture(elven),ally)
-        }
-      }
-      {
-        type: activated
-        phase: fellowship
-        cost: {
-          type: exert
-          filter: self
-          times: 2
-        }
-        effect: {
-          type: putCardsFromDiscardIntoHand
-          filter: choose(or(and(culture(elven),event),name(Lore of Imladris)))
-        }
-      }
-    ]
+	culture: elven
+	twilight: 2
+	type: ally
+	allyHome: 3H
+	race: elf
+	strength: 5
+	vitality: 4
+	effects: [
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: moves
+		}
+		effect: {
+		  type: heal
+		  select: choose(culture(elven),ally)
+		}
+	  }
+	  {
+		type: activated
+		phase: fellowship
+		cost: {
+		  type: exert
+		  select: self
+		  times: 2
+		}
+		effect: {
+		  type: putCardsFromDiscardIntoHand
+		  select: choose(or(and(culture(elven),event),name(Lore of Imladris)))
+		}
+	  }
+	]
   }
   33_15: {
-    title: Moon-letters
-    culture: elven
-    twilight: 1
-    type: event
-    keyword: fellowship
-    effects: {
-      type: event
-      cost: {
-        type: choice
-        texts: [
-          Exert a Dwarf companion
-          Spot a Dwarven possession
-        ]
-        effects: [
-          {
-            type: conditional
-            requires: {
-              type: cantSpot
-              filter: culture(dwarven),possession
-            }
-            effect: {
-              type: exert
-              filter: choose(dwarf,companion)
-            }
-          }
-          {
-            type: conditional
-            requires: {
-              type: canSpot
-              filter: culture(dwarven),possession
-            }
-          }
-        ]
-      }
-      effect: {
-        type: choice
-        texts: [
-          Take from your draw deck
-          Take from your discard pile
-        ]
-        effects: [
-          {
-            type: putCardsFromDeckIntoHand
-            filter: choose(or(culture(elven),culture(mirkwood)))
-          }
-          {
-            type: putCardsFromDiscardIntoHand
-            filter: choose(or(culture(elven),culture(mirkwood)))
-          }
-        ]
-      }
-    }
+	title: Moon-letters
+	culture: elven
+	twilight: 1
+	type: event
+	timeword: fellowship
+	effects: {
+	  type: event
+	  cost: {
+		type: choice
+		texts: [
+		  Exert a Dwarf companion
+		  Spot a Dwarven possession
+		]
+		effects: [
+		  {
+			type: If
+			check: {
+			  type: cantSpot
+			  filter: culture(dwarven),possession
+			}
+			true: {
+			  type: exert
+			  select: choose(dwarf,companion)
+			}
+		  }
+		  {
+			type: If
+			check: {
+			  type: canSpot
+			  filter: culture(dwarven),possession
+			}
+		  }
+		]
+	  }
+	  effect: {
+		type: choice
+		texts: [
+		  Take from your draw deck
+		  Take from your discard pile
+		]
+		effects: [
+		  {
+			type: putCardsFromDeckIntoHand
+			select: choose(or(culture(elven),culture(mirkwood)))
+			reveal: true
+			shuffle: true
+			showAll: true
+		  }
+		  {
+			type: putCardsFromDiscardIntoHand
+			select: choose(or(culture(elven),culture(mirkwood)))
+		  }
+		]
+	  }
+	}
   }
   33_16: {
-    title: Rivendell Scout
+	title: Rivendell Scout
 		unique: true
-    culture: elven
-    twilight: 2
-    type: ally
-    allyHome: hobbit,3
-    race: elf
-    strength: 6
-    vitality: 3
-    keyword: archer
-    effects: {
-      type: trigger
-      optional: true
-      trigger: {
-        type: heals
-        filter: companion
-      }
-      cost: {
-        type: exert
-        filter: self
-      }
-      effect: {
-        type: wound
-        filter: choose(orc)
-      }
-    }
+	culture: elven
+	twilight: 2
+	type: ally
+	allyHome: 3H
+	race: elf
+	strength: 6
+	vitality: 3
+	keyword: archer
+	effects: {
+	  type: trigger
+	  optional: true
+	  trigger: {
+		type: heals
+		filter: companion
+	  }
+	  cost: {
+		type: exert
+		select: self
+	  }
+	  effect: {
+		type: wound
+		select: choose(orc)
+	  }
+	}
   }
   33_17: {
-    title: Vilya
+	title: Vilya
 		unique: true
-    culture: elven
-    twilight: 0
-    type: artifact
-    itemclass: ring
-    vitality: 1
-    target: name(elrond)
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: cantBeDiscarded
-          filter: name(Gandalf)
-        }
-      }
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: heals
-          filter: companion
-          memorize: healedCompanion
-        }
-        requires: {
-          type: phase
-          phase: maneuver
-        }
-        effect: {
-          type: modifyStrength
-          filter: memory(healedCompanion)
-          amount: 2
-          until: start(regroup)
-        }
-      }
-    ]
+	culture: elven
+	twilight: 0
+	type: artifact
+	itemclass: ring
+	vitality: 1
+	target: name(elrond)
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: cantBeDiscarded
+		  filter: name(Gandalf)
+		}
+	  }
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: heals
+		  filter: companion
+		  memorize: healedCompanion
+		}
+		requires: {
+		  type: phase
+		  phase: maneuver
+		}
+		effect: {
+		  type: modifyStrength
+		  select: memory(healedCompanion)
+		  amount: 2
+		  until: start(regroup)
+		}
+	  }
+	]
   }
   33_18: {
-    title: Wise Advice
-    culture: elven
-    twilight: 2
-    type: event
-    keyword: fellowship
-    requires: {
-      type: canSpot
-      filter: name(Elrond)
-    }
-    effects: {
-      type: event
-      effect: [
-        {
-          type: drawCards
-          count: 4
-        }
-        {
-          type: putCardsFromHandOnBottomOfDeck
-          count: 2
-        }
-      ]
-    }
+	title: Wise Advice
+	culture: elven
+	twilight: 2
+	type: event
+	timeword: fellowship
+	effects: {
+	  type: event
+		requires: {
+		  type: canSpot
+		  filter: name(Elrond)
+		}
+	  effect: [
+		{
+		  type: drawCards
+		  count: 4
+		}
+		{
+		  type: putCardsFromHandOnBottomOfDeck
+		  count: 2
+		}
+	  ]
+	}
   }
   33_19: {
-    title: Betsy Butterbur
-    subtitle: Prancing Pony Proprietor
+	title: Betsy Butterbur
+	subtitle: Prancing Pony Proprietor
 		unique: true
-    culture: gandalf
-    twilight: 0
-    type: ally
-    allyHome: hobbit,1
-    race: man
-    strength: 1
-    vitality: 2
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: canttakewounds
-          filter: self
-        }
-      }
-      {
-        type: activated
-        phase: fellowship
-        cost: {
-          type: exert
-          filter: self
-        }
-        effect: {
-          type: putCardsFromDiscardIntoHand
-          filter: choose(side(free people),event)
-        }
-      }
-    ]
+	culture: gandalf
+	twilight: 0
+	type: ally
+	allyHome: 1H
+	race: man
+	strength: 1
+	vitality: 2
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: canttakewounds
+		  filter: self
+		}
+	  }
+	  {
+		type: activated
+		phase: fellowship
+		cost: {
+		  type: exert
+		  select: self
+		}
+		effect: {
+		  type: putCardsFromDiscardIntoHand
+		  select: choose(side(free people),event)
+		}
+	  }
+	]
   }
   33_20: {
-    title: Burning Fir Cones
-    culture: gandalf
-    twilight: 1
-    type: possession
-    keyword: support area
-    effects: {
-      type: activated
-      phase: archery
-      requires: {
-        type: canSpot
-        filter: name(Gandalf)
-      }
-      cost: {
-        type: addTwilight
-        amount: 3
-      }
-      effect: [
-        {
-          type: revealHand
-          memorize: cardsInHand
-        }
-        {
-          type: repeat
-          amount: {
-            type: forEachMatchingInMemory
-            memory: cardsInHand
-            filter: side(free people),skirmish,event
-          }
-          effect: {
-            type: wound
-            filter: choose(minion)
-          }
-        }
-        {
-          type: discard
-          filter: self
-        }
-      ]
-    }
+	title: Burning Fir Cones
+	culture: gandalf
+	twilight: 1
+	type: possession
+	keyword: support area
+	effects: {
+	  type: activated
+	  phase: archery
+	  requires: {
+		type: canSpot
+		filter: name(Gandalf)
+	  }
+	  cost: {
+		type: addTwilight
+		amount: 3
+	  }
+	  effect: [
+		{
+		  type: revealHand
+		  memorize: cardsInHand
+		}
+		{
+		  type: repeat
+		  times: {
+			type: forEachInMemory
+			memory: cardsInHand
+			filter: side(free people),timeword(skirmish),event
+		  }
+		  effect: {
+			type: wound
+			select: choose(minion)
+		  }
+		}
+		{
+		  type: discard
+		  select: self
+		}
+	  ]
+	}
   }
   33_21: {
-    title: No Finer Blade
-    culture: gandalf
-    twilight: 1
-    type: event
-    keyword: skirmish
-    effects: {
-      type: event
-      effect: {
-        type: choice
-        texts: [
-          Make companion strength +3
-          Play Glamdring from draw deck
-          Play Glamdring from discard
-        ]
-        effects: [
-          {
-            type: modifyStrength
-            filter: choose(companion,hasAttached(and(artifact,hand weapon)))
-            amount: 3
-          }
-          {
-            type: playCardFromDrawDeck
-            filter: choose(name(Glamdring))
-          }
-          {
-            type: playCardFromDiscard
-            filter: choose(name(Glamdring))
-          }
-        ]
-      }
-    }
+	title: No Finer Blade
+	culture: gandalf
+	twilight: 1
+	type: event
+	timeword: skirmish
+	effects: {
+	  type: event
+	  effect: {
+		type: choice
+		texts: [
+		  Make companion strength +3
+		  Play Glamdring from draw deck
+		  Play Glamdring from discard
+		]
+		effects: [
+		  {
+			type: modifyStrength
+			select: choose(companion,hasAttached(and(artifact,hand weapon)))
+			amount: 3
+		  }
+		  {
+			type: playCardFromDrawDeck
+			select: choose(name(Glamdring))
+			showAll: true
+			shuffle: true
+		  }
+		  {
+			type: playCardFromDiscard
+			select: choose(name(Glamdring))
+		  }
+		]
+	  }
+	}
   }
   33_52: {
-    title: Bilbo's Pony
+	title: Bilbo's Pony
 		unique: true
-    culture: shire
-    twilight: 1
-    type: possession
-    itemclass: mount
-    strength: 1
-    target: name(bilbo)
-    effects: {
-      type: activated
-      phase: skirmish
-      requires: {
-        type: canSpot
-        filter: minion,assignedToSkirmish(name(Bilbo))
-      }
-      cost: {
-        type: exert
-        filter: choose(name(Bilbo))
-      }
-      effect: {
-        type: modifyStrength
-        filter: choose(culture(dwarven),companion)
-        amount: {
-          type: cardAffectedLimitPerPhase
-          limit: 2
-          source: 2
-        }
-      }
-    }
+	culture: shire
+	twilight: 1
+	type: possession
+	itemclass: mount
+	strength: 1
+	target: name(bilbo)
+	effects: {
+	  type: activated
+	  phase: skirmish
+	  requires: {
+		type: canSpot
+		filter: minion,assignedToSkirmish(name(Bilbo))
+	  }
+	  cost: {
+		type: exert
+		select: choose(name(Bilbo))
+	  }
+	  effect: {
+		type: modifyStrength
+		select: choose(culture(dwarven),companion)
+		amount: {
+		  type: cardAffectedLimitPerPhase
+		  limit: 2
+		  source: 2
+		}
+	  }
+	}
   }
   33_53: {
-    title: Master Worrywort
-    subtitle: Hobbit Farmer
+	title: Master Worrywort
+	subtitle: Hobbit Farmer
 		unique: true
-    culture: shire
-    twilight: 1
-    type: ally
-    allyHome: hobbit,1
-    race: hobbit
-    strength: 2
-    vitality: 3
-    effects: [
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: winsSkirmish
-          filter: name(Bilbo)
-        }
-        effect: {
-          type: heal
-          filter: choose(character,or(culture(dwarven),culture(shire)))
-        }
-      }
-      {
-        type: activated
-        phase: skirmish
-        cost: {
-          type: play
-          filter: choose(skirmish,event)
-        }
-        effect: {
-          type: modifyStrength
-          filter: choose(inSkirmishAgainst(name(Bilbo)),not(name(Gollum)))
-          amount: -2
-        }
-      }
-    ]
+	culture: shire
+	twilight: 1
+	type: ally
+	allyHome: 1H
+	race: hobbit
+	strength: 2
+	vitality: 3
+	effects: [
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: winsSkirmish
+		  filter: name(Bilbo)
+		}
+		effect: {
+		  type: heal
+		  select: choose(character,or(culture(dwarven),culture(shire)))
+		}
+	  }
+	  {
+		type: activated
+		phase: skirmish
+		cost: {
+		  type: PlayCardFromHand
+		  select: choose(timeword(skirmish),event)
+		}
+		effect: {
+		  type: modifyStrength
+		  select: choose(inSkirmishAgainst(name(Bilbo)),not(name(Gollum)))
+		  amount: -2
+		}
+	  }
+	]
   }
   33_54: {
-    title: There and Back Again
+	title: There and Back Again
 		unique: true
-    culture: shire
-    twilight: 1
-    type: possession
-    resistance: 1
-    target: name(bilbo)
-    effects: {
-      type: activated
-      phase: skirmish
-      requires: {
-        type: canSpot
-        filter: name(Bilbo),inSkirmish
-      }
-      cost: {
-        type: addBurdens
-      }
-      effect: {
-        type: playCardFromDiscard
-        filter: choose(culture(dwarven),skirmish,event)
-      }
-      limitPerPhase: 1
-    }
+	culture: shire
+	twilight: 1
+	type: possession
+	resistance: 1
+	target: name(bilbo)
+	effects: {
+	  type: activated
+	  phase: skirmish
+	  requires: {
+		type: canSpot
+		filter: name(Bilbo),inSkirmish
+	  }
+	  cost: {
+		type: addBurdens
+	  }
+	  effect: {
+		type: playCardFromDiscard
+		select: choose(culture(dwarven),timeword(skirmish),event)
+	  }
+	  limitPerPhase: 1
+	}
   }
 }

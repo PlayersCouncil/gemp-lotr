@@ -62,7 +62,7 @@ public class Card_13_188_ErrataTests
 
 		assertFalse(parapet.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, parapet.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(parapet, Keyword.DWELLING));
+		assertTrue(scn.hasKeyword(parapet, Keyword.DWELLING));
 		assertEquals(0, parapet.getBlueprint().getTwilightCost());
 		assertEquals(SitesBlock.SHADOWS, parapet.getBlueprint().getSiteBlock());
 		assertEquals(0, parapet.getBlueprint().getSiteNumber());

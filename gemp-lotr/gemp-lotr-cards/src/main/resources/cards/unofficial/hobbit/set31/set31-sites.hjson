@@ -1,5 +1,10 @@
 {
 	31_44: {
+		cardInfo: {
+			image: hobbit/HDG3144.jpg
+			collInfo: 31_44
+			rarity: _
+		}
 		title: Beorn's House
 		type: site
 		block: hobbit
@@ -17,11 +22,13 @@
 				effects: [
 					{
 						type: spot
-						filter: choose(culture(gandalf),staff)
+						filter: culture(gandalf),staff
 					}
 					{
 						type: playCardFromDrawDeck
-						filter: choose(culture(gandalf),staff)
+						select: choose(culture(gandalf),staff)
+						showAll: true
+						shuffle: true
 					}
 				]
 			}
@@ -29,7 +36,7 @@
 				{
 					type: spot
 					text: Choose a Gandalf
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 					memorize: chosenGandalf
 				}
 				{
@@ -44,6 +51,11 @@
 		}
 	}
 	31_45: {
+		cardInfo: {
+			image: hobbit/HDG3145.jpg
+			collInfo: 31_45
+			rarity: _
+		}
 		title: Underground Lake
 		twilight: 2
 		type: site
@@ -68,11 +80,18 @@
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(or(and(side(shadow),condition),name(The One Ring)))
+				select: choose(or(and(side(shadow),condition),name(The One Ring)))
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
 	31_46: {
+		cardInfo: {
+			image: hobbit/HDG3146.jpg
+			collInfo: 31_46
+			rarity: _
+		}
 		title: Forest River
 		type: site
 		block: hobbit
@@ -87,15 +106,22 @@
 			phase: assignment
 			cost: {
 				type: exert
-				filter: choose(your,orc)
+				select: choose(your,orc)
 			}
-			effect: {
-				type: DisableSkirmishAssignment
-				filter: choose(or(name(Gandalf),and(culture(elven),ally)))
-			}
+			effect: [
+				{
+					type: disableSkirmishAssignment
+					select: choose(or(name(Gandalf),and(culture(elven),ally)))
+				}
+			]
 		}
 	}
 	31_47: {
+		cardInfo: {
+			image: hobbit/HDG3147.jpg
+			collInfo: 31_47
+			rarity: _
+		}
 		title: Thrór's Throne
 		type: site
 		block: hobbit

@@ -59,8 +59,8 @@ public class Card_V1_012_Tests
 		PhysicalCardImpl three = scn.GetFreepsCard("three");
 
 		assertTrue(three.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(three, Keyword.SUPPORT_AREA));
-		assertTrue(scn.HasKeyword(three, Keyword.TALE));
+		assertTrue(scn.hasKeyword(three, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(three, Keyword.TALE));
 		assertEquals(1, three.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, three.getBlueprint().getCardType());
 		assertEquals(Culture.ELVEN, three.getBlueprint().getCulture());

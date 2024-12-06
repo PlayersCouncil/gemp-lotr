@@ -1,0 +1,171 @@
+{
+
+	10_1: {
+		cardInfo: {
+			image: decipher/LOTR10001.jpg
+			collInfo: 10R1
+			rarity: R
+		}
+		title: Great Day, Great Hour
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 3
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: played
+				filter: not(your),minion
+				memorize: playedMinion
+			}
+			cost: {
+				type: exert
+				select: choose(dwarf,damage)
+				memorize: exertedDwarf
+			}
+			effect: [
+				{
+					type: exert
+					select: memory(playedMinion)
+					times: {
+						type: forEachKeyword
+						filter: memory(exertedDwarf)
+						keyword: damage
+					}
+				}
+			]
+		}
+		gametext: If an opponent plays a minion, exert a Dwarf who is damage +X to exert that minion X times.
+		lore: "'Oft hope is born, when all is forlorn.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_2: {
+		cardInfo: {
+			image: decipher/LOTR10002.jpg
+			collInfo: 10U2
+			rarity: U
+		}
+		title: Memories of Darkness
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: dwarf
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: losesInitiative
+					side: free people
+				}
+				requires: {
+					type: not
+					requires: {
+						type: phase
+						phase: fellowship
+					}
+				}
+				effect: {
+					type: choice
+					texts: [
+						Play a {dwarven} condition from hand
+						Play a {dwarven} condition from discard
+					]
+					effects: [
+						{
+							type: PlayCardFromHand
+							select: choose(culture(dwarven),condition)
+						}
+						{
+							type: playCardFromDiscard
+							select: choose(culture(dwarven),condition)
+						}
+					]
+				}
+			}
+		]
+		gametext: To play, spot a Dwarf.<br>Each time you lose initiative (except during the fellowship phase), you may play a [dwarven] condition from hand or from your discard pile.
+		lore: "'Had I known what was before me, I think that not for any friendship would I have taken the Paths of the Dead.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	10_3: {
+		cardInfo: {
+			image: decipher/LOTR10003.jpg
+			collInfo: 10R3
+			rarity: R
+		}
+		title: More Yet to Come
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: Killed
+				filter: minion
+				killer: dwarf
+				inSkirmish: true
+				memorize: killedMinion
+			}
+			text: Play for {killedMinion}
+			requires: {
+				type: killedWithSurplusDamage
+				memorize: surplusDamage
+			}
+			effect: [
+				{
+					type: repeat
+					times: {
+						type: fromMemory
+						memory: surplusDamage
+					}
+					effect: {
+						type: wound
+						select: choose(minion,notAssignedToSkirmish)
+					}
+				}
+				{
+					type: consumeSurplusDamage
+				}
+			]
+		}
+		gametext: If a Dwarf kills a minion in a skirmish and that minion did not take all wounds caused by that Dwarf's damage bonus, assign those remaining wounds to minions not assigned to a skirmish.
+		lore: "'...whatever is still to do, I hope to have a part in it, for the honour of the folk of the Lonely Mountain.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -5,19 +5,20 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_03_017_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<String, String>()
+				new HashMap<>()
 				{{
 					put("galadriel", "3_17");
 					put("celeborn", "1_34");
@@ -44,7 +45,7 @@ public class Card_03_017_Tests
 
 	protected GenericCardTestHelper GetExpandedScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<String, String>()
+				new HashMap<>()
 				{{
 					put("galadriel", "3_17");
 					// put other cards in here as needed for the test case
@@ -74,37 +75,36 @@ public class Card_03_017_Tests
 	public void GaladrielStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 3
-		* Title: *Galadriel, Lady of the Golden Wood
-		* Side: Free Peoples
-		* Culture: Elven
-		* Twilight Cost: 3
-		* Type: ally
-		* Subtype: Elf
-		* Strength: 3
-		* Vitality: 3
-		* Site Number: 6
-		* Game Text: At the start of each of your turns, you may heal another Elf.
-		 * Fellowship: Exert Galadriel to play the fellowship's next site if it is a forest (replacing opponent's site if necessary).
-		*/
+		 * Set: 3
+		 * Name: Galadriel, Lady of the Golden Wood
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 3
+		 * Type: Ally
+		 * Subtype: Elf
+		 * Strength: 3
+		 * Vitality: 3
+		 * Site Number: 6
+		 * Game Text: At the start of each of your turns, you may heal another Elf.
+		 *  Fellowship: Exert Galadriel to play the fellowship's next site if it is a forest (replacing opponent's site if necessary).
+		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var galadriel = scn.GetFreepsCard("galadriel");
+		var card = scn.GetFreepsCard("galadriel");
 
-		assertTrue(galadriel.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, galadriel.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, galadriel.getBlueprint().getCulture());
-		assertEquals(CardType.ALLY, galadriel.getBlueprint().getCardType());
-		assertEquals(Race.ELF, galadriel.getBlueprint().getRace());
-		assertEquals(3, galadriel.getBlueprint().getTwilightCost());
-		assertEquals(3, galadriel.getBlueprint().getStrength());
-		assertEquals(3, galadriel.getBlueprint().getVitality());
-		//assertEquals(, galadriel.getBlueprint().getResistance());
-		//assertEquals(Signet., galadriel.getBlueprint().getSignet());
-		assertEquals(6, galadriel.getBlueprint().getAllyHomeSiteNumbers()[0]); // Change this to getAllyHomeSiteNumbers for allies
-		assertEquals(SitesBlock.FELLOWSHIP, galadriel.getBlueprint().getAllyHomeSiteBlock());
+		assertEquals("Galadriel", card.getBlueprint().getTitle());
+		assertEquals("Lady of the Golden Wood", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
+		assertEquals(Race.ELF, card.getBlueprint().getRace());
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(3, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 6)));
 
 	}
 
@@ -178,7 +178,7 @@ public class Card_03_017_Tests
 		var shadowSite2 = scn.GetShadowSite("site2");
 
 		//cheating to ensure site 2 qualifies
-		scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.name("West Road"), Keyword.FOREST));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("West Road"), null, Keyword.FOREST));
 
 		scn.StartGame();
 

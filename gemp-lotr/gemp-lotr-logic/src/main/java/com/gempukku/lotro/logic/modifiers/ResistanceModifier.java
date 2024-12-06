@@ -10,14 +10,6 @@ public class ResistanceModifier extends AbstractModifier {
     private final Evaluator evaluator;
     private final boolean nonCardTextModifier;
 
-    public ResistanceModifier(PhysicalCard source, Filterable affectFilter, int modifier) {
-        this(source, affectFilter, new ConstantEvaluator(modifier));
-    }
-
-    public ResistanceModifier(PhysicalCard source, Filterable affectFilter, Evaluator evaluator) {
-        this(source, affectFilter, null, evaluator);
-    }
-
     public ResistanceModifier(PhysicalCard source, Filterable affectFilter, Condition condition, int modifier) {
         this(source, affectFilter, condition, new ConstantEvaluator(modifier));
     }

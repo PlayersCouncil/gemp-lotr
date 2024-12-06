@@ -1,0 +1,259 @@
+{
+
+	9_24: {
+		cardInfo: {
+			image: decipher/LOTR09024.jpg
+			collInfo: 9R24
+			rarity: R
+		}
+		title: Ent Draught
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		vitality: 1
+		target: companion,not(hasAttached(name(Ent Draught)))
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: ent
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: bearer
+					memorize: bearer
+				}
+				effect: {
+					type: addKeyword
+					select: memory(bearer)
+					keyword: damage+1
+				}
+			}
+		]
+		gametext: To play, spot an Ent. Bearer must be a companion. Limit 1 per bearer.<br><b>Skirmish:</b> Exert bearer to make him or her <b>damage +1</b>.
+		lore: "Indeed the hobbits felt that the hair on their heads was actually standing up, waving and curling and growing."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_25: {
+		cardInfo: {
+			image: decipher/LOTR09025.jpg
+			collInfo: 9R25
+			rarity: R
+		}
+		title: Huorn
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Companion
+		race: Tree
+		strength: 6
+		vitality: 4
+		resistance: 6
+		keywords: Damage+1
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: ent
+					}
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: self
+				}
+				cost: {
+					type: exert
+					select: choose(ent)
+				}
+				effect: {
+					type: preventWound
+					select: self
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>.<br>This companion is strength +1 for each Ent you can spot.<br><b>Response:</b> If this companion is about to take a wound, exert an Ent to prevent that.
+		lore: "'...the Forest itself was moving behind us.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_26: {
+		cardInfo: {
+			image: decipher/LOTR09026.jpg
+			collInfo: 9R+26
+			rarity: R+
+		}
+		title: Radagast
+		subtitle: The Brown
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 8
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: [
+					{
+						type: played
+						filter: self
+					}
+					{
+						type: startOfTurn
+					}
+				]
+				requires: {
+					type: perTurnLimit
+					limit: 1
+				}
+				effect: [
+					{
+						type: incrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: addModifier
+						until: endOfTurn
+						modifier: {
+							type: modifyMoveLimit
+							amount: 1
+						}
+					}
+				]
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: optional
+					player: shadowPlayer
+					text: Would you like to discard 2 cards to draw 2 cards?
+					effect: {
+						type: costToEffect
+						cost: {
+							type: discardFromHand
+							forced: false
+							count: 2
+						}
+						effect: {
+							type: drawCards
+							count: 2
+						}
+					}
+				}
+			}
+		]
+		gametext: The move limit is +1.<br>Each time the fellowship moves during the regroup phase, each opponent may discard 2 cards from hand to draw 2 cards.
+		lore: "'...a master of shapes and changes of hue; and he has much lore of herbs and beasts....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_27: {
+		cardInfo: {
+			image: decipher/LOTR09027.jpg
+			collInfo: 9R27
+			rarity: R
+		}
+		title: Sent Back
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: chooseActiveCards
+						text: Choose Wizard to put in dead pile
+						select: choose(wizard,inSkirmish)
+						memorize: chosenWizard
+					}
+					{
+						type: discard
+						select: all(minion,inSkirmishAgainst(memory(chosenWizard)))
+					}
+					{
+						type: kill
+						select: memory(chosenWizard)
+					}
+				]
+			}
+			{
+				type: activated
+				phase: [
+					fellowship
+					regroup
+				]
+				effect: {
+					type: PlayCardFromHand
+					select: choose(wizard)
+					ignoreInDeadPile: true
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Discard this condition to discard each minion skirmishing a Wizard. Place that Wizard in your dead pile.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> Play a Wizard (even if another copy of that Wizard is in your dead pile).
+		lore: "'The Sun shines through you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

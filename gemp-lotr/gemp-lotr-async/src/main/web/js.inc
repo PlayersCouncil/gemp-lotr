@@ -14,15 +14,18 @@
 <script type="text/javascript" src="js/gemp-022/logging.js"></script>
 <script type="text/javascript" src="js/gemp-022/chat.js"></script>
 <script type="text/javascript" src="js/gemp-022/communication.js"></script>
-<script type="text/javascript" src="js/gemp-022/deliveryService.js"></script>
 <script type="text/javascript" src="js/gemp-022/commonUi.js"></script>
-<script type="text/javascript" src="js/gemp-022/cardFilter.js"></script>
+<script type="text/javascript" src="js/gemp-022/cards/CardFilter.js"></script>
 
-<script type="text/javascript" src="js/gemp-022/jCardGroup.js"></script>
+<script type="text/javascript" src="js/gemp-022/cards/CardGroup.js"></script>
+<script type="text/javascript" src="js/gemp-022/cards/Card.js"></script>
+<script type="text/javascript" src="js/gemp-022/cards/CardDisplay.js"></script>
+<script type="text/javascript" src="js/gemp-022/cards/CardInfoDialog.js"></script>
+<script type="text/javascript" src="js/gemp-022/cards/CardImages.js"></script>
+<script type="text/javascript" src="js/gemp-022/cards/PackImages.js"></script>
 <script type="text/javascript" src="js/gemp-022/hobbit.js"></script>
 <script type="text/javascript" src="js/gemp-022/set40.js"></script>
-<script type="text/javascript" src="js/gemp-022/jCards.js"></script>
-<script type="text/javascript" src="js/gemp-022/set21.js"></script>
+<script type="text/javascript" src="js/gemp-022/PC_Cards.js"></script>
 
 <script type="text/javascript" src="js/gemp-022/hallUi.js"></script>
 <script type="text/javascript" src="js/gemp-022/leagueResultsUi.js"></script>

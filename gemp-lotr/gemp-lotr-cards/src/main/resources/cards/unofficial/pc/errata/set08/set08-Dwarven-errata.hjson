@@ -2,17 +2,14 @@
 
 	58_1: {
 		cardInfo: {
-			imagePath: errata/58_1.jpg
-			javaClass: false
+			//id: 8_1.1
 			parent: 8_1
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/58_1.jpg
 			collInfo: 8C1
 			rarity: C
-			setNum: "8"
-			cardNum: 1
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Aggression
 		culture: dwarven
@@ -41,7 +38,7 @@
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: drawCards

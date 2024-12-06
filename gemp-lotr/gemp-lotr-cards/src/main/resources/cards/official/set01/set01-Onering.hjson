@@ -1,0 +1,160 @@
+{
+
+	1_1: {
+		cardInfo: {
+			image: decipher/LOTR01001.jpg
+			collInfo: 1R1
+			rarity: R
+		}
+		title: The One Ring
+		subtitle: Isildur's Bane
+		unique: true
+		twilight: 0
+		type: The One Ring
+		strength: 1
+		vitality: 1
+		effects: [
+			{
+				type: Response
+				requires: {
+					type: ringIsActive
+				}
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: putOnRing
+					}
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+						amount: 2
+					}
+				]
+			}
+			{
+				type: Trigger
+				optional: false
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+						amount: 2
+					}
+				]
+			}
+		]
+		gametext: <b>Response:</b> If bearer is about to take a wound, he wears The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound, add 2 burdens instead.
+		lore: "'...the Ring slipped from his finger as he swam....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_2: {
+		cardInfo: {
+			image: decipher/LOTR01002.jpg
+			collInfo: 1C2
+			rarity: C
+		}
+		title: The One Ring
+		subtitle: The Ruling Ring
+		unique: true
+		twilight: 0
+		type: The One Ring
+		strength: 1
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: bearer
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				requires: [
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				effect: [
+					{
+						type: putOnRing
+					}
+					{
+						type: negateWound
+						select: bearer
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+		]
+		gametext: <b>Response:</b> If bearer is about to take a wound in a skirmish, he wears The One Ring until the regroup phase.<br>While wearing The One Ring, each time the Ring-bearer is about to take a wound during a skirmish, add a burden instead.
+		lore: "One Ring to rule them all...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -6,8 +6,10 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.Token;
-import com.gempukku.lotro.logic.timing.PlayConditions;
+import com.gempukku.lotro.game.state.LotroGame;
+import com.gempukku.lotro.logic.GameUtils;
 import org.json.simple.JSONObject;
 
 public class CanSpotCultureTokens implements RequirementProducer {
@@ -18,14 +20,22 @@ public class CanSpotCultureTokens implements RequirementProducer {
         final int count = FieldUtils.getInteger(object.get("amount"), "amount", 1);
         final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
         final Culture culture = FieldUtils.getEnum(Culture.class, object.get("culture"), "culture");
-        final Token tokenForCulture = Token.findTokenForCulture(culture);
-
-        if(tokenForCulture == null)
-            throw new InvalidCardDefinitionException("Culture is required for CanSpotCultureTokens.");
+        final Token tokenForCulture = culture != null ? Token.findTokenForCulture(culture) : null;
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
-        return (actionContext) -> PlayConditions.canSpotCultureTokensOnCards(actionContext.getGame(), tokenForCulture, count,
-                filterableSource.getFilterable(actionContext));
+        if (tokenForCulture == null) {
+            return (actionContext) -> {
+                LotroGame game = actionContext.getGame();
+                Filterable[] filters = new Filterable[]{filterableSource.getFilterable(actionContext)};
+                return GameUtils.getAllSpottableCultureTokens(game, filters) >= count;
+            };
+        } else {
+            return (actionContext) -> {
+                LotroGame game = actionContext.getGame();
+                Filterable[] filters = new Filterable[]{filterableSource.getFilterable(actionContext)};
+                return GameUtils.getSpottableCultureTokensOfType(game, tokenForCulture, filters) >= count;
+            };
+        }
     }
 }

@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.official.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -9,8 +12,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_01_108_Tests
 {
@@ -20,8 +22,8 @@ public class Card_01_108_Tests
                     put("aragorn", "1_89");
                     put("arwen", "1_30");
                     put("boromir", "1_97");
-                    put("nostranger", "51_108");
-                    put("nostranger2", "51_108");
+                    put("nostranger", "1_108");
+                    put("nostranger2", "1_108");
                 }}
         );
     }
@@ -31,35 +33,38 @@ public class Card_01_108_Tests
     public void NoStrangerStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
         /**
-         * Set: 1E
-         * Title: *No Stranger to the Shadows
+         * Set: 1
+         * Name: No Stranger to the Shadows
+		 * Unique: False
          * Side: Free Peoples
          * Culture: Gondor
          * Twilight Cost: 0
          * Type: Condition
-         * Errata Game Text: At the start of each of your turns, heal up to 3 allies whose home is site 6.
-         * Fellowship: Exert Galadriel to play an Elf; that Elf's twilight cost is -1.
+         * Game Text: Bearer must be a ranger. Limit 1 per ranger.<br>Each site's Shadow number is -1.
          */
 
-        //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl nostranger = scn.GetFreepsCard("nostranger");
+        var card = scn.GetFreepsCard("nostranger");
 
-        assertTrue(nostranger.getBlueprint().isUnique());
-        assertEquals(0, nostranger.getBlueprint().getTwilightCost());
-        assertTrue(scn.HasKeyword(nostranger, Keyword.STEALTH));
+        assertEquals("No Stranger to the Shadows", card.getBlueprint().getTitle());
+        assertNull(card.getBlueprint().getSubtitle());
+        assertFalse(card.getBlueprint().isUnique());
+        assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+        assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+        assertEquals(0, card.getBlueprint().getTwilightCost());
     }
 
     @Test
     public void NoStrangerCanOnlyPlayOnRanger() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-        PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
-        PhysicalCardImpl nostranger = scn.GetFreepsCard("nostranger");
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var arwen = scn.GetFreepsCard("arwen");
+        var boromir = scn.GetFreepsCard("boromir");
+        var nostranger = scn.GetFreepsCard("nostranger");
 
         scn.FreepsMoveCharToTable(aragorn);
         scn.FreepsMoveCharToTable(arwen);
@@ -80,10 +85,10 @@ public class Card_01_108_Tests
     @Test
     public void NoStrangerReducesTwilight() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        PhysicalCardImpl nostranger = scn.GetFreepsCard("nostranger");
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var nostranger = scn.GetFreepsCard("nostranger");
 
         scn.FreepsMoveCharToTable(aragorn);
         scn.FreepsMoveCardToHand(nostranger);

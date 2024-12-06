@@ -38,28 +38,30 @@ public class Card_01_023_Tests
 	public void NobodyTossesaDwarfStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Nobody Tosses a Dwarf
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 0
-		* Type: event
-		* Subtype: Response
-		* Game Text: If a Dwarf wins a skirmish, make an opponent discard 3 cards from the top of his or her draw deck.
-		*/
+		 * Set: 1
+		 * Name: Nobody Tosses a Dwarf
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 0
+		 * Type: Event
+		 * Subtype: Response
+		 * Game Text: If a Dwarf wins a skirmish, make an opponent discard 3 cards from the top of his or her draw deck.
+		 */
 
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var nobody = scn.GetFreepsCard("nobody");
+		var card = scn.GetFreepsCard("nobody");
 
-		assertFalse(nobody.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, nobody.getBlueprint().getSide());
-		assertEquals(Culture.DWARVEN, nobody.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, nobody.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(nobody, Keyword.RESPONSE));
-		assertEquals(0, nobody.getBlueprint().getTwilightCost());
+		assertEquals("Nobody Tosses a Dwarf", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+        assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test

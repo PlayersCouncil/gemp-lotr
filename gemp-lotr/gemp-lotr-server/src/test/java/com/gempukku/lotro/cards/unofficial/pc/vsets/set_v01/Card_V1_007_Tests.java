@@ -9,9 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_007_Tests
 {
@@ -52,10 +50,10 @@ public class Card_V1_007_Tests
 		PhysicalCardImpl there = scn.GetFreepsCard("there");
 
 		assertFalse(there.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(there, Keyword.TALE)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(there, Keyword.TALE)); // test for keywords as needed
 		assertEquals(1, there.getBlueprint().getTwilightCost());
 		assertEquals(CardType.EVENT, there.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(there, Keyword.SKIRMISH));
+        assertTrue(scn.hasTimeword(there, Timeword.SKIRMISH));
 		assertEquals(Culture.ELVEN, there.getBlueprint().getCulture());
 		assertEquals(Side.FREE_PEOPLE, there.getBlueprint().getSide());
 	}

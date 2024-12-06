@@ -16,21 +16,15 @@ import java.util.LinkedList;
 public abstract class ChooseCardsFromDeckEffect extends AbstractEffect {
     private final String _playerId;
     private final String _deckId;
+    private final boolean showAll;
     private final int _minimum;
     private final int _maximum;
     private final Filter _filter;
 
-    public ChooseCardsFromDeckEffect(String playerId, int minimum, int maximum, Filterable... filters) {
-        _playerId = playerId;
-        _deckId = playerId;
-        _minimum = minimum;
-        _maximum = maximum;
-        _filter = Filters.and(filters);
-    }
-
-    public ChooseCardsFromDeckEffect(String playerId, String deckId, int minimum, int maximum, Filterable... filters) {
+    public ChooseCardsFromDeckEffect(String playerId, String deckId, boolean showAll, int minimum, int maximum, Filterable... filters) {
         _playerId = playerId;
         _deckId = deckId;
+        this.showAll = showAll;
         _minimum = minimum;
         _maximum = maximum;
         _filter = Filters.and(filters);
@@ -48,30 +42,70 @@ public abstract class ChooseCardsFromDeckEffect extends AbstractEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        Collection<PhysicalCard> cards = Filters.filter(game.getGameState().getDeck(_deckId), game, _filter);
+        Collection<PhysicalCard> cards = Filters.filter(game, game.getGameState().getDeck(_deckId), _filter);
         return cards.size() >= _minimum;
     }
 
     @Override
     protected FullEffectResult playEffectReturningResult(final LotroGame game) {
-        Collection<PhysicalCard> cards = Filters.filter(game.getGameState().getDeck(_deckId), game, _filter);
+        Collection<PhysicalCard> cards = Filters.filter(game, game.getGameState().getDeck(_deckId), _filter);
 
         boolean success = cards.size() >= _minimum;
 
         int minimum = Math.min(_minimum, cards.size());
 
         if (_maximum == 0) {
-            cardsSelected(game, Collections.emptySet());
+            if (showAll) {
+                game.getUserFeedback().sendAwaitingDecision(_playerId,
+                        new ArbitraryCardsSelectionDecision(2, "You may inspect the contents of your deck while retrieving cards", game.getGameState().getDeck(_deckId), new LinkedList<>(), 0, 0) {
+                            @Override
+                            public void decisionMade(String result2) throws DecisionResultInvalidException {
+                                cardsSelected(game, Collections.emptySet());
+                            }
+                        });
+            }
+            else {
+                cardsSelected(game, Collections.emptySet());
+            }
         } else if (cards.size() == minimum) {
-            cardsSelected(game, cards);
+            if (showAll) {
+                game.getUserFeedback().sendAwaitingDecision(_playerId,
+                        new ArbitraryCardsSelectionDecision(2, "You may inspect the contents of your deck while retrieving cards", game.getGameState().getDeck(_deckId), new LinkedList<>(), 0, 0) {
+                            @Override
+                            public void decisionMade(String result2) throws DecisionResultInvalidException {
+                                cardsSelected(game, cards);
+                            }
+                        });
+            }
+            else {
+                cardsSelected(game, cards);
+            }
         } else {
-            game.getUserFeedback().sendAwaitingDecision(_playerId,
-                    new ArbitraryCardsSelectionDecision(1, "Choose card from deck", new LinkedList<>(cards), minimum, _maximum) {
-                        @Override
-                        public void decisionMade(String result) throws DecisionResultInvalidException {
-                            cardsSelected(game, getSelectedCardsByResponse(result));
-                        }
-                    });
+
+            if (showAll) {
+                game.getUserFeedback().sendAwaitingDecision(_playerId,
+                        new ArbitraryCardsSelectionDecision(1, "You may inspect the contents of your deck before retrieving cards", game.getGameState().getDeck(_deckId), new LinkedList<>(), 0, 0) {
+                            @Override
+                            public void decisionMade(String ignored) throws DecisionResultInvalidException {
+                                game.getUserFeedback().sendAwaitingDecision(_playerId,
+                                        new ArbitraryCardsSelectionDecision(2, "Choose cards from deck", new LinkedList<>(cards), minimum, _maximum) {
+                                            @Override
+                                            public void decisionMade(String result) throws DecisionResultInvalidException {
+                                                cardsSelected(game, getSelectedCardsByResponse(result));
+                                            }
+                                        });
+                            }
+                        });
+            }
+            else {
+                game.getUserFeedback().sendAwaitingDecision(_playerId,
+                        new ArbitraryCardsSelectionDecision(1, "Choose cards from deck", new LinkedList<>(cards), minimum, _maximum) {
+                            @Override
+                            public void decisionMade(String result) throws DecisionResultInvalidException {
+                                cardsSelected(game, getSelectedCardsByResponse(result));
+                            }
+                        });
+            }
         }
 
         return new FullEffectResult(success);

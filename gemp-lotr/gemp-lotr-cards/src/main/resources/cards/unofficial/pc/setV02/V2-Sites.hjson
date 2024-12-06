@@ -1,0 +1,300 @@
+{
+
+	102_67: {
+		cardInfo: {
+			//id: 102_67
+			image: sets/V2/LOTR-ENV2S067.0_card.jpg
+			collInfo: V2_67
+			rarity: _
+		}
+		title: Eastemnet Hills
+		unique: false
+		twilight: 2
+		type: Site
+		site: 2
+		block: Towers
+		direction: Left
+		keywords: Mountain
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: MovesFrom
+					filter: self
+				}
+				requires: {
+					type: Phase
+					phase: Regroup
+				}
+				effect: {
+					type: ForEachPlayer
+					effect: {
+						type: Optional
+						text: Would you like to discard 2 cards to draw 2?
+						effect: {
+							type: CostToEffect
+							cost: {
+								type: DiscardFromHand
+								forced: false
+								select: choose(any)
+								count: 2
+							}
+							effect: {
+								type: DrawCards
+								count: 2
+							}
+						}
+					}
+				}
+			}
+		]
+		gametext: Mountain. When the fellowship moves from here during the regroup phase, each player may discard 2 cards to draw 2 cards.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_68: {
+		cardInfo: {
+			//id: 102_68
+			image: sets/V2/LOTR-ENV2S068.0_card.jpg
+			collInfo: V2_68
+			rarity: _
+		}
+		title: Theodred's Tomb
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: Towers
+		direction: Left
+		keywords: Sanctuary
+		effects: [
+			{
+				type: Activated
+				phase: Fellowship
+				cost: {
+					type: PlayCardFromHand
+					select: choose(valiant,character)
+				}
+				effect: {
+					type: DrawCards
+					count: 1
+				}
+			}
+		]
+		gametext: Sanctuary. Fellowship: Play a valiant character to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_69: {
+		cardInfo: {
+			//id: 102_69
+			image: sets/V2/LOTR-ENV2S069.0_card.jpg
+			collInfo: V2_69
+			rarity: _
+		}
+		title: Westfold Plains
+		unique: false
+		twilight: 3
+		type: Site
+		site: 4
+		block: Towers
+		direction: Left
+		keywords: Plains
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyCost
+					filter: mount
+					amount: -1
+				}
+			}
+		]
+		gametext: Plains. Each mount is twilight cost -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_70: {
+		cardInfo: {
+			//id: 102_70
+			image: sets/V2/LOTR-ENV2S070.0_card.jpg
+			collInfo: V2_70
+			rarity: _
+		}
+		title: Breached Wall
+		unique: false
+		twilight: 6
+		type: Site
+		site: 5
+		block: Towers
+		direction: Left
+		keywords: Battleground
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: SiteControlCount
+					amount: +1
+				}
+			}
+		]
+		gametext: Battleground. The count of sites each Shadow player controls<br> is +1. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_71: {
+		cardInfo: {
+			//id: 102_71
+			image: sets/V2/LOTR-ENV2S071.0_card.jpg
+			collInfo: V2_71
+			rarity: _
+		}
+		title: Helm's Tower
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7
+		block: Towers
+		direction: Left
+		keywords: Battleground
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: damage+1
+					filter: character
+					requires: {
+						type: CanSpot
+						filter: companion
+						count: 6
+					}
+				}
+			}
+		]
+		gametext: Battleground. While you can spot 6 companions, each character is damage +1. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_72: {
+		cardInfo: {
+			//id: 102_72
+			image: sets/V2/LOTR-ENV2S072.0_card.jpg
+			collInfo: V2_72
+			rarity: _
+		}
+		title: Desolation of Saruman
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: Towers
+		direction: Left
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: MovesTo
+					filter: self
+				}
+				effect: {
+					type: ForEachPlayer
+					effect: {
+						type: Optional
+						text: Would you like to discard a card in your opponent's support area?
+						effect: {
+							type: Discard
+							select: choose(not(your),zone(SUPPORT))
+						}
+					}
+				}
+			}
+		]
+		gametext: When the fellowship moves to this site, each player may discard a card from their opponent's support area. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_73: {
+		cardInfo: {
+			//id: 102_73
+			image: sets/V2/LOTR-ENV2S073.0_card.jpg
+			collInfo: V2_73
+			rarity: _
+		}
+		title: Isengard Clefts
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: Towers
+		direction: Left
+		effects: [
+			{
+				type: Activated
+				phase: Shadow
+				cost: {
+					type: Exert
+					select: choose(minion)
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: choose(side(shadow), possession)
+				}
+			}
+		]
+		gametext: Shadow: Exert a minion to play a Shadow possession from your discard pile. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -31,40 +31,44 @@ public class Card_01_007_Tests
 	public void DwarfGuardStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Dwarf Guard
-		* Side: Free Peoples
-		* Culture: Dwarven
-		* Twilight Cost: 1
-		* Type: companion
-		* Subtype: Dwarf
-		* Strength: 4
-		* Vitality: 2
-		* Game Text: To play, spot a Dwarf.
-		*/
+		 * Set: 1
+		 * Name: Dwarf Guard
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 1
+		 * Type: Companion
+		 * Subtype: Dwarf
+		 * Strength: 4
+		 * Vitality: 2
+		 * Resistance: 6
+		 * Game Text: To play, spot a Dwarf.
+		 */
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
+		var card = scn.GetFreepsCard("guard");
 
-		assertFalse(guard.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, guard.getBlueprint().getSide());
-		assertEquals(Culture.DWARVEN, guard.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, guard.getBlueprint().getCardType());
-		assertEquals(Race.DWARF, guard.getBlueprint().getRace());
-		assertEquals(1, guard.getBlueprint().getTwilightCost());
-		assertEquals(4, guard.getBlueprint().getStrength());
-		assertEquals(2, guard.getBlueprint().getVitality());
+		assertEquals("Dwarf Guard", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.DWARF, card.getBlueprint().getRace());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(4, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	@Test
 	public void DwarfGuardRequiresDwarf() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
-		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var gimli = scn.GetFreepsCard("gimli");
 		scn.FreepsMoveCardToHand(guard, gimli);
 
 		scn.StartGame();

@@ -55,7 +55,7 @@ public class Card_01_254_ErrataTests
 		assertEquals(Side.SHADOW, mordor.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, mordor.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, mordor.getBlueprint().getCardType());
-		assertFalse(scn.HasKeyword(mordor, Keyword.SUPPORT_AREA));
+		assertFalse(scn.hasKeyword(mordor, Keyword.SUPPORT_AREA));
 		assertEquals(1, mordor.getBlueprint().getTwilightCost());
 	}
 

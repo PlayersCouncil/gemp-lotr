@@ -1,0 +1,1101 @@
+{
+
+	13_59: {
+		cardInfo: {
+			image: decipher/LOTR13059.jpg
+			collInfo: 13R59
+			rarity: R
+		}
+		title: Aragorn
+		subtitle: Isildur's Heir
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		resistance: 8
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: culture(gondor),HasAnyCultureTokens
+					}
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: assignment
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: addKeyword
+					select: choose(unbound,companion,minResistance(7))
+					keyword: defender
+					amount: 1
+					until: regroup
+				}
+			}
+		]
+		gametext: Aragorn is strength +1 for each [gondor] card that has a culture token on it.<br>At the start of each assignment phase, you may exert Aragorn to make an unbound companion that has resistance 7 or more <b>defender +1</b> until the regroup phase.
+		lore: "Thus came Aragorn, son of Arathorn, Elessar...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_60: {
+		cardInfo: {
+			image: decipher/LOTR13060.jpg
+			collInfo: 13U60
+			rarity: U
+		}
+		title: Away on the Wind
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: name(Faramir)
+				}
+				cost: [
+					{
+						type: discard
+						select: self
+					}
+					{
+						type: kill
+						select: choose(or(name(Boromir)),or(name(Denethor)))
+					}
+				]
+				effect: [
+					{
+						type: preventWound
+						select: choose(name(Faramir))
+						memorize: faramir
+					}
+					{
+						type: heal
+						select: memory(faramir)
+						times: 2
+					}
+				]
+			}
+		]
+		gametext: <b>Response:</b> If Faramir is about to take a wound, discard this condition from play and place Boromir or Denethor in the dead pile from play to prevent that and heal Faramir twice.
+		lore: "'...then I will have naught: neither life diminished, nor love halved, nor honour abated.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_61: {
+		cardInfo: {
+			image: decipher/LOTR13061.jpg
+			collInfo: 13U61
+			rarity: U
+		}
+		title: Banners Blowing
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: activatedInDiscard
+				phase: skirmish
+				cost: {
+					type: removeCardsInDiscardFromGame
+					select: choose(other,culture(gondor))
+					count: 4
+				}
+				effect:
+				{
+				   type: playCardFromDiscard
+				   select: self
+				   extraEffects: {
+					   type: removePlayedEventFromTheGame
+					   filter: self
+				   }
+				}
+			}
+			{
+				type: event
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(culture(gondor),man)
+						amount: 3
+					}
+				]
+			}
+		]
+		gametext: You may remove from the game 4 other [gondor] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Make your [gondor] Man strength +3.
+		lore: "And so... with less than six thousands... the Captains of the West came at last to challenge the Black Gate...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_62: {
+		cardInfo: {
+			image: decipher/LOTR13062.jpg
+			collInfo: 13S62
+			rarity: S
+		}
+		title: Boromir
+		subtitle: Doomed Heir
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: lurker,minion
+						multiplier: -1
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: {
+						type: forEachHasAttached
+						filter: possession
+					}
+				}
+			}
+		]
+		gametext: Boromir is resistance -1 for each lurker minion you can spot.<br><b>Skirmish:</b> Exert Boromir to make him strength +1 for each possession he bears.
+		lore: "'I shall go to Minas Tirith, alone if need be, for it is my duty.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_63: {
+		cardInfo: {
+			image: decipher/LOTR13063.jpg
+			collInfo: 13R63
+			rarity: R
+		}
+		title: Brego
+		subtitle: Loyal Steed
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Possession
+		itemclass: Mount
+		target: culture(gondor),companion
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: reinforceTokens
+					culture: gondor
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: [
+					{
+						type: exert
+						select: bearer
+					}
+					{
+						type: removeTokensCumulative
+						culture: gondor
+						count: 2
+					}
+				]
+				effect: {
+					type: wound
+					select: choose(minion)
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] companion.<br>When you play Brego, you may reinforce a [gondor] token.<br><b>Maneuver:</b> Exert bearer and remove 2 [gondor] tokens to wound a minion.
+		lore: "'Turn this fellow free. He has seen enough of war.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_64: {
+		cardInfo: {
+			image: decipher/LOTR13064.jpg
+			collInfo: 13R64
+			rarity: R
+		}
+		title: Denethor
+		subtitle: Last Ruling Steward
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 5
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: self
+					amount: {
+						type: forEachInDiscard
+						filter: your,culture(gondor),possession
+					}
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: removeFromTheGame
+					select: choose(culture(gondor),possession,attachedTo(companion))
+				}
+				effect: {
+					type: exert
+					select: choose(minion)
+					times: 2
+				}
+			}
+		]
+		gametext: Denethor is resistance +1 for each [gondor] possession in your discard pile.<br><b>Maneuver:</b> Spot a [gondor] possession borne by a companion and remove that possession from the game to exert a minion twice.
+		lore: "...he took up the staff of his Stewardship that lay at his feet and broke it on his knee."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_65: {
+		cardInfo: {
+			image: decipher/LOTR13065.jpg
+			collInfo: 13R65
+			rarity: R
+		}
+		title: Elendil
+		subtitle: High-king of Gondor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 5
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 5
+		resistance: 6
+		keywords: Knight
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: choice
+					texts: [
+						Spot 2 {gondor} knights
+						Exert 2 {gondor} Men
+					]
+					effects: [
+						{
+							type: spot
+							filter: culture(gondor),knight
+							count: 2
+						}
+						{
+							type: exert
+							select: choose(culture(gondor),man)
+							count: 2
+						}
+					]
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: your,culture(gondor),companion
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: RemoveCultureTokens
+					culture: gondor
+					select: choose(any)
+				}
+				effect: {
+					type: modifyResistance
+					select: choose(unbound,companion)
+					amount: 1
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Knight</b>. To play, spot 2 [gondor] knights or exert 2 [gondor] Men.<br>Each of your [gondor] companions is resistance +1.<br><b>Maneuver:</b> Remove a [gondor] token to make an unbound companion resistance +1 until the regroup phase.
+		lore: "'...and Elendil of Westernesse who overthrew Sauron....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_66: {
+		cardInfo: {
+			image: decipher/LOTR13066.jpg
+			collInfo: 13C66
+			rarity: C
+		}
+		title: Faramir
+		subtitle: Prince of Ithilien
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 7
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: name(Boromir)
+				}
+				amount: -1
+			}
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: name(Denethor)
+				}
+				amount: -1
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,hasAttached(culture(gondor),possession)
+					keyword: defender
+					amount: 1
+				}
+			}
+		]
+		gametext: While you can spot Boromir, Faramir is twilight cost -1.<br>While you can spot Denethor, Faramir is twilight cost -1.<br>While Faramir bears a [gondor] possession, he is <b>defender +1</b>.
+		lore: "'Do you wish then... that our places had been exchanged?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_67: {
+		cardInfo: {
+			image: decipher/LOTR13067.jpg
+			collInfo: 13U67
+			rarity: U
+		}
+		title: Guard of the White Tree
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 5
+		keywords: Knight
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: choose(culture(gondor),condition,zone(support))
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Knight</b>.<br><b>Skirmish:</b> Discard a [gondor] condition from your support area to make this companion strength +2.
+		lore: "This was the livery of the heirs of Elendil, and none wore it now in all Gondor, save the Guards of the Citadel...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_68: {
+		cardInfo: {
+			image: decipher/LOTR13068.jpg
+			collInfo: 13C68
+			rarity: C
+		}
+		title: Guarded City
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: {
+				type: spot
+				select: choose(culture(gondor),companion)
+				memorize: spottedCompanion
+			}
+			effect: [
+				{
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: possession,attachedTo(memory(spottedCompanion))
+					}
+					effect: {
+						type: reinforceTokens
+						culture: gondor
+					}
+				}
+			]
+		}
+		gametext: Spot a [gondor] companion to reinforce a [gondor] token for each possession borne by that companion.
+		lore: "...so strong and old that it seemed to have been not builded but carven by giants out of the bones of the earth."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_69: {
+		cardInfo: {
+			image: decipher/LOTR13069.jpg
+			collInfo: 13C69
+			rarity: C
+		}
+		title: Heirs of Gondor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: gondor
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Discard this from play
+						Remove a token from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: gondor
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(gondor),companion,hasAttached(hand weapon))
+					amount: 2
+				}
+			}
+		]
+		gametext: When you play this, add a [gondor] token here.<br><b>Skirmish:</b> Discard this from play or remove a token from here to make a [gondor] companion bearing a hand weapon strength +2.
+		lore: "'And Eldarion our son is a man full-ripe for kingship.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_70: {
+		cardInfo: {
+			image: decipher/LOTR13070.jpg
+			collInfo: 13U70
+			rarity: U
+		}
+		title: Hope Renewed
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: discard
+				select: choose(culture(gondor),possession)
+			}
+			effect: [
+				{
+					type: discard
+					select: choose(possession)
+				}
+				{
+					type: optional
+					text: Would you like to reinforce a {gondor} token
+					effect: {
+						type: reinforceTokens
+						culture: gondor
+					}
+				}
+			]
+		}
+		gametext: Discard a [gondor] possession from play to discard a possession from play and you may reinforce a [gondor] token.
+		lore: "'...Frodo saw the old king's head: it was lying rolled away by the roadside... 'Look! The king has got a crown again!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_71: {
+		cardInfo: {
+			image: decipher/LOTR13071.jpg
+			collInfo: 13U71
+			rarity: U
+		}
+		title: Isildur
+		subtitle: Heir of Elendil
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 1
+		keywords: Knight
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: self
+					amount: {
+						type: forEachInHand
+					}
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: endOfPhase
+				}
+				requires: {
+					type: isEqual
+					firstNumber: {
+						type: forEachResistance
+						filter: self
+					}
+					secondNumber: 0
+				}
+				effect: {
+					type: kill
+					select: self
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: reconciles
+					player: you
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+		]
+		gametext: <b>Knight</b>.<br>Isildur is resistance +1 for each card in your hand.<br>At the end of any phase, if Isildur has resistance 0, place him in your dead pile.<br>Each time you reconcile, you may draw a card.
+		lore: "'...Elendil's son cut the Ring from Sauron's hand....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_72: {
+		cardInfo: {
+			image: decipher/LOTR13072.jpg
+			collInfo: 13U72
+			rarity: U
+		}
+		title: Kings' Legacy
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: winsSkirmish
+					filter: name(Elendil)
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(or(culture(elven),culture(gondor)),companion)
+					amount: 2
+					until: regroup
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: winsSkirmish
+					filter: name(Isildur)
+				}
+				effect: {
+					type: heal
+					select: choose(man)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: winsSkirmish
+					filter: name(Aragorn)
+				}
+				effect: {
+					type: addKeyword
+					select: choose(culture(gondor),man)
+					keyword: damage
+					amount: 1
+					until: regroup
+				}
+			}
+		]
+		gametext: Each time Elendil wins a skirmish, make a [gondor] or [elven] companion strength +2 until the start of the regroup phase.<br>Each time Isildur wins a skirmish, heal a Man.<br>Each time Aragorn wins a skirmish, make a [gondor] Man <b>damage +1</b> until the start of the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_73: {
+		cardInfo: {
+			image: decipher/LOTR13073.jpg
+			collInfo: 13C73
+			rarity: C
+		}
+		title: Kingsfoil
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		target: culture(gondor),man
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: heal
+						select: choose(companion)
+						memorize: chosenCompanion
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: chosenCompanion
+							filter: culture(shire),companion
+						}
+						true: {
+							type: discard
+							select: choose(condition,attachedTo(memory(chosenCompanion)))
+							count: 0-1
+						}
+					}
+				]
+			}
+		]
+		gametext: Bearer must be a [gondor] Man.<br><b>Fellowship:</b> Discard this possession from play to heal a companion and, if that companion is a [shire] companion, you may discard a condition he or she bears.
+		lore: "'Life to the dying / In the king's hand lying!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_74: {
+		cardInfo: {
+			image: decipher/LOTR13074.jpg
+			collInfo: 13S74
+			rarity: S
+		}
+		title: Rally the Company
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(gondor),companion)
+					memorize: chosenCompanion
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenCompanion
+							filter: minResistance(6)
+						}
+						true: 4
+						false: 2
+					}
+				}
+			]
+		}
+		gametext: Make a [gondor] companion strength +2 (or +4 if that companion has resistance 6 or more).
+		lore: "Aragorn was able to keep the way open for escape from the Chamber of Mazarbul."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_75: {
+		cardInfo: {
+			image: decipher/LOTR13075.jpg
+			collInfo: 13U75
+			rarity: U
+		}
+		title: Stewards' Legacy
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: exerted
+					filter: name(Denethor)
+				}
+				effect: {
+					type: addKeyword
+					select: choose(name(Denethor))
+					keyword: muster
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: exerted
+					filter: name(Boromir)
+				}
+				effect: {
+					type: exert
+					select: choose(minion)
+					count: 0-1
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: exerted
+					filter: name(Faramir)
+				}
+				cost: {
+					type: spot
+					select: choose(minion)
+					count: 0-1
+					memorize: spottedMinion
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: cantUseSpecialAbilities
+						filter: memory(spottedMinion)
+					}
+					until: regroup
+				}
+			}
+		]
+		gametext: Each time Denethor exerts, he gains <b>muster</b> until the end of the regroup phase.<br>Each time Boromir exerts, you may exert a minion.<br>Each time Faramir exerts, you may spot a minion to prevent it from using special abilities until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_76: {
+		cardInfo: {
+			image: decipher/LOTR13076.jpg
+			collInfo: 13R76
+			rarity: R
+		}
+		title: Storied Homestead
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					select: self
+					culture: gondor
+					count: {
+						type: forEachYouCanSpot
+						filter: culture(gondor),companion,minResistance(7)
+					}
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: usesSpecialAbility
+					filter: minion
+				}
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Remove 2 {gondor} tokens from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							select: self
+							culture: gondor
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: cancelSpecialAbility
+				}
+			}
+		]
+		gametext: When you play this, add a [gondor] token here for each [gondor] companion who has resistance 7 or more.<br><b>Response:</b> If a minion's special ability is used, discard this condition or remove 2 [gondor] tokens from here to cancel its effect.
+		lore: "...a silent company of tall images graven in cold stone."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_77: {
+		cardInfo: {
+			image: decipher/LOTR13077.jpg
+			collInfo: 13C77
+			rarity: C
+		}
+		title: Tradesman From Lebennin
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 5
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+				effect: {
+					type: reinforceTokens
+					culture: gondor
+				}
+			}
+		]
+		gametext: At the start of each fellowship phase, you may add (2) to reinforce a [gondor] token.
+		lore: "Fearful of the spreading Shadow, many from southern Gondor sought refuge behind the walls of Minas Tirith."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

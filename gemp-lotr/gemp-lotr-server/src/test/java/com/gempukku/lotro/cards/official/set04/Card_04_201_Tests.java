@@ -1,0 +1,132 @@
+package com.gempukku.lotro.cards.official.set04;
+
+import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Test;
+
+import java.util.HashMap;
+
+import static org.junit.Assert.*;
+
+public class Card_04_201_Tests
+{
+
+	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new GenericCardTestHelper(
+				new HashMap<>()
+				{{
+					put("veteran", "4_201");
+					put("child", "4_148"); // source of easy site control
+				}},
+				GenericCardTestHelper.FellowshipSites,
+				GenericCardTestHelper.FOTRFrodo,
+				GenericCardTestHelper.RulingRing
+		);
+	}
+
+	@Test
+	public void UrukVeteranStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+
+		/**
+		 * Set: 4
+		 * Name: Uruk Veteran
+		 * Unique: False
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 3
+		 * Type: Minion
+		 * Subtype: Uruk-hai
+		 * Strength: 8
+		 * Vitality: 2
+		 * Site Number: 5
+		 * Game Text: <b>Damage +1</b>.<br><b>Regroup:</b> Stack this minion on a site you control.<br><b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -1.
+		*/
+
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("veteran");
+
+		assertEquals("Uruk Veteran", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(8, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(5, card.getBlueprint().getSiteNumber());
+	}
+
+	@Test
+	public void UrukVeteranRegroupActionStacksSelfOnControlledSite() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var veteran = scn.GetShadowCard("veteran");
+		var child = scn.GetShadowCard("child");
+		scn.ShadowMoveCardToHand(child, veteran);
+
+		scn.StartGame();
+
+		scn.SkipToSite(2);
+
+		scn.ShadowMoveCardToSupportArea(child);
+		scn.AddTokensToCard(child, 2);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowUseCardAction(child); //should take control of site
+
+		scn.ShadowMoveCharToTable(veteran);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPassCurrentPhaseAction();
+
+		var controlledSite = scn.GetFreepsSite(1);
+		assertTrue(scn.IsSiteControlled(controlledSite));
+		assertTrue(scn.ShadowActionAvailable(veteran));
+
+		scn.ShadowUseCardAction(veteran);
+		assertEquals(controlledSite, veteran.getStackedOn());
+		assertEquals(Zone.STACKED, veteran.getZone());
+	}
+
+	@Test
+	public void UrukVeteranShadowActionPlaysSelfFromControlledSite() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var veteran = scn.GetShadowCard("veteran");
+		var child = scn.GetShadowCard("child");
+		scn.ShadowMoveCardToHand(child, veteran);
+
+		scn.StartGame();
+
+		scn.SkipToSite(2);
+
+		scn.ShadowMoveCardToSupportArea(child);
+		scn.AddTokensToCard(child, 2);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowUseCardAction(child); //should take control of site
+
+		scn.SkipToSite(4);
+		var controlledSite = scn.GetFreepsSite(1);
+		assertTrue(scn.IsSiteControlled(controlledSite));
+		scn.StackCardsOn(controlledSite, veteran);
+		scn.SetTwilight(48);
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertEquals(controlledSite, veteran.getStackedOn());
+		assertEquals(Zone.STACKED, veteran.getZone());
+
+		assertTrue(scn.ShadowActionAvailable(veteran));
+		assertEquals(50, scn.GetTwilight());
+		scn.ShadowUseCardAction(veteran);
+		assertEquals(Zone.SHADOW_CHARACTERS, veteran.getZone());
+		// Trooper cost 3, but should have a -1 discount, so costs 2 + 2 for roaming
+		assertEquals(46, scn.GetTwilight());
+	}
+}

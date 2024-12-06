@@ -2,29 +2,23 @@
 
 	61_31: {
 		cardInfo: {
-			imagePath: errata/61_31.jpg
-			javaClass: false
-			parent: 11_31
-			parentPath: errata/pc
-			version: 1?
+			//id: 1_31.1
+			revision: 1
+			image: errata/61_31.jpg
 			collInfo: 11C31
 			rarity: C
-			setNum: "11"
-			cardNum: 31
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Final Account
 		culture: gandalf
 		twilight: 1
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: [
 				{
 					type: exert
-					filter: choose(culture(gandalf),wizard)
+					select: choose(culture(gandalf),wizard)
 				}
 				{
 					type: discardFromHand
@@ -33,7 +27,7 @@
 			]
 			effect: {
 				type: putCardsFromDiscardIntoHand
-				filter: choose(side(shadow))
+				select: choose(side(shadow))
 			}
 		}
 		gametext: To play, exert a [gandalf] Wizard.<br>Discard a card from hand to take a Shadow card from your discard pile into hand.

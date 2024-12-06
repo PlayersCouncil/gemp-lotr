@@ -15,7 +15,7 @@ public class PlayableFromDiscard implements RequirementProducer {
         final String player = FieldUtils.getString(object.get("player"), "player", "you");
         final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         return (actionContext) -> {

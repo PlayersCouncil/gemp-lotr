@@ -1,17 +1,11 @@
 {
 	60_72: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN10E072.1.jpg
-			javaClass: false
-			parent: 10_72
-			parentPath: errata/pc
-			version: 1
+			//id: 0_72.1
+			revision: 1
+			image: errata/LOTR-EN10E072.1.jpg
 			collInfo: 10R72
 			rarity: R
-			setNum: "10"
-			cardNum: 72
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Éowyn
 		subtitle: Lady of Ithilien
@@ -43,23 +37,19 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
-						type: ChooseOpponent
-						memorize: opp
-					}
-					{
 						type: Repeat
-						amount: {
+						times: {
 							type: ForEachWound
 							filter: minion,InSkirmishAgainst(self)
 						}
 						effect: {
 							type: Wound
-							player: FromMemory(opp)
-							filter: choose(minion)
+							player: shadow
+							select: choose(minion)
 						}
 					}
 					{

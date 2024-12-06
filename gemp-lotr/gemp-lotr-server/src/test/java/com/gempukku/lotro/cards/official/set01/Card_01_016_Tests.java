@@ -35,30 +35,31 @@ public class Card_01_016_Tests
 	public void GreatestKingdomofMyPeopleStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Greatest Kingdom of My People
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 1
-		* Type: condition
-		* Subtype: Support Area
-		* Game Text: <b>Tale.</b>  To play, exert a Dwarf. 
-		* 	Each time your opponent plays an Orc, that player discards the top card of his or her draw deck.
-		*/
+		 * Set: 1
+		 * Name: Greatest Kingdom of My People
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 0
+		 * Type: Condition
+		 * Subtype: Support Area
+		 * Game Text: <b>Tale.</b>  To play, exert a Dwarf.
+		 * 	Each time your opponent plays an Orc, that player discards the top card of his or her draw deck.
+		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var kingdom = scn.GetFreepsCard("kingdom");
+		var card = scn.GetFreepsCard("kingdom");
 
-		assertTrue(kingdom.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, kingdom.getBlueprint().getSide());
-		assertEquals(Culture.DWARVEN, kingdom.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, kingdom.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(kingdom, Keyword.SUPPORT_AREA));
-		assertTrue(scn.HasKeyword(kingdom, Keyword.TALE));
-		assertEquals(0, kingdom.getBlueprint().getTwilightCost());
+		assertEquals("Greatest Kingdom of My People", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(card, Keyword.TALE));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test

@@ -24,15 +24,15 @@ import java.util.List;
 public class TransferFromDiscard implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "where");
+        FieldUtils.validateAllowedFields(effectObject, "select", "where");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String where = FieldUtils.getString(effectObject.get("where"), "where");
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInDiscard(filter, new ConstantEvaluator(1), "_temp1", "you", "Choose card to transfer", environment));
+                CardResolver.resolveCardsInDiscard(select, actionContext -> new ConstantEvaluator(1), "_temp1", "you", "Choose card to transfer", environment));
         result.addEffectAppender(
                 CardResolver.resolveCards(where,
                         actionContext -> (Filter) (game, physicalCard) -> {

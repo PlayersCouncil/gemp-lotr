@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -41,40 +40,42 @@ public class Card_01_055_Tests
 	public void TheMirrorofGaladrielStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: *The Mirror of Galadriel
-		* Side: Free Peoples
-		* Culture: Elven
-		* Twilight Cost: 2
-		* Type: possession
-		* Subtype: 
-		* Game Text: Plays to your support area.
-		* 	Each Elf ally whose home is site 6 is strength +1.
-		* 	Fellowship: Exert Galadriel to look at 2 of cards at random from an opponent's hand. Discard one and replace the other.
-		*/
+		 * Set: 1
+		 * Name: The Mirror of Galadriel
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 2
+		 * Type: Possession
+		 * Subtype: Support Area
+		 * Game Text: Plays to your support area.
+		 * 	Each Elf ally whose home is site 6 is strength +1.
+		 * 	Fellowship: Exert Galadriel to look at 2 of cards at random from an opponent's hand. Discard one and replace the other.
+		 */
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl mirror = scn.GetFreepsCard("mirror");
+		var card = scn.GetFreepsCard("mirror");
 
-		assertTrue(mirror.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, mirror.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, mirror.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, mirror.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(mirror, Keyword.SUPPORT_AREA));
-		assertEquals(2, mirror.getBlueprint().getTwilightCost());
+		assertEquals("The Mirror of Galadriel", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
 	public void MirrorMakesSite6AlliesStrengthPlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl mirror = scn.GetFreepsCard("mirror");
-		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-		PhysicalCardImpl allyHome3_1 = scn.GetFreepsCard("allyHome3_1");
-		PhysicalCardImpl allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
+		var mirror = scn.GetFreepsCard("mirror");
+		var galadriel = scn.GetFreepsCard("galadriel");
+		var allyHome3_1 = scn.GetFreepsCard("allyHome3_1");
+		var allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
 		scn.FreepsMoveCharToTable(galadriel, allyHome3_1, allyHome6_1);
 		scn.FreepsMoveCardToHand(mirror);
 
@@ -92,10 +93,10 @@ public class Card_01_055_Tests
 	@Test
 	public void ManeuverAbilityNotAvailableIfShadowHandLessThan7() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl mirror = scn.GetFreepsCard("mirror");
-		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
+		var mirror = scn.GetFreepsCard("mirror");
+		var galadriel = scn.GetFreepsCard("galadriel");
 		scn.FreepsMoveCharToTable(galadriel);
 		scn.FreepsMoveCardToSupportArea(mirror);
 
@@ -111,10 +112,10 @@ public class Card_01_055_Tests
 	@Test
 	public void ManeuverAbilityReveals2CardFromShadowHandAndDiscards1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl mirror = scn.GetFreepsCard("mirror");
-		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
+		var mirror = scn.GetFreepsCard("mirror");
+		var galadriel = scn.GetFreepsCard("galadriel");
 		scn.FreepsMoveCharToTable(galadriel);
 		scn.FreepsMoveCardToSupportArea(mirror);
 

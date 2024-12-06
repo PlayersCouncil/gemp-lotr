@@ -11,11 +11,11 @@ import com.gempukku.lotro.logic.modifiers.Condition;
 
 public class ExertTargetExtraPlayCostModifier extends AbstractExtraPlayCostModifier {
     public ExertTargetExtraPlayCostModifier(PhysicalCard source, Filterable affects, Condition condition) {
-        super(source, "Exert to play", Filters.and(affects), condition);
+        super(source, "Exert to play", Filters.changeToFilter(affects), condition);
     }
 
     @Override
-    public boolean canPayExtraCostsToPlay(LotroGame game, PhysicalCard card) {
+    public boolean canPayExtraCostsToPlay(LotroGame game, PhysicalCard target) {
         return true;
     }
 

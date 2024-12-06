@@ -14,10 +14,6 @@ public class PutCardFromDeckIntoHandEffect extends AbstractEffect {
     private final PhysicalCard _card;
     private final boolean _reveal;
 
-    public PutCardFromDeckIntoHandEffect(PhysicalCard card) {
-        this(card, true);
-    }
-
     public PutCardFromDeckIntoHandEffect(PhysicalCard card, boolean reveal) {
         _card = card;
         _reveal = reveal;

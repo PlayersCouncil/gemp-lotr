@@ -61,7 +61,7 @@ public class Card_V1_001_Tests
         assertEquals(1, hosp.getBlueprint().getTwilightCost());
         assertEquals(CardType.CONDITION, hosp.getBlueprint().getCardType());
         assertEquals(Culture.DWARVEN, hosp.getBlueprint().getCulture());
-        assertTrue(scn.HasKeyword(hosp, Keyword.SUPPORT_AREA));
+        assertTrue(scn.hasKeyword(hosp, Keyword.SUPPORT_AREA));
     }
 
     @Test
@@ -119,7 +119,7 @@ public class Card_V1_001_Tests
         scn.SkipToPhase(Phase.MANEUVER);
         assertTrue(scn.FreepsActionAvailable(hosp));
         scn.FreepsUseCardAction(hosp);
-        assertFalse(scn.HasKeyword(gimli, Keyword.DAMAGE));
+        assertFalse(scn.hasKeyword(gimli, Keyword.DAMAGE));
 
         scn.SkipToPhase(Phase.ASSIGNMENT);
         scn.PassCurrentPhaseActions();

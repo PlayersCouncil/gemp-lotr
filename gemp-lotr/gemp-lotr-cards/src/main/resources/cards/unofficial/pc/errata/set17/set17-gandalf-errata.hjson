@@ -1,46 +1,40 @@
 {
 	67_15: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN17E015.1.jpg
-			javaClass: false
-			parent: 17_15
-			parentPath: errata/pc
-			version: 1
+			//id: 7_15.1
+			revision: 1
+			image: errata/LOTR-EN17E015.1.jpg
 			collInfo: 17U15
 			rarity: U
-			setNum: "17"
-			cardNum: 15
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: A New Light
 		unique: false
 		culture: gandalf
 		twilight: 1
 		type: event
+		timeword: fellowship
 		keyword: [
-			fellowship
 			spell
 		]
-		requires: {
-			type: canSpot
-			filter: culture(gandalf),wizard
-		}
 		effects: [
 			{
 				type: event
+				requires: {
+					type: canSpot
+					filter: culture(gandalf),wizard
+				}
 				effect: [
 					{
 						type: PutCardsFromDiscardIntoHand
 						player: freeps
 						discard: shadow
-						filter: choose(minion)
+						select: choose(minion)
 						count: 2
 						memorize: chosenMinions
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: IsGreaterThan
 							firstNumber: {
 								type: ForEachInMemory
@@ -48,7 +42,7 @@
 							}
 							secondNumber: 0
 						}
-						effect: [
+						true: [
 							{
 								type: revealHand
 								hand: shadowPlayer
@@ -59,7 +53,7 @@
 								hand: shadowPlayer
 								forced: true
 								player: you
-								filter: choose(memory(revealedCards),minion)
+								select: choose(memory(revealedCards),minion)
 							}
 						]
 					}
@@ -80,17 +74,11 @@
 	
 	67_24: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN17E024.1_card.jpg
-			javaClass: false
-			parent: 17_24
-			parentPath: errata/pc
-			version: 1
+			//id: 7_24.1
+			revision: 1
+			image: errata/LOTR-EN17E024.1_card.jpg
 			collInfo: 17R24
 			rarity: R
-			setNum: "17"
-			cardNum: 24
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Shadowfax
 		subtitle: Greatest of the Mearas
@@ -108,13 +96,14 @@
 			{
 				type: Trigger
 				optional: false
+				optional: false
 				trigger: {
 					type: Played
 					filter: self
 				}
 				effect: {
 					type: Discard
-					filter: all(attachedTo(bearer),or(possession,weapon),another)
+					select: all(attachedTo(bearer),or(possession,weapon),another)
 				}
 			}
 			{
@@ -134,7 +123,7 @@
 				cost: [
 					{
 						type: exert
-						filter: bearer
+						select: bearer
 						times: 1				
 					}
 					{

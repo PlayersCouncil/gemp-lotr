@@ -49,9 +49,9 @@ public class Card_01_040_Tests
     public void ElrondStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
         /**
-         * Set: 1E
-         * Title: *Elrond
-         * Subtitle: Lord of Rivendell
+         * Set: 1
+         * Name: Elrond, Lord of Rivendell
+         * Unique: True
          * Side: Free Peoples
          * Culture: Elven
          * Twilight Cost: 4
@@ -65,28 +65,28 @@ public class Card_01_040_Tests
          * Fellowship: Exert Elrond to draw a card.
          */
 
-        //Pre-game setup
-        GenericCardTestHelper scn = GetSimpleDeckScenario();
+        var scn = GetSimpleDeckScenario();
 
-        PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
+        var card = scn.GetFreepsCard("elrond");
 
-        assertTrue(elrond.getBlueprint().isUnique());
-        assertEquals(Side.FREE_PEOPLE, elrond.getBlueprint().getSide());
-        assertEquals(Culture.ELVEN, elrond.getBlueprint().getCulture());
-        assertEquals(CardType.ALLY, elrond.getBlueprint().getCardType());
-        assertEquals(Race.ELF, elrond.getBlueprint().getRace());
-        assertEquals(4, elrond.getBlueprint().getTwilightCost());
-        assertEquals(8, elrond.getBlueprint().getStrength());
-        assertEquals(4, elrond.getBlueprint().getVitality());
-        assertEquals(3, elrond.getBlueprint().getAllyHomeSiteNumbers()[0]);
-        assertEquals(SitesBlock.FELLOWSHIP, elrond.getBlueprint().getAllyHomeSiteBlock());
+        assertEquals("Elrond", card.getBlueprint().getTitle());
+        assertEquals("Lord of Rivendell", card.getBlueprint().getSubtitle());
+        assertTrue(card.getBlueprint().isUnique());
+        assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+        assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+        assertEquals(CardType.ALLY, card.getBlueprint().getCardType());
+        assertEquals(Race.ELF, card.getBlueprint().getRace());
+        assertEquals(4, card.getBlueprint().getTwilightCost());
+        assertEquals(8, card.getBlueprint().getStrength());
+        assertEquals(4, card.getBlueprint().getVitality());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
     }
 
     @Test
     public void FellowshipActionExertsToDrawACard() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetHome3AllyScenario();
-        PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
+        var scn = GetHome3AllyScenario();
+        var elrond = scn.GetFreepsCard("elrond");
 
         scn.FreepsMoveCharToTable(elrond);
 
@@ -107,9 +107,9 @@ public class Card_01_040_Tests
     @Test
     public void CardCanPlayIfGandalfInPlay() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetSimpleSpotScenario();
-        PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-        PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
+        var scn = GetSimpleSpotScenario();
+        var elrond = scn.GetFreepsCard("elrond");
+        var gandalf = scn.GetFreepsCard("gandalf");
 
         scn.FreepsMoveCardToHand(elrond);
         scn.FreepsMoveCardToHand(gandalf);
@@ -126,9 +126,9 @@ public class Card_01_040_Tests
     @Test
     public void CardCanPlayIfElfInPlay() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetSimpleSpotScenario();
-        PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-        PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
+        var scn = GetSimpleSpotScenario();
+        var elrond = scn.GetFreepsCard("elrond");
+        var arwen = scn.GetFreepsCard("arwen");
 
         scn.FreepsMoveCardToHand(elrond);
         scn.FreepsMoveCardToHand(arwen);
@@ -145,12 +145,12 @@ public class Card_01_040_Tests
     @Test
     public void Site3AlliesAllHeal() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetHome3AllyScenario();
-        PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
-        PhysicalCardImpl allyHome3_1 = scn.GetFreepsCard("allyHome3_1");
-        PhysicalCardImpl allyHome3_2 = scn.GetFreepsCard("allyHome3_2");
-        PhysicalCardImpl allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
-        PhysicalCardImpl allyHome6_2 = scn.GetFreepsCard("allyHome6_2");
+        var scn = GetHome3AllyScenario();
+        var elrond = scn.GetFreepsCard("elrond");
+        var allyHome3_1 = scn.GetFreepsCard("allyHome3_1");
+        var allyHome3_2 = scn.GetFreepsCard("allyHome3_2");
+        var allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
+        var allyHome6_2 = scn.GetFreepsCard("allyHome6_2");
 
         scn.FreepsMoveCharToTable(elrond, allyHome3_1, allyHome3_2, allyHome6_1, allyHome6_2);
 

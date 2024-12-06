@@ -2,17 +2,11 @@
 
 	68_29: {
 		cardInfo: {
-			imagePath: errata/68_29.jpg
-			javaClass: false
-			parent: 18_29
-			parentPath: errata/pc
-			version: 1?
+			//id: 8_29.1
+			revision: 1
+			image: errata/68_29.jpg
 			collInfo: 18R29
 			rarity: R
-			setNum: "18"
-			cardNum: 29
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Deceit
 		unique: true
@@ -22,7 +16,7 @@
 		type: Condition
 		keyword: Support Area
 		effects: {
-			type: activatedTrigger
+			type: Response
 			trigger: {
 				type: abouttodiscard
 				source: side(free people)
@@ -34,7 +28,7 @@
 			}
 			effect: {
 				type: preventdiscard
-				filter: choose(your,culture(gollum),another,condition)
+				select: choose(your,culture(gollum),another,condition)
 			}
 		}
 		gametext: <b>Response:</b> If the Free Peoples player is about to discard your other [gollum] condition, remove (2) to prevent that.

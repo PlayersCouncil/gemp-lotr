@@ -1,0 +1,255 @@
+{
+
+	19_28: {
+		cardInfo: {
+			image: decipher/LOTR19028.jpg
+			collInfo: 19P28
+			rarity: P
+		}
+		title: Frodo
+		subtitle: Little Master
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 10
+		canStartWithRing: true
+		keywords: [
+			Ring-bearer
+			Ring-bound
+			Fellowship
+		]
+		effects: {
+			type: modifier
+			modifier: {
+				type: cantDiscardCardsFromHandOrTopOfDrawDeck
+				requires: {
+					type: not
+					requires: {
+						type: canSpotThreats
+						amount: 4
+					}
+				}
+				filter: side(shadow)
+			}
+		}
+		gametext: <b>Ring-bearer.</b> <b>Ring-bound</b>. <b>Fellowship</b>.<br>While you cannot spot 4 threats, Shadow cards cannot discard cards from your hand or from the top of your draw deck.
+		lore: "We're friends of Gandalf the Grey."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_29: {
+		cardInfo: {
+			image: decipher/LOTR19029.jpg
+			collInfo: 19P29
+			rarity: P
+		}
+		title: Merry
+		subtitle: Resolute Friend
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 8
+		keywords: Fellowship
+		effects: {
+			type: activated
+			phase: skirmish
+			requires: {
+				type: canSpot
+				filter: self,notAssignedToSkirmish
+			}
+			cost: {
+				type: removeCardsInDiscardFromGame
+				count: 2
+				select: choose(culture(shire))
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(companion)
+				amount: 2
+			}
+		}
+		gametext: <b>Fellowship</b>.<br><b>Skirmish:</b> If Merry is not assigned to a skirmish, take 2 [shire] cards from your discard pile and remove them from the game to make a companion strength +2.
+		lore: "'You can trust us to stick to you through thick and thin – to the bitter end.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_30: {
+		cardInfo: {
+			image: decipher/LOTR19030.jpg
+			collInfo: 19P30
+			rarity: P
+		}
+		title: Pippin
+		subtitle: Steadfast Friend
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 8
+		keywords: Fellowship
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: self
+				amount: {
+					type: forEachYouCanSpot
+					filter: tale
+				}
+			}
+		}
+		gametext: <b>Fellowship</b>.<br>Pippin is strength +1 for each tale you can spot.
+		lore: "'You must go – and therefore we must, too. Merry and I are coming with you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_31: {
+		cardInfo: {
+			image: decipher/LOTR19031.jpg
+			collInfo: 19P31
+			rarity: P
+		}
+		title: Rabbit Stew
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		target: culture(shire),companion
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: transfer
+					select: self
+					where: choose(fellowship,companion)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: transferred
+					filter: self
+					to: companion
+				}
+				effect: {
+					type: heal
+					select: bearer
+				}
+			}
+		]
+		gametext: Bearer must be a [shire] companion.<br>Each time bearer wins a skirmish, you may transfer this condition to a fellowship companion.<br>Each time this condition is transferred to a companion, heal that companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_32: {
+		cardInfo: {
+			image: decipher/LOTR19032.jpg
+			collInfo: 19P32
+			rarity: P
+		}
+		title: Sam
+		subtitle: Loyal Friend
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 9
+		keywords: [
+			Ring-bound
+			Fellowship
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: self,ring bearer
+					amount: -4
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						count: 3
+						filter: culture(shire),companion
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
+			}
+		]
+		gametext: <b>Ring-bound</b>. <b>Fellowship</b>.<br>While Sam bears The One Ring, he is resistance -4.<br>While you can spot 3 [shire] companions, Sam is strength +2.<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

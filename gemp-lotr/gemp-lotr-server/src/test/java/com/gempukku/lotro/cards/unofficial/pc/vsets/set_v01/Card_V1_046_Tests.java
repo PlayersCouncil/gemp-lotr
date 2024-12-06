@@ -56,7 +56,7 @@ public class Card_V1_046_Tests
 		assertEquals(Culture.SAURON, iseeyou.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, iseeyou.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, iseeyou.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(iseeyou, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(iseeyou, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(0, iseeyou.getBlueprint().getTwilightCost());
 		//assertEquals(, iseeyou.getBlueprint().getStrength());
 		//assertEquals(, iseeyou.getBlueprint().getVitality());

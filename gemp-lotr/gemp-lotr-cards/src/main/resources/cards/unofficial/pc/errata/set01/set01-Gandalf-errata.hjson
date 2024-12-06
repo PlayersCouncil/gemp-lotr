@@ -2,17 +2,14 @@
 	
 		51_70: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E070.1_card.jpg
-			javaClass: false
+			//id: 1_70.4
 			parent: 1_70
-			parentPath: errata/pc
-			version: 4
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 4
+			image: errata/LOTR-EN01E070.1_card.jpg
 			collInfo: 1U70
 			rarity: U
-			setNum: "1"
-			cardNum: 70
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Barliman Butterbur
 		subtitle: Prancing Pony Proprietor
@@ -21,7 +18,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Ally
-		allyHome: fellowship,1
+		allyHome: 1F
 		race: Man
 		strength: 1
 		vitality: 2
@@ -30,11 +27,11 @@
 			phase: fellowship
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: putCardsFromDiscardIntoHand
-				filter: choose(spell)
+				select: choose(spell)
 			}
 		}
 		gametext: <b>Fellowship:</b> Exert Barliman Butterbur to take a spell into hand from your discard pile.
@@ -50,17 +47,14 @@
 
 	51_80: {
 		cardInfo: {
-			imagePath: errata/51_80.jpg
-			javaClass: false
+			//id: 1_80.1
 			parent: 1_80
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_80.jpg
 			collInfo: 1R80
 			rarity: R
-			setNum: "1"
-			cardNum: 80
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Ottar
 		subtitle: Man of Laketown
@@ -69,31 +63,36 @@
 		culture: Gandalf
 		twilight: 1
 		type: Ally
-		allyHome: fellowship,3
+		allyHome: 3F
 		race: Man
 		strength: 2
 		vitality: 4
-		requires: {
-			type: canSpot
-			filter: name(Gandalf)
-		}
-		effects: {
-			type: activated
-			phase: fellowship
-			cost: [
-				{
-					type: exert
-					filter: self
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
 				}
-				{
-					type: discardFromHand
-					forced: false
-				}
-			]
-			effect: {
-				type: drawCards
 			}
-		}
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: exert
+						select: self
+					}
+					{
+						type: discardFromHand
+						forced: false
+					}
+				]
+				effect: {
+					type: drawCards
+				}
+			}
+		]
 		gametext: To play, spot Gandalf.<br><b>Fellowship:</b> Exert Ottar and discard a card from hand to draw a card.
 		lore: The Men of Laketown come from the North, where they trade with the Dwarves of the Lonely Mountain.
 		promotext: ""
@@ -107,17 +106,14 @@
 	
 	51_87: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E087.1_card.jpg
-			javaClass: false
+			//id: 1_87.1
 			parent: 1_87
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E087.1_card.jpg
 			collInfo: 1R87
 			rarity: R
-			setNum: "1"
-			cardNum: 87
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: A Wizard Is Never Late
 		unique: false
@@ -125,13 +121,14 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: Fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(or(wizard,and(culture(gandalf),ally)))
-				nocheck: true
+				select: choose(or(wizard,and(culture(gandalf),ally)))
+				showAll: true
+				shuffle: true
 			}
 		}
 		gametext: Play a Wizard or [gandalf] ally from your draw deck.

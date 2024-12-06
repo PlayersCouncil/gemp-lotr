@@ -1,17 +1,14 @@
 {
 	53_38: {
 		cardInfo: {
-			imagePath: errata/53_38.jpg
-			javaClass: false
+			//id: 3_38.1
 			parent: 3_38
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/53_38.jpg
 			collInfo: 3R38
 			rarity: R
-			setNum: "3"
-			cardNum: 38
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Aragorn
 		subtitle: Heir to the White City
@@ -28,7 +25,8 @@
 			Ranger
 		]
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: moves
 			}
@@ -54,17 +52,14 @@
 	
 	53_41: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E041.1_card.jpg
-			javaClass: false
+			//id: 3_41.1
 			parent: 3_41
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN03E041.1_card.jpg
 			collInfo: 3R41
 			rarity: R
-			setNum: "3"
-			cardNum: 41
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Gondor Bowmen
 		unique: false
@@ -83,11 +78,11 @@
 				cost: [
 					{
 						type: Exert
-						filter: choose(culture(gondor),companion)
+						select: choose(culture(gondor),companion)
 					}
 					{
 						type: Discard
-						filter: self
+						select: self
 					}
 				]
 				effect: {
@@ -110,17 +105,14 @@
 	
 	53_42: {
 		cardInfo: {
-			imagePath: errata/53_42.jpg
-			javaClass: false
+			//id: 3_42.1
 			parent: 3_42
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/53_42.jpg
 			collInfo: 3R42
 			rarity: R
-			setNum: "3"
-			cardNum: 42
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Horn of Boromir
 		unique: true
@@ -135,17 +127,17 @@
 			cost: [
 				{
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: [
 				{
 					type: spot
-					filter: choose(ally)
+					select: choose(ally)
 					memorize: chosenAlly
 				}
 				{
@@ -159,7 +151,7 @@
 				}
 				{
 					type: EnableParticipationInArcheryFireAndSkirmishes
-					filter: memory(chosenAlly)
+					select: memory(chosenAlly)
 					until: start(regroup)
 				}
 			]

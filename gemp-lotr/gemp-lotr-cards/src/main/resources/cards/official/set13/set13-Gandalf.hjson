@@ -1,0 +1,854 @@
+{
+
+	13_28: {
+		cardInfo: {
+			image: decipher/LOTR13028.jpg
+			collInfo: 13U28
+			rarity: U
+		}
+		title: Alatar
+		subtitle: Final Envoy
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Follower
+		effects: [
+			{
+				type: aidCost
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: transferred
+					filter: self
+					to: companion
+				}
+				effect: {
+					type: reinforceTokens
+					culture: gandalf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: culture(gandalf),companion
+					}
+					filter: minion,inSkirmishAgainst(bearer)
+					amount: -1
+				}
+			}
+		]
+		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper><br>Each time you transfer this to a companion, you may reinforce a [gandalf] token.<br>While you can spot a [gandalf] companion, each minion skirmishing bearer is strength -1.
+		lore: "Third of the Istari to be named, he was clad in sea-blue."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_29: {
+		cardInfo: {
+			image: decipher/LOTR13029.jpg
+			collInfo: 13C29
+			rarity: C
+		}
+		title: Dasron
+		subtitle: Merchant From Dorwinion
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: removeTokensCumulative
+					filter: side(free people)
+					count: 2
+				}
+				effect: {
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(gandalf),event)
+				}
+			}
+		]
+		gametext: At the start of the fellowship phase, you may remove 2 Free Peoples culture tokens to take a [gandalf] event into hand from your discard pile.
+		lore: "...its inhabitants, traditional trading partners of Esgaroth and Dale, now look to their northern allies for protection against the wild Easterlings...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_30: {
+		cardInfo: {
+			image: decipher/LOTR13030.jpg
+			collInfo: 13C30
+			rarity: C
+		}
+		title: Fear and Great Wonder
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: gandalf
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: choice
+					texts: [
+						Discard this from play
+						Remove a token from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: gandalf
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: addKeyword
+					select: choose(culture(gandalf),companion)
+					keyword: muster
+					until: endOfTurn
+				}
+			}
+		]
+		gametext: When you play this, add a [gandalf] token here.<br><b>Maneuver:</b> Discard this from play or remove a token from here to spot a [gandalf] companion. That companion gains <b>muster</b> until end of turn.
+		lore: "The Hosts of Isengard roared, swaying this way and that, turning from fear to fear."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_31: {
+		cardInfo: {
+			image: decipher/LOTR13031.jpg
+			collInfo: 13U31
+			rarity: U
+		}
+		title: The Flame of Anor
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		keywords: Spell
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(gandalf),companion
+				count: 3
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(companion))
+					amount: -3
+				}
+			]
+		}
+		gametext: <b>Spell</b>.<br>Spot 3 [gandalf] companions to make a minion skirmishing a companion strength -3.
+		lore: "The power of the flame is like that of the Sun – beautiful yet blinding."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_32: {
+		cardInfo: {
+			image: decipher/LOTR13032.jpg
+			collInfo: 13C32
+			rarity: C
+		}
+		title: For a While Less Dark
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		keywords: Spell
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(gandalf),companion)
+					memorize: chosenCompanion
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenCompanion
+							filter: hasAttached(follower)
+						}
+						true: 4
+						false: 2
+					}
+				}
+			]
+		}
+		gametext: <b>Spell</b>.<br>Make a [gandalf] companion strength +2 (or +4 if that companion bears a follower).
+		lore: "The Nazgûl gave a long wailing cry and swerved away; and with that the four others waivered...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_33: {
+		cardInfo: {
+			image: decipher/LOTR13033.jpg
+			collInfo: 13R33
+			rarity: R
+		}
+		title: Gandalf
+		subtitle: Bearer of Obligation
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 7
+		vitality: 4
+		resistance: 5
+		canStartWithRing: true
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: moves
+				}
+				requires: {
+					type: canSpot
+					filter: self,ringBearer
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add 3 burdens
+						Discard 2 {gandalf} cards from hand
+					]
+					effects: [
+						{
+							type: addBurdens
+							amount: 3
+						}
+						{
+							type: If
+							check: {
+								type: canSpot
+								filter: other,companion
+								count: 2
+							}
+							true: {
+								type: discardFromHand
+								forced: false
+								select: choose(culture(gandalf))
+								count: 2
+							}
+						}
+					]
+				}
+			}
+		]
+		gametext: While Gandalf is the Ring-bearer, each time the fellowship moves, add 3 burdens unless you spot 2 other companions and discard 2 [gandalf] cards from hand.
+		lore: "'But all worthy things that are in peril as the world now stands, those are my care.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_34: {
+		cardInfo: {
+			image: decipher/LOTR13034.jpg
+			collInfo: 13U34
+			rarity: U
+		}
+		title: Look to My Coming
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: activatedInDiscard
+				phase: skirmish
+				cost: {
+					type: removeCardsInDiscardFromGame
+					select: choose(other,culture(gandalf))
+					count: 4
+				}
+				effect: {
+				   type: playCardFromDiscard
+				   select: self
+				   extraEffects: {
+					   type: removePlayedEventFromTheGame
+					   filter: self
+				   }
+				}
+			}
+			{
+				type: event
+				requires: {
+					type: canSpot
+					filter: name(Gandalf)
+				}
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(your,culture(gandalf),companion)
+						amount: 3
+					}
+				]
+			}
+		]
+		gametext: You may remove from the game 4 other [gandalf] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Spot Gandalf to make your [gandalf] companion strength +3.
+		lore: "'...at dawn on the fifth day.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_35: {
+		cardInfo: {
+			image: decipher/LOTR13035.jpg
+			collInfo: 13C35
+			rarity: C
+		}
+		title: No Colour Now
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: discard
+				select: choose(your,culture(gandalf),condition)
+			}
+			effect: [
+				{
+					type: discard
+					select: choose(condition)
+				}
+				{
+					type: drawCards
+				}
+			]
+		}
+		gametext: Discard your [gandalf] condition from play to discard a condition from play and draw a card.
+		lore: "'He raised his hand, and spoke slowly in a clear cold voice. 'Saruman, your staff is broken.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_36: {
+		cardInfo: {
+			image: decipher/LOTR13036.jpg
+			collInfo: 13R36
+			rarity: R
+		}
+		title: The Palantír of Orthanc
+		subtitle: Recovered Seeing Stone
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Artifact
+		resistance: -2
+		target: title(Gandalf)
+		effects: [
+			{
+				type: extraCost
+				requires: {
+					type: canSpot
+					filter: name(The Palantír of Orthanc)
+				}
+				cost: {
+					type: discard
+					select: choose(name(The Palantír of Orthanc))
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: addBurdens
+				}
+				effect: [
+					{
+						type: revealHand
+						hand: shadow
+						memorize: revealedCards
+					}
+					{
+						type: discardFromHand
+						forced: true
+						hand: shadow
+						player: shadow
+						select: choose(memory(revealedCards),minion)
+					}
+				]
+			}
+		]
+		gametext: Bearer must be Gandalf. To play this, if you can spot The Palantír of Orthanc, discard it.<br>At the start of the fellowship phase, you may add a burden to reveal a Shadow player's hand. He or she must choose a revealed minion and discard it from hand.
+		lore: "...a heavy shining thing came hurtling down from above."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_37: {
+		cardInfo: {
+			image: decipher/LOTR13037.jpg
+			collInfo: 13R37
+			rarity: R
+		}
+		title: Pallando
+		subtitle: Far-travelling One
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Follower
+		strength: 1
+		effects: [
+			{
+				type: aidCost
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: transferred
+					filter: self
+					to: companion,not(culture(gandalf))
+				}
+				effect: {
+					type: exert
+					select: bearer
+					times: 2
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: discard
+					select: choose(condition)
+				}
+			}
+		]
+		gametext: <b>Aid</b> – (2).<br>Each time you transfer this to a companion, except a [gandalf] companion, exert bearer twice.<br>Each time bearer wins a skirmish, you may discard a condition from play.
+		lore: "Brought as a companion by Alatar, he traveled the South and East to aid the Free Peoples."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_38: {
+		cardInfo: {
+			image: decipher/LOTR13038.jpg
+			collInfo: 13R38
+			rarity: R
+		}
+		title: Radagast
+		subtitle: Tender of Beasts
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Follower
+		resistance: 2
+		effects: [
+			{
+				type: aidCost
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cancelStrengthBonus
+					requires: {
+						type: canSpot
+						filter: culture(gandalf),companion
+						count: 2
+					}
+					filter: minion,inSkirmishAgainst(bearer)
+					from: possession
+				}
+			}
+		]
+		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper><br>While you can spot 2 [gandalf] companions, minions skirmishing bearer do not gain strength bonuses from possessions.
+		lore: "'It would have been useless in any case to try and win over the honest Radagast to treachery.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_39: {
+		cardInfo: {
+			image: decipher/LOTR13039.jpg
+			collInfo: 13C39
+			rarity: C
+		}
+		title: Return to Us
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: {
+				type: discardFromHand
+				forced: false
+				select: choose(side(shadow))
+				count: 2
+			}
+			effect: [
+				{
+					type: putCardsFromDiscardIntoHand
+					select: choose(culture(gandalf),event)
+				}
+			]
+		}
+		gametext: Discard 2 Shadow cards from hand to take a [gandalf] event into hand from your discard pile.
+		lore: "'Yes, that was the name. I was Gandalf.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_40: {
+		cardInfo: {
+			image: decipher/LOTR13040.jpg
+			collInfo: 13R40
+			rarity: R
+		}
+		title: Shadowfax
+		subtitle: Roaring Wind
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		strength: 1
+		itemclass: Mount
+		target: wizard
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: reinforceTokens
+					culture: gandalf
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeTokensCumulative
+					culture: gandalf
+					count: 2
+				}
+				effect: {
+					type: wound
+					select: choose(minion,inSkirmishAgainst(bearer))
+				}
+			}
+		]
+		gametext: Bearer must be a Wizard.<br>When you play Shadowfax, you may reinforce a [gandalf] token.<br><b>Skirmish:</b> Remove 2 [gandalf] tokens to wound a minion skirmishing bearer.
+		lore: "Then Shadowfax gathered himself together and sprang away, and the night flowed over him...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_41: {
+		cardInfo: {
+			image: decipher/LOTR13041.jpg
+			collInfo: 13C41
+			rarity: C
+		}
+		title: Strange Meeting
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: companion,hasAttached(follower)
+					keyword: muster
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: companion,hasAttached(follower),culture(gandalf)
+					amount: 1
+				}
+			}
+		]
+		gametext: Each companion bearing a follower gains <b>muster</b> (and is strength +1 if that companion is a [gandalf] companion).
+		lore: "'Gandalf obviously expected to find Treebeard here; and Treebeard might almost have been loitering about near the gates on purpose to meet him.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_42: {
+		cardInfo: {
+			image: decipher/LOTR13042.jpg
+			collInfo: 13R42
+			rarity: R
+		}
+		title: Traveler's Homestead
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: wizard
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: gandalf
+					select: self
+					count: {
+						type: regionNumber
+					}
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: choice
+					texts: [
+						Discard this from play
+						Remove 2 tokens from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: gandalf
+							select: self
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: discard
+					select: choose(side(shadow),condition)
+				}
+			}
+		]
+		gametext: To play, spot a Wizard.<br>When you play this, add X [gandalf] tokens here, where X is the current region number.<br><b>Maneuver:</b> Discard this from play or remove 2 tokens from here to discard a Shadow condition from play.
+		lore: "Of the Wizards, it was Gandalf that chose no home."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_43: {
+		cardInfo: {
+			image: decipher/LOTR13043.jpg
+			collInfo: 13U43
+			rarity: U
+		}
+		title: Vapour and Steam
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: [
+					{
+						type: exert
+						select: choose(your,culture(gandalf),companion)
+						memorize: exertedCompanion
+					}
+					{
+						type: addBurdens
+					}
+				]
+				effect: {
+					type: addKeyword
+					select: memory(exertedCompanion)
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Skirmish:</b> Exert your [gandalf] companion and add a burden to make that companion <b>damage +1</b>.
+		lore: "'There was none to see, or perhaps in after ages songs would still be sung of the Battle of the Peak.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

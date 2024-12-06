@@ -23,7 +23,7 @@ public class ModifySiteNumber implements ModifierSourceProducer {
             final Evaluator evaluator = amount.getEvaluator(actionContext);
             return new MinionSiteNumberModifier(actionContext.getSource(),
                     filterableSource.getFilterable(actionContext),
-                    new RequirementCondition(requirements, actionContext), evaluator);
+                    RequirementCondition.createCondition(requirements, actionContext), evaluator);
         };
     }
 }

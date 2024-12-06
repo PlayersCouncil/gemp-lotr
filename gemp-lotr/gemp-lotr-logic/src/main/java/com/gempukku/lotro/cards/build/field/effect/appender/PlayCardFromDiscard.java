@@ -15,8 +15,11 @@ import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.StackActionEffect;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
+import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
+import com.gempukku.lotro.logic.modifiers.evaluator.RangeEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.ExtraFilters;
+import com.gempukku.lotro.logic.timing.FailedEffect;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
@@ -24,52 +27,52 @@ import java.util.Collection;
 public class PlayCardFromDiscard implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "on", "cost", "removedTwilight", "memorize", "nocheck");
+        FieldUtils.validateAllowedFields(effectObject,  "player", "select", "on", "discount", "maxDiscount", "removedTwilight", "optional", "extraEffects", "memorize");
 
-        final String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
-        final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
-        final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("cost"), 0, environment);
-        final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
-        final boolean noCheck = FieldUtils.getBoolean(effectObject.get("nocheck"), "nocheck", false);
 
-        ValueSource countSource = new ConstantEvaluator(1);
-        if(noCheck)
-        {
-            //This range will cause choice checks to succeed even if no valid choices are found (which is how draw deck
-            // searching is supposed to work RAW).  However we don't want this to be the default, else dual-choice cards
-            // that play "from draw deck or discard pile" would allow empty sources to be chosen, which is NPE.
-            countSource = ValueResolver.resolveEvaluator("0-1", 1, environment);
-        }
+        final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("discount"), 0, environment);
+        final ValueSource maxDiscountSource = effectObject.get("maxDiscount") == null ? costModifierSource : ValueResolver.resolveEvaluator(effectObject.get("maxDiscount"), 0, environment);
+        final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
+
+        final boolean optional = FieldUtils.getBoolean(effectObject.get("optional"), "optional", false);
+        final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
+
+        final JSONObject[] extraEffectsArray = FieldUtils.getObjectArray(effectObject.get("extraEffects"), "extraEffects");
+        final EffectAppender[] extraEffectsAppenders = environment.getEffectAppenderFactory().getEffectAppenders(extraEffectsArray, environment);
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 
         MultiEffectAppender result = new MultiEffectAppender();
         result.setPlayabilityCheckedForEffect(true);
 
+        Evaluator countEvaluator = optional ? new RangeEvaluator(0, 1) : new ConstantEvaluator(1);
+
         result.addEffectAppender(
-                CardResolver.resolveCardsInDiscard(filter,
+                CardResolver.resolveCardsInDiscard(select,
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(game, costModifier), ExtraFilters.attachableTo(game, onFilterable));
+                                return Filters.and(Filters.playable(game, costModifier), ExtraFilters.attachableTo(game, costModifier, onFilterable));
                             }
 
                             return Filters.playable(game, costModifier);
                         },
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
-                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
+                            final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, false, true), ExtraFilters.attachableTo(actionContext.getGame(), onFilterable));
+                                return Filters.and(Filters.playable(actionContext.getGame(), removedTwilight, maxDiscountModifier, false, false, true), ExtraFilters.attachableTo(actionContext.getGame(), maxDiscountModifier, onFilterable));
                             }
 
-                            return Filters.playable(actionContext.getGame(), removedTwilight, costModifier, false, false, true);
+                            return Filters.playable(actionContext.getGame(), removedTwilight, maxDiscountModifier, false, false, true);
                         },
-                        countSource, memorize, "you", "Choose card to play", environment));
+                        actionContext -> countEvaluator, memorize, player, "Choose card to play from discard", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -81,9 +84,13 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
                             Filterable onFilterable = (onFilterableSource != null) ? onFilterableSource.getFilterable(actionContext) : Filters.any;
 
                             final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(game, cardsToPlay.iterator().next(), costModifier, onFilterable, false);
+                            for (EffectAppender extraEffectsAppender : extraEffectsAppenders) {
+                                extraEffectsAppender.appendEffect(false, playCardAction, actionContext);
+                            }
+
                             return new StackActionEffect(playCardAction);
                         } else {
-                            return null;
+                            return new FailedEffect();
                         }
                     }
 

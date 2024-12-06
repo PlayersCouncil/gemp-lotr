@@ -3,16 +3,13 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 public class Card_01_018_Tests
@@ -40,7 +37,8 @@ public class Card_01_018_Tests
 
         /**
          * Set: 1
-         * Title: Halls of My Home
+         * Name: Halls of My Home
+         * Unique: False
          * Side: Free Peoples
          * Culture: Dwarven
          * Twilight Cost: 1
@@ -51,43 +49,38 @@ public class Card_01_018_Tests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl halls = scn.GetFreepsCard("halls");
+        var card = scn.GetFreepsCard("halls");
 
-        assertFalse(halls.getBlueprint().isUnique());
-        assertEquals(Side.FREE_PEOPLE, halls.getBlueprint().getSide());
-        assertEquals(Culture.DWARVEN, halls.getBlueprint().getCulture());
-        assertEquals(CardType.EVENT, halls.getBlueprint().getCardType());
-        //assertEquals(Race.CREATURE, halls.getBlueprint().getRace());
-        assertTrue(scn.HasKeyword(halls, Keyword.FELLOWSHIP)); // test for keywords as needed
-        assertEquals(1, halls.getBlueprint().getTwilightCost());
-        //assertEquals(, halls.getBlueprint().getStrength());
-        //assertEquals(, halls.getBlueprint().getVitality());
-        //assertEquals(, halls.getBlueprint().getResistance());
-        //assertEquals(Signet., halls.getBlueprint().getSignet());
-        //assertEquals(, halls.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-
+        assertEquals("Halls of My Home", card.getBlueprint().getTitle());
+        assertNull(card.getBlueprint().getSubtitle());
+        assertFalse(card.getBlueprint().isUnique());
+        assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+        assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
+        assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+        assertTrue(scn.hasTimeword(card, Timeword.FELLOWSHIP));
+        assertEquals(1, card.getBlueprint().getTwilightCost());
     }
 
     @Test
     public void HallsExertsToRevealDiscardAndRearrangeFreepsDeck() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        PhysicalCardImpl halls = scn.GetFreepsCard("halls");
+        var gimli = scn.GetFreepsCard("gimli");
+        var halls = scn.GetFreepsCard("halls");
         scn.FreepsMoveCharToTable(gimli);
         scn.FreepsMoveCardToHand(halls);
 
-        PhysicalCardImpl fcard1 = scn.GetFreepsCard("fcard1");
-        PhysicalCardImpl fcard2 = scn.GetFreepsCard("fcard2");
-        PhysicalCardImpl fcard3 = scn.GetFreepsCard("fcard3");
+        var fcard1 = scn.GetFreepsCard("fcard1");
+        var fcard2 = scn.GetFreepsCard("fcard2");
+        var fcard3 = scn.GetFreepsCard("fcard3");
         scn.FreepsMoveCardsToTopOfDeck(fcard3, fcard2, fcard1);
 
-        PhysicalCardImpl scard1 = scn.GetShadowCard("scard1");
-        PhysicalCardImpl scard2 = scn.GetShadowCard("scard2");
-        PhysicalCardImpl scard3 = scn.GetShadowCard("scard3");
+        var scard1 = scn.GetShadowCard("scard1");
+        var scard2 = scn.GetShadowCard("scard2");
+        var scard3 = scn.GetShadowCard("scard3");
         scn.ShadowMoveCardsToTopOfDeck(scard3, scard2, scard1);
 
         scn.StartGame();
@@ -109,7 +102,7 @@ public class Card_01_018_Tests
         scn.AcknowledgeReveal();
         assertTrue(scn.FreepsDecisionAvailable("Would you like to discard"));
         scn.FreepsChooseYes();
-        assertTrue(scn.FreepsDecisionAvailable("Choose card from deck"));
+        assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 
         choices = scn.FreepsGetADParamAsList("blueprintId");
         assertTrue(choices.contains(fcard1.getBlueprintId()));
@@ -132,21 +125,21 @@ public class Card_01_018_Tests
     @Test
     public void HallsExertsToRevealDiscardAndRearrangeShadowDeck() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        var scn = GetScenario();
 
-        PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        PhysicalCardImpl halls = scn.GetFreepsCard("halls");
+        var gimli = scn.GetFreepsCard("gimli");
+        var halls = scn.GetFreepsCard("halls");
         scn.FreepsMoveCharToTable(gimli);
         scn.FreepsMoveCardToHand(halls);
 
-        PhysicalCardImpl fcard1 = scn.GetFreepsCard("fcard1");
-        PhysicalCardImpl fcard2 = scn.GetFreepsCard("fcard2");
-        PhysicalCardImpl fcard3 = scn.GetFreepsCard("fcard3");
+        var fcard1 = scn.GetFreepsCard("fcard1");
+        var fcard2 = scn.GetFreepsCard("fcard2");
+        var fcard3 = scn.GetFreepsCard("fcard3");
         scn.FreepsMoveCardsToTopOfDeck(fcard3, fcard2, fcard1);
 
-        PhysicalCardImpl scard1 = scn.GetShadowCard("scard1");
-        PhysicalCardImpl scard2 = scn.GetShadowCard("scard2");
-        PhysicalCardImpl scard3 = scn.GetShadowCard("scard3");
+        var scard1 = scn.GetShadowCard("scard1");
+        var scard2 = scn.GetShadowCard("scard2");
+        var scard3 = scn.GetShadowCard("scard3");
         scn.ShadowMoveCardsToTopOfDeck(scard3, scard2, scard1);
 
         scn.StartGame();
@@ -168,7 +161,7 @@ public class Card_01_018_Tests
         scn.AcknowledgeReveal();
         assertTrue(scn.FreepsDecisionAvailable("Would you like to discard"));
         scn.FreepsChooseYes();
-        assertTrue(scn.FreepsDecisionAvailable("Choose card from deck"));
+        assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 
         choices = scn.FreepsGetADParamAsList("blueprintId");
         assertTrue(choices.contains(scard1.getBlueprintId()));
@@ -186,7 +179,4 @@ public class Card_01_018_Tests
         assertEquals(scard3.getBlueprintId(), scn.GetShadowTopOfDeck().getBlueprintId());
 
     }
-
-
-
 }

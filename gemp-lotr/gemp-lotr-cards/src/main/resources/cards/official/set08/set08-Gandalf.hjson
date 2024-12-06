@@ -1,0 +1,395 @@
+{
+
+	8_14: {
+		cardInfo: {
+			image: decipher/LOTR08014.jpg
+			collInfo: 8C14
+			rarity: C
+		}
+		title: A Fool
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: if
+					check: {
+						type: location
+						filter: siteBlock(king),siteNumber(1-5)
+					}
+					true: {
+						type: heal
+						select: choose(name(Gandalf))
+					}
+					false: {
+						type: alterOverwhelmMultiplier
+						select: choose(hobbit)
+						multiplier: 3
+					}
+				}
+			]
+		}
+		gametext: At sites 1[K] to 5[K], heal Gandalf. At any other site, prevent a Hobbit from being overwhelmed unless his or her strength is tripled.
+		lore: "'...but an honest fool he remains.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_15: {
+		cardInfo: {
+			image: decipher/LOTR08015.jpg
+			collInfo: 8R15
+			rarity: R
+		}
+		title: Gandalf
+		subtitle: Leader of Men
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Companion
+		race: Wizard
+		strength: 7
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: phase
+					phase: play starting fellowship
+				}
+				amount: -2
+			}
+		]
+		gametext: When Gandalf is in your starting fellowship, his twilight cost is -2.
+		lore: "'...the rule of no realm is mine, neither of Gondor nor any other, great or small.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_16: {
+		cardInfo: {
+			image: decipher/LOTR08016.jpg
+			collInfo: 8U16
+			rarity: U
+		}
+		title: Let Us Not Tarry
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(name(Gandalf))
+			},
+			effect: [
+				{
+					type: chooseHowManyToSpot
+					filter: signet(gandalf)
+					memorize: spotCount
+				}
+				{
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(unbound,companion))
+					amount: {
+						type: fromMemory
+						memory: spotCount
+						multiplier: -1
+					}
+				}
+			]
+		}
+		gametext: Exert Gandalf to make a minion skirmishing an unbound companion strength -1 for each Gandalf signet you spot.
+		lore: "'There is much to say and to do, and you are weary.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_17: {
+		cardInfo: {
+			image: decipher/LOTR08017.jpg
+			collInfo: 8U17
+			rarity: U
+		}
+		title: Mighty Steed
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf),notAssignedToSkirmish
+			}
+			cost: {
+				type: choice
+				texts: [
+					Spot Shadowfax
+					Exert Gandalf
+				]
+				effects: [
+					{
+						type: spot
+						filter: name(Shadowfax)
+					}
+					{
+						type: exert
+						select: choose(name(Gandalf))
+					}
+				]
+			},
+			effect: [
+				{
+					type: replaceInSkirmish
+					filter: unbound,companion,not(name(Gandalf))
+					with: choose(name(Gandalf))
+				}
+			]
+		}
+		gametext: If Gandalf is not assigned to a skirmish, spot Shadowfax or exert Gandalf to have Gandalf replace an unbound companion in a skirmish.
+		lore: "'He always turns up when things are darkest. Go on! Go on, White Rider! Gandalf! Gandalf!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_18: {
+		cardInfo: {
+			image: decipher/LOTR08018.jpg
+			collInfo: 8U18
+			rarity: U
+		}
+		title: Not the First Halfling
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: [
+					{
+						type: exert
+						select: choose(name(Gandalf))
+					}
+					{
+						type: exert
+						select: choose(or(culture(elven),culture(shire)),companion)
+					}
+				]
+				effect: {
+					type: AddCultureTokens
+					culture: gandalf
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					culture: gandalf
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(unbound,companion))
+					amount: -2
+				}
+			}
+		]
+		gametext: <b>Fellowship:</b> Exert Gandalf and either an [elven] companion or a [shire] companion to add a [gandalf] token here.<br><b>Skirmish:</b> Remove a [gandalf] token here to make a minion skirmishing an unbound companion strength -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_19: {
+		cardInfo: {
+			image: decipher/LOTR08019.jpg
+			collInfo: 8U19
+			rarity: U
+		}
+		title: On Your Doorstep
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			cost: {
+				type: exert
+				select: choose(companion)
+				memorize: exertedCompanion
+			}
+			effect: [
+				{
+					type: putCardsFromDiscardOnTopOfDeck
+					select: choose(cultureFromMemory(exertedCompanion))
+				}
+			]
+		}
+		gametext: Spot Gandalf and exert a companion to place a card of that companion's culture from your discard pile on top of your draw deck.
+		lore: "'Lord Denethor is a Steward only.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_20: {
+		cardInfo: {
+			image: decipher/LOTR08020.jpg
+			collInfo: 8R20
+			rarity: R
+		}
+		title: Saved From the Fire
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			cost: {
+				type: kill
+				select: choose(companion,not(ringBearer))
+				memorize: killedCompanion
+			},
+			effect: [
+				{
+					type: putCardsFromDeckIntoHand
+					select: choose(cultureFromMemory(killedCompanion))
+					count: 0-3
+					reveal: true
+					shuffle: true
+					showAll: true
+				}
+				{
+					type: shuffleDeck
+				}
+			]
+		}
+		gametext: Spot Gandalf and place a companion (except the Ring-bearer) in the dead pile to take up to 3 cards from that companion's culture into hand from your draw deck. Shuffle your draw deck.
+		lore: "'...we will bear Faramir, Steward of Gondor, to a place where he can sleep in peace....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	8_21: {
+		cardInfo: {
+			image: decipher/LOTR08021.jpg
+			collInfo: 8R21
+			rarity: R
+		}
+		title: Shadowfax
+		subtitle: Greatheart
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		itemclass: Mount
+		target: title(Gandalf)
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				effect: {
+					type: exert
+					select: all(minion,inSkirmishAgainst(bearer))
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: modifyStrength
+					select: bearer
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be Gandalf.<br>At the start of each skirmish involving Gandalf, each minion skirmishing Gandalf must exert.<br><b>Skirmish:</b> Add a threat to make Gandalf strength +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

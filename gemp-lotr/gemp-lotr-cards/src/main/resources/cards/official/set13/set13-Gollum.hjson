@@ -1,0 +1,936 @@
+{
+
+	13_44: {
+		cardInfo: {
+			image: decipher/LOTR13044.jpg
+			collInfo: 13R44
+			rarity: R
+		}
+		title: Chasm's Edge
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: name(Gollum)
+					amount: {
+						type: forEachYouCanSpot
+						filter: ringBound,companion
+					}
+				}
+			}
+		]
+		gametext: Gollum is strength +1 for each Ring-bound companion you can spot.
+		lore: "...Gollum, dancing like a mad thing, held aloft the ring... It shown now as if verily it was wrought of living fire."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_45: {
+		cardInfo: {
+			image: decipher/LOTR13045.jpg
+			collInfo: 13U45
+			rarity: U
+		}
+		title: Cunningly Hidden
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: discount
+				discount: {
+					type: ifRemoveFromDiscard
+					filter: culture(gollum)
+					count: 4
+				}
+			}
+			{
+				type: event
+				requires: {
+					type: canSpot
+					filter: name(Gollum)
+				}
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(minion)
+						amount: 2
+					}
+				]
+			}
+		]
+		gametext: You may remove from the game 4 [gollum] cards in your discard pile instead of paying the twilight cost for this card.<br>Spot Gollum to make a minion strength +2.
+		lore: "'No one ever found out what had become of Déagol....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_46: {
+		cardInfo: {
+			image: decipher/LOTR13046.jpg
+			collInfo: 13R46
+			rarity: R
+		}
+		title: Déagol
+		subtitle: Fateful Finder
+		unique: true
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Follower
+		resistance: 1
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Sméagol)
+				}
+			}
+			{
+				type: aidCost
+				cost: {
+					type: addBurdens
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: bearer,notAssignedToSkirmish
+				}
+				cost: [
+					{
+						type: memorizeActive
+						filter: bearer
+						memory: bearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(or(artifact,possession))
+					on: memory(bearer)
+					showAll: true
+					shuffle: true
+				}
+			}
+		]
+		gametext: To play, spot Sméagol.<br><b>Aid</b> – Add a burden.<br><b>Skirmish:</b> If bearer is not assigned to a skirmish, discard this from play to play an artifact or possession from your draw deck on bearer.
+		lore: "'...there in his hand lay a beautiful golden ring.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_47: {
+		cardInfo: {
+			image: decipher/LOTR13047.jpg
+			collInfo: 13C47
+			rarity: C
+		}
+		title: Duality
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Sméagol)
+			}
+			effect: [
+				{
+					type: choice
+					player: shadow
+					texts: [
+						Discard a Shadow card from hand
+						Remove (2)
+					]
+					effects: [
+						{
+							type: discardFromHand
+							forced: false
+							hand: shadow
+							player: shadow
+							select: choose(side(shadow))
+						}
+						{
+							type: removeTwilight
+							amount: 2
+						}
+					]
+				}
+			]
+		}
+		gametext: Spot Sméagol to choose a Shadow player who must discard a Shadow card from hand or remove (2).
+		lore: "Gollum had two loyalties: The Ring and The Ring."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_48: {
+		cardInfo: {
+			image: decipher/LOTR13048.jpg
+			collInfo: 13R48
+			rarity: R
+		}
+		title: Fishing Boat
+		unique: true
+		side: Free Peoples
+		culture: Gollum
+		twilight: 2
+		type: Possession
+		vitality: 1
+		target: title(Sméagol)
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: reinforceTokens
+					culture: gollum
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: aboutToBeOverwhelmed
+					filter: name(Sméagol)
+				}
+				cost: {
+					type: removeTokensCumulative
+					culture: gollum
+					count: 2
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(name(Sméagol))
+					amount: 2
+				}
+			}
+		]
+		gametext: Bearer must be Sméagol.<br>When you play Fishing Boat, you may reinforce a [gollum] token.<br>Each time Sméagol is about to be overwhelmed in a skirmish, you may remove 2 [gollum] tokens to make him strength +2 until the end of that skirmish.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_49: {
+		cardInfo: {
+			image: decipher/LOTR13049.jpg
+			collInfo: 13R49
+			rarity: R
+		}
+		title: Gladden Homestead
+		unique: true
+		side: Free Peoples
+		culture: Gollum
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: name(Sméagol)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: gollum
+					select: self
+					count: {
+						type: forEachYouCanSpot
+						filter: culture(gollum)
+					}
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: choice
+					texts: [
+						Discard this from play
+						Remove 2 tokens from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							select: self
+							culture: gollum
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: putCardsFromPlayOnTopOfDeck
+					select: choose(side(shadow),condition)
+				}
+			}
+		]
+		gametext: To play, spot Sméagol.<br>When you play this, add a [gollum] token here for each [gollum] card you can spot.<br><b>Maneuver:</b> Discard this from play or remove 2 tokens from here to spot a Shadow condition and place that condition on top of its owner's draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_50: {
+		cardInfo: {
+			image: decipher/LOTR13050.jpg
+			collInfo: 13U50
+			rarity: U
+		}
+		title: Gollum
+		subtitle: Her Sneak
+		unique: true
+		side: Shadow
+		culture: Gollum
+		twilight: 2
+		type: Minion
+		strength: 5
+		vitality: 4
+		site: 3
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: hasCardInRemoved
+						filter: name(Déagol)
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: hasCardInRemoved
+						filter: name(Déagol)
+					}
+					filter: self
+					keyword: fierce
+				}
+			}
+			{
+				type: activatedInDiscard
+				phase: shadow
+				cost: {
+					type: removeCardsInDiscardFromGame
+					select: choose(name(Déagol))
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: self
+				}
+			}
+		]
+		gametext: While a card titled Déagol is removed from the game, Gollum is strength +2 and <b>fierce</b>.<br><b>Shadow:</b> Remove a card titled Déagol in your discard pile from the game to play this minion from your discard pile.
+		lore: "Of that deadly gleam and of the dark eyeholes Frodo and Sam were always conscious."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_51: {
+		cardInfo: {
+			image: decipher/LOTR13051.jpg
+			collInfo: 13C51
+			rarity: C
+		}
+		title: It's My Birthday
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(name(Gollum))
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: or(name(Sméagol),name(Déagol))
+						}
+						true: 4
+						false: 2
+					}
+				}
+			]
+		}
+		gametext: Make Gollum strength +2 (or +4 if you can spot Sméagol or Déagol).
+		lore: "'Give us that, Déagol, my love....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_52: {
+		cardInfo: {
+			image: decipher/LOTR13052.jpg
+			collInfo: 13U52
+			rarity: U
+		}
+		title: Little Snuffler
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 2
+		type: Event
+		timewords: Shadow
+		effects: [
+			{
+				type: event
+				cost: [
+					{
+						type: choice
+						texts: [
+							Spot Gollum
+							Spot Gollum
+							Spot anything
+						]
+						effects: [
+							{
+								type: If
+								check: {
+									type: location
+									filter: regionNumber(1)
+								}
+								true: {
+									type: spot
+									filter: name(Gollum)
+								}
+							}
+							{
+								type: If
+								check: {
+									type: location
+									filter: regionNumber(2)
+								}
+								true: {
+									type: spot
+									filter: name(Gollum)
+								}
+							}
+							{
+								type: If
+								check: {
+									type: location
+									filter: regionNumber(3)
+								}
+								true: {
+									type: spot
+									filter: any
+								}
+							}
+						]
+					}
+				]
+				effect: [
+					{
+						type: choice
+						texts: [
+							Wound a companion
+							Exert a companion
+							Play Gollum from discard
+						]
+						effects: [
+							{
+								type: If
+								check: {
+									type: location
+									filter: regionNumber(1)
+								}
+								true: {
+									type: wound
+									select: choose(companion)
+								}
+							}
+							{
+								type: If
+								check: {
+									type: location
+									filter: regionNumber(2)
+								}
+								true: {
+									type: exert
+									select: choose(companion)
+								}
+							}
+							{
+								type: If
+								check: {
+									type: location
+									filter: regionNumber(3)
+								}
+								true: {
+									type: playCardFromDiscard
+									select: choose(culture(gollum),minion)
+								}
+							}
+						]
+					}
+				]
+			}
+		]
+		gametext: If the fellowship is in region 1, spot Gollum to wound a companion.<br>If the fellowship is in region 2, spot Gollum to exert a companion.<br>If the fellowship is in region 3, play a [gollum] minion from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_53: {
+		cardInfo: {
+			image: decipher/LOTR13053.jpg
+			collInfo: 13U53
+			rarity: U
+		}
+		title: Naked Waste
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: activatedInDiscard
+				phase: skirmish
+				cost: {
+					type: removeCardsInDiscardFromGame
+					select: choose(other,culture(elven))
+					count: 4
+				}
+				effect:
+				{
+				   type: playCardFromDiscard
+				   select: self
+				   extraEffects: {
+					   type: removePlayedEventFromTheGame
+					   filter: self
+				   }
+				}
+			}
+			{
+				type: event
+				requires: {
+					type: canSpot
+					filter: name(Sméagol)
+				}
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(ringBound,companion)
+						amount: 3
+					}
+				]
+			}
+		]
+		gametext: You may remove from the game 4 other [gollum] cards in your discard pile to play this event from your discard pile. Then remove this event from the game.<br>Spot Sméagol to make a Ring-bound companion strength +3.
+		lore: "'Nothing can hide from them. Curse the White Face!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_54: {
+		cardInfo: {
+			image: decipher/LOTR13054.jpg
+			collInfo: 13C54
+			rarity: C
+		}
+		title: Out of All Knowledge
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: choice
+				texts: [
+					Spot Sméagol
+					Exert Gollum
+				]
+				effects: [
+					{
+						type: spot
+						filter: name(Sméagol)
+					}
+					{
+						type: exert
+						select: choose(name(Gollum))
+					}
+				]
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(name(Sméagol))
+					amount: 2
+				}
+				{
+					type: optional
+					text: Would you like to reinforce a {gollum} token?
+					effect: {
+						type: reinforceTokens
+						culture: gollum
+					}
+				}
+			]
+		}
+		gametext: Spot Sméagol or exert Gollum to make Sméagol strength +2 and you may reinforce a [gollum] token.
+		lore: "And he thought suddenly: \"It would be cool and shady under those mountains. The Sun could not watch me there.\"'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_55: {
+		cardInfo: {
+			image: decipher/LOTR13055.jpg
+			collInfo: 13U55
+			rarity: U
+		}
+		title: Sméagol
+		subtitle: Simple Stoor
+		unique: true
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Companion
+		strength: 3
+		vitality: 4
+		resistance: 5
+		keywords: Ring-bound
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: addBurdens
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachInDiscard
+						filter: your,name(Déagol)
+						multiplier: 2
+					}
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: self
+					amount: {
+						type: forEachInDiscard
+						filter: your,name(Déagol)
+						multiplier: -1
+					}
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: discardCardsFromDrawDeck
+					select: choose(culture(gollum))
+					showAll: true
+					shuffle: true
+				}
+			}
+		]
+		gametext: <b>Ring-bound</b>. To play, add a burden.<br>For each card titled Déagol in your discard pile, Sméagol is strength +2 and resistance -1.<br>Each time Sméagol wins a skirmish, you may take a [gollum] card from your draw deck and place it in your discard pile.
+		lore: "'...his head and his eyes were downward.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_56: {
+		cardInfo: {
+			image: decipher/LOTR13056.jpg
+			collInfo: 13U56
+			rarity: U
+		}
+		title: Softly Up Behind
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: event
+				requires: {
+					type: canSpot
+					filter: name(Sméagol)
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(culture(gollum))
+					count: 2
+				}
+				effect: [
+					{
+						type: returnToHand
+						select: choose(minion,maxStrength(6))
+					}
+				]
+			}
+			{
+				type: modifierInDiscard
+				modifier: {
+					type: addKeyword
+					filter: name(Sméagol)
+					keyword: muster
+				}
+			}
+		]
+		gametext: Spot Sméagol and discard 2 [gollum] cards from hand to return a minion with strength 6 or less to its owner's hand.<br>While this is in your discard pile, Sméagol gains <b>muster</b>.
+		lore: "'The Ring went into the shadows with him, and even the maker... could learn nothing of it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_57: {
+		cardInfo: {
+			image: decipher/LOTR13057.jpg
+			collInfo: 13R57
+			rarity: R
+		}
+		title: Trap Is Sprung
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 3
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			cost: [
+				{
+					type: discard
+					select: choose(name(Gollum))
+				}
+			]
+			effect: [
+				{
+					type: if
+					check: {
+						type: location
+						filter: regionNumber(1)
+					}
+					true: {
+						type: costToEffect
+						cost: {
+							type: heal
+							select: choose(ringBearer)
+						}
+						effect: {
+							type: addBurdens
+						}
+					}
+					false: {
+						type: repeat
+						times: {
+							type: forEachWound
+							filter: ringBearer
+						}
+						effect: {
+							type: optional
+							text: Would you like to heal the Ring-beaer to add a burden?
+							effect: {
+								type: costToEffect
+								cost: {
+									type: heal
+									select: choose(ringBearer)
+								}
+								effect: {
+									type: addBurdens
+								}
+							}
+						}
+					}
+				}
+			]
+		}
+		gametext: To play, discard Gollum from play.<br>Heal the Ring-bearer to add a burden. If the fellowship is not in region 1, you may repeat this for each other wound on the Ring-bearer.
+		lore: "'Crumbs on his jacket. He took it. He took it!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_58: {
+		cardInfo: {
+			image: decipher/LOTR13058.jpg
+			collInfo: 13R58
+			rarity: R
+		}
+		title: Wild Light of Madness
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 1
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gollum)
+			}
+			effect: [
+				{
+					type: choice
+					player: free people
+					texts: [
+						Add a burden
+						Exert a companion
+					]
+					effects: [
+						{
+							type: addBurdens
+						}
+						{
+							type: exert
+							player: free people
+							select: choose(companion)
+						}
+					]
+				}
+			]
+		}
+		gametext: Spot Gollum to make the Free Peoples player choose to either add a burden or exert a companion.
+		lore: "...for at that moment many things happened."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

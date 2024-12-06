@@ -1,0 +1,273 @@
+{
+
+	2_16: {
+		cardInfo: {
+			image: decipher/LOTR02016.jpg
+			collInfo: 2U16
+			rarity: U
+		}
+		title: A Blended Race
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: uruk-hai
+					amount: -2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: removeKeyword
+					filter: uruk-hai
+					keyword: damage
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: To play, spot an Elf. Plays to your support area.<br>Each Uruk-hai is strength -2 and loses all <b>damage</b> bonuses. Discard this condition during the regroup phase.
+		lore: "'...he has been doing something to them.... For these Isengarders are more like wicked Men.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_17: {
+		cardInfo: {
+			image: decipher/LOTR02017.jpg
+			collInfo: 2U17
+			rarity: U
+		}
+		title: Dismay Our Enemies
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: elf,archer
+			}
+			effect: {
+				type: preventable
+				player: shadowPlayer
+				effect: {
+					type: discard
+					player: shadowPlayer
+					select: choose(minion)
+				}
+				text: Would you like to remove (3) to prevent discarding a minion?
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+			}
+		}
+		gametext: <b>Response:</b> If an Elf archer wins a skirmish, make an opponent choose a minion to discard. That opponent may remove (3) to prevent this.
+		lore: "Reeling from the bite of an arrow, the Cave Troll became enraged trying to strike the nimble Elf."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_18: {
+		cardInfo: {
+			image: decipher/LOTR02018.jpg
+			collInfo: 2U18
+			rarity: U
+		}
+		title: Hosts of the Last Alliance
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Condition
+		keywords: [
+			Tale
+			Support Area
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					requires: {
+						type: canSpot
+						filter: elf,companion
+					}
+					amount: -1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: elf
+				}
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: preventWound
+					select: choose(elf)
+				}
+			}
+		]
+		gametext: <b>Tale</b>. Plays to your support area.<br>While you can spot an Elf companion, the minion archery total is -1.<br><b>Response:</b> If an Elf is about to take a wound, discard this condition to prevent that wound.
+		lore: "'...many great princes and captains were assembled.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_19: {
+		cardInfo: {
+			image: decipher/LOTR02019.jpg
+			collInfo: 2R19
+			rarity: R
+		}
+		title: Release the Angry Flood
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(elf)
+			}
+			effect: {
+				type: wound
+				select: all(nazgul)
+				times: {
+					type: Conditional
+					requires: {
+						type: location
+						filter: river
+					}
+					true: 2
+					false: 1
+				}
+			}
+		}
+		gametext: <b>Maneuver:</b> Exert an Elf to wound each Nazgûl once (or twice if at a river).
+		lore: The three Riders that were still in the midst of the Ford were overwhelmed.... Their piercing cries were drowned in the roaring of the river as it carried them 'away.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_20: {
+		cardInfo: {
+			image: decipher/LOTR02020.jpg
+			collInfo: 2R20
+			rarity: R
+		}
+		title: Secret Sentinels
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(elf,ally)
+			}
+			effect: [
+				{
+					type: memorizeNumber
+					memory: discardCount
+					amount: 1
+				}
+				{
+					type: If
+					check: {
+						type: canSpot
+						filter: orc
+					}
+					true: {
+						type: chooseYesOrNo
+						text: Would you like to spot an Orc?
+						memorize: discardCount
+						yes: "2"
+						no: "1"
+					}
+				}
+				{
+					type: discard
+					select: choose(condition)
+					count: {
+						type: range
+						from: 1
+						to: {
+							type: fromMemory
+							memory: discardCount
+						}
+					}
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Exert an Elf ally to discard a condition (or 2 conditions if you spot an Orc).
+		lore: "'Yet so little faith and trust do we find now in the world beyond Lothlórien... that we dare not by our own trust endanger our land.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

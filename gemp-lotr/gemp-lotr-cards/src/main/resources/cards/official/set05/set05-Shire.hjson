@@ -1,0 +1,321 @@
+{
+
+	5_111: {
+		cardInfo: {
+			image: decipher/LOTR05111.jpg
+			collInfo: 5U111
+			rarity: U
+		}
+		title: Frodo
+		subtitle: Master of the Precious
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 10
+		canStartWithRing: true
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: addBurdens
+					amount: 1
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(name(Sméagol))
+				}
+			}
+		]
+		gametext: <b>Ring-bearer (resistance 10).</b><br><b>Fellowship:</b> Add a burden to play Sméagol from your discard pile.
+		lore: "'We promises, yes I promise!... Good master, good Sméagol, gollum, gollum!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_112: {
+		cardInfo: {
+			image: decipher/LOTR05112.jpg
+			collInfo: 5R112
+			rarity: R
+		}
+		title: No Help for It
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Sam)
+			}
+			cost: {
+				type: discard
+				select: choose(or(name(Sméagol),name(Gollum)))
+			},
+			effect: [
+				{
+					type: removeBurdens
+					amount: 3
+				}
+			]
+		}
+		gametext: <b>Regroup:</b> Spot Sam and discard Sméagol or Gollum to remove 3 burdens.
+		lore: "'...he'll come back, you'll see. The promise will hold yet a while. And he won't leave his Precious, anyway.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_113: {
+		cardInfo: {
+			image: decipher/LOTR05113.jpg
+			collInfo: 5R113
+			rarity: R
+		}
+		title: No Use That Way
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: addBurdens
+				amount: 3
+			},
+			effect: [
+				{
+					type: wound
+					select: choose(minion,inSkirmishAgainst(companion,signet(Frodo)))
+					times: 2
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Add 3 burdens to wound a minion skirmishing a companion who has the Frodo signet twice.
+		lore: "'Don't take the Precious to Him!... Keep it, nice master, and be kind to Sméagol.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_114: {
+		cardInfo: {
+			image: decipher/LOTR05114.jpg
+			collInfo: 5U114
+			rarity: U
+		}
+		title: Rare Good Ballast
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		vitality: 1
+		target: name(Sam)
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: usesSpecialAbility
+					phase: regroup
+				}
+				cost: {
+					type: discard
+					select: choose(or(name(Sméagol),name(Gollum)))
+				}
+				effect: {
+					type: cancelSpecialAbility
+				}
+			}
+		]
+		gametext: Plays on Sam.<br><b>Response:</b> If a regroup special ability is used, discard Sméagol or Gollum to cancel that action.
+		lore: "'What a hobbit needs with coney... is some herbs and roots, especially taters – not to mention bread.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_115: {
+		cardInfo: {
+			image: decipher/LOTR05115.jpg
+			collInfo: 5U115
+			rarity: U
+		}
+		title: Sam
+		subtitle: Nice Sensible Hobbit
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 5
+		keywords: Ring-bound
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeOverwhelmedMultiplier
+					requires: [
+						{
+							type: canSpot
+							filter: name(Frodo)
+						}
+						{
+							type: canSpot
+							filter: name(Sméagol)
+						}
+					]
+					filter: self
+					multiplier: 3
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
+			}
+		]
+		gametext: <b>Ring-bound</b>.<br>While you can spot Frodo and Sméagol, Sam may not be overwhelmed unless his strength is tripled.<br><b>Response:</b> If Frodo is killed, make Sam the <b>Ring-bearer (resistance 5)</b>.
+		lore: "'Trust Sméagol now? Very, very good.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_116: {
+		cardInfo: {
+			image: decipher/LOTR05116.jpg
+			collInfo: 5R116
+			rarity: R
+		}
+		title: Sting
+		subtitle: Baggins Heirloom
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: title(Frodo)
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: choice
+					texts: [
+						Make Sméagol strength +2
+						Make Gollum strength -2
+					]
+					effects: [
+						{
+							type: modifyStrength
+							select: choose(name(Sméagol))
+							amount: 2
+						}
+						{
+							type: modifyStrength
+							select: choose(name(Gollum))
+							amount: -2
+						}
+					]
+				}
+			}
+		]
+		gametext: Bearer must be Frodo.<br><b>Skirmish:</b> Exert Frodo to make Sméagol strength +2 or Gollum strength -2.
+		lore: "'This is Sting. You have seen it before once upon a time.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_117: {
+		cardInfo: {
+			image: decipher/LOTR05117.jpg
+			collInfo: 5C117
+			rarity: C
+		}
+		title: You Must Help Us
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: {
+				type: playCardFromDiscard
+				select: choose(name(Sméagol))
+			},
+			effect: [
+				{
+					type: heal
+					select: all(ringBound,hobbit)
+					times: 2
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Play Sméagol from your discard pile to heal each Ring-bound Hobbit twice.
+		lore: "'You will have to come with us, that's all, while we keep an eye on you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

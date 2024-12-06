@@ -1,29 +1,26 @@
 {
 	51_29: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E029.1.jpg
-			javaClass: false
+			//id: 1_29.1
 			parent: 1_29
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E029.1.jpg
 			collInfo: 1U29
 			rarity: U
-			setNum: "1"
-			cardNum: 29
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Ancient Enmity
 		culture: elven
 		twilight: 0
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: {
 			type: event
 			effect: [
 				{
 					type: modifyStrength
-					filter: choose(elf)
+					select: choose(elf)
 					amount: 1
 					memorize: chosenElf
 				}
@@ -39,7 +36,7 @@
 						{
 							type: chooseActiveCards
 							count: 1
-							filter: choose(wounded,Elf)
+							select: choose(wounded,Elf)
 							memorize: chosenElf
 							text: Choose Elf to heal
 						}
@@ -56,7 +53,7 @@
 							text: Discard 1 card from hand to prevent healing {chosenElf}
 							effect: {
 								type: heal
-								filter: memory(chosenElf)
+								select: memory(chosenElf)
 							}
 						}
 					]
@@ -76,28 +73,25 @@
 	
 	51_36: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E036.1.jpg
-			javaClass: false
+			//id: 1_36.1
 			parent: 1_36
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E036.1.jpg
 			collInfo: 1R36
 			rarity: R
-			setNum: "1"
-			cardNum: 36
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Curse Their Foul Feet!
 		culture: elven
 		twilight: 2
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(elf)
+				select: choose(elf)
 			}
 			effect: [
 				{
@@ -111,14 +105,14 @@
 					type: memorizeNumber
 					memory: OrcCount
 					amount: {
-						type: forEachMatchingInMemory
+						type: forEachInMemory
 						memory: revealedCards
 						filter: orc
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: isGreaterThan
 						firstNumber: {
 							type: FromMemory
@@ -126,7 +120,7 @@
 						}
 						secondNumber: 0
 					}
-					effect: [
+					true: [
 						{
 							type: preventable
 							player: shadow
@@ -147,7 +141,7 @@
 									type: modifyArcheryTotal
 									side: freeps
 									amount: {
-										type: forEachMatchingInMemory
+										type: forEachInMemory
 										memory: revealedCards
 										filter: orc
 									}
@@ -173,17 +167,14 @@
 	
 	51_40: {
 		cardInfo: {
-			imagePath: errata/51_40.jpg
-			javaClass: false
+			//id: 1_40.1
 			parent: 1_40
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_40.jpg
 			collInfo: 1R40
 			rarity: R
-			setNum: "1"
-			cardNum: 40
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Elrond
 		subtitle: Lord of Rivendell
@@ -191,23 +182,27 @@
 		culture: elven
 		twilight: 4
 		type: ally
-		allyHome: fellowship,3
+		allyHome: 3F
 		race: elf
 		strength: 8
 		vitality: 4
-		requires: {
-			type: canSpot
-			filter: or(name(Gandalf),elf)
-		}
 		effects: [
 			{
-				type: trigger
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: or(name(Gandalf),elf)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfTurn
 				}
 				effect: {
 					type: heal
-					filter: choose(ally,allyHome(fellowship,3))
+					select: choose(ally,allyHome(fellowship,3))
 					count: 0-3
 				}
 			}
@@ -216,9 +211,9 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: canSpot
 							count: 2
@@ -246,17 +241,14 @@
 	
 	51_43: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E043.1.jpg
-			javaClass: false
+			//id: 1_43.1
 			parent: 1_43
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E043.1.jpg
 			collInfo: 1C43
 			rarity: C
-			setNum: "1"
-			cardNum: 43
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Far-seeing Eyes
 		unique: true
@@ -265,7 +257,8 @@
 		type: condition
 		keyword: support area
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: played
 				filter: your,elf
@@ -300,17 +293,14 @@
 
 	51_45: {
 		cardInfo: {
-			imagePath: errata/51_45.jpg
-			javaClass: false
+			//id: 1_45.1
 			parent: 1_45
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_45.jpg
 			collInfo: 1R45
 			rarity: R
-			setNum: "1"
-			cardNum: 45
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Galadriel
 		subtitle: Lady of Light
@@ -318,19 +308,20 @@
 		culture: elven
 		twilight: 3
 		type: ally
-		allyHome: fellowship,6
+		allyHome: 6F
 		race: elf
 		strength: 3
 		vitality: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfTurn
 				}
 				effect: {
 					type: heal
-					filter: choose(ally,allyHome(fellowship,6))
+					select: choose(ally,allyHome(fellowship,6))
 					count: 0-3
 				}
 			}
@@ -339,13 +330,13 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 1
 				}
 				effect: {
-					type: play
-					filter: choose(elf)
-					cost: -1
+					type: PlayCardFromHand
+					select: choose(elf)
+					discount: -1
 				}
 			}
 		]
@@ -360,19 +351,92 @@
 		}
 	}
 	
+	51_50: {
+		cardInfo: {
+			//id: 51_50.1
+			parent: 1_50
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E050.1_card.jpg
+			collInfo: 1R50
+			rarity: R
+		}
+		title: Legolas
+		subtitle: Greenleaf
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Frodo
+		resistance: 6
+		keywords: Archer
+		effects: {
+			type: activated
+			phase: archery
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: [
+				{
+					type: wound
+					select: choose(minion)
+				}
+				{
+					type: if
+					check: {
+						type: Or
+						requires: [
+							{
+								type: CanSpot
+								filter: ranged weapon,AttachedTo(self)
+							}
+							{
+								type: isGreaterThan
+								firstNumber: {
+									type: forEachYouCanSpot
+									filter: minion
+								}
+								secondNumber: {
+									type: forEachYouCanSpot
+									filter: companion
+								}
+							}
+						]
+					}
+					false: {
+						type: exert
+						select: self
+					}
+				}
+			]
+		}
+		gametext: <b>Archer.</b><br/><b>Archery:</b> Exert Legolas to wound a minion. Exert him again unless he bears a ranged weapon or you can spot more minions than companions.
+		lore: And I too will go with him,' said Legolas. 'It would be faithless now to say farewell.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	51_53: {
 		cardInfo: {
-			imagePath: errata/51_53.jpg
-			javaClass: false
+			//id: 1_53.1
 			parent: 1_53
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_53.jpg
 			collInfo: 1C53
 			rarity: C
-			setNum: "1"
-			cardNum: 53
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Lorien Elf
 		culture: elven
@@ -382,9 +446,12 @@
 		strength: 5
 		vitality: 2
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: elf
+		effects: {
+			type: toPlay
+			requires: {
+				type: canSpot
+				filter: elf
+			}
 		}
 		gametext: To play, spot an Elf.
 		lore: "'...we dwell now in the heart of the forest, and do not willingly have dealings with any other folk.'"
@@ -399,17 +466,14 @@
 
 	51_55: {
 		cardInfo: {
-			imagePath: errata/51_55.jpg
-			javaClass: false
+			//id: 1_55.1
 			parent: 1_55
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_55.jpg
 			collInfo: 1R55
 			rarity: R
-			setNum: "1"
-			cardNum: 55
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The Mirror of Galadriel
 		unique: true
@@ -431,7 +495,7 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: choose(name(Galadriel))
+					select: choose(name(Galadriel))
 				}
 				effect: [
 					{
@@ -443,9 +507,10 @@
 					}
 					{
 						type: putCardsFromHandOnTopOfDeck
-						filter: choose(memory(revealedCards))
+						select: choose(memory(revealedCards))
 						player: freeps
 						hand: shadow
+						reveal: true
 					}
 				]
 			}
@@ -463,17 +528,14 @@
 	
 	51_59: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E059.1_card.jpg
-			javaClass: false
+			//id: 1_59.1
 			parent: 1_59
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E059.1_card.jpg
 			collInfo: 1C59
 			rarity: C
-			setNum: "1"
-			cardNum: 59
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Shoulder to Shoulder
 		unique: false
@@ -493,33 +555,33 @@
 				}
 				{
 					type: exert
-					filter: choose(or(dwarf,elf))
+					select: choose(or(dwarf,elf))
 					memorize: exerter
 				}
 			]
 			effect: [
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: MemoryMatches
 						memory: exerter
 						filter: dwarf
 					}
-					effect: {
+					true: {
 						type: heal
-						filter: choose(elf)
+						select: choose(elf)
 					}
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: MemoryMatches
 						memory: exerter
 						filter: elf
 					}
-					effect: {
+					true: {
 						type: heal
-						filter: choose(dwarf)
+						select: choose(dwarf)
 					}
 				}
 			]
@@ -535,19 +597,72 @@
 		}
 	}
 	
+	51_63: {
+		cardInfo: {
+			//id: 1_63.1
+			parent: 1_63
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E063.1_card.jpg
+			collInfo: 1U63
+			rarity: U
+		}
+		title: Stand Against Darkness
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(elf)
+			}
+			effect: 
+			{
+				type: Choice
+				texts: [
+					Wound a {sauron} minion twice
+					Discard a {sauron} condition or possession
+				]
+				effects: [
+					{
+						type: Wound
+						select: choose(culture(sauron), minion)
+						times: 2
+					}
+					{
+						type: discard
+						select: choose(culture(sauron),or(condition,possession))
+					}
+				]
+			}
+			
+		}
+		gametext: <b>Maneuver:</b> Exert an Elf to wound a [sauron] minion twice or discard a [sauron] condition or possession.
+		lore: "'What power still remains lies with us, here in Imladris, or with Círdan at the Havens, or in Lórien. But have they the strength, have we here the strength to withstand the Enemy...?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	51_68: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E068.1.jpg
-			javaClass: false
+			//id: 1_68.1
 			parent: 1_68
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E068.1.jpg
 			collInfo: 1C68
 			rarity: C
-			setNum: "1"
-			cardNum: 68
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: The White Arrows of Lorien
 		culture: elven
@@ -564,12 +679,12 @@
 			}
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: [
 				{
 					type: chooseActiveCards
-					filter: choose(minion,not(exhausted))
+					select: choose(minion,not(exhausted))
 					memorize: targetMinion
 					text: Choose a minion to exert
 				}
@@ -586,7 +701,7 @@
 					text: Discard a card from hand to prevent {targetMinion} from exerting
 					effect: {
 						type: exert
-						filter: memory(targetMinion)
+						select: memory(targetMinion)
 					}
 				}
 			]

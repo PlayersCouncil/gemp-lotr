@@ -2,39 +2,36 @@
 
 	54_304: {
 		cardInfo: {
-			imagePath: errata/54_304.jpg
-			javaClass: false
+			//id: 4_304.1
 			parent: 4_304
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/54_304.jpg
 			collInfo: 4R304
 			rarity: R
-			setNum: "4"
-			cardNum: 304
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Get On and Get Away
 		culture: shire
 		twilight: 0
 		type: event
-		keyword: fellowship
-		requires: {
-			type: or
-			requires: [
-				{
-					type: canSpot
-					filter: name(smeagol)
-				}
-				{
-					type: canSpot
-					filter: ring bound,hobbit
-					count: 2
-				}
-			]
-		}
+		timeword: fellowship
 		effects: {
 			type: event
+			requires: {
+				type: or
+				requires: [
+					{
+						type: canSpot
+						filter: name(smeagol)
+					}
+					{
+						type: canSpot
+						filter: ring bound,hobbit
+						count: 2
+					}
+				]
+			}
 			cost: {
 				type: addBurdens
 				amount: 2

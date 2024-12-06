@@ -19,7 +19,7 @@ public class DrawCards implements EffectAppenderProducer {
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
         final ValueSource count = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
 
         return new DelayedAppender() {

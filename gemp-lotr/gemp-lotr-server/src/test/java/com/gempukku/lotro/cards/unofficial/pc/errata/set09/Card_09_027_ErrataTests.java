@@ -60,7 +60,7 @@ public class Card_09_027_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, sentback.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, sentback.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, sentback.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(sentback, Keyword.SUPPORT_AREA));
+		assertTrue(scn.hasKeyword(sentback, Keyword.SUPPORT_AREA));
 		assertEquals(2, sentback.getBlueprint().getTwilightCost());
 	}
 

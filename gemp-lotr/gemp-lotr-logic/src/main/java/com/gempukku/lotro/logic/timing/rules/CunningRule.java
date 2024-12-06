@@ -18,6 +18,6 @@ public class CunningRule {
         _modifiersLogic.addAlwaysOnModifier(
                 new CantTakeWoundsModifier(null, new PhaseCondition(Phase.ARCHERY), Keyword.CUNNING));
         _modifiersLogic.addAlwaysOnModifier(
-                new CantBeAssignedToSkirmishModifier(null, Keyword.CUNNING));
+                new CantBeAssignedToSkirmishModifier(null, null, Keyword.CUNNING));
     }
 }

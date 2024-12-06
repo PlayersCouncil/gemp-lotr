@@ -4,21 +4,20 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
-import com.gempukku.lotro.logic.actions.PlayEventAction;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 
 import java.util.Collections;
 
 public class PutPlayedEventOnTopOfDeckEffect extends AbstractEffect {
-    private final PlayEventAction _action;
+    private final PhysicalCard card;
 
-    public PutPlayedEventOnTopOfDeckEffect(PlayEventAction action) {
-        _action = action;
+    public PutPlayedEventOnTopOfDeckEffect(PhysicalCard card) {
+        this.card = card;
     }
 
     @Override
     public String getText(LotroGame game) {
-        return "Put " + GameUtils.getFullName(_action.getEventPlayed()) + " on top of your deck";
+        return "Put " + GameUtils.getFullName(card) + " on top of your deck";
     }
 
     @Override
@@ -28,17 +27,16 @@ public class PutPlayedEventOnTopOfDeckEffect extends AbstractEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        Zone zone = _action.getEventPlayed().getZone();
+        Zone zone = card.getZone();
         return zone == Zone.VOID || zone == Zone.VOID_FROM_HAND;
     }
 
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
         if (isPlayableInFull(game)) {
-            PhysicalCard eventPlayed = _action.getEventPlayed();
-            game.getGameState().sendMessage(_action.getPerformingPlayer() + " puts " + GameUtils.getCardLink(eventPlayed) + " on top of their deck");
-            game.getGameState().removeCardsFromZone(eventPlayed.getOwner(), Collections.singletonList(eventPlayed));
-            game.getGameState().putCardOnTopOfDeck(eventPlayed);
+            game.getGameState().sendMessage(card.getOwner() + " puts " + GameUtils.getCardLink(card) + " on top of their deck");
+            game.getGameState().removeCardsFromZone(card.getOwner(), Collections.singletonList(card));
+            game.getGameState().putCardOnTopOfDeck(card);
             return new FullEffectResult(true);
         }
         return new FullEffectResult(false);

@@ -55,7 +55,7 @@ public class Card_01_029_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, enmity.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, enmity.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, enmity.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(enmity, Keyword.SKIRMISH));
+        assertTrue(scn.hasTimeword(enmity, Timeword.SKIRMISH));
 		assertEquals(0, enmity.getBlueprint().getTwilightCost());
 	}
 

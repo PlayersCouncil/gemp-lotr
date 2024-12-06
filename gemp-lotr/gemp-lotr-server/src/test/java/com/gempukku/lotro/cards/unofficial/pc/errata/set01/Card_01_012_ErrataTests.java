@@ -58,7 +58,7 @@ public class Card_01_012_ErrataTests
 		assertEquals(Culture.DWARVEN, gimli.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, gimli.getBlueprint().getCardType());
 		assertEquals(Race.DWARF, gimli.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 		assertEquals(2, gimli.getBlueprint().getTwilightCost());
 		assertEquals(6, gimli.getBlueprint().getStrength());

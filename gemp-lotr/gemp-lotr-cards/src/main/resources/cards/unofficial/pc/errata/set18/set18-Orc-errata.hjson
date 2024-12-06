@@ -2,30 +2,24 @@
 
 	68_79: {
 		cardInfo: {
-			imagePath: errata/68_79.jpg
-			javaClass: false
-			parent: 18_79
-			parentPath: errata/pc
-			version: 1?
+			//id: 8_79.1
+			revision: 1
+			image: errata/68_79.jpg
 			collInfo: 18U79
 			rarity: U
-			setNum: "18"
-			cardNum: 79
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Frenzy of Arrows
 		unique: false
 		culture: Orc
 		twilight: 2
 		type: Event
-		keyword: Archery
+		timeword: archery
 		effects: {
 			type: event
 			effect: [
 				{
 					type: addKeyword
-					filter: choose(culture(orc),orc)
+					select: choose(culture(orc),orc)
 					keyword: archer
 					until: start(regroup)
 					count: 2
@@ -53,17 +47,11 @@
 	
 	68_82: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E082.1.jpg
-			javaClass: false
-			parent: 18_82
-			parentPath: errata/pc
-			version: 1
+			//id: 8_82.1
+			revision: 1
+			image: errata/LOTR-EN18E082.1.jpg
 			collInfo: 18R82
 			rarity: R
-			setNum: "18"
-			cardNum: 82
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Grond
 		subtitle: Forged With Black Steel
@@ -74,13 +62,17 @@
 		keyword: [
 			Support Area
 		]
-		requires: {
-			type: CanSpot
-			filter: culture(Orc),minion
-		}
 		effects: [
 			{
-				type: trigger
+				type: toPlay
+				requires: {
+					type: CanSpot
+					filter: culture(Orc),minion
+				}
+			}
+			{
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}
@@ -91,7 +83,7 @@
 				optional: true
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: [
 					{
@@ -100,17 +92,14 @@
 						player: freeps
 					}
 					{
-						type: LookAtDrawDeck
-						deck: freeps
-					}
-					{
 						type: DiscardCardsFromDrawDeck
-						filter: choose(side(freeps))
+						select: choose(side(freeps))
 						player: you
 						deck: freeps
 						count: 2
+						showAll: true
+						shuffle: true
 					}
-
 				]
 			}
 		]

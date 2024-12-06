@@ -1,5 +1,10 @@
 {
 	32_46: {
+		cardInfo: {
+			image: hobbit/HDG3246.jpg
+			collInfo: 32_46
+			rarity: _
+		}
 		title: Dol Guldur
 		twilight: 8
 		type: site
@@ -7,7 +12,7 @@
 		site: 5
 		keyword: forest
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			requires: {
 				type: isSide
@@ -19,16 +24,21 @@
 			}
 			cost: {
 				type: discard
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 			}
 			effect: {
 				type: EnableParticipationInSkirmishes
-				filter: all(wise,ally)
+				select: all(wise,ally)
 				until: start(regroup)
 			}
 		}
 	}
 	32_47: {
+		cardInfo: {
+			image: hobbit/HDG3247.jpg
+			collInfo: 32_47
+			rarity: _
+		}
 		title: Town Hall
 		twilight: 3
 		type: site
@@ -41,15 +51,20 @@
 			limitPerTurn: 1
 			cost: {
 				type: exert
-				filter: choose(culture(esgaroth),ally)
+				select: choose(culture(esgaroth),ally)
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(weapon)
+				select: choose(weapon)
 			}
 		}
 	}
 	32_48: {
+		cardInfo: {
+			image: hobbit/HDG3248.jpg
+			collInfo: 32_48
+			rarity: _
+		}
 		title: Secret Door
 		twilight: 8
 		type: site
@@ -70,6 +85,11 @@
 		}
 	}
 	32_49: {
+		cardInfo: {
+			image: hobbit/HDG3249.jpg
+			collInfo: 32_49
+			rarity: _
+		}
 		title: Northern Slopes
 		twilight: 9
 		type: site
@@ -85,7 +105,7 @@
 			limitPerTurn: 1
 			effect: {
 				type: exert
-				filter: choose(culture(dwarven),character)
+				select: choose(culture(dwarven),character)
 				count: {
 					type: forEachCulture
 					filter: side(shadow)

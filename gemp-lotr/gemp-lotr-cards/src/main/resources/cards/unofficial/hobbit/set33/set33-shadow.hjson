@@ -1,5 +1,10 @@
 {
 	33_22: {
+		cardInfo: {
+			image: hobbit/HDG3322.jpg
+			collInfo: 33_22
+			rarity: _
+		}
 		title: Bill Ferny Sr.
 		subtitle: Servant of Azog
 		unique: true
@@ -33,16 +38,21 @@
 				phase: regroup
 				cost: {
 					type: kill
-					filter: choose(ally,allyHome(hobbit,1))
+					select: choose(ally,allyHome(hobbit,1))
 				}
 				effect: {
 					type: returnToHand
-					filter: self
+					select: self
 				}
 			}
 		]
 	}
 	33_23: {
+		cardInfo: {
+			image: hobbit/HDG3323.jpg
+			collInfo: 33_23
+			rarity: _
+		}
 		title: Scouting Warg
 		culture: gundabad
 		twilight: 4
@@ -82,17 +92,22 @@
 				phase: regroup
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 					times: 2
 				}
 				effect: {
 					type: discard
-					filter: choose(side(free people),possession)
+					select: choose(side(free people),possession)
 				}
 			}
 		]
 	}
 	33_24: {
+		cardInfo: {
+			image: hobbit/HDG3324.jpg
+			collInfo: 33_24
+			rarity: _
+		}
 		title: Alfrid's Influence
 		culture: men
 		twilight: 1
@@ -121,15 +136,15 @@
 						memorize: bottomCard
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryMatches
 							memory: bottomCard
 							filter: minion
 						}
-						effect: {
+						true: {
 							type: playCardFromDiscard
-							filter: choose(culture(men),man)
+							select: choose(culture(men),man)
 						}
 					}
 				]
@@ -137,6 +152,11 @@
 		]
 	}
 	33_25: {
+		cardInfo: {
+			image: hobbit/HDG3325.jpg
+			collInfo: 33_25
+			rarity: _
+		}
 		title: Braga
 		subtitle: Captain of the Guard
 		unique: true
@@ -153,17 +173,22 @@
 			phase: skirmish
 			cost: {
 				type: putCardsFromPlayOnBottomOfDeck
-				filter: choose(orc)
+				select: choose(orc)
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(culture(men),man)
+				select: choose(culture(men),man)
 				amount: 3
 				until: start(regroup)
 			}
 		}
 	}
 	33_26: {
+		cardInfo: {
+			image: hobbit/HDG3326.jpg
+			collInfo: 33_26
+			rarity: _
+		}
 		title: Gangsquad Spies
 		culture: men
 		twilight: 3
@@ -187,16 +212,21 @@
 				phase: maneuver
 				cost: {
 					type: putCardsFromPlayOnBottomOfDeck
-					filter: choose(orc)
+					select: choose(orc)
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: choose(culture(men))
+					select: choose(culture(men))
 				}
 			}
 		]
 	}
 	33_27: {
+		cardInfo: {
+			image: hobbit/HDG3327.jpg
+			collInfo: 33_27
+			rarity: _
+		}
 		title: Laketown Patrol
 		culture: men
 		twilight: 4
@@ -208,7 +238,7 @@
 		keyword: fierce
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -216,13 +246,13 @@
 				}
 				effect: {
 					type: putCardsFromDiscardOnBottomOfDeck
-					filter: choose(orc)
+					select: choose(orc)
 				}
 			}
 			{
 				type: modifier
 				modifier: {
-					type: cancelStrengthBonusTo
+					type: cancelStrengthBonus
 					filter: companion,culture(dwarven)
 					from: weapon
 				}
@@ -230,6 +260,11 @@
 		]
 	}
 	33_28: {
+		cardInfo: {
+			image: hobbit/HDG3328.jpg
+			collInfo: 33_28
+			rarity: _
+		}
 		title: Spear of the Guard
 		culture: men
 		twilight: 0
@@ -242,7 +277,7 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: bearer
+				select: bearer
 			}
 			effect: [
 				{
@@ -251,15 +286,15 @@
 					memorize: bottomCard
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryMatches
 						memory: bottomCard
 						filter: minion
 					}
-					effect: {
+					true: {
 						type: addKeyword
-						filter: bearer
+						select: bearer
 						keyword: damage+1
 					}
 				}
@@ -267,6 +302,11 @@
 		}
 	}
 	33_29: {
+		cardInfo: {
+			image: hobbit/HDG3329.jpg
+			collInfo: 33_29
+			rarity: _
+		}
 		title: Ancient Grudge
 		culture: mirkwood
 		twilight: 2
@@ -295,13 +335,18 @@
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(culture(gundabad),orc)
+					select: choose(culture(gundabad),orc)
 					amount: 2
 				}
 			}
 		]
 	}
 	33_30: {
+		cardInfo: {
+			image: hobbit/HDG3330.jpg
+			collInfo: 33_30
+			rarity: _
+		}
 		title: Borders of the Forest
 		culture: mirkwood
 		twilight: 1
@@ -309,7 +354,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: endOfPhase
@@ -321,7 +366,7 @@
 				}
 				effect: {
 					type: heal
-					filter: choose(culture(gundabad),orc)
+					select: choose(culture(gundabad),orc)
 				}
 			}
 			{
@@ -341,7 +386,7 @@
 					{
 						type: chooseActiveCards
 						text: Choose minion to assign to Bilbo
-						filter: choose(culture(gundabad),orc,assignableToSkirmishAgainst(name(Bilbo)))
+						select: choose(culture(gundabad),orc,assignableToSkirmishAgainst(name(Bilbo)))
 						memorize: chosenMinion
 					}
 					{
@@ -356,7 +401,7 @@
 								type: assignFpCharacterToSkirmish
 								player: fp
 								fpCharacter: choose(companion)
-								against: choose(memory(chosenMinion))
+								minion: choose(memory(chosenMinion))
 							}
 						]
 					}
@@ -372,13 +417,13 @@
 								type: assignFpCharacterToSkirmish
 								player: shadowPlayer
 								fpCharacter: choose(companion)
-								against: choose(memory(chosenMinion))
+								minion: choose(memory(chosenMinion))
 							}
 						]
 						effect: {
 							type: assignFpCharacterToSkirmish
 							fpCharacter: choose(name(Bilbo))
-							against: choose(memory(chosenMinion))
+							minion: choose(memory(chosenMinion))
 						}
 					}
 				]
@@ -386,6 +431,11 @@
 		]
 	}
 	33_31: {
+		cardInfo: {
+			image: hobbit/HDG3331.jpg
+			collInfo: 33_31
+			rarity: _
+		}
 		title: Elf-guards
 		unique: true
 		culture: mirkwood
@@ -394,7 +444,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: losesSkirmish
@@ -402,7 +452,7 @@
 				}
 				cost: {
 					type: discard
-					filter: choose(culture(gundabad),orc)
+					select: choose(culture(gundabad),orc)
 				}
 				effect: {
 					type: addBurdens
@@ -422,6 +472,11 @@
 		]
 	}
 	33_32: {
+		cardInfo: {
+			image: hobbit/HDG3332.jpg
+			collInfo: 33_32
+			rarity: _
+		}
 		title: Elven Jails
 		culture: mirkwood
 		twilight: 2
@@ -434,7 +489,7 @@
 				cost: [
 					{
 						type: discard
-						filter: choose(culture(gundabad),orc)
+						select: choose(culture(gundabad),orc)
 					}
 					{
 						type: removeTwilight
@@ -442,13 +497,14 @@
 					}
 				]
 				effect: {
-					type: stackCards
-					filter: choose(lowestStrength(culture(dwarven),companion))
+					type: StackCardsFromPlay
+					select: choose(lowestStrength(culture(dwarven),companion))
 					where: self
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: aboutToDiscard
 					filter: self
@@ -475,7 +531,7 @@
 								effects: [
 									{
 										type: putCardsFromDiscardIntoHand
-										filter: choose(memory(jailedCards))
+										select: choose(memory(jailedCards))
 										count: {
 											type: forEachInMemory
 											memory: jailedCards
@@ -490,6 +546,11 @@
 		]
 	}
 	33_33: {
+		cardInfo: {
+			image: hobbit/HDG3333.jpg
+			collInfo: 33_33
+			rarity: _
+		}
 		title: Secretive People
 		culture: mirkwood
 		twilight: 1
@@ -505,7 +566,7 @@
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(minion)
+					select: choose(minion)
 					amount: {
 						type: cardAffectedLimitPerPhase
 						limit: 3
@@ -523,7 +584,7 @@
 				cost: [
 					{
 						type: exert
-						filter: choose(minion)
+						select: choose(minion)
 					}
 					{
 						type: removeTwilight
@@ -533,17 +594,22 @@
 				effect: [
 					{
 						type: discard
-						filter: choose(or(culture(dwarven),culture(elven)),attachedTo(character))
+						select: choose(or(culture(dwarven),culture(elven)),attachedTo(character))
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}
 		]
 	}
 	33_34: {
+		cardInfo: {
+			image: hobbit/HDG3334.jpg
+			collInfo: 33_34
+			rarity: _
+		}
 		title: The Elvenking
 		unique: true
 		culture: mirkwood
@@ -552,7 +618,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -567,17 +633,19 @@
 					effects: [
 						{
 							type: playCardFromDrawDeck
-							filter: choose(culture(mirkwood),condition)
+							select: choose(culture(mirkwood),condition)
+							showAll: true
+							shuffle: true
 						}
 						{
 							type: playCardFromDiscard
-							filter: choose(culture(mirkwood),condition)
+							select: choose(culture(mirkwood),condition)
 						}
 					]
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToDiscard
 					filter: another,condition,or(culture(gundabad),culture(mirkwood))
@@ -585,16 +653,21 @@
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: preventDiscard
-					filter: all(or(culture(gundabad),culture(mirkwood)),condition)
+					select: all(or(culture(gundabad),culture(mirkwood)),condition)
 				}
 			}
 		]
 	}
 	33_35: {
+		cardInfo: {
+			image: hobbit/HDG3335.jpg
+			collInfo: 33_35
+			rarity: _
+		}
 		title: Boulder Rock
 		culture: moria
 		twilight: 1
@@ -606,7 +679,7 @@
 			phase: archery
 			cost: {
 				type: discard
-				filter: self
+				select: self
 			}
 			effect: [
 				{
@@ -628,7 +701,7 @@
 					type: modifyArcheryTotal
 					side: shadow
 					amount: {
-						type: forEachMatchingInMemory
+						type: forEachInMemory
 						memory: revealedCards
 						filter: side(shadow)
 					}
@@ -637,6 +710,11 @@
 		}
 	}
 	33_36: {
+		cardInfo: {
+			image: hobbit/HDG3336.jpg
+			collInfo: 33_36
+			rarity: _
+		}
 		title: Bridging Troll
 		culture: moria
 		twilight: 5
@@ -651,21 +729,26 @@
 			cost: [
 				{
 					type: exert
-					filter: self
+					select: self
 				}
 				{
 					type: discard
-					filter: choose(orc)
+					select: choose(orc)
 				}
 			]
 			effect: {
 				type: discard
 				player: fp
-				filter: choose(culture(dwarven),or(possession,artifact))
+				select: choose(culture(dwarven),or(possession,artifact))
 			}
 		}
 	}
 	33_37: {
+		cardInfo: {
+			image: hobbit/HDG3337.jpg
+			collInfo: 33_37
+			rarity: _
+		}
 		title: Catapult Troll
 		culture: moria
 		twilight: 5
@@ -679,7 +762,7 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: [
 				{
@@ -699,12 +782,17 @@
 				{
 					type: discard
 					player: fp
-					filter: choose(side(free people),minTwilight(memory(cardTwilight)),maxTwilight(memory(cardTwilight)),not(companion))
+					select: choose(side(free people),minTwilight(memory(cardTwilight)),maxTwilight(memory(cardTwilight)),not(companion))
 				}
 			]
 		}
 	}
 	33_38: {
+		cardInfo: {
+			image: hobbit/HDG3338.jpg
+			collInfo: 33_38
+			rarity: _
+		}
 		title: Goblin Archer
 		culture: moria
 		twilight: 2
@@ -715,7 +803,7 @@
 		site: 4
 		keyword: archer
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -732,7 +820,7 @@
 				text: Would you like to wound Bilbo to prevent adding a doubt?
 				cost: {
 					type: wound
-					filter: choose(name(Bilbo))
+					select: choose(name(Bilbo))
 				}
 				effect: {
 					type: addBurdens
@@ -741,6 +829,11 @@
 		}
 	}
 	33_39: {
+		cardInfo: {
+			image: hobbit/HDG3339.jpg
+			collInfo: 33_39
+			rarity: _
+		}
 		title: Goblin Band
 		culture: moria
 		twilight: 3
@@ -774,6 +867,11 @@
 		}
 	}
 	33_40: {
+		cardInfo: {
+			image: hobbit/HDG3340.jpg
+			collInfo: 33_40
+			rarity: _
+		}
 		title: Goblin Bow
 		culture: moria
 		twilight: 0
@@ -806,17 +904,22 @@
 				phase: archery
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: choose(culture(moria),archer)
+					select: choose(culture(moria),archer)
 				}
 					limitPerTurn: 1
 			}
 		]
 	}
 	33_41: {
+		cardInfo: {
+			image: hobbit/HDG3341.jpg
+			collInfo: 33_41
+			rarity: _
+		}
 		title: Goblin Troop
 		culture: moria
 		twilight: 4
@@ -840,6 +943,11 @@
 		}
 	}
 	33_42: {
+		cardInfo: {
+			image: hobbit/HDG3342.jpg
+			collInfo: 33_42
+			rarity: _
+		}
 		title: Granite Giant
 		culture: moria
 		twilight: 5
@@ -862,7 +970,7 @@
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -871,11 +979,11 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 					}
 					{
 						type: discard
-						filter: choose(orc)
+						select: choose(orc)
 					}
 				]
 				effect: {
@@ -887,6 +995,11 @@
 		]
 	}
 	33_43: {
+		cardInfo: {
+			image: hobbit/HDG3343.jpg
+			collInfo: 33_43
+			rarity: _
+		}
 		title: Great Goblin's Sceptre
 		unique: true
 		culture: moria
@@ -910,6 +1023,11 @@
 		}
 	}
 	33_44: {
+		cardInfo: {
+			image: hobbit/HDG3344.jpg
+			collInfo: 33_44
+			rarity: _
+		}
 		title: Lavastone Giant
 		culture: moria
 		twilight: 7
@@ -932,7 +1050,7 @@
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -940,7 +1058,7 @@
 				phase: archery
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
@@ -957,28 +1075,28 @@
 						]
 						effects: [
 							{
-								type: conditional
-								requires: {
+								type: If
+								check: {
 									type: memoryMatches
 									memory: revealedCard
 									filter: side(shadow)
 								}
-								effect: {
+								true: {
 									type: modifyArcheryTotal
 									side: shadow
 									amount: 2
 								}
 							}
 							{
-								type: conditional
-								requires: {
+								type: If
+								check: {
 									type: memoryMatches
 									memory: revealedCard
 									filter: side(free people)
 								}
-								effect: {
+								true: {
 									type: exert
-									filter: self
+									select: self
 								}
 							}
 						]
@@ -988,6 +1106,11 @@
 		]
 	}
 	33_45: {
+		cardInfo: {
+			image: hobbit/HDG3345.jpg
+			collInfo: 33_45
+			rarity: _
+		}
 		title: The Great Goblin
 		subtitle: Goblin King
 		unique: true
@@ -1013,7 +1136,7 @@
 				phase: skirmish
 				cost: {
 					type: discard
-					filter: choose(another,orc)
+					select: choose(another,orc)
 				}
 				effect: {
 					type: preventable
@@ -1024,29 +1147,34 @@
 					}
 					effect: {
 						type: wound
-						filter: choose(inSkirmishAgainst(self))
+						select: choose(inSkirmishAgainst(self))
 					}
 				}
 			}
 		]
 	}
 	33_46: {
+		cardInfo: {
+			image: hobbit/HDG3346.jpg
+			collInfo: 33_46
+			rarity: _
+		}
 		title: Hidden
 		culture: sauron
 		twilight: 0
 		type: event
-		keyword: assignment
-		requires: {
-			type: canSpot
-			filter: culture(sauron)
-		}
+		timeword: assignment
 		effects: {
 			type: event
+			requires: {
+				type: canSpot
+				filter: culture(sauron)
+			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(orc)
-				cost: {
-					type: requires
+				select: choose(orc)
+				discount: {
+					type: Conditional
 					requires: {
 						type: location
 						filter: forest
@@ -1058,6 +1186,11 @@
 		}
 	}
 	33_47: {
+		cardInfo: {
+			image: hobbit/HDG3347.jpg
+			collInfo: 33_47
+			rarity: _
+		}
 		title: Malevolent Orc
 		culture: sauron
 		twilight: 2
@@ -1067,7 +1200,7 @@
 		vitality: 2
 		site: 5
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: endOfPhase
@@ -1075,11 +1208,16 @@
 			}
 			effect: {
 				type: putCardsFromDiscardIntoHand
-				filter: choose(or(culture(gundabad),culture(sauron)),event)
+				select: choose(or(culture(gundabad),culture(sauron)),event)
 			}
 		}
 	}
 	33_48: {
+		cardInfo: {
+			image: hobbit/HDG3348.jpg
+			collInfo: 33_48
+			rarity: _
+		}
 		title: Orc Ambusher
 		culture: sauron
 		twilight: 1
@@ -1106,7 +1244,7 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: drawCards
@@ -1123,6 +1261,11 @@
 		]
 	}
 	33_49: {
+		cardInfo: {
+			image: hobbit/HDG3349.jpg
+			collInfo: 33_49
+			rarity: _
+		}
 		title: Orc Sentinel
 		culture: sauron
 		twilight: 1
@@ -1149,7 +1292,7 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: drawCards
@@ -1167,6 +1310,11 @@
 		]
 	}
 	33_50: {
+		cardInfo: {
+			image: hobbit/HDG3350.jpg
+			collInfo: 33_50
+			rarity: _
+		}
 		title: Orc Underling
 		culture: sauron
 		twilight: 1
@@ -1185,7 +1333,7 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: orc
@@ -1196,48 +1344,55 @@
 				}
 				effect: {
 					type: preventWound
-					filter: choose(orc)
+					select: choose(orc)
 				}
 			}
 		]
 	}
 	33_51: {
+		cardInfo: {
+			image: hobbit/HDG3351.jpg
+			collInfo: 33_51
+			rarity: _
+		}
 		title: Rise of the Necromancer
 		culture: sauron
 		twilight: 2
 		type: event
-		keyword: skirmish
-		requires: {
-			type: canSpot
-			filter: culture(sauron),minion
-			count: 2
-		}
+		timeword: skirmish
 		effects: {
 			type: event
+			requires: {
+				type: canSpot
+				filter: culture(sauron),minion
+				count: 2
+			}
 			effect: [
 				{
 					type: shuffleCardsFromPlayIntoDrawDeck
-					filter: choose(orc)
+					select: choose(orc)
 					count: 1-100
 					memorize: shuffledOrcs
 				}
 				{
 					type: modifyStrength
-					filter: choose(orc)
+					select: choose(orc)
 					 amount: {
-						type: multiply
+						type: forEachInMemory
+						memory: shuffledOrcs
+						filter: orc
 						multiplier: 3
-						source: {
-							type: forEachMatchingInMemory
-							memory: shuffledOrcs
-							filter: orc
-						}
 					}
 				}
 			]
 		}
 	}
 	33_59: {
+		cardInfo: {
+			image: hobbit/HDG3359.jpg
+			collInfo: 33_59
+			rarity: _
+		}
 		title: Dragon-sickness
 		unique: true
 		culture: smaug
@@ -1262,16 +1417,21 @@
 				phase: shadow
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: choose(minion)
+					select: choose(minion)
 				}
 			}
 		]
 	}
 	33_60: {
+		cardInfo: {
+			image: hobbit/HDG3360.jpg
+			collInfo: 33_60
+			rarity: _
+		}
 		title: The Last Lights of Durin's Day
 		unique: true
 		culture: smaug
@@ -1302,13 +1462,18 @@
 					text: Would you like to take a Dwarven or Shire event into hand from discard?
 					effect: {
 						type: putCardsFromDiscardIntoHand
-						filter: choose(or(culture(dwarven),culture(shire)),event)
+						select: choose(or(culture(dwarven),culture(shire)),event)
 					}
 				}
 			]
 		}
 	}
 	33_61: {
+		cardInfo: {
+			image: hobbit/HDG3361.jpg
+			collInfo: 33_61
+			rarity: _
+		}
 		title: Dark Sorcery
 		unique: true
 		culture: wraith
@@ -1320,7 +1485,7 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(orc)
+					select: choose(orc)
 				}
 			}
 			{
@@ -1334,7 +1499,7 @@
 				phase: Shadow
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: drawCards

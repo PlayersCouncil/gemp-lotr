@@ -1,0 +1,115 @@
+{
+
+	19_10: {
+		cardInfo: {
+			image: decipher/LOTR19010.jpg
+			collInfo: 19P10
+			rarity: P
+		}
+		title: Gollum
+		subtitle: Threatening Guide
+		unique: true
+		side: Shadow
+		culture: Gollum
+		twilight: 2
+		type: Minion
+		strength: 5
+		vitality: 4
+		site: 3
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachThreat
+					}
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+		]
+		gametext: Gollum is strength +1 for each threat you can spot.<br>Each time Gollum wins a skirmish, you may add a threat.
+		lore: "'But if we was master, then we could help ourselfs, yes....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_11: {
+		cardInfo: {
+			image: decipher/LOTR19011.jpg
+			collInfo: 19P11
+			rarity: P
+		}
+		title: Sméagol
+		subtitle: Pitiable Guide
+		unique: true
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Companion
+		strength: 3
+		vitality: 4
+		resistance: 5
+		keywords: Ring-bound
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: addBurdens
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: {
+					type: shuffleCardsFromDiscardIntoDrawDeck
+					count: 0-2
+					select: choose(culture(gollum))
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(ring-bound,companion)
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Ring-bound</b>. To play, add a burden.<br>Each time Sméagol wins a skirmish, you may shuffle up to 2 [gollum] cards from your discard pile into your draw deck.<br><b>Skirmish:</b> Exert a Ring-bound companion to make Sméagol strength +2.
+		lore: "...now that I see him, I do pity him."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

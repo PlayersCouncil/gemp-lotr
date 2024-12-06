@@ -1,0 +1,268 @@
+{
+
+	19_18: {
+		cardInfo: {
+			image: decipher/LOTR19018.jpg
+			collInfo: 19P18
+			rarity: P
+		}
+		title: The Balrog
+		subtitle: Demon of Might
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 14
+		type: Minion
+		race: Balrog
+		strength: 17
+		vitality: 5
+		site: 4
+		keywords: [
+			Damage+2
+			Fierce
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: skipPhase
+					requires: {
+						type: location
+						filter: underground
+					}
+					phase: archery
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: skipPhase
+					requires: {
+						type: location
+						filter: underground
+					}
+					phase: maneuver
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBeAssignedToSkirmishAgainst
+					requires: {
+						type: location
+						filter: underground
+					}
+					fpCharacter: companion,MaxStrength(6)
+					minion: self
+				}
+			}
+		]
+		gametext: <b>Damage +2</b>. <b>Fierce</b>.<br>While at an underground site, skip the archery phase, the maneuver phase, and The Balrog cannot be assigned to skirmish companions of strength 6 or less.
+		lore: "The flames roared up to greet it, and wreathed about it...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_19: {
+		cardInfo: {
+			image: decipher/LOTR19019.jpg
+			collInfo: 19P19
+			rarity: P
+		}
+		title: Reaching Tentacle
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 2
+		type: Minion
+		race: Creature
+		strength: 4
+		vitality: 2
+		site: 4
+		keywords: Tentacle
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBear
+					filter: self
+					cardFilter: possession
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: location
+						filter: not(marsh)
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: tentacle
+					}
+				}
+			}
+		]
+		gametext: <b>Tentacle</b>.<br>This minion cannot bear possessions.<br>Discard this minion from play if not at a marsh.<br>This minion is strength +1 for each tentacle you can spot.
+		lore: "Frodo felt something seize him by the ankle...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_20: {
+		cardInfo: {
+			image: decipher/LOTR19020.jpg
+			collInfo: 19P20
+			rarity: P
+		}
+		title: Strong Tentacle
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 3
+		type: Minion
+		race: Creature
+		strength: 7
+		vitality: 2
+		site: 4
+		keywords: Tentacle
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBear
+					filter: self
+					cardFilter: possession
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: location
+						filter: not(marsh)
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: tentacle
+					}
+				}
+			}
+		]
+		gametext: <b>Tentacle</b>.<br>This minion cannot bear possessions.<br>Discard this minion from play if not at a marsh.<br>This minion is strength +1 for each tentacle you can spot.
+		lore: "One came wriggling over the threshold...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_21: {
+		cardInfo: {
+			image: decipher/LOTR19021.jpg
+			collInfo: 19P21
+			rarity: P
+		}
+		title: Watcher in the Water
+		subtitle: Many-tentacled Creature
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 4
+		type: Minion
+		race: Creature
+		strength: 11
+		vitality: 4
+		site: 4
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: canSpot
+						filter: minion,not(self),not(tentacle)
+					}
+				}
+				effect: {
+					type: discard
+					select: all(minion,not(self),not(tentacle))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBear
+					filter: self
+					cardFilter: possession
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: currentSite
+					keyword: marsh
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				effect: {
+					type: playCardFromDiscard
+					select: choose(tentacle)
+				}
+			}
+		]
+		gametext: Discard all other minions (except tentacles).<br>Watcher in the Water cannot bear possessions.<br>The fellowship's current site gains <b>marsh</b>.<br><b>Shadow:</b> Play a tentacle from your discard pile.
+		lore: "...as if a host of snakes were swimming up...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

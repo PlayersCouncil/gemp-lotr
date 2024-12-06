@@ -1,0 +1,439 @@
+{
+
+	13_185: {
+		cardInfo: {
+			image: decipher/LOTR13185.jpg
+			collInfo: 13U185
+			rarity: U
+		}
+		title: Abandoned Mine Shaft
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Underground
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesFrom
+					filter: self,not(regionNumber(1))
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+		]
+		gametext: <b>Underground</b>. If this site is not in region 1 when the fellowship moves from here during the regroup phase, add a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_186: {
+		cardInfo: {
+			image: decipher/LOTR13186.jpg
+			collInfo: 13S186
+			rarity: S
+		}
+		title: Caves of Aglarond
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Underground
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				player: free people
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: removeBurdens
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Underground</b>. When the fellowship moves to this site during the regroup phase, the Free Peoples player may remove 2 burdens.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_187: {
+		cardInfo: {
+			image: decipher/LOTR13187.jpg
+			collInfo: 13U187
+			rarity: U
+		}
+		title: City of Kings
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Battleground
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				player: free people
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: drawCards
+					player: free people
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. When the fellowship moves to this site during the regroup phase, the Free Peoples player may draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_188: {
+		cardInfo: {
+			image: decipher/LOTR13188.jpg
+			collInfo: 13U188
+			rarity: U
+		}
+		title: Courtyard Parapet
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Dwelling
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				player: shadow
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+		]
+		gametext: <b>Dwelling</b>. When the fellowship moves to this site, the first Shadow player may discard 2 cards from hand to add a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_189: {
+		cardInfo: {
+			image: decipher/LOTR13189.jpg
+			collInfo: 13S189
+			rarity: S
+		}
+		title: Crossroads of the Fallen Kings
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				player: free people
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: [
+					{
+						type: heal
+						select: choose(companion,culture(dwarven))
+					}
+					{
+						type: heal
+						select: choose(companion,culture(elven))
+					}
+					{
+						type: heal
+						select: choose(companion,culture(gandalf))
+					}
+					{
+						type: heal
+						select: choose(companion,culture(gollum))
+					}
+					{
+						type: heal
+						select: choose(companion,culture(gondor))
+					}
+					{
+						type: heal
+						select: choose(companion,culture(rohan))
+					}
+					{
+						type: heal
+						select: choose(companion,culture(shire))
+					}
+					{
+						type: heal
+						select: choose(companion,culture(esgaroth))
+					}
+				]
+			}
+		]
+		gametext: <b>Forest</b>. When the fellowship moves to this site during the regroup phase, the Free Peoples player may heal a companion of each culture.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_190: {
+		cardInfo: {
+			image: decipher/LOTR13190.jpg
+			collInfo: 13U190
+			rarity: U
+		}
+		title: Doors of Durin
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Marsh
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: companion,highestRaceCount(companion)
+					amount: -1
+				}
+			}
+		]
+		gametext: <b>Marsh</b>. Each companion of each race that has the most companions is strength -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_191: {
+		cardInfo: {
+			image: decipher/LOTR13191.jpg
+			collInfo: 13S191
+			rarity: S
+		}
+		title: Fords of Isen
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: River
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: character
+					amount: {
+						type: forEachHasAttached
+						filter: any
+					}
+				}
+			}
+		]
+		gametext: <b>River</b>. Each character is strength +1 for each card borne by that character.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_192: {
+		cardInfo: {
+			image: decipher/LOTR13192.jpg
+			collInfo: 13S192
+			rarity: S
+		}
+		title: The Great Gates
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Battleground
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: isGreaterThan
+						firstNumber: {
+							type: forEachYouCanSpot
+							filter: companion
+						}
+						secondNumber: {
+							type: forEachYouCanSpot
+							filter: minion
+						}
+					}
+					filter: minion
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. While a player can spot more companions than minions, each minion is strength +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_193: {
+		cardInfo: {
+			image: decipher/LOTR13193.jpg
+			collInfo: 13U193
+			rarity: U
+		}
+		title: Isenwash
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: [
+			Battleground
+			Plains
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				player: shadow
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				cost: {
+					type: exert
+					select: choose(minion)
+				}
+				effect: {
+					type: exert
+					select: choose(companion)
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. <b>Plains</b>. At the start of the regroup phase, each Shadow player may exert a minion to exert a companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_194: {
+		cardInfo: {
+			image: decipher/LOTR13194.jpg
+			collInfo: 13U194
+			rarity: U
+		}
+		title: Redhorn Pass
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Mountain
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantTouchTokens
+				}
+			}
+		]
+		gametext: <b>Mountain</b>. Culture tokens cannot be added, removed, or reinforced.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

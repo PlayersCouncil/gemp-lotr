@@ -14,10 +14,10 @@ import org.json.simple.JSONObject;
 public class DiscardStackedCards implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "on", "filter", "count" ,"memorize");
+        FieldUtils.validateAllowedFields(effectObject, "on", "select", "count" ,"memorize");
 
         String on = FieldUtils.getString(effectObject.get("on"), "on", "any");
-        String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "choose(any)");
+        String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
@@ -25,7 +25,7 @@ public class DiscardStackedCards implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
         result.addEffectAppender(
-                CardResolver.resolveStackedCards(filter, valueSource, onFilterSource, memory, "you", "Choose stacked cards to discard", environment));
+                CardResolver.resolveStackedCards(select, valueSource, onFilterSource, memory, "you", "Choose stacked cards to discard", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

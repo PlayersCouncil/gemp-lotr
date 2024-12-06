@@ -17,7 +17,7 @@ public class CantRemoveBurdens implements ModifierSourceProducer {
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return (actionContext) -> new CantRemoveBurdensModifier(actionContext.getSource(),
-                new RequirementCondition(requirements, actionContext),
+                RequirementCondition.createCondition(requirements, actionContext),
                 filterableSource.getFilterable(actionContext));
     }
 }

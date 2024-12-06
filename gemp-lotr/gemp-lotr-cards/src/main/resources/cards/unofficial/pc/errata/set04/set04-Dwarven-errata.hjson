@@ -1,17 +1,14 @@
 {
 	54_46: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E046.1.jpg
-			javaClass: false
+			//id: 4_46.1
 			parent: 4_46
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN04E046.1.jpg
 			collInfo: 4R46
 			rarity: R
-			setNum: "4"
-			cardNum: 46
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Ever My Heart Rises
 		unique: true
@@ -24,7 +21,8 @@
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: self
@@ -52,7 +50,7 @@
 				}
 				effect: {
 					type: putStackedCardsIntoHand
-					filter: choose(side(free people))
+					select: choose(side(free people))
 					on: self
 				}
 			}
@@ -70,7 +68,6 @@
 					{
 						type: chooseANumber
 						from: 0
-						to: 99
 						text: Choose how many times to discard 5 cards from draw deck
 						memorize: chosenNumber
 					}
@@ -78,12 +75,9 @@
 						type: discardTopCardsFromDeck
 						forced: false
 						count: {
-							type: multiply
+							type: fromMemory
+							memory: chosenNumber
 							multiplier: 5
-							source: {
-								type: fromMemory
-								memory: chosenNumber
-							}
 						}
 					}
 				]

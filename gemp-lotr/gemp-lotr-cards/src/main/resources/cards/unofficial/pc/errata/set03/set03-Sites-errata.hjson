@@ -2,17 +2,14 @@
 
 	53_120: {
 		cardInfo: {
-			imagePath: errata/53_120.jpg
-			javaClass: false
+			//id: 3_120.1
 			parent: 3_120
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/53_120.jpg
 			collInfo: 3U120
 			rarity: U
-			setNum: "3"
-			cardNum: 120
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Wastes of Emyn Muil
 		twilight: 9
@@ -24,7 +21,7 @@
 			phase: skirmish
 			cost: {
 				type: exert
-				filter: choose(your,culture(isengard),orc)
+				select: choose(your,culture(isengard),orc)
 			}
 			effect: {
 				type: choice
@@ -36,21 +33,21 @@
 					{
 						type: wound
 						player: fp
-						filter: choose(companion)
+						select: choose(companion)
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpot
 							count: 6
 							filter: companion
 						}
-						effect: [
+						true: [
 							{
 								type: wound
 								count: 2
 								player: fp
-								filter: choose(companion)
+								select: choose(companion)
 							}
 						]
 					}

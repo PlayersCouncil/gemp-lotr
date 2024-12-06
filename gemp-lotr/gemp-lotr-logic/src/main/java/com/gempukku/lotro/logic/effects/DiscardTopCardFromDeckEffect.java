@@ -18,10 +18,6 @@ public class DiscardTopCardFromDeckEffect extends AbstractEffect {
     private final int _count;
     private final boolean _forced;
 
-    public DiscardTopCardFromDeckEffect(PhysicalCard source, String playerId, boolean forced) {
-        this(source, playerId, 1, forced);
-    }
-
     public DiscardTopCardFromDeckEffect(PhysicalCard source, String playerId, int count, boolean forced) {
         _source = source;
         _playerId = playerId;

@@ -1,0 +1,1775 @@
+{
+
+	1_29: {
+		cardInfo: {
+			image: decipher/LOTR01029.jpg
+			collInfo: 1U29
+			rarity: U
+		}
+		title: Ancient Enmity
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(elf)
+					amount: 1
+					memorize: chosenElf
+				}
+				{
+					type: addTrigger
+					trigger: {
+						type: losesSkirmish
+						filter: minion
+						against: memory(chosenElf)
+						memorize: losingMinion
+					}
+					effect: {
+						type: discardCardAtRandomFromHand
+						hand: ownerFromMemory(losingMinion)
+						count: 2
+						forced: true
+					}
+				}
+			]
+		}
+		gametext: <b>Skirmish:</b> Make an Elf strength +1. If a minion loses this skirmish to that Elf, that minion's owner discards 2 cards at random from hand.
+		lore: "Hard and bitter is the Elven hatred of Orcs, for they have lost many kinsmen to Orc savagery."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_30: {
+		cardInfo: {
+			image: decipher/LOTR01030.jpg
+			collInfo: 1R30
+			rarity: R
+		}
+		title: Arwen
+		subtitle: Daughter of Elrond
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		keywords: Ranger
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				amount: 3
+				filter: self,inSkirmishAgainst(nazgul)
+			}
+		}
+		gametext: <b>Ranger</b>.<br>While skirmishing a Nazgûl, Arwen is strength +3.
+		lore: "Long she had been in the land of her mother's kin, in Lórien beyond the mountains, and was but lately returned to Rivendell to her father's house."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_31: {
+		cardInfo: {
+			image: decipher/LOTR01031.jpg
+			collInfo: 1U31
+			rarity: U
+		}
+		title: Asfaloth
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Mount
+		target: elf
+		effects: [
+			{
+				type: modifyOwnCost
+				on: name(Arwen)
+				amount: -2
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer
+					requires: {
+						type: location
+						filter: plains
+					}
+					amount: 2
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: [
+						{
+							type: location
+							filter: underground
+						}
+						{
+							type: canSpot
+							filter: self,attachedTo(companion)
+						}
+					]
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: Bearer must be an Elf. When played on Arwen, Asfaloth's twilight cost is -2.<br>While at a plains site, bearer is strength +2. Discard Asfaloth when at an underground site.
+		lore: "'Noro lim, Asfaloth, noro lim!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_32: {
+		cardInfo: {
+			image: decipher/LOTR01032.jpg
+			collInfo: 1C32
+			rarity: C
+		}
+		title: Border Defenses
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: {
+				type: modifyStrength
+				select: choose(elf)
+				memorize: chosenElf
+				amount: {
+					type: Conditional
+					requires: {
+						type: canSpot
+						filter: memory(chosenElf),inSkirmishAgainst(archer)
+					}
+					true: 4
+					false: 2
+				}
+			}
+		}
+		gametext: <b>Skirmish:</b> Make an Elf strength +2 (or +4 if skirmishing an archer).
+		lore: "'None of the Orcs will ever return out of Lórien. And there will be many Elves hidden on the northern border before another night falls.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_33: {
+		cardInfo: {
+			image: decipher/LOTR01033.jpg
+			collInfo: 1R33
+			rarity: R
+		}
+		title: Bow of the Galadhrim
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		strength: 1
+		itemclass: Ranged weapon
+		target: name(Legolas)
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: winsSkirmish
+				filter: bearer
+			}
+			effect: {
+				type: wound
+				select: choose(minion)
+			}
+		}
+		gametext: Bearer must be Legolas.<br>Each time Legolas wins a skirmish, you may wound a minion.
+		lore: "To Legolas she gave a bow such as the Galadhrim used, longer and stouter than the bows of Mirkwood, and strung with a string of elf-hair."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_34: {
+		cardInfo: {
+			image: decipher/LOTR01034.jpg
+			collInfo: 1R34
+			rarity: R
+		}
+		title: Celeborn
+		subtitle: Lord of Lórien
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Ally
+		allyHome: 6F
+		race: Elf
+		strength: 6
+		vitality: 3
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: heal
+				select: choose(culture(elven),ally)
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert Celeborn to heal an [elven] ally.
+		lore: They were clad wholly in white... and the hair of the Lord Celeborn was of silver long and bright; but no sign of age was upon them, unless it were in the 'depths of their eyes; for these were as keen as lances in the starlight, and yet profound....
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_35: {
+		cardInfo: {
+			image: decipher/LOTR01035.jpg
+			collInfo: 1R35
+			rarity: R
+		}
+		title: The Council of Elrond
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: elf
+			}
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(tale)
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Fellowship:</b> Spot an Elf to play a tale from your draw deck.
+		lore: You will hear today all that you need in order to understand the purposes of the Enemy.... What shall we do with the Ring, the least of rings, the trifle that 'Sauron fancies? That is the doom that we must deem.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_36: {
+		cardInfo: {
+			image: decipher/LOTR01036.jpg
+			collInfo: 1R36
+			rarity: R
+		}
+		title: Curse Their Foul Feet!
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(elf)
+			}
+			effect: [
+				{
+					type: revealHand
+					hand: shadowPlayer
+					memorize: cardsInHand
+				}
+				{
+					type: If
+					check: {
+						type: isGreaterThan
+						firstNumber: {
+							type: forEachInMemory
+							memory: cardsInHand
+							filter: orc
+						}
+						secondNumber: 0
+					}
+					true: {
+						type: discardFromHand
+						hand: shadowPlayer
+						player: shadowPlayer
+						forced: true
+						count: {
+							type: forEachInMemory
+							memory: cardsInHand
+							filter: orc
+						}
+					}
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Exert an Elf to reveal an opponent's hand. That player discards a card from hand for each Orc revealed.
+		lore: "'A strong company of Orcs has passed. They crossed the Nimrodel – curse their foul feet in its clean water!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_37: {
+		cardInfo: {
+			image: decipher/LOTR01037.jpg
+			collInfo: 1C37
+			rarity: C
+		}
+		title: Defiance
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: {
+				type: modifyStrength
+				select: choose(elf)
+				memorize: chosenElf
+				amount: {
+					type: Conditional
+					requires: {
+						type: canSpot
+						filter: memory(chosenElf),inSkirmishAgainst(nazgul)
+					}
+					true: 4
+					false: 2
+				}
+			}
+		}
+		gametext: <b>Skirmish:</b> Make an Elf strength +2 (or +4 if skirmishing a Nazgûl).
+		lore: "'If you want him, come and claim him!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_38: {
+		cardInfo: {
+			image: decipher/LOTR01038.jpg
+			collInfo: 1R38
+			rarity: R
+		}
+		title: Double Shot
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		timewords: Archery
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: elf,archer,companion
+			}
+			effect: {
+				type: modifyArcheryTotal
+				side: free people
+				amount: 1
+			}
+		}
+		gametext: <b>Archery:</b> Spot an Elf archer companion to make the fellowship archery total +1.
+		lore: "The affray was sharp, but the orcs were dismayed by the fierceness of the defence. Legolas shot two through the throat."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_39: {
+		cardInfo: {
+			image: decipher/LOTR01039.jpg
+			collInfo: 1C39
+			rarity: C
+		}
+		title: Elf-song
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: elf
+			}
+			effect: {
+				type: removeBurdens
+			}
+		}
+		gametext: <b>Fellowship:</b> Spot an Elf to remove a burden.
+		lore: ...the beauty of the melodies and of the interwoven words in elven-tongues, even though he understood them little, held him in a spell, as soon as he began to 'attend to them.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_40: {
+		cardInfo: {
+			image: decipher/LOTR01040.jpg
+			collInfo: 1R40
+			rarity: R
+		}
+		title: Elrond
+		subtitle: Lord of Rivendell
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 4
+		type: Ally
+		allyHome: 3F
+		race: Elf
+		strength: 8
+		vitality: 4
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: or(name(Gandalf),elf)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfTurn
+				}
+				effect: {
+					type: heal
+					select: all(ally,allyHome(fellowship,3))
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+		]
+		gametext: To play, spot Gandalf or an Elf.<br>At the start of each of your turns, heal every ally whose home is site 3.<br><b>Fellowship:</b> Exert Elrond to draw a card.
+		lore: "He was the Lord of Rivendell and mighty among both Elves and Men."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_41: {
+		cardInfo: {
+			image: decipher/LOTR01041.jpg
+			collInfo: 1C41
+			rarity: C
+		}
+		title: Elven Bow
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		itemclass: Ranged weapon
+		target: elf
+		effects: {
+			type: modifier
+			modifier: {
+				type: addKeyword
+				filter: bearer
+				keyword: archer
+			}
+		}
+		gametext: Bearer must be an Elf.<br>Bearer is an <b>archer</b>.
+		lore: "'We live now upon an island amid many perils, and our hands are more often upon the bowstring than upon the harp.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_42: {
+		cardInfo: {
+			image: decipher/LOTR01042.jpg
+			collInfo: 1C42
+			rarity: C
+		}
+		title: Elven Cloak
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Possession
+		itemclass: Cloak
+		target: companion
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: -1
+				}
+			}
+		]
+		gametext: To play, spot an Elf. Bearer must be a companion.<br>The minion archery total is -1.
+		lore: "'...never before have we clad strangers in the garb of our own people.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_43: {
+		cardInfo: {
+			image: decipher/LOTR01043.jpg
+			collInfo: 1C43
+			rarity: C
+		}
+		title: Far-seeing Eyes
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: played
+				filter: your,elf
+			}
+			effect: {
+				type: discardFromHand
+				hand: shadowPlayer
+				player: shadowPlayer
+				forced: true
+			}
+		}
+		gametext: Plays to your support area.<br>Each time you play an Elf, choose an opponent to discard a card from hand.
+		lore: "Keen Elven eyes see farther and more keenly than those of Men or Dwarves."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_44: {
+		cardInfo: {
+			image: decipher/LOTR01044.jpg
+			collInfo: 1U44
+			rarity: U
+		}
+		title: Foul Creation
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(elf)
+			}
+			effect: [
+				{
+					type: revealHand
+					hand: shadowPlayer
+					memorize: revealedCards
+				}
+				{
+					type: If
+					check: {
+						type: MemoryMatches
+						memory: revealedCards
+						filter: culture(isengard),minion
+					}
+					true: {
+						type: optional
+						text: Would you like to discard an ISENGARD minion revealed to draw 2 cards?
+						effect: {
+							type: costToEffect
+							cost: {
+								type: discardFromHand
+								hand: shadowPlayer
+								forced: true
+								player: you
+								select: choose(memory(revealedCards),culture(isengard),minion)
+							}
+							effect: {
+								type: drawCards
+								count: 2
+							}
+						}
+					}
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Exert an Elf to reveal an opponent's hand. You may discard an [isengard] minion revealed to draw 2 cards.
+		lore: "Saruman's Uruk-hai mirrored the singular focus of their master, viewing with contempt and disgust all they encountered."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_45: {
+		cardInfo: {
+			image: decipher/LOTR01045.jpg
+			collInfo: 1R45
+			rarity: R
+		}
+		title: Galadriel
+		subtitle: Lady of Light
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 3
+		type: Ally
+		allyHome: 6F
+		race: Elf
+		strength: 3
+		vitality: 3
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfTurn
+				}
+				effect: {
+					type: heal
+					select: all(ally,allyHome(fellowship,6))
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: PlayCardFromHand
+					select: choose(elf)
+					discount: -1000
+				}
+			}
+		]
+		gametext: At the start of each of your turns, heal every ally whose home is site 6.<br><b>Fellowship:</b> Exert Galadriel to play an Elf for free.
+		lore: "Very tall they were, and the Lady no less tall than the Lord; and they were grave and beautiful... and the hair of the Lady was of deep gold...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_46: {
+		cardInfo: {
+			image: decipher/LOTR01046.jpg
+			collInfo: 1U46
+			rarity: U
+		}
+		title: Gift of Boats
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(elf,ally)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesFrom
+					filter: river
+				}
+				requires: {
+					type: phase
+					phase: fellowship
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: 1
+					}
+					until: endOfTurn
+				}
+			}
+		]
+		gametext: To play, exert an Elf ally. Plays to your support area.<br>When the fellowship moves from a river during the fellowship phase, the move limit for this turn is +1.
+		lore: "'They will not sink, lade them as you will; but they are wayward if mishandled.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_47: {
+		cardInfo: {
+			image: decipher/LOTR01047.jpg
+			collInfo: 1R47
+			rarity: R
+		}
+		title: Gwemegil
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: name(Arwen)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage+1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Exert Arwen
+						Discard 2 cards from hand
+					]
+					effects: [
+						{
+							type: exert
+							select: bearer
+						}
+						{
+							type: discardFromHand
+							count: 2
+							forced: false
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: bearer
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be Arwen.<br>She is <b>damage +1</b>.<br><b>Skirmish:</b> Exert Arwen or discard 2 cards from hand to make her strength +1.
+		lore: "Forged by the Elven-smiths of Rivendell, Arwen's blade bears enchantments to ward off the forces of the Great Eye."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_48: {
+		cardInfo: {
+			image: decipher/LOTR01048.jpg
+			collInfo: 1U48
+			rarity: U
+		}
+		title: Haldir
+		subtitle: Elf of the Golden Wood
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					amount: 2
+					requires: {
+						type: location
+						filter: siteBlock(fellowship),or(siteNumber(6),siteNumber(7),siteNumber(8))
+					}
+					filter: self
+				}
+			}
+		]
+		gametext: To play, spot an Elf.<br>While Haldir is at site 6, 7, or 8, he is strength +2.
+		lore: "'But there are some of us who still go abroad for the gathering of news and the watching of our enemies.... I am one. Haldir is my name.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_49: {
+		cardInfo: {
+			image: decipher/LOTR01049.jpg
+			collInfo: 1R49
+			rarity: R
+		}
+		title: The Last Alliance of Elves and Men
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		target: culture(gondor),man,not(hasAttached(name(The Last Alliance of Elves and Men)))
+		keywords: Tale
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: bearer
+				amount: {
+					type: forEachYouCanSpot
+					filter: elf
+					limit: 3
+				}
+			}
+		}
+		gametext: <b>Tale</b>. Bearer must be a [gondor] Man. Limit 1 per bearer.<br>Bearer is strength +1 for each Elf you can spot (limit +3).
+		lore: "But Sauron of Mordor assailed them, and they made the Last Alliance of Elves and Men, and the hosts of Gil-galad and Elendil were mustered...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_50: {
+		cardInfo: {
+			image: decipher/LOTR01050.jpg
+			collInfo: 1R50
+			rarity: R
+		}
+		title: Legolas
+		subtitle: Greenleaf
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Frodo
+		resistance: 6
+		keywords: Archer
+		effects: {
+			type: activated
+			phase: archery
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: [
+				{
+					type: wound
+					select: choose(minion)
+				}
+				{
+					type: disableArcheryTotalContribution
+					select: self
+				}
+			]
+		}
+		gametext: <b>Archer</b>.<br><b>Archery:</b> Exert Legolas to wound a minion; Legolas does not add to the fellowship archery total.
+		lore: "'And I too will go with him,' said Legolas. 'It would be faithless now to say farewell.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_51: {
+		cardInfo: {
+			image: decipher/LOTR01051.jpg
+			collInfo: 1U51
+			rarity: U
+		}
+		title: Legolas
+		subtitle: Prince of Mirkwood
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		keywords: Archer
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: self,inSkirmishAgainst(nazgul)
+				amount: 3
+			}
+		}
+		gametext: <b>Archer</b>.<br>While skirmishing a Nazgûl, Legolas is strength +3.
+		lore: "There was also a strange Elf clad in green and brown, Legolas, a messenger from his father, Thranduil, the King of the Elves of Northern Mirkwood."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_52: {
+		cardInfo: {
+			image: decipher/LOTR01052.jpg
+			collInfo: 1C52
+			rarity: C
+		}
+		title: Lightfootedness
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		timewords: Archery
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: elf,companion
+			}
+			effect: {
+				type: modifyArcheryTotal
+				side: shadow
+				amount: -1
+			}
+		}
+		gametext: <b>Archery:</b> Spot an Elf companion to make the minion archery total -1.
+		lore: "'...let a ploughman plough, but choose an otter for swimming, and for running light over grass and leaf, or over snow – an Elf.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_53: {
+		cardInfo: {
+			image: decipher/LOTR01053.jpg
+			collInfo: 1C53
+			rarity: C
+		}
+		title: Lórien Elf
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Companion
+		race: Elf
+		strength: 4
+		vitality: 2
+		resistance: 6
+		effects: {
+			type: toPlay
+			requires: {
+				type: canSpot
+				filter: elf
+			}
+		}
+		gametext: To play, spot an Elf.
+		lore: "'...we dwell now in the heart of the forest, and do not willingly have dealings with any other folk.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_54: {
+		cardInfo: {
+			image: decipher/LOTR01054.jpg
+			collInfo: 1U54
+			rarity: U
+		}
+		title: Mallorn-trees
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: fellowship
+			effect: [
+				{
+					type: revealCardsFromHand
+					select: choose(culture(elven))
+					memorize: revealedCards
+				}
+				{
+					type: putCardsFromHandOnBottomOfDeck
+					select: memory(revealedCards)
+					reveal: true
+				}
+			]
+		}
+		gametext: Plays to your support area.<br><b>Fellowship:</b> Reveal an [elven] card from hand and place it beneath your draw deck.
+		lore: Upon the further side there rose to a great height a green wall encircling a green hill thronged with mallorn-trees taller than any they had yet seen in all the 'land.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_55: {
+		cardInfo: {
+			image: decipher/LOTR01055.jpg
+			collInfo: 1R55
+			rarity: R
+		}
+		title: The Mirror of Galadriel
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Possession
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: elf,ally,allyHome(fellowship,6)
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: cardsInHandMoreThan
+					player: shadowPlayer
+					count: 6
+				}
+				cost: {
+					type: exert
+					select: choose(name(Galadriel))
+				}
+				effect: [
+					{
+						type: LookAtRandomCardsFromHand
+						hand: shadow
+						count: 2
+						memorize: seenCards
+					}
+					{
+						type: discardFromHand
+						forced: true
+						select: choose(memory(seenCards))
+						player: freeps
+						hand: shadow
+					}
+				]
+			}
+		]
+		gametext: Plays to your support area.<br>Each Elf ally whose home is site 6 is strength +1.<br><b>Maneuver:</b> If an opponent has at least 7 cards in hand, exert Galadriel to look at 2 of those cards at random. Discard one and replace the other.
+		lore: "'What you will see I cannot tell....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_56: {
+		cardInfo: {
+			image: decipher/LOTR01056.jpg
+			collInfo: 1U56
+			rarity: U
+		}
+		title: Orophin
+		subtitle: Lórien Bowman
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Ally
+		allyHome: 6F
+		race: Elf
+		strength: 3
+		vitality: 3
+		keywords: Archer
+		effects: {
+			type: activated
+			phase: archery
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: wound
+				select: choose(uruk-hai)
+			}
+		}
+		gametext: <b>Archer</b>.<br><b>Archery:</b> Exert Orophin to wound an Uruk-hai.
+		lore: "The swift bow of Orophin, Haldir's kinsman, has slain many Orcs."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_57: {
+		cardInfo: {
+			image: decipher/LOTR01057.jpg
+			collInfo: 1U57
+			rarity: U
+		}
+		title: Rúmil
+		subtitle: Elven Protector
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Ally
+		allyHome: 6F
+		race: Elf
+		strength: 3
+		vitality: 3
+		keywords: Archer
+		effects: {
+			type: activated
+			phase: archery
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: wound
+				select: choose(orc)
+			}
+		}
+		gametext: <b>Archer</b>.<br><b>Archery:</b> Exert Rúmil to wound an Orc.
+		lore: "Brother to Haldir, Rúmil guards the northern marches of the Golden Wood."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_58: {
+		cardInfo: {
+			image: decipher/LOTR01058.jpg
+			collInfo: 1C58
+			rarity: C
+		}
+		title: The Seen and the Unseen
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				count: 2
+				select: choose(elf)
+			}
+			effect: {
+				type: discard
+				select: choose(condition)
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert 2 Elves to discard a condition.
+		lore: "'You have entered the realm of the Lady of the Wood – you cannot go back.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_59: {
+		cardInfo: {
+			image: decipher/LOTR01059.jpg
+			collInfo: 1C59
+			rarity: C
+		}
+		title: Shoulder to Shoulder
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: maneuver
+			text: Add (1) and either exert an Elf to heal a Dwarf, or exert a Dwarf to heal an Elf.
+			cost: [
+				{
+					type: addTwilight
+					amount: 1
+				}
+				{
+					type: exert
+					select: choose(or(dwarf,elf))
+					memorize: exerter
+				}
+			]
+			effect: [
+				{
+					type: If
+					check: {
+						type: MemoryMatches
+						memory: exerter
+						filter: dwarf
+					}
+					true: {
+						type: heal
+						select: choose(elf)
+					}
+				}
+				{
+					type: If
+					check: {
+						type: MemoryMatches
+						memory: exerter
+						filter: elf
+					}
+					true: {
+						type: heal
+						select: choose(dwarf)
+					}
+				}
+			]
+		}
+		gametext: Plays to your support area.<br><b>Maneuver:</b> Add (1) and exert a Dwarf to heal an Elf, or add (1) and exert an Elf to heal a Dwarf.
+		lore: "'May it be a sign that though the world is now dark better days are at hand, and that friendship shall be renewed between out peoples.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_60: {
+		cardInfo: {
+			image: decipher/LOTR01060.jpg
+			collInfo: 1U60
+			rarity: U
+		}
+		title: Silinde
+		subtitle: Elf of Mirkwood
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Ally
+		allyHome: 3F
+		race: Elf
+		strength: 5
+		vitality: 2
+		effects: {
+			type: copyCard
+			filter: your,site,siteNumber(3),siteBlock(fellowship)
+		}
+		gametext: While you can spot your site 3, Silinde has the game text of that site.
+		lore: "Among the representatives of the Elves of Northern Mirkwood was Silinde, friend of the House of Thranduil."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_61: {
+		cardInfo: {
+			image: decipher/LOTR01061.jpg
+			collInfo: 1C61
+			rarity: C
+		}
+		title: Songs of the Blessed Realm
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: your,culture(elven),tale
+			}
+			effect: {
+				type: removeBurdens
+			}
+		}
+		gametext: Plays to your support area.<br>Each time you play an [elven] tale, you may remove a burden.
+		lore: "Elves seem to like music and poetry and tales as much as Hobbits like food."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_62: {
+		cardInfo: {
+			image: decipher/LOTR01062.jpg
+			collInfo: 1R62
+			rarity: R
+		}
+		title: The Splendor of Their Banners
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		target: elf,companion
+		keywords: Tale
+		effects: {
+			type: activated
+			phase: archery
+			requires: {
+				type: canSpot
+				filter: bearer,archer
+			}
+			cost: {
+				type: exert
+				select: bearer
+			}
+			effect: {
+				type: modifyArcheryTotal
+				side: free people
+				amount: 1
+			}
+		}
+		gametext: <b>Tale</b>. Bearer must be an Elf companion.<br><b>Archery:</b> If bearer is an archer, exert bearer to make the fellowship archery total +1.
+		lore: "'It recalled to me the glory of the Elder Days and the hosts of Beleriand, so many great princes and captains were assembled.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_63: {
+		cardInfo: {
+			image: decipher/LOTR01063.jpg
+			collInfo: 1U63
+			rarity: U
+		}
+		title: Stand Against Darkness
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(elf)
+			}
+			effect: {
+				type: discard
+				select: choose(culture(sauron),or(minion,condition,possession))
+			}
+		}
+		gametext: <b>Maneuver:</b> Exert an Elf to discard a [sauron] minion, a [sauron] condition, or a [sauron] possession.
+		lore: What power still remains lies with us, here in Imladris, or with Círdan at the Havens, or in Lórien. But have they the strength, have we here the strength to 'withstand the Enemy...?'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_64: {
+		cardInfo: {
+			image: decipher/LOTR01064.jpg
+			collInfo: 1U64
+			rarity: U
+		}
+		title: Support of the Last Homely House
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(elf,ally,allyHome(fellowship,3))
+				memorize: exertedAlly
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: memory(exertedAlly)
+					amount: 3
+					until: start(regroup)
+				}
+				{
+					type: EnableParticipationInArcheryFireAndSkirmishes
+					select: memory(exertedAlly)
+					until: start(regroup)
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Exert an Elf ally whose home is site 3. Until the regroup phase, that ally is strength +3 and participates in archery fire and skirmishes.
+		lore: "Merely to be there was a cure for weariness, fear, and sadness."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_65: {
+		cardInfo: {
+			image: decipher/LOTR01065.jpg
+			collInfo: 1U65
+			rarity: U
+		}
+		title: Swan-ship of the Galadhrim
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(elf,ally,allyHome(fellowship,6))
+				memorize: exertedAlly
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: memory(exertedAlly)
+					amount: 3
+					until: start(regroup)
+				}
+				{
+					type: EnableParticipationInArcheryFireAndSkirmishes
+					select: memory(exertedAlly)
+					until: start(regroup)
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Exert an Elf ally whose home is site 6. Until the regroup phase, that ally is strength +3 and participates in archery fire and skirmishes.
+		lore: "...and suddenly they perceived that it was a ship, wrought and carved with elven-skill in the likeness of a bird."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_66: {
+		cardInfo: {
+			image: decipher/LOTR01066.jpg
+			collInfo: 1R66
+			rarity: R
+		}
+		title: The Tale of Gil-galad
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		vitality: 1
+		target: elf
+		keywords: Tale
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: [
+				{
+					type: memorize
+					filter: bearer
+					memory: bearer
+				}
+				{
+					type: discard
+					select: self
+				}
+			]
+			effect: {
+				type: modifyStrength
+				select: memory(bearer)
+				amount: 2
+			}
+		}
+		gametext: <b>Tale</b>. Bearer must be an Elf.<br><b>Skirmish:</b> Discard this condition to make bearer strength +2.
+		lore: "Gil-galad was an Elven-king / Of him the harpers sadly sing: / the last whose realm was fair and free / between the Mountains and the Sea."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_67: {
+		cardInfo: {
+			image: decipher/LOTR01067.jpg
+			collInfo: 1C67
+			rarity: C
+		}
+		title: Uruviel
+		subtitle: Maid of Lórien
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Ally
+		allyHome: 6F
+		race: Elf
+		strength: 5
+		vitality: 2
+		effects: {
+			type: copyCard
+			filter: your,site,siteNumber(6),siteBlock(fellowship)
+		}
+		gametext: While you can spot your site 6, Uruviel has the game text of that site.
+		lore: "An Elf-maid of the Galadhrim, Uruviel has dwelt for years beneath the mallorn-trees of Lothlórien."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_68: {
+		cardInfo: {
+			image: decipher/LOTR01068.jpg
+			collInfo: 1C68
+			rarity: C
+		}
+		title: The White Arrows of Lórien
+		unique: false
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Condition
+		target: elf,companion
+		keywords: Tale
+		effects: {
+			type: activated
+			phase: archery
+			requires: {
+				type: canSpot
+				filter: bearer,archer
+			}
+			cost: {
+				type: exert
+				select: bearer
+			}
+			effect: {
+				type: discardCardAtRandomFromHand
+				forced: true
+				hand: shadowPlayer
+				count: 2
+			}
+		}
+		gametext: <b>Tale</b>. Bearer must be an Elf companion.<br><b>Archery:</b> If bearer is an archer, exert bearer to make an opponent discard 2 cards at random from hand.
+		lore: "Straight and true, the arrows of the Golden Wood are known to leave a deadly mark."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -10,13 +10,11 @@ public class CardPhaseLimitEvaluator implements Evaluator {
 
     private final Evaluator _amount;
 
-    private final LotroGame _game;
     private final PhysicalCard _source;
     private final Phase _phase;
     private final Evaluator _limit;
 
-    public CardPhaseLimitEvaluator(LotroGame game, PhysicalCard source, Phase phase, Evaluator limit, Evaluator amount) {
-        _game = game;
+    public CardPhaseLimitEvaluator(PhysicalCard source, Phase phase, Evaluator limit, Evaluator amount) {
         _source = source;
         _phase = phase;
         _limit = limit;

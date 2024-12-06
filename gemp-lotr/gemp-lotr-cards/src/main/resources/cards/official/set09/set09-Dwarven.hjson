@@ -1,0 +1,500 @@
+{
+
+	9_3: {
+		cardInfo: {
+			image: decipher/LOTR09003.jpg
+			collInfo: 9R+3
+			rarity: R+
+		}
+		title: Durin III
+		subtitle: Dwarven Lord
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 4
+		type: Companion
+		race: Dwarf
+		strength: 7
+		vitality: 4
+		resistance: 6
+		keywords: Damage+1
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: dwarf
+					count: 2
+				}
+				amount: -2
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: or(artifact,possession),attachedTo(self)
+					}
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>.<br>While you can spot 2 Dwarves, Durin III is twilight cost -2.<br>Durin III is strength +1 for each artifact and each possession he bears.
+		lore: "Durin is the name that the Dwarves used for the eldest of the Seven Fathers of their race...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_4: {
+		cardInfo: {
+			image: decipher/LOTR09004.jpg
+			collInfo: 9R+4
+			rarity: R+
+		}
+		title: Gimli
+		subtitle: Bearer of Grudges
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		resistance: 4
+		canStartWithRing: true
+		keywords: Damage+1
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,ring bearer,inSkirmish
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add 2 burdens
+						Add 2 threats
+					]
+					effects: [
+						{
+							type: addBurdens
+							amount: 2
+						}
+						{
+							type: addThreats
+							amount: 2
+						}
+					]
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: self
+					amount: {
+						type: forEachKeyword
+						filter: self
+						keyword: damage
+					}
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>.<br>While Gimli is the Ring-bearer, at the start of each skirmish involving him, add 2 burdens or 2 threats.<br>While Gimli is damage +X, he is resistance +X.
+		lore: "'Never trust an Elf.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_5: {
+		cardInfo: {
+			image: decipher/LOTR09005.jpg
+			collInfo: 9R5
+			rarity: R
+		}
+		title: Linnar
+		subtitle: Dwarven Lord
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 7
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: dwarf
+					memorize: winner
+				}
+				requires: {
+					type: fierceSkirmish
+				}
+				effect: {
+					type: heal
+					select: memory(winner)
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(culture(dwarven))
+				}
+				effect: {
+					type: addKeyword
+					select: choose(dwarf)
+					keyword: damage+1
+				}
+			}
+		]
+		gametext: Each time a Dwarf wins a fierce skirmish, you may heal that Dwarf.<br><b>Skirmish:</b> Discard a [dwarven] card from hand to make a Dwarf <b>damage +1</b>.
+		lore: "...they were joined by great forces sent from the Houses of the other Fathers...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_6: {
+		cardInfo: {
+			image: decipher/LOTR09006.jpg
+			collInfo: 9R6
+			rarity: R
+		}
+		title: Ring of Accretion
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Artifact
+		strength: 1
+		itemclass: Ring
+		target: dwarf
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage+1
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						filter: dwarf
+						memorize: spotCount
+					}
+					{
+						type: revealTopCardsOfDrawDeck
+						count: {
+							type: fromMemory
+							memory: spotCount
+						}
+						memorize: revealedCards
+					}
+					{
+						type: putCardsFromDeckIntoHand
+						select: all(memory(revealedCards),side(free people))
+						reveal: true
+						shuffle: false
+						showAll: false
+					}
+					{
+						type: discardCardsFromDrawDeck
+						select: all(memory(revealedCards),not(side(free people)))
+						showAll: false
+						shuffle: false
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: Bearer must be a Dwarf.<br>Bearer is <b>damage +1</b>.<br><b>Maneuver:</b> For each Dwarf you spot, reveal a card from the top of your draw deck. Take all Free Peoples cards revealed into hand and discard the rest. Discard this artifact.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_7: {
+		cardInfo: {
+			image: decipher/LOTR09007.jpg
+			collInfo: 9R+7
+			rarity: R+
+		}
+		title: Ring of Fury
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Artifact
+		strength: 1
+		itemclass: Ring
+		target: dwarf
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage+2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: spot
+					select: choose(dwarf,damage)
+					memorize: spottedDwarf
+				}
+				effect: [
+					{
+						type: heal
+						select: choose(dwarf)
+						count: {
+							type: forEachKeywordOnCardInMemory
+							memory: spottedDwarf
+							keyword: damage
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: Bearer must be a Dwarf.<br>Bearer is <b>damage +2</b>.<br><b>Regroup:</b> Spot a Dwarf that is damage +X to heal X Dwarves. Discard this artifact.
+		lore: "'Azog! If you are in come out! Or is the play in the valley too rough?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_8: {
+		cardInfo: {
+			image: decipher/LOTR09008.jpg
+			collInfo: 9R8
+			rarity: R
+		}
+		title: Ring of Guile
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Artifact
+		strength: 1
+		itemclass: Ring
+		target: dwarf
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage+1
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				effect: [
+					{
+						type: putCardsFromDiscardIntoHand
+						select: choose(culture(dwarven),event)
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: Bearer must be a Dwarf.<br>Bearer is <b>damage +1</b>.<br><b>Maneuver:</b> Take a [dwarven] event into hand from your discard pile. Discard this artifact.
+		lore: "But, as Thrór had said, the Ring needed gold to breed gold...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_9: {
+		cardInfo: {
+			image: decipher/LOTR09009.jpg
+			collInfo: 9R9
+			rarity: R
+		}
+		title: Ring of Retribution
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Artifact
+		strength: 1
+		vitality: 1
+		itemclass: Ring
+		target: dwarf
+		effects: {
+			type: Response
+			trigger: {
+				type: winsSkirmish
+				filter: bearer
+			}
+			cost: {
+				type: discard
+				select: self
+			}
+			effect: {
+				type: exert
+				select: all(orc)
+			}
+		}
+		gametext: Bearer must be a Dwarf.<br><b>Response:</b> If bearer wins a skirmish, discard this artifact to exert each Orc.
+		lore: "'We fought this war for vengeance, and vengeance we have taken. But it is not sweet.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_10: {
+		cardInfo: {
+			image: decipher/LOTR09010.jpg
+			collInfo: 9R10
+			rarity: R
+		}
+		title: Sindri
+		subtitle: Dwarven Lord
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: {
+			type: modifier
+			modifier: {
+				type: canPlayStackedCards
+				filter: culture(dwarven),timeword(skirmish),event
+				on: culture(dwarven),condition
+				requires: {
+					type: phase
+					phase: skirmish
+				}
+			}
+		}
+		gametext: You may play [dwarven] skirmish events stacked on [dwarven] conditions as if from hand.
+		lore: "Concerning the beginning of the Dwarves strange tales are told both by the Eldar and by the Dwarves themselves...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_11: {
+		cardInfo: {
+			image: decipher/LOTR09011.jpg
+			collInfo: 9R11
+			rarity: R
+		}
+		title: Úri
+		subtitle: Dwarven Lord
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 5
+		vitality: 4
+		resistance: 6
+		effects: {
+			type: activated
+			phase: skirmish
+			requires: {
+				type: canSpot
+				filter: self,damage
+			}
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: modifyStrength
+				select: self
+				amount: {
+					type: forEachKeyword
+					filter: self
+					keyword: damage
+				}
+			}
+		}
+		gametext: <b>Skirmish:</b> If Úri is damage +X, exert him to make him strength +X.
+		lore: ...the Dwarves had the victory through their strength, and their matchless weapons, and the fire of their anger, as they hunted for Azog in every den under 'mountain.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -9,9 +9,12 @@ import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.GameStats;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GameState {
     private static final Logger _log = LogManager.getLogger(GameState.class);
@@ -40,7 +43,7 @@ public class GameState {
     private int _twilightPool;
 
     private int _moveCount;
-    private boolean _moving;
+    private int turnNumber;
     private boolean _fierceSkirmishes;
     private boolean _extraSkirmishes;
 
@@ -152,14 +155,6 @@ public class GameState {
         }
     }
 
-    public boolean isMoving() {
-        return _moving;
-    }
-
-    public void setMoving(boolean moving) {
-        _moving = moving;
-    }
-
     private void addPlayerCards(String playerId, List<String> cards, LotroCardBlueprintLibrary library) {
         for (String blueprintId : cards) {
             try {
@@ -237,7 +232,7 @@ public class GameState {
         if (_playerOrder != null) {
             listener.initializeBoard(_playerOrder.getAllPlayers(), _format.discardPileIsPublic());
             if (_currentPlayerId != null)
-                listener.setCurrentPlayerId(_currentPlayerId);
+                listener.setCurrentPlayerId(_currentPlayerId, Collections.emptySet());
             if (_currentPhase != null)
                 listener.setCurrentPhase(getPhaseString());
             listener.setTwilight(_twilightPool);
@@ -261,7 +256,7 @@ public class GameState {
                         cardIterator.remove();
                     }
                 }
-            } while (cardsToSendAtLoopStart != cardsLeftToSent.size() && cardsLeftToSent.size() > 0);
+            } while (cardsToSendAtLoopStart != cardsLeftToSent.size() && !cardsLeftToSent.isEmpty());
 
             // Finally the stacked ones
             for (List<PhysicalCardImpl> physicalCards : _stacked.values())
@@ -278,11 +273,13 @@ public class GameState {
                 for (PhysicalCardImpl physicalCard : physicalCards)
                     listener.cardCreated(physicalCard);
 
-            List<PhysicalCardImpl> discard = _discards.get(playerId);
-            if (discard != null) {
-                for (PhysicalCardImpl physicalCard : discard)
+            for (List<PhysicalCardImpl> physicalCards : _removed.values())
+                for (PhysicalCardImpl physicalCard : physicalCards)
                     listener.cardCreated(physicalCard);
-            }
+
+            for (List<PhysicalCardImpl> physicalCards : _discards.values())
+                for (PhysicalCardImpl physicalCard : physicalCards)
+                    listener.cardCreated(physicalCard);
 
             List<PhysicalCardImpl> adventureDeck = _adventureDecks.get(playerId);
             if (adventureDeck != null) {
@@ -306,6 +303,9 @@ public class GameState {
             }
 
             listener.sendGameStats(gameStats);
+
+            if (_currentPlayerId != null)
+                listener.setCurrentPlayerId(_currentPlayerId, getInactiveCards());
         }
 
         for (String lastMessage : _lastMessages)
@@ -504,7 +504,7 @@ public class GameState {
                 if (assignment.getFellowshipCharacter() == card)
                     removeAssignment(assignment);
                 if (assignment.getShadowCharacters().remove(card))
-                    if (assignment.getShadowCharacters().size() == 0)
+                    if (assignment.getShadowCharacters().isEmpty())
                         removeAssignment(assignment);
             }
 
@@ -541,7 +541,7 @@ public class GameState {
         if (end)
             zoneCards.add((PhysicalCardImpl) card);
         else
-            zoneCards.add(0, (PhysicalCardImpl) card);
+            zoneCards.addFirst((PhysicalCardImpl) card);
 
         if (card.getZone() != null)
             _log.error("Card was in " + card.getZone() + " when tried to add to zone: " + zone);
@@ -817,14 +817,28 @@ public class GameState {
         return _twilightPool;
     }
 
-    public void startPlayerTurn(String playerId) {
+    public void startPlayerTurn(String playerId, boolean realTurn) {
         _currentPlayerId = playerId;
+        if (realTurn) {
+            turnNumber++;
+        }
         setTwilight(0);
         _moveCount = 0;
         _fierceSkirmishes = false;
 
-        for (GameStateListener listener : getAllGameStateListeners())
-            listener.setCurrentPlayerId(_currentPlayerId);
+        for (var listener : getAllGameStateListeners()) {
+            listener.setCurrentPlayerId(_currentPlayerId, getInactiveCards());
+        }
+    }
+
+    public Set<PhysicalCard> getInactiveCards() {
+        return Stream.concat(_inPlay.stream(), _stacked.values().stream().flatMap(Collection::stream))
+                .filter(x -> !isCardInPlayActive(x))
+                .collect(Collectors.toSet());
+    }
+
+    public int getTurnNumber() {
+        return turnNumber;
     }
 
     public boolean isExtraSkirmishes() {
@@ -857,14 +871,17 @@ public class GameState {
         if (card.getBlueprint().getCardType() == CardType.THE_ONE_RING)
             return card.getOwner().equals(_currentPlayerId);
 
+        if (card.getAttachedTo() != null && card.getAttachedTo().getBlueprint().getCardType() != CardType.SITE)
+            return isCardInPlayActive(card.getAttachedTo());
+
+        if(card.getStackedOn() != null && card.getStackedOn().getBlueprint().getCardType() != CardType.SITE)
+            return isCardInPlayActive(card.getStackedOn());
+
         if (card.getOwner().equals(_currentPlayerId) && side == Side.SHADOW)
             return false;
 
         if (!card.getOwner().equals(_currentPlayerId) && side == Side.FREE_PEOPLE)
             return false;
-
-        if (card.getAttachedTo() != null)
-            return isCardInPlayActive(card.getAttachedTo());
 
         return true;
     }

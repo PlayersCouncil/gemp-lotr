@@ -150,7 +150,7 @@ public class TurnProcedure {
             if (!_initialized) {
                 _initialized = true;
                 List<Action> requiredResponses = _game.getActionsEnvironment().getRequiredAfterTriggers(_effectResults);
-                if (requiredResponses.size() > 0)
+                if (!requiredResponses.isEmpty())
                     appendEffect(new PlayoutAllActionsIfEffectNotCancelledEffect(this, requiredResponses));
 
                 appendEffect(
@@ -171,7 +171,7 @@ public class TurnProcedure {
             for (EffectResult effectResult : _effectResults) {
                 if (effectResult.getType() == EffectResult.Type.ANY_NUMBER_KILLED) {
                     KilledResult killResult = (KilledResult) effectResult;
-                    if (Filters.filter(killResult.getKilledCards(), _game, Filters.ringBearer).size() > 0)
+                    if (Filters.acceptsAny(_game, killResult.getKilledCards(), Filters.ringBearer))
                         return true;
                 }
                 if (effectResult.getType() == EffectResult.Type.FOR_EACH_RETURNED_TO_HAND) {

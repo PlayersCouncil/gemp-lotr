@@ -6,15 +6,13 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_02_075_ErrataTests
 {
@@ -92,10 +90,10 @@ public class Card_02_075_ErrataTests
 
         //should be -5 for Black Rider, -2 for roaming
         assertEquals(7, scn.GetTwilight());
-        assertTrue(scn.HasKeyword(nazgul1, Keyword.ROAMING));
+        assertTrue(scn.hasKeyword(nazgul1, Keyword.ROAMING));
 
         scn.ShadowPlayCard(ferny);
-        assertFalse(scn.HasKeyword(nazgul1, Keyword.ROAMING));
+        assertFalse(scn.hasKeyword(nazgul1, Keyword.ROAMING));
         scn.ShadowPlayCard(nazgul2);
 
         //Should have been exactly enough twilight to play ferny + another black rider, if there are no roaming penalties.
@@ -116,8 +114,8 @@ public class Card_02_075_ErrataTests
         scn.FreepsMoveCharToTable(sam);
 
         //Make ferny fierce and strength +5 just to make things easier to test
-        scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.name("Bill Ferny"), Keyword.FIERCE));
-        scn.ApplyAdHocModifier(new StrengthModifier(null, Filters.name("Bill Ferny"), 5));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("Bill Ferny"), null, Keyword.FIERCE));
+        scn.ApplyAdHocModifier(new StrengthModifier(null, Filters.name("Bill Ferny"), null, 5));
 
         scn.StartGame();
 
@@ -162,7 +160,7 @@ public class Card_02_075_ErrataTests
 
         scn.ShadowMoveCharToTable(ferny);
 
-        scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
 
         scn.StartGame();
 

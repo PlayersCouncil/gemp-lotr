@@ -21,14 +21,10 @@ public abstract class AbstractModifier implements Modifier {
     private final Condition _condition;
     private final ModifierEffect _effect;
 
-    protected AbstractModifier(PhysicalCard source, String text, Filterable affectFilter, ModifierEffect effect) {
-        this(source, text, affectFilter, null, effect);
-    }
-
     protected AbstractModifier(PhysicalCard source, String text, Filterable affectFilter, Condition condition, ModifierEffect effect) {
         _physicalCard = source;
         _text = text;
-        _affectFilter = (affectFilter != null) ? Filters.and(affectFilter) : null;
+        _affectFilter = (affectFilter != null) ? Filters.changeToFilter(affectFilter) : null;
         _condition = condition;
         _effect = effect;
     }
@@ -147,7 +143,7 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
-    public boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard physicalCard, Set<PhysicalCard> winners) {
+    public boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard physicalCard) {
         return true;
     }
 
@@ -173,6 +169,11 @@ public abstract class AbstractModifier implements Modifier {
 
     @Override
     public boolean isUnhastyCompanionAllowedToParticipateInSkirmishes(LotroGame game, PhysicalCard card) {
+        return false;
+    }
+
+    @Override
+    public boolean isAssignmentCostPaid(LotroGame game, PhysicalCard card) {
         return false;
     }
 
@@ -383,6 +384,9 @@ public abstract class AbstractModifier implements Modifier {
     public int getFPCulturesSpotCountModifier(LotroGame game, String playerId) {
         return 0;
     }
+
+    @Override
+    public int getSiteControlledSpotCountModifier(LotroGame game, String playerId) { return 0; }
 
     @Override
     public int getSanctuaryHealModifier(LotroGame game) {

@@ -17,7 +17,7 @@ public class HasCardInDeadPile implements RequirementProducer {
         FieldUtils.validateAllowedFields(object, "count", "filter");
 
         final int count = FieldUtils.getInteger(object.get("count"), "count", 1);
-        final String filter = FieldUtils.getString(object.get("filter"), "filter");
+        final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         return (actionContext) -> {
@@ -25,7 +25,7 @@ public class HasCardInDeadPile implements RequirementProducer {
             final LotroGame game = actionContext.getGame();
 
             // You can "spot" cards in dead pile, only for current player
-            return Filters.filter(game.getGameState().getDeadPile(GameUtils.getFreePeoplePlayer(game)), game, filterable).size() >= count;
+            return Filters.filter(game, game.getGameState().getDeadPile(GameUtils.getFreePeoplePlayer(game)), filterable).size() >= count;
         };
     }
 }

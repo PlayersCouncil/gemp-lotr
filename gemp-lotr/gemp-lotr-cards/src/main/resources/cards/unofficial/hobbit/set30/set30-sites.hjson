@@ -1,5 +1,10 @@
 {
 	30_49: {
+		cardInfo: {
+			image: hobbit/HDG3049.jpg
+			collInfo: 30_49
+			rarity: _
+		}
 		title: Bag End
 		type: site
 		block: hobbit
@@ -9,8 +14,8 @@
 			type: activated
 			phase: fellowship
 			cost: {
-				type: play
-				filter: choose(culture(dwarven),follower)
+				type: PlayCardFromHand
+				select: choose(culture(dwarven),follower)
 			}
 			effect: {
 				type: drawCards
@@ -19,6 +24,11 @@
 		}
 	}
 	30_50: {
+		cardInfo: {
+			image: hobbit/HDG3050.jpg
+			collInfo: 30_50
+			rarity: _
+		}
 		title: The Troll Hoard
 		twilight: 3
 		type: site
@@ -29,7 +39,7 @@
 			underground
 		]
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfPhase
@@ -41,11 +51,18 @@
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(hand weapon)
+				select: choose(hand weapon)
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
 	30_51: {
+		cardInfo: {
+			image: hobbit/HDG3051.jpg
+			collInfo: 30_51
+			rarity: _
+		}
 		title: Rivendell
 		twilight: 1
 		type: site
@@ -60,6 +77,11 @@
 		}
 	}
 	30_52: {
+		cardInfo: {
+			image: hobbit/HDG3052.jpg
+			collInfo: 30_52
+			rarity: _
+		}
 		title: Goblin Town
 		twilight: 4
 		type: site
@@ -75,11 +97,18 @@
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(name(The One Ring))
+				select: choose(name(The One Ring))
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
 	30_53: {
+		cardInfo: {
+			image: hobbit/HDG3053.jpg
+			collInfo: 30_53
+			rarity: _
+		}
 		title: Mirkwood
 		twilight: 6
 		type: site
@@ -87,18 +116,24 @@
 		site: 5
 		keyword: forest
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: movesTo
 				filter: self
 			}
 			effect: {
 				type: discard
-				filter: all(name(Gandalf))
+				select: all(name(Gandalf))
 			}
 		}
 	}
 	30_54: {
+		cardInfo: {
+			image: hobbit/HDG3054.jpg
+			collInfo: 30_54
+			rarity: _
+		}
 		title: Esgaroth
 		twilight: 3
 		type: site
@@ -106,7 +141,7 @@
 		site: 6
 		keyword: river
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			requires: {
 				type: isSide
@@ -118,11 +153,18 @@
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(or(culture(esgaroth),culture(dwarven)),ally)
+				select: choose(or(culture(esgaroth),culture(dwarven)),ally)
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
 	30_55: {
+		cardInfo: {
+			image: hobbit/HDG3055.jpg
+			collInfo: 30_55
+			rarity: _
+		}
 		title: Erebor
 		twilight: 6
 		type: site
@@ -142,7 +184,7 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(minion)
+				select: choose(minion)
 				count: 2
 			}
 			effect: {
@@ -152,6 +194,11 @@
 		}
 	}
 	30_56: {
+		cardInfo: {
+			image: hobbit/HDG3056.jpg
+			collInfo: 30_56
+			rarity: _
+		}
 		title: Smaug's Den
 		twilight: 8
 		type: site
@@ -173,17 +220,24 @@
 				effects: [
 					{
 						type: playCardFromDrawDeck
-						filter: choose(name(Smaug))
+						select: choose(name(Smaug))
+						showAll: true
+						shuffle: true
 					}
 					{
 						type: playCardFromDiscard
-						filter: choose(name(Smaug))
+						select: choose(name(Smaug))
 					}
 				]
 			}
 		}
 	}
 	30_57: {
+		cardInfo: {
+			image: hobbit/HDG3057.jpg
+			collInfo: 30_57
+			rarity: _
+		}
 		title: Battle of the Five Armies
 		twilight: 9
 		type: site
@@ -202,18 +256,23 @@
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(minion,not(name(Smaug)))
+				select: choose(minion,not(name(Smaug)))
 			}
 		}
 	}
 	30_58: {
+		cardInfo: {
+			image: hobbit/HDG3058.jpg
+			collInfo: 30_58
+			rarity: _
+		}
 		title: Bilbo's Kitchen
 		twilight: 0
 		type: site
 		block: hobbit
 		site: 1
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			requires: {
 				type: isSide
@@ -225,15 +284,22 @@
 			}
 			cost: {
 				type: exert
-				filter: choose(companion)
+				select: choose(companion)
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(culture(dwarven),follower)
+				select: choose(culture(dwarven),follower)
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
 	30_59: {
+		cardInfo: {
+			image: hobbit/HDG3059.jpg
+			collInfo: 30_59
+			rarity: _
+		}
 		title: Trollshaw Forest
 		twilight: 2
 		type: site
@@ -241,7 +307,8 @@
 		site: 2
 		keyword: forest
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: startOfPhase
 				phase: maneuver
@@ -255,15 +322,17 @@
 						memorize: choice
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: memoryIs
 							memory: choice
 							value: yes
 						}
-						effect: {
+						true: {
 							type: playCardFromDrawDeck
-							filter: choose(hand weapon)
+							select: choose(hand weapon)
+							showAll: true
+							shuffle: true
 						}
 					}
 				]
@@ -271,6 +340,11 @@
 		}
 	}
 	30_60: {
+		cardInfo: {
+			image: hobbit/HDG3060.jpg
+			collInfo: 30_60
+			rarity: _
+		}
 		title: Rhudaur
 		twilight: 1
 		type: site
@@ -283,15 +357,22 @@
 			limitPerTurn: 1
 			cost: {
 				type: exert
-				filter: choose(your,fierce,minion)
+				select: choose(your,fierce,minion)
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(condition)
+				select: choose(condition)
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
 	30_61: {
+		cardInfo: {
+			image: hobbit/HDG3061.jpg
+			collInfo: 30_61
+			rarity: _
+		}
 		title: Wooded Steep Cliff
 		twilight: 3
 		type: site
@@ -302,7 +383,8 @@
 			forest
 		]
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: movesTo
 				filter: self
@@ -317,18 +399,23 @@
 				effects: [
 					{
 						type: exert
-						filter: choose(name(Thorin))
+						select: choose(name(Thorin))
 					}
 					{
 						type: exert
 						count: 2
-						filter: choose(not(name(Thorin)),companion)
+						select: choose(not(name(Thorin)),companion)
 					}
 				]
 			}
 		}
 	}
 	30_62: {
+		cardInfo: {
+			image: hobbit/HDG3062.jpg
+			collInfo: 30_62
+			rarity: _
+		}
 		title: Old Forest Road
 		twilight: 5
 		type: site
@@ -336,7 +423,7 @@
 		site: 5
 		keyword: forest
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: startOfPhase
@@ -348,15 +435,20 @@
 			}
 			cost: {
 				type: discard
-				filter: choose(name(Gandalf))
+				select: choose(name(Gandalf))
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 	}
 	30_63: {
+		cardInfo: {
+			image: hobbit/HDG3063.jpg
+			collInfo: 30_63
+			rarity: _
+		}
 		title: Lake-Town
 		twilight: 3
 		type: site
@@ -379,7 +471,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: played
 					filter: orc
@@ -393,12 +486,13 @@
 					}
 				}
 				effect: {
-					type: appendCardIdsToWhileInZone
+					type: storeWhileInZone
 					memory: playedOrc
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: endOfTurn
 				}
@@ -409,6 +503,11 @@
 		]
 	}
 	30_64: {
+		cardInfo: {
+			image: hobbit/HDG3064.jpg
+			collInfo: 30_64
+			rarity: _
+		}
 		title: Dale
 		twilight: 6
 		type: site
@@ -438,6 +537,11 @@
 		}
 	}
 	30_65: {
+		cardInfo: {
+			image: hobbit/HDG3065.jpg
+			collInfo: 30_65
+			rarity: _
+		}
 		title: Ravenhill
 		twilight: 8
 		type: site
@@ -449,12 +553,12 @@
 			phase: maneuver
 			cost: {
 				type: removeFromTheGame
-				filter: choose(your,minion)
+				select: choose(your,minion)
 			}
 			effect: {
 				type: playCardFromDiscard
-				filter: choose(minion)
-				cost: -2
+				select: choose(minion)
+				discount: -2
 			}
 		}
 	}

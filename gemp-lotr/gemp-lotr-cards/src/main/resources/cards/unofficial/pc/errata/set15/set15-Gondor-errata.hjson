@@ -2,17 +2,11 @@
 
 	65_62: {
 		cardInfo: {
-			imagePath: errata/65_62.jpg
-			javaClass: false
-			parent: 15_62
-			parentPath: errata/pc
-			version: 1?
+			//id: 5_62.1
+			revision: 1
+			image: errata/65_62.jpg
 			collInfo: 15C62
 			rarity: C
-			setNum: "15"
-			cardNum: 62
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Ithilien Blade
 		unique: false
@@ -40,12 +34,12 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 					times: 2
 				}
 				effect: {
 					type: wound
-					filter: choose(minion,roaming)
+					select: choose(minion,roaming)
 					times: 2
 				}
 			}
@@ -63,17 +57,11 @@
 
 	65_64: {
 		cardInfo: {
-			imagePath: errata/65_64.jpg
-			javaClass: false
-			parent: 15_64
-			parentPath: errata/pc
-			version: 1?
+			//id: 5_64.1
+			revision: 1
+			image: errata/65_64.jpg
 			collInfo: 15R64
 			rarity: R
-			setNum: "15"
-			cardNum: 64
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Madril
 		subtitle: Defender of Osgiliath
@@ -100,7 +88,8 @@
 				amount: -2
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfPhase
 					phase: maneuver
@@ -110,12 +99,12 @@
 				}
 				effect: {
 					type: repeat
-					amount: {
+					times: {
 						type: forEachThreat
 					}
 					effect: {
 						type: modifySiteNumber
-						filter: choose(minion)
+						select: choose(minion)
 						count: 1
 						amount: 1
 						until: start(regroup)

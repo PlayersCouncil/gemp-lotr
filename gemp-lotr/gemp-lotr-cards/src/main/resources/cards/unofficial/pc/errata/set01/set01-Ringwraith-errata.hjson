@@ -2,17 +2,14 @@
 
 	51_234: {
 		cardInfo: {
-			imagePath: errata/51_234.jpg
-			javaClass: false
+			//id: 1_234.1
 			parent: 1_234
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_234.jpg
 			collInfo: 1U234
 			rarity: U
-			setNum: "1"
-			cardNum: 234
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Úlairë Nertëa
 		subtitle: Messenger of Dol Guldur
@@ -25,7 +22,7 @@
 		vitality: 2
 		site: 3
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -44,20 +41,20 @@
 			]
 			effect: [
 				{
-					type: MemorizeValue
+					type: MemorizeInfo
 					memory: choice
-					value: yes
+					info: yes
 				}
 				{
 					type: Repeat
-					amount: {
+					times: {
 						type: forEachYouCanSpot
 						filter: companion
 						over: 4
 					}
 					effect: {
-						type: conditional
-						requires: [
+						type: if
+						check: [
 							{
 								type: MemoryIs
 								memory: choice
@@ -68,7 +65,7 @@
 								filter: playable,unique,culture(wraith),minion
 							}
 						]
-						effect: [
+						true: [
 							{
 								type: chooseYesOrNo
 								player: you
@@ -76,17 +73,17 @@
 								memorize: choice
 							}
 							{
-								type: conditional
-								requires: [
+								type: if
+								check: [
 									{
 										type: MemoryIs
 										memory: choice
 										value: yes
 									}
 								]
-								effect: {
+								true: {
 									type: playCardFromDiscard
-									filter: choose(unique,culture(wraith),minion)
+									select: choose(unique,culture(wraith),minion)
 								}
 							}
 						]

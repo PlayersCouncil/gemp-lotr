@@ -1,0 +1,33 @@
+{
+
+	0_62: {
+		cardInfo: {
+			image: decipher/LOTR00062.jpg
+			collInfo: 0P62
+			rarity: P
+		}
+		title: Gimli
+		subtitle: Dwarven Delegate
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 7
+		vitality: 3
+		resistance: 6
+		keywords: Damage+1
+
+		gametext: <b>Damage +1</b>.
+		lore: "'The ring cannot be destroyed, Gimli, son of Glóin, by any craft that we here possess.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

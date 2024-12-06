@@ -1,5 +1,10 @@
 {
 	31_19: {
+		cardInfo: {
+			image: hobbit/HDG3119.jpg
+			collInfo: 31_19
+			rarity: _
+		}
 		title: Better Than Nothing
 		unique: true
 		culture: gollum
@@ -24,7 +29,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: endOfPhase
@@ -32,7 +37,7 @@
 				}
 				cost: {
 					type: discard
-					filter: choose(orc)
+					select: choose(orc)
 				}
 				effect: {
 					type: choice
@@ -43,11 +48,13 @@
 					effects: [
 						{
 							type: playCardFromDrawDeck
-							filter: choose(name(Gollum))
+							select: choose(name(Gollum))
+							showAll: true
+							shuffle: true
 						}
 						{
 							type: playCardFromDiscard
-							filter: choose(name(Gollum))
+							select: choose(name(Gollum))
 						}
 					]
 				}
@@ -55,6 +62,11 @@
 		]
 	}
 	31_20: {
+		cardInfo: {
+			image: hobbit/HDG3120.jpg
+			collInfo: 31_20
+			rarity: _
+		}
 		title: Gollum
 		subtitle: Small Slimy Creature
 		unique: true
@@ -67,7 +79,7 @@
 		site: 4
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -88,20 +100,20 @@
 				cost: [
 					{
 						type: exert
-						filter: choose(self,not(roaming))
+						select: choose(self,not(roaming))
 					}
 				]
 				effect: [
 					{
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(name(Bilbo))
-						against: self
+						minion: self
 					}
 					{
 						type: modifyStrength
-						filter: self
+						select: self
 						amount: {
-							type: requires
+							type: Conditional
 							requires: {
 								type: location
 								filter: underground
@@ -116,24 +128,29 @@
 		]
 	}
 	31_21: {
+		cardInfo: {
+			image: hobbit/HDG3121.jpg
+			collInfo: 31_21
+			rarity: _
+		}
 		title: If He Loses
 		culture: gollum
 		side: shadow
 		twilight: 2
 		type: event
-		keyword: skirmish
+		timeword: skirmish
 		effects: [
 			{
 				type: activatedInDiscard
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: choose(name(Gollum))
+					select: choose(name(Gollum))
 					times: 2
 				}
 				effect: {
 					type: playCardFromDiscard
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -141,7 +158,7 @@
 				effect: [
 					{
 						type: modifyStrength
-						filter: choose(minion)
+						select: choose(minion)
 						amount: 2
 						memorize: chosenMinion
 					}
@@ -162,6 +179,11 @@
 		]
 	}
 	31_22: {
+		cardInfo: {
+			image: hobbit/HDG3122.jpg
+			collInfo: 31_22
+			rarity: _
+		}
 		title: Riddles in the Dark
 		unique: true
 		culture: gollum
@@ -171,7 +193,8 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}
@@ -181,10 +204,10 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: [
 					{
-						type: exerts
+						type: exerted
 						filter: name(Bilbo)
 					}
 					{
@@ -195,7 +218,7 @@
 				cost: [
 					{
 						type: exert
-						filter: choose(minion)
+						select: choose(minion)
 					}
 					{
 						type: discardFromHand
@@ -213,13 +236,18 @@
 					}
 					effect: {
 						type: discard
-						filter: choose(culture(shire),not(name(Bilbo)))
+						select: choose(culture(shire),not(name(Bilbo)))
 					}
 				}
 			}
 		]
 	}
 	31_23: {
+		cardInfo: {
+			image: hobbit/HDG3123.jpg
+			collInfo: 31_23
+			rarity: _
+		}
 		title: Azog
 		subtitle: The Defiler
 		unique: true
@@ -232,7 +260,7 @@
 		site: 3
 		keyword: damage+1
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -241,11 +269,16 @@
 			effect: {
 				type: exert
 				player: fp
-				filter: choose(culture(dwarven),companion)
+				select: choose(culture(dwarven),companion)
 			}
 		}
 	}
 	31_24: {
+		cardInfo: {
+			image: hobbit/HDG3124.jpg
+			collInfo: 31_24
+			rarity: _
+		}
 		title: Bolg
 		subtitle: Son of Azog
 		unique: true
@@ -258,7 +291,7 @@
 		site: 3
 		keyword: damage+1
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: winsSkirmish
@@ -266,7 +299,7 @@
 			}
 			cost: {
 				type: exert
-				filter: self
+				select: self
 				times: 2
 			}
 			effect: {
@@ -276,6 +309,11 @@
 		}
 	}
 	31_25: {
+		cardInfo: {
+			image: hobbit/HDG3125.jpg
+			collInfo: 31_25
+			rarity: _
+		}
 		title: Savage Warg
 		culture: gundabad
 		twilight: 3
@@ -294,7 +332,8 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: winsSkirmish
 					filter: bearer
@@ -302,7 +341,7 @@
 				effect: {
 					type: exert
 					player: fp
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 					count: {
 						type: forEachYouCanSpot
 						filter: culture(gandalf)
@@ -313,6 +352,11 @@
 		]
 	}
 	31_26: {
+		cardInfo: {
+			image: hobbit/HDG3126.jpg
+			collInfo: 31_26
+			rarity: _
+		}
 		title: Threatening Warg
 		culture: gundabad
 		twilight: 4
@@ -342,7 +386,7 @@
 					effects: [
 						{
 							type: exert
-							filter: bearer
+							select: bearer
 							times: 2
 						}
 						{
@@ -354,12 +398,17 @@
 				effect: {
 					type: assignFpCharacterToSkirmish
 					fpCharacter: choose(name(Thorin))
-					against: choose(bearer)
+					minion: choose(bearer)
 				}
 			}
 		]
 	}
 	31_27: {
+		cardInfo: {
+			image: hobbit/HDG3127.jpg
+			collInfo: 31_27
+			rarity: _
+		}
 		title: Warg
 		culture: gundabad
 		twilight: 2
@@ -386,16 +435,21 @@
 				}
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				effect: {
 					type: wound
-					filter: choose(ally)
+					select: choose(ally)
 				}
 			}
 		]
 	}
 	31_28: {
+		cardInfo: {
+			image: hobbit/HDG3128.jpg
+			collInfo: 31_28
+			rarity: _
+		}
 		title: War-warg
 		culture: gundabad
 		twilight: 3
@@ -422,17 +476,22 @@
 				}
 				cost: {
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				effect: {
 					type: wound
 					player: fp
-					filter: choose(companion)
+					select: choose(companion)
 				}
 			}
 		]
 	}
 	31_29: {
+		cardInfo: {
+			image: hobbit/HDG3129.jpg
+			collInfo: 31_29
+			rarity: _
+		}
 		title: Ancestral Feuds
 		unique: true
 		culture: mirkwood
@@ -441,14 +500,15 @@
 		twilight: 2
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: siteNumber(5)
 				}
 				effect: {
 					type: discard
-					filter: all(weapon,attachedTo(culture(dwarven),companion))
+					select: all(weapon,attachedTo(culture(dwarven),companion))
 				}
 			}
 			{
@@ -460,24 +520,26 @@
 				}
 				effect: {
 					type: modifyStrength
-					filter: choose(culture(dwarven),character)
+					select: choose(culture(dwarven),character)
 					amount: {
-						type: multiply
-						multiplier: -1
+						type: cardAffectedLimitPerPhase
+						limit: 3
 						source: {
-							type: cardAffectedLimitPerPhase
-							limit: 3
-							source: {
-								type: forEachYouCanSpot
-								filter: culture(elven),ally
-							}
+							type: forEachYouCanSpot
+							filter: culture(elven),ally
 						}
+						multiplier: -1
 					}
 				}
 			}
 		]
 	}
 	31_30: {
+		cardInfo: {
+			image: hobbit/HDG3130.jpg
+			collInfo: 31_30
+			rarity: _
+		}
 		title: Goblin Runner
 		culture: moria
 		twilight: 1
@@ -487,7 +549,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -504,30 +566,45 @@
 		}
 	}
 	31_31: {
+		cardInfo: {
+			image: hobbit/HDG3131.jpg
+			collInfo: 31_31
+			rarity: _
+		}
 		title: Goblin Scimitar
 		culture: moria
 		twilight: 0
 		type: possession
 		itemclass: hand weapon
 		strength: 2
-		requires: {
-			type: canSpot
-			filter: culture(moria)
-		}
 		target: orc
-		effects: {
-			type: trigger
-			optional: true
-			trigger: {
-				type: played
-				filter: self
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(moria)
+				}
 			}
-			effect: {
-				type: drawCards
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: drawCards
+				}
 			}
-		}
+		]
 	}
 	31_32: {
+		cardInfo: {
+			image: hobbit/HDG3132.jpg
+			collInfo: 31_32
+			rarity: _
+		}
 		title: Goblin Sneak
 		culture: moria
 		twilight: 1
@@ -537,7 +614,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -545,9 +622,9 @@
 			}
 			effect: {
 				type: putCardsFromDiscardOnBottomOfDeck
-				filter: choose(orc)
+				select: choose(orc)
 				count: {
-					type: requires
+					type: Conditional
 					requires: {
 						type: location
 						filter: underground
@@ -559,800 +636,829 @@
 		}
 	}
 	31_33: {
+		cardInfo: {
+			image: hobbit/HDG3133.jpg
+			collInfo: 31_33
+			rarity: _
+		}
 		title: Goblin Song
 		culture: moria
 		twilight: 1
 		type: event
-		keyword: maneuver
+		timeword: maneuver
 		effects: [
 			{
 				type: activatedInDiscard
-        phase: maneuver
-        cost: {
-          type: exert
-          filter: choose(name(The Great Goblin))
-          times: 2
-        }
-        effect: {
-          type: playCardFromDiscard
-          filter: self
-        }
-      }
-      {
-        type: event
-        cost: {
-          type: exert
-          count: 2
-          filter: choose(orc)
-        }
-        effect: {
-          type: discard
-          filter: choose(culture(dwarven),or(possession,artifact),attachedTo(companion))
-        }
-      }
-    ]
+		phase: maneuver
+		cost: {
+		  type: exert
+		  select: choose(name(The Great Goblin))
+		  times: 2
+		}
+		effect: {
+		  type: playCardFromDiscard
+		  select: self
+		}
+	  }
+	  {
+		type: event
+		cost: {
+		  type: exert
+		  count: 2
+		  select: choose(orc)
+		}
+		effect: {
+		  type: discard
+		  select: choose(culture(dwarven),or(possession,artifact),attachedTo(companion))
+		}
+	  }
+	]
   }
   31_34: {
-    title: Goblin Swarms
-    culture: moria
-    twilight: 1
-    type: condition
-    keyword: support area
-    requires: {
-      type: canSpot
-      filter: culture(moria)
-    }
-    effects: [
-      {
-        type: activatedTrigger
-        trigger: {
-          type: winsSkirmish
-          filter: your,orc,inSkirmish
-        }
-        effect: {
-          type: stackCards
-          filter: choose(your,orc,inSkirmish)
-          where: self
-        }
-      }
-      {
-        type: activated
-        phase: shadow
-        effect: {
-          type: playCardFromStacked
-          filter: choose(orc)
-          on: self
-        }
-      }
-    ]
+	title: Goblin Swarms
+	culture: moria
+	twilight: 1
+	type: condition
+	keyword: support area
+	effects: [
+		{
+			type: toPlay
+			requires: {
+			  type: canSpot
+			  filter: culture(moria)
+			}
+		}
+	  {
+		type: Response
+		trigger: {
+		  type: winsSkirmish
+		  filter: your,orc,inSkirmish
+		}
+		effect: {
+		  type: StackCardsFromPlay
+		  select: choose(your,orc,inSkirmish)
+		  where: self
+		}
+	  }
+	  {
+		type: activated
+		phase: shadow
+		effect: {
+		  type: playCardFromStacked
+		  select: choose(orc)
+		  on: self
+		}
+	  }
+	]
   }
   31_35: {
-    title: Great Goblin's Power
-    culture: moria
-    twilight: 0
-    type: condition
-    keyword: support area
-    requires: {
-      type: canSpot
-      filter: culture(moria)
-    }
-    effects: [
-      {
-        type: trigger
-        trigger: {
-          type: played
-          filter: your,weapon
-        }
-        effect: {
-          type: addTwilight
-          amount: 1
-        }
-      }
-      {
-        type: activatedTrigger
-        trigger: {
-          type: aboutToTakeWound
-          filter: orc
-        }
-        cost: {
-          type: choice
-          texts: [
-            Discard this condition
-            Remove (3)
-          ]
-          effects: [
-            {
-              type: discard
-              filter: self
-            }
-            {
-              type: removeTwilight
-              amount: 3
-            }
-          ]
-        }
-        effect: {
-          type: preventWound
-          filter: choose(orc)
-        }
-      }
-    ]
+	title: Great Goblin's Power
+	culture: moria
+	twilight: 0
+	type: condition
+	keyword: support area
+	effects: [
+		{
+			type: toPlay
+			requires: {
+			  type: canSpot
+			  filter: culture(moria)
+			}
+		}
+	  {
+		type: Trigger
+		optional: false
+		trigger: {
+		  type: played
+		  filter: your,weapon
+		}
+		effect: {
+		  type: addTwilight
+		  amount: 1
+		}
+	  }
+	  {
+		type: Response
+		trigger: {
+		  type: aboutToTakeWound
+		  filter: orc
+		}
+		cost: {
+		  type: choice
+		  texts: [
+			Discard this condition
+			Remove (3)
+		  ]
+		  effects: [
+			{
+			  type: discard
+			  select: self
+			}
+			{
+			  type: removeTwilight
+			  amount: 3
+			}
+		  ]
+		}
+		effect: {
+		  type: preventWound
+		  select: choose(orc)
+		}
+	  }
+	]
   }
   31_36: {
-    title: The Great Goblin
-    subtitle: Chieftain of the Misty Mountains
+	title: The Great Goblin
+	subtitle: Chieftain of the Misty Mountains
 		unique: true
-    culture: moria
-    twilight: 4
-    type: minion
-    race: orc
-    strength: 10
-    vitality: 3
-    site: 4
-    keyword: fierce
-    effects: {
-      type: activated
-      phase: maneuver
-      cost: {
-        type: exert
-        filter: self
-        times: 2
-      }
-      effect: [
-        {
-          type: revealHand
-          hand: fp
-          memorize: revealedCards
-        }
-        {
-          type: discardFromHand
-          hand: fp
-          filter: choose(culture(dwarven),event)
-          forced: true
-        }
-      ]
-    }
+	culture: moria
+	twilight: 4
+	type: minion
+	race: orc
+	strength: 10
+	vitality: 3
+	site: 4
+	keyword: fierce
+	effects: {
+	  type: activated
+	  phase: maneuver
+	  cost: {
+		type: exert
+		select: self
+		times: 2
+	  }
+	  effect: [
+		{
+		  type: revealHand
+		  hand: fp
+		  memorize: revealedCards
+		}
+		{
+		  type: discardFromHand
+		  hand: fp
+		  select: choose(culture(dwarven),event)
+		  forced: true
+		}
+	  ]
+	}
   }
   31_37: {
-    title: Bolg
-    subtitle: Servant of Sauron
+	title: Bolg
+	subtitle: Servant of Sauron
 		unique: true
-    culture: sauron
-    type: minion
-    race: orc
-    twilight: 4
-    strength: 9
-    vitality: 3
-    site: 5
-    keyword: damage+1
-    effects: [
-      {
-        type: trigger
-        trigger: {
-          type: played
-          filter: self
-        }
-        effect: {
-          type: repeat
-          amount: {
-            type: forEachYouCanSpot
-            filter: culture(dwarven),companion
-            over: 3
-          }
-          effect: {
-            type: optional
-            text: Do you want to play an Orc from your discard pile?
-            effect: {
-              type: playCardFromDiscard
-              filter: choose(orc)
-            }
-          }
-        }
-      }
-      {
-        type: activated
-        phase: maneuver
-        requires: {
-          type: canSpot
-          filter: culture(elven),archer
-        }
-        effect: {
-          type: addKeyword
-          filter: self
-          keyword: fierce
-          until: start(regroup)
-        }
-      }
-    ]
+	culture: sauron
+	type: minion
+	race: orc
+	twilight: 4
+	strength: 9
+	vitality: 3
+	site: 5
+	keyword: damage+1
+	effects: [
+	  {
+		type: Trigger
+		optional: false
+		trigger: {
+		  type: played
+		  filter: self
+		}
+		effect: {
+		  type: repeat
+		  times: {
+			type: forEachYouCanSpot
+			filter: culture(dwarven),companion
+			over: 3
+		  }
+		  effect: {
+			type: optional
+			text: Do you want to play an Orc from your discard pile?
+			effect: {
+			  type: playCardFromDiscard
+			  select: choose(orc)
+			}
+		  }
+		}
+	  }
+	  {
+		type: activated
+		phase: maneuver
+		requires: {
+		  type: canSpot
+		  filter: culture(elven),archer
+		}
+		effect: {
+		  type: addKeyword
+		  select: self
+		  keyword: fierce
+		  until: start(regroup)
+		}
+	  }
+	]
   }
   31_48: {
-    title: The Arkenstone
-    subtitle: King's Jewel
+	title: The Arkenstone
+	subtitle: King's Jewel
 		unique: true
-    culture: smaug
-    type: artifact
-    twilight: 2
-    strength: -2
-    target: name(Bilbo)
-    effects: [
-      {
-        type: trigger
-        requires: {
-          type: location
-          filter: siteNumber(7-9)
-        }
-        trigger: {
-          type: endOfPhase
-          phase: maneuver
-        }
-        effect: [
-          {
-            type: conditional
-            requires: {
-              type: canSpot
-              filter: self,attachedTo(name(Bilbo))
-            }
-            effect: {
-              type: addBurdens
-              amount: 1
-            }
-          }
-          {
-            type: conditional
-            requires: {
-              type: canSpot
-              filter: self,attachedTo(not(name(Bilbo)))
-            }
-            effect: {
-              type: wound
-              filter: bearer
-            }
-          }
-        ]
-      }
-      {
-        type: modifier
-        modifier: {
-          type: addActivated
-          filter: name(Thorin)
-          phase: maneuver
-          text: Add a doubt to transfer The Arkenstone
-          cost: {
-            type: addBurdens
-            amount: 1
-          }
-          effect: {
-            type: transfer
-            filter: choose(name(The Arkenstone))
-            where: self
-          }
-        }
-      }
-      {
-        type: modifier
-        modifier: {
-          type: addActivated
-          filter: name(Thorin)
-          phase: maneuver
-          text: Add 3 doubts to discard The Arkenstone
-          cost: {
-            type: addBurdens
-            amount: 3
-          }
-          effect: {
-            type: discard
-            filter: choose(name(The Arkenstone))
-          }
-        }
-      }
-    ]
+	culture: smaug
+	type: artifact
+	twilight: 2
+	strength: -2
+	target: name(Bilbo)
+	effects: [
+	  {
+		type: trigger
+		optional: false
+		requires: {
+		  type: location
+		  filter: siteNumber(7-9)
+		}
+		trigger: {
+		  type: endOfPhase
+		  phase: maneuver
+		}
+		effect: [
+		  {
+			type: If
+			check: {
+			  type: canSpot
+			  filter: self,attachedTo(name(Bilbo))
+			}
+			true: {
+			  type: addBurdens
+			  amount: 1
+			}
+		  }
+		  {
+			type: If
+			check: {
+			  type: canSpot
+			  filter: self,attachedTo(not(name(Bilbo)))
+			}
+			true: {
+			  type: wound
+			  select: bearer
+			}
+		  }
+		]
+	  }
+	  {
+		type: modifier
+		modifier: {
+		  type: addActivated
+		  filter: name(Thorin)
+		  phase: maneuver
+		  text: Add a doubt to transfer The Arkenstone
+		  cost: {
+			type: addBurdens
+			amount: 1
+		  }
+		  effect: {
+			type: transfer
+			select: choose(name(The Arkenstone))
+			where: self
+		  }
+		}
+	  }
+	  {
+		type: modifier
+		modifier: {
+		  type: addActivated
+		  filter: name(Thorin)
+		  phase: maneuver
+		  text: Add 3 doubts to discard The Arkenstone
+		  cost: {
+			type: addBurdens
+			amount: 3
+		  }
+		  effect: {
+			type: discard
+			select: choose(name(The Arkenstone))
+		  }
+		}
+	  }
+	]
   }
   31_49: {
-    title: Crazy Cob
+	title: Crazy Cob
 		unique: true
-    culture: spider
-    twilight: 3
-    type: minion
-    race: spider
-    strength: 9
-    vitality: 3
-    site: 5
-    keyword: fierce
-    effects: {
-      type: trigger
-      optional: true
-      trigger: [
-        {
-          type: killed
-          filter: orc
-        }
-        {
-          type: discarded
-          filter: orc
-        }
-      ]
-      requires: {
-        type: not
-        requires: {
-          type: phase
-          phase: regroup
-        }
-      }
-      effect: [
-        {
-          type: play
-          filter: choose(spider)
-          cost: -2
-          memorize: playedSpider
-        }
-        {
-          type: modifyStrength
-          filter: memory(playedSpider)
-          amount: 2
-          until: start(regroup)
-        }
-      ]
-    }
+	culture: spider
+	twilight: 3
+	type: minion
+	race: spider
+	strength: 9
+	vitality: 3
+	site: 5
+	keyword: fierce
+	effects: {
+	  type: trigger
+	  optional: true
+	  trigger: [
+		{
+		  type: killed
+		  filter: orc
+		}
+		{
+		  type: discarded
+		  filter: orc
+		}
+	  ]
+	  requires: {
+		type: not
+		requires: {
+		  type: phase
+		  phase: regroup
+		}
+	  }
+	  effect: [
+		{
+		  type: PlayCardFromHand
+		  select: choose(spider)
+		  discount: -2
+		  memorize: playedSpider
+		}
+		{
+		  type: modifyStrength
+		  select: memory(playedSpider)
+		  amount: 2
+		  until: start(regroup)
+		}
+	  ]
+	}
   }
   31_50: {
-    title: Enchanted River
+	title: Enchanted River
 		unique: true
-    culture: spider
-    twilight: 2
-    type: condition
-    keyword: support area
-    effects: [
-      {
-        type: trigger
-        trigger: {
-          type: played
-          filter: or(companion,follower)
-        }
-        requires: {
-          type: location
-          filter: siteNumber(5)
-        }
-        effect: {
-          type: exert
-          player: fp
-          count: 2
-          filter: choose(culture(dwarven),companion)
-        }
-      }
-      {
-        type: activated
-        phase: shadow
-        cost: {
-          type: choice
-          texts: [
-            Discard this condition
-            Exert 3 Spiders
-          ]
-          effects: [
-            {
-              type: discard
-              filter: self
-            }
-            {
-              type: exert
-              count: 3
-              filter: choose(spider)
-            }
-          ]
-        }
-        effect: {
-          type: drawCards
-          count: 3
-        }
-      }
-    ]
+	culture: spider
+	twilight: 2
+	type: condition
+	keyword: support area
+	effects: [
+	  {
+		type: Trigger
+		optional: false
+		trigger: {
+		  type: played
+		  filter: or(companion,follower)
+		}
+		requires: {
+		  type: location
+		  filter: siteNumber(5)
+		}
+		effect: {
+		  type: exert
+		  player: fp
+		  count: 2
+		  select: choose(culture(dwarven),companion)
+		}
+	  }
+	  {
+		type: activated
+		phase: shadow
+		cost: {
+		  type: choice
+		  texts: [
+			Discard this condition
+			Exert 3 Spiders
+		  ]
+		  effects: [
+			{
+			  type: discard
+			  select: self
+			}
+			{
+			  type: exert
+			  count: 3
+			  select: choose(spider)
+			}
+		  ]
+		}
+		effect: {
+		  type: drawCards
+		  count: 3
+		}
+	  }
+	]
   }
   31_51: {
-    title: Fat Spider
-    culture: spider
-    twilight: 3
-    type: minion
-    race: spider
-    strength: 8
-    vitality: 2
-    site: 5
-    keyword: fierce
-    effects: [
-      {
-        type: modifyOwnCost
-        amount: {
-          type: forEachBurden
-          multiplier: -1
-        }
-      }
-      {
-        type: activated
-        phase: regroup
-        cost: {
-          type: discard
-          filter: self
-        }
-        effect: {
-          type: addBurdens
-          amount: 1
-        }
-      }
-    ]
+	title: Fat Spider
+	culture: spider
+	twilight: 3
+	type: minion
+	race: spider
+	strength: 8
+	vitality: 2
+	site: 5
+	keyword: fierce
+	effects: [
+	  {
+		type: modifyOwnCost
+		amount: {
+		  type: forEachBurden
+		  multiplier: -1
+		}
+	  }
+	  {
+		type: activated
+		phase: regroup
+		cost: {
+		  type: discard
+		  select: self
+		}
+		effect: {
+		  type: addBurdens
+		  amount: 1
+		}
+	  }
+	]
   }
   31_52: {
-    title: Lazy Lob
+	title: Lazy Lob
 		unique: true
-    culture: spider
-    twilight: 4
-    type: minion
-    race: spider
-    strength: 9
-    vitality: 2
-    site: 5
-    keyword: fierce
-    effects: [
-      {
-        type: modifyOwnCost
-        amount: {
-          type: forEachYouCanSpot
-          filter: orc
-          multiplier: -1
-        }
-      }
-      {
-        type: activated
-        phase: skirmish
-        cost: {
-          type: discard
-          filter: choose(orc)
-        }
-        effect: {
-          type: addKeyword
-          filter: choose(spider)
-          keyword: damage+1
-        }
-      }
-    ]
+	culture: spider
+	twilight: 4
+	type: minion
+	race: spider
+	strength: 9
+	vitality: 2
+	site: 5
+	keyword: fierce
+	effects: [
+	  {
+		type: modifyOwnCost
+		amount: {
+		  type: forEachYouCanSpot
+		  filter: orc
+		  multiplier: -1
+		}
+	  }
+	  {
+		type: activated
+		phase: skirmish
+		cost: {
+		  type: discard
+		  select: choose(orc)
+		}
+		effect: {
+		  type: addKeyword
+		  select: choose(spider)
+		  keyword: damage+1
+		}
+	  }
+	]
   }
   31_53: {
-    title: Old Tomnoddy
-    culture: spider
-    twilight: 4
-    type: minion
-    race: spider
-    strength: 8
-    vitality: 3
-    site: 5
-    keyword: fierce
-    effects: {
-      type: trigger
-      optional: true
-      trigger: {
-        type: played
-        filter: self
-      }
-      cost: {
-        type: removeTwilight
-        amount: 1
-      }
-      effect: {
-        type: playCardFromDiscard
-        filter: choose(or(spider,orc))
-        removedTwilight: 1
-      }
-    }
+	title: Old Tomnoddy
+	culture: spider
+	twilight: 4
+	type: minion
+	race: spider
+	strength: 8
+	vitality: 3
+	site: 5
+	keyword: fierce
+	effects: {
+	  type: trigger
+	  optional: true
+	  trigger: {
+		type: played
+		filter: self
+	  }
+	  cost: {
+		type: removeTwilight
+		amount: 1
+	  }
+	  effect: {
+		type: playCardFromDiscard
+		select: choose(or(spider,orc))
+		removedTwilight: 1
+	  }
+	}
   }
   31_54: {
-    title: Spider Nest
-    culture: spider
-    twilight: 2
-    type: condition
-    keyword: support area
-    requires: {
-      type: canSpot
-      filter: spider
-    }
-    effects: {
-      type: activated
-      phase: assignment
-      cost: {
-        type: discard
-        filter: choose(orc)
-      }
-      effect: {
-        type: choice
-        texts: [
-          Play a Spider from your draw deck
-          Play a Spider from your discard pile
-        ]
-        effects: [
-          {
-            type: playCardFromDrawDeck
-            filter: choose(spider)
-            cost: {
-              type: requires
-              requires: {
-                type: location
-                filter: forest
-              }
-              true: -4
-              false: -2
-            }
-          }
-          {
-            type: playCardFromDiscard
-            filter: choose(spider)
-            cost: {
-              type: requires
-              requires: {
-                type: location
-                filter: forest
-              }
-              true: -4
-              false: -2
-            }
-          }
-        ]
-      }
-    }
+	title: Spider Nest
+	culture: spider
+	twilight: 2
+	type: condition
+	keyword: support area
+	effects: [
+		{
+			type: toPlay
+			requires: {
+			  type: canSpot
+			  filter: spider
+			}
+		}
+		{
+		  type: activated
+		  phase: assignment
+		  cost: {
+			type: discard
+			select: choose(orc)
+		  }
+		  effect: {
+			type: choice
+			texts: [
+			  Play a Spider from your draw deck
+			  Play a Spider from your discard pile
+			]
+			effects: [
+			  {
+				type: playCardFromDrawDeck
+				select: choose(spider)
+				discount: {
+				  type: Conditional
+				  requires: {
+					type: location
+					filter: forest
+				  }
+				  true: -4
+				  false: -2
+				}
+				showAll: true
+				shuffle: true
+			  }
+			  {
+				type: playCardFromDiscard
+				select: choose(spider)
+				discount: {
+				  type: Conditional
+				  requires: {
+					type: location
+					filter: forest
+				  }
+				  true: -4
+				  false: -2
+				}
+			  }
+			]
+		  }
+		}
+	]
   }
   31_55: {
-    title: Wicked Spider
-    culture: spider
-    twilight: 2
-    type: minion
-    race: spider
-    strength: 7
-    vitality: 2
-    site: 5
-    keyword: fierce
-    effects: {
-      type: activated
-      phase: skirmish
-      cost: {
-        type: discard
-        filter: choose(orc)
-      }
-      effect: {
-        type: modifyStrength
-        filter: choose(spider)
-        amount: {
-          type: requires
-          requires: {
-            type: canSpot
-            count: 6
-            filter: companion
-          }
-          true: 5
-          false: 3
-        }
-        until: start(regroup)
-      }
-    }
+	title: Wicked Spider
+	culture: spider
+	twilight: 2
+	type: minion
+	race: spider
+	strength: 7
+	vitality: 2
+	site: 5
+	keyword: fierce
+	effects: {
+	  type: activated
+	  phase: skirmish
+	  cost: {
+		type: discard
+		select: choose(orc)
+	  }
+	  effect: {
+		type: modifyStrength
+		select: choose(spider)
+		amount: {
+		  type: Conditional
+		  requires: {
+			type: canSpot
+			count: 6
+			filter: companion
+		  }
+		  true: 5
+		  false: 3
+		}
+		until: start(regroup)
+	  }
+	}
   }
   31_56: {
-    title: Bert
-    subtitle: Troll of Ettenmoors
+	title: Bert
+	subtitle: Troll of Ettenmoors
 		unique: true
-    culture: troll
-    twilight: 5
-    type: minion
-    race: troll
-    strength: 11
-    vitality: 4
-    site: 2
-    keyword: fierce
-    effects: [
-      {
-        type: extraCost
-        cost: {
-          type: discard
-          filter: choose(orc)
-        }
-      }
-      {
-        type: modifier
-        modifier: {
-          type: modifyCost
-          filter: troll
-          amount: -2
-        }
-      }
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: discarded
-          filter: condition
-          player: fp
-        }
-        effect: {
-          type: discard
-          filter: choose(ally)
-        }
-      }
-    ]
+	culture: troll
+	twilight: 5
+	type: minion
+	race: troll
+	strength: 11
+	vitality: 4
+	site: 2
+	keyword: fierce
+	effects: [
+	  {
+		type: extraCost
+		cost: {
+		  type: discard
+		  select: choose(orc)
+		}
+	  }
+	  {
+		type: modifier
+		modifier: {
+		  type: modifyCost
+		  filter: troll
+		  amount: -2
+		}
+	  }
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: discarded
+		  filter: condition
+		  player: fp
+		}
+		effect: {
+		  type: discard
+		  select: choose(ally)
+		}
+	  }
+	]
   }
   31_57: {
-    title: Caught in a Sack
-    culture: troll
-    twilight: 0
-    type: condition
-    keyword: support area
-    effects: [
-      {
-        type: trigger
-        trigger: {
-          type: winsSkirmish
-          filter: name(Bilbo)
-        }
-        effect: {
-          type: discard
-          filter: self
-        }
-      }
-      {
-        type: activated
-        phase: regroup
-        cost: {
-          type: choice
-          texts: [
-            Discard a minion
-            Exert a Troll
-          ]
-          effects: [
-            {
-              type: discard
-              filter: choose(minion)
-            }
-            {
-              type: exert
-              filter: choose(troll)
-            }
-          ]
-        }
-        effect: {
-          type: transfer
-          filter: self
-          where: choose(culture(dwarven),companion)
-        }
-      }
-      {
-        type: modifier
-        modifier: {
-          type: cantBeAssignedToSkirmishAgainst
-          fpCharacter: bearer
-          minion: any
-        }
-      }
-    ]
+	title: Caught in a Sack
+	culture: troll
+	twilight: 0
+	type: condition
+	keyword: support area
+	effects: [
+	  {
+		type: Trigger
+		optional: false
+		trigger: {
+		  type: winsSkirmish
+		  filter: name(Bilbo)
+		}
+		effect: {
+		  type: discard
+		  select: self
+		}
+	  }
+	  {
+		type: activated
+		phase: regroup
+		cost: {
+		  type: choice
+		  texts: [
+			Discard a minion
+			Exert a Troll
+		  ]
+		  effects: [
+			{
+			  type: discard
+			  select: choose(minion)
+			}
+			{
+			  type: exert
+			  select: choose(troll)
+			}
+		  ]
+		}
+		effect: {
+		  type: transfer
+		  select: self
+		  where: choose(culture(dwarven),companion)
+		}
+	  }
+	  {
+		type: modifier
+		modifier: {
+		  type: cantBeAssignedToSkirmishAgainst
+		  fpCharacter: bearer
+		  minion: any
+		}
+	  }
+	]
   }
   31_58: {
-    title: Tom
-    subtitle: Troll of Ettenmoors
+	title: Tom
+	subtitle: Troll of Ettenmoors
 		unique: true
-    culture: troll
-    twilight: 5
-    type: minion
-    race: troll
-    strength: 11
-    vitality: 4
-    site: 2
-    keyword: fierce
-    effects: [
-      {
-        type: extraCost
-        cost: {
-          type: discard
-          filter: choose(orc)
-        }
-      }
-      {
-        type: modifier
-        modifier: {
-          type: modifyCost
-          filter: troll
-          amount: -2
-        }
-      }
-      {
-        type: trigger
-        trigger: {
-          type: losesSkirmish
-          filter: companion
-        }
-        effect: {
-          type: modifyStrength
-          filter: all(troll)
-          amount: 1
-          until: start(regroup)
-        }
-      }
-    ]
+	culture: troll
+	twilight: 5
+	type: minion
+	race: troll
+	strength: 11
+	vitality: 4
+	site: 2
+	keyword: fierce
+	effects: [
+	  {
+		type: extraCost
+		cost: {
+		  type: discard
+		  select: choose(orc)
+		}
+	  }
+	  {
+		type: modifier
+		modifier: {
+		  type: modifyCost
+		  filter: troll
+		  amount: -2
+		}
+	  }
+	  {
+		type: Trigger
+		optional: false
+		trigger: {
+		  type: losesSkirmish
+		  filter: companion
+		}
+		effect: {
+		  type: modifyStrength
+		  select: all(troll)
+		  amount: 1
+		  until: start(regroup)
+		}
+	  }
+	]
   }
   31_59: {
-    title: Troll Campfire
+	title: Troll Campfire
 		unique: true
-    culture: troll
-    twilight: 2
-    type: condition
-    keyword: support area
-    requires: {
-      type: canSpot
-      filter: troll
-    }
-    effects: {
-      type: activated
-      phase: shadow
-      cost: {
-        type: discardFromHand
-        forced: false
-        count: 2
-      }
-      effect: {
-        type: playCardFromDiscard
-        filter: choose(minion)
-      }
-    }
+	culture: troll
+	twilight: 2
+	type: condition
+	keyword: support area
+	effects: [
+		{
+			type: toPlay
+			requires: {
+			  type: canSpot
+			  filter: troll
+			}
+		}
+		{
+		  type: activated
+		  phase: shadow
+		  cost: {
+			type: discardFromHand
+			forced: false
+			count: 2
+		  }
+		  effect: {
+			type: playCardFromDiscard
+			select: choose(minion)
+		  }
+		}
+	]
   }
   31_60: {
-    title: Troll Knife
-    culture: troll
-    twilight: 2
-    type: possession
-    itemclass: hand weapon
-    strength: 3
-    target: troll
-    effects: {
-      type: modifier
-      modifier: {
-        type: addKeyword
-        filter: bearer
-        keyword: damage+1
-      }
-    }
+	title: Troll Knife
+	culture: troll
+	twilight: 2
+	type: possession
+	itemclass: hand weapon
+	strength: 3
+	target: troll
+	effects: {
+	  type: modifier
+	  modifier: {
+		type: addKeyword
+		filter: bearer
+		keyword: damage+1
+	  }
+	}
   }
   31_61: {
-    title: William
-    subtitle: Troll of Ettenmoors
+	title: William
+	subtitle: Troll of Ettenmoors
 		unique: true
-    culture: troll
-    twilight: 5
-    type: minion
-    race: troll
-    strength: 11
-    vitality: 4
-    site: 2
-    keyword: fierce
-    effects: [
-      {
-        type: extraCost
-        cost: {
-          type: discard
-          filter: choose(orc)
-        }
-      }
-      {
-        type: modifier
-        modifier: {
-          type: modifyCost
-          filter: troll
-          amount: -2
-        }
-      }
-      {
-        type: trigger
-        optional: true
-        trigger: {
-          type: transferred
-          filter: follower
-          to: character
-        }
-        effect: {
-          type: discard
-          filter: choose(hand weapon)
-        }
-      }
-    ]
+	culture: troll
+	twilight: 5
+	type: minion
+	race: troll
+	strength: 11
+	vitality: 4
+	site: 2
+	keyword: fierce
+	effects: [
+	  {
+		type: extraCost
+		cost: {
+		  type: discard
+		  select: choose(orc)
+		}
+	  }
+	  {
+		type: modifier
+		modifier: {
+		  type: modifyCost
+		  filter: troll
+		  amount: -2
+		}
+	  }
+	  {
+		type: trigger
+		optional: true
+		trigger: {
+		  type: transferred
+		  filter: follower
+		  to: character
+		}
+		effect: {
+		  type: discard
+		  select: choose(hand weapon)
+		}
+	  }
+	]
   }
 }

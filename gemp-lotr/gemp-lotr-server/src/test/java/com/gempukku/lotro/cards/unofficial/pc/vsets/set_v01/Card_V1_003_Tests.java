@@ -55,7 +55,7 @@ public class Card_V1_003_Tests
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 
 		assertTrue(gimli.getBlueprint().isUnique());
-		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE)); // test for keywords as needed
 		assertEquals(2, gimli.getBlueprint().getTwilightCost());
 		assertEquals(6, gimli.getBlueprint().getStrength());
 		assertEquals(3, gimli.getBlueprint().getVitality());

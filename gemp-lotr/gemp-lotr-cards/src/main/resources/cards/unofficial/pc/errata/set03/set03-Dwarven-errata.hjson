@@ -1,17 +1,14 @@
 {
 	53_4: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN03E004.1.jpg
-			javaClass: false
+			//id: 3_4.1
 			parent: 3_4
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN03E004.1.jpg
 			collInfo: 3U4
 			rarity: U
-			setNum: "3"
-			cardNum: 4
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: A Royal Welcome
 		unique: false
@@ -25,11 +22,11 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 				}
 				effect: {
 					type: heal
-					filter: choose(culture(dwarven),ally)
+					select: choose(culture(dwarven),ally)
 				}
 			}
 			{
@@ -37,15 +34,15 @@
 				phase: skirmish
 				requires: {
 					type: CanSpot
-					filter: culture(dwarven),companion,InSkirmishAgainst(minion,StrengthMoreThan(9))
+					filter: culture(dwarven),companion,InSkirmishAgainst(minion,minStrength(10))
 				}
 				cost: {
 					type: exert
-					filter: choose(culture(dwarven),ally)
+					select: choose(culture(dwarven),ally)
 				}
 				effect: {
 					type: ModifyStrength
-					filter: choose(culture(dwarven),companion,InSkirmishAgainst(minion,StrengthMoreThan(9)))
+					select: choose(culture(dwarven),companion,InSkirmishAgainst(minion,minStrength(10)))
 					amount: 2
 				}
 			}
@@ -54,11 +51,11 @@
 				phase: regroup
 				cost: {
 					type: exert
-					filter: choose(culture(dwarven),ally)
+					select: choose(culture(dwarven),ally)
 				}
 				effect: {
 					type: heal
-					filter: choose(culture(dwarven),companion)
+					select: choose(culture(dwarven),companion)
 				}
 			}
 		]

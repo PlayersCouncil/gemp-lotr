@@ -7,11 +7,10 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCard;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.KeywordModifier;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
@@ -20,9 +19,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_01_031_Tests
 {
@@ -46,40 +43,42 @@ public class Card_01_031_Tests
 	public void AsfalothStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: *Asfaloth
-		* Side: Free Peoples
-		* Culture: Elven
-		* Twilight Cost: 2
-		* Type: Possession
-		* Item Class: Mount
-		* Game Text: Bearer must be an Elf.  When played on Arwen, Asfaloth's twilight cost is -2.  While at a plains
-		 * site, bearer is strength +2.  Discard Asfaloth when at an underground site.
+		 * Set: 1
+		 * Name: Asfaloth
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 2
+		 * Type: Possession
+		 * Subtype: Mount
+		 * Strength: 2
+		 * Game Text: Bearer must be an Elf. When played on Arwen, Asfaloth's twilight cost is -2.<br>While at a plains site, bearer is strength +2. Discard Asfaloth when at an underground site.
 		*/
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
+		var card = scn.GetFreepsCard("asfaloth");
 
-		assertTrue(asfaloth.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, asfaloth.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, asfaloth.getBlueprint().getCulture());
-		assertEquals(CardType.POSSESSION, asfaloth.getBlueprint().getCardType());
-		assertEquals(PossessionClass.MOUNT, asfaloth.getBlueprint().getPossessionClasses().stream().findFirst().get());
-		assertEquals(2, asfaloth.getBlueprint().getTwilightCost());
-		assertEquals(2, asfaloth.getBlueprint().getStrength());
+		assertEquals("Asfaloth", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MOUNT));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
 	@Test
 	public void BearerMustBeAnElf() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl erestor = scn.GetFreepsCard("erestor");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
+		var asfaloth = scn.GetFreepsCard("asfaloth");
+		var arwen = scn.GetFreepsCard("arwen");
+		var erestor = scn.GetFreepsCard("erestor");
+		var orophin = scn.GetFreepsCard("orophin");
 		scn.FreepsMoveCardToHand(asfaloth, arwen, erestor, orophin);
 
 		scn.StartGame();
@@ -95,12 +94,12 @@ public class Card_01_031_Tests
 	@Test
 	public void TwilightCost2OnNonArwen() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl erestor = scn.GetFreepsCard("erestor");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
+		var asfaloth = scn.GetFreepsCard("asfaloth");
+		var arwen = scn.GetFreepsCard("arwen");
+		var erestor = scn.GetFreepsCard("erestor");
+		var orophin = scn.GetFreepsCard("orophin");
 		scn.FreepsMoveCharToTable(arwen, erestor, orophin);
 		scn.FreepsMoveCardToHand(asfaloth);
 
@@ -115,12 +114,12 @@ public class Card_01_031_Tests
 	@Test
 	public void TwilightCost0OnArwen() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl erestor = scn.GetFreepsCard("erestor");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
+		var asfaloth = scn.GetFreepsCard("asfaloth");
+		var arwen = scn.GetFreepsCard("arwen");
+		var erestor = scn.GetFreepsCard("erestor");
+		var orophin = scn.GetFreepsCard("orophin");
 		scn.FreepsMoveCharToTable(arwen, erestor, orophin);
 		scn.FreepsMoveCardToHand(asfaloth);
 
@@ -135,17 +134,17 @@ public class Card_01_031_Tests
 	@Test
 	public void BearerIsStrengthPlus2AtPlains() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl erestor = scn.GetFreepsCard("erestor");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
+		var asfaloth = scn.GetFreepsCard("asfaloth");
+		var arwen = scn.GetFreepsCard("arwen");
+		var erestor = scn.GetFreepsCard("erestor");
+		var orophin = scn.GetFreepsCard("orophin");
 		scn.FreepsMoveCharToTable(arwen, erestor, orophin);
 		scn.FreepsMoveCardToHand(asfaloth);
 
 		//cheating to ensure site 2 qualifies
-		scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.PLAINS));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.PLAINS));
 
 		scn.StartGame();
 
@@ -161,17 +160,17 @@ public class Card_01_031_Tests
 	@Test
 	public void SelfDiscardsAtUnderground() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl erestor = scn.GetFreepsCard("erestor");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
+		var asfaloth = scn.GetFreepsCard("asfaloth");
+		var arwen = scn.GetFreepsCard("arwen");
+		var erestor = scn.GetFreepsCard("erestor");
+		var orophin = scn.GetFreepsCard("orophin");
 		scn.FreepsMoveCharToTable(arwen, erestor, orophin);
 		scn.FreepsMoveCardToHand(asfaloth);
 
 		//cheating to ensure site 2 qualifies
-		scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+        scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
 
 		scn.StartGame();
 
@@ -190,13 +189,13 @@ public class Card_01_031_Tests
 		// Site 6 permitted multiple transfers between Rumil and Legolas on site 6 with 0 twilight added to the pool.
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl asfaloth = scn.GetFreepsCard("asfaloth");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
-		PhysicalCardImpl erestor = scn.GetFreepsCard("erestor");
-		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
+		var asfaloth = scn.GetFreepsCard("asfaloth");
+		var arwen = scn.GetFreepsCard("arwen");
+		var legolas = scn.GetFreepsCard("legolas");
+		var erestor = scn.GetFreepsCard("erestor");
+		var orophin = scn.GetFreepsCard("orophin");
 		scn.FreepsMoveCharToTable(arwen, legolas, erestor, orophin);
 		scn.FreepsMoveCardToHand(asfaloth);
 

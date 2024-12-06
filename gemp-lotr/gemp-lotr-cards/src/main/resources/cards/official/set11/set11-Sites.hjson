@@ -1,0 +1,1620 @@
+{
+
+	11_227: {
+		cardInfo: {
+			image: decipher/LOTR11227.jpg
+			collInfo: 11U227
+			rarity: U
+		}
+		title: Anduin Banks
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: River
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 4
+						multiplier: 2
+					}
+				}
+			}
+		]
+		gametext: <b>River</b>. The minion archery total is +2 for each companion in the fellowship over 4.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_228: {
+		cardInfo: {
+			image: decipher/LOTR11228.jpg
+			collInfo: 11S228
+			rarity: S
+		}
+		title: Anduin Confluence
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: River
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: all(ally)
+				}
+			}
+		]
+		gametext: <b>River</b>. When the fellowship moves to this site, discard each ally from play.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_229: {
+		cardInfo: {
+			image: decipher/LOTR11229.jpg
+			collInfo: 11S229
+			rarity: S
+		}
+		title: Barazinbar
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Mountain
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				player: free people
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: exert
+					select: choose(dwarf)
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(culture(dwarven),possession)
+					showAll: true
+					shuffle: true
+				}
+			}
+		]
+		gametext: <b>Mountain</b>. At the start of your fellowship phase, you may exert a Dwarf to play a [dwarven] possession from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_230: {
+		cardInfo: {
+			image: decipher/LOTR11230.jpg
+			collInfo: 11S230
+			rarity: S
+		}
+		title: Buckland Homestead
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Dwelling
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: PlayCardFromHand
+					select: choose(nazgul)
+				}
+				effect:
+				{
+					type: discard
+					select: choose(condition)
+				}
+			}
+		]
+		gametext: <b>Dwelling</b>. <b>Shadow:</b> Play a Nazgûl to discard a condition from play.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_231: {
+		cardInfo: {
+			image: decipher/LOTR11231.jpg
+			collInfo: 11S231
+			rarity: S
+		}
+		title: Caras Galadhon
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Forest
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: noMoreThanOneMinionMayBeAssignedToEachSkirmish
+				}
+			}
+		]
+		gametext: <b>Forest</b>. No more than 1 minion can be assigned to each skirmish.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_232: {
+		cardInfo: {
+			image: decipher/LOTR11232.jpg
+			collInfo: 11S232
+			rarity: S
+		}
+		title: Cavern Entrance
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Underground
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: CantUseSpecialAbilities
+					phase: skirmish
+				}
+			}
+		]
+		gametext: <b>Underground</b>. Skirmish special abilities cannot be used.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_233: {
+		cardInfo: {
+			image: decipher/LOTR11233.jpg
+			collInfo: 11S233
+			rarity: S
+		}
+		title: Chamber of Mazarbul
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Underground
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: transferForFree
+				}
+			}
+		]
+		gametext: <b>Underground</b>. The Free Peoples player may transfer Free Peoples artifacts and possessions at no twilight cost.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_234: {
+		cardInfo: {
+			image: decipher/LOTR11234.jpg
+			collInfo: 11S234
+			rarity: S
+		}
+		title: Crags of Emyn Muil
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Mountain
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesFrom
+					filter: self,regionNumber(2)
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				effect: {
+					type: wound
+					select: all(companion)
+				}
+			}
+		]
+		gametext: <b>Mountain</b>. If this site is in region 2 when the fellowship moves from it during the regroup phase, wound each companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_235: {
+		cardInfo: {
+			image: decipher/LOTR11235.jpg
+			collInfo: 11U235
+			rarity: U
+		}
+		title: Dammed Gate-stream
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Marsh
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: startOfPhase
+				phase: fellowship
+			}
+			optional: true
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(culture(gollum),side(free peoples))
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Marsh</b>. At the start of your fellowship phase, you may play a [gollum] Free Peoples card from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_236: {
+		cardInfo: {
+			image: decipher/LOTR11236.jpg
+			collInfo: 11S236
+			rarity: S
+		}
+		title: East Road
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Forest
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: companion
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Forest</b>. Each companion is twilight cost +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_237: {
+		cardInfo: {
+			image: decipher/LOTR11237.jpg
+			collInfo: 11S237
+			rarity: S
+		}
+		title: Ettenmoors
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Plains
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(your,character,not(enduring))
+					memorize: exertedCharacter
+				}
+				effect: {
+					type: modifyStrength
+					select: memory(exertedCharacter)
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Plains</b>. <b>Skirmish:</b> Exert your character (except an enduring character), to make it strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_238: {
+		cardInfo: {
+			image: decipher/LOTR11238.jpg
+			collInfo: 11S238
+			rarity: S
+		}
+		title: Expanding Marshland
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Marsh
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				requires: {
+					type: isLessThanOrEqual
+					firstNumber: {
+						type: sum
+						source: [
+							{
+								type: forEachYouCanSpot
+								filter: minion
+							}
+							twilightCount
+						]
+					}
+					secondNumber: 3
+				}
+				effect: {
+					type: PlayCardFromHand
+					select: choose(minion)
+					discount: -3
+				}
+			}
+		]
+		gametext: <b>Marsh</b>. <b>Shadow:</b> If the total number of minions and twilight tokens is 3 or fewer, play a minion at twilight cost -3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_239: {
+		cardInfo: {
+			image: decipher/LOTR11239.jpg
+			collInfo: 11S239
+			rarity: S
+		}
+		title: Fangorn Glade
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Forest
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachYouCanSpot
+						filter: side(free people),weapon
+					}
+				}
+			}
+		]
+		gametext: <b>Forest</b>. When the fellowship moves to this site, add (1) for each Free Peoples weapon.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_240: {
+		cardInfo: {
+			image: decipher/LOTR11240.jpg
+			collInfo: 11S240
+			rarity: S
+		}
+		title: Flats of Rohan
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Plains
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: unbound,companion,inSkirmishAgainstAtLeast(2,minion)
+					amount: 3
+				}
+			}
+		]
+		gametext: <b>Plains</b>. Each unbound companion skirmishing more than 1 minion is strength +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_241: {
+		cardInfo: {
+			image: decipher/LOTR11241.jpg
+			collInfo: 11S241
+			rarity: S
+		}
+		title: Fortress of Orthanc
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Battleground
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachYouCanSpot
+						filter: companion
+						over: 5
+						multiplier: 2
+					}
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. When the fellowship moves to this site, add (2) for each companion over 5.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_242: {
+		cardInfo: {
+			image: decipher/LOTR11242.jpg
+			collInfo: 11S242
+			rarity: S
+		}
+		title: Green Dragon Inn
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Dwelling
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				player: free people
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: exert
+					select: choose(hobbit)
+					count: 2
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(hobbit)
+					showAll: true
+					shuffle: true
+				}
+			}
+		]
+		gametext: <b>Dwelling</b>. At the start of your fellowship phase, you may exert 2 Hobbits to play a Hobbit from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_243: {
+		cardInfo: {
+			image: decipher/LOTR11243.jpg
+			collInfo: 11S243
+			rarity: S
+		}
+		title: Harrowdale
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Plains
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: constantlyCheck
+				}
+				requires: {
+					type: not
+					requires: {
+						type: phase
+						phase: regroup
+					}
+				}
+				effect: {
+					type: addTrigger
+					trigger: {
+						type: constantlyCheck
+					}
+					requires: {
+						type: canSpot
+						filter: minion,fierce,inSkirmishAgainst(culture(rohan),companion)
+					}
+					effect: {
+						type: addModifier
+						modifier: {
+							type: removeKeyword
+							filter: minion,fierce,inSkirmishAgainst(culture(rohan),companion)
+							keyword: fierce
+						}
+						until: regroup
+					}
+					until: regroup
+				}
+				limitPerTurn: 1
+			}
+		]
+		gametext: <b>Plains</b>. Until the regroup phase, each minion skirmishing a [rohan] companion loses <b>fierce</b> and cannot gain fierce.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_244: {
+		cardInfo: {
+			image: decipher/LOTR11244.jpg
+			collInfo: 11U244
+			rarity: U
+		}
+		title: Heights of Isengard
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Battleground
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				player: free people
+				trigger: {
+					type: winsSkirmish
+					filter: culture(gandalf),companion
+				}
+				effect:
+				{
+					type: discard
+					select: choose(condition)
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. Each time a [gandalf] companion wins a skirmish, the Free Peoples player may discard a condition from play.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_245: {
+		cardInfo: {
+			image: decipher/LOTR11245.jpg
+			collInfo: 11S245
+			rarity: S
+		}
+		title: Helm's Gate
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Battleground
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: character,hasAttached(hand weapon)
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. Each character bearing a hand weapon is strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_246: {
+		cardInfo: {
+			image: decipher/LOTR11246.jpg
+			collInfo: 11U246
+			rarity: U
+		}
+		title: Mere of Dead Faces
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Marsh
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: choose(your,or(name(Gollum),name(Sméagol)))
+				}
+				effect: {
+					type: playNextSite
+				}
+			}
+		]
+		gametext: <b>Marsh</b>. <b>Regroup:</b> Exert your Gollum or your Sméagol to play the fellowship's next site.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_247: {
+		cardInfo: {
+			image: decipher/LOTR11247.jpg
+			collInfo: 11S247
+			rarity: S
+		}
+		title: Moria Guardroom
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Underground
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				player: free people
+				optional: true
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: dwarf
+				}
+				effect: {
+					type: drawCards
+					count: 2
+				}
+			}
+		]
+		gametext: <b>Underground</b>. When your fellowship moves from this site, you may spot a Dwarf to draw 2 cards.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_248: {
+		cardInfo: {
+			image: decipher/LOTR11248.jpg
+			collInfo: 11S248
+			rarity: S
+		}
+		title: Moria Stairway
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Underground
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: character,hasAttached(hand weapon)
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Underground</b>. Each character bearing a hand weapon is <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_249: {
+		cardInfo: {
+			image: decipher/LOTR11249.jpg
+			collInfo: 11S249
+			rarity: S
+		}
+		title: Neekerbreekers' Bog
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Marsh
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: [
+					{
+						type: memorize
+						filter: character,minResistance(5)
+						memory: healedChars
+					}
+					{
+						type: heal
+						select: all(memory(healedChars))
+					}
+					{
+						type: exert
+						select: all(character,not(memory(healedChars)))
+					}
+				]
+			}
+		]
+		gametext: <b>Marsh</b>. When the fellowship moves to here, heal each character who has resistance 5 or more and exert each other character.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_250: {
+		cardInfo: {
+			image: decipher/LOTR11250.jpg
+			collInfo: 11S250
+			rarity: S
+		}
+		title: North Undeep
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: River
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: -3
+				}
+			}
+		]
+		gametext: <b>River</b>. The minion archery total is -3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_251: {
+		cardInfo: {
+			image: decipher/LOTR11251.jpg
+			collInfo: 11S251
+			rarity: S
+		}
+		title: Old Forest Road
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Forest
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				player: free people
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				effect: {
+					type: heal
+					select: choose(elf)
+					count: 2
+				}
+			}
+		]
+		gametext: <b>Forest</b>. At the start of your fellowship phase, you may heal 2 Elves.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_252: {
+		cardInfo: {
+			image: decipher/LOTR11252.jpg
+			collInfo: 11S252
+			rarity: S
+		}
+		title: Osgiliath Reclaimed
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Battleground
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				player: free people
+				optional: true
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				requires: {
+					type: canSpotBurdens
+					amount: 3
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. When the fellowship moves from this site, the Free Peoples player may spot 3 burdens to remove a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_253: {
+		cardInfo: {
+			image: decipher/LOTR11253.jpg
+			collInfo: 11S253
+			rarity: S
+		}
+		title: Pelennor Fields
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Plains
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: culture(men),minion
+					keyword: ambush
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Plains</b>. Each [men] minion gains <b>ambush</b> (1).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_254: {
+		cardInfo: {
+			image: decipher/LOTR11254.jpg
+			collInfo: 11S254
+			rarity: S
+		}
+		title: Pelennor Flat
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Plains
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				player: free people
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add a burden
+						Discard 3 cards from hand
+					]
+					effects: [
+						{
+							type: addBurdens
+						}
+						{
+							type: discardFromHand
+							forced: false
+							count: 3
+						}
+					]
+				}
+			}
+		]
+		gametext: <b>Plains</b>. At the start of the maneuver phase, the Free Peoples player must add a burden or discard 3 cards from hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_255: {
+		cardInfo: {
+			image: decipher/LOTR11255.jpg
+			collInfo: 11S255
+			rarity: S
+		}
+		title: Pinnacle of Zirakzigil
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Mountain
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				player: free people
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: exert
+					select: choose(companion)
+					count: 3
+				}
+				effect: {
+					type: playCardFromDeadPile
+					select: choose(wizard)
+				}
+			}
+		]
+		gametext: <b>Mountain</b>. At the start of your fellowship phase, you may exert 3 companions to play a Wizard from your dead pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_256: {
+		cardInfo: {
+			image: decipher/LOTR11256.jpg
+			collInfo: 11S256
+			rarity: S
+		}
+		title: The Prancing Pony
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Dwelling
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				player: free people
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: addBurdens
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(ranger)
+					showAll: true
+					shuffle: true
+				}
+			}
+		]
+		gametext: <b>Dwelling</b>. At the start of your fellowship phase, you may add a burden to play a ranger from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_257: {
+		cardInfo: {
+			image: decipher/LOTR11257.jpg
+			collInfo: 11S257
+			rarity: S
+		}
+		title: Rohan Uplands
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Plains
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: phase
+						phase: archery
+					}
+					filter: culture(uruk-hai),minion
+				}
+			}
+		]
+		gametext: <b>Plains</b>. During the archery phase, [uruk-hai] minions cannot take wounds.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_258: {
+		cardInfo: {
+			image: decipher/LOTR11258.jpg
+			collInfo: 11S258
+			rarity: S
+		}
+		title: Slag Mounds
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Battleground
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: killed
+					filter: companion
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+		]
+		gametext: <b>Battleground</b>. Each time a companion is killed, add a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_259: {
+		cardInfo: {
+			image: decipher/LOTR11259.jpg
+			collInfo: 11S259
+			rarity: S
+		}
+		title: Stables
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				player: free people
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: exert
+					select: choose(culture(rohan),man)
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(culture(rohan),mount)
+					showAll: true
+					shuffle: true
+				}
+			}
+		]
+		gametext: At the start of your fellowship phase, you may exert a [rohan] Man to play a [rohan] mount from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_260: {
+		cardInfo: {
+			image: decipher/LOTR11260.jpg
+			collInfo: 11S260
+			rarity: S
+		}
+		title: Trollshaw Forest
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Forest
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				player: free people
+				optional: true
+				trigger: {
+					type: played
+					filter: or(artifact,possession)
+					on: your,companion
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+		]
+		gametext: <b>Forest</b>. Each time you play an artifact or possession on your companion, you may draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_261: {
+		cardInfo: {
+			image: decipher/LOTR11261.jpg
+			collInfo: 11S261
+			rarity: S
+		}
+		title: Valley of the Silverlode
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: [
+			Dwelling
+			River
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				player: free people
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: heal
+					select: all(hobbit,companion)
+				}
+			}
+		]
+		gametext: <b>Dwelling</b>. <b>River</b>. When your fellowship moves to this site, you may heal each Hobbit companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_262: {
+		cardInfo: {
+			image: decipher/LOTR11262.jpg
+			collInfo: 11S262
+			rarity: S
+		}
+		title: Watch-tower of Cirith Ungol
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Mountain
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: choose(your,culture(orc),minion)
+				}
+				effect: {
+					type: discardCardAtRandomFromHand
+					forced: true
+					hand: free people
+				}
+			}
+		]
+		gametext: <b>Mountain</b>. <b>Maneuver:</b> Exert your [orc] minion to discard a card at random from the Free Peoples player's hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_263: {
+		cardInfo: {
+			image: decipher/LOTR11263.jpg
+			collInfo: 11S263
+			rarity: S
+		}
+		title: West Gate of Moria
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Underground
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				effect: {
+					type: removeTwilight
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Underground</b>. When the fellowship moves from this site, remove (2).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_264: {
+		cardInfo: {
+			image: decipher/LOTR11264.jpg
+			collInfo: 11S264
+			rarity: S
+		}
+		title: Westemnet Village
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Dwelling
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				player: free people
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: ally
+					}
+					effect: {
+						type: wound
+						select: choose(companion)
+					}
+				}
+			}
+		]
+		gametext: <b>Dwelling</b>. When the fellowship moves to this site, the Free Peoples player wounds a companion for each ally.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_265: {
+		cardInfo: {
+			image: decipher/LOTR11265.jpg
+			collInfo: 11S265
+			rarity: S
+		}
+		title: Window on the West
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Underground
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: unwounded,culture(gondor),man
+					keyword: defender
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Underground</b>. Each unwounded [gondor] Man is <b>defender +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	11_266: {
+		cardInfo: {
+			image: decipher/LOTR11266.jpg
+			collInfo: 11S266
+			rarity: S
+		}
+		title: Woody-End
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Forest
+		effects: [
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeBurdens
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(nazgul)
+				}
+			}
+		]
+		gametext: <b>Forest</b>. <b>Shadow:</b> Remove a burden to play a Nazgûl from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

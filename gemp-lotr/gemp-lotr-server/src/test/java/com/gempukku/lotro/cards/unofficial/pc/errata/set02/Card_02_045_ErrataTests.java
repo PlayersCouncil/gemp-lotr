@@ -59,7 +59,7 @@ public class Card_02_045_ErrataTests
 		assertEquals(Side.SHADOW, attention.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, attention.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, attention.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(attention, Keyword.RESPONSE));
+        assertTrue(scn.hasTimeword(attention, Timeword.RESPONSE));
 		assertEquals(1, attention.getBlueprint().getTwilightCost());
 	}
 
@@ -115,8 +115,10 @@ public class Card_02_045_ErrataTests
 		assertEquals(Zone.DECK,  sauron.getZone());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
+		scn.ShadowDismissRevealedCards();
 		assertEquals(3, scn.GetShadowCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(sauron);
+
 		//Decline the prevention
 		scn.FreepsChooseNo();
 		assertEquals(Zone.DISCARD,  attention.getZone());
@@ -153,6 +155,7 @@ public class Card_02_045_ErrataTests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(3, scn.GetShadowCardChoiceCount());
+		scn.ShadowDismissRevealedCards();
 		scn.ShadowChooseCardBPFromSelection(sauron);
 
 		//Accept the prevention

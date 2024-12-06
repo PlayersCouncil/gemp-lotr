@@ -1,0 +1,1007 @@
+{
+
+	13_103: {
+		cardInfo: {
+			image: decipher/LOTR13103.jpg
+			collInfo: 13U103
+			rarity: U
+		}
+		title: Always Threatening
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: orc
+					select: self
+					count: {
+						type: forEachYouCanSpot
+						filter: culture(orc),condition
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Discard from play
+						Remove 2 tokens from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: orc
+							select: self
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(lurker)
+					amount: 2
+				}
+			}
+		]
+		gametext: When you play this, you may add an [orc] token here for each [orc] condition you can spot.<br><b>Skirmish:</b> Discard this from play or remove 2 tokens from here to make a lurker minion strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_104: {
+		cardInfo: {
+			image: decipher/LOTR13104.jpg
+			collInfo: 13R104
+			rarity: R
+		}
+		title: Chamber Patrol
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 11
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: location
+						filter: regionNumber(1)
+					}
+					filter: culture(orc),orc
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: regionNumber(2)
+					}
+					filter: currentSite
+					keyword: underground
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: location
+						filter: regionNumber(3)
+					}
+					filter: culture(orc),orc
+					amount: 2
+				}
+			}
+		]
+		gametext: To play, spot an [orc] minion.<br>While the fellowship is in region 1, [orc] Orcs cannot take wounds.<br>While the fellowship is in region 2, the current site gains <b>underground</b>.<br>While the fellowship is in region 3, each [orc] Orc is strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_105: {
+		cardInfo: {
+			image: decipher/LOTR13105.jpg
+			collInfo: 13U105
+			rarity: U
+		}
+		title: Defiled
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: discount
+				discount: {
+					type: ifRemoveFromDiscard
+					filter: culture(orc)
+					count: 4
+				}
+			}
+			{
+				type: event
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(your,culture(orc),lurker)
+						amount: 2
+					}
+				]
+			}
+		]
+		gametext: You may remove from the game 4 [orc] cards in your discard pile instead of paying the twilight cost for this card.<br>Make your [orc] lurker minion strength +2.
+		lore: "...transmogrified to trophies by the advancing hordes."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_106: {
+		cardInfo: {
+			image: decipher/LOTR13106.jpg
+			collInfo: 13U106
+			rarity: U
+		}
+		title: Enemy Upon Enemy
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: spot
+					select: choose(culture(orc),lurker,minion)
+					memorize: spottedMinion
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: memory(spottedMinion)
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeBurdens
+				}
+				effect: {
+					type: playCardFromStacked
+					select: choose(lurker,minion)
+					on: self
+					discount: -3
+				}
+			}
+		]
+		gametext: <b>Regroup:</b> Spot an [orc] lurker minion to stack that minion here.<br><b>Shadow:</b> Remove a burden to play a lurker minion stacked here as if from hand. That minion is twilight cost -3.
+		lore: "On they came, reckless of their loss as they approached."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_107: {
+		cardInfo: {
+			image: decipher/LOTR13107.jpg
+			collInfo: 13C107
+			rarity: C
+		}
+		title: Expendable Servants
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: {
+				type: isGreaterThan
+				firstNumber: {
+					type: forEachYouCanSpot
+					filter: culture(orc),condition
+				}
+				secondNumber: {
+					type: forEachYouCanSpot
+					filter: culture(orc),minion
+				}
+			}
+			cost: {
+				type: discard
+				select: choose(your,culture(orc),condition)
+			},
+			effect: [
+				{
+					type: playCardFromDiscard
+					select: choose(culture(orc),minion)
+				}
+			]
+		}
+		gametext: If you can spot more [orc] conditions than [orc] minions, you may discard your [orc] condition from play to play an [orc] minion from your discard pile.
+		lore: "Sauron's minions were loyal to his rule. Their loyalty was repaid in blood: the enemy's or their own."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_108: {
+		cardInfo: {
+			image: decipher/LOTR13108.jpg
+			collInfo: 13R108
+			rarity: R
+		}
+		title: Forced March
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+					count: 2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: discard
+						player: free people
+						select: choose(another,culture(orc),condition)
+					}
+					{
+						type: removeTwilight
+						amount: 3
+					}
+				]
+				effect: [
+					{
+						type: addModifier
+						modifier: {
+							type: hasToMoveIfAble
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: To play, spot 2 [orc] minions.<br><b>Regroup:</b> Make the Free Peoples player spot another [orc] condition, discard it from play, and remove (3) to make the Free Peoples player choose to move again this turn (if the move limit allows). Discard this condition.
+		lore: "Orcs do not rest."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_109: {
+		cardInfo: {
+			image: decipher/LOTR13109.jpg
+			collInfo: 13S109
+			rarity: S
+		}
+		title: Howling Orc
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: Lurker
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Killed
+					filter: culture(orc),minion
+					inSkirmish: true
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 2
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br>Each time an [orc] minion is killed in a skirmish, you may make this minion strength +2 until the regroup phase.
+		lore: "Losses served only to enrage the besiegers."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_110: {
+		cardInfo: {
+			image: decipher/LOTR13110.jpg
+			collInfo: 13U110
+			rarity: U
+		}
+		title: Isengard Informant
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(orc),troll)
+				}
+			}
+		]
+		gametext: <b>Regroup:</b> Exert this minion to play an [orc] Troll from your discard pile.
+		lore: "Some remained in Isengard to propel the war machine."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_111: {
+		cardInfo: {
+			image: decipher/LOTR13111.jpg
+			collInfo: 13C111
+			rarity: C
+		}
+		title: Massing Strength
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: discard
+				select: choose(your,culture(orc),minion)
+				count: any
+				memorize: discardedMinions
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(orc),minion)
+					amount: {
+						type: forEachInMemory
+						memory: discardedMinions
+						multiplier: 3
+					}
+				}
+			]
+		}
+		gametext: Discard any number of your [orc] minions from play to make an [orc] minion strength +3 for each one discarded.
+		lore: "...the Dark Power, moving its armies like pieces on the board, was gathering them together."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_112: {
+		cardInfo: {
+			image: decipher/LOTR13112.jpg
+			collInfo: 13R112
+			rarity: R
+		}
+		title: Orc Crusher
+		unique: true
+		side: Shadow
+		culture: Orc
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 11
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),orc
+				}
+			}
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachBurden
+					multiplier: -1
+				}
+			}
+			{
+				type: inHandTrigger
+				trigger: {
+					type: losesSkirmish
+					filter: ringBound,companion
+					against: culture(orc),minion
+				}
+				cost: {
+					type: revealCardsFromHand
+					select: self
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+		]
+		gametext: To play, spot an [orc] Orc.<br>This minion is twilight cost -1 for each burden.<br>Each time a Ring-bound companion loses a skirmish involving an [orc] minion, you may reveal this card from hand to add a burden.
+		lore: "'Hit me now, Sam. Hit me!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_113: {
+		cardInfo: {
+			image: decipher/LOTR13113.jpg
+			collInfo: 13C113
+			rarity: C
+		}
+		title: Orc Line-breaker
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 14
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: endOfPhase
+					phase: skirmish
+				}
+				requires: [
+					{
+						type: canSpot
+						filter: self,inSkirmish
+					}
+					{
+						type: canSpotCultureTokens
+						filter: side(free people)
+					}
+				]
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: fierce
+					until: regroup
+				}
+			}
+		]
+		gametext: At the end of each skirmish involving this minion, if you can spot a Free Peoples culture token, this minion is <b>fierce</b> until the regroup phase.
+		lore: "Fell captains moved Sauron's forces from the Gorgoroth plains."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_114: {
+		cardInfo: {
+			image: decipher/LOTR13114.jpg
+			collInfo: 13S114
+			rarity: S
+		}
+		title: Orc Plains Runner
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: choice
+						texts: [
+							Discard this minion from play
+							Exert this minion
+						]
+						effects: [
+							{
+								type: discard
+								select: self
+							}
+							{
+								type: If
+								check: {
+									type: canSpot
+									filter: nextSite,underground
+								}
+								true: {
+									type: exert
+									select: self
+								}
+							}
+						]
+					}
+					{
+						type: spot
+						select: choose(another,culture(orc),minion)
+						memorize: spottedMinion
+					}
+				]
+				effect: {
+					type: returnToHand
+					select: memory(spottedMinion)
+				}
+			}
+		]
+		gametext: <b>Regroup:</b> Discard this minion from play (or exert this minion if the fellowship's next site is an underground site) and spot another [orc] minion to return that minion to your hand.
+		lore: "Saruman unleashed the remaining minions to ravage the countryside of Rohan."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_115: {
+		cardInfo: {
+			image: decipher/LOTR13115.jpg
+			collInfo: 13R115
+			rarity: R
+		}
+		title: Orc Raid Commander
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 12
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),your,zone(support)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				cost: {
+					type: spot
+					select: choose(side(free people),condition)
+					memorize: chosenCondition
+				}
+				effect: {
+					type: discard
+					select: all(nameFromMemory(chosenCondition),not(memory(chosenCondition)))
+				}
+			}
+		]
+		gametext: To play, spot an [orc] card in your support area.<br>When you play this, spot a Free Peoples condition to discard from play each other card that has the same card title as that condition.
+		lore: "Once inside the walls of the City, the besiegers were ordered to kill on sight."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_116: {
+		cardInfo: {
+			image: decipher/LOTR13116.jpg
+			collInfo: 13C116
+			rarity: C
+		}
+		title: Orc Reaper
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotCultureTokens
+						filter: side(free people)
+					}
+					filter: name(Orc Reaper)
+					amount: 2
+				}
+			}
+		]
+		gametext: While you can spot a Free Peoples culture token, each minion that has the title Orc Reaper is strength +2.
+		lore: "As they overrun the lands of the Free Peoples, the forces of the Shadow destroy all available resources."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_117: {
+		cardInfo: {
+			image: decipher/LOTR13117.jpg
+			collInfo: 13R117
+			rarity: R
+		}
+		title: Ordnance Grunt
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 6
+		type: Minion
+		race: Troll
+		strength: 12
+		vitality: 3
+		site: 5
+		keywords: [
+			Damage+1
+			Fierce
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+				}
+			}
+			{
+				type: activatedInDiscard
+				phase: shadow
+				cost: {
+					type: discard
+					select: choose(culture(orc),condition)
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: self
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>. <b>Fierce</b>. To play, spot an [orc] minion.<br><b>Shadow:</b> Discard an [orc] condition from play to play this minion from your discard pile.
+		lore: "Only Trolls had the strength to man the siege catapults."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_118: {
+		cardInfo: {
+			image: decipher/LOTR13118.jpg
+			collInfo: 13S118
+			rarity: S
+		}
+		title: Picket Denizen
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 4
+		keywords: Lurker
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: another,culture(orc),minion
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: preventWound
+					select: choose(another,culture(orc),minion)
+				}
+			}
+		]
+		gametext: <b>Lurker</b>. <helper>(Skirmishes involving lurker minions must be resolved after any others.)</helper><br><b>Response:</b> If another [orc] minion is about to take a wound, exert this minion to prevent that.
+		lore: "Frontline minions drew the fire of parapet archers."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_119: {
+		cardInfo: {
+			image: decipher/LOTR13119.jpg
+			collInfo: 13C119
+			rarity: C
+		}
+		title: Underdeeps Denizen
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 1
+		site: 4
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					requires: {
+						type: location
+						filter: underground
+					}
+					filter: self
+				}
+			}
+		]
+		gametext: While this minion is at an underground site, it cannot take wounds.
+		lore: "There was a crash on the door, followed by crash after crash.... How many there were the Company could not count."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_120: {
+		cardInfo: {
+			image: decipher/LOTR13120.jpg
+			collInfo: 13C120
+			rarity: C
+		}
+		title: Unforgiving Depths
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: underground,site
+						count: 3
+					}
+					filter: culture(orc),orc
+					keyword: muster
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: discard
+					select: self
+				}
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
+				}
+				effect: {
+					type: playSite
+					number: {
+						type: currentSiteNumber
+					}
+					filter: underground
+				}
+			}
+		]
+		gametext: While you can spot 3 underground sites, each [orc] Orc gains <b>muster</b>.<br><b>Shadow:</b> Discard this condition from play and spot an [orc] minion to replace the fellowship's current site with an underground site from your adventure deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	13_121: {
+		cardInfo: {
+			image: decipher/LOTR13121.jpg
+			collInfo: 13C121
+			rarity: C
+		}
+		title: Whatever Means
+		unique: false
+		side: Shadow
+		culture: Orc
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: optional
+				text: Would you like to remove 2 burdens?
+				effect: {
+					type: costToEffect
+					cost: {
+						type: removeBurdens
+						amount: 2
+					}
+					effect: {
+						type: MemorizeInfo
+						memory: removedBurdens
+						info: yes
+					}
+				}
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(orc),orc)
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryIs
+							memory: removedBurdens
+							value: yes
+						}
+						true: 6
+						false: 2
+					}
+				}
+			]
+		}
+		gametext: Make an [orc] Orc strength +2 (or +6 if you remove 2 burdens).
+		lore: "The besiegers believed not that the flames would burn the city walls, but the souls of those behind them."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

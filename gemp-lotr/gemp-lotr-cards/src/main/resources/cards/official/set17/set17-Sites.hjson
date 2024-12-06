@@ -1,0 +1,156 @@
+{
+
+	17_145: {
+		cardInfo: {
+			image: decipher/LOTR17145.jpg
+			collInfo: 17U145
+			rarity: U
+		}
+		title: Dol Guldur
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: exert
+						select: choose(your,minion)
+					}
+					{
+						type: removeThreats
+					}
+				]
+				effect: {
+					type: discard
+					player: free people
+					select: choose(side(free people),condition)
+				}
+			}
+		]
+		gametext: <b>Regroup:</b> Exert your minion and remove a threat to make the Free Peoples player discard one of his or her conditions.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_146: {
+		cardInfo: {
+			image: decipher/LOTR17146.jpg
+			collInfo: 17U146
+			rarity: U
+		}
+		title: Falls of Rauros
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: River
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesTo
+					filter: self,regionNumber(2)
+				}
+				effect: {
+					type: removeCardsInDeadPileFromGame
+					player: free people
+				}
+			}
+		]
+		gametext: <b>River</b>. When the Fellowship moves to this site in region 2, the Free Peoples player places a card from the dead pile out of play.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_147: {
+		cardInfo: {
+			image: decipher/LOTR17147.jpg
+			collInfo: 17U147
+			rarity: U
+		}
+		title: Imladris
+		unique: false
+		twilight: 3
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: River
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesTo
+					filter: self,sanctuary
+				}
+				effect: {
+					type: removeBurdens
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>River</b>. When the fellowship moves to this site, if it is a sanctuary, remove 2 burdens.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_148: {
+		cardInfo: {
+			image: decipher/LOTR17148.jpg
+			collInfo: 17U148
+			rarity: U
+		}
+		title: Nurn
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Plains
+		effects: [
+			{
+				type: controlledSiteModifier
+				modifier: {
+					type: modifyStrength
+					filter: hunter,minion
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Plains</b>. While you control this site, each of your hunter minions is strength +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

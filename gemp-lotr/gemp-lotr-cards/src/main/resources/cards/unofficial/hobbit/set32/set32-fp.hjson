@@ -1,5 +1,10 @@
 {
 	32_1: {
+		cardInfo: {
+			image: hobbit/HDG321.jpg
+			collInfo: 32_1
+			rarity: _
+		}
 		title: Crown of Erebor
 		unique: true
 		culture: dwarven
@@ -8,7 +13,7 @@
 		keyword: support area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -17,7 +22,7 @@
 				effect: [
 					{
 						type: heal
-						filter: choose(or(name(Thorin),name(Dain Ironfoot)))
+						select: choose(or(name(Thorin),name(Dain Ironfoot)))
 					}
 					{
 						type: optional
@@ -38,19 +43,24 @@
 				}
 				effect: {
 					type: EnableParticipationInSkirmishes
-					filter: all(culture(dwarven),ally)
+					select: all(culture(dwarven),ally)
 				}
 			}
 		]
 	}
 	32_2: {
+		cardInfo: {
+			image: hobbit/HDG322.jpg
+			collInfo: 32_2
+			rarity: _
+		}
 		title: Dain Ironfoot
 		subtitle: Lord of the Iron Hills
 		unique: true
 		culture: dwarven
 		twilight: 3
 		type: ally
-		allyHome: hobbit,9
+		allyHome: 9H
 		race: dwarf
 		strength: 7
 		vitality: 3
@@ -64,7 +74,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfPhase
@@ -72,35 +82,45 @@
 				}
 				cost: {
 					type: discard
-					filter: choose(culture(dwarven),follower)
+					select: choose(culture(dwarven),follower)
 				}
 				effect: {
 					type: discard
-					filter: choose(minion,not(name(Smaug)))
+					select: choose(minion,not(name(Smaug)))
 				}
 			}
 		]
 	}
 	32_3: {
+		cardInfo: {
+			image: hobbit/HDG323.jpg
+			collInfo: 32_3
+			rarity: _
+		}
 		title: Du Bekar!
 		culture: dwarven
 		twilight: 3
 		type: event
-		keyword: assignment
+		timeword: assignment
 		effects: {
 			type: event
 			cost: {
 				type: discard
 				count: 2
-				filter: choose(culture(dwarven),not(companion))
+				select: choose(culture(dwarven),not(companion))
 			}
 			effect: {
 				type: discard
-				filter: choose(minion,maxTwilight(4))
+				select: choose(minion,maxTwilight(4))
 			}
 		}
 	}
 	32_4: {
+		cardInfo: {
+			image: hobbit/HDG324.jpg
+			collInfo: 32_4
+			rarity: _
+		}
 		title: Dwarven Spear
 		culture: dwarven
 		twilight: 1
@@ -118,12 +138,17 @@
 		}
 	}
 	32_5: {
+		cardInfo: {
+			image: hobbit/HDG325.jpg
+			collInfo: 32_5
+			rarity: _
+		}
 		title: Iron Hills Army
 		unique: true
 		culture: dwarven
 		twilight: 3
 		type: ally
-		allyHome: hobbit,9
+		allyHome: 9H
 		race: dwarf
 		strength: 9
 		vitality: 3
@@ -145,26 +170,31 @@
 			cost: [
 				{
 					type: exert
-					filter: self
+					select: self
 				}
 				{
 					type: discard
-					filter: choose(culture(dwarven),follower)
+					select: choose(culture(dwarven),follower)
 				}
 			]
 			effect: {
 				type: discard
 				player: shadowPlayer
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 	}
 	32_6: {
+		cardInfo: {
+			image: hobbit/HDG326.jpg
+			collInfo: 32_6
+			rarity: _
+		}
 		title: King Under the Mountain
 		culture: dwarven
 		twilight: 1
 		type: event
-		keyword: fellowship
+		timeword: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -172,11 +202,18 @@
 			}
 			effect: {
 				type: playCardFromDrawDeck
-				filter: choose(culture(dwarven),follower)
+				select: choose(culture(dwarven),follower)
+				showAll: true
+				shuffle: true
 			}
 		}
 	}
 	32_7: {
+		cardInfo: {
+			image: hobbit/HDG327.jpg
+			collInfo: 32_7
+			rarity: _
+		}
 		title: Ring of Thror
 		unique: true
 		culture: dwarven
@@ -204,17 +241,22 @@
 				effect: [
 					{
 						type: putCardsFromDiscardIntoHand
-						filter: choose(culture(dwarven),event)
+						select: choose(culture(dwarven),event)
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}
 		]
 	}
 	32_8: {
+		cardInfo: {
+			image: hobbit/HDG328.jpg
+			collInfo: 32_8
+			rarity: _
+		}
 		title: Roac
 		subtitle: Son of Carc
 		unique: true
@@ -228,7 +270,7 @@
 				type: aidCost
 				cost: {
 					type: exert
-					filter: choose(name(Thorin))
+					select: choose(name(Thorin))
 				}
 			}
 			{
@@ -240,7 +282,7 @@
 				}
 				cost: {
 					type: discard
-					filter: self
+					select: self
 				}
 				effect: {
 					type: choice
@@ -251,11 +293,13 @@
 					effects: [
 						{
 							type: playCardFromDrawDeck
-							filter: choose(culture(dwarven),ally)
+							select: choose(culture(dwarven),ally)
+							showAll: true
+							shuffle: true
 						}
 						{
 							type: EnableParticipationInSkirmishes
-							filter: choose(culture(dwarven),ally)
+							select: choose(culture(dwarven),ally)
 							until: start(regroup)
 						}
 					]
@@ -264,6 +308,11 @@
 		]
 	}
 	32_9: {
+		cardInfo: {
+			image: hobbit/HDG329.jpg
+			collInfo: 32_9
+			rarity: _
+		}
 		title: Thrain
 		subtitle: Father of Thorin
 		unique: true
@@ -278,7 +327,7 @@
 				cost: [
 					{
 						type: spot
-						filter: choose(name(Gandalf))
+						filter: name(Gandalf)
 					}
 					{
 						type: addTwilight
@@ -287,7 +336,7 @@
 				]
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
@@ -295,23 +344,30 @@
 				}
 				effect: {
 					type: playCardFromDrawDeck
-					filter: choose(culture(dwarven),or(possession,artifact))
+					select: choose(culture(dwarven),or(possession,artifact))
 					on: bearer
+					showAll: true
+					shuffle: true
 				}
 			}
 		]
 	}
 	32_10: {
+		cardInfo: {
+			image: hobbit/HDG3210.jpg
+			collInfo: 32_10
+			rarity: _
+		}
 		title: Thror's Heirlooms
 		culture: dwarven
 		twilight: 3
 		type: event
-		keyword: regroup
+		timeword: regroup
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(dwarf,companion)
+				select: choose(dwarf,companion)
 			}
 			effect: {
 				type: choice
@@ -322,17 +378,24 @@
 				effects: [
 					{
 						type: playCardFromDrawDeck
-						filter: choose(or(name(Thrain),and(culture(dwarven),or(possession,artifact))))
+						select: choose(or(name(Thrain),and(culture(dwarven),or(possession,artifact))))
+						showAll: true
+						shuffle: true
 					}
 					{
 						type: playCardFromDiscard
-						filter: choose(or(name(Thrain),and(culture(dwarven),or(possession,artifact))))
+						select: choose(or(name(Thrain),and(culture(dwarven),or(possession,artifact))))
 					}
 				]
 			}
 		}
 	}
 	32_11: {
+		cardInfo: {
+			image: hobbit/HDG3211.jpg
+			collInfo: 32_11
+			rarity: _
+		}
 		title: Thror's Key
 		unique: true
 		culture: dwarven
@@ -341,7 +404,8 @@
 		target: culture(dwarven),companion
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: movesFrom
 					filter: siteNumber(6-7)
@@ -367,22 +431,27 @@
 					effects: [
 						{
 							type: exert
-							filter: bearer
+							select: bearer
 						}
 						{
 							type: discard
-							filter: self
+							select: self
 						}
 					]
 				}
 				effect: {
 					type: discard
-					filter: choose(minion)
+					select: choose(minion)
 				}
 			}
 		]
 	}
 	32_12: {
+		cardInfo: {
+			image: hobbit/HDG3212.jpg
+			collInfo: 32_12
+			rarity: _
+		}
 		title: Thror's Map
 		unique: true
 		culture: dwarven
@@ -404,11 +473,11 @@
 				effects: [
 					{
 						type: exert
-						filter: bearer
+						select: bearer
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}
@@ -418,42 +487,47 @@
 					memorize: playedSite
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryMatches
 						memory: playedSite
 						filter: mountain
 					}
-					effect: {
+					true: {
 						type: heal
-						filter: choose(culture(dwarven),companion)
+						select: choose(culture(dwarven),companion)
 					}
 				}
 			]
 		}
 	}
 	32_13: {
+		cardInfo: {
+			image: hobbit/HDG3213.jpg
+			collInfo: 32_13
+			rarity: _
+		}
 		title: Galadriel
 		subtitle: Elven Lady
 		unique: true
 		culture: elven
 		twilight: 3
 		type: ally
-		allyHome: hobbit,3
+		allyHome: 3H
 		race: elf
 		strength: 3
 		vitality: 3
 		keyword: wise
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfTurn
 				}
 				effect: {
 					type: heal
-					filter: choose(name(Gandalf))
+					select: choose(name(Gandalf))
 				}
 			}
 			{
@@ -462,20 +536,20 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 					}
 					{
 						type: discardFromHand
 						forced: false
-						filter: choose(side(shadow))
+						select: choose(side(shadow))
 					}
 				]
 				effect: {
 					type: modifyStrength
-					filter: choose(minion)
+					select: choose(minion)
 					memorize: chosenMinion
 					amount: {
-						type: requires
+						type: Conditional
 						requires: {
 							type: memoryMatches
 							memory: chosenMinion
@@ -489,6 +563,11 @@
 		]
 	}
 	32_14: {
+		cardInfo: {
+			image: hobbit/HDG3214.jpg
+			collInfo: 32_14
+			rarity: _
+		}
 		title: Nenya
 		unique: true
 		culture: elven
@@ -499,14 +578,14 @@
 		target: name(Galadriel)
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfTurn
 				}
 				effect: {
 					type: heal
-					filter: choose(wise,ally)
+					select: choose(wise,ally)
 				}
 			}
 			{
@@ -515,7 +594,7 @@
 				cost: [
 					{
 						type: exert
-						filter: bearer
+						select: bearer
 					}
 					{
 						type: addTwilight
@@ -524,32 +603,40 @@
 				]
 				effect: {
 					type: putCardsFromDeckIntoHand
-					filter: choose(culture(gandalf),spell)
+					select: choose(culture(gandalf),spell)
+					reveal: true
+					shuffle: true
+					showAll: true
 				}
 			}
 		]
 	}
 	32_15: {
+		cardInfo: {
+			image: hobbit/HDG3215.jpg
+			collInfo: 32_15
+			rarity: _
+		}
 		title: Bain
 		subtitle: Son of Bard
 		unique: true
 		culture: esgaroth
 		twilight: 2
 		type: ally
-		allyHome: hobbit,6
+		allyHome: 6H
 		race: man
 		strength: 4
 		vitality: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfTurn
 				}
 				effect: {
 					type: heal
-					filter: choose(culture(esgaroth),man,not(name(The Master)))
+					select: choose(culture(esgaroth),man,not(name(The Master)))
 				}
 			}
 			{
@@ -557,17 +644,22 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: EnableParticipationInArcheryFireAndSkirmishes
-					filter: choose(name(Bard))
+					select: choose(name(Bard))
 					until: start(regroup)
 				}
 			}
 		]
 	}
 	32_16: {
+		cardInfo: {
+			image: hobbit/HDG3216.jpg
+			collInfo: 32_16
+			rarity: _
+		}
 		title: Black Arrow
 		unique: true
 		culture: esgaroth
@@ -582,42 +674,47 @@
 			cost: [
 				{
 					type: exert
-					filter: bearer
+					select: bearer
 				}
 				{
 					type: discard
-					filter: self
+					select: self
 				}
 			]
 			effect: [
 				{
 					type: wound
-					filter: choose(minion)
+					select: choose(minion)
 					times: 2
 					memorize: woundedMinion
 				}
 				{
-					type: conditional
-					requires: {
+					type: If
+					check: {
 						type: memoryMatches
 						memory: woundedMinion
 						filter: name(Smaug)
 					}
-					effect: {
+					true: {
 						type: wound
-						filter: memory(woundedMinion)
+						select: memory(woundedMinion)
 					}
 				}
 			]
 		}
 	}
 	32_17: {
+		cardInfo: {
+			image: hobbit/HDG3217.jpg
+			collInfo: 32_17
+			rarity: _
+		}
 		title: Esgaroth Volunteers
 		unique: true
 		culture: esgaroth
 		twilight: 3
 		type: ally
-		allyHome: hobbit,6
+		allyHome: 6H
 		race: man
 		strength: 6
 		vitality: 4
@@ -631,16 +728,21 @@
 			}
 			cost: {
 				type: exert
-				filter: self
+				select: self
 			}
 			effect: {
 				type: EnableParticipationInArcheryFireAndSkirmishes
-				filter: self
+				select: self
 				until: start(regroup)
 			}
 		}
 	}
 	32_18: {
+		cardInfo: {
+			image: hobbit/HDG3218.jpg
+			collInfo: 32_18
+			rarity: _
+		}
 		title: Iron-forged Weapon
 		culture: esgaroth
 		twilight: 2
@@ -657,22 +759,27 @@
 			}
 			cost: {
 				type: discard
-				filter: self
+				select: self
 			}
 			effect: {
 				type: wound
-				filter: choose(minion)
+				select: choose(minion)
 			}
 		}
 	}
 	32_19: {
+		cardInfo: {
+			image: hobbit/HDG3219.jpg
+			collInfo: 32_19
+			rarity: _
+		}
 		title: Percy
 		subtitle: Bard's Lieutenant
 		unique: true
 		culture: esgaroth
 		twilight: 2
 		type: ally
-		allyHome: hobbit,6
+		allyHome: 6H
 		race: man
 		strength: 6
 		vitality: 3
@@ -686,36 +793,41 @@
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: aboutToTakeWound
 					filter: another,culture(esgaroth),ally
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: {
 					type: preventWound
-					filter: choose(another,culture(esgaroth),ally)
+					select: choose(another,culture(esgaroth),ally)
 				}
 			}
 		]
 	}
 	32_20: {
+		cardInfo: {
+			image: hobbit/HDG3220.jpg
+			collInfo: 32_20
+			rarity: _
+		}
 		title: The Master
 		subtitle: Master of Lake-Town
 		unique: true
 		culture: esgaroth
 		twilight: 2
 		type: ally
-		allyHome: hobbit,6
+		allyHome: 6H
 		race: man
 		strength: 5
 		vitality: 3
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: startOfTurn
@@ -726,7 +838,7 @@
 				}
 				effect: {
 					type: heal
-					filter: all(or(name(Bard),name(The Master)))
+					select: all(or(name(Bard),name(The Master)))
 				}
 			}
 			{
@@ -734,7 +846,7 @@
 				phase: fellowship
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: [
@@ -750,151 +862,151 @@
 							type: forEachInMemory
 							memory: discardedCards
 						}
-          }
-        ]
-      }
-    ]
+		  }
+		]
+	  }
+	]
   }
   32_21: {
-    title: Former Herald
-    culture: gandalf
-    twilight: 1
-    type: event
-    keyword: maneuver
-    effects: {
-      type: event
-      cost: {
-        type: exert
-        filter: choose(wise,ally)
-        memorize: exertedAlly
-      }
-      effect: [
-        {
-          type: modifyStrength
-          filter: memory(exertedAlly)
-          amount: 3
-          until: start(regroup)
-        }
-        {
-          type: EnableParticipationInArcheryFireAndSkirmishes
-          filter: memory(exertedAlly)
-          until: start(regroup)
-        }
-      ]
-    }
+	title: Former Herald
+	culture: gandalf
+	twilight: 1
+	type: event
+	timeword: maneuver
+	effects: {
+	  type: event
+	  cost: {
+		type: exert
+		select: choose(wise,ally)
+		memorize: exertedAlly
+	  }
+	  effect: [
+		{
+		  type: modifyStrength
+		  select: memory(exertedAlly)
+		  amount: 3
+		  until: start(regroup)
+		}
+		{
+		  type: EnableParticipationInArcheryFireAndSkirmishes
+		  select: memory(exertedAlly)
+		  until: start(regroup)
+		}
+	  ]
+	}
   }
   32_22: {
-    title: Gathering of the Three Rings
-    culture: gandalf
-    twilight: 3
-    type: event
-    keyword: [
-      spell
-      maneuver
-    ]
-    effects: {
-      type: event
-      effect: {
-        type: modifyStrength
-        count: {
-          type: forEachYouCanSpot
-          filter: or(name(Gandalf),name(Elrond),name(Galadriel))
-        }
-        filter: choose(minion)
-        amount: {
-          type: forEachYouCanSpot
-          filter: or(name(Gandalf),name(Elrond),name(Galadriel))
-          multiplier: -1
-        }
-        until: start(regroup)
-      }
-    }
+	title: Gathering of the Three Rings
+	culture: gandalf
+	twilight: 3
+	type: event
+	timeword: maneuver
+	keyword: [
+	  spell
+	]
+	effects: {
+	  type: event
+	  effect: {
+		type: modifyStrength
+		count: {
+		  type: forEachYouCanSpot
+		  filter: or(name(Gandalf),name(Elrond),name(Galadriel))
+		}
+		select: choose(minion)
+		amount: {
+		  type: forEachYouCanSpot
+		  filter: or(name(Gandalf),name(Elrond),name(Galadriel))
+		  multiplier: -1
+		}
+		until: start(regroup)
+	  }
+	}
   }
   32_23: {
-    title: Narya
-    unique: true
-    culture: gandalf
-    twilight: 0
-    type: artifact
-    itemclass: ring
-    vitality: 1
-    target: name(Gandalf)
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: modifyCost
-          filter: culture(gandalf),event
-          amount: -1
-        }
-      }
-      {
-        type: activatedTrigger
-        trigger: {
-          type: aboutToDiscard
-          filter: bearer
-        }
-        cost: {
-          type: exert
-          filter: bearer
-        }
-        effect: {
-          type: preventDiscard
-          filter: bearer
-        }
-      }
-    ]
+	title: Narya
+	unique: true
+	culture: gandalf
+	twilight: 0
+	type: artifact
+	itemclass: ring
+	vitality: 1
+	target: name(Gandalf)
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: modifyCost
+		  filter: culture(gandalf),event
+		  amount: -1
+		}
+	  }
+	  {
+		type: Response
+		trigger: {
+		  type: aboutToDiscard
+		  filter: bearer
+		}
+		cost: {
+		  type: exert
+		  select: bearer
+		}
+		effect: {
+		  type: preventDiscard
+		  select: bearer
+		}
+	  }
+	]
   }
   32_24: {
-    title: Saruman
-    subtitle: The White
+	title: Saruman
+	subtitle: The White
 		unique: true
-    culture: gandalf
-    type: ally
-    allyHome: hobbit,3
-    race: wizard
-    twilight: 4
-    strength: 8
-    vitality: 4
-    keyword: wise
-    effects: [
-      {
-        type: modifier
-        modifier: {
-          type: addKeyword
-          filter: name(Gandalf)
-          keyword: defender+1
-        }
-      }
-      {
-        type: activated
-        phase: fellowship
-        cost: {
-          type: discard
-          filter: choose(wise,ally)
-        }
-        effect: {
-          type: playCardFromDiscard
-          filter: choose(name(Gandalf))
-        }
-      }
-      {
-        type: activated
-        phase: skirmish
-        cost: {
-          type: exert
-          filter: self
-        }
-        effect: {
-          type: modifyStrength
-          filter: choose(wise,character)
-          amount: {
-            type: cardAffectedLimitPerPhase
-            source: 2
-            limit: 2
-          }
-        }
-      }
-    ]
+	culture: gandalf
+	type: ally
+	allyHome: 3H
+	race: wizard
+	twilight: 4
+	strength: 8
+	vitality: 4
+	keyword: wise
+	effects: [
+	  {
+		type: modifier
+		modifier: {
+		  type: addKeyword
+		  filter: name(Gandalf)
+		  keyword: defender+1
+		}
+	  }
+	  {
+		type: activated
+		phase: fellowship
+		cost: {
+		  type: discard
+		  select: choose(wise,ally)
+		}
+		effect: {
+		  type: playCardFromDiscard
+		  select: choose(name(Gandalf))
+		}
+	  }
+	  {
+		type: activated
+		phase: skirmish
+		cost: {
+		  type: exert
+		  select: self
+		}
+		effect: {
+		  type: modifyStrength
+		  select: choose(wise,character)
+		  amount: {
+			type: cardAffectedLimitPerPhase
+			source: 2
+			limit: 2
+		  }
+		}
+	  }
+	]
   }
 }

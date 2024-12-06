@@ -1,0 +1,228 @@
+{
+
+	2_115: {
+		cardInfo: {
+			image: decipher/LOTR02115.jpg
+			collInfo: 2U115
+			rarity: U
+		}
+		title: Hobbiton Party Field
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: choose(hobbit)
+			}
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(name(Bilbo))
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert a Hobbit to play Bilbo from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_116: {
+		cardInfo: {
+			image: decipher/LOTR02116.jpg
+			collInfo: 2U116
+			rarity: U
+		}
+		title: Hobbiton Woods
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Fellowship
+		direction: Left
+		keywords: Forest
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: choose(hobbit)
+			}
+			effect: {
+				type: playNextSite
+			}
+		}
+		gametext: <b>Forest</b>. <b>Fellowship:</b> Exert a Hobbit to play your site 2 (replacing opponent's site if necessary).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_117: {
+		cardInfo: {
+			image: decipher/LOTR02117.jpg
+			collInfo: 2C117
+			rarity: C
+		}
+		title: Town Center
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: PlayCardFromHand
+				select: choose(culture(shire),ally)
+			}
+			effect: {
+				type: drawCards
+				count: 1
+			}
+		}
+		gametext: <b>Fellowship:</b> Play a [shire] ally to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_118: {
+		cardInfo: {
+			image: decipher/LOTR02118.jpg
+			collInfo: 2U118
+			rarity: U
+		}
+		title: Great Chasm
+		unique: false
+		twilight: 4
+		type: Site
+		site: 4
+		block: Fellowship
+		direction: Right
+		keywords: Underground
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyCost
+				requires: {
+					type: not
+					requires: {
+						type: playedCardThisPhase
+						filter: culture(moria),archer
+					}
+				}
+				filter: culture(moria),archer
+				amount: -2
+			}
+		}
+		gametext: <b>Underground</b>. The twilight cost of the first [moria] archer played each Shadow phase is -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_119: {
+		cardInfo: {
+			image: decipher/LOTR02119.jpg
+			collInfo: 2C119
+			rarity: C
+		}
+		title: Hollin
+		unique: false
+		twilight: 3
+		type: Site
+		site: 4
+		block: Fellowship
+		direction: Right
+		keywords: Plains
+		effects: {
+			type: modifier
+			modifier: {
+				type: removeKeyword
+				filter: urukHai
+				keyword: roaming
+			}
+		}
+		gametext: <b>Plains</b>. Uruk-hai are not roaming.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_120: {
+		cardInfo: {
+			image: decipher/LOTR02120.jpg
+			collInfo: 2U120
+			rarity: U
+		}
+		title: Valley of the Silverlode
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: Fellowship
+		direction: Left
+		keywords: [
+			River
+			Sanctuary
+		]
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			effect: {
+				type: heal
+				select: choose(hobbit,companion)
+				count: any
+			}
+			player: fp
+		}
+		gametext: <b>River</b>. <b>Sanctuary</b>. When the fellowship moves to Valley of the Silverlode, each Hobbit companion may heal.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

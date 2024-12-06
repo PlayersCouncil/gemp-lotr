@@ -33,7 +33,7 @@ public class HealByDiscardRule {
                         if (game.getGameState().getCurrentPhase() == Phase.FELLOWSHIP
                                 && GameUtils.isFP(game, playerId)) {
                             List<Action> result = new LinkedList<>();
-                            for (PhysicalCard card : Filters.filter(game.getGameState().getHand(playerId), game, Filters.or(CardType.COMPANION, CardType.ALLY), Filters.unique)) {
+                            for (PhysicalCard card : Filters.filter(game, game.getGameState().getHand(playerId), Filters.or(CardType.COMPANION, CardType.ALLY), Filters.unique)) {
                                 PhysicalCard active = Filters.findFirstActive(game, Filters.name(card.getBlueprint().getTitle()));
                                 if (active != null && game.getGameState().getWounds(active) > 0) {
                                     ActivateCardAction action = new ActivateCardAction(card);

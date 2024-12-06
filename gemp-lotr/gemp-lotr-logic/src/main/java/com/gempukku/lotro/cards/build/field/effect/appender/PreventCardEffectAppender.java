@@ -17,14 +17,14 @@ import org.json.simple.JSONObject;
 public class PreventCardEffectAppender implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "filter", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "memorize");
 
-        String filter = FieldUtils.getString(effectObject.get("filter"), "filter");
+        String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         MultiEffectAppender result = new MultiEffectAppender();
         result.addEffectAppender(
-                CardResolver.resolveCard(filter,
+                CardResolver.resolveCard(select,
                         (actionContext) -> Filters.in(((PreventableCardEffect) actionContext.getEffect()).getAffectedCardsMinusPrevented(actionContext.getGame())),
                         memory, "you", "Choose card to prevent effect on", environment));
         result.addEffectAppender(

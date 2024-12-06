@@ -2,17 +2,14 @@
 
 	51_7: {
 		cardInfo: {
-			imagePath: errata/51_7.jpg
-			javaClass: false
+			//id: 1_7.1
 			parent: 1_7
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_7.jpg
 			collInfo: 1C7
 			rarity: C
-			setNum: "1"
-			cardNum: 7
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Dwarf Guard
 		culture: Dwarven
@@ -22,9 +19,12 @@
 		strength: 5
 		vitality: 2
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: dwarf
+		effects: {
+			type: toPlay
+			requires: {
+				type: canSpot
+				filter: dwarf
+			}
 		}
 		gametext: To play, spot a Dwarf.
 		lore: Dwarves from Dain's people are stout companions, trustworthy and loyal.
@@ -52,7 +52,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 1?
+	# 		revision: 1
 	# 		collInfo: 1C9
 	# 		rarity: C
 	# 		setNum: "1"
@@ -68,7 +68,7 @@
 	# 	strength: 2
 	# 	target: dwarf
 	# 	effects: {
-	# 		type: trigger
+	# 		type: Trigger
 	# 		trigger: {
 	# 			type: losesSkirmish
 	# 			filter: minion
@@ -85,7 +85,7 @@
 	# 			effects: [
 	# 				{
 	# 					type: exert
-	# 					filter: choose(your,minion)
+	# 					select: choose(your,minion)
 	# 				}
 	# 				{
 	# 					type: discardBottomCardsFromDeck
@@ -110,17 +110,14 @@
 	
 	51_9: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E009.2_card.jpg
-			javaClass: false
+			//id: 1_9.2
 			parent: 1_9
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN01E009.2_card.jpg
 			collInfo: 1C9
 			rarity: C
-			setNum: "1"
-			cardNum: 9
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Dwarven Axe
 		unique: false
@@ -132,7 +129,8 @@
 		strength: 2
 		target: dwarf
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: losesSkirmish
 				filter: minion
@@ -143,15 +141,15 @@
 					# Need to check for minions first, else if this was the last
 					# minion on the table, it defaults to asking freeps to make
 					# the choice.
-					type: Conditional
-					requires: {
+					type: If
+					check: {
 						type: CanSpot
 						filter: minion
 					}
-					effect: [
+					true: [
 						{
 							type: ChooseActiveCards
-							filter: choose(minion)
+							select: choose(minion)
 							memorize: chosenMinion
 							count: 0-1
 							text: Choose a minion to make strength -1 until regroup
@@ -169,7 +167,7 @@
 							effect: {
 								type: ModifyStrength
 								amount: -1
-								filter: memory(chosenMinion)
+								select: memory(chosenMinion)
 								until: start(regroup)
 							}
 						}
@@ -191,17 +189,14 @@
 
 	51_11: {
 		cardInfo: {
-			imagePath: errata/51_11.jpg
-			javaClass: false
+			//id: 1_11.1
 			parent: 1_11
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_11.jpg
 			collInfo: 1C11
 			rarity: C
-			setNum: "1"
-			cardNum: 11
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Farin
 		subtitle: Dwarven Emissary
@@ -213,18 +208,23 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: dwarf
-		}
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyStrength
-				filter: self,inSkirmishAgainst(orc)
-				amount: 2
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: dwarf
+				}
 			}
-		}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmishAgainst(orc)
+					amount: 2
+				}
+			}
+		]
 		gametext: To play, spot a Dwarf.<br>While skirmishing an Orc, Farin is strength +2.
 		lore: Among the envoys sent to represent the Dwarves of Erebor at the Council of Elrond was Farin, a young but wise Dwarf, and a fierce foe in battle.
 		promotext: ""
@@ -238,17 +238,14 @@
 
 	51_12: {
 		cardInfo: {
-			imagePath: errata/51_12.jpg
-			javaClass: false
+			//id: 1_12.1
 			parent: 1_12
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/51_12.jpg
 			collInfo: 1U12
 			rarity: U
-			setNum: "1"
-			cardNum: 12
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Gimli
 		subtitle: Dwarf of Erebor
@@ -295,17 +292,14 @@
 	
 	51_16: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E016.1.jpg
-			javaClass: false
+			//id: 1_16.1
 			parent: 1_16
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E016.1.jpg
 			collInfo: 1R16
 			rarity: R
-			setNum: "1"
-			cardNum: 16
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Greatest Kingdom of My People
 		unique: true
@@ -321,11 +315,11 @@
 				type: extraCost
 				cost: {
 					type: exert
-					filter: choose(dwarf)
+					select: choose(dwarf)
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -339,7 +333,7 @@
 				effect: [
 					{
 						type: chooseCardsFromDiscard
-						filter: choose(culture(dwarven))
+						select: choose(culture(dwarven))
 						memorize: chosenCard
 						count: 0-1
 						text: Choose a Dwarven card from your discard pile to take into hand
@@ -356,7 +350,7 @@
 						}
 						effect: {
 							type: putCardsFromDiscardIntoHand
-							filter: memory(chosenCard)
+							select: memory(chosenCard)
 						}
 					}
 					{
@@ -379,17 +373,14 @@
 	
 	51_17: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E017.1.jpg
-			javaClass: false
+			//id: 1_17.1
 			parent: 1_17
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E017.1.jpg
 			collInfo: 1U17
 			rarity: U
-			setNum: "1"
-			cardNum: 17
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Grimir
 		subtitle: Dwarven Elder
@@ -397,7 +388,7 @@
 		culture: dwarven
 		twilight: 1
 		type: ally
-		allyHome: fellowship,3
+		allyHome: 3F
 		race: dwarf
 		strength: 3
 		vitality: 3
@@ -407,7 +398,7 @@
 			cost: [
 				{
 					type: exert
-					filter: self
+					select: self
 				}
 				{
 					type: discardTopCardsFromDeck
@@ -418,7 +409,7 @@
 			]
 			effect: {
 				type: PutCardsFromDiscardOnTopOfDeck
-				filter: choose(culture(dwarven),event)
+				select: choose(culture(dwarven),event)
 				count: 1
 			}
 		}
@@ -435,23 +426,20 @@
 	
 	51_23: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN01E023.1.jpg
-			javaClass: false
+			//id: 1_23.1
 			parent: 1_23
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN01E023.1.jpg
 			collInfo: 1R23
 			rarity: R
-			setNum: "1"
-			cardNum: 23
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Nobody Tosses a Dwarf
 		culture: dwarven
 		twilight: 0
 		type: event
-		keyword: response
+		timeword: response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -461,7 +449,7 @@
 			effect: [
 				{
 					type: chooseActiveCards
-					filter: choose(side(shadow))
+					select: choose(side(shadow))
 					memorize: chosenCard
 					text: Choose a Shadow card to discard
 				}
@@ -477,7 +465,7 @@
 					}
 					effect: {
 						type: discard
-						filter: memory(chosenCard)
+						select: memory(chosenCard)
 					}
 				}
 			]

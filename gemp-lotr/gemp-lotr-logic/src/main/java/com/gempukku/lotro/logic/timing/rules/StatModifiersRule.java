@@ -31,7 +31,7 @@ public class StatModifiersRule {
                             }
                         }, true));
         modifiersLogic.addAlwaysOnModifier(
-                new VitalityModifier(null, Filters.and(Filters.inPlay, Filters.character, Filters.hasAttached(Filters.any)),
+                new VitalityModifier(null, Filters.and(Filters.inPlay, Filters.character, Filters.hasAttached(Filters.any)), null,
                         new Evaluator() {
                             @Override
                             public int evaluateExpression(LotroGame game, PhysicalCard cardAffected) {

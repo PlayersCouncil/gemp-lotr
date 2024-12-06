@@ -58,7 +58,7 @@ public class Card_V1_040_Tests
 		assertEquals(Culture.WRAITH, rit.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, rit.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, rit.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(rit, Keyword.TWILIGHT)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(rit, Keyword.TWILIGHT)); // test for keywords as needed
 		assertEquals(4, rit.getBlueprint().getTwilightCost());
 		assertEquals(9, rit.getBlueprint().getStrength());
 		assertEquals(3, rit.getBlueprint().getVitality());
@@ -101,18 +101,18 @@ public class Card_V1_040_Tests
 
 		scn.StartGame();
 
-		assertFalse(scn.HasKeyword(rit, Keyword.FIERCE));
+		assertFalse(scn.hasKeyword(rit, Keyword.FIERCE));
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 		scn.FreepsChooseNo();
 
-		assertTrue(scn.HasKeyword(rit, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(rit, Keyword.FIERCE));
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		assertTrue(scn.HasKeyword(rit, Keyword.FIERCE));
+		assertTrue(scn.hasKeyword(rit, Keyword.FIERCE));
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class Card_V1_040_Tests
 
 		scn.StartGame();
 
-		assertFalse(scn.HasKeyword(rit, Keyword.FIERCE));
+		assertFalse(scn.hasKeyword(rit, Keyword.FIERCE));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -135,6 +135,6 @@ public class Card_V1_040_Tests
 		assertTrue(scn.FreepsDecisionAvailable("prevent"));
 		scn.FreepsChooseYes();
 
-		assertFalse(scn.HasKeyword(rit, Keyword.FIERCE));
+		assertFalse(scn.hasKeyword(rit, Keyword.FIERCE));
 	}
 }

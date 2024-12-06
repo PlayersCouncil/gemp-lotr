@@ -7,18 +7,18 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.results.AddCultureTokenResult;
+import com.gempukku.lotro.logic.timing.results.RemoveCultureTokenResult;
 
 public class RemoveTokenEffect extends AbstractEffect {
+    private final String _performingPlayer;
     private final PhysicalCard _source;
     private final PhysicalCard _target;
     private final Token _token;
     private final int _count;
 
-    public RemoveTokenEffect(PhysicalCard source, PhysicalCard target, Token token) {
-        this(source, target, token, 1);
-    }
-
-    public RemoveTokenEffect(PhysicalCard source, PhysicalCard target, Token token, int count) {
+    public RemoveTokenEffect(String performingPlayer, PhysicalCard source, PhysicalCard target, Token token, int count) {
+        _performingPlayer = performingPlayer;
         _source = source;
         _target = target;
         _token = token;
@@ -50,6 +50,9 @@ public class RemoveTokenEffect extends AbstractEffect {
                 game.getGameState().removeTokens(_target, _token, removeTokens);
                 game.getGameState().sendMessage(GameUtils.getCardLink(_source) + " removed " + removeTokens + " " + _token + " token" + ((removeTokens > 1) ? "s" : "") + " from " + GameUtils.getCardLink(_target));
             }
+
+            for (int i = 0; i < _count; i++)
+                game.getActionsEnvironment().emitEffectResult(new RemoveCultureTokenResult(_performingPlayer, _source, _target));
 
             return new FullEffectResult(removeTokens == _count);
         } else {

@@ -7,7 +7,7 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.Preventable;
-import com.gempukku.lotro.logic.timing.results.TakeControlOfSiteResult;
+import com.gempukku.lotro.logic.timing.results.SiteControlledResult;
 
 public class TakeControlOfASiteEffect extends AbstractEffect implements Preventable {
     private final PhysicalCard _source;
@@ -69,7 +69,7 @@ public class TakeControlOfASiteEffect extends AbstractEffect implements Preventa
         if (site != null && !_prevented) {
             game.getGameState().takeControlOfCard(_playerId, game, site, Zone.SUPPORT);
             game.getGameState().sendMessage(_playerId + " took control of " + GameUtils.getCardLink(site));
-            game.getActionsEnvironment().emitEffectResult(new TakeControlOfSiteResult(_playerId));
+            game.getActionsEnvironment().emitEffectResult(new SiteControlledResult(_playerId));
             return new FullEffectResult(true);
         }
         return new FullEffectResult(false);

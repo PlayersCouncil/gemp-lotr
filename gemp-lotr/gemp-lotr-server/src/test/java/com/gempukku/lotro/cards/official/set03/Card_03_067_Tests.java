@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set03;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -32,42 +31,44 @@ public class Card_03_067_Tests
 	public void ThePalantirofOrthancStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 3
-		* Title: *The Palantir of Orthanc
-		* Side: Free Peoples
-		* Culture: Isengard
-		* Twilight Cost: 0
-		* Type: artifact
-		* Subtype: Palantir
-		* Game Text: To play, spot an [isengard] minion. Plays to your support area.
-		* 	<b>Shadow:</b> Spot an [isengard] minions and remove (1) to reveal a card at random from the Free Peoples player's hand. Place that card on top of that player's draw deck.
-		*/
+		 * Set: 3
+		 * Name: The Palantír of Orthanc
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 0
+		 * Type: Artifact
+		 * Subtype: Palantir
+		 * Game Text: To play, spot an [isengard] minion. Plays to your support area.
+		 * 	<b>Shadow:</b> Spot an [isengard] minions and remove (1) to reveal a card at random from the Free Peoples player's hand. Place that card on top of that player's draw deck.
+		 */
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl palantir = scn.GetFreepsCard("palantir");
+		var card = scn.GetFreepsCard("palantir");
 
-		assertTrue(palantir.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, palantir.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, palantir.getBlueprint().getCulture());
-		assertEquals(CardType.ARTIFACT, palantir.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(palantir, Keyword.SUPPORT_AREA));
+		assertEquals("The Palantír of Orthanc", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
 		//Uncomment this once this has been converted to JSON; java cards don't support support area items with classes
-		//assertTrue(palantir.getBlueprint().getPossessionClasses().contains(PossessionClass.PALANTIR));
-		assertEquals(0, palantir.getBlueprint().getTwilightCost());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PALANTIR));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
 	public void PalantirRequires1IsengardMinionToPlayAnd1ToActivate() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		scn.FreepsMoveCardToHand("palantir", "uruk1", "uruk2");
 
-		PhysicalCardImpl palantir = scn.GetShadowCard("palantir");
-		PhysicalCardImpl uruk1 = scn.GetShadowCard("uruk1");
-		PhysicalCardImpl uruk2 = scn.GetShadowCard("uruk2");
+		var palantir = scn.GetShadowCard("palantir");
+		var uruk1 = scn.GetShadowCard("uruk1");
+		var uruk2 = scn.GetShadowCard("uruk2");
 		scn.ShadowMoveCardToHand(palantir, uruk1, uruk2);
 
 		scn.StartGame();
@@ -88,13 +89,13 @@ public class Card_03_067_Tests
 	@Test
 	public void PalantirRemoves2ToRevealCardFromFreepsHandAndPlacesOnDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		scn.FreepsMoveCardToHand("palantir", "uruk1", "uruk2");
 
-		PhysicalCardImpl palantir = scn.GetShadowCard("palantir");
-		PhysicalCardImpl uruk1 = scn.GetShadowCard("uruk1");
-		PhysicalCardImpl uruk2 = scn.GetShadowCard("uruk2");
+		var palantir = scn.GetShadowCard("palantir");
+		var uruk1 = scn.GetShadowCard("uruk1");
+		var uruk2 = scn.GetShadowCard("uruk2");
 		scn.ShadowMoveCharToTable(uruk1, uruk2);
 		scn.ShadowMoveCardToSupportArea(palantir);
 

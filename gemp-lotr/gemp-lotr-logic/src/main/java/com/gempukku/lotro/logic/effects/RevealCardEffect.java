@@ -5,7 +5,6 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.PlayOrder;
 import com.gempukku.lotro.logic.decisions.ArbitraryCardsSelectionDecision;
-import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.timing.AbstractSuccessfulEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 
@@ -15,10 +14,6 @@ import java.util.Collections;
 public class RevealCardEffect extends AbstractSuccessfulEffect {
     private final PhysicalCard _source;
     private final Collection<? extends PhysicalCard> _cards;
-
-    public RevealCardEffect(PhysicalCard source, PhysicalCard card) {
-        this(source, Collections.singleton(card));
-    }
 
     public RevealCardEffect(PhysicalCard source, Collection<? extends PhysicalCard> cards) {
         _source = source;

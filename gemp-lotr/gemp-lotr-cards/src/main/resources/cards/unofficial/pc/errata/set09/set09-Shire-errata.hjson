@@ -1,17 +1,14 @@
 {
 	59_49: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN09E049.1_card.jpg
-			javaClass: false
+			//id: 9_49.1
 			parent: 9_49
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN09E049.1_card.jpg
 			collInfo: 9R+49
 			rarity: R+
-			setNum: "9"
-			cardNum: 49
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Bilbo
 		subtitle: Bearer of Things Burgled
@@ -24,13 +21,14 @@
 		strength: 3
 		vitality: 4
 		resistance: 9
+		canStartWithRing: true
 		keyword: [
-			can start with ring
 			ring-bound
 		]
 		effects: [
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: moves
 				}
@@ -66,8 +64,8 @@
 					type: addBurdens
 				}
 				effect: {
-					type: play
-					filter: choose(culture(shire),tale)
+					type: PlayCardFromHand
+					select: choose(culture(shire),tale)
 				}
 			}
 		]

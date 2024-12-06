@@ -1,122 +1,122 @@
 {
-	100_2: {
-		cardInfo: {
-			imagePath: sets/LOTR-ENV0S002.0.jpg
-			javaClass: false
-			version: 0
-			collInfo: V0 2
-			rarity: X
-			setNum: V0
-			cardNum: 2
-			style: Standard
-		}
-		title: Path of the Fellowship
-		unique: false
-		type: Map
-		twilight: 0
-		effects: [
-			{
-				type: DeckBuildingRestriction
-				pile: sites
-				#We do it this way instead of checking for fellowship
-				# so that the error message shows all sites that don't 
-				# match, instead of listing all the ones that do and
-				# making the user figure out which one isn't listed.
-				filter: or(siteblock(towers),siteblock(king),siteblock(shadows))
-				max: 0
-				text: Adventure Deck must only contain sites from the Fellowship block path.
-			}
-		]
-		gametext: Before the game begins, play this to your support area. Your adventure deck must only contain cards from the Fellowship site path.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
+	# 100_2: {
+	# 	cardInfo: {
+	# 		imagePath: sets/LOTR-ENV0S002.0.jpg
+	# 		javaClass: false
+	# 		revision: 0
+	# 		collInfo: V0 2
+	# 		rarity: X
+	# 		setNum: V0
+	# 		cardNum: 2
+	# 		style: Standard
+	# 	}
+	# 	title: Path of the Fellowship
+	# 	unique: false
+	# 	type: Map
+	# 	twilight: 0
+	# 	effects: [
+	# 		{
+	# 			type: DeckBuildingRestriction
+	# 			pile: sites
+	# 			#We do it this way instead of checking for fellowship
+	# 			# so that the error message shows all sites that don't 
+	# 			# match, instead of listing all the ones that do and
+	# 			# making the user figure out which one isn't listed.
+	# 			filter: or(siteblock(towers),siteblock(king),siteblock(shadows))
+	# 			max: 0
+	# 			text: Adventure Deck must only contain sites from the Fellowship block path.
+	# 		}
+	# 	]
+	# 	gametext: Before the game begins, play this to your support area. Your adventure deck must only contain cards from the Fellowship site path.
+	# 	lore: ""
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
 	
-	100_3: {
-		cardInfo: {
-			imagePath: sets/LOTR-ENV0S003.0.jpg
-			javaClass: false
-			version: 0
-			collInfo: V0 3
-			rarity: X
-			setNum: V0
-			cardNum: 3
-			style: Standard
-		}
-		title: Road to the Towers
-		unique: false
-		type: Map
-		twilight: 0
-		effects: [
-			{
-				type: DeckBuildingRestriction
-				pile: sites
-				#We do it this way instead of checking for fellowship
-				# so that the error message shows all sites that don't 
-				# match, instead of listing all the ones that do and
-				# making the user figure out which one isn't listed.
-				filter: or(siteblock(fellowship),siteblock(king),siteblock(shadows))
-				max: 0
-				text: Adventure deck must only contain sites from the Towers block site path.
-			}
-		]
-		gametext: Before the game begins, play this to your support area. Your adventure deck must only contain cards from the Towers site path.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
+	# 100_3: {
+	# 	cardInfo: {
+	# 		imagePath: sets/LOTR-ENV0S003.0.jpg
+	# 		javaClass: false
+	# 		revision: 0
+	# 		collInfo: V0 3
+	# 		rarity: X
+	# 		setNum: V0
+	# 		cardNum: 3
+	# 		style: Standard
+	# 	}
+	# 	title: Road to the Towers
+	# 	unique: false
+	# 	type: Map
+	# 	twilight: 0
+	# 	effects: [
+	# 		{
+	# 			type: DeckBuildingRestriction
+	# 			pile: sites
+	# 			#We do it this way instead of checking for fellowship
+	# 			# so that the error message shows all sites that don't 
+	# 			# match, instead of listing all the ones that do and
+	# 			# making the user figure out which one isn't listed.
+	# 			filter: or(siteblock(fellowship),siteblock(king),siteblock(shadows))
+	# 			max: 0
+	# 			text: Adventure deck must only contain sites from the Towers block site path.
+	# 		}
+	# 	]
+	# 	gametext: Before the game begins, play this to your support area. Your adventure deck must only contain cards from the Towers site path.
+	# 	lore: ""
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
 	
-	100_4: {
-		cardInfo: {
-			imagePath: sets/LOTR-ENV0S004.0.jpg
-			javaClass: false
-			//parentId: 1_319
-			//One of: Variant, Errata, Reprint
-			//parentType: Variant
-			//parentPath: alts/promo
-			version: 0
-			collInfo: V0 4
-			rarity: X
-			setNum: V0
-			cardNum: 4
-			style: Standard
-		}
-		title: Journey of the King
-		unique: false
-		type: Map
-		twilight: 0
-		effects: [
-			{
-				type: DeckBuildingRestriction
-				pile: sites
-				#We do it this way instead of checking for fellowship
-				# so that the error message shows all sites that don't 
-				# match, instead of listing all the ones that do and
-				# making the user figure out which one isn't listed.
-				filter: or(siteblock(fellowship),siteblock(towers),siteblock(shadows))
-				max: 0
-				text: Adventure Deck must only contain sites from the King block site path.
-			}
-		]
-		gametext: Before the game begins, play this to your support area. Your adventure deck must only contain cards from the King site path.
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
+	# 100_4: {
+	# 	cardInfo: {
+	# 		imagePath: sets/LOTR-ENV0S004.0.jpg
+	# 		javaClass: false
+	# 		//parent//id: 1_319
+	# 		//One of: Variant, Errata, Reprint
+	# 		//parentType: Variant
+	# 		//parentPath: alts/promo
+	# 		revision: 0
+	# 		collInfo: V0 4
+	# 		rarity: X
+	# 		setNum: V0
+	# 		cardNum: 4
+	# 		style: Standard
+	# 	}
+	# 	title: Journey of the King
+	# 	unique: false
+	# 	type: Map
+	# 	twilight: 0
+	# 	effects: [
+	# 		{
+	# 			type: DeckBuildingRestriction
+	# 			pile: sites
+	# 			#We do it this way instead of checking for fellowship
+	# 			# so that the error message shows all sites that don't 
+	# 			# match, instead of listing all the ones that do and
+	# 			# making the user figure out which one isn't listed.
+	# 			filter: or(siteblock(fellowship),siteblock(towers),siteblock(shadows))
+	# 			max: 0
+	# 			text: Adventure Deck must only contain sites from the King block site path.
+	# 		}
+	# 	]
+	# 	gametext: Before the game begins, play this to your support area. Your adventure deck must only contain cards from the King site path.
+	# 	lore: ""
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
 }

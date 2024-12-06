@@ -1,0 +1,2031 @@
+{
+
+	1_239: {
+		cardInfo: {
+			image: decipher/LOTR01239.jpg
+			collInfo: 1U239
+			rarity: U
+		}
+		title: All Thought Bent on It
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		keywords: Search
+		effects: {
+			type: event
+			requires: [
+				{
+					type: canSpot
+					filter: culture(sauron),orc
+				}
+				{
+					type: canSpot
+					count: 5
+					filter: companion
+				}
+			]
+			effect: {
+				type: repeat
+				times: {
+					type: forEachYouCanSpot
+					filter: companion
+					over: 4
+				}
+				effect: {
+					type: exert
+					player: fp
+					select: choose(companion)
+				}
+			}
+		}
+		gametext: <b>Search</b>.<br><b>Maneuver:</b> Spot a [sauron] Orc and 5 companions to make the Free Peoples player exert a companion for each companion over 4.
+		lore: "'...for the Ring yearns, above all else, to return to the hand of its Master: they are one....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_240: {
+		cardInfo: {
+			image: decipher/LOTR01240.jpg
+			collInfo: 1R240
+			rarity: R
+		}
+		title: Band of the Eye
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 12
+		vitality: 3
+		site: 6
+		effects: {
+			type: Response
+			trigger: {
+				type: winsSkirmish
+				filter: self
+			}
+			cost: {
+				type: removeTwilight
+				amount: 2
+			}
+			effect: {
+				type: discardCardAtRandomFromHand
+				forced: true
+				hand: fp
+			}
+		}
+		gametext: <b>Response:</b> If this minion wins a skirmish, remove (2) to make the Free Peoples player discard a card at random from hand.
+		lore: "Far more Orcs has Sauron bred in the pits under Barad-dûr than Saruman could ever imagine."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_241: {
+		cardInfo: {
+			image: decipher/LOTR01241.jpg
+			collInfo: 1U241
+			rarity: U
+		}
+		title: Curse From Mordor
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(sauron),orc
+			}
+			effect: {
+				type: discard
+				select: choose(culture(elven),condition)
+			}
+		}
+		gametext: <b>Shadow:</b> Spot a [sauron] Orc to discard an [elven] condition.
+		lore: "The Dark Lord harbors an ancient hatred for descendants of Gil-galad and those that marched with his gleaming host."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_242: {
+		cardInfo: {
+			image: decipher/LOTR01242.jpg
+			collInfo: 1U242
+			rarity: U
+		}
+		title: The Dark Lord's Summons
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						count: 1
+						memorize: revealedCards
+					}
+					{
+						type: putCardsFromDeckIntoHand
+						select: all(memory(revealedCards),culture(sauron))
+						reveal: true
+						shuffle: false
+						showAll: false
+					}
+					{
+						type: discardCardsFromDrawDeck
+						select: all(memory(revealedCards),not(culture(sauron)))
+						showAll: false
+						shuffle: false
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: revealedCards
+							filter: not(culture(sauron))
+						}
+						true: {
+							type: discardFromHand
+							forced: false
+							count: 1
+						}
+					}
+				]
+			}
+		]
+		gametext: <b>Search</b>. To play, spot a [sauron] Orc. Plays to your support area.<br><b>Shadow:</b> Remove (3) to reveal the top card of your draw deck. If it is a [sauron] card, take it into hand. Otherwise, discard it and one other card from hand.
+		lore: "Orcs obey the Dark Lord unquestioningly."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_243: {
+		cardInfo: {
+			image: decipher/LOTR01243.jpg
+			collInfo: 1R243
+			rarity: R
+		}
+		title: Despair
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: [
+				{
+					type: isGreaterThan
+					firstNumber: {
+						type: sum
+						source: [
+							{
+								type: forEachInDeadPile
+								filter: companion
+							}
+							{
+								type: forEachBurden
+							}
+						]
+					}
+					secondNumber: 11
+				}
+				{
+					type: canSpot
+					filter: culture(sauron),orc
+				}
+			]
+			effect: {
+				type: corruptRingBearer
+			}
+		}
+		gametext: <b>Maneuver:</b> If the total number of burdens and companions in the dead pile is at least 12, spot a [sauron] Orc to corrupt the Ring-bearer.
+		lore: "'The Nameless Enemy has arisen again. Smoke rises once more from Orodruin that we call Mount Doom.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_244: {
+		cardInfo: {
+			image: decipher/LOTR01244.jpg
+			collInfo: 1R244
+			rarity: R
+		}
+		title: Desperate Defense of the Ring
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		target: companion
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(sauron),orc)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: assignedToSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: choice
+					player: fp
+					texts: [
+						Discard 3 cards from hand
+						Add a burden
+					]
+					effects: [
+						{
+							type: discardFromHand
+							count: 3
+							forced: false
+						}
+						{
+							type: addBurdens
+						}
+					]
+				}
+			}
+		]
+		gametext: To play, exert a [sauron] Orc. Plays on a companion.<br>Each time bearer is assigned to a skirmish, the Free Peoples player chooses to either discard 3 cards from hand or add a burden.
+		lore: "The Company must defend the Ring at all costs."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_245: {
+		cardInfo: {
+			image: decipher/LOTR01245.jpg
+			collInfo: 1R245
+			rarity: R
+		}
+		title: Desperate Measures
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(sauron),orc
+			}
+			cost: {
+				type: removeBurdens
+			}
+			effect: {
+				type: discardTopCardsFromDeck
+				deck: fp
+				forced: true
+				count: 5
+			}
+		}
+		gametext: <b>Maneuver:</b> Spot a [sauron] Orc and remove a burden to make the Free Peoples player discard top 5 cards from his draw deck.
+		lore: "'Go back, Sam. You can't swim. I'm going to Mordor alone.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_246: {
+		cardInfo: {
+			image: decipher/LOTR01246.jpg
+			collInfo: 1R246
+			rarity: R
+		}
+		title: Enduring Evil
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: chooseHowManyBurdensToSpot
+				memorize: spottedBurdens
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(character,inSkirmishAgainst(culture(sauron),orc))
+				amount: {
+					type: fromMemory
+					memory: spottedBurdens
+					multiplier: -1
+				}
+			}
+		}
+		gametext: <b>Skirmish:</b> Spot X burdens to make a character skirmishing a [sauron] Orc strength -X.
+		lore: "'The Dark Tower was broken, but its foundations were not removed; for they were made with the power of the Ring, and while it remains they will endure.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_247: {
+		cardInfo: {
+			image: decipher/LOTR01247.jpg
+			collInfo: 1R247
+			rarity: R
+		}
+		title: Enheartened Foe
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: culture(sauron),orc
+				memorize: winner
+			}
+			effect: {
+				type: addKeyword
+				select: memory(winner)
+				keyword: fierce
+				until: start(regroup)
+			}
+		}
+		gametext: <b>Response:</b> If a [sauron] Orc wins a skirmish, make that Orc <b>fierce</b> until the regroup phase.
+		lore: "Orcs feed on their own success. The greater their exploits in battle, the greater their confidence grows."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_248: {
+		cardInfo: {
+			image: decipher/LOTR01248.jpg
+			collInfo: 1C248
+			rarity: C
+		}
+		title: Forces of Mordor
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			cost: {
+				type: chooseHowManyToSpot
+				filter: culture(sauron),minion
+				memorize: spottedCount
+			}
+			effect: {
+				type: addTwilight
+				amount: {
+					type: fromMemory
+					memory: spottedCount
+				}
+			}
+		}
+		gametext: <b>Shadow:</b> Spot X [sauron] minions to add (X).
+		lore: "'...the Dark Lord is not without allies. The Easterlings and Haradrim now pay tribute to Mordor.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_249: {
+		cardInfo: {
+			image: decipher/LOTR01249.jpg
+			collInfo: 1U249
+			rarity: U
+		}
+		title: Gleaming Spires Will Crumble
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: culture(sauron),orc,inSkirmishAgainst(culture(gondor),character)
+					amount: 2
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: losesSkirmish
+					filter: your,culture(sauron),orc
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: Plays to your support area.<br>Each [sauron] Orc skirmishing a [gondor] character is strength +2.<br>Discard this condition if your [sauron] Orc loses a skirmish.
+		lore: "Gondor has long been a target for the wrath of Sauron the Great."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_250: {
+		cardInfo: {
+			image: decipher/LOTR01250.jpg
+			collInfo: 1R250
+			rarity: R
+		}
+		title: Hate
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(culture(sauron),orc)
+			}
+			effect: {
+				type: wound
+				select: choose(companion,not(ring bearer))
+			}
+		}
+		gametext: <b>Maneuver:</b> Exert a [sauron] Orc to wound a companion (except the Ring-bearer).
+		lore: "Orcs are filled with hatred not only for their foes, but for all that lives."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_251: {
+		cardInfo: {
+			image: decipher/LOTR01251.jpg
+			collInfo: 1U251
+			rarity: U
+		}
+		title: A Host Avails Little
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Event
+		timewords: Maneuver
+		keywords: Search
+		effects: {
+			type: event
+			requires: [
+				{
+					type: canSpot
+					filter: culture(sauron),orc
+				}
+				{
+					type: canSpot
+					count: 6
+					filter: companion
+				}
+			]
+			effect: {
+				type: repeat
+				times: {
+					type: forEachYouCanSpot
+					filter: companion
+					over: 5
+				}
+				effect: {
+					type: wound
+					select: choose(companion,not(ring bearer))
+				}
+			}
+		}
+		gametext: <b>Search</b>.<br><b>Maneuver:</b> Spot a [sauron] Orc and 6 companions to wound a companion (except the Ring-bearer). Do this once for each companion over 5.
+		lore: "'Had I a host of Elves in armour of the Elder Days, it would avail little....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_252: {
+		cardInfo: {
+			image: decipher/LOTR01252.jpg
+			collInfo: 1R252
+			rarity: R
+		}
+		title: The Irresistible Shadow
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(sauron),orc)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: [
+						{
+							type: canSpotBurdens
+							amount: 5
+						}
+						{
+							type: cardsInDeckCount
+							deck: fp
+							count: 0
+						}
+					]
+				}
+				effect: {
+					type: corruptRingBearer
+				}
+			}
+		]
+		gametext: To play, exert a [sauron] Orc. Plays to your support area.<br>If you can spot 5 burdens and the Free Peoples player has no cards in his or her draw deck, the Ring-bearer is corrupted.
+		lore: "Once more the desire to slip on the Ring came over Frodo; but this time it was stronger than before."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_253: {
+		cardInfo: {
+			image: decipher/LOTR01253.jpg
+			collInfo: 1R253
+			rarity: R
+		}
+		title: Journey Into Danger
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(sauron),orc)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: {
+						type: canSpot
+						count: 5
+						filter: companion
+					}
+					filter: companion
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Search</b>. To play, exert a [sauron] Orc. Plays to your support area.<br>While you can spot 5 companions, each companion's twilight cost is +2.
+		lore: "'I do not foretell, for all foretelling is now vain: on the one hand lies darkness, on the other only hope.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_254: {
+		cardInfo: {
+			image: decipher/LOTR01254.jpg
+			collInfo: 1R254
+			rarity: R
+		}
+		title: Mordor Enraged
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		target: culture(sauron),minion
+		effects: {
+			type: activated
+			phase: shadow
+			cost: {
+				type: exert
+				select: bearer
+			}
+			effect: {
+				type: addTwilight
+				amount: {
+					type: forEachYouCanSpot
+					filter: archer,companion
+				}
+			}
+		}
+		gametext: Plays on a [sauron] minion.<br><b>Shadow:</b> Exert bearer to add (1) for each archer companion.
+		lore: "The armies of Elendil and Gil-galad inflamed Sauron's anger and hatred."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_255: {
+		cardInfo: {
+			image: decipher/LOTR01255.jpg
+			collInfo: 1C255
+			rarity: C
+		}
+		title: Mordor's Strength
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(culture(sauron),orc)
+				memorize: exertedOrc
+			}
+			effect: {
+				type: wound
+				select: choose(character,inSkirmishAgainst(memory(exertedOrc)))
+			}
+		}
+		gametext: <b>Skirmish:</b> Exert a [sauron] Orc to wound a character he is skirmishing.
+		lore: "'It should have ended that day, but evil was allowed to endure.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_256: {
+		cardInfo: {
+			image: decipher/LOTR01256.jpg
+			collInfo: 1R256
+			rarity: R
+		}
+		title: Morgul Hunter
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 4
+		site: 6
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: self
+				amount: {
+					type: forEachYouCanSpot
+					filter: companion
+				}
+			}
+		}
+		gametext: For each companion you can spot, this minion is strength +1.
+		lore: "Sauron's hatred lives in the hearts of his minions."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_257: {
+		cardInfo: {
+			image: decipher/LOTR01257.jpg
+			collInfo: 1U257
+			rarity: U
+		}
+		title: Morgul Skirmisher
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: removeTwilight
+				amount: 3
+			}
+			effect: {
+				type: exert
+				select: choose(hobbit,not(ring bearer))
+			}
+		}
+		gametext: <b>Maneuver:</b> Remove (3) to exert a Hobbit (except the Ring-bearer).
+		lore: "The Orcs of Mordor, heartened by the promise of blood and plunder, are dangerous foes in battle."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_258: {
+		cardInfo: {
+			image: decipher/LOTR01258.jpg
+			collInfo: 1U258
+			rarity: U
+		}
+		title: Morgul Skulker
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 6
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: self
+			}
+			effect: {
+				type: shuffleCardsFromDiscardIntoDrawDeck
+				select: choose(culture(wraith))
+				count: 0-2
+			}
+		}
+		gametext: When you play this minion, you may shuffle up to 2 [wraith] cards from your discard pile into your draw deck.
+		lore: "Sly servants of the Ringwraiths of Morgul Vale, Morgul Orcs are alert to the desires of their masters."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_259: {
+		cardInfo: {
+			image: decipher/LOTR01259.jpg
+			collInfo: 1R259
+			rarity: R
+		}
+		title: Morgul Warden
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: self
+				amount: {
+					type: forEachYouCanSpot
+					filter: another,culture(sauron),orc
+				}
+			}
+		}
+		gametext: For each other [sauron] Orc you can spot, Morgul Warden is strength +1.
+		lore: "With blind devotion, the Orcs of Mordor follow orders issued from the Dark Tower."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_260: {
+		cardInfo: {
+			image: decipher/LOTR01260.jpg
+			collInfo: 1U260
+			rarity: U
+		}
+		title: The Number Must Be Few
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: ConstantlyCheck
+				requires: [
+					{
+						type: perTurnLimit
+						limit: 1
+					}
+					{
+						type: canSpot
+						count: 7
+						filter: companion
+					}
+				]
+			}
+			effect: [
+				{
+					type: incrementPerTurnLimit
+					limit: 1
+				}
+				{
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: -1
+					}
+					until: endOfTurn
+				}
+			]
+		}
+		gametext: <b>Search</b>. Plays to your support area.<br>While you can spot 7 companions, the move limit for this turn is -1 (to a minimum of 1).
+		lore: "'The number must be few, since your hope is in speed and secrecy.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_261: {
+		cardInfo: {
+			image: decipher/LOTR01261.jpg
+			collInfo: 1C261
+			rarity: C
+		}
+		title: Orc Ambusher
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Minion
+		race: Orc
+		strength: 5
+		vitality: 2
+		site: 6
+		keywords: Tracker
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyRoamingPenalty
+					filter: culture(sauron),minion,your
+					amount: -1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: played
+					filter: side(free people),timeword(regroup),event
+				}
+				requires: {
+					type: phase
+					phase: regroup
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: cancelEvent
+				}
+			}
+		]
+		gametext: <b>Tracker</b>.<br>The roaming penalty for each [sauron] minion you play is -1.<br><b>Response:</b> If a Free Peoples regroup event is played, exert this minion to cancel that event.
+		lore: "'Orcs will often pursue foes for many leagues....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_262: {
+		cardInfo: {
+			image: decipher/LOTR01262.jpg
+			collInfo: 1U262
+			rarity: U
+		}
+		title: Orc Assassin
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 2
+		site: 6
+		keywords: Tracker
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyRoamingPenalty
+					filter: culture(sauron),minion,your
+					amount: -1
+				}
+			}
+			{
+				type: activated
+				phase: assignment
+				requires: [
+					{
+						type: canSpot
+						filter: hobbit,companion
+						count: 2
+					}
+					{
+						type: cantspot
+						filter: AssignedToSkirmish(self)
+					}
+				]
+				effect: {
+					type: assignFpCharacterToSkirmish
+					player: fp
+					fpCharacter: choose(hobbit)
+					minion: self
+				}
+			}
+		]
+		gametext: <b>Tracker</b>.<br>The roaming penalty for each [sauron] minion you play is -1.<br><b>Assignment:</b> Spot 2 Hobbit companions to make the Free Peoples player assign a Hobbit to skirmish this minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_263: {
+		cardInfo: {
+			image: decipher/LOTR01263.jpg
+			collInfo: 1R263
+			rarity: R
+		}
+		title: Orc Banner
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: losesSkirmish
+				filter: or(companion,ally)
+				against: culture(sauron),orc
+			}
+			effect: {
+				type: modifyStrength
+				select: all(culture(sauron),orc)
+				amount: 1
+				until: start(regroup)
+			}
+		}
+		gametext: Plays to your support area.<br>Each time a companion or ally loses a skirmish involving a [sauron] Orc, each [sauron] Orc is strength +1 until the regroup phase.
+		lore: "Tribes of Orcs from throughout Mordor rally to the banner of the Dark Tower."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_264: {
+		cardInfo: {
+			image: decipher/LOTR01264.jpg
+			collInfo: 1R264
+			rarity: R
+		}
+		title: Orc Bowmen
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyArcheryTotal
+				side: shadow
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc
+				}
+				amount: 1
+			}
+		}
+		gametext: Plays to your support area.<br>While you can spot a [sauron] Orc, add 1 to the minion archery total.
+		lore: "Where volleys of Orcish arrows fly, the defenders of the West fall."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_265: {
+		cardInfo: {
+			image: decipher/LOTR01265.jpg
+			collInfo: 1R265
+			rarity: R
+		}
+		title: Orc Butchery
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			requires: {
+				type: canSpot
+				filter: culture(sauron),orc,inSkirmish
+			}
+			trigger: {
+				type: killed
+				filter: companion
+			}
+			effect: {
+				type: discardTopCardsFromDeck
+				deck: fp
+				forced: true
+				count: {
+					type: forEachInDeadPile
+					multiplier: 3
+				}
+			}
+		}
+		gametext: <b>Response:</b> If a companion is killed by a [sauron] Orc, the Free Peoples player must discard 3 cards from the top of his draw deck for each card in the dead pile.
+		lore: "For sport, Orcs hew cruelly at the bodies of those they slay."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_266: {
+		cardInfo: {
+			image: decipher/LOTR01266.jpg
+			collInfo: 1C266
+			rarity: C
+		}
+		title: Orc Chieftain
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 6
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: played
+				filter: your,weapon
+				on: self
+			}
+			requires: {
+				type: perTurnLimit
+				limit: 1
+			}
+			effect: [
+				{
+					type: incrementPerTurnLimit
+					limit: 1
+				}
+				{
+					type: addTwilight
+					amount: 2
+				}
+			]
+		}
+		gametext: When you play a weapon on this minion, add (2) (limit once per turn).
+		lore: "Orc chieftains are the most cruel of a heartless race. Both strength and malice are needed to lead such followers."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_267: {
+		cardInfo: {
+			image: decipher/LOTR01267.jpg
+			collInfo: 1U267
+			rarity: U
+		}
+		title: Orc Hunters
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 2
+		site: 6
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: wound
+				select: choose(character,inSkirmishAgainst(self))
+			}
+		}
+		gametext: <b>Skirmish:</b> Exert this minion to wound a character he is skirmishing.
+		lore: "Bred for battle, Sauron's soldiers live for the thrill of the fight – and the spoils of victory."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_268: {
+		cardInfo: {
+			image: decipher/LOTR01268.jpg
+			collInfo: 1C268
+			rarity: C
+		}
+		title: Orc Inquisitor
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 9
+		vitality: 3
+		site: 6
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: self
+			}
+			effect: {
+				type: discardCardAtRandomFromHand
+				hand: fp
+				forced: true
+			}
+		}
+		gametext: When you play this minion, you may make the Free Peoples player discard a card at random from hand.
+		lore: "Cruel questioners of Mordor tore the secret from poor Gollum, that Sauron's most prized possession once again was found."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_269: {
+		cardInfo: {
+			image: decipher/LOTR01269.jpg
+			collInfo: 1C269
+			rarity: C
+		}
+		title: Orc Scimitar
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(sauron),orc
+		effects: {
+			type: activated
+			phase: skirmish
+			requires: {
+				type: perPhaseLimit
+				limit: 3
+			}
+			cost: {
+				type: removeTwilight
+			}
+			effect: [
+				{
+					type: incrementPerPhaseLimit
+					limit: 3
+				}
+				{
+					type: modifyStrength
+					select: bearer
+					amount: 1
+				}
+			]
+		}
+		gametext: Bearer must be a [sauron] Orc.<br><b>Skirmish:</b> Remove (1) to make bearer strength +1 (limit +3).
+		lore: "An Orc's weapon reflects his passion for war and cruelty."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_270: {
+		cardInfo: {
+			image: decipher/LOTR01270.jpg
+			collInfo: 1U270
+			rarity: U
+		}
+		title: Orc Scouting Band
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Orc
+		strength: 8
+		vitality: 2
+		site: 6
+		keywords: Tracker
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyRoamingPenalty
+					filter: culture(sauron),minion,your
+					amount: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: wound
+					select: choose(character,inSkirmishAgainst(self))
+				}
+			}
+		]
+		gametext: <b>Tracker</b>.<br>The roaming penalty for each [sauron] minion you play is -1.<br><b>Skirmish:</b> Exert this minion to wound a character it is skirmishing.
+		lore: "The cunning ambushes of the Orc armies rely upon scouts first finding the enemy."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_271: {
+		cardInfo: {
+			image: decipher/LOTR01271.jpg
+			collInfo: 1C271
+			rarity: C
+		}
+		title: Orc Soldier
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 7
+		vitality: 2
+		site: 6
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: wound
+				select: choose(character,inSkirmishAgainst(self))
+			}
+		}
+		gametext: <b>Skirmish:</b> Exert this minion to wound a character he is skirmishing.
+		lore: "Bearing cruel weapons, Orcs go forth from Mordor to serve the Eye."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_272: {
+		cardInfo: {
+			image: decipher/LOTR01272.jpg
+			collInfo: 1R272
+			rarity: R
+		}
+		title: Orc War Band
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 10
+		vitality: 2
+		site: 6
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: exert
+				select: self
+			}
+			effect: {
+				type: wound
+				select: choose(character,inSkirmishAgainst(self))
+			}
+		}
+		gametext: <b>Skirmish:</b> Exert this minion to wound a character it is skirmishing.
+		lore: "Sauron has countless armies of Orcs at his disposal."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_273: {
+		cardInfo: {
+			image: decipher/LOTR01273.jpg
+			collInfo: 1C273
+			rarity: C
+		}
+		title: The Ring's Oppression
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			requires: {
+				type: canSpot
+				filter: culture(sauron),orc,inSkirmish
+			}
+			trigger: {
+				type: killed
+				filter: companion
+			}
+			effect: {
+				type: addBurdens
+				amount: {
+					type: Conditional
+					requires: {
+						type: ringIsOn
+					}
+					true: 3
+					false: 1
+				}
+			}
+		}
+		gametext: <b>Response:</b> If a [sauron] Orc kills a companion, add 1 burden (or 3 if the Ring-bearer wears The One Ring).
+		lore: "The Ring that hung upon its chain about his neck grew heavy, heavier than a great stone, and his head was dragged downwards."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_274: {
+		cardInfo: {
+			image: decipher/LOTR01274.jpg
+			collInfo: 1U274
+			rarity: U
+		}
+		title: Sauron's Defenses
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(sauron),orc)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: [
+						{
+							type: perTurnLimit
+							limit: 1
+						}
+						{
+							type: isGreaterThan
+							firstNumber: {
+								type: forEachInDeadPile
+								filter: companion
+							}
+							secondNumber: 2
+						}
+					]
+				}
+				effect: [
+					{
+						type: incrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: modifyMoveLimit
+							amount: -1
+						}
+						until: endOfTurn
+					}
+				]
+			}
+		]
+		gametext: To play, exert a [sauron] Orc. Plays to your support area.<br>While there are 3 or more companions in the dead pile, the move limit for this turn is -1 (to a minimum of 1).
+		lore: "Sauron's minions are everywhere. Few roads escape the gaze of the Lidless Eye."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_275: {
+		cardInfo: {
+			image: decipher/LOTR01275.jpg
+			collInfo: 1U275
+			rarity: U
+		}
+		title: Seeking It Always
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		effects: {
+			type: Response
+			trigger: {
+				type: played
+				filter: stealth,event
+			}
+			cost: {
+				type: exert
+				select: choose(culture(sauron),tracker)
+			}
+			effect: {
+				type: cancelEvent
+			}
+		}
+		gametext: <b>Search</b>. Plays to your support area.<br><b>Response:</b> If a stealth event is played, exert a [sauron] tracker to cancel that event.
+		lore: "'...the only measure that he knows is desire, desire for power; and so he judges all hearts.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_276: {
+		cardInfo: {
+			image: decipher/LOTR01276.jpg
+			collInfo: 1R276
+			rarity: R
+		}
+		title: Seeking Its Master
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: shadow
+			cost: [
+				{
+					type: exert
+					select: choose(culture(sauron),orc)
+				}
+				{
+					type: removeTwilight
+					amount: 2
+				}
+			]
+			effect: {
+				type: drawCards
+			}
+		}
+		gametext: Plays to your support area.<br><b>Shadow:</b> Exert a [sauron] Orc and remove (2) to draw a card.
+		lore: "'This at least is plain: the evil of the Ring is already at work even in the Company, and the Ring must leave them before it does more harm.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_277: {
+		cardInfo: {
+			image: decipher/LOTR01277.jpg
+			collInfo: 1C277
+			rarity: C
+		}
+		title: Shadow's Reach
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(culture(sauron),orc)
+			}
+			effect: {
+				type: discard
+				select: choose(side(free people),condition)
+			}
+		}
+		gametext: <b>Shadow:</b> Exert a [sauron] Orc to discard a Free Peoples condition.
+		lore: "'Is it secret? Is it safe?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_278: {
+		cardInfo: {
+			image: decipher/LOTR01278.jpg
+			collInfo: 1C278
+			rarity: C
+		}
+		title: Strength Born of Fear
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: removeTwilight
+				amount: 3
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(culture(sauron),orc)
+				amount: 1
+			}
+		}
+		gametext: Plays to your support area.<br><b>Skirmish:</b> Remove (3) to make a [sauron] Orc strength +1.
+		lore: "Fear of death in Barad-dûr's dungeons spurs Mordor's servants to even greater savagery."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_279: {
+		cardInfo: {
+			image: decipher/LOTR01279.jpg
+			collInfo: 1R279
+			rarity: R
+		}
+		title: Thin and Stretched
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		target: ring bearer
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(sauron),orc)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: endOfTurn
+				}
+				requires: [
+					{
+						type: not
+						requires: {
+							type: wasAssignedToSkirmish
+							filter: bearer
+						}
+					}
+					{
+						type: wasAssignedToSkirmish
+						filter: companion,not(bearer)
+					}
+				]
+				effect: {
+					type: addBurdens
+					amount: 1
+				}
+			}
+		]
+		gametext: To play, exert a [sauron] Orc. Plays on the Ring-bearer.<br>Add a burden at the end of each turn during which bearer was not assigned to a skirmish (and another companion was).
+		lore: "'I am old, Gandalf. I don't look it....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_280: {
+		cardInfo: {
+			image: decipher/LOTR01280.jpg
+			collInfo: 1U280
+			rarity: U
+		}
+		title: Tower Lieutenant
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Minion
+		race: Orc
+		strength: 10
+		vitality: 3
+		site: 6
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: winsSkirmish
+				filter: self
+			}
+			effect: {
+				type: discardCardAtRandomFromHand
+				hand: fp
+				forced: true
+				count: 2
+			}
+		}
+		gametext: Each time this minion wins a skirmish, the Free Peoples player discards 2 cards at random from hand.
+		lore: "Sauron shows favour to those in his dungeons with the ambition to squeeze the information he needs from those caught spying out his borders."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_281: {
+		cardInfo: {
+			image: decipher/LOTR01281.jpg
+			collInfo: 1C281
+			rarity: C
+		}
+		title: Under the Watching Eye
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		keywords: [
+			Search
+			Support Area
+		]
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(sauron),tracker)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: exert
+					player: fp
+					select: choose(companion)
+				}
+			}
+		]
+		gametext: <b>Search</b>. To play, exert a [sauron] tracker. Plays to your support area.<br>Each time the fellowship moves, the Free Peoples player must exert a companion.
+		lore: "What the Lidless Eye of Sauron does not see, his countless minions observe and report."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_282: {
+		cardInfo: {
+			image: decipher/LOTR01282.jpg
+			collInfo: 1R282
+			rarity: R
+		}
+		title: The Weight of a Legacy
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 0
+		type: Condition
+		strength: -1
+		target: name(Aragorn)
+		effects: {
+			type: extraCost
+			cost: {
+				type: exert
+				select: choose(culture(sauron),orc)
+			}
+		}
+		gametext: To play, exert a [sauron] Orc. Plays on Aragorn.
+		lore: "'It is because of Men, the Ring survives.... I was there the day the strength of Men failed.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_283: {
+		cardInfo: {
+			image: decipher/LOTR01283.jpg
+			collInfo: 1C283
+			rarity: C
+		}
+		title: You Bring Great Evil
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		target: companion,not(elf)
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantHeal
+					filter: bearer
+					requires: {
+						type: location
+						filter: sanctuary
+					}
+				}
+			}
+		]
+		gametext: To play, spot a [sauron] Orc. Plays on a companion (except an Elf).<br>While at a sanctuary, bearer cannot heal.
+		lore: "'And what is this? We have not had dealings with the Dwarves since the Dark Days.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

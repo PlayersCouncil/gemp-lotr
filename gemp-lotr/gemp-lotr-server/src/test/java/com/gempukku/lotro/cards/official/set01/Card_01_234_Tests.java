@@ -41,44 +41,46 @@ public class Card_01_234_Tests
 	public void UlaireNerteaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: *Ulaire Nertea, Messenger of Dol Guldur
-		* Side: Free Peoples
-		* Culture: Ringwraith
-		* Twilight Cost: 4
-		* Type: minion
-		* Subtype: Nazgul
-		* Strength: 9
-		* Vitality: 2
-		* Site Number: 3
-		* Game Text: When you play Úlairë Nertëa, for each companion over 4, you may play 1 minion from your discard pile.
-		*/
+		 * Set: 1
+		 * Name: Úlairë Nertëa, Messenger of Dol Guldur
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Ringwraith
+		 * Twilight Cost: 4
+		 * Type: Minion
+		 * Subtype: Nazgûl
+		 * Strength: 9
+		 * Vitality: 2
+		 * Site Number: 3
+		 * Game Text: When you play Úlairë Nertëa, for each companion over 4, you may play 1 minion from your discard pile.
+		 */
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl nertea = scn.GetFreepsCard("nertea");
+		var card = scn.GetFreepsCard("nertea");
 
-		assertTrue(nertea.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, nertea.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, nertea.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, nertea.getBlueprint().getCardType());
-		assertEquals(Race.NAZGUL, nertea.getBlueprint().getRace());
-		assertEquals(4, nertea.getBlueprint().getTwilightCost());
-		assertEquals(9, nertea.getBlueprint().getStrength());
-		assertEquals(2, nertea.getBlueprint().getVitality());
-		assertEquals(3, nertea.getBlueprint().getSiteNumber());
+		assertEquals("Úlairë Nertëa", card.getBlueprint().getTitle());
+		assertEquals("Messenger of Dol Guldur", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
+		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(9, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(3, card.getBlueprint().getSiteNumber());
 
 	}
 
 	@Test
 	public void NerteaDoesNotTriggerWith4Companions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4");
 
-		PhysicalCardImpl nertea = scn.GetShadowCard("nertea");
+		var nertea = scn.GetShadowCard("nertea");
 		scn.ShadowMoveCardToHand(nertea);
 
 		scn.StartGame();
@@ -92,13 +94,13 @@ public class Card_01_234_Tests
 	@Test
 	public void NerteaPlays1MinionIf5Companions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5");
 
-		PhysicalCardImpl twk = scn.GetShadowCard("twk");
-		PhysicalCardImpl attea = scn.GetShadowCard("attea");
-		PhysicalCardImpl nertea = scn.GetShadowCard("nertea");
+		var twk = scn.GetShadowCard("twk");
+		var attea = scn.GetShadowCard("attea");
+		var nertea = scn.GetShadowCard("nertea");
 		scn.ShadowMoveCardToDiscard("runner", "rit", "twk", "attea");
 		scn.ShadowMoveCardToDiscard(twk);
 		scn.ShadowMoveCardToHand(nertea);
@@ -124,14 +126,14 @@ public class Card_01_234_Tests
 	@Test
 	public void NerteaPlays2MinionsIf6Companions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5", "comp6");
 
-		PhysicalCardImpl twk = scn.GetShadowCard("twk");
-		PhysicalCardImpl attea = scn.GetShadowCard("attea");
-		PhysicalCardImpl nertea = scn.GetShadowCard("nertea");
-		PhysicalCardImpl runner = scn.GetShadowCard("runner");
+		var twk = scn.GetShadowCard("twk");
+		var attea = scn.GetShadowCard("attea");
+		var nertea = scn.GetShadowCard("nertea");
+		var runner = scn.GetShadowCard("runner");
 		scn.ShadowMoveCardToDiscard("rit", "twk", "attea");
 		scn.ShadowMoveCardToDiscard(twk, runner);
 		scn.ShadowMoveCardToHand(nertea);
@@ -163,14 +165,14 @@ public class Card_01_234_Tests
 	@Test
 	public void CancelingNerteaAfterFirstMinionDoesntAskAgain() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5", "comp6");
 
-		PhysicalCardImpl twk = scn.GetShadowCard("twk");
-		PhysicalCardImpl attea = scn.GetShadowCard("attea");
-		PhysicalCardImpl nertea = scn.GetShadowCard("nertea");
-		PhysicalCardImpl runner = scn.GetShadowCard("runner");
+		var twk = scn.GetShadowCard("twk");
+		var attea = scn.GetShadowCard("attea");
+		var nertea = scn.GetShadowCard("nertea");
+		var runner = scn.GetShadowCard("runner");
 		scn.ShadowMoveCardToDiscard("rit", "twk", "attea");
 		scn.ShadowMoveCardToDiscard(twk, runner);
 		scn.ShadowMoveCardToHand(nertea);
@@ -227,11 +229,11 @@ public class Card_01_234_Tests
 	@Test
 	public void NerteaDoesNotPromptIfNoMinionsInDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
 		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5", "comp6");
 
-		PhysicalCardImpl nertea = scn.GetShadowCard("nertea");
+		var nertea = scn.GetShadowCard("nertea");
 		scn.ShadowMoveCardToHand("rit", "twk", "attea", "runner");
 		scn.ShadowMoveCardToHand(nertea);
 

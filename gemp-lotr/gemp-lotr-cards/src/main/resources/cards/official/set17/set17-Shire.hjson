@@ -1,0 +1,322 @@
+{
+
+	17_106: {
+		cardInfo: {
+			image: decipher/LOTR17106.jpg
+			collInfo: 17U106
+			rarity: U
+		}
+		title: Halfling Leaf
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		keywords: [
+			Pipeweed
+			Support Area
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: hobbit
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: choose(pipeweed)
+				}
+				effect: {
+					type: cancelSkirmish
+					filter: unbound,hobbit
+				}
+			}
+		]
+		gametext: <b>Pipeweed</b>. To play, spot a Hobbit.<br><b>Skirmish:</b> Discard a pipeweed from play to cancel a skirmish involving an unbound Hobbit.
+		lore: "'It feels good, and it smells good.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_107: {
+		cardInfo: {
+			image: decipher/LOTR17107.jpg
+			collInfo: 17U107
+			rarity: U
+		}
+		title: Merry
+		subtitle: In the Bloom of Health
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 8
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyRaceSpotCount
+					race: ent
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: putCardsFromDiscardOnBottomOfDeck
+					select: choose(pipeweed)
+				}
+			}
+		]
+		gametext: Add 1 to the number of Ents you can spot.<br><b>Regroup:</b> Exert Merry to place a pipeweed from your discard pile beneath your draw deck.
+		lore: "'I think we may have made a mistake leaving the Shire, Pippin.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_108: {
+		cardInfo: {
+			image: decipher/LOTR17108.jpg
+			collInfo: 17U108
+			rarity: U
+		}
+		title: Hornblower Leaf
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		keywords: [
+			Pipeweed
+			Support Area
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: unbound,hobbit
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				text: Remove a threat
+				cost: {
+					type: discard
+					select: choose(pipeweed)
+				}
+				effect: {
+					type: removeThreats
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				text: Discard a minion
+				cost: {
+					type: discard
+					select: choose(pipeweed)
+				}
+				effect: {
+					type: discard
+					select: choose(minion)
+				}
+			}
+		]
+		gametext: <b>Pipeweed</b>. To play, spot an unbound Hobbit.<br><b>Regroup:</b> Discard a pipeweed from play to remove a threat.<br><b>Regroup:</b> Discard a pipeweed from play to discard a minion.
+		lore: "'These are the Hornblower brandmarks....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_109: {
+		cardInfo: {
+			image: decipher/LOTR17109.jpg
+			collInfo: 17U109
+			rarity: U
+		}
+		title: Pippin
+		subtitle: In the Bloom of Health
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		resistance: 8
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyRaceSpotCount
+					race: ent
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: discard
+					select: choose(pipeweed)
+					count: 2
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
+		]
+		gametext: Add 1 to the number of Ents you can spot.<br><b>Maneuver:</b> Discard 2 pipeweed cards from play to remove a burden.
+		lore: "Ents are – well Ents are all different for one thing."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_110: {
+		cardInfo: {
+			image: decipher/LOTR17110.jpg
+			collInfo: 17U110
+			rarity: U
+		}
+		title: Southfarthing Leaf
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		keywords: [
+			Pipeweed
+			Support Area
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: unbound,hobbit
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: choose(pipeweed)
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(unbound,hobbit)
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(pipeweed)
+					showAll: true
+					shuffle: true
+				}
+			}
+		]
+		gametext: <b>Pipeweed</b>. To play, spot an unbound Hobbit.<br><b>Skirmish:</b> Discard a pipeweed from play to make an unbound Hobbit strength +2.<br><b>Regroup:</b> Discard this pipeweed from play to play a pipeweed from your draw deck. Reshuffle your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	17_111: {
+		cardInfo: {
+			image: decipher/LOTR17111.jpg
+			collInfo: 17U111
+			rarity: U
+		}
+		title: Southlinch Leaf
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Condition
+		keywords: [
+			Pipeweed
+			Support Area
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: hobbit
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: choose(pipeweed)
+				}
+				effect: {
+					type: alterOverwhelmMultiplier
+					select: choose(unbound,hobbit)
+					multiplier: 3
+				}
+			}
+		]
+		gametext: <b>Pipeweed</b>. To play, spot a Hobbit.<br><b>Skirmish:</b> Discard a pipeweed from play to prevent an unbound Hobbit from being overwhelmed unless that Hobbit's strength is tripled.
+		lore: "'How it came here, I can't imagine. For Saruman's private use, I fancy.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

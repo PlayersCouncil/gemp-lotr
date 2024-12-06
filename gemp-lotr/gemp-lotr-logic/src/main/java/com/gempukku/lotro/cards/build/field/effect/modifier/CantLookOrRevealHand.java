@@ -11,16 +11,19 @@ import org.json.simple.JSONObject;
 public class CantLookOrRevealHand implements ModifierSourceProducer {
     @Override
     public ModifierSource getModifierSource(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(object, "player", "hand");
+        FieldUtils.validateAllowedFields(object, "player", "hand", "requires");
 
         final String player = FieldUtils.getString(object.get("player"), "player");
         final String hand = FieldUtils.getString(object.get("hand"), "hand");
 
-        PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
-        PlayerSource handSource = PlayerResolver.resolvePlayer(hand, environment);
+        PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
+        PlayerSource handSource = PlayerResolver.resolvePlayer(hand);
+
+        final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
+        final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         return actionContext -> new AbstractModifier(actionContext.getSource(), "Player may not look at or reveal cards in another player hand",
-                null, ModifierEffect.LOOK_OR_REVEAL_MODIFIER) {
+                null, RequirementCondition.createCondition(requirements, actionContext), ModifierEffect.LOOK_OR_REVEAL_MODIFIER) {
             @Override
             public boolean canLookOrRevealCardsInHand(LotroGame game, String revealingPlayerId, String actingPlayerId) {
                 if (playerSource.getPlayer(actionContext).equals(actingPlayerId)

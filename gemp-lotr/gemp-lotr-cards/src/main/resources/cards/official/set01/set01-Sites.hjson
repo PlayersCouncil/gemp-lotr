@@ -1,0 +1,1914 @@
+{
+
+	1_319: {
+		cardInfo: {
+			image: decipher/LOTR01319.jpg
+			collInfo: 1U319
+			rarity: U
+		}
+		title: Bag End
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: choose(hobbit)
+			}
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(name(The Gaffer))
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert a Hobbit to play The Gaffer from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_320: {
+		cardInfo: {
+			image: decipher/LOTR01320.jpg
+			collInfo: 1U320
+			rarity: U
+		}
+		title: East Road
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyCost
+				filter: companion
+				amount: 2
+			}
+		}
+		gametext: Each companion's twilight cost is +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_321: {
+		cardInfo: {
+			image: decipher/LOTR01321.jpg
+			collInfo: 1U321
+			rarity: U
+		}
+		title: Farmer Maggot's Fields
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: choose(hobbit)
+			}
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(or(name(Merry),name(Pippin)))
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert a Hobbit to play Merry or Pippin from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_322: {
+		cardInfo: {
+			image: decipher/LOTR01322.jpg
+			collInfo: 1U322
+			rarity: U
+		}
+		title: Green Dragon Inn
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: choose(hobbit)
+			}
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(name(Sam))
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert a Hobbit to play Sam from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_323: {
+		cardInfo: {
+			image: decipher/LOTR01323.jpg
+			collInfo: 1U323
+			rarity: U
+		}
+		title: Green Hill Country
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyCost
+				filter: hobbit
+				amount: -1
+			}
+		}
+		gametext: The twilight cost of each Hobbit is -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_324: {
+		cardInfo: {
+			image: decipher/LOTR01324.jpg
+			collInfo: 1U324
+			rarity: U
+		}
+		title: The Prancing Pony
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: addBurdens
+			}
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(name(Aragorn))
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Fellowship:</b> Add a burden to play Aragorn from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_325: {
+		cardInfo: {
+			image: decipher/LOTR01325.jpg
+			collInfo: 1U325
+			rarity: U
+		}
+		title: Shire Lookout Point
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: activated
+			phase: fellowship
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(name(Gandalf's Cart))
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Fellowship:</b> Spot Gandalf to play Gandalf's Cart from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_326: {
+		cardInfo: {
+			image: decipher/LOTR01326.jpg
+			collInfo: 1C326
+			rarity: C
+		}
+		title: Westfarthing
+		unique: false
+		twilight: 0
+		type: Site
+		site: 1
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: choose(hobbit)
+			}
+			effect: {
+				type: PlayCardFromHand
+				select: choose(or(companion,ally))
+				discount: -1
+			}
+		}
+		gametext: <b>Fellowship:</b> Exert a Hobbit to play a companion or ally; that character's twilight cost is -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_327: {
+		cardInfo: {
+			image: decipher/LOTR01327.jpg
+			collInfo: 1U327
+			rarity: U
+		}
+		title: Bree Gate
+		unique: false
+		twilight: 2
+		type: Site
+		site: 2
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: ConstantlyCheck
+				requires: {
+					type: canSpot
+					filter: ranger
+				}
+			}
+			requires: {
+				type: perTurnLimit
+				limit: 1
+			}
+			effect: [
+				{
+					type: incrementPerTurnLimit
+					limit: 1
+				}
+				{
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: 1
+					}
+					until: endOfTurn
+				}
+			]
+		}
+		gametext: While you can spot a ranger, the move limit is +1 for this turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_328: {
+		cardInfo: {
+			image: decipher/LOTR01328.jpg
+			collInfo: 1U328
+			rarity: U
+		}
+		title: Bree Streets
+		unique: false
+		twilight: 1
+		type: Site
+		site: 2
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyRoamingPenalty
+				filter: nazgul
+				amount: -2
+			}
+		}
+		gametext: The roaming penalty for each Nazgûl you play to Bree Streets is -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_329: {
+		cardInfo: {
+			image: decipher/LOTR01329.jpg
+			collInfo: 1U329
+			rarity: U
+		}
+		title: Breeland Forest
+		unique: false
+		twilight: 1
+		type: Site
+		site: 2
+		block: Fellowship
+		direction: Left
+		keywords: Forest
+		effects: {
+			type: modifier
+			modifier: {
+				type: cantPlayCards
+				filter: stealth,event
+			}
+		}
+		gametext: <b>Forest</b>. Stealth events may not be played.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_330: {
+		cardInfo: {
+			image: decipher/LOTR01330.jpg
+			collInfo: 1U330
+			rarity: U
+		}
+		title: Buckleberry Ferry
+		unique: false
+		twilight: 1
+		type: Site
+		site: 2
+		block: Fellowship
+		direction: Left
+		keywords: River
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: skipPhase
+					requires: {
+						type: cantSpot
+						filter: companion,not(hobbit)
+					}
+					phase: assignment
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: skipPhase
+					requires: {
+						type: cantSpot
+						filter: companion,not(hobbit)
+					}
+					phase: skirmish
+				}
+			}
+		]
+		gametext: <b>River</b>. While only Hobbits are in the fellowship, there are no assignment and skirmish phases at Buckleberry Ferry.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_331: {
+		cardInfo: {
+			image: decipher/LOTR01331.jpg
+			collInfo: 1C331
+			rarity: C
+		}
+		title: Ettenmoors
+		unique: false
+		twilight: 2
+		type: Site
+		site: 2
+		block: Fellowship
+		direction: Left
+		keywords: Plains
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: exert
+				select: choose(your,or(companion,minion))
+				memorize: exertedCharacter
+			}
+			effect: {
+				type: modifyStrength
+				select: memory(exertedCharacter)
+				amount: 2
+			}
+		}
+		gametext: <b>Plains</b>. <b>Skirmish:</b> Exert your companion or minion to make that character strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_332: {
+		cardInfo: {
+			image: decipher/LOTR01332.jpg
+			collInfo: 1U332
+			rarity: U
+		}
+		title: Midgewater Marshes
+		unique: false
+		twilight: 1
+		type: Site
+		site: 2
+		block: Fellowship
+		direction: Left
+		keywords: Marsh
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			requires: {
+				type: canSpot
+				filter: hobbit,companion
+			}
+			effect: {
+				type: exert
+				select: all(hobbit,companion)
+			}
+		}
+		gametext: <b>Marsh</b>. Each time a Hobbit moves to Midgewater Marshes, that Hobbit must exert.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_333: {
+		cardInfo: {
+			image: decipher/LOTR01333.jpg
+			collInfo: 1U333
+			rarity: U
+		}
+		title: Midgewater Moors
+		unique: false
+		twilight: 1
+		type: Site
+		site: 2
+		block: Fellowship
+		direction: Left
+		keywords: Plains
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: played
+				filter: minion
+			}
+			effect: {
+				type: discardFromHand
+				hand: fp
+				player: fp
+				forced: true
+				count: 1
+			}
+		}
+		gametext: <b>Plains</b>. Each time a minion is played, the Free Peoples player discards a card from hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_334: {
+		cardInfo: {
+			image: decipher/LOTR01334.jpg
+			collInfo: 1U334
+			rarity: U
+		}
+		title: Trollshaw Forest
+		unique: false
+		twilight: 1
+		type: Site
+		site: 2
+		block: Fellowship
+		direction: Left
+		keywords: Forest
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: played
+				filter: or(possession,artifact)
+				on: companion
+			}
+			effect: {
+				type: drawCards
+				player: fp
+				count: 1
+			}
+		}
+		gametext: <b>Forest</b>. Each time you play a possession or artifact on your companion, draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_335: {
+		cardInfo: {
+			image: decipher/LOTR01335.jpg
+			collInfo: 1U335
+			rarity: U
+		}
+		title: Weatherhills
+		unique: false
+		twilight: 3
+		type: Site
+		site: 2
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyCost
+				filter: nazgul
+				amount: -1
+			}
+		}
+		gametext: Each Nazgûl's twilight cost is -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_336: {
+		cardInfo: {
+			image: decipher/LOTR01336.jpg
+			collInfo: 1U336
+			rarity: U
+		}
+		title: Weathertop
+		unique: false
+		twilight: 3
+		type: Site
+		site: 2
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: modifier
+			modifier: {
+				type: addKeyword
+				filter: nazgul
+				keyword: fierce
+			}
+		}
+		gametext: Each Nazgûl at Weathertop is <b>fierce</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_337: {
+		cardInfo: {
+			image: decipher/LOTR01337.jpg
+			collInfo: 1C337
+			rarity: C
+		}
+		title: Council Courtyard
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: Fellowship
+		direction: Right
+		keywords: Sanctuary
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: movesFrom
+				filter: self
+			}
+			effect: {
+				type: removeTwilight
+				amount: 2
+			}
+		}
+		gametext: <b>Sanctuary</b>. When the fellowship moves from Council Courtyard, remove (2).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_338: {
+		cardInfo: {
+			image: decipher/LOTR01338.jpg
+			collInfo: 1U338
+			rarity: U
+		}
+		title: Ford of Bruinen
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: Fellowship
+		direction: Right
+		keywords: [
+			River
+			Sanctuary
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: {
+						type: perTurnLimit
+						limit: 1
+					}
+					filter: nazgul
+					amount: -5
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: nazgul
+				}
+				effect: {
+					type: incrementPerTurnLimit
+					limit: 1
+				}
+			}
+		]
+		gametext: <b>River</b>. <b>Sanctuary</b>. The twilight cost of the first Nazgûl played to Ford of Bruinen each turn is -5.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_339: {
+		cardInfo: {
+			image: decipher/LOTR01339.jpg
+			collInfo: 1U339
+			rarity: U
+		}
+		title: Frodo's Bedroom
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: Fellowship
+		direction: Right
+		keywords: Sanctuary
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: PlayCardFromHand
+				select: choose(hobbit)
+			}
+			effect: {
+				type: drawCards
+				count: 1
+			}
+		}
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Play a Hobbit to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_340: {
+		cardInfo: {
+			image: decipher/LOTR01340.jpg
+			collInfo: 1U340
+			rarity: U
+		}
+		title: Rivendell Terrace
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: Fellowship
+		direction: Right
+		keywords: Sanctuary
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: PlayCardFromHand
+				select: choose(man)
+			}
+			effect: {
+				type: drawCards
+				count: 1
+			}
+		}
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Play a Man to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_341: {
+		cardInfo: {
+			image: decipher/LOTR01341.jpg
+			collInfo: 1U341
+			rarity: U
+		}
+		title: Rivendell Valley
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: Fellowship
+		direction: Right
+		keywords: Sanctuary
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: PlayCardFromHand
+				select: choose(elf)
+			}
+			effect: {
+				type: drawCards
+				count: 1
+			}
+		}
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Play an Elf to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_342: {
+		cardInfo: {
+			image: decipher/LOTR01342.jpg
+			collInfo: 1U342
+			rarity: U
+		}
+		title: Rivendell Waterfall
+		unique: false
+		twilight: 0
+		type: Site
+		site: 3
+		block: Fellowship
+		direction: Right
+		keywords: [
+			Forest
+			Sanctuary
+		]
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: ConstantlyCheck
+				requires: {
+					type: canSpot
+					filter: ranger
+				}
+			}
+			requires: {
+				type: perTurnLimit
+				limit: 1
+			}
+			effect: [
+				{
+					type: incrementPerTurnLimit
+					limit: 1
+				}
+				{
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: 1
+					}
+					until: endOfTurn
+				}
+			]
+		}
+		gametext: <b>Forest</b>. <b>Sanctuary</b>. While you can spot a ranger at Rivendell Waterfall, the move limit is +1 for this turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_343: {
+		cardInfo: {
+			image: decipher/LOTR01343.jpg
+			collInfo: 1U343
+			rarity: U
+		}
+		title: Balin's Tomb
+		unique: false
+		twilight: 3
+		type: Site
+		site: 4
+		block: Fellowship
+		direction: Right
+		keywords: Underground
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: choice
+				texts: [
+					Discard your tale from play
+					Discard tale from hand
+				]
+				effects: [
+					{
+						type: discard
+						select: choose(your,tale)
+					}
+					{
+						type: discardFromHand
+						forced: false
+						select: choose(tale)
+					}
+				]
+			}
+			effect: {
+				type: heal
+				select: choose(your,companion)
+			}
+		}
+		gametext: <b>Underground</b>. <b>Maneuver:</b> Discard your tale from play or from hand to heal your companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_344: {
+		cardInfo: {
+			image: decipher/LOTR01344.jpg
+			collInfo: 1U344
+			rarity: U
+		}
+		title: Dwarrowdelf Chamber
+		unique: false
+		twilight: 2
+		type: Site
+		site: 4
+		block: Fellowship
+		direction: Right
+		keywords: Underground
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			effect: {
+				type: choice
+				player: fp
+				texts: [
+					Exert Gimli
+					Exert 2 other companions
+				]
+				effects: [
+					{
+						type: exert
+						select: choose(name(Gimli))
+					}
+					{
+						type: exert
+						count: 2
+						select: choose(not(name(Gimli)),companion)
+					}
+				]
+			}
+		}
+		gametext: <b>Underground</b>. When the fellowship moves to Dwarrowdelf Chamber, Gimli or 2 other companions must exert.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_345: {
+		cardInfo: {
+			image: decipher/LOTR01345.jpg
+			collInfo: 1U345
+			rarity: U
+		}
+		title: Mithril Mine
+		unique: false
+		twilight: 3
+		type: Site
+		site: 4
+		block: Fellowship
+		direction: Right
+		keywords: Underground
+		effects: {
+			type: activated
+			phase: shadow
+			cost: {
+				type: removeTwilight
+				amount: 1
+			}
+			effect: {
+				type: playCardFromDiscard
+				select: choose(side(shadow),weapon)
+			}
+		}
+		gametext: <b>Underground</b>. <b>Shadow:</b> Remove (1) to play a Shadow weapon from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_346: {
+		cardInfo: {
+			image: decipher/LOTR01346.jpg
+			collInfo: 1C346
+			rarity: C
+		}
+		title: Moria Lake
+		unique: false
+		twilight: 3
+		type: Site
+		site: 4
+		block: Fellowship
+		direction: Right
+		keywords: Marsh
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			effect: {
+				type: choice
+				player: fp
+				texts: [
+					Exert Frodo
+					Exert 2 other companions
+				]
+				effects: [
+					{
+						type: exert
+						select: choose(name(Frodo))
+					}
+					{
+						type: exert
+						count: 2
+						select: choose(not(name(Frodo)),companion)
+					}
+				]
+			}
+		}
+		gametext: <b>Marsh</b>. When the fellowship moves to Moria Lake, Frodo or 2 other companions must exert.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_347: {
+		cardInfo: {
+			image: decipher/LOTR01347.jpg
+			collInfo: 1U347
+			rarity: U
+		}
+		title: Moria Stairway
+		unique: false
+		twilight: 2
+		type: Site
+		site: 4
+		block: Fellowship
+		direction: Right
+		keywords: Underground
+		effects: {
+			type: modifier
+			modifier: {
+				type: addKeyword
+				filter: or(companion,minion),hasAttached(hand weapon)
+				keyword: damage+1
+			}
+		}
+		gametext: <b>Underground</b>. Each companion and minion bearing a hand weapon is <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_348: {
+		cardInfo: {
+			image: decipher/LOTR01348.jpg
+			collInfo: 1U348
+			rarity: U
+		}
+		title: Pass of Caradhras
+		unique: false
+		twilight: 2
+		type: Site
+		site: 4
+		block: Fellowship
+		direction: Right
+		keywords: Mountain
+		effects: {
+			type: activated
+			phase: shadow
+			requires: [
+				{
+					type: perTurnLimit
+					limit: 1
+				}
+				{
+					type: canSpot
+					filter: culture(isengard),minion
+				}
+			]
+			effect: [
+				{
+					type: incrementPerTurnLimit
+					limit: 1
+				}
+				{
+					type: playCardFromDrawDeck
+					select: choose(weather)
+					showAll: true
+					shuffle: true
+				}
+			]
+		}
+		gametext: <b>Mountain</b>. <b>Shadow:</b> Spot an [isengard] minion to play a weather card from your draw deck (limit 1 per turn).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_349: {
+		cardInfo: {
+			image: decipher/LOTR01349.jpg
+			collInfo: 1C349
+			rarity: C
+		}
+		title: The Bridge of Khazad-dûm
+		unique: false
+		twilight: 6
+		type: Site
+		site: 5
+		block: Fellowship
+		direction: Left
+		keywords: Underground
+		effects: {
+			type: activated
+			phase: shadow
+			effect: {
+				type: choice
+				texts: [
+					Play The Balrog from your draw deck
+					Play The Balrog from hand
+				]
+				effects: [
+					{
+						type: playCardFromDrawDeck
+						select: choose(name(The Balrog))
+						discount: -6
+						showAll: true
+						shuffle: true
+					}
+					{
+						type: PlayCardFromHand
+						select: choose(name(The Balrog))
+						discount: -6
+					}
+				]
+			}
+		}
+		gametext: <b>Underground</b>. <b>Shadow:</b> Play The Balrog from your draw deck or hand; The Balrog's twilight cost is -6.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_350: {
+		cardInfo: {
+			image: decipher/LOTR01350.jpg
+			collInfo: 1U350
+			rarity: U
+		}
+		title: Dimrill Dale
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: Fellowship
+		direction: Left
+		keywords: Sanctuary
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: {
+						type: perPhaseLimit
+						limit: 1
+					}
+					filter: culture(moria),orc
+					amount: -2
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: culture(moria),orc
+				}
+				effect: {
+					type: incrementPerPhaseLimit
+					limit: 1
+				}
+			}
+		]
+		gametext: <b>Sanctuary</b>. The twilight cost of the first [moria] Orc played each Shadow phase is -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_351: {
+		cardInfo: {
+			image: decipher/LOTR01351.jpg
+			collInfo: 1C351
+			rarity: C
+		}
+		title: Galadriel's Glade
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: Fellowship
+		direction: Left
+		keywords: Sanctuary
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				select: choose(elf)
+			}
+			effect: {
+				type: lookAtHand
+				hand: shadowPlayer
+			}
+		}
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Exert an Elf to look at an opponent's hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_352: {
+		cardInfo: {
+			image: decipher/LOTR01352.jpg
+			collInfo: 1U352
+			rarity: U
+		}
+		title: Lothlórien Woods
+		unique: false
+		twilight: 3
+		type: Site
+		site: 6
+		block: Fellowship
+		direction: Left
+		keywords: [
+			Forest
+			Sanctuary
+		]
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyStrength
+				filter: ally,allyHome(fellowship,6)
+				amount: 3
+			}
+		}
+		gametext: <b>Forest</b>. <b>Sanctuary</b>. Each ally whose home is site 6 is strength +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_353: {
+		cardInfo: {
+			image: decipher/LOTR01353.jpg
+			collInfo: 1U353
+			rarity: U
+		}
+		title: Anduin Confluence
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7
+		block: Fellowship
+		direction: Right
+		keywords: River
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			effect: {
+				type: discard
+				select: all(ally)
+			}
+		}
+		gametext: <b>River</b>. When the fellowship moves to Anduin Confluence, discard every ally.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_354: {
+		cardInfo: {
+			image: decipher/LOTR01354.jpg
+			collInfo: 1C354
+			rarity: C
+		}
+		title: Anduin Wilderland
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7
+		block: Fellowship
+		direction: Right
+		keywords: [
+			Forest
+			River
+		]
+		effects: {
+			type: modifier
+			modifier: {
+				type: skipPhase
+				phase: archery
+			}
+		}
+		gametext: <b>Forest</b>. <b>River</b>. While the fellowship is at Anduin Wilderland, skip the archery phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_355: {
+		cardInfo: {
+			image: decipher/LOTR01355.jpg
+			collInfo: 1U355
+			rarity: U
+		}
+		title: Silverlode Banks
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7
+		block: Fellowship
+		direction: Right
+		keywords: River
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			requires: {
+				type: cantSpot
+				filter: ranger
+			}
+			effect: {
+				type: exert
+				select: all(companion)
+			}
+		}
+		gametext: <b>River</b>. When the fellowship moves to Silverlode Banks without a ranger, every companion must exert.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_356: {
+		cardInfo: {
+			image: decipher/LOTR01356.jpg
+			collInfo: 1C356
+			rarity: C
+		}
+		title: Anduin Banks
+		unique: false
+		twilight: 6
+		type: Site
+		site: 8
+		block: Fellowship
+		direction: Right
+		keywords: River
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyArcheryTotal
+				side: shadow
+				amount: {
+					type: forEachYouCanSpot
+					filter: companion
+					over: 4
+					multiplier: 2
+				}
+			}
+		}
+		gametext: <b>River</b>. For each companion in the fellowship over 4, add 2 to the minion archery total.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_357: {
+		cardInfo: {
+			image: decipher/LOTR01357.jpg
+			collInfo: 1U357
+			rarity: U
+		}
+		title: Brown Lands
+		unique: false
+		twilight: 6
+		type: Site
+		site: 8
+		block: Fellowship
+		direction: Right
+		keywords: River
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyArcheryTotal
+				side: shadow
+				amount: {
+					type: forEachYouCanSpot
+					filter: minion,archer
+					limit: 4
+				}
+			}
+		}
+		gametext: <b>River</b>. For each minion archer at Brown Lands, the minion archery total is +1 (limit +4).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_358: {
+		cardInfo: {
+			image: decipher/LOTR01358.jpg
+			collInfo: 1U358
+			rarity: U
+		}
+		title: Pillars of the Kings
+		unique: false
+		twilight: 6
+		type: Site
+		site: 8
+		block: Fellowship
+		direction: Right
+		keywords: River
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: discardFromHand
+				forced: false
+				select: choose(culture(gondor))
+			}
+			effect: {
+				type: heal
+				select: choose(culture(gondor),companion)
+			}
+		}
+		gametext: <b>River</b>. <b>Fellowship:</b> Discard a [gondor] card from hand to heal a [gondor] companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_359: {
+		cardInfo: {
+			image: decipher/LOTR01359.jpg
+			collInfo: 1U359
+			rarity: U
+		}
+		title: Shores of Nen Hithoel
+		unique: false
+		twilight: 9
+		type: Site
+		site: 8
+		block: Fellowship
+		direction: Right
+		keywords: River
+		effects: {
+			type: activated
+			phase: shadow
+			requires: {
+				type: canSpot
+				count: 5
+				filter: orc,minion
+			}
+			effect: {
+				type: addModifier
+				modifier: {
+					type: cantMove
+				}
+				until: endOfTurn
+			}
+		}
+		gametext: <b>River</b>. <b>Shadow:</b> Spot 5 Orc minions to prevent the fellowship from moving again this turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_360: {
+		cardInfo: {
+			image: decipher/LOTR01360.jpg
+			collInfo: 1U360
+			rarity: U
+		}
+		title: Emyn Muil
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: exert
+				select: choose(your,minion)
+				memorize: exertedMinion
+			}
+			effect: {
+				type: addKeyword
+				select: memory(exertedMinion)
+				keyword: fierce
+				until: start(regroup)
+			}
+		}
+		gametext: <b>Maneuver:</b> Exert your minion to make that minion <b>fierce</b> until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_361: {
+		cardInfo: {
+			image: decipher/LOTR01361.jpg
+			collInfo: 1U361
+			rarity: U
+		}
+		title: Slopes of Amon Hen
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyCost
+				filter: culture(isengard),minion
+				amount: -1
+			}
+		}
+		gametext: The twilight cost of each [isengard] minion is -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_362: {
+		cardInfo: {
+			image: decipher/LOTR01362.jpg
+			collInfo: 1C362
+			rarity: C
+		}
+		title: Summit of Amon Hen
+		unique: false
+		twilight: 8
+		type: Site
+		site: 9
+		block: Fellowship
+		direction: Left
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			requires: {
+				type: isSide
+				side: shadow
+			}
+			effect: {
+				type: drawCards
+				count: {
+					type: forEachBurden
+				}
+			}
+		}
+		gametext: When the fellowship moves to Summit of Amon Hen, each Shadow player may draw a card for each burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	1_363: {
+		cardInfo: {
+			image: decipher/LOTR01363.jpg
+			collInfo: 1U363
+			rarity: U
+		}
+		title: Tol Brandir
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: Fellowship
+		direction: Left
+		keywords: River
+		effects: {
+			type: activated
+			phase: shadow
+			effect: [
+				{
+					type: repeat
+					times: 3
+					effect: {
+						type: playCardFromDiscard
+						select: choose(tracker) 
+						optional: true
+					}
+				}
+				{
+					type: endPhase
+				}
+			]
+			
+			/*
+			// A less obnoxious version that short-circuits the loop if the 
+			// player ever chooses 0 cards at the prompt.  Unfortunately, it
+			// turns out that "memoryIs" does not check card memory, so this
+			// is useless until those are unified.
+			effect: [
+				{
+					type: MemorizeValue
+					memory: choice
+					value: default
+				}
+				{
+					type: repeat
+					amount: 3
+					effect: {
+						type: conditional
+						requires: [
+							{
+								type: Not
+								requires: {
+									type: MemoryIs
+									memory: choice
+									value: ""
+								}
+							}
+							{
+								type: HasCardInDiscard
+								filter: playable,tracker
+							}
+						]
+						effect: {
+							type: playCardFromDiscard
+							filter: choose(tracker)
+							memorize: choice
+							//Forces the choice to allow 0 options
+							nocheck: true
+						}
+					}
+				}
+				{
+					type: endPhase
+				}
+			]
+			*/
+			
+			/*
+			// An obnoxious version that prompts the user with a question
+			// for each individual tracker played
+			effect: [
+				{
+					type: MemorizeValue
+					memory: choice
+					value: yes
+				}
+				{
+					type: repeat
+					amount: 3
+					effect: {
+						type: conditional
+						requires: [
+							{
+								type: MemoryIs
+								memory: choice
+								value: yes
+							}
+							{
+								type: HasCardInDiscard
+								filter: playable,tracker
+							}
+						]
+						effect: [
+							{
+								type: chooseYesOrNo
+								player: you
+								text: Would you like to play a tracker from your discard pile?
+								memorize: choice
+							}
+							{
+								type: conditional
+								requires: [
+									{
+										type: MemoryIs
+										memory: choice
+										value: yes
+									}
+								]
+								effect: {
+									type: playCardFromDiscard
+									filter: choose(tracker)
+								}
+							}
+						]
+					}
+				}
+				{
+					type: endPhase
+				}
+			]
+			*/
+		}
+		gametext: <b>River</b>. <b>Shadow:</b> Play up to 3 trackers from your discard pile; end your Shadow phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -1,17 +1,11 @@
 {
 	68_110: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E110.1.jpg
-			javaClass: false
-			parent: 18_110
-			parentPath: errata/pc
-			version: 1
+			//id: 8_110.1
+			revision: 1
+			image: errata/LOTR-EN18E110.1.jpg
 			collInfo: 18R110
 			rarity: U
-			setNum: "18"
-			cardNum: 110
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Prized Lagan
 		unique: false
@@ -23,7 +17,8 @@
 		]
 		effects:[
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: startOfTurn
 				}
@@ -36,7 +31,7 @@
 					}
 					effect: {
 						type: heal
-						filter: choose(culture(shire),companion)
+						select: choose(culture(shire),companion)
 					}
 				}
 			}
@@ -50,7 +45,7 @@
 				effect: [
 					{
 						type: chooseActiveCards
-						filter: choose(minion)
+						select: choose(minion)
 						memorize: chosenMinion
 						text: Choose a minion to lose fierce
 					}
@@ -65,7 +60,7 @@
 						effect: {
 							type: RemoveKeyword
 							keyword: fierce
-							filter: memory(chosenMinion)
+							select: memory(chosenMinion)
 							until: start(regroup)
 						}
 					}
@@ -86,17 +81,11 @@
 	
 	68_111: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E111.1.jpg
-			javaClass: false
-			parent: 18_111
-			parentPath: errata/pc
-			version: 1
+			//id: 8_111.1
+			revision: 1
+			image: errata/LOTR-EN18E111.1.jpg
 			collInfo: 18U111
 			rarity: U
-			setNum: "18"
-			cardNum: 111
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Robin Smallburrow
 		subtitle: Shirriff Cock-Robin
@@ -114,7 +103,7 @@
 				}
 			}
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: transferred
@@ -151,17 +140,11 @@
 
 	68_112: {
 		cardInfo: {
-			imagePath: errata/68_112.jpg
-			javaClass: false
-			parent: 18_112
-			parentPath: errata/pc
-			version: 1?
+			//id: 8_112.1
+			revision: 1
+			image: errata/68_112.jpg
 			collInfo: 18R112
 			rarity: R
-			setNum: "18"
-			cardNum: 112
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Scouring of the Shire
 		unique: true
@@ -174,35 +157,36 @@
 		]
 		effects:[
 			{
-				type: trigger
+				type: Trigger
+				optional: false
 				trigger: {
 					type: ConstantlyCheck
 					requires: {
 						type: canSpot
-						filter: self,hasTokenCount(3,shire)
+						filter: self,HasCultureTokenCount(3,shire)
 					}
 				}
 				effect: {
 					type: discard
-					filter: self
+					select: self
 				}
 			}
 			{
-				type: activatedTrigger
+				type: Response
 				trigger: {
 					type: abouttodiscard
 					source: side(shadow)
 					filter: culture(shire),or(condition,possession)
 				}
 				cost: {
-					type: addtokens
-					amount: 1
+					type: AddCultureTokens
+					count: 1
 					culture: shire
-					filter: self
+					select: self
 				}
 				effect: {
 					type: preventdiscard
-					filter: choose(culture(shire),or(condition,possession))
+					select: choose(culture(shire),or(condition,possession))
 				}
 			}
 		]

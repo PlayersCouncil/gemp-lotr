@@ -6,7 +6,7 @@
 	# 		javaClass: false
 	# 		parent: 8_51
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 8R51
 	# 		rarity: R
 	# 		setNum: "8"
@@ -37,14 +37,14 @@
 	# 					filter: self
 	# 				}
 	# 				{
-	# 					type: play
-	# 					filter: choose(corsair)
+	# 					type: PlayCardFromHand
+	# 					select: choose(corsair)
 	# 				}
 	# 			]
 	# 			effect: {
-	# 				type: addTokens
+	# 				type: AddCultureTokens
 	# 				culture: raider
-	# 				filter: choose(hasToken(raider))
+	# 				select: choose(HasCultureToken(raider))
 	# 				amount: 2
 	# 			}
 	# 		}
@@ -62,17 +62,14 @@
 
 	58_51: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN08E051.2_card.jpg
-			javaClass: false
+			//id: 8_51.2
 			parent: 8_51
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN08E051.2_card.jpg
 			collInfo: 8R51
 			rarity: R
-			setNum: "8"
-			cardNum: 51
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Castamir of Umbar
 		unique: true
@@ -107,18 +104,18 @@
 				cost: [
 					{
 						type: exert
-						filter: self
+						select: self
 					}
 					{
-						type: play
-						filter: choose(corsair)
+						type: PlayCardFromHand
+						select: choose(corsair)
 					}
 				]
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: raider
-					filter: choose(hasToken(raider))
-					amount: 2
+					select: choose(HasCultureToken(raider))
+					count: 2
 				}
 			}
 		]
@@ -134,17 +131,14 @@
 	}
 	58_57: {
 		cardInfo: {
-			imagePath: errata/58_57.jpg
-			javaClass: false
+			//id: 8_57.1
 			parent: 8_57
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/58_57.jpg
 			collInfo: 8R57
 			rarity: R
-			setNum: "8"
-			cardNum: 57
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Corsair Marauder
 		unique: false
@@ -158,7 +152,7 @@
 		site: 4
 		keyword: Corsair
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -180,42 +174,27 @@
 						type: costToEffect
 						cost: {
 							type: discard
-							filter: choose(possession,side(Shadow))
+							select: choose(possession,side(Shadow))
 						}
 						effect: {
 							type: ReinforceTokens
+							select: choose(culture(raider))
 							culture: raider
-							filter: choose(culture(raider))
-							amount: 2
+							times: 2
 						}
 					}
 					{
 						type: costToEffect
-						requires: {
-							type: IsGreaterThanOrEqual
-							firstNumber: {
-								type: forEachToken
-								culture: raider
-							}
-							secondNumber: 2
-						}
 						cost: [
 							{
-								type: ChooseAndRemoveTokens
+								type: removeTokensCumulative
 								culture: raider
-								filter: choose(any)
-								limit: 1
-							}
-							{
-								type: ChooseAndRemoveTokens
-								culture: raider
-								filter: choose(any)
-								limit: 1
+								count: 2
 							}
 						]
 						effect: {
 							type: discard
-							filter: choose(possession)
+							select: choose(possession)
 						}
 					}
 				]
@@ -248,7 +227,7 @@
 	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
 	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 	# 		//Top-level cards should always be version 0.
-	# 		version: 1?
+	# 		revision: 1
 	# 		collInfo: 8U59
 	# 		rarity: U
 	# 		setNum: "8"
@@ -263,14 +242,14 @@
 	# 	keyword: Support Area
 	# 	effects: [
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
 	# 			optional: true
 	# 			trigger: {
 	# 				type: played
 	# 				filter: self
 	# 			}
 	# 			effect: {
-	# 				type: addTokens
+	# 				type: AddCultureTokens
 	# 				culture: raider
 	# 				filter: self
 	# 			}
@@ -282,7 +261,7 @@
 	# 				requires: [
 	# 					{
 	# 						type: canSpot
-	# 						filter: self,hasTokenCount(4,raider)
+	# 						filter: self,HasCultureTokenCount(4,raider)
 	# 					}
 	# 					{
 	# 						type: canSpot
@@ -298,7 +277,7 @@
 	# 				type: memorizeNumber
 	# 				memory: numberOfTokens
 	# 				amount: {
-	# 					type: forEachToken
+	# 					type: ForEachCultureToken
 	# 					culture: raider
 	# 					filter: self
 	# 				}
@@ -333,17 +312,14 @@
 	
 	58_59: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN08E059.2_card.jpg
-			javaClass: false
+			//id: 8_59.2
 			parent: 8_59
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/LOTR-EN08E059.2_card.jpg
 			collInfo: 8U59
 			rarity: U
-			setNum: "8"
-			cardNum: 59
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Corsair War Galley
 		unique: true
@@ -354,16 +330,16 @@
 		keyword: Support Area
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
 					filter: self
 				}
 				effect: {
-					type: addTokens
+					type: AddCultureTokens
 					culture: raider
-					filter: self
+					select: self
 				}
 			}
 			{
@@ -390,7 +366,7 @@
 					type: memorizeNumber
 					memory: numberOfTokens
 					amount: {
-						type: forEachToken
+						type: ForEachCultureToken
 						culture: raider
 						filter: any
 					}
@@ -405,7 +381,7 @@
 					}
 					{
 						type: discard
-						filter: self
+						select: self
 					}
 				]
 			}

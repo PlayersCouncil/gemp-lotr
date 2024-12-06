@@ -1,0 +1,688 @@
+{
+
+	7_3: {
+		cardInfo: {
+			image: decipher/LOTR07003.jpg
+			collInfo: 7U3
+			rarity: U
+		}
+		title: Battle Tested
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(dwarf)
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: culture(dwarven),condition,hasStacked(any)
+						}
+						true: 4
+						false: 2
+					}
+				}
+			]
+		}
+		gametext: Make a Dwarf strength +2 (+4 if you spot a card stacked on a [dwarven] condition).
+		lore: "'We're going to follow you, lad – even on the dark Road....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_4: {
+		cardInfo: {
+			image: decipher/LOTR07004.jpg
+			collInfo: 7C4
+			rarity: C
+		}
+		title: Calculated Risk
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: dwarf
+			}
+			cost: {
+				type: addThreats
+			},
+			effect: [
+				{
+					type: drawCards
+					count: 3
+				}
+			]
+		}
+		gametext: Spot a Dwarf and add a threat to draw 3 cards.
+		lore: "'Beyond the eyes of Dwarves are such fortellings....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_5: {
+		cardInfo: {
+			image: decipher/LOTR07005.jpg
+			collInfo: 7R5
+			rarity: R
+		}
+		title: Dark Ways
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: dwarf
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add a threat
+						Discard this condition
+					]
+					effects: [
+						{
+							type: addThreats
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: heal
+						select: choose(dwarf)
+						times: 2
+					}
+					{
+						type: putCardsFromDiscardIntoHand
+						select: choose(culture(dwarven),timeword(skirmish),event)
+					}
+				]
+			}
+		]
+		gametext: To play, spot a Dwarf.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition to heal a Dwarf twice and take a [dwarven] skirmish event into hand from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_6: {
+		cardInfo: {
+			image: decipher/LOTR07006.jpg
+			collInfo: 7C6
+			rarity: C
+		}
+		title: Gimli
+		subtitle: Faithful Companion
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		keywords: Damage+1
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					requires: {
+						type: haveInitiative
+						side: free people
+					}
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>.<br>While you have initiative, Gimli is strength +2.
+		lore: "'I will go with you even on the Paths of the Dead, and to whatever end they may lead....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_7: {
+		cardInfo: {
+			image: decipher/LOTR07007.jpg
+			collInfo: 7R7
+			rarity: R
+		}
+		title: Gimli
+		subtitle: Feared Axeman
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		keywords: Damage+1
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToDiscard
+					filter: culture(dwarven),condition
+					opponent: true
+				}
+				cost: {
+					type: choice
+					texts: [
+						Exert a Dwarf
+						Discard a {dwarven} card from hand
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(dwarf)
+						}
+						{
+							type: discardFromHand
+							forced: false
+							select: choose(culture(dwarven))
+						}
+					]
+				}
+				effect: {
+					type: preventDiscard
+					select: choose(culture(dwarven),condition)
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>.<br><b>Response:</b> If a [dwarven] condition is about to be discarded by an opponent, exert a Dwarf or discard a [dwarven] card from hand to prevent that.
+		lore: "'There are countless things still to see in Middle-earth, and great works to do.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_8: {
+		cardInfo: {
+			image: decipher/LOTR07008.jpg
+			collInfo: 7U8
+			rarity: U
+		}
+		title: Gimli's Armor
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Possession
+		itemclass: Armor
+		target: title(Gimli)
+		effects: [
+			{
+				type: Response
+				requires: {
+					type: haveInitiative
+					side: free people
+				}
+				trigger: {
+					type: aboutToTakeWound
+					filter: name(Gimli)
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: preventWound
+					select: all(name(Gimli))
+				}
+			}
+		]
+		gametext: Bearer must be Gimli.<br><b>Response:</b> If you have initiative and Gimli is about to take a wound, discard 2 cards from hand to prevent that wound.
+		lore: "'I hope that the forgotten people will not have forgotten how to fight....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_9: {
+		cardInfo: {
+			image: decipher/LOTR07009.jpg
+			collInfo: 7R9
+			rarity: R
+		}
+		title: Gimli's Battle Axe
+		subtitle: Trusted Weapon
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: dwarf
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpotThreats
+						amount: 1
+					}
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpotThreats
+						amount: 2
+					}
+					filter: bearer
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					requires: {
+						type: canSpotThreats
+						amount: 3
+					}
+					side: free people
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a Dwarf.<br>While you can spot a threat, bearer is <b>damage +1</b>.<br>While you can spot 2 threats, bearer is strength +1.<br>While you can spot 3 threats, the fellowship archery total is +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_10: {
+		cardInfo: {
+			image: decipher/LOTR07010.jpg
+			collInfo: 7R10
+			rarity: R
+		}
+		title: Loyalty Unshaken
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: [
+					{
+						type: stackCardsFromHand
+						where: self
+						count: 2
+						memorize: stackedCards
+					}
+					{
+						type: drawCards
+						count: {
+							type: forEachInMemory
+							memory: stackedCards
+							filter: culture(dwarven)
+						}
+					}
+				]
+			}
+			{
+				type: activated
+				phase: skirmish
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(dwarf)
+						amount: 2
+						memorize: chosenDwarf
+					}
+					{
+						type: addKeyword
+						select: memory(chosenDwarf)
+						keyword: damage
+						amount: {
+							type: forEachStacked
+							on: self
+							filter: culture(dwarven)
+							multiplier: 2
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: When you play this condition, you may stack 2 cards from hand here and draw a card for each [dwarven] card you stack.<br><b>Skirmish:</b> Make a Dwarf strength +2. Also, make that Dwarf <b>damage +2</b> for each [dwarven] card stacked on this condition. Discard this condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_11: {
+		cardInfo: {
+			image: decipher/LOTR07011.jpg
+			collInfo: 7C11
+			rarity: C
+		}
+		title: Out of Darkness
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(dwarf)
+					amount: 2
+					memorize: chosenDwarf
+				}
+				{
+					type: If
+					check: {
+						type: canSpot
+						filter: memory(chosenDwarf),canExert
+					}
+					true: {
+						type: optional
+						text: Would you like to exert {chosenDwarf} to draw 2 cards?
+						effect: {
+							type: costToEffect
+							cost: {
+								type: exert
+								select: memory(chosenDwarf)
+							}
+							effect: {
+								type: drawCards
+								count: 2
+							}
+						}
+					}
+				}
+			]
+		}
+		gametext: Make a Dwarf strength +2. You may also exert that Dwarf to draw 2 cards.
+		lore: "'Had I known what was before me, I think that not for any friendship would I have taken the Paths of the Dead.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_12: {
+		cardInfo: {
+			image: decipher/LOTR07012.jpg
+			collInfo: 7R12
+			rarity: R
+		}
+		title: Preparations
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: choose(dwarf)
+				}
+				effect: {
+					type: stackCardsFromDiscard
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				effect: [
+					{
+						type: wound
+						select: choose(minion,inSkirmishAgainst(dwarf))
+						times: {
+							type: forEachStacked
+							on: self
+							filter: culture(dwarven)
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: <b>Regroup:</b> Exert a Dwarf companion to stack a card from your discard pile here.<br><b>Skirmish:</b> Wound a minion skirmishing a Dwarf once for each [dwarven] card stacked here. Discard this condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_13: {
+		cardInfo: {
+			image: decipher/LOTR07013.jpg
+			collInfo: 7U13
+			rarity: U
+		}
+		title: Reckless Pride
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Condition
+		target: culture(dwarven),companion
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addActivated
+					filter: minion
+					phase: assignment
+					text: Assign this minion to bearer of Reckless Pride.
+					effect: {
+						type: assignFpCharacterToSkirmish
+						fpCharacter: choose(hasAttached(name(Reckless Pride)))
+						minion: self
+					}
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: drawCards
+					count: 4
+				}
+			}
+		]
+		gametext: Bearer must be a [dwarven] companion.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to bearer of Reckless Pride."<br><b>Regroup:</b> Discard this condition to draw 4 cards.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_14: {
+		cardInfo: {
+			image: decipher/LOTR07014.jpg
+			collInfo: 7U14
+			rarity: U
+		}
+		title: Slaked Thirsts
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: event
+				requires: {
+					type: canSpot
+					filter: dwarf
+				}
+				effect: [
+					{
+						type: drawCards
+					}
+				]
+			}
+			{
+				type: activatedFromStacked
+				phase: maneuver
+				stackedOn: culture(dwarven),condition
+				requires: {
+					type: canSpot
+					filter: dwarf,companion
+				}
+				cost: {
+					type: discardStackedCards
+					select: self
+					on: culture(dwarven),condition
+				}
+				effect: {
+					type: exert
+					select: choose(minion)
+					times: 2
+				}
+			}
+		]
+		gametext: Choose one: Spot a Dwarf to draw a card; or, if this card is stacked on a [dwarven] condition, spot a Dwarf companion and discard this event to exert a minion twice.
+		lore: Food and drink would pay off some of my score against you.'
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+		gametext: Choose one: Spot a Dwarf to draw a card; or, if this card is stacked on a [dwarven] condition, spot a Dwarf companion and discard this event to exert a minion twice.
+		lore: "'Food and drink would pay off some of my score against you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -1,0 +1,109 @@
+{
+
+	102_74: {
+		cardInfo: {
+			//id: 102_74
+			image: sets/V2/LOTR-ENV2S074.0_card.jpg
+			collInfo: V2_74
+			rarity: _
+		}
+		title: Path of the Fellowship
+		unique: false
+		twilight: 0
+		type: Map
+		effects: [
+			{
+				type: DeckBuildingRestriction
+				pile: sites
+				#We do it this way instead of checking for fellowship
+				# so that the error message shows all sites that don't 
+				# match, instead of listing all the ones that do and
+				# making the user figure out which one isn't listed.
+				filter: or(siteblock(towers),siteblock(king),siteblock(shadows))
+				max: 0
+				text: Adventure Deck must only contain sites from the Fellowship block path.
+			}
+		]
+		gametext: Before the game begins, place this Map in your support area.<br>Your adventure deck must only contain cards from the Fellowship site path.
+		lore: "'It's a dangerous business, Frodo, going out your door. You step onto the Road, and if you don't keep your feet, there's no knowing where you might be swept off to.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	102_75: {
+		cardInfo: {
+			//id: 102_75
+			image: sets/V2/LOTR-ENV2S075.0_card.jpg
+			collInfo: V2_75
+			rarity: _
+		}
+		title: Road to the Towers
+		unique: false
+		twilight: 0
+		type: Map
+		effects: [
+			{
+				type: DeckBuildingRestriction
+				pile: sites
+				#We do it this way instead of checking for fellowship
+				# so that the error message shows all sites that don't 
+				# match, instead of listing all the ones that do and
+				# making the user figure out which one isn't listed.
+				filter: or(siteblock(fellowship),siteblock(king),siteblock(shadows))
+				max: 0
+				text: Adventure deck must only contain sites from the Towers block site path.
+			}
+		]
+		gametext: Before the game begins, place this Map in your support area.<br>Your adventure deck must only contain cards from the Towers site path.
+		lore: "'Faithless is he that says farewell when the road darkens.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	
+	102_76: {
+		cardInfo: {
+			//id: 102_76
+			image: sets/V2/LOTR-ENV2S076.0_card.jpg
+			collInfo: V2_76
+			rarity: _
+		}
+		title: Journey of the King
+		unique: false
+		twilight: 0
+		type: Map
+		effects: [
+			{
+				type: DeckBuildingRestriction
+				pile: sites
+				#We do it this way instead of checking for fellowship
+				# so that the error message shows all sites that don't 
+				# match, instead of listing all the ones that do and
+				# making the user figure out which one isn't listed.
+				filter: or(siteblock(fellowship),siteblock(towers),siteblock(shadows))
+				max: 0
+				text: Adventure Deck must only contain sites from the King block site path.
+			}
+		]
+		gametext: Before the game begins, place this Map in your support area.<br>Your adventure deck must only contain cards from the King site path.
+		lore: "'Tall ships and tall kings / Three times three,<br>What brought they from the foundered land /<br>Over the flowing sea?<br>Seven stars and seven stones / And one white tree.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

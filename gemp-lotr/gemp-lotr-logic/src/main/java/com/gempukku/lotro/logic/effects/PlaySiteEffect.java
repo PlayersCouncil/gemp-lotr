@@ -60,14 +60,14 @@ public class PlaySiteEffect extends AbstractEffect {
                 }
             };
             if (_siteBlock != null)
-                return Filters.filter(game.getGameState().getAdventureDeck(_playerId), game, Filters.and(_extraSiteFilters, printedSiteNumber, Filters.siteBlock(_siteBlock)));
+                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), Filters.and(_extraSiteFilters, printedSiteNumber, Filters.siteBlock(_siteBlock)));
             else
-                return Filters.filter(game.getGameState().getAdventureDeck(_playerId), game, Filters.and(_extraSiteFilters, printedSiteNumber));
+                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), Filters.and(_extraSiteFilters, printedSiteNumber));
         } else {
             if (_siteBlock != null)
-                return Filters.filter(game.getGameState().getAdventureDeck(_playerId), game, Filters.and(_extraSiteFilters, Filters.siteBlock(_siteBlock)));
+                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), Filters.and(_extraSiteFilters, Filters.siteBlock(_siteBlock)));
             else
-                return Filters.filter(game.getGameState().getAdventureDeck(_playerId), game, _extraSiteFilters);
+                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), _extraSiteFilters);
         }
     }
 
@@ -122,7 +122,7 @@ public class PlaySiteEffect extends AbstractEffect {
                                 if (gameState.getCurrentSiteNumber() == siteNumber
                                         && !_playerId.equals(gameState.getCurrentPlayerId()))
                                     game.getModifiersEnvironment().addUntilEndOfTurnModifier(
-                                            new SpecialFlagModifier(null, ModifierFlag.SHADOW_PLAYER_REPLACED_CURRENT_SITE));
+                                            new SpecialFlagModifier(null, null, ModifierFlag.SHADOW_PLAYER_REPLACED_CURRENT_SITE));
 
                                 game.getActionsEnvironment().emitEffectResult(new ReplaceSiteResult(_playerId, siteNumber));
                             }
@@ -139,7 +139,7 @@ public class PlaySiteEffect extends AbstractEffect {
                             }
 
                             sitePlayedCallback(newSite);
-                            game.getActionsEnvironment().emitEffectResult(new PlayCardResult(Zone.ADVENTURE_DECK, newSite, null, null, false));
+                            game.getActionsEnvironment().emitEffectResult(new PlayCardResult(_playerId, Zone.ADVENTURE_DECK, newSite, null, null, false));
                         }
                     });
 

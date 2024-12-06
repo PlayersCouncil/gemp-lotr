@@ -1,0 +1,122 @@
+{
+
+	5_118: {
+		cardInfo: {
+			image: decipher/LOTR05118.jpg
+			collInfo: 5U118
+			rarity: U
+		}
+		title: Hornburg Wall
+		unique: false
+		twilight: 6
+		type: Site
+		site: 7
+		block: Towers
+		direction: Right
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: your,minion
+				}
+				cost: {
+					type: removeTwilight
+					amount: 9
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: hasToMoveIfAble
+					}
+				}
+			}
+		]
+		gametext: <b>Regroup:</b> Spot your minion and remove (9) to make the fellowship move again this turn (if the move limit allows).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_119: {
+		cardInfo: {
+			image: decipher/LOTR05119.jpg
+			collInfo: 5U119
+			rarity: U
+		}
+		title: Nan Curunír
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: Towers
+		direction: Left
+		keywords: Plains
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: your,mounted,minion
+				}
+				cost: {
+					type: removeTwilight
+					amount: 2
+				}
+				effect: {
+					type: preventWound
+					select: choose(your,mounted,minion)
+				}
+			}
+		]
+		gametext: <b>Plains</b>. <b>Response:</b> If your mounted minion is about to take a wound, remove (2) to prevent that wound.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	5_120: {
+		cardInfo: {
+			image: decipher/LOTR05120.jpg
+			collInfo: 5U120
+			rarity: U
+		}
+		title: Caverns of Isengard
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: Towers
+		direction: Right
+		keywords: Underground
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: winsAfterReconcile
+				}
+			}
+		]
+		gametext: <b>Underground</b>. The Free Peoples player wins the game only if the Ring-bearer survives until Shadow players reconcile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -1,17 +1,14 @@
 {
 	54_355: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN04E355.1_card.jpg
-			javaClass: false
+			//id: 4_355.1
 			parent: 4_355
-			parentPath: errata/pc
-			version: 1
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 1
+			image: errata/LOTR-EN04E355.1_card.jpg
 			collInfo: 4U355
 			rarity: U
-			setNum: "4"
-			cardNum: 355
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Cavern Entrance
 		unique: false
@@ -21,7 +18,8 @@
 		block: Towers
 		direction: Right
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			trigger: {
 				type: startOfPhase
 				phase: skirmish
@@ -31,29 +29,29 @@
 					type: ForEachPlayer
 					effect: [
 						{
-							type: conditional
-							requires: {
+							type: If
+							check: {
 								type: CanSpot
 								filter: your,InSkirmish,character,not(exhausted)
 							}
-							effect: [
+							true: [
 								{
 									type: chooseYesOrNo
 									text: Would you like to exert your skirmishing character to prevent all special abilities from being used this skirmish?
 									memorize: choice
 								}
 								{
-									type: conditional
-									requires: {
+									type: If
+									check: {
 										type: memoryIs
 										memory: choice
 										value: yes
 									}
-									effect: {
+									true: {
 										type: CostToEffect
 										cost: {
 											type: exert
-											filter: choose(your,character,InSkirmish)
+											select: choose(your,character,InSkirmish)
 										}
 										effect: [
 											{

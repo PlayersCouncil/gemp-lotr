@@ -1,50 +1,41 @@
 {
 	68_115: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN18E115.1.jpg
-			javaClass: false
-			parent: 18_115
-			parentPath: errata/pc
-			version: 1
+			//id: 8_115.1
+			revision: 1
+			image: errata/LOTR-EN18E115.1.jpg
 			collInfo: 18R115
 			rarity: R
-			setNum: "18"
-			cardNum: 115
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Final Triumph
 		culture: uruk-hai
 		twilight: 4
 		type: event
-		keyword: skirmish
-		requires: {
-			type: CanSpot
-			filter: your,Uruk-hai,InSkirmishAgainst(companion)
-		}
+		timeword: skirmish
 		effects: {
 			type: event
+			requires: {
+				type: CanSpot
+				filter: your,Uruk-hai,InSkirmishAgainst(companion)
+			}
 			effect: [
 				{
-					type: addModifier
-					modifier: {
-						type: FPUsesVitInsteadOfStr
-						filter: companion,InSkirmishAgainst(your,Uruk-hai)
+					type: setFPStrengthOverride
+					amount: {
+						type: forEachVitality
+					}
+				}
+				{
+					type: setShadowStrengthOverride
+					amount: {
+						type: forEachVitality
 					}
 				}
 				{
 					type: addModifier
 					modifier: {
-						type: ShadowUsesVitInsteadOfStr
-						filter: your,Uruk-hai,InSkirmishAgainst(companion)
-					}
-				}
-				{
-					type: addModifier
-					modifier: {
-						type: CantBeOverwhelmedMultiplier
+						type: CantBeOverwhelmed
 						filter: InSkirmish
-						multiplier: 100
 					}
 				}
 			]

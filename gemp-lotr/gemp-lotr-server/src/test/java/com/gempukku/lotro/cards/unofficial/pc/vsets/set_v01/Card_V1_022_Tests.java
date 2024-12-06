@@ -56,7 +56,7 @@ public class Card_V1_022_Tests
 		assertEquals(Culture.GONDOR, memorial.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, memorial.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, memorial.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(memorial, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.hasKeyword(memorial, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, memorial.getBlueprint().getTwilightCost());
 		//assertEquals(, memorial.getBlueprint().getStrength());
 		//assertEquals(, memorial.getBlueprint().getVitality());

@@ -11,7 +11,9 @@
 	<link rel="manifest" href="images/icons/site.webmanifest">
 
 	<link rel="stylesheet" type="text/css" href="css/gemp-001/deckBuild.css">
-	<link rel="stylesheet" type="text/css" href="css/gemp-001/autozoom.css">
+	<link rel="stylesheet" type="text/css" href="css/gemp-001/hall.css">
+	<link rel="stylesheet" type="text/css" href="css/gemp-001/cardFilter.css">
+  <link rel="stylesheet" type="text/css" href="css/gemp-001/autozoom.css">
 
 	<link rel="stylesheet" type="text/css" href="css/dark-hive/jquery-ui-1.8.16.custom.css">
 	<link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css">
@@ -31,12 +33,16 @@
 	<script type="text/javascript" src="js/gemp-022/communication.js"></script>
 	<script type="text/javascript" src="js/gemp-022/deliveryService.js"></script>
 	<script type="text/javascript" src="js/gemp-022/commonUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/cardFilter.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/CardFilter.js"></script>
 
-	<script type="text/javascript" src="js/gemp-022/jCardGroup.js"></script>
+  <script type="text/javascript" src="js/gemp-022/cards/CardGroup.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/Card.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/CardDisplay.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/CardInfoDialog.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/CardImages.js"></script>
+	<script type="text/javascript" src="js/gemp-022/cards/PackImages.js"></script>
 	<script type="text/javascript" src="js/gemp-022/hobbit.js"></script>
 	<script type="text/javascript" src="js/gemp-022/set40.js"></script>
-	<script type="text/javascript" src="js/gemp-022/jCards.js"></script>
 	<script type="text/javascript" src="js/gemp-022/PC_Cards.js"></script>
 
 	<script type="text/javascript" src="js/gemp-022/hallUi.js"></script>
@@ -89,9 +95,13 @@
 			<button id="deckListBut" title="Deck list" class="menu-button">
 				<span class="ui-icon ui-icon-suitcase"></span>
 			</button>
+			
+			<button id="convertErrataBut" title="Convert to PC Errata" class="menu-button">
+				<span class="ui-icon ui-icon-transferthick-e-w"></span>
+			</button>
 
-			<select id="formatSelect" style="float: right; width: 100px;">
-				<option value="fotr_block">Fellowship Block</option>
+			<select id="formatSelect" style="float: right; width: 200px;">
+				<option value="rev_tow_sta">Anything Goes</option>
 			</select>
 
 			<button id="notesBut" title="Add/Edit Notes" class="menu-button">
@@ -129,7 +139,7 @@
 				Map
 				<div class="helper-text" >
 					(Click here to select your Map.)
-					<br/><br/><i><a href="https://lotrtcgpc.net" target="_blank">See here for details.</a></i>
+					<br/><br/><i><a href="https://wiki.lotrtcgpc.net/wiki/Map" target="_blank">See here for details.</a></i>
 				</div>
 			</div>
 		</div>
@@ -138,7 +148,7 @@
 			<div id="sites-content" class="ui-widget-content card-group">
 				Sites
 				<div class="helper-text" style="top:10%">
-					(To select sites, change the "All Card Types" dropdown to "Sites", and consider changing "Sort By" to "Site Number".)
+					(Click here to select Sites. When done, you will need to manually reset the Card Type filter.)
 				</div>
 			</div>
 		</div>

@@ -1,0 +1,109 @@
+{
+
+	0_60: {
+		cardInfo: {
+			image: decipher/LOTR00060.jpg
+			collInfo: 0P60
+			rarity: P
+		}
+		title: Tom Bombadil's Hat
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		#target: 
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(shire),companion
+					count: 2
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: [
+					{
+						type: addsBurden
+						filter: side(shadow)
+					}
+					{
+						type: addsThreat
+						filter: side(shadow)
+					}
+				]
+				effect: {
+					type: AddCultureTokens
+					culture: shire
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: RemoveCultureTokens
+					select: self
+					count: 2
+					culture: shire
+				}
+				effect: {
+					type: removeBurdens
+				}
+			}
+		]
+		gametext: To play, spot 2 [shire] companions.<br>Each time a Shadow card adds a burden or a threat, add a [shire] token here.<br><b>Fellowship:</b> Remove 2 [shire] tokens from here to remove a burden.
+		lore: "...there appeared above the reeds an old battered hat a tall crown and a long blue feather...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	0_67: {
+		cardInfo: {
+			image: decipher/LOTR00067.jpg
+			collInfo: 0P67
+			rarity: P
+		}
+		title: Frodo
+		subtitle: Mr. Underhill
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Gandalf
+		resistance: 10
+		canStartWithRing: true
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyPlayOnCost
+				filter: or(artifact,possession,and(culture(shire),tale))
+				on: self
+				amount: -1
+			}
+		}
+		gametext: <b>Ring-bearer (resistance 10).</b><br>The twilight cost of each artifact, possession, and [shire] tale played on Frodo is -1.
+		lore: "'...I nearly tried on Bilbo's ring. I longed to disappear.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

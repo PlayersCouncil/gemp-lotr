@@ -1,0 +1,279 @@
+{
+
+	18_134: {
+		cardInfo: {
+			image: decipher/LOTR18134.jpg
+			collInfo: 18U134
+			rarity: U
+		}
+		title: Doorway to Doom
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: Mountain
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: [
+					{
+						type: wound
+						player: free people
+						select: choose(side(free people),character)
+						count: 2
+					}
+					{
+						type: wound
+						player: shadow
+						select: choose(side(shadow),character)
+						count: 2
+					}
+				]
+			}
+		]
+		gametext: <b>Mountain</b>. When the fellowship moves to this site, each player wounds two of his or her characters.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_135: {
+		cardInfo: {
+			image: decipher/LOTR18135.jpg
+			collInfo: 18U135
+			rarity: U
+		}
+		title: Foot of Mount Doom
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Mountain
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: removeCardsGoingToDiscard
+				}
+			}
+		]
+		gametext: <b>Mountain</b>. Each card that is about to be placed into the discard pile is removed from the game instead.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_136: {
+		cardInfo: {
+			image: decipher/LOTR18136.jpg
+			collInfo: 18U136
+			rarity: U
+		}
+		title: Mithlond
+		unique: false
+		twilight: 2
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: River
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: [
+					{
+						type: heal
+						player: free people
+						select: all(side(free people),character)
+					}
+					{
+						type: heal
+						player: shadow
+						select: all(side(shadow),character)
+					}
+				]
+			}
+		]
+		gametext: <b>River</b>. When the fellowship moves to this site, each player heals each of his or her characters.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_137: {
+		cardInfo: {
+			image: decipher/LOTR18137.jpg
+			collInfo: 18U137
+			rarity: U
+		}
+		title: Morannon Plains
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: [
+			Battleground
+			Plains
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: [
+					{
+						type: ForEachPlayer
+						effect: {
+							type: optional
+							text: Would you like to reinforce a culture token
+							effect: {
+								type: reinforceTokens
+							}
+						}
+					}
+				]
+			}
+		]
+		gametext: <b>Battleground</b>. <b>Plains</b>. When the fellowship moves to this site, each player may reinforce a culture token.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_138: {
+		cardInfo: {
+			image: decipher/LOTR18138.jpg
+			collInfo: 18U138
+			rarity: U
+		}
+		title: Sirannon Ruins
+		unique: false
+		twilight: 4
+		type: Site
+		block: Shadows
+		direction: Right
+		keywords: River
+		gametext: <b>River</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_139: {
+		cardInfo: {
+			image: decipher/LOTR18139.jpg
+			collInfo: 18U139
+			rarity: U
+		}
+		title: Steward's Tomb
+		unique: false
+		twilight: 1
+		type: Site
+		block: Shadows
+		direction: Right
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantPreventWounds
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantHeal
+					filter: any
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantRemoveBurdens
+				}
+			}
+		]
+		gametext: Wounds cannot be prevented or healed. Burdens cannot be removed.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	18_140: {
+		cardInfo: {
+			image: decipher/LOTR18140.jpg
+			collInfo: 18U140
+			rarity: U
+		}
+		title: Streets of Bree
+		unique: false
+		twilight: 0
+		type: Site
+		block: Shadows
+		direction: Left
+		keywords: Dwelling
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeTransferred
+					filter: follower
+				}
+			}
+		]
+		gametext: <b>Dwelling</b>. While the fellowship is at this site, followers cannot be transferred to a character.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

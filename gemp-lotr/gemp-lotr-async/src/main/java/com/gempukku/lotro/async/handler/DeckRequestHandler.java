@@ -2,9 +2,11 @@ package com.gempukku.lotro.async.handler;
 
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
+import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.db.DeckDAO;
+import com.gempukku.lotro.db.DeckSerialization;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -38,6 +40,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private final LotroFormatLibrary _formatLibrary;
     private final SoloDraftDefinitions _draftLibrary;
     private final LotroServer _lotroServer;
+    private final MarkdownParser _markdownParser;
 
     private static final Logger _log = LogManager.getLogger(DeckRequestHandler.class);
 
@@ -49,6 +52,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         _formatLibrary = extractObject(context, LotroFormatLibrary.class);
         _lotroServer = extractObject(context, LotroServer.class);
         _draftLibrary = extractObject(context, SoloDraftDefinitions.class);
+        _markdownParser = extractObject(context, MarkdownParser.class);
     }
 
     @Override
@@ -77,7 +81,9 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             getDeckStats(request, responseWriter);
         } else if (uri.equals("/formats") && request.method() == HttpMethod.POST) {
             getAllFormats(request, responseWriter);
-        } else {
+        } else if (uri.equals("/convert") && request.method() == HttpMethod.POST) {
+            convertErrata(request, responseWriter);
+        }else {
             throw new HttpProcessingException(404);
         }
     }
@@ -108,13 +114,12 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                 json = JsonUtils.Serialize(data);
             }
             else {
-                Map<String, LotroFormat> formats = _formatLibrary.getHallFormats();
+                JSONDefs.FullFormatReadout data = new JSONDefs.FullFormatReadout();
+                data.Formats = _formatLibrary.getAllFormats().values().stream()
+                        .map(LotroFormat::Serialize)
+                        .collect(Collectors.toMap(x-> x.code, x-> x));
 
-                Object[] output = formats.entrySet().stream()
-                        .map(x -> new JSONDefs.ItemStub(x.getKey(), x.getValue().getName()))
-                        .toArray();
-
-                json = JsonUtils.Serialize(output);
+                json = JsonUtils.Serialize(data);
             }
 
             responseWriter.writeJsonResponse(json);
@@ -393,7 +398,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         for (CardCollection.Item item : _sortAndFilterCards.process("side:SHADOW sort:cardType,culture,name", deckCards.getAll(), _library, _formatLibrary))
             result.append(item.getCount() + "x " + generateCardTooltip(item) + "<br/>");
 
-        result.append("<h3>Notes</h3><br>" + deck.getNotes().replace("\n", "<br/>"));
+        result.append("<h3>Notes</h3><br>" + _markdownParser.renderMarkdown(deck.getNotes(), true));
 
         result.append("</body></html>");
 
@@ -443,6 +448,24 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
         responseWriter.writeXmlResponse(serializeDeck(resourceOwner, deckName));
+    }
+
+    private void convertErrata(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException, ParserConfigurationException {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+
+            String targetFormat = getFormParameterSafely(postDecoder, "targetFormat");
+            String contents = getFormParameterSafely(postDecoder, "deckContents");
+
+            var format = validateFormat(targetFormat);
+            var originalDeck = DeckSerialization.buildDeckFromContents("", contents, format.getName(), "");
+
+            responseWriter.writeXmlResponse(serializeDeck(format.applyErrata(originalDeck)));
+        } finally {
+            postDecoder.destroy();
+        }
     }
 
     private void getLibraryDeck(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, ParserConfigurationException {

@@ -21,7 +21,7 @@ public class Card_01_009_Tests
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<String, String>()
+				new HashMap<>()
 				{{
 					put("axe", "1_9");
 					put("gimli", "1_13");
@@ -39,24 +39,24 @@ public class Card_01_009_Tests
 	public void DwarvenAxeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Dwarven Axe
-		* Unique: False
-		* Side: FREE_PEOPLE
-		* Culture: Dwarven
-		* Twilight Cost: 0
-		* Type: possession
-		* Subtype: Hand Weapon
-		* Strength: 2
-		* Game Text: Bearer must be a Dwarf.
+		 * Set: 1
+		 * Name: Dwarven Axe
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 0
+		 * Type: Possession
+		 * Subtype: Hand Weapon
+		 * Strength: 2
+		 * Game Text: Bearer must be a Dwarf.
 		 * Each time a minion loses a skirmish to bearer, that minion's owner must discard the top card of their draw deck.
-		*/
+		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("axe");
-
+		assertEquals("Dwarven Axe", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
@@ -178,10 +178,10 @@ public class Card_01_009_Tests
 			Map<String, Collection<String>> extraCards = new HashMap<>();
 			initializeSimplestGame(extraCards);
 
-			PhysicalCardImpl gimli = new PhysicalCardImpl(100, "1_13", P1, _cardLibrary.getLotroCardBlueprint("1_13"));
-			PhysicalCardImpl dwarvenAxe = new PhysicalCardImpl(101, "1_9", P1, _cardLibrary.getLotroCardBlueprint("1_9"));
-			PhysicalCardImpl goblinRunner = new PhysicalCardImpl(102, "1_178", P2, _cardLibrary.getLotroCardBlueprint("1_178"));
-			PhysicalCardImpl cardInDeck = new PhysicalCardImpl(103, "1_178", P2, _cardLibrary.getLotroCardBlueprint("1_178"));
+			var gimli = new PhysicalCardImpl(100, "1_13", P1, _cardLibrary.getLotroCardBlueprint("1_13"));
+			var dwarvenAxe = new PhysicalCardImpl(101, "1_9", P1, _cardLibrary.getLotroCardBlueprint("1_9"));
+			var goblinRunner = new PhysicalCardImpl(102, "1_178", P2, _cardLibrary.getLotroCardBlueprint("1_178"));
+			var cardInDeck = new PhysicalCardImpl(103, "1_178", P2, _cardLibrary.getLotroCardBlueprint("1_178"));
 
 			skipMulligans();
 

@@ -30,7 +30,7 @@ public class PlayRingBearerRingAndAddBurdersGameProcess implements GameProcess {
             if (ring != null)
                 gameState.attachCard(game, ring, ringBearer);
 
-            gameState.startPlayerTurn(playerId);
+            gameState.startPlayerTurn(playerId, false);
             gameState.addBurdens(_bids.get(playerId));
         }
         gameState.setCurrentPhase(Phase.PLAY_STARTING_FELLOWSHIP);

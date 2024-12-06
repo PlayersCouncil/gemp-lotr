@@ -1,0 +1,43 @@
+{
+
+	9_41: {
+		cardInfo: {
+			image: decipher/LOTR09041.jpg
+			collInfo: 9R+41
+			rarity: R+
+		}
+		title: Host of Moria
+		subtitle: Legion of the Underdeeps
+		unique: true
+		side: Shadow
+		culture: Moria
+		twilight: 7
+		type: Minion
+		race: Orc
+		strength: 15
+		vitality: 3
+		site: 4
+		effects: {
+			type: Trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: self
+			}
+			effect: {
+				type: playCardFromDiscard
+				select: choose(culture(moria),not(event,timeword(response)))
+			}
+		}
+		gametext: When you play Host of Moria, you may play a [moria] card from your discard pile.
+		lore: "There was a horn-blast and a rush of feet, and orcs one after another leaped into the chamber."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

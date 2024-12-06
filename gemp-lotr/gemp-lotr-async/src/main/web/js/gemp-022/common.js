@@ -74,3 +74,21 @@ function replaceIncludes($) {
   // });
 
 }
+
+function loadFromCookie(cookieName, defaultValue) {
+    let cookie = $.cookie(cookieName);
+    if (cookie === undefined || cookie === null){
+        saveToCookie(cookieName, defaultValue);
+        return defaultValue;
+    } else {
+        return cookie;
+    }
+}
+
+function saveToCookie(cookieName, value) {
+    $.cookie(cookieName, value, { expires: 365 });
+}
+
+function onTouchDevice() {
+    return 'ontouchstart' in document.documentElement;
+}

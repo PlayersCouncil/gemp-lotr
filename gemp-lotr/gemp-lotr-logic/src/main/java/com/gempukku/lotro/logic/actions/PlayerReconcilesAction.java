@@ -1,6 +1,7 @@
 package com.gempukku.lotro.logic.actions;
 
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -45,12 +46,12 @@ public class PlayerReconcilesAction implements Action {
     }
 
     @Override
-    public Phase getActionTimeword() {
+    public Timeword getActionTimeword() {
         return null;
     }
 
     @Override
-    public void setActionTimeword(Phase phase) {
+    public void setActionTimeword(Timeword timeword) {
     }
 
     @Override
@@ -109,16 +110,20 @@ public class PlayerReconcilesAction implements Action {
                                             new TriggeringResultEffect(new ReconcileResult(_playerId), "Player reconciled"));
                                 }
                             }));
-                } else if (cardsInHand.size() > 0) {
+                } else if (!cardsInHand.isEmpty()) {
                     _effectQueue.add(new PlayoutDecisionEffect(_playerId,
                             new CardsSelectionDecision(1, "Reconcile - choose card to discard or press DONE", cardsInHand, 0, 1) {
                                 @Override
                                 public void decisionMade(String result) throws DecisionResultInvalidException {
                                     Set<PhysicalCard> selectedCards = getSelectedCardsByResponse(result);
-                                    if (selectedCards.size() > 0) {
+                                    if (!selectedCards.isEmpty()) {
                                         _effectQueue.add(new DiscardCardsFromHandEffect(null, _playerId, selectedCards, false));
                                     }
-                                    int cardsInHandAfterDiscard = cardsInHand.size() - selectedCards.size();
+                                    //We refresh the hand size here because effects could have reacted to the discard, causing
+                                    // the previous hand size calculation to be stale.
+                                    //See https://github.com/PlayersCouncil/gemp-lotr/issues/89
+                                    //As the discard selection is only queued, we need to subtract it from the current hand size.
+                                    int cardsInHandAfterDiscard = gameState.getHand(_playerId).size() - selectedCards.size();
                                     if (cardsInHandAfterDiscard < handSize) {
                                         _effectQueue.add(new DrawCardsEffect(PlayerReconcilesAction.this, _playerId, handSize - cardsInHandAfterDiscard));
                                     }

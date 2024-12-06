@@ -4,6 +4,7 @@ import com.gempukku.lotro.AbstractServer;
 import com.gempukku.lotro.PrivateInformationException;
 import com.gempukku.lotro.chat.ChatCommandErrorException;
 import com.gempukku.lotro.chat.ChatServer;
+import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.db.DeckDAO;
 import com.gempukku.lotro.hall.GameSettings;
 import com.gempukku.lotro.logic.timing.GameResultListener;
@@ -33,14 +34,17 @@ public class LotroServer extends AbstractServer {
 
     private final ChatServer _chatServer;
     private final GameRecorder _gameRecorder;
+    private final MarkdownParser _markdownParser;
 
     private final ReadWriteLock _lock = new ReentrantReadWriteLock();
 
-    public LotroServer(DeckDAO deckDao, LotroCardBlueprintLibrary library, ChatServer chatServer, GameRecorder gameRecorder) {
+    public LotroServer(DeckDAO deckDao, LotroCardBlueprintLibrary library, ChatServer chatServer,
+            GameRecorder gameRecorder, MarkdownParser parser) {
         _deckDao = deckDao;
         _lotroCardBlueprintLibrary = library;
         _chatServer = chatServer;
         _gameRecorder = gameRecorder;
+        _markdownParser = parser;
     }
 
     protected void cleanup() {
@@ -110,9 +114,9 @@ public class LotroServer extends AbstractServer {
                 spectate = false;
             }
 
-            LotroGameMediator lotroGameMediator = new LotroGameMediator(gameId, gameSettings.format(), participants, _lotroCardBlueprintLibrary,
-                    gameSettings.timeSettings(),
-                    spectate, !gameSettings.competitive(), gameSettings.hiddenGame(), tournamentName);
+            LotroGameMediator lotroGameMediator = new LotroGameMediator(gameId, gameSettings.format(), participants,
+                    _lotroCardBlueprintLibrary, gameSettings.timeSettings(), spectate, !gameSettings.competitive(),
+                    gameSettings.hiddenGame(), tournamentName, _markdownParser);
             lotroGameMediator.addGameResultListener(
                 new GameResultListener() {
                     @Override

@@ -61,7 +61,7 @@ public interface Modifier {
 
     boolean canTakeWounds(LotroGame game, Collection<PhysicalCard> woundSources, PhysicalCard physicalCard, int woundsAlreadyTakenInPhase, int woundsToTake);
 
-    boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard physicalCard, Set<PhysicalCard> winners);
+    boolean canTakeWoundsFromLosingSkirmish(LotroGame game, PhysicalCard physicalCard);
 
     boolean canTakeArcheryWound(LotroGame game, PhysicalCard physicalCard);
 
@@ -72,6 +72,8 @@ public interface Modifier {
     boolean isAllyParticipateInSkirmishes(LotroGame game, Side sidePlayer, PhysicalCard card);
 
     boolean isUnhastyCompanionAllowedToParticipateInSkirmishes(LotroGame game, PhysicalCard card);
+
+    boolean isAssignmentCostPaid(LotroGame game, PhysicalCard card);
 
     boolean isAllyPreventedFromParticipatingInArcheryFire(LotroGame game, PhysicalCard card);
 
@@ -153,6 +155,8 @@ public interface Modifier {
     boolean canSpotCulture(LotroGame game, Culture culture, String playerId);
 
     int getFPCulturesSpotCountModifier(LotroGame game, String playerId);
+
+    int getSiteControlledSpotCountModifier(LotroGame game, String playerId);
 
     int getSanctuaryHealModifier(LotroGame game);
 

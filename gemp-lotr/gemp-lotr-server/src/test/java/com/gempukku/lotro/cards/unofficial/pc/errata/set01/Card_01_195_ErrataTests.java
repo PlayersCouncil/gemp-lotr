@@ -56,7 +56,7 @@ public class Card_01_195_ErrataTests
         assertEquals(Culture.MORIA, relics.getBlueprint().getCulture());
         assertEquals(CardType.CONDITION, relics.getBlueprint().getCardType());
         assertEquals(1, relics.getBlueprint().getTwilightCost());
-        assertTrue(scn.HasKeyword(relics, Keyword.SUPPORT_AREA));
+        assertTrue(scn.hasKeyword(relics, Keyword.SUPPORT_AREA));
     }
 
     @Test

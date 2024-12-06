@@ -2,17 +2,11 @@
 
 	61_114: {
 		cardInfo: {
-			imagePath: errata/61_114.jpg
-			javaClass: false
-			parent: 11_114
-			parentPath: errata/pc
-			version: 1?
+			//id: 1_114.1
+			revision: 1
+			image: errata/61_114.jpg
 			collInfo: 11U114
 			rarity: U
-			setNum: "11"
-			cardNum: 114
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Demoralized
 		unique: true
@@ -20,30 +14,36 @@
 		twilight: 1
 		type: condition
 		keyword: support area
-		requires: {
-			type: canSpot
-			filter: culture(orc),minion
-		}
-		effects: {
-			type: trigger
-			trigger: {
-				type: exerts
-				filter: companion
-			}
-			effect: {
-				type: addTwilight
-				amount: {
-					type: requires
-					requires: {
-						type: canSpot
-						filter: companion
-						count: 6
-					}
-					true: 2
-					false: 1
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(orc),minion
 				}
 			}
-		}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: exerted
+					filter: companion
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: companion
+							count: 6
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+		]
 		gametext: To play, spot an [orc] minion. <br>Each time a companion exerts, you<br> may add (1) (or (2) if you can spot 6 companions).
 		lore: "But soon there were few left in Minas Tirith<br> who had the heart to stand up and defy the hosts of Mordor."
 		promotext: ""
@@ -57,17 +57,11 @@
 
 	61_132: {
 		cardInfo: {
-			imagePath: errata/61_132.jpg
-			javaClass: false
-			parent: 11_132
-			parentPath: errata/pc
-			version: 1?
+			//id: 1_132.1
+			revision: 1
+			image: errata/61_132.jpg
 			collInfo: 11C132
 			rarity: C
-			setNum: "11"
-			cardNum: 132
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Orkish Smith
 		culture: orc
@@ -78,7 +72,7 @@
 		vitality: 1
 		site: 4
 		effects: {
-			type: trigger
+			type: Trigger
 			optional: true
 			trigger: {
 				type: played
@@ -86,7 +80,7 @@
 			}
 			effect: {
 				type: shuffleCardsFromDiscardIntoDrawDeck
-				filter: choose(culture(orc),condition)
+				select: choose(culture(orc),condition)
 				count: 0-2
 			}
 		}

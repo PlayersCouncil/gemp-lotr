@@ -28,7 +28,7 @@ public class PayPlayOnTwilightCostEffect extends AbstractEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        int twilightCost = game.getModifiersQuerying().getTwilightCost(game, _physicalCard, _target, _twilightModifier, false);
+        int twilightCost = game.getModifiersQuerying().getTwilightCostToPlay(game, _physicalCard, _target, _twilightModifier, false);
 
         String currentPlayerId = game.getGameState().getCurrentPlayerId();
         if (!currentPlayerId.equals(_physicalCard.getOwner())) {
@@ -41,7 +41,7 @@ public class PayPlayOnTwilightCostEffect extends AbstractEffect {
 
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
-        int twilightCost = game.getModifiersQuerying().getTwilightCost(game, _physicalCard, _target, _twilightModifier, false);
+        int twilightCost = game.getModifiersQuerying().getTwilightCostToPlay(game, _physicalCard, _target, _twilightModifier, false);
 
         String currentPlayerId = game.getGameState().getCurrentPlayerId();
         if (currentPlayerId.equals(_physicalCard.getOwner())) {

@@ -31,40 +31,44 @@ public class Card_01_053_Tests
 	public void LorienElfStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 1
-		* Title: Lorien Elf
-		* Side: Free Peoples
-		* Culture: Elven
-		* Twilight Cost: 1
-		* Type: companion
-		* Subtype: Elf
-		* Strength: 5
-		* Vitality: 2
-		* Game Text: To play, spot an Elf.
-		*/
+		 * Set: 1
+		 * Name: Lórien Elf
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Elven
+		 * Twilight Cost: 1
+		 * Type: Companion
+		 * Subtype: Elf
+		 * Strength: 4
+		 * Vitality: 2
+		 * Resistance: 6
+		 * Game Text: To play, spot an Elf.
+		 */
 
-		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl elf = scn.GetFreepsCard("elf");
+		var card = scn.GetFreepsCard("elf");
 
-		assertFalse(elf.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, elf.getBlueprint().getSide());
-		assertEquals(Culture.ELVEN, elf.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, elf.getBlueprint().getCardType());
-		assertEquals(Race.ELF, elf.getBlueprint().getRace());
-		assertEquals(1, elf.getBlueprint().getTwilightCost());
-		assertEquals(4, elf.getBlueprint().getStrength());
-		assertEquals(2, elf.getBlueprint().getVitality());
+		assertEquals("Lórien Elf", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.ELF, card.getBlueprint().getRace());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(4, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	@Test
 	public void LorienElfRequiresAnElfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl elf = scn.GetFreepsCard("elf");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
+		var elf = scn.GetFreepsCard("elf");
+		var arwen = scn.GetFreepsCard("arwen");
 		scn.FreepsMoveCardToHand(elf, arwen);
 
 		scn.StartGame();

@@ -1,0 +1,499 @@
+{
+
+	2_39: {
+		cardInfo: {
+			image: decipher/LOTR02039.jpg
+			collInfo: 2R39
+			rarity: R
+		}
+		title: Beyond the Height of Men
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(uruk-hai)
+			}
+			effect: [
+				{
+					type: If
+					check: {
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+					true: {
+						type: discard
+						select: all(side(free people),possession,or(armor,helm,shield))
+					}
+				}
+				{
+					type: If
+					check: {
+						type: cantSpot
+						filter: companion
+						count: 6
+					}
+					true: {
+						type: discard
+						select: choose(possession,or(armor,helm,shield))
+					}
+				}
+			]
+		}
+		gametext: <b>Maneuver:</b> Exert an Uruk-hai to discard an armor possession, helm possession, or shield possession (or all such Free Peoples possessions if you can spot 6 companions).
+		lore: "'Whom do you serve?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_40: {
+		cardInfo: {
+			image: decipher/LOTR02040.jpg
+			collInfo: 2C40
+			rarity: C
+		}
+		title: Demands of the Sackville-Bagginses
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(isengard),minion
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: exerted
+					filter: culture(shire),ally
+				}
+				effect: {
+					type: addTwilight
+					amount: 1
+				}
+			}
+		]
+		gametext: To play, spot an [isengard] minion. Plays to your support area.<br>Each time a [shire] ally exerts, add (1).
+		lore: "In the middle of the commotion, the Sackville- Bagginses arrived."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_41: {
+		cardInfo: {
+			image: decipher/LOTR02041.jpg
+			collInfo: 2U41
+			rarity: U
+		}
+		title: Evil Afoot
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: {
+			type: event
+			cost: [
+				{
+					type: exert
+					select: choose(uruk-hai)
+				}
+				{
+					type: chooseHowManyBurdensToSpot
+					memorize: spottedBurdens
+				}
+			]
+			effect: {
+				type: shuffleCardsFromDiscardIntoDrawDeck
+				count: {
+					type: fromMemory
+					memory: spottedBurdens
+				}
+				select: choose(minion)
+			}
+		}
+		gametext: <b>Shadow:</b> Exert an Uruk-hai and spot X burdens to shuffle X minions from your discard pile into your draw deck.
+		lore: "'It is not the Eastern Shore I am worried about. A shadow and a threat has been growing in my mind. Something draws near, I can feel it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_42: {
+		cardInfo: {
+			image: decipher/LOTR02042.jpg
+			collInfo: 2C42
+			rarity: C
+		}
+		title: Goblin Man
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 2
+		site: 2
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: {
+						type: location
+						filter: underground
+					}
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: lookAtHand
+					hand: fp
+				}
+			}
+		]
+		gametext: Discard this minion if underground.<br><b>Shadow:</b> Exert this minion to look at the Free Peoples player's hand.
+		lore: "'He looks more than half like a goblin.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_43: {
+		cardInfo: {
+			image: decipher/LOTR02043.jpg
+			collInfo: 2R43
+			rarity: R
+		}
+		title: Lurtz's Sword
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: name(Lurtz)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage+1
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: discardTopCardsFromDeck
+					count: 2
+					forced: true
+					deck: fp
+				}
+			}
+		]
+		gametext: Bearer must be Lurtz.<br>He is <b>damage +1</b>.<br>Each time Lurtz wins a skirmish, the Free Peoples player must discard the top 2 cards of his or her draw deck.
+		lore: "The Uruk giant laid down his bow and drew a broad-bladed weapon."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_44: {
+		cardInfo: {
+			image: decipher/LOTR02044.jpg
+			collInfo: 2C44
+			rarity: C
+		}
+		title: No Business of Ours
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(isengard),minion
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantLookOrRevealHand
+					player: fp
+					hand: shadowPlayer
+				}
+			}
+		]
+		gametext: To play, spot an [isengard] minion. Plays to your support area.<br>The Free Peoples player may not look at or reveal cards in any Shadow player's hand.
+		lore: "'Goblins? Cobblers! Far-off tales and children's stories, that's all that is!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_45: {
+		cardInfo: {
+			image: decipher/LOTR02045.jpg
+			collInfo: 2R45
+			rarity: R
+		}
+		title: Too Much Attention
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			requires: {
+				type: canSpot
+				filter: culture(isengard),minion
+			}
+			trigger: {
+				type: putsOnRing
+			}
+			effect: {
+				type: discardTopCardsFromDeck
+				count: 5
+				forced: true
+				deck: fp
+			}
+		}
+		gametext: <b>Response:</b> If the Ring-bearer puts on The One Ring, spot an [isengard] minion to make the Free Peoples player discard the top 5 cards of his or her draw deck.
+		lore: "'A little more caution from you – that is not a trinket you carry.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_46: {
+		cardInfo: {
+			image: decipher/LOTR02046.jpg
+			collInfo: 2R46
+			rarity: R
+		}
+		title: Uruk Captain
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: Damage+1
+		effects: {
+			type: activated
+			phase: shadow
+			cost: [
+				{
+					type: removeTwilight
+					amount: 1
+				}
+				{
+					type: exert
+					select: self
+				}
+			]
+			effect: {
+				type: playCardFromDiscard
+				select: choose(uruk-hai)
+			}
+		}
+		gametext: <b>Damage +1</b>.<br><b>Shadow:</b> Remove (1) and exert Uruk Captain to play an Uruk-hai from your discard pile.
+		lore: "The captains marched the Uruk-hai to the great river without halting."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_47: {
+		cardInfo: {
+			image: decipher/LOTR02047.jpg
+			collInfo: 2C47
+			rarity: C
+		}
+		title: Uruk Scout
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Uruk-hai
+		strength: 7
+		vitality: 2
+		site: 5
+		keywords: [
+			Tracker
+			Damage+1
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyRoamingPenalty
+					filter: culture(isengard),minion,your
+					amount: -1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: played
+					filter: event
+					exertsRanger: true
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: cancelEvent
+				}
+			}
+		]
+		gametext: <b>Tracker</b>. <b>Damage +1</b>.<br>The roaming penalty for each [isengard] minion you play is -1.<br><b>Response:</b> If an event is played that spots or exerts a ranger, exert this minion to cancel that event.
+		lore: "Forward Uruk troops caught the fellowship unaware."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	2_48: {
+		cardInfo: {
+			image: decipher/LOTR02048.jpg
+			collInfo: 2U48
+			rarity: U
+		}
+		title: Wizard Storm
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Condition
+		target: site,not(hasAttached(name(Wizard Storm)))
+		keywords: [
+			Spell
+			Weather
+		]
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: exert
+					select: choose(culture(isengard),minion)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: movesFrom
+					filter: hasAttached(self)
+				}
+				effect: {
+					type: exert
+					select: all(companion)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: endOfTurn
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: <b>Spell</b>. <b>Weather</b>. To play, exert an [isengard] minion. Plays on a site. Limit 1 per site.<br>When the fellowship moves from this site, every companion must exert. Discard this condition at the end of the turn.
+		lore: "There was a black look in the sky, and the sun was wan. The wind had gone now round to the north-east."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

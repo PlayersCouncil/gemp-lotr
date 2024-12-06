@@ -1,0 +1,2663 @@
+{
+
+	7_79: {
+		cardInfo: {
+			image: decipher/LOTR07079.jpg
+			collInfo: 7R79
+			rarity: R
+		}
+		title: Andúril
+		subtitle: Flame of the West
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Artifact
+		strength: 2
+		vitality: 1
+		itemclass: Hand weapon
+		target: title(Aragorn)
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: all(another,weapon,attachedTo(bearer))
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBear
+					filter: bearer
+					cardFilter: another,weapon
+				}
+			}
+			{
+				type: activated
+				phase: [
+					fellowship
+					regroup
+				]
+				requires: {
+					type: location
+					filter: or(siteNumber(2),siteNumber(5))
+				}
+				effect: {
+					type: playNextSite
+				}
+			}
+		]
+		gametext: Bearer must be Aragorn. Discard other weapons he bears. He is <b>damage +1</b> and cannot bear other weapons.<br><b>Fellowship</b> <i>or</i> <b>Regroup:</b> If the fellowship is at any site 2 or any site 5, play the fellowship's next site (replacing opponent's site if necessary).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_80: {
+		cardInfo: {
+			image: decipher/LOTR07080.jpg
+			collInfo: 7R80
+			rarity: R
+		}
+		title: Andúril
+		subtitle: King's Blade
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Artifact
+		strength: 2
+		itemclass: Hand weapon
+		target: title(Aragorn)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self
+					requires: {
+						type: CantSpotThreats
+					}
+					keyword: defender
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be Aragorn.<br>If you cannot spot a threat, Aragorn is <b>defender +1</b>.
+		lore: "The Sword of Elendil was forged anew by Elvish smiths... for Aragorn son of Arathorn was going to war upon the marches of Mordor."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_81: {
+		cardInfo: {
+			image: decipher/LOTR07081.jpg
+			collInfo: 7C81
+			rarity: C
+		}
+		title: Aragorn
+		subtitle: Captain of Gondor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		keywords: Knight
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+				effect: {
+					type: heal
+					select: choose(another,culture(gondor),companion)
+				}
+			}
+		]
+		gametext: <b>Knight</b>.<br>At the start of each fellowship phase, you may add (2) to heal another [gondor] companion.
+		lore: "'...but one who can wield the power this sword commands....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_82: {
+		cardInfo: {
+			image: decipher/LOTR07082.jpg
+			collInfo: 7C82
+			rarity: C
+		}
+		title: Cirion
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: [
+						{
+							type: isGreaterThanOrEqual
+							firstNumber: {
+								type: forEachInHand
+							}
+							secondNumber: 4
+						}
+						{
+							type: isLessThanOrEqual
+							firstNumber: {
+								type: forEachInHand
+							}
+							secondNumber: 5
+						}
+					]
+					filter: self
+					amount: 2
+				}
+			}
+		]
+		gametext: While you have only 4 or 5 cards in hand, Cirion is strength +2.
+		lore: "So now at last the City was besieged...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_83: {
+		cardInfo: {
+			image: decipher/LOTR07083.jpg
+			collInfo: 7C83
+			rarity: C
+		}
+		title: City of Men
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(gondor),man)
+					amount: 2
+					memorize: chosenMan
+				}
+				{
+					type: If
+					check: {
+						type: memoryMatches
+						memory: chosenMan
+						filter: inSkirmishAgainst(culture(sauron),minion)
+					}
+					true: [
+						{
+							type: memorizeActive
+							filter: culture(sauron),minion,inSkirmishAgainst(memory(chosenMan))
+							memory: sauronMinions
+						}
+						{
+							type: addTrigger
+							trigger: {
+								type: endOfPhase
+								phase: skirmish
+							}
+							effect: {
+								type: discard
+								select: choose(memory(sauronMinions))
+							}
+						}
+					]
+				}
+			]
+		}
+		gametext: Make a [gondor] Man strength +2. If that Man is skirmishing a [sauron] minion, discard that minion at the end of the skirmish.
+		lore: "'I will gladly give my life to defend her beauty, her memory... her wisdom.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_84: {
+		cardInfo: {
+			image: decipher/LOTR07084.jpg
+			collInfo: 7C84
+			rarity: C
+		}
+		title: Dagger Strike
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(or(culture(gondor),culture(shire)),companion,hasAttached(hand weapon))
+					amount: 2
+					memorize: chosenCompanion
+				}
+				{
+					type: addKeyword
+					select: memory(chosenCompanion)
+					keyword: damage
+					amount: 1
+				}
+			]
+		}
+		gametext: Make a [gondor] or [shire] companion bearing a hand weapon strength +2 and <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_85: {
+		cardInfo: {
+			image: decipher/LOTR07085.jpg
+			collInfo: 7R85
+			rarity: R
+		}
+		title: Denethor
+		subtitle: Steward of the City
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 8
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				effect: {
+					type: PlayCardFromHand
+					select: choose(culture(gondor),knight)
+					discount: -2
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: addsThreat
+					filter: side(shadow)
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: addsBurden
+					filter: side(shadow)
+				}
+				effect: {
+					type: addThreats
+				}
+			}
+		]
+		gametext: <b>Fellowship:</b> Play a [gondor] knight. That knight's twilight cost is -2.<br>Each time a Shadow card adds a threat, add a burden. Each time a Shadow card adds a burden, add a threat.
+		lore: "A pale smile, like a gleam of cold sun on a winter's evening, passed over the old man's face...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_86: {
+		cardInfo: {
+			image: decipher/LOTR07086.jpg
+			collInfo: 7C86
+			rarity: C
+		}
+		title: Denethor
+		subtitle: Wizened Steward
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		signet: Aragorn
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: another,culture(gondor),man
+						limit: 4
+					}
+				}
+			}
+		]
+		gametext: Denethor is strength +1 for each other [gondor] Man you can spot (limit +4).
+		lore: "'...in desperate hours gentleness may be repaid with death.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_87: {
+		cardInfo: {
+			image: decipher/LOTR07087.jpg
+			collInfo: 7R87
+			rarity: R
+		}
+		title: Derufin
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: isEqual
+					firstNumber: {
+						type: forEachInHand
+					}
+					secondNumber: 5
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(or(engine,machine,possession))
+				}
+			}
+		]
+		gametext: <b>Regroup:</b> While you have exactly 5 cards in hand, you may exert Derufin to discard an engine, machine, or possession.
+		lore: "From the uplands of Morthond...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_88: {
+		cardInfo: {
+			image: decipher/LOTR07088.jpg
+			collInfo: 7U88
+			rarity: U
+		}
+		title: Dervorin
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				requires: [
+					{
+						type: isEqual
+						firstNumber: {
+							type: forEachInHand
+						}
+						secondNumber: 4
+					}
+					{
+						type: canSpot
+						filter: another,culture(gondor),man
+					}
+				]
+				effect: {
+					type: discard
+					select: choose(minion)
+				}
+			}
+		]
+		gametext: At the start of the regroup phase, if you have only 4 cards in hand, you may spot another [gondor] Man to discard a minion.
+		lore: "The men of Ringló Vale behind the son of their lord...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_89: {
+		cardInfo: {
+			image: decipher/LOTR07089.jpg
+			collInfo: 7C89
+			rarity: C
+		}
+		title: Duty of Two
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			cost: {
+				type: addThreats
+				amount: 3
+			},
+			effect: [
+				{
+					type: heal
+					select: all(culture(gondor),companion)
+				}
+			]
+		}
+		gametext: Add 3 threats to heal all [gondor] companions.
+		lore: "'...for himself, and for the one that will not return.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_90: {
+		cardInfo: {
+			image: decipher/LOTR07090.jpg
+			collInfo: 7C90
+			rarity: C
+		}
+		title: Faramir
+		subtitle: Stout Captain
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		keywords: Ranger
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gondor),man
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+					against: fierce,minion
+					memorizeLoser: losers
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: discard
+					select: choose(memory(losers),fierce,minion)
+				}
+			}
+		]
+		gametext: <b>Ranger</b>. To play, spot a [gondor] Man.<br>Each time Faramir wins a skirmish involving a fierce minion, you may exert Faramir to discard that minion.
+		lore: "'But if I should return, think better of me!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_91: {
+		cardInfo: {
+			image: decipher/LOTR07091.jpg
+			collInfo: 7R91
+			rarity: R
+		}
+		title: Faramir
+		subtitle: Wizard's Pupil
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Frodo
+		resistance: 6
+		keywords: Ranger
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: PlayCardFromHand
+					select: choose(culture(rohan),man)
+				}
+				effect: {
+					type: heal
+					select: self
+				}
+			}
+			{
+				type: activated
+				text: Exert Faramir to make an unbound Hobbit strength +2
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(unbound,hobbit)
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				text: Exert Gandalf to prevent all wounds to Faramir
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(name(Gandalf))
+				}
+				effect: {
+					type: preventAllWounds
+					select: self
+				}
+			}
+		]
+		gametext: <b>Ranger</b>.<br><b>Fellowship:</b> Play a [rohan] Man to heal Faramir.<br><b>Skirmish:</b> Exert Faramir to make an unbound Hobbit strength +2.<br><b>Skirmish:</b> Exert Gandalf to prevent all wounds to Faramir.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_92: {
+		cardInfo: {
+			image: decipher/LOTR07092.jpg
+			collInfo: 7C92
+			rarity: C
+		}
+		title: First Level
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		strength: -1
+		keywords: [
+			Fortification
+			Support Area
+		]
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: choice
+					texts: [
+						Exert a {gondor} Man
+						Spot a knight
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(culture(gondor),man)
+						}
+						{
+							type: spot
+							filter: knight
+						}
+					]
+				}
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(minion)
+				}
+			}
+		]
+		gametext: <b>Fortification</b>.<br><b>Maneuver:</b> Exert a [gondor] Man or spot a knight to transfer this condition from your support area to a minion.
+		lore: "...the walls passed from looming white to grey...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_93: {
+		cardInfo: {
+			image: decipher/LOTR07093.jpg
+			collInfo: 7U93
+			rarity: U
+		}
+		title: Footman's Armor
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		itemclass: Armor
+		target: culture(gondor),man
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToBeOverwhelmed
+					filter: bearer
+				}
+				cost: {
+					type: choice
+					texts: [
+						Discard a {gondor} fortification
+						Discard card from hand
+					]
+					effects: [
+						{
+							type: discard
+							select: choose(culture(gondor),fortification)
+						}
+						{
+							type: discardFromHand
+							forced: false
+						}
+					]
+				}
+				effect: {
+					type: modifyStrength
+					select: bearer
+					amount: 2
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] Man.<br><b>Response:</b> If bearer is about to be overwhelmed, discard a [gondor] fortification or a card from hand to make bearer strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_94: {
+		cardInfo: {
+			image: decipher/LOTR07094.jpg
+			collInfo: 7U94
+			rarity: U
+		}
+		title: Gondor Bow
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		itemclass: Ranged weapon
+		target: culture(gondor),man
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer,knight
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: wound
+					select: choose(minion,inSkirmishAgainst(bearer),hasAttached(fortification))
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] Man.<br>If bearer is a knight, he or she is strength +1.<br><b>Skirmish:</b> Exert bearer to wound a minion he or she is skirmishing if that minion bears a fortification.
+		lore: "...tall Duinhir with his sons, Duilin and Derufin, and five hundred bowmen."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_95: {
+		cardInfo: {
+			image: decipher/LOTR07095.jpg
+			collInfo: 7R95
+			rarity: R
+		}
+		title: Gondor Still Stands
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gondor),companion
+					count: 3
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				requires: {
+					type: cantSpot
+					filter: site,controlledByOtherPlayer
+				}
+				effect: {
+					type: wound
+					select: choose(minion)
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: putCardsFromDiscardOnTopOfDeck
+					select: choose(culture(gondor),fortification)
+				}
+			}
+		]
+		gametext: To play, spot 3 [gondor] companions.<br>While no opponent controls a site, wound a minion at the start of each regroup phase.<br><b>Regroup:</b> Discard this condition to place a [gondor] fortification from your discard pile on top of your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_96: {
+		cardInfo: {
+			image: decipher/LOTR07096.jpg
+			collInfo: 7C96
+			rarity: C
+		}
+		title: Gondorian Captain
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Knight
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discard
+					select: choose(fortification)
+				}
+				effect: {
+					type: removeThreats
+				}
+			}
+		]
+		gametext: <b>Knight</b>.<br><b>Fellowship:</b> Discard a fortification to remove a threat.
+		lore: "'The Captains of the Outlands are expected up the South Road ere sundown.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_97: {
+		cardInfo: {
+			image: decipher/LOTR07097.jpg
+			collInfo: 7R97
+			rarity: R
+		}
+		title: Gondorian Merchant
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Ally
+		allyHome: 3T
+		race: Man
+		strength: 6
+		vitality: 1
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: haveInitiative
+					side: free people
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: modifySiteNumber
+					select: choose(minion)
+					amount: 2
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Maneuver:</b> If you have initiative, discard 2 cards from hand to make the site number of a minion +2 until the regroup phase.
+		lore: "...they talked now of Gondor and its ways and customs...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_98: {
+		cardInfo: {
+			image: decipher/LOTR07098.jpg
+			collInfo: 7U98
+			rarity: U
+		}
+		title: Gondorian Sword
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(gondor),man
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 3
+				}
+				effect: {
+					type: addKeyword
+					select: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] Man.<br><b>Skirmish:</b> Discard 3 cards from hand to make bearer <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_99: {
+		cardInfo: {
+			image: decipher/LOTR07099.jpg
+			collInfo: 7C99
+			rarity: C
+		}
+		title: Great Gate
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(gondor),companion)
+					amount: 2
+					memorize: chosenCompanion
+				}
+				{
+					type: If
+					check: {
+						type: canSpot
+						filter: culture(gondor),fortification
+						count: 2
+					}
+					true: {
+						type: exert
+						select: choose(minion,inSkirmishAgainst(memory(chosenCompanion)))
+					}
+				}
+			]
+		}
+		gametext: Make a [gondor] companion strength +2 and, if you can spot 2 [gondor] fortifications, exert a minion that companion is skirmishing.
+		lore: "...and its iron doors rolled back before them."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_100: {
+		cardInfo: {
+			image: decipher/LOTR07100.jpg
+			collInfo: 7R100
+			rarity: R
+		}
+		title: Greatest Stronghold
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Event
+		timewords: Archery
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: fortification
+				count: 3
+			}
+			cost: {
+				type: exert
+				select: choose(culture(gondor),man)
+			},
+			effect: [
+				{
+					type: modifyArcheryTotal
+					side: free people
+					amount: 2
+				}
+			]
+		}
+		gametext: Exert a [gondor] Man and spot 3 fortifications to make the fellowship archery total +2.
+		lore: "'...City of Kings of yore.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_101: {
+		cardInfo: {
+			image: decipher/LOTR07101.jpg
+			collInfo: 7R101
+			rarity: R
+		}
+		title: Guarded
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gondor),man
+					count: 3
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add a threat
+						Discard this condition
+					]
+					effects: [
+						{
+							type: addThreats
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: choice
+					texts: [
+						Discard a minion
+						Discard all roaming minions
+					]
+					effects: [
+						{
+							type: discard
+							select: choose(minion)
+						}
+						{
+							type: discard
+							select: all(roaming,minion)
+						}
+					]
+				}
+			}
+		]
+		gametext: To play, spot 3 [gondor] Men.<br>Each time the fellowship moves, add a threat or discard this condition.<br><b>Regroup:</b> Discard this condition to discard a minion (or all roaming minions).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_102: {
+		cardInfo: {
+			image: decipher/LOTR07102.jpg
+			collInfo: 7U102
+			rarity: U
+		}
+		title: Hasty Repairs
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gondor),man
+					count: 3
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: isEqual
+					firstNumber: {
+						type: forEachInHand
+					}
+					secondNumber: 4
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(gondor),fortification)
+				}
+			}
+		]
+		gametext: To play, spot 3 [gondor] Men.<br><b>Regroup:</b> While you have only 4 cards in hand, you may discard 2 cards from hand to play a [gondor] fortification from your discard pile.
+		lore: "'The work will be finished ere evening...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_103: {
+		cardInfo: {
+			image: decipher/LOTR07103.jpg
+			collInfo: 7R103
+			rarity: R
+		}
+		title: Hearts Raised
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				requires: {
+					type: canSpot
+					filter: culture(gondor),man
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+				}
+				effect: {
+					type: removeThreats
+				}
+			}
+		]
+		gametext: At the start of your regroup phase, you may spot a [gondor] Man and discard a card from hand to remove a threat.
+		lore: "...lifted for a while by the return of Faramir...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_104: {
+		cardInfo: {
+			image: decipher/LOTR07104.jpg
+			collInfo: 7R104
+			rarity: R
+		}
+		title: Hidden Knowledge
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(gondor),companion
+			}
+			effect: [
+				{
+					type: revealTopCardsOfDrawDeck
+					deck: shadow
+					count: 5
+					memorize: revealedCards
+				}
+				{
+					type: addThreats
+					amount: {
+						type: forEachInMemory
+						memory: revealedCards
+						filter: side(shadow)
+					}
+				}
+				{
+					type: repeat
+					times: {
+						type: forEachInMemory
+						memory: revealedCards
+						filter: side(free people)
+					}
+					effect: {
+						type: AddCultureTokens
+						culture: gondor
+						select: choose(your,condition,HasCultureToken(gondor))
+					}
+				}
+				{
+					type: shuffleDeck
+					deck: shadow
+				}
+			]
+		}
+		gametext: Spot a [gondor] companion to reveal the top 5 cards of an opponent's draw deck. For each Shadow card revealed, add a threat. For each Free Peoples card revealed, place a [gondor] token on one of your conditions with a [gondor] token on it. Shuffle that draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_105: {
+		cardInfo: {
+			image: decipher/LOTR07105.jpg
+			collInfo: 7C105
+			rarity: C
+		}
+		title: I Will Go
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Condition
+		target: culture(gondor),man
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: haveInitiative
+						side: free people
+					}
+					filter: bearer
+					keyword: defender
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] Man.<br>If you have initiative, bearer is <b>defender +1</b>.
+		lore: "'I do command it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_106: {
+		cardInfo: {
+			image: decipher/LOTR07106.jpg
+			collInfo: 7C106
+			rarity: C
+		}
+		title: Ingold
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Knight
+		effects: [
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discard
+					select: choose(fortification)
+				}
+				effect: {
+					type: heal
+					select: self
+					times: 2
+				}
+			}
+		]
+		gametext: <b>Knight</b>.<br><b>Fellowship:</b> Discard a fortification to heal Ingold twice.
+		lore: "'Do you know aught of them? Will they answer the summons, think you?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_107: {
+		cardInfo: {
+			image: decipher/LOTR07107.jpg
+			collInfo: 7U107
+			rarity: U
+		}
+		title: Iorlas
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: played
+					filter: not(your),or(possession,engine)
+					memorize: playedCard
+				}
+				cost: {
+					type: RemoveCultureTokens
+					culture: gondor
+					select: choose(your,condition)
+				}
+				effect: {
+					type: if
+					check: {
+						type: twilightPoolLessThan
+						amount: 1
+					}
+					true: {
+						type: discard
+						player: shadow
+						select: memory(playedCard)
+					}
+					false: {
+						type: removeTwilight
+						amount: 1
+					}
+				}
+			}
+		]
+		gametext: <b>Response:</b> If a possession or engine is played by your opponent, remove a [gondor] token from your condition to make that opponent remove (1). If he or she cannot, discard that possession or engine.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_108: {
+		cardInfo: {
+			image: decipher/LOTR07108.jpg
+			collInfo: 7C108
+			rarity: C
+		}
+		title: Knight's Spear
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(gondor),man
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: not
+					requires: {
+						type: canSpotThreats
+						amount: 2
+					}
+				}
+				cost: {
+					type: addThreats
+				}
+				effect: {
+					type: modifyStrength
+					select: bearer
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a [gondor] Man.<br><b>Skirmish:</b> If you cannot spot 2 threats, add a threat to make bearer strength +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_109: {
+		cardInfo: {
+			image: decipher/LOTR07109.jpg
+			collInfo: 7U109
+			rarity: U
+		}
+		title: Long Prepared
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: addThreats
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(culture(gondor),man)
+					memorize: exertedMan
+				}
+				effect: {
+					type: wound
+					select: choose(minion,inSkirmishAgainst(memory(exertedMan)))
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfPhase
+					phase: regroup
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+		]
+		gametext: To play, add 2 threats.<br><b>Skirmish:</b> Exert a [gondor] Man to wound a roaming minion that Man is skirmishing.<br>Discard this condition at the start of the regroup phase.
+		lore: "'For myself, I have long known....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_110: {
+		cardInfo: {
+			image: decipher/LOTR07110.jpg
+			collInfo: 7U110
+			rarity: U
+		}
+		title: Madril
+		subtitle: Faramir's Aide
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Ranger
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: haveInitiative
+					side: free people
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: wound
+					select: choose(roaming,minion,inSkirmishAgainst(self))
+				}
+			}
+		]
+		gametext: <b>Ranger</b>.<br><b>Skirmish:</b> If you have initiative, discard 2 cards from hand to wound a roaming minion Madril is skirmishing.
+		lore: "'I have sent the company of Ithilien to strengthen it....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_111: {
+		cardInfo: {
+			image: decipher/LOTR07111.jpg
+			collInfo: 7C111
+			rarity: C
+		}
+		title: Man the Walls
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					filter: minion,inSkirmishAgainst(culture(gondor),man)
+					amount: 1
+				}
+			}
+		]
+		gametext: The site number of each minion skirmishing a [gondor] Man is +1.
+		lore: "'...their force was too weak to make any stroke of war on their own part....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_112: {
+		cardInfo: {
+			image: decipher/LOTR07112.jpg
+			collInfo: 7R112
+			rarity: R
+		}
+		title: Noble Leaders
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: gondor
+					select: self
+					count: {
+						type: forEachYouCanSpot
+						filter: or(name(Aragorn),name(Boromir),name(Denethor),name(Faramir))
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Remove a token from here
+						Discard this condition
+					]
+					effects: [
+						{
+							type: RemoveCultureTokens
+							culture: gondor
+							select: self
+						}
+						{
+							type: discard
+							select: self
+						}
+					]
+				}
+				effect: [
+					{
+						type: modifyStrength
+						select: choose(culture(gondor),companion)
+						amount: 1
+						memorize: chosenCompanion
+					}
+					{
+						type: addKeyword
+						select: memory(chosenCompanion)
+						keyword: damage
+						amount: 1
+					}
+				]
+			}
+		]
+		gametext: When you play this condition, place a [gondor] token here for each of the following characters you can spot: Aragorn, Boromir, Denethor or Faramir.<br><b>Skirmish:</b> Remove a token from here or discard this condition to make a [gondor] companion strength +1 and <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_113: {
+		cardInfo: {
+			image: decipher/LOTR07113.jpg
+			collInfo: 7R113
+			rarity: R
+		}
+		title: Pippin's Armor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Possession
+		strength: 2
+		vitality: -1
+		itemclass: Armor
+		target: title(Pippin)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeMoreWoundsThan
+					requires: {
+						type: canSpot
+						filter: culture(gondor),man
+						count: 3
+					}
+					phase: skirmish
+					filter: bearer
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be Pippin.<br>While you can spot 3 [gondor] Men, Pippin may take no more than 1 wound in a skirmish.
+		lore: "'Here do I swear fealty and service to Gondor....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_114: {
+		cardInfo: {
+			image: decipher/LOTR07114.jpg
+			collInfo: 7R114
+			rarity: R
+		}
+		title: Pippin's Sword
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: title(Pippin)
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: bearer
+					times: 2
+				}
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						filter: culture(gondor),companion
+						text: Choose how many {gondor} companions to spot
+						memorize: spotCount
+					}
+					{
+						type: modifyStrength
+						select: bearer
+						amount: {
+							type: fromMemory
+							memory: spotCount
+						}
+					}
+				]
+			}
+		]
+		gametext: Bearer must be Pippin.<br><b>Skirmish:</b> Exert Pippin twice make him strength +1 for each [gondor] companion you spot.
+		lore: "The old man laid the sword along his lap, and Pippin put his hand to the hilt...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_115: {
+		cardInfo: {
+			image: decipher/LOTR07115.jpg
+			collInfo: 7C115
+			rarity: C
+		}
+		title: Ranger of Minas Tirith
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		keywords: Ranger
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmishAgainst(roaming,minion)
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self,inSkirmishAgainst(roaming,minion)
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Ranger</b>.<br>While skirmishing a roaming minion, this companion is strength +2 and <b>damage +1</b>.
+		lore: "And upon its out-thrust knee was the Guarded City, with its seven walls of stone...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_116: {
+		cardInfo: {
+			image: decipher/LOTR07116.jpg
+			collInfo: 7C116
+			rarity: C
+		}
+		title: Ranger of Osgiliath
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Ranger
+		effects: [
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: exhaust
+					select: choose(minion)
+				}
+			}
+		]
+		gametext: <b>Ranger</b>.<br><b>Regroup:</b> Discard 2 cards from hand to exhaust a minion.
+		lore: "'Osgiliath ... once the greatest city in all of Gondor....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_117: {
+		cardInfo: {
+			image: decipher/LOTR07117.jpg
+			collInfo: 7C117
+			rarity: C
+		}
+		title: Reckless Counter
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Event
+		timewords: Regroup
+		effects: {
+			type: event
+			cost: {
+				type: choice
+				texts: [
+					Spot 2 knights
+					Exert 2 {gondor} Men
+				]
+				effects: [
+					{
+						type: spot
+						filter: knight
+						count: 2
+					}
+					{
+						type: exert
+						select: choose(culture(gondor),man)
+						count: 2
+					}
+				]
+			}
+			effect: [
+				{
+					type: choice
+					texts: [
+						Liberate a site
+						Discard any number of cards from hand
+					]
+					effects: [
+						{
+							type: liberateSite
+						}
+						{
+							type: discardFromHand
+							forced: false
+							count: any
+						}
+					]
+				}
+			]
+		}
+		gametext: Spot 2 knights or exert 2 [gondor] Men to liberate a site or discard any number of cards from hand.
+		lore: "'Do not throw your life away so rashly!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_118: {
+		cardInfo: {
+			image: decipher/LOTR07118.jpg
+			collInfo: 7C118
+			rarity: C
+		}
+		title: Second Level
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		site: 2
+		keywords: [
+			Fortification
+			Support Area
+		]
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: choice
+					texts: [
+						Exert a {gondor} Man
+						Spot a ranger
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(culture(gondor),man)
+						}
+						{
+							type: spot
+							filter: ranger
+						}
+					]
+				}
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(minion)
+				}
+			}
+		]
+		gametext: <b>Fortification</b>.<br><b>Maneuver:</b> Exert a [gondor] Man or spot a ranger to transfer this condition from your support area to a minion.
+		lore: "...but the next faced half south...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_119: {
+		cardInfo: {
+			image: decipher/LOTR07119.jpg
+			collInfo: 7R119
+			rarity: R
+		}
+		title: Seventh Level
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 5
+		type: Condition
+		strength: -2
+		vitality: -2
+		keywords: [
+			Fortification
+			Support Area
+		]
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(culture(gondor),man)
+					count: 3
+				}
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+				}
+			}
+		]
+		gametext: <b>Fortification</b>.<br><b>Skirmish:</b> Exert 3 [gondor] Men to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
+		lore: "Up it rose, even to the level of the topmost circle, and there was crowned by a battlement...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_120: {
+		cardInfo: {
+			image: decipher/LOTR07120.jpg
+			collInfo: 7U120
+			rarity: U
+		}
+		title: Stand to Arms
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: haveInitiative
+				side: free people
+			}
+			cost: {
+				type: discardFromHand
+				forced: false
+				count: 2
+			},
+			effect: [
+				{
+					type: wound
+					select: choose(roaming,minion,inSkirmishAgainst(culture(gondor),man))
+					times: 2
+				}
+			]
+		}
+		gametext: If you have initiative, discard 2 cards from hand to wound a roaming minion skirmishing a [gondor] Man twice.
+		lore: "'Return to the outer walls!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_121: {
+		cardInfo: {
+			image: decipher/LOTR07121.jpg
+			collInfo: 7C121
+			rarity: C
+		}
+		title: Stout Resistance
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			cost: {
+				type: addThreats
+			},
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(gondor),man)
+					amount: 3
+				}
+			]
+		}
+		gametext: Add a threat to make a [gondor] Man strength +3.
+		lore: "...the hardiest of the garrison stood at bay."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_122: {
+		cardInfo: {
+			image: decipher/LOTR07122.jpg
+			collInfo: 7R122
+			rarity: R
+		}
+		title: Strong and Old
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(gondor),man
+					count: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: your,culture(gondor),fortification
+					amount: -1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeControlOfSite
+				}
+				cost: {
+					type: discard
+					select: choose(culture(gondor),fortification)
+					count: 2
+				}
+				effect: {
+					type: preventEffect
+				}
+			}
+		]
+		gametext: To play, spot 2 [gondor] Men.<br>The twilight cost of each of your [gondor] fortifications is -1.<br><b>Response:</b> If an opponent is about to control a site, discard 2 [gondor] fortifications to prevent this.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_123: {
+		cardInfo: {
+			image: decipher/LOTR07123.jpg
+			collInfo: 7U123
+			rarity: U
+		}
+		title: Support of the City
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: activated
+				text: Play a {gondor} Man to place a {gondor} token here
+				phase: fellowship
+				cost: {
+					type: PlayCardFromHand
+					select: choose(culture(gondor),man)
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: gondor
+					select: self
+				}
+			}
+			{
+				type: activated
+				text: Play a {gondor} companion at a discount
+				phase: fellowship
+				effect: [
+					{
+						type: PlayCardFromHand
+						select: choose(culture(gondor),companion)
+						discount: {
+							type: ForEachCultureToken
+							culture: gondor
+							filter: self
+							multiplier: -1
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: <b>Fellowship:</b> Play a [gondor] Man to place a [gondor] token here.<br><b>Fellowship:</b> Play a [gondor] companion. That companion's twilight cost is -1 for each token here. Discard this condition.
+		lore: "'...Gondor shall not perish yet.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_124: {
+		cardInfo: {
+			image: decipher/LOTR07124.jpg
+			collInfo: 7C124
+			rarity: C
+		}
+		title: Targon
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Ranger
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: haveInitiative
+					side: free people
+				}
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+				}
+				effect: {
+					type: wound
+					select: choose(man,inSkirmishAgainst(self))
+				}
+			}
+		]
+		gametext: <b>Ranger</b>.<br><b>Skirmish:</b> If you have initiative, discard 2 cards from hand to wound a Man Targon is skirmishing.
+		lore: "'This is a fortress and a tower of guard and is now in posture of war.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_125: {
+		cardInfo: {
+			image: decipher/LOTR07125.jpg
+			collInfo: 7U125
+			rarity: U
+		}
+		title: Third Level
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Condition
+		site: 4
+		keywords: [
+			Fortification
+			Support Area
+		]
+		effects: [
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Exert a {gondor} Man
+						Spot 2 rangers
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(culture(gondor),man)
+						}
+						{
+							type: spot
+							filter: ranger
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(minion,inSkirmishAgainst(culture(gondor),man))
+				}
+			}
+		]
+		gametext: <b>Fortification</b>.<br><b>Skirmish:</b> Exert a [gondor] Man or spot 2 rangers to transfer this condition from your support area to a minion skirmishing a [gondor] Man.
+		lore: "...and the third half north...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_126: {
+		cardInfo: {
+			image: decipher/LOTR07126.jpg
+			collInfo: 7U126
+			rarity: U
+		}
+		title: Unexpected Visitor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		target: culture(gondor),companion
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addActivated
+					filter: minion
+					phase: assignment
+					text: Assign this minion to bearer of Unexpected Visitor.
+					effect: {
+						type: assignFpCharacterToSkirmish
+						fpCharacter: choose(hasAttached(name(Unexpected Visitor)))
+						minion: self
+					}
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: [
+					{
+						type: discard
+						select: choose(minion)
+					}
+					{
+						type: removeTwilight
+						amount: 4
+					}
+				]
+			}
+		]
+		gametext: Bearer must be a [gondor] companion.<br>Each minion gains this ability: "<b>Assignment:</b> Assign this minion to bearer of Unexpected Visitor."<br><b>Regroup:</b> Discard this condition to discard a minion and remove (4).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_127: {
+		cardInfo: {
+			image: decipher/LOTR07127.jpg
+			collInfo: 7R127
+			rarity: R
+		}
+		title: Vorondil
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: cantSpot
+						filter: site,controlledByOtherPlayer
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: choice
+					texts: [
+						Exert 3 {gondor} Men
+						Exert 2 knights
+					]
+					effects: [
+						{
+							type: exert
+							select: choose(culture(gondor),man)
+							count: 3
+						}
+						{
+							type: exert
+							select: choose(knight)
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: liberateSite
+				}
+			}
+		]
+		gametext: While no opponent controls a site, Vorondil is strength +2.<br><b>Regroup:</b> Exert 3 [gondor] Men or 2 knights to liberate a site.
+		lore: "...greater and stronger than Isengard, and far more beautiful."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_128: {
+		cardInfo: {
+			image: decipher/LOTR07128.jpg
+			collInfo: 7U128
+			rarity: U
+		}
+		title: While We Yet Live
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(roaming,minion,inSkirmishAgainst(culture(gondor),man))
+					amount: -3
+				}
+			]
+		}
+		gametext: Make a roaming minion skirmishing a [gondor] Man strength -3.
+		lore: "'...not if the Nameless One himself should come, not even he could enter....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	7_364: {
+		cardInfo: {
+			image: decipher/LOTR07364.jpg
+			collInfo: 7P364
+			rarity: P
+		}
+		title: Aragorn
+		subtitle: Driven by Need
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: not
+						requires: {
+							type: canSpotThreats
+							amount: 4
+						}
+					}
+					filter: self
+					amount: {
+						type: forEachThreat
+					}
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: exert
+					select: self
+					times: 2
+				}
+				effect: {
+					type: removeThreats
+					amount: 3
+				}
+			}
+		]
+		gametext: While you cannot spot 4 threats, Aragorn is strength +1 for each threat.<br><b>Regroup:</b> Exert Aragorn twice to remove 3 threats.
+		lore: "'...for you will find both toil and great fear, and maybe worse.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

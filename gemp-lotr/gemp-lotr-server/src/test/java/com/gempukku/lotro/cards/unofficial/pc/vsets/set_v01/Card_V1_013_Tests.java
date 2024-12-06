@@ -10,9 +10,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V1_013_Tests
 {
@@ -54,7 +52,7 @@ public class Card_V1_013_Tests
 		assertEquals(Side.FREE_PEOPLE, counsel.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, counsel.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, counsel.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(counsel, Keyword.FELLOWSHIP)); // test for keywords as needed
+        assertTrue(scn.hasTimeword(counsel, Timeword.FELLOWSHIP)); // test for keywords as needed
 		//assertTrue(scn.HasKeyword(counsel, Keyword.TALE));
 		assertEquals(0, counsel.getBlueprint().getTwilightCost());
 
@@ -94,7 +92,8 @@ public class Card_V1_013_Tests
 		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsPlayCard(counsel);
-		assertTrue(scn.FreepsDecisionAvailable("Choose card from deck"));
+		scn.FreepsDismissRevealedCards();
+        assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		// Choices available should be 1 Elrond, 1 Galadriel, 1 Orophin
 		assertEquals(3, scn.GetFreepsCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(scn.GetFreepsCard("elrond"));
@@ -126,7 +125,8 @@ public class Card_V1_013_Tests
 		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsPlayCard(counsel);
-		assertTrue(scn.FreepsDecisionAvailable("Choose card from deck"));
+		scn.FreepsDismissRevealedCards();
+        assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		// Choices available should be 1 Elrond, 1 Galadriel, 1 Orophin
 		assertEquals(3, scn.GetFreepsCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(scn.GetFreepsCard("elrond"));

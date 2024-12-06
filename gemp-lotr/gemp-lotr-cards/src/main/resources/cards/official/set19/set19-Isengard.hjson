@@ -1,0 +1,136 @@
+{
+
+	19_16: {
+		cardInfo: {
+			image: decipher/LOTR19016.jpg
+			collInfo: 19P16
+			rarity: P
+		}
+		title: Gríma
+		subtitle: Servant of Another Master
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 4
+		vitality: 3
+		site: 3
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				cost: {
+					type: removeTwilight
+					amount: 4
+				}
+				effect: [
+					{
+						type: exert
+						select: choose(unbound,companion)
+						memorize: exertedCompanion
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: cantUseSpecialAbilities
+							filter: memory(exertedCompanion)
+						}
+						until: start(regroup)
+					}
+				]
+			}
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: assignFPCharacterToSkirmish
+					fpCharacter: choose(unbound,companion)
+					minion: self
+					memorizeFPCharacter: chosenCompanion
+					preventText: Would you like to exert {chosenCompanion} to prevent {self} assigning to it?
+					preventCost: {
+						type: exert
+						select: memory(chosenCompanion)
+					}
+				}
+			}
+		]
+		gametext: When you play Gríma, you may remove (4) to exert an unbound companion. That companion cannot use special abilities until the regroup phase.<br><b>Assignment:</b> Exert Gríma to assign him to an unbound companion. That companion may exert to prevent this.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	19_17: {
+		cardInfo: {
+			image: decipher/LOTR19017.jpg
+			collInfo: 19P17
+			rarity: P
+		}
+		title: Urgency
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: [
+			Weather
+			Support Area
+		]
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: forEachYouCanSpot
+						filter: ent
+						multiplier: 2
+					}
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(not(culture(wraith)),minion)
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Weather</b>.<br>Each time the fellowship moves, add (2) for each Ent you can spot.<br><b>Skirmish:</b> Discard this condition from play to make a non-[wraith] minion strength +1.
+		lore: "If the mountain defeats you, will you risk a more dangerous road?"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

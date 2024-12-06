@@ -1,0 +1,226 @@
+{
+
+	9_28: {
+		cardInfo: {
+			image: decipher/LOTR09028.jpg
+			collInfo: 9R+28
+			rarity: R+
+		}
+		title: Gollum
+		subtitle: Dark as Darkness
+		unique: true
+		side: Shadow
+		culture: Gollum
+		twilight: 2
+		type: Minion
+		strength: 5
+		vitality: 4
+		site: 3
+		effects: [
+			{
+				type: activated
+				text: Exert the Ring-bearer
+				phase: shadow
+				cost: {
+					type: exert
+					select: self
+					times: 2
+				}
+				effect: {
+					type: exert
+					select: choose(ring bearer)
+				}
+			}
+			{
+				type: activated
+				text: Add (1)
+				phase: shadow
+				cost: {
+					type: removeBurdens
+				}
+				effect: {
+					type: addTwilight
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeBurdens
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				text: Add (3)
+				phase: regroup
+				cost: {
+					type: removeBurdens
+				}
+				effect: {
+					type: addTwilight
+					amount: 3
+				}
+			}
+			{
+				type: activated
+				text: Wound the Ring-bearer
+				phase: regroup
+				cost: {
+					type: exert
+					select: self
+					times: 2
+				}
+				effect: {
+					type: wound
+					select: choose(ring bearer)
+				}
+			}
+		]
+		gametext: <b>Shadow:</b> Exert Gollum twice to exert the Ring-bearer.<br><b>Shadow:</b> Remove a burden to add (1).<br><b>Skirmish:</b> Remove a burden to add (2).<br><b>Regroup:</b> Remove a burden to add (3).<br><b>Regroup:</b> Exert Gollum twice to wound the Ring-bearer.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_29: {
+		cardInfo: {
+			image: decipher/LOTR09029.jpg
+			collInfo: 9R+29
+			rarity: R+
+		}
+		title: Slippery as Fishes
+		unique: false
+		side: Shadow
+		culture: Gollum
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: name(Gollum)
+					requires: {
+						type: location
+						filter: or(mountain,river,underground)
+					}
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: name(Gollum)
+				}
+				effect: [
+					{
+						type: revealCardsFromHand
+						select: all(any)
+					}
+					{
+						type: repeat
+						times: {
+							type: forEachInHand
+							filter: side(shadow)
+						}
+						effect: {
+							type: putCardsFromHandOnBottomOfDeck
+							select: choose(side(shadow))
+							reveal: true
+						}
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+			}
+		]
+		gametext: While Gollum is at a mountain, river, or underground site, he is strength +2.<br><b>Regroup:</b> Spot Gollum to reveal your hand. Place all Shadow cards revealed beneath your draw deck. Discard this condition.
+		lore: "'I hoped the river-voyage would beat him, but he is too clever a waterman.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	9_30: {
+		cardInfo: {
+			image: decipher/LOTR09030.jpg
+			collInfo: 9R+30
+			rarity: R+
+		}
+		title: Sméagol
+		subtitle: Bearer of Great Secrets
+		unique: true
+		side: Free Peoples
+		culture: Gollum
+		twilight: 0
+		type: Companion
+		strength: 3
+		vitality: 4
+		resistance: 7
+		canStartWithRing: true
+		keywords: Ring-bound
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: addBurdens
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: moves
+				}
+				effect: {
+					type: kill
+					select: choose(unbound,companion)
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: canSpot
+					filter: self,ring bearer
+				}
+				cost: {
+					type: addBurdens
+					amount: 2
+				}
+				effect: {
+					type: discard
+					select: all(minion)
+				}
+			}
+		]
+		gametext: <b>Ring-bound</b>. To play, add a burden.<br>Each time the fellowship moves, place an unbound companion in the dead pile.<br><b>Regroup:</b> If Sméagol is the Ring-bearer, add 2 burdens to discard each minion.
+		lore: "'...he used it to find out secrets, and he put his knowledge to crooked and malicious uses.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

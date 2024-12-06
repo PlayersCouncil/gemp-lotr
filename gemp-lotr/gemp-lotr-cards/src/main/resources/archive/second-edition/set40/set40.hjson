@@ -1,0 +1,1061 @@
+{
+	40_1: {
+		title: The One Ring
+		subtitle: Doom of Free Peoples
+		unique: true
+		twilight: 0
+		type: the one ring
+		strength: 1
+		vitality: 1
+		resistance: 1
+		effects: [
+			{
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+			{
+				type: activated
+				requires: {
+					type: ringIsActive
+				}
+				phase: maneuver
+				cost: {
+					type: choice
+					texts: [
+						Exert bearer
+						Discard a card at random
+					]
+					effects: [
+						{
+							type: exert
+							select: bearer
+						}
+						{
+							type: discardCardAtRandomFromHand
+							forced: false
+						}
+					]
+				}
+				effect: {
+					type: putOnRing
+				}
+			}
+		]
+	}
+	40_2: {
+		title: The One Ring
+		subtitle: The Ruling Ring
+		unique: true
+		twilight: 0
+		type: the one ring
+		strength: 1
+		effects: [
+			{
+				type: trigger
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				requires: [
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: ringIsActive
+					}
+				]
+				effect: [
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+					{
+						type: putOnRing
+					}
+				]
+			}
+		]
+	}
+	40_273: {
+		title: Bag End
+		type: site
+		block: Second ed
+		site: 1
+		twilight: 0
+		keyword: dwelling
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: discardFromHand
+				forced: false
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(name(Frodo))
+				until: endOfTurn
+				amount: 1
+			}
+		}
+	}
+	40_274: {
+		title: Bywater Bridge
+		type: site
+		block: Second ed
+		site: 1
+		twilight: 0
+		keyword: river
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: exert
+				count: 2
+				select: choose(hobbit)
+			}
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(name(Gandalf))
+                showAll: true
+                shuffle: true
+			}
+		}
+	}
+	40_275: {
+		title: East Road
+		type: site
+		block: Second ed
+		site: 1
+		twilight: 0
+		keyword: forest
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyCost
+				requires: {
+					type: phase
+					phase: fellowship
+				}
+				filter: companion
+				amount: 2
+			}
+		}
+	}
+	40_276: {
+		title: Green Hill Country
+		type: site
+		block: Second ed
+		site: 1
+		twilight: 0
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyCost
+				requires: {
+					type: phase
+					phase: fellowship
+				}
+				filter: hobbit
+				amount: -1
+			}
+		}
+	}
+	40_277: {
+		title: The Prancing Pony
+		type: site
+		block: Second ed
+		site: 1
+		twilight: 0
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: addBurdens
+			}
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(name(Aragorn))
+                showAll: true
+                shuffle: true
+			}
+		}
+	}
+	40_278: {
+		title: Southfarthing
+		type: site
+		block: Second ed
+		site: 1
+		twilight: 0
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: startOfTurn
+			}
+			cost: {
+				type: exert
+				select: choose(your,hobbit)
+			}
+			effect: {
+				type: playCardFromDrawDeck
+				select: choose(or(pipe,and(pipeweed,possession)))
+                showAll: true
+                shuffle: true
+			}
+		}
+	}
+	40_279: {
+		title: Barrow-downs
+		type: site
+		block: Second ed
+		site: 2
+		twilight: 2
+		effects: {
+			type: modifyOwnCost
+			requires: {
+				type: haveInitiative
+				side: shadow
+			}
+			amount: 3
+		}
+	}
+	40_280: {
+		title: Chetwood
+		type: site
+		block: Second ed
+		site: 2
+		twilight: 3
+		keyword: forest
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyRoamingPenalty
+				filter: nazgul
+				amount: -1
+			}
+		}
+	}
+	40_281: {
+		title: Ettenmoors
+		type: site
+		block: Second ed
+		site: 2
+		twilight: 3
+		keyword: plains
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: exert
+				select: choose(your,not(enduring),character)
+				memorize: exertedCharacter
+			}
+			effect: {
+				type: modifyStrength
+				select: memory(exertedCharacter)
+				amount: 2
+			}
+		}
+	}
+	40_282: {
+		title: Midgewater Marshes
+		type: site
+		block: Second ed
+		site: 2
+		twilight: 1
+		keyword: marsh
+		effects: {
+			type: trigger
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			effect: {
+				type: exert
+				select: all(hobbit,companion)
+			}
+		}
+	}
+	40_283: {
+		title: Banks of Nen Hithoel
+		type: site
+		block: Second ed
+		site: 3
+		twilight: 0
+		keyword: river
+		effects: {
+			type: trigger
+			trigger: {
+				type: startOfPhase
+				phase: fellowship
+			}
+			effect: {
+				type: heal
+				player: fp
+				select: choose(companion)
+				count: {
+					type: forEachCulture
+					over: 2
+				}
+			}
+		}
+	}
+	40_284: {
+		title: Ford of Bruinen
+		type: site
+		block: Second ed
+		site: 3
+		twilight: 0
+		keyword: river
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: {
+						type: not
+						requires: {
+							type: hasInZoneData
+							filter: self
+						}
+					}
+					filter: nazgul
+					amount: -5
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: nazgul
+					memorize: playedNazgul
+				}
+				requires: {
+					type: not
+					requires: {
+						type: hasInZoneData
+						filter: self
+					}
+				}
+				effect: {
+					type: storeWhileInZone
+					memory: playedNazgul
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: endOfTurn
+				}
+				effect: {
+					type: resetWhileInZoneData
+				}
+			}
+		]
+	}
+	40_285: {
+		title: Gates of Moria
+		type: site
+		block: Second ed
+		site: 3
+		twilight: 0
+		keyword: underground
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: PlayCardFromHand
+				select: choose(culture(dwarven),possession)
+			}
+			effect: {
+				type: drawCards
+			}
+		}
+	}
+	40_286: {
+		title: Lothlorien
+		type: site
+		block: Second ed
+		site: 3
+		twilight: 0
+		keyword: forest
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			requires: [
+				{
+					type: isSide
+					side: free people
+				}
+				{
+					type: canSpot
+					filter: elf
+					count: 2
+				}
+			]
+			effect: {
+				type: removeBurdens
+			}
+		}
+	}
+	40_287: {
+		title: Eastemnet Plains
+		type: site
+		block: Second ed
+		site: 4
+		twilight: 4
+		keyword: plains
+		effects: {
+			type: activated
+			phase: [
+				fellowship
+				regroup
+			]
+			effect: {
+				type: addModifier
+				modifier: {
+					type: modifyMoveLimit
+					amount: {
+						type: forEachCulture
+						over: 2
+						filter: companion
+					}
+				}
+				until: endOfTurn
+			}
+			limitPerTurn: 1
+		}
+	}
+	40_288: {
+		title: Eastern Emyn Muil
+		type: site
+		block: Second ed
+		site: 4
+		twilight: 4
+		keyword: mountain
+		effects: {
+			type: modifier
+			modifier: {
+				type: CantReplaceSite
+				filter: site,inSameRegion
+			}
+		}
+	}
+	40_289: {
+		title: Hollin
+		type: site
+		block: Second ed
+		site: 4
+		twilight: 3
+		keyword: plains
+		effects: {
+			type: modifier
+			modifier: {
+				type: removeKeyword
+				filter: uruk-hai
+				keyword: roaming
+			}
+		}
+	}
+	40_290: {
+		title: Moria Caverns
+		type: site
+		block: Second ed
+		site: 4
+		twilight: 4
+		keyword: underground
+		effects: {
+			type: activated
+			phase: shadow
+			cost: {
+				type: discardFromHand
+				forced: false
+				count: 2
+			}
+			effect: {
+				type: playCardFromDiscard
+				select: choose(goblin)
+			}
+		}
+	}
+	40_291: {
+		title: The Bridge of Khazad-dum
+		type: site
+		block: Second ed
+		site: 5
+		twilight: 6
+		keyword: underground
+		effects: {
+			type: activated
+			phase: shadow
+			effect: {
+				type: choice
+				texts: [
+					Play the Balrog from your hand
+					Play the Balrog from your draw deck
+				]
+				effects: [
+					{
+						type: PlayCardFromHand
+						select: choose(name(The Balrog))
+						discount: -6
+					}
+					{
+						type: playCardFromDrawDeck
+						select: choose(name(The Balrog))
+						discount: -6
+                        showAll: true
+                        shuffle: true
+					}
+				]
+			}
+		}
+	}
+	40_292: {
+		title: Deep of Helm
+		type: site
+		block: Second ed
+		site: 5
+		twilight: 6
+		keyword: [
+			battleground
+			plains
+		]
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: {
+						type: not
+						requires: {
+							type: hasInZoneData
+							filter: self
+						}
+					}
+					filter: uruk-hai
+					amount: -3
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: played
+					filter: uruk-hai
+					memorize: playedUrukHai
+				}
+				effect: {
+					type: storeWhileInZone
+					memory: playedUrukHai
+				}
+			}
+		]
+	}
+	40_293: {
+		title: Morannon
+		type: site
+		block: Second ed
+		site: 5
+		twilight: 6
+		effects: [
+			{
+				type: trigger
+				trigger: {
+					type: movesTo
+					filter: self
+				}
+				effect: {
+					type: addThreats
+					amount: 3
+				}
+			}
+			{
+				type: trigger
+				trigger: {
+					type: movesFrom
+					filter: self
+				}
+				effect: {
+					type: removeThreats
+					amount: 3
+				}
+			}
+		]
+	}
+	40_294: {
+		title: Tower of Orthanc
+		type: site
+		block: Second ed
+		site: 5
+		twilight: 6
+		keyword: battleground
+		effects: {
+			type: activated
+			phase: shadow
+			effect: {
+				type: choice
+				texts: [
+					Play Saruman from your hand
+					Play Saruman from your draw deck
+					Play Saruman from your discard pile
+				]
+				effects: [
+					{
+						type: PlayCardFromHand
+						select: choose(name(Saruman))
+						discount: -2
+					}
+					{
+						type: playCardFromDrawDeck
+						select: choose(name(Saruman))
+						discount: -2
+                        showAll: true
+                        shuffle: true
+					}
+					{
+						type: playCardFromDiscard
+						select: choose(name(Saruman))
+						discount: -2
+					}
+				]
+			}
+		}
+	}
+	40_295: {
+		title: Great Feasting Hall
+		type: site
+		block: Second ed
+		site: 6
+		twilight: 3
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifySanctuaryHeal
+				requires: {
+					type: HasCardInDeadPile
+					filter: companion
+				}
+				amount: 2
+			}
+		}
+	}
+	40_296: {
+		title: Henneth Annun
+		type: site
+		block: Second ed
+		site: 6
+		twilight: 3
+		keyword: mountain
+		effects: {
+			type: trigger
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			effect: {
+				type: heal
+				select: all(ring-bound,companion)
+			}
+		}
+	}
+	40_297: {
+		title: Minas Tirith Balcony
+		type: site
+		block: Second ed
+		site: 6
+		twilight: 3
+		keyword: battleground
+		effects: {
+			type: trigger
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			effect: {
+				type: drawCards
+				player: fp
+				count: {
+					type: forEachThreat
+				}
+			}
+		}
+	}
+	40_298: {
+		title: Steward's Chamber
+		type: site
+		block: Second ed
+		site: 6
+		twilight: 3
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			requires: {
+				type: isSide
+				side: free people
+			}
+			cost: {
+				type: exert
+				select: choose(companion)
+				memorize: exertedCompanion
+			}
+			effect: {
+				type: heal
+				select: choose(companion,not(cultureFromMemory(exertedCompanion)))
+			}
+		}
+	}
+	40_299: {
+		title: Broken Gate
+		type: site
+		block: Second ed
+		site: 7
+		twilight: 6
+		keyword: battleground
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: culture(sauron),minion
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: culture(gondor),man
+					amount: -1
+				}
+			}
+		]
+	}
+	40_300: {
+		title: Dimholt Road
+		type: site
+		block: Second ed
+		site: 7
+		twilight: 6
+		keyword: mountain
+		effects: {
+			type: trigger
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			requires: {
+				type: cantSpot
+				filter: name(Aragorn)
+			}
+			effect: {
+				type: addThreats
+				player: fp
+				amount: 2
+			}
+		}
+	}
+	40_301: {
+		title: Eastern Ithilien
+		type: site
+		block: Second ed
+		site: 7
+		twilight: 6
+		keyword: forest
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyResistance
+				requires: {
+					type: canSpot
+					filter: nazgul
+				}
+				filter: companion
+				amount: -1
+			}
+		}
+	}
+	40_302: {
+		title: Osgiliath
+		type: site
+		block: Second ed
+		site: 7
+		twilight: 7
+		keyword: battleground
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: endOfPhase
+				phase: shadow
+			}
+			requires: [
+				{
+					type: canSpot
+					filter: orc
+					count: 5
+				}
+				{
+					type: isSide
+					side: shadow
+				}
+			]
+			effect: {
+				type: addModifier
+				modifier: {
+					type: modifyMoveLimit
+					amount: -1
+				}
+				until: endOfTurn
+			}
+		}
+	}
+	40_303: {
+		title: Citadel of Cirith Ungol
+		type: site
+		block: Second ed
+		site: 8
+		twilight: 8
+		effects: {
+			type: trigger
+			trigger: {
+				type: movesTo
+				filter: self
+			}
+			requires: {
+				type: cantSpot
+				filter: name(Sam)
+			}
+			effect: {
+				type: addBurdens
+			}
+		}
+	}
+	40_304: {
+		title: Fiery Terrace
+		type: site
+		block: Second ed
+		site: 8
+		twilight: 8
+		keyword: battleground
+		effects: {
+			type: activated
+			phase: shadow
+			effect: {
+				type: choice
+				texts: [
+					Play The Witch-king from your hand
+					Play The Witch-king from your draw deck
+				]
+				effects: [
+					{
+						type: PlayCardFromHand
+						select: choose(name(The Witch-King))
+						discount: -4
+					}
+					{
+						type: playCardFromDrawDeck
+						select: choose(name(The Witch-King))
+						discount: -4
+                        showAll: true
+                        shuffle: true
+					}
+				]
+			}
+		}
+	}
+	40_305: {
+		title: Pelennor Battlefield
+		type: site
+		block: Second ed
+		site: 8
+		twilight: 8
+		keyword: [
+			battleground
+			plains
+		]
+		effects: {
+			type: activated
+			phase: regroup
+			requires: {
+				type: isSide
+				side: free people
+			}
+			cost: {
+				type: kill
+				select: choose(unbound,companion)
+			}
+	    effect: {
+        type: addModifier
+        modifier: {
+          type: modifyMoveLimit
+          amount: 1
+        }
+        until: endOfTurn
+      }
+    }
+  }
+  40_306: {
+    title: The Black Gate
+    type: site
+    block: Second ed
+    site: 9
+    twilight: 9
+    keyword: battleground
+    effects: {
+      type: modifier
+      modifier: {
+        type: cantPlayCards
+        filter: side(free people),event
+      }
+    }
+  }
+  40_307: {
+    title: Dagorlad
+    type: site
+    block: Second ed
+    site: 9
+    twilight: 9
+    keyword: plains
+    effects: {
+      type: trigger
+      trigger: {
+        type: movesTo
+        filter: self
+      }
+      effect: {
+        type: addThreats
+        player: fp
+        amount: 3
+      }
+    }
+  }
+  40_308: {
+    title: Mount Doom
+    type: site
+    block: Second ed
+    site: 9
+    twilight: 9
+    keyword: mountain
+    effects: {
+      type: trigger
+      optional: true
+      trigger: {
+        type: movesTo
+        filter: self
+      }
+      requires: {
+        type: isSide
+        side: shadow
+      }
+      cost: {
+        type: removeThreats
+        amount: 2
+      }
+      effect: {
+        type: addBurdens
+        amount: 2
+      }
+    }
+  }
+  40_309: {
+    title: Tower of Barad-dur
+    type: site
+    block: Second ed
+    site: 9
+    twilight: 10
+    effects: {
+      type: activated
+      phase: shadow
+      effect: [
+        {
+          type: choice
+          texts: [
+            Play The Great Eye from your draw deck
+            Play The Great Eye from your discard pile
+          ]
+          effects: [
+            {
+              type: playCardFromDrawDeck
+              select: choose(name(The Great Eye))
+              discount: -3
+                showAll: true
+                shuffle: true
+            }
+            {
+              type: playCardFromDiscard
+              select: choose(name(The Great Eye))
+              discount: -3
+            }
+          ]
+        }
+        {
+          type: endPhase
+        }
+      ]
+    }
+  }
+}

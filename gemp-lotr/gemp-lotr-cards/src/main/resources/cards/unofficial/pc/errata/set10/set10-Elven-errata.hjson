@@ -1,46 +1,119 @@
 {
 
+	# 60_8: {
+	# 	cardInfo: {
+	# 		//id: 0_8.1
+	# 		revision: 1
+	# 		image: errata/60_8.jpg
+	# 		collInfo: 10R8
+	# 		rarity: R
+	# 	}
+	# 	title: Cirdan
+	# 	subtitle: The Shipwright
+	# 	unique: true
+	# 	culture: Elven
+	# 	twilight: 4
+	# 	type: companion
+	# 	race: Elf
+	# 	strength: 7
+	# 	vitality: 4
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: toPlay
+	# 			requires: {
+	# 				type: canSpot
+	# 				filter: elf
+	# 				count: 2
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: skirmish
+	# 			cost: {
+	# 				type: exert
+	# 				select: self
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: modifyStrength
+	# 					select: choose(minion,inSkirmishAgainst(self))
+	# 					memorize: chosenMinion
+	# 					amount: {
+	# 						type: forEachInDiscard
+	# 						filter: your,culture(elven),event
+	# 						multiplier: -1
+	# 					}
+	# 				}
+	# 				{
+	# 					type: If
+	# 					check: {
+	# 						type: memorymatches
+	# 						memory: chosenMinion
+	# 						filter: maxStrength(6)
+	# 					}
+	# 					true: {
+	# 						type: removeCardsInDiscardFromGame
+	# 						count: 3
+	# 						select: choose(culture(elven),event)
+	# 					}
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: To play, spot 2 Elves.<br> <b>Skirmish:</b> Exert Cirdan to make a minion he is skirmishing strength -1 for each [elven] event in your discard pile. If that minion is now strength 6 or less, remove 3 [elven] events in your discard pile from the game.
+	# 	lore: "...he was grey and old, save that his eyes were keen as stars...."
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	60_8: {
 		cardInfo: {
-			imagePath: errata/60_8.jpg
-			javaClass: false
+			//id: 60_8.2
 			parent: 10_8
-			parentPath: errata/pc
-			version: 1?
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 2
+			image: errata/LOTR-EN10E008.2_card.jpg
 			collInfo: 10R8
 			rarity: R
-			setNum: "10"
-			cardNum: 8
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Cirdan
 		subtitle: The Shipwright
 		unique: true
+		side: Free Peoples
 		culture: Elven
 		twilight: 4
-		type: companion
+		type: Companion
 		race: Elf
 		strength: 7
 		vitality: 4
 		resistance: 6
-		requires: {
-			type: canSpot
-			filter: elf
-			count: 2
-		}
 		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+					count: 2
+				}
+			}
 			{
 				type: activated
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: modifyStrength
-						filter: choose(minion,inSkirmishAgainst(self))
+						select: choose(minion,inSkirmishAgainst(self))
 						memorize: chosenMinion
 						amount: {
 							type: forEachInDiscard
@@ -49,22 +122,28 @@
 						}
 					}
 					{
-						type: conditional
-						requires: {
-							type: memorymatches
-							memory: chosenMinion
-							filter: strengthLessThan(7)
+						type: AddTrigger
+						trigger: {
+							type: losesSkirmish
+							overwhelm: true
+							filter: memory(chosenMinion)
+							against: self
 						}
 						effect: {
 							type: removeCardsInDiscardFromGame
-							count: 3
-							filter: choose(culture(elven),event)
+							count: {
+								type: ForEachInDiscard
+								discard: you
+								filter: culture(elven),event
+								divider: 2
+							}
+							select: choose(culture(elven),event)
 						}
 					}
 				]
 			}
 		]
-		gametext: To play, spot 2 Elves.<br> <b>Skirmish:</b> Exert Cirdan to make a minion he is skirmishing strength -1 for each [elven] event in your discard pile. If that minion is now strength 6 or less, remove 3 [elven] events in your discard pile from the game.
+		gametext: To play, spot 2 Elves.<br> <b>Skirmish:</b> Exert Cirdan to make a minion he is skirmishing strength -1 for each [elven] event in your discard pile. If that minion is overwhelmed, remove half of the [elven] events in your discard pile from the game (rounded down).
 		lore: "...he was grey and old, save that his eyes were keen as stars...."
 		promotext: ""
 		alts: {
@@ -81,7 +160,7 @@
 	# 		javaClass: false
 	# 		parent: 10_11
 	# 		parentPath: errata/pc
-	# 		version: 1
+	# 		revision: 1
 	# 		collInfo: 10R11
 	# 		rarity: R
 	# 		setNum: "10"
@@ -109,7 +188,7 @@
 	# 			amount: -3
 	# 		}
 	# 		{
-	# 			type: trigger
+	# 			type: Trigger
 	# 			optional: true
 	# 			trigger: {
 	# 				type: startOfPhase
@@ -119,11 +198,11 @@
 	# 				type: discardFromHand
 	# 				count: 1
 	# 				forced: false
-	# 				filter: choose(culture(elven),event)
+	# 				select: choose(culture(elven),event)
 	# 			}
 	# 			effect: {
 	# 				type: discard
-	# 				filter: choose(side(shadow),or(condition,possession))
+	# 				select: choose(side(shadow),or(condition,possession))
 	# 			}
 	# 		}
 	# 	]
@@ -144,7 +223,7 @@
 	# 		javaClass: false
 	# 		parent: 10_11
 	# 		parentPath: errata/pc
-	# 		version: 2
+	# 		revision: 2
 	# 		collInfo: 10R11
 	# 		rarity: R
 	# 		setNum: "10"
@@ -187,12 +266,12 @@
 	# 					type: discardFromHand
 	# 					count: 1
 	# 					forced: false
-	# 					filter: choose(culture(elven),event)
+	# 					select: choose(culture(elven),event)
 	# 				}
 	# 			]
 	# 			effect: {
 	# 				type: discard
-	# 				filter: choose(side(shadow),or(condition,possession))
+	# 				select: choose(side(shadow),or(condition,possession))
 	# 			}
 	# 		}
 	# 	]
@@ -209,17 +288,11 @@
 	
 	60_11: {
 		cardInfo: {
-			imagePath: errata/60_11.jpg
-			javaClass: false
-			parent: 10_11
-			parentPath: errata/pc
-			version: 3
+			//id: 0_11.3
+			revision: 3
+			image: errata/60_11.jpg
 			collInfo: 10R11
 			rarity: R
-			setNum: "10"
-			cardNum: 11
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Galadriel
 		subtitle: Lady Redeemed
@@ -252,13 +325,13 @@
 						type: discardFromHand
 						count: 1
 						forced: false
-						filter: choose(culture(elven),event)
+						select: choose(culture(elven),event)
 					}
 				]
 				effect: [
 					{
 						type: discard
-						filter: choose(side(shadow),or(condition,possession))
+						select: choose(side(shadow),or(condition,possession))
 					}
 					{
 						type: incrementPerPhaseLimit
@@ -280,17 +353,11 @@
 	
 	60_12: {
 		cardInfo: {
-			imagePath: errata/LOTR-EN10E012.1.jpg
-			javaClass: false
-			parent: 10_12
-			parentPath: errata/pc
-			version: 1
+			//id: 0_12.1
+			revision: 1
+			image: errata/LOTR-EN10E012.1.jpg
 			collInfo: 10U12
 			rarity: U
-			setNum: "10"
-			cardNum: 12
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Glimpse of Fate
 		unique: true
@@ -298,35 +365,40 @@
 		twilight: 0
 		type: condition
 		keyword: support area
-		requires: {
-			type: CanSpot
-			filter: Elf
-			count: 2
-		}
-		effects: {
-			type: trigger
-			optional: true
-			trigger: {
-				type: losesInitiative
-				side: free peoples
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: CanSpot
+					filter: Elf
+					count: 2
+				}
 			}
-			requires: {
-				type: perTurnLimit
-				limit: 1
-			}
-			effect: [
-				{
-					type: incrementPerTurnLimit
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: losesInitiative
+					side: free peoples
+				}
+				requires: {
+					type: perTurnLimit
 					limit: 1
 				}
-				{
-					type: modifyStrength
-					filter: choose(minion)
-					amount: -3
-					until: start(regroup)
-				}
-			]
-		}
+				effect: [
+					{
+						type: incrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: modifyStrength
+						select: choose(minion)
+						amount: -3
+						until: start(regroup)
+					}
+				]
+			}
+		]
 		gametext: To play, spot 2 Elves. <br>When you lose initiative, you may make a minion strength –3 until the regroup phase (limit once per turn).
 		lore: "'The uttermost choice is before you: to repent and go to the Havens... or else to abide the Doom of Men.'"
 		promotext: ""
@@ -337,6 +409,4 @@
 			}
 		}
 	}
-	
-	
 }

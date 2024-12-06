@@ -1,0 +1,135 @@
+
+package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
+
+import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
+import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Test;
+
+import java.util.HashMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class Card_V1_020_Tests
+{
+
+	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new GenericCardTestHelper(
+				new HashMap<>() {{
+					put("boromir", "101_20");
+					put("sam", "1_311");
+
+					put("runner1", "1_178");
+					put("runner2", "1_178");
+					put("runner3", "1_178");
+					put("nelya", "1_233");
+				}},
+				GenericCardTestHelper.FellowshipSites,
+				GenericCardTestHelper.FOTRFrodo,
+				GenericCardTestHelper.RulingRing
+		);
+	}
+
+	@Test
+	public void BoromirStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+
+		/**
+		* Set: V1
+		* Title: *Boromir, Redeemed
+		* Side: Free Peoples
+		* Culture: gondor
+		* Twilight Cost: 3
+		* Type: companion
+		* Subtype: Man
+		* Strength: 5
+		* Vitality: 3
+		* Signet: Aragorn
+		* Game Text: Boromir is strength +2 for each minion he is skirmishing.
+		* 	At the start of the assignment phase, you may exert another companion with the Aragorn signet to make Boromir defender +1 until the regroup phase.
+		*/
+
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
+
+		assertTrue(boromir.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, boromir.getBlueprint().getSide());
+		assertEquals(Culture.GONDOR, boromir.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, boromir.getBlueprint().getCardType());
+		assertEquals(Race.MAN, boromir.getBlueprint().getRace());
+		//assertTrue(scn.HasKeyword(boromir, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertEquals(3, boromir.getBlueprint().getTwilightCost());
+		assertEquals(5, boromir.getBlueprint().getStrength());
+		assertEquals(3, boromir.getBlueprint().getVitality());
+		//assertEquals(, boromir.getBlueprint().getResistance());
+		assertEquals(Signet.ARAGORN, boromir.getBlueprint().getSignet());
+		//assertEquals(, boromir.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
+
+	}
+
+	@Test
+	public void BoromirIsStrengthPlus2PerMinionHeIsSkirmishing() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
+		scn.FreepsMoveCharToTable(boromir);
+
+		PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
+		PhysicalCardImpl runner2 = scn.GetShadowCard("runner2");
+		PhysicalCardImpl runner3 = scn.GetShadowCard("runner3");
+		scn.ShadowMoveCharToTable(runner1, runner2, runner3);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(5, scn.GetStrength(boromir));
+		scn.FreepsAssignToMinions(boromir, runner1);
+		scn.ShadowAssignToMinions(boromir, runner2, runner3);
+
+		scn.FreepsResolveSkirmish(boromir);
+
+		assertEquals(11, scn.GetStrength(boromir));
+	}
+
+	@Test
+	public void AssignmentActionExertsAragornSignetToMakeBoromirDefenderPlus1() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
+		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(boromir, sam);
+
+		PhysicalCardImpl nelya = scn.GetShadowCard("nelya");
+		scn.ShadowMoveCharToTable(nelya);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		assertFalse(scn.hasKeyword(boromir, Keyword.DEFENDER));
+		assertEquals(0, scn.GetWoundsOn(sam));
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.hasKeyword(boromir, Keyword.DEFENDER));
+		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
+		assertEquals(1, scn.GetWoundsOn(sam));
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(boromir, nelya);
+		scn.FreepsResolveSkirmish(boromir);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		assertTrue(scn.hasKeyword(boromir, Keyword.DEFENDER));
+		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
+	}
+}

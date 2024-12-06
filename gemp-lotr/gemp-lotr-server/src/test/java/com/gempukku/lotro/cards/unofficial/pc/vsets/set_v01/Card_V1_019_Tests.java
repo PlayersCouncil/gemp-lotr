@@ -3,29 +3,23 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_V1_019_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<>() {{
-					put("aragorn", "101_19");
-					put("arwen", "1_30");
-					put("elrond", "1_40");
-					put("galadriel", "1_45");
-					put("celeborn", "1_34");
-					put("orophin", "1_56");
-					put("defiance", "1_37");
-
-					put("runner", "1_178");
+				new HashMap<>()
+				{{
+					put("card", "101_19");
+					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,14 +41,15 @@ public class Card_V1_019_Tests
 		 * Subtype: Man
 		 * Strength: 8
 		 * Vitality: 4
+		 * Resistance: 6
 		 * Signet: Gandalf
-		 * Game Text: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.
-		* 	Maneuver: Discard an [elven] card from hand to make Aragorn <b>damage +1</b>, <b>archer</b>, or strength +2 until the regroup phase.
+		 * Game Text: When you play Aragorn (except in your starting fellowship), you may play an Elf with a twilight cost of 2 or less from your draw deck.
+		 * Skirmish: Discard an [elven] card from hand to make Aragorn strength +2 or <b>damage +1</b>.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("aragorn");
+		var card = scn.GetFreepsCard("card");
 
 		assertEquals("Aragorn", card.getBlueprint().getTitle());
 		assertEquals("Estel", card.getBlueprint().getSubtitle());
@@ -66,75 +61,22 @@ public class Card_V1_019_Tests
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
+	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void OnPlayTutorsAnElfOfCost2OrLess() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AragornTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var arwen = scn.GetFreepsCard("arwen");
-		var elrond = scn.GetFreepsCard("elrond");
-		var galadriel = scn.GetFreepsCard("galadriel");
-		var celeborn = scn.GetFreepsCard("celeborn");
-		var orophin = scn.GetFreepsCard("orophin");
-
-		scn.FreepsMoveCardToHand(aragorn);
+		var card = scn.GetFreepsCard("card");
+		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.FreepsPlayCard(card);
 
-		scn.FreepsPlayCard(aragorn);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-
-		//Orophin, Celeborn, or Arwen, but not Elrond (4) or Galadriel (3)
-		assertEquals(3, scn.GetFreepsCardChoiceCount());
-		assertEquals(Zone.DECK, orophin.getZone());
-		assertEquals(0, scn.GetFreepsHandCount());
-		assertEquals(6, scn.GetFreepsDeckCount());
-
-		scn.FreepsChooseCardBPFromSelection(orophin);
-		assertEquals(Zone.HAND, orophin.getZone());
-		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(5, scn.GetFreepsDeckCount());
-	}
-
-	//@Test
-	public void ManeuverAbilityCanDiscardsElvenCardToPumpAragornUntilRegroup() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var defiance = scn.GetFreepsCard("defiance");
-		var arwen = scn.GetFreepsCard("arwen");
-
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToHand(defiance, arwen);
-
-		var runner = scn.GetShadowCard("runner");
-
-		scn.ShadowMoveCharToTable(runner);
-
-		scn.StartGame();
-
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertTrue(scn.FreepsActionAvailable(aragorn));
-
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.PassCurrentPhaseActions();
-		scn.FreepsAssignToMinions(aragorn, runner);
-		scn.FreepsResolveSkirmish(aragorn);
-
-		assertTrue(scn.FreepsActionAvailable(aragorn));
-		assertEquals(Zone.HAND, defiance.getZone());
-		assertEquals(8, scn.GetStrength(aragorn));
-
-		scn.FreepsUseCardAction(aragorn);
-		assertEquals(Zone.DISCARD, defiance.getZone());
-		assertEquals(10, scn.GetStrength(aragorn));
-
+		assertEquals(4, scn.GetTwilight());
 	}
 }

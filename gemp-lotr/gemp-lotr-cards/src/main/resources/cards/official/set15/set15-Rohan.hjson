@@ -1,0 +1,1131 @@
+{
+
+	15_121: {
+		cardInfo: {
+			image: decipher/LOTR15121.jpg
+			collInfo: 15C121
+			rarity: C
+		}
+		title: Brilliant Light
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(rohan),companion)
+					memorize: chosenCompanion
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: chosenCompanion
+							filter: hunter,companion
+						}
+						true: 3
+						false: 2
+					}
+				}
+				{
+					type: If
+					check: {
+						type: memoryMatches
+						memory: chosenCompanion
+						filter: hunter,companion
+					}
+					true: {
+						type: addKeyword
+						select: memory(chosenCompanion)
+						keyword: damage
+						amount: 1
+					}
+				}
+			]
+		}
+		gametext: Make a [rohan] companion strength +2 (or strength +3 and <b>damage +1</b> if he or she is a hunter companion).
+		lore: "The Orcs reeled and screamed and cast aside both sword and spear."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_122: {
+		cardInfo: {
+			image: decipher/LOTR15122.jpg
+			collInfo: 15R122
+			rarity: R
+		}
+		title: Burial Mounds
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		timewords: Assignment
+		effects: {
+			type: event
+			effect: [
+				{
+					type: addKeyword
+					select: choose(culture(rohan),companion)
+					keyword: defender
+					amount: 1
+					until: regroup
+					memorize: chosenCompanion
+				}
+				{
+					type: addModifier
+					modifier: {
+						type: cantTakeWounds
+	   					filter: minion,inSkirmishAgainst(memory(chosenCompanion))
+					}
+					until: regroup
+				}
+			]
+		}
+		gametext: Make a [rohan] companion <b>defender +1</b> and minions skirmishing that companion cannot take wounds during a skirmish involving that companion until the regroup phase.
+		lore: "Their hearts were heavy, remembering the many men that had fallen in battle in this place."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_123: {
+		cardInfo: {
+			image: decipher/LOTR15123.jpg
+			collInfo: 15R123
+			rarity: R
+		}
+		title: Éomer
+		subtitle: Horsemaster
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		resistance: 7
+		keywords: [
+			Valiant
+			Hunter 2
+		]
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+				amount: -1
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(culture(rohan))
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 2
+				}
+			}
+		]
+		gametext: <b>Valiant</b>. <b>Hunter 2</b>. <helper>(While skirmishing a non-hunter character, this character is strength +2.)</helper><br>While you can spot a [rohan] Man, Éomer's twilight cost is -1.<br><b>Skirmish:</b> Discard a [rohan] card from hand to make Éomer strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_124: {
+		cardInfo: {
+			image: decipher/LOTR15124.jpg
+			collInfo: 15R124
+			rarity: R
+		}
+		title: Éomer's Spear
+		subtitle: Trusty Weapon
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(rohan),man
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,name(Éomer),unwounded
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: bearer,name(Éomer),unwounded
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: bearer,name(Éomer)
+				}
+				cost: [
+					{
+						type: memorizeActive
+						memory: bearer
+						filter: bearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: wound
+					select: choose(minion,inSkirmishAgainst(memory(bearer)))
+				}
+			}
+		]
+		gametext: Bearer must be a [rohan] Man.<br>If bearer is Éomer and he is unwounded, he is <b>damage +1</b> and resistance +1.<br><b>Skirmish:</b> If bearer is Éomer, discard this possession to wound a minion he is skirmishing.
+		lore: "Aim for their heads!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_125: {
+		cardInfo: {
+			image: decipher/LOTR15125.jpg
+			collInfo: 15C125
+			rarity: C
+		}
+		title: Éowyn
+		subtitle: Willing Fighter
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Valiant
+		effects: [
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: or(and(hunter,companion),and(valiant,man))
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: preventWound
+					select: choose(or(and(hunter,companion),and(valiant,man)))
+				}
+			}
+		]
+		gametext: <b>Valiant</b>.<br><b>Response:</b> If a hunter companion or valiant Man is about to take a wound, exert Éowyn to prevent that wound.
+		lore: "I can fight!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_126: {
+		cardInfo: {
+			image: decipher/LOTR15126.jpg
+			collInfo: 15S126
+			rarity: S
+		}
+		title: Gamling
+		subtitle: The Old
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: [
+			Valiant
+			Hunter 1
+		]
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: hunter
+						count: 3
+					}
+					filter: self
+					amount: 3
+				}
+			}
+		]
+		gametext: <b>Valiant</b>. <b>Hunter 1</b>. <helper>(While skirmishing a non-hunter character, this character is strength +1.)</helper> To play, spot a [rohan] Man.<br>While you can spot 3 hunters, Gamling is strength +3.
+		lore: "'Dawn is not far off... But dawn will not help us, I fear.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_127: {
+		cardInfo: {
+			image: decipher/LOTR15127.jpg
+			collInfo: 15C127
+			rarity: C
+		}
+		title: Grim Trophy
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(culture(rohan),man)
+					amount: {
+						type: max
+						firstNumber: {
+							type: forEachYouCanSpot
+							filter: valiant,man
+						}
+						secondNumber: {
+							type: forEachYouCanSpot
+							filter: hunter
+						}
+					}
+				}
+			]
+		}
+		gametext: Make a [rohan] Man strength +1 for each hunter you can spot (or if you can spot more valiant Men than hunters, make a [rohan] Man strength +1 for each valiant Man you can spot).
+		lore: "'At least they will not love the Orcs.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_128: {
+		cardInfo: {
+			image: decipher/LOTR15128.jpg
+			collInfo: 15U128
+			rarity: U
+		}
+		title: Haleth
+		subtitle: Son of Háma
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: mount
+						count: 2
+					}
+					filter: self
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: canSpot
+						filter: mount
+						count: 3
+					}
+					filter: self
+					keyword: damage
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBeDiscarded
+					requires: {
+						type: canSpot
+						filter: side(free people),mount
+						count: 4
+					}
+					filter: side(free people),mount
+					player: shadow
+				}
+			}
+		]
+		gametext: While you can spot 2 mounts, Haleth is strength +2.<br>While you can spot 3 mounts, Haleth is <b>damage +1</b>.<br>While you can spot 4 Free Peoples mounts, those mounts can not be discarded by a Shadow player.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_129: {
+		cardInfo: {
+			image: decipher/LOTR15129.jpg
+			collInfo: 15U129
+			rarity: U
+		}
+		title: Horse of Great Stature
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		itemclass: Mount
+		target: culture(rohan),man
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfSkirmishInvolving
+					filter: bearer
+				}
+				effect: {
+					type: exert
+					select: all(minion,inSkirmishAgainst(bearer))
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(rohan),man)
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.<br><b>Skirmish:</b> Exert bearer to make a [rohan] Man strength +1.
+		lore: "Aragorn saw a shadow on the distant green, a dark swift-moving blur."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_130: {
+		cardInfo: {
+			image: decipher/LOTR15130.jpg
+			collInfo: 15C130
+			rarity: C
+		}
+		title: Horseman of the North
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 5
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: valiant,man
+				}
+				amount: -1
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: cantSpot
+						filter: site,controlledByOtherPlayer
+					}
+					filter: self
+					amount: 2
+				}
+			}
+		]
+		gametext: While you can spot a valiant Man, this companion's twilight cost is -1.<br>This companion is strength +2 while no opponent controls a site.
+		lore: "'And they became our allies, and have ever proved true to us....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_131: {
+		cardInfo: {
+			image: decipher/LOTR15131.jpg
+			collInfo: 15C131
+			rarity: C
+		}
+		title: Our Inspiration
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: culture(rohan),man
+			}
+			effect: [
+				{
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: hunter,character
+					}
+					effect: {
+						type: playCardFromDiscard
+						select: choose(possession)
+					}
+				}
+			]
+		}
+		gametext: Spot a [rohan] Man to play a possession from your discard pile for each hunter character you can spot.
+		lore: "Decorative armor adorned the hallways and armories of Helm's Deep."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_132: {
+		cardInfo: {
+			image: decipher/LOTR15132.jpg
+			collInfo: 15U132
+			rarity: U
+		}
+		title: Last Days of My House
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: or
+				requires: [
+					{
+						type: canSpot
+						filter: culture(rohan),man
+						count: 2
+					}
+					{
+						type: canSpot
+						filter: hunter,culture(rohan),man
+					}
+				]
+			}
+			effect: [
+				{
+					type: playCardFromDrawDeck
+					select: choose(culture(rohan),or(companion,follower))
+					showAll: true
+					shuffle: true
+				}
+			]
+		}
+		gametext: Spot 2 [rohan] Men (or 1 hunter [rohan] Man) to play a [rohan] companion or a [rohan] follower from your draw deck.
+		lore: "No parent should have to bury their child."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_133: {
+		cardInfo: {
+			image: decipher/LOTR15133.jpg
+			collInfo: 15C133
+			rarity: C
+		}
+		title: Rider's Mount
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		itemclass: Mount
+		target: culture(rohan),man
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfSkirmishInvolving
+					filter: bearer
+				}
+				effect: {
+					type: exert
+					select: all(minion,inSkirmishAgainst(bearer))
+				}
+			}
+		]
+		gametext: Bearer must be a [rohan] Man.<br>At the start of each skirmish involving bearer, each minion skirmishing bearer must exert.
+		lore: "Their horses were of great stature, strong and clean- limbed; their grey coats glistened, their long tails flowed in the wind...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_134: {
+		cardInfo: {
+			image: decipher/LOTR15134.jpg
+			collInfo: 15U134
+			rarity: U
+		}
+		title: Rohan Stable Master
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Follower
+		strength: 1
+		effects: [
+			{
+				type: aidCost
+				cost: {
+					type: addTwilight
+				}
+			}
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: mounted
+				}
+			}
+		]
+		gametext: <b>Aid</b> – (1). <helper>(At the start of the maneuver phase, you may add (1) to transfer this to a companion.)</helper> To play, spot a [rohan] Man.<br>Bearer is considered to be mounted.
+		lore: "Rohirrim warriors were seldom seen without their mount."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_135: {
+		cardInfo: {
+			image: decipher/LOTR15135.jpg
+			collInfo: 15R135
+			rarity: R
+		}
+		title: Rohan Worker
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Follower
+		effects: [
+			{
+				type: aidCost
+				cost: {
+					type: addTwilight
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: transferred
+					filter: self
+					to: companion,not(culture(rohan))
+				}
+				effect: {
+					type: exert
+					select: bearer
+					times: 2
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: bearer
+				}
+				effect: {
+					type: liberateSite
+				}
+			}
+		]
+		gametext: <b>Aid</b> – (1).<br>Each time you transfer this to a companion, except a [rohan] companion, exert bearer twice.<br>Each time bearer wins a skirmish, you may liberate a site.
+		lore: "In preparation for the Battle of Helm's Deep, everyone helped fortify the doors and walls."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_136: {
+		cardInfo: {
+			image: decipher/LOTR15136.jpg
+			collInfo: 15C136
+			rarity: C
+		}
+		title: Rohirrim Axe
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(rohan),man
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,inSkirmishAgainst(hunter,minion)
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a [rohan] Man.<br>While bearer is skirmishing a hunter minion, bearer is <b>damage +1</b>.
+		lore: "Rohirrim young and old were given weapons of all kinds to defend Helm's Deep."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_137: {
+		cardInfo: {
+			image: decipher/LOTR15137.jpg
+			collInfo: 15U137
+			rarity: U
+		}
+		title: Rohirrim Doorwarden
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Follower
+		effects: [
+			{
+				type: aidCost
+				cost: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: bearer
+					amount: {
+						type: forEachHasAttached
+						filter: possession
+					}
+				}
+			}
+		]
+		gametext: <b>Aid</b> – (2). <helper>(At the start of the maneuver phase, you may add (2) to transfer this to a companion.)</helper> To play, spot a [rohan] Man.<br>Bearer is strength +1 for each possession he or she bears.
+		lore: "'...any weapon that you bear, be it only a staff, you must leave it on the threshold.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_138: {
+		cardInfo: {
+			image: decipher/LOTR15138.jpg
+			collInfo: 15S138
+			rarity: S
+		}
+		title: Rohirrim Soldier
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Valiant
+		effects: [
+			{
+				type: modifyOwnCost
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man
+				}
+				amount: -1
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: forEachYouCanSpot
+						filter: hunter,minion
+					}
+				}
+			}
+		]
+		gametext: <b>Valiant</b>. While you can spot a [rohan] Man, this companion's twilight cost is -1.<br>This companion is strength +1 for each hunter minion you can spot.
+		lore: "'Let us ride on!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_139: {
+		cardInfo: {
+			image: decipher/LOTR15139.jpg
+			collInfo: 15U139
+			rarity: U
+		}
+		title: Rohirrim Warrior
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Valiant
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: maneuver
+				}
+				cost: {
+					type: choice
+					texts: [
+						Spot a hunter minion
+						Exert 2 valiant Men
+					]
+					effects: [
+						{
+							type: spot
+							filter: hunter,minion
+						}
+						{
+							type: exert
+							select: choose(valiant,man)
+							count: 2
+						}
+					]
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: defender
+					amount: 1
+					until: regroup
+				}
+			}
+		]
+		gametext: <b>Valiant</b>.<br>At the start of the maneuver phase, you may spot a hunter minion (or exert 2 valiant Men) to make this companion <b>defender +1</b> until the regroup phase.
+		lore: "'...a warrior should have more skills and knowledge than only the craft of weapons and slaying....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_140: {
+		cardInfo: {
+			image: decipher/LOTR15140.jpg
+			collInfo: 15U140
+			rarity: U
+		}
+		title: Spear of the Mark
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 1
+		resistance: 1
+		itemclass: Hand weapon
+		target: culture(rohan),man
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer,mounted
+					keyword: defender
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a [rohan] Man.<br>If bearer is mounted, bearer is <b>defender +1</b>.
+		lore: "Rohirrim spears are much deadlier when the bearer is on horseback."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_141: {
+		cardInfo: {
+			image: decipher/LOTR15141.jpg
+			collInfo: 15R141
+			rarity: R
+		}
+		title: Sturdy Shield
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		itemclass: Shield
+		target: culture(rohan),man
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: cantSpot
+						filter: site,controlledByOtherPlayer
+					}
+					filter: bearer
+					amount: 1
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: memorizeActive
+						filter: bearer
+						memory: bearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
+				effect: {
+					type: repeat
+					times: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: bearer
+							filter: mounted
+						}
+						true: 2
+						false: 1
+					}
+					effect: {
+						type: liberateSite
+					}
+				}
+			}
+		]
+		gametext: Bearer must be a [rohan] Man.<br>While no opponent controls a site, bearer is strength +1.<br><b>Regroup:</b> Discard this to liberate a site (or two sites if bearer is mounted).
+		lore: "Sometimes the best offense is a good defense."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_142: {
+		cardInfo: {
+			image: decipher/LOTR15142.jpg
+			collInfo: 15U142
+			rarity: U
+		}
+		title: Swift Stroke
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: your,culture(rohan),man,hasAttached(possession)
+			}
+			effect: [
+				{
+					type: chooseActiveCards
+					text: Choose a character
+					select: choose(character)
+					memorize: chosenCharacter
+				}
+				{
+					type: discard
+					select: all(possession,attachedTo(memory(chosenCharacter)))
+				}
+			]
+		}
+		gametext: Spot your [rohan] Man bearing a possession to discard all possessions from one character.
+		lore: "...she drove her sword between crown and mantle, as the great shoulders bowed before her."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

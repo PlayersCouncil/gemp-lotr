@@ -11,9 +11,6 @@ import com.gempukku.lotro.logic.timing.results.SkirmishCancelledResult;
 public class CancelSkirmishEffect extends AbstractEffect {
     private Filterable[] _involvementFilter;
 
-    public CancelSkirmishEffect() {
-    }
-
     public CancelSkirmishEffect(Filterable... involvementFilter) {
         _involvementFilter = involvementFilter;
     }

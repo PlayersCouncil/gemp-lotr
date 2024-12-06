@@ -164,7 +164,7 @@ public class RuleUtils {
                             for (PossessionClass possessionClass : possessionClasses) {
                                 List<PhysicalCard> attachedCards = game.getGameState().getAttachedCards(attachedTo);
 
-                                Collection<PhysicalCard> matchingClassPossessions = Filters.filter(attachedCards, game, Filters.or(CardType.POSSESSION, CardType.ARTIFACT), possessionClass);
+                                Collection<PhysicalCard> matchingClassPossessions = Filters.filter(game, attachedCards, Filters.or(CardType.POSSESSION, CardType.ARTIFACT), possessionClass);
                                 if (matchingClassPossessions.size() > 1)
                                     return false;
 
@@ -182,27 +182,21 @@ public class RuleUtils {
     }
 
     public static boolean isAllyAtHome(PhysicalCard ally, int siteNumber, SitesBlock siteBlock) {
-        final SitesBlock allySiteBlock = ally.getBlueprint().getAllyHomeSiteBlock();
-        final int[] allyHomeSites = ally.getBlueprint().getAllyHomeSiteNumbers();
-        if (allySiteBlock != siteBlock)
-            return false;
-        for (int number : allyHomeSites)
-            if (number == siteNumber)
+        for(var home : ally.getBlueprint().getAllyHomes()) {
+            if(home.block() == siteBlock && home.siteNum() == siteNumber)
                 return true;
+        }
+
         return false;
     }
 
     public static boolean isAllyInRegion(PhysicalCard ally, int regionNumber, SitesBlock siteBlock) {
-        final SitesBlock allySiteBlock = ally.getBlueprint().getAllyHomeSiteBlock();
-        final int[] allyHomeSites = ally.getBlueprint().getAllyHomeSiteNumbers();
-        if (allySiteBlock != siteBlock)
-            return false;
-//        for (int number : allyHomeSites)
-//            if (regionNumber == GameUtils.getRegion(number))
-//                return true;
-//        return false;
+        for(var home : ally.getBlueprint().getAllyHomes()) {
+            if(home.block() == siteBlock && GameUtils.getRegion(home.siteNum()) == regionNumber)
+                return true;
+        }
 
-        return Arrays.stream(ally.getBlueprint().getAllyHomeSiteNumbers()).anyMatch(x -> regionNumber == GameUtils.getRegion(x));
+        return false;
     }
 
 }

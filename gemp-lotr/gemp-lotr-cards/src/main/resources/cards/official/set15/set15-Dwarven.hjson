@@ -1,0 +1,471 @@
+{
+
+	15_3: {
+		cardInfo: {
+			image: decipher/LOTR15003.jpg
+			collInfo: 15U3
+			rarity: U
+		}
+		title: Chamber of Records
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: dwarf
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: dwarven
+					select: self
+					count: 2
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: choice
+					texts: [
+						Discard this from play
+						Remove a {dwarven} token from here
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: RemoveCultureTokens
+							culture: dwarven
+							select: self
+						}
+					]
+				}
+				effect: [
+					{
+						type: revealTopCardsOfDrawDeck
+						memorize: revealedCard
+					}
+					{
+						type: if
+						check: {
+							type: memoryMatches
+							memory: revealedCard
+							filter: culture(dwarven)
+						}
+						true: {
+							type: putCardsFromDeckIntoHand
+							select: memory(revealedCard)
+							reveal: true
+							shuffle: false
+							showAll: false
+						}
+						false: {
+							type: discardCardsFromDrawDeck
+							select: memory(revealedCard)
+							showAll: false
+							shuffle: false
+						}
+					}
+				]
+			}
+		]
+		gametext: When you play this, you may spot a Dwarf to place 2 [dwarven] tokens here.<br><b>Fellowship:</b> Discard this from play or remove a [dwarven] token from here to reveal the top card of your draw deck. If it is a [dwarven] card, take it into your hand, otherwise, place it in your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_4: {
+		cardInfo: {
+			image: decipher/LOTR15004.jpg
+			collInfo: 15U4
+			rarity: U
+		}
+		title: The Fortunes of Balin's Folk
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(dwarf)
+			}
+			effect: [
+				{
+					type: chooseActiveCards
+					text: Choose {dwarven} condition to shuffle into deck
+					select: choose(culture(dwarven),condition,HasCultureToken(dwarven))
+					memorize: chosenCondition
+				}
+				{
+					type: memorizeNumber
+					memory: tokenCount
+					amount: {
+						type: ForEachCultureToken
+						filter: memory(chosenCondition)
+						culture: dwarven
+					}
+				}
+				{
+					type: shuffleCardsFromPlayIntoDrawDeck
+					select: memory(chosenCondition)
+				}
+				{
+					type: repeat
+					times: memory(tokenCount)
+					effect: {
+						type: wound
+						select: choose(minion)
+					}
+				}
+			]
+		}
+		gametext: Exert a Dwarf to shuffle a [dwarven] condition with one or more [dwarven] tokens on it into your draw deck. Wound a minion for each [dwarven] token that was on that condition.
+		lore: "'It is grim reading....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_5: {
+		cardInfo: {
+			image: decipher/LOTR15005.jpg
+			collInfo: 15C5
+			rarity: C
+		}
+		title: Gimli
+		subtitle: Eager Hunter
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: [
+			Damage+1
+			Hunter 3
+		]
+
+		gametext: <b>Damage +1</b>. <b>Hunter 3</b>. <helper>(While skirmishing a non-hunter character, this character is strength +3.)</helper>
+		lore: "'Well, after them!' said Gimli. 'Dwarves too can go swiftly....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_6: {
+		cardInfo: {
+			image: decipher/LOTR15006.jpg
+			collInfo: 15R6
+			rarity: R
+		}
+		title: Glóin
+		subtitle: Son of Gróin
+		unique: true
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Companion
+		race: Dwarf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				effect: [
+					{
+						type: drawCards
+						count: 3
+					}
+					{
+						type: putCardsFromHandOnBottomOfDeck
+						count: 3
+					}
+				]
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					culture: dwarven
+					select: choose(any)
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: 2
+				}
+			}
+		]
+		gametext: Each time Glóin wins a skirmish, you may draw 3 cards, then place 3 cards from your hand beneath your draw deck in any order.<br><b>Skirmish:</b> Remove a [dwarven] token to make Glóin strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_7: {
+		cardInfo: {
+			image: decipher/LOTR15007.jpg
+			collInfo: 15U7
+			rarity: U
+		}
+		title: Heavy Axe
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 4
+		type: Possession
+		strength: 3
+		itemclass: Hand weapon
+		target: dwarf
+		effects: [
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: culture(dwarven),HasAnyCultureTokens
+					multiplier: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: RemoveCultureTokens
+					culture: dwarven
+					select: choose(any)
+				}
+				effect: {
+					type: modifyStrength
+					select: bearer
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a Dwarf.<br>This is twilight cost -1 for each [dwarven] card that has a culture token on it.<br><b>Skirmish:</b> Remove a [dwarven] token to make bearer strength +1.
+		lore: "Dwarven smiths created weaponry of all sizes and styles."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_8: {
+		cardInfo: {
+			image: decipher/LOTR15008.jpg
+			collInfo: 15C8
+			rarity: C
+		}
+		title: Sturdy Stock
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(dwarf)
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: hunter,minion
+						}
+						true: {
+							type: forEachYouCanSpot
+							filter: hunter,minion
+						}
+						false: 2
+					}
+					memorize: chosenDwarf
+				}
+				{
+					type: If
+					check: {
+						type: canSpot
+						filter: hunter,minion
+					}
+					true: {
+						type: addKeyword
+						select: memory(chosenDwarf)
+						keyword: damage
+						amount: {
+							type: forEachYouCanSpot
+							filter: hunter,minion
+						}
+					}
+				}
+			]
+		}
+		gametext: Make a Dwarf strength +2 (or if you can spot a hunter minion, strength +1 and <b>damage +1</b> for each hunter minion you can spot).
+		lore: "Dwarves have a knack for surviving misfortune."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_9: {
+		cardInfo: {
+			image: decipher/LOTR15009.jpg
+			collInfo: 15R9
+			rarity: R
+		}
+		title: Well-crafted Armor
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Possession
+		itemclass: Armor
+		target: dwarf
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: takesWound
+					filter: bearer
+				}
+				effect: {
+					type: reinforceTokens
+					culture: dwarven
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(culture(dwarven))
+				}
+				effect: {
+					type: addKeyword
+					select: bearer
+					keyword: damage
+					amount: 1
+				}
+			}
+		]
+		gametext: Bearer must be a Dwarf. Each time bearer takes a wound, you may reinforce a [dwarven] token.<br><b>Skirmish:</b> Discard a [dwarven] card from hand to make bearer <b>damage +1</b>.
+		lore: "Dwarven armor is among the strongest crafted in Middle-earth."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	15_10: {
+		cardInfo: {
+			image: decipher/LOTR15010.jpg
+			collInfo: 15C10
+			rarity: C
+		}
+		title: Whatever End
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: name(Gimli)
+				}
+				effect: {
+					type: addKeyword
+					select: choose(hunter,or(culture(gondor),culture(elven)),companion)
+					keyword: damage
+					amount: 1
+					until: regroup
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(dwarven),companion)
+					amount: 2
+				}
+			}
+		]
+		gametext: Each time Gimli wins a skirmish, you may make a hunter [gondor] companion or hunter [elven] companion <b>damage +1</b> until the regroup phase.<br><b>Skirmish:</b> Discard this condition to make a [dwarven] companion strength +2.
+		lore: "'I will go with you even on the Paths of the Dead....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

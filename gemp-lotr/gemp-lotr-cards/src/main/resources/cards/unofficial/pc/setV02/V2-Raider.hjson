@@ -1,0 +1,148 @@
+{
+
+	102_43: {
+		cardInfo: {
+			//id: 102_43
+			image: sets/V2/LOTR-ENV2S043.0_card.jpg
+			collInfo: V2_43
+			rarity: _
+		}
+		title: All Hope of Secrecy Lost
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 0
+		type: Event
+		timewords: Shadow
+		effects: [
+			{
+				type: event
+				effect: {
+					type: Choice
+					texts: [
+						Remove (3) to draw 2 cards
+						Remove (4) to take up to 4 events into hand from your deck
+					]
+					effects: [
+						{
+							type: CostToEffect
+							requires: [
+								{
+									type: CanSpot
+									filter: your,minion
+								}
+								{
+									type: Not
+									requires: {
+										type: MemoryIs
+										memory: PlayedFromDeck
+										value: 1
+									}
+								}
+							]
+							cost: {
+								type: RemoveTwilight
+								amount: 3
+							}
+							effect: [
+								{
+									type: DrawCards
+									count: 2
+								}
+							]
+						}
+						
+						{
+							type: CostToEffect
+							requires: {
+								type: Or
+								requires: [
+									{
+										type: And
+										requires: [
+											{
+												type: Location
+												filter: RegionNumber(3)
+											}
+											{
+												type: CanSpotTwilight
+												amount: 25
+											}
+										]
+									}
+									{
+										type: And
+										requires: [
+											{
+												type: Location
+												filter: RegionNumber(1-2)
+											}
+											{
+												type: CanSpotTwilight
+												amount: 18
+											}
+										]
+									}
+								]
+							}
+							cost: {
+								type: RemoveTwilight
+								amount: 4
+							}
+							effect: [
+								{
+									type: PutCardsFromDeckIntoHand
+									count: 0-4
+									select: choose(side(shadow),event)
+									shuffle: true
+									reveal: true
+									showAll: true
+								}
+							]
+						}
+					]
+				}
+			}
+			{
+				type: ActivatedInDrawDeck
+				phase: Shadow
+				requires: [
+					{
+						type: canSelfBePlayed
+					}
+					{
+						type: Location
+						filter: RegionNumber(1)
+					}
+					{
+						type: CanSpotTwilight
+						amount: 18
+					}
+				]
+				effect: [
+					{
+						type: MemorizeNumber
+						amount: 1
+						memory: PlayedFromDeck
+					}
+					{
+						type: PlayCardFromDrawDeck
+						select: self
+						shuffle: true
+						showAll: true
+					}
+				]
+			}
+		]
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.\Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (4) to take up to 4 Shadow events into hand from your draw deck. If in region 1, this action can be performed from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

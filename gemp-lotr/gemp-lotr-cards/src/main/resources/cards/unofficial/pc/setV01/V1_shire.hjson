@@ -1,13 +1,21 @@
 {
+
 	101_50: {
+		cardInfo: {
+			//id: 101_50
+			image: sets/vset1/LOTR-ENV1S050.0_card.jpg
+			collInfo: V1U50
+			rarity: U
+		}
 		title: Bilbo
 		subtitle: Of Bag End
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 2
-		type: ally
-		allyHome: fellowship,3
-		race: hobbit
+		type: Ally
+		allyHome: 3F
+		race: Hobbit
 		strength: 2
 		vitality: 3
 		effects: [
@@ -20,41 +28,59 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					select: self
 					times: 2
 				}
 				effect: [
 					{
 						type: playCardFromDrawDeck
-						filter: choose(item)
+						select: choose(item)
 						on: culture(shire),companion
-						nocheck: true
+						showAll: true
+						shuffle: true
 					}
 					{
 						type: playCardFromDrawDeck
-						filter: choose(item)
+						select: choose(item)
 						on: culture(shire),companion
-						nocheck: true
+						showAll: true
+						shuffle: true
 					}
 				]
 			}
 		]
+		gametext: To play, spot 2 companions with the Frodo signet. <br>Fellowship: If the fellowship is at a sanctuary, exert Bilbo twice to play 2 items from your draw deck on [shire] companions.
+		lore: "'There has always been a Baggins in Bag End, and there always will be.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_51: {
+		cardInfo: {
+			//id: 101_51
+			image: sets/vset1/LOTR-ENV1S051.0_card.jpg
+			collInfo: V1C51
+			rarity: C
+		}
 		title: Griffo Boffin
 		subtitle: Uncouth Fellow
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: ally
-		allyHome: fellowship,1
-		race: hobbit
+		type: Ally
+		allyHome: 1F
+		race: Hobbit
 		strength: 3
 		vitality: 2
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: played
@@ -70,19 +96,83 @@
 				}
 			}
 		]
+		gametext: Each time you play a [shire] ally, you may add (1) to draw a card.
+		lore: "'Neither are they counted amongst the very wise...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 	
+	# 101_52: {
+	# 	title: Merry
+	# 	subtitle: Of Buckland
+	# 	unique: true
+	# 	culture: shire
+	# 	twilight: 1
+	# 	type: companion
+	# 	race: hobbit
+	# 	strength: 3
+	# 	vitality: 4
+	# 	signet: frodo
+	# 	resistance: 6
+	# 	effects: [
+	# 		{
+	# 			type: activated
+	# 			phase: assignment
+	# 			cost: [
+	# 				{
+	# 					type: exert
+	# 					select: self
+	# 					times: 3
+	# 				}
+	# 				{
+	# 					type: chooseActiveCards
+	# 					text: Choose minion to prevent from skirmishing
+	# 					select: choose(minion)
+	# 					memorize: chosenMinion
+	# 				}
+	# 			]
+	# 			effect: {
+	# 				type: preventable
+	# 				player: shadowPlayer
+	# 				text: Would you like to exhaust {chosenMinion} to permit it to skirmish?
+	# 				cost: {
+	# 					type: exhaust
+	# 					select: memory(chosenMinion)
+	# 				}
+	# 				effect: {
+	#	 				type: disableSkirmishAssignment
+	#					 select: memory(chosenMinion)
+	# 					until: regroup
+	# 				}
+	# 			}
+	# 		}
+	# 	]
+	# }
+
 	101_52: {
+		cardInfo: {
+			//id: 101_52.2
+			revision: 2
+			image: sets/vset1/LOTR-ENV1E052.1_card.jpg
+			collInfo: V1R52
+			rarity: R
+		}
 		title: Merry
 		subtitle: Of Buckland
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: companion
-		race: hobbit
+		type: Companion
+		race: Hobbit
 		strength: 3
 		vitality: 4
-		signet: frodo
+		signet: Frodo
 		resistance: 6
 		effects: [
 			{
@@ -91,13 +181,13 @@
 				cost: [
 					{
 						type: exert
-						filter: self
-						times: 3
+						select: self
+						times: 2
 					}
 					{
 						type: chooseActiveCards
 						text: Choose minion to prevent from skirmishing
-						filter: choose(minion)
+						select: choose(minion)
 						memorize: chosenMinion
 					}
 				]
@@ -107,29 +197,45 @@
 					text: Would you like to exhaust {chosenMinion} to permit it to skirmish?
 					cost: {
 						type: exhaust
-						filter: memory(chosenMinion)
+						select: memory(chosenMinion)
 					}
 					effect: {
-						type: DisableSkirmishAssignment
-						filter: memory(chosenMinion)
-						until: start(regroup)
+						type: disableSkirmishAssignment
+						select: memory(chosenMinion)
+						until: regroup
 					}
 				}
 			}
 		]
+		gametext: Assignment: Exert Merry twice to prevent a minion from being assigned to a skirmish until the regroup phase.  The Shadow player may exhaust that minion to prevent this.
+		lore: "'...we are going to do our best to help you against the Enemy.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_53: {
+		cardInfo: {
+			//id: 101_53
+			image: sets/vset1/LOTR-ENV1S053.0_card.jpg
+			collInfo: V1R53
+			rarity: R
+		}
 		title: Pippin
 		subtitle: Of Tuckborough
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: companion
-		race: hobbit
+		type: Companion
+		race: Hobbit
 		strength: 3
 		vitality: 4
-		signet: frodo
+		signet: Frodo
 		resistance: 6
 		effects: [
 			{
@@ -137,77 +243,134 @@
 				phase: skirmish
 				cost: {
 					type: exert
-					filter: self
+					select: self
 				}
 				effect: [
 					{
 						type: AlterOverwhelmMultiplier
-						filter: choose(culture(shire),companion,inSkirmish)
+						select: choose(culture(shire),companion,inSkirmish)
 						memorize: shireCompanion
 					}
 					{
-						type: conditional
-						requires: {
+						type: If
+						check: {
 							type: canSpot
 							filter: companion,signet(frodo)
 							count: 3
 						}
-						effect: {
+						true: {
 							type: modifyStrength
-							filter: choose(memory(shireCompanion))
+							select: choose(memory(shireCompanion))
 							amount: 1
 						}
 					}
 				]
 			}
 		]
+		gametext: Skirmish: Exert Pippin to prevent a skirmishing [shire] companion from being overwhelmed unless their strength is tripled (and make them strength +1 if you can spot 3 companions with the Frodo signet).
+		lore: "‘You must go - and therefore we must, too. Merry and I are coming with you.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 	
+	# 101_54: {
+	# 	title: Sam
+	# 	subtitle: Of Bagshot Row
+	# 	unique: true
+	# 	culture: shire
+	# 	twilight: 2
+	# 	type: companion
+	# 	race: hobbit
+	# 	strength: 3
+	# 	vitality: 4
+	# 	signet: frodo
+	# 	resistance: 5
+	# 	effects: [
+	# 		{
+	# 			type: Trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: winsSkirmish
+	# 				filter: companion,signet(frodo)
+	# 				memorize: winner
+	# 			}
+	# 			cost: {
+	# 				type: choice
+	# 				texts: [
+	# 					Exert Sam
+	# 					Add a burden
+	# 				]
+	# 				effects: [
+	# 					{
+	# 						type: exert
+	# 						select: self
+	# 					}
+	# 					{
+	# 						type: addBurdens
+	# 						amount: 1
+	# 					}
+	# 				]
+	# 			}
+	# 			effect: {
+	# 				type: heal
+	# 				select: choose(memory(winner))
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Response
+	# 			trigger: {
+	# 				type: killed
+	# 				filter: name(Frodo),ring bearer
+	# 			}
+	# 			effect: {
+	# 				type: makeSelfRingBearer
+	# 			}
+	# 		}
+	# 	]
+	# }
+	
+
 	101_54: {
+		cardInfo: {
+			//id: 101_54.2
+			revision: 2
+			image: sets/vset1/LOTR-ENV1E054.1_card.jpg
+			collInfo: V1U54
+			rarity: U
+		}
 		title: Sam
 		subtitle: Of Bagshot Row
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 2
-		type: companion
-		race: hobbit
+		type: Companion
+		race: Hobbit
 		strength: 3
 		vitality: 4
-		signet: frodo
+		signet: Frodo
 		resistance: 5
 		effects: [
 			{
-				type: trigger
+				type: Trigger
 				optional: true
 				trigger: {
 					type: winsSkirmish
 					filter: companion,signet(frodo)
 					memorize: winner
 				}
-				cost: {
-					type: choice
-					texts: [
-						Exert Sam
-						Add a burden
-					]
-					effects: [
-						{
-							type: exert
-							filter: self
-						}
-						{
-							type: addBurdens
-							amount: 1
-						}
-					]
-				}
 				effect: {
 					type: heal
-					filter: choose(memory(winner))
+					select: choose(memory(winner))
 				}
 			}
 			{
-				type: ActivatedTrigger
+				type: Response
 				trigger: {
 					type: killed
 					filter: name(Frodo),ring bearer
@@ -217,24 +380,41 @@
 				}
 			}
 		]
+		gametext: Each time a companion with the Frodo signet wins a skirmish, heal that companion.<br>Response: If Frodo is killed, make Sam the Ring-bearer (resistance 5).
+		lore: "'Don't turn me into anything... unnatural.'" 
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-	
+
 	101_55: {
+		cardInfo: {
+			//id: 101_55
+			image: sets/vset1/LOTR-ENV1S055.0_card.jpg
+			collInfo: V1C55
+			rarity: C
+		}
 		title: We May Yet
-		culture: shire
+		unique: false
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: event
-		keyword: skirmish
+		type: Event
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
 				type: exert
-				filter: choose(companion,signet(frodo),inSkirmish)
+				select: choose(companion,signet(frodo),inSkirmish)
 				memorize: exertedCompanion
 			}
 			effect: {
 				type: modifyStrength
-				filter: choose(memory(exertedCompanion))
+				select: choose(memory(exertedCompanion))
 				amount: {
 					type: forEachYouCanSpot
 					filter: companion,signet(frodo)
@@ -242,31 +422,58 @@
 				}
 			}
 		}
-	}
-	
-	101_56: {
-		title: We're Coming, Too!
-		culture: shire
-		twilight: 2
-		type: event
-		keyword: fellowship
-		requires: [
-			{
-				type: canSpot
-				filter: name(Merry)
+		gametext: Exert a skirmishing companion with the Frodo signet to make that companion strength +1 for each companion with the Frodo signet you can spot (limit +4).
+		lore: "'I don't suppose we'll ever see them again.'"
+		promotext: ""
+		alts: {
+			promos: {
 			}
-			{
-				type: canSpot
-				filter: name(Pippin)
-			}
-		]
-		effects: {
-			type: event
-			effect: {
-				type: heal
-				count: 2
-				filter: choose(companion,signet(frodo))
+			errata: {
 			}
 		}
 	}
+
+	101_56: {
+		cardInfo: {
+			//id: 101_56
+			image: sets/vset1/LOTR-ENV1S056.0_card.jpg
+			collInfo: V1C56
+			rarity: C
+		}
+		title: We're Coming, Too!
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: [
+				{
+					type: canSpot
+					filter: name(Merry)
+				}
+				{
+					type: canSpot
+					filter: name(Pippin)
+			}
+			]
+			effect: {
+				type: heal
+				count: 2
+				select: choose(companion,signet(frodo))
+			}
+		}
+		gametext: Spot Merry and Pippin to heal two companions with the Frodo signet.
+		lore: "'We hobbits ought to stick together, and we will. I shall go, unless they chain me up.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
 }

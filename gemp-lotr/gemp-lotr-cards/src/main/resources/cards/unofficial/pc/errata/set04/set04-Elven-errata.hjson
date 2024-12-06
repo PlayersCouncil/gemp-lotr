@@ -1,67 +1,61 @@
 {
 
-	54_73: {
-		cardInfo: {
-			imagePath: errata/54_73.jpg
-			javaClass: false
-			parent: 4_73
-			parentPath: errata/pc
-			version: 1
-			collInfo: 4R73
-			rarity: R
-			setNum: "4"
-			cardNum: 73
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
-		}
-		title: Legolas
-		subtitle: Dauntless Hunter
-		unique: true
-		culture: elven
-		twilight: 2
-		type: companion
-		race: elf
-		strength: 6
-		vitality: 3
-		resistance: 6
-		signet: aragorn
-		keyword: archer
-		effects: {
-			type: modifier
-			modifier: {
-				type: modifyCost
-				filter: side(shadow),or(event,condition)
-				amount: {
-					type: forEachYouCanSpot
-					filter: unbound,hobbit
-					limit: 2
-				}
-			}
-		}
-		gametext: Archer.<br>The twilight cost of each Shadow event and Shadow condition is +1 for each unbound Hobbit you can spot (limit +2).
-		lore: "'They are far, far away.... I know in my heart that they have not rested this night.'"
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
+	# 54_73: {
+	# 	cardInfo: {
+	# 		//id: 4_73.1
+	# 		parent: 4_73
+	# 		variant: ERRATA
+	# 		variantPath: promos/pc
+	# 		revision: 1
+	# 		image: errata/54_73.jpg
+	# 		collInfo: 4R73
+	# 		rarity: R
+	# 	}
+	# 	title: Legolas
+	# 	subtitle: Dauntless Hunter
+	# 	unique: true
+	# 	culture: elven
+	# 	twilight: 2
+	# 	type: companion
+	# 	race: elf
+	# 	strength: 6
+	# 	vitality: 3
+	# 	resistance: 6
+	# 	signet: aragorn
+	# 	keyword: archer
+	# 	effects: {
+	# 		type: modifier
+	# 		modifier: {
+	# 			type: modifyCost
+	# 			filter: side(shadow),or(event,condition)
+	# 			amount: {
+	# 				type: forEachYouCanSpot
+	# 				filter: unbound,hobbit
+	# 				limit: 2
+	# 			}
+	# 		}
+	# 	}
+	# 	gametext: Archer.<br>The twilight cost of each Shadow event and Shadow condition is +1 for each unbound Hobbit you can spot (limit +2).
+	# 	lore: "'They are far, far away.... I know in my heart that they have not rested this night.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
 	
 	54_73: {
 		cardInfo: {
-			imagePath: errata/54_73.jpg
-			javaClass: false
+			//id: 4_73.2
 			parent: 4_73
-			parentPath: errata/pc
-			version: 2
+			variant: ERRATA
+			variantPath: promos/pc
+			revision: 2
+			image: errata/54_73.jpg
 			collInfo: 4R73
 			rarity: R
-			setNum: "4"
-			cardNum: 73
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
 		}
 		title: Legolas
 		subtitle: Dauntless Hunter
@@ -77,7 +71,8 @@
 		signet: aragorn
 		resistance: 6
 		effects: {
-			type: trigger
+			type: Trigger
+			optional: false
 			optional: false
 			trigger: {
 				type: played

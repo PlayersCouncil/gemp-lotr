@@ -32,7 +32,7 @@ public class Choice implements EffectAppenderProducer {
 
         EffectAppender[] possibleEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
 
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player, environment);
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         return new DelayedAppender() {
             @Override
@@ -48,21 +48,35 @@ public class Choice implements EffectAppenderProducer {
                 for (EffectAppender possibleEffectAppender : possibleEffectAppenders) {
                     if (possibleEffectAppender.isPlayableInFull(delegateActionContext)) {
                         playableEffectAppenders.add(possibleEffectAppender);
-                        effectTexts.add(GameUtils.SubstituteText(textArray[textIndex], actionContext));
+                        effectTexts.add(GameUtils.substituteText(textArray[textIndex], actionContext));
                     }
                     textIndex++;
                 }
 
-                if (playableEffectAppenders.size() == 0) {
-                    actionContext.setValueToMemory(memorize, "");
-                    return null;
-                }
-
                 if (playableEffectAppenders.size() == 1) {
                     SubAction subAction = new SubAction(action);
-                    playableEffectAppenders.get(0).appendEffect(cost, subAction, delegateActionContext);
+                    playableEffectAppenders.getFirst().appendEffect(cost, subAction, delegateActionContext);
                     actionContext.setValueToMemory(memorize, textArray[0]);
                     return new StackActionEffect(subAction);
+                }
+
+                if (playableEffectAppenders.isEmpty()) {
+                    actionContext.setValueToMemory(memorize, "");
+
+                    // Costs that are a choice should not let the player pick freely, else it effectively results in there
+                    // being no cost at all.
+                    if(cost)
+                        return null;
+
+                    // If we are an effect however, then we will let "no valid choices" default to the player choosing
+                    // which fork to go down; this should eliminate situations like Here Lies Balin doing nothing
+                    // if there is a single 1-vitality Orc on the field
+                    textIndex = 0;
+                    for (var possibleEffectAppender : possibleEffectAppenders) {
+                        playableEffectAppenders.add(possibleEffectAppender);
+                        effectTexts.add(GameUtils.substituteText(textArray[textIndex], actionContext));
+                        textIndex++;
+                    }
                 }
 
                 SubAction subAction = new SubAction(action);

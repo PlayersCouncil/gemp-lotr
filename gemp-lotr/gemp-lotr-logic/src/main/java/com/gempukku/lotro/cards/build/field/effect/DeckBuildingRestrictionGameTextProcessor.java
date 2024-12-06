@@ -77,13 +77,6 @@ public class DeckBuildingRestrictionGameTextProcessor implements EffectProcessor
 
                     return new Result(true, successMsg);
                 });
-
-        blueprint.setExtraPossessionClassTest(
-                (game, self, attachedTo) -> {
-                    DefaultActionContext actionContext = new DefaultActionContext(self.getOwner(), game, self, null, null);
-                    final Filterable attachedFilterable = filterSource.getFilterable(actionContext);
-                    return Filters.and(attachedFilterable).accepts(game, attachedTo);
-                });
     }
 
     protected List<LotroCardBlueprint> validate(List<PhysicalCardImpl> cards, Filter filter) {

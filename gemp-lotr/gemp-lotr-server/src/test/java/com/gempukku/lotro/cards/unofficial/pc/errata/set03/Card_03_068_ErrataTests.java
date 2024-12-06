@@ -98,7 +98,7 @@ public class Card_03_068_ErrataTests
         assertEquals(0, scn.GetWoundsOn(uruk1));
         assertEquals(1, scn.GetWoundsOn(saruman));
         //Old version made them fierce, ensure that was removed
-        assertFalse(scn.HasKeyword(uruk1, Keyword.FIERCE));
+        assertFalse(scn.hasKeyword(uruk1, Keyword.FIERCE));
 
         //shadow has to skip archery actions
         scn.ShadowPassCurrentPhaseAction();
@@ -137,12 +137,12 @@ public class Card_03_068_ErrataTests
 
         scn.ShadowUseCardAction(saruman);
 
-        assertTrue(scn.HasKeyword(uruk1, Keyword.FIERCE));
+        assertTrue(scn.hasKeyword(uruk1, Keyword.FIERCE));
 
         assertEquals(0, scn.GetWoundsOn(uruk1));
         assertEquals(1, scn.GetWoundsOn(saruman));
 
         scn.SkipToPhase(Phase.ASSIGNMENT);
-        assertTrue(scn.HasKeyword(uruk1, Keyword.FIERCE));
+        assertTrue(scn.hasKeyword(uruk1, Keyword.FIERCE));
     }
 }

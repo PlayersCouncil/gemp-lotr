@@ -1,0 +1,809 @@
+{
+
+	102_45: {
+		cardInfo: {
+			//id: 102_45
+			image: sets/V2/LOTR-ENV2S045.0_card.jpg
+			collInfo: V2_45
+			rarity: _
+		}
+		title: Do Not Trust to Hope
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		strength: 2
+		target: culture(rohan),companion
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: valiant
+					filter: bearer
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: StartOfPhase
+					phase: regroup
+				}
+				effect: [
+					{
+						type: Memorize
+						filter: bearer
+						memory: DNTHBearer
+					}
+					{
+						type: Choice
+						texts: [
+							Wound {DNTHBearer}
+							Discard {self}
+						]
+						effects: [
+							{
+								type: Wound
+								select: bearer
+							}
+							{
+								type: Discard
+								select: self
+							}
+						]
+					}
+				]
+			}
+		]
+		gametext: Bearer must be a [rohan] companion.<br> Bearer is <b>valiant</b>.<br>At the start of the regroup phase, wound bearer or discard this condition.
+		lore: "'I fret in this prison,' said Théoden. 'If I could have set a spear in rest, riding before my men upon the field, maybe I could have felt again the joy of battle, and so ended. But I serve little purpose here.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_46: {
+		cardInfo: {
+			//id: 102_46
+			image: sets/V2/LOTR-ENV2S046.0_card.jpg
+			collInfo: V2_46
+			rarity: _
+		}
+		title: An End Worthy of Remembrance
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: {
+				type: CanSpot
+				filter: HasCultureTokenCount(2,rohan)
+			}
+			cost: [
+				{
+					type: ChooseActiveCards
+					text: Choose how many {rohan} conditions to remove 2 tokens from.
+					count: {
+						type: Range
+						from: 0
+						to: {
+							type: ForEachYouCanSpot
+							filter: condition,HasCultureTokenCount(2,rohan)
+						}
+					}
+					select: choose(HasCultureTokenCount(2,rohan))
+					memorize: chosenConditions
+				}
+				{
+					type: RemoveCultureTokens
+					select: memory(chosenConditions)
+					count: 2
+				}				
+			]
+			effect: [
+				{
+					type: ModifyStrength
+					select: choose(valiant, companion)
+					count: 3
+					until: start(regroup)
+					amount: {
+						type: ForEachInMemory
+						memory: chosenConditions
+					}
+				}
+			]
+		}
+		gametext: Spot X [rohan] conditions and remove 2 tokens from each to make 3 valiant companions strength +X until the regroup phase.
+		lore: "Captains and champions fell or fled before them. Neither orc nor man withstood them."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_47: {
+		cardInfo: {
+			//id: 102_47
+			image: sets/V2/LOTR-ENV2S047.0_card.jpg
+			collInfo: V2_47
+			rarity: _
+		}
+		title: Erkenbrand
+		subtitle: Kinsman of the House of Eorl
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 5
+		type: Companion
+		race: Man
+		strength: 7
+		vitality: 3
+		signet: Gandalf
+		resistance: 6
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: self
+				}
+				effect: {
+					type: RemoveCardsInDeadPileFromGame
+					count: 3
+					select: choose(culture(Rohan), companion, not(unique))
+				}
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: valiant
+					filter: exhausted, companion
+				}
+			}
+		]
+		gametext: When you play Erkenbrand, remove up to 3 non-unique [rohan] companions in the dead pile from the game. <br>Each exhausted companion gains <b>valiant</b>.
+		lore: "'He was a mighty man. In him lived again the valour of Helm the Hammerhand.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_48: {
+		cardInfo: {
+			//id: 102_48
+			image: sets/V2/LOTR-ENV2S048.0_card.jpg
+			collInfo: V2_48
+			rarity: _
+		}
+		title: Stronghold of My Fathers
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		keywords: [
+			Support Area
+			Fortification
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: CanSpot
+							filter: valiant,companion
+							count: 2
+						}
+						{
+							type: CanSpot
+							filter: culture(Rohan), Companion
+							count: 3
+						}
+					]
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: culture(rohan),companion
+				}
+				cost: {
+					type: Choice
+					texts: [
+						Discard Stronghold of My Fathers
+						Discard 2 other {rohan} possessions
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: discard
+							select: choose(other,culture(rohan),possession)
+							count: 2
+						}
+					]
+				}
+				effect: [
+					{
+						type: preventWound
+						select: choose(culture(rohan),companion)
+					}
+				]
+			}
+		]
+		gametext: Fortification. To play, spot 3 [rohan] companions (or 2 valiant companions).<br>Response: If a [rohan] companion is about to take a wound, discard this or 2 other [rohan] possessions to prevent that wound.
+		lore: "'Is it not said that no foe has ever taken the Hornburg, if men defended it?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_49: {
+		cardInfo: {
+			//id: 102_49
+			image: sets/V2/LOTR-ENV2S049.0_card.jpg
+			collInfo: V2_49
+			rarity: _
+		}
+		title: Gúthwinë
+		subtitle: Eomer's Blade
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: culture(rohan),companion
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: damage+1
+					requires: {
+						type: CanSpot
+						filter: bearer, name(Eomer)
+					}
+					filter: bearer
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: WinsSkirmish
+					filter: bearer
+				}
+				requires: {
+					type: CanSpot
+					filter: bearer, name(Eomer)
+				}
+				effect: {
+					type: ReinforceTokens
+					culture: rohan
+					select: choose(any)
+				}
+			}
+		]
+		gametext: Bearer must be a [rohan] companion.<br>If bearer is Eomer, he is damage +1 and each time he wins a skirmish, you may reinforce a [rohan] token.
+		lore: "The swords flashed from the sheath as one."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_50: {
+		cardInfo: {
+			//id: 102_50
+			image: sets/V2/LOTR-ENV2S050.0_card.jpg
+			collInfo: V2_50
+			rarity: _
+		}
+		title: Let This Be the Hour
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		timewords: Assignment
+		effects: {
+			type: event
+			cost: {
+				type: Exert
+				select: choose(valiant, companion)
+				memorize: exertedComp
+			},
+			effect: [
+				{
+					type: AddKeyword
+					keyword: defender+1
+					select: memory(exertedComp)
+				}
+				{
+					type: AddModifier
+					modifier: {
+						type: ModifyStrength
+						amount: {
+							type: ForEachYouCanSpot
+							filter: InSkirmishAgainst(memory(exertedComp))
+						}
+						filter: memory(exertedComp)
+					}
+					until: start(regroup)
+				}
+			]
+		}
+		gametext: Exert a valiant companion to make that companion defender +1. That companion is strength +1 for each minion skirmishing them until the regroup phase.
+		lore: "At his right hand was Aragorn, Elendil's heir, behind him rode the lords of the House of Eorl the Young."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+	102_51: {
+		cardInfo: {
+			//id: 102_51
+			image: sets/V2/LOTR-ENV2S051.0_card.jpg
+			collInfo: V2_51
+			rarity: _
+		}
+		title: Now for Wrath
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: [
+					{
+						type: Discarded
+						filter: culture(rohan), or(item, ally)
+					}
+					{
+						type: Discarded
+						fromZone: hand
+						filter: culture(rohan), or(item, ally)
+					}
+					{
+						type: Discarded
+						fromZone: deck
+						filter: culture(rohan), or(item, ally)
+					}
+					{
+						type: Killed
+						filter: culture(rohan), ally
+					}
+				]
+				effect: {
+					type: AddCultureTokens
+					culture: rohan
+					count: 1
+					select: self
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Exerted
+					filter: minion
+					source: side(freeps)
+					memorize: hurtMinion
+				}
+				cost: [
+					{
+						type: RemoveCultureTokens
+						count: 1
+						select: self
+					}
+					{
+						type: Exert
+						select: choose(valiant, companion)
+						times: 1
+					}
+				]
+				effect: {
+					type: Wound
+					select: memory(hurtMinion)
+				}
+			}
+		]
+		gametext: Each time a [rohan] item or [rohan] ally is discarded or killed, add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove a [rohan] token here and exert a valiant companion to wound that minion.
+		lore: "'How shall any tower withstand such numbers and such reckless hate?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_52: {
+		cardInfo: {
+			//id: 102_52
+			image: sets/V2/LOTR-ENV2S052.0_card.jpg
+			collInfo: V2_52
+			rarity: _
+		}
+		title: Now for Ruin
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Killed
+					filter: minion
+				}
+				cost: {
+					type: Spot
+					filter: valiant, companion
+					count: 2
+				}
+				effect: {
+					type: AddCultureTokens
+					culture: rohan
+					select: self
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: AddsCultureToken
+					on: self
+				}
+				requires: {
+					type: CanSpotCultureTokens
+					filter: self
+					amount: 3
+				}
+				cost: {
+					type: RemoveAllTokens
+				}
+				effect: [
+					{
+						type: PlayCardFromDiscard
+						select: choose(culture(rohan), or(condition, event))
+					}
+					{
+						type: PlayCardFromDiscard
+						player: shadow
+						optional: true
+						select: choose(minion)
+					}
+				]
+			}
+		]
+		gametext: Each time a minion is killed, spot 2 valiant companions to add a [rohan] token here.<br>Each time there are 3 [rohan] tokens here, remove all tokens here to play a [rohan] condition or event from your discard pile. The Shadow player may then play a minion from their discard pile. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_53: {
+		cardInfo: {
+			//id: 102_53
+			image: sets/V2/LOTR-ENV2S053.0_card.jpg
+			collInfo: V2_53
+			rarity: _
+		}
+		title: And the Red Dawn
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Activated
+				phase: Maneuver
+				cost: {
+					type: Spot
+					filter: valiant, companion
+					count: 3
+				}
+				effect: [
+					{
+						type: Repeat
+						times: {
+							type: ForEachInHand
+						}
+						effect: [
+							{
+								type: DiscardFromHand
+								forced: false
+								select: choose(any)
+								memorize: discardedCard
+							}
+							{
+								type: If
+								check: {
+									type: MemoryMatches
+									memory: discardedCard
+									filter: side(freeps)
+								}
+								true: {
+									type: Heal
+									select: choose(companion,or(valiant,culture(rohan)))
+								}
+								false: {
+									type: Exert
+									select: choose(minion)
+								}
+							}
+						]
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: CantUseSpecialAbilities
+							player: you
+							phase: maneuver
+						}
+					}
+					{
+						type: addModifier
+						modifier: {
+							type: CantPlayPhaseEvents
+							player: you
+							phase: maneuver
+						}
+					}
+				]
+			}
+		]
+		gametext: Maneuver: Spot 3 valiant companions to discard your hand. For each Shadow card discarded, exert a minion. For each Free Peoples card discarded, heal a valiant or [rohan] companion. You may not make any more Maneuver actions.
+		lore: "'The end will not be long,' said the king. 'But I will not end here, taken like an old badger in a trap.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_54: {
+		cardInfo: {
+			//id: 102_54
+			image: sets/V2/LOTR-ENV2S054.0_card.jpg
+			collInfo: V2_54
+			rarity: _
+		}
+		title: Royal Guard
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Ally
+		allyHome: 3T
+		race: Man
+		strength: 3
+		vitality: 3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: CanSpot
+							filter: name(Theoden)
+						}
+						{
+							type: CanSpot
+							filter: culture(Rohan), Man
+							count: 3
+						}
+					]
+				}
+			}
+			{
+				type: Activated
+				phase: Skirmish
+				limitPerPhase: 1
+				requires: [
+					{
+						type: CanSpot
+						filter: InSkirmish, Hobbit, companion
+					}
+				]
+				cost: [
+					{
+						type: Exert
+						select: self	
+					}
+					{
+						type: Spot
+						select: choose(InSkirmish, Hobbit, companion)
+						memorize: guardedHobbit
+					}
+				]
+				effect: [
+					{
+						type: ModifyStrength
+						select: memory(guardedHobbit)
+						amount: {
+							type: forEachStrength
+							filter: self
+						}
+					}
+					{
+						type: AddKeyword
+						keyword: valiant
+						select: memory(guardedHobbit)
+					}
+				]
+			}
+		]
+		gametext: To play, spot Theoden (or 3 [rohan] Men).<br>Skirmish: Exert this ally to add his strength to a skirmishing Hobbit and make that Hobbit gain <b>valiant</b> until the regroup phase (limit once per phase).
+		lore: "'It is not as I would have it,' said Théoden; 'for this is little like my fair house in Edoras. And your friend is gone, who should also be here.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_55: {
+		cardInfo: {
+			//id: 102_55
+			image: sets/V2/LOTR-ENV2S055.0_card.jpg
+			collInfo: V2_55
+			rarity: _
+		}
+		title: Theoden
+		subtitle: Last of His House
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 3
+		signet: Theoden
+		resistance: 6
+		keywords: valiant
+		effects: [
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: {
+						type: ForEachYouCanSpot
+						filter: other, valiant, companion, AssignedToSkirmish(any)
+					}
+				}
+			}
+		]
+		gametext: Valiant.<br>Theoden is strength +1 for each other valiant companion assigned to a skirmish.
+		lore: "His beard was laid like snow upon his knees; but his eyes still burned with a bright light, glinting as he gazed..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	102_56: {
+		cardInfo: {
+			//id: 102_56
+			image: sets/V2/LOTR-ENV2S056.0_card.jpg
+			collInfo: V2_56
+			rarity: _
+		}
+		title: To the King!
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 0
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			requires: [
+				{
+					type: CanSpot 
+					filter: valiant, companion, not(AssignedToSkirmish(any))
+				}
+				{
+					type: CanSpot 
+					filter: unbound, companion, InSkirmish
+				}
+			]
+			cost: {
+				type: Spot
+				select: choose(valiant, companion, not(AssignedToSkirmish(any)))
+				memorize: rescuer
+			},
+			effect: [
+				{
+					type: If
+					check: {
+						type: CanSpot
+						filter: name(Theoden), InSkirmish
+					}
+					true: {
+						type: AddKeyword
+						keyword: damage+1
+						select: memory(rescuer)
+					}
+				}
+				{
+					type: ReplaceInSkirmish
+					filter: unbound, companion
+					with: memory(rescuer)
+				}
+			]
+		}
+		gametext: Spot an unassigned valiant companion to have them replace an unbound companion in a skirmish (and make them damage +1 if that unbound companion is Theoden). 
+		lore: "'Helm for Théoden King!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}
