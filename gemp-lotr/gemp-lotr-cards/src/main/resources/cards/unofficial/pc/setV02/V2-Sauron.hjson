@@ -26,10 +26,20 @@
 					effects: [
 						{
 							type: CostToEffect
-							requires: {
-								type: CanSpot
-								filter: your,minion
-							}
+							requires: [
+								{
+									type: CanSpot
+									filter: your,minion
+								}
+								{
+									type: Not
+									requires: {
+										type: MemoryIs
+										memory: PlayedFromDeck
+										value: 1
+									}
+								}
+							]
 							cost: {
 								type: RemoveTwilight
 								amount: 3
@@ -115,15 +125,22 @@
 						amount: 18
 					}
 				]
-				effect: {
-					type: PlayCardFromDrawDeck
-					select: self
-					shuffle: true
-					showAll: true
-				}
+				effect: [
+					{
+						type: MemorizeNumber
+						amount: 1
+						memory: PlayedFromDeck
+					}
+					{
+						type: PlayCardFromDrawDeck
+						select: self
+						shuffle: true
+						showAll: true
+					}
+				]
 			}
 		]
-		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) to play up to 2 minions from your draw deck costing (5) or more. If in region 1, this action can be played from your draw deck.
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) to play up to 2 minions from your draw deck costing (5) or more. If in region 1, this action can be performed from your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {

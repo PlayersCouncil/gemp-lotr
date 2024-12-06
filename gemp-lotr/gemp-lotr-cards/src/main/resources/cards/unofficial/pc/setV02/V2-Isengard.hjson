@@ -138,7 +138,7 @@
 			}
 			{
 				type: KilledTrigger
-				optional: false
+				optional: true
 				requires: {
 					type: CanSpot
 					filter: self,InSkirmish
@@ -155,7 +155,7 @@
 				}
 			}
 		]
-		gametext: Damage +1. <br>The minion is strength+1 for each wound on each character in its skirmish.<br>When this minion dies in a skirmish, you may remove 2 [isengard] tokens from a machine to wound a character it was skirmishing. 
+		gametext: Damage +1. <br>This minion is strength +1 for each wound on each character in its skirmish.<br>When this minion dies in a skirmish, you may remove 2 [isengard] tokens from a machine to wound a character it was skirmishing. 
 		lore: "Then the Orcs screamed, waving spear and sword, and shooting a cloud of arrows."
 		promotext: ""
 		alts: {
@@ -253,10 +253,20 @@
 					effects: [
 						{
 							type: CostToEffect
-							requires: {
-								type: CanSpot
-								filter: your,minion
-							}
+							requires: [
+								{
+									type: CanSpot
+									filter: your,minion
+								}
+								{
+									type: Not
+									requires: {
+										type: MemoryIs
+										memory: PlayedFromDeck
+										value: 1
+									}
+								}
+							]
 							cost: {
 								type: RemoveTwilight
 								amount: 3
@@ -336,15 +346,22 @@
 						amount: 18
 					}
 				]
-				effect: {
-					type: PlayCardFromDrawDeck
-					select: self
-					shuffle: true
-					showAll: true
-				}
+				effect: [
+					{
+						type: MemorizeNumber
+						amount: 1
+						memory: PlayedFromDeck
+					}
+					{
+						type: PlayCardFromDrawDeck
+						select: self
+						shuffle: true
+						showAll: true
+					}
+				]
 			}
 		]
-		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (5) to take up to 4 Shadow items into hand from your draw deck. If in region 1, this action can be played from your draw deck.
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (5) to take up to 4 Shadow items into hand from your draw deck. If in region 1, this action can be performed from your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {
