@@ -12,11 +12,24 @@ FROM gemp_db.transfer t
 # WHERE collection RLIKE('(101_65|101_66|101_67)')
 ORDER BY id DESC;
 
+
+UPDATE transfer 
+SET notify = TRUE 
+WHERE id = 5031
+
+SELECT NOW(), NOW() + INTERVAL 24 HOUR
+
+
+
+
 ALTER TABLE gemp_db.transfer  
 ADD COLUMN date_recorded DATETIME NOT NULL DEFAULT now() AFTER transfer_date;
 
 ALTER TABLE gemp_db.transfer  
 ADD COLUMN notify2 BIT NOT NULL DEFAULT 0 AFTER notify;
+
+ALTER TABLE gemp_db.transfer
+MODIFY COLUMN currency INT(11) NOT NULL DEFAULT 0;
 
 UPDATE gemp_db.transfer 
 SET date_recorded = from_unixtime(floor(transfer_date/1000));
