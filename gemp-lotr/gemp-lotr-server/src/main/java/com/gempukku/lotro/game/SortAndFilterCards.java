@@ -265,7 +265,6 @@ public class SortAndFilterCards {
 
     private boolean isInSetOrFormat(String blueprintId, LotroCardBlueprint card, List<String> setFilters,
             LotroFormat currentFormat, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
-        boolean isInAnySet = false;
 
         for (String set : setFilters) {
             if(isJSInvalidString(set))
@@ -283,7 +282,7 @@ public class SortAndFilterCards {
                 }
 
                 if(StringUtils.isEmpty(invalid)) {
-                    isInAnySet = true;
+                    return true;
                 }
                 continue;
             }
@@ -305,18 +304,18 @@ public class SortAndFilterCards {
 
             for (int setNo = min; setNo <= max; setNo++) {
                 if (blueprintId.startsWith(setNo + "_") || library.hasAlternateInSet(blueprintId, String.valueOf(setNo))) {
-                    isInAnySet = true;
+                    return true;
                 }
                 else if (currentFormat != null && currentFormat.hasErrata()) {
                     int errataSetNo = library.getErrataSet(setNo);
                     if (blueprintId.startsWith(errataSetNo + "_") || library.hasAlternateInSet(blueprintId, String.valueOf(errataSetNo))) {
-                        isInAnySet = true;
+                        return true;
                     }
                 }
             }
         }
 
-        return isInAnySet;
+        return false;
     }
 
     private List<String> getWords(List<String> params, boolean sanitize) {
