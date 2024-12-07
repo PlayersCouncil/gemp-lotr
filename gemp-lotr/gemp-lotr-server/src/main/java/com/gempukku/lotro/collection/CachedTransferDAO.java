@@ -97,7 +97,12 @@ public class CachedTransferDAO implements TransferDAO, Cached {
 
     @Override
     public DBDefs.Announcement getUndeliveredAnnouncement(Player player) {
-        return _delegate.getUndeliveredAnnouncement(player);
+        return this.getUndeliveredAnnouncement(player, getCurrentAnnouncement());
+    }
+
+    @Override
+    public DBDefs.Announcement getUndeliveredAnnouncement(Player player, DBDefs.Announcement announcement) {
+        return _delegate.getUndeliveredAnnouncement(player, announcement);
     }
 
     @Override

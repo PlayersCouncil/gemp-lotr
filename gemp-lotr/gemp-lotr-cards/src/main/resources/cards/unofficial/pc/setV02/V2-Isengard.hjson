@@ -139,9 +139,10 @@
 			{
 				type: KilledTrigger
 				optional: true
+				player: owner
 				requires: {
 					type: CanSpot
-					filter: self,InSkirmish
+					filter: RecentlyInSkirmishAgainst(self)
 				}
 				cost: {
 					type: RemoveCultureTokens
@@ -151,7 +152,7 @@
 				}
 				effect: {
 					type: wound
-					select: choose(companion,inSkirmishAgainst(self))
+					select: choose(companion,RecentlyInSkirmishAgainst(self))
 				}
 			}
 		]

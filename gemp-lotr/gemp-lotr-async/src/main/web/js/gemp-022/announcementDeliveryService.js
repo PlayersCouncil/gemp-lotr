@@ -31,7 +31,7 @@ function announcementDeliveryService(comm, json) {
 		closeOnEscape:true,
 		close: closeCleanup,
 		resizable:false,
-		width:$(window).width() * 0.9,
+		width:800,
 		height:$(window).height() * 0.9,
 		closeText: ''
 	});
