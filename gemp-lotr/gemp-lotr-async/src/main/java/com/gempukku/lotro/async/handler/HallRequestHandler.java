@@ -22,7 +22,8 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;import org.w3c.dom.Document;
+import org.apache.logging.log4j.Logger;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -414,8 +415,13 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
 
     private void getErrataInfo(HttpRequest request, ResponseWriter responseWriter) throws CardNotFoundException {
 
-        var errata = _library.getErrata();
-        String json = JsonUtils.Serialize(errata);
+        var recentErrata = _formatLibrary.getFormat("pc_errata").getRecentErrata();
+
+        var errataInfo = new HashMap<String, Object>();
+        errataInfo.put("all", _library.getErrata());
+        errataInfo.put("recent", recentErrata);
+
+        String json = JsonUtils.Serialize(errataInfo);
 
         responseWriter.writeJsonResponse(json);
     }

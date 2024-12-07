@@ -168,11 +168,11 @@ public class GameUtils {
         if(override == null || override.isEmpty()) {
             override = culture.toString().toLowerCase();
         }
-        return "<span class='cultureHint' ><img src='images/cultures/" + override + ".png'></span>";
+        return "<span class='cultureHint' ><img src='images/cultures/" + override + ".png'/></span>";
     }
 
     public static String getCultureImage(Culture culture) {
-        return "<span class='cultureHint' value='" + culture.toString() + "'><img src='images/cultures/" + culture.toString().toLowerCase() + ".png'> "
+        return "<span class='cultureHint' value='" + culture.toString() + "'><img src='images/cultures/" + culture.toString().toLowerCase() + ".png'/> "
                 + culture.getHumanReadable() + "</span>";
     }
 
@@ -181,7 +181,7 @@ public class GameUtils {
         for (PhysicalCard card : cards)
             sb.append(GameUtils.getFullName(card) + ", ");
 
-        if (sb.length() == 0)
+        if (sb.isEmpty())
             return "none";
         else
             return sb.substring(0, sb.length() - 2);

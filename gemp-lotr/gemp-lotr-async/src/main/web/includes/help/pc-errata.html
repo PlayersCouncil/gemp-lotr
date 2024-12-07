@@ -6,9 +6,12 @@
 				//$("#errata-readout").text(JSON.stringify(json, null, 2));
 				var top = $("<div style='display:flex; flex-direction:column; gap:20px; justify-content:center; align-items:center;'></div>");
 				
-				var results = {};
-				for(var bp in json) {
-					var info = json[bp];
+				var bot = $("<div style='display:flex; flex-direction:column; gap:20px; justify-content:center; align-items:center;'></div>");
+				
+				var recentResults = {};
+				var allResults = {};
+				for(var bp in json.all) {
+					var info = json.all[bp];
 					var eid = info.ErrataIDs.PC;
 					var text = info.LinkText;
 					text = text.replace(eid, bp + "," + eid);
@@ -19,42 +22,90 @@
 					var setID = parseInt(parts[0]);
 					var cardID = parseInt(parts[1]);
 					
-					if(setID in results) {
-						results[setID][cardID] = text;
+					if(setID in allResults) {
+						allResults[setID][cardID] = text;
 					}
 					else {
-						results[setID] = {};
-						results[setID][cardID] = text;
+						allResults[setID] = {};
+						allResults[setID][cardID] = text;
 					}
 				}
-				//debugger;
-				var collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
-				var sets = Object.keys(results).sort(collator.compare);
 				
-				for(var set in sets) {
-					var setdiv = $("<div style='display:flex; flex-direction:column; gap:10px; flex-wrap: wrap; width:70%; row-gap:10px; column-gap:30px; '></div>");
-					top.append($("<div style='margin:auto; font-size: 140%; position:relative; top:20px; bottom:10px;'>Set " + sets[set] + "</div>"));
+				for(var bp in json.recent) {
+					var info = json.recent[bp];
+					var eid = info.ErrataIDs.PC;
+					var text = info.LinkText;
+					text = text.replace(eid, bp + "," + eid);
+					//console.log(text);
+					//result.append(text);
+					
+					var parts = bp.split("_");
+					var setID = parseInt(parts[0]);
+					var cardID = parseInt(parts[1]);
+					
+					if(setID in recentResults) {
+						recentResults[setID][cardID] = text;
+					}
+					else {
+						recentResults[setID] = {};
+						recentResults[setID][cardID] = text;
+					}
+				}
+				debugger;
+				var collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
+				var recentSets = Object.keys(recentResults).sort(collator.compare);
+				var allSets = Object.keys(allResults).sort(collator.compare);
+				
+				for(let set in recentSets) {
+					let setdiv = $("<div style='display:flex; flex-direction:column; gap:10px; flex-wrap: wrap; width:70%; row-gap:10px; column-gap:30px; '></div>");
+					top.append($("<div style='margin:auto; font-size: 140%; position:relative; top:20px; bottom:10px;'>Set " + recentSets[set] + "</div>"));
 					
 					//(# * 28) / 2
 					//debugger;
-					var cards = Object.keys(results[sets[set]]).sort(collator.compare);
-					for(var card in cards) {
-						var cardspan = $("<span></span>");
+					let cards = Object.keys(recentResults[recentSets[set]]).sort(collator.compare);
+					for(let card in cards) {
+						let cardspan = $("<span></span>");
 						
-						var html = results[sets[set]][cards[card]];
-						cardspan.append(results[sets[set]][cards[card]]);
+						let html = recentResults[recentSets[set]][cards[card]];
+						cardspan.append(html);
 						
 						setdiv.append(cardspan);
 					}
 
 					
-					setdiv.css({"height": "" + (((cards.length * 28) / 1.8) + 30) + "px"});
+					setdiv.css({"height": "" + (((cards.length * 29) / 1.8) + 30) + "px"});
 					
 					top.append(setdiv);
 				}
 				
+				debugger;
+				for(let set in allSets) {
+					let setdiv = $("<div style='display:flex; flex-direction:column; gap:10px; flex-wrap: wrap; width:70%; row-gap:10px; column-gap:30px; '></div>");
+					bot.append($("<div style='margin:auto; font-size: 140%; position:relative; top:20px; bottom:10px;'>Set " + allSets[set] + "</div>"));
+					
+					//(# * 28) / 2
+					//debugger;
+					let cards = Object.keys(allResults[allSets[set]]).sort(collator.compare);
+					for(let card in cards) {
+						let cardspan = $("<span></span>");
+						
+						let html = allResults[allSets[set]][cards[card]];
+						cardspan.append(html);
+						
+						setdiv.append(cardspan);
+					}
+
+					
+					setdiv.css({"height": "" + (((cards.length * 29) / 1.8) + 30) + "px"});
+					
+					bot.append(setdiv);
+				}
+				console.log(bot);
+				$("#all-errata-readout").html(bot);
 				
-				$("#errata-readout").html(top);
+				console.log(top);
+				$("#recent-errata-readout").html(top);
+				
 			}, hall.hallErrorMap());
 		  }
 		);
@@ -67,11 +118,12 @@
 			Each of the released errata have had a full writeup on the PC's thoughts and justifications <a href="https://wiki.lotrtcgpc.net/wiki/PC_Errata">here on the LOTR-TCG wiki</a>.
 		</p>
 		<p>
-			Cards on the <a href="https://docs.google.com/document/d/1ECobwVqgpQtUUEN4drxyvHntp1GX91WNaHcfAWjlHeQ/edit#">Errata Probation List can be viewed here</a>.  If you have suggestions for errata, please bring it up on the <a href="https://discord.com/channels/699957633121255515/1047679707728060617">#errata forum on the PC Discord</a>.
-		</p>
-		<p>
 			Below you can find a quick reference allowing you to quickly compare released errata.
 		</p>
-		<div id="errata-readout" />
+		<h1>Recent Errata</h1>
+		<div id="recent-errata-readout"></div>
+		
+		<h1>All PC Errata</h1>
+		<div id="all-errata-readout"></div>
 	</div>
 </div>
