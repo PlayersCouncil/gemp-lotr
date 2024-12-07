@@ -87,7 +87,7 @@
 			{
 				type: aidCost
 				cost: {
-					type: addTwilight
+					type: removeTwilight
 				}
 			}
 			{
