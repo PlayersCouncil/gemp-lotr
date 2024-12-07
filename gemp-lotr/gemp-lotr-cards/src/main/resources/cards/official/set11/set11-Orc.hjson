@@ -908,7 +908,7 @@
 				}
 				effect: {
 					type: putCardsFromDiscardIntoHand
-					select: choose(culture(orc),minion)
+					select: choose(culture(orc),event)
 				}
 			}
 		]
