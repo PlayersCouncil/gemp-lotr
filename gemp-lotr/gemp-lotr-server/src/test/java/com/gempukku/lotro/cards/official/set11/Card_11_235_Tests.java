@@ -83,12 +83,10 @@ public class Card_11_235_Tests
 		var clever = scn.GetFreepsCard("clever");
 		var site1 = scn.GetFreepsSite("Dammed Gate-stream");
 
-		scn.FreepsChooseCardBPFromSelection(site1);
-		scn.SkipStartingFellowships();
-		//Apparently it's drawing cards now.  It doesn't do this in other formats.
-		scn.FreepsMoveCardsToBottomOfDeck(dontlook, smeagol, slippery, boat, clever);
-		scn.StartGame();
+		scn.StartGame(site1);
 
+		//For some reason it's drawing cards.  It never seems to do that in any other test.
+		scn.FreepsMoveCardsToBottomOfDeck(dontlook, smeagol, slippery, boat, clever);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 		scn.FreepsDismissRevealedCards();

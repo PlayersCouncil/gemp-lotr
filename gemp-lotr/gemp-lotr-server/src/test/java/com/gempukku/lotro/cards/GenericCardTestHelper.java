@@ -50,6 +50,18 @@ public class GenericCardTestHelper extends AbstractAtTest {
         put("site9", "7_360");
     }};
 
+    public static final HashMap<String, String> ShadowsSites = new HashMap<>() {{
+        put("site1", "11_239");
+        put("site2", "13_185");
+        put("site3", "11_234");
+        put("site4", "17_148");
+        put("site5", "18_138");
+        put("site6", "11_230");
+        put("site7", "12_187");
+        put("site8", "12_185");
+        put("site9", "17_146");
+    }};
+
     public static final String FOTRFrodo = "1_290";
     public static final String GimliRB = "9_4";
     public static final String GaladrielRB = "9_14";
@@ -58,6 +70,9 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public static final String IsildursBaneRing = "1_1";
     public static final String ATARRing = "4_1";
     public static final String GreatRing = "19_1";
+
+    public static final String Multipath = "multipath";
+    public static final String Shadows = "expanded";
 
     private final FilterFactory FilterFactory = new FilterFactory();
     private final CardGenerationEnvironment Environment = new LotroCardBlueprintBuilder();
@@ -69,11 +84,11 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public Map<String, Map<String, PhysicalCardImpl>> Cards = new HashMap<>();
 
     public GenericCardTestHelper(HashMap<String, String> cardIDs) throws CardNotFoundException, DecisionResultInvalidException {
-        this(cardIDs, null, null, null, "multipath");
+        this(cardIDs, null, null, null, Multipath);
     }
 
     public GenericCardTestHelper(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID) throws CardNotFoundException, DecisionResultInvalidException {
-        this(cardIDs, siteIDs, ringBearerID, ringID, "multipath");
+        this(cardIDs, siteIDs, ringBearerID, ringID, Multipath);
     }
 
     public GenericCardTestHelper(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String path) throws CardNotFoundException, DecisionResultInvalidException {
@@ -143,7 +158,16 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
 
     public void StartGame() throws DecisionResultInvalidException {
-        skipMulligans();
+        SkipStartingFellowships();
+        SkipMulligans();
+    }
+
+    //Use this one when setting up a Shadows path game
+    public void StartGame(PhysicalCardImpl site1) throws DecisionResultInvalidException {
+        //Choosing first site, since that can't be automatic
+        FreepsChooseCardBPFromSelection(site1);
+        SkipStartingFellowships();
+        SkipMulligans();
     }
 
     public void SkipStartingFellowships() throws DecisionResultInvalidException {
@@ -152,6 +176,15 @@ public class GenericCardTestHelper extends AbstractAtTest {
         }
         if(ShadowDecisionAvailable("Starting fellowship")) {
             ShadowChoose("");
+        }
+    }
+
+    public void SkipMulligans() throws DecisionResultInvalidException {
+        if(FreepsDecisionAvailable("Do you wish to mulligan")) {
+            FreepsChooseNo();
+        }
+        if(ShadowDecisionAvailable("Do you wish to mulligan")) {
+            ShadowChooseNo();
         }
     }
 
@@ -181,7 +214,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public PhysicalCardImpl GetSite(String playerID, int siteNum)
     {
         PhysicalCardImpl site = (PhysicalCardImpl)_game.getGameState().getSite(siteNum);
-        if(site != null && site.getOwner() == playerID)
+        if(site != null && site.getOwner().equals(playerID))
             return site;
 
         List<PhysicalCardImpl> advDeck = (List<PhysicalCardImpl>)_game.getGameState().getAdventureDeck(playerID);
@@ -592,6 +625,26 @@ public class GenericCardTestHelper extends AbstractAtTest {
     }
     public void ShadowMoveCardToDiscard(PhysicalCardImpl...cards) {
         Arrays.stream(cards).forEach(card -> MoveCardToZone(P2, card, Zone.DISCARD));
+    }
+
+    public void FreepsMoveCardToAdventurePath(PhysicalCardImpl card) {
+        int num = _game.getGameState().getCurrentSiteNumber() + 1;
+        MoveCardToZone(P1, card, Zone.ADVENTURE_PATH);
+        card.setSiteNumber(num);
+    }
+
+    public void ShadowMoveCardToAdventurePath(PhysicalCardImpl card) {
+        int num = _game.getGameState().getCurrentSiteNumber() + 1;
+        MoveCardToZone(P2, card, Zone.ADVENTURE_PATH);
+        card.setSiteNumber(num);
+    }
+
+    public void FreepsMoveCardToAdventureDeck(PhysicalCardImpl...cards) {
+        Arrays.stream(cards).forEach(card -> MoveCardToZone(P1, card, Zone.ADVENTURE_DECK));
+    }
+
+    public void ShadowMoveCardToAdventureDeck(PhysicalCardImpl...cards) {
+        Arrays.stream(cards).forEach(card -> MoveCardToZone(P2, card, Zone.ADVENTURE_DECK));
     }
 
 
