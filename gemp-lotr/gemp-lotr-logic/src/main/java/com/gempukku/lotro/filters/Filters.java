@@ -317,6 +317,18 @@ public class Filters {
         };
     }
 
+    public static Filter recentlyInSkirmishAgainst(final Filterable... againstFilter) {
+        return (game, physicalCard) -> {
+            Skirmish skirmish = game.getGameState().getSkirmish();
+            if (skirmish != null && skirmish.getFellowshipCharacter() != null) {
+                return (skirmish.getFellowshipCharacter() == physicalCard && (Filters.acceptsAny(game, skirmish.getShadowCharacters(), Filters.and(againstFilter)) || Filters.acceptsAny(game, skirmish.getRemovedFromSkirmish(), Filters.and(againstFilter))))
+                    || (skirmish.getShadowCharacters().contains(physicalCard) && Filters.and(againstFilter).accepts(game, skirmish.getFellowshipCharacter()));
+
+            }
+            return false;
+        };
+    }
+
     public static Filter canBeReturnedToHand(final PhysicalCard source) {
         return (game, physicalCard) -> game.getModifiersQuerying().canBeReturnedToHand(game, physicalCard, source);
     }

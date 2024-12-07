@@ -414,6 +414,11 @@ public class FilterFactory {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return (actionContext) -> Filters.inSkirmishAgainst(filterableSource.getFilterable(actionContext));
                 });
+        parameterFilters.put("recentlyinskirmishagainst",
+                (parameter, environment) -> {
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> Filters.recentlyInSkirmishAgainst(filterableSource.getFilterable(actionContext));
+                });
         parameterFilters.put("inskirmishagainstatleast",
                 (parameter, environment) -> {
                     String[] split = parameter.split(",", 2);
