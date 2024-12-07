@@ -38,4 +38,6 @@ function announcementDeliveryService(comm, json) {
 		
 	$("#announcement-dialog").html(json.content);
 	announcementDialog.dialog("open");
+	//Otherwise any links cause it to scroll to the link
+	$("#announcement-dialog").scrollTop("0"); 
 }
