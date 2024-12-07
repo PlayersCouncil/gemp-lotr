@@ -9,15 +9,15 @@ WHERE player = 'wert'
 
 SELECT *
 FROM gemp_db.transfer t
-# WHERE collection RLIKE('(101_65|101_66|101_67)')
+WHERE collection RLIKE('(101_65|101_66|101_67)')
 ORDER BY id DESC;
 
 
-UPDATE transfer 
-SET notify = TRUE 
-WHERE id = 5031
+-- UPDATE transfer 
+-- SET notify = TRUE 
+-- WHERE id = 5031
 
-SELECT NOW(), NOW() + INTERVAL 24 HOUR
+-- SELECT NOW(), NOW() + INTERVAL 24 HOUR
 
 
 
