@@ -219,8 +219,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private boolean IgnoreError(Exception ex) {
         String msg = ex.getMessage();
 
-        if(msg != null && msg.contains("You don't have a deck registered yet") ||
-                msg.contains("Your selected deck is not valid for this format"))
+        if(msg != null && (msg.contains("You don't have a deck registered yet") ||
+                msg.contains("Your selected deck is not valid for this format")))
             return true;
 
         return false;

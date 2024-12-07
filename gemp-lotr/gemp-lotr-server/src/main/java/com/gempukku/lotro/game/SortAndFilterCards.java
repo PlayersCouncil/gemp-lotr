@@ -74,7 +74,12 @@ public class SortAndFilterCards {
             //Cache our looked-up blueprints so we're not always re-searching; also used later for sorting
             try {
                 if(!cardBPCache.containsKey(blueprintId)) {
-                    cardBPCache.putIfAbsent(blueprintId, cardLibrary.getLotroCardBlueprint(blueprintId));
+                    var bp = cardLibrary.getLotroCardBlueprint(blueprintId);
+                    //TODO: log this
+                    if(bp == null)
+                        continue;
+
+                    cardBPCache.putIfAbsent(blueprintId, bp);
                 }
             } catch (CardNotFoundException ignored) {
                 // Ignore the card

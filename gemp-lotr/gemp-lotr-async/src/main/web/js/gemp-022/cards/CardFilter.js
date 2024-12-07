@@ -860,18 +860,28 @@ var CardFilter = Class.extend({
 			sort = " sort:" + sort;
 		
 		var format = this.currentFormat;
-		if (format)
+		if (format) {
 			format = " format:" + format;
-		else
+		}
+		else {
 			format = "";
+		}
 
 		var block = $("#blockSelect option:selected").prop("value");
-		if (block)
+		if (block) {
 			block = " block:" + block;
+		}
+		else {
+			block = "":
+		}
 		
 		var set = $("#setSelect option:selected").prop("value");
-		if (set)
+		if (set) {
 			set = " set:" + set;
+		}
+		else {
+			set = "";
+		}
 
 		var cardType = $("#cardTypeSelect option:selected").prop("value");
 		if (cardType != "")
