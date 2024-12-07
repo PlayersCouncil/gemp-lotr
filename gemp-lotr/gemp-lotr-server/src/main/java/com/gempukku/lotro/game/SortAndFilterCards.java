@@ -227,6 +227,10 @@ public class SortAndFilterCards {
                         comparators.addComparator(new PacksFirstComparator(new CultureComparator(cardBPCache)));
                 case "name" ->
                         comparators.addComparator(new PacksFirstComparator(new NameComparator(cardBPCache)));
+                case "collinfo" ->
+                        comparators.addComparator(new PacksFirstComparator(new CollInfoComparator(cardBPCache, cardLibrary)));
+                case "set" ->
+                        comparators.addComparator(new PacksFirstComparator(new SetComparator()));
             }
         }
 
@@ -554,6 +558,39 @@ public class SortAndFilterCards {
         @Override
         public int compare(CardItem o1, CardItem o2) {
             return GameUtils.getFullName(_cardBlueprintMap.get(o1.getBlueprintId())).compareTo(GameUtils.getFullName(_cardBlueprintMap.get(o2.getBlueprintId())));
+        }
+    }
+
+    private static class CollInfoComparator implements Comparator<CardItem> {
+        private final Map<String, LotroCardBlueprint> _cardBlueprintMap;
+        private final LotroCardBlueprintLibrary _library;
+
+        private CollInfoComparator(Map<String, LotroCardBlueprint> cardBlueprintMap, LotroCardBlueprintLibrary library) {
+            _cardBlueprintMap = cardBlueprintMap;
+            _library = library;
+        }
+
+        @Override
+        public int compare(CardItem o1, CardItem o2) {
+            var split1 = _library.getBaseBlueprintId(o1.getBlueprintId()).split("_");
+            var split2 = _library.getBaseBlueprintId(o2.getBlueprintId()).split("_");
+            var set1 = Integer.parseInt(split1[0]);
+            var card1 = Integer.parseInt(split1[1]);
+            var set2 = Integer.parseInt(split2[0]);
+            var card2 = Integer.parseInt(split2[1]);
+
+            if(set1 == set2)
+                return card1 - card2;
+
+            return set1 - set2;
+        }
+    }
+
+    private static class SetComparator implements Comparator<CardItem> {
+
+        @Override
+        public int compare(CardItem o1, CardItem o2) {
+            return Integer.parseInt(o1.getBlueprintId().split("_")[0]) - Integer.parseInt(o2.getBlueprintId().split("_")[0]);
         }
     }
 
