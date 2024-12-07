@@ -689,6 +689,7 @@
 							type: RemoveCultureTokens
 							culture: men
 							select: self
+							count: 2
 						}
 					]
 				}
