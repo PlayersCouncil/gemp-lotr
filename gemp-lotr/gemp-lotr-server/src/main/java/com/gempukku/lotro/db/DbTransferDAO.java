@@ -106,8 +106,8 @@ public class DbTransferDAO implements TransferDAO {
                     FROM transfer 
                     WHERE player = :playerName 
                         AND notify = TRUE
-                        AND date_recorded < NOW();
-                """;
+                        AND date_recorded < NOW()
+                """ + " AND reason NOT IN ('" + ANNOUNCEMENT + "', '" + OPENED_PACK + "') ";;
                 Integer result = conn.createQuery(sql)
                         .addParameter("playerName", player.getName())
                         .executeScalar(Integer.class);
