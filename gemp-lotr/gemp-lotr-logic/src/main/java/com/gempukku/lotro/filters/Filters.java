@@ -102,6 +102,7 @@ public class Filters {
         GetCardsMatchingFilterVisitor matchingFilterVisitor = new GetCardsMatchingFilterVisitor(game, Filters.and(filters, Filters.spottable));
         game.getGameState().iterateActiveCards(matchingFilterVisitor);
         int result = matchingFilterVisitor.getCounter();
+        //TODO: make this less dependent on how the definition is arranged
         if (filters.length == 1)
             result += game.getModifiersQuerying().getSpotBonus(game, filters[0]);
         return result;
