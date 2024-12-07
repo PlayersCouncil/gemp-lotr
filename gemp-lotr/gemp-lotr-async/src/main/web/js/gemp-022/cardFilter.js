@@ -1,4 +1,4 @@
-var CardFilter = Class.extend({
+var LegacyCardFilter = Class.extend({
     clearCollectionFunc: null,
     addCardFunc: null,
     finishCollectionFunc: null,
@@ -543,10 +543,12 @@ var CardFilter = Class.extend({
             sort = " sort:" + sort;
 
         var cardName = this.nameInput.val();
-        var cardNameElems = cardName.split(" ");
-        cardName = "";
-        for (var i = 0; i < cardNameElems.length; i++)
-            cardName += " name:" + cardNameElems[i];
+        if(cardName) {
+            var cardNameElems = cardName.split(" ");
+            cardName = "";
+            for (var i = 0; i < cardNameElems.length; i++)
+                cardName += " name:" + cardNameElems[i];
+        }
 
         var rarity = $("option:selected", this.raritySelect).prop("value");
         if (rarity != "")

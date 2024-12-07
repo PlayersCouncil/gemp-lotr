@@ -872,7 +872,7 @@ var CardFilter = Class.extend({
 			block = " block:" + block;
 		}
 		else {
-			block = "":
+			block = "";
 		}
 		
 		var set = $("#setSelect option:selected").prop("value");
