@@ -596,7 +596,7 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				player: free people
 				trigger: {
 					type: startOfPhase
