@@ -13,6 +13,11 @@ body {
     color: #A63F03;
 }
 
+.ui-widget-content a:link,
+.msg-content p a:link {
+    color: #BF6B04;
+}
+
 .deckSize {
     display: table-cell;
     text-align: center;

@@ -26,7 +26,7 @@ html, body {
 
 
 a:visited {
-	color: #A63F03;
+	color: #BF6B04;
 }
 
 .custom-icon {
@@ -215,8 +215,9 @@ button {
 #buttonsDiv a,
 #motd a,
 #infoButtons a,
-.msg-content p a {
-	color: #BF6B04;
+.msg-content p a,
+#announcement-dialog a {
+	color: #E88104;
 }
 
 #infoButtons {
@@ -827,4 +828,12 @@ table.standings {
 	margin-left: auto;
 	margin-right: auto;
 	padding-bottom: 50px;
+}
+
+#announcement-dialog img{
+    width:90%;
+    max-width:600px;
+    display: block;
+	  margin-left: auto;
+	  margin-right: auto;
 }
