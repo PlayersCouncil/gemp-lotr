@@ -91,7 +91,7 @@ public class DbTransferDAO implements TransferDAO {
                 return id;
             }
         } catch (Exception ex) {
-            throw new RuntimeException("Unable to insert transfer from", ex);
+            throw new RuntimeException("Unable to insert transfer to", ex);
         }
     }
 
