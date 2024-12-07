@@ -35,8 +35,11 @@ function announcementDeliveryService(comm, json) {
 		height:$(window).height() * 0.9,
 		closeText: ''
 	});
+	
+	var content = json.content;
+	content = content.replaceAll("<br/>", "");
 		
-	$("#announcement-dialog").html(json.content);
+	$("#announcement-dialog").html(content);
 	announcementDialog.dialog("open");
 	//Otherwise any links cause it to scroll to the link
 	$("#announcement-dialog").scrollTop("0"); 

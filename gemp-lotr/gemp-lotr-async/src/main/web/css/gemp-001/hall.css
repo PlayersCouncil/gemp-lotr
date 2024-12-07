@@ -837,3 +837,9 @@ table.standings {
 	  margin-left: auto;
 	  margin-right: auto;
 }
+
+#announcement-dialog h1, 
+#announcement-dialog h2,
+#announcement-dialog ul {
+	margin-bottom: 5px;
+}
