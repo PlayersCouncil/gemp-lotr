@@ -93,7 +93,7 @@ public class PlayUtils {
         final LotroCardBlueprint blueprint = card.getBlueprint();
 
         // Check if card's own play requirements are met
-        if (!card.getBlueprint().checkPlayRequirements(game, card))
+        if (!blueprint.checkPlayRequirements(game, card))
             return false;
 
         twilightModifier -= game.getModifiersQuerying().getPotentialDiscount(game, card);
@@ -122,15 +122,16 @@ public class PlayUtils {
                 && !(checkRuleOfNine(game, card) && checkPlayRingBearer(game, card)))
             return false;
 
+        final Timeword timeword = PhaseKeywordMap.get(game.getGameState().getCurrentPhase());
+
         if (blueprint.getCardType() == CardType.EVENT) {
-            if (card.getBlueprint().hasTimeword(Timeword.RESPONSE)) {
-                if (ignoreResponseEvents)
-                    return false;
-            } else {
-                final Timeword timeword = PhaseKeywordMap.get(game.getGameState().getCurrentPhase());
-                if (timeword != null && !card.getBlueprint().hasTimeword(timeword))
-                    return false;
+            //Some events are dual-timeword, such as Eye of Barad-dur, and so should not be automatically disqualified
+            if (ignoreResponseEvents && blueprint.hasTimeword(Timeword.RESPONSE) && !blueprint.hasTimeword(timeword)) {
+                return false;
             }
+
+            if (!blueprint.hasTimeword(Timeword.RESPONSE) && timeword != null && !card.getBlueprint().hasTimeword(timeword))
+                return false;
         }
 
         return (blueprint.getSide() != Side.SHADOW || canPayForShadowCard(game, card, finalTargetFilter, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty));
