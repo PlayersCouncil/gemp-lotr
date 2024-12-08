@@ -308,6 +308,7 @@
 						text: Choose how many times to heal {healingAlly}
 						from: 0
 						to: 2
+						default: 2
 						memorize: healing
 					}
 					{

@@ -149,6 +149,7 @@
 							}
 							secondNumber: 2
 						}
+						default: 2
 						memorize: heals
 					}
 					{
