@@ -12,6 +12,7 @@ import com.gempukku.lotro.cards.build.field.effect.appender.resolver.TimeResolve
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Race;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.AbstractActionProxy;
@@ -34,7 +35,7 @@ import java.util.List;
 public class TurnIntoMinion implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "select", "count", "strength", "vitality", "keywords", "until", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "select", "count", "strength", "vitality", "keywords", "race", "until", "memorize");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
@@ -42,6 +43,7 @@ public class TurnIntoMinion implements EffectAppenderProducer {
         final ValueSource vitality = ValueResolver.resolveEvaluator(effectObject.get("vitality"), environment);
         final String[] keywordStrings = FieldUtils.getStringArray(effectObject.get("keywords"), "keywords");
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
+        final Race race = FieldUtils.getEnum(Race.class, effectObject.get("race"), "race");
 
         String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
@@ -75,6 +77,9 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                                             addModifier(action, new StrengthModifier(card, card, null, strengthValue), until);
                                             addModifier(action, new VitalityModifier(card, card, null, vitalityValue), until);
                                             addModifier(action, new IsAdditionalCardTypeModifier(card, card, null, CardType.MINION), until);
+                                            if(race != null) {
+                                                addModifier(action, new IsAdditionalRaceModifier(card, card, null, race), until);
+                                            }
 
                                             for (Keyword keyword : keywordsList) {
                                                 addModifier(action, new AddKeywordModifier(card, card, null, keyword), until);

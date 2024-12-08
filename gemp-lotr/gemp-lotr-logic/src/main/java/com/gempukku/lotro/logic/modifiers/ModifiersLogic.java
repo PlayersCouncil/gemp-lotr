@@ -531,11 +531,44 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
-    public boolean isAdditionalCardType(LotroGame game, PhysicalCard card, CardType cardType) {
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.ADDITIONAL_CARD_TYPE, card))
-            if (modifier.isAdditionalCardTypeModifier(game, card, cardType))
-                return true;
-        return false;
+    public List<CardType> getCardTypes(LotroGame game, PhysicalCard card) {
+        var types = new ArrayList<CardType>();
+        types.add(card.getBlueprint().getCardType());
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.ADDITIONAL_CARD_TYPE, card)) {
+            var cardTypeMod = (IsAdditionalCardTypeModifier)modifier;
+            types.add(cardTypeMod.getType());
+        }
+
+        return types;
+    }
+
+    @Override
+    public boolean isCardType(LotroGame game, PhysicalCard card, CardType cardType) {
+        var types = getCardTypes(game, card);
+        return types.contains(cardType);
+    }
+
+
+
+    @Override
+    public List<Race> getRaces(LotroGame game, PhysicalCard card) {
+        var races = new ArrayList<Race>();
+        if(card.getBlueprint().getRace() != null) {
+            races.add(card.getBlueprint().getRace());
+        }
+
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.ADDITIONAL_RACE, card)) {
+            var cardTypeMod = (IsAdditionalRaceModifier)modifier;
+            races.add(cardTypeMod.getRace());
+        }
+
+        return races;
+    }
+
+    @Override
+    public boolean isRace(LotroGame game, PhysicalCard card, Race race) {
+        var races = getRaces(game, card);
+        return races.contains(race);
     }
 
     @Override

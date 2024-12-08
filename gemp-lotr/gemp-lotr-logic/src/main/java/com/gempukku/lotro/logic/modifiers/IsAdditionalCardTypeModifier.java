@@ -17,4 +17,8 @@ public class IsAdditionalCardTypeModifier extends AbstractModifier {
     public boolean isAdditionalCardTypeModifier(LotroGame game, PhysicalCard physicalCard, CardType cardType) {
         return cardType == _cardType;
     }
+
+    public CardType getType() {
+        return _cardType;
+    }
 }

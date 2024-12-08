@@ -50,6 +50,7 @@ public interface Modifier {
     int getMinionSiteNumberModifier(LotroGame game, PhysicalCard physicalCard);
 
     boolean isAdditionalCardTypeModifier(LotroGame game, PhysicalCard physicalCard, CardType cardType);
+    boolean isAdditionalRaceModifier(LotroGame game, PhysicalCard physicalCard, Race race);
 
     int getTwilightCostModifier(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, boolean ignoreRoamingPenalty);
 

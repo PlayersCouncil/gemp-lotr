@@ -125,6 +125,11 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
+    public boolean isAdditionalRaceModifier(LotroGame game, PhysicalCard physicalCard, Race race) {
+        return false;
+    }
+
+    @Override
     public int getTwilightCostModifier(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, boolean ignoreRoamingPenalty) {
         return 0;
     }

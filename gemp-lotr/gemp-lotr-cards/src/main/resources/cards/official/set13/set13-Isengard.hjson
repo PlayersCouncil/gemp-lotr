@@ -32,6 +32,7 @@
 						strength: 11
 						vitality: 1
 						keywords: fierce
+						race: Wizard
 						until: regroup
 					}
 					{
@@ -97,6 +98,7 @@
 						strength: 10
 						vitality: 1
 						keywords: fierce
+						race: Wizard
 						until: regroup
 					}
 					{

@@ -308,9 +308,7 @@ public class GameUtils {
     public static int getSpottableRacesCount(LotroGame game, Filterable... filters) {
         Set<Race> races = new HashSet<>();
         for (PhysicalCard physicalCard : Filters.filterActive(game, filters)) {
-            final Race race = physicalCard.getBlueprint().getRace();
-            if (race != null)
-                races.add(race);
+            races.addAll(game.getModifiersQuerying().getRaces(game, physicalCard));
         }
         return races.size();
     }

@@ -170,7 +170,7 @@ public class GameStats {
             newCharStrengths.put(character.getCardId(), game.getModifiersQuerying().getStrength(game, character));
             newCharVitalities.put(character.getCardId(), game.getModifiersQuerying().getVitality(game, character));
             final LotroCardBlueprint blueprint = character.getBlueprint();
-            if (blueprint.getCardType() == CardType.MINION || game.getModifiersQuerying().isAdditionalCardType(game, character, CardType.MINION))
+            if (blueprint.getCardType() == CardType.MINION || game.getModifiersQuerying().isCardType(game, character, CardType.MINION))
                 newSiteNumbers.put(character.getCardId(), game.getModifiersQuerying().getMinionSiteNumber(game, character));
             else {
                 final int resistance = game.getModifiersQuerying().getResistance(game, character);

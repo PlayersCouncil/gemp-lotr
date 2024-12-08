@@ -1021,8 +1021,12 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public boolean IsType(PhysicalCardImpl card, CardType type)
     {
-        return card.getBlueprint().getCardType() == type
-            || _game.getModifiersQuerying().isAdditionalCardType(_game, card, type);
+        return  _game.getModifiersQuerying().isCardType(_game, card, type);
+    }
+
+    public boolean IsRace(PhysicalCardImpl card, Race race)
+    {
+        return  _game.getModifiersQuerying().isRace(_game, card, race);
     }
 
     public Boolean CanBeAssigned(PhysicalCardImpl card)

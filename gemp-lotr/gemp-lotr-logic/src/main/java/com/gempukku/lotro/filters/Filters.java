@@ -417,10 +417,7 @@ public class Filters {
     private static Filter race(final Race race) {
         return Filters.and(
                 Filters.or(CardType.COMPANION, CardType.ALLY, CardType.MINION, CardType.FOLLOWER),
-                (Filter) (game, physicalCard) -> {
-                    LotroCardBlueprint blueprint = physicalCard.getBlueprint();
-                    return blueprint.getRace() == race;
-                });
+                (Filter) (game, physicalCard) -> game.getModifiersQuerying().isRace(game, physicalCard, race));
     }
 
 
@@ -572,8 +569,7 @@ public class Filters {
     }
 
     private static Filter type(final CardType cardType) {
-        return (game, physicalCard) -> (physicalCard.getBlueprint().getCardType() == cardType)
-                || game.getModifiersQuerying().isAdditionalCardType(game, physicalCard, cardType);
+        return (game, physicalCard) -> game.getModifiersQuerying().isCardType(game, physicalCard, cardType);
     }
 
     public static Filter attachedTo(final Filterable... filters) {
