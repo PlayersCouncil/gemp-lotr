@@ -33,7 +33,7 @@ public class ReinforceTokens implements EffectAppenderProducer {
 
         final Culture culture = FieldUtils.getEnum(Culture.class, effectObject.get("culture"), "culture");
         final Token token = Token.findTokenForCulture(culture);
-        final String select = FieldUtils.getString(effectObject.get("select"), "select", "self");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("times"), 1, environment);
         String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
