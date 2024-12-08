@@ -172,6 +172,12 @@
 					filter: culture(men),possession
 					memorize: discardedPossession
 				}
+				# If this is true, then the possession must have been caught by a copy of Countless Companies
+				# so we shouldn't continue pestering the user
+				requires: {
+					type: CantSpot
+					filter: memory(discardedPossession)
+				}
 				effect: {
 					type: stackCardsFromDiscard
 					select: memory(discardedPossession)
