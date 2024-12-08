@@ -218,6 +218,10 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: CanSpot
+					filter: self, zone(SUPPORT)
+				}
 				effect: {
 					type: transfer
 					select: self
@@ -330,6 +334,10 @@
 					type: winsSkirmish
 					filter: nazgul
 					memorize: winner
+				}
+				requires: {
+					type: CanSpot
+					filter: self, zone(SUPPORT)
 				}
 				effect: {
 					type: transfer
