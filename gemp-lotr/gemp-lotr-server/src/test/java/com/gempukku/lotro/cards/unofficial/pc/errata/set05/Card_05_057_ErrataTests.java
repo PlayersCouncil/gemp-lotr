@@ -1,7 +1,10 @@
-package com.gempukku.lotro.cards.official.set05;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set05;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -10,14 +13,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_05_057_Tests
+public class Card_05_057_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("ladder", "5_57");
+					put("ladder", "55_57");
 					put("troop", "1_143");
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -38,7 +41,9 @@ public class Card_05_057_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-		 * Game Text: <b>Machine</b>. Plays to your support area.<br><b>Shadow:</b> Exert an Uruk-hai to place an [isengard] token on this card.<br><b>Skirmish:</b> Spot an [isengard] token here to heal an Uruk-hai. Discard this condition.
+		 * Game Text: <b>Machine</b>. Plays to your support area.
+		 * <b>Shadow:</b> Exert an Uruk-hai to place an [isengard] token on this card (limit 2 per phase).
+		 * <b>Skirmish:</b> For each [isengard] token here, heal an Uruk-hai.  Discard this condition.
 		*/
 
 		var scn = GetScenario();
@@ -57,7 +62,7 @@ public class Card_05_057_Tests
 	}
 
 	@Test
-	public void ScalingLadderExertsUruksToAddTokens() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ScalingLadderExertsUruksToAddTokensLimit2() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -86,6 +91,6 @@ public class Card_05_057_Tests
 		assertEquals(2, scn.GetCultureTokensOn(ladder));
 		assertEquals(2, scn.getWounds(troop));
 
-		assertTrue(scn.ShadowActionAvailable(ladder));
+		assertFalse(scn.ShadowActionAvailable(ladder));
 	}
 }
