@@ -125,8 +125,7 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
-				optional: false
+				optional: true
 				trigger: {
 					type: StartOfTurn
 				},

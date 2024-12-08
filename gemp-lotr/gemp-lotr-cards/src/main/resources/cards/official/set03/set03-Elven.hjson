@@ -312,7 +312,7 @@
 					}
 					{
 						type: heal
-						select: choose(ally,allyHome(Fellowship,3))
+						select: memory(healingAlly)
 						times: memory(healing)
 					}
 				]

@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_03_013_ErrataTests
 {
@@ -18,7 +18,7 @@ public class Card_03_013_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "53_13");
+					put("elrond", "53_13");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -42,13 +42,14 @@ public class Card_03_013_ErrataTests
 		 * Strength: 8
 		 * Vitality: 4
 		 * Site Number: 3
-		 * Game Text: At the start of each of your turns, you may heal up to 2 allies whose home is site 3.
-		* 	Regroup: Exert Elrond twice to heal a companion.
+		 * Game Text: At the start of each of your turns, you may spot an ally whose home site is 3 to heal that ally
+		 * up to 2 times.  Add (1) per wound healed.
+		 * Regroup: Exert Elrond twice to heal a companion.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("elrond");
 
 		assertEquals("Elrond", card.getBlueprint().getTitle());
 		assertEquals("Herald to Gil-galad", card.getBlueprint().getSubtitle());
@@ -63,18 +64,47 @@ public class Card_03_013_ErrataTests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ElrondBTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void AtTheStartOfTurnAdds2toHealAHome3AllyTwice() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.FreepsMoveCharToTable(elrond);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddWoundsToChar(elrond, 3);
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 
-		assertEquals(4, scn.GetTwilight());
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsChooseCard(elrond);
+		scn.FreepsChoose("2");
+
+		assertEquals(2, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(elrond));
+	}
+
+	@Test
+	public void RegroupActionExertsElrondTwiceToHealCompanionOnce() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.FreepsMoveCharToTable(elrond);
+
+		scn.StartGame();
+		scn.FreepsDeclineOptionalTrigger();
+		scn.AddWoundsToChar(frodo, 3);
+
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(0, scn.GetWoundsOn(elrond));
+		assertEquals(3, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsActionAvailable(elrond));
+		scn.FreepsUseCardAction(elrond);
+		assertEquals(2, scn.GetWoundsOn(elrond));
+		assertEquals(2, scn.GetWoundsOn(frodo));
 	}
 }
