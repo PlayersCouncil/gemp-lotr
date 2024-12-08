@@ -1292,11 +1292,14 @@
 						memorize: hobbitCount
 					}
 					{
-						type: wound
-						select: choose(minion)
-						count: {
+						type: Repeat
+						times: {
 							type: fromMemory
 							memory: hobbitCount
+						}
+						effect: {
+							type: wound
+							select: choose(minion)
 						}
 					}
 				]
