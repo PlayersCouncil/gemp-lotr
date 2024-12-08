@@ -315,7 +315,8 @@
 		keywords: Marsh
 		effects: {
 			type: Trigger
-			optional: false
+			optional: true
+			player: freeps
 			trigger: {
 				type: startOfPhase
 				phase: fellowship
