@@ -890,53 +890,53 @@
 	# 		}
 	# 	}
 	# }
-	53_105: {
-		cardInfo: {
-			//id: 3_105.2
-			parent: 3_105
-			variant: ERRATA
-			variantPath: promos/pc
-			revision: 2
-			image: errata/LOTR-EN03E105.2_card.jpg
-			collInfo: 3R105
-			rarity: R
-		}
-		title: Why Shouldn't I Keep It?
-		unique: false
-		side: Shadow
-		culture: Sauron
-		twilight: 0
-		type: event
-		timeword: maneuver
-		effects: {
-			type: event
-			requires: {
-				type: canSpot
-				filter: culture(sauron),minion
-			}
-			effect: {
-				type: preventable
-				text: Would you like to discard 2 FP conditions to prevent discarding Bilbo?
-				player: fp
-				cost: {
-					type: discard
-					select: choose(side(free),condition)
-					count: 2
-				}
-				effect: {
-					type: discard
-					select: choose(name(Bilbo))
-				}
-			}
-		}
-		gametext: Spot a [sauron] minion to discard Bilbo. The Free Peoples player may discard 2 Free Peoples conditions to prevent this. 
-		lore: ""
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-	}
+	# 53_105: {
+	# 	cardInfo: {
+	# 		//id: 3_105.2
+	# 		parent: 3_105
+	# 		variant: ERRATA
+	# 		variantPath: promos/pc
+	# 		revision: 2
+	# 		image: errata/LOTR-EN03E105.2_card.jpg
+	# 		collInfo: 3R105
+	# 		rarity: R
+	# 	}
+	# 	title: Why Shouldn't I Keep It?
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Sauron
+	# 	twilight: 0
+	# 	type: event
+	# 	timeword: maneuver
+	# 	effects: {
+	# 		type: event
+	# 		requires: {
+	# 			type: canSpot
+	# 			filter: culture(sauron),minion
+	# 		}
+	# 		effect: {
+	# 			type: preventable
+	# 			text: Would you like to discard 2 FP conditions to prevent discarding Bilbo?
+	# 			player: fp
+	# 			cost: {
+	# 				type: discard
+	# 				select: choose(side(free),condition)
+	# 				count: 2
+	# 			}
+	# 			effect: {
+	# 				type: discard
+	# 				select: choose(name(Bilbo))
+	# 			}
+	# 		}
+	# 	}
+	# 	gametext: Spot a [sauron] minion to discard Bilbo. The Free Peoples player may discard 2 Free Peoples conditions to prevent this. 
+	# 	lore: ""
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
 }
