@@ -91,47 +91,53 @@
 						multiplier: -1
 					}
 				}
-				effect: {
-					type: CostToEffect
-					cost: {
-						type: chooseANumber
-						text: Choose how many {raider} tokens to remove
-						from: 0
-						to: {
-							type: ForEachCultureToken
-							culture: raider
-							filter: self
-						}
-						memorize: tokenCount
-					}
-					effect: {
+				effect: [
+					{
 						type: CostToEffect
 						cost: {
-							type: RemoveCultureTokens
-							culture: raider
-							select: self
-							count: {
-								type: fromMemory
-								memory: tokenCount
-							}
-						}
-						effect: {
-							type: playCardFromDiscard
-							select: choose(corsair)
-							maxDiscount: {
+							type: chooseANumber
+							text: Choose how many {raider} tokens to remove
+							from: 0
+							to: {
 								type: ForEachCultureToken
 								culture: raider
 								filter: self
-								multiplier: -1
 							}
-							discount: {
-								type: fromMemory
-								memory: tokenCount
-								multiplier: -1
+							memorize: tokenCount
+						}
+						effect: {
+							type: CostToEffect
+							cost: {
+								type: RemoveCultureTokens
+								culture: raider
+								select: self
+								count: {
+									type: fromMemory
+									memory: tokenCount
+								}
+							}
+							effect: {
+								type: playCardFromDiscard
+								select: choose(corsair)
+								maxDiscount: {
+									type: ForEachCultureToken
+									culture: raider
+									filter: self
+									multiplier: -1
+								}
+								discount: {
+									type: fromMemory
+									memory: tokenCount
+									multiplier: -1
+								}
 							}
 						}
 					}
-				}
+					{
+						type: Discard
+						select: self
+					}
+				]
 			}
 		]
 		gametext: When you play this possession, you may add a [raider] token here.<br><b>Shadow:</b> Remove X [raider] tokens here to play a corsair from your discard pile; its twilight cost is -X. Discard this possession.
