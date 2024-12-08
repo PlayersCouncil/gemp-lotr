@@ -584,7 +584,7 @@
 				phase: skirmish
 				cost: {
 					type: removeCardsInDiscardFromGame
-					select: choose(other,culture(elven))
+					select: choose(other,culture(gollum))
 					count: 4
 				}
 				effect:
