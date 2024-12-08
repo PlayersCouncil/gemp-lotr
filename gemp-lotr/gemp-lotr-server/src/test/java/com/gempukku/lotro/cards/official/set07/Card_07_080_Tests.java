@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set07;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,8 @@ public class Card_07_080_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "7_80");
-					// put other cards in here as needed for the test case
+					put("anduril", "7_80");
+					put("aragorn", "1_89");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -45,7 +44,7 @@ public class Card_07_080_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("anduril");
 
 		assertEquals("Andúril", card.getBlueprint().getTitle());
 		assertEquals("King's Blade", card.getBlueprint().getSubtitle());
@@ -58,18 +57,46 @@ public class Card_07_080_Tests
 		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AndurilTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void AndurilIsBorneByAragorn() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var anduril = scn.GetFreepsCard("anduril");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCardToHand(anduril, aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertFalse(scn.FreepsPlayAvailable(anduril));
+
+		scn.FreepsPlayCard(aragorn);
+		assertTrue(scn.FreepsPlayAvailable(anduril));
+		scn.FreepsPlayCard(anduril);
+		assertEquals(Zone.ATTACHED, anduril.getZone());
+		assertEquals(aragorn, anduril.getAttachedTo());
+	}
+
+	@Test
+	public void AndurilMakesAragornDefenderIfNoThreats() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var anduril = scn.GetFreepsCard("anduril");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCharToTable(aragorn);
+		scn.FreepsAttachCardsTo(aragorn, anduril);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.getThreats());
+		assertTrue(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+
+		scn.AddThreats(1);
+
+		assertEquals(1, scn.getThreats());
+		assertFalse(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
 	}
 }

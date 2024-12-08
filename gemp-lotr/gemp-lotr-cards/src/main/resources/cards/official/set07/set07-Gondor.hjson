@@ -94,12 +94,11 @@
 				type: modifier
 				modifier: {
 					type: addKeyword
-					filter: self
+					filter: title(Aragorn)
 					requires: {
 						type: CantSpotThreats
 					}
-					keyword: defender
-					amount: 1
+					keyword: defender+1
 				}
 			}
 		]
