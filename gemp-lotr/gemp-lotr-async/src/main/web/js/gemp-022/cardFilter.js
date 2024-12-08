@@ -513,7 +513,7 @@ var LegacyCardFilter = Class.extend({
 
         var type = $("#type option:selected").prop("value");
         if (type != "")
-            type = " type:" + type;
+            type = " product:" + type;
 
         var race = $("#race option:selected").prop("value");
         if (race != "")
