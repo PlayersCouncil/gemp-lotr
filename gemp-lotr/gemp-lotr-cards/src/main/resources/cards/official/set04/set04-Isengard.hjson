@@ -35,7 +35,8 @@
 				modifier: {
 					type: modifyStrength
 					requires: {
-						type: controlsSite
+						type: CanSpot
+						filter: SiteYouControl, battleground
 					}
 					filter: self
 					amount: 4
