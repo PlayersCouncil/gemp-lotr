@@ -230,7 +230,10 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
                 }
             }
 
-            responseWriter.writeXmlResponse(doc);
+            Map<String, String> headers = new HashMap<>();
+            processDeliveryServiceNotification(resourceOwner, headers);
+
+            responseWriter.writeXmlResponse(doc, headers);
         } finally {
             postDecoder.destroy();
         }
