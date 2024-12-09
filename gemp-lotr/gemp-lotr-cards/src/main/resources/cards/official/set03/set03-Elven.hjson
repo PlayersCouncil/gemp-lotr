@@ -739,7 +739,10 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		timewords: Regroup
+		timewords: [
+			Fellowship
+			Regroup
+		]
 		effects: {
 			type: event
 			requires: {
