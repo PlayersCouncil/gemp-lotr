@@ -941,9 +941,9 @@ var PCCards = {
 	// Boromir, Redeemed (V1 20) [Errata]
 	'101_20'   : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E020.1_card.jpg',
 	// Southron Archer (4R245)
-	'4_245'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E245.1_card.jpg',
+	'54_245'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E245.1_card.jpg',
 	// The Number Must Be Few (1U260)
-	'1_260'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E260.1_card.jpg'
+	'51_260'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E260.1_card.jpg'
 	
 }
 
