@@ -659,7 +659,11 @@
 					}
 					memorize: exertCount
 				}
-				{
+				
+			]
+			effect: {
+				type: CostToEffect
+				cost: {
 					type: exert
 					select: memory(weaponBearer)
 					times: {
@@ -667,31 +671,31 @@
 						memory: exertCount
 					}
 				}
-			]
-			effect: {
-				type: choice
-				texts: [
-					Wound X Orcs
-					Wound X Uruk-hai
-				]
-				effects: [
-					{
-						type: wound
-						select: choose(orc)
-						count: {
-							type: fromMemory
-							memory: exertCount
+				effect: {
+					type: choice
+					texts: [
+						Wound X Orcs
+						Wound X Uruk-hai
+					]
+					effects: [
+						{
+							type: wound
+							select: choose(orc)
+							count: {
+								type: fromMemory
+								memory: exertCount
+							}
 						}
-					}
-					{
-						type: wound
-						select: choose(uruk_hai)
-						count: {
-							type: fromMemory
-							memory: exertCount
+						{
+							type: wound
+							select: choose(uruk_hai)
+							count: {
+								type: fromMemory
+								memory: exertCount
+							}
 						}
-					}
-				]
+					]
+				}
 			}
 		}
 		gametext: <b>Maneuver:</b> Spot Sting or Glamdring and exert its bearer X times to wound X Orcs or X Uruk-hai.

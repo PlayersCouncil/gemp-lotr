@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.official.set02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -20,8 +17,9 @@ public class Card_02_109_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "2_109");
-					// put other cards in here as needed for the test case
+					put("orcbane", "2_109");
+					put("sting", "1_313");
+					put("runner", "1_178");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +44,7 @@ public class Card_02_109_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("orcbane");
 
 		assertEquals("Orc-bane", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +56,21 @@ public class Card_02_109_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OrcbaneTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void OrcbaneDoesntCrashAtStartOfManeuver() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var frodo = scn.GetRingBearer();
+		var orcbane = scn.GetFreepsCard("orcbane");
+		scn.FreepsMoveCardToHand(orcbane);
+		scn.FreepsAttachCardsTo(frodo, "sting");
+
+		scn.ShadowMoveCharToTable("runner");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertTrue(scn.FreepsPlayAvailable(orcbane));
 	}
 }

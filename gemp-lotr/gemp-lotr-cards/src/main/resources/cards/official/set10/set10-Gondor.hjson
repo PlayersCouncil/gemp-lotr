@@ -271,6 +271,7 @@
 				{
 					type: RevealRandomCardsFromHand
 					hand: shadow
+					forced: true
 					count: {
 						type: fromMemory
 						memory: spotCount
