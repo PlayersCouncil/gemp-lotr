@@ -513,13 +513,20 @@
 				modifier: {
 					type: CantTakeWounds
 					filter: twilight
-					requires: {
-						type: Not 
-						requires: {
-							type: Phase
-							phase: Skirmish
+					requires: [
+						{
+							type: Not 
+							requires: {
+								type: Phase
+								phase: Skirmish
+							}
 						}
-					}
+						{
+							type: CanSpot
+							count: 3
+							filter: twilight,minion
+						}
+					]
 				}
 			}
 			{
