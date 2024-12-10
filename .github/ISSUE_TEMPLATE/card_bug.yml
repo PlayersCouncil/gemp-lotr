@@ -1,10 +1,10 @@
-name: Card bug Report
+name: Card Bug Report
 description: File a Gemp bug report.
 title: "[Bug]: "
 labels: ["bug", "triage"]
 # projects: ["octo-org/1", "octo-org/44"]
-assignees:
-  - octocat
+# assignees:
+#   - octocat
 body:
   - type: markdown
     attributes:
@@ -23,7 +23,7 @@ body:
     attributes:
       label: Replay Link(s)
       description: To find a replay link, log into Gemp and go to My Account > My Game History and copy the appropriate game link.
-      placeholder: https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=ketura$03v2dqktxmnubto1
+      placeholder: https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=XXXXXXX
     validations:
       required: false
   - type: checkboxes
