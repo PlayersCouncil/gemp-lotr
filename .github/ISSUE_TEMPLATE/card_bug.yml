@@ -31,8 +31,6 @@ body:
     attributes:
       label: Which site did the problem occur in?
       description: Select all that apply.
-      validations:
-        required: true
       options:
         - label: Pre-game
         - label: Site 1
