@@ -269,7 +269,7 @@
 					memorize: spotCount
 				}
 				{
-					type: revealCardsFromHand
+					type: RevealRandomCardsFromHand
 					hand: shadow
 					count: {
 						type: fromMemory
@@ -283,7 +283,7 @@
 					hand: shadow
 					player: you
 					count: 1
-					select: choose(memory(revealedCards))
+					select: choose(side(shadow),memory(revealedCards))
 				}
 				{
 					type: drawCards
