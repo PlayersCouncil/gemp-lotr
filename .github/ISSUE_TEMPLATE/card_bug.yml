@@ -9,7 +9,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
+        If you clicked on the post-game link, some of the below information will be auto-filled; leave those entries alone.
   - type: input
     id: reporter
     attributes:
