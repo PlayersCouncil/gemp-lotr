@@ -923,7 +923,7 @@
 								type: addKeyword
 								requires: {
 										type: ControlsSite
-										count: 3
+										count: 4
 								}
 								filter: your,culture(dunland),man
 								keyword: damage
