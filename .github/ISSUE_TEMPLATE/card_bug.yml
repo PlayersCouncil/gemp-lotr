@@ -15,7 +15,7 @@ body:
     attributes:
       label: Reporter
       description: Gemp Username (or contact info)
-      placeholder: ex. email@example.com
+      placeholder: "ex: email@example.com"
     validations:
       required: false
   - type: input
@@ -23,7 +23,7 @@ body:
     attributes:
       label: Replay Link(s)
       description: To find a replay link, log into Gemp and go to My Account > My Game History and copy the appropriate game link.
-      placeholder: https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=XXXXXXX
+      placeholder: "ex: https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=XXXXXXX"
     validations:
       required: false
   - type: checkboxes
@@ -31,6 +31,8 @@ body:
     attributes:
       label: Which site did the problem occur in?
       description: Select all that apply.
+      validations:
+        required: true
       options:
         - label: Pre-game
         - label: Site 1
