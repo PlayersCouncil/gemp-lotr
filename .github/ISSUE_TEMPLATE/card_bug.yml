@@ -1,0 +1,82 @@
+name: Card bug Report
+description: File a Gemp bug report.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+# projects: ["octo-org/1", "octo-org/44"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: input
+    id: reporter
+    attributes:
+      label: Reporter
+      description: Gemp Username (or contact info)
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: input
+    id: replays
+    attributes:
+      label: Replay Link(s)
+      description: To find a replay link, log into Gemp and go to My Account > My Game History and copy the appropriate game link.
+      placeholder: https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=ketura$03v2dqktxmnubto1
+    validations:
+      required: false
+  - type: checkboxes
+    id: site
+    attributes:
+      label: Which site did the problem occur in?
+      description: Select all that apply.
+      options:
+        - label: Pre-game
+        - label: Site 1
+        - label: Site 2
+        - label: Site 3
+        - label: Site 4
+        - label: Site 5
+        - label: Site 6
+        - label: Site 7
+        - label: Site 8
+        - label: Site 9
+        - label: Post-game
+        - label: No replay / outside of game
+        
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: The more detail, the better
+      placeholder: Bug Details
+      value: |
+        1. Describe what happened
+        2. Describe what you expected to happen instead
+    validations:
+      required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+        - Other
+  - type: dropdown
+    id: os
+    attributes:
+      label: What operating system are you seeing the problem on?
+      multiple: true
+      options:
+        - Mobile (Android)
+        - Mobile (Apple)
+        - Windows
+        - MacOS
+        - Linux
+        - Other
+
