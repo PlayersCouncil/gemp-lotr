@@ -509,7 +509,7 @@
 					filter: self
 				}
 				requires: {
-					type: cantSpot
+					type: canSpot
 					filter: elf
 				}
 				effect: {
