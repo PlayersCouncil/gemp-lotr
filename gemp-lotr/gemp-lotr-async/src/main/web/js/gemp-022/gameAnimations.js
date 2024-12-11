@@ -132,7 +132,7 @@ var GameAnimations = Class.extend({
             var backSideTestingText = element.getAttribute("backSideTestingText");
 
             // Play-out card affects card animation only if it's not the player who initiated it
-            if (this.game.spectatorMode || this.game.replayMode || this.game.replayMode || (participantId != this.game.bottomPlayerId)) {
+            if (this.game.spectatorMode || this.game.replayMode || (participantId != this.game.bottomPlayerId)) {
                 $("#main").queue(
                     function (next) {
                         for (var i = 0; i < targetCardIds.length; i++) {
@@ -958,17 +958,19 @@ var GameAnimations = Class.extend({
         var that = this;
         $("#main").queue(
             function (next) {
-                that.game.countdownIntervalId = window.setInterval(function(){
-                    that.game.totalTime -= 1;
-                    that.game.decisionTime += 1;
-                    
-                    if(that.game.allPlayerIds == null)
-                        return;
-                    
-                    var index = that.game.getPlayerIndex(that.game.currentPlayerId);
-                    $("#clock-1").text(that.game.parseTime(that.game.decisionTime));
-                    $("#clock" + index).text(that.game.parseTime(that.game.totalTime));
-                }, 1000);
+                if(!that.game.replayMode) {
+                    that.game.countdownIntervalId = window.setInterval(function(){
+                        that.game.totalTime -= 1;
+                        that.game.decisionTime += 1;
+                        
+                        if(that.game.allPlayerIds == null)
+                            return;
+                        
+                        var index = that.game.getPlayerIndex(that.game.currentPlayerId);
+                        $("#clock-1").text(that.game.parseTime(that.game.decisionTime));
+                        $("#clock" + index).text(that.game.parseTime(that.game.totalTime));
+                    }, 1000);
+                }
                 
                 var decisionType = decision.getAttribute("decisionType");
                 if (decisionType == "INTEGER") {
