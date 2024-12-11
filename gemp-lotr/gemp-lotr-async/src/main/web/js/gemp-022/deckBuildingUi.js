@@ -335,12 +335,6 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 		this.cardInfoDialog = new CardInfoDialog(window.innerWidth, window.innerHeight);
 
-		this.getCollectionTypes();
-
-		// this.cardFilter.setFilter("");
-		// this.cardFilter.getCollection();
-
-
 		setInterval(() => {
 			if (that.deckValidationDirty) {
 				that.deckValidationDirty = false;
@@ -413,15 +407,18 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.comm.getCollectionTypes(
 				function (xml) {
 					var root = xml.documentElement;
-					if (root.tagName == "collections") {
-						var collections = root.getElementsByTagName("collection");
-						$("#formatSelect").append("<option disabled>---Limited---</option>");
-						for (var i = 0; i < collections.length; i++) {
-							var collection = collections[i];
-							$("#collectionSelect").append("<option value='" + collection.getAttribute("type") + "'>" + collection.getAttribute("name") + "</option>");
-							$("#formatSelect").append("<option value='" + collection.getAttribute("format") + "'>" + collection.getAttribute("name") + "</option>");
-						}
+					if (root.tagName != "collections") 
+						return;
+					
+					var collections = root.getElementsByTagName("collection");
+					$("#formatSelect").append("<option disabled>---Limited---</option>");
+					for (var i = 0; i < collections.length; i++) {
+						var collection = collections[i];
+						$("#collectionSelect").append("<option value='" + collection.getAttribute("type") + "'>" + collection.getAttribute("name") + "</option>");
+						$("#formatSelect").append("<option value='" + collection.getAttribute("format") + "'>" + collection.getAttribute("name") + "</option>");
 					}
+					
+					$("#collectionSelect").val("default");
 				});
 	},
 	
@@ -1029,45 +1026,49 @@ var GempLotrDeckBuildingUI = Class.extend({
 		var that = this;
 		var currentFormat = $("#formatSelect").val();
 		
-		this.comm.getFormats(false,
-			function (json) 
-			{
-				that.formatSelect.empty();
-				that.formats = json.Formats;
-				
-				let max = 0;
-				let options = {};
-				for (const [code, format] of Object.entries(that.formats)) {
-					if(!format.hall)
-						continue;
-					
-					var option = $("<option/>")
-						.attr("value", code)
-						.text(format.name);
-					options[format.order] = option;
-					if(format.order > max) {
-						max = format.order;
-					}
-				}
-				
-				for(let i = -1; i <= max; i++) {
-					if(Object.hasOwn(options, i)) {
-						that.formatSelect.append(options[i]);
-					}
-				}
-				
-				that.formatSelect.val(currentFormat);
-				that.formatSelect.change();
-				const sleep = ms => new Promise(r => setTimeout(r, ms));
-				that.showNormalFilter();
-
-			}, 
-			{
-				"400":function () 
+		//this.comm.getLeagues(function() { 
+			that.comm.getFormats(false,
+				function (json) 
 				{
-					alert("Could not retrieve formats.");
-				}
-			});
+					that.formatSelect.empty();
+					that.formats = json.Formats;
+					
+					let max = 0;
+					let options = {};
+					for (const [code, format] of Object.entries(that.formats)) {
+						if(!format.hall)
+							continue;
+						
+						var option = $("<option/>")
+							.attr("value", code)
+							.text(format.name);
+						options[format.order] = option;
+						if(format.order > max) {
+							max = format.order;
+						}
+					}
+					
+					for(let i = -1; i <= max; i++) {
+						if(Object.hasOwn(options, i)) {
+							that.formatSelect.append(options[i]);
+						}
+					}
+					
+					that.formatSelect.val(currentFormat);
+					that.formatSelect.change();
+					const sleep = ms => new Promise(r => setTimeout(r, ms));
+					that.showNormalFilter();
+
+					that.getCollectionTypes();
+				}, 
+				{
+					"400":function () 
+					{
+						alert("Could not retrieve formats.");
+					}
+				})
+		//})
+		;
 	},
 
 	removeCardFromDeck:function (cardDiv) {
