@@ -217,6 +217,10 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: CanSpot
+					filter: self, zone(SUPPORT)
+				}
 				effect: {
 					type: transfer
 					select: self
