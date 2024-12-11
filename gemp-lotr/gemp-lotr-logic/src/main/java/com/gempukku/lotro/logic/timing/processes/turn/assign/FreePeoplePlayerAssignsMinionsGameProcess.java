@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FreePeoplePlayerAssignsMinionsGameProcess implements GameProcess {
     private Set<PhysicalCard> _leftoverMinions;
@@ -45,7 +46,7 @@ public class FreePeoplePlayerAssignsMinionsGameProcess implements GameProcess {
                         final GameState gameState = game.getGameState();
 
                         final Collection<PhysicalCard> minions = Filters.filterActive(game, CardType.MINION, Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, false));
-                        if (minions.size() > 0) {
+                        if (!minions.isEmpty()) {
                             final Collection<PhysicalCard> freePeopleTargets =
                                     Filters.filterActive(game,
                                             Filters.and(
@@ -60,8 +61,16 @@ public class FreePeoplePlayerAssignsMinionsGameProcess implements GameProcess {
                                         public void decisionMade(String result) throws DecisionResultInvalidException {
                                             Map<PhysicalCard, Set<PhysicalCard>> assignments = getAssignmentsBasedOnResponse(result);
 
-                                            Set<PhysicalCard> unassignedMinions = new HashSet<>(Filters.filterActive(game, CardType.MINION, Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, false)));
-                                            // Validate minion count (Defender)
+                                            //Start with all minions on the field
+                                            Set<PhysicalCard> unassignedMinions = new HashSet<>(Filters.filterActive(game, CardType.MINION));
+
+                                            //Then remove all minions who have already gotten themselves assigned (via assignment actions)
+                                            var existingAssignments = gameState.getAssignments();
+                                            unassignedMinions.removeAll(existingAssignments.stream().flatMap(x -> x.getShadowCharacters().stream()).collect(
+                                                    Collectors.toSet()));
+
+                                            //Finally, remove all minions just recently assigned by the Free Peoples player
+                                            // (while incidentally double-checking that freeps did not violate assignment boundaries)
                                             for (PhysicalCard freeCard : assignments.keySet()) {
                                                 Set<PhysicalCard> minionsAssigned = assignments.get(freeCard);
                                                 if (minionsAssigned.size() + getMinionsAssignedBeforeCount(freeCard, gameState) > 1 + game.getModifiersQuerying().getKeywordCount(game, freeCard, Keyword.DEFENDER))
