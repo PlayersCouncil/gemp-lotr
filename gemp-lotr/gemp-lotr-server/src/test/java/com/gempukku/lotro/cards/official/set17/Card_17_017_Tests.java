@@ -1,15 +1,18 @@
 package com.gempukku.lotro.cards.official.set17;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Race;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_17_017_Tests
 {
@@ -18,8 +21,10 @@ public class Card_17_017_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "17_17");
-					// put other cards in here as needed for the test case
+					put("gandalf", "17_17");
+					put("evenstar", "15_16");
+
+					put("runner", "1_178");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +52,7 @@ public class Card_17_017_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("gandalf");
 
 		assertEquals("Gandalf", card.getBlueprint().getTitle());
 		assertEquals("Returned", card.getBlueprint().getSubtitle());
@@ -62,18 +67,56 @@ public class Card_17_017_Tests
 		assertEquals(7, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GandalfTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GandalfReinforcesFreePeoplesTokenUponWinningSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var evenstar = scn.GetFreepsCard("evenstar");
+		scn.FreepsMoveCharToTable(gandalf);
+		scn.FreepsMoveCardToSupportArea(evenstar);
+
+		var runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCharToTable(runner);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddTokensToCard(evenstar, 1);
+		scn.SkipToAssignments();
 
-		assertEquals(4, scn.GetTwilight());
+		scn.FreepsAssignToMinions(gandalf, runner);
+		scn.FreepsResolveSkirmish(gandalf);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(1, scn.GetCultureTokensOn(evenstar));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(2, scn.GetCultureTokensOn(evenstar));
+	}
+
+	@Test
+	public void GandalfDoesNotReinforceBurdens() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCharToTable(gandalf);
+
+		var runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCharToTable(runner);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+
+		scn.FreepsAssignToMinions(gandalf, runner);
+		scn.FreepsResolveSkirmish(gandalf);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(1, scn.GetBurdens());
 	}
 }
