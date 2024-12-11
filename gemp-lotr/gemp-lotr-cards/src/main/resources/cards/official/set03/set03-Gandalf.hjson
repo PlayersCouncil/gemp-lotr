@@ -143,6 +143,7 @@
 						type: modifyStrength
 						select: choose(hobbit)
 						amount: 3
+						until: start(regroup)
 					}
 				}
 			]
