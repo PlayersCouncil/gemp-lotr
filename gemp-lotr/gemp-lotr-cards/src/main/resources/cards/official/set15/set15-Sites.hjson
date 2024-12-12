@@ -18,7 +18,7 @@
 				type: modifier
 				modifier: {
 					type: modifyArcheryTotal
-					side: shadow
+					side: freeps
 					amount: -3
 				}
 			}
