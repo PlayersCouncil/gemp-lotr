@@ -1286,7 +1286,10 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		timewords: Regroup
+		timewords: [
+			Skirmish
+			Regroup
+		]
 		effects: {
 			type: event
 			requires: {

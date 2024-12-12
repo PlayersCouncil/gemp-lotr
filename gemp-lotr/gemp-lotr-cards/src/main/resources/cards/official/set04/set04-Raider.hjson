@@ -984,7 +984,10 @@
 		culture: Raider
 		twilight: 0
 		type: Event
-		timewords: Skirmish
+		timewords: [
+			Maneuver
+			Skirmish
+		]
 		effects: {
 			type: event
 			cost: {

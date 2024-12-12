@@ -506,7 +506,10 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timewords: Maneuver
+		timewords: [
+			Fellowship
+			Maneuver
+		]
 		effects: {
 			type: event
 			requires: {

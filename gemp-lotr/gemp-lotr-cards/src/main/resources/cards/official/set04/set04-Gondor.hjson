@@ -43,7 +43,10 @@
 		culture: Gondor
 		twilight: 3
 		type: Event
-		timewords: Skirmish
+		timewords: [
+			Archery
+			Skirmish
+		]
 		effects: {
 			type: event
 			cost: {
@@ -957,7 +960,10 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timewords: Regroup
+		timewords: [
+			Fellowship
+			Regroup
+		]
 		effects: {
 			type: event
 			requires: {

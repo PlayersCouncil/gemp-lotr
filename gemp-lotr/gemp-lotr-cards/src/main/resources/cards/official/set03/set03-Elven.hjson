@@ -925,7 +925,10 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		timewords: Maneuver
+		timewords: [
+			Fellowship
+			Maneuver
+		]
 		effects: {
 			type: event
 			cost: {

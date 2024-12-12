@@ -1379,7 +1379,10 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		timewords: Skirmish
+		timewords: [
+			Maneuver
+			Skirmish
+		]
 		effects: {
 			type: event
 			effect: {
