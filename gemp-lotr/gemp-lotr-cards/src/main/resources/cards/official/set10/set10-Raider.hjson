@@ -545,14 +545,18 @@
 				{
 					type: discard
 					select: choose(side(free people),condition)
-					count: {
-						type: Conditional
-						requires: {
-							type: canSpot
-							filter: culture(rohan),man
-						}
-						true: 1-2
-						false: 1
+					count: 1
+				}
+				{
+					type: If
+					check: {
+						type: canSpot
+						filter: culture(rohan),man
+					}
+					true: {
+						type: discard
+						select: choose(side(free people),condition)
+						count: 1
 					}
 				}
 			]
