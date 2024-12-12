@@ -165,5 +165,6 @@ public class Card_01_311_ErrataTests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 		assertSame(scn.GetRingBearer(), sam);
+		assertFalse(scn.GameIsFinished());
 	}
 }

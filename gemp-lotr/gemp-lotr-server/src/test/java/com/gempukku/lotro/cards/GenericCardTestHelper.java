@@ -1104,6 +1104,10 @@ public class GenericCardTestHelper extends AbstractAtTest {
         playerDecided(playerID, option);
     }
 
+    public boolean GameIsFinished() {
+        return _game.isFinished();
+    }
+
     public void FreepsResolveRuleFirst() throws DecisionResultInvalidException { FreepsResolveActionOrder(null); }
     public void FreepsResolveActionOrder(String option) throws DecisionResultInvalidException { ChooseAction(P1, "actionText", option); }
 
