@@ -43,6 +43,12 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
+    forcePackDelivery:function() {
+        if (window.deckbuilderDeliveryService != null) {
+            this.getPackDelivery(window.deckbuilderDeliveryService);
+        }
+    },
+    
     getPackDelivery:function (callback) {
         $.ajax({
             type:"GET",
@@ -152,8 +158,8 @@ var GempLotrCommunication = Class.extend({
         var that = this;
         return function (xml, status, request) {
             var delivery = request.getResponseHeader("Delivery-Service-Opened-Pack");
-            if (delivery == "true" && window.deckbuilderDeliveryService != null) {
-                that.getPackDelivery(window.deckbuilderDeliveryService);
+            if (delivery == "true") {
+                that.forcePackDelivery();
             }
             callback(xml);
         };
@@ -540,7 +546,8 @@ var GempLotrCommunication = Class.extend({
             cache:false,
             data:{
                 participantId:getUrlParam("participantId"),
-                pack:pack},
+                pack:pack
+            },
             success:this.deckbuilderDeliveryCheck(callback),
             error:this.errorCheck(errorMap),
             dataType:"xml"
@@ -554,7 +561,8 @@ var GempLotrCommunication = Class.extend({
             data:{
                 participantId:getUrlParam("participantId"),
                 pack:pack,
-                selection:selection},
+                selection:selection
+            },
             success:this.deckbuilderDeliveryCheck(callback),
             error:this.errorCheck(errorMap),
             dataType:"xml"

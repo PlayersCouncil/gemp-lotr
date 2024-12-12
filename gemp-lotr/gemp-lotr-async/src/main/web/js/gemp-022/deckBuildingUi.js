@@ -343,6 +343,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 		}, this.checkDirtyInterval);
 		
 		this.updateFormatOptions();
+		this.comm.forcePackDelivery();
 	},
 	
 	setMapVisibility:function(value) {
@@ -752,6 +753,11 @@ var GempLotrDeckBuildingUI = Class.extend({
 					} else if (selectedCardElem.hasClass("packInCollection")) {
 						// if (confirm("Would you like to open this pack?")) {
 							this.comm.openPack(this.getCollectionType(), selectedCardElem.data("card").blueprintId, function () {
+								
+								setTimeout(function (){
+										console.log("forcing delivery");
+										that.comm.forcePackDelivery();
+									}, 1000);
 								that.cardFilter.getCollection();
 							}, {
 								"404":function () {
@@ -761,6 +767,10 @@ var GempLotrDeckBuildingUI = Class.extend({
 						//}
 					} else if (selectedCardElem.hasClass("cardToSelect")) {
 						this.comm.openSelectionPack(this.getCollectionType(), this.packSelectionId, selectedCardElem.data("card").blueprintId, function () {
+							setTimeout(function (){
+										console.log("forcing delivery");
+										that.comm.forcePackDelivery();
+									}, 1000);
 							that.cardFilter.getCollection();
 						}, {
 							"404":function () {
@@ -1166,7 +1176,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 		if (type == "pack") {
 			var card = new Card(blueprintId, null, null, "pack", "collection", "player");
 			card.tokens = {"count":count};
-			var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, false, false, true);
+			var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, false, true, true);
 			cardDiv.data("card", card);
 			
 			if (blueprintId.substr(0, 3) == "(S)") {

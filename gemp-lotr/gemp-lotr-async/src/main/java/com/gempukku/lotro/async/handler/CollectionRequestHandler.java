@@ -206,34 +206,10 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
             if (packContents == null)
                 throw new HttpProcessingException(404);
 
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-
-            Document doc = documentBuilder.newDocument();
-
-            Element collectionElem = doc.createElement("pack");
-            doc.appendChild(collectionElem);
-
-            for (CardCollection.Item item : packContents.getAll()) {
-                String blueprintId = item.getBlueprintId();
-                if (item.getType() == CardCollection.Item.Type.CARD) {
-                    Element card = doc.createElement("card");
-                    card.setAttribute("count", String.valueOf(item.getCount()));
-                    card.setAttribute("blueprintId", blueprintId);
-                    appendCardSide(card, _library.getLotroCardBlueprint(blueprintId));
-                    collectionElem.appendChild(card);
-                } else {
-                    Element pack = doc.createElement("pack");
-                    pack.setAttribute("count", String.valueOf(item.getCount()));
-                    pack.setAttribute("blueprintId", blueprintId);
-                    collectionElem.appendChild(pack);
-                }
-            }
-
             Map<String, String> headers = new HashMap<>();
             processDeliveryServiceNotification(resourceOwner, headers);
 
-            responseWriter.writeXmlResponse(doc, headers);
+            responseWriter.writeXmlResponse(null, headers);
         } finally {
             postDecoder.destroy();
         }
