@@ -632,10 +632,16 @@
 					type: addKeyword
 					keyword: damage+1
 					filter: self
-					requires: {
-						type: CanSpot
-						filter: SiteYouControl, battleground
-					}
+					requires: [
+						{
+							type: CanSpot
+							filter: SiteYouControl, battleground
+						}
+						{
+							type: CanSpot
+							filter: self,inSkirmish
+						}
+					]
 				}
 			}
 			{
