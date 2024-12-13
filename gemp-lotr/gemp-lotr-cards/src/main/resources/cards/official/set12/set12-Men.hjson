@@ -765,10 +765,10 @@
 				type: Trigger
 				optional: true
 				trigger: [
-					{
-						type: killed
-						filter: culture(men),minion
-					}
+					# {
+					# 	type: killed
+					# 	filter: culture(men),minion
+					# }
 					{
 						type: discarded
 						filter: culture(men),minion
