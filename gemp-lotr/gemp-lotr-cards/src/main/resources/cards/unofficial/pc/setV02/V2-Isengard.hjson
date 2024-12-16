@@ -1142,18 +1142,27 @@
 					filter: uruk-hai
 					memorize: woundedUruk
 				}
-				requires: {
-					type: IsEqual
-					firstNumber: {
-						type: TwilightCostInMemory
-						memory: woundedUruk
+				requires: [
+					{
+						type: IsEqual
+						firstNumber: {
+							type: TwilightCostInMemory
+							memory: woundedUruk
+						}
+						secondNumber: {
+							type: ForEachCultureToken
+							filter: self
+							culture: isengard
+						}
 					}
-					secondNumber: {
-						type: ForEachCultureToken
-						filter: self
-						culture: isengard
+					{
+						type: not
+						requires: {
+							type: phase
+							phase: skirmish
+						}
 					}
-				}
+				]
 				effect: [
 					{
 						type: PreventWound

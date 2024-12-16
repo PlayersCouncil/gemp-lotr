@@ -390,6 +390,9 @@ public class LotroCardBlueprintLibrary {
 
             collectionReady.release();
 
+            if(bp == null)
+                throw new CardNotFoundException(blueprintId + " was somehow null");
+
             return bp;
         } catch (InterruptedException exp) {
             throw new RuntimeException("LotroCardBlueprintLibrary.getLotroCardBlueprint() interrupted: ", exp);
