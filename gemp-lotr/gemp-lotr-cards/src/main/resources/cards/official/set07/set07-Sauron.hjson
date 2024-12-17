@@ -72,7 +72,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					select: choose(character,inSkirmishAgainst(culture(moria),orc))
+					select: choose(character,inSkirmishAgainst(culture(sauron),orc))
 					amount: -3
 				}
 			]
