@@ -287,13 +287,20 @@
 			{
 				type: activated
 				phase: assignment
-				cost: {
-					type: discard
-					select: self
-				}
+				cost: [
+					{
+						type: Memorize
+						filter: bearer
+						memory: recentBearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
 				effect: {
 					type: addKeyword
-					select: bearer
+					select: memory(recentBearer)
 					keyword: defender
 					amount: 1
 				}
