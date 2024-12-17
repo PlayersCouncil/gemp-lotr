@@ -31,7 +31,10 @@
 						select: self
 						strength: 11
 						vitality: 1
-						keywords: fierce
+						keywords: [
+							fierce
+							damage+1
+						]
 						race: Wizard
 						until: regroup
 					}
@@ -160,6 +163,7 @@
 						strength: 12
 						vitality: 1
 						keywords: fierce
+						race: Wizard
 						until: regroup
 					}
 					{
