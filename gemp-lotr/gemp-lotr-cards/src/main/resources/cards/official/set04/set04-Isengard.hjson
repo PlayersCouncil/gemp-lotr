@@ -3534,11 +3534,17 @@
 			type: event
 			effect: [
 				{
+					type: ChooseActiveCards
+					select: choose(culture(isengard),tracker,InSkirmish)
+					memorize: chosenTracker
+					text: Choose {Isengard} tracker to pump
+				}
+				{
 					type: modifyStrength
-					select: choose(culture(isengard),tracker)
+					select: memory(chosenTracker)
 					amount: {
 						type: forEachYouCanSpot
-						filter: attachedTo(character,inSkirmishAgainst(self))
+						filter: attachedTo(character,inSkirmishAgainst(memory(chosenTracker)))
 						multiplier: 2
 					}
 				}
