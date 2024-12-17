@@ -271,10 +271,10 @@ public class TriggerConditions {
         return false;
     }
 
-    public static boolean isSkirmishAboutToEnd(EffectResult effectResult, LotroGame game, Filterable... minionsInvolving) {
+    public static boolean isSkirmishAboutToEnd(EffectResult effectResult, LotroGame game, Filterable... charactersInvolving) {
         if (effectResult.getType() == EffectResult.Type.SKIRMISH_ABOUT_TO_END) {
             SkirmishAboutToEndResult skirmishAboutToEnd = (SkirmishAboutToEndResult) effectResult;
-            return Filters.acceptsAny(game, skirmishAboutToEnd.getMinionsInvolved(), minionsInvolving);
+            return Filters.acceptsAny(game, skirmishAboutToEnd.getAllInvolved(), charactersInvolving);
         }
         return false;
     }
