@@ -265,13 +265,8 @@ public abstract class AbstractAtTest {
     }
 
     public void validateContents(String[] array1, String[] array2) {
-        if (array1.length != array2.length)
-            fail("Array sizes differ");
-        List<String> values = new ArrayList<>(Arrays.asList(array1));
-        for (String s : array2) {
-            if (!values.remove(s))
-                fail("Arrays contents differ");
-        }
+        assertEquals("Array sizes differ", array1.length, array2.length);
+        assertArrayEquals("Array contents differ", Arrays.stream(array1).sorted().toArray(), Arrays.stream(array2).sorted().toArray());
     }
 
     public String[] toCardIdArray(PhysicalCard... cards) {

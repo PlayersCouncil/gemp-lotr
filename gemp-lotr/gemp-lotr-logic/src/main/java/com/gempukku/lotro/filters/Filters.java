@@ -256,7 +256,8 @@ public class Filters {
                 (Filter) (game, physicalCard) -> {
                     if (!ignoreExistingAssignments) {
                         boolean assignedToSkirmish = Filters.assignedToSkirmish.accepts(game, physicalCard);
-                        if (assignedToSkirmish)
+                        int defender = game.getModifiersQuerying().getKeywordCount(game, physicalCard, Keyword.DEFENDER);
+                        if (assignedToSkirmish && defender == 0)
                             return false;
                     }
                     return game.getModifiersQuerying().canBeAssignedToSkirmish(game, assignedBySide, physicalCard);

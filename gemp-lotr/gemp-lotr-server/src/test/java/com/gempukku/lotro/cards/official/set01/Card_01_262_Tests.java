@@ -19,7 +19,7 @@ public class Card_01_262_Tests
 				{{
 					put("assassin", "1_262");
 					put("runner", "1_178");
-					put("sam", "1_310");
+					put("sam", "2_114");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -94,6 +94,49 @@ public class Card_01_262_Tests
 		scn.FreepsAssignToMinions(frodo, runner);
 		// If beginning skirmishes now fails, then there is some dangling minion that Gemp thinks
 		// is unassigned, which isn't right.
+		scn.FreepsResolveSkirmish(sam);
+	}
+
+	@Test
+	public void OrcAssassinDoesNotPreventDefenderBonusFromBeingUsed() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var assassin = scn.GetShadowCard("assassin");
+		var runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCharToTable(assassin, runner);
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsUseCardAction(sam);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(assassin));
+		scn.ShadowUseCardAction(assassin);
+		assertEquals(2, scn.GetFreepsCardChoiceCount());
+
+		assertTrue(scn.CanBeAssigned(sam));
+		scn.FreepsChooseCard(sam);
+		assertTrue(scn.IsCharAssigned(sam));
+		assertTrue(scn.IsCharAssigned(assassin));
+
+		scn.PassCurrentPhaseActions();
+
+		assertTrue(scn.hasKeyword(sam, Keyword.DEFENDER));
+		assertEquals(1, scn.GetKeywordCount(sam, Keyword.DEFENDER));
+		scn.CanBeAssigned(sam);
+		scn.FreepsAssignToMinions(sam, runner);
+		assertTrue(scn.IsCharAssigned(sam));
+		assertTrue(scn.IsCharAssigned(assassin));
+		assertTrue(scn.IsCharAssigned(runner));
+		// If beginning skirmishes now fails, then there is some issue with defender, which isn't right
 		scn.FreepsResolveSkirmish(sam);
 	}
 }
