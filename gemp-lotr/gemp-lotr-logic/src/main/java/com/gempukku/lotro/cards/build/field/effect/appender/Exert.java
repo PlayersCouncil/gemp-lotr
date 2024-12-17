@@ -35,6 +35,7 @@ public class Exert implements EffectAppenderProducer {
 
         result.addEffectAppender(
                 CardResolver.resolveCards(select,
+                        (actionContext) -> Filters.canExert(actionContext.getSource(), 1),
                         (actionContext) -> Filters.canExert(actionContext.getSource(), timesSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null)),
                         valueSource, memory, player, "Choose cards to exert", environment));
         result.addEffectAppender(
