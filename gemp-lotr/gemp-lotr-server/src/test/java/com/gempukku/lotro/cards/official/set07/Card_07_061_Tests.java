@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.official.set07;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -20,8 +17,8 @@ public class Card_07_061_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "7_61");
-					// put other cards in here as needed for the test case
+					put("hobbitses", "7_61");
+					put("gollum", "9_28");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +43,7 @@ public class Card_07_061_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("hobbitses");
 
 		assertEquals("Hobbitses Are Dead", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +55,34 @@ public class Card_07_061_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HobbitsesAreDeadTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void HobbitsesAreDeadCanBePlayedFromDiscardWithInitiative() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var frodo = scn.GetRingBearer();
+
+		var hobbitses = scn.GetShadowCard("hobbitses");
+		var gollum = scn.GetShadowCard("gollum");
+		scn.ShadowMoveCardToDiscard(hobbitses);
+		scn.ShadowMoveCharToTable(gollum);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, gollum);
+		scn.FreepsResolveSkirmish(frodo);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.getTwilightPool() > 1);
+		assertTrue(scn.ShadowHasInitiative());
+		assertEquals(Zone.SHADOW_CHARACTERS, gollum.getZone());
+		assertEquals(Zone.DISCARD, hobbitses.getZone());
+		assertEquals(5, scn.GetStrength(gollum));
+		assertTrue(scn.ShadowActionAvailable(hobbitses));
+
+		scn.ShadowPlayCard(hobbitses);
+		assertEquals(7, scn.GetStrength(gollum));
+		assertEquals(Zone.DECK, hobbitses.getZone());
 	}
 }

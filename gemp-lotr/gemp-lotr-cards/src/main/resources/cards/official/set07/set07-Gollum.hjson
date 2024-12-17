@@ -413,7 +413,7 @@
 			}
 			{
 				type: activatedInDiscard
-				phase: shadow
+				phase: skirmish
 				requires: [
 					{
 						type: haveInitiative
