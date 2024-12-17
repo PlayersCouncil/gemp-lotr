@@ -85,12 +85,16 @@ public class Card_01_262_Tests
 		scn.ShadowUseCardAction(assassin);
 		assertEquals(2, scn.GetFreepsCardChoiceCount());
 
-		assertTrue(scn.CanBeAssigned(sam));
+		assertTrue(scn.CanBeAssignedViaAction(sam));
 		scn.FreepsChooseCard(sam);
 		assertTrue(scn.IsCharAssigned(sam));
 		assertTrue(scn.IsCharAssigned(assassin));
 
 		scn.PassCurrentPhaseActions();
+		assertFalse(scn.FreepsCanAssign(sam));
+		assertFalse(scn.FreepsCanAssign(assassin));
+		assertTrue(scn.FreepsCanAssign(runner));
+		assertTrue(scn.FreepsCanAssign(frodo));
 		scn.FreepsAssignToMinions(frodo, runner);
 		// If beginning skirmishes now fails, then there is some dangling minion that Gemp thinks
 		// is unassigned, which isn't right.
@@ -122,7 +126,7 @@ public class Card_01_262_Tests
 		scn.ShadowUseCardAction(assassin);
 		assertEquals(2, scn.GetFreepsCardChoiceCount());
 
-		assertTrue(scn.CanBeAssigned(sam));
+		assertTrue(scn.CanBeAssignedViaAction(sam));
 		scn.FreepsChooseCard(sam);
 		assertTrue(scn.IsCharAssigned(sam));
 		assertTrue(scn.IsCharAssigned(assassin));
@@ -131,7 +135,7 @@ public class Card_01_262_Tests
 
 		assertTrue(scn.hasKeyword(sam, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(sam, Keyword.DEFENDER));
-		scn.CanBeAssigned(sam);
+		assertTrue(scn.FreepsCanAssign(sam));
 		scn.FreepsAssignToMinions(sam, runner);
 		assertTrue(scn.IsCharAssigned(sam));
 		assertTrue(scn.IsCharAssigned(assassin));

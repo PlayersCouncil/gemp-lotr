@@ -14,6 +14,7 @@ import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.RuleUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Filters {
     private static final Map<CardType, Filter> _typeFilterMap = new HashMap<>();
@@ -192,16 +193,17 @@ public class Filters {
     }
 
     public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter) {
-        return assignableToSkirmishAgainst(assignedBySide, againstFilter, false, false);
+        return assignableToSkirmishAgainst(assignedBySide, againstFilter, false, false, false);
     }
 
-    public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter, final boolean ignoreExistingAssignments, final boolean allowAllyToSkirmish) {
+    public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter,
+            final boolean ignoreExistingAssignments, final boolean ignoreDefender, final boolean allowAllyToSkirmish) {
         return Filters.and(
-                assignableToSkirmish(assignedBySide, ignoreExistingAssignments, allowAllyToSkirmish),
+                assignableToSkirmish(assignedBySide, ignoreExistingAssignments, ignoreDefender, allowAllyToSkirmish),
                 (Filter) (game, physicalCard) -> {
                     for (PhysicalCard card : Filters.filterActive(game, againstFilter)) {
                         if (card.getBlueprint().getSide() != physicalCard.getBlueprint().getSide()
-                                && Filters.assignableToSkirmish(assignedBySide, ignoreExistingAssignments, allowAllyToSkirmish).accepts(game, card)) {
+                                && Filters.assignableToSkirmish(assignedBySide, ignoreExistingAssignments, ignoreDefender, allowAllyToSkirmish).accepts(game, card)) {
                             Map<PhysicalCard, Set<PhysicalCard>> thisAssignment = new HashMap<>();
                             if (card.getBlueprint().getSide() == Side.FREE_PEOPLE) {
                                 if (thisAssignment.containsKey(card))
@@ -223,7 +225,8 @@ public class Filters {
                 });
     }
 
-    public static Filter assignableToSkirmish(final Side assignedBySide, final boolean ignoreExistingAssignments, final boolean allowAllyToSkirmish) {
+    public static Filter assignableToSkirmish(final Side assignedBySide, final boolean ignoreExistingAssignments,
+            final boolean ignoreDefender, final boolean allowAllyToSkirmish) {
         Filter assignableFilter = Filters.or(
                 Filters.and(
                         CardType.ALLY,
@@ -256,9 +259,20 @@ public class Filters {
                 (Filter) (game, physicalCard) -> {
                     if (!ignoreExistingAssignments) {
                         boolean assignedToSkirmish = Filters.assignedToSkirmish.accepts(game, physicalCard);
-                        int defender = game.getModifiersQuerying().getKeywordCount(game, physicalCard, Keyword.DEFENDER);
-                        if (assignedToSkirmish && defender == 0)
-                            return false;
+
+                        if (assignedToSkirmish) {
+                            if(!ignoreDefender) {
+                                int defender = game.getModifiersQuerying().getKeywordCount(game, physicalCard, Keyword.DEFENDER);
+                                var assignments = game.getGameState().getAssignments()
+                                        .stream().filter(x -> x.getFellowshipCharacter() == physicalCard || x.getShadowCharacters().contains(physicalCard)).collect(
+                                                Collectors.toSet());
+                                if(1 + defender <= assignments.size())
+                                    return false;
+                            }
+                            else {
+                                return false;
+                            }
+                        }
                     }
                     return game.getModifiersQuerying().canBeAssignedToSkirmish(game, assignedBySide, physicalCard);
                 });

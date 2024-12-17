@@ -36,14 +36,14 @@ public class ShadowPlayerAssignsHisMinionsGameProcess implements GameProcess {
         GameState gameState = game.getGameState();
         Filter minionFilter = Filters.and(CardType.MINION, Filters.owner(_playerId), Filters.in(_leftoverMinions));
 
-        final Collection<PhysicalCard> minions = Filters.filterActive(game, minionFilter, Filters.assignableToSkirmish(Side.SHADOW, false, false));
+        final Collection<PhysicalCard> minions = Filters.filterActive(game, minionFilter, Filters.assignableToSkirmish(Side.SHADOW, false, false, false));
         if (!minions.isEmpty()) {
             final Collection<PhysicalCard> freePeopleTargets =
                     Filters.filterActive(game,
                             Filters.and(
                                     Filters.or(
                                             CardType.COMPANION, CardType.ALLY),
-                                    Filters.assignableToSkirmish(Side.SHADOW, true, false)));
+                                    Filters.assignableToSkirmish(Side.SHADOW, true, true, false)));
 
             game.getUserFeedback().sendAwaitingDecision(_playerId,
                     new PlayerAssignMinionsDecision(1, "Assign minions to companions or allies at home", freePeopleTargets, minions) {

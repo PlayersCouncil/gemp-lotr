@@ -4,6 +4,7 @@ import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.effect.filter.FilterFactory;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -1029,14 +1030,29 @@ public class GenericCardTestHelper extends AbstractAtTest {
         return  _game.getModifiersQuerying().isRace(_game, card, race);
     }
 
-    public Boolean CanBeAssigned(PhysicalCardImpl card)
+    public Boolean CanBeAssignedViaAction(PhysicalCardImpl card)
     {
-        return CanBeAssigned(card, Side.SHADOW) || CanBeAssigned(card, Side.FREE_PEOPLE);
+        return CanBeAssignedViaAction(card, Side.SHADOW) || CanBeAssignedViaAction(card, Side.FREE_PEOPLE);
     }
 
-    public Boolean CanBeAssigned(PhysicalCardImpl card, Side side)
+    public Boolean FreepsCanAssign(PhysicalCardImpl card)
     {
-        return _game.getModifiersQuerying().canBeAssignedToSkirmish(_game, side, card);
+        return CanBeAssignedNormally(card, Side.FREE_PEOPLE);
+    }
+
+    public Boolean ShadowCanAssign(PhysicalCardImpl card)
+    {
+        return CanBeAssignedViaAction(card, Side.FREE_PEOPLE);
+    }
+
+    public Boolean CanBeAssignedViaAction(PhysicalCardImpl card, Side side)
+    {
+        return Filters.assignableToSkirmish(side, false, true, false).accepts(_game, card);
+    }
+
+    public Boolean CanBeAssignedNormally(PhysicalCardImpl card, Side side)
+    {
+        return Filters.assignableToSkirmish(side, side == Side.SHADOW, side == Side.SHADOW, false).accepts(_game, card);
     }
 
 

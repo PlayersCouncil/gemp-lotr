@@ -213,6 +213,7 @@
 						type: AssignFpCharacterToSkirmish
 						fpCharacter: choose(or(ally,and(unbound,companion)))
 						minion: choose(uruk-hai, MaxTwilight(memory(removed)))
+						ignoreAllyLocation: true
 					}
 				}
 			]

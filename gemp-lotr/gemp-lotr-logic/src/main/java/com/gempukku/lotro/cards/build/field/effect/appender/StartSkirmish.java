@@ -39,7 +39,7 @@ public class StartSkirmish implements EffectAppenderProducer {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Filterable filter = minionFilter.getFilterable(actionContext);
-                            return Filters.assignableToSkirmishAgainst(assigningSide, filter, true, false);
+                            return Filters.assignableToSkirmishAgainst(assigningSide, filter, true, true, false);
                         }, "_fpCharacterTemp", "you", "Choose character to assign to skirmish", environment));
         result.addEffectAppender(
                 CardResolver.resolveCard(against,
@@ -47,7 +47,7 @@ public class StartSkirmish implements EffectAppenderProducer {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory("_tempFpCharacter");
-                            return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar), true, false);
+                            return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar), true, true, false);
                         }, "_minionTemp", "you", "Choose minion to assign to character", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
@@ -55,7 +55,7 @@ public class StartSkirmish implements EffectAppenderProducer {
                     protected List<? extends Effect> createEffects(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory("_fpCharacterTemp");
                         final Collection<? extends PhysicalCard> minions = actionContext.getCardsFromMemory("_minionTemp");
-                        if (fpChar.size() == 1 && minions.size() > 0) {
+                        if (fpChar.size() == 1 && !minions.isEmpty()) {
                             new AdditionalSkirmishPhaseEffect(fpChar.iterator().next(), minions);
                         }
                         return null;

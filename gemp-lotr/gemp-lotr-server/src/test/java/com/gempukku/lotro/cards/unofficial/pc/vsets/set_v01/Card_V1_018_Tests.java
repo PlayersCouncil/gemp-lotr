@@ -88,13 +88,13 @@ public class Card_V1_018_Tests
 
 		scn.StartGame();
 
-		assertFalse(scn.CanBeAssigned(saruman));
+		assertFalse(scn.CanBeAssignedViaAction(saruman));
 		scn.FreepsPlayCard(elrond);
-		assertFalse(scn.CanBeAssigned(saruman));
+		assertFalse(scn.CanBeAssignedViaAction(saruman));
 		scn.FreepsPlayCard(galadriel);
-		assertFalse(scn.CanBeAssigned(saruman));
+		assertFalse(scn.CanBeAssignedViaAction(saruman));
 		scn.FreepsPlayCard(gandalf);
-		assertTrue(scn.CanBeAssigned(saruman));
+		assertTrue(scn.CanBeAssignedViaAction(saruman));
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();

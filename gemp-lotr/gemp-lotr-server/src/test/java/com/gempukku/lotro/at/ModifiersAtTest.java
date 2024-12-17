@@ -373,9 +373,9 @@ public class ModifiersAtTest extends AbstractAtTest {
         DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
 
         passUntil(Phase.FELLOWSHIP);
-        assertFalse(Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, false).accepts(_game, birchseed));
+        assertFalse(Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, false, false).accepts(_game, birchseed));
         addModifier(modifierSource.getModifier(actionContext));
-        assertTrue(Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, false).accepts(_game, birchseed));
+        assertTrue(Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, false, false).accepts(_game, birchseed));
     }
 
     @Test
