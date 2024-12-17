@@ -33,7 +33,7 @@
 						vitality: 1
 						keywords: [
 							fierce
-							damage+1
+							damage
 						]
 						race: Wizard
 						until: regroup
