@@ -34,14 +34,21 @@
 			{
 				type: activated
 				phase: assignment
-				cost: {
-					type: assignFpCharacterToSkirmish
-					fpCharacter: self
-					minion: choose(minion,hasAttached(culture(gondor),fortification))
+				requires: {
+					type: CanSpot
+					filter: minion,hasAttached(culture(gondor),fortification),AssignableToSkirmishAgainst(self)
 				}
 				effect: {
-					type: heal
-					select: self
+					type: CostToEffect
+					cost: {
+						type: assignFpCharacterToSkirmish
+						fpCharacter: self
+						minion: choose(minion,hasAttached(culture(gondor),fortification))
+					}
+					effect: {
+						type: heal
+						select: self
+					}
 				}
 			}
 		]
