@@ -64,7 +64,7 @@
 		site: 3
 		effects: {
 			type: ModifyOwnCost
-			amount: -1
+			amount: -2
 			requires: {
 				type: HaveInitiative
 				side: Shadow
