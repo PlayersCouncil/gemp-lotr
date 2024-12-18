@@ -17,6 +17,7 @@ import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 public class StartSkirmish implements EffectAppenderProducer {
@@ -46,17 +47,19 @@ public class StartSkirmish implements EffectAppenderProducer {
                         (actionContext) -> {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
-                            final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory("_tempFpCharacter");
+                            final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory("_fpCharacterTemp");
                             return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar), true, true, false);
                         }, "_minionTemp", "you", "Choose minion to assign to character", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
                     protected List<? extends Effect> createEffects(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                        List<Effect> result = new LinkedList<>();
                         final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory("_fpCharacterTemp");
                         final Collection<? extends PhysicalCard> minions = actionContext.getCardsFromMemory("_minionTemp");
                         if (fpChar.size() == 1 && !minions.isEmpty()) {
-                            new AdditionalSkirmishPhaseEffect(fpChar.iterator().next(), minions);
+                            result.add(new AdditionalSkirmishPhaseEffect(fpChar.iterator().next(), minions));
+                            return result;
                         }
                         return null;
                     }
