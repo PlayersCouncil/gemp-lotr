@@ -8,7 +8,7 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.actions.DefaultActionsEnvironment;
 import com.gempukku.lotro.logic.GameUtils;
-import com.gempukku.lotro.logic.actions.ActivateCardAction;
+import com.gempukku.lotro.logic.actions.DiscardToHealAction;
 import com.gempukku.lotro.logic.effects.DiscardCardsFromHandEffect;
 import com.gempukku.lotro.logic.effects.HealCharactersEffect;
 import com.gempukku.lotro.logic.timing.Action;
@@ -36,8 +36,7 @@ public class HealByDiscardRule {
                             for (PhysicalCard card : Filters.filter(game, game.getGameState().getHand(playerId), Filters.or(CardType.COMPANION, CardType.ALLY), Filters.unique)) {
                                 PhysicalCard active = Filters.findFirstActive(game, Filters.name(card.getBlueprint().getTitle()));
                                 if (active != null && game.getGameState().getWounds(active) > 0) {
-                                    ActivateCardAction action = new ActivateCardAction(card);
-                                    action.setText("Heal by discarding");
+                                    var action = new DiscardToHealAction(card);
                                     action.appendCost(new DiscardCardsFromHandEffect(null, card.getOwner(), Collections.singleton(card), false));
                                     action.appendCost(
                                             new UnrespondableEffect() {
