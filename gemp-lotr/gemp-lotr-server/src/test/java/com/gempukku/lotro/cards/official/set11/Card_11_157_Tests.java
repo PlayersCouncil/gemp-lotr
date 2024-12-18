@@ -17,8 +17,8 @@ public class Card_11_157_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "11_157");
-					// put other cards in here as needed for the test case
+					put("rush", "11_157");
+					put("scout", "10_78");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -38,12 +38,14 @@ public class Card_11_157_Tests
 		 * Twilight Cost: 3
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: To play, spot a [rohan] Man.<br>Each time a Shadow condition is played, you may exert a minion.<br><b>Response:</b> If a minion exerts as a cost of its special ability, discard this condition to prevent that and return that minion to its owner's hand.
+		 * Game Text: To play, spot a [rohan] Man.
+		 * Each time a Shadow condition is played, you may exert a minion.
+		 * <b>Response:</b> If a minion exerts as a cost of its special ability, discard this condition to prevent that and return that minion to its owner's hand.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("rush");
 
 		assertEquals("Rush of Steeds", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,18 +57,31 @@ public class Card_11_157_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void RushofSteedsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void RushofSteedsDoesntCrashWhenUsedAgainstAdvanceScout() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var rush = scn.GetFreepsCard("rush");
+		scn.FreepsMoveCardToSupportArea(rush);
+
+		var scout = scn.GetShadowCard("scout");
+		scn.ShadowMoveCharToTable(scout);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(scout));
+		scn.ShadowUseCardAction(scout);
+		scn.ShadowChooseMultipleChoiceOption("exert");
+
+		assertEquals(Zone.SUPPORT, rush.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, scout.getZone());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(Zone.DISCARD, rush.getZone());
+		assertEquals(Zone.HAND, scout.getZone());
 	}
 }

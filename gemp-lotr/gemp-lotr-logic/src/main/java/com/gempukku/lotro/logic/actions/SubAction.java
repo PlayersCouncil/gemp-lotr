@@ -12,6 +12,7 @@ public class SubAction extends AbstractCostToEffectAction {
     public SubAction(Action action) {
         _action = action;
     }
+    public Action getAction() { return _action; }
 
     @Override
     public Type getType() {

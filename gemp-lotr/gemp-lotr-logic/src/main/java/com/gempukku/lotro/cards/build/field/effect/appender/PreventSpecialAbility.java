@@ -9,6 +9,7 @@ import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.ActivateCardAction;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
+import com.gempukku.lotro.logic.actions.SubAction;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
@@ -30,9 +31,21 @@ public class PreventSpecialAbility implements EffectAppenderProducer {
                             protected void doPlayEffect(LotroGame game) {
                                 EffectResult effectResult = actionContext.getEffectResult();
                                 if (effectResult instanceof ActionSource) {
-                                    ActivateCardAction cardAction = (ActivateCardAction) ((ActionSource) effectResult).getAction();
-                                    if (cardAction != null)
-                                        cardAction.prevent();
+                                    var cardAction = ((ActionSource) effectResult).getAction();
+                                    ActivateCardAction act = null;
+
+                                    if(cardAction instanceof ActivateCardAction activate) {
+                                        act = activate;
+                                    }
+                                    else if(cardAction instanceof SubAction sub) {
+                                        var coreAction = sub.getAction();
+                                        if(coreAction instanceof ActivateCardAction activate) {
+                                            act = activate;
+                                        }
+                                    }
+                                    if(act != null) {
+                                        act.prevent();
+                                    }
                                 }
                             }
                         };
