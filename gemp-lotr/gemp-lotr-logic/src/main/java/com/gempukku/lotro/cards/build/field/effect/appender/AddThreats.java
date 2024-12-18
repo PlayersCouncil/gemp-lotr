@@ -68,7 +68,7 @@ public class AddThreats implements EffectAppenderProducer {
                 new DelayedAppender() {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                        final int threats = valueSource.getEvaluator(actionContext).getMinimum(actionContext.getGame(), null);
+                        int threats = Integer.parseInt(actionContext.getValueFromMemory(memorize));
                         final String playerAddingThreats = playerSource.getPlayer(actionContext);
                         if (threats > 0) {
                             return new AddThreatsEffect(playerAddingThreats, actionContext.getSource(), threats);

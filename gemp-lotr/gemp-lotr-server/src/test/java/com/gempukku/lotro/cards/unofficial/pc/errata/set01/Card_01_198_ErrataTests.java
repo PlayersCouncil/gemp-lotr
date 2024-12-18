@@ -54,7 +54,9 @@ public class Card_01_198_ErrataTests
 		* Twilight Cost: 1
 		* Type: condition
 		* Subtype: Support Area
-		* Game Text: <b>Search.</b> To play, exert a [moria] minion.   <br>Each time the fellowship moves to any site 4, 5, or 6 and contains a Dwarf or Elf, draw a ttmm.  The Free Peoples player may discard 1 ttmm at random from hand to prevent this.
+		* Game Text: <b>Search.</b> To play, exert a [moria] minion.
+		 * Each time the fellowship moves to any site 4, 5, or 6 and contains a Dwarf or Elf, draw a card.
+		 * The Free Peoples player may discard 1 card at random from hand to prevent this.
 		*/
 
 		//Pre-game setup
@@ -119,7 +121,7 @@ public class Card_01_198_ErrataTests
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
 
-		scn.SkipToSite(4);
+		scn.SkipCurrentSite();
 
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
@@ -127,21 +129,21 @@ public class Card_01_198_ErrataTests
 		assertEquals(3, scn.GetShadowDeckCount());
 		assertEquals(9, scn.GetShadowHandCount());
 
-		scn.SkipToSite(5);
+		scn.SkipCurrentSite();
 
 		assertEquals(8, scn.GetShadowHandCount());
 		scn.FreepsPassCurrentPhaseAction(); // move to 5
 		assertEquals(2, scn.GetShadowDeckCount());
 		assertEquals(9, scn.GetShadowHandCount());
 
-		scn.SkipToSite(6);
+		scn.SkipCurrentSite();
 
 		assertEquals(8, scn.GetShadowHandCount());
 		scn.FreepsPassCurrentPhaseAction(); // move to 6
 		assertEquals(1, scn.GetShadowDeckCount());
 		assertEquals(9, scn.GetShadowHandCount());
 
-		scn.SkipToSite(7);
+		scn.SkipCurrentSite();
 
 		assertEquals(8, scn.GetShadowHandCount());
 		scn.FreepsPassCurrentPhaseAction(); // move to 7
@@ -175,7 +177,7 @@ public class Card_01_198_ErrataTests
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
 
-		scn.SkipToSite(4);
+		scn.SkipCurrentSite();
 
 		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(8, scn.GetShadowHandCount());
@@ -183,21 +185,21 @@ public class Card_01_198_ErrataTests
 		assertEquals(3, scn.GetShadowDeckCount());
 		assertEquals(9, scn.GetShadowHandCount());
 
-		scn.SkipToSite(5);
+		scn.SkipCurrentSite();
 
 		assertEquals(8, scn.GetShadowHandCount());
 		scn.FreepsPassCurrentPhaseAction(); // move to 5
 		assertEquals(2, scn.GetShadowDeckCount());
 		assertEquals(9, scn.GetShadowHandCount());
 
-		scn.SkipToSite(6);
+		scn.SkipCurrentSite();
 
 		assertEquals(8, scn.GetShadowHandCount());
 		scn.FreepsPassCurrentPhaseAction(); // move to 6
 		assertEquals(1, scn.GetShadowDeckCount());
 		assertEquals(9, scn.GetShadowHandCount());
 
-		scn.SkipToSite(7);
+		scn.SkipCurrentSite();
 
 		assertEquals(8, scn.GetShadowHandCount());
 		scn.FreepsPassCurrentPhaseAction(); // move to 7

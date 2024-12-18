@@ -367,9 +367,76 @@
 		twilight: 0
 		type: Event
 		timewords: Shadow
+		
 		effects: [
-						{
+			{
 				type: event
+				requires: [
+					{
+						type: Or
+						requires: [
+							# Small draw
+							{
+								type: And
+								requires: [
+									{
+										type: CanSpot
+										filter: your,minion
+									}
+									{
+										type: Not
+										requires: {
+											type: WasPlayedFromZone
+											zone: DECK
+										}
+									}
+									{
+										type: CanSpotTwilight
+										amount: 3
+									}
+								]
+							}
+							
+							# Big draw
+							{
+								type: And
+								requires: [
+									{
+										type: Or
+										requires: [
+											{
+												type: And
+												requires: [
+													{
+														type: Location
+														filter: RegionNumber(3)
+													}
+													{
+														type: CanSpotTwilight
+														amount: 25
+													}
+												]
+											}
+											{
+												type: And
+												requires: [
+													{
+														type: Location
+														filter: RegionNumber(1-2)
+													}
+													{
+														type: CanSpotTwilight
+														amount: 18
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
 				effect: {
 					type: Choice
 					texts: [
@@ -387,9 +454,8 @@
 								{
 									type: Not
 									requires: {
-										type: MemoryIs
-										memory: PlayedFromDeck
-										value: 1
+										type: WasPlayedFromZone
+										zone: DECK
 									}
 								}
 							]
@@ -472,19 +538,12 @@
 						amount: 18
 					}
 				]
-				effect: [
-					{
-						type: MemorizeNumber
-						amount: 1
-						memory: PlayedFromDeck
-					}
-					{
-						type: PlayCardFromDrawDeck
-						select: self
-						shuffle: true
-						showAll: true
-					}
-				]
+				effect: {
+					type: PlayCardFromDrawDeck
+					select: self
+					shuffle: true
+					showAll: true
+				}
 			}
 		]
 		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (6) to take up to 4 Shadow conditions into hand from your draw deck. If in region 1, this action can be performed from your draw deck.

@@ -116,17 +116,17 @@ public class Card_04_201_Tests
 		var controlledSite = scn.GetFreepsSite(1);
 		assertTrue(scn.IsSiteControlled(controlledSite));
 		scn.StackCardsOn(controlledSite, veteran);
-		scn.SetTwilight(48);
+		scn.SetTwilight(3);
 
 		scn.FreepsPassCurrentPhaseAction();
 		assertEquals(controlledSite, veteran.getStackedOn());
 		assertEquals(Zone.STACKED, veteran.getZone());
 
 		assertTrue(scn.ShadowActionAvailable(veteran));
-		assertEquals(50, scn.GetTwilight());
+		assertEquals(10, scn.GetTwilight());
 		scn.ShadowUseCardAction(veteran);
 		assertEquals(Zone.SHADOW_CHARACTERS, veteran.getZone());
-		// Trooper cost 3, but should have a -1 discount, so costs 2 + 2 for roaming
-		assertEquals(46, scn.GetTwilight());
+		// Costs 3, -1 discount = 2
+		assertEquals(8, scn.GetTwilight());
 	}
 }

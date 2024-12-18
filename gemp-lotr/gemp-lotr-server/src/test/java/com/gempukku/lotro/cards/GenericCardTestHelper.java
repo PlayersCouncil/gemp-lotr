@@ -30,7 +30,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public static final HashMap<String, String> FellowshipSites = new HashMap<>() {{
         put("site1", "1_319");
         put("site2", "1_327");
-        put("site3", "1_337");
+        put("site3", "1_341");
         put("site4", "1_343");
         put("site5", "1_349");
         put("site6", "1_351");
@@ -734,6 +734,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public boolean RBWearingOneRing() { return _game.getGameState().isWearingRing(); }
     public PhysicalCardImpl GetCurrentSite() { return (PhysicalCardImpl)_game.getGameState().getCurrentSite(); }
 
+    public int GetCurrentSiteNumber() { return GetCurrentSite().getSiteNumber(); }
     public void SkipToAssignments() throws DecisionResultInvalidException {
         SkipToPhase(Phase.ASSIGNMENT);
         PassCurrentPhaseActions();
@@ -1183,7 +1184,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
     }
 
     public void SkipToSite(int siteNum) throws DecisionResultInvalidException {
-        for(int i = GetCurrentSite().getSiteNumber(); i < siteNum; i++)
+        for(int i = GetCurrentSite().getSiteNumber(); i < siteNum; i = GetCurrentSite().getSiteNumber())
         {
             SkipCurrentSite();
         }
