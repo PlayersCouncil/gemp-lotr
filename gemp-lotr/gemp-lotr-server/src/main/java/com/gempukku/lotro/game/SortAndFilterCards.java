@@ -480,13 +480,13 @@ public class SortAndFilterCards {
      * @return true or false
      */
     private static boolean isAttributeValueAccepted(Integer filterValue, String compareType, Integer blueprintValue) {
-        if(filterValue == null || compareType == null)
+        if(filterValue == null)
             return true;
 
         if (blueprintValue == null)
             return false;
 
-        if ("EQUALS".equals(compareType) || "GREATER_THAN_OR_EQUAL_TO".equals(compareType) || "LESS_THAN_OR_EQUAL_TO".equals(compareType)) {
+        if (compareType == null || "EQUALS".equals(compareType) || "GREATER_THAN_OR_EQUAL_TO".equals(compareType) || "LESS_THAN_OR_EQUAL_TO".equals(compareType)) {
             if (blueprintValue.equals(filterValue))
                 return true;
         }
