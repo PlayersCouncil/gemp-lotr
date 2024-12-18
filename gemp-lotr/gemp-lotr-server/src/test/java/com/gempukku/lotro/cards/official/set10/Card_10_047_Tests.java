@@ -17,8 +17,8 @@ public class Card_10_047_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "10_47");
-					// put other cards in here as needed for the test case
+					put("call", "10_47");
+					put("southron", "4_220");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -38,12 +38,14 @@ public class Card_10_047_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: To play, spot a [raider] Man.<br>Threats cannot be removed by Free Peoples cards.<br><b>Shadow:</b> Remove (1) and play a Southron to add a threat.
+		 * Game Text: To play, spot a [raider] Man.
+		 * Threats cannot be removed by Free Peoples cards.
+		 * <b>Shadow:</b> Remove (1) and play a Southron to add a threat.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("call");
 
 		assertEquals("Rallying Call", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,18 +57,60 @@ public class Card_10_047_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void RallyingCallTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void RallyingCallRemoves1AndPlaysASouthronToAddAThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var call = scn.GetShadowCard("call");
+		var southron = scn.GetShadowCard("southron");
+		scn.ShadowMoveCardToSupportArea(call);
+		scn.ShadowMoveCardToHand(southron);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(7);
+		scn.FreepsPassCurrentPhaseAction();
 
+		assertEquals(10, scn.GetTwilight());
+		assertEquals(0, scn.getThreats());
+		assertTrue(scn.ShadowActionAvailable(call));
+		assertTrue(scn.ShadowPlayAvailable(southron));
+		assertEquals(Zone.HAND, southron.getZone());
+
+		scn.ShadowUseCardAction(call);
+
+		//10 twiliight -4 base -2 roaming -1 extra tax from Call
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(1, scn.getThreats());
+		assertEquals(Zone.SHADOW_CHARACTERS, southron.getZone());
+	}
+
+	@Test
+	public void RallyingCallHasEffectEvenWhenFinalTwilightPoolIsZero() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var call = scn.GetShadowCard("call");
+		var southron = scn.GetShadowCard("southron");
+		scn.ShadowMoveCardToSupportArea(call);
+		scn.ShadowMoveCardToHand(southron);
+
+		scn.StartGame();
+		scn.SetTwilight(4);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(7, scn.GetTwilight());
+		assertEquals(0, scn.getThreats());
+		assertTrue(scn.ShadowActionAvailable(call));
+		assertTrue(scn.ShadowPlayAvailable(southron));
+		assertEquals(Zone.HAND, southron.getZone());
+
+		scn.ShadowUseCardAction(call);
+
+		//We must ensure that the final tally results in an empty twilight pool
+		// as it is here that PlayCardFromHand falters if set up incorrectly
 		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.getThreats());
+		assertEquals(Zone.SHADOW_CHARACTERS, southron.getZone());
 	}
 }

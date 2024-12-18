@@ -49,7 +49,7 @@ public class PlayCardFromHand implements EffectAppenderProducer {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
                                 return Filters.and(Filters.playable(game, costModifier, ignoreRoamingPenalty, ignoreInDeadPile), ExtraFilters.attachableTo(game, costModifier, onFilterable));
                             }
-                            return Filters.playable(game, removedTwilight, costModifier, ignoreRoamingPenalty, ignoreInDeadPile, true);
+                            return Filters.playable(game, 0, costModifier, ignoreRoamingPenalty, ignoreInDeadPile, true);
                         },
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();

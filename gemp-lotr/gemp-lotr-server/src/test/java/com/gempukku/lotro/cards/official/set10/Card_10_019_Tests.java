@@ -45,7 +45,7 @@ public class Card_10_019_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("sprang");
 
 		assertEquals("A Dark Shape Sprang", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
