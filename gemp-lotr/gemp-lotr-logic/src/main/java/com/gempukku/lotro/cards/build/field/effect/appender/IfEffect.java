@@ -51,10 +51,12 @@ public class IfEffect implements EffectAppenderProducer {
 
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
-                EffectAppender[] effects = checkConditions(actionContext) ? trueEffectAppenders : falseEffectAppenders;
+
+                boolean check = checkConditions(actionContext);
+                EffectAppender[] effects = check ? trueEffectAppenders : falseEffectAppenders;
 
                 if(effects == null || effects.length == 0)
-                    return false;
+                    return check;
 
                 for (EffectAppender effectAppender : effects) {
                     if (!effectAppender.isPlayableInFull(actionContext))

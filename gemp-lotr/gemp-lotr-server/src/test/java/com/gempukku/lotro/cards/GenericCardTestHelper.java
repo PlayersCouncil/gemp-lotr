@@ -1125,7 +1125,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
         return _game.isFinished();
     }
 
-    public void FreepsResolveRuleFirst() throws DecisionResultInvalidException { FreepsResolveActionOrder(null); }
+    public void FreepsResolveRuleFirst() throws DecisionResultInvalidException { FreepsResolveActionOrder(GetADParamAsList(P1, "actionText").getFirst()); }
     public void FreepsResolveActionOrder(String option) throws DecisionResultInvalidException { ChooseAction(P1, "actionText", option); }
 
     public Filterable GenerateFreepsFilter(String filter) throws InvalidCardDefinitionException {

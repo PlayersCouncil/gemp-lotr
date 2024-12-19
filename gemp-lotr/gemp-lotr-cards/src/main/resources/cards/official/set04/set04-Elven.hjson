@@ -1002,7 +1002,6 @@
 					filter: minion,inSkirmishAgainst(self)
 					amount: {
 						type: forEachWound
-						filter: self
 						multiplier: -2
 					}
 				}

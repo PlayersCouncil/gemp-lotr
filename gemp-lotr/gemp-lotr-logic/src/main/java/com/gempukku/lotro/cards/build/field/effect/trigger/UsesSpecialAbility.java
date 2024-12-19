@@ -9,6 +9,7 @@ import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.timing.TriggerConditions;
 import com.gempukku.lotro.logic.timing.results.ActivateCardResult;
+import com.gempukku.lotro.logic.timing.results.DiscardToHealResult;
 import org.json.simple.JSONObject;
 
 public class UsesSpecialAbility implements TriggerCheckerProducer {
@@ -33,6 +34,9 @@ public class UsesSpecialAbility implements TriggerCheckerProducer {
 
                 if (activated) {
                     ActivateCardResult activateCardResult = (ActivateCardResult) actionContext.getEffectResult();
+                    if(activateCardResult instanceof DiscardToHealResult)
+                        return false;
+
                     if (timeword != null) {
                         if (activateCardResult.getActionTimeword() != timeword)
                             return false;
