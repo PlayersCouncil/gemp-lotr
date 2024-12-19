@@ -17,8 +17,8 @@ public class Card_09_038_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "9_38");
-					// put other cards in here as needed for the test case
+					put("palantir", "9_38");
+					put("boromir", "3_122");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -38,12 +38,13 @@ public class Card_09_038_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Support area
-		 * Game Text: To play, spot a [gondor] Man with 3 or more vitality (or spot a [gondor] Man and add 2 threats).<br><b>Regroup:</b> Add a threat or discard this artifact to remove (2) or to draw a card.
+		 * Game Text: To play, spot a [gondor] Man with 3 or more vitality (or spot a [gondor] Man and add 2 threats).
+		 * <b>Regroup:</b> Add a threat or discard this artifact to remove (2) or to draw a card.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("palantir");
 
 		assertEquals("Seeing Stone of Orthanc", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,18 +56,54 @@ public class Card_09_038_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SeeingStoneofOrthancTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SeeingStoneofOrthancAddsThreatsIfNoGondorManOfVit3() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var palantir = scn.GetFreepsCard("palantir");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.FreepsMoveCardToHand(palantir, boromir);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertFalse(scn.FreepsPlayAvailable(palantir));
 
-		assertEquals(0, scn.GetTwilight());
+		scn.FreepsPlayCard(boromir);
+		assertTrue(scn.FreepsPlayAvailable(palantir));
+
+		scn.AddWoundsToChar(boromir, 1);
+		assertEquals(2, scn.GetVitality(boromir));
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.FreepsPlayAvailable(palantir));
+
+		scn.FreepsPlayCard(palantir);
+		assertEquals(2, scn.GetThreats());
+	}
+
+	@Test
+	public void SeeingStoneofOrthancOffersChoiceOf2ThreatsOrSpotIfCanSpotGondorManOf3Vit() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var palantir = scn.GetFreepsCard("palantir");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.FreepsMoveCardToHand(palantir, boromir);
+
+		scn.StartGame();
+		assertFalse(scn.FreepsPlayAvailable(palantir));
+
+		scn.FreepsPlayCard(boromir);
+		assertTrue(scn.FreepsPlayAvailable(palantir));
+
+		assertEquals(3, scn.GetVitality(boromir));
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.FreepsPlayAvailable(palantir));
+
+		scn.FreepsPlayCard(palantir);
+		assertEquals(2, scn.FreepsGetMultipleChoices().size());
+		scn.FreepsChooseMultipleChoiceOption("3 or more vitality");
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(Zone.SUPPORT, palantir.getZone());
 	}
 }
