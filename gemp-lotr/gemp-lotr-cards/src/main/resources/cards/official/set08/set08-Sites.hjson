@@ -132,8 +132,13 @@
 							amount: 3
 						}
 						{
-							type: takeControlOfSite
+							type: Optional
 							player: shadow
+							text: Would you like to take control of a site?
+							effect: {
+								type: takeControlOfSite
+								player: shadow
+							}
 						}
 					]
 				}
