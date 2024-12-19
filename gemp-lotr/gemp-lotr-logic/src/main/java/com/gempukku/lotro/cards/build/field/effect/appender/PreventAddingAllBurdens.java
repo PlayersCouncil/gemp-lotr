@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
 
 public class PreventAddingAllBurdens implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject);
 
         MultiEffectAppender result = new MultiEffectAppender();

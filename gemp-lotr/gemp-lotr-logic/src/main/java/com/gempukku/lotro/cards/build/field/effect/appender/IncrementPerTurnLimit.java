@@ -14,7 +14,7 @@ import org.json.simple.JSONObject;
 
 public class IncrementPerTurnLimit implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "limit");
 
         final int limit = FieldUtils.getInteger(effectObject.get("limit"), "limit", 1);

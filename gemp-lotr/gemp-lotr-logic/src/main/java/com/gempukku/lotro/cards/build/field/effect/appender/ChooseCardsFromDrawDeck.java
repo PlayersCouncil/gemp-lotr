@@ -12,7 +12,7 @@ import org.json.simple.JSONObject;
 
 public class ChooseCardsFromDrawDeck implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "player", "deck", "count", "select", "memorize", "text", "showAll");
 
         String player = FieldUtils.getString(effectObject.get("player"), "player", "you");

@@ -1,9 +1,11 @@
 package com.gempukku.lotro.cards.build.field.effect;
 
+import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.*;
+import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;
@@ -195,23 +197,58 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("wound", new Wound());
     }
 
-    public EffectAppender getEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender getEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         final String type = FieldUtils.getString(effectObject.get("type"), "type");
+        boolean ignoreCostCheckFailure = FieldUtils.getBoolean(effectObject.get("ignoreCostCheckFailure"), "ignoreCostCheckFailure", false);
         final EffectAppenderProducer effectAppenderProducer = effectAppenderProducers.get(type.toLowerCase());
         if (effectAppenderProducer == null)
             throw new InvalidCardDefinitionException("Unable to find effect of type: " + type);
-        return effectAppenderProducer.createEffectAppender(effectObject, environment);
+        return wrapIgnoreCost(ignoreCostCheckFailure, effectAppenderProducer.createEffectAppender(cost, effectObject, environment));
     }
 
-    public EffectAppender[] getEffectAppenders(JSONObject[] effectArray, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender[] getEffectAppenders(boolean cost, JSONObject[] effectArray, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         EffectAppender[] result = new EffectAppender[effectArray.length];
         for (int i = 0; i < result.length; i++) {
             final String type = FieldUtils.getString(effectArray[i].get("type"), "type");
+            boolean ignoreCostCheckFailure = FieldUtils.getBoolean(effectArray[i].get("ignoreCostCheckFailure"), "ignoreCostCheckFailure", false);
             final EffectAppenderProducer effectAppenderProducer = effectAppenderProducers.get(type.toLowerCase());
             if (effectAppenderProducer == null)
                 throw new InvalidCardDefinitionException("Unable to find effect of type: " + type);
-            result[i] = effectAppenderProducer.createEffectAppender(effectArray[i], environment);
+            result[i] = wrapIgnoreCost(ignoreCostCheckFailure, effectAppenderProducer.createEffectAppender(cost, effectArray[i], environment));
         }
         return result;
+    }
+
+    private EffectAppender wrapIgnoreCost(boolean ignoreCostCheckFailure, EffectAppender effectAppender) {
+        if (ignoreCostCheckFailure) {
+            return new EffectAppender() {
+                @Override
+                public void appendEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                    effectAppender.appendEffect(cost, action, actionContext);
+                }
+
+                @Override
+                public boolean isPlayableInFull(ActionContext actionContext) {
+                    try {
+                        return effectAppender.isPlayableInFull(actionContext);
+                    } catch (Exception e) {
+                        // Ignore any errors, as we can't evaluate at this time
+                        return true;
+                    }
+                }
+
+                @Override
+                public boolean canPreEvaluate() {
+                    return effectAppender.canPreEvaluate();
+                }
+
+                @Override
+                public boolean isPlayabilityCheckedForEffect() {
+                    return effectAppender.isPlayabilityCheckedForEffect();
+                }
+            };
+        } else {
+            return effectAppender;
+        }
     }
 }

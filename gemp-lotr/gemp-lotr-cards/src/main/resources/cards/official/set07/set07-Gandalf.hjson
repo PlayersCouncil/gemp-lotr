@@ -182,11 +182,10 @@
 				trigger: {
 					type: winsSkirmish
 					filter: name(Gandalf)
-					memorize: winner
 				}
 				cost: {
 					type: exert
-					select: memory(winner)
+					select: choose(skirmishWinner)
 				}
 				effect: {
 					type: drawCards
@@ -1009,6 +1008,7 @@
 					type: exert
 					select: choose(name(Gandalf))
 					times: memory(exertCount)
+					ignoreCostCheckFailure: true
 				}
 			]
 			effect: [

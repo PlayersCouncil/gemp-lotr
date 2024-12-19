@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class MemorizeDiscard implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "filter", "memory", "uniqueTitles");
 
         final String filter = FieldUtils.getString(effectObject.get("filter"), "filter", "any");

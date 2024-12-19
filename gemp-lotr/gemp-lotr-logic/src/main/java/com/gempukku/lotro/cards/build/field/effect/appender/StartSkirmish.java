@@ -21,7 +21,7 @@ import java.util.List;
 
 public class StartSkirmish implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "fpCharacter", "against");
 
         final String fpCharacter = FieldUtils.getString(effectObject.get("fpCharacter"), "fpCharacter");

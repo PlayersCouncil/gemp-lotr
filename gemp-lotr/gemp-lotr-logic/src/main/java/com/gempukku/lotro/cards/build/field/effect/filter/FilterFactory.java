@@ -14,6 +14,7 @@ import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.SingleMemoryEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.results.CharacterLostSkirmishResult;
+import com.gempukku.lotro.logic.timing.results.CharacterWonSkirmishResult;
 
 import java.util.*;
 
@@ -149,6 +150,11 @@ public class FilterFactory {
                 (actionContext) -> {
                     final CharacterLostSkirmishResult lostSkirmish = (CharacterLostSkirmishResult) actionContext.getEffectResult();
                     return lostSkirmish.getLoser();
+                });
+        simpleFilters.put("skirmishwinner",
+                (actionContext) -> {
+                    final CharacterWonSkirmishResult lostSkirmish = (CharacterWonSkirmishResult) actionContext.getEffectResult();
+                    return lostSkirmish.getWinner();
                 });
         simpleFilters.put("storedculture",
                 (actionContext) -> (Filter) (game, physicalCard) -> {

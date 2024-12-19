@@ -14,7 +14,7 @@ import org.json.simple.JSONObject;
 
 public class MemorizeInfo implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "info", "memory");
 
         final String info = FieldUtils.getString(effectObject.get("info"), "info");

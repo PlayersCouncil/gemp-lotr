@@ -20,7 +20,7 @@ import java.util.Collection;
 
 public class Exhaust implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "player", "count", "select", "memorize");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
