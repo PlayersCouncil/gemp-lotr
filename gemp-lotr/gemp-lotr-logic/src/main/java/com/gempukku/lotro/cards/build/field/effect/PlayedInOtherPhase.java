@@ -20,7 +20,7 @@ public class PlayedInOtherPhase implements EffectProcessor {
         final JSONObject[] costArray = FieldUtils.getObjectArray(value.get("cost"), "cost");
 
         final Requirement[] conditions = environment.getRequirementFactory().getRequirements(conditionArray, environment);
-        EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(costArray, environment);
+        EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(true, costArray, environment);
 
         blueprint.appendPlayInOtherPhaseCondition(
                 new Requirement() {

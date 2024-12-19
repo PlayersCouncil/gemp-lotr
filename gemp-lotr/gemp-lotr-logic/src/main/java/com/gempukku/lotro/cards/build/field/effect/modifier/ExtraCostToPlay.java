@@ -23,7 +23,7 @@ public class ExtraCostToPlay implements ModifierSourceProducer {
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         final JSONObject[] effectArray = FieldUtils.getObjectArray(object.get("cost"), "cost");
-        final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
+        final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(true, effectArray, environment);
 
         final boolean requiresRanger = FieldUtils.getBoolean(object.get("requiresRanger"), "requiresRanger", false);
 

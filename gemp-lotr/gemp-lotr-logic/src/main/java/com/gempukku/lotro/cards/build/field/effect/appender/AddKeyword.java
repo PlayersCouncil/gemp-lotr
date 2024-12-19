@@ -27,7 +27,7 @@ import java.util.function.Function;
 
 public class AddKeyword implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "count", "select", "memorize", "keyword", "amount", "until");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);

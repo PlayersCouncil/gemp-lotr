@@ -27,7 +27,7 @@ import java.util.List;
 
 public class ModifyStrength implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "amount", "count", "select", "until", "memorize", "limitPerCardThisPhase");
 
         final ValueSource amountSource = ValueResolver.resolveEvaluator(effectObject.get("amount"), environment);

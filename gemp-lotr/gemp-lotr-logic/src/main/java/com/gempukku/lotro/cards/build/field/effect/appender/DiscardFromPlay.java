@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class DiscardFromPlay implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "player", "count", "select", "memorize", "memorizeStackedCards");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
@@ -34,10 +35,14 @@ public class DiscardFromPlay implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
+        EffectAppender cardResolver = CardResolver.resolveCards(select,
+                (actionContext) -> Filters.canBeDiscarded(actionContext.getPerformingPlayer(), actionContext.getSource()),
+                valueSource, memory, player, "Choose cards to discard", environment);
+
+        EffectUtils.validatePreEvaluate(cost, effectObject, discardingPlayer, valueSource, cardResolver);
+
         result.addEffectAppender(
-                CardResolver.resolveCards(select,
-                        (actionContext) -> Filters.canBeDiscarded(actionContext.getPerformingPlayer(), actionContext.getSource()),
-                        valueSource, memory, player, "Choose cards to discard", environment));
+                cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

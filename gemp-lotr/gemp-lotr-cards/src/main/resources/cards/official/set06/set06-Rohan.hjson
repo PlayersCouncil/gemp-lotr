@@ -88,6 +88,7 @@
 					{
 						type: discard
 						select: memory(chosenMount)
+						ignoreCostCheckFailure: true
 					}
 				]
 				effect: {

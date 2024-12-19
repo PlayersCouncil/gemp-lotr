@@ -17,7 +17,7 @@ import org.json.simple.JSONObject;
 
 public class ExchangeSite implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "site1", "site2");
 
         final String site1 = FieldUtils.getString(effectObject.get("site1"), "site1");

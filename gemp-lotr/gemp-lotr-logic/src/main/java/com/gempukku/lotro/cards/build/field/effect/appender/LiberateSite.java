@@ -17,7 +17,7 @@ import org.json.simple.JSONObject;
 
 public class LiberateSite implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "memorize", "controller");
 
         String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize");

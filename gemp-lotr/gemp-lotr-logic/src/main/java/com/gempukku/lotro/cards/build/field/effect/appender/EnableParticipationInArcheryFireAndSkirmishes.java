@@ -20,7 +20,7 @@ import java.util.Collection;
 
 public class EnableParticipationInArcheryFireAndSkirmishes implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "select", "until", "count", "requires");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);

@@ -16,7 +16,7 @@ import org.json.simple.JSONObject;
 
 public class Optional implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "player", "text", "effect");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
@@ -27,7 +27,7 @@ public class Optional implements EffectAppenderProducer {
             throw new InvalidCardDefinitionException("There is a text required for optional effects");
 
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
-        final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
+        final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, effectArray, environment);
 
         return new DelayedAppender() {
             @Override

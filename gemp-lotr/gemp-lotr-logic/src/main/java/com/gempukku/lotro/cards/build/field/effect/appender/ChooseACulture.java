@@ -18,7 +18,7 @@ import java.util.TreeSet;
 
 public class ChooseACulture implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "memorize");
 
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");

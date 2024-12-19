@@ -609,6 +609,7 @@
 						culture: sauron
 						count: memory(tokenCount)
 						select: self
+						ignoreCostCheckFailure: true
 					}
 				]
 				effect: [

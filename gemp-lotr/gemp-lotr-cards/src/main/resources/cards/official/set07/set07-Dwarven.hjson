@@ -489,6 +489,7 @@
 							cost: {
 								type: exert
 								select: memory(chosenDwarf)
+								ignoreCostCheckFailure: true
 							}
 							effect: {
 								type: drawCards

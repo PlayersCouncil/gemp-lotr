@@ -22,7 +22,7 @@ import java.util.*;
 
 public class PutCardsFromHandOnBottomOfDeck implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "player", "select", "count", "reveal");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");

@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
@@ -19,7 +20,7 @@ import java.util.Collection;
 
 public class DiscardFromHand implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "forced", "count", "select", "memorize", "hand", "player");
 
         final String hand = FieldUtils.getString(effectObject.get("hand"), "hand", "you");
@@ -34,10 +35,14 @@ public class DiscardFromHand implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
+        EffectAppender cardResolver = CardResolver.resolveCardsInHand(select,
+                actionContext -> Filters.not(actionContext.getSource()),
+                countSource, memorize, player, hand, "Choose cards from hand to discard", true, environment);
+
+        EffectUtils.validatePreEvaluate(cost, effectObject, handSource, playerSource, countSource, cardResolver);
+
         result.addEffectAppender(
-                CardResolver.resolveCardsInHand(select,
-                        actionContext -> Filters.not(actionContext.getSource()),
-                        countSource, memorize, player, hand, "Choose cards from hand to discard", true, environment));
+                cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

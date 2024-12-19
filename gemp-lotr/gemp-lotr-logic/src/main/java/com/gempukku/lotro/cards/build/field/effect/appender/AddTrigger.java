@@ -25,7 +25,7 @@ import java.util.List;
 
 public class AddTrigger implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "trigger", "until", "optional", "requires", "cost", "effect");
 
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
@@ -37,8 +37,8 @@ public class AddTrigger implements EffectAppenderProducer {
         final JSONObject[] effectArray = FieldUtils.getObjectArray(effectObject.get("effect"), "effect");
 
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(requirementArray, environment);
-        final EffectAppender[] costs = environment.getEffectAppenderFactory().getEffectAppenders(costArray, environment);
-        final EffectAppender[] effects = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
+        final EffectAppender[] costs = environment.getEffectAppenderFactory().getEffectAppenders(true, costArray, environment);
+        final EffectAppender[] effects = environment.getEffectAppenderFactory().getEffectAppenders(false, effectArray, environment);
 
         return new DelayedAppender() {
             @Override

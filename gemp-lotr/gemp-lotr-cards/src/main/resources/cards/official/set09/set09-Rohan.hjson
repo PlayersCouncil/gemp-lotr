@@ -86,6 +86,7 @@
 						cost: {
 							type: exert
 							select: memory(playedRohanMan)
+							ignoreCostCheckFailure: true
 						}
 						effect: {
 							type: PlayCardFromHand

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class RevealTopCardsOfDrawDeck implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "deck", "count", "memorize");
 
         final String deck = FieldUtils.getString(effectObject.get("deck"), "deck", "you");

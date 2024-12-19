@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Culture;
@@ -27,7 +28,7 @@ import java.util.List;
 
 public class RemoveCultureTokens implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "count", "culture", "select", "memorize");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
@@ -41,16 +42,20 @@ public class RemoveCultureTokens implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
+        EffectAppender cardResolver = CardResolver.resolveCards(select,
+                actionContext -> {
+                    final int tokenCount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                    if (token != null)
+                        return Filters.hasToken(token, tokenCount);
+                    else
+                        return Filters.hasAnyCultureTokens(tokenCount);
+                },
+                actionContext -> new ConstantEvaluator(1), memory, "you", "Choose card to remove tokens from", environment);
+
+        EffectUtils.validatePreEvaluate(cost, effectObject, valueSource, cardResolver);
+
         result.addEffectAppender(
-                CardResolver.resolveCards(select,
-                        actionContext -> {
-                            final int tokenCount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                            if (token != null)
-                                return Filters.hasToken(token, tokenCount);
-                            else
-                                return Filters.hasAnyCultureTokens(tokenCount);
-                        },
-                        actionContext -> new ConstantEvaluator(1), memory, "you", "Choose card to remove tokens from", environment));
+                cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

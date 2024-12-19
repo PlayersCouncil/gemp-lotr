@@ -14,6 +14,7 @@ import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.SingleMemoryEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.results.CharacterLostSkirmishResult;
+import com.gempukku.lotro.logic.timing.results.CharacterWonSkirmishResult;
 
 import java.util.*;
 

@@ -304,19 +304,18 @@
 			type: event
 			cost: [
 				{
-					type: ChooseANumber
-					text: Choose how many {moria} minions to discard
-					from: 0
-					to: {
-						type: ForEachYouCanSpot
-						filter: culture(moria), minion
-					}
-					memorize: discardedMinions
+					type: Discard
+					select: choose(culture(Moria),minion)
+					count: any
+					memorize: discardedCards
 				}
 				{
-					type: Discard
-					select: choose(culture(Moria), minion)
-					count: memory(discardedMinions)
+				    type: memorizeNumber
+				    amount: {
+				        type: forEachInMemory
+				        memory: discardedCards
+				    }
+				    memory: discardedMinions
 				}
 			]
 			effect: {
@@ -334,6 +333,7 @@
 						type: Exert
 						select: choose(companion)
 						count: memory(discardedMinions)
+						ignoreCostCheckFailure: true
 					}
 					effect: {
 						type: AddThreats

@@ -20,7 +20,7 @@ import java.util.Collection;
 
 public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "minion", "memorizeMinion",
                 "memorizeFPCharacter", "ignoreExistingAssignments", "ignoreDefender", "ignoreAllyLocation", "preventCost", "preventText", "insteadEffect");
 
@@ -35,8 +35,8 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
             throw new InvalidCardDefinitionException("preventText and preventCost have to be specified (or not) together");
         if (insteadEffectArray.length > 0 && preventCostArray.length == 0)
             throw new InvalidCardDefinitionException("preventCost is required if insteadEffect is present");
-        EffectAppender[] preventEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(preventCostArray, environment);
-        EffectAppender[] insteadEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(insteadEffectArray, environment);
+        EffectAppender[] preventEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(false, preventCostArray, environment);
+        EffectAppender[] insteadEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(false, insteadEffectArray, environment);
 
         final String minionMemory = FieldUtils.getString(effectObject.get("memorizeMinion"), "memorizeMinion", "_tempMinion");
         final String fpCharacterMemory = FieldUtils.getString(effectObject.get("memorizeFPCharacter"), "memorizeFPCharacter", "_tempFpCharacter");

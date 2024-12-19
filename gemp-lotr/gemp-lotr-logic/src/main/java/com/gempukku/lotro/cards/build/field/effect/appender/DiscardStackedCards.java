@@ -13,7 +13,7 @@ import org.json.simple.JSONObject;
 
 public class DiscardStackedCards implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "on", "select", "count" ,"memorize");
 
         String on = FieldUtils.getString(effectObject.get("on"), "on", "any");

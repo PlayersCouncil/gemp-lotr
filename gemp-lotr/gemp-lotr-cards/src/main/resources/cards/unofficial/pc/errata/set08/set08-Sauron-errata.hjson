@@ -54,6 +54,7 @@
 						type: RemoveCultureTokens
 						select: self
 						count: memory(numberOfTokens)
+						ignoreCostCheckFailure: true
 					}
 					{
 						type: discard

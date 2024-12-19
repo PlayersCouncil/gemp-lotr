@@ -107,6 +107,7 @@
 					type: RemoveCultureTokens
 					select: memory(chosenConditions)
 					count: 2
+					ignoreCostCheckFailure: true
 				}				
 			]
 			effect: [

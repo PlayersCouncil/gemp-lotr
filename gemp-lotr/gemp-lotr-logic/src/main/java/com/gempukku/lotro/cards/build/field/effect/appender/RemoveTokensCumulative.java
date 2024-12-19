@@ -21,7 +21,7 @@ import org.json.simple.JSONObject;
 
 public class RemoveTokensCumulative implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "count", "culture", "filter");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 0, environment);

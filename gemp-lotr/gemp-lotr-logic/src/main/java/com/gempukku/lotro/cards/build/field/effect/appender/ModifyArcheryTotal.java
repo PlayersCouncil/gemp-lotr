@@ -19,7 +19,7 @@ import org.json.simple.JSONObject;
 
 public class ModifyArcheryTotal implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "amount", "side", "until");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("amount"), environment);

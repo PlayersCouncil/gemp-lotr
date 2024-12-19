@@ -21,7 +21,7 @@ import java.util.Collection;
 
 public class ChooseArbitraryCards implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "fromMemory", "count", "filter", "memorize", "text", "player");
 
         final String fromMemory = FieldUtils.getString(effectObject.get("fromMemory"), "fromMemory");

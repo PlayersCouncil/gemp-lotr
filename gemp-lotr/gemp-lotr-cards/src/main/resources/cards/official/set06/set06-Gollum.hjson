@@ -286,13 +286,14 @@
 			cost: [
 				{
 					type: exert
-					select: choose(name(Sméagol))
+					select: choose(name(Sméagol),canBeDiscarded)
 					times: 3
 					memorize: smeagol
 				}
 				{
 					type: discard
 					select: memory(smeagol)
+					ignoreCostCheckFailure: true
 				}
 			]
 			effect: [

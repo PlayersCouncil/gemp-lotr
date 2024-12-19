@@ -18,7 +18,7 @@ import org.json.simple.JSONObject;
 
 public class IncrementPerPhaseLimit implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "limit", "phase", "perPlayer");
 
         Phase phase = FieldUtils.getEnum(Phase.class, effectObject.get("phase"), "phase");

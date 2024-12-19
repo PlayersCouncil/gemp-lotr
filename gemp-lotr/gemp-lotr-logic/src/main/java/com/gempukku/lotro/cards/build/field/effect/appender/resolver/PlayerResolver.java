@@ -34,7 +34,17 @@ public class PlayerResolver {
         }
         else if (type.toLowerCase().startsWith("frommemory(") && type.endsWith(")")) {
             String memory = type.substring(type.indexOf("(") + 1, type.lastIndexOf(")"));
-            return (actionContext) -> actionContext.getValueFromMemory(memory);
+            return new PlayerSource() {
+                @Override
+                public String getPlayer(ActionContext actionContext) {
+                    return actionContext.getValueFromMemory(memory);
+                }
+
+                @Override
+                public boolean canPreEvaluate() {
+                    return false;
+                }
+            };
         }
         throw new InvalidCardDefinitionException("Unable to resolve player resolver of type: " + type);
     }

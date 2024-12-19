@@ -16,7 +16,7 @@ import org.json.simple.JSONObject;
 
 public class ChooseANumber implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "player", "text", "from", "to", "default", "memorize");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
