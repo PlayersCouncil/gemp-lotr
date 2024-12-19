@@ -151,11 +151,6 @@ public class FilterFactory {
                     final CharacterLostSkirmishResult lostSkirmish = (CharacterLostSkirmishResult) actionContext.getEffectResult();
                     return lostSkirmish.getLoser();
                 });
-        simpleFilters.put("skirmishwinner",
-                (actionContext) -> {
-                    final CharacterWonSkirmishResult lostSkirmish = (CharacterWonSkirmishResult) actionContext.getEffectResult();
-                    return lostSkirmish.getWinner();
-                });
         simpleFilters.put("storedculture",
                 (actionContext) -> (Filter) (game, physicalCard) -> {
                     PhysicalCard.WhileInZoneData data = actionContext.getSource().getWhileInZoneData();

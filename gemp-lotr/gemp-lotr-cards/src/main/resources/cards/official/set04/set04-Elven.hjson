@@ -1036,10 +1036,12 @@
 			trigger: {
 				type: winsSkirmish
 				filter: elf
+				memorize: winner
 			}
 			cost: {
 				type: exert
-				select: choose(skirmishWinner)
+				select: memory(winner)
+				ignoreCostCheckFailure: true
 			},
 			effect: [
 				{
