@@ -19,7 +19,7 @@ import java.util.List;
 
 public class Choice implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "player", "effects", "texts", "memorize");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
@@ -30,7 +30,7 @@ public class Choice implements EffectAppenderProducer {
         if (effectArray.length != textArray.length)
             throw new InvalidCardDefinitionException("Number of texts and effects does not match in choice effect");
 
-        EffectAppender[] possibleEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
+        EffectAppender[] possibleEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, effectArray, environment);
 
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 

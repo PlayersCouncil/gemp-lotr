@@ -16,7 +16,7 @@ import org.json.simple.JSONObject;
 
 public class StoreCulture implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "memory");
 
         final String memory = FieldUtils.getString(effectObject.get("memory"), "memory");

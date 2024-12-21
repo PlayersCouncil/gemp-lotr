@@ -26,7 +26,7 @@ import java.util.Collection;
 
 public class PlayCardFromDiscard implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject,  "player", "select", "on", "discount", "maxDiscount", "removedTwilight", "optional", "extraEffects", "memorize");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
@@ -41,7 +41,7 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         final JSONObject[] extraEffectsArray = FieldUtils.getObjectArray(effectObject.get("extraEffects"), "extraEffects");
-        final EffectAppender[] extraEffectsAppenders = environment.getEffectAppenderFactory().getEffectAppenders(extraEffectsArray, environment);
+        final EffectAppender[] extraEffectsAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, extraEffectsArray, environment);
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 

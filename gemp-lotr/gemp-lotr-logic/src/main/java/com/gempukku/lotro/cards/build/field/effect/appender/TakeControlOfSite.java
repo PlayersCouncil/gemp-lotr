@@ -17,7 +17,7 @@ import org.json.simple.JSONObject;
 
 public class TakeControlOfSite implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "player");
 
         String player = FieldUtils.getString(effectObject.get("player"), "player", "you");

@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.filters.Filters;
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class Exert implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "player", "count", "times", "select", "memorize");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
@@ -33,11 +34,15 @@ public class Exert implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
+        EffectAppender cardResolver = CardResolver.resolveCards(select,
+                (actionContext) -> Filters.canExert(actionContext.getSource(), 1),
+                (actionContext) -> Filters.canExert(actionContext.getSource(), timesSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null)),
+                valueSource, memory, player, "Choose cards to exert", environment);
+
+        EffectUtils.validatePreEvaluate(cost, effectObject, valueSource, timesSource, cardResolver);
+
         result.addEffectAppender(
-                CardResolver.resolveCards(select,
-                        (actionContext) -> Filters.canExert(actionContext.getSource(), 1),
-                        (actionContext) -> Filters.canExert(actionContext.getSource(), timesSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null)),
-                        valueSource, memory, player, "Choose cards to exert", environment));
+                cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

@@ -538,6 +538,11 @@ public class CardResolver {
                     additionalFilterable = filter.getFilterable(actionContext);
                 return Filters.filter(actionContext.getGame(), cardSource.apply(actionContext), Filters.in(cardsFromMemory), additionalFilterable);
             }
+
+            @Override
+            public boolean canPreEvaluate() {
+                return false;
+            }
         };
     }
 

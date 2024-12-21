@@ -355,6 +355,7 @@
 						cost: {
 							type: discard
 							select: memory(spottedPossession)
+							ignoreCostCheckFailure: true
 						}
 						effect: {
 							type: addKeyword

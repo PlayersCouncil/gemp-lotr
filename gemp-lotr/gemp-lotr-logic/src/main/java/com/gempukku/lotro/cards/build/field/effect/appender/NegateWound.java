@@ -20,7 +20,7 @@ import java.util.Collection;
 
 public class NegateWound implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "select");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "all(any)");

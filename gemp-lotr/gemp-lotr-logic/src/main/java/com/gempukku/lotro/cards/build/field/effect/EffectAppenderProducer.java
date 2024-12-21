@@ -5,5 +5,5 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import org.json.simple.JSONObject;
 
 public interface EffectAppenderProducer {
-    EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException;
+    EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException;
 }
