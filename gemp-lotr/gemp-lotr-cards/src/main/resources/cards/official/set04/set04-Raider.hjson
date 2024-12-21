@@ -41,6 +41,10 @@
 							filter: self
 						}
 					}
+					{
+						type: Discard
+						select: self
+					}
 				]
 			}
 		]
