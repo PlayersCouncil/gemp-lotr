@@ -52,7 +52,7 @@ public class ModifyStrength implements EffectAppenderProducer {
                         LotroGame game = actionContext.getGame();
                         final int amount = evaluator.evaluateExpression(game, actionContext.getSource());
 
-                        if (limit != -1) {
+                        if (limit != -1 && amount != 0) {
                             int absAmount = Math.abs(amount);
                             int multiplier = absAmount / amount;
                             List<Modifier> modifiers = new LinkedList<>();
