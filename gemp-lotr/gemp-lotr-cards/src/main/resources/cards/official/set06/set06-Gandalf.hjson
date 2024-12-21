@@ -391,12 +391,22 @@
 					count: 2
 				}
 			}
+			# These have to be split apart because the spot modifier only works
+			# if a filter has only 1 thing in it
 			{
 				type: modifyOwnCost
 				amount: {
 					type: forEachYouCanSpot
-					filter: or(ent,and(unbound,hobbit))
-					multiplier: -2
+					filter: ent
+					multiplier: -1
+				}
+			}
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: unbound,hobbit
+					multiplier: -1
 				}
 			}
 		]
@@ -526,11 +536,21 @@
 		vitality: 4
 		resistance: 6
 		effects: [
+			# These have to be split apart because the spot modifier only works
+			# if a filter has only 1 thing in it
 			{
 				type: modifyOwnCost
 				amount: {
 					type: forEachYouCanSpot
-					filter: or(ent,and(unbound,hobbit))
+					filter: ent
+					multiplier: -1
+				}
+			}
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: unbound,hobbit
 					multiplier: -1
 				}
 			}
