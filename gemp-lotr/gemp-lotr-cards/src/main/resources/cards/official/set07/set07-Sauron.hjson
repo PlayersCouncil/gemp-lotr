@@ -1587,7 +1587,11 @@
 				effect: {
 					type: modifyStrength
 					select: choose(companion,inSkirmishAgainst(self))
-					amount: -1
+					amount: {
+						type: ForEachYouCanSpot
+						filter: other,culture(sauron),Orc
+						multiplier: -1
+					}
 					limitPerCardThisPhase: 3
 				}
 			}
