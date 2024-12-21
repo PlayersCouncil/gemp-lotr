@@ -45,7 +45,7 @@ public class ValidateCards {
                     final LotroCardBlueprint lotroCardBlueprint = cardBlueprintBuilder.buildFromJson(blueprint, cardDefinition);
                 } catch (InvalidCardDefinitionException exp) {
                     System.out.println("Unable to load card " + blueprint);
-                    exp.printStackTrace();
+                    exp.printStackTrace(System.out);
                 }
             }
         } catch (Exception exp) {

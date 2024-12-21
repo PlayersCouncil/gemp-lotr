@@ -25,7 +25,7 @@ import java.util.Set;
 
 public class ExchangeCardsInHandWithCardsStacked implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "selectInHand", "selectInStacked", "countInHand", "countInStacked");
 
         final String selectInHand = FieldUtils.getString(effectObject.get("selectInHand"), "selectInHand");

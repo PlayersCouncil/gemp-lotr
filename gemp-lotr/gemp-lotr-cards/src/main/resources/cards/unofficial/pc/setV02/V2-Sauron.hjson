@@ -640,6 +640,7 @@
 					cost: {
 						type: Exert
 						select: memory(pumpedTwilight)
+						ignoreCostCheckFailure: true
 					}
 					effect: {
 						type: AddBurdens

@@ -9,12 +9,12 @@ import org.json.simple.JSONObject;
 
 public class Multiple implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "effects");
 
         final JSONObject[] effectArray = FieldUtils.getObjectArray(effectObject.get("effects"), "effects");
 
-        final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
+        final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, effectArray, environment);
 
         MultiEffectAppender multiEffectAppender = new MultiEffectAppender();
         multiEffectAppender.setPlayabilityCheckedForEffect(true);

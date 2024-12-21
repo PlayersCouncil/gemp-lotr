@@ -22,7 +22,7 @@ import java.util.Collection;
 
 public class Transfer implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "select", "where", "checkTarget", "fromSupport", "memorizeTransferred", "memorizeTarget");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select");

@@ -41,6 +41,7 @@
 					type: exert
 					select: memory(chosenCompanion)
 					times: memory(exertCount)
+					ignoreCostCheckFailure: true
 				}
 			]
 			effect: [

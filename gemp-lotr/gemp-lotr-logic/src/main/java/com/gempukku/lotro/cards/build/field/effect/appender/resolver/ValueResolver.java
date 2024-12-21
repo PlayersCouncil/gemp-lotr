@@ -46,7 +46,17 @@ public class ValueResolver {
                 return actionContext -> new RangeEvaluator(0, Integer.MAX_VALUE);
             } else if (stringValue.startsWith("memory(") && stringValue.endsWith(")")) {
                 String memory = stringValue.substring("memory(".length(), stringValue.length() - 1);
-                return actionContext -> new ConstantEvaluator(Integer.parseInt(actionContext.getValueFromMemory(memory, "0")));
+                return new ValueSource() {
+                    @Override
+                    public Evaluator getEvaluator(ActionContext actionContext) {
+                        return new ConstantEvaluator(Integer.parseInt(actionContext.getValueFromMemory(memory)));
+                    }
+
+                    @Override
+                    public boolean canPreEvaluate() {
+                        return false;
+                    }
+                };
             } else {
                 try {
                     int v = Integer.parseInt(stringValue);
@@ -65,51 +75,81 @@ public class ValueResolver {
                 FieldUtils.validateAllowedFields(object, "firstNumber", "secondNumber");
                 ValueSource first = resolveEvaluator(object.get("firstNumber"), environment);
                 ValueSource second = resolveEvaluator(object.get("secondNumber"), environment);
+                return new ValueSource() {
+                    @Override
+                    public Evaluator getEvaluator(ActionContext actionContext) {
+                        Evaluator evaluator1 = first.getEvaluator(actionContext);
+                        Evaluator evaluator2 = second.getEvaluator(actionContext);
+                        return (game, cardAffected) ->
+                                Math.max(
+                                        evaluator1.evaluateExpression(game, cardAffected),
+                                        evaluator2.evaluateExpression(game, cardAffected)
+                                );
+                    }
 
-                return actionContext -> {
-                    Evaluator evaluator1 = first.getEvaluator(actionContext);
-                    Evaluator evaluator2 = second.getEvaluator(actionContext);
-                    return (game, cardAffected) ->
-                            Math.max(
-                                    evaluator1.evaluateExpression(game, null),
-                                    evaluator2.evaluateExpression(game, null)
-                            );
+                    @Override
+                    public boolean canPreEvaluate() {
+                        return first.canPreEvaluate() && second.canPreEvaluate();
+                    }
                 };
             } else if (type.equalsIgnoreCase("min")) {
                 FieldUtils.validateAllowedFields(object, "firstNumber", "secondNumber");
                 ValueSource first = resolveEvaluator(object.get("firstNumber"), environment);
                 ValueSource second = resolveEvaluator(object.get("secondNumber"), environment);
+                return new ValueSource() {
+                    @Override
+                    public Evaluator getEvaluator(ActionContext actionContext) {
+                        Evaluator evaluator1 = first.getEvaluator(actionContext);
+                        Evaluator evaluator2 = second.getEvaluator(actionContext);
+                        return (game, cardAffected) ->
+                                Math.min(
+                                        evaluator1.evaluateExpression(game, cardAffected),
+                                        evaluator2.evaluateExpression(game, cardAffected)
+                                );
+                    }
 
-                return actionContext -> {
-                    Evaluator evaluator1 = first.getEvaluator(actionContext);
-                    Evaluator evaluator2 = second.getEvaluator(actionContext);
-                    return (game, cardAffected) ->
-                            Math.min(
-                                    evaluator1.evaluateExpression(game, null),
-                                    evaluator2.evaluateExpression(game, null)
-                            );
+                    @Override
+                    public boolean canPreEvaluate() {
+                        return first.canPreEvaluate() && second.canPreEvaluate();
+                    }
                 };
             } else if (type.equalsIgnoreCase("range")) {
                 FieldUtils.validateAllowedFields(object, "from", "to");
                 ValueSource fromValue = resolveEvaluator(object.get("from"), environment);
                 ValueSource toValue = resolveEvaluator(object.get("to"), environment);
-                return actionContext -> {
-                    Evaluator fromEvaluator = fromValue.getEvaluator(actionContext);
-                    Evaluator toEvaluator = toValue.getEvaluator(actionContext);
-                    return new RangeEvaluator(fromEvaluator, toEvaluator);
+                return new ValueSource() {
+                    @Override
+                    public Evaluator getEvaluator(ActionContext actionContext) {
+                        Evaluator fromEvaluator = fromValue.getEvaluator(actionContext);
+                        Evaluator toEvaluator = toValue.getEvaluator(actionContext);
+                        return new RangeEvaluator(fromEvaluator, toEvaluator);
+                    }
+
+                    @Override
+                    public boolean canPreEvaluate() {
+                        return fromValue.canPreEvaluate() && toValue.canPreEvaluate();
+                    }
                 };
             } else if (type.equalsIgnoreCase("subtract")) {
                 FieldUtils.validateAllowedFields(object, "firstNumber", "secondNumber");
-                final ValueSource firstNumber = ValueResolver.resolveEvaluator(object.get("firstNumber"), 0, environment);
-                final ValueSource secondNumber = ValueResolver.resolveEvaluator(object.get("secondNumber"), 0, environment);
-                return actionContext -> {
-                    Evaluator evaluator1 = firstNumber.getEvaluator(actionContext);
-                    Evaluator evaluator2 = secondNumber.getEvaluator(actionContext);
-                    return (Evaluator) (game, cardAffected) -> {
-                        final int first = evaluator1.evaluateExpression(game, null);
-                        final int second = evaluator2.evaluateExpression(game, null);
-                        return first - second;
-                    };
+                final ValueSource first = ValueResolver.resolveEvaluator(object.get("firstNumber"), 0, environment);
+                final ValueSource second = ValueResolver.resolveEvaluator(object.get("secondNumber"), 0, environment);
+                return new ValueSource() {
+                    @Override
+                    public Evaluator getEvaluator(ActionContext actionContext) {
+                        Evaluator evaluator1 = first.getEvaluator(actionContext);
+                        Evaluator evaluator2 = second.getEvaluator(actionContext);
+                        return (game, cardAffected) -> {
+                            final int first = evaluator1.evaluateExpression(game, cardAffected);
+                            final int second = evaluator2.evaluateExpression(game, cardAffected);
+                            return first - second;
+                        };
+                    }
+
+                    @Override
+                    public boolean canPreEvaluate() {
+                        return first.canPreEvaluate() && second.canPreEvaluate();
+                    }
                 };
             } else if (type.equalsIgnoreCase("sum")) {
                 FieldUtils.validateAllowedFields(object, "source");
@@ -118,18 +158,30 @@ public class ValueResolver {
                 for (int i = 0; i < sources.length; i++)
                     sources[i] = ValueResolver.resolveEvaluator(sourceArray.get(i), 0, environment);
 
-                return actionContext -> {
-                    Evaluator[] evaluators = new Evaluator[sources.length];
-                    for (int i = 0; i < sources.length; i++)
-                        evaluators[i] = sources[i].getEvaluator(actionContext);
+                return new ValueSource() {
+                    @Override
+                    public Evaluator getEvaluator(ActionContext actionContext) {
+                        Evaluator[] evaluators = new Evaluator[sources.length];
+                        for (int i = 0; i < sources.length; i++)
+                            evaluators[i] = sources[i].getEvaluator(actionContext);
 
-                    return (game, cardAffected) -> {
-                        int sum = 0;
-                        for (Evaluator evaluator : evaluators)
-                            sum += evaluator.evaluateExpression(game, cardAffected);
+                        return (game, cardAffected) -> {
+                            int sum = 0;
+                            for (Evaluator evaluator : evaluators)
+                                sum += evaluator.evaluateExpression(game, cardAffected);
 
-                        return sum;
-                    };
+                            return sum;
+                        };
+                    }
+
+                    @Override
+                    public boolean canPreEvaluate() {
+                        for (int i = 0; i < sources.length; i++) {
+                            if (!sources[i].canPreEvaluate())
+                                return false;
+                        }
+                        return true;
+                    }
                 };
             }
 
@@ -241,30 +293,59 @@ public class ValueResolver {
                 final String prefix = FieldUtils.getString(object.get("prefix"), "prefix", "");
                 final int multiplier = FieldUtils.getInteger(object.get("multiplier"), "multiplier", 1);
                 final ValueSource valueSource = ValueResolver.resolveEvaluator(object.get("source"), 0, environment);
-                return (actionContext ->
-                        new MultiplyEvaluator(multiplier, new CardAffectedPhaseLimitEvaluator(
+                return new ValueSource() {
+                    @Override
+                    public Evaluator getEvaluator(ActionContext actionContext) {
+                        return new MultiplyEvaluator(multiplier, new CardAffectedPhaseLimitEvaluator(
                                 actionContext.getSource(),
                                 actionContext.getGame().getGameState().getCurrentPhase(),
-                                limit, prefix, valueSource.getEvaluator(actionContext))));
+                                limit, prefix, valueSource.getEvaluator(actionContext)));
+                    }
+
+                    @Override
+                    public boolean canPreEvaluate() {
+                        return valueSource.canPreEvaluate();
+                    }
+                };
             } else if (type.equalsIgnoreCase("cardphaselimit")) {
                 FieldUtils.validateAllowedFields(object, "limit", "amount");
                 ValueSource limitSource = resolveEvaluator(object.get("limit"), 0, environment);
                 ValueSource valueSource = resolveEvaluator(object.get("amount"), 0, environment);
-                return (actionContext) -> new CardPhaseLimitEvaluator(actionContext.getSource(),
-                        actionContext.getGame().getGameState().getCurrentPhase(), limitSource.getEvaluator(actionContext),
-                        valueSource.getEvaluator(actionContext));
+                return new ValueSource() {
+                    @Override
+                    public Evaluator getEvaluator(ActionContext actionContext) {
+                        return new CardPhaseLimitEvaluator(actionContext.getSource(),
+                                actionContext.getGame().getGameState().getCurrentPhase(), limitSource.getEvaluator(actionContext),
+                                valueSource.getEvaluator(actionContext));
+                    }
+
+                    @Override
+                    public boolean canPreEvaluate() {
+                        return limitSource.canPreEvaluate() && valueSource.canPreEvaluate();
+                    }
+                };
             } else if (type.equalsIgnoreCase("conditional")) {
                 FieldUtils.validateAllowedFields(object, "requires", "true", "false");
                 final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
                 final Requirement[] conditions = environment.getRequirementFactory().getRequirements(conditionArray, environment);
                 ValueSource trueValue = resolveEvaluator(object.get("true"), environment);
                 ValueSource falseValue = resolveEvaluator(object.get("false"), environment);
-                return (actionContext) -> (Evaluator) (game, cardAffected) -> {
-                    for (Requirement condition : conditions) {
-                        if (!condition.accepts(actionContext))
-                            return falseValue.getEvaluator(actionContext).evaluateExpression(game, cardAffected);
+                return new ValueSource() {
+                    @Override
+                    public Evaluator getEvaluator(ActionContext actionContext) {
+                        return (game, cardAffected) -> {
+                            for (Requirement condition : conditions) {
+                                if (!condition.accepts(actionContext))
+                                    return falseValue.getEvaluator(actionContext).evaluateExpression(game, cardAffected);
+                            }
+                            return trueValue.getEvaluator(actionContext).evaluateExpression(game, cardAffected);
+                        };
                     }
-                    return trueValue.getEvaluator(actionContext).evaluateExpression(game, cardAffected);
+
+                    @Override
+                    public boolean canPreEvaluate() {
+                        return trueValue.canPreEvaluate() && falseValue.canPreEvaluate();
+                    }
                 };
             } else if (type.equalsIgnoreCase("currentSiteNumber")) {
                 FieldUtils.validateAllowedFields(object, "over", "limit", "multiplier", "divider");
@@ -653,6 +734,12 @@ public class ValueResolver {
                 result /= divider.evaluateExpression(game, cardAffected);
                 return result;
             };
+        }
+
+        @Override
+        public boolean canPreEvaluate() {
+            return valueSource.canPreEvaluate() && overSource.canPreEvaluate() && limitSource.canPreEvaluate() && multiplierSource.canPreEvaluate()
+                    && dividerSource.canPreEvaluate();
         }
     }
 }

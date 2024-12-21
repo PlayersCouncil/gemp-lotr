@@ -19,7 +19,7 @@ import org.json.simple.JSONObject;
 
 public class PlaySite implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "block", "filter", "number", "memorize", "player");
 
         final String blockString = FieldUtils.getString(effectObject.get("block"), "block");
