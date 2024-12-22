@@ -546,8 +546,11 @@
 			type: event
 			requires: [
 				{
-					type: controlsSite
-					player: shadow
+					type: Not
+					requires: {
+						type: controlsSite
+						player: shadow
+					}
 				}
 				{
 					type: canSpot
