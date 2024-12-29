@@ -411,7 +411,7 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: optional
 				trigger: {
 						type: winsSkirmish
