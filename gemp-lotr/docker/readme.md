@@ -12,7 +12,7 @@ gemp_db is straightforward: it's a bare-bones linux instance using the official 
 
 gemp_app is slightly more complicated.  Gemp is a Java server, is built using Maven, and utilizes Apache to serve http.  All of those have to be installed and available in the arrangement that Gemp expects, so this image starts with the Alpine Linux image (which includes Apache) and frankensteins the rest together to get both Maven and Java installed properly.
 
-## Development Tools Needed/Recomended
+## Development Tools Needed/Recommended
 * [Docker/Docker Desktop](https://www.docker.com/products/docker-desktop/) - required
 * Java 18 - required
 * [Maven 3.8.6](https://archive.apache.org/dist/maven/maven-3/3.8.6/) - required 
@@ -28,7 +28,7 @@ gemp_app is slightly more complicated.  Gemp is a Java server, is built using Ma
 3. Pull the git repository down to your host machine; you may have already done this.
 4. Open a code editor of your choice and navigate to `{repo-root}/gemp-lotr/gemp-lotr/docker`.  Open up [docker-compose.yml](docker-compose.yml) and change the defaults to suit your needs:
 	1. Note all the relative paths under each volume/source: these are all paths on your host system.  If you want e.g. the database to be in a different location than what's listed, alter these relative paths to something else on your host system.
-	2. In the Docker [.env](./.env) file note all of the username/password fields.  If you are hosting this for something other than personal development, be sure to change all of these to something else.
+	2. In the Docker [.env](./.env) file note all the username/password fields.  If you are hosting this for something other than personal development, be sure to change all of these to something else.
 	3. Note the two "published" ports: 17001 for the app, and 35001 for the db.  These are the ports that you will be accessing the site with (and the db if you connect with a database manager). If you are hosting this for something other than personal development, consider changing these to something else.  **DO NOT** change the "target" ports, these targets are the ports that are used internally by Docker networking.
 5. If you changed SQL credentials in step 4.2, navigate to [gemp-lotr.properties](../gemp-lotr-common/src/main/resources/gemp-lotr.properties):
 	1. **DO NOT CHANGE** the ports here.  These ports listed are the "target" ports in step 4.3, which you didn't edit because you followed the big "DO NOT" imperative.
@@ -52,8 +52,8 @@ gemp_app is slightly more complicated.  Gemp is a Java server, is built using Ma
 		* If using Docker Desktop
 			* Open Docker Desktop
 			* Select the "Container" option in the left navbar
-			* expand the `gemp_1` container
-			* click the actiosn button and select `Open in Terminal`
+			* Expand the `gemp_1` container
+			* Click the action button and select `Open in Terminal`
 9. Navigate to the folder that Docker binds to your code base (by default `etc/gemp-lotr` unless you updated volume bindings in `docker-compose.yml`)
 	* Navigate to the gemp codebase  `cd etc/gemp-lotr`
 	* Use Maven to compile the application	`mvn install`
