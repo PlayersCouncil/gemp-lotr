@@ -157,17 +157,23 @@ var GempLotrDeckBuildingUI = Class.extend({
                                     alert("Deck name has to have at least 3 characters and at most 100 characters.");
                                 else {
                                     that.deckName = newDeckName;
-                                    $("#editingDeck").text(newDeckName);
                                     that.saveDeck(false);
+                                    that.deckName = null;
+                                    $("#editingDeck").text("New deck");
+                                    that.clearDeck();
                                 }
                             }
                         } else {
                             that.saveDeck(false);
+                            that.deckName = null;
+                            $("#editingDeck").text("New deck");
+                            that.clearDeck();
                         }
+                    } else {
+                        that.deckName = null;
+                        $("#editingDeck").text("New deck");
+                        that.clearDeck();
                     }
-					that.deckName = null;
-					$("#editingDeck").text("New deck");
-					that.clearDeck();
 				});
 
 		saveDeckBut.click(
