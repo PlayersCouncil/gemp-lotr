@@ -59,7 +59,7 @@ gemp_app is slightly more complicated.  Gemp is a Java server, is built using Ma
 	* Use Maven to compile the application	`mvn install`
 	* This process will take upwards of 5-10 minutes.  
 	* You should see a green "BUILD SUCCESS" when it is successfully done.  In portainer.io or another rich command line context, you should see lots of red text if it failed.
-10. Uncomment [this line](https://github.com/PlayersCouncil/gemp-lotr/blob/master/gemp-lotr/docker/docker-compose.yml#L52) in `docker-compose.yml` to ensure the GEMP server is run on every container statrt
+10. Uncomment [the `command` line](https://github.com/PlayersCouncil/gemp-lotr/blob/master/gemp-lotr/docker/docker-compose.yml#L48) in `docker-compose.yml` to ensure the GEMP server is run on every container start
 11. On your host machine cycle your docker container
 	* In a terminal navigate to `gemp-lotr/docker`
 	* Run `docker-compose down`
