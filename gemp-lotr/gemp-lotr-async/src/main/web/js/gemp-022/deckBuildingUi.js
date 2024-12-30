@@ -150,7 +150,20 @@ var GempLotrDeckBuildingUI = Class.extend({
 				function () {
                     if (that.deckContentsDirty && confirm("Do you wish to save this deck?"))
                     {
-                        that.saveDeck(false);
+                        if (that.deckName == null) {
+                            var newDeckName = prompt("Enter the name of the deck", "");
+                            if (newDeckName != null) {
+                                if (newDeckName.length < 3 || newDeckName.length > 100)
+                                    alert("Deck name has to have at least 3 characters and at most 100 characters.");
+                                else {
+                                    that.deckName = newDeckName;
+                                    $("#editingDeck").text(newDeckName);
+                                    that.saveDeck(false);
+                                }
+                            }
+                        } else {
+                            that.saveDeck(false);
+                        }
                     }
 					that.deckName = null;
 					$("#editingDeck").text("New deck");
