@@ -148,26 +148,27 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 		newDeckBut.click(
 				function () {
-                    if (that.deckContentsDirty && confirm("Do you wish to save this deck?"))
-                    {
-                        if (that.deckName == null) {
-                            var newDeckName = prompt("Enter the name of the deck", "");
-                            if (newDeckName != null) {
-                                if (newDeckName.length < 3 || newDeckName.length > 100)
-                                    alert("Deck name has to have at least 3 characters and at most 100 characters.");
-                                else {
-                                    that.deckName = newDeckName;
-                                    that.saveDeck(false);
-                                    that.deckName = null;
-                                    $("#editingDeck").text("New deck");
-                                    that.clearDeck();
+                    if (that.deckContentsDirty) {
+                        if (confirm("Do you wish to save this deck?")) {
+                            if (that.deckName == null) {
+                                var newDeckName = prompt("Enter the name of the deck", "");
+                                if (newDeckName != null) {
+                                    if (newDeckName.length < 3 || newDeckName.length > 100)
+                                        alert("Deck name has to have at least 3 characters and at most 100 characters.");
+                                    else {
+                                        that.deckName = newDeckName;
+                                        that.saveDeck(false);
+                                        that.deckName = null;
+                                        $("#editingDeck").text("New deck");
+                                        that.clearDeck();
+                                    }
                                 }
+                            } else {
+                                that.saveDeck(false);
+                                that.deckName = null;
+                                $("#editingDeck").text("New deck");
+                                that.clearDeck();
                             }
-                        } else {
-                            that.saveDeck(false);
-                            that.deckName = null;
-                            $("#editingDeck").text("New deck");
-                            that.clearDeck();
                         }
                     } else {
                         that.deckName = null;
