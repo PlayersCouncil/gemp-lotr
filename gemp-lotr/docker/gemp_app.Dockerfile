@@ -39,7 +39,7 @@ ARG USER_HOME_DIR="/root"
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
 # Enables the JRE remote debugging; perhaps comment this out in a production build
-ENV JAVA_TOOL_OPTIONS -agentlib:jdwp=transport=dt_socket,address=*:8000,server=y,suspend=n
+#ENV JAVA_TOOL_OPTIONS -agentlib:jdwp=transport=dt_socket,address=*:8000,server=y,suspend=n
 
 
 #####################################################################
