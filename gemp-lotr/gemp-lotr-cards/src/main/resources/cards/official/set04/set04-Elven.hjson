@@ -110,7 +110,6 @@
 					filter: minion
 					amount: {
 						type: forEachWound
-						filter: self
 						multiplier: -2
 					}
 				}
