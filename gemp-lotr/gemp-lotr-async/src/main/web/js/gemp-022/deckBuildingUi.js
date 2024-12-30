@@ -148,6 +148,10 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 		newDeckBut.click(
 				function () {
+                    if (that.deckContentsDirty && confirm("Do you wish to save this deck?"))
+                    {
+                        that.saveDeck(false);
+                    }
 					that.deckName = null;
 					$("#editingDeck").text("New deck");
 					that.clearDeck();
