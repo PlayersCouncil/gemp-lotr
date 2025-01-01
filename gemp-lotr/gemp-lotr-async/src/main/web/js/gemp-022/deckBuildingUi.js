@@ -40,7 +40,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 	filterDirty:false,
 	deckValidationDirty:true,
-	deckContentsDirty:true,
+	deckContentsDirty:false,
 
 	checkDirtyInterval:500,
 
@@ -98,7 +98,10 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.formatSelect = $("#formatSelect");
 		$("#formatSelect").change(
 				function () {
-					that.deckModified(true);
+					if(that.deckName != null) {
+						that.deckModified(true);
+					}
+					
 					let formatCode = that.formatSelect.val();
 					if(formatCode == "pc_movie" || formatCode == "test_pc_movie") {
 						that.setMapVisibility(true);
@@ -148,8 +151,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 		newDeckBut.click(
 				function () {
-					if (!that.deckContentsDirty ||
-						(confirm("Do you wish to save this deck?") && that.saveCurrentDeck())) {
+					if(that.savePromptOnNew()) {
 						that.deckName = null;
 						$("#editingDeck").text("New deck");
 						that.clearDeck();
@@ -164,20 +166,22 @@ var GempLotrDeckBuildingUI = Class.extend({
 		renameDeckBut.click(
 				function () {
 					if (that.deckName == null) {
-						alert("You can't rename this deck, since it's not named (saved) yet.");
-						return;
+						that.saveCurrentDeck();
 					}
-					that.renameCurrentDeck();
+					else {
+						that.renameCurrentDeck();	
+					}
 				});
 
 		copyDeckBut.click(
 				function () {
 					that.deckName = null;
-					$("#editingDeck").text("New deck");
+					that.deckModified(true);
 				});
 
 		deckListBut.click(
 				function () {
+					that.savePrompt();
 					that.loadDeckList();
 				});
 		
@@ -188,12 +192,13 @@ var GempLotrDeckBuildingUI = Class.extend({
 		
 		libraryListBut.click(
 				function () {
+					that.savePrompt();
 					that.loadLibraryList();
 				});
 
 		importDeckBut.click(
 				function () {
-					that.deckName = null;
+					that.savePrompt();
 					that.importDecklist();
 				});
 		
@@ -340,8 +345,28 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.showMap = value;
 		this.layoutUI(true);
 	},
+	
+	savePrompt:function() {
+		return !this.deckContentsDirty || (confirm("Your deck has been modified.  Would you like to save your deck before proceeding?") && this.saveCurrentDeck())
+	},
+	
+	savePromptOnNew:function() {
+		if(!this.deckContentsDirty)
+			return true;
+		
+		if(confirm("Your deck has been modified.  Click 'OK' to save, or 'Cancel' to discard your changes without saving.")) {
+			//If this fails, then the user hit cancel while naming the deck, and in that case
+			// we actually do want to abort.
+			return this.saveCurrentDeck();
+		}
+		else {
+			//The user clicked "cancel", which according to the prompt means they wish to discard
+			// their changes.
+			return true;
+		}
+	},
 
-    saveCurrentDeck:function() {
+	saveCurrentDeck:function() {
 		var that = this;
 		var saved = false;
 
@@ -349,15 +374,17 @@ var GempLotrDeckBuildingUI = Class.extend({
 			var newDeckName = prompt("Enter the name of the deck", "");
 			if (newDeckName == null)
 				return saved;
-			if (newDeckName.length < 3 || newDeckName.length > 100)
+			if (newDeckName.length < 3 || newDeckName.length > 100) {
 				alert("Deck name has to have at least 3 characters and at most 100 characters.");
+			}
 			else {
 				that.deckName = newDeckName;
 				$("#editingDeck").text(newDeckName);
 				that.saveDeck(true);
 				saved = true;
 			}
-		} else {
+		} 
+		else {
 			that.saveDeck(false);
 			saved = true;
 		}
@@ -385,8 +412,9 @@ var GempLotrDeckBuildingUI = Class.extend({
 		if (newDeckName == null)
 			return;
 		
-		if (newDeckName.length < 3 || newDeckName.length > 100)
+		if (newDeckName.length < 3 || newDeckName.length > 100) {
 			alert("Deck name has to have at least 3 characters and at most 100 characters.");
+		}
 		else {
 			that.comm.renameDeck(oldName, newDeckName, () => callback(newDeckName), 
 				{
@@ -434,6 +462,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 					}
 					
 					$("#collectionSelect").val("default");
+					that.deckModified(false);
 				});
 	},
 	
@@ -457,6 +486,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 		getDecklistTextBut.click(
 			 function () {
+			 	that.deckName = null;
 				var decklist = $('textarea[decklist="decklist"]').val()
 				that.parseDecklist(decklist);
 			}
@@ -989,7 +1019,6 @@ var GempLotrDeckBuildingUI = Class.extend({
 	},
 
 	deckModified:function (value) {
-		
 		var name = (this.deckName == null) ? "New deck" : this.deckName;
 		if (value)
 		{
@@ -1132,6 +1161,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.layoutUI(false);
 
 		this.deckValidationDirty = true;
+		this.deckModified(false);
 	},
 
 	setupDeck:function (xml, deckName) {
