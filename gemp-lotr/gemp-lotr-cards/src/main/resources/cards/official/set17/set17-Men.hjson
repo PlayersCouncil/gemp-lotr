@@ -396,8 +396,8 @@
 			effect: [
 				{
 					type: playCardFromStacked
-					select: choose(culture(orc),minion)
-					on: culture(orc),possession
+					select: choose(culture(men),minion)
+					on: culture(men),possession
 				}
 			]
 		}
