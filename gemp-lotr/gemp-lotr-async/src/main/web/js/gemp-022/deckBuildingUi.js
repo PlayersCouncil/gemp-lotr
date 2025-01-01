@@ -148,27 +148,17 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 		newDeckBut.click(
 				function () {
-					that.deckName = null;
-					$("#editingDeck").text("New deck");
-					that.clearDeck();
+					if (!that.deckContentsDirty ||
+						(confirm("Do you wish to save this deck?") && that.saveCurrentDeck())) {
+						that.deckName = null;
+						$("#editingDeck").text("New deck");
+						that.clearDeck();
+					}
 				});
 
 		saveDeckBut.click(
 				function () {
-					if (that.deckName == null) {
-						var newDeckName = prompt("Enter the name of the deck", "");
-						if (newDeckName == null)
-							return;
-						if (newDeckName.length < 3 || newDeckName.length > 100)
-							alert("Deck name has to have at least 3 characters and at most 100 characters.");
-						else {
-							that.deckName = newDeckName;
-							$("#editingDeck").text(newDeckName);
-							that.saveDeck(true);
-						}
-					} else {
-						that.saveDeck(false);
-					}
+					that.saveCurrentDeck();
 				});
 
 		renameDeckBut.click(
@@ -350,7 +340,31 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.showMap = value;
 		this.layoutUI(true);
 	},
-	
+
+    saveCurrentDeck:function() {
+		var that = this;
+		var saved = false;
+
+		if (that.deckName == null) {
+			var newDeckName = prompt("Enter the name of the deck", "");
+			if (newDeckName == null)
+				return saved;
+			if (newDeckName.length < 3 || newDeckName.length > 100)
+				alert("Deck name has to have at least 3 characters and at most 100 characters.");
+			else {
+				that.deckName = newDeckName;
+				$("#editingDeck").text(newDeckName);
+				that.saveDeck(true);
+				saved = true;
+			}
+		} else {
+			that.saveDeck(false);
+			saved = true;
+		}
+
+		return saved;
+	},
+
 	renameCurrentDeck:function() {
 		var that = this;
 		that.renameDeck(that.deckName, function (newDeckName) {
