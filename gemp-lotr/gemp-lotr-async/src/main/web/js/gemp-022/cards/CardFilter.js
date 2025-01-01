@@ -889,7 +889,7 @@ var CardFilter = Class.extend({
 		
 		var name = $("#nameInput").prop("value");
 		if (name.trim() != "" && !predefFilter.includes("name:")) {
-			var nameElems = name.split(" ");
+			var nameElems = name.split(" ").filter(Boolean);
 			name = "";
 			for (var i = 0; i < nameElems.length; i++)
 				name += " name:" + nameElems[i];
