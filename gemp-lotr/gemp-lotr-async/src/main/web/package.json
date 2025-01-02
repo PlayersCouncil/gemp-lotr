@@ -1,5 +1,5 @@
 {
-  "name": "gemp-lotr-client",
+  "name": "gemp-lotr-async",
   "private": true,
   "version": "0.0.0",
   "type": "module",
