@@ -264,6 +264,10 @@
 						fpCharacter: bearer
 						minion: choose(culture(isengard),minion,strengthLessThanFilter(bearer))
 					}
+					{
+						type: Discard
+						select: self
+					}
 				]
 			}
 		]
