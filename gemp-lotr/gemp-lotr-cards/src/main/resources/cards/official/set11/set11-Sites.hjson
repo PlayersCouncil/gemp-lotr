@@ -644,32 +644,38 @@
 			{
 				type: Trigger
 				optional: false
-				trigger: {
-					type: constantlyCheck
-				}
-				requires: {
-					type: not
-					requires: {
-						type: phase
-						phase: regroup
+				trigger: [
+					{
+						type: MovesTo
+						filter: self
 					}
+					{
+						type: StartOfPhase
+						phase: Fellowship
+					}
+				]
+				requires: {
+					type: Location
+					filter: self
 				}
 				effect: {
 					type: addTrigger
 					trigger: {
-						type: constantlyCheck
+						type: StartOfSkirmishInvolving
+						filter: culture(rohan),companion
 					}
 					requires: {
 						type: canSpot
-						filter: minion,fierce,inSkirmishAgainst(culture(rohan),companion)
+						filter: minion,inSkirmishAgainst(culture(rohan),companion)
 					}
 					effect: {
-						type: addModifier
-						modifier: {
-							type: removeKeyword
-							filter: minion,fierce,inSkirmishAgainst(culture(rohan),companion)
-							keyword: fierce
+						type: RemoveKeyword
+						count: {
+							type: ForEachYouCanSpot
+							filter: minion,inSkirmishAgainst(culture(rohan),companion)
 						}
+						select: all(minion,inSkirmishAgainst(culture(rohan),companion))
+						keyword: fierce
 						until: regroup
 					}
 					until: regroup
