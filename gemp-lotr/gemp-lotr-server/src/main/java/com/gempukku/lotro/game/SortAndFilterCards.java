@@ -250,7 +250,7 @@ public class SortAndFilterCards {
     // any combination of the two.
     //Note that this coerces the key into lowercase
     private Map<String, List<String>> parseFilterParams(String filter) {
-        String[] params = filter.split(" ");
+        String[] params = filter.split(" +");
         Map<String, List<String>> result = new HashMap<>();
 
         for (String param : params) {
@@ -259,6 +259,9 @@ public class SortAndFilterCards {
 
             var parts = param.split(":");
             String key = parts[0].toLowerCase();
+
+            if(parts.length < 2)
+                continue;
 
             if(!result.containsKey(key)) {
                 var list = new ArrayList<>(Arrays.stream(parts[1].split(",")).toList());
