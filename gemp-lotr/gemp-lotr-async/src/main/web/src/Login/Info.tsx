@@ -1,4 +1,5 @@
 import SwShoutout from "./SwShoutout";
+import "./Info.css"
 
 function Info() {
   return (

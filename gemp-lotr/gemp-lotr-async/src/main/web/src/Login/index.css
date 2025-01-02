@@ -73,15 +73,6 @@ body {
     color: #ffffff;
 }
 
-.info {
-    text-align: center; 
-    background-color: #222222CC; 
-    margin-bottom: 150px; 
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    color: #FFFFFF;
-}
-
 input {
     font-size: 90%;
 }
