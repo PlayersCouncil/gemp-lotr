@@ -398,21 +398,21 @@
 				trigger: [
 					{
 						type: Discarded
-						filter: culture(rohan), or(item, ally)
+						filter: your, culture(rohan), or(item, ally)
 					}
 					{
 						type: Discarded
 						fromZone: hand
-						filter: culture(rohan), or(item, ally)
+						filter: your, culture(rohan), or(item, ally)
 					}
 					{
 						type: Discarded
 						fromZone: deck
-						filter: culture(rohan), or(item, ally)
+						filter: your, culture(rohan), or(item, ally)
 					}
 					{
 						type: Killed
-						filter: culture(rohan), ally
+						filter: your, culture(rohan), ally
 					}
 				]
 				effect: {
