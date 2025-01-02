@@ -82,13 +82,6 @@ body {
     color: #FFFFFF;
 }
 
-.sw-shoutout {
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 input {
     font-size: 90%;
 }

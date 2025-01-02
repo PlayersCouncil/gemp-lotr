@@ -1,3 +1,5 @@
+import './SwShoutout.css'
+
 function SwShoutout() {
   return (
     <div className="sw-shoutout">
