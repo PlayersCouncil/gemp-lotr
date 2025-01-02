@@ -5,6 +5,12 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: "../gemp-lotr-async/src/main/web/src/Login"
+    // generate .vite/manifest.json in outDir
+    manifest: true,
+    rollupOptions: {
+      // overwrite default .html entry
+      input: 'src/Login/main.tsx',
+    },
+    outDir: "src/Login/dist",
   }
 })
