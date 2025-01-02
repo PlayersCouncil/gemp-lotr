@@ -412,11 +412,8 @@
 			{
 				type: activated
 				phase: regroup
+				limitPerPhase: 2
 				requires: [
-					{
-						type: perPhaseLimit
-						limit: 2
-					}
 					{
 						type: canSpot
 						count: 2
@@ -429,21 +426,8 @@
 					count: 2
 				}
 				effect: {
-					type: If
-					check: {
-						type: perPhaseLimit
-						limit: 2
-					}
-					true: [
-						{
-							type: incrementPerPhaseLimit
-							limit: 1
-						}
-						{
-							type: heal
-							select: choose(companion,or(name(Gandalf),signet(gandalf)))
-						}
-					]
+					type: heal
+					select: choose(companion,or(name(Gandalf),signet(gandalf)))
 				}
 			}
 		]

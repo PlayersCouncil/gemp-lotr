@@ -252,6 +252,12 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public AwaitingDecision FreepsGetAwaitingDecision() { return GetAwaitingDecision(P1); }
     public AwaitingDecision ShadowGetAwaitingDecision() { return GetAwaitingDecision(P2); }
     public AwaitingDecision GetAwaitingDecision(String playerID) { return _userFeedback.getAwaitingDecision(playerID); }
+    public AwaitingDecision GetCurrentDecision() {
+        var freeps = FreepsGetAwaitingDecision();
+        if(freeps != null)
+            return freeps;
+        return ShadowGetAwaitingDecision();
+    }
 
     public Boolean FreepsDecisionAvailable(String text) { return DecisionAvailable(P1, text); }
     public Boolean ShadowDecisionAvailable(String text) { return DecisionAvailable(P2, text); }
@@ -751,7 +757,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
             ShadowDeclineReconciliation();
         }
         while(ShadowDecisionAvailable("discard down")) {
-            ShadowChooseCard((PhysicalCardImpl) GetShadowHand().get(0));
+            ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
         }
     }
     public void SkipToPhase(Phase target) throws DecisionResultInvalidException {
@@ -768,7 +774,17 @@ public class GenericCardTestHelper extends AbstractAtTest {
                 ShadowPassCurrentPhaseAction();
             }
             else {
-                PassCurrentPhaseActions();
+                var freeps = FreepsGetAwaitingDecision();
+                var shadow = ShadowGetAwaitingDecision();
+                if(freeps != null && freeps.getText().toLowerCase().contains("required")) {
+                    FreepsChooseAction("0");
+                }
+                else if(shadow != null && shadow.getText().toLowerCase().contains("required")){
+                    ShadowChooseAction("0");
+                }
+                else {
+                    PassCurrentPhaseActions();
+                }
             }
 
             if(attempts == 20)
