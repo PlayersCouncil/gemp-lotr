@@ -1,7 +1,7 @@
 import Attribution from "./Attribution";
 import SwShoutout from "./SwShoutout";
 
-function App() {
+function Info() {
   return (
     <>
       <Attribution/>        
@@ -10,4 +10,4 @@ function App() {
   )
 }
 
-export default App
+export default Info
