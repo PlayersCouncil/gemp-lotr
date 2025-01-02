@@ -11,6 +11,5 @@ export default defineConfig({
       // overwrite default .html entry
       input: 'src/Login/main.tsx',
     },
-    outDir: "src/Login/dist",
   }
 })
