@@ -1,11 +1,10 @@
-import Banner from "./Banner";
+import Attribution from "./Attribution";
 import SwShoutout from "./SwShoutout";
 
 function App() {
   return (
     <>
-      <Banner/>
-        
+      <Attribution/>        
       <SwShoutout/>
     </>
   )
