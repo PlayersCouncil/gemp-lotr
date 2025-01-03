@@ -17,7 +17,7 @@ function Login() {
       <div className="interaction">
         {
           mode == InteractionMode.Welcome ?
-            <WelcomeInteraction /> :
+            <WelcomeInteraction onRegister={() => setMode(InteractionMode.Registration)} /> :
           mode == InteractionMode.Login ?
             <LoginInteraction /> :
             <RegistrationInteraction />
@@ -27,9 +27,14 @@ function Login() {
   )
 }
 
-function WelcomeInteraction() {
+interface WelcomeInteractionProps {
+  onRegister: () => void,
+}
+
+function WelcomeInteraction(props: WelcomeInteractionProps) {
   return (
     <>
+      Login below, or <button onClick={props.onRegister}>Register</button>
     </>
   )
 }
@@ -44,7 +49,11 @@ function LoginInteraction() {
 function RegistrationInteraction() {
   return (
     <>
-    </>
+      Login: <input id='login' type='text'/><br/>
+      Password: <input id='password' type='password'/><br/>
+      Password repeated: <input id='password2' type='password'/><br/>
+      <button id='registerButton'>Register</button>
+   </>
   )
 }
 
