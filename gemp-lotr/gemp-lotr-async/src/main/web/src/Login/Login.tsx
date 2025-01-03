@@ -17,7 +17,10 @@ function Login() {
       <div className="interaction">
         {
           mode == InteractionMode.Welcome ?
-            <WelcomeInteraction onRegister={() => setMode(InteractionMode.Registration)} /> :
+            <WelcomeInteraction
+              onRegister={() => setMode(InteractionMode.Registration)}
+              onLogin={() => setMode(InteractionMode.Login)}
+            /> :
           mode == InteractionMode.Login ?
             <LoginInteraction /> :
             <RegistrationInteraction onRegister={() => {}} />
@@ -29,12 +32,30 @@ function Login() {
 
 interface WelcomeInteractionProps {
   onRegister: () => void,
+  onLogin: () => void,
 }
 
 function WelcomeInteraction(props: WelcomeInteractionProps) {
   return (
     <>
       Login below, or <DivButton onClick={props.onRegister} text="Register" />
+      <br/>
+      Login: <input id='login' type='text'/>
+      <br/>
+      Password: <input id='password' type='password'/>
+      <br/>
+      <DivButton onClick={props.onLogin} text="Login" />
+      <br/>
+      <div style={{
+        textAlign: "center",
+        overflowWrap: "break-word",
+        display: "inline-block",
+        maxWidth: "300px",
+      }}>
+        <a href='https://lotrtcgpc.net/discord'>
+          Forgot your password?  Contact <span style={{color:"orange"}}>ketura</span> on the PC Discord.
+        </a>
+      </div>
     </>
   )
 }
