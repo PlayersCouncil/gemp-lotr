@@ -63,15 +63,25 @@ interface ButtonProps {
 }
 
 function Button(props: ButtonProps) {
-  const [hovered, setHovered] = useState(false)
-  const toggleHovered = () => setHovered(!hovered)
+  const [hover, setHover] = useState(false)
+  const toggleHover = () => setHover(!hover)
+
+  const [active, setActive] = useState(false)
+  const toggleActive = () => setActive(!active)
+
+  const baseClassName = "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+  const hoverClassName = hover ? " ui-state-hover" : ""
+  const activeClassName = active ? " ui-state-active" : ""
+
   return (
     <div
-      className={"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" + (hovered ? " ui-state-hover" : "")}
+      className={baseClassName + hoverClassName + activeClassName}
       role="button"
       onClick={props.onClick}
-      onMouseEnter={toggleHovered}
-      onMouseLeave={toggleHovered}
+      onMouseEnter={toggleHover}
+      onMouseLeave={toggleHover}
+      onMouseDown={toggleActive}
+      onMouseUp={toggleActive}
     >
       <span className="ui-button-text">{props.text}</span>
     </div>
