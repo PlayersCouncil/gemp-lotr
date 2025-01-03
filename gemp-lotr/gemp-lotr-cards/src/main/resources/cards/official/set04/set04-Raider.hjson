@@ -2166,7 +2166,33 @@
 			Southron
 			Ambush 1
 		]
-
+		effects: {
+			type: Activated
+			phase: Assignment
+			cost: [
+				{
+					type: Spot
+					filter: companion
+					count: 5
+				}
+				{
+					type: Exert
+					select: self
+				}
+			]
+			effect: {
+				type: assignFpCharacterToSkirmish
+				fpCharacter: choose(ringBearer)
+				minion: self
+				memorizeFPCharacter: ringBearer
+				memorizeMinion: itself
+				preventText: Would you like to add (4) to prevent assigning {itself} to {ringBearer}?
+				preventCost: {
+					type: AddTwilight
+					amount: 4
+				}
+			}
+		}
 		gametext: <b>Southron</b>. <b>Ambush (1)</b>.<br><b>Assignment:</b> Exert this minion and spot 5 companions to assign this minion to the Ring-bearer. The Free Peoples player may add (4) to prevent this.
 		lore: "Some desert warriors have no allegiance and work for any faction that will pay them."
 		promotext: ""
