@@ -34,13 +34,7 @@ interface WelcomeInteractionProps {
 function WelcomeInteraction(props: WelcomeInteractionProps) {
   return (
     <>
-      Login below, or <div
-        className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-        role="button"
-        onClick={props.onRegister}
-      >
-        <span className="ui-button-text">Register</span>
-      </div>
+      Login below, or <Button onClick={props.onRegister} text="Register" />
     </>
   )
 }
@@ -60,6 +54,27 @@ function RegistrationInteraction() {
       Password repeated: <input id='password2' type='password'/><br/>
       <button id='registerButton'>Register</button>
    </>
+  )
+}
+
+interface ButtonProps {
+  text: string,
+  onClick: () => void,
+}
+
+function Button(props: ButtonProps) {
+  const [hovered, setHovered] = useState(false)
+  const toggleHovered = () => setHovered(!hovered)
+  return (
+    <div
+      className={"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" + (hovered ? " ui-state-hover" : "")}
+      role="button"
+      onClick={props.onClick}
+      onMouseEnter={toggleHovered}
+      onMouseLeave={toggleHovered}
+    >
+      <span className="ui-button-text">{props.text}</span>
+    </div>
   )
 }
 
