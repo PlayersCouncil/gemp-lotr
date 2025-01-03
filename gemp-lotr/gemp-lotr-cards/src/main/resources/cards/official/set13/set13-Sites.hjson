@@ -182,6 +182,9 @@
 		type: Site
 		block: Shadows
 		direction: Right
+		keywords: [
+			Forest
+		]
 		effects: [
 			{
 				type: Trigger
