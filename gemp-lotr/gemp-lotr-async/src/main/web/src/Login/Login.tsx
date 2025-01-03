@@ -63,25 +63,29 @@ interface ButtonProps {
 }
 
 function Button(props: ButtonProps) {
-  const [hover, setHover] = useState(false)
-  const toggleHover = () => setHover(!hover)
+  const [mouseEntered, setMouseEntered] = useState(false)
+  const onMouseBoundary = (entered: boolean, buttons: number) => {
+    setMouseEntered(entered)
+    setMouseDown(buttons != 0)
+  }
 
-  const [active, setActive] = useState(false)
-  const toggleActive = () => setActive(!active)
+  const [mouseDown, setMouseDown] = useState(false)
+  const onMouseDown = () => setMouseDown(true)
+  const onMouseUp = () => setMouseDown(false)
 
   const baseClassName = "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-  const hoverClassName = hover ? " ui-state-hover" : ""
-  const activeClassName = active ? " ui-state-active" : ""
+  const hoverClassName = mouseEntered ? " ui-state-hover" : ""
+  const activeClassName = mouseEntered && mouseDown ? " ui-state-active" : ""
 
   return (
     <div
       className={baseClassName + hoverClassName + activeClassName}
       role="button"
       onClick={props.onClick}
-      onMouseEnter={toggleHover}
-      onMouseLeave={toggleHover}
-      onMouseDown={toggleActive}
-      onMouseUp={toggleActive}
+      onMouseEnter={e => onMouseBoundary(true, e.buttons)}
+      onMouseLeave={e => onMouseBoundary(false, e.buttons)}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
     >
       <span className="ui-button-text">{props.text}</span>
     </div>
