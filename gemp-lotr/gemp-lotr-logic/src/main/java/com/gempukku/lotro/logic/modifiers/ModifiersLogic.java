@@ -137,7 +137,18 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         else {
             LinkedList<Modifier> liveModifiers = new LinkedList<>();
             for (Modifier modifier : modifiers) {
-                if (keyword == null || ((KeywordAffectingModifier) modifier).getKeyword() == keyword || ((KeywordAffectingModifier) modifier).getKeyword() == null) {
+                boolean keywordMatches = false;
+
+                if(modifier instanceof KeywordAffectingModifier keyModifier) {
+                    keywordMatches = keyModifier.getKeyword() == null || keyModifier.getKeyword() == keyword;
+                }
+                else if(modifier instanceof DelegateModifier delegateModifier) {
+                    if(delegateModifier.delegate instanceof KeywordAffectingModifier keyModifier) {
+                        keywordMatches = keyModifier.getKeyword() == null || keyModifier.getKeyword() == keyword;
+                    }
+                }
+
+                if (keyword == null || keywordMatches) {
                     if (!_skipSet.contains(modifier)) {
                         _skipSet.add(modifier);
                         Condition condition = modifier.getCondition();

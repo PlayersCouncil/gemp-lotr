@@ -17,8 +17,8 @@ public class Card_07_275_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "7_275");
-					// put other cards in here as needed for the test case
+					put("pillager", "7_275");
+					put("troop", "7_279");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +46,7 @@ public class Card_07_275_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("pillager");
 
 		assertEquals("Gorgoroth Pillager", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +62,28 @@ public class Card_07_275_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GorgorothPillagerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GorgorothPillagerMakesBesiegersFierceWhenStackedOnSiteYouControl() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var site1 = scn.GetFreepsSite(1);
+
+		var pillager = scn.GetShadowCard("pillager");
+		var troop = scn.GetShadowCard("troop");
+		scn.ShadowMoveCardToDiscard(pillager, troop);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(4, scn.GetTwilight());
+		scn.SkipToSite(2);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowTakeControlOfSite();
+		assertTrue(scn.IsSiteControlled(site1));
+
+		scn.ShadowMoveCharToTable(troop);
+		scn.StackCardsOn(site1, pillager);
+
+		assertTrue(scn.hasKeyword(troop, Keyword.FIERCE));
 	}
 }

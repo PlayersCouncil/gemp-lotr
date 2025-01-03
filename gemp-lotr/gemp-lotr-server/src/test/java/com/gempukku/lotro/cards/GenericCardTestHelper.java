@@ -14,7 +14,9 @@ import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.effects.DiscardCardsFromPlayEffect;
+import com.gempukku.lotro.logic.effects.TakeControlOfASiteEffect;
 import com.gempukku.lotro.logic.modifiers.Modifier;
+import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 import com.gempukku.lotro.logic.timing.RuleUtils;
@@ -22,6 +24,8 @@ import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.junit.Assert;
 
 import java.util.*;
+
+import static org.junit.Assert.assertTrue;
 
 public class GenericCardTestHelper extends AbstractAtTest {
 
@@ -1087,6 +1091,17 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public void ApplyAdHocAction(ActionProxy action)
     {
         _game.getActionsEnvironment().addUntilEndOfTurnActionProxy(action);
+    }
+
+    public void ShadowTakeControlOfSite() throws DecisionResultInvalidException {
+        ShadowExecuteAdHocEffect(new TakeControlOfASiteEffect(null, P2));
+    }
+
+    public void FreepsExecuteAdHocEffect(Effect effect) throws DecisionResultInvalidException { ExecuteAdHocEffect(P1, effect); }
+    public void ShadowExecuteAdHocEffect(Effect effect) throws DecisionResultInvalidException { ExecuteAdHocEffect(P2, effect); }
+    public void ExecuteAdHocEffect(String playerId, Effect effect) throws DecisionResultInvalidException {
+        carryOutEffectInPhaseActionByPlayer(playerId, effect);
+        assertTrue(effect.wasCarriedOut());
     }
 
     public void FreepsChoose(String choice) throws DecisionResultInvalidException { playerDecided(P1, choice); }
