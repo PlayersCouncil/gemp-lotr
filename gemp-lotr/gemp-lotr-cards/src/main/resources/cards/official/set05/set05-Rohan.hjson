@@ -270,7 +270,7 @@
 			effect: [
 				{
 					type: heal
-					select: all(another,companion,signet(Théoden))
+					select: all(companion,signet(Théoden),not(name(Théoden)))
 					times: 2
 				}
 			]
