@@ -34,7 +34,13 @@ interface WelcomeInteractionProps {
 function WelcomeInteraction(props: WelcomeInteractionProps) {
   return (
     <>
-      Login below, or <button onClick={props.onRegister}>Register</button>
+      Login below, or <div
+        className="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+        role="button"
+        onClick={props.onRegister}
+      >
+        <span className="ui-button-text">Register</span>
+      </div>
     </>
   )
 }
