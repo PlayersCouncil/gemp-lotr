@@ -398,7 +398,7 @@
 				amount: {
 					type: forEachYouCanSpot
 					filter: ent
-					multiplier: -1
+					multiplier: -2
 				}
 			}
 			{
@@ -406,7 +406,7 @@
 				amount: {
 					type: forEachYouCanSpot
 					filter: unbound,hobbit
-					multiplier: -1
+					multiplier: -2
 				}
 			}
 		]
