@@ -20,7 +20,7 @@ function Login() {
             <WelcomeInteraction onRegister={() => setMode(InteractionMode.Registration)} /> :
           mode == InteractionMode.Login ?
             <LoginInteraction /> :
-            <RegistrationInteraction />
+            <RegistrationInteraction onRegister={() => {}} />
         }
       </div>
     </>
@@ -34,7 +34,7 @@ interface WelcomeInteractionProps {
 function WelcomeInteraction(props: WelcomeInteractionProps) {
   return (
     <>
-      Login below, or <Button onClick={props.onRegister} text="Register" />
+      Login below, or <DivButton onClick={props.onRegister} text="Register" />
     </>
   )
 }
@@ -46,13 +46,17 @@ function LoginInteraction() {
   )
 }
 
-function RegistrationInteraction() {
+interface RegistrationInteractionProps {
+  onRegister: () => void,
+}
+
+function RegistrationInteraction(props: RegistrationInteractionProps) {
   return (
     <>
       Login: <input id='login' type='text'/><br/>
       Password: <input id='password' type='password'/><br/>
       Password repeated: <input id='password2' type='password'/><br/>
-      <button id='registerButton'>Register</button>
+      <Button onClick={props.onRegister} text="Register" />
    </>
   )
 }
@@ -62,7 +66,38 @@ interface ButtonProps {
   onClick: () => void,
 }
 
+
 function Button(props: ButtonProps) {
+  const [mouseEntered, setMouseEntered] = useState(false)
+  const onMouseBoundary = (entered: boolean, buttons: number) => {
+    setMouseEntered(entered)
+    setMouseDown(buttons != 0)
+  }
+
+  const [mouseDown, setMouseDown] = useState(false)
+  const onMouseDown = () => setMouseDown(true)
+  const onMouseUp = () => setMouseDown(false)
+
+  const baseClassName = "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+  const hoverClassName = mouseEntered ? " ui-state-hover" : ""
+  const activeClassName = mouseEntered && mouseDown ? " ui-state-active" : ""
+
+  return (
+    <button
+      className={baseClassName + hoverClassName + activeClassName}
+      role="button"
+      onClick={props.onClick}
+      onMouseEnter={e => onMouseBoundary(true, e.buttons)}
+      onMouseLeave={e => onMouseBoundary(false, e.buttons)}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
+    >
+      <span className="ui-button-text">{props.text}</span>
+    </button>
+  )
+}
+
+function DivButton(props: ButtonProps) {
   const [mouseEntered, setMouseEntered] = useState(false)
   const onMouseBoundary = (entered: boolean, buttons: number) => {
     setMouseEntered(entered)
