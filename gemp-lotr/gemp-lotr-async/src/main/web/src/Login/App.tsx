@@ -1,4 +1,5 @@
 import Info from "./Info";
+import Login from "./Login.tsx";
 import "./App.css"
 
 function App() {
@@ -9,9 +10,7 @@ function App() {
         <h1 className="banner">GEMP: Play the Lord of the Rings TCG</h1>
         <div className="content">
           <div className="login">
-            <div className="status"></div>
-            <div className="error"></div>
-            <div className="interaction"></div>
+            <Login />
           </div>
 
           <div className="info">
