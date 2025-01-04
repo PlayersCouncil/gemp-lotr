@@ -1020,7 +1020,7 @@
 				type: modifier
 				modifier: {
 					type: addKeyword
-					filter: self
+					filter: bearer
 					keyword: hunter
 					amount: {
 						type: forEachFPCulture
