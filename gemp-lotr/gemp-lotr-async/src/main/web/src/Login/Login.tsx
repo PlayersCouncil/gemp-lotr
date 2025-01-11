@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react"
 import "./Login.css"
 
-declare global {
-  const GempLotrCommunication : any;
-}
-
 function Login() {
   enum InteractionMode {
     Welcome,
