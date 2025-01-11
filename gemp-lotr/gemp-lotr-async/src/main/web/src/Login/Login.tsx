@@ -1,5 +1,7 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import "./Login.css"
+
+declare const window: any;
 
 function Login() {
   enum InteractionMode {
@@ -9,6 +11,13 @@ function Login() {
   }
 
   const [mode, setMode] = useState(InteractionMode.Welcome)
+  const [comm, setComm] = useState(undefined as any)
+  useEffect(() => {
+    var comm = new window.GempLotrCommunication("/gemp-lotr-server", function () {
+      alert("Unable to contact the server");
+    })
+    setComm(comm)
+  }, [])
 
   return (
     <>
@@ -19,7 +28,40 @@ function Login() {
           mode == InteractionMode.Welcome ?
             <WelcomeInteraction
               onRegister={() => setMode(InteractionMode.Registration)}
-              onLogin={() => setMode(InteractionMode.Login)}
+              onLogin={() => {
+                comm && comm.login("bondolin", "password", function (_: any, status: any) {
+                  if(status == "202") {
+                      setMode(InteractionMode.Registration)
+                      // $("#registerButton").html("Update Password");
+                      // $(".error").html("Your password has been reset.  Please enter a new password.");
+                      // $("#login").val(login);
+                  }
+                  else {
+                      location.href = "/gemp-lotr/hall.html";
+                  }
+              },
+              {
+                  "0": function () {
+                      alert("Unable to connect to server, either server is down or there is a problem" +
+                          " with your internet connection");
+                  },
+                  "401": function () {
+                      // $(".error").html("Invalid username or password. Try again.");
+                      // loginScreen();
+                  },
+                  "403": function () {
+                      // $(".error").html("You have been permanently banned. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord>the PC Discord</a>.");
+                      // $(".interaction").html("");
+                  },
+                  "409": function () {
+                      // $(".error").html("You have been temporarily banned. You can try logging in at a later time. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord>the PC Discord</a>.");
+                      // $(".interaction").html("");
+                  },
+                  "503": function () {
+                      // $(".error").html("Server is down for maintenance. Please come at a later time.");
+                  }
+              });
+              }}
             /> :
           mode == InteractionMode.Login ?
             <LoginInteraction /> :
