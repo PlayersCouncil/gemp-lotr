@@ -63,7 +63,32 @@ function Login() {
             /> :
           mode == InteractionMode.Login ?
             <LoginInteraction /> :
-            <RegistrationInteraction onRegister={() => {}} />
+            <RegistrationInteraction onRegister={() => {
+              comm.register("bondolin", "password", function (_: any, status: any) {
+                if(status == "202") {
+                  // $(".error").html("Your password has successfully been reset!  Please refresh the page and log in.");
+                }
+                else {
+                  location.href = "/gemp-lotr/hall.html";
+                }
+              },
+              {
+                "0": function () {
+                  alert("Unable to connect to server, either server is down or there is a problem" +
+                    " with your internet connection");
+                },
+                "400": function () {
+                  // $(".error").html("Login is invalid. Login must be between 2-10 characters long, and contain only<br/>" +
+                  //   " english letters, numbers or _ (underscore) and - (dash) characters.");
+                },
+                "409": function () {
+                  // $(".error").html("User with this login already exists in the system. Try a different one.");
+                },
+                "503": function () {
+                  // $(".error").html("Server is down for maintenance. Please come at a later time.");
+                }
+              });
+            }} />
         }
       </div>
     </>
