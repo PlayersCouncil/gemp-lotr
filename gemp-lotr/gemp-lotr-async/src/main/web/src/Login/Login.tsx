@@ -6,10 +6,16 @@ function Login() {
     Welcome,
     Registration,
     Login,
+    Banned,
   }
 
+  const [error, setError] = useState("")
   const [mode, setMode] = useState(InteractionMode.Welcome)
   const [comm, setComm] = useState(undefined as any)
+  const [login, setLogin] = useState("")
+  const [password, setPassword] = useState("")
+  const [password2, setPassword2] = useState("")
+  const [registerButton, setRegisterButton] = useState("Register")
   useEffect(() => {
     var comm = new GempLotrCommunication("/gemp-lotr-server", function () {
       alert("Unable to contact the server");
@@ -20,19 +26,23 @@ function Login() {
   return (
     <>
       <div className="status"></div>
-      <div className="error"></div>
+      <div className="error">{error}</div>
       <div className="interaction">
         {
           mode == InteractionMode.Welcome ?
             <WelcomeInteraction
+              login={login}
+              setLogin={setLogin}
+              password={password}
+              setPassword={setPassword}
               onRegister={() => setMode(InteractionMode.Registration)}
               onLogin={() => {
-                comm && comm.login("bondolin", "password", function (_: any, status: any) {
+                comm && comm.login(login, password, function (_: any, status: any) {
                   if(status == "202") {
                       setMode(InteractionMode.Registration)
-                      // $("#registerButton").html("Update Password");
-                      // $(".error").html("Your password has been reset.  Please enter a new password.");
-                      // $("#login").val(login);
+                      setRegisterButton("Update Password")
+                      setError("Your password has been reset.  Please enter a new password.")
+                      setLogin(login)
                   }
                   else {
                       location.href = "/gemp-lotr/hall.html";
@@ -44,55 +54,63 @@ function Login() {
                           " with your internet connection");
                   },
                   "401": function () {
-                      // $(".error").html("Invalid username or password. Try again.");
-                      // loginScreen();
+                      setError("Invalid username or password. Try again.")
+                      setMode(InteractionMode.Login)
                   },
                   "403": function () {
-                      // $(".error").html("You have been permanently banned. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord>the PC Discord</a>.");
-                      // $(".interaction").html("");
+                      setError("You have been permanently banned. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord>the PC Discord</a>.");
+                      setMode(InteractionMode.Banned)
                   },
                   "409": function () {
-                      // $(".error").html("You have been temporarily banned. You can try logging in at a later time. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord>the PC Discord</a>.");
-                      // $(".interaction").html("");
+                      setError("You have been temporarily banned. You can try logging in at a later time. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord>the PC Discord</a>.");
+                      setMode(InteractionMode.Banned)
                   },
                   "503": function () {
-                      // $(".error").html("Server is down for maintenance. Please come at a later time.");
+                      setError("Server is down for maintenance. Please come at a later time.");
                   }
               });
               }}
             /> :
           mode == InteractionMode.Login ?
             <LoginInteraction /> :
-            <RegistrationInteraction onRegister={() => {
-              if ("password" != "password") {
-                // $(".error").html("Password and Password repeated are different! Try again");
-              } else {
-                comm.register("bondolin", "password", function (_: any, status: any) {
-                  if(status == "202") {
-                    // $(".error").html("Your password has successfully been reset!  Please refresh the page and log in.");
-                  }
-                  else {
-                    location.href = "/gemp-lotr/hall.html";
-                  }
-                },
-                {
-                  "0": function () {
-                    alert("Unable to connect to server, either server is down or there is a problem" +
-                      " with your internet connection");
+            <RegistrationInteraction
+              login={login}
+              setLogin={setLogin}
+              password={password}
+              setPassword={setPassword}
+              password2={password2}
+              setPassword2={setPassword2}
+              registerButton={registerButton}
+              onRegister={() => {
+                if (password != password2) {
+                  setError("Password and Password repeated are different! Try again");
+                } else {
+                  comm.register(login, password, function (_: any, status: any) {
+                    if(status == "202") {
+                      setError("Your password has successfully been reset!  Please refresh the page and log in.");
+                    }
+                    else {
+                      location.href = "/gemp-lotr/hall.html";
+                    }
                   },
-                  "400": function () {
-                    // $(".error").html("Login is invalid. Login must be between 2-10 characters long, and contain only<br/>" +
-                    //   " english letters, numbers or _ (underscore) and - (dash) characters.");
-                  },
-                  "409": function () {
-                    // $(".error").html("User with this login already exists in the system. Try a different one.");
-                  },
-                  "503": function () {
-                    // $(".error").html("Server is down for maintenance. Please come at a later time.");
-                  }
-                });
-              }
-            }} />
+                  {
+                    "0": function () {
+                      alert("Unable to connect to server, either server is down or there is a problem" +
+                        " with your internet connection");
+                    },
+                    "400": function () {
+                      setError("Login is invalid. Login must be between 2-10 characters long, and contain only<br/>" +
+                        " english letters, numbers or _ (underscore) and - (dash) characters.");
+                    },
+                    "409": function () {
+                      setError("User with this login already exists in the system. Try a different one.");
+                    },
+                    "503": function () {
+                      setError("Server is down for maintenance. Please come at a later time.");
+                    }
+                  });
+                }
+              }} />
         }
       </div>
     </>
@@ -100,6 +118,10 @@ function Login() {
 }
 
 interface WelcomeInteractionProps {
+  login: string,
+  setLogin: (value: string) => void,
+  password: string,
+  setPassword: (value: string) => void,
   onRegister: () => void,
   onLogin: () => void,
 }
@@ -109,9 +131,9 @@ function WelcomeInteraction(props: WelcomeInteractionProps) {
     <>
       Login below, or <DivButton onClick={props.onRegister} text="Register" />
       <br/>
-      Login: <input id='login' type='text'/>
+      Login: <input type='text' value={props.login} onChange={e => props.setLogin(e.target.value)}/>
       <br/>
-      Password: <input id='password' type='password'/>
+      Password: <input type='password' value={props.password} onChange={e => props.setPassword(e.target.value)}/>
       <br/>
       <DivButton onClick={props.onLogin} text="Login" />
       <br/>
@@ -137,16 +159,23 @@ function LoginInteraction() {
 }
 
 interface RegistrationInteractionProps {
+  login: string,
+  setLogin: (value: string) => void,
+  password: string,
+  setPassword: (value: string) => void,
+  password2: string,
+  setPassword2: (value: string) => void,
+  registerButton: string,
   onRegister: () => void,
 }
 
 function RegistrationInteraction(props: RegistrationInteractionProps) {
   return (
     <>
-      Login: <input id='login' type='text'/><br/>
-      Password: <input id='password' type='password'/><br/>
-      Password repeated: <input id='password2' type='password'/><br/>
-      <Button onClick={props.onRegister} text="Register" />
+      Login: <input type='text' value={props.login} onChange={e => props.setLogin(e.target.value)}/><br/>
+      Password: <input type='password' value={props.password} onChange={e => props.setPassword(e.target.value)}/><br/>
+      Password repeated: <input type='password' value={props.password2} onChange={e => props.setPassword2(e.target.value)}/><br/>
+      <Button onClick={props.onRegister} text={props.registerButton} />
    </>
   )
 }
