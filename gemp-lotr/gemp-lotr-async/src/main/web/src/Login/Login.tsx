@@ -2,9 +2,7 @@ import { useEffect, useState } from "react"
 import "./Login.css"
 
 declare global {
-  interface Window {
-    GempLotrCommunication : any;
-  }
+  const GempLotrCommunication : any;
 }
 
 function Login() {
@@ -17,7 +15,7 @@ function Login() {
   const [mode, setMode] = useState(InteractionMode.Welcome)
   const [comm, setComm] = useState(undefined as any)
   useEffect(() => {
-    var comm = new window.GempLotrCommunication("/gemp-lotr-server", function () {
+    var comm = new GempLotrCommunication("/gemp-lotr-server", function () {
       alert("Unable to contact the server");
     })
     setComm(comm)
