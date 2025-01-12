@@ -946,11 +946,11 @@ var PCCards = {
 	'51_260'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E260.1_card.jpg',
 	
 	// The Balrog, Flame of Udun, 2024 Playtest Promo
-	'2_129' : 'https://i.lotrtcgpc.net/promos/LOTR-EN02O052.0_card',
+	'2_129' : 'https://i.lotrtcgpc.net/promos/LOTR-EN02O052.0_card.jpg',
 	// 2024 Yuletide Frodo, Reluctant Adventurer
-	'2_130' : 'https://i.lotrtcgpc.net/promos/LOTR-EN02H102.0_card',
+	'2_130' : 'https://i.lotrtcgpc.net/promos/LOTR-EN02H102.0_card.jpg',
 	// 2024 Yuletide Sam, Resolute Halfling
-	'7_369' : 'https://i.lotrtcgpc.net/promos/LOTR-EN07H327.0_card'
+	'7_369' : 'https://i.lotrtcgpc.net/promos/LOTR-EN07H327.0_card.jpg'
 	
 }
 
