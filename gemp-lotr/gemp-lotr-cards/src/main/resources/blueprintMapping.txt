@@ -406,3 +406,9 @@ gl_theOneRing,1_2
 1_396,1_196
 #2024 WC World Champion - They Are Coming FA
 1_397,1_196
+#The Balrog, Flame of Udun, 2024 Playtest Promo
+2_129,2_52
+#2024 Yuletide Frodo, Reluctant Adventurer
+2_130,2_102
+#2024 Yuletide Sam, Resolute Halfling
+7_369,7_327

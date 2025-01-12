@@ -943,7 +943,14 @@ var PCCards = {
 	// Southron Archer (4R245)
 	'54_245'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E245.1_card.jpg',
 	// The Number Must Be Few (1U260)
-	'51_260'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E260.1_card.jpg'
+	'51_260'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E260.1_card.jpg',
+	
+	// The Balrog, Flame of Udun, 2024 Playtest Promo
+	'2_129' : 'https://i.lotrtcgpc.net/promos/LOTR-EN02O052.0_card',
+	// 2024 Yuletide Frodo, Reluctant Adventurer
+	'2_130' : 'https://i.lotrtcgpc.net/promos/LOTR-EN02H102.0_card',
+	// 2024 Yuletide Sam, Resolute Halfling
+	'7_369' : 'https://i.lotrtcgpc.net/promos/LOTR-EN07H327.0_card'
 	
 }
 
