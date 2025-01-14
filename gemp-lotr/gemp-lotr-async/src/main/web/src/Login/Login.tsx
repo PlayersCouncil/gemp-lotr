@@ -9,6 +9,7 @@ function Login() {
     Banned,
   }
 
+  const [status, setStatus] = useState("")
   const [error, setError] = useState("")
   const [mode, setMode] = useState(InteractionMode.Welcome)
   const [comm, setComm] = useState(undefined as any)
@@ -16,16 +17,22 @@ function Login() {
   const [password, setPassword] = useState("")
   const [password2, setPassword2] = useState("")
   const [registerButton, setRegisterButton] = useState("Register")
+
   useEffect(() => {
     var comm = new GempLotrCommunication("/gemp-lotr-server", function () {
       alert("Unable to contact the server");
     })
     setComm(comm)
+
+    comm.getStatus(
+      function (html: any) {
+          setStatus(html)
+      })
   }, [])
 
   return (
     <>
-      <div className="status"></div>
+      <div className="status">{status}</div>
       <div className="error">{error}</div>
       <div className="interaction">
         {
