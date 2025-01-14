@@ -15,8 +15,6 @@ function Login() {
   const [mode, setMode] = useState(InteractionMode.Login)
   const [comm, setComm] = useState(undefined as any)
   const [login, setLogin] = useState("")
-  const [password, setPassword] = useState("")
-  const [password2, setPassword2] = useState("")
   const [registerButton, setRegisterButton] = useState("Register")
 
   useEffect(() => {
@@ -41,12 +39,8 @@ function Login() {
             <RegistrationScreen
               login={login}
               setLogin={setLogin}
-              password={password}
-              setPassword={setPassword}
-              password2={password2}
-              setPassword2={setPassword2}
               registerButton={registerButton}
-              onRegister={() => {
+              onRegister={(login, password, password2) => {
                 if (password != password2) {
                   setError("Password and Password repeated are different! Try again");
                 } else {
@@ -80,16 +74,16 @@ function Login() {
             <LoginScreen
               login={login}
               setLogin={setLogin}
-              password={password}
-              setPassword={setPassword}
-              onRegister={() => setMode(InteractionMode.Register)}
-              onLogin={() => {
+              onRegister={() => {
+                setError("")
+                setMode(InteractionMode.Register)
+              }}
+              onLogin={(login, password) => {
                 comm && comm.login(login, password, function (_: any, status: any) {
                   if(status == "202") {
                       setMode(InteractionMode.Register)
                       setRegisterButton("Update Password")
                       setError("Your password has been reset.  Please enter a new password.")
-                      setLogin(login)
                   }
                   else {
                       location.href = "/gemp-lotr/hall.html";

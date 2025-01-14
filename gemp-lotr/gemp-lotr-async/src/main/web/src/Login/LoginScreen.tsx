@@ -1,24 +1,25 @@
+import { useState } from "react"
 import { DivButton } from "./Button"
 
 export interface LoginScreenProps {
   login: string,
   setLogin: (value: string) => void,
-  password: string,
-  setPassword: (value: string) => void,
   onRegister: () => void,
-  onLogin: () => void,
+  onLogin: (login: string, password: string) => void,
 }
 
 function LoginScreen(props: LoginScreenProps) {
+  const [password, setPassword] = useState("")
+
   return (
     <>
       Login below, or <DivButton onClick={props.onRegister} text="Register" />
       <br/>
       Login: <input type='text' value={props.login} onChange={e => props.setLogin(e.target.value)}/>
       <br/>
-      Password: <input type='password' value={props.password} onChange={e => props.setPassword(e.target.value)}/>
+      Password: <input type='password' value={password} onChange={e => setPassword(e.target.value)}/>
       <br/>
-      <DivButton onClick={props.onLogin} text="Login" />
+      <DivButton onClick={() => props.onLogin(props.login, password)} text="Login" />
       <br/>
       <div style={{
         textAlign: "center",
