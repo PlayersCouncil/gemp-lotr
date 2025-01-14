@@ -1,7 +1,6 @@
 import { Button } from "./Button"
-import "./Login.css"
 
-export interface RegistrationInteractionProps {
+export interface RegistrationScreenProps {
   login: string,
   setLogin: (value: string) => void,
   password: string,
@@ -12,7 +11,7 @@ export interface RegistrationInteractionProps {
   onRegister: () => void,
 }
 
-function RegistrationInteraction(props: RegistrationInteractionProps) {
+function RegistrationScreen(props: RegistrationScreenProps) {
   return (
     <>
       Login: <input type='text' value={props.login} onChange={e => props.setLogin(e.target.value)}/><br/>
@@ -23,4 +22,4 @@ function RegistrationInteraction(props: RegistrationInteractionProps) {
   )
 }
 
-export default RegistrationInteraction
+export default RegistrationScreen

@@ -1,7 +1,6 @@
 import { DivButton } from "./Button"
-import "./Login.css"
 
-export interface WelcomeInteractionProps {
+export interface LoginScreenProps {
   login: string,
   setLogin: (value: string) => void,
   password: string,
@@ -10,7 +9,7 @@ export interface WelcomeInteractionProps {
   onLogin: () => void,
 }
 
-function WelcomeInteraction(props: WelcomeInteractionProps) {
+function LoginScreen(props: LoginScreenProps) {
   return (
     <>
       Login below, or <DivButton onClick={props.onRegister} text="Register" />
@@ -35,4 +34,4 @@ function WelcomeInteraction(props: WelcomeInteractionProps) {
   )
 }
 
-export default WelcomeInteraction
+export default LoginScreen

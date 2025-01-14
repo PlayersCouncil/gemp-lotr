@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import RegistrationInteraction from "./RegisterScreen"
-import WelcomeInteraction from "./LoginScreen"
+import RegistrationScreen from "./RegistrationScreen"
+import LoginScreen from "./LoginScreen"
 import "./Login.css"
 
 function Login() {
@@ -38,7 +38,7 @@ function Login() {
       <div className="interaction">
         {
           mode == InteractionMode.Register ?
-            <RegistrationInteraction
+            <RegistrationScreen
               login={login}
               setLogin={setLogin}
               password={password}
@@ -77,7 +77,7 @@ function Login() {
                 }
               }} /> :
           mode == InteractionMode.Login ?
-            <WelcomeInteraction
+            <LoginScreen
               login={login}
               setLogin={setLogin}
               password={password}
