@@ -17,7 +17,15 @@ function LoginScreen(props: LoginScreenProps) {
       <br/>
       Login: <input type='text' value={props.login} onChange={e => props.setLogin(e.target.value)}/>
       <br/>
-      Password: <input type='password' value={password} onChange={e => setPassword(e.target.value)}/>
+      Password: <input
+        type='password'
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        onKeyDown={e => {
+          if (e.key == "Enter") {
+            props.onLogin(props.login, password)
+          }
+        }}/>
       <br/>
       <DivButton onClick={() => props.onLogin(props.login, password)} text="Login" />
       <br/>
