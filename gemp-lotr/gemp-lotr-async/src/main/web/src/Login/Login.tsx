@@ -10,8 +10,21 @@ function Login() {
     Banned,
   }
 
+  enum LoginError {
+    None,
+    MismatchedPasswords,
+    PasswordReset,
+    SuccessfulReset,
+    InvalidLogin,
+    InvalidAuthentication,
+    PermanentBan,
+    TemporaryBan,
+    ExistingUser,
+    ServerDown,
+  }
+
   const [status, setStatus] = useState("")
-  const [error, setError] = useState("")
+  const [error, setError] = useState(LoginError.None)
   const [mode, setMode] = useState(InteractionMode.Login)
   const [comm, setComm] = useState(undefined as any)
   const [login, setLogin] = useState("")
@@ -32,7 +45,28 @@ function Login() {
   return (
     <>
       <div className="status" dangerouslySetInnerHTML={{ __html: status}}></div>
-      <div className="error" dangerouslySetInnerHTML={{ __html: error}}></div>
+      <div className="error">{
+        error == LoginError.MismatchedPasswords ?
+          "Password and Password repeated are different! Try again" :
+        error == LoginError.PasswordReset ?
+          "Your password has been reset.  Please enter a new password." :
+        error == LoginError.SuccessfulReset ?
+          "Your password has successfully been reset!  Please refresh the page and log in." :
+        error == LoginError.InvalidLogin ?
+          "Login is invalid. Login must be between 2-10 characters long, and contain only<br/>" +
+            " english letters, numbers or _ (underscore) and - (dash) characters." :
+        error == LoginError.InvalidAuthentication ?
+          "Invalid username or password. Try again." :
+        error == LoginError.PermanentBan ?
+          "You have been permanently banned. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord>the PC Discord</a>." :
+        error == LoginError.TemporaryBan ?
+          "You have been temporarily banned. You can try logging in at a later time. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord>the PC Discord</a>." :
+        error == LoginError.ExistingUser ?
+          "User with this login already exists in the system. Try a different one." :
+        error == LoginError.ServerDown ?
+          "Server is down for maintenance. Please come at a later time." :
+          ""
+      }</div>
       <div className="interaction">
         {
           mode == InteractionMode.Register ?
@@ -42,11 +76,11 @@ function Login() {
               registerButton={registerButton}
               onRegister={(login, password, password2) => {
                 if (password != password2) {
-                  setError("Password and Password repeated are different! Try again");
+                  setError(LoginError.MismatchedPasswords);
                 } else {
                   comm.register(login, password, function (_: any, status: any) {
                     if(status == "202") {
-                      setError("Your password has successfully been reset!  Please refresh the page and log in.");
+                      setError(LoginError.SuccessfulReset);
                     }
                     else {
                       location.href = "/gemp-lotr/hall.html";
@@ -58,14 +92,13 @@ function Login() {
                         " with your internet connection");
                     },
                     "400": function () {
-                      setError("Login is invalid. Login must be between 2-10 characters long, and contain only<br/>" +
-                        " english letters, numbers or _ (underscore) and - (dash) characters.");
+                      setError(LoginError.InvalidLogin);
                     },
                     "409": function () {
-                      setError("User with this login already exists in the system. Try a different one.");
+                      setError(LoginError.ExistingUser);
                     },
                     "503": function () {
-                      setError("Server is down for maintenance. Please come at a later time.");
+                      setError(LoginError.ServerDown);
                     }
                   });
                 }
@@ -75,7 +108,7 @@ function Login() {
               login={login}
               setLogin={setLogin}
               onRegister={() => {
-                setError("")
+                setError(LoginError.None)
                 setMode(InteractionMode.Register)
               }}
               onLogin={(login, password) => {
@@ -83,7 +116,7 @@ function Login() {
                   if(status == "202") {
                       setMode(InteractionMode.Register)
                       setRegisterButton("Update Password")
-                      setError("Your password has been reset.  Please enter a new password.")
+                      setError(LoginError.PasswordReset)
                   }
                   else {
                       location.href = "/gemp-lotr/hall.html";
@@ -95,19 +128,19 @@ function Login() {
                           " with your internet connection");
                   },
                   "401": function () {
-                      setError("Invalid username or password. Try again.")
+                      setError(LoginError.InvalidAuthentication)
                       setMode(InteractionMode.Login)
                   },
                   "403": function () {
-                      setError("You have been permanently banned. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord>the PC Discord</a>.");
+                      setError(LoginError.PermanentBan);
                       setMode(InteractionMode.Banned)
                   },
                   "409": function () {
-                      setError("You have been temporarily banned. You can try logging in at a later time. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord>the PC Discord</a>.");
+                      setError(LoginError.TemporaryBan);
                       setMode(InteractionMode.Banned)
                   },
                   "503": function () {
-                      setError("Server is down for maintenance. Please come at a later time.");
+                      setError(LoginError.ServerDown);
                   }
                 });
               }}
