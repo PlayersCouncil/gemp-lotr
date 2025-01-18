@@ -31,8 +31,8 @@ function Login() {
 
   return (
     <>
-      <div className="status">{status}</div>
-      <div className="error">{error}</div>
+      <div className="status" dangerouslySetInnerHTML={{ __html: status}}></div>
+      <div className="error" dangerouslySetInnerHTML={{ __html: error}}></div>
       <div className="interaction">
         {
           mode == InteractionMode.Register ?
