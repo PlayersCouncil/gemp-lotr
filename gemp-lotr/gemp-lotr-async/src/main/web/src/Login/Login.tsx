@@ -53,14 +53,20 @@ function Login() {
         error == LoginError.SuccessfulReset ?
           "Your password has successfully been reset!  Please refresh the page and log in." :
         error == LoginError.InvalidLogin ?
-          "Login is invalid. Login must be between 2-10 characters long, and contain only<br/>" +
-            " english letters, numbers or _ (underscore) and - (dash) characters." :
+          <>
+            Login is invalid. Login must be between 2-10 characters long, and contain only<br/>
+            english letters, numbers or _ (underscore) and - (dash) characters.
+          </> :
         error == LoginError.InvalidAuthentication ?
           "Invalid username or password. Try again." :
         error == LoginError.PermanentBan ?
-          "You have been permanently banned. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord>the PC Discord</a>." :
+          <>
+            You have been permanently banned. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord'>the PC Discord</a>.
+          </> :
         error == LoginError.TemporaryBan ?
-          "You have been temporarily banned. You can try logging in at a later time. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord>the PC Discord</a>." :
+          <>
+            You have been temporarily banned. You can try logging in at a later time. If you think it was a mistake please appeal with dmaz or ketura on <a href='https://lotrtcgpc.net/discord'>the PC Discord</a>.
+          </> :
         error == LoginError.ExistingUser ?
           "User with this login already exists in the system. Try a different one." :
         error == LoginError.ServerDown ?
