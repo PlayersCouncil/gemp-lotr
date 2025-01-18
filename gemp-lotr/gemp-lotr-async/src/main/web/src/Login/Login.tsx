@@ -29,6 +29,10 @@ function Login() {
       })
   }, [])
 
+  useEffect(() => {
+    setError("")
+  }, [mode])
+
   return (
     <>
       <div className="status" dangerouslySetInnerHTML={{ __html: status}}></div>
@@ -75,7 +79,6 @@ function Login() {
               login={login}
               setLogin={setLogin}
               onRegister={() => {
-                setError("")
                 setMode(InteractionMode.Register)
               }}
               onLogin={(login, password) => {
