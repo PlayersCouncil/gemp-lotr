@@ -323,10 +323,16 @@
 					type: aboutToTakeWound
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: another,culture(uruk-hai)
-				}
+				requires: [
+						{
+							type: canSpot
+							filter: another,culture(uruk-hai)
+				 		}
+						{
+							type: location
+							filter: battleground
+						}
+				]
 				effect: [
 					{
 						type: negateWound
