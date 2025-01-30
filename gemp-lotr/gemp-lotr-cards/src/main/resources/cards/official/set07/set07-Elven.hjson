@@ -126,7 +126,7 @@
 				}
 				effect: {
 					type: modifyStrength
-					select: choose(minion,inSkirmishAgainst(bearer))
+					filter: minion,inSkirmishAgainst(bearer)
 					amount: -2
 				}
 			}
