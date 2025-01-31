@@ -380,7 +380,7 @@
 				modifier: {
 					type: modifyStrength
 					requires: {
-						type: canSpotThreats
+						type: canSpotTwilight
 						amount: 4
 					}
 					filter: bearer
