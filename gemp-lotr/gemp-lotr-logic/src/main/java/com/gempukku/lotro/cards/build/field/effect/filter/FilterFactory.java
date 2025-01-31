@@ -374,7 +374,7 @@ public class FilterFactory {
                                                 new Evaluator() {
                                                     @Override
                                                     public int evaluateExpression(LotroGame game, PhysicalCard cardAffected) {
-                                                        int maxStrength = Integer.MAX_VALUE;
+                                                        int maxStrength = Integer.MIN_VALUE;
                                                         for (PhysicalCard card : Filters.filterActive(game, sourceFilterable))
                                                             maxStrength = Math.max(maxStrength, game.getModifiersQuerying().getStrength(game, card));
                                                         return maxStrength;
