@@ -193,11 +193,21 @@
 					count: 2
 				}
 			}
+			# These have to be split apart because the spot modifier only works
+			# if a filter has only 1 thing in it
 			{
 				type: modifyOwnCost
 				amount: {
 					type: forEachYouCanSpot
-					filter: or(ent,and(unbound,hobbit))
+					filter: ent
+					multiplier: -2
+				}
+			}
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: unbound,hobbit
 					multiplier: -2
 				}
 			}
