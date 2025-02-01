@@ -921,7 +921,6 @@
 		code: limited_hobbit
 		sites: HOBBIT
 		cancelRingBearerSkirmish: true
-		Limited: true
 		sets: [
 			30, 31, 32, 33
 		]
@@ -935,7 +934,6 @@
 		code: limited_fotr
 		sites: FELLOWSHIP
 		cancelRingBearerSkirmish: true
-		maximumSameName: 100
 		sets: [
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 		]
@@ -968,7 +966,6 @@
 		code: limited_ttt
 		sites: TWO_TOWERS
 		cancelRingBearerSkirmish: true
-		maximumSameName: 100
 		sets: [
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 		]
@@ -983,7 +980,6 @@
 		code: limited_king
 		sites: KING
 		cancelRingBearerSkirmish: true
-		maximumSameName: 100
 		sets: [
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 		]
@@ -999,7 +995,6 @@
 		code: limited_shadows
 		sites: SHADOWS
 		cancelRingBearerSkirmish: false
-		maximumSameName: 100
 		sets: [
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 		]
@@ -1016,7 +1011,6 @@
 		code: limited_hunters
 		sites: SHADOWS
 		cancelRingBearerSkirmish: false
-		maximumSameName: 100
 		sets: [
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 		]
@@ -1033,7 +1027,6 @@
 		code: limited_multipath
 		sites: MULTIPATH
 		cancelRingBearerSkirmish: false
-		maximumSameName: 100
 		sets: [
 			1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 		]
