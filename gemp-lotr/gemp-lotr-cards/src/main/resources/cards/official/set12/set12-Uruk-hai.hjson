@@ -536,7 +536,7 @@
 			}
 			{
 				type: activated
-				phase: skirmish
+				phase: assignment
 				cost: {
 					type: discard
 					select: self
