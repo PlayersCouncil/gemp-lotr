@@ -50,7 +50,7 @@ public class WinsSkirmish implements TriggerCheckerProducer {
                     if (winner != null) {
                         losers.remove(winner);
                     }
-                    actionContext.setCardMemory(memorizeInvolving, losers);
+                    actionContext.setCardMemory(memorizeLoser, losers);
                 }
                 return result;
             }
