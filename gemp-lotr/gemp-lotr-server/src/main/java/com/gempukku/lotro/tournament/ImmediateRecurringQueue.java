@@ -31,19 +31,48 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
             _playerDecks.remove(player);
         }
 
-        var params = new TournamentParams() {{
-            this.tournamentId = tid;
-            this.name = tournamentName;
-            this.format = getFormatCode();
-            this.startTime = DateUtils.Now().toLocalDateTime();
-            this.type = Tournament.TournamentType.CONSTRUCTED;
-            this.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
-            this.manualKickoff = false;
-            this.cost = getCost();
-            this.minimumPlayers = _playerCap;
-        }};
+        boolean isSealed = _tournamentInfo instanceof SealedTournamentInfo;
 
-        var newInfo = new TournamentInfo(_tournamentInfo, params);
+        TournamentParams params;
+        TournamentInfo newInfo;
+
+        if (isSealed) {
+            params = new SealedTournamentParams() {{
+                this.type = Tournament.TournamentType.SEALED;
+
+                this.deckbuildingDuration = ((SealedTournamentParams) _tournamentInfo._params).deckbuildingDuration;
+                this.turnInDuration = ((SealedTournamentParams) _tournamentInfo._params).turnInDuration;
+
+                this.sealedFormatCode = ((SealedTournamentParams) _tournamentInfo._params).sealedFormatCode;
+                this.format = _tournamentInfo._params.format;
+                this.requiresDeck = false;
+
+                this.tournamentId = tid;
+                this.playoff = _tournamentInfo._params.playoff;
+                this.prizes = _tournamentInfo._params.prizes;
+                this.name = tournamentName;
+                this.format = getFormatCode();
+                this.startTime = DateUtils.Now().toLocalDateTime();
+                this.manualKickoff = false;
+                this.cost = getCost();
+                this.minimumPlayers = _playerCap;
+            }};
+            newInfo = new SealedTournamentInfo((SealedTournamentInfo) _tournamentInfo, (SealedTournamentParams) params);
+        } else {
+            params = new TournamentParams() {{
+                this.tournamentId = tid;
+                this.name = tournamentName;
+                this.format = getFormatCode();
+                this.startTime = DateUtils.Now().toLocalDateTime();
+                this.type = Tournament.TournamentType.CONSTRUCTED;
+                this.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
+                this.manualKickoff = false;
+                this.cost = getCost();
+                this.minimumPlayers = _playerCap;
+            }};
+            newInfo = new TournamentInfo(_tournamentInfo, params);
+        }
+
         var tournament = _tournamentService.addTournament(newInfo);
         tournamentQueueCallback.createTournament(tournament);
 
