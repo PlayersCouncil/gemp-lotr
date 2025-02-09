@@ -81,7 +81,7 @@
 				}
 				effect: {
 					type: playCardFromDrawDeck
-					select: choose(support area,possession)
+					select: choose(culture(raider),support area,possession)
 					showAll: true
 					shuffle: true
 				}
