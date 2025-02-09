@@ -84,22 +84,34 @@
 		vitality: 4
 		signet: Frodo
 		resistance: 5
-		effects: {
-			type: activated
-			limitPerTurn: 1
-			phase: fellowship
-			cost: {
-				type: exert
-				select: self
+		effects: [
+			{
+				type: activated
+				limitPerTurn: 1
+				phase: fellowship
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: PutCardsFromDeckIntoHand
+					select: choose(culture(shire),item)
+					reveal: true
+					showAll: true
+					shuffle: true
+				}
 			}
-			effect: {
-				type: PutCardsFromDeckIntoHand
-				select: choose(culture(shire),item)
-				reveal: true
-				showAll: true
-				shuffle: true
+			{
+				type: Response
+				trigger: {
+					type: killed
+					filter: name(Frodo),ring bearer
+				}
+				effect: {
+					type: makeSelfRingBearer
+				}
 			}
-		}
+		]
 		gametext: <b>Fellowship:</b> Exert Sam to take a [shire] item into hand from your draw deck (limit once per turn).<br><b>Response:</b> If Frodo dies, make Sam the <b>Ring-bearer (resistance 5)</b>.
 		lore: Mr. Frodo's not going anywhere without me!'
 		promotext: ""
