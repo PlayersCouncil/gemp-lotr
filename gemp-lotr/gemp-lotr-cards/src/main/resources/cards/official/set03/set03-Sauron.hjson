@@ -161,7 +161,7 @@
 				select: choose(culture(sauron),minion)
 			}
 			effect: {
-				type: discardFromHand
+				type: DiscardCardAtRandomFromHand
 				forced: true
 				player: fp
 				hand: fp
