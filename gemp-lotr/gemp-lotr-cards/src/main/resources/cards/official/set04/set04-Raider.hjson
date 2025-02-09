@@ -841,6 +841,7 @@
 				}
 				effect: {
 					type: exert
+					count: 2
 					select: all(ringBound,companion)
 				}
 			}
