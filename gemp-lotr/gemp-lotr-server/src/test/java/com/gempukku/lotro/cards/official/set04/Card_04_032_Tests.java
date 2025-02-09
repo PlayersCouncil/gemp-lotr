@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.official.set04;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -20,8 +17,13 @@ public class Card_04_032_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "4_32");
-					// put other cards in here as needed for the test case
+					put("ravage", "4_32");
+					put("brigand", "4_10");
+					put("weary", "4_212");
+
+					put("sword", "1_299");
+					put("coat", "2_105");
+					put("stone", "1_314");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +48,7 @@ public class Card_04_032_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("ravage");
 
 		assertEquals("Ravage the Defeated", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +60,50 @@ public class Card_04_032_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void RavagetheDefeatedTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void RavagetheDefeatedDiscardsFreepsCardsAttachedToLoser() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		//A freeps possession, artifact, and condition
+		var sword = scn.GetFreepsCard("sword");
+		var coat = scn.GetFreepsCard("coat");
+		var stone = scn.GetFreepsCard("stone");
+		var frodo = scn.GetRingBearer();
+		scn.AttachCardsTo(frodo, sword, coat, stone);
+
+		var ravage = scn.GetShadowCard("ravage");
+		var brigand = scn.GetShadowCard("brigand");
+		var weary = scn.GetShadowCard("weary");
+		scn.ShadowMoveCardToHand(ravage);
+		scn.AttachCardsTo(frodo, weary);
+		scn.ShadowMoveCharToTable(brigand);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, brigand);
+		scn.FreepsResolveSkirmish(frodo);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(Zone.ATTACHED, sword.getZone());
+		assertEquals(frodo, sword.getAttachedTo());
+		assertEquals(Zone.ATTACHED, coat.getZone());
+		assertEquals(frodo, coat.getAttachedTo());
+		assertEquals(Zone.ATTACHED, stone.getZone());
+		assertEquals(frodo, stone.getAttachedTo());
+		assertEquals(Zone.ATTACHED, weary.getZone());
+		assertEquals(frodo, weary.getAttachedTo());
+
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPassCurrentPhaseAction();
+
+		scn.FreepsDeclineOptionalTrigger(); //One Ring converting wound on frodo
+		assertTrue(scn.ShadowPlayAvailable(ravage));
+		scn.ShadowPlayCard(ravage);
+
+		assertEquals(Zone.DISCARD, sword.getZone());
+		assertEquals(Zone.DISCARD, coat.getZone());
+		assertEquals(Zone.DISCARD, stone.getZone());
+		assertEquals(Zone.ATTACHED, weary.getZone());
+		assertEquals(frodo, weary.getAttachedTo());
 	}
 }
