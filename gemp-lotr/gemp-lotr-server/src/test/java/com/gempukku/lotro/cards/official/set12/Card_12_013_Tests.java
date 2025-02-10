@@ -20,8 +20,12 @@ public class Card_12_013_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "12_13");
-					// put other cards in here as needed for the test case
+					put("sharp", "12_13");
+					put("gimli", "11_8");
+					put("book", "3_1");
+					put("helm", "1_15");
+
+					put("savage", "1_151");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +50,7 @@ public class Card_12_013_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("sharp");
 
 		assertEquals("Sharp Defense", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +62,88 @@ public class Card_12_013_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SharpDefenseTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SharpDefenseMakesDwarfWith3ResistanceAndNoPossessionsStrengthPlus2() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var sharp = scn.GetFreepsCard("sharp");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.FreepsMoveCardToHand(sharp);
+		scn.FreepsMoveCharToTable(gimli);
+
+		var savage = scn.GetShadowCard("savage");
+		scn.ShadowMoveCharToTable(savage);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.AddBurdens(3);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, savage);
+		scn.FreepsResolveSkirmish(gimli);
+
+		assertEquals(3, scn.getResistance(gimli));
+		assertEquals(6, scn.GetStrength(gimli));
+
+		scn.FreepsPlayCard(sharp);
+		//Base 6, and since the 4 resistance clause is not met, +2 flat strength
+		assertEquals(8, scn.GetStrength(gimli));
+	}
+
+	@Test
+	public void SharpDefenseMakesDwarfWith4ResistanceAndNoPossessionsStrengthPlus0() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var sharp = scn.GetFreepsCard("sharp");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.FreepsMoveCardToHand(sharp);
+		scn.FreepsMoveCharToTable(gimli);
+
+		var savage = scn.GetShadowCard("savage");
+		scn.ShadowMoveCharToTable(savage);
+
+		scn.StartGame();
+
+		scn.AddBurdens(2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, savage);
+		scn.FreepsResolveSkirmish(gimli);
+
+		assertEquals(4, scn.getResistance(gimli));
+		assertEquals(6, scn.GetStrength(gimli));
+
+		scn.FreepsPlayCard(sharp);
+		//Base 6, and since the 4 resistance clause is met, +0 for all attached possessions
+		assertEquals(6, scn.GetStrength(gimli));
+	}
+
+	@Test
+	public void SharpDefenseMakesDwarfWith4ResistanceAndNoPossessionsStrengthPlus2ForEachPossessionBorne() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var sharp = scn.GetFreepsCard("sharp");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.FreepsMoveCardToHand(sharp);
+		scn.FreepsMoveCharToTable(gimli);
+		scn.FreepsAttachCardsTo(gimli, "book", "helm");
+
+		var savage = scn.GetShadowCard("savage");
+		scn.ShadowMoveCharToTable(savage);
+
+		scn.StartGame();
+
+		scn.AddBurdens(2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, savage);
+		scn.FreepsResolveSkirmish(gimli);
+
+		assertEquals(4, scn.getResistance(gimli));
+		assertEquals(6, scn.GetStrength(gimli));
+
+		scn.FreepsPlayCard(sharp);
+		//Base 6 + 2 for book + 2 for helm
+		assertEquals(10, scn.GetStrength(gimli));
 	}
 }
