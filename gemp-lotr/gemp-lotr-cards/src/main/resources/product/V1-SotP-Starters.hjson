@@ -16,7 +16,7 @@
 			#    Rivendell Gateway
 			1x101_59
 			#    Balin's Tomb
-			1x1_343
+			1x51_343
 			#    The Bridge of Khazad-dum
 			1x1_349
 			#    Lorien Throne Room
@@ -29,7 +29,7 @@
 			1x53_120
 			#Free Peoples (30 cards)
 			#    Arwen, Elven Rider
-			1x3_7
+			1x53_7
 			#    Haldir, Elf of the Golden Wood
 			1x1_48
 			#    Legolas, Keen-Eyed
@@ -38,9 +38,9 @@
 			1x51_53
 			#    Aragorn, Estel
 			2x101_19
-			#    Dinendal, Silent Scout
+			#    Dinendal
 			1x3_12
-			#    Rumil, Elven Protector
+			#    Rumil
 			1x1_57
 			#    Elven Bow
 			2x1_41
@@ -56,7 +56,7 @@
 			3x101_7
 			#    Voice of Nimrodel
 			2x3_28
-			#    Might of Numenor
+			#    Men of Numenor
 			1x3_43
 			#    Beren And Luthien
 			1x3_9
@@ -74,25 +74,29 @@
 			#    Crebain Flock
 			3x101_25
 			#    Isengard Retainer
-			4x3_57
+			3x3_57
 			#    Isengard Servant
 			3x3_58
 			#    Isengard Worker
 			3x3_62
 			#    Murder of Crows
-			2x101_29
+			1x101_29
 			#    Saruman, Fell Voice
 			2x101_30
 			#    Saruman, Servant of the Eye
 			1x3_69
+			#    Uruk Guide
+			1x1_147
+			#    Uruk Ravager
+			2x3_75
+			#    Uruk-Hai Raiding Party
+			1x1_158
 			#    Orc Ambush Troop
 			3x101_48
 			#    Caradhras Has Not Forgiven Us
 			1x1_123
 			#    Just A Wisp Of Cloud
 			2x101_28
-			#    Frostbite
-			2x101_27
 			#    Saruman's Chill
 			1x1_134
 			#    Wizard Storm
@@ -126,20 +130,20 @@
 			#    Nen Hithoel
 			1x101_63
 			#    Emyn Muil
-			1x1_360
+			1x51_360
 			#Free Peoples (30 cards)
-			#    Gandalf, The Grey Pilgrim
+			#    Gandalf, Grey Pilgrim
 			1x2_122
 			#    Aragorn, King in Exile
 			2x1_365
 			#    Boromir, Redeemed
 			1x101_20
 			#    Merry, From O'er the Brandywine
-			1x1_303
+			1x51_303
 			#    Pippin, Mr. Took
-			1x2_110
+			1x52_110
 			#    Coat of Mail
-			1x1_101
+			1x51_101
 			#    Flaming Brand
 			1x52_32
 			#    Ranger's Sword
@@ -171,7 +175,7 @@
 			#Shadow (30 cards)
 			#    Bill Ferny, Swarthy Sneering Fellow
 			1x52_75
-			#    Harry Goatleaf, In Thrall To The Nine
+			#    Harry Goatleaf
 			1x101_38
 			#    Ringwraith in Twilight
 			3x101_40
@@ -186,9 +190,9 @@
 			#    Ulaire Otsea, Ringwraith in Twilight
 			3x3_86
 			#    Nazgul Sword
-			2x1_218
+			1x1_218
 			#    Pale Crown
-			1x101_39
+			2x101_39
 			#    Fell Voices Call
 			2x101_37
 			#    It Wants To Be Found
@@ -200,7 +204,7 @@
 			#    Their Eyes Fell Upon Him
 			1x101_41
 			#    Walks in Twilight
-			1x101_42
+			1x1_42
 		]
 	}
 	{
@@ -230,30 +234,30 @@
 			#    Nen Hithoel
 			1x101_63
 			#    Emyn Muil
-			1x1_360
+			1x51_360
 			#Free Peoples (30 cards)
-			#    Arwen, Lady Undomiel
-			1x3_8
-			#    Legolas, Prince of Mirkwood
-			1x1_51
+			#    Arwen, Elven Rider
+			1x53_7
+			#    Legolas, Keen-Eyed
+			1x101_9
 			#    Gandalf, Olorin
 			1x101_14
 			#    Aragorn, Estel
 			2x101_19
 			#    Pippin, Mr. Took
-			1x2_110
-			#    Calaglin, Elf of Lorien
+			1x52_110
+			#    Calaglin
 			1x3_10
-			#    Dinendal, Silent Scout
+			#    Dinendal
 			1x3_12
-			#    Elrond, Lord of Rivendell
-			1x51_40
+			#    Elrond, Herald to Gil-Galad
+			1x53_13
 			#    Galadriel, Lady of Light
 			1x51_45
 			#    Galdor, Councilor From The West
 			1x3_18
 			#    Golradir, Councilor of Imladris
-			1x3_20
+			1x53_20
 			#    Silinde, Elf of Mirkwood
 			1x1_60
 			#    Gwaihir, Lord of Eagles
@@ -274,7 +278,7 @@
 			2x3_31
 			#    Two Eyes, As Often As I Can Spare Them
 			2x101_17
-			#    Three Rings For The Elven-Kings
+			#    Three For The Elven-Kings
 			1x101_12
 			#    My Heart Tells Me
 			1x101_16
@@ -286,27 +290,29 @@
 			#    Huge Tentacle
 			3x2_66
 			#    The Balrog, Durin's Bane
-			3x2_51
+			2x2_51
 			#    Thrashing Tentacle
 			3x101_33
 			#    Vile Tentacle
 			4x101_36
 			#    Watcher in the Water, Keeper of Westgate
 			2x2_73
+			#    Writhing Tentacle
+			2x101_66
+			#    Sirannon Dam
+			1x101_65
 			#    The Balrog's Sword
 			1x2_50
+			#    Whip of Many Thongs
+			1x2_74
 			#    Foul Things
 			1x52_59
 			#    Troubled Mountains
 			1x2_72
-			#    Dark Places
-			2x2_55
-			#    Guided By One Purpose
-			1x101_31
 			#    Out of Dark Waters
 			2x101_34
 			#    Terror At Its Coming
-			2x101_32
+			1x101_32
 			#    The Darkness Grew
 			1x101_35
 		]

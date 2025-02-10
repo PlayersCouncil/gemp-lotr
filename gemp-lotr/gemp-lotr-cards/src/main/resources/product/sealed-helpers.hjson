@@ -1,0 +1,494 @@
+[
+	{
+		name: Fellowship Site Pack
+		type: pack
+		items: [
+			#Bag End
+			1x1_319
+			#East Road
+			1x1_320
+			#Farmer Maggot's Fields
+			1x1_321
+			#Green Dragon Inn
+			1x1_322
+			#Green Hill Country
+			1x1_323
+			#The Prancing Pony
+			1x1_324
+			#Shire Lookout Point
+			1x1_325
+			#Westfarthing
+			1x1_326
+			#Bree Gate
+			1x1_327
+			#Bree Streets
+			1x1_328
+			#Breeland Forest
+			1x1_329
+			#Buckleberry Ferry
+			1x1_330
+			#Ettenmoors
+			1x1_331
+			#Midgewater Marshes
+			1x1_332
+			#Midgewater Moors
+			1x1_333
+			#Trollshaw Forest
+			1x1_334
+			#Weatherhills
+			1x1_335
+			#Weathertop
+			1x1_336
+			#Council Courtyard
+			1x1_337
+			#Ford of Bruinen
+			1x1_338
+			#Frodo's Bedroom
+			1x1_339
+			#Rivendell Terrace
+			1x1_340
+			#Rivendell Valley
+			1x1_341
+			#Rivendell Waterfall
+			1x1_342
+			#Balin's Tomb
+			1x1_343
+			#Dwarrowdelf Chamber
+			1x1_344
+			#Mithril Mine
+			1x1_345
+			#Moria Lake
+			1x1_346
+			#Moria Stairway
+			1x1_347
+			#Pass of Caradhras
+			1x1_348
+			#The Bridge of Khazad-dum
+			1x1_349
+			#Dimrill Dale
+			1x1_350
+			#Galadriel's Glade
+			1x1_351
+			#Lothlorien Woods
+			1x1_352
+			#Anduin Confluence
+			1x1_353
+			#Anduin Wilderland
+			1x1_354
+			#Silverlode Banks
+			1x1_355
+			#Anduin Banks
+			1x1_356
+			#Brown Lands
+			1x1_357
+			#Pillars of the Kings
+			1x1_358
+			#Shores of Nen Hithoel
+			1x1_359
+			#Emyn Muil
+			1x1_360
+			#Slopes of Amon Hen
+			1x1_361
+			#Summit of Amon Hen
+			1x1_362
+			#Tol Brandir
+			1x1_363
+			#Hobbiton Party Field
+			1x2_115
+			#Hobbiton Woods
+			1x2_116
+			#Town Center
+			1x2_117
+			#Great Chasm
+			1x2_118
+			#Hollin
+			1x2_119
+			#Valley of the Silverlode
+			1x2_120
+			#Caras Galadhon
+			1x3_115
+			#Eregion Hills
+			1x3_116
+			#Gates of Argonath
+			1x3_117
+			#The Great River
+			1x3_118
+			#House of Elrond
+			1x3_119
+			#Wastes of Emyn Muil
+			1x3_120
+		]
+	}
+	
+	{
+		name: Towers Site Pack
+		type: pack
+		items: [
+			#East Wall of Rohan
+			1x4_323
+			#Eastemnet Downs
+			1x4_324
+			#Eastemnet Gullies
+			1x4_325
+			#Horse-country
+			1x4_326
+			#Plains of Rohan
+			1x4_327
+			#The Riddermark
+			1x4_328
+			#Western Emyn Muil
+			1x4_329
+			#Derndingle
+			1x4_330
+			#Eastfold
+			1x4_331
+			#Fangorn Forest
+			1x4_332
+			#Plains of Rohan Camp
+			1x4_333
+			#Rohirrim Village
+			1x4_334
+			#Uruk Camp
+			1x4_335
+			#Wold of Rohan
+			1x4_336
+			#Barrows of Edoras
+			1x4_337
+			#Golden Hall
+			1x4_338
+			#Stables
+			1x4_339
+			#Streets of Edoras
+			1x4_340
+			#Throne Room
+			1x4_341
+			#Westemnet Plains
+			1x4_342
+			#Ered Nimrais
+			1x4_343
+			#Westemnet Hills
+			1x4_344
+			#White Mountains
+			1x4_345
+			#White Rocks
+			1x4_346
+			#Deep of Helm
+			1x4_347
+			#Deeping Wall
+			1x4_348
+			#Helm's Gate
+			1x4_349
+			#Hornburg Courtyard
+			1x4_350
+			#Hornburg Parapet
+			1x4_351
+			#Caves of Aglarond
+			1x4_352
+			#Great Hall
+			1x4_353
+			#Hornburg Armory
+			1x4_354
+			#Cavern Entrance
+			1x4_355
+			#Hornburg Causeway
+			1x4_356
+			#King's Room
+			1x4_357
+			#Ring of Isengard
+			1x4_358
+			#Wizard's Vale
+			1x4_359
+			#Fortress of Orthanc
+			1x4_360
+			#Orthanc Balcony
+			1x4_361
+			#Orthanc Library
+			1x4_362
+			#Palantir Chamber
+			1x4_363
+			#Hornburg Wall
+			1x5_118
+			#Nan Curunir
+			1x5_119
+			#Caverns of Isengard
+			1x5_120
+			#Rocks of Emyn Muil
+			1x6_115
+			#Westfold
+			1x6_116
+			#Meduseld
+			1x6_117
+			#Hornburg Hall
+			1x6_118
+			#Valley of Saruman
+			1x6_119
+			#Saruman's Laboratory
+			1x6_120
+		]
+	}
+	
+	{
+		name: King Site Pack
+		type: pack
+		items: [
+			#Dunharrow Plateau
+			1x7_329
+			#Edoras Hall
+			1x7_330
+			#Isengard Ruined
+			1x7_331
+			#Rohirrim Road
+			1x7_332
+			#Sleeping Quarters
+			1x7_333
+			#Steps of Edoras
+			1x7_334
+			#King's Tent
+			1x7_335
+			#Rohirrim Camp
+			1x7_336
+			#West Road
+			1x7_337
+			#Beacon of Minas Tirith
+			1x7_338
+			#Hall of the Kings
+			1x7_339
+			#Tower of Ecthelion
+			1x7_340
+			#Anduin Banks
+			1x7_341
+			#Osgiliath Fallen
+			1x7_342
+			#Pelennor Plain
+			1x7_343
+			#City Gates
+			1x7_344
+			#Pelennor Flat
+			1x7_345
+			#Minas Tirith Fifth Circle
+			1x7_346
+			#Minas Tirith First Circle
+			1x7_347
+			#Minas Tirith Fourth Circle
+			1x7_348
+			#Minas Tirith Second Circle
+			1x7_349
+			#Minas Tirith Seventh Circle
+			1x7_350
+			#Minas Tirith Sixth Circle
+			1x7_351
+			#Minas Tirith Third Circle
+			1x7_352
+			#Osgiliath Crossing
+			1x7_353
+			#Pelennor Grassland
+			1x7_354
+			#Ruined Capitol
+			1x7_355
+			#Cross Roads
+			1x7_356
+			#Morgul Vale
+			1x7_357
+			#Morgulduin
+			1x7_358
+			#Northern Ithilien
+			1x7_359
+			#Dagorlad
+			1x7_360
+			#Haunted Pass
+			1x7_361
+			#Narchost
+			1x7_362
+			#Slag Mounds
+			1x7_363
+			#The Dimholt
+			1x8_117
+			#City of the Dead
+			1x8_118
+			#Crashed Gate
+			1x8_119
+			#Osgiliath Channel
+			1x8_120
+			#Base of Mindolluin
+			1x10_117
+			#Pelennor Prairie
+			1x10_118
+			#Steward's Tomb
+			1x10_119
+			#Watchers of Cirith Ungol
+			1x10_120
+		]
+	}
+
+	{
+		name: WOTR Site Pack
+		type: pack
+		items: [
+			#Anduin Banks
+			1x11_227
+			#Anduin Confluence
+			1x11_228
+			#Barazinbar
+			1x11_229
+			#Buckland Homestead
+			1x11_230
+			#Caras Galadhon
+			1x11_231
+			#Cavern Entrance
+			1x11_232
+			#Chamber of Mazarbul
+			1x11_233
+			#Crags of Emyn Muil
+			1x11_234
+			#Dammed Gate-stream
+			1x11_235
+			#East Road
+			1x11_236
+			#Ettenmoors
+			1x11_237
+			#Expanding Marshland
+			1x11_238
+			#Fangorn Glade
+			1x11_239
+			#Flats of Rohan
+			1x11_240
+			#Fortress of Orthanc
+			1x11_241
+			#Green Dragon Inn
+			1x11_242
+			#Harrowdale
+			1x11_243
+			#Heights of Isengard
+			1x11_244
+			#Helm's Gate
+			1x11_245
+			#Mere of Dead Faces
+			1x11_246
+			#Moria Guardroom
+			1x11_247
+			#Moria Stairway
+			1x11_248
+			#Neekerbreekers' Bog
+			1x11_249
+			#North Undeep
+			1x11_250
+			#Old Forest Road
+			1x11_251
+			#Osgiliath Reclaimed
+			1x11_252
+			#Pelennor Fields
+			1x11_253
+			#Pelennor Flat
+			1x11_254
+			#Pinnacle of Zirakzigil
+			1x11_255
+			#The Prancing Pony
+			1x11_256
+			#Rohan Uplands
+			1x11_257
+			#Slag Mounds
+			1x11_258
+			#Stables
+			1x11_259
+			#Trollshaw Forest
+			1x11_260
+			#Valley of the Silverlode
+			1x11_261
+			#Watch-tower of Cirith Ungol
+			1x11_262
+			#West Gate of Moria
+			1x11_263
+			#Westemnet Village
+			1x11_264
+			#Window on the West
+			1x11_265
+			#Woody-End
+			1x11_266
+			#The Angle
+			1x12_185
+			#The Bridge of Khazad-dum
+			1x12_186
+			#Emyn Muil
+			1x12_187
+			#Hill of Sight
+			1x12_188
+			#Hobbiton Market
+			1x12_189
+			#Northern Pelennor
+			1x12_190
+			#Shores of Nen Hithoel
+			1x12_191
+			#Slopes of Orodruin
+			1x12_192
+			#Starkhorn
+			1x12_193
+			#Wold Battlefield
+			1x12_194
+			#Abandoned Mine Shaft
+			1x13_185
+			#Caves of Aglarond
+			1x13_186
+			#City of Kings
+			1x13_187
+			#Courtyard Parapet
+			1x13_188
+			#Crossroads of the Fallen Kings
+			1x13_189
+			#Doors of Durin
+			1x13_190
+			#Fords of Isen
+			1x13_191
+			#The Great Gates
+			1x13_192
+			#Isenwash
+			1x13_193
+			#Redhorn Pass
+			1x13_194
+		]
+	}
+
+	{
+		name: Hunters Site Pack
+		type: pack
+		items: [
+			#Anduin River
+			1x15_187
+			#Breeding Pit of Isengard
+			1x15_188
+			#City Gates
+			1x15_189
+			#East Wall of Rohan
+			1x15_190
+			#Gate of Mordor
+			1x15_191
+			#Isengard Ruined
+			1x15_192
+			#Mount Doom
+			1x15_193
+			#Westfold Village
+			1x15_194
+			#Dol Guldur
+			1x17_145
+			#Falls of Rauros
+			1x17_146
+			#Imladris
+			1x17_147
+			#Nurn
+			1x17_148
+			#Doorway to Doom
+			1x18_134
+			#Foot of Mount Doom
+			1x18_135
+			#Mithlond
+			1x18_136
+			#Morannon Plains
+			1x18_137
+			#Sirannon Ruins
+			1x18_138
+			#Steward's Tomb
+			1x18_139
+			#Streets of Bree
+			1x18_140
+		]
+	}
+]

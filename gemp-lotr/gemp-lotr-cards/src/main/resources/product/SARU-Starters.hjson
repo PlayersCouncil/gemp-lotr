@@ -42,34 +42,38 @@
 			1x13_124
 			#    Banner of the Mark
 			1x6_90
+			#    Brego
+			1x4_263
+			#    Firefoot, Eomer's Steed
+			1x7_232
 			#    Heavy Chain
-			2x4_278
-			#    Horse of Rohan
-			2x4_283
+			1x4_278
 			#    Long Spear
-			1x7_240
+			2x7_240
 			#    Rider's Mount
 			1x4_287
+			#    Rider's Spear
+			1x11_153
+			#    Rohirrim Bow
+			1x5_88
 			#    Rohirrim Javelin
 			1x7_248
 			#    Rohirrim Shield
 			1x5_91
 			#    Spear of the Mark
 			1x15_140
-			#    Swift Steed
-			2x7_253
 			#    Hobbit Sword
 			1x1_299
 			#    Ever the Hope of Men
 			1x6_93
+			#    Hurried Barrows
+			2x13_130
 			#    Where Now the Horse
 			2x17_103
-			#    Border Patrol
-			1x11_144
+			#    Arrow-Slits
+			1x5_80
 			#    Cast from the Hall
 			2x18_94
-			#    Doom Drove Them
-			2x8_86	
 			#    Freely Across Our Land
 			1x13_127
 			#    We Left None Alive
@@ -140,20 +144,24 @@
 			#    Starkhorn
 			1x12_193
 			#Free Peoples (30 cards)
-			#    Dwarf Guard
-			2x1_7
 			#    Dwarven Warrior
 			2x12_7
+			#    Dain Ironfoot, King Under the Mountain
+			1x14_1
 			#    Farin, Emissary of Erebor
 			1x11_7
 			#    Gimli, Lively Combatant
 			1x11_8
+			#    Gloin, Son of Groin
+			1x15_6
 			#    Axe of Khazad-Dum
-			1x11_3
+			2x11_3
 			#    Belt of Erebor
 			1x12_2
+			#    Dwarven Bracers
+			1x12_5
 			#    Hand Axe
-			1x2_10
+			2x2_10
 			#    Heavy Axe
 			1x15_7
 			#    Hobbit Sword
@@ -164,26 +172,22 @@
 			2x5_6
 			#    Durability
 			2x12_4
-			#    Honoring His Kinfolk
-			1x13_6
 			#    Sorrow Shared
-			2x13_7
+			1x13_7
 			#    The Fortunes of Balin's Folk
 			2x15_4
 			#    Noble Intentions
 			1x1_304
 			#    Chamber of Records
 			2x15_3
-			#    Great Works Begun There
-			1x2_9
 			#    His Father's Charge
 			1x12_8
 			#    Mountain Homestead
-			1x11_12
+			2x11_12
 			#    Stout and Strong
 			1x4_57
 			#    Thorin's Harp
-			2x18_3
+			1x18_3
 			#Shadow (30 cards)
 			#    Saruman, Instigator of Insurrection
 			2x17_37
@@ -260,14 +264,16 @@
 			1x7_107
 			#    Ranger of the South
 			2x18_56
-			#    Armor of the Citadel
-			1x11_55
-			#    Banner of Westernesse
-			1x6_51
+			#    Armor
+			1x1_92
 			#    Dunadan's Bow
 			1x18_45
+			#    Gondorian Blade
+			1x11_59
 			#    Gondorian Sword
 			2x7_98
+			#    Sword of Gondor
+			1x4_134
 			#    Hobbit Sword
 			1x1_299
 			#    Battle Cry
@@ -280,12 +286,12 @@
 			2x18_44
 			#    Great Gate
 			1x7_99
-			#    Reckless Counter
-			1x7_117
 			#    Garrison of Osgiliath
 			2x6_52
 			#    Hasty Repairs
 			1x7_102
+			#    Heirs of Gondor
+			1x13_69
 			#    Houses of Healing
 			1x11_61
 			#    Ithilien Trap
@@ -293,7 +299,7 @@
 			#    Portico
 			2x15_67
 			#    Soldier's Cache
-			2x17_35
+			1x17_35
 			#    Support of the City
 			1x7_123
 			#Shadow (30 cards)
@@ -376,8 +382,6 @@
 			1x2_29
 			#    Bilbo's Pipe
 			1x1_285
-			#    Frodo's Pipe
-			1x3_107
 			#    Hobbit Sword
 			2x1_299
 			#    Longbottom Leaf
@@ -390,6 +394,8 @@
 			1x4_99
 			#    A Marvel
 			1x10_110
+			#    Hobbit Intuition
+			1x1_296
 			#    Long-Stemmed Pipe
 			1x17_21
 			#    New Authority
