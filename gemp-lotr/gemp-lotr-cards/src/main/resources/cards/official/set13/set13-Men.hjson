@@ -753,6 +753,10 @@
 					type: winsSkirmish
 					filter: culture(men),minion
 				}
+				requires: {
+					type: CantSpot
+					filter: self, Zone(support)
+				}
 				effect: {
 					type: modifyStrength
 					select: bearer
