@@ -510,7 +510,7 @@
 				type: discount
 				discount: {
 					type: ifRemoveFromDiscard
-					filter: culture(gollum)
+					filter: culture(men)
 					count: 4
 				}
 			}
