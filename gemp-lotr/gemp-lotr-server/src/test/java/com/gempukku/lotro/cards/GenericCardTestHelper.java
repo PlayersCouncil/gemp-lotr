@@ -76,6 +76,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public static final String ATARRing = "4_1";
     public static final String GreatRing = "19_1";
 
+    public static final String Fellowship = "fotr_block";
     public static final String Multipath = "multipath";
     public static final String Shadows = "expanded";
 
@@ -96,7 +97,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
         this(cardIDs, siteIDs, ringBearerID, ringID, Multipath);
     }
 
-    public GenericCardTestHelper(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String path) throws CardNotFoundException, DecisionResultInvalidException {
+    public GenericCardTestHelper(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String format) throws CardNotFoundException, DecisionResultInvalidException {
         super();
 
         if(siteIDs == null || ringBearerID == null || ringID == null) {
@@ -119,7 +120,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
             decks.get(P1).setRing(ringID);
             decks.get(P2).setRing(ringID);
 
-            initializeGameWithDecks(decks, path);
+            initializeGameWithDecks(decks, format);
         }
 
         Cards.put(P1, new HashMap<>());
@@ -993,6 +994,9 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public boolean IsCharSkirmishing(PhysicalCardImpl card) {
         var skirmish = _game.getGameState().getSkirmish();
+        if(skirmish == null)
+            return false;
+
         return skirmish.getFellowshipCharacter() == card ||
                 skirmish.getShadowCharacters().stream().anyMatch(x -> x == card);
     }
