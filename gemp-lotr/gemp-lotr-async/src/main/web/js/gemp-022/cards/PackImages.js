@@ -223,10 +223,10 @@ const packBlueprints = {
     "The Nine - Toldea Starter": "/gemp-lotr/images/boosters/gala_2025/nine_toldea.jpg",
     "The Nine - Witch-King Starter": "/gemp-lotr/images/boosters/gala_2025/nine_twk.jpg",
     
-    "(R)Movie Random": "/gemp-lotr/images/boosters/gala_2025/",
-    "(R)Expanded Random": "/gemp-lotr/images/boosters/gala_2025/",
-    "(S)Ringbearer Choice": "/gemp-lotr/images/boosters/gala_2025/",
-    "(S)Ages End Choice": "/gemp-lotr/images/boosters/gala_2025/",
+    "(R)Movie Random": "/gemp-lotr/images/boosters/gala_2025/random-movie-booster.jpg",
+    "(R)Expanded Random": "/gemp-lotr/images/boosters/gala_2025/random-expanded-booster.jpg",
+    "(S)Ringbearer Choice": "/gemp-lotr/images/boosters/gala_2025/ring-bearer-selection.jpg",
+    "(S)Ages End Choice": "/gemp-lotr/images/boosters/gala_2025/ages-end-selection.jpg",
     
     "(S)Allies - Starter": "/gemp-lotr/images/boosters/starter_selection.png",
     "(S)Big Baddies - Starter": "/gemp-lotr/images/boosters/starter_selection.png",
@@ -238,10 +238,10 @@ const packBlueprints = {
     "(R)RotK Block - Starter": "/gemp-lotr/images/boosters/starter_selection.png",
     "(R)WotR Block - Starter": "/gemp-lotr/images/boosters/starter_selection.png",
     
-    "Fellowship Site Pack": "/gemp-lotr/images/boosters/gala_2025/",
-    "Towers Site Pack": "/gemp-lotr/images/boosters/gala_2025/",
-    "King Site Pack": "/gemp-lotr/images/boosters/gala_2025/",
-    "WOTR Site Pack": "/gemp-lotr/images/boosters/gala_2025/",
-    "Hunters Site Pack": "/gemp-lotr/images/boosters/gala_2025/"
+    "Fellowship Site Pack": "/gemp-lotr/images/boosters/gala_2025/fellowship-site-pack.jpg",
+    "Towers Site Pack": "/gemp-lotr/images/boosters/gala_2025/towers-site-pack.jpg",
+    "King Site Pack": "/gemp-lotr/images/boosters/gala_2025/king-site-pack.jpg",
+    "WOTR Site Pack": "/gemp-lotr/images/boosters/gala_2025/wotr-site-pack.jpg",
+    "Hunters Site Pack": "/gemp-lotr/images/boosters/gala_2025/hunters-site-pack.jpg"
     
 };
