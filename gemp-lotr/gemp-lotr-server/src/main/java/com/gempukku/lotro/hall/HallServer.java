@@ -522,7 +522,7 @@ public class HallServer extends AbstractServer {
         }
     }
 
-    public String registerSealedTournamentDeck(String tournamentId, Player player, String deckName) throws HallException {
+    public String registerLimitedTournamentDeck(String tournamentId, Player player, String deckName) throws HallException {
         _hallDataAccessLock.writeLock().lock();
         try {
             String result = "";

@@ -5,6 +5,7 @@ import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.GameHistoryDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
+import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -34,6 +35,7 @@ public class TournamentService {
     private final GameHistoryDAO _gameHistoryDao;
     private final LotroCardBlueprintLibrary _blueprintLibrary;
     private TableHolder _tables;
+    protected final SoloDraftDefinitions _soloDraftLibrary;
 
     private final CollectionsManager _collectionsManager;
 
@@ -45,7 +47,8 @@ public class TournamentService {
 
     public TournamentService(CollectionsManager collectionsManager, ProductLibrary productLibrary, DraftPackStorage draftPackStorage,
                              TournamentDAO tournamentDao, TournamentPlayerDAO tournamentPlayerDao, TournamentMatchDAO tournamentMatchDao,
-                             GameHistoryDAO gameHistoryDao, LotroCardBlueprintLibrary bpLibrary, LotroFormatLibrary formatLibrary) {
+                             GameHistoryDAO gameHistoryDao, LotroCardBlueprintLibrary bpLibrary, LotroFormatLibrary formatLibrary,
+                             SoloDraftDefinitions soloDraftLibrary) {
         _collectionsManager = collectionsManager;
         _productLibrary = productLibrary;
         _draftPackStorage = draftPackStorage;
@@ -55,6 +58,7 @@ public class TournamentService {
         _gameHistoryDao = gameHistoryDao;
         _blueprintLibrary = bpLibrary;
         _formatLibrary = formatLibrary;
+        _soloDraftLibrary = soloDraftLibrary;
     }
 
     public PairingMechanism getPairingMechanism(Tournament.PairingType pairing) {
@@ -277,6 +281,9 @@ public class TournamentService {
         else if(info.Parameters().type == Tournament.TournamentType.CONSTRUCTED) {
             return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
         }
+        else if(info.Parameters().type == Tournament.TournamentType.SOLODRAFT) {
+            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
+        }
 
         return null;
     }
@@ -290,6 +297,10 @@ public class TournamentService {
         else if(type == Tournament.TournamentType.CONSTRUCTED) {
             return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
                     new TournamentInfo(this, _productLibrary, _formatLibrary, tourney));
+        }
+        else if(type == Tournament.TournamentType.SOLODRAFT) {
+            return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
+                    new SoloDraftTournamentInfo(this, _productLibrary, _formatLibrary, tourney, _soloDraftLibrary));
         }
 
         return null;
@@ -358,10 +369,12 @@ public class TournamentService {
             tournament = _activeTournaments.get(tid);
             if (tournament == null) {
                 if(info.Parameters().type == Tournament.TournamentType.SEALED) {
-                    tournament = new SealedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _tables, tid);
+                    tournament = new SealedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tables, tid);
                 }
                 else if(info.Parameters().type == Tournament.TournamentType.CONSTRUCTED) {
-                    tournament = new ConstructedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _tables, tid);
+                    tournament = new ConstructedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tables, tid);
+                } else if (info.Parameters().type == Tournament.TournamentType.SOLODRAFT) {
+                    tournament = new SoloDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tables, tid);
                 }
 
                 _activeTournaments.put(tid, tournament);
@@ -384,10 +397,12 @@ public class TournamentService {
             tournament = _activeTournaments.get(tid);
             if (tournament == null) {
                 if(type == Tournament.TournamentType.SEALED) {
-                    tournament = new SealedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _tables, tid);
+                    tournament = new SealedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tables, tid);
                 }
                 else if(type == Tournament.TournamentType.CONSTRUCTED) {
-                    tournament = new ConstructedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _tables, tid);
+                    tournament = new ConstructedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tables, tid);
+                } else if (type == Tournament.TournamentType.SOLODRAFT) {
+                    tournament = new SoloDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tables, tid);
                 }
 
                 _activeTournaments.put(tid, tournament);

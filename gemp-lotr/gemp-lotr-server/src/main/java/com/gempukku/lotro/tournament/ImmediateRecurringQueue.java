@@ -32,6 +32,7 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
         }
 
         boolean isSealed = _tournamentInfo instanceof SealedTournamentInfo;
+        boolean isSoloDraft = _tournamentInfo instanceof SoloDraftTournamentInfo;
 
         TournamentParams params;
         TournamentInfo newInfo;
@@ -58,6 +59,28 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
                 this.minimumPlayers = _playerCap;
             }};
             newInfo = new SealedTournamentInfo((SealedTournamentInfo) _tournamentInfo, (SealedTournamentParams) params);
+        } else if (isSoloDraft) {
+            params = new SoloDraftTournamentParams() {{
+                this.type = Tournament.TournamentType.SOLODRAFT;
+
+                this.deckbuildingDuration = ((SoloDraftTournamentParams) _tournamentInfo._params).deckbuildingDuration;
+                this.turnInDuration = ((SoloDraftTournamentParams) _tournamentInfo._params).turnInDuration;
+
+                this.soloDraftFormatCode = ((SoloDraftTournamentParams) _tournamentInfo._params).soloDraftFormatCode;
+                this.format = _tournamentInfo._params.format;
+                this.requiresDeck = false;
+
+                this.tournamentId = tid;
+                this.playoff = _tournamentInfo._params.playoff;
+                this.prizes = _tournamentInfo._params.prizes;
+                this.name = tournamentName;
+                this.format = getFormatCode();
+                this.startTime = DateUtils.Now().toLocalDateTime();
+                this.manualKickoff = false;
+                this.cost = getCost();
+                this.minimumPlayers = _playerCap;
+            }};
+            newInfo = new SoloDraftTournamentInfo((SoloDraftTournamentInfo) _tournamentInfo, (SoloDraftTournamentParams) params);
         } else {
             params = new TournamentParams() {{
                 this.tournamentId = tid;

@@ -98,7 +98,8 @@ public class ServerBuilder {
                         extract(objectMap, TournamentMatchDAO.class),
                         extract(objectMap, GameHistoryDAO.class),
                         extract(objectMap, LotroCardBlueprintLibrary.class),
-                        extract(objectMap, LotroFormatLibrary.class)));
+                        extract(objectMap, LotroFormatLibrary.class),
+                        extract(objectMap, SoloDraftDefinitions.class)));
 
         objectMap.put(MerchantService.class,
                 new MerchantService(

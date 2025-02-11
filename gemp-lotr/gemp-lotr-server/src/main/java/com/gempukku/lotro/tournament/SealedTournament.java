@@ -4,6 +4,7 @@ import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.draft.Draft;
+import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.DefaultCardCollection;
 import com.gempukku.lotro.game.Player;
@@ -25,8 +26,8 @@ public class SealedTournament extends BaseTournament implements Tournament {
     private SealedTournamentInfo _sealedInfo;
 
     public SealedTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
-            LotroFormatLibrary formatLibrary,  TableHolder tables, String tournamentId) {
-        super(tournamentService, collectionsManager, productLibrary, formatLibrary, tables, tournamentId);
+                            LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableHolder tables, String tournamentId) {
+        super(tournamentService, collectionsManager, productLibrary, formatLibrary, soloDraftDefinitions, tables, tournamentId);
     }
 
     @Override

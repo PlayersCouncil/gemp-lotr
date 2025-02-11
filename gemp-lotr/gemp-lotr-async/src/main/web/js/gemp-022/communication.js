@@ -758,7 +758,7 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
-    registerSealedTournamentDeck:function(tournamentId, deckName, callback, errorMap) {
+    registerLimitedTournamentDeck:function(tournamentId, deckName, callback, errorMap) {
         $.ajax({
             type:"POST",
             url:this.url + "/hall/tournament/" + tournamentId + "/registerdeck",
@@ -1346,10 +1346,10 @@ var GempLotrCommunication = Class.extend({
             dataType:"html"
         });
     },
-    getDraft:function (leagueType, callback, errorMap) {
+    getDraft:function (eventId, callback, errorMap) {
         $.ajax({
             type:"GET",
-            url:this.url + "/soloDraft/"+leagueType,
+            url:this.url + "/soloDraft/" + eventId,
             cache:false,
             data:{
                 participantId:getUrlParam("participantId")},
@@ -1358,10 +1358,10 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
-    makeDraftPick:function (leagueType, choiceId, callback, errorMap) {
+    makeDraftPick:function (eventId, choiceId, callback, errorMap) {
         $.ajax({
             type:"POST",
-            url:this.url + "/soloDraft/"+leagueType,
+            url:this.url + "/soloDraft/" + eventId,
             cache:false,
             data:{
                 choiceId:choiceId,

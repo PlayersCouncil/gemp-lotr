@@ -425,6 +425,13 @@ var GempLotrHallUI = Class.extend({
 											 "At any time during the deckbuilding phase and for a short time after it ends, you will need to lock-in your deck before the tournament begins.<br><br>" +
 											 "Deckbuilding begins at " + queueStart + ".	Good luck!";
 											}
+
+											if(type === "solodraft") {
+												message = "You have signed up to participate in the <b>" + queueName
+											 + "</b> tournament.<br><br>When the event begins, use the 'Go to Draft' button in the Active Tournaments Section, and then build your deck in the Deck Builder." +
+											 "At any time during the deckbuilding phase and for a short time after it ends, you will need to lock-in your deck before the tournament begins.<br><br>" +
+											 "Deckbuilding begins at " + queueStart + ".	Good luck!";
+											}
 											that.showDialog("Joined Tournament", message, 320);
 										}
 									}, that.hallErrorMap());
@@ -542,7 +549,24 @@ var GempLotrHallUI = Class.extend({
 					if (joined == "true") {
 						that.inTournament = true;
 						debugger;
-						if(type === "sealed" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff" || stage === "paused between rounds")) {
+						if(type === "solodraft" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff")) {
+								var but = $("<button>Go to Draft</button>");
+								$(but).button().click((
+									function(tourneyInfo) {
+										var tourneyId = tournament.getAttribute("id");
+
+                                        return function() {
+                                            var win = window.open("/gemp-lotr/soloDraft.html?eventId=" + tourneyId, '_blank');
+                                            if (win) {
+                                                //Browser has allowed it to be opened
+                                            win.focus();
+                                            }
+                                        }
+									}
+									)(tournament));
+								actionsField.append(but);
+						}
+						if((type === "sealed" || type === "solodraft") && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff" || stage === "paused between rounds")) {
 								var but = $("<button>Register Deck</button>");
 								$(but).button().click((
 									function(tourneyInfo) {
@@ -550,7 +574,7 @@ var GempLotrHallUI = Class.extend({
 										var tourneyName = tournament.getAttribute("name");
 										
 										return function () {
-											that.comm.registerSealedTournamentDeck(tourneyId, that.decksSelect.val(), function (xml) {
+											that.comm.registerLimitedTournamentDeck(tourneyId, that.decksSelect.val(), function (xml) {
 														that.processResponse(xml);
 												});
 										};
@@ -613,7 +637,11 @@ var GempLotrHallUI = Class.extend({
 					else {
 						rowhtml = "<tr class='tournament" + id + "'><td>" + tournament.getAttribute("format") + "</td>";
 						if(type === "sealed") {
-							rowhtml += "<td>Limited</td>";
+							rowhtml += "<td>Sealed</td>";
+						}
+						else if (type === "solodraft") {
+							rowhtml += "<td>Solo Draft</td>";
+
 						}
 						else {
 							rowhtml += "<td>" + tournament.getAttribute("collection") + "</td>";

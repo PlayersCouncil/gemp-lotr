@@ -152,6 +152,7 @@ public interface Tournament {
                 return JsonUtils.Convert(unparsed, SealedTournamentParams.class);
             }
             case SOLODRAFT -> {
+                return JsonUtils.Convert(unparsed, SoloDraftTournamentParams.class);
             }
         }
 

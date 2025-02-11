@@ -81,7 +81,7 @@ public class ConstructedTournamentTest extends AbstractAtTest {
 
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
 
-        var tournament = new ConstructedTournament(tournamentService, null, _productLibrary, _formatLibrary, tables, tournamentId);
+        var tournament = new ConstructedTournament(tournamentService, null, _productLibrary, _formatLibrary, null, tables, tournamentId);
 
         tournament.setWaitForPairingsTime(_waitForPairingsTime);
 

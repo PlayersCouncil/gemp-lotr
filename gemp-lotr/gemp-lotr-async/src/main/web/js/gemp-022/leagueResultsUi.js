@@ -85,7 +85,7 @@ var LeagueResultsUI = Class.extend({
                     var draftBut = $("<button>Go to draft</button>").button();
                     var draftFunc = (function (leagueCode) {
                         return function() {
-                            var win = window.open("/gemp-lotr/soloDraft.html?leagueType=" + leagueCode, '_blank');
+                            var win = window.open("/gemp-lotr/soloDraft.html?eventId=" + leagueCode, '_blank');
                             if (win) {
                                 //Browser has allowed it to be opened
                                 win.focus();
