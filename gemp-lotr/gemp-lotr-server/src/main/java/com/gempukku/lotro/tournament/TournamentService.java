@@ -72,6 +72,58 @@ public class TournamentService {
         );
     }
 
+    private void addImmediateRecurringSealed(String queueId, String queueName, String prefix, String formatCode) {
+
+        var sealedParams = new SealedTournamentParams();
+        sealedParams.type = Tournament.TournamentType.SEALED;
+
+        sealedParams.deckbuildingDuration = 25;
+        sealedParams.turnInDuration = 5;
+
+        var sealedFormat = _formatLibrary.GetSealedTemplate(formatCode);
+        sealedParams.sealedFormatCode = formatCode;
+        sealedParams.format = sealedFormat.GetFormat().getCode();
+        sealedParams.requiresDeck = false;
+
+        sealedParams.tournamentId = prefix;
+        sealedParams.name = queueName;
+        sealedParams.cost = 0;
+        sealedParams.minimumPlayers = 2;
+        sealedParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
+        sealedParams.prizes = Tournament.PrizeType.NONE;
+
+        _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
+                new SealedTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
+                        sealedParams))
+        );
+    }
+
+    private void addImmediateRecurringDraft(String queueId, String queueName, String prefix, String formatCode) {
+
+        var soloDraftParams = new SoloDraftTournamentParams();
+        soloDraftParams.type = Tournament.TournamentType.SOLODRAFT;
+
+        soloDraftParams.deckbuildingDuration = 25;
+        soloDraftParams.turnInDuration = 5;
+
+        var soloDraft = _soloDraftLibrary.getSoloDraft(formatCode);
+        soloDraftParams.soloDraftFormatCode = formatCode;
+        soloDraftParams.format = soloDraft.getFormat();
+        soloDraftParams.requiresDeck = false;
+
+        soloDraftParams.tournamentId = prefix;
+        soloDraftParams.name = queueName;
+        soloDraftParams.cost = 0;
+        soloDraftParams.minimumPlayers = 2;
+        soloDraftParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
+        soloDraftParams.prizes = Tournament.PrizeType.NONE;
+
+        _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
+                new SoloDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
+                        soloDraftParams, _soloDraftLibrary))
+        );
+    }
+
     private void addRecurringScheduledQueue(String queueId, String queueName, String time, String prefix, String formatCode) {
         _tournamentQueues.put(queueId, new RecurringScheduledQueue(this, queueId, queueName,
                 new TournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.ParseStringDate(time),
@@ -90,6 +142,9 @@ public class TournamentService {
         addImmediateRecurringQueue("pc_movie_queue", "PC-Movie", "pcmovieQueue-", "pc_movie");
         addImmediateRecurringQueue("expanded_queue", "Expanded", "expandedQueue-", "expanded");
         addImmediateRecurringQueue("pc_expanded_queue", "PC-Expanded", "pcexpandedQueue-", "pc_expanded");
+
+        addImmediateRecurringSealed("sealed_queue", "FotR Sealed", "sealedQueue-", "single_fotr_block_sealed");
+        addImmediateRecurringDraft("draft_queue", "FotR Draft", "draftQueue-", "fotr_draft");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
