@@ -129,4 +129,210 @@
 			1xRoS - Booster
 		]
 	}
+	{
+		name: (R)Movie Random
+		type: random
+		items: [
+			1xFotR - Booster
+			1xMoM - Booster
+			1xRotEL - Booster
+			1xTTT - Booster
+			1xBoHD - Booster
+			1xEoF - Booster
+			1xRotK - Booster
+			1xSoG - Booster
+			1xMD - Booster
+		]
+	}
+	{
+		name: (R)Expanded Random
+		type: random
+		items: [
+			1xSH - Booster
+			1xBR - Booster
+			1xBL - Booster
+			1xHU - Booster
+			1xRoS - Booster
+			1xTaD - Booster
+		]
+	}
+	{
+		name: (S)Ringbearer Choice
+		type: selection
+		items: [
+			1x9_49
+			1x9_31
+			1x9_14
+			1x9_4
+			1x9_33
+			1x9_30
+		]
+	}
+	{
+		name: (S)Ages End Choice
+		type: selection
+		items: [
+			1x19_2
+			1x19_3
+			1x19_4
+			1x19_5
+			1x19_6
+			1x19_7
+			1x19_8
+			1x19_9
+			1x19_10
+			1x19_11
+			1x19_12
+			1x19_13
+			1x19_14
+			1x19_15
+			1x19_16
+			1x19_17
+			1x19_18
+			1x19_19
+			1x19_20
+			1x19_21
+			1x19_22
+			1x19_23
+			1x19_24
+			1x19_25
+			1x19_26
+			1x19_27
+			1x19_28
+			1x19_29
+			1x19_30
+			1x19_31
+			1x19_32
+			1x19_33
+			1x19_34
+			1x19_35
+			1x19_36
+			1x19_37
+			1x19_38
+			1x19_39
+			1x19_40
+		]
+	}
+	{
+		name: (S)Allies - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xAllies - Lothlorien Starter
+			1xAllies - Rivendell Starter
+			1xAllies - Thrarin Starter
+			1xAllies - Villagers Starter
+		]
+	}
+	{
+		name: (S)Big Baddies - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xBig Baddies - Gorbag's Command Starter
+			1xBig Baddies - Gothmog's Conquering Starter
+			1xBig Baddies - Sauron's Corruption Starter
+			1xBig Baddies - Shelob's Web Starter
+		]
+	}
+	{
+		name: (S)The Nine - Free Peoples Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xThe Nine - Aragorn Starter
+			1xThe Nine - Boromir Starter
+			1xThe Nine - Frodo Starter
+			1xThe Nine - Gandalf Starter
+			1xThe Nine - Gimli Starter
+			1xThe Nine - Legolas Starter
+			1xThe Nine - Merry Starter
+			1xThe Nine - Pippin Starter
+			1xThe Nine - Sam Starter
+		]
+	}
+	{
+		name: (S)The Nine - Shadow Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xThe Nine - Attea Starter
+			1xThe Nine - Cantea Starter
+			1xThe Nine - Enquea Starter
+			1xThe Nine - Lemenya Starter
+			1xThe Nine - Nelya Starter
+			1xThe Nine - Nertea Starter
+			1xThe Nine - Otsea Starter
+			1xThe Nine - Toldea Starter
+			1xThe Nine - Witch-King Starter
+		]
+	}
+	{
+		name: (S)Little Baddies - Starter
+		type: selection
+		selectionCount: 1
+		items: [
+			1xLittle Baddies - Bill Ferny's Ponies Starter
+			1xLittle Baddies - Gollum's Threat Starter
+			1xLittle Baddies - Grima's Assignment Starter
+			1xLittle Baddies - Ted Sandyman's Control Starter
+		]
+	}
+	{
+		name: (R)FotR Block - Starter
+		type: random
+		selectionCount: 1
+		items: [
+			1xFotR - Gandalf Starter
+			1xFotR - Aragorn Starter
+			1xMoM - Gandalf Starter
+			1xMoM - Gimli Starter
+			1xRotEL - Boromir Starter
+			1xRotEL - Legolas Starter
+		]
+	}
+	
+	{
+		name: (R)TTT Block - Starter
+		type: random
+		selectionCount: 1
+		items: [
+			1xTTT - Aragorn Starter
+			1xTTT - Theoden Starter
+			1xBoHD - Eowyn Starter
+			1xBoHD - Legolas Starter
+			1xEoF - Faramir Starter
+			1xEoF - Witch-king Starter
+		]
+	}
+	
+	{
+		name: (R)RotK Block - Starter
+		type: random
+		selectionCount: 1
+		items: [
+			1xRotK - Aragorn Starter
+			1xRotK - Eomer Starter
+			1xSoG - Merry Starter
+			1xSoG - Pippin Starter
+			1xMD - Frodo Starter
+			1xMD - Sam Starter
+		]
+	}
+	
+	{
+		name: (R)WotR Block - Starter
+		type: random
+		selectionCount: 1
+		items: [
+			1xSH - Aragorn Starter
+			1xSH - Eowyn Starter
+			1xSH - Gandalf Starter
+			1xSH - Legolas Starter
+			1xBR - Mouth Starter
+			1xBR - Saruman Starter
+			1xBL - Arwen Starter
+			1xBL - Boromir Starter
+		]
+	}
 ]
