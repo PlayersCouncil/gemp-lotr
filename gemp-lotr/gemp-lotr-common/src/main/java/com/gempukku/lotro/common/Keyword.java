@@ -82,7 +82,7 @@ public enum Keyword implements Filterable {
     private final boolean terrain;
     private final boolean realKeyword;
 
-    private Keyword(String humanReadable, boolean infoDisplayable, boolean multiples, boolean terrain, boolean realKeyword) {
+    Keyword(String humanReadable, boolean infoDisplayable, boolean multiples, boolean terrain, boolean realKeyword) {
         this.humanReadable = humanReadable;
         this.infoDisplayable = infoDisplayable;
         this.multiples = multiples;

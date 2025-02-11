@@ -28,12 +28,12 @@ import java.util.Map;
 
 public class ReinforceTokens implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "culture", "select", "memorize", "times", "player");
 
         final Culture culture = FieldUtils.getEnum(Culture.class, effectObject.get("culture"), "culture");
         final Token token = Token.findTokenForCulture(culture);
-        final String select = FieldUtils.getString(effectObject.get("select"), "select", "self");
+        final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("times"), 1, environment);
         String player = FieldUtils.getString(effectObject.get("player"), "player", "you");

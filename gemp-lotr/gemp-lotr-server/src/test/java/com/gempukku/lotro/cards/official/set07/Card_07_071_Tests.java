@@ -17,8 +17,8 @@ public class Card_07_071_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "7_71");
-					// put other cards in here as needed for the test case
+					put("smeagol", "7_71");
+					put("balrog", "12_79");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +47,7 @@ public class Card_07_071_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("smeagol");
 
 		assertEquals("Sméagol", card.getBlueprint().getTitle());
 		assertEquals("Always Helps", card.getBlueprint().getSubtitle());
@@ -63,18 +63,66 @@ public class Card_07_071_Tests
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SmeagolTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SmeagolAddsABurdenWhenPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.FreepsMoveCardToHand(smeagol);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.getBurdens());
+		scn.FreepsPlayCard(smeagol);
+		assertEquals(2, scn.getBurdens());
+	}
+
+	@Test
+	public void SmeagolAbilityCantBeUsedIfNoThreatRoom() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.FreepsMoveCharToTable(smeagol);
+
+		var balrog = scn.GetShadowCard("balrog");
+		scn.ShadowMoveCharToTable(balrog);
+
+		scn.StartGame();
+		scn.AddThreats(2);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		assertFalse(scn.FreepsActionAvailable(smeagol));
+	}
+
+	@Test
+	public void SmeagolAbilityAssignsMinionAndAdds2ThreatsToExhaustMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.FreepsMoveCharToTable(smeagol);
+
+		var balrog = scn.GetShadowCard("balrog");
+		scn.ShadowMoveCharToTable(balrog);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertEquals(0, scn.getThreats());
+		assertEquals(5, scn.GetVitality(balrog));
+		assertFalse(scn.IsCharAssigned(smeagol));
+		assertFalse(scn.IsCharAssigned(balrog));
+
+		assertTrue(scn.FreepsActionAvailable(smeagol));
+
+		scn.FreepsUseCardAction(smeagol);
+
+		assertEquals(2, scn.getThreats());
+		assertTrue(scn.IsCharAssigned(smeagol));
+		assertTrue(scn.IsCharAssigned(balrog));
+		assertEquals(1, scn.GetVitality(balrog));
 	}
 }

@@ -73,10 +73,19 @@
 					type: losesInitiative
 					side: free people
 				}
-				requires: {
-					type: canSpot
-					filter: culture(gandalf),companion
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: culture(gandalf),companion
+					}
+					{
+						type: not
+						requires: {
+							type: phase
+							phase: fellowship
+						}
+					}
+				]
 				effect: {
 					type: discard
 					player: shadow

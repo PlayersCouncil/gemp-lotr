@@ -187,6 +187,7 @@
 				cost: {
 					type: exert
 					select: memory(winner)
+					ignoreCostCheckFailure: true
 				}
 				effect: {
 					type: drawCards
@@ -379,7 +380,7 @@
 				modifier: {
 					type: modifyStrength
 					requires: {
-						type: canSpotThreats
+						type: canSpotTwilight
 						amount: 4
 					}
 					filter: bearer
@@ -1009,6 +1010,7 @@
 					type: exert
 					select: choose(name(Gandalf))
 					times: memory(exertCount)
+					ignoreCostCheckFailure: true
 				}
 			]
 			effect: [

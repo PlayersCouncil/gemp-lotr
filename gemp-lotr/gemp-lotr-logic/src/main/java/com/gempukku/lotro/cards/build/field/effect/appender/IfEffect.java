@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
 
 public class IfEffect implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "check", "true", "false");
 
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(effectObject.get("check"), "check");
@@ -23,8 +23,8 @@ public class IfEffect implements EffectAppenderProducer {
         final JSONObject[] falseEffects = FieldUtils.getObjectArray(effectObject.get("false"), "false");
 
         final Requirement[] conditions = environment.getRequirementFactory().getRequirements(conditionArray, environment);
-        final EffectAppender[] trueEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(trueEffects, environment);
-        final EffectAppender[] falseEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(falseEffects, environment);
+        final EffectAppender[] trueEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, trueEffects, environment);
+        final EffectAppender[] falseEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, falseEffects, environment);
 
         return new DelayedAppender() {
             @Override
@@ -51,10 +51,12 @@ public class IfEffect implements EffectAppenderProducer {
 
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
-                EffectAppender[] effects = checkConditions(actionContext) ? trueEffectAppenders : falseEffectAppenders;
+
+                boolean check = checkConditions(actionContext);
+                EffectAppender[] effects = check ? trueEffectAppenders : falseEffectAppenders;
 
                 if(effects == null || effects.length == 0)
-                    return false;
+                    return check;
 
                 for (EffectAppender effectAppender : effects) {
                     if (!effectAppender.isPlayableInFull(actionContext))

@@ -41,7 +41,8 @@ public class Card_04_199_Tests
 		 * Strength: 9
 		 * Vitality: 2
 		 * Site Number: 5
-		 * Game Text: <b>Damage +1</b>.<br><b>Regroup:</b> Stack this minion on a site you control.
+		 * Game Text: <b>Damage +1</b>.
+		 * <b>Regroup:</b> Stack this minion on a site you control.
 		 * 	<b>Shadow:</b> If stacked on a site you control, play this minion. Its twilight cost is -1.
 		*/
 
@@ -117,17 +118,17 @@ public class Card_04_199_Tests
 		var controlledSite = scn.GetFreepsSite(1);
 		assertTrue(scn.IsSiteControlled(controlledSite));
 		scn.StackCardsOn(controlledSite, trooper);
-		scn.SetTwilight(48);
+		scn.SetTwilight(3);
 
 		scn.FreepsPassCurrentPhaseAction();
 		assertEquals(controlledSite, trooper.getStackedOn());
 		assertEquals(Zone.STACKED, trooper.getZone());
 
 		assertTrue(scn.ShadowActionAvailable(trooper));
-		assertEquals(50, scn.GetTwilight());
+		assertEquals(10, scn.GetTwilight());
 		scn.ShadowUseCardAction(trooper);
 		assertEquals(Zone.SHADOW_CHARACTERS, trooper.getZone());
-		// Trooper cost 4, but should have a -1 discount, so costs 3 + 2 for roaming
-		assertEquals(45, scn.GetTwilight());
+		// Trooper cost 4, but should have a -1 discount
+		assertEquals(7, scn.GetTwilight());
 	}
 }

@@ -180,18 +180,6 @@
 					}
 				}
 			}
-			{
-				type: activated
-				phase: fellowship
-				cost: {
-					type: exert
-					select: self
-				}
-				effect: {
-					type: heal
-					select: choose(unbound,hobbit)
-				}
-			}
 		]
 		gametext: <b>Unhasty</b>.<br><b>Assignment:</b> Exert an unbound Hobbit or discard 2 cards from hand to allow this companion to skirmish.
 		lore: "'We keep off strangers and the foolhardy; and we train and we teach, we walk and we weed.'"
@@ -293,18 +281,6 @@
 						type: unhastyCompanionCanParticipateInSkirmishes
 						filter: self
 					}
-				}
-			}
-			{
-				type: activated
-				phase: fellowship
-				cost: {
-					type: exert
-					select: self
-				}
-				effect: {
-					type: heal
-					select: choose(unbound,hobbit)
 				}
 			}
 			{

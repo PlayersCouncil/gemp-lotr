@@ -611,12 +611,7 @@ var PCCards = {
 	'10_127'  : 'https://i.lotrtcgpc.net/promos/LOTR-EN10U025.0_card.jpg',
 	//Arwen, Queen of Elves and Men FA
 	'10_128'  : 'https://i.lotrtcgpc.net/promos/LOTR-EN10U006.0_card.jpg',
-	
-	
-	//Maps
-	'100_2' : 'https://i.lotrtcgpc.net/sets/vset0/LOTR-ENV0S002.0_card.jpg',
-	'100_3' : 'https://i.lotrtcgpc.net/sets/vset0/LOTR-ENV0S003.0_card.jpg',
-	'100_4' : 'https://i.lotrtcgpc.net/sets/vset0/LOTR-ENV0S004.0_card.jpg',
+
 	
 	//April 2024 Weekend League
 	//Troop of Uruk-hai FA
@@ -871,7 +866,8 @@ var PCCards = {
 	'53_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E080.2_card.jpg',
 	'53_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.2_card.jpg',
 	'53_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.3_card.jpg',
-	'53_105' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E105.2_card.jpg',
+	//Why Shouldn't I Keep It, entirely reverted
+	//'53_105' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E105.2_card.jpg',
 	
 	//2024 World Championship promos
 	//Unbranded - Do not release until 2025 WC has concluded.
@@ -943,8 +939,18 @@ var PCCards = {
 	// Fortress Never Fallen (4U276) [Errata]
 	'54_276' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E276.2_card.jpg',
 	// Boromir, Redeemed (V1 20) [Errata]
-	'101_20'   : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E020.1_card.jpg'
+	'101_20'   : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E020.1_card.jpg',
+	// Southron Archer (4R245)
+	'54_245'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E245.1_card.jpg',
+	// The Number Must Be Few (1U260)
+	'51_260'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E260.1_card.jpg',
 	
+	// The Balrog, Flame of Udun, 2024 Playtest Promo
+	'2_129' : 'https://i.lotrtcgpc.net/promos/LOTR-EN02O052.0_card.jpg',
+	// 2024 Yuletide Frodo, Reluctant Adventurer
+	'2_130' : 'https://i.lotrtcgpc.net/promos/LOTR-EN02H102.0_card.jpg',
+	// 2024 Yuletide Sam, Resolute Halfling
+	'7_369' : 'https://i.lotrtcgpc.net/promos/LOTR-EN07H327.0_card.jpg'
 	
 }
 

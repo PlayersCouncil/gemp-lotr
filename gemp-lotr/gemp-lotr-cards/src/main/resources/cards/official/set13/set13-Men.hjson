@@ -510,7 +510,7 @@
 				type: discount
 				discount: {
 					type: ifRemoveFromDiscard
-					filter: culture(gollum)
+					filter: culture(men)
 					count: 4
 				}
 			}
@@ -689,6 +689,7 @@
 							type: RemoveCultureTokens
 							culture: men
 							select: self
+							count: 2
 						}
 					]
 				}
@@ -751,6 +752,10 @@
 				trigger: {
 					type: winsSkirmish
 					filter: culture(men),minion
+				}
+				requires: {
+					type: CantSpot
+					filter: self, Zone(support)
 				}
 				effect: {
 					type: modifyStrength

@@ -73,11 +73,9 @@ public class Card_V0_001_ErrataTests
 		PhysicalCardImpl site2 = scn.GetShadowSite("Ettenmoors");
 		PhysicalCardImpl rath = scn.GetShadowSite("Rath Dínen");
 
-		scn.FreepsChooseCardBPFromSelection(site1);
-		scn.SkipStartingFellowships();
 		scn.AddWoundsToChar(frodo, 5);
 
-		scn.StartGame();
+		scn.StartGame(site1);
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowChooseCardBPFromSelection(site2);
 		scn.SkipCurrentSite();

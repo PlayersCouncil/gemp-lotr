@@ -20,8 +20,9 @@ public class Card_01_311_ErrataTests
 					put("rosie", "1_309");
 					put("proudfoot", "1_301");
 					put("gaffer", "1_291");
+					put("stealth", "1_298");
 
-					put("orc", "1_272");
+					put("twk", "1_237");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -165,5 +166,66 @@ public class Card_01_311_ErrataTests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 		assertSame(scn.GetRingBearer(), sam);
+		assertFalse(scn.GameIsFinished());
+	}
+
+	@Test
+	public void RBOverwhelmMakesSamTheRB() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
+
+		var twk = scn.GetShadowCard("twk");
+		scn.ShadowMoveCharToTable(twk);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, twk);
+		scn.FreepsResolveSkirmish(frodo);
+		scn.PassCurrentPhaseActions();
+
+		assertNotSame(scn.GetRingBearer(), sam);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertSame(scn.GetRingBearer(), sam);
+		assertFalse(scn.GameIsFinished());
+	}
+
+	@Test
+	public void RBFierceOverwhelmMakesSamTheRB() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var stealth = scn.GetFreepsCard("stealth");
+		scn.FreepsMoveCharToTable(sam);
+		scn.FreepsMoveCardToHand(stealth);
+
+		var twk = scn.GetShadowCard("twk");
+		scn.ShadowMoveCharToTable(twk);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(sam, twk);
+		scn.FreepsResolveSkirmish(sam);
+		scn.FreepsPlayCard(stealth);
+
+		//Fierce
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(frodo, twk);
+		scn.FreepsResolveSkirmish(frodo);
+		scn.PassCurrentPhaseActions();
+
+		assertNotSame(scn.GetRingBearer(), sam);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertSame(scn.GetRingBearer(), sam);
+		assertFalse(scn.GameIsFinished());
 	}
 }

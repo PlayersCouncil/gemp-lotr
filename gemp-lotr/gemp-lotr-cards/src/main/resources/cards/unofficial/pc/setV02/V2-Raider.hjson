@@ -17,6 +17,72 @@
 		effects: [
 			{
 				type: event
+				requires: [
+					{
+						type: Or
+						requires: [
+							# Small draw
+							{
+								type: And
+								requires: [
+									{
+										type: CanSpot
+										filter: your,minion
+									}
+									{
+										type: Not
+										requires: {
+											type: WasPlayedFromZone
+											zone: DECK
+										}
+									}
+									{
+										type: CanSpotTwilight
+										amount: 3
+									}
+								]
+							}
+							
+							# Big draw
+							{
+								type: And
+								requires: [
+									{
+										type: Or
+										requires: [
+											{
+												type: And
+												requires: [
+													{
+														type: Location
+														filter: RegionNumber(3)
+													}
+													{
+														type: CanSpotTwilight
+														amount: 25
+													}
+												]
+											}
+											{
+												type: And
+												requires: [
+													{
+														type: Location
+														filter: RegionNumber(1-2)
+													}
+													{
+														type: CanSpotTwilight
+														amount: 18
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
 				effect: {
 					type: Choice
 					texts: [
@@ -26,10 +92,19 @@
 					effects: [
 						{
 							type: CostToEffect
-							requires: {
-								type: CanSpot
-								filter: your,minion
-							}
+							requires: [
+								{
+									type: CanSpot
+									filter: your,minion
+								}
+								{
+									type: Not
+									requires: {
+										type: WasPlayedFromZone
+										zone: DECK
+									}
+								}
+							]
 							cost: {
 								type: RemoveTwilight
 								amount: 3
@@ -117,7 +192,7 @@
 				}
 			}
 		]
-		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.\Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (4) to take up to 4 Shadow events into hand from your draw deck. If in region 1, this action can be played from your draw deck.
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.\Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (4) to take up to 4 Shadow events into hand from your draw deck. If in region 1, this action can be performed from your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {

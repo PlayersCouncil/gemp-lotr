@@ -12,7 +12,7 @@ import org.json.simple.JSONObject;
 
 public class PreventableAppenderProducer implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "text", "player", "effect", "cost", "instead");
 
         final String text = FieldUtils.getString(effectObject.get("text"), "text");
@@ -27,9 +27,9 @@ public class PreventableAppenderProducer implements EffectAppenderProducer {
             throw new InvalidCardDefinitionException("Player is required for preventable effect");
 
         final PlayerSource preventingPlayerSource = PlayerResolver.resolvePlayer(player);
-        final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(effectArray, environment);
-        final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(costArray, environment);
-        final EffectAppender[] insteadAppenders = environment.getEffectAppenderFactory().getEffectAppenders(insteadArray, environment);
+        final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, effectArray, environment);
+        final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(true, costArray, environment);
+        final EffectAppender[] insteadAppenders = environment.getEffectAppenderFactory().getEffectAppenders(true, insteadArray, environment);
 
         return new PreventableEffectAppender(preventingPlayerSource, text, Predicates.alwaysTrue(), costAppenders, effectAppenders, insteadAppenders);
     }

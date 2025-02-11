@@ -236,7 +236,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		target: or(companion,ally)
+		target: or(companion,ally),not(hasAttached(name(Too Great and Terrible)))
 		effects: [
 			{
 				type: ExtraCost
@@ -261,7 +261,7 @@
 					}
 					{
 						type: Preventable
-						text: Would you like to discard a card from hand sharing a culture with {bearer}?
+						text: Discard a card from hand sharing a culture with {bearer} to prevent exhausting {bearer}?
 						player: Freeps
 						cost: {
 							type: DiscardFromHand
@@ -272,24 +272,16 @@
 						}
 						effect: [
 							{
-								type: revealHand
-								hand: freeps
-								memorize: revealedCards
-							}
-							{
-								type: discardFromHand
-								hand: freeps
-								forced: true
-								player: you
-								select: choose(memory(revealedCards),side(free peoples))
+								type: Exhaust
+								select: bearer
 							}
 						]
 					}					
 				]
 			}
 		]
-		gametext: To play, exert a [ringwraith] minion. Bearer must\be a companion or ally.\Each time bearer exerts, the Free Peoples player may discard a card from hand of bearer's culture.  If they do not, reveal their hand and discard 1 revealed Free Peoples card.
-		lore: “‘I do not wish to become like the Dark Lord himself.'”
+		gametext: To play, exert a [ringwraith] minion. Bearer must be a companion or ally. Limit 1 per bearer.<br/>Each time bearer exerts, exhaust bearer unless the Free Peoples player discards a card from hand of bearer's culture.
+		lore: "His eyes flashed and his face was lit as by a fire within. 'Do not tempt me! For I do not wish to become like the Dark Lord himself.'"
 		promotext: ""
 		alts: {
 			promos: {

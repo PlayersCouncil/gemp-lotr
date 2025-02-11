@@ -17,8 +17,9 @@ public class Card_13_079_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "13_79");
-					// put other cards in here as needed for the test case
+					put("pallando", "13_79");
+					put("throne", "17_39");
+					put("saruman", "4_173");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -43,7 +44,7 @@ public class Card_13_079_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("pallando");
 
 		assertEquals("Pallando Deceived", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,18 +56,25 @@ public class Card_13_079_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void PallandoDeceivedTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void PallandoDeceivedIsPumpedByThroneOfIsengardAfterConversion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var pallando = scn.GetShadowCard("pallando");
+		var throne = scn.GetShadowCard("throne");
+		var saruman = scn.GetShadowCard("saruman");
+		scn.ShadowMoveCardToSupportArea(pallando, throne);
+		scn.ShadowMoveCharToTable(saruman);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		//10 base +3 from throne making Wizards stronger
+		assertEquals(13, scn.getStrength(pallando));
 	}
 }

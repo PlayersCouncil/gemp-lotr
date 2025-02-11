@@ -615,6 +615,7 @@ class Card {
 
     //Used for ephemeral card displays such as event display or the "affected by card" effect
     static CreateSimpleCardDiv(image, testingText, foil, incomplete, borderWidth) {
+        var foilPresentation = Card.getFoilPresentation();
         var cardDiv = $("<div class='card'><img src='" + image + "' width='100%' height='100%'></div>");
 
         if (incomplete) {

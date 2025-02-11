@@ -14,11 +14,9 @@ import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.SingleMemoryEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.results.CharacterLostSkirmishResult;
-import com.google.common.base.Predicates;
+import com.gempukku.lotro.logic.timing.results.CharacterWonSkirmishResult;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class FilterFactory {
     private final Map<String, FilterableSource> simpleFilters = new HashMap<>();
@@ -111,7 +109,7 @@ public class FilterFactory {
                     return Filters.none;
                 }));
         simpleFilters.put("hasrace",
-                (actionContext -> (Filter) (game, physicalCard) -> physicalCard.getBlueprint().getRace() != null));
+                (actionContext -> (Filter) (game, physicalCard) -> !game.getModifiersQuerying().getRaces(game, physicalCard).isEmpty()));
         simpleFilters.put("idinstored",
                 (actionContext ->
                         (Filter) (game, physicalCard) -> {
@@ -337,12 +335,12 @@ public class FilterFactory {
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return actionContext -> {
+                        var game = actionContext.getGame();
                         final Filterable sourceFilterable = filterableSource.getFilterable(actionContext);
 
                         Map<Race, Integer> counts = new HashMap<>();
                         for (PhysicalCard card : Filters.filterActive(actionContext.getGame(), sourceFilterable)) {
-                            final Race race = card.getBlueprint().getRace();
-                            if (race != null) {
+                            for(var race : game.getModifiersQuerying().getRaces(game, card)) {
                                 Integer count = counts.get(race);
                                 if (count == null)
                                     count = 0;
@@ -376,7 +374,7 @@ public class FilterFactory {
                                                 new Evaluator() {
                                                     @Override
                                                     public int evaluateExpression(LotroGame game, PhysicalCard cardAffected) {
-                                                        int maxStrength = Integer.MAX_VALUE;
+                                                        int maxStrength = Integer.MIN_VALUE;
                                                         for (PhysicalCard card : Filters.filterActive(game, sourceFilterable))
                                                             maxStrength = Math.max(maxStrength, game.getModifiersQuerying().getStrength(game, card));
                                                         return maxStrength;
@@ -413,6 +411,11 @@ public class FilterFactory {
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return (actionContext) -> Filters.inSkirmishAgainst(filterableSource.getFilterable(actionContext));
+                });
+        parameterFilters.put("recentlyinskirmishagainst",
+                (parameter, environment) -> {
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> Filters.recentlyInSkirmishAgainst(filterableSource.getFilterable(actionContext));
                 });
         parameterFilters.put("inskirmishagainstatleast",
                 (parameter, environment) -> {
@@ -567,23 +570,31 @@ public class FilterFactory {
                     if (parameter.startsWith("memory(") && parameter.endsWith(")")) {
                         return actionContext -> (Filter) (game, physicalCard) -> {
                             String memory = parameter.substring(parameter.indexOf("(") + 1, parameter.lastIndexOf(")"));
-                            Set<Race> races = actionContext.getCardsFromMemory(memory).stream().map(
-                                    (Function<PhysicalCard, Race>) cardFromMemory -> cardFromMemory.getBlueprint().getRace()).filter(Predicates.notNull()).collect(Collectors.toSet());
-                            return races.contains(physicalCard.getBlueprint().getRace());
+                            var races = new HashSet<Race>();
+                            for(var memoryCard : actionContext.getCardsFromMemory(memory)) {
+                                races.addAll(game.getModifiersQuerying().getRaces(game, memoryCard));
+                            }
+                            //Disjoint returns true if there are no elements in common between two collections
+                            return !Collections.disjoint(races, game.getModifiersQuerying().getRaces(game, physicalCard));
                         };
                     } else if (parameter.equals("stored")) {
                         return actionContext -> (Filter) (game, physicalCard) -> {
                             final PhysicalCard.WhileInZoneData value = actionContext.getSource().getWhileInZoneData();
                             if (value != null)
-                                return Race.valueOf(value.getValue()) == physicalCard.getBlueprint().getRace();
+                                return game.getModifiersQuerying().getRaces(game, physicalCard).contains(Race.valueOf(value.getValue()));
                             return false;
                         };
                     } else if (parameter.equals("cannotspot")) {
                         return actionContext -> (Filter) (game, physicalCard) -> {
-                            final Race race = physicalCard.getBlueprint().getRace();
-                            if (race != null)
-                                return !Filters.canSpot(game, race);
-                            return false;
+                            var races = game.getModifiersQuerying().getRaces(game, physicalCard);
+                            if(races.isEmpty())
+                                return false;
+
+                            for(var race : races) {
+                                if(Filters.canSpot(game, race))
+                                    return false;
+                            }
+                            return true;
                         };
                     }
                     throw new InvalidCardDefinitionException("Unknown race definition in filter: " + parameter

@@ -20,7 +20,7 @@ import org.json.simple.JSONObject;
 
 public class AddThreats implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "amount", "player");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("amount"), 1, environment);
@@ -68,7 +68,7 @@ public class AddThreats implements EffectAppenderProducer {
                 new DelayedAppender() {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                        final int threats = valueSource.getEvaluator(actionContext).getMinimum(actionContext.getGame(), null);
+                        int threats = Integer.parseInt(actionContext.getValueFromMemory(memorize));
                         final String playerAddingThreats = playerSource.getPlayer(actionContext);
                         if (threats > 0) {
                             return new AddThreatsEffect(playerAddingThreats, actionContext.getSource(), threats);

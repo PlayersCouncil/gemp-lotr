@@ -14,6 +14,7 @@ public class PhysicalCardImpl implements PhysicalCard {
     private final String _owner;
     private String _cardController;
     private Zone _zone;
+    private Zone _playedFromZone;
     private final LotroCardBlueprint _blueprint;
 
     private PhysicalCardImpl _attachedTo;
@@ -52,6 +53,15 @@ public class PhysicalCardImpl implements PhysicalCard {
     @Override
     public Zone getZone() {
         return _zone;
+    }
+
+    @Override
+    public void setPlayedFromZone(Zone zone) {
+        _playedFromZone = zone;
+    }
+    @Override
+    public Zone getPlayedFromZone() {
+        return _playedFromZone;
     }
 
     @Override

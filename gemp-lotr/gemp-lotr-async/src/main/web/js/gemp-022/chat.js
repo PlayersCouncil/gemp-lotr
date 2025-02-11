@@ -325,7 +325,7 @@ var ChatBoxUI = Class.extend({
         //     return;
         // }
         
-        if(message.includes("Thank you for playtesting!")) {
+        if(message.includes("Thank you for playing!")) {
             if (this.dialogListener != null) {
                 this.dialogListener("Give us feedback!", message);
             }

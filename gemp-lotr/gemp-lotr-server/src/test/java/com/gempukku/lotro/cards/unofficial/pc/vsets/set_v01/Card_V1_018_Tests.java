@@ -88,13 +88,13 @@ public class Card_V1_018_Tests
 
 		scn.StartGame();
 
-		assertFalse(scn.CanBeAssigned(saruman));
+		assertFalse(scn.CanBeAssignedViaAction(saruman));
 		scn.FreepsPlayCard(elrond);
-		assertFalse(scn.CanBeAssigned(saruman));
+		assertFalse(scn.CanBeAssignedViaAction(saruman));
 		scn.FreepsPlayCard(galadriel);
-		assertFalse(scn.CanBeAssigned(saruman));
+		assertFalse(scn.CanBeAssignedViaAction(saruman));
 		scn.FreepsPlayCard(gandalf);
-		assertTrue(scn.CanBeAssigned(saruman));
+		assertTrue(scn.CanBeAssignedViaAction(saruman));
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
@@ -177,8 +177,9 @@ public class Card_V1_018_Tests
 		//limit of 2 means it won't let us even with healthy allies
 		assertEquals(1, scn.GetWoundsOn(galadriel));
 		assertEquals(2, scn.GetWoundsOn(elrond));
-		assertTrue(scn.FreepsActionAvailable(council));
+		assertFalse(scn.FreepsActionAvailable(council));
 
+		scn.SkipToSite(3);
 		scn.SkipToPhase(Phase.REGROUP);
 
 		assertTrue(scn.FreepsActionAvailable(council));

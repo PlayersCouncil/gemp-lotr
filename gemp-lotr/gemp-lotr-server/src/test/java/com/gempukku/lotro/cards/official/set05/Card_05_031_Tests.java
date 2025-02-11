@@ -17,8 +17,10 @@ public class Card_05_031_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "5_31");
-					// put other cards in here as needed for the test case
+					put("alcarin", "5_31");
+					put("secondlevel", "7_118");
+
+					put("runner", "1_178");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +48,7 @@ public class Card_05_031_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("alcarin");
 
 		assertEquals("Alcarin", card.getBlueprint().getTitle());
 		assertEquals("Warrior of Lamedon", card.getBlueprint().getSubtitle());
@@ -62,18 +64,36 @@ public class Card_05_031_Tests
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AlcarinTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void AlcarinCanSelfAssignToAFortifiedMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var alcarin = scn.GetFreepsCard("alcarin");
+		var secondlevel = scn.GetFreepsCard("secondlevel");
+		scn.FreepsMoveCharToTable(alcarin);
+		scn.FreepsMoveCardToSupportArea(secondlevel);
+
+		var runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCharToTable(runner);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsUseCardAction(secondlevel);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertEquals(1, scn.GetWoundsOn(alcarin));
+		assertEquals(Zone.ATTACHED, secondlevel.getZone());
+		assertEquals(runner, secondlevel.getAttachedTo());
+		assertTrue(scn.FreepsActionAvailable(alcarin));
+		assertFalse(scn.IsCharAssigned(alcarin));
+		assertFalse(scn.IsCharAssigned(runner));
+
+		scn.FreepsUseCardAction(alcarin);
+		assertTrue(scn.IsCharAssigned(alcarin));
+		assertTrue(scn.IsCharAssigned(runner));
+		assertEquals(0, scn.GetWoundsOn(alcarin));
 	}
 }

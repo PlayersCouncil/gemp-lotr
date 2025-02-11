@@ -17,6 +17,7 @@
 		effects: {
 			type: Trigger
 			optional: true
+			player: freeps
 			trigger: {
 				type: movesFrom
 				filter: name(Bag End Study)

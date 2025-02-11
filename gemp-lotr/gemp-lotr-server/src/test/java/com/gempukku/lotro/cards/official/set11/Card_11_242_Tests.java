@@ -17,12 +17,23 @@ public class Card_11_242_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "11_242");
-					// put other cards in here as needed for the test case
+					put("sam", "1_310");
+					put("gaffer", "1_291");
 				}},
-				GenericCardTestHelper.FellowshipSites,
+				new HashMap<>() {{
+					put("greendragon", "11_242");
+					put("site2", "13_185");
+					put("site3", "11_234");
+					put("site4", "17_148");
+					put("site5", "18_138");
+					put("site6", "11_230");
+					put("site7", "12_187");
+					put("site8", "12_185");
+					put("site9", "17_146");
+				}},
 				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				GenericCardTestHelper.RulingRing,
+				GenericCardTestHelper.Shadows
 		);
 	}
 
@@ -44,9 +55,7 @@ public class Card_11_242_Tests
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite();
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("greendragon");
 
 		assertEquals("Green Dragon Inn", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +65,21 @@ public class Card_11_242_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GreenDragonInnTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GreenDragonInnIsOnlyTriggeredByFreePeoplesPlayerAndNotShadow() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
 
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		var greendragon = scn.GetFreepsCard("greendragon");
 
-		assertEquals(3, scn.GetTwilight());
+		scn.StartGame(greendragon);
+		scn.FreepsMoveCardsToTopOfDeck("gaffer");
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsDeclineOptionalTrigger();
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 	}
 }

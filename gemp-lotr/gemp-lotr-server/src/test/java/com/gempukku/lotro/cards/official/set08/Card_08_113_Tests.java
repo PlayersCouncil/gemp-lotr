@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set08;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,8 @@ public class Card_08_113_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "8_113");
-					// put other cards in here as needed for the test case
+					put("sting", "8_113");
+					put("shelob", "8_25");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -40,12 +39,14 @@ public class Card_08_113_Tests
 		 * Type: Possession
 		 * Subtype: Hand weapon
 		 * Strength: 2
-		 * Game Text: Bearer must be Frodo or Sam.<br><b>Response:</b> If a fierce skirmish involving bearer is about to end, add a threat to discard a minion involved in that skirmish.
+		 * Game Text: Bearer must be Frodo or Sam.
+		 * <b>Response:</b> If a fierce skirmish involving bearer is about to end, add a threat to discard a minion
+		 * involved in that skirmish.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("sting");
 
 		assertEquals("Sting", card.getBlueprint().getTitle());
 		assertEquals("Bane of the Eight Legs", card.getBlueprint().getSubtitle());
@@ -58,18 +59,39 @@ public class Card_08_113_Tests
 		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void StingTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void StingTriggersAfterFierceButNotRegularSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var frodo = scn.GetRingBearer();
+		var sting = scn.GetFreepsCard("sting");
+		scn.FreepsAttachCardsTo(frodo, sting);
+
+		var shelob = scn.GetShadowCard("shelob");
+		scn.ShadowMoveCharToTable(shelob);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, shelob);
+		scn.FreepsResolveSkirmish(frodo);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsDeclineOptionalTrigger(); //Ring converting burdens
+		assertFalse(scn.FreepsDecisionAvailable("Sting"));
 
-		assertEquals(1, scn.GetTwilight());
+		//Fierce assignment
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(frodo, shelob);
+		scn.FreepsResolveSkirmish(frodo);
+		scn.PassCurrentPhaseActions();
+
+		scn.FreepsDeclineOptionalTrigger(); //Ring converting burdens
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(Zone.SHADOW_CHARACTERS, shelob.getZone());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetThreats());
+		assertEquals(Zone.DISCARD, shelob.getZone());
 	}
 }

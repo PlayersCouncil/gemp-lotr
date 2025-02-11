@@ -73,6 +73,7 @@ public class RequirementFactory {
         requirementProducers.put("shadowplayerreplacedcurrentsite", new ShadowPlayerReplacedCurrentSite());
         requirementProducers.put("twilightpoollessthan", new TwilightPoolLessThan());
         requirementProducers.put("wasassignedtoskirmish", new WasAssignedToSkirmish());
+        requirementProducers.put("wasplayedfromzone", new WasPlayedFromZone());
     }
 
     public Requirement getRequirement(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {

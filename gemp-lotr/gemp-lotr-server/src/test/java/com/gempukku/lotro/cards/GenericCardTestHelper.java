@@ -4,6 +4,7 @@ import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.effect.filter.FilterFactory;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -13,7 +14,9 @@ import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.effects.DiscardCardsFromPlayEffect;
+import com.gempukku.lotro.logic.effects.TakeControlOfASiteEffect;
 import com.gempukku.lotro.logic.modifiers.Modifier;
+import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 import com.gempukku.lotro.logic.timing.RuleUtils;
@@ -22,6 +25,8 @@ import org.junit.Assert;
 
 import java.util.*;
 
+import static org.junit.Assert.assertTrue;
+
 public class GenericCardTestHelper extends AbstractAtTest {
 
     private final int LastCardID = 100;
@@ -29,7 +34,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public static final HashMap<String, String> FellowshipSites = new HashMap<>() {{
         put("site1", "1_319");
         put("site2", "1_327");
-        put("site3", "1_337");
+        put("site3", "1_341");
         put("site4", "1_343");
         put("site5", "1_349");
         put("site6", "1_351");
@@ -50,6 +55,18 @@ public class GenericCardTestHelper extends AbstractAtTest {
         put("site9", "7_360");
     }};
 
+    public static final HashMap<String, String> ShadowsSites = new HashMap<>() {{
+        put("site1", "11_239");
+        put("site2", "13_185");
+        put("site3", "11_234");
+        put("site4", "17_148");
+        put("site5", "18_138");
+        put("site6", "11_230");
+        put("site7", "12_187");
+        put("site8", "12_185");
+        put("site9", "17_146");
+    }};
+
     public static final String FOTRFrodo = "1_290";
     public static final String GimliRB = "9_4";
     public static final String GaladrielRB = "9_14";
@@ -58,6 +75,10 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public static final String IsildursBaneRing = "1_1";
     public static final String ATARRing = "4_1";
     public static final String GreatRing = "19_1";
+
+    public static final String Fellowship = "fotr_block";
+    public static final String Multipath = "multipath";
+    public static final String Shadows = "expanded";
 
     private final FilterFactory FilterFactory = new FilterFactory();
     private final CardGenerationEnvironment Environment = new LotroCardBlueprintBuilder();
@@ -69,14 +90,14 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public Map<String, Map<String, PhysicalCardImpl>> Cards = new HashMap<>();
 
     public GenericCardTestHelper(HashMap<String, String> cardIDs) throws CardNotFoundException, DecisionResultInvalidException {
-        this(cardIDs, null, null, null, "multipath");
+        this(cardIDs, null, null, null, Multipath);
     }
 
     public GenericCardTestHelper(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID) throws CardNotFoundException, DecisionResultInvalidException {
-        this(cardIDs, siteIDs, ringBearerID, ringID, "multipath");
+        this(cardIDs, siteIDs, ringBearerID, ringID, Multipath);
     }
 
-    public GenericCardTestHelper(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String path) throws CardNotFoundException, DecisionResultInvalidException {
+    public GenericCardTestHelper(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String format) throws CardNotFoundException, DecisionResultInvalidException {
         super();
 
         if(siteIDs == null || ringBearerID == null || ringID == null) {
@@ -99,7 +120,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
             decks.get(P1).setRing(ringID);
             decks.get(P2).setRing(ringID);
 
-            initializeGameWithDecks(decks, path);
+            initializeGameWithDecks(decks, format);
         }
 
         Cards.put(P1, new HashMap<>());
@@ -143,7 +164,16 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
 
     public void StartGame() throws DecisionResultInvalidException {
-        skipMulligans();
+        SkipStartingFellowships();
+        SkipMulligans();
+    }
+
+    //Use this one when setting up a Shadows path game
+    public void StartGame(PhysicalCardImpl site1) throws DecisionResultInvalidException {
+        //Choosing first site, since that can't be automatic
+        FreepsChooseCardBPFromSelection(site1);
+        SkipStartingFellowships();
+        SkipMulligans();
     }
 
     public void SkipStartingFellowships() throws DecisionResultInvalidException {
@@ -152,6 +182,15 @@ public class GenericCardTestHelper extends AbstractAtTest {
         }
         if(ShadowDecisionAvailable("Starting fellowship")) {
             ShadowChoose("");
+        }
+    }
+
+    public void SkipMulligans() throws DecisionResultInvalidException {
+        if(FreepsDecisionAvailable("Do you wish to mulligan")) {
+            FreepsChooseNo();
+        }
+        if(ShadowDecisionAvailable("Do you wish to mulligan")) {
+            ShadowChooseNo();
         }
     }
 
@@ -181,7 +220,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public PhysicalCardImpl GetSite(String playerID, int siteNum)
     {
         PhysicalCardImpl site = (PhysicalCardImpl)_game.getGameState().getSite(siteNum);
-        if(site != null && site.getOwner() == playerID)
+        if(site != null && site.getOwner().equals(playerID))
             return site;
 
         List<PhysicalCardImpl> advDeck = (List<PhysicalCardImpl>)_game.getGameState().getAdventureDeck(playerID);
@@ -218,6 +257,12 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public AwaitingDecision FreepsGetAwaitingDecision() { return GetAwaitingDecision(P1); }
     public AwaitingDecision ShadowGetAwaitingDecision() { return GetAwaitingDecision(P2); }
     public AwaitingDecision GetAwaitingDecision(String playerID) { return _userFeedback.getAwaitingDecision(playerID); }
+    public AwaitingDecision GetCurrentDecision() {
+        var freeps = FreepsGetAwaitingDecision();
+        if(freeps != null)
+            return freeps;
+        return ShadowGetAwaitingDecision();
+    }
 
     public Boolean FreepsDecisionAvailable(String text) { return DecisionAvailable(P1, text); }
     public Boolean ShadowDecisionAvailable(String text) { return DecisionAvailable(P2, text); }
@@ -594,6 +639,26 @@ public class GenericCardTestHelper extends AbstractAtTest {
         Arrays.stream(cards).forEach(card -> MoveCardToZone(P2, card, Zone.DISCARD));
     }
 
+    public void FreepsMoveCardToAdventurePath(PhysicalCardImpl card) {
+        int num = _game.getGameState().getCurrentSiteNumber() + 1;
+        MoveCardToZone(P1, card, Zone.ADVENTURE_PATH);
+        card.setSiteNumber(num);
+    }
+
+    public void ShadowMoveCardToAdventurePath(PhysicalCardImpl card) {
+        int num = _game.getGameState().getCurrentSiteNumber() + 1;
+        MoveCardToZone(P2, card, Zone.ADVENTURE_PATH);
+        card.setSiteNumber(num);
+    }
+
+    public void FreepsMoveCardToAdventureDeck(PhysicalCardImpl...cards) {
+        Arrays.stream(cards).forEach(card -> MoveCardToZone(P1, card, Zone.ADVENTURE_DECK));
+    }
+
+    public void ShadowMoveCardToAdventureDeck(PhysicalCardImpl...cards) {
+        Arrays.stream(cards).forEach(card -> MoveCardToZone(P2, card, Zone.ADVENTURE_DECK));
+    }
+
 
     public void FreepsMoveCardToDeadPile(String...names) {
         Arrays.stream(names).forEach(name -> FreepsMoveCardToDeadPile(GetFreepsCard(name)));
@@ -680,6 +745,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public boolean RBWearingOneRing() { return _game.getGameState().isWearingRing(); }
     public PhysicalCardImpl GetCurrentSite() { return (PhysicalCardImpl)_game.getGameState().getCurrentSite(); }
 
+    public int GetCurrentSiteNumber() { return GetCurrentSite().getSiteNumber(); }
     public void SkipToAssignments() throws DecisionResultInvalidException {
         SkipToPhase(Phase.ASSIGNMENT);
         PassCurrentPhaseActions();
@@ -696,7 +762,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
             ShadowDeclineReconciliation();
         }
         while(ShadowDecisionAvailable("discard down")) {
-            ShadowChooseCard((PhysicalCardImpl) GetShadowHand().get(0));
+            ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
         }
     }
     public void SkipToPhase(Phase target) throws DecisionResultInvalidException {
@@ -713,7 +779,17 @@ public class GenericCardTestHelper extends AbstractAtTest {
                 ShadowPassCurrentPhaseAction();
             }
             else {
-                PassCurrentPhaseActions();
+                var freeps = FreepsGetAwaitingDecision();
+                var shadow = ShadowGetAwaitingDecision();
+                if(freeps != null && freeps.getText().toLowerCase().contains("required")) {
+                    FreepsChooseAction("0");
+                }
+                else if(shadow != null && shadow.getText().toLowerCase().contains("required")){
+                    ShadowChooseAction("0");
+                }
+                else {
+                    PassCurrentPhaseActions();
+                }
             }
 
             if(attempts == 20)
@@ -918,6 +994,9 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public boolean IsCharSkirmishing(PhysicalCardImpl card) {
         var skirmish = _game.getGameState().getSkirmish();
+        if(skirmish == null)
+            return false;
+
         return skirmish.getFellowshipCharacter() == card ||
                 skirmish.getShadowCharacters().stream().anyMatch(x -> x == card);
     }
@@ -968,18 +1047,37 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public boolean IsType(PhysicalCardImpl card, CardType type)
     {
-        return card.getBlueprint().getCardType() == type
-            || _game.getModifiersQuerying().isAdditionalCardType(_game, card, type);
+        return  _game.getModifiersQuerying().isCardType(_game, card, type);
     }
 
-    public Boolean CanBeAssigned(PhysicalCardImpl card)
+    public boolean IsRace(PhysicalCardImpl card, Race race)
     {
-        return CanBeAssigned(card, Side.SHADOW) || CanBeAssigned(card, Side.FREE_PEOPLE);
+        return  _game.getModifiersQuerying().isRace(_game, card, race);
     }
 
-    public Boolean CanBeAssigned(PhysicalCardImpl card, Side side)
+    public Boolean CanBeAssignedViaAction(PhysicalCardImpl card)
     {
-        return _game.getModifiersQuerying().canBeAssignedToSkirmish(_game, side, card);
+        return CanBeAssignedViaAction(card, Side.SHADOW) || CanBeAssignedViaAction(card, Side.FREE_PEOPLE);
+    }
+
+    public Boolean FreepsCanAssign(PhysicalCardImpl card)
+    {
+        return CanBeAssignedNormally(card, Side.FREE_PEOPLE);
+    }
+
+    public Boolean ShadowCanAssign(PhysicalCardImpl card)
+    {
+        return CanBeAssignedViaAction(card, Side.FREE_PEOPLE);
+    }
+
+    public Boolean CanBeAssignedViaAction(PhysicalCardImpl card, Side side)
+    {
+        return Filters.assignableToSkirmish(side, false, true, false).accepts(_game, card);
+    }
+
+    public Boolean CanBeAssignedNormally(PhysicalCardImpl card, Side side)
+    {
+        return Filters.assignableToSkirmish(side, side == Side.SHADOW, side == Side.SHADOW, false).accepts(_game, card);
     }
 
 
@@ -997,6 +1095,17 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public void ApplyAdHocAction(ActionProxy action)
     {
         _game.getActionsEnvironment().addUntilEndOfTurnActionProxy(action);
+    }
+
+    public void ShadowTakeControlOfSite() throws DecisionResultInvalidException {
+        ShadowExecuteAdHocEffect(new TakeControlOfASiteEffect(null, P2));
+    }
+
+    public void FreepsExecuteAdHocEffect(Effect effect) throws DecisionResultInvalidException { ExecuteAdHocEffect(P1, effect); }
+    public void ShadowExecuteAdHocEffect(Effect effect) throws DecisionResultInvalidException { ExecuteAdHocEffect(P2, effect); }
+    public void ExecuteAdHocEffect(String playerId, Effect effect) throws DecisionResultInvalidException {
+        carryOutEffectInPhaseActionByPlayer(playerId, effect);
+        assertTrue(effect.wasCarriedOut());
     }
 
     public void FreepsChoose(String choice) throws DecisionResultInvalidException { playerDecided(P1, choice); }
@@ -1047,7 +1156,11 @@ public class GenericCardTestHelper extends AbstractAtTest {
         playerDecided(playerID, option);
     }
 
-    public void FreepsResolveRuleFirst() throws DecisionResultInvalidException { FreepsResolveActionOrder(null); }
+    public boolean GameIsFinished() {
+        return _game.isFinished();
+    }
+
+    public void FreepsResolveRuleFirst() throws DecisionResultInvalidException { FreepsResolveActionOrder(GetADParamAsList(P1, "actionText").getFirst()); }
     public void FreepsResolveActionOrder(String option) throws DecisionResultInvalidException { ChooseAction(P1, "actionText", option); }
 
     public Filterable GenerateFreepsFilter(String filter) throws InvalidCardDefinitionException {
@@ -1106,7 +1219,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
     }
 
     public void SkipToSite(int siteNum) throws DecisionResultInvalidException {
-        for(int i = GetCurrentSite().getSiteNumber(); i < siteNum; i++)
+        for(int i = GetCurrentSite().getSiteNumber(); i < siteNum; i = GetCurrentSite().getSiteNumber())
         {
             SkipCurrentSite();
         }

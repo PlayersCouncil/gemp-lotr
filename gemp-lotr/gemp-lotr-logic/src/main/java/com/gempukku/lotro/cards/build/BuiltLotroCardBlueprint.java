@@ -788,10 +788,6 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             for (ActionSource optionalBeforeTrigger : optionalBeforeTriggers) {
                 var actionContext = new DefaultActionContext(playerId, game, self, null, effect);
 
-                if(optionalBeforeTrigger.getPlayer() != null) {
-                    actionContext = new DefaultActionContext(optionalBeforeTrigger.getPlayer().getPlayer(actionContext), game, self, null, effect);
-                }
-
                 if (optionalBeforeTrigger.isValid(actionContext)) {
                     OptionalTriggerAction action = new OptionalTriggerAction(self);
                     optionalBeforeTrigger.createAction(action, actionContext);
@@ -822,10 +818,6 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             result = new LinkedList<>();
             for (ActionSource optionalAfterTrigger : optionalAfterTriggers) {
                 DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, effectResult, null);
-
-                if(optionalAfterTrigger.getPlayer() != null) {
-                    actionContext = new DefaultActionContext(optionalAfterTrigger.getPlayer().getPlayer(actionContext), game, self, effectResult, null);
-                }
 
                 if (optionalAfterTrigger.isValid(actionContext)) {
                     OptionalTriggerAction action = new OptionalTriggerAction(self);

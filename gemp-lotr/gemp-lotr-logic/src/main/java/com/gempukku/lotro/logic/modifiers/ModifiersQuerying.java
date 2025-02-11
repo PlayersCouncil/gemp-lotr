@@ -68,7 +68,10 @@ public interface ModifiersQuerying {
 
     int getOverwhelmMultiplier(LotroGame game, PhysicalCard card);
 
-    boolean isAdditionalCardType(LotroGame game, PhysicalCard card, CardType cardType);
+    List<CardType> getCardTypes(LotroGame game, PhysicalCard card);
+    boolean isCardType(LotroGame game, PhysicalCard card, CardType cardType);
+    List<Race> getRaces(LotroGame game, PhysicalCard card);
+    boolean isRace(LotroGame game, PhysicalCard card, Race race);
 
     // Wounds/exertions
     boolean canTakeWounds(LotroGame game, Collection<PhysicalCard> woundSources, PhysicalCard card, int woundsToTake);

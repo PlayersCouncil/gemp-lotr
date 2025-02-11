@@ -597,17 +597,24 @@
 			effect: {
 				type: choice
 				texts: [
-					Take off The One Ring
 					Cancel a skirmish involving the Ring-bearer and a Nazgul
+					Take off The One Ring
 				]
 				effects: [
-					{
-						type: takeOffRing
+					{ 
+						type: If
+						check: {
+							type: CanSpot
+							filter: ringBearer,InSkirmishAgainst(Nazgul)
+						}
+						true: {
+							type: cancelSkirmish
+							filter: ringBearer
+							involving: nazgul
+						}
 					}
 					{
-						type: cancelSkirmish
-						filter: ringBearer
-						involving: nazgul
+						type: takeOffRing
 					}
 				]
 			}
@@ -666,6 +673,7 @@
 						type: fromMemory
 						memory: exertCount
 					}
+					ignoreCostCheckFailure: true
 				}
 			]
 			effect: {

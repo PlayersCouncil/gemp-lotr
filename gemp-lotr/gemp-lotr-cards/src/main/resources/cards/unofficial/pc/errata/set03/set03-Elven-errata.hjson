@@ -125,8 +125,7 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
-				optional: false
+				optional: true
 				trigger: {
 					type: StartOfTurn
 				},
@@ -150,6 +149,7 @@
 							}
 							secondNumber: 2
 						}
+						default: 2
 						memorize: heals
 					}
 					{

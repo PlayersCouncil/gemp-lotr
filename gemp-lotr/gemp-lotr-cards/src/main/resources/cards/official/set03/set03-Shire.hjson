@@ -246,6 +246,7 @@
 			trigger: {
 				type: discarded
 				filter: your
+				fromZone: HAND
 				source: side(shadow)
 				ignoreVoluntary: true
 			}

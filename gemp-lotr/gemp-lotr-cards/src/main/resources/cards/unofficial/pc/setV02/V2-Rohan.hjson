@@ -107,6 +107,7 @@
 					type: RemoveCultureTokens
 					select: memory(chosenConditions)
 					count: 2
+					ignoreCostCheckFailure: true
 				}				
 			]
 			effect: [
@@ -194,7 +195,7 @@
 			rarity: _
 		}
 		title: Stronghold of My Fathers
-		unique: false
+		unique: true
 		side: Free Peoples
 		culture: Rohan
 		twilight: 1
@@ -231,7 +232,7 @@
 				cost: {
 					type: Choice
 					texts: [
-						Discard Fortress of My Fathers
+						Discard Stronghold of My Fathers
 						Discard 2 other {rohan} possessions
 					]
 					effects: [
@@ -297,7 +298,7 @@
 			}
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: WinsSkirmish
 					filter: bearer
@@ -397,21 +398,21 @@
 				trigger: [
 					{
 						type: Discarded
-						filter: culture(rohan), or(item, ally)
+						filter: your, culture(rohan), or(item, ally)
 					}
 					{
 						type: Discarded
 						fromZone: hand
-						filter: culture(rohan), or(item, ally)
+						filter: your, culture(rohan), or(item, ally)
 					}
 					{
 						type: Discarded
 						fromZone: deck
-						filter: culture(rohan), or(item, ally)
+						filter: your, culture(rohan), or(item, ally)
 					}
 					{
 						type: Killed
-						filter: culture(rohan), ally
+						filter: your, culture(rohan), ally
 					}
 				]
 				effect: {
@@ -654,11 +655,8 @@
 			{
 				type: Activated
 				phase: Skirmish
+				limitPerPhase: 1
 				requires: [
-					{
-						type: PerPhaseLimit
-						limit: 1
-					}
 					{
 						type: CanSpot
 						filter: InSkirmish, Hobbit, companion

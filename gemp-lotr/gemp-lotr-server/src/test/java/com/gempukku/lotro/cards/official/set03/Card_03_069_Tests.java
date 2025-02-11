@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set03;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,12 @@ public class Card_03_069_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "3_69");
-					// put other cards in here as needed for the test case
+					put("saruman", "3_69");
+					put("savage", "1_151");
+					put("shaman", "1_152");
+
+					put("sam", "2_114");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +50,7 @@ public class Card_03_069_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("saruman");
 
 		assertEquals("Saruman", card.getBlueprint().getTitle());
 		assertEquals("Servant of the Eye", card.getBlueprint().getSubtitle());
@@ -62,18 +65,80 @@ public class Card_03_069_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SarumanTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SarumanCanAssignWithoutErrors() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var saruman = scn.GetShadowCard("saruman");
+		var savage = scn.GetShadowCard("savage");
+		scn.ShadowMoveCharToTable(saruman, savage);
+
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(4, scn.GetTwilight());
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(saruman));
+		assertTrue(scn.CanBeAssignedViaAction(sam));
+		assertTrue(scn.CanBeAssignedViaAction(savage));
+
+		scn.ShadowUseCardAction(saruman);
+		scn.FreepsChooseNo();
+		scn.PassCurrentPhaseActions();
+		assertTrue(scn.IsCharAssigned(sam));
+		assertTrue(scn.IsCharAssigned(savage));
+
+		scn.FreepsResolveSkirmish(sam);
+	}
+
+	@Test
+	public void SarumanCannotAssignMultipleMinionsToSameCompanionEvenWithDefender() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var saruman = scn.GetShadowCard("saruman");
+		var savage = scn.GetShadowCard("savage");
+		var shaman = scn.GetShadowCard("shaman");
+		scn.ShadowMoveCharToTable(saruman, savage, shaman);
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsUseCardAction(sam);
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(saruman));
+		assertTrue(scn.CanBeAssignedViaAction(sam));
+		assertTrue(scn.CanBeAssignedViaAction(savage));
+		assertTrue(scn.CanBeAssignedViaAction(shaman));
+
+		scn.ShadowUseCardAction(saruman);
+		scn.ShadowChooseCard(savage);
+		scn.FreepsChooseNo();
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.IsCharAssigned(sam));
+		assertTrue(scn.IsCharAssigned(savage));
+		assertFalse(scn.IsCharAssigned(shaman));
+		assertFalse(scn.CanBeAssignedViaAction(sam));
+		assertFalse(scn.CanBeAssignedViaAction(savage));
+		assertTrue(scn.CanBeAssignedViaAction(shaman));
+
+		scn.ShadowUseCardAction(saruman);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(frodo, shaman);
+
+		scn.FreepsResolveSkirmish(sam);
 	}
 }

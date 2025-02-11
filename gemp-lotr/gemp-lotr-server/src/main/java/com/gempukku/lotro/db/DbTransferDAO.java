@@ -91,7 +91,7 @@ public class DbTransferDAO implements TransferDAO {
                 return id;
             }
         } catch (Exception ex) {
-            throw new RuntimeException("Unable to insert transfer from", ex);
+            throw new RuntimeException("Unable to insert transfer to", ex);
         }
     }
 
@@ -106,8 +106,8 @@ public class DbTransferDAO implements TransferDAO {
                     FROM transfer 
                     WHERE player = :playerName 
                         AND notify = TRUE
-                        AND date_recorded < NOW();
-                """;
+                        AND date_recorded < NOW()
+                """ + " AND reason NOT IN ('" + ANNOUNCEMENT + "', '" + OPENED_PACK + "') ";;
                 Integer result = conn.createQuery(sql)
                         .addParameter("playerName", player.getName())
                         .executeScalar(Integer.class);
@@ -226,8 +226,24 @@ public class DbTransferDAO implements TransferDAO {
         } catch (Exception ex) {
             throw new RuntimeException("Unable to get undelivered announcement for player", ex);
         }
+    }
 
+    @Override
+    public DBDefs.Announcement getUndeliveredAnnouncement(Player player, DBDefs.Announcement currentAnnouncement) {
+        try {
+            if(currentAnnouncement == null) {
+                currentAnnouncement = getCurrentAnnouncement();
+            }
+            var transferEntry = addAnnouncementEntryForPlayer(currentAnnouncement, player);
 
+            if(transferEntry == null || !transferEntry.notify || DateUtils.Now().isBefore(transferEntry.GetUTCDateRecorded()))
+                return null;
+
+            return currentAnnouncement;
+
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to get undelivered announcement for player", ex);
+        }
     }
 
     @Override

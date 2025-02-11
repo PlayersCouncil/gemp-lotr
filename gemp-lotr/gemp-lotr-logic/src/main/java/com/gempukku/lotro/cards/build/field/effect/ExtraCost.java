@@ -25,7 +25,7 @@ public class ExtraCost implements EffectProcessor {
         boolean skipValidate = FieldUtils.getBoolean(value.get("skipValidate"), "skipValidate", false);
 
         final JSONObject[] costArray = FieldUtils.getObjectArray(value.get("cost"), "cost");
-        final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(costArray, environment);
+        final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(true, costArray, environment);
 
         if (costAppenders.length == 0)
             throw new InvalidCardDefinitionException("At least one cost is required on ExtraCost effects.");

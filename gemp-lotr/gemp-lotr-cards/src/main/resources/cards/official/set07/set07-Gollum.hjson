@@ -413,7 +413,7 @@
 			}
 			{
 				type: activatedInDiscard
-				phase: shadow
+				phase: skirmish
 				requires: [
 					{
 						type: haveInitiative
@@ -969,20 +969,27 @@
 				phase: assignment
 				cost: [
 					{
-						type: assignFPCharacterToSkirmish
-						fpCharacter: self
-						minion: choose(minion)
-						memorizeMinion: assignedMinion
+						type: ChooseActiveCards
+						text: Choose a minion for Smeagol to skirmish and exhaust.
+						select: choose(minion,AssignableToSkirmishAgainst(self))
+						memorize: assignedMinion
 					}
 					{
 						type: addThreats
 						amount: 2
 					}
 				]
-				effect: {
-					type: exhaust
-					select: memory(assignedMinion)
-				}
+				effect: [
+					{
+						type: assignFPCharacterToSkirmish
+						fpCharacter: self
+						minion: memory(assignedMinion)
+					}
+					{
+						type: exhaust
+						select: memory(assignedMinion)
+					}
+				]
 			}
 		]
 		gametext: <b>Ring-bound</b>. To play, add a burden.<br><b>Assignment:</b> Assign a minion to Sméagol and add 2 threats to exhaust that minion.

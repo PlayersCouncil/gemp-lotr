@@ -14,11 +14,11 @@ public enum Token {
 
     private final Culture _culture;
 
-    private Token() {
+    Token() {
         this(null);
     }
 
-    private Token(Culture culture) {
+    Token(Culture culture) {
         _culture = culture;
     }
 
@@ -27,6 +27,9 @@ public enum Token {
     }
 
     public static Token findTokenForCulture(Culture culture) {
+        if(culture == null)
+            return null;
+
         for (Token token : Token.values()) {
             if (token.getCulture() == culture)
                 return token;

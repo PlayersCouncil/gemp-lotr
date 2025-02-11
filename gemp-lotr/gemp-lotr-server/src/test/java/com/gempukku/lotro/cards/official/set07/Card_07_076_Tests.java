@@ -94,7 +94,7 @@ public class Card_07_076_Tests
         //Pre-game setup
         var scn = GetScenario();
 
-        var site3 = scn.GetFreepsSite("Council Courtyard");
+        var site3 = scn.GetFreepsSite(3);
         var friends = scn.GetFreepsCard("friends");
         var smeagol = scn.GetFreepsCard("smeagol");
         scn.FreepsMoveCardToHand(friends);

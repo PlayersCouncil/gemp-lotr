@@ -376,18 +376,27 @@
 						filter: tentacle
 						memorize: woundedTentacle
 					}
+					
+				]
+				effect: [
 					{
-						type: Killed
-						filter: tentacle
-						cause: wounds
-						memorize: woundedTentacle
+						type: If
+						check: {
+							type: HasCardInDiscard
+							filter: memory(woundedTentacle)
+						}
+						true: {
+							type: StackCardsFromDiscard
+							select: memory(woundedTentacle)
+							where: self
+						}
+						false: {
+							type: StackCardsFromPlay
+							select: memory(woundedTentacle)
+							where: self
+						}
 					}
 				]
-				effect: {
-					type: StackCardsFromPlay
-					select: memory(woundedTentacle)
-					where: self
-				}
 			}
 			{
 				type: activated
@@ -610,7 +619,7 @@
 				modifier: {
 					type: AddKeyword
 					keyword: marsh
-					filter: or(river,and(site,not(or(Battleground,Dwelling,Forest,Mountain,Plains,River,Underground))))
+					filter: or(river,and(site,not(or(Battleground,Dwelling,Forest,Mountain,Plains,Sanctuary,River,Underground))))
 				}
 			}
 			{

@@ -2,7 +2,7 @@ var deckDeliveryDialogs = {};
 var deckDeliveryGroups = {};
 
 function deckbuilderDeliveryService(xml) {
-    console.log("Delivered a package:");
+    console.log("Delivered a package for deckbuilder:");
     console.log(xml);
 
     var root = xml.documentElement;

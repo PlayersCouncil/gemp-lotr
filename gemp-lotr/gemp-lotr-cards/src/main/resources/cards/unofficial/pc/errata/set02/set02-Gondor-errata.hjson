@@ -157,7 +157,7 @@
 				]
 			}
 		]
-		gametext: Bearer must be a ranger.<br>This weapon may be borne in addition to 1 other hand weapon.<br>Skirmish: If bearer is skirmishing a Nazgul, discard this possession to make bearer strength +3 and <b>damage +2</b>.
+		gametext: Bearer must be a ranger. This weapon may be borne in addition to 1 other hand weapon.<br>Skirmish: Make bearer strength +2 and <b>damage +1</b> while bearing this item and skirmishing a Nazgul until the regroup phase (limit once per turn).  Discard this possession at the start of the regroup phase.
 		lore: "...a glimpse of Strider leaping out of the darkness with a flaming brand of wood in either hand."
 		promotext: ""
 		alts: {

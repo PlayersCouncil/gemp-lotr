@@ -18,6 +18,7 @@ public interface TransferDAO {
     int addTransferFrom(String player, String reason, String collectionName, int currency, CardCollection items);
 
     DBDefs.Announcement getUndeliveredAnnouncement(Player player);
+    DBDefs.Announcement getUndeliveredAnnouncement(Player player, DBDefs.Announcement announcement);
     DBDefs.Transfer addAnnouncementEntryForPlayer(DBDefs.Announcement announcement, Player player);
     void dismissAnnouncement(DBDefs.Announcement announcement, Player player);
     void snoozeAnnouncement(DBDefs.Announcement announcement, Player player);

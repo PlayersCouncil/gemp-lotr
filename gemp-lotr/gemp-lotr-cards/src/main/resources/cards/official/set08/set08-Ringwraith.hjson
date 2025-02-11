@@ -541,12 +541,14 @@
 					{
 						type: playCardFromDrawDeck
 						select: choose(culture(wraith),minion)
+						discount: -1
 						showAll: true
 						shuffle: false
 					}
 					{
 						type: playCardFromDrawDeck
 						select: choose(culture(wraith),minion)
+						discount: -1
 						showAll: true
 						shuffle: false
 					}

@@ -244,6 +244,8 @@ class AutoZoom {
 		const refCard = target.closest(".card");
 		this.baseImageDiv = refCard[0];
 		var card = refCard.data("card");
+		if(card == null)
+			return;
 
 		// don't show preview image if card is animating
 		if (!$(this.baseImageDiv).hasClass('card-animating')) {

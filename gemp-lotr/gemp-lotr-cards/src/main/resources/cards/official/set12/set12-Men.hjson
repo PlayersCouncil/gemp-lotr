@@ -172,10 +172,33 @@
 					filter: culture(men),possession
 					memorize: discardedPossession
 				}
+				# If this is true, then the possession must have been caught by a copy of Countless Companies
+				# so we shouldn't continue pestering the user
+				requires: {
+					type: CantSpot
+					filter: memory(discardedPossession)
+				}
 				effect: {
 					type: stackCardsFromDiscard
 					select: memory(discardedPossession)
 					where: self
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: removeTwilight
+					amount: 1
+				}
+				requires: {
+					type: canSpot
+					filter: self,hasStacked(possession)
+				}
+				effect: {
+					type: playCardFromStacked
+					select: choose(possession)
+					on: self
 				}
 			}
 		]
@@ -742,10 +765,10 @@
 				type: Trigger
 				optional: true
 				trigger: [
-					{
-						type: killed
-						filter: culture(men),minion
-					}
+					# {
+					# 	type: killed
+					# 	filter: culture(men),minion
+					# }
 					{
 						type: discarded
 						filter: culture(men),minion

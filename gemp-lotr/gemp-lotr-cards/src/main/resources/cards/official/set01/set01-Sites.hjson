@@ -1298,6 +1298,10 @@
 					type: played
 					filter: culture(moria),orc
 				}
+				requires: {
+						type: perPhaseLimit
+						limit: 1
+					}
 				effect: {
 					type: incrementPerPhaseLimit
 					limit: 1

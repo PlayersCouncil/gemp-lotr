@@ -96,6 +96,7 @@ public class JSONDefs {
         public String getPCErrata() {
             return ErrataIDs.get(PC_Errata);
         }
+        public void addPCErrata(String errataBP) { ErrataIDs.put(PC_Errata, errataBP); }
     }
 
     public static class PlayHistoryStats {

@@ -15,8 +15,74 @@
 		type: Event
 		timewords: Shadow
 		effects: [
-						{
+			{
 				type: event
+				requires: [
+					{
+						type: Or
+						requires: [
+							# Small draw
+							{
+								type: And
+								requires: [
+									{
+										type: CanSpot
+										filter: your,minion
+									}
+									{
+										type: Not
+										requires: {
+											type: WasPlayedFromZone
+											zone: DECK
+										}
+									}
+									{
+										type: CanSpotTwilight
+										amount: 3
+									}
+								]
+							}
+							
+							# Big draw
+							{
+								type: And
+								requires: [
+									{
+										type: Or
+										requires: [
+											{
+												type: And
+												requires: [
+													{
+														type: Location
+														filter: RegionNumber(3)
+													}
+													{
+														type: CanSpotTwilight
+														amount: 25
+													}
+												]
+											}
+											{
+												type: And
+												requires: [
+													{
+														type: Location
+														filter: RegionNumber(1-2)
+													}
+													{
+														type: CanSpotTwilight
+														amount: 18
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
 				effect: {
 					type: Choice
 					texts: [
@@ -26,10 +92,19 @@
 					effects: [
 						{
 							type: CostToEffect
-							requires: {
-								type: CanSpot
-								filter: your,minion
-							}
+							requires: [
+								{
+									type: CanSpot
+									filter: your,minion
+								}
+								{
+									type: Not
+									requires: {
+										type: WasPlayedFromZone
+										zone: DECK
+									}
+								}
+							]
 							cost: {
 								type: RemoveTwilight
 								amount: 3
@@ -75,24 +150,18 @@
 									}
 								]
 							}
-							cost: {
-								type: RemoveTwilight
-								amount: 9
-							}
 							effect: [
 								{
-									type: Repeat
-									times: 2
-									effect: {
-										type: Optional
-										text: Would you like to play another minion from your draw deck costing (5) or more?
-										effect: {
-											type: PlayCardFromDrawDeck
-											select: choose(minion,MinTwilight(5))
-											shuffle: true
-											showAll: true
-										}
-									}
+									type: PlayCardFromDrawDeck
+									select: choose(minion,MinTwilight(5))
+									shuffle: true
+									showAll: true
+								}
+								{
+									type: PlayCardFromDrawDeck
+									select: choose(minion,MinTwilight(5))
+									shuffle: true
+									showAll: true
 								}
 							]
 						}
@@ -123,7 +192,7 @@
 				}
 			}
 		]
-		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) to play up to 2 minions from your draw deck costing (5) or more. If in region 1, this action can be played from your draw deck.
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) to play up to 2 minions from your draw deck costing (5) or more. If in region 1, this action can be performed from your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -496,13 +565,20 @@
 				modifier: {
 					type: CantTakeWounds
 					filter: twilight
-					requires: {
-						type: Not 
-						requires: {
-							type: Phase
-							phase: Skirmish
+					requires: [
+						{
+							type: Not 
+							requires: {
+								type: Phase
+								phase: Skirmish
+							}
 						}
-					}
+						{
+							type: CanSpot
+							count: 3
+							filter: twilight,minion
+						}
+					]
 				}
 			}
 			{
@@ -564,6 +640,7 @@
 					cost: {
 						type: Exert
 						select: memory(pumpedTwilight)
+						ignoreCostCheckFailure: true
 					}
 					effect: {
 						type: AddBurdens

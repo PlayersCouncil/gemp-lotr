@@ -123,7 +123,7 @@ public class FieldUtils {
     public static void validateAllowedFields(JSONObject object, String... fields) throws InvalidCardDefinitionException {
         Set<String> keys = object.keySet();
         for (String key : keys) {
-            if (!key.equals("type") && !contains(fields, key))
+            if (!key.equals("type") && !key.equals("ignoreCostCheckFailure") && !contains(fields, key))
                 throw new InvalidCardDefinitionException("Unrecognized field: " + key);
         }
     }

@@ -72,7 +72,7 @@
 			effect: [
 				{
 					type: modifyStrength
-					select: choose(character,inSkirmishAgainst(culture(moria),orc))
+					select: choose(character,inSkirmishAgainst(culture(sauron),orc))
 					amount: -3
 				}
 			]
@@ -187,7 +187,7 @@
 						type: haveInitiative
 						side: shadow
 					}
-					filter: self
+					filter: bearer
 					amount: 3
 				}
 			}
@@ -269,34 +269,29 @@
 					memorize: discardedCard
 				}
 				{
+					type: chooseHowManyToSpot
+					filter: besieger
+					memorize: spotCount
+				}
+				{
 					type: If
 					check: {
-						type: memoryMatches
-						memory: discardedCard
-						filter: any
+						type: IsLessThan
+						firstNumber: {
+							type: TwilightCostInMemory
+							memory: discardedCard
+						}
+						secondNumber: memory(spotCount)
 					}
 					true: [
 						{
-							type: chooseHowManyToSpot
-							filter: besieger
-							memorize: spotCount
+							type: takeControlOfSite
 						}
 						{
-							type: if
-							check: {
-								type: memoryMatches
-								memory: discardedCard
-								filter: minTwilight(memory(spotCount))
-							}
-							false: {
-								type: takeControlOfSite
-							}
-							true: {
-								type: modifyStrength
-								until: regroup
-								select: all(besieger)
-								amount: 3
-							}
+							type: modifyStrength
+							until: regroup
+							select: all(besieger)
+							amount: 3
 						}
 					]
 				}
@@ -1592,7 +1587,11 @@
 				effect: {
 					type: modifyStrength
 					select: choose(companion,inSkirmishAgainst(self))
-					amount: -1
+					amount: {
+						type: ForEachYouCanSpot
+						filter: other,culture(sauron),Orc
+						multiplier: -1
+					}
 					limitPerCardThisPhase: 3
 				}
 			}

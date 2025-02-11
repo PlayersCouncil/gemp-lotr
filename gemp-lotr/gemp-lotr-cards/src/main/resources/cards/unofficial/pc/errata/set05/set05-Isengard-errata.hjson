@@ -85,10 +85,7 @@
 			{
 				type: activated
 				phase: shadow
-				requires: {
-					type: perPhaseLimit
-					limit: 2
-				}
+				limitPerPhase: 2
 				cost: {
 					type: exert
 					select: choose(Uruk-hai)
@@ -100,10 +97,6 @@
 						culture: isengard
 						select: self
 					}
-					{
-						type: incrementPerPhaseLimit
-						limit: 1
-					}	
 				]
 			}
 			{

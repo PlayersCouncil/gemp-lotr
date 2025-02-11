@@ -48,6 +48,7 @@ public class DefaultLotroFormat implements LotroFormat {
 
     private final List<String> _blockDefs = new ArrayList<>();
     private final List<JSONDefs.BlockFilter> _blockFilters = new ArrayList<>();
+    private final Map<String, JSONDefs.ErrataInfo> _recentErrataInfo;
 
 
     public DefaultLotroFormat(AdventureLibrary adventureLibrary, LotroCardBlueprintLibrary library, JSONDefs.Format def) throws InvalidPropertiesFormatException{
@@ -96,6 +97,36 @@ public class DefaultLotroFormat implements LotroFormat {
 
         if(def.blocks != null)
             this._blockDefs.addAll(def.blocks);
+
+        _recentErrataInfo = new HashMap<>();
+
+        if(_code.equals("pc_errata")) {
+            for(String errata : _validCards) {
+                var split = errata.split("_");
+                String base = _library.getErrataBase(split[0]) + "_" + split[1];
+
+                try {
+                    var basecard = _library.getLotroCardBlueprint(base);
+                    var info = new JSONDefs.ErrataInfo();
+                    info.BaseID = base;
+                    info.Name = GameUtils.getFullName(_library.getLotroCardBlueprint(base));
+                    info.LinkText = GameUtils.getDeluxeCardLink(errata, basecard);
+                    info.ErrataIDs = new HashMap<>();
+                    info.addPCErrata(errata);
+                    _recentErrataInfo.put(base, info);
+                }
+                catch(CardNotFoundException ignored) {
+                    continue;
+                }
+
+            }
+        }
+    }
+
+
+    @Override
+    public Map<String, JSONDefs.ErrataInfo> getRecentErrata() {
+        return _recentErrataInfo;
     }
 
     @Override

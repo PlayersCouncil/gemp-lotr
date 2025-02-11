@@ -31,11 +31,16 @@ function announcementDeliveryService(comm, json) {
 		closeOnEscape:true,
 		close: closeCleanup,
 		resizable:false,
-		width:$(window).width() * 0.9,
+		width:800,
 		height:$(window).height() * 0.9,
 		closeText: ''
 	});
+	
+	var content = json.content;
+	content = content.replaceAll("<br/>", "");
 		
-	$("#announcement-dialog").html(json.content);
+	$("#announcement-dialog").html(content);
 	announcementDialog.dialog("open");
+	//Otherwise any links cause it to scroll to the link
+	$("#announcement-dialog").scrollTop("0"); 
 }

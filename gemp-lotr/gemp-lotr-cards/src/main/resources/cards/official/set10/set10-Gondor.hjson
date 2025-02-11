@@ -269,8 +269,9 @@
 					memorize: spotCount
 				}
 				{
-					type: revealCardsFromHand
+					type: RevealRandomCardsFromHand
 					hand: shadow
+					forced: true
 					count: {
 						type: fromMemory
 						memory: spotCount
@@ -283,7 +284,7 @@
 					hand: shadow
 					player: you
 					count: 1
-					select: choose(memory(revealedCards))
+					select: choose(side(shadow),memory(revealedCards))
 				}
 				{
 					type: drawCards
@@ -545,8 +546,11 @@
 			type: event
 			requires: [
 				{
-					type: controlsSite
-					player: shadow
+					type: Not
+					requires: {
+						type: controlsSite
+						player: shadow
+					}
 				}
 				{
 					type: canSpot

@@ -419,7 +419,7 @@
 				effect: {
 					type: ModifyStrength
 					amount: 1
-					select: choose(another,or(man, elf, dwarf), not(race(memory(winner))))
+					select: choose(your,another,or(man, elf, dwarf), not(race(memory(winner))))
 					until: start(regroup)
 				}
 			}

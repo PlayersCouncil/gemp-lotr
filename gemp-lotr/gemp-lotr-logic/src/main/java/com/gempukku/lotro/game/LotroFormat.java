@@ -78,4 +78,5 @@ public interface LotroFormat {
     Adventure getAdventure();
     JSONDefs.Format Serialize();
     void generateBlockFilter(Map<String, LotroFormat> allFormats, Map<String, SetDefinition> allSets);
+    Map<String, JSONDefs.ErrataInfo> getRecentErrata();
 }

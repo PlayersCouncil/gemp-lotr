@@ -40,7 +40,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 	filterDirty:false,
 	deckValidationDirty:true,
-	deckContentsDirty:true,
+	deckContentsDirty:false,
 
 	checkDirtyInterval:500,
 
@@ -98,7 +98,10 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.formatSelect = $("#formatSelect");
 		$("#formatSelect").change(
 				function () {
-					that.deckModified(true);
+					if(that.deckName != null) {
+						that.deckModified(true);
+					}
+					
 					let formatCode = that.formatSelect.val();
 					if(formatCode == "pc_movie" || formatCode == "test_pc_movie") {
 						that.setMapVisibility(true);
@@ -148,46 +151,37 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 		newDeckBut.click(
 				function () {
-					that.deckName = null;
-					$("#editingDeck").text("New deck");
-					that.clearDeck();
+					if(that.savePromptOnNew()) {
+						that.deckName = null;
+						$("#editingDeck").text("New deck");
+						that.clearDeck();
+					}
 				});
 
 		saveDeckBut.click(
 				function () {
-					if (that.deckName == null) {
-						var newDeckName = prompt("Enter the name of the deck", "");
-						if (newDeckName == null)
-							return;
-						if (newDeckName.length < 3 || newDeckName.length > 100)
-							alert("Deck name has to have at least 3 characters and at most 100 characters.");
-						else {
-							that.deckName = newDeckName;
-							$("#editingDeck").text(newDeckName);
-							that.saveDeck(true);
-						}
-					} else {
-						that.saveDeck(false);
-					}
+					that.saveCurrentDeck();
 				});
 
 		renameDeckBut.click(
 				function () {
 					if (that.deckName == null) {
-						alert("You can't rename this deck, since it's not named (saved) yet.");
-						return;
+						that.saveCurrentDeck();
 					}
-					that.renameCurrentDeck();
+					else {
+						that.renameCurrentDeck();	
+					}
 				});
 
 		copyDeckBut.click(
 				function () {
 					that.deckName = null;
-					$("#editingDeck").text("New deck");
+					that.deckModified(true);
 				});
 
 		deckListBut.click(
 				function () {
+					that.savePrompt();
 					that.loadDeckList();
 				});
 		
@@ -198,12 +192,13 @@ var GempLotrDeckBuildingUI = Class.extend({
 		
 		libraryListBut.click(
 				function () {
+					that.savePrompt();
 					that.loadLibraryList();
 				});
 
 		importDeckBut.click(
 				function () {
-					that.deckName = null;
+					that.savePrompt();
 					that.importDecklist();
 				});
 		
@@ -335,12 +330,6 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 		this.cardInfoDialog = new CardInfoDialog(window.innerWidth, window.innerHeight);
 
-		this.getCollectionTypes();
-
-		// this.cardFilter.setFilter("");
-		// this.cardFilter.getCollection();
-
-
 		setInterval(() => {
 			if (that.deckValidationDirty) {
 				that.deckValidationDirty = false;
@@ -349,6 +338,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 		}, this.checkDirtyInterval);
 		
 		this.updateFormatOptions();
+		this.comm.forcePackDelivery();
 	},
 	
 	setMapVisibility:function(value) {
@@ -356,6 +346,52 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.layoutUI(true);
 	},
 	
+	savePrompt:function() {
+		return !this.deckContentsDirty || (confirm("Your deck has been modified.  Would you like to save your deck before proceeding?") && this.saveCurrentDeck())
+	},
+	
+	savePromptOnNew:function() {
+		if(!this.deckContentsDirty)
+			return true;
+		
+		if(confirm("Your deck has been modified.  Click 'OK' to save, or 'Cancel' to discard your changes without saving.")) {
+			//If this fails, then the user hit cancel while naming the deck, and in that case
+			// we actually do want to abort.
+			return this.saveCurrentDeck();
+		}
+		else {
+			//The user clicked "cancel", which according to the prompt means they wish to discard
+			// their changes.
+			return true;
+		}
+	},
+
+	saveCurrentDeck:function() {
+		var that = this;
+		var saved = false;
+
+		if (that.deckName == null) {
+			var newDeckName = prompt("Enter the name of the deck", "");
+			if (newDeckName == null)
+				return saved;
+			if (newDeckName.length < 3 || newDeckName.length > 100) {
+				alert("Deck name has to have at least 3 characters and at most 100 characters.");
+			}
+			else {
+				that.deckName = newDeckName;
+				$("#editingDeck").text(newDeckName);
+				that.saveDeck(true);
+				saved = true;
+			}
+		} 
+		else {
+			that.saveDeck(false);
+			saved = true;
+		}
+
+		return saved;
+	},
+
 	renameCurrentDeck:function() {
 		var that = this;
 		that.renameDeck(that.deckName, function (newDeckName) {
@@ -376,8 +412,9 @@ var GempLotrDeckBuildingUI = Class.extend({
 		if (newDeckName == null)
 			return;
 		
-		if (newDeckName.length < 3 || newDeckName.length > 100)
+		if (newDeckName.length < 3 || newDeckName.length > 100) {
 			alert("Deck name has to have at least 3 characters and at most 100 characters.");
+		}
 		else {
 			that.comm.renameDeck(oldName, newDeckName, () => callback(newDeckName), 
 				{
@@ -413,15 +450,19 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.comm.getCollectionTypes(
 				function (xml) {
 					var root = xml.documentElement;
-					if (root.tagName == "collections") {
-						var collections = root.getElementsByTagName("collection");
-						$("#formatSelect").append("<option disabled>---Limited---</option>");
-						for (var i = 0; i < collections.length; i++) {
-							var collection = collections[i];
-							$("#collectionSelect").append("<option value='" + collection.getAttribute("type") + "'>" + collection.getAttribute("name") + "</option>");
-							$("#formatSelect").append("<option value='" + collection.getAttribute("format") + "'>" + collection.getAttribute("name") + "</option>");
-						}
+					if (root.tagName != "collections") 
+						return;
+					
+					var collections = root.getElementsByTagName("collection");
+					$("#formatSelect").append("<option disabled>---Limited---</option>");
+					for (var i = 0; i < collections.length; i++) {
+						var collection = collections[i];
+						$("#collectionSelect").append("<option value='" + collection.getAttribute("type") + "'>" + collection.getAttribute("name") + "</option>");
+						$("#formatSelect").append("<option value='" + collection.getAttribute("format") + "'>" + collection.getAttribute("name") + "</option>");
 					}
+					
+					$("#collectionSelect").val("default");
+					that.deckModified(false);
 				});
 	},
 	
@@ -445,6 +486,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 		getDecklistTextBut.click(
 			 function () {
+			 	that.deckName = null;
 				var decklist = $('textarea[decklist="decklist"]').val()
 				that.parseDecklist(decklist);
 			}
@@ -755,6 +797,11 @@ var GempLotrDeckBuildingUI = Class.extend({
 					} else if (selectedCardElem.hasClass("packInCollection")) {
 						// if (confirm("Would you like to open this pack?")) {
 							this.comm.openPack(this.getCollectionType(), selectedCardElem.data("card").blueprintId, function () {
+								
+								setTimeout(function (){
+										console.log("forcing delivery");
+										that.comm.forcePackDelivery();
+									}, 1000);
 								that.cardFilter.getCollection();
 							}, {
 								"404":function () {
@@ -764,6 +811,10 @@ var GempLotrDeckBuildingUI = Class.extend({
 						//}
 					} else if (selectedCardElem.hasClass("cardToSelect")) {
 						this.comm.openSelectionPack(this.getCollectionType(), this.packSelectionId, selectedCardElem.data("card").blueprintId, function () {
+							setTimeout(function (){
+										console.log("forcing delivery");
+										that.comm.forcePackDelivery();
+									}, 1000);
 							that.cardFilter.getCollection();
 						}, {
 							"404":function () {
@@ -968,7 +1019,6 @@ var GempLotrDeckBuildingUI = Class.extend({
 	},
 
 	deckModified:function (value) {
-		
 		var name = (this.deckName == null) ? "New deck" : this.deckName;
 		if (value)
 		{
@@ -1029,45 +1079,49 @@ var GempLotrDeckBuildingUI = Class.extend({
 		var that = this;
 		var currentFormat = $("#formatSelect").val();
 		
-		this.comm.getFormats(false,
-			function (json) 
-			{
-				that.formatSelect.empty();
-				that.formats = json.Formats;
-				
-				let max = 0;
-				let options = {};
-				for (const [code, format] of Object.entries(that.formats)) {
-					if(!format.hall)
-						continue;
-					
-					var option = $("<option/>")
-						.attr("value", code)
-						.text(format.name);
-					options[format.order] = option;
-					if(format.order > max) {
-						max = format.order;
-					}
-				}
-				
-				for(let i = -1; i <= max; i++) {
-					if(Object.hasOwn(options, i)) {
-						that.formatSelect.append(options[i]);
-					}
-				}
-				
-				that.formatSelect.val(currentFormat);
-				that.formatSelect.change();
-				const sleep = ms => new Promise(r => setTimeout(r, ms));
-				that.showNormalFilter();
-
-			}, 
-			{
-				"400":function () 
+		//this.comm.getLeagues(function() { 
+			that.comm.getFormats(false,
+				function (json) 
 				{
-					alert("Could not retrieve formats.");
-				}
-			});
+					that.formatSelect.empty();
+					that.formats = json.Formats;
+					
+					let max = 0;
+					let options = {};
+					for (const [code, format] of Object.entries(that.formats)) {
+						if(!format.hall)
+							continue;
+						
+						var option = $("<option/>")
+							.attr("value", code)
+							.text(format.name);
+						options[format.order] = option;
+						if(format.order > max) {
+							max = format.order;
+						}
+					}
+					
+					for(let i = -1; i <= max; i++) {
+						if(Object.hasOwn(options, i)) {
+							that.formatSelect.append(options[i]);
+						}
+					}
+					
+					that.formatSelect.val(currentFormat);
+					that.formatSelect.change();
+					const sleep = ms => new Promise(r => setTimeout(r, ms));
+					that.showNormalFilter();
+
+					that.getCollectionTypes();
+				}, 
+				{
+					"400":function () 
+					{
+						alert("Could not retrieve formats.");
+					}
+				})
+		//})
+		;
 	},
 
 	removeCardFromDeck:function (cardDiv) {
@@ -1107,6 +1161,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.layoutUI(false);
 
 		this.deckValidationDirty = true;
+		this.deckModified(false);
 	},
 
 	setupDeck:function (xml, deckName) {
@@ -1165,7 +1220,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 		if (type == "pack") {
 			var card = new Card(blueprintId, null, null, "pack", "collection", "player");
 			card.tokens = {"count":count};
-			var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, false, false, true);
+			var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, false, true, true);
 			cardDiv.data("card", card);
 			
 			if (blueprintId.substr(0, 3) == "(S)") {

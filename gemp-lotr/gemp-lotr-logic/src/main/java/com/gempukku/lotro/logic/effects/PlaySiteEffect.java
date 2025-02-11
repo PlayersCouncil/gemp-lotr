@@ -94,7 +94,7 @@ public class PlaySiteEffect extends AbstractEffect {
 
         PhysicalCard currentSite = game.getGameState().getSite(siteNumber);
 
-        if (newSite.size() > 0 && (currentSite == null || game.getModifiersQuerying().canReplaceSite(game, _playerId, currentSite))
+        if (!newSite.isEmpty() && (currentSite == null || game.getModifiersQuerying().canReplaceSite(game, _playerId, currentSite))
                 && game.getModifiersQuerying().canPlaySite(game, _playerId)) {
             SubAction subAction = new SubAction(_action);
             subAction.appendEffect(

@@ -217,6 +217,10 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: CanSpot
+					filter: self, zone(SUPPORT)
+				}
 				effect: {
 					type: transfer
 					select: self
@@ -925,6 +929,7 @@
 		keywords: [
 			Fierce
 			Toil 2
+			Muster
 		]
 
 		gametext: <b>Fierce</b>. <b>Toil 2</b>. <helper>(For each [wraith] character you exert when playing this, its twilight cost is -2.)</helper> <b>Muster</b>. <helper>(At the start of the regroup phase, you may discard a card from hand to draw a card.)</helper>

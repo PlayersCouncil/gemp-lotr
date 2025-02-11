@@ -367,6 +367,7 @@
 				{
 					type: exert
 					select: memory(chosenCompanions)
+					ignoreCostCheckFailure: true
 				}
 			]
 			effect: [

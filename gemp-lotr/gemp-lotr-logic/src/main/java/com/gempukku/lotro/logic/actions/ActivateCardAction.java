@@ -7,16 +7,16 @@ import com.gempukku.lotro.logic.effects.ActivateCardEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 
 public class ActivateCardAction extends AbstractCostToEffectAction {
-    private final PhysicalCard _physicalCard;
+    protected final PhysicalCard _physicalCard;
 
-    private ActivateCardEffect _activateCardEffect;
+    protected ActivateCardEffect _activateCardEffect;
 
-    private final String _message;
+    protected final String _message;
 
-    private boolean _sentMessage;
-    private boolean _activated;
+    protected boolean _sentMessage;
+    protected boolean _activated;
 
-    private boolean _prevented;
+    protected boolean _prevented;
 
     public ActivateCardAction(PhysicalCard physicalCard) {
         _physicalCard = physicalCard;
@@ -60,7 +60,7 @@ public class ActivateCardAction extends AbstractCostToEffectAction {
 
             if (!_activated) {
                 _activated = true;
-                _activateCardEffect = new ActivateCardEffect(_physicalCard, getActionTimeword());
+                generateCardEffect();
                 return _activateCardEffect;
             }
 
@@ -71,5 +71,9 @@ public class ActivateCardAction extends AbstractCostToEffectAction {
             }
         }
         return null;
+    }
+
+    protected void generateCardEffect() {
+        _activateCardEffect = new ActivateCardEffect(_physicalCard, getActionTimeword());
     }
 }

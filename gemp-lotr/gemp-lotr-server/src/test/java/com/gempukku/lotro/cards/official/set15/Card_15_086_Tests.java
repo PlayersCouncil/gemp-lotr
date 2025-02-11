@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.official.set15;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_15_086_Tests
 {
@@ -18,8 +18,10 @@ public class Card_15_086_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "15_86");
-					// put other cards in here as needed for the test case
+					put("gats", "15_86");
+					put("pavise", "11_94");
+
+					put("sam", "1_311");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +49,7 @@ public class Card_15_086_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("gats");
 
 		assertEquals("Mûmak Commander", card.getBlueprint().getTitle());
 		assertEquals("Giant Among the Swertings", card.getBlueprint().getSubtitle());
@@ -62,18 +64,34 @@ public class Card_15_086_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MumakCommanderTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void MumakCommanderCanExertCompanionWith1Vitality() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var gats = scn.GetShadowCard("gats");
+		scn.ShadowMoveCharToTable(gats);
+		scn.ShadowAttachCardsTo(gats, "pavise");
+
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(6, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(gats));
+		assertEquals(0, scn.GetWoundsOn(sam));
+
+		scn.ShadowUseCardAction(gats);
+		assertEquals(2, scn.GetWoundsOn(gats));
+		assertEquals(2, scn.GetWoundsOn(sam));
+
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowUseCardAction(gats);
+		assertEquals(4, scn.GetWoundsOn(gats));
+		assertEquals(3, scn.GetWoundsOn(sam));
+
 	}
 }

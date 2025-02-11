@@ -17,11 +17,14 @@ public class Card_18_011_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "18_11");
-					// put other cards in here as needed for the test case
+					put("ewer", "18_11");
+					put("homestead", "13_22");
+					put("defiance", "1_37");
+
+					put("savage", "1_151");
 				}},
 				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
+				GenericCardTestHelper.GaladrielRB,
 				GenericCardTestHelper.RulingRing
 		);
 	}
@@ -38,12 +41,14 @@ public class Card_18_011_Tests
 		 * Twilight Cost: 2
 		 * Type: Artifact
 		 * Subtype: Support area
-		 * Game Text: To play, spot Galadriel or Celeborn.<br>While Galadriel is the Ring-bearer, she is strength +2 and resistance +2.<br>Each time you play an [elven] skirmish event, you may reinforce an [elven] token.
+		 * Game Text: To play, spot Galadriel or Celeborn.
+		 * While Galadriel is the Ring-bearer, she is strength +2 and resistance +2.
+		 * Each time you play an [elven] skirmish event, you may reinforce an [elven] token.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("ewer");
 
 		assertEquals("Galadriel's Silver Ewer", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,18 +60,57 @@ public class Card_18_011_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GaladrielsSilverEwerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void EwerPumpsGaladrielARB() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var galadriel = scn.GetRingBearer();
+		var ewer = scn.GetFreepsCard("ewer");
+		scn.FreepsMoveCardToHand(ewer);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		//3 base +1 from ring
+		assertEquals(4, scn.GetStrength(galadriel));
+		//3 base +1 from text -1 from burden
+		assertEquals(3, scn.GetResistance(galadriel));
+
+		scn.FreepsPlayCard(ewer);
+
+		//3 base +1 from ring +2 from ewer
+		assertEquals(6, scn.GetStrength(galadriel));
+		//3 base +1 from text -1 from burden + 2 from ewer
+		assertEquals(5, scn.GetResistance(galadriel));
+	}
+
+	@Test
+	public void EwerReinforcesAfterPlayingSkirmishEvent() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var galadriel = scn.GetRingBearer();
+		var ewer = scn.GetFreepsCard("ewer");
+		var homestead = scn.GetFreepsCard("homestead");
+		var defiance = scn.GetFreepsCard("defiance");
+		scn.FreepsMoveCardToSupportArea(ewer, homestead);
+		scn.FreepsMoveCardToHand(defiance);
+
+		var savage = scn.GetShadowCard("savage");
+		scn.ShadowMoveCharToTable(savage);
+
+		scn.StartGame();
+
+		scn.AddTokensToCard(homestead, 1);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(galadriel, savage);
+		scn.FreepsResolveSkirmish(galadriel);
+
+		assertEquals(1, scn.GetCultureTokensOn(homestead));
+		scn.FreepsPlayCard(defiance);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(2, scn.GetCultureTokensOn(homestead));
 	}
 }

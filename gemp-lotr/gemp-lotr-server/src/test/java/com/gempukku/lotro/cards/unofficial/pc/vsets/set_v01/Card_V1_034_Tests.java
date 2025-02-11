@@ -2,9 +2,10 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -16,10 +17,12 @@ public class Card_V1_034_Tests
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<>()
-				{{
-					put("card", "101_34");
-					// put other cards in here as needed for the test case
+				new HashMap<>() {{
+					put("darkwaters", "101_34");
+					put("tentacle1", "2_58");
+					put("tentacle2", "2_66");
+					put("song", "3_5");
+					put("greenleaf", "1_50");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +49,7 @@ public class Card_V1_034_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("darkwaters");
 
 		assertEquals("Out of Dark Waters", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +61,95 @@ public class Card_V1_034_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OutofDarkWatersTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void DarkWatersStacksWoundedTentacles() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = GetScenario();
+		GenericCardTestHelper scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var darkwaters = scn.GetShadowCard("darkwaters");
+		var tentacle2 = scn.GetShadowCard("tentacle2");
+		scn.ShadowMoveCardToSupportArea(darkwaters);
+		scn.ShadowMoveCardToHand(tentacle2);
+
+		scn.FreepsMoveCharToTable("greenleaf");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(4);
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(1, scn.GetTwilight());
+		scn.ShadowPlayCard(tentacle2);
+
+		assertEquals(0, scn.getWounds(tentacle2));
+		assertEquals(Zone.SHADOW_CHARACTERS, tentacle2.getZone());
+
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(1, scn.getWounds(tentacle2));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(Zone.STACKED, tentacle2.getZone());
+		assertEquals(darkwaters, tentacle2.getStackedOn());
+	}
+
+	@Test
+	public void DarkWatersStacksTentaclesKilledByWound() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		var darkwaters = scn.GetShadowCard("darkwaters");
+		var tentacle1 = scn.GetShadowCard("tentacle1");
+		scn.ShadowMoveCardToSupportArea(darkwaters);
+		scn.ShadowMoveCardToHand(tentacle1);
+
+		scn.FreepsMoveCharToTable("greenleaf");
+
+		scn.StartGame();
+		scn.SetTwilight(4);
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(tentacle1);
+
+		assertEquals(Zone.SHADOW_CHARACTERS, tentacle1.getZone());
+
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassCurrentPhaseActions();
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(Zone.STACKED, tentacle1.getZone());
+		assertEquals(darkwaters, tentacle1.getStackedOn());
+	}
+
+
+	@Test
+	public void DarkWatersCanBurn2AStackedTentaclesToPreventSelfDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		var song = scn.GetFreepsCard("song");
+		scn.FreepsMoveCardToSupportArea(song);
+
+		var darkwaters = scn.GetShadowCard("darkwaters");
+		var tentacle1 = scn.GetShadowCard("tentacle1");
+		var tentacle2 = scn.GetShadowCard("tentacle2");
+		scn.ShadowMoveCardToSupportArea(darkwaters);
+		//scn.ShadowMoveCardToHand(tentacle1, tentacle2);
+
+		scn.StartGame();
+		scn.StackCardsOn(darkwaters, tentacle1, tentacle2);
+
+		scn.FreepsUseCardAction(song);
+		scn.FreepsChooseCard(darkwaters);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(Zone.DISCARD, tentacle1.getZone());
+		assertEquals(Zone.DISCARD, tentacle2.getZone());
+		assertEquals(Zone.SUPPORT, darkwaters.getZone());
+
 	}
 }

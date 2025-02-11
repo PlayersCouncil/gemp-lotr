@@ -445,7 +445,7 @@
 			}
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: movesTo
 					filter: storedKeyword

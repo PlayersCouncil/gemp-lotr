@@ -138,10 +138,11 @@
 			}
 			{
 				type: KilledTrigger
-				optional: false
+				optional: true
+				player: owner
 				requires: {
 					type: CanSpot
-					filter: self,InSkirmish
+					filter: RecentlyInSkirmishAgainst(self)
 				}
 				cost: {
 					type: RemoveCultureTokens
@@ -151,11 +152,11 @@
 				}
 				effect: {
 					type: wound
-					select: choose(companion,inSkirmishAgainst(self))
+					select: choose(companion,RecentlyInSkirmishAgainst(self))
 				}
 			}
 		]
-		gametext: Damage +1. <br>The minion is strength+1 for each wound on each character in its skirmish.<br>When this minion dies in a skirmish, you may remove 2 [isengard] tokens from a machine to wound a character it was skirmishing. 
+		gametext: Damage +1. <br>This minion is strength +1 for each wound on each character in its skirmish.<br>When this minion dies in a skirmish, you may remove 2 [isengard] tokens from a machine to wound a character it was skirmishing. 
 		lore: "Then the Orcs screamed, waving spear and sword, and shooting a cloud of arrows."
 		promotext: ""
 		alts: {
@@ -212,6 +213,7 @@
 						type: AssignFpCharacterToSkirmish
 						fpCharacter: choose(or(ally,and(unbound,companion)))
 						minion: choose(uruk-hai, MaxTwilight(memory(removed)))
+						ignoreAllyLocation: true
 					}
 				}
 			]
@@ -244,6 +246,72 @@
 		effects: [
 			{
 				type: event
+				requires: [
+					{
+						type: Or
+						requires: [
+							# Small draw
+							{
+								type: And
+								requires: [
+									{
+										type: CanSpot
+										filter: your,minion
+									}
+									{
+										type: Not
+										requires: {
+											type: WasPlayedFromZone
+											zone: DECK
+										}
+									}
+									{
+										type: CanSpotTwilight
+										amount: 3
+									}
+								]
+							}
+							
+							# Big draw
+							{
+								type: And
+								requires: [
+									{
+										type: Or
+										requires: [
+											{
+												type: And
+												requires: [
+													{
+														type: Location
+														filter: RegionNumber(3)
+													}
+													{
+														type: CanSpotTwilight
+														amount: 25
+													}
+												]
+											}
+											{
+												type: And
+												requires: [
+													{
+														type: Location
+														filter: RegionNumber(1-2)
+													}
+													{
+														type: CanSpotTwilight
+														amount: 18
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
 				effect: {
 					type: Choice
 					texts: [
@@ -253,10 +321,19 @@
 					effects: [
 						{
 							type: CostToEffect
-							requires: {
-								type: CanSpot
-								filter: your,minion
-							}
+							requires: [
+								{
+									type: CanSpot
+									filter: your,minion
+								}
+								{
+									type: Not
+									requires: {
+										type: WasPlayedFromZone
+										zone: DECK
+									}
+								}
+							]
 							cost: {
 								type: RemoveTwilight
 								amount: 3
@@ -344,7 +421,7 @@
 				}
 			}
 		]
-		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (5) to take up to 4 Shadow items into hand from your draw deck. If in region 1, this action can be played from your draw deck.
+		gametext: Shadow: Spot your minion and remove (3) to draw 2 cards.<br>Shadow: Spot 18 twilight tokens (or 25 if in region 3) and remove (5) to take up to 4 Shadow items into hand from your draw deck. If in region 1, this action can be performed from your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -614,10 +691,16 @@
 					type: addKeyword
 					keyword: damage+1
 					filter: self
-					requires: {
-						type: CanSpot
-						filter: SiteYouControl, battleground
-					}
+					requires: [
+						{
+							type: CanSpot
+							filter: SiteYouControl, battleground
+						}
+						{
+							type: CanSpot
+							filter: self,inSkirmish
+						}
+					]
 				}
 			}
 			{
@@ -627,8 +710,8 @@
 					filter: any
 					phase: skirmish
 					requires: {
-						type: CanSpot
-						filter: SiteYouControl, battleground
+						type: Location
+						filter: battleground
 					}
 				}
 			}
@@ -1118,18 +1201,27 @@
 					filter: uruk-hai
 					memorize: woundedUruk
 				}
-				requires: {
-					type: IsEqual
-					firstNumber: {
-						type: TwilightCostInMemory
-						memory: woundedUruk
+				requires: [
+					{
+						type: IsEqual
+						firstNumber: {
+							type: TwilightCostInMemory
+							memory: woundedUruk
+						}
+						secondNumber: {
+							type: ForEachCultureToken
+							filter: self
+							culture: isengard
+						}
 					}
-					secondNumber: {
-						type: ForEachCultureToken
-						filter: self
-						culture: isengard
+					{
+						type: not
+						requires: {
+							type: phase
+							phase: skirmish
+						}
 					}
-				}
+				]
 				effect: [
 					{
 						type: PreventWound

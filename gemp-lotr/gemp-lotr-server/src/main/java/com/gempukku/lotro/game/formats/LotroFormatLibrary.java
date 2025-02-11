@@ -121,7 +121,7 @@ public class LotroFormatLibrary {
                 }
             }
 
-            for(var format : _hallFormats.values()) {
+            for(var format : _allFormats.values()) {
                 format.generateBlockFilter(_allFormats, _cardLibrary.getSetDefinitions());
             }
 

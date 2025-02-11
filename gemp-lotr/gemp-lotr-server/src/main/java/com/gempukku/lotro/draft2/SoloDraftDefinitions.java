@@ -41,6 +41,7 @@ public class SoloDraftDefinitions {
     public void ReloadDraftsFromFile() {
         try {
             collectionReady.acquire();
+            _draftTypes.clear();
             loadDrafts(_draftDefinitionPath);
             collectionReady.release();
         } catch (InterruptedException e) {

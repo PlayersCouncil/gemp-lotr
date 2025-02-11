@@ -110,7 +110,6 @@
 					filter: minion
 					amount: {
 						type: forEachWound
-						filter: self
 						multiplier: -2
 					}
 				}
@@ -1002,7 +1001,6 @@
 					filter: minion,inSkirmishAgainst(self)
 					amount: {
 						type: forEachWound
-						filter: self
 						multiplier: -2
 					}
 				}
@@ -1042,6 +1040,7 @@
 			cost: {
 				type: exert
 				select: memory(winner)
+				ignoreCostCheckFailure: true
 			},
 			effect: [
 				{
@@ -1286,7 +1285,10 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		timewords: Regroup
+		timewords: [
+			Skirmish
+			Regroup
+		]
 		effects: {
 			type: event
 			requires: {

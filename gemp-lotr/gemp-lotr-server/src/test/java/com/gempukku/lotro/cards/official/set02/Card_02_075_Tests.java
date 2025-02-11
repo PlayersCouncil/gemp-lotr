@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.official.set02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_02_075_Tests
 {
@@ -18,8 +18,10 @@ public class Card_02_075_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "2_75");
-					// put other cards in here as needed for the test case
+					put("ferny", "2_75");
+					put("runner", "1_178");
+
+					put("gimli", "1_13");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -42,12 +44,13 @@ public class Card_02_075_Tests
 		 * Strength: 4
 		 * Vitality: 1
 		 * Site Number: 2
-		 * Game Text: Nazgûl are not roaming.<br>The Free Peoples player may not assign a character to skirmish Bill Ferny. Discard Bill Ferny if underground.
+		 * Game Text: Nazgûl are not roaming.
+		 * The Free Peoples player may not assign a character to skirmish Bill Ferny. Discard Bill Ferny if underground.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("ferny");
 
 		assertEquals("Bill Ferny", card.getBlueprint().getTitle());
 		assertEquals("Swarthy Sneering Fellow", card.getBlueprint().getSubtitle());
@@ -62,18 +65,50 @@ public class Card_02_075_Tests
 		assertEquals(2, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BillFernyTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void BillFernyCannotBeAssignedByFreepsWhenAlone() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var frodo = scn.GetRingBearer();
+		var ferny = scn.GetShadowCard("ferny");
+		scn.ShadowMoveCharToTable(ferny);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPassCurrentPhaseAction();
+
+		assertEquals(1, scn.ShadowGetShadowAssignmentTargetCount());
+
+		scn.ShadowAssignToMinions(frodo, ferny);
+		scn.FreepsResolveSkirmish(frodo);
+	}
+
+	@Test
+	public void BillFernyCannotBeAssignedByFreepsWhenWithOtherMinions() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.FreepsMoveCharToTable(gimli);
+
+		var ferny = scn.GetShadowCard("ferny");
+		var runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCharToTable(ferny, runner);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+
+		assertEquals(1, scn.FreepsGetShadowAssignmentTargetCount());
+		scn.FreepsAssignToMinions(frodo, runner);
+
+		assertEquals(1, scn.ShadowGetShadowAssignmentTargetCount());
+
+		scn.ShadowAssignToMinions(frodo, ferny);
+		scn.FreepsResolveSkirmish(frodo);
 	}
 }

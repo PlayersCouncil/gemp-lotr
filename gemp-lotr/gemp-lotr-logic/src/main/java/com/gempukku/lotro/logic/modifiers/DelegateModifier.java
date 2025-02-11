@@ -320,6 +320,11 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
+    public boolean isAdditionalRaceModifier(LotroGame game, PhysicalCard physicalCard, Race race) {
+        return delegate.isAdditionalRaceModifier(game, physicalCard, race);
+    }
+
+    @Override
     public boolean isAllyParticipateInArcheryFire(LotroGame game, PhysicalCard card) {
         return delegate.isAllyParticipateInArcheryFire(game, card);
     }

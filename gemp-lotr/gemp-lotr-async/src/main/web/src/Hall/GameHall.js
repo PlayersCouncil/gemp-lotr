@@ -38,7 +38,7 @@ var chat;
 						var bpid = ids[i];
 						var card = new Card(bpid, "SPECIAL", "hint", "");
 						horiz = horiz || card.horizontal;
-						floatCardDiv.append(createFullCardDiv(card.imageUrl, card.foil, card.horizontal));
+						floatCardDiv.append(Card.CreateFullCardDiv(card.imageUrl, null, card.foil, card.horizontal));
 					}
 					
 					infoDialog.append(floatCardDiv);

@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.official.set02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -16,16 +13,42 @@ import static org.junit.Assert.*;
 public class Card_02_026_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+	protected GenericCardTestHelper GetFellowshipScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "2_26");
-					// put other cards in here as needed for the test case
+					put("speak", "2_26");
+					put("gandalf", "1_72");
+					put("fodder1", "1_73");
+					put("fodder2", "1_74");
 				}},
-				GenericCardTestHelper.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "30_50"); //HDG Troll Hoard, underground
+					put("site3", "1_337");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing
+		);
+	}
+
+	protected GenericCardTestHelper GetShadowsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new GenericCardTestHelper(
+				new HashMap<>()
+				{{
+					put("speak", "2_26");
+					put("gandalf", "1_72");
+				}},
+				GenericCardTestHelper.ShadowsSites,
+				GenericCardTestHelper.FOTRFrodo,
+				GenericCardTestHelper.RulingRing,
+				GenericCardTestHelper.Shadows
 		);
 	}
 
@@ -44,9 +67,9 @@ public class Card_02_026_Tests
 		 * Game Text: <b>Fellowship</b> <i>or</i> <b>Regroup:</b> Spot Gandalf to play the fellowship's next site (replacing opponent's site if necessary). Draw a card if you play an underground site.
 		*/
 
-		var scn = GetScenario();
+		var scn = GetFellowshipScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("speak");
 
 		assertEquals("Speak \"Friend\" and Enter", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +81,155 @@ public class Card_02_026_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SpeakFriendandEnterTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SpeakFriendandEnterRequiresGandalfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = GetScenario();
+		var scn = GetFellowshipScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var speak = scn.GetFreepsCard("speak");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCardToHand(speak, gandalf);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertFalse(scn.FreepsPlayAvailable(speak));
+
+		scn.FreepsPlayCard(gandalf);
+		assertTrue(scn.FreepsPlayAvailable(speak));
+	}
+
+	@Test
+	public void SpeakFriendandEnterDrawsACardIfSiteIsUnderground() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetFellowshipScenario();
+
+		var speak = scn.GetFreepsCard("speak");
+		scn.FreepsMoveCardToHand(speak);
+		scn.FreepsMoveCharToTable("gandalf");
+
+		scn.StartGame();
+
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(2, scn.GetFreepsDeckCount());
+		scn.FreepsPlayCard(speak);
+		// Played Speak Friend, drew a card to replace it
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(1, scn.GetFreepsDeckCount());
+	}
+
+	@Test
+	public void SpeakFriendandEnterCanBeUsedInFellowshipPhaseToPlayNextSite() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetFellowshipScenario();
+
+		var speak = scn.GetFreepsCard("speak");
+		scn.FreepsMoveCardToHand(speak);
+		scn.FreepsMoveCharToTable("gandalf");
+
+		var site2 = scn.GetFreepsSite(2);
+
+		scn.StartGame();
+
+		assertEquals(Zone.ADVENTURE_DECK, site2.getZone());
+
+		scn.FreepsPlayCard(speak);
+		assertEquals(Zone.ADVENTURE_PATH, site2.getZone());
+	}
+
+	@Test
+	public void SpeakFriendandEnterCanBeUsedInRegroupPhaseToPlayNextSite() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetFellowshipScenario();
+
+		var speak = scn.GetFreepsCard("speak");
+		scn.FreepsMoveCardToHand(speak);
+		scn.FreepsMoveCharToTable("gandalf");
+
+		var site3 = scn.GetFreepsSite(3);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(Zone.ADVENTURE_DECK, site3.getZone());
+		assertTrue(scn.FreepsPlayAvailable(speak));
+
+		scn.FreepsPlayCard(speak);
+		assertEquals(Zone.ADVENTURE_PATH, site3.getZone());
+	}
+
+	@Test
+	public void SpeakFriendandEnterReplacesOpponentSite() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetFellowshipScenario();
+
+		var speak = scn.GetFreepsCard("speak");
+		scn.FreepsMoveCardToHand(speak);
+		scn.FreepsMoveCharToTable("gandalf");
+
+		var site2 = scn.GetFreepsSite(2);
+		var shadow2 = scn.GetShadowSite(2);
+
+		scn.StartGame();
+
+		scn.ShadowMoveCardToAdventurePath(shadow2);
+
+		assertEquals(Zone.ADVENTURE_DECK, site2.getZone());
+		assertEquals(Zone.ADVENTURE_PATH, shadow2.getZone());
+
+		scn.FreepsPlayCard(speak);
+		assertEquals(Zone.ADVENTURE_PATH, site2.getZone());
+		assertEquals(Zone.ADVENTURE_DECK, shadow2.getZone());
+	}
+
+	@Test
+	public void SpeakFriendandEnterCanBeUsedInFellowshipPhaseToPlayNextSiteOnShadowsPath() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetShadowsScenario();
+
+		var speak = scn.GetFreepsCard("speak");
+		scn.FreepsMoveCardToHand(speak);
+		scn.FreepsMoveCharToTable("gandalf");
+
+		var site1 = scn.GetFreepsSite("site1");
+		var site2 = scn.GetFreepsSite("site2");
+
+		scn.StartGame(site1);
+
+		assertEquals(Zone.ADVENTURE_DECK, site2.getZone());
+
+		scn.FreepsPlayCard(speak);
+		assertTrue(scn.FreepsDecisionAvailable("Choose site to play"));
+		scn.FreepsChooseCardBPFromSelection(site2);
+		assertEquals(Zone.ADVENTURE_PATH, site2.getZone());
+	}
+
+	@Test
+	public void SpeakFriendandEnterCanBeUsedInRegroupPhaseToPlayNextSiteOnShadowsPath() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetShadowsScenario();
+
+		var speak = scn.GetFreepsCard("speak");
+		scn.FreepsMoveCardToHand(speak);
+		scn.FreepsMoveCharToTable("gandalf");
+
+		var site1 = scn.GetFreepsSite("site1");
+		var site3 = scn.GetFreepsSite("site3");
+
+		var site2 = scn.GetFreepsSite("site2");
+
+		scn.StartGame(site1);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowChooseCardBPFromSelection(site2);
+
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(Zone.ADVENTURE_DECK, site3.getZone());
+		assertTrue(scn.FreepsPlayAvailable(speak));
+
+		scn.FreepsPlayCard(speak);
+		assertTrue(scn.FreepsDecisionAvailable("Choose site to play"));
+		scn.FreepsChooseCardBPFromSelection(site3);
+		assertEquals(Zone.ADVENTURE_PATH, site3.getZone());
 	}
 }

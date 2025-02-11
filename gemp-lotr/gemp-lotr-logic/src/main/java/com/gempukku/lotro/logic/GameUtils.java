@@ -168,11 +168,11 @@ public class GameUtils {
         if(override == null || override.isEmpty()) {
             override = culture.toString().toLowerCase();
         }
-        return "<span class='cultureHint' ><img src='images/cultures/" + override + ".png'></span>";
+        return "<span class='cultureHint' ><img src='images/cultures/" + override + ".png'/></span>";
     }
 
     public static String getCultureImage(Culture culture) {
-        return "<span class='cultureHint' value='" + culture.toString() + "'><img src='images/cultures/" + culture.toString().toLowerCase() + ".png'> "
+        return "<span class='cultureHint' value='" + culture.toString() + "'><img src='images/cultures/" + culture.toString().toLowerCase() + ".png'/> "
                 + culture.getHumanReadable() + "</span>";
     }
 
@@ -181,7 +181,7 @@ public class GameUtils {
         for (PhysicalCard card : cards)
             sb.append(GameUtils.getFullName(card) + ", ");
 
-        if (sb.length() == 0)
+        if (sb.isEmpty())
             return "none";
         else
             return sb.substring(0, sb.length() - 2);
@@ -308,9 +308,7 @@ public class GameUtils {
     public static int getSpottableRacesCount(LotroGame game, Filterable... filters) {
         Set<Race> races = new HashSet<>();
         for (PhysicalCard physicalCard : Filters.filterActive(game, filters)) {
-            final Race race = physicalCard.getBlueprint().getRace();
-            if (race != null)
-                races.add(race);
+            races.addAll(game.getModifiersQuerying().getRaces(game, physicalCard));
         }
         return races.size();
     }

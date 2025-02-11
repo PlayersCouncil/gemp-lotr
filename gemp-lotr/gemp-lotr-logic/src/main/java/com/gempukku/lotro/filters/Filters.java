@@ -14,6 +14,7 @@ import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.RuleUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Filters {
     private static final Map<CardType, Filter> _typeFilterMap = new HashMap<>();
@@ -102,6 +103,7 @@ public class Filters {
         GetCardsMatchingFilterVisitor matchingFilterVisitor = new GetCardsMatchingFilterVisitor(game, Filters.and(filters, Filters.spottable));
         game.getGameState().iterateActiveCards(matchingFilterVisitor);
         int result = matchingFilterVisitor.getCounter();
+        //TODO: make this less dependent on how the definition is arranged
         if (filters.length == 1)
             result += game.getModifiersQuerying().getSpotBonus(game, filters[0]);
         return result;
@@ -191,16 +193,17 @@ public class Filters {
     }
 
     public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter) {
-        return assignableToSkirmishAgainst(assignedBySide, againstFilter, false, false);
+        return assignableToSkirmishAgainst(assignedBySide, againstFilter, false, false, false);
     }
 
-    public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter, final boolean ignoreExistingAssignments, final boolean allowAllyToSkirmish) {
+    public static Filter assignableToSkirmishAgainst(final Side assignedBySide, final Filterable againstFilter,
+            final boolean ignoreExistingAssignments, final boolean ignoreDefender, final boolean allowAllyToSkirmish) {
         return Filters.and(
-                assignableToSkirmish(assignedBySide, ignoreExistingAssignments, allowAllyToSkirmish),
+                assignableToSkirmish(assignedBySide, ignoreExistingAssignments, ignoreDefender, allowAllyToSkirmish),
                 (Filter) (game, physicalCard) -> {
                     for (PhysicalCard card : Filters.filterActive(game, againstFilter)) {
                         if (card.getBlueprint().getSide() != physicalCard.getBlueprint().getSide()
-                                && Filters.assignableToSkirmish(assignedBySide, ignoreExistingAssignments, allowAllyToSkirmish).accepts(game, card)) {
+                                && Filters.assignableToSkirmish(assignedBySide, ignoreExistingAssignments, ignoreDefender, allowAllyToSkirmish).accepts(game, card)) {
                             Map<PhysicalCard, Set<PhysicalCard>> thisAssignment = new HashMap<>();
                             if (card.getBlueprint().getSide() == Side.FREE_PEOPLE) {
                                 if (thisAssignment.containsKey(card))
@@ -222,7 +225,8 @@ public class Filters {
                 });
     }
 
-    public static Filter assignableToSkirmish(final Side assignedBySide, final boolean ignoreExistingAssignments, final boolean allowAllyToSkirmish) {
+    public static Filter assignableToSkirmish(final Side assignedBySide, final boolean ignoreExistingAssignments,
+            final boolean ignoreDefender, final boolean allowAllyToSkirmish) {
         Filter assignableFilter = Filters.or(
                 Filters.and(
                         CardType.ALLY,
@@ -255,8 +259,20 @@ public class Filters {
                 (Filter) (game, physicalCard) -> {
                     if (!ignoreExistingAssignments) {
                         boolean assignedToSkirmish = Filters.assignedToSkirmish.accepts(game, physicalCard);
-                        if (assignedToSkirmish)
-                            return false;
+
+                        if (assignedToSkirmish) {
+                            if(!ignoreDefender) {
+                                int defender = game.getModifiersQuerying().getKeywordCount(game, physicalCard, Keyword.DEFENDER);
+                                var assignments = game.getGameState().getAssignments()
+                                        .stream().filter(x -> x.getFellowshipCharacter() == physicalCard || x.getShadowCharacters().contains(physicalCard)).collect(
+                                                Collectors.toSet());
+                                if(1 + defender <= assignments.size())
+                                    return false;
+                            }
+                            else {
+                                return false;
+                            }
+                        }
                     }
                     return game.getModifiersQuerying().canBeAssignedToSkirmish(game, assignedBySide, physicalCard);
                 });
@@ -312,6 +328,18 @@ public class Filters {
             if (skirmish != null && skirmish.getFellowshipCharacter() != null) {
                 return (skirmish.getFellowshipCharacter() == physicalCard && Filters.acceptsAny(game, skirmish.getShadowCharacters(), Filters.and(againstFilter)))
                         || (skirmish.getShadowCharacters().contains(physicalCard) && Filters.and(againstFilter).accepts(game, skirmish.getFellowshipCharacter()));
+            }
+            return false;
+        };
+    }
+
+    public static Filter recentlyInSkirmishAgainst(final Filterable... againstFilter) {
+        return (game, physicalCard) -> {
+            Skirmish skirmish = game.getGameState().getSkirmish();
+            if (skirmish != null && skirmish.getFellowshipCharacter() != null) {
+                return (skirmish.getFellowshipCharacter() == physicalCard && (Filters.acceptsAny(game, skirmish.getShadowCharacters(), Filters.and(againstFilter)) || Filters.acceptsAny(game, skirmish.getRemovedFromSkirmish(), Filters.and(againstFilter))))
+                    || (skirmish.getShadowCharacters().contains(physicalCard) && Filters.and(againstFilter).accepts(game, skirmish.getFellowshipCharacter()));
+
             }
             return false;
         };
@@ -404,10 +432,7 @@ public class Filters {
     private static Filter race(final Race race) {
         return Filters.and(
                 Filters.or(CardType.COMPANION, CardType.ALLY, CardType.MINION, CardType.FOLLOWER),
-                (Filter) (game, physicalCard) -> {
-                    LotroCardBlueprint blueprint = physicalCard.getBlueprint();
-                    return blueprint.getRace() == race;
-                });
+                (Filter) (game, physicalCard) -> game.getModifiersQuerying().isRace(game, physicalCard, race));
     }
 
 
@@ -559,8 +584,7 @@ public class Filters {
     }
 
     private static Filter type(final CardType cardType) {
-        return (game, physicalCard) -> (physicalCard.getBlueprint().getCardType() == cardType)
-                || game.getModifiersQuerying().isAdditionalCardType(game, physicalCard, cardType);
+        return (game, physicalCard) -> game.getModifiersQuerying().isCardType(game, physicalCard, cardType);
     }
 
     public static Filter attachedTo(final Filterable... filters) {

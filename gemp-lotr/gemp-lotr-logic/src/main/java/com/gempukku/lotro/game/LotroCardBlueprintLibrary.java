@@ -310,7 +310,7 @@ public class LotroCardBlueprintLibrary {
                     int setID = Integer.parseInt(parts[0]);
                     String cardID = parts[1];
                     JSONDefs.ErrataInfo card = null;
-                    String base = id;
+                    String base;
                     if (setID >= 50 && setID <= 69) {
                         base = "" + (setID - 50) + "_" + cardID;
                     } else if (setID >= 70 && setID <= 89) {
@@ -339,7 +339,7 @@ public class LotroCardBlueprintLibrary {
 
                     }
 
-                    card.ErrataIDs.put(JSONDefs.ErrataInfo.PC_Errata, id);
+                    card.addPCErrata(id);
                 }
 
                 collectionReady.release();
@@ -389,6 +389,9 @@ public class LotroCardBlueprintLibrary {
             }
 
             collectionReady.release();
+
+            if(bp == null)
+                throw new CardNotFoundException(blueprintId + " was somehow null");
 
             return bp;
         } catch (InterruptedException exp) {

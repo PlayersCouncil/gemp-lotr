@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.official.set10;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -20,8 +17,10 @@ public class Card_10_019_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "10_19");
-					// put other cards in here as needed for the test case
+					put("sprang", "10_19");
+					put("gollum", "9_28");
+
+					put("sword", "1_299");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +45,7 @@ public class Card_10_019_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("sprang");
 
 		assertEquals("A Dark Shape Sprang", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +57,37 @@ public class Card_10_019_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
+	@Test
 	public void ADarkShapeSprangTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var sprang = scn.GetShadowCard("sprang");
+		var gollum = scn.GetShadowCard("gollum");
+		scn.ShadowMoveCardToHand(sprang, gollum);
+
+		var frodo = scn.GetRingBearer();
+		var sword = scn.GetFreepsCard("sword");
+		scn.FreepsMoveCardToHand(sword);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SetTwilight(9);
+		scn.FreepsPlayCard(sword);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(Zone.HAND, gollum.getZone());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(Zone.SHADOW_CHARACTERS, gollum.getZone());
+		//9 start, +1 from sword = 10; gollum costs 2 + 2 roaming -2 discount
+		assertEquals(8, scn.GetTwilight());
+
+		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPassCurrentPhaseAction();
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
+
+		assertEquals(1, scn.GetWoundsOn(gollum)); //lost skirmish
 	}
 }

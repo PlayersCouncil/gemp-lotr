@@ -20,8 +20,9 @@ import java.util.Collection;
 
 public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
     @Override
-    public EffectAppender createEffectAppender(JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "minion", "memorizeMinion", "memorizeFPCharacter", "ignoreExistingAssignments", "preventCost", "preventText", "insteadEffect");
+    public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        FieldUtils.validateAllowedFields(effectObject, "player", "fpCharacter", "minion", "memorizeMinion",
+                "memorizeFPCharacter", "ignoreExistingAssignments", "ignoreDefender", "ignoreAllyLocation", "preventCost", "preventText", "insteadEffect");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String fpCharacter = FieldUtils.getString(effectObject.get("fpCharacter"), "fpCharacter", "choose(any)");
@@ -34,12 +35,14 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
             throw new InvalidCardDefinitionException("preventText and preventCost have to be specified (or not) together");
         if (insteadEffectArray.length > 0 && preventCostArray.length == 0)
             throw new InvalidCardDefinitionException("preventCost is required if insteadEffect is present");
-        EffectAppender[] preventEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(preventCostArray, environment);
-        EffectAppender[] insteadEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(insteadEffectArray, environment);
+        EffectAppender[] preventEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(false, preventCostArray, environment);
+        EffectAppender[] insteadEffectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(false, insteadEffectArray, environment);
 
         final String minionMemory = FieldUtils.getString(effectObject.get("memorizeMinion"), "memorizeMinion", "_tempMinion");
         final String fpCharacterMemory = FieldUtils.getString(effectObject.get("memorizeFPCharacter"), "memorizeFPCharacter", "_tempFpCharacter");
         final boolean ignoreExistingAssignments = FieldUtils.getBoolean(effectObject.get("ignoreExistingAssignments"), "ignoreExistingAssignments", false);
+        final boolean ignoreDefender = FieldUtils.getBoolean(effectObject.get("ignoreDefender"), "ignoreDefender", true);
+        final boolean ignoreAllyLocation = FieldUtils.getBoolean(effectObject.get("ignoreAllyLocation"), "ignoreAllyLocation", false);
 
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
@@ -52,7 +55,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Filterable filter = minionFilter.getFilterable(actionContext);
-                            return Filters.assignableToSkirmishAgainst(assigningSide, filter, ignoreExistingAssignments, false);
+                            return Filters.assignableToSkirmishAgainst(assigningSide, filter, ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
                         }, fpCharacterMemory, player, "Choose character to assign to skirmish", environment));
         result.addEffectAppender(
                 CardResolver.resolveCard(minion,
@@ -60,7 +63,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory(fpCharacterMemory);
-                            return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar), ignoreExistingAssignments, false);
+                            return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar), ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
                         }, minionMemory, player, "Choose minion to assign to character", environment));
 
         DelayedAppender assignAppender = new DelayedAppender() {
@@ -70,8 +73,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                 final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory(fpCharacterMemory);
                 final Collection<? extends PhysicalCard> minion = actionContext.getCardsFromMemory(minionMemory);
                 if (fpChar.size() == 1 && minion.size() == 1) {
-                    AssignmentEffect effect = new AssignmentEffect(assigningPlayer, fpChar.iterator().next(), minion.iterator().next());
-                    effect.setIgnoreSingleMinionRestriction(ignoreExistingAssignments);
+                    AssignmentEffect effect = new AssignmentEffect(assigningPlayer, fpChar.iterator().next(), minion.iterator().next(), ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
                     return effect;
                 } else {
                     return null;

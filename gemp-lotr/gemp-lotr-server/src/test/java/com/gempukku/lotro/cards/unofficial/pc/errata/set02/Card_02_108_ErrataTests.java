@@ -24,7 +24,8 @@ public class Card_02_108_ErrataTests
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.IsildursBaneRing
+				GenericCardTestHelper.IsildursBaneRing,
+				GenericCardTestHelper.Fellowship //We need the Ring-bearer's skirmish to be cancelable
 		);
 	}
 
@@ -127,6 +128,37 @@ public class Card_02_108_ErrataTests
 
 		scn.FreepsUseCardAction(elbereth);
 		assertEquals(8, scn.GetStrength(frodo));
+		assertEquals(Zone.DISCARD, elbereth.getZone());
+	}
+
+	@Test
+	public void SkirmishAbilityCantMakeRBStrengthPlus4IfNotSkirmishingNazgul() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var elbereth = scn.GetFreepsCard("elbereth");
+		scn.AttachCardsTo(frodo, elbereth);
+
+		var goblinarcher = scn.GetShadowCard("goblinarcher");
+		scn.ShadowMoveCharToTable(goblinarcher);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsDeclineOptionalTrigger();
+
+		//Assignments
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(frodo, goblinarcher);
+		scn.FreepsResolveSkirmish(frodo);
+		assertTrue(scn.FreepsActionAvailable(elbereth));
+		assertEquals(5, scn.GetStrength(frodo)); // 3 + 1 from ring +1 from O Elbereth itself
+		assertEquals(Zone.ATTACHED, elbereth.getZone());
+
+		scn.FreepsUseCardAction(elbereth);
+		assertEquals(4, scn.GetStrength(frodo)); // 3 + 1 from ring, nothing from O Elbereth itself
 		assertEquals(Zone.DISCARD, elbereth.getZone());
 	}
 }

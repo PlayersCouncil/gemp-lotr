@@ -308,11 +308,12 @@
 						text: Choose how many times to heal {healingAlly}
 						from: 0
 						to: 2
+						default: 2
 						memorize: healing
 					}
 					{
 						type: heal
-						select: choose(ally,allyHome(Fellowship,3))
+						select: memory(healingAlly)
 						times: memory(healing)
 					}
 				]
@@ -738,7 +739,10 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		timewords: Regroup
+		timewords: [
+			Fellowship
+			Regroup
+		]
 		effects: {
 			type: event
 			requires: {
@@ -921,7 +925,10 @@
 		culture: Elven
 		twilight: 0
 		type: Event
-		timewords: Maneuver
+		timewords: [
+			Fellowship
+			Maneuver
+		]
 		effects: {
 			type: event
 			cost: {

@@ -14,7 +14,7 @@ public class AidCost implements EffectProcessor {
 
         final JSONObject[] costArray = FieldUtils.getObjectArray(value.get("cost"), "cost");
 
-        final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(costArray, environment);
+        final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(true, costArray, environment);
 
         if (costAppenders.length == 0)
             throw new InvalidCardDefinitionException("At least one cost is required on AidCost effects.");

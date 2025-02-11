@@ -394,7 +394,7 @@
 				type: toPlay
 				requires: {
 					type: canSpot
-					filter: self
+					filter: elf
 				}
 			}
 			{

@@ -171,8 +171,20 @@ public class TurnProcedure {
             for (EffectResult effectResult : _effectResults) {
                 if (effectResult.getType() == EffectResult.Type.ANY_NUMBER_KILLED) {
                     KilledResult killResult = (KilledResult) effectResult;
+
                     if (Filters.acceptsAny(_game, killResult.getKilledCards(), Filters.ringBearer))
                         return true;
+
+                    //TODO: Make a better filter that keys off of "can become ring-bearer" rather than
+                    // assuming that will always be Sam.
+                    //If Sam is killed as a response to triggering *his* response, then the game flounders
+                    // and never properly evaluates the ring-bearer as dying.  So as a hack, we will check
+                    // for *Sam's* death and see if the Ring-bearer is dead at that time as well.
+                    if (Filters.acceptsAny(_game, killResult.getKilledCards(), Filters.sam)) {
+                        var ringBearer = _game.getGameState().getRingBearer( _game.getGameState().getCurrentPlayerId());
+                        if (ringBearer.getZone() == null || !ringBearer.getZone().isInPlay())
+                            return true;
+                    }
                 }
                 if (effectResult.getType() == EffectResult.Type.FOR_EACH_RETURNED_TO_HAND) {
                     ReturnCardsToHandResult returnResult = (ReturnCardsToHandResult) effectResult;

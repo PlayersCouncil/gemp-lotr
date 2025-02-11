@@ -1,9 +1,11 @@
 package com.gempukku.lotro.cards.official.set04;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Race;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +20,9 @@ public class Card_04_078_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "4_78");
-					// put other cards in here as needed for the test case
+					put("swordsman", "4_78");
+					put("savage", "1_151");
+					put("runner", "1_178");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +50,7 @@ public class Card_04_078_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("swordsman");
 
 		assertEquals("Lórien Swordsman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +65,40 @@ public class Card_04_078_Tests
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LorienSwordsmanTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void LorienSwordsmanReducesStrengthOnEachMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var swordsman = scn.GetFreepsCard("swordsman");
+		scn.FreepsMoveCharToTable(swordsman);
+
+		var savage = scn.GetShadowCard("savage");
+		var runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCharToTable(savage, runner);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		scn.AddWoundsToChar(savage, 1);
+
+		scn.SkipToAssignments();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowAssignToMinions(swordsman, savage, runner);
+
+		assertEquals(5, scn.GetStrength(swordsman));
+		assertEquals(5, scn.GetStrength(runner));
+		assertEquals(5, scn.GetStrength(savage));
+
+		scn.FreepsResolveSkirmish(swordsman);
+
+		assertEquals(5, scn.GetStrength(swordsman));
+		assertEquals(5, scn.GetStrength(runner));
+		assertEquals(3, scn.GetStrength(savage));
+
+		scn.AddWoundsToChar(savage, 1);
+
+		assertEquals(5, scn.GetStrength(swordsman));
+		assertEquals(5, scn.GetStrength(runner));
+		assertEquals(1, scn.GetStrength(savage));
 	}
 }

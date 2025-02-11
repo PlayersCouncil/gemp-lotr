@@ -74,7 +74,12 @@ public class SortAndFilterCards {
             //Cache our looked-up blueprints so we're not always re-searching; also used later for sorting
             try {
                 if(!cardBPCache.containsKey(blueprintId)) {
-                    cardBPCache.putIfAbsent(blueprintId, cardLibrary.getLotroCardBlueprint(blueprintId));
+                    var bp = cardLibrary.getLotroCardBlueprint(blueprintId);
+                    //TODO: log this
+                    if(bp == null)
+                        continue;
+
+                    cardBPCache.putIfAbsent(blueprintId, bp);
                 }
             } catch (CardNotFoundException ignored) {
                 // Ignore the card
@@ -227,6 +232,10 @@ public class SortAndFilterCards {
                         comparators.addComparator(new PacksFirstComparator(new CultureComparator(cardBPCache)));
                 case "name" ->
                         comparators.addComparator(new PacksFirstComparator(new NameComparator(cardBPCache)));
+                case "collinfo" ->
+                        comparators.addComparator(new PacksFirstComparator(new CollInfoComparator(cardBPCache, cardLibrary)));
+                case "set" ->
+                        comparators.addComparator(new PacksFirstComparator(new SetComparator()));
             }
         }
 
@@ -241,7 +250,7 @@ public class SortAndFilterCards {
     // any combination of the two.
     //Note that this coerces the key into lowercase
     private Map<String, List<String>> parseFilterParams(String filter) {
-        String[] params = filter.split(" ");
+        String[] params = filter.split(" +");
         Map<String, List<String>> result = new HashMap<>();
 
         for (String param : params) {
@@ -250,6 +259,9 @@ public class SortAndFilterCards {
 
             var parts = param.split(":");
             String key = parts[0].toLowerCase();
+
+            if(parts.length < 2)
+                continue;
 
             if(!result.containsKey(key)) {
                 var list = new ArrayList<>(Arrays.stream(parts[1].split(",")).toList());
@@ -265,7 +277,6 @@ public class SortAndFilterCards {
 
     private boolean isInSetOrFormat(String blueprintId, LotroCardBlueprint card, List<String> setFilters,
             LotroFormat currentFormat, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
-        boolean isInAnySet = false;
 
         for (String set : setFilters) {
             if(isJSInvalidString(set))
@@ -283,7 +294,7 @@ public class SortAndFilterCards {
                 }
 
                 if(StringUtils.isEmpty(invalid)) {
-                    isInAnySet = true;
+                    return true;
                 }
                 continue;
             }
@@ -305,18 +316,18 @@ public class SortAndFilterCards {
 
             for (int setNo = min; setNo <= max; setNo++) {
                 if (blueprintId.startsWith(setNo + "_") || library.hasAlternateInSet(blueprintId, String.valueOf(setNo))) {
-                    isInAnySet = true;
+                    return true;
                 }
                 else if (currentFormat != null && currentFormat.hasErrata()) {
                     int errataSetNo = library.getErrataSet(setNo);
                     if (blueprintId.startsWith(errataSetNo + "_") || library.hasAlternateInSet(blueprintId, String.valueOf(errataSetNo))) {
-                        isInAnySet = true;
+                        return true;
                     }
                 }
             }
         }
 
-        return isInAnySet;
+        return false;
     }
 
     private List<String> getWords(List<String> params, boolean sanitize) {
@@ -472,13 +483,13 @@ public class SortAndFilterCards {
      * @return true or false
      */
     private static boolean isAttributeValueAccepted(Integer filterValue, String compareType, Integer blueprintValue) {
-        if(filterValue == null || compareType == null)
+        if(filterValue == null)
             return true;
 
         if (blueprintValue == null)
             return false;
 
-        if ("EQUALS".equals(compareType) || "GREATER_THAN_OR_EQUAL_TO".equals(compareType) || "LESS_THAN_OR_EQUAL_TO".equals(compareType)) {
+        if (compareType == null || "EQUALS".equals(compareType) || "GREATER_THAN_OR_EQUAL_TO".equals(compareType) || "LESS_THAN_OR_EQUAL_TO".equals(compareType)) {
             if (blueprintValue.equals(filterValue))
                 return true;
         }
@@ -555,6 +566,39 @@ public class SortAndFilterCards {
         @Override
         public int compare(CardItem o1, CardItem o2) {
             return GameUtils.getFullName(_cardBlueprintMap.get(o1.getBlueprintId())).compareTo(GameUtils.getFullName(_cardBlueprintMap.get(o2.getBlueprintId())));
+        }
+    }
+
+    private static class CollInfoComparator implements Comparator<CardItem> {
+        private final Map<String, LotroCardBlueprint> _cardBlueprintMap;
+        private final LotroCardBlueprintLibrary _library;
+
+        private CollInfoComparator(Map<String, LotroCardBlueprint> cardBlueprintMap, LotroCardBlueprintLibrary library) {
+            _cardBlueprintMap = cardBlueprintMap;
+            _library = library;
+        }
+
+        @Override
+        public int compare(CardItem o1, CardItem o2) {
+            var split1 = _library.getBaseBlueprintId(o1.getBlueprintId()).split("_");
+            var split2 = _library.getBaseBlueprintId(o2.getBlueprintId()).split("_");
+            var set1 = Integer.parseInt(split1[0]);
+            var card1 = Integer.parseInt(split1[1]);
+            var set2 = Integer.parseInt(split2[0]);
+            var card2 = Integer.parseInt(split2[1]);
+
+            if(set1 == set2)
+                return card1 - card2;
+
+            return set1 - set2;
+        }
+    }
+
+    private static class SetComparator implements Comparator<CardItem> {
+
+        @Override
+        public int compare(CardItem o1, CardItem o2) {
+            return Integer.parseInt(o1.getBlueprintId().split("_")[0]) - Integer.parseInt(o2.getBlueprintId().split("_")[0]);
         }
     }
 

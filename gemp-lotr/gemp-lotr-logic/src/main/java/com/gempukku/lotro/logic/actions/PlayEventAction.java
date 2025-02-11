@@ -69,6 +69,7 @@ public class PlayEventAction extends AbstractCostToEffectAction {
         if (!_cardRemoved) {
             _cardRemoved = true;
             final Zone playedFromZone = _eventPlayed.getZone();
+            _eventPlayed.setPlayedFromZone(playedFromZone);
 
             game.getGameState().sendMessage(_eventPlayed.getOwner() + " plays " + GameUtils.getCardLink(_eventPlayed) + " from " + playedFromZone.getHumanReadable());
             game.getGameState().removeCardsFromZone(_eventPlayed.getOwner(), Collections.singleton(_eventPlayed));

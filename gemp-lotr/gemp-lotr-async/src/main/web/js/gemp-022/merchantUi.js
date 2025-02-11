@@ -23,7 +23,7 @@ var GempLotrMerchantUI = Class.extend({
 
         this.comm = new GempLotrCommunication("/gemp-lotr-server", that.processError);
 
-        this.cardFilter = new CardFilter(cardFilterElem, 
+        this.cardFilter = new LegacyCardFilter(cardFilterElem, 
                 function (filter, start, count, callback) {
                     that.comm.getMerchant(filter, that.ownedMin, start, count, callback);
                 },
@@ -188,7 +188,7 @@ var GempLotrMerchantUI = Class.extend({
     displayCardInfo:function (card) {
         this.infoDialog.html("");
         this.infoDialog.html("<div style='scroll: auto'></div>");
-        this.infoDialog.append(createFullCardDiv(card.imageUrl, card.foil, card.horizontal, card.isPack()));
+        this.infoDialog.append(Card.CreateFullCardDiv(card.imageUrl, null, card.foil, card.horizontal, card.isPack()));
         if (card.hasWikiInfo())
             this.infoDialog.append("<div><a href='" + card.getWikiLink() + "' target='_blank'>Wiki</a></div>");
         var windowWidth = $(window).width();
@@ -233,13 +233,13 @@ var GempLotrMerchantUI = Class.extend({
 
         if (type == "pack") {
             card = new Card(blueprintId, "merchant", "collection", "player");
-            cardDiv = createCardDiv(card.imageUrl, null, false, true, true, false);
+            cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, false, true, true, false, false);
             cardDiv.data("card", card);
             cardDiv.data("sizeListeners", sizeListeners);
             this.cardsDiv.append(cardDiv);
         } else if (type == "card") {
             card = new Card(blueprintId, "merchant", "collection", "player");
-            cardDiv = createCardDiv(card.imageUrl, null, card.isFoil(), true, false, card.hasErrata());
+            cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, card.isFoil(), true, false, card.hasErrata(), false);
             cardDiv.data("card", card);
             cardDiv.data("sizeListeners", sizeListeners);
             this.cardsDiv.append(cardDiv);
@@ -303,7 +303,7 @@ var GempLotrMerchantUI = Class.extend({
         this.questionDialog.html("");
         this.questionDialog.html("<div style='scroll: auto'></div>");
         var floatCardDiv = $("<div style='float: left;'></div>");
-        floatCardDiv.append(createFullCardDiv(card.imageUrl, card.foil, card.horizontal, card.isPack()));
+        floatCardDiv.append(Card.CreateFullCardDiv(card.imageUrl, null, card.foil, card.horizontal, card.isPack()));
         if (card.hasWikiInfo())
             floatCardDiv.append("<div><a href='" + card.getWikiLink() + "' target='_blank'>Wiki</a></div>");
         this.questionDialog.append(floatCardDiv);

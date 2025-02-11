@@ -399,8 +399,8 @@
 				cost: {
 					type: choice
 					texts: [
-						Spot a GONDOR Man with 3 or more vitality
-						Spot a GONDOR Man and add 2 threats
+						Spot a {GONDOR} Man with 3 or more vitality
+						Spot a {GONDOR} Man and add 2 threats
 					]
 					effects: [
 						{
@@ -488,8 +488,8 @@
 				cost: {
 					type: choice
 					texts: [
-						Spot a GONDOR Man with 3 or more vitality
-						Spot a GONDOR Man and add 2 threats
+						Spot a {GONDOR} Man with 3 or more vitality
+						Spot a {GONDOR} Man and add 2 threats
 					]
 					effects: [
 						{

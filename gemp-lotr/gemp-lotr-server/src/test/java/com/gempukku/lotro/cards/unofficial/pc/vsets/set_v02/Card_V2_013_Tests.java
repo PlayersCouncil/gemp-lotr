@@ -8,8 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V2_013_Tests
 {
@@ -19,7 +18,15 @@ public class Card_V2_013_Tests
 				new HashMap<>()
 				{{
 					put("gandalf", "102_13");
-					// put other cards in here as needed for the test case
+					put("shadowfax", "4_100");
+
+					put("valiant1", "65_14");
+					put("valiant2", "7_224");
+					put("valiant3", "18_99");
+
+					put("shotgun", "1_231");
+					put("marauder", "10_76");
+					put("grishnakh", "5_100");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -66,18 +73,152 @@ public class Card_V2_013_Tests
 		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GandalfTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GandalfMakesMountedCompanionsValiant() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var shadowfax = scn.GetFreepsCard("shadowfax");
+		scn.FreepsMoveCharToTable(gandalf);
+		scn.FreepsMoveCardToHand(shadowfax);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(4, scn.GetTwilight());
+		assertFalse(scn.hasKeyword(gandalf, Keyword.VALIANT));
+		scn.FreepsPlayCard(shadowfax);
+		assertEquals(Zone.ATTACHED, shadowfax.getZone());
+		assertEquals(gandalf, shadowfax.getAttachedTo());
+		assertTrue(scn.hasKeyword(gandalf, Keyword.VALIANT));
+	}
+
+	@Test
+	public void GandalfCannotRespondWith2ValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCharToTable(gandalf);
+		scn.FreepsMoveCharToTable("valiant1", "valiant2");
+
+		var shotgun = scn.GetShadowCard("shotgun");
+		scn.ShadowMoveCharToTable(shotgun);
+
+		scn.StartGame();
+
+		scn.AddBurdens(4);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowActionAvailable(shotgun));
+
+		scn.ShadowUseCardAction(shotgun);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+	}
+
+	@Test
+	public void GandalfCanBlockMinionAbilityAndWoundItIf3ValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var valiant1 = scn.GetFreepsCard("valiant1");
+		scn.FreepsMoveCharToTable(gandalf);
+		scn.FreepsMoveCharToTable("valiant1", "valiant2", "valiant3");
+
+		var shotgun = scn.GetShadowCard("shotgun");
+		scn.ShadowMoveCharToTable(shotgun);
+
+		scn.StartGame();
+
+		scn.AddBurdens(4);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowActionAvailable(shotgun));
+
+		assertEquals(0, scn.GetWoundsOn(valiant1));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(shotgun));
+		scn.ShadowUseCardAction(shotgun);
+		//Enquea's own exertion
+		assertEquals(1, scn.GetWoundsOn(shotgun));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(0, scn.GetWoundsOn(valiant1));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		//Lathspell's retribution
+		assertEquals(2, scn.GetWoundsOn(shotgun));
+	}
+
+	@Test
+	public void GandalfCanBlockGrishnakhAndWoundHimIf3ValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var valiant1 = scn.GetFreepsCard("valiant1");
+		scn.FreepsMoveCharToTable(gandalf);
+		scn.FreepsMoveCharToTable("valiant1", "valiant2", "valiant3");
+
+		var grishnakh = scn.GetShadowCard("grishnakh");
+		scn.ShadowMoveCharToTable(grishnakh);
+		scn.ShadowMoveCharToTable("marauder");
+
+		scn.StartGame();
+
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(grishnakh));
+
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(grishnakh));
+		assertEquals(0, scn.GetShadowHandCount());
+		assertEquals(6, scn.GetShadowDeckCount());
+		scn.ShadowUseCardAction(grishnakh);
+		//Grishnakh's own exertions
+		assertEquals(2, scn.GetWoundsOn(grishnakh));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		//Lathspell's retribution
+		assertEquals(Zone.DISCARD, grishnakh.getZone());
+		assertEquals(0, scn.GetShadowHandCount());
+		assertEquals(6, scn.GetShadowDeckCount());
+	}
+
+	@Test
+	public void GandalfCannotBlockSkirmishAbilityEvenWith3ValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var valiant1 = scn.GetFreepsCard("valiant1");
+		scn.FreepsMoveCharToTable(gandalf);
+		scn.FreepsMoveCharToTable("valiant1", "valiant2", "valiant3");
+
+		var marauder = scn.GetShadowCard("marauder");
+		scn.ShadowMoveCharToTable(marauder);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(valiant1, marauder);
+		scn.FreepsResolveSkirmish(valiant1);
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowActionAvailable(marauder));
+
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(marauder));
+		assertEquals(9, scn.getStrength(marauder));
+		scn.ShadowUseCardAction(marauder);
+		//marauder's own exertion
+		assertEquals(1, scn.GetWoundsOn(marauder));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetWoundsOn(marauder));
+		//Ability went through with no objection
+		assertEquals(12, scn.getStrength(marauder));
 	}
 }

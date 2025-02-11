@@ -38,7 +38,7 @@ public class Card_18_134_ErrataTests
 				}},
 				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing,
-				"open"
+				GenericCardTestHelper.Shadows
 		);
 	}
 
@@ -86,10 +86,7 @@ public class Card_18_134_ErrataTests
 		var shadowSite2 = scn.GetShadowSite("Ettenmoors");
 		var doorway = scn.GetFreepsSite("Doorway to Doom");
 
-		scn.FreepsChooseCardBPFromSelection(site1);
-		scn.SkipStartingFellowships();
-
-		scn.StartGame();
+		scn.StartGame(site1);
 
 		//Start at East Road with player one
 		scn.FreepsPassCurrentPhaseAction();
@@ -157,10 +154,7 @@ public class Card_18_134_ErrataTests
 		var site1 = scn.GetFreepsSite("East Road");
 		var doorway = scn.GetShadowSite("Doorway to Doom");
 
-		scn.FreepsChooseCardBPFromSelection(site1);
-		scn.SkipStartingFellowships();
-
-		scn.StartGame();
+		scn.StartGame(site1);
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowChooseCardBPFromSelection(doorway);

@@ -20,8 +20,8 @@ public class Card_05_096_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "5_96");
-					// put other cards in here as needed for the test case
+					put("eye", "5_96");
+					put("orc", "1_266");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +46,7 @@ public class Card_05_096_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("eye");
 
 		assertEquals("Eye of Barad-Dûr", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -59,18 +59,24 @@ public class Card_05_096_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void EyeofBaradDurTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void EyeofBaradDurSkirmishAbility() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var eye = scn.GetShadowCard("eye");
+		var orc = scn.GetShadowCard("orc");
+		scn.ShadowMoveCardToHand(eye);
+		scn.ShadowMoveCharToTable(orc);
+
+		var frodo = scn.GetRingBearer();
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, orc);
+		scn.FreepsResolveSkirmish(frodo);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(eye));
 	}
 }

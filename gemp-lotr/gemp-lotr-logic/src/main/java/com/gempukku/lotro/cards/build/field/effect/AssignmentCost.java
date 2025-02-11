@@ -34,7 +34,7 @@ public class AssignmentCost implements EffectProcessor {
         if (text == null)
             throw new InvalidCardDefinitionException("Text is required for AssignmentCost effect");
 
-        final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(costArray, environment);
+        final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(true, costArray, environment);
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
 
         if (costAppenders.length == 0)
