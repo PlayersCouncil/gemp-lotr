@@ -472,8 +472,20 @@ var GempLotrHallUI = Class.extend({
 						"</tr>";
 					}
 					else {
-						rowstr += "<td>" + queue.getAttribute("collection") + "</td>" +
-						"<td>" + queue.getAttribute("queue") + "</td>" +
+                        var type = queue.getAttribute("type");
+                        if(type !== null)
+                            type = type.toLowerCase();
+						if(type === "sealed") {
+							rowstr += "<td>Sealed</td>";
+						}
+						else if (type === "solodraft") {
+							rowstr += "<td>Solo Draft</td>";
+
+						}
+						else {
+							rowstr += "<td>" + queue.getAttribute("collection") + "</td>";
+						}
+						rowstr += "<td>" + queue.getAttribute("queue") + "</td>" +
 						"<td>" + queue.getAttribute("start") + "</td>" +
 						"<td>" + queue.getAttribute("system") + "</td>" +
 						"<td><div class='prizeHint' title='Queued Players' value='" + queue.getAttribute("playerList") + "'>" + queue.getAttribute("playerCount") + "</div></td>" +

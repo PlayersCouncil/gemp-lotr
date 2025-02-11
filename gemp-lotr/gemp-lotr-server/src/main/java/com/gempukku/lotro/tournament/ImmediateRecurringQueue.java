@@ -88,7 +88,7 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
                 this.format = getFormatCode();
                 this.startTime = DateUtils.Now().toLocalDateTime();
                 this.type = Tournament.TournamentType.CONSTRUCTED;
-                this.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
+                this.playoff = _tournamentInfo._params.playoff;
                 this.manualKickoff = false;
                 this.cost = getCost();
                 this.minimumPlayers = _playerCap;

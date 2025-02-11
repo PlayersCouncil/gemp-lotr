@@ -18,9 +18,9 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
 
     private final int _minimumPlayers;
 
-    public RecurringScheduledQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info, Duration repeatEvery, int minPlayers) {
+    public RecurringScheduledQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info, Duration repeatEvery) {
         super(tournamentService, queueId, queueName, info);
-        _minimumPlayers = minPlayers;
+        _minimumPlayers = info._params.minimumPlayers;
 
         _repeatEvery = repeatEvery;
         var sinceOriginal = Duration.between(info.StartTime, ZonedDateTime.now());
