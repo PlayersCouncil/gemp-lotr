@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set07;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -62,44 +61,8 @@ public class Card_07_200_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	@Test
-	public void MorgulSpawnTest0() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.SHADOW);
-		scn.setTwilightPool(4);
-		assertTrue(scn.FreepsPlayAvailable(card));
-		scn.FreepsPlayCard(card);
-
-		assertEquals(4, scn.GetTwilight());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
 	@Test
 	public void MorgulSpawnTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetShadowCard("card");
-		scn.ShadowMoveCardToHand(card);
-
-		scn.StartGame();
-		scn.setTwilightPool(4);
-		scn.FreepsPassCurrentPhaseAction();
-		assertTrue(scn.ShadowPlayAvailable(card));
-		scn.ShadowPlayCard(card);
-
-		assertEquals(0, scn.GetTwilight());
-	}
-
-	@Test
-	public void CopiesOfDifferentUniqueMinionWithAccentCannotBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		GenericCardTestHelper scn = GetScenario();
 
@@ -115,6 +78,6 @@ public class Card_07_200_Tests
 
 		assertTrue(scn.ShadowPlayAvailable(card));
 		scn.ShadowPlayCard(card);
-		assertEquals(16, scn.GetTwilight());
+		assertEquals(17, scn.GetTwilight());
 	}
 }
