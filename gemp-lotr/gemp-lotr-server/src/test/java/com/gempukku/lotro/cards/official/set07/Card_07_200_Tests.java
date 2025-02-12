@@ -18,7 +18,7 @@ public class Card_07_200_Tests
 				new HashMap<>()
 				{{
 					put("card", "7_200");
-					// put other cards in here as needed for the test case
+					put("enque", "1_231");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -67,17 +67,28 @@ public class Card_07_200_Tests
 		GenericCardTestHelper scn = GetScenario();
 
 		var card = scn.GetShadowCard("card");
+		var enque = scn.GetShadowCard("enque");
 
 		scn.ShadowMoveCardToHand(card);
+		scn.ShadowMoveCardToHand(enque);
 
 		scn.StartGame();
 
 		scn.SetTwilight(20);
 
+		// Fellowship
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertTrue(scn.ShadowPlayAvailable(card));
+		// Shadow
 		scn.ShadowPlayCard(card);
-		assertEquals(17, scn.GetTwilight());
+		scn.ShadowPlayCard(enque);
+		scn.ShadowPassCurrentPhaseAction();
+
+		// Maneuver
+		scn.SkipToAssignments();
+
+		// Assignments
+		assertTrue(scn.FreepsDecisionAvailable(
+				"Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?"));
 	}
 }
