@@ -917,6 +917,10 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         String turnInDurationStr = getFormParameterSafely(postDecoder, "turnInDuration");
         String sealedFormatCodeStr = getFormParameterSafely(postDecoder, "sealedFormatCode");
 
+        String soloDraftDeckbuildingDurationStr = getFormParameterSafely(postDecoder, "soloDraftDeckbuildingDuration");
+        String soloDraftTurnInDurationStr = getFormParameterSafely(postDecoder, "soloDraftTurnInDuration");
+        String soloDraftFormatCodeStr = getFormParameterSafely(postDecoder, "soloDraftFormatCode");
+
         String wcStr = getFormParameterSafely(postDecoder, "wc");
         String tournamentId = getFormParameterSafely(postDecoder, "tournamentId");
         String formatStr = getFormParameterSafely(postDecoder, "formatCode");
@@ -984,6 +988,21 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             sealedParams.format = sealedFormat.GetFormat().getCode();
             sealedParams.requiresDeck = false;
             params = sealedParams;
+        }
+        else if (type == Tournament.TournamentType.SOLODRAFT) {
+            var soloDraftParams = new SoloDraftTournamentParams();
+            soloDraftParams.type = Tournament.TournamentType.SOLODRAFT;
+
+            soloDraftParams.deckbuildingDuration = Throw400IfNullOrNonInteger("soloDraftDeckbuildingDuration", soloDraftDeckbuildingDurationStr);
+            soloDraftParams.turnInDuration = Throw400IfNullOrNonInteger("soloDraftTurnInDuration", soloDraftTurnInDurationStr);
+
+            Throw400IfStringNull("soloDraftFormatCode", soloDraftFormatCodeStr);
+            var soloDraftFormat = _soloDraftDefinitions.getSoloDraft(soloDraftFormatCodeStr);
+            Throw400IfValidationFails("soloDraftFormatCode", soloDraftFormatCodeStr,soloDraftFormat != null);
+            soloDraftParams.soloDraftFormatCode = soloDraftFormatCodeStr;
+            soloDraftParams.format = soloDraftFormat.getFormat();
+            soloDraftParams.requiresDeck = false;
+            params = soloDraftParams;
         }
         else {
             params.type = Tournament.TournamentType.CONSTRUCTED;
