@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.at.AbstractAtTest.P1;
 import static org.junit.Assert.*;
 
 public class Card_07_200_Tests
@@ -90,5 +91,11 @@ public class Card_07_200_Tests
 		// Assignments
 		assertTrue(scn.FreepsDecisionAvailable(
 				"Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?"));
+
+		// Act
+		scn.playerDecided(P1, "0");
+
+		// Assert
+		assertTrue(scn.FreepsDecisionAvailable("exert"));
 	}
 }
