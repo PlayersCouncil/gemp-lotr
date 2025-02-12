@@ -63,8 +63,8 @@ public class Card_07_200_Tests
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MorgulSpawnTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void MorgulSpawnTest0() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -72,8 +72,49 @@ public class Card_07_200_Tests
 		scn.FreepsMoveCardToHand(card);
 
 		scn.StartGame();
+		scn.SkipToPhase(Phase.SHADOW);
+		scn.setTwilightPool(4);
+		assertTrue(scn.FreepsPlayAvailable(card));
 		scn.FreepsPlayCard(card);
 
 		assertEquals(4, scn.GetTwilight());
+	}
+
+	// Uncomment any @Test markers below once this is ready to be used
+	@Test
+	public void MorgulSpawnTest1() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetShadowCard("card");
+		scn.ShadowMoveCardToHand(card);
+
+		scn.StartGame();
+		scn.setTwilightPool(4);
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowPlayAvailable(card));
+		scn.ShadowPlayCard(card);
+
+		assertEquals(0, scn.GetTwilight());
+	}
+
+	@Test
+	public void CopiesOfDifferentUniqueMinionWithAccentCannotBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		var card = scn.GetShadowCard("card");
+
+		scn.ShadowMoveCardToHand(card);
+
+		scn.StartGame();
+
+		scn.SetTwilight(20);
+
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowPlayAvailable(card));
+		scn.ShadowPlayCard(card);
+		assertEquals(16, scn.GetTwilight());
 	}
 }
