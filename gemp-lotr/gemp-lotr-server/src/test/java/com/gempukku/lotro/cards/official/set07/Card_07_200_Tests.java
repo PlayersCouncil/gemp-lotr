@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static com.gempukku.lotro.at.AbstractAtTest.P1;
+import static com.gempukku.lotro.cards.GenericCardTestHelper.FOTRFrodo;
 import static org.junit.Assert.*;
 
 public class Card_07_200_Tests
@@ -22,7 +23,7 @@ public class Card_07_200_Tests
 					put("enque", "1_231");
 				}},
 				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
+				FOTRFrodo,
 				GenericCardTestHelper.RulingRing
 		);
 	}
@@ -69,6 +70,7 @@ public class Card_07_200_Tests
 
 		var card = scn.GetShadowCard("card");
 		var enque = scn.GetShadowCard("enque");
+		var frodo = scn.GetRingBearer();
 
 		scn.ShadowMoveCardToHand(card);
 		scn.ShadowMoveCardToHand(enque);
@@ -96,6 +98,7 @@ public class Card_07_200_Tests
 		scn.playerDecided(P1, "0");
 
 		// Assert
-		assertTrue(scn.FreepsDecisionAvailable("exert"));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsCanAssign(card));
 	}
 }
