@@ -3,12 +3,12 @@ package com.gempukku.lotro.cards.official.set07;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.at.AbstractAtTest.P1;
 import static org.junit.Assert.*;
 
 public class Card_07_200_Tests
@@ -19,7 +19,7 @@ public class Card_07_200_Tests
 				new HashMap<>()
 				{{
 					put("card", "7_200");
-					// put other cards in here as needed for the test case
+					put("enquea", "1_231");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -62,18 +62,38 @@ public class Card_07_200_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MorgulSpawnTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void MustExertToAssignMorgulSpawn() throws DecisionResultInvalidException, CardNotFoundException {
+		// Arrange
+		GenericCardTestHelper scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var card = scn.GetShadowCard("card");
+		var enquea = scn.GetShadowCard("enquea");
+		var frodo = scn.GetRingBearer();
+
+		scn.ShadowMoveCardToHand(card);
+		scn.ShadowMoveCardToHand(enquea);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(4, scn.GetTwilight());
+		scn.SetTwilight(20);
+
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(card);
+		scn.ShadowPlayCard(enquea);
+		scn.ShadowPassCurrentPhaseAction();
+
+		scn.SkipToAssignments();
+
+		assertTrue(scn.FreepsDecisionAvailable(
+				"Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?"));
+
+		// Act
+		scn.playerDecided(P1, "0");
+
+		// Assert
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsCanAssign(card));
 	}
 }
