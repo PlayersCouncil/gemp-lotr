@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static com.gempukku.lotro.at.AbstractAtTest.P1;
-import static com.gempukku.lotro.cards.GenericCardTestHelper.FOTRFrodo;
 import static org.junit.Assert.*;
 
 public class Card_07_200_Tests
@@ -20,10 +19,10 @@ public class Card_07_200_Tests
 				new HashMap<>()
 				{{
 					put("card", "7_200");
-					put("enque", "1_231");
+					put("enquea", "1_231");
 				}},
 				GenericCardTestHelper.FellowshipSites,
-				FOTRFrodo,
+				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing
 		);
 	}
@@ -64,33 +63,29 @@ public class Card_07_200_Tests
 	}
 
 	@Test
-	public void MorgulSpawnTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void MustExertToAssignMorgulSpawn() throws DecisionResultInvalidException, CardNotFoundException {
+		// Arrange
 		GenericCardTestHelper scn = GetScenario();
 
 		var card = scn.GetShadowCard("card");
-		var enque = scn.GetShadowCard("enque");
+		var enquea = scn.GetShadowCard("enquea");
 		var frodo = scn.GetRingBearer();
 
 		scn.ShadowMoveCardToHand(card);
-		scn.ShadowMoveCardToHand(enque);
+		scn.ShadowMoveCardToHand(enquea);
 
 		scn.StartGame();
 
 		scn.SetTwilight(20);
 
-		// Fellowship
 		scn.FreepsPassCurrentPhaseAction();
 
-		// Shadow
 		scn.ShadowPlayCard(card);
-		scn.ShadowPlayCard(enque);
+		scn.ShadowPlayCard(enquea);
 		scn.ShadowPassCurrentPhaseAction();
 
-		// Maneuver
 		scn.SkipToAssignments();
 
-		// Assignments
 		assertTrue(scn.FreepsDecisionAvailable(
 				"Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?"));
 
