@@ -17,12 +17,15 @@ public class Card_02_108_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "2_108");
-					// put other cards in here as needed for the test case
+					put("elbereth", "2_108");
+
+					put("nelya", "1_233");
+					put("goblinarcher", "1_176");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				GenericCardTestHelper.IsildursBaneRing,
+				GenericCardTestHelper.Fellowship //We need the Ring-bearer's skirmish to be cancelable
 		);
 	}
 
@@ -44,7 +47,7 @@ public class Card_02_108_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("elbereth");
 
 		assertEquals("O Elbereth! Gilthoniel!", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,18 +60,107 @@ public class Card_02_108_Tests
 		assertEquals(1, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OElberethGilthonielTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void OElberethGilthonielGoesOnRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = GetScenario();
+		GenericCardTestHelper scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var elbereth = scn.GetFreepsCard("elbereth");
+		scn.FreepsMoveCardToHand(elbereth);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertEquals(Zone.HAND, elbereth.getZone());
+		scn.FreepsPlayCard(elbereth);
+		assertEquals(Zone.ATTACHED, elbereth.getZone());
+		assertSame(scn.GetRingBearer(), elbereth.getAttachedTo());
+	}
 
-		assertEquals(1, scn.GetTwilight());
+	@Test
+	public void SkirmishAbilityCanDiscardToTakeOffRing() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var elbereth = scn.GetFreepsCard("elbereth");
+		scn.AttachCardsTo(frodo, elbereth);
+
+		var goblinarcher = scn.GetShadowCard("goblinarcher");
+		scn.ShadowMoveCharToTable(goblinarcher);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAcceptOptionalTrigger(); // IB ring turning archery wound into 2 burdens
+
+		//Assignments
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(frodo, goblinarcher);
+		scn.FreepsResolveSkirmish(frodo);
+		assertTrue(scn.FreepsActionAvailable(elbereth));
+		assertTrue(scn.RBWearingOneRing());
+		assertEquals(Zone.ATTACHED, elbereth.getZone());
+
+		scn.FreepsUseCardAction(elbereth);
+		assertFalse(scn.RBWearingOneRing());
+		assertEquals(Zone.DISCARD, elbereth.getZone());
+	}
+
+	@Test
+	public void SkirmishAbilityCanCancelRBSkirmishIfSkirmishingNazgul() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var elbereth = scn.GetFreepsCard("elbereth");
+		scn.AttachCardsTo(frodo, elbereth);
+
+		var nelya = scn.GetShadowCard("nelya");
+		scn.ShadowMoveCharToTable(nelya);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, nelya);
+		scn.FreepsResolveSkirmish(frodo);
+		assertTrue(scn.FreepsActionAvailable(elbereth));
+		assertTrue(scn.IsCharSkirmishing(frodo));
+		assertEquals(Zone.ATTACHED, elbereth.getZone());
+
+		scn.FreepsUseCardAction(elbereth);
+		assertFalse(scn.IsCharSkirmishing(frodo));
+		assertEquals(Zone.DISCARD, elbereth.getZone());
+	}
+
+	@Test
+	public void SkirmishAbilityCantCancelRBSkirmishIfNotSkirmishingNazgul() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var elbereth = scn.GetFreepsCard("elbereth");
+		scn.AttachCardsTo(frodo, elbereth);
+
+		var goblinarcher = scn.GetShadowCard("goblinarcher");
+		scn.ShadowMoveCharToTable(goblinarcher);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsDeclineOptionalTrigger();
+
+		//Assignments
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(frodo, goblinarcher);
+		scn.FreepsResolveSkirmish(frodo);
+		assertTrue(scn.FreepsActionAvailable(elbereth));
+		assertTrue(scn.IsCharSkirmishing(frodo));
+		assertEquals(Zone.ATTACHED, elbereth.getZone());
+
+		scn.FreepsUseCardAction(elbereth);
+		scn.FreepsChooseMultipleChoiceOption("cancel");
+		assertTrue(scn.IsCharSkirmishing(frodo));
+		assertEquals(Zone.DISCARD, elbereth.getZone());
 	}
 }

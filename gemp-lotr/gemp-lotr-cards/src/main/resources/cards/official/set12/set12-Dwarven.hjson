@@ -626,8 +626,8 @@
 							filter: minResistance(4)
 						}
 						true: {
-							type: forEachHasAttached
-							filter: possession
+							type: ForEachYouCanSpot
+							filter: possession, AttachedTo(memory(chosenDwarf))
 							multiplier: 2
 						}
 						false: 2

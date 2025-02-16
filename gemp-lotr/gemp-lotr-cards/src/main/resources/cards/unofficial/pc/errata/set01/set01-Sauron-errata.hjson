@@ -302,7 +302,7 @@
 				type: modifier
 				modifier: {
 					type: modifyMoveLimit
-					amount: 1
+					amount: -1
 					requires: {
 						type: canSpot
 						count: 7

@@ -20,7 +20,7 @@
 				optional: true
 				trigger: {
 					type: WinsSkirmish
-					filter: unique, culture(moria), minion	
+					filter: culture(moria), minion	
 				}
 				effect: {
 					type: StackCardsFromPlay
