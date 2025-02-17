@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.official.set12;
 
+import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -9,6 +10,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.at.AbstractAtTest.P1;
 import static org.junit.Assert.*;
 
 public class Card_12_098_Tests
@@ -19,7 +21,7 @@ public class Card_12_098_Tests
 				new HashMap<>()
 				{{
 					put("card", "12_98");
-					// put other cards in here as needed for the test case
+					put("card2", "12_98");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -69,7 +71,10 @@ public class Card_12_098_Tests
 		var scn = GetScenario();
 
 		var card = scn.GetShadowCard("card");
+		var card2 = scn.GetFreepsCard("card2");
+		var frodo = scn.GetRingBearer();
 		scn.ShadowMoveCardToHand(card);
+		scn.FreepsMoveCardToHand(card2);
 
 		scn.StartGame();
 
@@ -81,5 +86,9 @@ public class Card_12_098_Tests
 		scn.ShadowPassCurrentPhaseAction();
 
 		scn.SkipToAssignments();
+		assertTrue(scn.FreepsCanAssign(card));
+
+		scn.FreepsAssignToMinions(frodo, card);
+		var decision = scn.GetAwaitingDecision(P1);
 	}
 }
