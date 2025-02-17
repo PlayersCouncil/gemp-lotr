@@ -63,17 +63,23 @@ public class Card_12_098_Tests
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
+	@Test
 	public void OrcTormentorTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var card = scn.GetShadowCard("card");
+		scn.ShadowMoveCardToHand(card);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		scn.SetTwilight(20);
+
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(card);
+		scn.ShadowPassCurrentPhaseAction();
+
+		scn.SkipToAssignments();
 	}
 }
