@@ -90,5 +90,10 @@ public class Card_12_098_Tests
 
 		scn.FreepsAssignToMinions(frodo, card);
 		var decision = scn.GetAwaitingDecision(P1);
+		assertNotNull(decision);
+
+		assertEquals(1, scn.GetFreepsHandCount());
+		scn.playerDecided(P1, "1");
+		assertEquals(0, scn.GetFreepsHandCount());
 	}
 }
