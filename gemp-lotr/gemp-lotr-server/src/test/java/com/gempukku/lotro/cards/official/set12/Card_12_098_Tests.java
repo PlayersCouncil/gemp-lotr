@@ -1,10 +1,8 @@
 package com.gempukku.lotro.cards.official.set12;
 
-import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -64,10 +62,9 @@ public class Card_12_098_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
 	@Test
-	public void OrcTormentorTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void FreepDiscardsAfterAssigningToOrcTormentor() throws DecisionResultInvalidException, CardNotFoundException {
+		// Arrange
 		var scn = GetScenario();
 
 		var card = scn.GetShadowCard("card");
@@ -88,19 +85,21 @@ public class Card_12_098_Tests
 		scn.SkipToAssignments();
 		assertTrue(scn.FreepsCanAssign(card));
 
+		// Act
 		scn.FreepsAssignToMinions(frodo, card);
 		var decision = scn.GetAwaitingDecision(P1);
 		assertNotNull(decision);
 
 		assertEquals(1, scn.GetFreepsHandCount());
 		scn.playerDecided(P1, "1");
+
+		// Assert
 		assertEquals(0, scn.GetFreepsHandCount());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
 	@Test
-	public void OrcTormentorTest2() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void FreepBurdensAfterAssigningToOrcTormentor() throws DecisionResultInvalidException, CardNotFoundException {
+		// Arrange
 		var scn = GetScenario();
 
 		var card = scn.GetShadowCard("card");
@@ -121,12 +120,15 @@ public class Card_12_098_Tests
 		scn.SkipToAssignments();
 		assertTrue(scn.FreepsCanAssign(card));
 
+		// Act
 		scn.FreepsAssignToMinions(frodo, card);
 		var decision = scn.GetAwaitingDecision(P1);
 		assertNotNull(decision);
 
 		assertEquals(1, scn.GetBurdens());
 		scn.playerDecided(P1, "0");
+
+		// Assert
 		assertEquals(2, scn.GetBurdens());
 	}
 }
