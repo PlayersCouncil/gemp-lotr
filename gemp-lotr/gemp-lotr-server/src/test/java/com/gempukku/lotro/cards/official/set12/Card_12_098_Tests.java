@@ -96,4 +96,37 @@ public class Card_12_098_Tests
 		scn.playerDecided(P1, "1");
 		assertEquals(0, scn.GetFreepsHandCount());
 	}
+
+	// Uncomment any @Test markers below once this is ready to be used
+	@Test
+	public void OrcTormentorTest2() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetShadowCard("card");
+		var card2 = scn.GetFreepsCard("card2");
+		var frodo = scn.GetRingBearer();
+		scn.ShadowMoveCardToHand(card);
+		scn.FreepsMoveCardToHand(card2);
+
+		scn.StartGame();
+
+		scn.SetTwilight(20);
+
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(card);
+		scn.ShadowPassCurrentPhaseAction();
+
+		scn.SkipToAssignments();
+		assertTrue(scn.FreepsCanAssign(card));
+
+		scn.FreepsAssignToMinions(frodo, card);
+		var decision = scn.GetAwaitingDecision(P1);
+		assertNotNull(decision);
+
+		assertEquals(1, scn.GetBurdens());
+		scn.playerDecided(P1, "0");
+		assertEquals(2, scn.GetBurdens());
+	}
 }
