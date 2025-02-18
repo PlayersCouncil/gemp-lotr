@@ -480,7 +480,6 @@ var GempLotrHallUI = Class.extend({
 						}
 						else if (type === "solodraft") {
 							rowstr += "<td>Solo Draft</td>";
-
 						}
 						else {
 							rowstr += "<td>" + queue.getAttribute("collection") + "</td>";
@@ -497,6 +496,24 @@ var GempLotrHallUI = Class.extend({
 					var row = $(rowstr);
 					row.append(actionsField);
 
+					// Row for tournament queue table
+                    var tablesRow = $("<tr class='table" + id + "'></tr>");
+                    tablesRow.append("<td>" + queue.getAttribute("format") + "</td>");
+                    var type = queue.getAttribute("type");
+                    if(type !== null)
+                        type = type.toLowerCase();
+                    if(type === "sealed") {
+                        type = "Sealed";
+                    }
+                    else if (type === "solodraft") {
+                        type = "Solo Draft";
+                    }
+                    tablesRow.append("<td> Tournament - " + type + " - " + queue.getAttribute("queue") + "</td>");
+                    tablesRow.append("<td>" + queue.getAttribute("start") + "</td>");
+                    tablesRow.append("<td>" + queue.getAttribute("playerList") + "</td>");
+                    var actionsFieldClone = actionsField.clone(true);
+                    tablesRow.append(actionsFieldClone);
+
 					if (action == "add") {
 						if(isWC) {
 							$("table.wc-queues", this.tablesDiv)
@@ -505,6 +522,11 @@ var GempLotrHallUI = Class.extend({
 						else {
 							$("table.queues", this.tablesDiv)
 							.append(row);
+							// Display 2-man queues with 1 player joined as tables
+                            if (queue.getAttribute("playerCount") != 0) {
+                                $("table.waitingTables", this.tablesDiv)
+                                    .append(tablesRow);
+                            }
 						}
 					} else if (action == "update") {
 						if(isWC) {
@@ -512,6 +534,21 @@ var GempLotrHallUI = Class.extend({
 						}
 						else {
 							$(".queue" + id, this.tablesDiv).replaceWith(row);
+
+                            // Display 2-man queues with 1 player joined as tables
+                            if (queue.getAttribute("playerCount") != 0) {
+                                var existingRow = $(".table" + id, this.tablesDiv);
+                                if (existingRow.length > 0) {
+                                    // If the row exists, replace it
+                                    existingRow.replaceWith(tablesRow);
+                                } else {
+                                    // If the row does not exist, append it
+                                    $("table.waitingTables", this.tablesDiv).append(tablesRow);
+                                }
+                            } else if (queue.getAttribute("playerCount") == 0) {
+                                // Remove tournaments displayed as tables
+                                $(".table" + id, this.tablesDiv).remove();
+                            }
 						}
 						
 					}
@@ -529,6 +566,8 @@ var GempLotrHallUI = Class.extend({
 					}
 					else {
 						$(".queue" + id, this.tablesDiv).remove();
+                        // Remove tournaments displayed as tables
+                        $(".table" + id, this.tablesDiv).remove();
 					}
 					
 				}

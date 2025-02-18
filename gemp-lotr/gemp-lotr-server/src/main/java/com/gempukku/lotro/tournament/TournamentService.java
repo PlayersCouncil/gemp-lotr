@@ -146,7 +146,7 @@ public class TournamentService {
         sealedParams.tournamentId = prefix;
         sealedParams.name = queueName;
         sealedParams.cost = 0;
-        sealedParams.minimumPlayers = 2;
+        sealedParams.minimumPlayers = 4;
         sealedParams.playoff = Tournament.PairingType.SWISS_3;
         sealedParams.prizes = Tournament.PrizeType.DAILY;
 
@@ -172,7 +172,7 @@ public class TournamentService {
         soloDraftParams.tournamentId = prefix;
         soloDraftParams.name = queueName;
         soloDraftParams.cost = 0;
-        soloDraftParams.minimumPlayers = 2;
+        soloDraftParams.minimumPlayers = 4;
         soloDraftParams.playoff = Tournament.PairingType.SWISS_3;
         soloDraftParams.prizes = Tournament.PrizeType.DAILY;
 
@@ -187,6 +187,11 @@ public class TournamentService {
         clearCache();
         _tournamentQueues.clear();
 
+        addImmediateRecurringSealed("fotr_sealed_queue", "FotR Sealed", "fotrSealedQueue-", "single_fotr_block_sealed");
+        addImmediateRecurringSealed("movie_sealed_queue", "Movie Sealed", "movieSealedQueue-", "single_movie_sealed");
+        addImmediateRecurringDraft("fotr_draft_queue", "FotR Draft", "fotrDraftQueue-", "fotr_draft");
+        addImmediateRecurringDraft("ttt_draft_queue", "TTT Draft", "tttDraftQueue-", "ttt_draft");
+
         addImmediateRecurringQueue("fotr_queue", "Fellowship Block", "fotrQueue-", "fotr_block");
         addImmediateRecurringQueue("pc_fotr_queue", "PC-Fellowship", "pcfotrQueue-", "pc_fotr_block");
         addImmediateRecurringQueue("ts_queue", "Towers Standard", "tsQueue-", "towers_standard");
@@ -194,9 +199,6 @@ public class TournamentService {
         addImmediateRecurringQueue("pc_movie_queue", "PC-Movie", "pcmovieQueue-", "pc_movie");
         addImmediateRecurringQueue("expanded_queue", "Expanded", "expandedQueue-", "expanded");
         addImmediateRecurringQueue("pc_expanded_queue", "PC-Expanded", "pcexpandedQueue-", "pc_expanded");
-
-        addImmediateRecurringSealed("sealed_queue", "FotR Sealed", "sealedQueue-", "single_fotr_block_sealed");
-        addImmediateRecurringDraft("draft_queue", "FotR Draft", "draftQueue-", "fotr_draft");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -207,11 +209,11 @@ public class TournamentService {
             addRecurringScheduledQueue("movie_daily_eu", "Daily Gondor Movie Block", "2013-01-16 19:30:00", "movieDailyEu-", "movie");
             addRecurringScheduledQueue("movie_daily_us", "Daily Rohan Movie Block", "2013-01-17 00:30:00", "movieDailyUs-", "movie");
 
-            addRecurringScheduledDraft("fotr_draft_daily_eu", "Daily Gondor Fellowship Draft", "2013-01-16 19:30:00", "fotrDraftDailyEu-", "fotr_draft");
-            addRecurringScheduledDraft("fotr_draft_daily_us", "Daily Rohan Fellowship Draft", "2013-01-17 00:30:00", "fotrDraftDailyUS-", "fotr_draft");
-
-            addRecurringScheduledSealed("movie_sealed_daily_eu", "Daily Gondor Movie Sealed", "2013-01-15 19:30:00", "movieSealedDailyEu-", "single_movie_sealed");
-            addRecurringScheduledSealed("movie_sealed_daily_us", "Daily Rohan Movie Sealed", "2013-01-16 00:30:00", "movieSealedDailyUs-", "single_movie_sealed");
+//            addRecurringScheduledDraft("fotr_draft_daily_eu", "Daily Gondor Fellowship Draft", "2013-01-16 19:30:00", "fotrDraftDailyEu-", "fotr_draft");
+//            addRecurringScheduledDraft("fotr_draft_daily_us", "Daily Rohan Fellowship Draft", "2013-01-17 00:30:00", "fotrDraftDailyUS-", "fotr_draft");
+//
+//            addRecurringScheduledSealed("movie_sealed_daily_eu", "Daily Gondor Movie Sealed", "2013-01-15 19:30:00", "movieSealedDailyEu-", "single_movie_sealed");
+//            addRecurringScheduledSealed("movie_sealed_daily_us", "Daily Rohan Movie Sealed", "2013-01-16 00:30:00", "movieSealedDailyUs-", "single_movie_sealed");
 
         } catch (DateTimeParseException exp) {
             // Ignore, can't happen
