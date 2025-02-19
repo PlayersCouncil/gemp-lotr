@@ -187,10 +187,7 @@ public class TournamentService {
         clearCache();
         _tournamentQueues.clear();
 
-        addImmediateRecurringSealed("fotr_sealed_queue", "FotR Sealed", "fotrSealedQueue-", "single_fotr_block_sealed");
-        addImmediateRecurringSealed("movie_sealed_queue", "Movie Sealed", "movieSealedQueue-", "single_movie_sealed");
-        addImmediateRecurringDraft("fotr_draft_queue", "FotR Draft", "fotrDraftQueue-", "fotr_draft");
-        addImmediateRecurringDraft("ttt_draft_queue", "TTT Draft", "tttDraftQueue-", "ttt_draft");
+        addImmediateRecurringLimitedGames();
 
         addImmediateRecurringQueue("fotr_queue", "Fellowship Block", "fotrQueue-", "fotr_block");
         addImmediateRecurringQueue("pc_fotr_queue", "PC-Fellowship", "pcfotrQueue-", "pc_fotr_block");
@@ -221,6 +218,20 @@ public class TournamentService {
         }
 
         getLiveTournaments();
+    }
+
+    private void addImmediateRecurringLimitedGames() {
+        addImmediateRecurringDraft("fotr_draft_queue", "FotR Draft", "fotrDraftQueue-", "fotr_draft");
+        addImmediateRecurringDraft("ttt_draft_queue", "TTT Draft", "tttDraftQueue-", "ttt_draft");
+        addImmediateRecurringDraft("hobbit_draft_queue", "Hobbit Draft", "hobbitDraftQueue-", "hobbit_random_draft");
+
+        addImmediateRecurringSealed("fotr_sealed_queue", "Fellowship Block Sealed", "fotrSealedQueue-", "single_fotr_block_sealed");
+        addImmediateRecurringSealed("ttt_sealed_queue", "Towers Block Sealed", "tttSealedQueue-", "single_ttt_block_sealed");
+        addImmediateRecurringSealed("ts_sealed_queue", "Towers Standard Sealed", "tsSealedQueue-", "single_ts_sealed");
+        addImmediateRecurringSealed("king_sealed_queue", "King Block Sealed", "rotkSealedQueue-", "single_rotk_block_sealed");
+        addImmediateRecurringSealed("movie_sealed_queue", "Movie Sealed", "movieSealedQueue-", "single_movie_sealed");
+        addImmediateRecurringSealed("wotr_sealed_queue", "War of the Ring Block Sealed", "wotrSealedQueue-", "single_wotr_block_sealed");
+        addImmediateRecurringSealed("th_sealed_queue", "Hunters Block Sealed", "thSealedQueue-", "single_th_block_sealed");
     }
 
     public void clearCache() {
