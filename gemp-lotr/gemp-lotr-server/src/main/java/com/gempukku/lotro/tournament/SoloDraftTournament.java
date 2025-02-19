@@ -27,8 +27,6 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
     private static final int HIGH_ENOUGH_PRIME_NUMBER = 8963;
     private SoloDraftTournamentInfo _soloDraftInfo;
 
-    private long _deckBuildStartTime;
-
     public SoloDraftTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
                                LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableHolder tables, String tournamentId) {
         super(tournamentService, collectionsManager, productLibrary, formatLibrary, soloDraftDefinitions, tables, tournamentId);
@@ -51,6 +49,21 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
                     && _players.contains(player)) {
                 _tournamentService.updateRecordedPlayerDeck(_tournamentId, player, deck);
                 _playerDecks.put(player, deck);
+
+                // If 1v1 and both registered the deck, skip the wait and start playing
+                var players = _tournamentService.retrieveTournamentPlayers(_tournamentId);
+                boolean everyoneSubmitted = true;
+                for(var playerName : players) {
+                    var registeredDeck = getPlayerDeck(playerName);
+                    if(registeredDeck == null || StringUtils.isEmpty(registeredDeck.getDeckName())) {
+                        everyoneSubmitted = false;
+                    }
+                }
+                if (players.size() == 2 && everyoneSubmitted) {
+                    _tournamentInfo.Stage = _soloDraftInfo.PostRegistrationStage();
+                    _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
+                }
+
                 return true;
             }
             return false;

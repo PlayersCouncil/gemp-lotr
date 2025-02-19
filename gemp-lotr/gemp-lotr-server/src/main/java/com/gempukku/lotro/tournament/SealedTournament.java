@@ -7,10 +7,8 @@ import com.gempukku.lotro.draft.Draft;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.DefaultCardCollection;
-import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.TableHolder;
-import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.tournament.action.BroadcastAction;
@@ -47,6 +45,21 @@ public class SealedTournament extends BaseTournament implements Tournament {
                     && _players.contains(player)) {
                 _tournamentService.updateRecordedPlayerDeck(_tournamentId, player, deck);
                 _playerDecks.put(player, deck);
+
+                // If 1v1 and both registered the deck, skip the wait and start playing
+                var players = _tournamentService.retrieveTournamentPlayers(_tournamentId);
+                boolean everyoneSubmitted = true;
+                for(var playerName : players) {
+                    var registeredDeck = getPlayerDeck(playerName);
+                    if(registeredDeck == null || StringUtils.isEmpty(registeredDeck.getDeckName())) {
+                        everyoneSubmitted = false;
+                    }
+                }
+                if (players.size() == 2 && everyoneSubmitted) {
+                    _tournamentInfo.Stage = _sealedInfo.PostRegistrationStage();
+                    _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
+                }
+
                 return true;
             }
             return false;

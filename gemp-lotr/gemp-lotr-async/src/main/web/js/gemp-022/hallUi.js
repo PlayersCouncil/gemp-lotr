@@ -416,20 +416,20 @@ var GempLotrHallUI = Class.extend({
 										if(result) {
 											that.inTournament = true;
 											let message = "You have signed up to participate in the <b>" + queueName
-											 + "</b> tournament.<br><br>You will use a snapshot of your '<b>" + deck +"</b>' deck as it is right now.  " + 
+											 + "</b> tournament.<br><br>You will use a snapshot of your '<b>" + deck +"</b>' deck as it is right now. " +
 											 "If you need to change or update your deck, you will need to leave the queue and rejoin.<br><br>" +
 											 "The first game begins at " + queueStart + ".	Good luck!";
 											 
 											if(type === "sealed") {
 												message = "You have signed up to participate in the <b>" + queueName
-											 + "</b> tournament.<br><br>When the event begins, you will be issued sealed packs to open and make a deck.  " + 
+											 + "</b> tournament.<br><br>When the event begins, you will be issued sealed packs to open and make a deck. " +
 											 "At any time during the deckbuilding phase and for a short time after it ends, you will need to lock-in your deck before the tournament begins.<br><br>" +
 											 "Deckbuilding begins at " + queueStart + ".	Good luck!";
 											}
 
 											if(type === "solodraft") {
 												message = "You have signed up to participate in the <b>" + queueName
-											 + "</b> tournament.<br><br>When the event begins, use the 'Go to Draft' button in the Active Tournaments Section, and then build your deck in the Deck Builder." +
+											 + "</b> tournament.<br><br>When the event begins, use the 'Go to Draft' button in the Active Tournaments Section, and then build your deck in the Deck Builder. " +
 											 "At any time during the deckbuilding phase and for a short time after it ends, you will need to lock-in your deck before the tournament begins.<br><br>" +
 											 "Deckbuilding begins at " + queueStart + ".	Good luck!";
 											}
