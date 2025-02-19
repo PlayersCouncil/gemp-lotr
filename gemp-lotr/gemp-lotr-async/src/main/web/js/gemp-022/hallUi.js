@@ -99,16 +99,17 @@ var GempLotrHallUI = Class.extend({
 
 		var hallSettingsStr = $.cookie("hallSettings");
 		if (hallSettingsStr == null)
-			hallSettingsStr = "1|1|0|0|0|0|0";
+			hallSettingsStr = "1|1|0|0|0|0|0|0";
 		var hallSettings = hallSettingsStr.split("|");
 
 		this.initTable(hallSettings[0] == "1", "waitingTablesHeader", "waitingTablesContent");
 		this.initTable(hallSettings[1] == "1", "playingTablesHeader", "playingTablesContent");
 		this.initTable(hallSettings[2] == "1", "finishedTablesHeader", "finishedTablesContent");
-		this.initTable(hallSettings[3] == "1", "tournamentQueuesHeader", "tournamentQueuesContent");
-		this.initTable(hallSettings[4] == "1", "activeTournamentsHeader", "activeTournamentsContent");
-		this.initTable(hallSettings[5] == "1", "wcQueuesHeader", "wcQueuesContent");
-		this.initTable(hallSettings[6] == "1", "wcEventsHeader", "wcEventsContent");
+		this.initTable(hallSettings[3] == "1", "wcQueuesHeader", "wcQueuesContent");
+		this.initTable(hallSettings[4] == "1", "wcEventsHeader", "wcEventsContent");
+		this.initTable(hallSettings[5] == "1", "tournamentQueuesHeader", "tournamentQueuesContent");
+		this.initTable(hallSettings[6] == "1", "limitedQueuesHeader", "limitedQueuesContent");
+		this.initTable(hallSettings[7] == "1", "activeTournamentsHeader", "activeTournamentsContent");
 		
 		$('#wcQueuesHeader').hide();
 		$('#wcQueuesContent').hide();
@@ -180,7 +181,7 @@ var GempLotrHallUI = Class.extend({
 				return $(visibilityToggle[index]).hasClass("hidden") ? "0" : "1";
 			};
 
-		var newHallSettings = getSettingValue(0) + "|" + getSettingValue(1) + "|" + getSettingValue(2) + "|" + getSettingValue(3) + "|" + getSettingValue(4)+ "|" + getSettingValue(5)+ "|" + getSettingValue(6);
+		var newHallSettings = getSettingValue(0) + "|" + getSettingValue(1) + "|" + getSettingValue(2) + "|" + getSettingValue(3) + "|" + getSettingValue(4)+ "|" + getSettingValue(5) + "|" + getSettingValue(6) + "|" + getSettingValue(7);
 		console.log("New settings: " + newHallSettings);
 		$.cookie("hallSettings", newHallSettings, { expires:365 });
 	},
@@ -496,7 +497,7 @@ var GempLotrHallUI = Class.extend({
 					var row = $(rowstr);
 					row.append(actionsField);
 
-					// Row for tournament queue table
+					// Row for tournament queue waiting table
                     var tablesRow = $("<tr class='table" + id + "'></tr>");
                     tablesRow.append("<td>" + queue.getAttribute("format") + "</td>");
                     var type = queue.getAttribute("type");
@@ -518,39 +519,39 @@ var GempLotrHallUI = Class.extend({
 						if(isWC) {
 							$("table.wc-queues", this.tablesDiv)
 							.append(row);
-						}
-						else {
+						} else if (queue.getAttribute("start") == "When 2 players join" && queue.getAttribute("format").includes("Limited")) {
+							$("table.limitedQueues", this.tablesDiv)
+							.append(row);
+						} else {
 							$("table.queues", this.tablesDiv)
 							.append(row);
-							// Display 2-man queues with 1 player joined as tables
-                            if (queue.getAttribute("playerCount") != 0) {
-                                $("table.waitingTables", this.tablesDiv)
-                                    .append(tablesRow);
-                            }
 						}
+                        // Display queues with waiting players also as waiting tables
+                        if (queue.getAttribute("playerCount") != 0) {
+                            $("table.waitingTables", this.tablesDiv)
+                                .append(tablesRow);
+                        }
 					} else if (action == "update") {
 						if(isWC) {
 							$(".wc-queue" + id, this.tablesDiv).replaceWith(row);
 						}
 						else {
 							$(".queue" + id, this.tablesDiv).replaceWith(row);
-
-                            // Display 2-man queues with 1 player joined as tables
-                            if (queue.getAttribute("playerCount") != 0) {
-                                var existingRow = $(".table" + id, this.tablesDiv);
-                                if (existingRow.length > 0) {
-                                    // If the row exists, replace it
-                                    existingRow.replaceWith(tablesRow);
-                                } else {
-                                    // If the row does not exist, append it
-                                    $("table.waitingTables", this.tablesDiv).append(tablesRow);
-                                }
-                            } else if (queue.getAttribute("playerCount") == 0) {
-                                // Remove tournaments displayed as tables
-                                $(".table" + id, this.tablesDiv).remove();
-                            }
 						}
-						
+                        // Display queues with waiting players also as waiting tables
+                        if (queue.getAttribute("playerCount") != 0) {
+                            var existingRow = $(".table" + id, this.tablesDiv);
+                            if (existingRow.length > 0) {
+                                // If the row exists, replace it
+                                existingRow.replaceWith(tablesRow);
+                            } else {
+                                // If the row does not exist, append it
+                                $("table.waitingTables", this.tablesDiv).append(tablesRow);
+                            }
+                        } else if (queue.getAttribute("playerCount") == 0) {
+                            // Remove tournaments displayed as tables
+                            $(".table" + id, this.tablesDiv).remove();
+                        }
 					}
 
 					if(isWC) {
@@ -944,6 +945,7 @@ var GempLotrHallUI = Class.extend({
 			$(".count", $(".eventHeader.waitingTables")).html("(" + ($("tr", $("table.waitingTables")).length - 1) + ")");
 			$(".count", $(".eventHeader.playingTables")).html("(" + ($("tr", $("table.playingTables")).length - 1) + ")");
 			$(".count", $(".eventHeader.finishedTables")).html("(" + ($("tr", $("table.finishedTables")).length - 1) + ")");
+			$(".count", $(".eventHeader.limitedQueues")).html("(" + ($("tr", $("table.limitedQueues")).length - 1) + ")");
 			
 			$(".count", $(".eventHeader.wc-queues")).html("(" + ($("tr", $("table.wc-queues")).length - 1) + ")");
 			$(".count", $(".eventHeader.wc-events")).html("(" + ($("tr", $("table.wc-events")).length - 1) + ")");
