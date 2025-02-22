@@ -65,6 +65,7 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
 
                 boolean isSealed = _tournamentInfo instanceof SealedTournamentInfo;
                 boolean isSoloDraft = _tournamentInfo instanceof SoloDraftTournamentInfo;
+                boolean isSoloTableDraft = _tournamentInfo instanceof SoloTableDraftTournamentInfo;
 
                 TournamentParams params;
                 TournamentInfo newInfo;
@@ -112,6 +113,28 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
                         this.minimumPlayers = _minimumPlayers;
                     }};
                     newInfo = new SoloDraftTournamentInfo((SoloDraftTournamentInfo) _tournamentInfo, (SoloDraftTournamentParams) params);
+                } else if (isSoloTableDraft) {
+                    params = new SoloTableDraftTournamentParams() {{
+                        this.type = Tournament.TournamentType.TABLE_SOLODRAFT;
+
+                        this.deckbuildingDuration = ((SoloTableDraftTournamentParams) _tournamentInfo._params).deckbuildingDuration;
+                        this.turnInDuration = ((SoloTableDraftTournamentParams) _tournamentInfo._params).turnInDuration;
+
+                        this.soloTableDraftFormatCode = ((SoloTableDraftTournamentParams) _tournamentInfo._params).soloTableDraftFormatCode;
+                        this.format = _tournamentInfo._params.format;
+                        this.requiresDeck = false;
+
+                        this.tournamentId = tid;
+                        this.playoff = _tournamentInfo._params.playoff;
+                        this.prizes = _tournamentInfo._params.prizes;
+                        this.name = tournamentName;
+                        this.format = getFormatCode();
+                        this.startTime = DateUtils.Now().toLocalDateTime();
+                        this.manualKickoff = false;
+                        this.cost = getCost();
+                        this.minimumPlayers = _minimumPlayers;
+                    }};
+                    newInfo = new SoloTableDraftTournamentInfo((SoloTableDraftTournamentInfo) _tournamentInfo, (SoloTableDraftTournamentParams) params);
                 } else {
                     params = new TournamentParams() {{
                         this.tournamentId = tid;

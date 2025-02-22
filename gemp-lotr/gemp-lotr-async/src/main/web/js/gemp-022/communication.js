@@ -1374,5 +1374,30 @@ var GempLotrCommunication = Class.extend({
             error:this.errorCheck(errorMap),
             dataType:"xml"
         });
+    },
+    getTableDraft:function (eventId, callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/tableDraft/" + eventId,
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId")},
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
+    makeTableDraftPick:function (eventId, choiceId, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/tableDraft/" + eventId,
+            cache:false,
+            data:{
+                choiceId:choiceId,
+                participantId:getUrlParam("participantId")},
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
     }
 });

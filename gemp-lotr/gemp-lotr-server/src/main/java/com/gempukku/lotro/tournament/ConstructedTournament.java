@@ -9,6 +9,7 @@ import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft.Draft;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
+import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.TableHolder;
@@ -30,8 +31,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class ConstructedTournament extends BaseTournament implements Tournament {
 
     public ConstructedTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
-                                 LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableHolder tables, String tournamentId) {
-        super(tournamentService, collectionsManager, productLibrary, formatLibrary, soloDraftDefinitions, tables, tournamentId);
+                                 LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableDraftDefinitions tableDraftDefinitions, TableHolder tables, String tournamentId) {
+        super(tournamentService, collectionsManager, productLibrary, formatLibrary, soloDraftDefinitions, tableDraftDefinitions, tables, tournamentId);
     }
 
     @Override

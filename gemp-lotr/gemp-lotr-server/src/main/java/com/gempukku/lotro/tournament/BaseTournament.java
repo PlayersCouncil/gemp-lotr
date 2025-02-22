@@ -9,6 +9,7 @@ import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft.Draft;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
+import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -54,6 +55,7 @@ public abstract class BaseTournament implements Tournament {
     protected final TableHolder _tables;
 
     protected final SoloDraftDefinitions _soloDraftLibrary;
+    protected final TableDraftDefinitions _tableDraftLibrary;
 
     protected final ReadWriteLock lock = new ReentrantReadWriteLock();
     protected final Lock readLock = lock.readLock();
@@ -66,7 +68,8 @@ public abstract class BaseTournament implements Tournament {
     protected String _tournamentReport;
 
     public BaseTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
-            LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftLibrary,TableHolder tables, String tournamentId) {
+                          LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftLibrary, TableDraftDefinitions tableDraftDefinitions,
+                          TableHolder tables, String tournamentId) {
         _tournamentService = tournamentService;
         _collectionsManager = collectionsManager;
         _productLibrary = productLibrary;
@@ -74,6 +77,7 @@ public abstract class BaseTournament implements Tournament {
         _tournamentId = tournamentId;
         _tables = tables;
         _soloDraftLibrary = soloDraftLibrary;
+        _tableDraftLibrary = tableDraftDefinitions;
 
         RefreshTournamentInfo();
     }

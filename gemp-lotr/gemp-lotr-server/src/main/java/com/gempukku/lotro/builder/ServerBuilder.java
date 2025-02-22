@@ -7,6 +7,7 @@ import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.collection.TransferDAO;
 import com.gempukku.lotro.db.*;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
+import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.HallServer;
@@ -70,6 +71,13 @@ public class ServerBuilder {
                     extract(objectMap, LotroFormatLibrary.class)
                 ));
 
+        objectMap.put(TableDraftDefinitions.class,
+                new TableDraftDefinitions(
+                        extract(objectMap, CollectionsManager.class),
+                        extract(objectMap, LotroCardBlueprintLibrary.class),
+                        extract(objectMap, LotroFormatLibrary.class)
+                ));
+
         objectMap.put(LeagueService.class,
                 new LeagueService(
                         extract(objectMap, LeagueDAO.class),
@@ -99,7 +107,8 @@ public class ServerBuilder {
                         extract(objectMap, GameHistoryDAO.class),
                         extract(objectMap, LotroCardBlueprintLibrary.class),
                         extract(objectMap, LotroFormatLibrary.class),
-                        extract(objectMap, SoloDraftDefinitions.class)));
+                        extract(objectMap, SoloDraftDefinitions.class),
+                        extract(objectMap, TableDraftDefinitions.class)));
 
         objectMap.put(MerchantService.class,
                 new MerchantService(

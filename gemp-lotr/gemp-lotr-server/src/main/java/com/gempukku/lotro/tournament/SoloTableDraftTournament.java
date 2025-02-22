@@ -5,8 +5,8 @@ import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft.Draft;
-import com.gempukku.lotro.draft2.SoloDraft;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
+import com.gempukku.lotro.draft3.TableDraft;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.DefaultCardCollection;
@@ -23,20 +23,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class SoloDraftTournament extends BaseTournament implements Tournament {
+public class SoloTableDraftTournament extends BaseTournament implements Tournament {
 
-    private static final int HIGH_ENOUGH_PRIME_NUMBER = 8963;
-    private SoloDraftTournamentInfo _soloDraftInfo;
+    private SoloTableDraftTournamentInfo soloTableDraftInfo;
+    private Map<String, TableDraft> tables = null;
 
-    public SoloDraftTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
-                               LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableDraftDefinitions tableDraftDefinitions, TableHolder tables, String tournamentId) {
+    public SoloTableDraftTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
+                                    LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableDraftDefinitions tableDraftDefinitions,
+                                    TableHolder tables, String tournamentId) {
         super(tournamentService, collectionsManager, productLibrary, formatLibrary, soloDraftDefinitions, tableDraftDefinitions, tables, tournamentId);
+        if (this.tables == null) {
+            this.tables = new HashMap<>();
+        }
     }
 
     @Override
     protected void recreateTournamentInfo(DBDefs.Tournament data) {
-        _soloDraftInfo = new SoloDraftTournamentInfo(_tournamentService, _productLibrary, _formatLibrary, data, _soloDraftLibrary);
-        _tournamentInfo = _soloDraftInfo;
+        soloTableDraftInfo = new SoloTableDraftTournamentInfo(_tournamentService, _productLibrary, _formatLibrary, data, _tableDraftLibrary);
+        _tournamentInfo = soloTableDraftInfo;
     }
 
 
@@ -61,7 +65,7 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
                     }
                 }
                 if (players.size() == 2 && everyoneSubmitted) {
-                    _tournamentInfo.Stage = _soloDraftInfo.PostRegistrationStage();
+                    _tournamentInfo.Stage = soloTableDraftInfo.postRegistrationStage();
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                 }
 
@@ -76,9 +80,9 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
     //No locking because it is handled in the function that calls this one
     protected void resumeTournamentFromDatabase() {
         if (getTournamentStage() == Stage.DECK_BUILDING) {
-            createStartingCollections();
+            createTablesAndStartingCollections();
         } else if (getTournamentStage() == Stage.DECK_REGISTRATION) {
-            createStartingCollections();
+            createTablesAndStartingCollections();
         } else if (_tournamentInfo.Stage == Stage.PLAYING_GAMES) {
             var matchesToCreate = new HashMap<String, String>();
             var existingTables = _tables.getTournamentTables(_tournamentId);
@@ -108,44 +112,43 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
         }
     }
 
-    private void createStartingCollections() {
-        var collDef = _soloDraftInfo.generateCollectionInfo();
+    private void createTablesAndStartingCollections() {
+        if (tables == null) {
+            tables = new HashMap<>();
+        }
+
+        // Create a table for each player to draft with bots
+        for (String playerName : _players) {
+            if (tables.containsKey(playerName)) {
+                continue;
+            }
+            TableDraft tableDraft = _tableDraftLibrary.getTableDraftDefinition(soloTableDraftInfo.soloTableDraftParams.soloTableDraftFormatCode).getTableDraft();
+            tables.put(playerName, tableDraft);
+            tableDraft.registerPlayer(playerName);
+            // Just one player per table
+            tableDraft.startDraft();
+        }
+
+        var collDef = soloTableDraftInfo.generateCollectionInfo();
         var collections = _collectionsManager.getPlayersCollection(collDef.getCode());
 
         for(var playerName : _players) {
-            // check if player already has a collection
+            // Check if player already has a collection
             var player = collections.keySet().stream().filter(x -> x.getName().equals(playerName)).findFirst();
             if(player.isPresent()) {
                 continue;
             }
 
-            // create new collection for the player
+            // Create new collection for the player
             var startingCollection = new DefaultCardCollection();
 
-            // initialize with starting cards
-            long seed = getSeed(playerName, collDef);
-            CardCollection leagueProduct = _soloDraftLibrary.getSoloDraft(_soloDraftInfo._soloDraftParams.soloDraftFormatCode).initializeNewCollection(seed);
-            for (CardCollection.Item serieCollectionItem : leagueProduct.getAll())
-                startingCollection.addItem(serieCollectionItem.getBlueprintId(), serieCollectionItem.getCount());
-            startingCollection.setExtraInformation(createExtraInformation(seed));
+            // Initialize with starting cards
+            CardCollection alreadyAssigned = tables.get(playerName).getPlayer(playerName).getCardCollection();
+            for (CardCollection.Item item : alreadyAssigned.getAll())
+                startingCollection.addItem(item.getBlueprintId(), item.getCount());
 
             _collectionsManager.addPlayerCollection(false, "Draft tournament product", playerName, collDef, startingCollection);
         }
-    }
-
-    private long getSeed(String playerName, CollectionType collectionType) {
-        // random seed based on tournament id and player's name
-        return collectionType.getCode().hashCode() + playerName.hashCode() * HIGH_ENOUGH_PRIME_NUMBER;
-    }
-
-    private Map<String, Object> createExtraInformation(long seed) {
-        Map<String, Object> extraInformation = new HashMap<>();
-        extraInformation.put("finished", false);
-        extraInformation.put("stage", 0);
-        extraInformation.put("seed", seed);
-        // the current time is used in solo draft leagues, so i used it here too
-        extraInformation.put("draftPool", _soloDraftLibrary.getSoloDraft(_soloDraftInfo._soloDraftParams.soloDraftFormatCode).initializeDraftPool(seed, System.currentTimeMillis()));
-        return extraInformation;
     }
 
     @Override
@@ -158,31 +161,31 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
                     _tournamentInfo.Stage = Stage.DECK_BUILDING;
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
 
-                    createStartingCollections();
+                    createTablesAndStartingCollections();
 
-                    String duration = DateUtils.HumanDuration(_soloDraftInfo.DeckbuildingDuration);
+                    String duration = DateUtils.HumanDuration(soloTableDraftInfo.deckbuildingDuration);
                     result.add(new BroadcastAction("Draft has been opened for tournament <b>" + getTournamentName() + "</b>. Use the 'Go to Draft' button in the Active Tournaments Section. Players now have "
                             + duration + " to solo draft and build a deck with the cards they got. "
-                            + "<br/><br/>Remember to return to the game hall and register your deck before " + DateUtils.FormatTime(_soloDraftInfo.RegistrationDeadline) + "."));
+                            + "<br/><br/>Remember to return to the game hall and register your deck before " + DateUtils.FormatTime(soloTableDraftInfo.registrationDeadline) + "."));
                 }
                 else if (getTournamentStage() == Stage.DECK_BUILDING) {
-                    if (DateUtils.Now().isAfter(_soloDraftInfo.DeckbuildingDeadline)) {
+                    if (DateUtils.Now().isAfter(soloTableDraftInfo.deckbuildingDeadline)) {
                         _tournamentInfo.Stage = Stage.DECK_REGISTRATION;
                         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
 
-                        String duration = DateUtils.HumanDuration(_soloDraftInfo.RegistrationDuration);
+                        String duration = DateUtils.HumanDuration(soloTableDraftInfo.registrationDuration);
                         result.add(new BroadcastAction("Deck building in tournament <b>" + getTournamentName() + "</b> has finished. Players now have "
                                 + duration + " to finish registering their decks.  Any player who has not turned in their deck by the deadline at "
-                                + DateUtils.FormatTime(_soloDraftInfo.RegistrationDeadline) + " will be auto-disqualified."
+                                + DateUtils.FormatTime(soloTableDraftInfo.registrationDeadline) + " will be auto-disqualified."
                                 + "<br/><br/>Once the deadline has passed, the tournament will begin."));
                     }
                 }
 
                 if (getTournamentStage() == Stage.DECK_REGISTRATION) {
-                    if (DateUtils.Now().isAfter(_soloDraftInfo.RegistrationDeadline)) {
+                    if (DateUtils.Now().isAfter(soloTableDraftInfo.registrationDeadline)) {
                         disqualifyUnregisteredPlayers();
 
-                        _tournamentInfo.Stage = _soloDraftInfo.PostRegistrationStage();
+                        _tournamentInfo.Stage = soloTableDraftInfo.postRegistrationStage();
                         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                     }
                 }
@@ -235,8 +238,11 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
         }
     }
 
-    public SoloDraft getSoloDraft() {
-        return _soloDraftLibrary.getSoloDraft(_soloDraftInfo._soloDraftParams.soloDraftFormatCode);
+    public TableDraft getTableDraft(String playerName) {
+        if (tables == null) {
+            return null;
+        }
+        return tables.get(playerName);
     }
 
     @Override
@@ -251,6 +257,6 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
 
     @Override
     public CollectionType getCollectionType() {
-        return _soloDraftInfo.generateCollectionInfo();
+        return soloTableDraftInfo.generateCollectionInfo();
     }
 }
