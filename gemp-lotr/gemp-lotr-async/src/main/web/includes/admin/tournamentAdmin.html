@@ -155,14 +155,22 @@ $(document).ready(
 			if(type === "SEALED") {
 				$('.sealed-only').show();
 				$('.constructed-only').hide();
+				$('.solodraft-only').hide();
+			}
+			else if(type === "SOLODRAFT") {
+				$('.sealed-only').hide();
+				$('.constructed-only').hide();
+				$('.solodraft-only').show();
 			}
 			else {
 				$('.sealed-only').hide();
 				$('.constructed-only').show();
+				$('.solodraft-only').hide();
 			}
 		});
 		
 		$('.sealed-only').hide();
+		$('.solodraft-only').hide();
 		$('.constructed-only').show();
 		
 		
@@ -225,6 +233,20 @@ $(document).ready(
 					}
 				}
 				sortOptionsByName("#sch-tourney-sealed-format");
+
+				for (var prop in drafts) {
+					if (Object.prototype.hasOwnProperty.call(drafts, prop)) {
+						//console.log(prop);
+
+						let code = drafts[prop].format;
+						let id = drafts[prop].id;
+
+						var item = $("<option/>")
+							.attr("value", id)
+							.text(prop);
+						$("#sch-tourney-solodraft-format").append(item);
+					}
+				}
 			}, 
 			tourneyErrorMap());
 	});
@@ -249,6 +271,10 @@ function processScheduledTournament(preview, resultdiv, callback) {
 		$("#sch-tourney-sealed-format").val(),
 		$("#sch-tourney-sealed-deckbuild").val(),
 		$("#sch-tourney-sealed-registration").val(),
+
+		$("#sch-tourney-solodraft-format").val(),
+		$("#sch-tourney-solodraft-deckbuild").val(),
+		$("#sch-tourney-solodraft-registration").val(),
 		
 		$("#sch-tourney-start").val(),
 		$("#sch-tourney-cost").val(),
@@ -387,6 +413,7 @@ function tourneyErrorMap(outputControl, callback=null) {
 			<select id="sch-tourney-type" class="flex-fill">
 				<option value="CONSTRUCTED">Constructed</option>
 				<option value="SEALED">Sealed</option>
+				<option value="SOLODRAFT">Solo Draft</option>
 				
 			</select>
 		</div>
@@ -409,6 +436,21 @@ function tourneyErrorMap(outputControl, callback=null) {
 		<div class="flex-horiz sealed-only">
 			<div class="label-column">Deck registration grace period (in minutes): </div>
 			<input type="number" min="1" id="sch-tourney-sealed-registration" value="5" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz solodraft-only">
+			<div class="label-column">Solo Draft Format: </div>
+			<select id="sch-tourney-solodraft-format" name="format" class="flex-fill"></select>
+		</div>
+
+		<div class="flex-horiz solodraft-only">
+			<div class="label-column">Solo Drafting + Deckbuilding duration (in minutes): </div>
+			<input type="number" min="1" id="sch-tourney-solodraft-deckbuild" value="25" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz solodraft-only">
+			<div class="label-column">Deck registration grace period (in minutes): </div>
+			<input type="number" min="1" id="sch-tourney-solodraft-registration" value="5" class="flex-fill">
 		</div>
 		
 		<div class="flex-horiz">

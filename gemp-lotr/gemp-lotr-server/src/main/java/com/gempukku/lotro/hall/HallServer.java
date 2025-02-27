@@ -522,7 +522,7 @@ public class HallServer extends AbstractServer {
         }
     }
 
-    public String registerSealedTournamentDeck(String tournamentId, Player player, String deckName) throws HallException {
+    public String registerLimitedTournamentDeck(String tournamentId, Player player, String deckName) throws HallException {
         _hallDataAccessLock.writeLock().lock();
         try {
             String result = "";
@@ -867,8 +867,10 @@ public class HallServer extends AbstractServer {
         private HallTournamentCallback(Tournament tournament) {
             tournamentId = tournament.getTournamentId();
             tournamentName = tournament.getTournamentName();
+            // Tournaments with just 2 players can be spectated
+            boolean privateGame = tournament.getPlayersInCompetitionCount() != 2;
             tournamentGameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
-                    tournamentId, null, null, true, true, false,
+                    tournamentId, null, null, true, privateGame, false,
                     false, GameTimer.TOURNAMENT_TIMER, null);
 
             wcGameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),

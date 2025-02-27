@@ -99,16 +99,17 @@ var GempLotrHallUI = Class.extend({
 
 		var hallSettingsStr = $.cookie("hallSettings");
 		if (hallSettingsStr == null)
-			hallSettingsStr = "1|1|0|0|0|0|0";
+			hallSettingsStr = "1|1|0|0|0|0|0|0";
 		var hallSettings = hallSettingsStr.split("|");
 
 		this.initTable(hallSettings[0] == "1", "waitingTablesHeader", "waitingTablesContent");
 		this.initTable(hallSettings[1] == "1", "playingTablesHeader", "playingTablesContent");
 		this.initTable(hallSettings[2] == "1", "finishedTablesHeader", "finishedTablesContent");
-		this.initTable(hallSettings[3] == "1", "tournamentQueuesHeader", "tournamentQueuesContent");
-		this.initTable(hallSettings[4] == "1", "activeTournamentsHeader", "activeTournamentsContent");
-		this.initTable(hallSettings[5] == "1", "wcQueuesHeader", "wcQueuesContent");
-		this.initTable(hallSettings[6] == "1", "wcEventsHeader", "wcEventsContent");
+		this.initTable(hallSettings[3] == "1", "wcQueuesHeader", "wcQueuesContent");
+		this.initTable(hallSettings[4] == "1", "wcEventsHeader", "wcEventsContent");
+		this.initTable(hallSettings[5] == "1", "tournamentQueuesHeader", "tournamentQueuesContent");
+		this.initTable(hallSettings[6] == "1", "limitedQueuesHeader", "limitedQueuesContent");
+		this.initTable(hallSettings[7] == "1", "activeTournamentsHeader", "activeTournamentsContent");
 		
 		$('#wcQueuesHeader').hide();
 		$('#wcQueuesContent').hide();
@@ -180,7 +181,7 @@ var GempLotrHallUI = Class.extend({
 				return $(visibilityToggle[index]).hasClass("hidden") ? "0" : "1";
 			};
 
-		var newHallSettings = getSettingValue(0) + "|" + getSettingValue(1) + "|" + getSettingValue(2) + "|" + getSettingValue(3) + "|" + getSettingValue(4)+ "|" + getSettingValue(5)+ "|" + getSettingValue(6);
+		var newHallSettings = getSettingValue(0) + "|" + getSettingValue(1) + "|" + getSettingValue(2) + "|" + getSettingValue(3) + "|" + getSettingValue(4)+ "|" + getSettingValue(5) + "|" + getSettingValue(6) + "|" + getSettingValue(7);
 		console.log("New settings: " + newHallSettings);
 		$.cookie("hallSettings", newHallSettings, { expires:365 });
 	},
@@ -415,15 +416,36 @@ var GempLotrHallUI = Class.extend({
 										if(result) {
 											that.inTournament = true;
 											let message = "You have signed up to participate in the <b>" + queueName
-											 + "</b> tournament.<br><br>You will use a snapshot of your '<b>" + deck +"</b>' deck as it is right now.  " + 
+											 + "</b> tournament.<br><br>You will use a snapshot of your '<b>" + deck +"</b>' deck as it is right now. " +
 											 "If you need to change or update your deck, you will need to leave the queue and rejoin.<br><br>" +
 											 "The first game begins at " + queueStart + ".	Good luck!";
 											 
 											if(type === "sealed") {
 												message = "You have signed up to participate in the <b>" + queueName
-											 + "</b> tournament.<br><br>When the event begins, you will be issued sealed packs to open and make a deck.  " + 
+											 + "</b> tournament.<br><br>When the event begins, you will be issued sealed packs to open and make a deck. " +
 											 "At any time during the deckbuilding phase and for a short time after it ends, you will need to lock-in your deck before the tournament begins.<br><br>" +
 											 "Deckbuilding begins at " + queueStart + ".	Good luck!";
+											}
+
+											if(type === "solodraft") {
+												message = "You have signed up to participate in the <b>" + queueName
+											 + "</b> tournament.<br><br>When the event begins, use the 'Go to Draft' button in the Active Tournaments Section, and then build your deck in the Deck Builder. " +
+											 "At any time during the deckbuilding phase and for a short time after it ends, you will need to lock-in your deck before the tournament begins.<br><br>" +
+											 "Deckbuilding begins at " + queueStart + ".	Good luck!";
+											}
+
+											if(type === "table_solodraft") {
+												message = "You have signed up to participate in the <b>" + queueName
+											 + "</b> tournament.<br><br>When the event begins, use the 'Go to Draft' button in the Active Tournaments Section, and then build your deck in the Deck Builder. " +
+											 "At any time during the deckbuilding phase and for a short time after it ends, you will need to lock-in your deck before the tournament begins.<br><br>" +
+											 "Deckbuilding begins at " + queueStart + ".	Good luck!";
+											}
+
+											if(type === "table_draft") {
+												message = "You have signed up to participate in the <b>" + queueName
+											 + "</b> tournament.<br><br>When the event begins, use the 'Go to Draft' button in the Active Tournaments Section, and then build your deck in the Deck Builder. " +
+											 "At any time during the deckbuilding phase and for a short time after it ends, you will need to lock-in your deck before the tournament begins.<br><br>" +
+											 "Draft begins at " + queueStart + ".	Good luck!";
 											}
 											that.showDialog("Joined Tournament", message, 320);
 										}
@@ -465,8 +487,25 @@ var GempLotrHallUI = Class.extend({
 						"</tr>";
 					}
 					else {
-						rowstr += "<td>" + queue.getAttribute("collection") + "</td>" +
-						"<td>" + queue.getAttribute("queue") + "</td>" +
+                        var type = queue.getAttribute("type");
+                        if(type !== null)
+                            type = type.toLowerCase();
+						if(type === "sealed") {
+							rowstr += "<td>Sealed</td>";
+						}
+						else if (type === "solodraft") {
+							rowstr += "<td>Solo Draft</td>";
+						}
+						else if (type === "table_solodraft") {
+							rowstr += "<td>Solo Table Draft</td>";
+						}
+						else if (type === "table_draft") {
+							rowstr += "<td>Table Draft</td>";
+						}
+						else {
+							rowstr += "<td>" + queue.getAttribute("collection") + "</td>";
+						}
+						rowstr += "<td>" + queue.getAttribute("queue") + "</td>" +
 						"<td>" + queue.getAttribute("start") + "</td>" +
 						"<td>" + queue.getAttribute("system") + "</td>" +
 						"<td><div class='prizeHint' title='Queued Players' value='" + queue.getAttribute("playerList") + "'>" + queue.getAttribute("playerCount") + "</div></td>" +
@@ -478,15 +517,46 @@ var GempLotrHallUI = Class.extend({
 					var row = $(rowstr);
 					row.append(actionsField);
 
+					// Row for tournament queue waiting table
+                    var tablesRow = $("<tr class='table" + id + "'></tr>");
+                    tablesRow.append("<td>" + queue.getAttribute("format") + "</td>");
+                    var type = queue.getAttribute("type");
+                    if(type !== null)
+                        type = type.toLowerCase();
+                    if(type === "sealed") {
+                        type = "Sealed";
+                    }
+                    else if (type === "solodraft") {
+                        type = "Solo Draft";
+                    }
+                    else if (type === "table_solodraft") {
+                        type = "Solo Table Draft";
+                    }
+                    else if (type === "table_draft") {
+                        type = "Table Draft";
+                    }
+                    tablesRow.append("<td> Tournament - " + type + " - " + queue.getAttribute("queue") + "</td>");
+                    tablesRow.append("<td>" + queue.getAttribute("start") + "</td>");
+                    tablesRow.append("<td>" + queue.getAttribute("playerList") + "</td>");
+                    var actionsFieldClone = actionsField.clone(true);
+                    tablesRow.append(actionsFieldClone);
+
 					if (action == "add") {
 						if(isWC) {
 							$("table.wc-queues", this.tablesDiv)
 							.append(row);
-						}
-						else {
+						} else if (queue.getAttribute("start") == "When 2 players join" && queue.getAttribute("format").includes("Limited")) {
+							$("table.limitedQueues", this.tablesDiv)
+							.append(row);
+						} else {
 							$("table.queues", this.tablesDiv)
 							.append(row);
 						}
+                        // Display queues with waiting players also as waiting tables
+                        if (queue.getAttribute("playerCount") != 0) {
+                            $("table.waitingTables", this.tablesDiv)
+                                .append(tablesRow);
+                        }
 					} else if (action == "update") {
 						if(isWC) {
 							$(".wc-queue" + id, this.tablesDiv).replaceWith(row);
@@ -494,7 +564,20 @@ var GempLotrHallUI = Class.extend({
 						else {
 							$(".queue" + id, this.tablesDiv).replaceWith(row);
 						}
-						
+                        // Display queues with waiting players also as waiting tables
+                        if (queue.getAttribute("playerCount") != 0) {
+                            var existingRow = $(".table" + id, this.tablesDiv);
+                            if (existingRow.length > 0) {
+                                // If the row exists, replace it
+                                existingRow.replaceWith(tablesRow);
+                            } else {
+                                // If the row does not exist, append it
+                                $("table.waitingTables", this.tablesDiv).append(tablesRow);
+                            }
+                        } else if (queue.getAttribute("playerCount") == 0) {
+                            // Remove tournaments displayed as tables
+                            $(".table" + id, this.tablesDiv).remove();
+                        }
 					}
 
 					if(isWC) {
@@ -510,6 +593,8 @@ var GempLotrHallUI = Class.extend({
 					}
 					else {
 						$(".queue" + id, this.tablesDiv).remove();
+                        // Remove tournaments displayed as tables
+                        $(".table" + id, this.tablesDiv).remove();
 					}
 					
 				}
@@ -542,7 +627,58 @@ var GempLotrHallUI = Class.extend({
 					if (joined == "true") {
 						that.inTournament = true;
 						debugger;
-						if(type === "sealed" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff" || stage === "paused between rounds")) {
+						if(type === "solodraft" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff")) {
+								var but = $("<button>Go to Draft</button>");
+								$(but).button().click((
+									function(tourneyInfo) {
+										var tourneyId = tournament.getAttribute("id");
+
+                                        return function() {
+                                            var win = window.open("/gemp-lotr/soloDraft.html?eventId=" + tourneyId, '_blank');
+                                            if (win) {
+                                                //Browser has allowed it to be opened
+                                            win.focus();
+                                            }
+                                        }
+									}
+									)(tournament));
+								actionsField.append(but);
+						}
+						if(type === "table_solodraft" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff")) {
+								var but = $("<button>Go to Draft</button>");
+								$(but).button().click((
+									function(tourneyInfo) {
+										var tourneyId = tournament.getAttribute("id");
+
+                                        return function() {
+                                            var win = window.open("/gemp-lotr/tableDraft.html?eventId=" + tourneyId, '_blank');
+                                            if (win) {
+                                                //Browser has allowed it to be opened
+                                            win.focus();
+                                            }
+                                        }
+									}
+									)(tournament));
+								actionsField.append(but);
+						}
+						if(type === "table_draft" && stage === "drafting") {
+								var but = $("<button>Go to Draft</button>");
+								$(but).button().click((
+									function(tourneyInfo) {
+										var tourneyId = tournament.getAttribute("id");
+
+                                        return function() {
+                                            var win = window.open("/gemp-lotr/tableDraft.html?eventId=" + tourneyId, '_blank');
+                                            if (win) {
+                                                //Browser has allowed it to be opened
+                                            win.focus();
+                                            }
+                                        }
+									}
+									)(tournament));
+								actionsField.append(but);
+						}
+						if((type === "sealed" || type === "solodraft" || type === "table_solodraft" || type === "table_draft") && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff" || stage === "paused between rounds")) {
 								var but = $("<button>Register Deck</button>");
 								$(but).button().click((
 									function(tourneyInfo) {
@@ -550,7 +686,7 @@ var GempLotrHallUI = Class.extend({
 										var tourneyName = tournament.getAttribute("name");
 										
 										return function () {
-											that.comm.registerSealedTournamentDeck(tourneyId, that.decksSelect.val(), function (xml) {
+											that.comm.registerLimitedTournamentDeck(tourneyId, that.decksSelect.val(), function (xml) {
 														that.processResponse(xml);
 												});
 										};
@@ -613,7 +749,17 @@ var GempLotrHallUI = Class.extend({
 					else {
 						rowhtml = "<tr class='tournament" + id + "'><td>" + tournament.getAttribute("format") + "</td>";
 						if(type === "sealed") {
-							rowhtml += "<td>Limited</td>";
+							rowhtml += "<td>Sealed</td>";
+						}
+						else if (type === "solodraft") {
+							rowhtml += "<td>Solo Draft</td>";
+
+						}
+						else if (type === "table_solodraft") {
+							rowhtml += "<td>Solo Table Draft</td>";
+					    }
+						else if (type === "table_draft") {
+							rowhtml += "<td>Table Draft</td>";
 						}
 						else {
 							rowhtml += "<td>" + tournament.getAttribute("collection") + "</td>";
@@ -865,6 +1011,7 @@ var GempLotrHallUI = Class.extend({
 			$(".count", $(".eventHeader.waitingTables")).html("(" + ($("tr", $("table.waitingTables")).length - 1) + ")");
 			$(".count", $(".eventHeader.playingTables")).html("(" + ($("tr", $("table.playingTables")).length - 1) + ")");
 			$(".count", $(".eventHeader.finishedTables")).html("(" + ($("tr", $("table.finishedTables")).length - 1) + ")");
+			$(".count", $(".eventHeader.limitedQueues")).html("(" + ($("tr", $("table.limitedQueues")).length - 1) + ")");
 			
 			$(".count", $(".eventHeader.wc-queues")).html("(" + ($("tr", $("table.wc-queues")).length - 1) + ")");
 			$(".count", $(".eventHeader.wc-events")).html("(" + ($("tr", $("table.wc-events")).length - 1) + ")");

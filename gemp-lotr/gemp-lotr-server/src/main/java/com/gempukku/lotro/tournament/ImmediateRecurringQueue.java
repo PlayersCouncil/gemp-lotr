@@ -31,19 +31,8 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
             _playerDecks.remove(player);
         }
 
-        var params = new TournamentParams() {{
-            this.tournamentId = tid;
-            this.name = tournamentName;
-            this.format = getFormatCode();
-            this.startTime = DateUtils.Now().toLocalDateTime();
-            this.type = Tournament.TournamentType.CONSTRUCTED;
-            this.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
-            this.manualKickoff = false;
-            this.cost = getCost();
-            this.minimumPlayers = _playerCap;
-        }};
+        TournamentInfo newInfo = getInfo(tid, tournamentName);
 
-        var newInfo = new TournamentInfo(_tournamentInfo, params);
         var tournament = _tournamentService.addTournament(newInfo);
         tournamentQueueCallback.createTournament(tournament);
 
@@ -54,5 +43,79 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
     @Override
     public boolean isJoinable() {
         return true;
+    }
+
+    private TournamentInfo getInfo(String tournamentId, String tournamentName) {
+        TournamentParams params = getParams(tournamentId, tournamentName);
+
+        boolean isSealed = _tournamentInfo instanceof SealedTournamentInfo;
+        boolean isSoloDraft = _tournamentInfo instanceof SoloDraftTournamentInfo;
+        boolean isSoloTableDraft = _tournamentInfo instanceof SoloTableDraftTournamentInfo;
+        boolean isTableDraft = _tournamentInfo instanceof TableDraftTournamentInfo;
+
+        TournamentInfo newInfo;
+
+        if (isSealed) {
+            newInfo = new SealedTournamentInfo((SealedTournamentInfo) _tournamentInfo, (SealedTournamentParams) params);
+        } else if (isSoloDraft) {
+            newInfo = new SoloDraftTournamentInfo((SoloDraftTournamentInfo) _tournamentInfo, (SoloDraftTournamentParams) params);
+        } else if(isSoloTableDraft) {
+            newInfo = new SoloTableDraftTournamentInfo((SoloTableDraftTournamentInfo) _tournamentInfo, (SoloTableDraftTournamentParams) params);
+        } else if (isTableDraft) {
+            newInfo = new TableDraftTournamentInfo((TableDraftTournamentInfo) _tournamentInfo, (TableDraftTournamentParams) params);
+        } else {
+            newInfo = new TournamentInfo(_tournamentInfo, params);
+        }
+
+        return newInfo;
+    }
+
+    private TournamentParams getParams(String tournamentId, String tournamentName) {
+        TournamentParams tbr;
+        if (_tournamentInfo instanceof SealedTournamentInfo) {
+            tbr = new SealedTournamentParams() {{
+                this.type = Tournament.TournamentType.SEALED;
+                this.deckbuildingDuration = ((SealedTournamentParams) _tournamentInfo._params).deckbuildingDuration;
+                this.turnInDuration = ((SealedTournamentParams) _tournamentInfo._params).turnInDuration;
+                this.sealedFormatCode = ((SealedTournamentParams) _tournamentInfo._params).sealedFormatCode;
+            }};
+        } else if (_tournamentInfo instanceof SoloDraftTournamentInfo) {
+            tbr = new SoloDraftTournamentParams() {{
+                this.type = Tournament.TournamentType.SOLODRAFT;
+                this.deckbuildingDuration = ((SoloDraftTournamentParams) _tournamentInfo._params).deckbuildingDuration;
+                this.turnInDuration = ((SoloDraftTournamentParams) _tournamentInfo._params).turnInDuration;
+                this.soloDraftFormatCode = ((SoloDraftTournamentParams) _tournamentInfo._params).soloDraftFormatCode;
+            }};
+        } else if (_tournamentInfo instanceof SoloTableDraftTournamentInfo) {
+            tbr = new SoloTableDraftTournamentParams() {{
+                this.type = Tournament.TournamentType.TABLE_SOLODRAFT;
+                this.deckbuildingDuration = ((SoloTableDraftTournamentParams) _tournamentInfo._params).deckbuildingDuration;
+                this.turnInDuration = ((SoloTableDraftTournamentParams) _tournamentInfo._params).turnInDuration;
+                this.soloTableDraftFormatCode = ((SoloTableDraftTournamentParams) _tournamentInfo._params).soloTableDraftFormatCode;
+            }};
+        } else if (_tournamentInfo instanceof TableDraftTournamentInfo) {
+            tbr = new TableDraftTournamentParams() {{
+                this.type = Tournament.TournamentType.TABLE_DRAFT;
+                this.deckbuildingDuration = ((TableDraftTournamentParams) _tournamentInfo._params).deckbuildingDuration;
+                this.turnInDuration = ((TableDraftTournamentParams) _tournamentInfo._params).turnInDuration;
+                this.tableDraftFormatCode = ((TableDraftTournamentParams) _tournamentInfo._params).tableDraftFormatCode;
+            }};
+        } else {
+            tbr = new TournamentParams();
+            tbr.type = Tournament.TournamentType.CONSTRUCTED;
+        }
+
+        tbr.tournamentId = tournamentId;
+        tbr.name = tournamentName;
+        tbr.format = getFormatCode();
+        tbr.startTime = DateUtils.Now().toLocalDateTime();
+        tbr.playoff = _tournamentInfo._params.playoff;
+        tbr.manualKickoff = false;
+        tbr.cost = getCost();
+        tbr.prizes = _tournamentInfo._params.prizes;
+        tbr.minimumPlayers = _playerCap;
+        tbr.requiresDeck = _tournamentInfo._params.requiresDeck;
+
+        return tbr;
     }
 }

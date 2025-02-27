@@ -5,6 +5,10 @@ import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.GameHistoryDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
+import com.gempukku.lotro.draft2.SoloDraftDefinitions;
+import com.gempukku.lotro.draft3.DraftTimerProducerClassic;
+import com.gempukku.lotro.draft3.TableDraftDefinition;
+import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -34,6 +38,8 @@ public class TournamentService {
     private final GameHistoryDAO _gameHistoryDao;
     private final LotroCardBlueprintLibrary _blueprintLibrary;
     private TableHolder _tables;
+    private final SoloDraftDefinitions _soloDraftLibrary;
+    private final TableDraftDefinitions _tableDraftLibrary;
 
     private final CollectionsManager _collectionsManager;
 
@@ -45,7 +51,8 @@ public class TournamentService {
 
     public TournamentService(CollectionsManager collectionsManager, ProductLibrary productLibrary, DraftPackStorage draftPackStorage,
                              TournamentDAO tournamentDao, TournamentPlayerDAO tournamentPlayerDao, TournamentMatchDAO tournamentMatchDao,
-                             GameHistoryDAO gameHistoryDao, LotroCardBlueprintLibrary bpLibrary, LotroFormatLibrary formatLibrary) {
+                             GameHistoryDAO gameHistoryDao, LotroCardBlueprintLibrary bpLibrary, LotroFormatLibrary formatLibrary,
+                             SoloDraftDefinitions soloDraftLibrary, TableDraftDefinitions tableDraftDefinitions) {
         _collectionsManager = collectionsManager;
         _productLibrary = productLibrary;
         _draftPackStorage = draftPackStorage;
@@ -55,6 +62,8 @@ public class TournamentService {
         _gameHistoryDao = gameHistoryDao;
         _blueprintLibrary = bpLibrary;
         _formatLibrary = formatLibrary;
+        _soloDraftLibrary = soloDraftLibrary;
+        _tableDraftLibrary = tableDraftDefinitions;
     }
 
     public PairingMechanism getPairingMechanism(Tournament.PairingType pairing) {
@@ -68,16 +77,175 @@ public class TournamentService {
         );
     }
 
+    private void addImmediateRecurringSealed(String queueId, String queueName, String prefix, String formatCode) {
+
+        var sealedParams = new SealedTournamentParams();
+        sealedParams.type = Tournament.TournamentType.SEALED;
+
+        sealedParams.deckbuildingDuration = 25;
+        sealedParams.turnInDuration = 5;
+
+        var sealedFormat = _formatLibrary.GetSealedTemplate(formatCode);
+        sealedParams.sealedFormatCode = formatCode;
+        sealedParams.format = sealedFormat.GetFormat().getCode();
+        sealedParams.requiresDeck = false;
+
+        sealedParams.tournamentId = prefix;
+        sealedParams.name = queueName;
+        sealedParams.cost = 0;
+        sealedParams.minimumPlayers = 2;
+        sealedParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
+        sealedParams.prizes = Tournament.PrizeType.NONE;
+
+        _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
+                new SealedTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
+                        sealedParams))
+        );
+    }
+
+    private void addImmediateRecurringDraft(String queueId, String queueName, String prefix, String formatCode) {
+
+        var soloDraftParams = new SoloDraftTournamentParams();
+        soloDraftParams.type = Tournament.TournamentType.SOLODRAFT;
+
+        soloDraftParams.deckbuildingDuration = 25;
+        soloDraftParams.turnInDuration = 5;
+
+        var soloDraft = _soloDraftLibrary.getSoloDraft(formatCode);
+        soloDraftParams.soloDraftFormatCode = formatCode;
+        soloDraftParams.format = soloDraft.getFormat();
+        soloDraftParams.requiresDeck = false;
+
+        soloDraftParams.tournamentId = prefix;
+        soloDraftParams.name = queueName;
+        soloDraftParams.cost = 0;
+        soloDraftParams.minimumPlayers = 2;
+        soloDraftParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
+        soloDraftParams.prizes = Tournament.PrizeType.NONE;
+
+        _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
+                new SoloDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
+                        soloDraftParams, _soloDraftLibrary))
+        );
+    }
+
+    private void addImmediateRecurringSoloTableDraft(String queueId, String queueName, String prefix, String formatCode) {
+
+        SoloTableDraftTournamentParams soloDraftParams = new SoloTableDraftTournamentParams();
+        soloDraftParams.type = Tournament.TournamentType.TABLE_SOLODRAFT;
+
+        soloDraftParams.deckbuildingDuration = 25;
+        soloDraftParams.turnInDuration = 5;
+
+        TableDraftDefinition tableDraft = _tableDraftLibrary.getTableDraftDefinition(formatCode);
+        soloDraftParams.soloTableDraftFormatCode = formatCode;
+        soloDraftParams.format = tableDraft.getFormat();
+        soloDraftParams.requiresDeck = false;
+
+        soloDraftParams.tournamentId = prefix;
+        soloDraftParams.name = queueName;
+        soloDraftParams.cost = 0;
+        soloDraftParams.minimumPlayers = 2;
+        soloDraftParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
+        soloDraftParams.prizes = Tournament.PrizeType.NONE;
+
+        _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
+                new SoloTableDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
+                        soloDraftParams, _tableDraftLibrary))
+        );
+    }
+
+    private void addImmediateRecurringTableDraft(String queueId, String queueName, String prefix, String formatCode, int players) {
+
+        TableDraftTournamentParams draftParams = new TableDraftTournamentParams();
+        draftParams.type = Tournament.TournamentType.TABLE_DRAFT;
+
+        draftParams.deckbuildingDuration = 15;
+        draftParams.turnInDuration = 2;
+        draftParams.draftTimerProducer = new DraftTimerProducerClassic();
+
+        TableDraftDefinition tableDraft = _tableDraftLibrary.getTableDraftDefinition(formatCode);
+        draftParams.tableDraftFormatCode = formatCode;
+        draftParams.format = tableDraft.getFormat();
+        draftParams.requiresDeck = false;
+
+        draftParams.tournamentId = prefix;
+        draftParams.name = queueName;
+        draftParams.cost = 0;
+        draftParams.minimumPlayers = players;
+        draftParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
+        draftParams.prizes = Tournament.PrizeType.NONE;
+
+        _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
+                new TableDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
+                        draftParams, _tableDraftLibrary))
+        );
+    }
+
     private void addRecurringScheduledQueue(String queueId, String queueName, String time, String prefix, String formatCode) {
         _tournamentQueues.put(queueId, new RecurringScheduledQueue(this, queueId, queueName,
                 new TournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.ParseStringDate(time),
-                        new TournamentParams(prefix, queueName, formatCode, 0, 4, Tournament.PairingType.SWISS_3, Tournament.PrizeType.DAILY)), _tournamentRepeatPeriod, 4));
+                        new TournamentParams(prefix, queueName, formatCode, 0, 4, Tournament.PairingType.SWISS_3, Tournament.PrizeType.DAILY)), _tournamentRepeatPeriod));
+    }
+
+    private void addRecurringScheduledSealed(String queueId, String queueName, String time, String prefix, String formatCode) {
+
+        var sealedParams = new SealedTournamentParams();
+        sealedParams.type = Tournament.TournamentType.SEALED;
+
+        sealedParams.deckbuildingDuration = 25;
+        sealedParams.turnInDuration = 5;
+
+        var sealedFormat = _formatLibrary.GetSealedTemplate(formatCode);
+        sealedParams.sealedFormatCode = formatCode;
+        sealedParams.format = sealedFormat.GetFormat().getCode();
+        sealedParams.requiresDeck = false;
+
+        sealedParams.tournamentId = prefix;
+        sealedParams.name = queueName;
+        sealedParams.cost = 0;
+        sealedParams.minimumPlayers = 4;
+        sealedParams.playoff = Tournament.PairingType.SWISS_3;
+        sealedParams.prizes = Tournament.PrizeType.DAILY;
+
+        _tournamentQueues.put(queueId, new RecurringScheduledQueue(this, queueId, queueName,
+                new SealedTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.ParseStringDate(time),
+                        sealedParams), _tournamentRepeatPeriod)
+        );
+    }
+
+    private void addRecurringScheduledDraft(String queueId, String queueName, String time, String prefix, String formatCode) {
+
+        var soloDraftParams = new SoloDraftTournamentParams();
+        soloDraftParams.type = Tournament.TournamentType.SOLODRAFT;
+
+        soloDraftParams.deckbuildingDuration = 25;
+        soloDraftParams.turnInDuration = 5;
+
+        var soloDraft = _soloDraftLibrary.getSoloDraft(formatCode);
+        soloDraftParams.soloDraftFormatCode = formatCode;
+        soloDraftParams.format = soloDraft.getFormat();
+        soloDraftParams.requiresDeck = false;
+
+        soloDraftParams.tournamentId = prefix;
+        soloDraftParams.name = queueName;
+        soloDraftParams.cost = 0;
+        soloDraftParams.minimumPlayers = 4;
+        soloDraftParams.playoff = Tournament.PairingType.SWISS_3;
+        soloDraftParams.prizes = Tournament.PrizeType.DAILY;
+
+        _tournamentQueues.put(queueId, new RecurringScheduledQueue(this, queueId, queueName,
+                new SoloDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.ParseStringDate(time),
+                        soloDraftParams, _soloDraftLibrary), _tournamentRepeatPeriod)
+        );
     }
 
     public void reloadTournaments(TableHolder tables) {
         _tables = tables;
         clearCache();
         _tournamentQueues.clear();
+
+        addImmediateRecurringLimitedGames();
 
         addImmediateRecurringQueue("fotr_queue", "Fellowship Block", "fotrQueue-", "fotr_block");
         addImmediateRecurringQueue("pc_fotr_queue", "PC-Fellowship", "pcfotrQueue-", "pc_fotr_block");
@@ -92,9 +260,15 @@ public class TournamentService {
 
         try {
             addRecurringScheduledQueue("fotr_daily_eu", "Daily Gondor Fellowship Block", "2013-01-15 19:30:00", "fotrDailyEu-", "fotr_block");
-            addRecurringScheduledQueue("fotr_daily_us", "Daily Rohan Fellowship Block", "2013-01-16 00:30:00", "fotrDailyEu-", "fotr_block");
-            addRecurringScheduledQueue("movie_daily_eu", "Daily Gondor Movie Block", "2013-01-16 19:30:00", "fotrDailyEu-", "movie");
-            addRecurringScheduledQueue("movie_daily_us", "Daily Rohan Fellowship Block", "2013-01-17 00:30:00", "fotrDailyEu-", "movie");
+            addRecurringScheduledQueue("fotr_daily_us", "Daily Rohan Fellowship Block", "2013-01-16 00:30:00", "fotrDailyUS-", "fotr_block");
+            addRecurringScheduledQueue("movie_daily_eu", "Daily Gondor Movie Block", "2013-01-16 19:30:00", "movieDailyEu-", "movie");
+            addRecurringScheduledQueue("movie_daily_us", "Daily Rohan Movie Block", "2013-01-17 00:30:00", "movieDailyUs-", "movie");
+
+//            addRecurringScheduledDraft("fotr_draft_daily_eu", "Daily Gondor Fellowship Draft", "2013-01-16 19:30:00", "fotrDraftDailyEu-", "fotr_draft");
+//            addRecurringScheduledDraft("fotr_draft_daily_us", "Daily Rohan Fellowship Draft", "2013-01-17 00:30:00", "fotrDraftDailyUS-", "fotr_draft");
+//
+//            addRecurringScheduledSealed("movie_sealed_daily_eu", "Daily Gondor Movie Sealed", "2013-01-15 19:30:00", "movieSealedDailyEu-", "single_movie_sealed");
+//            addRecurringScheduledSealed("movie_sealed_daily_us", "Daily Rohan Movie Sealed", "2013-01-16 00:30:00", "movieSealedDailyUs-", "single_movie_sealed");
 
         } catch (DateTimeParseException exp) {
             // Ignore, can't happen
@@ -102,6 +276,23 @@ public class TournamentService {
         }
 
         getLiveTournaments();
+    }
+
+    private void addImmediateRecurringLimitedGames() {
+        addImmediateRecurringTableDraft("fotr_table_draft_queue", "FotR Table Draft 1v1", "fotrTableDraftQueue-", "fotr_table_draft", 2);
+        addImmediateRecurringSoloTableDraft("fotr_solo_table_draft_queue", "FotR Solo Table Draft", "fotrSoloTableDraftQueue-", "fotr_table_draft");
+
+        addImmediateRecurringDraft("fotr_draft_queue", "FotR Draft", "fotrDraftQueue-", "fotr_draft");
+        addImmediateRecurringDraft("ttt_draft_queue", "TTT Draft", "tttDraftQueue-", "ttt_draft");
+        addImmediateRecurringDraft("hobbit_draft_queue", "Hobbit Draft", "hobbitDraftQueue-", "hobbit_random_draft");
+
+        addImmediateRecurringSealed("fotr_sealed_queue", "Fellowship Block Sealed", "fotrSealedQueue-", "single_fotr_block_sealed");
+        addImmediateRecurringSealed("ttt_sealed_queue", "Towers Block Sealed", "tttSealedQueue-", "single_ttt_block_sealed");
+        addImmediateRecurringSealed("ts_sealed_queue", "Towers Standard Sealed", "tsSealedQueue-", "single_ts_sealed");
+        addImmediateRecurringSealed("king_sealed_queue", "King Block Sealed", "rotkSealedQueue-", "single_rotk_block_sealed");
+        addImmediateRecurringSealed("movie_sealed_queue", "Movie Sealed", "movieSealedQueue-", "single_movie_sealed");
+        addImmediateRecurringSealed("wotr_sealed_queue", "War of the Ring Block Sealed", "wotrSealedQueue-", "single_wotr_block_sealed");
+        addImmediateRecurringSealed("th_sealed_queue", "Hunters Block Sealed", "thSealedQueue-", "single_th_block_sealed");
     }
 
     public void clearCache() {
@@ -272,9 +463,18 @@ public class TournamentService {
 
     public TournamentQueue getTournamentQueue(TournamentInfo info) {
         if(info.Parameters().type == Tournament.TournamentType.SEALED) {
-            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, (SealedTournamentInfo) info);
+            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
         }
         else if(info.Parameters().type == Tournament.TournamentType.CONSTRUCTED) {
+            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
+        }
+        else if(info.Parameters().type == Tournament.TournamentType.SOLODRAFT) {
+            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
+        }
+        else if(info.Parameters().type == Tournament.TournamentType.TABLE_SOLODRAFT) {
+            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
+        }
+        else if(info.Parameters().type == Tournament.TournamentType.TABLE_DRAFT) {
             return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
         }
 
@@ -290,6 +490,18 @@ public class TournamentService {
         else if(type == Tournament.TournamentType.CONSTRUCTED) {
             return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
                     new TournamentInfo(this, _productLibrary, _formatLibrary, tourney));
+        }
+        else if(type == Tournament.TournamentType.SOLODRAFT) {
+            return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
+                    new SoloDraftTournamentInfo(this, _productLibrary, _formatLibrary, tourney, _soloDraftLibrary));
+        }
+        else if(type == Tournament.TournamentType.TABLE_SOLODRAFT) {
+            return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
+                    new SoloTableDraftTournamentInfo(this, _productLibrary, _formatLibrary, tourney, _tableDraftLibrary));
+        }
+        else if(type == Tournament.TournamentType.TABLE_DRAFT) {
+            return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
+                    new TableDraftTournamentInfo(this, _productLibrary, _formatLibrary, tourney, _tableDraftLibrary));
         }
 
         return null;
@@ -358,10 +570,16 @@ public class TournamentService {
             tournament = _activeTournaments.get(tid);
             if (tournament == null) {
                 if(info.Parameters().type == Tournament.TournamentType.SEALED) {
-                    tournament = new SealedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _tables, tid);
+                    tournament = new SealedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
                 }
                 else if(info.Parameters().type == Tournament.TournamentType.CONSTRUCTED) {
-                    tournament = new ConstructedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _tables, tid);
+                    tournament = new ConstructedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
+                } else if (info.Parameters().type == Tournament.TournamentType.SOLODRAFT) {
+                    tournament = new SoloDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
+                } else if (info.Parameters().type == Tournament.TournamentType.TABLE_SOLODRAFT) {
+                    tournament = new SoloTableDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
+                } else if (info.Parameters().type == Tournament.TournamentType.TABLE_DRAFT) {
+                    tournament = new TableDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
                 }
 
                 _activeTournaments.put(tid, tournament);
@@ -384,10 +602,16 @@ public class TournamentService {
             tournament = _activeTournaments.get(tid);
             if (tournament == null) {
                 if(type == Tournament.TournamentType.SEALED) {
-                    tournament = new SealedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _tables, tid);
+                    tournament = new SealedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
                 }
                 else if(type == Tournament.TournamentType.CONSTRUCTED) {
-                    tournament = new ConstructedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _tables, tid);
+                    tournament = new ConstructedTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
+                } else if (type == Tournament.TournamentType.SOLODRAFT) {
+                    tournament = new SoloDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
+                } else if (type == Tournament.TournamentType.TABLE_SOLODRAFT) {
+                    tournament = new SoloTableDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
+                } else if (type == Tournament.TournamentType.TABLE_DRAFT) {
+                    tournament = new TableDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
                 }
 
                 _activeTournaments.put(tid, tournament);

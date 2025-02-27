@@ -1,0 +1,5 @@
+.draft-highlight {
+    border: 2px solid red; /* Red border to indicate selection */
+    background-color: rgba(255, 0, 0, 0.2); /* Light red background */
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* Optional: Glowing effect for extra visibility */
+}

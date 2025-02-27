@@ -308,6 +308,10 @@ public class CollectionsManager {
         }
     }
 
+    public boolean sellCardInPlayerCollection(String player, CollectionType collectionType, String blueprintId, int currency) throws SQLException, IOException {
+        return sellCardInPlayerCollection(_playerDAO.getPlayer(player), collectionType, blueprintId, currency);
+    }
+
     public boolean sellCardInPlayerCollection(Player player, CollectionType collectionType, String blueprintId, int currency) throws SQLException, IOException {
         _readWriteLock.writeLock().lock();
         try {

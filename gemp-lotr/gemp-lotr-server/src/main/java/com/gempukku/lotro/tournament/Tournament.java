@@ -51,7 +51,9 @@ public interface Tournament {
     enum TournamentType {
         CONSTRUCTED,
         SEALED,
-        SOLODRAFT;
+        SOLODRAFT,
+        TABLE_SOLODRAFT,
+        TABLE_DRAFT;
 
         public static TournamentType parse(String name) {
             String nameCaps = name.toUpperCase().trim().replace(' ', '_').replace('-', '_');
@@ -152,6 +154,13 @@ public interface Tournament {
                 return JsonUtils.Convert(unparsed, SealedTournamentParams.class);
             }
             case SOLODRAFT -> {
+                return JsonUtils.Convert(unparsed, SoloDraftTournamentParams.class);
+            }
+            case TABLE_SOLODRAFT -> {
+                return JsonUtils.Convert(unparsed, SoloTableDraftTournamentParams.class);
+            }
+            case TABLE_DRAFT -> {
+                return JsonUtils.Convert(unparsed, TableDraftTournamentParams.class);
             }
         }
 
