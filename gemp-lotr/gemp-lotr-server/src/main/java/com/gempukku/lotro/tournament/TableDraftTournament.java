@@ -19,26 +19,22 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-public class SoloTableDraftTournament extends BaseTournament implements Tournament {
+public class TableDraftTournament extends BaseTournament implements Tournament {
 
-    private SoloTableDraftTournamentInfo soloTableDraftInfo;
-    private Map<String, TableDraft> tables = null;
+    private TableDraftTournamentInfo tableDraftInfo;
+    private TableDraft table = null;
 
-    public SoloTableDraftTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
-                                    LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableDraftDefinitions tableDraftDefinitions,
-                                    TableHolder tables, String tournamentId) {
+    public TableDraftTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
+                                LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableDraftDefinitions tableDraftDefinitions,
+                                TableHolder tables, String tournamentId) {
         super(tournamentService, collectionsManager, productLibrary, formatLibrary, soloDraftDefinitions, tableDraftDefinitions, tables, tournamentId);
-        if (this.tables == null) {
-            this.tables = new HashMap<>();
-        }
     }
 
     @Override
     protected void recreateTournamentInfo(DBDefs.Tournament data) {
-        soloTableDraftInfo = new SoloTableDraftTournamentInfo(_tournamentService, _productLibrary, _formatLibrary, data, _tableDraftLibrary);
-        _tournamentInfo = soloTableDraftInfo;
+        tableDraftInfo = new TableDraftTournamentInfo(_tournamentService, _productLibrary, _formatLibrary, data, _tableDraftLibrary);
+        _tournamentInfo = tableDraftInfo;
     }
 
 
@@ -63,7 +59,7 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
                     }
                 }
                 if (players.size() == 2 && everyoneSubmitted) {
-                    _tournamentInfo.Stage = soloTableDraftInfo.postRegistrationStage();
+                    _tournamentInfo.Stage = tableDraftInfo.postRegistrationStage();
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                 }
 
@@ -77,10 +73,12 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
 
     //No locking because it is handled in the function that calls this one
     protected void resumeTournamentFromDatabase() {
-        if (getTournamentStage() == Stage.DECK_BUILDING) {
-            createTables();
+        if (getTournamentStage() == Stage.DRAFT) {
+            createTable();
+        } else if (getTournamentStage() == Stage.DECK_BUILDING) {
+
         } else if (getTournamentStage() == Stage.DECK_REGISTRATION) {
-            createTables();
+
         } else if (_tournamentInfo.Stage == Stage.PLAYING_GAMES) {
             var matchesToCreate = new HashMap<String, String>();
             var existingTables = _tables.getTournamentTables(_tournamentId);
@@ -110,21 +108,14 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
         }
     }
 
-    private void createTables() {
-        if (tables == null) {
-            tables = new HashMap<>();
-        }
-
-        // Create a table for each player to draft with bots
-        for (String playerName : _players) {
-            if (tables.containsKey(playerName)) {
-                continue;
+    private void createTable() {
+        // Create one table for all players and start
+        if (table == null) {
+            table = _tableDraftLibrary.getTableDraftDefinition(tableDraftInfo.tableDraftParams.tableDraftFormatCode).getTableDraft(_collectionsManager, getCollectionType());
+            for (String playerName : _players) {
+                table.registerPlayer(playerName);
             }
-            TableDraft tableDraft = _tableDraftLibrary.getTableDraftDefinition(soloTableDraftInfo.soloTableDraftParams.soloTableDraftFormatCode).getTableDraft(_collectionsManager, getCollectionType());
-            tables.put(playerName, tableDraft);
-            tableDraft.registerPlayer(playerName);
-            // Just one player per table
-            tableDraft.startDraft();
+            table.startDraft();
         }
     }
 
@@ -135,34 +126,50 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
             List<TournamentProcessAction> result = new LinkedList<>();
             if (_nextTask == null) {
                 if(getTournamentStage() == Stage.STARTING) {
-                    _tournamentInfo.Stage = Stage.DECK_BUILDING;
+                    _tournamentInfo.Stage = Stage.DRAFT;
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
 
-                    createTables();
+                    createTable();
 
-                    String duration = DateUtils.HumanDuration(soloTableDraftInfo.deckbuildingDuration);
-                    result.add(new BroadcastAction("Draft has been opened for tournament <b>" + getTournamentName() + "</b>. Use the 'Go to Draft' button in the Active Tournaments Section. Players now have "
-                            + duration + " to solo draft and build a deck with the cards they got. "
-                            + "<br/><br/>Remember to return to the game hall and register your deck before " + DateUtils.FormatTime(soloTableDraftInfo.registrationDeadline) + "."));
+                    result.add(new BroadcastAction("Draft has been opened for tournament <b>" + getTournamentName() + "</b>. Use the 'Go to Draft' button in the Active Tournaments Section. " +
+                            "When the draft is finished, you will have " + (tableDraftInfo.tableDraftParams.deckbuildingDuration + tableDraftInfo.tableDraftParams.turnInDuration) + " minutes to build and register your deck."));
+                }
+                else if (getTournamentStage() == Stage.DRAFT) {
+                    // TODO mby timer here?
+                    if (table == null) {
+                        // Cannot resume draft after server restart, end the tournament
+                        result.add(finishTournament(collectionsManager));
+                    } else if (table.isFinished()) {
+                        _tournamentInfo.Stage = Stage.DECK_BUILDING;
+                        _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
+
+                        tableDraftInfo.deckbuildingDeadline = null;
+                        tableDraftInfo.registrationDeadline = tableDraftInfo.deckbuildingDeadline.plus(tableDraftInfo.registrationDuration);
+
+                        String duration = DateUtils.HumanDuration(tableDraftInfo.deckbuildingDuration);
+                        result.add(new BroadcastAction("Draft has finished for tournament <b>" + getTournamentName() + "</b>. " +
+                                "Players now have " + duration + " to build a deck with the cards they got. "
+                                + "<br/><br/>Remember to return to the game hall and register your deck before " + DateUtils.FormatTime(tableDraftInfo.registrationDeadline) + "."));
+                    }
                 }
                 else if (getTournamentStage() == Stage.DECK_BUILDING) {
-                    if (DateUtils.Now().isAfter(soloTableDraftInfo.deckbuildingDeadline)) {
+                    if (DateUtils.Now().isAfter(tableDraftInfo.deckbuildingDeadline)) {
                         _tournamentInfo.Stage = Stage.DECK_REGISTRATION;
                         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
 
-                        String duration = DateUtils.HumanDuration(soloTableDraftInfo.registrationDuration);
+                        String duration = DateUtils.HumanDuration(tableDraftInfo.registrationDuration);
                         result.add(new BroadcastAction("Deck building in tournament <b>" + getTournamentName() + "</b> has finished. Players now have "
                                 + duration + " to finish registering their decks.  Any player who has not turned in their deck by the deadline at "
-                                + DateUtils.FormatTime(soloTableDraftInfo.registrationDeadline) + " will be auto-disqualified."
+                                + DateUtils.FormatTime(tableDraftInfo.registrationDeadline) + " will be auto-disqualified."
                                 + "<br/><br/>Once the deadline has passed, the tournament will begin."));
                     }
                 }
 
                 if (getTournamentStage() == Stage.DECK_REGISTRATION) {
-                    if (DateUtils.Now().isAfter(soloTableDraftInfo.registrationDeadline)) {
+                    if (DateUtils.Now().isAfter(tableDraftInfo.registrationDeadline)) {
                         disqualifyUnregisteredPlayers();
 
-                        _tournamentInfo.Stage = soloTableDraftInfo.postRegistrationStage();
+                        _tournamentInfo.Stage = tableDraftInfo.postRegistrationStage();
                         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                     }
                 }
@@ -215,11 +222,8 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
         }
     }
 
-    public TableDraft getTableDraft(String playerName) {
-        if (tables == null) {
-            return null;
-        }
-        return tables.get(playerName);
+    public TableDraft getTableDraft() {
+        return table;
     }
 
     @Override
@@ -234,6 +238,6 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
 
     @Override
     public CollectionType getCollectionType() {
-        return soloTableDraftInfo.generateCollectionInfo();
+        return tableDraftInfo.generateCollectionInfo();
     }
 }

@@ -1,5 +1,7 @@
 package com.gempukku.lotro.draft3.fotr;
 
+import com.gempukku.lotro.collection.CollectionsManager;
+import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft3.*;
 
 import java.util.*;
@@ -13,21 +15,37 @@ public class FotrTableDraft implements TableDraft {
     private final int rounds;
     private final String uniqueTableIdentifier;
 
+    private final CollectionsManager collectionsManager;
+    private final CollectionType collectionType;
+
     private int currentRound;
     private int boostersRemaining;
     private final List<String> botNames = new ArrayList<>(List.of("Aragorn_bot", "Gandalf_bot", "Legolas_bot", "Gimli_bot", "Samwise_bot", "Frodo_bot"));
     private final List<DraftPlayer> players = new ArrayList<>();
     private final Set<DraftPlayer> playersReadyToPick = new HashSet<>();
 
-    public FotrTableDraft(StartingCollectionProducer startingCollectionProducer, BoosterProducer boosterProducer, int maxPlayers, int rounds) {
+    public FotrTableDraft(CollectionsManager collectionsManager, CollectionType collectionType, StartingCollectionProducer startingCollectionProducer, BoosterProducer boosterProducer, int maxPlayers, int rounds) {
+        this.collectionsManager = collectionsManager;
+        this.collectionType = collectionType;
+
         this.startingCollectionProducer = startingCollectionProducer;
         this.boosterProducer = boosterProducer;
         this.maxPlayers = maxPlayers;
         this.rounds = rounds;
-        this.uniqueTableIdentifier = "FotR Table Draft - " + + System.currentTimeMillis();
+        this.uniqueTableIdentifier = "FotR Table Draft - " + System.currentTimeMillis();
 
         this.currentRound = 0; // Not started yet
         this.boostersRemaining = 0; // 0 boosters opened at the table
+    }
+
+    @Override
+    public CollectionType getCollectionType() {
+        return collectionType;
+    }
+
+    @Override
+    public CollectionsManager getCollectionsManager() {
+        return collectionsManager;
     }
 
     @Override
@@ -40,9 +58,7 @@ public class FotrTableDraft implements TableDraft {
             // Ensure random seating
             Collections.shuffle(players);
             // Assign starting cards
-            players.forEach(draftPlayer -> {
-                draftPlayer.setCardCollection(startingCollectionProducer.getStartingCardCollection(uniqueTableIdentifier, draftPlayer.getName()));
-            });
+            players.forEach(draftPlayer -> draftPlayer.startCollection(startingCollectionProducer.getStartingCardCollection(uniqueTableIdentifier, draftPlayer.getName())));
             // Deal first boosters
             dealBoosters();
         }
@@ -112,6 +128,11 @@ public class FotrTableDraft implements TableDraft {
 
     @Override
     public DraftPlayer registerPlayer(String name) {
+        // Only before draft starts
+        if (currentRound != 0) {
+            return null;
+        }
+
         return registerPlayer(name, false);
     }
 

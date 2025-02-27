@@ -88,59 +88,146 @@ var GempLotrTableDraftUI = Class.extend({
         this.getDraftState();
     },
 
+    processDraftStatus:function (xml, callUpdate) {
+        var that = this;
+        var root = xml.documentElement;
+        if (root.tagName == "draftStatus") {
+            var pickedCards = root.getElementsByTagName("pickedCard");
+            var availablePicks = root.getElementsByTagName("availablePick");
+
+
+            // Check if picked cards changed and we should update
+            let pickedCardsChanged = false;
+            let newDraftedIds = new Set();
+            for (var i = 0; i < pickedCards.length; i++) {
+                let blueprintId = pickedCards[i].getAttribute("blueprintId");
+                newDraftedIds.add(blueprintId);
+            }
+            let existingDraftedIds = new Set();
+            $(".card", that.draftedDiv).each(function () {
+                existingDraftedIds.add($(this).data("blueprintId"));
+            });
+            if (newDraftedIds.size !== existingDraftedIds.size || ![...newDraftedIds].every(id => existingDraftedIds.has(id))) {
+                pickedCardsChanged = true;
+            }
+
+            // Check if cards to pick from changed and we should update
+            let availablePicksChanged = false;
+            let newPickIds = new Set();
+            for (var i = 0; i < availablePicks.length; i++) {
+                let id = availablePicks[i].getAttribute("id");
+                newPickIds.add(id);
+            }
+            let existingPickIds = new Set();
+            $(".card", that.picksDiv).each(function () {
+                existingPickIds.add($(this).data("choiceId"));
+            });
+            if (newPickIds.size !== existingPickIds.size || ![...newPickIds].every(id => existingPickIds.has(id))) {
+                availablePicksChanged = true;
+            }
+
+            // Check if pre picked card changed and we should update (highlight)
+            let chosenCardChanged = false;
+            let newChosenIds = new Set();
+            for (var i = 0; i < availablePicks.length; i++) {
+                let chosen = availablePicks[i].getAttribute("chosen")
+                if (chosen === "true") {
+                    newChosenIds.add(availablePicks[i].getAttribute("id"))
+                }
+            }
+            let existingChosenIds = new Set();
+            $(".card", that.picksDiv).each(function () {
+                if ($(this).hasClass("draft-highlight")) {
+                    existingChosenIds.add($(this).data("choiceId")); // Store the chosen card's choiceId
+                }
+            });
+            if (existingChosenIds.size !== newChosenIds.size || [...existingChosenIds].some(id => !newChosenIds.has(id))) {
+                chosenCardChanged = true;
+            }
+
+            if (pickedCardsChanged) {
+                console.log("Picked changed")
+                $(".card", that.draftedDiv).remove();
+                for (var i = 0; i < pickedCards.length; i++) {
+                    var pickedCard = pickedCards[i];
+                    var blueprintId = pickedCard.getAttribute("blueprintId");
+                    var count = pickedCard.getAttribute("count");
+                    for (var no = 0; no < count; no++) {
+                        var card = new Card(blueprintId, null, null, "drafted", "deck", "player");
+                        var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, card.isFoil(), false, false, card.hasErrata(), false);
+                        cardDiv.data("card", card);
+                        cardDiv.data("blueprintId", blueprintId);
+                        that.draftedDiv.append(cardDiv);
+                    }
+                }
+                that.draftedCardGroup.layoutCards();
+            }
+
+            if (availablePicksChanged) {
+                console.log("available changed")
+                $(".card", that.picksDiv).remove();
+                for (var i = 0; i < availablePicks.length; i++) {
+                    var availablePick = availablePicks[i];
+                    var id = availablePick.getAttribute("id");
+                    var url = availablePick.getAttribute("url");
+                    var blueprintId = availablePick.getAttribute("blueprintId");
+                    var chosen = availablePick.getAttribute("chosen"); // Declared card for pick
+
+                    var card;
+                    var cardDiv;
+
+                    if (blueprintId != null) {
+                        card = new Card(blueprintId, null, null, "picks", "deck", "player");
+                        cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, card.isFoil(), false, false, card.hasErrata(), false);
+                        cardDiv.data("card", card);
+                        cardDiv.data("choiceId", id);
+                    } else {
+                        card = new Card("rules", null, null, "picks", "deck", "player");
+                        cardDiv = Card.CreateCardDiv(url, null, null, false, false, true, false, false);
+                        cardDiv.data("card", card);
+                        cardDiv.data("choiceId", id);
+                    }
+
+                    // Check if the card is chosen and apply the highlight class
+                    if (chosen === "true") {
+                        cardDiv.get(0).classList.add("draft-highlight"); // Add highlight CSS class
+                    }
+
+                    that.picksDiv.append(cardDiv);
+                }
+                that.picksCardGroup.layoutCards();
+            } else if (chosenCardChanged) {
+                $(".card", that.picksDiv).removeClass("draft-highlight");
+                for (var i = 0; i < availablePicks.length; i++) {
+                    let chosen = availablePicks[i].getAttribute("chosen");
+                    if (chosen === "true") {
+                        $(".card", that.picksDiv).eq(i).addClass("draft-highlight");
+                    }
+                }
+            }
+
+            if (newChosenIds.size != 0) {
+                that.messageDiv.text("Waiting for others to pick a card");
+                setTimeout(function () {
+                    that.getDraftState();
+                }, 500);
+            } else if (availablePicks.length > 0) {
+                that.messageDiv.text("Make a pick");
+                setTimeout(function () {
+                    that.getDraftState();
+                }, 500);
+            } else {
+                that.messageDiv.text("Draft is finished");
+            }
+
+        }
+    },
+
     getDraftState:function () {
         var that = this;
         this.comm.getTableDraft(this.eventId,
             function (xml) {
-                var root = xml.documentElement;
-                if (root.tagName == "availablePicks") {
-                    var availablePicks = root.getElementsByTagName("availablePick");
-                    for (var i = 0; i < availablePicks.length; i++) {
-                        var availablePick = availablePicks[i];
-                        var id = availablePick.getAttribute("id");
-                        var url = availablePick.getAttribute("url");
-                        var blueprintId = availablePick.getAttribute("blueprintId");
-
-                        if (blueprintId != null) {
-                            var card = new Card(blueprintId, null, null, "picks", "deck", "player");
-                            var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, card.isFoil(), false, false, card.hasErrata(), false);
-                            cardDiv.data("card", card);
-                            cardDiv.data("choiceId", id);
-                            that.picksDiv.append(cardDiv);
-                        } else {
-                            var card = new Card("rules", null, null, "picks", "deck", "player");
-                            var cardDiv = Card.CreateCardDiv(url, null, null, false, false, true, false, false);
-                            cardDiv.data("card", card);
-                            cardDiv.data("choiceId", id);
-                            that.picksDiv.append(cardDiv);
-                        }
-                    }
-                    that.picksCardGroup.layoutCards();
-                    if (availablePicks.length > 0)
-                        that.messageDiv.text("Make a pick");
-                    else
-                        that.messageDiv.text("Draft is finished");
-                }
-            });
-
-        this.comm.getCollection(this.eventId, "sort:cardType,culture,name", 0, 1000,
-            function (xml) {
-                var root = xml.documentElement;
-                if (root.tagName == "collection") {
-                    var cards = root.getElementsByTagName("card");
-                    for (var i=0; i<cards.length; i++) {
-                        var card = cards[i];
-                        var count = card.getAttribute("count");
-                        var blueprintId = card.getAttribute("blueprintId");
-                        for (var no = 0; no < count; no++) {
-                            var card = new Card(blueprintId, null, null, "drafted", "deck", "player");
-                            var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, card.isFoil(), false, false, card.hasErrata(), false);
-                            cardDiv.data("card", card);
-                            that.draftedDiv.append(cardDiv);
-                        }
-                    }
-                    that.draftedCardGroup.layoutCards();
-                }
+                that.processDraftStatus(xml, true);
             });
     },
 
@@ -160,7 +247,6 @@ var GempLotrTableDraftUI = Class.extend({
         if (tar.hasClass("actionArea")) {
             var selectedCardElem = tar.closest(".card");
             var card = selectedCardElem.data("card");
-            debugger;
             if (event.which >= 1) {
                 if (!this.successfulDrag) {
                     if (event.shiftKey || event.which > 1) {
@@ -170,53 +256,8 @@ var GempLotrTableDraftUI = Class.extend({
                         if (selectedCardElem.data("card").zone == "picks") {
                             var choiceId = selectedCardElem.data("choiceId");
                             that.comm.makeTableDraftPick(that.eventId, choiceId, function (xml) {
-                                var root = xml.documentElement;
-                                if (root.tagName == "pickResult") {
-                                    var pickedCards = root.getElementsByTagName("pickedCard");
-                                    for (var i = 0; i < pickedCards.length; i++) {
-                                        var pickedCard = pickedCards[i];
-                                        var blueprintId = pickedCard.getAttribute("blueprintId");
-                                        var count = pickedCard.getAttribute("count");
-                                        for (var no = 0; no < count; no++) {
-                                            var card = new Card(blueprintId, null, null, "drafted", "deck", "player");
-                                            var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, card.isFoil(), false, false, card.hasErrata(), false);
-                                            cardDiv.data("card", card);
-                                            that.draftedDiv.append(cardDiv);
-                                        }
-                                    }
-                                    that.draftedCardGroup.layoutCards();
-
-                                    //TODO wait if picks not available
-                                    var availablePicks = root.getElementsByTagName("availablePick");
-                                    for (var i = 0; i < availablePicks.length; i++) {
-                                        var availablePick = availablePicks[i];
-                                        var id = availablePick.getAttribute("id");
-                                        var url = availablePick.getAttribute("url");
-                                        var blueprintId = availablePick.getAttribute("blueprintId");
-
-                                        if (blueprintId != null) {
-                                            var card = new Card(blueprintId, null, null, "picks", "deck", "player");
-                                            var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, card.isFoil(), false, false, card.hasErrata(), false);
-                                            cardDiv.data("card", card);
-                                            cardDiv.data("choiceId", id);
-                                            that.picksDiv.append(cardDiv);
-                                        } else {
-                                            var card = new Card("rules", null, null, "picks", "deck", "player");
-                                            var cardDiv = Card.CreateCardDiv(url, null, null, false, false, true, false, false);
-                                            cardDiv.data("card", card);
-                                            cardDiv.data("choiceId", id);
-                                            that.picksDiv.append(cardDiv);
-                                        }
-                                    }
-                                    that.picksCardGroup.layoutCards();
-                                    //TODO wait if picks not available
-                                    if (availablePicks.length > 0)
-                                        that.messageDiv.text("Make a pick");
-                                    else
-                                        that.messageDiv.text("Draft is finished");
-                                }
+                                that.processDraftStatus(xml, false)
                             });
-                            $(".card", that.picksDiv).remove();
                         }
                     }
 

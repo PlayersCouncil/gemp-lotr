@@ -52,7 +52,8 @@ public interface Tournament {
         CONSTRUCTED,
         SEALED,
         SOLODRAFT,
-        TABLE_SOLODRAFT;
+        TABLE_SOLODRAFT,
+        TABLE_DRAFT;
 
         public static TournamentType parse(String name) {
             String nameCaps = name.toUpperCase().trim().replace(' ', '_').replace('-', '_');
@@ -157,6 +158,9 @@ public interface Tournament {
             }
             case TABLE_SOLODRAFT -> {
                 return JsonUtils.Convert(unparsed, SoloTableDraftTournamentParams.class);
+            }
+            case TABLE_DRAFT -> {
+                return JsonUtils.Convert(unparsed, TableDraftTournamentParams.class);
             }
         }
 

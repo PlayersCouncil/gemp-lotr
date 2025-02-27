@@ -1,6 +1,7 @@
 package com.gempukku.lotro.draft3.fotr;
 
 import com.gempukku.lotro.collection.CollectionsManager;
+import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft3.BoosterProducer;
 import com.gempukku.lotro.draft3.StartingCollectionProducer;
 import com.gempukku.lotro.draft3.TableDraft;
@@ -22,8 +23,8 @@ public class FotrTableDraftDefinition implements TableDraftDefinition {
     }
 
     @Override
-    public TableDraft getTableDraft() {
-        return new FotrTableDraft(startingCollectionProducer, boosterProducer, PLAYER_COUNT, DRAFT_ROUNDS);
+    public TableDraft getTableDraft(CollectionsManager collectionsManager, CollectionType collectionType) {
+        return new FotrTableDraft(collectionsManager, collectionType, startingCollectionProducer, boosterProducer, PLAYER_COUNT, DRAFT_ROUNDS);
     }
 
     @Override

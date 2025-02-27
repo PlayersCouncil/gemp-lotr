@@ -4,6 +4,8 @@ import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.DefaultCardCollection;
 import com.gempukku.lotro.game.MutableCardCollection;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,9 +13,9 @@ import java.util.Objects;
 public class DraftPlayer {
     protected final TableDraft table;
     private final String name;
-    private MutableCardCollection cardCollection = new DefaultCardCollection();
     private final List<Booster> boosterQueue = new ArrayList<>();
     protected String chosenCard;
+    protected String lastPickedCard;
 
     public DraftPlayer(TableDraft table, String name) {
         this.table = table;
@@ -24,12 +26,30 @@ public class DraftPlayer {
         return name;
     }
 
-    public void setCardCollection(MutableCardCollection cardCollection) {
-        this.cardCollection = cardCollection;
-    }
+    public void startCollection(MutableCardCollection cardCollection) {
+        // Remove collection content if it exists
+        try {
+            CardCollection collection = getCollection();
+            if (collection != null) {
+                for (CardCollection.Item item : collection.getAll()) {
+                    for (int i = 0; i < item.getCount(); i++) {
+                        table.getCollectionsManager().sellCardInPlayerCollection(name, table.getCollectionType(), item.getBlueprintId(), 0);
+                    }
+                }
+            }
+        } catch (SQLException | IOException ignore) {
 
-    public CardCollection getCardCollection() {
-        return cardCollection;
+        }
+
+        // Create new collection for the player
+        var startingCollection = new DefaultCardCollection();
+
+        // Initialize with starting cards
+        for (CardCollection.Item item : cardCollection.getAll())
+            startingCollection.addItem(item.getBlueprintId(), item.getCount());
+
+        // Save
+        table.getCollectionsManager().addPlayerCollection(false, "Draft tournament product", name, table.getCollectionType(), startingCollection);
     }
 
     public void receiveBooster(Booster booster) {
@@ -38,7 +58,7 @@ public class DraftPlayer {
 
     public List<String> getCardsToPickFrom() {
         if (boosterQueue.isEmpty()) {
-            return null;
+            return List.of();
         }
         return boosterQueue.getFirst().getCardsInPack();
     }
@@ -66,14 +86,35 @@ public class DraftPlayer {
             return false;
         }
         // Remove the card from booster and add the card to collection
-        cardCollection.addItem(boosterQueue.getFirst().pickCard(chosenCard), 1);
+        boosterQueue.getFirst().pickCard(chosenCard);
+        addToCollection(chosenCard);
+        lastPickedCard = chosenCard;
+        chosenCard = null;
         // Pass booster to next player
         table.passBooster(this, boosterQueue.removeFirst());
 
         return true;
     }
 
+    private void addToCollection(String chosenCard) {
+        if (this instanceof DraftBot) {
+            ((MutableCardCollection) getCollection()).addItem(chosenCard, 1);
+        } else {
+            DefaultCardCollection pickedCardCollection = new DefaultCardCollection();
+            pickedCardCollection.addItem(chosenCard, 1);
+            table.getCollectionsManager().addItemsToPlayerCollection(false, "Draft pick", name, table.getCollectionType(), pickedCardCollection.getAll());
+        }
+    }
+
     public String getLastPickedCard() {
+        return lastPickedCard;
+    }
+
+    public CardCollection getCollection() {
+        return table.getCollectionsManager().getPlayerCollection(name, table.getCollectionType().getCode());
+    }
+
+    public String getChosenCard() {
         return chosenCard;
     }
 
