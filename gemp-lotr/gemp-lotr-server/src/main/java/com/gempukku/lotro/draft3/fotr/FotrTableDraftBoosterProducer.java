@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class FotrTableDraftBoosterProducer implements BoosterProducer {
+    private static final int MAX_ROUND = 6;
 
     private static final String RARE_FILTER = "rarity:R";
     private static final String UNCOMMON_FILTER = "rarity:U"; // No P rarity cards in boosters
@@ -58,12 +59,7 @@ public class FotrTableDraftBoosterProducer implements BoosterProducer {
                             formatLibrary
                     ).stream().map(CardCollection.Item::getBlueprintId).collect(Collectors.toList()));
                     // Remove alternate versions from different sets
-                    cardPools.get(key).removeIf(new Predicate<String>() {
-                        @Override
-                        public boolean test(String s) {
-                            return !s.startsWith((sets.indexOf(set) + 1) + "_");
-                        }
-                    });
+                    cardPools.get(key).removeIf(s -> !s.startsWith((sets.indexOf(set) + 1) + "_"));
                 }
             }
         }
@@ -71,7 +67,7 @@ public class FotrTableDraftBoosterProducer implements BoosterProducer {
 
     @Override
     public Booster getBooster(int round) {
-        if (round < 1 || round > 6) {
+        if (round < 1 || round > MAX_ROUND) {
             return null;
         }
         String set = switch (round % 3) {
@@ -92,6 +88,11 @@ public class FotrTableDraftBoosterProducer implements BoosterProducer {
         pickedCards.addAll(pickRandom(commonCards, 7));
 
         return new Booster(pickedCards);
+    }
+
+    @Override
+    public int getMaxRound(int numberOfPlayers) {
+        return MAX_ROUND;
     }
 
     private List<String> pickRandom(List<String> source, int count) {

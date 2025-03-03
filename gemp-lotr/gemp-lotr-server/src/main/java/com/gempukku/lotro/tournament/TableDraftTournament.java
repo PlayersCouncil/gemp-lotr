@@ -6,6 +6,7 @@ import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft.Draft;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
+import com.gempukku.lotro.draft3.DraftTimerProducer;
 import com.gempukku.lotro.draft3.TableDraft;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -76,9 +77,14 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
         if (getTournamentStage() == Stage.DRAFT) {
             createTable();
         } else if (getTournamentStage() == Stage.DECK_BUILDING) {
-
+            if (tableDraftInfo.deckbuildingDeadline == null || tableDraftInfo.registrationDeadline == null) {
+                tableDraftInfo.deckbuildingDeadline = DateUtils.Now().plus(tableDraftInfo.deckbuildingDuration);
+                tableDraftInfo.registrationDeadline = tableDraftInfo.deckbuildingDeadline.plus(tableDraftInfo.registrationDuration);
+            }
         } else if (getTournamentStage() == Stage.DECK_REGISTRATION) {
-
+            if (tableDraftInfo.registrationDeadline == null) {
+                tableDraftInfo.registrationDeadline = DateUtils.Now().plus(tableDraftInfo.registrationDuration);
+            }
         } else if (_tournamentInfo.Stage == Stage.PLAYING_GAMES) {
             var matchesToCreate = new HashMap<String, String>();
             var existingTables = _tables.getTournamentTables(_tournamentId);
@@ -111,11 +117,11 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
     private void createTable() {
         // Create one table for all players and start
         if (table == null) {
-            table = _tableDraftLibrary.getTableDraftDefinition(tableDraftInfo.tableDraftParams.tableDraftFormatCode).getTableDraft(_collectionsManager, getCollectionType());
+            table = _tableDraftLibrary.getTableDraftDefinition(tableDraftInfo.tableDraftParams.tableDraftFormatCode).getTableDraft(_collectionsManager, getCollectionType(), DraftTimerProducer.getDraftTimerProducer(tableDraftInfo.tableDraftParams.draftTimerProducerType));
             for (String playerName : _players) {
                 table.registerPlayer(playerName);
             }
-            table.startDraft();
+            table.advanceDraft();
         }
     }
 
@@ -135,7 +141,6 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
                             "When the draft is finished, you will have " + (tableDraftInfo.tableDraftParams.deckbuildingDuration + tableDraftInfo.tableDraftParams.turnInDuration) + " minutes to build and register your deck."));
                 }
                 else if (getTournamentStage() == Stage.DRAFT) {
-                    // TODO mby timer here?
                     if (table == null) {
                         // Cannot resume draft after server restart, end the tournament
                         result.add(finishTournament(collectionsManager));
@@ -143,7 +148,7 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
                         _tournamentInfo.Stage = Stage.DECK_BUILDING;
                         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
 
-                        tableDraftInfo.deckbuildingDeadline = null;
+                        tableDraftInfo.deckbuildingDeadline = DateUtils.Now().plus(tableDraftInfo.deckbuildingDuration);
                         tableDraftInfo.registrationDeadline = tableDraftInfo.deckbuildingDeadline.plus(tableDraftInfo.registrationDuration);
 
                         String duration = DateUtils.HumanDuration(tableDraftInfo.deckbuildingDuration);

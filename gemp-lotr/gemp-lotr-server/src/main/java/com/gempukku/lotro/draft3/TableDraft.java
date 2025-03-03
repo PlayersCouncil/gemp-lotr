@@ -1,17 +1,18 @@
 package com.gempukku.lotro.draft3;
 
-import com.gempukku.lotro.collection.CollectionsManager;
-import com.gempukku.lotro.db.vo.CollectionType;
+import com.gempukku.lotro.game.CardCollection;
+
+import java.util.List;
 
 public interface TableDraft {
     DraftPlayer registerPlayer(String name);
     DraftPlayer getPlayer(String name);
     boolean removePlayer(String name);
-    void startDraft();
-    boolean readyToPick(DraftPlayer who);
-    boolean passBooster(DraftPlayer from, Booster booster);
+    void advanceDraft();
+    List<String> getCardsToPickFrom(DraftPlayer draftPlayer);
+    String getChosenCard(DraftPlayer draftPlayer);
+    void chooseCard(DraftPlayer who, String what);
     boolean isFinished();
-
-    CollectionType getCollectionType();
-    CollectionsManager getCollectionsManager();
+    int getSecondsRemainingForPick() throws IllegalStateException;
+    CardCollection getPickedCards(DraftPlayer draftPlayer);
 }

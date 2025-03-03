@@ -4,7 +4,7 @@ import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.db.vo.CollectionType;
 
 public interface TableDraftDefinition {
-    TableDraft getTableDraft(CollectionsManager collectionsManager, CollectionType collectionType);
+    TableDraft getTableDraft(CollectionsManager collectionsManager, CollectionType collectionType, DraftTimerProducer draftTimerProducer);
 
     String getFormatCode();
     String getFormat();

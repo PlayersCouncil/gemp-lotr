@@ -94,6 +94,13 @@ var GempLotrTableDraftUI = Class.extend({
         if (root.tagName == "draftStatus") {
             var pickedCards = root.getElementsByTagName("pickedCard");
             var availablePicks = root.getElementsByTagName("availablePick");
+            var timeRemainingElements = root.getElementsByTagName("timeRemaining");
+
+            // Get time remaining
+            var timeRemaining = null; // Default to null
+            if (timeRemainingElements.length > 0) {
+                timeRemaining = timeRemainingElements[0].getAttribute("value");
+            }
 
 
             // Check if picked cards changed and we should update
@@ -146,7 +153,6 @@ var GempLotrTableDraftUI = Class.extend({
             }
 
             if (pickedCardsChanged) {
-                console.log("Picked changed")
                 $(".card", that.draftedDiv).remove();
                 for (var i = 0; i < pickedCards.length; i++) {
                     var pickedCard = pickedCards[i];
@@ -164,7 +170,6 @@ var GempLotrTableDraftUI = Class.extend({
             }
 
             if (availablePicksChanged) {
-                console.log("available changed")
                 $(".card", that.picksDiv).remove();
                 for (var i = 0; i < availablePicks.length; i++) {
                     var availablePick = availablePicks[i];
@@ -206,20 +211,36 @@ var GempLotrTableDraftUI = Class.extend({
                 }
             }
 
+            // Function to format time in m:ss
+            function formatTime(seconds) {
+                let minutes = Math.floor(seconds / 60);
+                let secs = seconds % 60;
+                return minutes + ":" + (secs < 10 ? "0" : "") + secs; // Adds leading zero if needed
+            }
+
             if (newChosenIds.size != 0) {
-                that.messageDiv.text("Waiting for others to pick a card");
+                let message = "Waiting for others to pick a card";
+                if (timeRemaining !== null) {
+                    message += " (" + formatTime(timeRemaining) + ")";
+                }
+                that.messageDiv.text(message);
+
                 setTimeout(function () {
                     that.getDraftState();
                 }, 500);
             } else if (availablePicks.length > 0) {
-                that.messageDiv.text("Make a pick");
+                let message = "Make a pick";
+                if (timeRemaining !== null) {
+                    message += " (" + formatTime(timeRemaining) + ")";
+                }
+                that.messageDiv.text(message);
+
                 setTimeout(function () {
                     that.getDraftState();
                 }, 500);
             } else {
                 that.messageDiv.text("Draft is finished");
             }
-
         }
     },
 

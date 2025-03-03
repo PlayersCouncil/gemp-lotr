@@ -6,7 +6,7 @@ import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.GameHistoryDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
-import com.gempukku.lotro.draft3.DraftTimerProducerClassic;
+import com.gempukku.lotro.draft3.DraftTimerProducer;
 import com.gempukku.lotro.draft3.TableDraftDefinition;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
@@ -162,7 +162,7 @@ public class TournamentService {
 
         draftParams.deckbuildingDuration = 15;
         draftParams.turnInDuration = 2;
-        draftParams.draftTimerProducer = new DraftTimerProducerClassic();
+        draftParams.draftTimerProducerType = DraftTimerProducer.Type.CLASSIC;
 
         TableDraftDefinition tableDraft = _tableDraftLibrary.getTableDraftDefinition(formatCode);
         draftParams.tableDraftFormatCode = formatCode;

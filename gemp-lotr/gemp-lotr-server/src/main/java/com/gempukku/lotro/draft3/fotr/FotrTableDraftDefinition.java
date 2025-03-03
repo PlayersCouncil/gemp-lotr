@@ -2,10 +2,7 @@ package com.gempukku.lotro.draft3.fotr;
 
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.db.vo.CollectionType;
-import com.gempukku.lotro.draft3.BoosterProducer;
-import com.gempukku.lotro.draft3.StartingCollectionProducer;
-import com.gempukku.lotro.draft3.TableDraft;
-import com.gempukku.lotro.draft3.TableDraftDefinition;
+import com.gempukku.lotro.draft3.*;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 
@@ -23,8 +20,9 @@ public class FotrTableDraftDefinition implements TableDraftDefinition {
     }
 
     @Override
-    public TableDraft getTableDraft(CollectionsManager collectionsManager, CollectionType collectionType) {
-        return new FotrTableDraft(collectionsManager, collectionType, startingCollectionProducer, boosterProducer, PLAYER_COUNT, DRAFT_ROUNDS);
+    public TableDraft getTableDraft(CollectionsManager collectionsManager, CollectionType collectionType, DraftTimerProducer draftTimerProducer) {
+        DraftTimer draftTimer = draftTimerProducer == null ? null : draftTimerProducer.getDraftTimer();
+        return new TableDraftClassic(collectionsManager, collectionType, startingCollectionProducer, boosterProducer, PLAYER_COUNT, DRAFT_ROUNDS, draftTimer);
     }
 
     @Override

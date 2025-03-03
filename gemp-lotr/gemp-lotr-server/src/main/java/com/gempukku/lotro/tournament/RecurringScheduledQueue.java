@@ -130,6 +130,7 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
         } else if (_tournamentInfo instanceof TableDraftTournamentInfo) {
             tbr = new TableDraftTournamentParams() {{
                 this.type = Tournament.TournamentType.TABLE_DRAFT;
+                this.draftTimerProducerType = ((TableDraftTournamentParams) _tournamentInfo._params).draftTimerProducerType;
                 this.deckbuildingDuration = ((TableDraftTournamentParams) _tournamentInfo._params).deckbuildingDuration;
                 this.turnInDuration = ((TableDraftTournamentParams) _tournamentInfo._params).turnInDuration;
                 this.tableDraftFormatCode = ((TableDraftTournamentParams) _tournamentInfo._params).tableDraftFormatCode;

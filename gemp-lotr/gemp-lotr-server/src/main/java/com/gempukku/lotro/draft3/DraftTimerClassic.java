@@ -40,8 +40,10 @@ public class DraftTimerClassic implements DraftTimer{
 
         // Look to map for info
         int tbr = durations.get(cardsInPack);
-        // Add 2 extra minutes for the very first pick so players can get to draft
-        tbr += firstCardPicked ? 0 : 120;
+        // Add 5 extra minutes for the very first pick so players can get to draft
+        tbr += firstCardPicked ? 0 : 300;
+
+        firstCardPicked = true;
 
         return tbr;
     }

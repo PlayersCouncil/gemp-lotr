@@ -120,11 +120,11 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
             if (tables.containsKey(playerName)) {
                 continue;
             }
-            TableDraft tableDraft = _tableDraftLibrary.getTableDraftDefinition(soloTableDraftInfo.soloTableDraftParams.soloTableDraftFormatCode).getTableDraft(_collectionsManager, getCollectionType());
+            TableDraft tableDraft = _tableDraftLibrary.getTableDraftDefinition(soloTableDraftInfo.soloTableDraftParams.soloTableDraftFormatCode).getTableDraft(_collectionsManager, getCollectionType(), null);
             tables.put(playerName, tableDraft);
             tableDraft.registerPlayer(playerName);
             // Just one player per table
-            tableDraft.startDraft();
+            tableDraft.advanceDraft();
         }
     }
 

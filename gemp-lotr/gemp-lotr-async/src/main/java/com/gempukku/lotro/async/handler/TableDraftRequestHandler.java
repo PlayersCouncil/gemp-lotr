@@ -205,7 +205,20 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
                 appendAvailablePicks(doc, rootElement);
             }
 
+            try {
+                int timeRemaining = draftPlayer.getSecondsRemainingForPick();
+                appendTimeRemaining(doc, rootElement, timeRemaining);
+            } catch (IllegalStateException ignore) {
+                // No timer
+            }
+
             return doc;
+        }
+
+        private void appendTimeRemaining(Document doc, Element rootElement, int timeRemaining) {
+            Element time = doc.createElement("timeRemaining");
+            time.setAttribute("value", "" + timeRemaining);
+            rootElement.appendChild(time);
         }
 
         private void appendPickedCards(Document doc, Element rootElement) {
@@ -224,7 +237,7 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
             }
         }
 
-        private void appendAvailablePicks(Document doc, Element rootElem) {
+        private void appendAvailablePicks(Document doc, Element rootElement) {
             for (String availableChoice : draftPlayer.getCardsToPickFrom()) {
                 Element availablePick = doc.createElement("availablePick");
                 availablePick.setAttribute("id", availableChoice);
@@ -232,7 +245,7 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
                 if (draftPlayer.getChosenCard() != null && draftPlayer.getChosenCard().equals(availableChoice)) {
                     availablePick.setAttribute("chosen", "true");
                 }
-                rootElem.appendChild(availablePick);
+                rootElement.appendChild(availablePick);
             }
         }
     }
