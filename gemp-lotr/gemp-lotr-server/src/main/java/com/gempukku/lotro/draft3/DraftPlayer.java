@@ -42,6 +42,10 @@ public class DraftPlayer {
         return table.getChosenCard(this);
     }
 
+    public TableDraft.TableStatus getTableStatus() {
+        return table.getTableStatus();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

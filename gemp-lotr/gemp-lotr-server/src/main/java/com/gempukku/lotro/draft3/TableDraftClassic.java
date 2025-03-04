@@ -348,4 +348,11 @@ public class TableDraftClassic implements TableDraft{
     public CardCollection getPickedCards(DraftPlayer draftPlayer) {
         return collectionsManager.getPlayerCollection(draftPlayer.getName(), collectionType.getCode());
     }
+
+    @Override
+    public TableStatus getTableStatus() {
+        List<PlayerStatus> statuses = new ArrayList<>();
+        players.forEach(draftPlayer -> statuses.add(new PlayerStatus(draftPlayer.getName(), chosenCards.containsKey(draftPlayer))));
+        return new TableStatus(statuses, currentRound % 2 == 1); // Alternate pick order with each booster
+    }
 }

@@ -24,6 +24,7 @@ var GempLotrTableDraftUI = Class.extend({
         this.bottomDiv = $("#bottomDiv");
 
         this.messageDiv = $("#messageDiv");
+        this.tableStatusDiv = $("#tableStatusDiv");
         this.picksDiv = $("#picksDiv");
         this.draftedDiv = $("#draftedDiv");
 
@@ -95,6 +96,8 @@ var GempLotrTableDraftUI = Class.extend({
             var pickedCards = root.getElementsByTagName("pickedCard");
             var availablePicks = root.getElementsByTagName("availablePick");
             var timeRemainingElements = root.getElementsByTagName("timeRemaining");
+            var playerElements = root.getElementsByTagName("player");
+            var pickOrderAscendingElements = root.getElementsByTagName("pickOrderAscending");
 
             // Get time remaining
             var timeRemaining = null; // Default to null
@@ -210,6 +213,34 @@ var GempLotrTableDraftUI = Class.extend({
                     }
                 }
             }
+
+            // Read player statuses
+            let players = [];
+            for (let i = 0; i < playerElements.length; i++) {
+                let name = playerElements[i].getAttribute("name");
+                let hasChosen = playerElements[i].getAttribute("hasChosen") === "true";
+                players.push({ name, hasChosen });
+            }
+
+            // Read pick order direction
+            let pickOrderAscending = pickOrderAscendingElements.length == 0 ||
+                                     pickOrderAscendingElements[0].getAttribute("value") === "true";
+
+            // Clear previous table status
+            that.tableStatusDiv.empty();
+
+            // Generate player order display
+            let separator = pickOrderAscending ? " > " : " < ";
+            let tableStatusText = players.map(player => {
+                let nameSpan = $("<span>").text(player.name);
+                if (player.hasChosen) {
+                    nameSpan.addClass("player-chosen"); // Add class to indicate a chosen card
+                }
+                return nameSpan.prop("outerHTML");
+            }).join(separator);
+
+            // Append to the table status div
+            that.tableStatusDiv.html(tableStatusText);
 
             // Function to format time in m:ss
             function formatTime(seconds) {
@@ -349,6 +380,7 @@ var GempLotrTableDraftUI = Class.extend({
     layoutUI:function (layoutDivs) {
         if (layoutDivs) {
             var messageHeight = 40;
+            var statusHeight = 20;
             var padding = 5;
 
             var topWidth = this.topDiv.width();
@@ -357,8 +389,16 @@ var GempLotrTableDraftUI = Class.extend({
             var bottomWidth = this.bottomDiv.width();
             var bottomHeight = this.bottomDiv.height();
 
-            this.picksDiv.css({position:"absolute", left:padding, top:messageHeight+padding, width:topWidth-padding*2, height:topHeight-messageHeight-padding*2});
-            this.picksCardGroup.setBounds(0, 0, topWidth-padding*2, topHeight-messageHeight-padding*2);
+            this.tableStatusDiv.css({
+                position: "absolute",
+                top: messageHeight + padding,
+                left: padding,
+                width: topWidth - padding * 2,
+                height: topHeight - messageHeight - statusHeight - padding * 2,
+            });
+
+            this.picksDiv.css({position:"absolute", left:padding, top:messageHeight+statusHeight+padding*2, width:topWidth-padding*2, height:topHeight-messageHeight-statusHeight-padding*2});
+            this.picksCardGroup.setBounds(0, 0, topWidth-padding*2, topHeight-messageHeight-statusHeight-padding*2);
 
             this.draftedDiv.css({position:"absolute", left:padding, top:padding, width:bottomWidth-padding*2, height:bottomHeight-padding*2});
             this.draftedCardGroup.setBounds(0, 0, bottomWidth-padding*2, bottomHeight-padding*2);

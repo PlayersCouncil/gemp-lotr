@@ -197,6 +197,8 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
             Element rootElement = doc.createElement("draftStatus");
             doc.appendChild(rootElement);
 
+            appendPlayersInfo(doc, rootElement);
+
             if (draftPlayer.getCollection() != null) {
                 appendPickedCards(doc, rootElement);
             }
@@ -214,6 +216,22 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
 
             return doc;
         }
+
+        private void appendPlayersInfo(Document doc, Element rootElement) {
+            TableDraft.TableStatus tableStatus = draftPlayer.getTableStatus();
+
+            for (TableDraft.PlayerStatus playerStatus : tableStatus.getPlayerStatuses()) {
+                Element playerElement = doc.createElement("player");
+                playerElement.setAttribute("name", playerStatus.getName());
+                playerElement.setAttribute("hasChosen", String.valueOf(playerStatus.hasChosenCard()));
+                rootElement.appendChild(playerElement);
+            }
+
+            Element pickOrder = doc.createElement("pickOrderAscending");
+            pickOrder.setAttribute("value", String.valueOf(tableStatus.isPickOrderAscending()));
+            rootElement.appendChild(pickOrder);
+        }
+
 
         private void appendTimeRemaining(Document doc, Element rootElement, int timeRemaining) {
             Element time = doc.createElement("timeRemaining");
