@@ -26,7 +26,12 @@ public class FotrTableDraftDefinition implements TableDraftDefinition {
     }
 
     @Override
-    public String getFormatCode() {
+    public int getMaxPlayers() {
+        return PLAYER_COUNT;
+    }
+
+    @Override
+    public String getCode() {
         return "fotr_table_draft";
     }
 

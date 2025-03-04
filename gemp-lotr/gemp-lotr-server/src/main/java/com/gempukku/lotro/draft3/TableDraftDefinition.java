@@ -5,7 +5,8 @@ import com.gempukku.lotro.db.vo.CollectionType;
 
 public interface TableDraftDefinition {
     TableDraft getTableDraft(CollectionsManager collectionsManager, CollectionType collectionType, DraftTimerProducer draftTimerProducer);
+    int getMaxPlayers();
 
-    String getFormatCode();
+    String getCode();
     String getFormat();
 }

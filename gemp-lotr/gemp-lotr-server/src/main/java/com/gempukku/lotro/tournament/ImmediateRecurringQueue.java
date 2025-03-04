@@ -5,10 +5,12 @@ import com.gempukku.lotro.collection.CollectionsManager;
 
 public class ImmediateRecurringQueue extends AbstractTournamentQueue implements TournamentQueue {
     private final int _playerCap;
+    private final int maxPlayers;
 
     public ImmediateRecurringQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info) {
         super(tournamentService, queueId, queueName, info);
         _playerCap = info.Parameters().minimumPlayers;
+        maxPlayers = info.Parameters().maximumPlayers;
     }
 
     @Override
@@ -42,7 +44,7 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
 
     @Override
     public boolean isJoinable() {
-        return true;
+        return maxPlayers < 0 || _players.size() < maxPlayers;
     }
 
     private TournamentInfo getInfo(String tournamentId, String tournamentName) {
@@ -115,6 +117,7 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
         tbr.cost = getCost();
         tbr.prizes = _tournamentInfo._params.prizes;
         tbr.minimumPlayers = _playerCap;
+        tbr.maximumPlayers = maxPlayers;
         tbr.requiresDeck = _tournamentInfo._params.requiresDeck;
 
         return tbr;

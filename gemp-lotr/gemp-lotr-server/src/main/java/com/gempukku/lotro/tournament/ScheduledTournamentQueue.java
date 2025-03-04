@@ -12,10 +12,12 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
     private static final Duration _signupTimeBeforeStart = Duration.ofMinutes(60);
     private static final Duration _wcSignupTimeBeforeStart = Duration.ofHours(30);
     private final ZonedDateTime _startTime;
+    private final int maximumPlayers;
 
     public ScheduledTournamentQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info) {
         super(tournamentService, queueId, queueName, info);
         _startTime = DateUtils.ParseDate(info.Parameters().startTime);
+        maximumPlayers = info.Parameters().maximumPlayers;
     }
 
     @Override
@@ -61,6 +63,6 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
         if (_tournamentInfo.Parameters().tournamentId.toLowerCase().contains("wc")) {
             window = _wcSignupTimeBeforeStart;
         }
-        return DateUtils.Now().isAfter(_startTime.minus(window));
+        return DateUtils.Now().isAfter(_startTime.minus(window)) && (maximumPlayers < 0 || _players.size() < maximumPlayers);
     }
 }

@@ -11,6 +11,8 @@ import com.gempukku.lotro.db.PlayerDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
+import com.gempukku.lotro.draft3.DraftTimerProducer;
+import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
@@ -58,6 +60,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
     private final PlayerDAO _playerDAO;
     private final AdminService _adminService;
     private final ChatServer _chatServer;
+    private final TableDraftDefinitions _tableDraftLibrary;
 
     private static final Logger _log = LogManager.getLogger(AdminRequestHandler.class);
 
@@ -76,6 +79,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         _cardLibrary = extractObject(context, LotroCardBlueprintLibrary.class);
         _productLibrary = extractObject(context, ProductLibrary.class);
         _chatServer = extractObject(context, ChatServer.class);
+        _tableDraftLibrary = extractObject(context, TableDraftDefinitions.class);
     }
 
     @Override
@@ -921,6 +925,15 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         String soloDraftTurnInDurationStr = getFormParameterSafely(postDecoder, "soloDraftTurnInDuration");
         String soloDraftFormatCodeStr = getFormParameterSafely(postDecoder, "soloDraftFormatCode");
 
+        String soloTableDraftDeckbuildingDurationStr = getFormParameterSafely(postDecoder, "soloTableDraftDeckbuildingDuration");
+        String soloTableDraftTurnInDurationStr = getFormParameterSafely(postDecoder, "soloTableDraftTurnInDuration");
+        String soloTableDraftFormatCodeStr = getFormParameterSafely(postDecoder, "soloTableDraftFormatCode");
+
+        String tableDraftDeckbuildingDurationStr = getFormParameterSafely(postDecoder, "tableDraftDeckbuildingDuration");
+        String tableDraftTurnInDurationStr = getFormParameterSafely(postDecoder, "tableDraftTurnInDuration");
+        String tableDraftFormatCodeStr = getFormParameterSafely(postDecoder, "tableDraftFormatCode");
+        String tableDraftTimer = getFormParameterSafely(postDecoder, "tableDraftTimer");
+
         String wcStr = getFormParameterSafely(postDecoder, "wc");
         String tournamentId = getFormParameterSafely(postDecoder, "tournamentId");
         String formatStr = getFormParameterSafely(postDecoder, "formatCode");
@@ -1004,6 +1017,38 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             soloDraftParams.requiresDeck = false;
             params = soloDraftParams;
         }
+        else if (type == Tournament.TournamentType.TABLE_SOLODRAFT) {
+            var soloTableDraftParams = new SoloTableDraftTournamentParams();
+            soloTableDraftParams.type = Tournament.TournamentType.TABLE_SOLODRAFT;
+
+            soloTableDraftParams.deckbuildingDuration = Throw400IfNullOrNonInteger("soloTableDraftDeckbuildingDuration", soloTableDraftDeckbuildingDurationStr);
+            soloTableDraftParams.turnInDuration = Throw400IfNullOrNonInteger("soloTableDraftTurnInDuration", soloTableDraftTurnInDurationStr);
+
+            Throw400IfStringNull("soloTableDraftFormatCode", soloTableDraftFormatCodeStr);
+            var tableDraftDefinition = _tableDraftLibrary.getTableDraftDefinition(soloTableDraftFormatCodeStr);
+            Throw400IfValidationFails("soloTableDraftFormatCode", soloTableDraftFormatCodeStr,tableDraftDefinition != null);
+            soloTableDraftParams.soloTableDraftFormatCode = soloTableDraftFormatCodeStr;
+            soloTableDraftParams.format = tableDraftDefinition.getFormat();
+            soloTableDraftParams.requiresDeck = false;
+            params = soloTableDraftParams;
+        }
+        else if (type == Tournament.TournamentType.TABLE_DRAFT) {
+            var tableDraftParams = new TableDraftTournamentParams();
+            tableDraftParams.type = Tournament.TournamentType.TABLE_DRAFT;
+
+            tableDraftParams.deckbuildingDuration = Throw400IfNullOrNonInteger("tableDraftDeckbuildingDuration", tableDraftDeckbuildingDurationStr);
+            tableDraftParams.turnInDuration = Throw400IfNullOrNonInteger("tableDraftTurnInDuration", tableDraftTurnInDurationStr);
+
+            Throw400IfStringNull("tableDraftFormatCode", tableDraftFormatCodeStr);
+            var tableDraftDefinition = _tableDraftLibrary.getTableDraftDefinition(tableDraftFormatCodeStr);
+            Throw400IfValidationFails("tableDraftFormatCode", tableDraftFormatCodeStr,tableDraftDefinition != null);
+            tableDraftParams.tableDraftFormatCode = tableDraftFormatCodeStr;
+            tableDraftParams.format = tableDraftDefinition.getFormat();
+            tableDraftParams.requiresDeck = false;
+            tableDraftParams.draftTimerProducerType = DraftTimerProducer.getDraftTimerProducer(tableDraftTimer);
+            tableDraftParams.maximumPlayers = tableDraftDefinition.getMaxPlayers();
+            params = tableDraftParams;
+        }
         else {
             params.type = Tournament.TournamentType.CONSTRUCTED;
             var format = _formatLibrary.getFormat(formatStr);
@@ -1026,6 +1071,15 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
         if(type == Tournament.TournamentType.SEALED) {
             info = new SealedTournamentInfo(_tournamentService, _productLibrary, _formatLibrary, start, (SealedTournamentParams)params);
+        }
+        else if (type == Tournament.TournamentType.SOLODRAFT) {
+            info = new SoloDraftTournamentInfo(_tournamentService, _productLibrary, _formatLibrary, start, ((SoloDraftTournamentParams) params), _soloDraftDefinitions);
+        }
+        else if (type == Tournament.TournamentType.TABLE_SOLODRAFT) {
+            info = new SoloTableDraftTournamentInfo(_tournamentService, _productLibrary, _formatLibrary, start, ((SoloTableDraftTournamentParams) params), _tableDraftLibrary);
+        }
+        else if (type == Tournament.TournamentType.TABLE_DRAFT) {
+            info = new TableDraftTournamentInfo(_tournamentService, _productLibrary, _formatLibrary, start, ((TableDraftTournamentParams) params), _tableDraftLibrary);
         }
         else {
             info = new TournamentInfo(_tournamentService, _productLibrary, _formatLibrary, start, params);

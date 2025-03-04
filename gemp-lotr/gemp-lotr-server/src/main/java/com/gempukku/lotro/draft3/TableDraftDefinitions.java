@@ -15,7 +15,7 @@ public class TableDraftDefinitions {
     public TableDraftDefinitions(CollectionsManager collectionsManager, LotroCardBlueprintLibrary cardLibrary,
                                  LotroFormatLibrary formatLibrary) {
         FotrTableDraftDefinition fotrTableDraftDefinition = new FotrTableDraftDefinition(collectionsManager, cardLibrary, formatLibrary);
-        draftTypes.put(fotrTableDraftDefinition.getFormatCode(), fotrTableDraftDefinition);
+        draftTypes.put(fotrTableDraftDefinition.getCode(), fotrTableDraftDefinition);
     }
 
     public TableDraftDefinition getTableDraftDefinition(String draftType) {

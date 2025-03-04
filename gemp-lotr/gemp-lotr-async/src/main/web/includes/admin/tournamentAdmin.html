@@ -156,22 +156,44 @@ $(document).ready(
 				$('.sealed-only').show();
 				$('.constructed-only').hide();
 				$('.solodraft-only').hide();
+				$('.solo-table-draft-only').hide();
+				$('.table-draft-only').hide();
 			}
 			else if(type === "SOLODRAFT") {
 				$('.sealed-only').hide();
 				$('.constructed-only').hide();
 				$('.solodraft-only').show();
+				$('.solo-table-draft-only').hide();
+				$('.table-draft-only').hide();
+			}
+			else if(type === "TABLE_SOLODRAFT") {
+				$('.sealed-only').hide();
+				$('.constructed-only').hide();
+				$('.solodraft-only').hide();
+				$('.solo-table-draft-only').show();
+				$('.table-draft-only').hide();
+			}
+			else if(type === "TABLE_DRAFT") {
+				$('.sealed-only').hide();
+				$('.constructed-only').hide();
+				$('.solodraft-only').hide();
+				$('.solo-table-draft-only').hide();
+				$('.table-draft-only').show();
 			}
 			else {
 				$('.sealed-only').hide();
 				$('.constructed-only').show();
 				$('.solodraft-only').hide();
+				$('.solo-table-draft-only').hide();
+				$('.table-draft-only').hide();
 			}
 		});
 		
 		$('.sealed-only').hide();
 		$('.solodraft-only').hide();
 		$('.constructed-only').show();
+		$('.solo-table-draft-only').hide();
+		$('.table-draft-only').hide();
 		
 		
 		hall.comm.getFormats(true,
@@ -180,7 +202,9 @@ $(document).ready(
 				//console.log(json);
 				let drafts = json.DraftTemplates;
 				let formats = json.Formats;
-				let sealed = json.SealedTemplates
+				let sealed = json.SealedTemplates;
+				let tableDrafts = json.TableDraftTemplates;
+				let tableDraftTimers = json.TableDraftTimerTypes;
 
 				for (var prop in formats) {
 					if (Object.prototype.hasOwnProperty.call(formats, prop)) {
@@ -247,6 +271,34 @@ $(document).ready(
 						$("#sch-tourney-solodraft-format").append(item);
 					}
 				}
+
+				for (var prop in tableDrafts) {
+					if (Object.prototype.hasOwnProperty.call(tableDrafts, prop)) {
+						//console.log(prop);
+
+						let code = tableDrafts[prop].format;
+						let id = tableDrafts[prop].id;
+
+						var item = $("<option/>")
+							.attr("value", id)
+							.text(prop);
+						$("#sch-tourney-solo-table-draft-format").append(item);
+						var item2 = $("<option/>")
+							.attr("value", id)
+							.text(prop);
+						$("#sch-tourney-table-draft-format").append(item2);
+					}
+				}
+
+				for (var prop in tableDraftTimers) {
+					if (Object.prototype.hasOwnProperty.call(tableDraftTimers, prop)) {
+						//console.log(prop);
+						var item = $("<option/>")
+							.attr("value", tableDraftTimers[prop])
+							.text(tableDraftTimers[prop]);
+						$("#sch-tourney-table-draft-timer").append(item);
+					}
+				}
 			}, 
 			tourneyErrorMap());
 	});
@@ -275,6 +327,15 @@ function processScheduledTournament(preview, resultdiv, callback) {
 		$("#sch-tourney-solodraft-format").val(),
 		$("#sch-tourney-solodraft-deckbuild").val(),
 		$("#sch-tourney-solodraft-registration").val(),
+
+		$("#sch-tourney-solo-table-draft-format").val(),
+		$("#sch-tourney-solo-table-draft-deckbuild").val(),
+		$("#sch-tourney-solo-table-draft-registration").val(),
+
+		$("#sch-tourney-table-draft-format").val(),
+		$("#sch-tourney-table-draft-timer").val(),
+		$("#sch-tourney-table-draft-deckbuild").val(),
+		$("#sch-tourney-table-draft-registration").val(),
 		
 		$("#sch-tourney-start").val(),
 		$("#sch-tourney-cost").val(),
@@ -414,7 +475,8 @@ function tourneyErrorMap(outputControl, callback=null) {
 				<option value="CONSTRUCTED">Constructed</option>
 				<option value="SEALED">Sealed</option>
 				<option value="SOLODRAFT">Solo Draft</option>
-				
+				<option value="TABLE_SOLODRAFT">Table Solo Draft</option>
+				<option value="TABLE_DRAFT">Table Draft</option>
 			</select>
 		</div>
 		
@@ -451,6 +513,41 @@ function tourneyErrorMap(outputControl, callback=null) {
 		<div class="flex-horiz solodraft-only">
 			<div class="label-column">Deck registration grace period (in minutes): </div>
 			<input type="number" min="1" id="sch-tourney-solodraft-registration" value="5" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz solo-table-draft-only">
+			<div class="label-column">Solo Table Draft Format: </div>
+			<select id="sch-tourney-solo-table-draft-format" name="format" class="flex-fill"></select>
+		</div>
+
+		<div class="flex-horiz solo-table-draft-only">
+			<div class="label-column">Solo Table Drafting + Deckbuilding duration (in minutes): </div>
+			<input type="number" min="1" id="sch-tourney-solo-table-draft-deckbuild" value="25" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz solo-table-draft-only">
+			<div class="label-column">Deck registration grace period (in minutes): </div>
+			<input type="number" min="1" id="sch-tourney-solo-table-draft-registration" value="5" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz table-draft-only">
+			<div class="label-column">Table Draft Format: </div>
+			<select id="sch-tourney-table-draft-format" name="format" class="flex-fill"></select>
+		</div>
+
+		<div class="flex-horiz table-draft-only">
+			<div class="label-column">Table Draft Timer: </div>
+			<select id="sch-tourney-table-draft-timer" name="format" class="flex-fill"></select>
+		</div>
+
+		<div class="flex-horiz table-draft-only">
+			<div class="label-column">Deckbuilding duration after draft (in minutes): </div>
+			<input type="number" min="1" id="sch-tourney-table-draft-deckbuild" value="15" class="flex-fill">
+		</div>
+
+		<div class="flex-horiz table-draft-only">
+			<div class="label-column">Deck registration grace period (in minutes): </div>
+			<input type="number" min="1" id="sch-tourney-table-draft-registration" value="2" class="flex-fill">
 		</div>
 		
 		<div class="flex-horiz">

@@ -1192,6 +1192,8 @@ var GempLotrCommunication = Class.extend({
     processScheduledTournament:function (preview, name, type, wc, tournamentId, 
                                          formatCode, sealedFormatCode, deckbuildingDuration, turnInDuration,
                                          soloDraftFormatCode, soloDraftDeckbuildingDuration, soloDraftTurnInDuration,
+                                         soloTableDraftFormatCode, soloTableDraftDeckbuildingDuration, soloTableDraftTurnInDuration,
+                                         tableDraftFormatCode, tableDraftTimer, tableDraftDeckbuildingDuration, tableDraftTurnInDuration,
                                          start, cost, playoff, tiebreaker, prizeStructure, minPlayers, manualKickoff,
                                        callback, errorMap) {
         $.ajax({
@@ -1211,6 +1213,13 @@ var GempLotrCommunication = Class.extend({
                 soloDraftFormatCode:soloDraftFormatCode,
                 soloDraftDeckbuildingDuration:soloDraftDeckbuildingDuration,
                 soloDraftTurnInDuration:soloDraftTurnInDuration,
+                soloTableDraftFormatCode:soloTableDraftFormatCode,
+                soloTableDraftDeckbuildingDuration:soloTableDraftDeckbuildingDuration,
+                soloTableDraftTurnInDuration:soloTableDraftTurnInDuration,
+                tableDraftFormatCode:tableDraftFormatCode,
+                tableDraftTimer:tableDraftTimer,
+                tableDraftDeckbuildingDuration:tableDraftDeckbuildingDuration,
+                tableDraftTurnInDuration:tableDraftTurnInDuration,
                 start:start,
                 cost:cost,
                 playoff:playoff,

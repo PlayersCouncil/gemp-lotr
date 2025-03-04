@@ -8,6 +8,8 @@ import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.db.DeckDAO;
 import com.gempukku.lotro.db.DeckSerialization;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
+import com.gempukku.lotro.draft3.DraftTimerProducer;
+import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.league.SealedEventDefinition;
@@ -41,6 +43,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private final SoloDraftDefinitions _draftLibrary;
     private final LotroServer _lotroServer;
     private final MarkdownParser _markdownParser;
+    private final TableDraftDefinitions _tableDraftDefinitions;
 
     private static final Logger _log = LogManager.getLogger(DeckRequestHandler.class);
 
@@ -53,6 +56,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         _lotroServer = extractObject(context, LotroServer.class);
         _draftLibrary = extractObject(context, SoloDraftDefinitions.class);
         _markdownParser = extractObject(context, MarkdownParser.class);
+        _tableDraftDefinitions = extractObject(context, TableDraftDefinitions.class);
     }
 
     @Override
@@ -110,6 +114,10 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                 data.DraftTemplates = _draftLibrary.getAllSoloDrafts().values().stream()
                         .map(soloDraft -> new JSONDefs.ItemStub(soloDraft.getCode(), soloDraft.getFormat()))
                         .collect(Collectors.toMap(x-> x.code, x-> x));
+                data.TableDraftTemplates = _tableDraftDefinitions.getAllTableDrafts().values().stream()
+                        .map(tableDraftDefinition -> new JSONDefs.ItemStub(tableDraftDefinition.getFormat(), tableDraftDefinition.getCode()))
+                        .collect(Collectors.toMap(itemStub -> itemStub.name, itemStub -> itemStub));
+                data.TableDraftTimerTypes = DraftTimerProducer.getAllTypes();
 
                 json = JsonUtils.Serialize(data);
             }

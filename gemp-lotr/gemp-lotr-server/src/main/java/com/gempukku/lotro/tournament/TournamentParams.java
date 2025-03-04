@@ -18,6 +18,7 @@ public class TournamentParams {
     public int cost;
     public String tiebreaker;
     public int minimumPlayers = 2;
+    public int maximumPlayers = -1; // Negative value = no maximum set
     public Tournament.PrizeType prizes = Tournament.PrizeType.NONE;
 
     public Tournament.Stage getInitialStage() {

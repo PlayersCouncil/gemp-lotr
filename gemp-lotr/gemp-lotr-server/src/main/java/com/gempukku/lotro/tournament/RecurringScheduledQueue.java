@@ -17,10 +17,12 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
     private String _nextStartText;
 
     private final int _minimumPlayers;
+    private final int _maximumPlayers;
 
     public RecurringScheduledQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info, Duration repeatEvery) {
         super(tournamentService, queueId, queueName, info);
         _minimumPlayers = info._params.minimumPlayers;
+        _maximumPlayers = info._params.maximumPlayers;
 
         _repeatEvery = repeatEvery;
         var sinceOriginal = Duration.between(info.StartTime, ZonedDateTime.now());
@@ -49,7 +51,7 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
 
     @Override
     public boolean isJoinable() {
-        return ZonedDateTime.now().isAfter(_nextStart.minus(_signupTimeBeforeStart));
+        return ZonedDateTime.now().isAfter(_nextStart.minus(_signupTimeBeforeStart)) && (_maximumPlayers < 0 || _players.size() < _maximumPlayers);
     }
 
     @Override
@@ -149,6 +151,7 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
         tbr.cost = getCost();
         tbr.prizes = _tournamentInfo._params.prizes;
         tbr.minimumPlayers = _minimumPlayers;
+        tbr.maximumPlayers = _maximumPlayers;
         tbr.requiresDeck = _tournamentInfo._params.requiresDeck;
 
         return tbr;
