@@ -1,4 +1,4 @@
-package com.gempukku.lotro.draft3;
+package com.gempukku.lotro.draft3.timer;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -2,8 +2,12 @@ package com.gempukku.lotro.draft3;
 
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.db.vo.CollectionType;
+import com.gempukku.lotro.draft3.bot.DraftBot;
+import com.gempukku.lotro.draft3.bot.WeightDraftBot;
+import com.gempukku.lotro.draft3.timer.DraftTimer;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.DefaultCardCollection;
+import com.gempukku.lotro.game.MutableCardCollection;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,6 +27,7 @@ public class TableDraftClassic implements TableDraft{
     private final int maxPlayers;
     private final int rounds;
     private final String uniqueTableIdentifier;
+    private final Map<String, Double> cardValuesForBots;
 
     private final DraftTimer draftTimer;
     private long timerStartTime = 0;
@@ -38,10 +43,11 @@ public class TableDraftClassic implements TableDraft{
     private final List<DraftPlayer> players = new ArrayList<>();
     private final Map<DraftPlayer, Booster> assignedBoosters = new HashMap<>();
     private final Map<DraftPlayer, String> chosenCards = new HashMap<>();
+    private final Map<DraftBot, MutableCardCollection> botCollections = new HashMap<>();
 
     public TableDraftClassic(CollectionsManager collectionsManager, CollectionType collectionType,
                              StartingCollectionProducer startingCollectionProducer, BoosterProducer boosterProducer,
-                             int maxPlayers, int rounds, DraftTimer draftTimer) {
+                             int maxPlayers, int rounds, DraftTimer draftTimer, Map<String, Double> cardValuesForBots) {
         this.collectionsManager = collectionsManager;
         this.collectionType = collectionType;
 
@@ -57,6 +63,7 @@ public class TableDraftClassic implements TableDraft{
         this.rounds = rounds;
         this.draftTimer = draftTimer;
         this.uniqueTableIdentifier = "" + System.currentTimeMillis();
+        this.cardValuesForBots = cardValuesForBots;
 
         this.currentRound = 0; // Not started yet
     }
@@ -101,7 +108,7 @@ public class TableDraftClassic implements TableDraft{
             makeBotsDeclare();
         } else {
             if (choiceTimePassed()) {
-                forceRandomDeclares();
+                forcePlayerDeclares();
                 advanceDraft();
             }
         }
@@ -122,17 +129,18 @@ public class TableDraftClassic implements TableDraft{
 
     private void assignStartingCollections() {
         players.forEach(draftPlayer -> {
-            if (draftPlayer.isBot()) {
-                return;
-            }
 
             // Remove collection content if it exists
             try {
                 CardCollection collection = getPickedCards(draftPlayer);
                 if (collection != null) {
-                    for (CardCollection.Item item : collection.getAll()) {
-                        for (int i = 0; i < item.getCount(); i++) {
-                            collectionsManager.sellCardInPlayerCollection(draftPlayer.getName(), collectionType, item.getBlueprintId(), 0);
+                    if (draftPlayer instanceof DraftBot) {
+                        botCollections.remove(draftPlayer);
+                    } else {
+                        for (CardCollection.Item item : collection.getAll()) {
+                            for (int i = 0; i < item.getCount(); i++) {
+                                collectionsManager.sellCardInPlayerCollection(draftPlayer.getName(), collectionType, item.getBlueprintId(), 0);
+                            }
                         }
                     }
                 }
@@ -145,7 +153,11 @@ public class TableDraftClassic implements TableDraft{
             for (CardCollection.Item item : startingCollectionProducer.getStartingCardCollection(uniqueTableIdentifier, draftPlayer.getName()).getAll())
                 startingCollection.addItem(item.getBlueprintId(), item.getCount());
             // Save
-            collectionsManager.addPlayerCollection(false, "Draft tournament product", draftPlayer.getName(), collectionType, startingCollection);
+            if (draftPlayer instanceof DraftBot) {
+                botCollections.put(((DraftBot) draftPlayer), startingCollection);
+            } else {
+                collectionsManager.addPlayerCollection(false, "Draft tournament product", draftPlayer.getName(), collectionType, startingCollection);
+            }
         });
     }
 
@@ -159,7 +171,7 @@ public class TableDraftClassic implements TableDraft{
             // Remove card from booster
             String pickedCard = assignedBoosters.get(draftPlayer).pickCard(card);
             // Add to collection
-            if (draftPlayer.isBot()) {
+            if (draftPlayer instanceof DraftBot) {
                 return;
             }
             DefaultCardCollection pickedCardCollection = new DefaultCardCollection();
@@ -207,8 +219,8 @@ public class TableDraftClassic implements TableDraft{
 
     private void makeBotsDeclare() {
         assignedBoosters.forEach((draftPlayer, booster) -> {
-            if (draftPlayer.isBot()) {
-                ((DraftBot) draftPlayer).chooseCard(booster.getCardsInPack());
+            if (draftPlayer instanceof DraftBot) {
+                chooseCard(draftPlayer, ((DraftBot) draftPlayer).chooseCard(booster.getCardsInPack()));
             }
         });
     }
@@ -257,13 +269,13 @@ public class TableDraftClassic implements TableDraft{
         return timerDuration - elapsedTime;
     }
 
-    private void forceRandomDeclares() {
+    private void forcePlayerDeclares() {
         players.forEach(draftPlayer -> {
             if (chosenCards.containsKey(draftPlayer)) {
                 return;
             }
             // Player has not declared card, choose one at random from current booster
-            chosenCards.put(draftPlayer, chooseRandom(assignedBoosters.get(draftPlayer).getCardsInPack()));
+            chosenCards.put(draftPlayer, chooseLikeBot(assignedBoosters.get(draftPlayer).getCardsInPack()));
         });
     }
 
@@ -274,6 +286,13 @@ public class TableDraftClassic implements TableDraft{
         Random rand = new Random();
         int randomIndex = rand.nextInt(source.size());
         return source.get(randomIndex);
+    }
+
+    private String chooseLikeBot(List<String> source) {
+        if (source == null || source.isEmpty()) {
+            return null;
+        }
+        return new WeightDraftBot(this, "dummy", cardValuesForBots).chooseCard(source);
     }
 
     @Override
@@ -322,7 +341,7 @@ public class TableDraftClassic implements TableDraft{
         }
 
         // Register bot or regular player as requested
-        DraftPlayer tbr = bot ? new DraftBot(this, name) : new DraftPlayer(this, name);
+        DraftPlayer tbr = bot ? new WeightDraftBot(this, name, cardValuesForBots) : new DraftPlayer(this, name);
         players.add(tbr);
         return tbr;
     }
@@ -346,6 +365,10 @@ public class TableDraftClassic implements TableDraft{
 
     @Override
     public CardCollection getPickedCards(DraftPlayer draftPlayer) {
+        if (draftPlayer instanceof DraftBot) {
+            return botCollections.get(((DraftBot) draftPlayer));
+        }
+
         return collectionsManager.getPlayerCollection(draftPlayer.getName(), collectionType.getCode());
     }
 

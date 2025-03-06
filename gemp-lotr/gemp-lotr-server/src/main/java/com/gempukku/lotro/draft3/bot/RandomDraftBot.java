@@ -1,21 +1,20 @@
-package com.gempukku.lotro.draft3;
+package com.gempukku.lotro.draft3.bot;
+
+import com.gempukku.lotro.draft3.DraftPlayer;
+import com.gempukku.lotro.draft3.TableDraft;
 
 import java.util.List;
 import java.util.Random;
 
-public class DraftBot extends DraftPlayer {
+public class RandomDraftBot extends DraftPlayer implements DraftBot{
 
-    public DraftBot(TableDraft table, String name) {
+    public RandomDraftBot(TableDraft table, String name) {
         super(table, name);
     }
 
     @Override
-    public boolean isBot() {
-        return true;
-    }
-
-    public void chooseCard(List<String> cardsToPickFrom) {
-        table.chooseCard(this, chooseRandom(cardsToPickFrom));
+    public String chooseCard(List<String> cardsToPickFrom) {
+        return chooseRandom(cardsToPickFrom);
     }
 
     private String chooseRandom(List<String> source) {

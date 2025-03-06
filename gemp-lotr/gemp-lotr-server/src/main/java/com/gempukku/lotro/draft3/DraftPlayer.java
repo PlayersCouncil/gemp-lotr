@@ -14,10 +14,6 @@ public class DraftPlayer {
         this.name = name;
     }
 
-    public boolean isBot() {
-        return false;
-    }
-
     public String getName() {
         return name;
     }
