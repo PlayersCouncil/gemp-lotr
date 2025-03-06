@@ -3,7 +3,6 @@ package com.gempukku.lotro.async.handler;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.collection.CollectionsManager;
-import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.draft3.DraftPlayer;
@@ -33,6 +32,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +45,8 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
     private final LeagueService _leagueService;
     private final TournamentService _tournamentService;
     private final TableDraftDefinitions _tableDraftDefinitions;
+
+    private final Map<String, Map<String, DraftPlayer>> eventMap = new HashMap<>();
 
     private static final Logger _log = LogManager.getLogger(TableDraftRequestHandler.class);
 
@@ -76,13 +78,21 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
         String participantId = getQueryParameterSafely(queryDecoder, "participantId");
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
-        TableDraft tableDraft;
+        if (eventMap.containsKey(eventId) && eventMap.get(eventId).containsKey(resourceOwner.getName())) {
+            // Check saved players first
+            DraftPlayer thisPlayer = eventMap.get(eventId).get(resourceOwner.getName());
+            writeXml(responseWriter, thisPlayer);
 
-        League league = findLeagueById(eventId);
-        Tournament tournament = findTournamentById(eventId);
+            clearCacheIfDraftFinished(eventId, resourceOwner, thisPlayer);
+        } else {
+            // Look for data in db and then save
+            TableDraft tableDraft;
 
-        if (league != null) {
-            throw new HttpProcessingException(404);
+            League league = findLeagueById(eventId);
+            Tournament tournament = findTournamentById(eventId);
+
+            if (league != null) {
+                throw new HttpProcessingException(404);
 //            LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
 //            var leagueStart = leagueData.getSeries().getFirst().getStart();
 //
@@ -92,19 +102,27 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
 //            SoloDraftLeague soloDraftLeague = (SoloDraftLeague) leagueData;
 //            collectionType = soloDraftLeague.getCollectionType();
 //            soloDraft = soloDraftLeague.getSoloDraft();
-        } else if (tournament != null) {
-            if ((tournament instanceof SoloTableDraftTournament) && (tournament.getTournamentStage() == Tournament.Stage.DECK_BUILDING || tournament.getTournamentStage() == Tournament.Stage.DECK_REGISTRATION)) {
-                tableDraft = ((SoloTableDraftTournament) tournament).getTableDraft(resourceOwner.getName());
-            } else if (tournament instanceof TableDraftTournament && tournament.getTournamentStage() == Tournament.Stage.DRAFT) {
-                tableDraft = ((TableDraftTournament) tournament).getTableDraft();
+            } else if (tournament != null) {
+                if ((tournament instanceof SoloTableDraftTournament) && (tournament.getTournamentStage() == Tournament.Stage.DECK_BUILDING || tournament.getTournamentStage() == Tournament.Stage.DECK_REGISTRATION)) {
+                    tableDraft = ((SoloTableDraftTournament) tournament).getTableDraft(resourceOwner.getName());
+                } else if (tournament instanceof TableDraftTournament && tournament.getTournamentStage() == Tournament.Stage.DRAFT) {
+                    tableDraft = ((TableDraftTournament) tournament).getTableDraft();
+                } else {
+                    throw new HttpProcessingException(404);
+                }
             } else {
                 throw new HttpProcessingException(404);
             }
-        } else {
-            throw new HttpProcessingException(404);
-        }
 
-        writeXml(responseWriter, tableDraft.getPlayer(resourceOwner.getName()));
+            if (!eventMap.containsKey(eventId)) {
+                eventMap.put(eventId, new HashMap<>());
+            }
+            if (!eventMap.get(eventId).containsKey(resourceOwner.getName())) {
+                eventMap.get(eventId).put(resourceOwner.getName(), tableDraft.getPlayer(resourceOwner.getName()));
+            }
+
+            writeXml(responseWriter, tableDraft.getPlayer(resourceOwner.getName()));
+        }
     }
 
     private League findLeagueById(String leagueId) {
@@ -131,14 +149,23 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
             Player resourceOwner = getResourceOwnerSafely(request, participantId);
             String selectedChoiceId = getFormParameterSafely(postDecoder, "choiceId");
 
-            TableDraft tableDraft;
+            if (eventMap.containsKey(eventId) && eventMap.get(eventId).containsKey(resourceOwner.getName())) {
+                // Check saved players first
+                DraftPlayer thisPlayer = eventMap.get(eventId).get(resourceOwner.getName());
+                // Declare intent of picking (and pick if all declared)
+                thisPlayer.chooseCard(selectedChoiceId);
+                writeXml(responseWriter, thisPlayer);
 
-            League league = findLeagueById(eventId);
-            Tournament tournament = findTournamentById(eventId);
+                clearCacheIfDraftFinished(eventId, resourceOwner, thisPlayer);
+            } else {
+                TableDraft tableDraft;
 
-            if (league != null) {
-                // Leagues will be supported later
-                throw new HttpProcessingException(404);
+                League league = findLeagueById(eventId);
+                Tournament tournament = findTournamentById(eventId);
+
+                if (league != null) {
+                    // Leagues will be supported later
+                    throw new HttpProcessingException(404);
 //                LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
 //                var leagueStart = leagueData.getSeries().getFirst().getStart();
 //
@@ -148,33 +175,43 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
 //                SoloDraftLeague soloDraftLeague = (SoloDraftLeague) leagueData;
 //                collectionType = soloDraftLeague.getCollectionType();
 //                soloDraft = soloDraftLeague.getSoloDraft();
-            } else if (tournament != null) {
-                if ((tournament instanceof SoloTableDraftTournament) && (tournament.getTournamentStage() == Tournament.Stage.DECK_BUILDING || tournament.getTournamentStage() == Tournament.Stage.DECK_REGISTRATION)) {
-                    tableDraft = ((SoloTableDraftTournament) tournament).getTableDraft(resourceOwner.getName());
-                } else if (tournament instanceof TableDraftTournament && tournament.getTournamentStage() == Tournament.Stage.DRAFT) {
-                    tableDraft = ((TableDraftTournament) tournament).getTableDraft();
+                } else if (tournament != null) {
+                    if ((tournament instanceof SoloTableDraftTournament) && (tournament.getTournamentStage() == Tournament.Stage.DECK_BUILDING || tournament.getTournamentStage() == Tournament.Stage.DECK_REGISTRATION)) {
+                        tableDraft = ((SoloTableDraftTournament) tournament).getTableDraft(resourceOwner.getName());
+                    } else if (tournament instanceof TableDraftTournament && tournament.getTournamentStage() == Tournament.Stage.DRAFT) {
+                        tableDraft = ((TableDraftTournament) tournament).getTableDraft();
+                    } else {
+                        throw new HttpProcessingException(404);
+                    }
                 } else {
                     throw new HttpProcessingException(404);
                 }
-            } else {
-                throw new HttpProcessingException(404);
+
+                if (tableDraft.isFinished()) {
+                    throw new HttpProcessingException(404);
+                }
+
+                // Check if card is present
+                if (!tableDraft.getPlayer(resourceOwner.getName()).getCardsToPickFrom().contains(selectedChoiceId)) {
+                    throw new HttpProcessingException(400);
+                }
+
+                // Declare intent of picking (and pick if all declared)
+                tableDraft.getPlayer(resourceOwner.getName()).chooseCard(selectedChoiceId);
+
+                writeXml(responseWriter, tableDraft.getPlayer(resourceOwner.getName()));
             }
-
-            if (tableDraft.isFinished()) {
-                throw new HttpProcessingException(404);
-            }
-
-            // Check if card is present
-            if (!tableDraft.getPlayer(resourceOwner.getName()).getCardsToPickFrom().contains(selectedChoiceId)) {
-                throw new HttpProcessingException(400);
-            }
-
-            // Declare intent of picking (and pick if all declared)
-            tableDraft.getPlayer(resourceOwner.getName()).chooseCard(selectedChoiceId);
-
-            writeXml(responseWriter, tableDraft.getPlayer(resourceOwner.getName()));
         } finally {
             postDecoder.destroy();
+        }
+    }
+
+    private void clearCacheIfDraftFinished(String eventId, Player resourceOwner, DraftPlayer thisPlayer) {
+        if (thisPlayer.draftFinished()) {
+            eventMap.get(eventId).remove(resourceOwner.getName());
+            if (eventMap.get(eventId).isEmpty()) {
+                eventMap.remove(eventId);
+            }
         }
     }
 

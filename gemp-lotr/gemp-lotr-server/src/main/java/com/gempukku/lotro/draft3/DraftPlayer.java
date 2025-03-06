@@ -42,6 +42,10 @@ public class DraftPlayer {
         return table.getTableStatus();
     }
 
+    public boolean draftFinished() {
+        return table.isFinished();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
