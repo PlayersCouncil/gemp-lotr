@@ -33,14 +33,9 @@ public class WeightDraftBot extends DraftPlayer implements DraftBot {
     private List<String> getTopCards(List<String> cardsToPickFrom) {
         // Sort the cards by value in descending order
         return cardsToPickFrom.stream()
-                .sorted((card1, card2) -> Double.compare(cardValues.getOrDefault(card2, 0.0), cardValues.getOrDefault(card1, 0.0)))
-                .limit(getTopCardCount(cardsToPickFrom.size()))
+                .sorted((card1, card2) -> Double.compare(cardValues.getOrDefault(card2, 0.1), cardValues.getOrDefault(card1, 0.1)))
+                .limit(2) // Choose from two highest ranked cards
                 .collect(Collectors.toList());
-    }
-
-    private int getTopCardCount(int packSize) {
-        // Choose top 3 cards if the pack has more than 5, otherwise choose half of the cards
-        return packSize <= 5 ? packSize / 2 : 3;
     }
 
     private double getTotalValue(List<String> topCards) {

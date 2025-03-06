@@ -172,6 +172,7 @@ public class TableDraftClassic implements TableDraft{
             String pickedCard = assignedBoosters.get(draftPlayer).pickCard(card);
             // Add to collection
             if (draftPlayer instanceof DraftBot) {
+                botCollections.get(((DraftPlayer) draftPlayer)).addItem(pickedCard, 1);
                 return;
             }
             DefaultCardCollection pickedCardCollection = new DefaultCardCollection();
@@ -310,7 +311,9 @@ public class TableDraftClassic implements TableDraft{
         chosenCards.put(who, what);
 
         //Check if all players chose
-        advanceDraft();
+        if (!(who instanceof DraftBot)) {
+            advanceDraft();
+        }
     }
 
     @Override
