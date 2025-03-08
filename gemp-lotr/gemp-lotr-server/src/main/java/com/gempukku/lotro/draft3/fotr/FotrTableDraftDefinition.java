@@ -5,6 +5,7 @@ import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft3.*;
 import com.gempukku.lotro.draft3.timer.DraftTimer;
 import com.gempukku.lotro.draft3.timer.DraftTimerProducer;
+import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 
@@ -25,6 +26,24 @@ public class FotrTableDraftDefinition implements TableDraftDefinition {
         startingCollectionProducer = new FotrTableDraftStartingCollectionProducer(collectionsManager, cardLibrary, formatLibrary);
         boosterProducer = new FotrTableDraftBoosterProducer(collectionsManager, cardLibrary, formatLibrary);
         cardValuesForBots = new FotrDraftBotsInitializer(cardLibrary).getValuesMap();
+        // Print the card values for manual check
+//        cardValuesForBots.entrySet()
+//                .stream()
+//                .sorted((entry1, entry2) -> Double.compare(entry2.getValue(), entry1.getValue())) // Sort by values in descending order
+//                .forEach(entry -> {
+//                    try {
+//                        System.out.println(cardLibrary.getLotroCardBlueprint(entry.getKey()).getCardInfo().rarity + ": " + cardLibrary.getLotroCardBlueprint(entry.getKey()).getFullName() + ": " + entry.getValue());
+//                    } catch (CardNotFoundException e) {
+//                        System.out.println(entry.getKey() + ": " + entry.getValue());
+//                    }
+//                });
+
+//        cardValuesForBots.entrySet()
+//                .stream()
+//                .sorted((entry1, entry2) -> Double.compare(entry2.getValue(), entry1.getValue())) // Sort by values in descending order
+//                .forEach(entry -> {
+//                    System.out.println("tbr.put(\"" + entry.getKey() + "\", " + entry.getValue() + ");");
+//                });
     }
 
     @Override

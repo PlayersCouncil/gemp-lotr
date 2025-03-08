@@ -1,6 +1,7 @@
 package com.gempukku.lotro.draft3.fotr;
 
 import com.gempukku.lotro.common.AppConfig;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.ReplayMetadata;
@@ -11,17 +12,41 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 public class FotrDraftBotsInitializer {
     private static final boolean READ_NEW_DATA = false;
 
-    private static final double RARE_FREQUENCY = 1.0 / 11;
-    private static final double UNCOMMON_FREQUENCY = 3.0 / 11;
-    private static final double COMMON_FREQUENCY = 7.0 / 11;
+    private static final int RARES_IN_PACK = 1;
+    private static final int UNCOMMONS_IN_PACK = 3;
+    private static final int COMMONS_IN_PACK = 7;
+
+    private static final Map<String, Double> AVERAGE_STARTING_COUNT_MAP = new HashMap<>();
+
+    static {
+        List<String> allCards = new ArrayList<>();
+        allCards.addAll(List.of("1_296", "2_110", "1_12", "1_365", "1_112", "1_365", "1_311", "1_317",
+                "2_104", "3_122", "1_364", "3_35", "1_78", "1_364", "2_114", "1_299", "1_303", "3_121", "1_365", "1_112",
+                "1_365", "2_110", "1_298", "2_104", "1_51", "1_364", "3_35", "1_76", "1_364", "2_114"));
+        allCards.addAll(List.of("1_26", "1_7", "1_9", "1_11", "1_5", "2_121", "1_97", "2_37", "1_97",
+                "1_51", "1_37", "1_48", "1_32", "1_51", "1_97", "2_121", "1_5", "2_6", "1_9", "1_7", "1_6", "2_121", "1_97",
+                "3_7", "1_37", "1_48", "2_18", "3_7", "1_97", "2_121"));
+        allCards.addAll(List.of("3_96", "1_270", "2_89", "1_262", "1_262", "2_89", "1_270", "3_96",
+                "1_231", "2_61", "1_179", "2_63", "1_184", "2_62", "2_62", "1_184", "2_63", "1_179", "2_61", "1_234", "1_158",
+                "1_152", "1_154", "1_151", "1_145", "1_151", "1_154", "1_152", "1_158", "1_231", "3_100", "1_267", "1_270",
+                "1_271", "1_271", "1_270", "1_267", "3_100", "1_234", "1_177", "2_67", "1_178", "1_176", "2_60", "2_60", "1_176",
+                "1_178", "2_67", "1_177", "1_231", "3_57", "3_58", "3_59", "3_62", "3_69", "3_62", "3_59", "3_58", "3_57", "1_234"));
+
+        for (String card : allCards) {
+            AVERAGE_STARTING_COUNT_MAP.merge(card, 14.0/60.0, Double::sum);
+        }
+        AVERAGE_STARTING_COUNT_MAP.put("1_290", 1.0); // Frodo SoD
+        AVERAGE_STARTING_COUNT_MAP.put("1_2", 1.0); // Ruling Ring
+    }
 
     private final LotroCardBlueprintLibrary library;
 
@@ -51,17 +76,28 @@ public class FotrDraftBotsInitializer {
 
             System.out.println("Read data from " + gamesAnalyzed + " games at " + new SimpleDateFormat("HH.mm.ss").format(new java.util.Date()));
 
-            // Normalize count based on rarities and performance
-            Map<String, Double> frequencyMap = normalizeCountByRarityAndPerformance(winningMap, losingMap, library);
+            // Merge win and lose maps (they are kept separate for potential wr info)
+            Map<String, Integer> mergedMap = mergeMaps(winningMap, losingMap);
 
-            // Calculate win rate
-            Map<String, Double> winRateMap = getWinRateMap(winningMap, losingMap);
+            // Lower count of cards from Draft Packs
+            Map<String, Double> startingCollectionNormalizedCardCountMap = normalizeCountByDraftPackChance(mergedMap);
 
-            // Combine both maps for final value
-            Map<String, Double> valuesMap = combineMaps(frequencyMap, winRateMap);
+            // Normalize for uneven set size
+            Map<String, Double> setNormalizedCardCountMap = normalizeCountBySetSize(startingCollectionNormalizedCardCountMap);
 
-            // Boost rare cards and return the result
-            return boostRareCards(valuesMap, library);
+            // Normalize count based on rarities
+            Map<String, Double> normalizedCardCountMap = normalizeCountByRarity(setNormalizedCardCountMap, library);
+
+            // Boost rarities (more likely to pick rares and uncommons)
+            Map<String, Double> rareInflatedMap = inflateRarity(normalizedCardCountMap, library);
+
+            // Boost FP cards (more likely to pick FP card in mixed draft)
+            Map<String, Double> fpInflatedMap = inflateFp(rareInflatedMap, library);
+
+            // Make sure all values are positive and in 0-1 range
+            Map<String, Double> shiftedMap = shift(fpInflatedMap);
+
+            return shiftedMap;
         }
     }
 
@@ -95,607 +131,648 @@ public class FotrDraftBotsInitializer {
         }
     }
 
-    private Map<String, Double> normalizeCountByRarityAndPerformance(Map<String, Integer> winningMap, Map<String, Integer> losingMap, LotroCardBlueprintLibrary library) {
+    private static Map<String, Integer> mergeMaps(Map<String, Integer> map1, Map<String, Integer> map2) {
+        Map<String, Integer> result = new HashMap<>(map1);
+
+        map2.forEach((key, value) -> result.merge(key, value, Integer::sum));
+
+        return result;
+    }
+
+    private Map<String, Double> normalizeCountByDraftPackChance(Map<String, Integer> map) {
         Map<String, Double> normalizedMap = new HashMap<>();
 
-        winningMap.entrySet().forEach(entry -> normalizedMap.put(entry.getKey(), getRarityNormalizedValue(library, entry)));
-        losingMap.entrySet().forEach(entry -> normalizedMap.put(entry.getKey(), getRarityNormalizedValue(library, entry) / 2)); // Being in losing deck is less important
-
-        // Make sure nothing is greater than 1
-        double max = normalizedMap.values().stream().max(Comparator.comparingDouble(value -> value)).orElse(1.0);
-        // Divide all values by max
-        normalizedMap.replaceAll((card, value) -> value / max);
+        map.forEach((key, value) -> {
+            double cardsGiven = gamesAnalyzed * 2 * AVERAGE_STARTING_COUNT_MAP.getOrDefault(key, 0.0);
+            normalizedMap.put(key, value.doubleValue() - (cardsGiven / 1.5)); // Assume 75 % of assigned cards are played, rest is drafted
+        });
 
         return normalizedMap;
     }
 
-    private double getRarityNormalizedValue(LotroCardBlueprintLibrary library, Map.Entry<String, Integer> entry) {
-        double expectedFrequency = 1.0;
+    private Map<String, Double> normalizeCountBySetSize(Map<String, Double> map) {
+        Map<String, Double> normalizedMap = new HashMap<>();
+
+        map.forEach((key, value) -> {
+            if (key.startsWith("2_") || key.startsWith("3_")) {
+                normalizedMap.put(key, value / 3.0); // MoM and RotEL are 1/3 of FotR set
+            } else {
+                normalizedMap.put(key, value);
+            }
+        });
+
+        return normalizedMap;
+    }
+
+    private Map<String, Double> normalizeCountByRarity(Map<String, Double> map, LotroCardBlueprintLibrary library) {
+        Map<String, Double> normalizedMap = new HashMap<>();
+
+        map.entrySet().forEach(entry -> {
+            // Do not add P cards
+            try {
+                if (library.getLotroCardBlueprint(entry.getKey()).getCardInfo().rarity.equals("P")) {
+                    return;
+                }
+            } catch (CardNotFoundException ignored) {
+
+            }
+            normalizedMap.put(entry.getKey(), getRarityNormalizedValue(library, entry));
+        });
+
+        return normalizedMap;
+    }
+
+    private double getRarityNormalizedValue(LotroCardBlueprintLibrary library, Map.Entry<String, Double> entry) {
+        double rarityInPack = 1.0;
         try {
-            expectedFrequency = switch (library.getLotroCardBlueprint(entry.getKey()).getCardInfo().rarity) {
-                case "R" -> RARE_FREQUENCY;
-                case "U" -> UNCOMMON_FREQUENCY;
-                case "C" -> COMMON_FREQUENCY;
-                default -> 1.0; // Fallback for unknown cards
+            rarityInPack = switch (library.getLotroCardBlueprint(entry.getKey()).getCardInfo().rarity) {
+                case "R" -> RARES_IN_PACK;
+                case "U" -> UNCOMMONS_IN_PACK;
+                case "C" -> COMMONS_IN_PACK;
+                default -> 1.0; // Fallback for unknown cards and promos
             };
         } catch (CardNotFoundException ignore) {
 
         }
 
         // Normalize by expected rarity frequency
-        return entry.getValue() / expectedFrequency;
+        return entry.getValue() / rarityInPack;
     }
 
-    private Map<String, Double> getWinRateMap(Map<String, Integer> winningMap, Map<String, Integer> losingMap) {
-        double smoothingFactor = 1.0;
+    private Map<String, Double> inflateRarity(Map<String, Double> map, LotroCardBlueprintLibrary library) {
+        Map<String, Double> rarityInflatedMap = new HashMap<>();
 
-        Map<String, Double> winRateMap = new HashMap<>();
-
-        winningMap.forEach((key, value) -> {
-            int wins = value;
-            int losses = losingMap.getOrDefault(key, 0);
-            winRateMap.put(key, ((double) wins + smoothingFactor) / (wins + losses + smoothingFactor * 2));
-        });
-        losingMap.forEach((key, value) -> {
-            if (!winRateMap.containsKey(key)) {
-                winRateMap.put(key, smoothingFactor / (value + smoothingFactor * 2));
-            }
-        });
-
-        return winRateMap;
-    }
-
-    private Map<String, Double> combineMaps(Map<String, Double> frequencyMap, Map<String, Double> winRateMap) {
-        Map<String, Double> tbr = new HashMap<>();
-        frequencyMap.forEach((key, entry) -> tbr.put(key, entry * 0.4 + winRateMap.getOrDefault(key, 0.5) * 0.6));
-        return tbr;
-    }
-
-    private Map<String, Double> boostRareCards(Map<String, Double> valuesMap, LotroCardBlueprintLibrary library) {
-        Map<String, Double> tbr = new HashMap<>();
-        valuesMap.forEach((key, entry) -> {
+        map.forEach((key, value) -> {
             try {
-                if (library.getLotroCardBlueprint(key).getCardInfo().rarity.equals("R")) {
-                    tbr.put(key, entry * 1.1);
-                } else {
-                    tbr.put(key, entry);
-                }
+                int rarityInPack = switch (library.getLotroCardBlueprint(key).getCardInfo().rarity) {
+                    case "R" -> RARES_IN_PACK;
+                    case "U" -> UNCOMMONS_IN_PACK;
+                    case "C" -> COMMONS_IN_PACK;
+                    default -> 1; // Fallback for unknown cards and promos
+                };
+                rarityInflatedMap.put(key, value / rarityInPack);
             } catch (CardNotFoundException e) {
-                tbr.put(key, entry);
+                rarityInflatedMap.put(key, value);
             }
         });
-        return tbr;
+        return rarityInflatedMap;
     }
 
+    private Map<String, Double> inflateFp(Map<String, Double> map, LotroCardBlueprintLibrary library) {
+        Map<String, Double> fpInflatedMap = new HashMap<>();
+
+        map.forEach((key, value) -> {
+            try {
+                double sideFactor = Side.FREE_PEOPLE.equals(library.getLotroCardBlueprint(key).getSide()) ? 1.1 : 1.0;
+                fpInflatedMap.put(key, value * sideFactor);
+            } catch (CardNotFoundException e) {
+                fpInflatedMap.put(key, value);
+            }
+        });
+        return fpInflatedMap;
+    }
+
+    private Map<String, Double> shift(Map<String, Double> map) {
+        double min = map.values().stream().min(Double::compareTo).orElse(0.0);
+
+        double positiveShift;
+        if (min < 0) {
+            positiveShift = -min + 5;
+        } else {
+            positiveShift = 5;
+        }
+
+        Map<String, Double> positiveMap = new HashMap<>();
+        map.forEach((key, value) -> positiveMap.put(key, value + positiveShift));
+
+        double max = positiveMap.values().stream().max(Double::compareTo).orElse(1.0);
+        Map<String, Double> tbr = new HashMap<>();
+        positiveMap.forEach((key, value) -> tbr.put(key, value / max));
+
+        return tbr;
+    }
 
     private Map<String, Double> getCachedValuesMap(){
         Map<String, Double> tbr = new HashMap<>();
-        tbr.put("1_97", 0.6970283344851417);
-        tbr.put("1_231", 0.6620151159369192);
-        tbr.put("2_108", 0.622758552048809);
-        tbr.put("3_38", 0.6166906711319767);
-        tbr.put("2_67", 0.6116585009447021);
-        tbr.put("1_234", 0.6023303064160046);
-        tbr.put("1_112", 0.6013394549350579);
-        tbr.put("1_270", 0.5771532423999821);
-        tbr.put("2_32", 0.568961147667159);
-        tbr.put("2_109", 0.5663167503423094);
-        tbr.put("3_60", 0.5609304076708128);
-        tbr.put("3_57", 0.5408972779886168);
-        tbr.put("2_84", 0.5375215934827726);
-        tbr.put("2_85", 0.5304489905603638);
-        tbr.put("3_68", 0.5221446413011909);
-        tbr.put("3_108", 0.5191677139187484);
-        tbr.put("2_93", 0.5143912845038001);
-        tbr.put("3_13", 0.5095259975692183);
-        tbr.put("3_63", 0.5088630923962862);
-        tbr.put("3_43", 0.5072316236619774);
-        tbr.put("3_65", 0.5060462503264241);
-        tbr.put("3_7", 0.5032381813352197);
-        tbr.put("3_58", 0.4990714809900447);
-        tbr.put("3_64", 0.4978625860657412);
-        tbr.put("1_100", 0.4974098585120949);
-        tbr.put("1_314", 0.4962049292560475);
-        tbr.put("2_105", 0.4909803973261142);
-        tbr.put("2_3", 0.48716367507893);
-        tbr.put("3_66", 0.4842272874280999);
-        tbr.put("2_60", 0.4836894673550722);
-        tbr.put("1_89", 0.4831275177107932);
-        tbr.put("1_170", 0.4812049292560475);
-        tbr.put("3_21", 0.4793967937015061);
-        tbr.put("3_69", 0.4781433266686652);
-        tbr.put("3_42", 0.47809660699419276);
-        tbr.put("2_46", 0.47674681912448846);
-        tbr.put("1_178", 0.4757851455848463);
-        tbr.put("3_67", 0.47470232853597605);
-        tbr.put("3_75", 0.4745222485510463);
-        tbr.put("1_50", 0.4740701471052909);
-        tbr.put("3_80", 0.470925650092219);
-        tbr.put("1_90", 0.4702121939135592);
-        tbr.put("1_69", 0.46579332301766657);
-        tbr.put("2_10", 0.4641561201148323);
-        tbr.put("1_127", 0.463742583295299);
-        tbr.put("1_308", 0.4630079532322752);
-        tbr.put("3_10", 0.4628127354337215);
-        tbr.put("1_14", 0.4554082585038898);
-        tbr.put("1_313", 0.4548167854067533);
-        tbr.put("2_80", 0.4530172523961662);
-        tbr.put("2_48", 0.45279365841518426);
-        tbr.put("1_2", 0.4495990089326465);
-        tbr.put("1_230", 0.4465282307889259);
-        tbr.put("1_49", 0.4434584487174333);
-        tbr.put("1_252", 0.4412049292560475);
-        tbr.put("1_111", 0.4412049292560475);
-        tbr.put("1_23", 0.4406024646280237);
-        tbr.put("2_49", 0.44016782536852417);
-        tbr.put("3_41", 0.43851008134883346);
-        tbr.put("1_262", 0.43482311086144954);
-        tbr.put("1_236", 0.43394892983256866);
-        tbr.put("1_237", 0.43352493968833544);
-        tbr.put("3_74", 0.4305621884685221);
-        tbr.put("1_228", 0.4300711466695305);
-        tbr.put("2_37", 0.43005689565727667);
-        tbr.put("1_13", 0.42983056270497394);
-        tbr.put("1_298", 0.42874105692808284);
-        tbr.put("1_21", 0.42868108614343214);
-        tbr.put("1_56", 0.42750484764294927);
-        tbr.put("1_229", 0.42631874386859514);
-        tbr.put("1_95", 0.425979834861624);
-        tbr.put("1_125", 0.4249613834146292);
-        tbr.put("1_139", 0.42477869041584077);
-        tbr.put("1_131", 0.42346311835129724);
-        tbr.put("2_22", 0.4229015904223572);
-        tbr.put("2_50", 0.42220561387494293);
-        tbr.put("1_114", 0.4216677791174089);
-        tbr.put("1_51", 0.42077163847488686);
-        tbr.put("2_51", 0.4194392498716111);
-        tbr.put("1_299", 0.41874869844051943);
-        tbr.put("3_19", 0.4181023104345788);
-        tbr.put("1_9", 0.4168640587430534);
-        tbr.put("1_66", 0.41492599595748847);
-        tbr.put("1_166", 0.4137049292560475);
-        tbr.put("3_29", 0.4133023206825124);
-        tbr.put("2_47", 0.41326826491891316);
-        tbr.put("1_165", 0.413194381053806);
-        tbr.put("2_75", 0.4107966608265485);
-        tbr.put("1_176", 0.41073855038553264);
-        tbr.put("1_267", 0.40904410086718396);
-        tbr.put("1_317", 0.40838250635717543);
-        tbr.put("1_47", 0.4077326483606296);
-        tbr.put("2_20", 0.40751387641524717);
-        tbr.put("1_296", 0.4069269093727439);
-        tbr.put("3_96", 0.40652572401147336);
-        tbr.put("1_57", 0.4061879310859634);
-        tbr.put("1_183", 0.40560495774885696);
-        tbr.put("2_61", 0.40557726162472857);
-        tbr.put("1_289", 0.40512951295600086);
-        tbr.put("1_365", 0.40430491951908687);
-        tbr.put("1_75", 0.40323311944586143);
-        tbr.put("2_44", 0.402176656948696);
-        tbr.put("3_106", 0.4016871436749921);
-        tbr.put("1_158", 0.40141199560247937);
-        tbr.put("1_45", 0.4013623315477191);
-        tbr.put("1_143", 0.4002838937349084);
-        tbr.put("1_273", 0.40015648431896716);
-        tbr.put("2_101", 0.40002429106364845);
-        tbr.put("1_27", 0.39993205958295114);
-        tbr.put("2_19", 0.3990123231401187);
-        tbr.put("2_112", 0.3974111386937695);
-        tbr.put("1_42", 0.39723448952556945);
-        tbr.put("3_62", 0.39450722504201047);
-        tbr.put("3_61", 0.3904898536854511);
-        tbr.put("1_128", 0.39035092239513547);
-        tbr.put("2_4", 0.38970497724793);
-        tbr.put("3_12", 0.3890197661763157);
-        tbr.put("2_103", 0.38896609122882375);
-        tbr.put("1_220", 0.38842691624553893);
-        tbr.put("1_148", 0.3876810090867599);
-        tbr.put("3_17", 0.38767898273062107);
-        tbr.put("1_302", 0.3875138553824086);
-        tbr.put("2_5", 0.38632957588422945);
-        tbr.put("1_227", 0.38589976402497644);
-        tbr.put("1_40", 0.3856228309637195);
-        tbr.put("3_35", 0.38559096773076357);
-        tbr.put("2_114", 0.3855855372377508);
-        tbr.put("1_133", 0.3854893458689908);
-        tbr.put("2_18", 0.38504526995511806);
-        tbr.put("1_156", 0.384256856994871);
-        tbr.put("1_152", 0.3840459071427097);
-        tbr.put("2_82", 0.38389409913150147);
-        tbr.put("1_161", 0.3838251828433391);
-        tbr.put("3_71", 0.3837699680511183);
-        tbr.put("1_106", 0.38366419067012403);
-        tbr.put("1_16", 0.38350802690849917);
-        tbr.put("2_102", 0.3831187764632389);
-        tbr.put("1_72", 0.3827018302806607);
-        tbr.put("1_173", 0.3815719438759736);
-        tbr.put("2_6", 0.3789521423768395);
-        tbr.put("3_34", 0.3771292335708667);
-        tbr.put("2_12", 0.37514773877324237);
-        tbr.put("1_311", 0.37353840422966983);
-        tbr.put("1_15", 0.3733774532177088);
-        tbr.put("1_102", 0.3730389014526274);
-        tbr.put("1_196", 0.3728565382586378);
-        tbr.put("2_52", 0.3721216469320373);
-        tbr.put("3_85", 0.3718594786157275);
-        tbr.put("1_240", 0.37173501988654883);
-        tbr.put("1_71", 0.3684740605507379);
-        tbr.put("1_154", 0.3680942703888273);
-        tbr.put("1_150", 0.3673937807974512);
-        tbr.put("1_107", 0.3669042268098245);
-        tbr.put("1_44", 0.3661290857214251);
-        tbr.put("2_98", 0.36571380527997305);
-        tbr.put("2_121", 0.36528149839062907);
-        tbr.put("1_96", 0.365050221803388);
-        tbr.put("1_290", 0.36448443025880956);
-        tbr.put("3_102", 0.36318575992697405);
-        tbr.put("1_250", 0.36308399225332133);
-        tbr.put("1_145", 0.362928835262501);
-        tbr.put("1_5", 0.3629079860768671);
-        tbr.put("1_30", 0.3618991276098384);
-        tbr.put("1_33", 0.3608176651870282);
-        tbr.put("1_46", 0.3605476951163852);
-        tbr.put("1_244", 0.36037293713517027);
-        tbr.put("1_285", 0.36018256503879503);
-        tbr.put("1_264", 0.3601287283412234);
-        tbr.put("1_246", 0.3601287283412234);
-        tbr.put("3_5", 0.35982310077275376);
-        tbr.put("2_100", 0.3596504640194736);
-        tbr.put("1_153", 0.359422709132516);
-        tbr.put("1_286", 0.3592782844722598);
-        tbr.put("1_175", 0.35925329325296274);
-        tbr.put("1_162", 0.3592321051450851);
-        tbr.put("2_110", 0.35835857700303164);
-        tbr.put("1_186", 0.35761031972903506);
-        tbr.put("3_27", 0.35560680992603616);
-        tbr.put("1_159", 0.3553373568855181);
-        tbr.put("1_364", 0.35497045644671515);
-        tbr.put("3_59", 0.353928891027986);
-        tbr.put("1_92", 0.35295626308251626);
-        tbr.put("2_122", 0.35209439820981503);
-        tbr.put("1_36", 0.351288030794933);
-        tbr.put("1_301", 0.35073026015518033);
-        tbr.put("1_121", 0.3502616587785105);
-        tbr.put("3_121", 0.3501300167530406);
-        tbr.put("1_318", 0.34982711090826113);
-        tbr.put("1_259", 0.3491608175953224);
-        tbr.put("1_303", 0.34886267999458326);
-        tbr.put("1_209", 0.3487783723857969);
-        tbr.put("2_39", 0.3478911912368781);
-        tbr.put("3_50", 0.3469183919312239);
-        tbr.put("1_116", 0.346703568150802);
-        tbr.put("2_96", 0.34469605990192576);
-        tbr.put("2_89", 0.3446736355680159);
-        tbr.put("2_106", 0.3437182099215629);
-        tbr.put("3_122", 0.34366623791543915);
-        tbr.put("1_48", 0.34352084920219383);
-        tbr.put("1_260", 0.3418262799225673);
-        tbr.put("3_77", 0.3415669395513291);
-        tbr.put("2_26", 0.3413994574076331);
-        tbr.put("1_256", 0.3410577361935189);
-        tbr.put("3_39", 0.3398646918407161);
-        tbr.put("1_123", 0.3396394340483797);
-        tbr.put("3_25", 0.3395823412812837);
-        tbr.put("1_12", 0.3388006721712792);
-        tbr.put("2_94", 0.3387295474012617);
-        tbr.put("1_146", 0.33842706343392587);
-        tbr.put("2_83", 0.33837658066421455);
-        tbr.put("1_187", 0.33720190389254745);
-        tbr.put("1_34", 0.3360921638678608);
-        tbr.put("1_26", 0.33606100587199733);
-        tbr.put("2_13", 0.33568534821457974);
-        tbr.put("3_8", 0.3355911936757241);
-        tbr.put("3_40", 0.33554541305340024);
-        tbr.put("1_224", 0.3354221816522136);
-        tbr.put("2_31", 0.3353415487600791);
-        tbr.put("1_80", 0.3348197170241899);
-        tbr.put("1_212", 0.3330123231401187);
-        tbr.put("1_138", 0.33227598527917357);
-        tbr.put("1_200", 0.3318073938840712);
-        tbr.put("3_23", 0.33060246462802373);
-        tbr.put("1_377", 0.33060246462802373);
-        tbr.put("2_42", 0.3298757527475714);
-        tbr.put("3_1", 0.3298252852578731);
-        tbr.put("1_142", 0.3297610459209964);
-        tbr.put("1_281", 0.3295272818039156);
-        tbr.put("3_99", 0.32931643436435776);
-        tbr.put("1_258", 0.32922948016648834);
-        tbr.put("1_147", 0.32886900958466453);
-        tbr.put("2_33", 0.32845276129621176);
-        tbr.put("1_309", 0.3283660429027841);
-        tbr.put("2_65", 0.3278193814734653);
-        tbr.put("1_11", 0.3274227578749823);
-        tbr.put("1_3", 0.32689507617407143);
-        tbr.put("3_20", 0.32645327914896605);
-        tbr.put("2_62", 0.326048632328079);
-        tbr.put("3_56", 0.32603089397506174);
-        tbr.put("1_188", 0.3252953144218645);
-        tbr.put("1_204", 0.3240295755362848);
-        tbr.put("1_168", 0.32363050966685547);
-        tbr.put("2_74", 0.3235928536951361);
-        tbr.put("2_90", 0.32350578428326016);
-        tbr.put("1_122", 0.32346813387434104);
-        tbr.put("1_19", 0.32276972767195156);
-        tbr.put("3_49", 0.32256041539473757);
-        tbr.put("2_72", 0.3219569567812379);
-        tbr.put("1_94", 0.32170846387639557);
-        tbr.put("1_155", 0.3208301339705212);
-        tbr.put("2_71", 0.31995030173943917);
-        tbr.put("2_14", 0.3193476751723053);
-        tbr.put("1_233", 0.3192014013100275);
-        tbr.put("1_98", 0.3190923520235427);
-        tbr.put("2_29", 0.3187042739063928);
-        tbr.put("1_151", 0.3185871018603163);
-        tbr.put("2_38", 0.31786363247375626);
-        tbr.put("1_108", 0.31744912573380124);
-        tbr.put("1_280", 0.3172574155374054);
-        tbr.put("1_195", 0.3162788680967595);
-        tbr.put("2_7", 0.3153505969396334);
-        tbr.put("1_59", 0.315298217847251);
-        tbr.put("1_219", 0.3148691286488202);
-        tbr.put("1_271", 0.3137087019264382);
-        tbr.put("1_68", 0.31356770714796256);
-        tbr.put("3_82", 0.31309752015822306);
-        tbr.put("1_307", 0.3122172523961661);
-        tbr.put("2_69", 0.31174130086463764);
-        tbr.put("1_110", 0.31136197565949375);
-        tbr.put("1_117", 0.3111800311792252);
-        tbr.put("1_194", 0.31097847839061893);
-        tbr.put("1_184", 0.31047417419564155);
-        tbr.put("1_191", 0.3104285378854491);
-        tbr.put("1_217", 0.3099552327218699);
-        tbr.put("2_2", 0.3084378651927716);
-        tbr.put("1_272", 0.30635326335006846);
-        tbr.put("1_103", 0.30633167863492733);
-        tbr.put("2_59", 0.3049648269936378);
-        tbr.put("2_15", 0.30489903838587323);
-        tbr.put("1_119", 0.30391210797418006);
-        tbr.put("3_91", 0.30388656855231094);
-        tbr.put("1_157", 0.30383386581469646);
-        tbr.put("2_76", 0.30318625334599775);
-        tbr.put("1_58", 0.30125187455173763);
-        tbr.put("3_36", 0.3004694529569016);
-        tbr.put("1_74", 0.30036513007759014);
-        tbr.put("1_211", 0.30036513007759014);
-        tbr.put("3_2", 0.30036513007759014);
-        tbr.put("1_61", 0.3001564843189672);
-        tbr.put("1_65", 0.2990863136501813);
-        tbr.put("1_261", 0.29874526293023246);
-        tbr.put("1_180", 0.29853700503388014);
-        tbr.put("1_6", 0.29758888056054145);
-        tbr.put("1_31", 0.2971457492622836);
-        tbr.put("2_64", 0.2968597664563693);
-        tbr.put("1_164", 0.296608404420131);
-        tbr.put("3_26", 0.293830131529812);
-        tbr.put("3_94", 0.29371288921821737);
-        tbr.put("3_31", 0.2933126426289365);
-        tbr.put("1_179", 0.2926352393992741);
-        tbr.put("1_306", 0.29216096546082854);
-        tbr.put("1_190", 0.29203620299165545);
-        tbr.put("3_114", 0.29094948866742565);
-        tbr.put("2_43", 0.2908443633044272);
-        tbr.put("3_55", 0.2903739227721513);
-        tbr.put("3_111", 0.2899339412929826);
-        tbr.put("1_163", 0.2878177588669189);
-        tbr.put("1_294", 0.2878171854934501);
-        tbr.put("1_232", 0.2875399361022364);
-        tbr.put("1_160", 0.2872594059396751);
-        tbr.put("2_11", 0.28707439525330897);
-        tbr.put("1_79", 0.28707439525330897);
-        tbr.put("2_53", 0.28707439525330897);
-        tbr.put("1_132", 0.2870160922247906);
-        tbr.put("1_316", 0.28701559232802265);
-        tbr.put("3_97", 0.28678478071449315);
-        tbr.put("1_185", 0.28674335349155633);
-        tbr.put("2_8", 0.2849850512053908);
-        tbr.put("1_136", 0.28481154079852605);
-        tbr.put("2_113", 0.28466453674121406);
-        tbr.put("1_62", 0.28461240037917357);
-        tbr.put("3_104", 0.2843030579643998);
-        tbr.put("2_104", 0.28381615518634823);
-        tbr.put("1_218", 0.2834498740452529);
-        tbr.put("1_113", 0.28308619829535203);
-        tbr.put("1_135", 0.28273847558192605);
-        tbr.put("1_83", 0.2822873117298038);
-        tbr.put("1_76", 0.2822817784679948);
-        tbr.put("2_41", 0.2819329275434904);
-        tbr.put("1_192", 0.2817995696681228);
-        tbr.put("1_149", 0.28165760961209424);
-        tbr.put("1_181", 0.28154267457781834);
-        tbr.put("1_37", 0.28132143873179866);
-        tbr.put("1_101", 0.2808824891988071);
-        tbr.put("2_55", 0.2805942914446974);
-        tbr.put("1_17", 0.28057437769897836);
-        tbr.put("1_207", 0.2805640298830142);
-        tbr.put("1_87", 0.28021932475606603);
-        tbr.put("3_73", 0.2801017531613284);
-        tbr.put("1_120", 0.2796640803286171);
-        tbr.put("2_16", 0.2790332886736061);
-        tbr.put("1_214", 0.2786147877681424);
-        tbr.put("3_30", 0.27611484327303903);
-        tbr.put("1_283", 0.2756830668430755);
-        tbr.put("3_93", 0.27529171060293683);
-        tbr.put("3_52", 0.27378053760599586);
-        tbr.put("1_257", 0.27340518906014116);
-        tbr.put("1_305", 0.2731184835246907);
-        tbr.put("1_205", 0.2706271109082611);
-        tbr.put("3_28", 0.27024153237415866);
-        tbr.put("1_235", 0.2700052290979655);
-        tbr.put("1_263", 0.2693184238551651);
-        tbr.put("1_213", 0.26931527496205404);
-        tbr.put("3_54", 0.2688197170241899);
-        tbr.put("1_41", 0.26856715201671444);
-        tbr.put("1_201", 0.26850647916592174);
-        tbr.put("1_70", 0.2683097520158223);
-        tbr.put("1_32", 0.26819424150532784);
-        tbr.put("1_223", 0.267807036691604);
-        tbr.put("3_107", 0.26739692682184696);
-        tbr.put("3_100", 0.26680739388407115);
-        tbr.put("1_268", 0.26661349262330547);
-        tbr.put("1_247", 0.2663282342721691);
-        tbr.put("1_118", 0.266092909729526);
-        tbr.put("2_73", 0.2652049292560475);
-        tbr.put("1_167", 0.2652049292560475);
-        tbr.put("1_279", 0.26424415671767276);
-        tbr.put("2_111", 0.2639605203103606);
-        tbr.put("2_107", 0.2631107602353609);
-        tbr.put("1_274", 0.26306034568293213);
-        tbr.put("3_14", 0.26175357113828945);
-        tbr.put("3_11", 0.26112443875864766);
-        tbr.put("3_70", 0.26084872486169935);
-        tbr.put("1_4", 0.2608202386385864);
-        tbr.put("1_63", 0.26061159287996344);
-        tbr.put("3_18", 0.2598606775561604);
-        tbr.put("1_78", 0.2581485208082652);
-        tbr.put("2_28", 0.25783016081832094);
-        tbr.put("1_177", 0.2563386853954781);
-        tbr.put("1_282", 0.25593450479233226);
-        tbr.put("1_182", 0.2558930415953164);
-        tbr.put("1_291", 0.25408387849282416);
-        tbr.put("3_79", 0.25405750798722043);
-        tbr.put("3_98", 0.2532353972177553);
-        tbr.put("1_7", 0.2520130902321368);
-        tbr.put("3_37", 0.2515799858506001);
-        tbr.put("2_9", 0.25140386855809294);
-        tbr.put("1_197", 0.25109913933624567);
-        tbr.put("3_83", 0.25109539023277044);
-        tbr.put("2_54", 0.2499369076704164);
-        tbr.put("2_57", 0.24990985851209493);
-        tbr.put("1_67", 0.24952773662070316);
-        tbr.put("3_53", 0.24748516659059788);
-        tbr.put("1_126", 0.2469374714742127);
-        tbr.put("2_88", 0.2468774858186086);
-        tbr.put("2_63", 0.2466584077720545);
-        tbr.put("1_199", 0.2457485783364378);
-        tbr.put("2_35", 0.24468725442085357);
-        tbr.put("1_278", 0.24226902262502445);
-        tbr.put("2_70", 0.24146052031036055);
-        tbr.put("1_238", 0.24146052031036055);
-        tbr.put("3_101", 0.24065126302749112);
-        tbr.put("1_315", 0.240391210797418);
-        tbr.put("1_84", 0.2399474973172811);
-        tbr.put("1_73", 0.23976895654211947);
-        tbr.put("1_253", 0.2389658227508256);
-        tbr.put("1_29", 0.23863532633500684);
-        tbr.put("3_95", 0.23698613876614788);
-        tbr.put("1_85", 0.23696616026602335);
-        tbr.put("2_68", 0.2368969312964802);
-        tbr.put("3_89", 0.23661122312798616);
-        tbr.put("1_226", 0.23657234139662256);
-        tbr.put("1_198", 0.2355442352144403);
-        tbr.put("1_8", 0.23535611949753718);
-        tbr.put("1_24", 0.23423918079086348);
-        tbr.put("1_104", 0.23366642338683385);
-        tbr.put("1_248", 0.23150083470605676);
-        tbr.put("1_251", 0.2306898125560679);
-        tbr.put("1_141", 0.22877920497272392);
-        tbr.put("1_266", 0.22805144421986046);
-        tbr.put("2_78", 0.2280025049621602);
-        tbr.put("1_202", 0.22514326284294334);
-        tbr.put("1_255", 0.22472544073202336);
-        tbr.put("1_297", 0.2245002282062985);
-        tbr.put("1_174", 0.22438156093108166);
-        tbr.put("1_216", 0.22421725239616613);
-        tbr.put("1_43", 0.22347409677395985);
-        tbr.put("3_3", 0.22301232314011865);
-        tbr.put("1_288", 0.2229872204472844);
-        tbr.put("1_269", 0.22115786855894212);
-        tbr.put("1_208", 0.22083943404837975);
-        tbr.put("1_28", 0.22060246462802374);
-        tbr.put("1_35", 0.22060246462802374);
-        tbr.put("1_55", 0.22060246462802374);
-        tbr.put("2_45", 0.22060246462802374);
-        tbr.put("1_169", 0.22060246462802374);
-        tbr.put("1_378", 0.22060246462802374);
-        tbr.put("1_243", 0.22060246462802374);
-        tbr.put("1_60", 0.2192772084145886);
-        tbr.put("3_22", 0.2188051649484785);
-        tbr.put("3_48", 0.2172624272122218);
-        tbr.put("2_95", 0.21503674491106678);
-        tbr.put("3_76", 0.2142513147155965);
-        tbr.put("3_86", 0.21302278018822687);
-        tbr.put("3_78", 0.2124025040295413);
-        tbr.put("2_92", 0.21221914737504982);
-        tbr.put("3_45", 0.21219078046554085);
-        tbr.put("3_16", 0.2109389059138032);
-        tbr.put("1_171", 0.20979104240668345);
-        tbr.put("1_277", 0.20923518289104778);
-        tbr.put("3_90", 0.20743561322292495);
-        tbr.put("3_24", 0.20741948770468993);
-        tbr.put("2_56", 0.2034891956121437);
-        tbr.put("1_221", 0.2016147877681424);
-        tbr.put("2_97", 0.2016147877681424);
-        tbr.put("3_6", 0.20139354027989353);
-        tbr.put("3_88", 0.20091282519397533);
-        tbr.put("1_91", 0.2005476951163852);
-        tbr.put("1_25", 0.20039121079741798);
-        tbr.put("2_17", 0.20018256503879506);
-        tbr.put("1_54", 0.20018256503879506);
-        tbr.put("1_292", 0.20018256503879506);
-        tbr.put("1_375", 0.20014937139537778);
-        tbr.put("1_18", 0.20007824215948358);
-        tbr.put("1_10", 0.20007824215948358);
-        tbr.put("1_312", 0.20007824215948358);
-        tbr.put("1_38", 0.1936760950818459);
-        tbr.put("1_109", 0.1913338658146965);
-        tbr.put("2_1", 0.1909310816978549);
-        tbr.put("1_193", 0.1903709982395514);
-        tbr.put("1_304", 0.18938846237579887);
-        tbr.put("2_81", 0.1893256503879507);
-        tbr.put("2_87", 0.18659993128169888);
-        tbr.put("2_34", 0.1810953902327704);
-        tbr.put("3_51", 0.18046945295690162);
-        tbr.put("2_99", 0.18033535102618012);
-        tbr.put("3_112", 0.1788140336006607);
-        tbr.put("1_293", 0.1764101806856928);
-        tbr.put("2_23", 0.1758366337362524);
-        tbr.put("3_109", 0.17575884027732497);
-        tbr.put("1_129", 0.17196210201608464);
-        tbr.put("2_124", 0.1717415400665058);
-        tbr.put("2_79", 0.16885744713220752);
-        tbr.put("3_72", 0.16885744713220752);
-        tbr.put("1_93", 0.16620492925604746);
-        tbr.put("1_310", 0.16620492925604746);
-        tbr.put("3_110", 0.16620492925604746);
-        tbr.put("3_33", 0.16443342143935477);
-        tbr.put("2_58", 0.16418405875274883);
-        tbr.put("1_134", 0.15704215658574397);
-        tbr.put("1_284", 0.15408032861706983);
-        tbr.put("2_21", 0.15297320206037687);
-        tbr.put("1_124", 0.1502814544348091);
-        tbr.put("1_300", 0.1501564843189672);
-        tbr.put("2_40", 0.14819199906469144);
-        tbr.put("3_44", 0.1474532177088088);
-        tbr.put("3_84", 0.14613849429200768);
-        tbr.put("2_91", 0.14403077524939686);
-        tbr.put("2_30", 0.14337441046706223);
-        tbr.put("1_275", 0.14336725105377615);
-        tbr.put("1_239", 0.1401046238106941);
-        tbr.put("1_105", 0.13698463410923475);
-        tbr.put("1_210", 0.13621725239616614);
-        tbr.put("1_249", 0.13442872356610375);
-        tbr.put("1_115", 0.1338073938840712);
-        tbr.put("1_86", 0.13380278629023495);
-        tbr.put("3_81", 0.131111364673665);
-        tbr.put("3_46", 0.13039707895937927);
-        tbr.put("3_47", 0.13039707895937927);
-        tbr.put("3_32", 0.12954647896108018);
-        tbr.put("1_53", 0.12935385016626458);
-        tbr.put("1_77", 0.1205476951163852);
-        tbr.put("1_370", 0.1205476951163852);
-        tbr.put("1_20", 0.1202347264784508);
-        tbr.put("3_87", 0.11734679703246766);
-        tbr.put("1_172", 0.11324749573614548);
-        tbr.put("2_36", 0.11240985851209492);
-        tbr.put("1_64", 0.10255591054313098);
-        tbr.put("2_24", 0.1003129686379344);
-        tbr.put("1_82", 0.1003129686379344);
-        tbr.put("3_92", 0.09849669100867184);
-        tbr.put("1_245", 0.09522957553628482);
-        tbr.put("2_27", 0.057396341677491844);
-        tbr.put("1_276", 0.05183204016430854);
-        tbr.put("3_4", 0.048162061580591935);
-        tbr.put("1_39", 0.047014509908165775);
+        tbr.put("1_50", 1.0);
+        tbr.put("1_90", 0.9832224243314389);
+        tbr.put("1_313", 0.932889697325756);
+        tbr.put("1_49", 0.9098205307814846);
+        tbr.put("1_89", 0.8720709855272226);
+        tbr.put("1_95", 0.8615850007343719);
+        tbr.put("1_14", 0.846904622024381);
+        tbr.put("2_108", 0.7762989910858537);
+        tbr.put("3_38", 0.7553270215001525);
+        tbr.put("1_127", 0.7298429008823761);
+        tbr.put("1_230", 0.7260298155031577);
+        tbr.put("1_308", 0.6917120470901921);
+        tbr.put("2_32", 0.6714391431573477);
+        tbr.put("1_165", 0.6669269921252725);
+        tbr.put("1_40", 0.6560596987945);
+        tbr.put("1_30", 0.6518653048773598);
+        tbr.put("1_75", 0.6350877292087987);
+        tbr.put("1_139", 0.6173568821954333);
+        tbr.put("1_302", 0.6141157596230975);
+        tbr.put("1_236", 0.6078241687473873);
+        tbr.put("1_229", 0.5982914552993412);
+        tbr.put("1_112", 0.5967116139990133);
+        tbr.put("1_131", 0.5715998576448125);
+        tbr.put("1_231", 0.5714868773372802);
+        tbr.put("1_237", 0.567786772265594);
+        tbr.put("1_47", 0.5511998508659939);
+        tbr.put("3_13", 0.5386166691145733);
+        tbr.put("1_72", 0.534422275197433);
+        tbr.put("1_250", 0.5239362904045824);
+        tbr.put("2_85", 0.5112260058071877);
+        tbr.put("2_84", 0.5074129204279694);
+        tbr.put("1_13", 0.5071587147360215);
+        tbr.put("2_93", 0.4978802069799233);
+        tbr.put("2_105", 0.49038113906746045);
+        tbr.put("3_68", 0.48771197930200755);
+        tbr.put("3_65", 0.4775437516240918);
+        tbr.put("1_114", 0.4631175786060489);
+        tbr.put("1_143", 0.44195495475138674);
+        tbr.put("1_125", 0.44195495475138674);
+        tbr.put("3_21", 0.43865028075606416);
+        tbr.put("1_183", 0.4305156986137315);
+        tbr.put("3_64", 0.4298801843838618);
+        tbr.put("2_46", 0.4292446701539921);
+        tbr.put("1_234", 0.42828433753996675);
+        tbr.put("1_97", 0.4225199880994075);
+        tbr.put("1_45", 0.41907644247607634);
+        tbr.put("3_42", 0.4169792455175062);
+        tbr.put("1_15", 0.40649326072465564);
+        tbr.put("3_80", 0.39746895866050536);
+        tbr.put("1_173", 0.39619793020076594);
+        tbr.put("1_96", 0.3918128820146648);
+        tbr.put("3_66", 0.3911138163618081);
+        tbr.put("1_16", 0.38971568505609466);
+        tbr.put("3_67", 0.38221661714363175);
+        tbr.put("1_240", 0.38094558868389233);
+        tbr.put("2_22", 0.37573437199896054);
+        tbr.put("1_56", 0.3713069561975347);
+        tbr.put("1_264", 0.3618801617878003);
+        tbr.put("1_246", 0.3618801617878003);
+        tbr.put("1_57", 0.3533642711075459);
+        tbr.put("1_83", 0.3519661398018325);
+        tbr.put("3_41", 0.3407810893561252);
+        tbr.put("1_33", 0.3372857610918416);
+        tbr.put("1_128", 0.3370951068228807);
+        tbr.put("1_148", 0.3313754787540531);
+        tbr.put("1_256", 0.3294689360644439);
+        tbr.put("2_49", 0.32756239337483467);
+        tbr.put("1_175", 0.3218427653060071);
+        tbr.put("2_20", 0.319809119770424);
+        tbr.put("1_27", 0.318177966580425);
+        tbr.put("3_60", 0.30517816994497854);
+        tbr.put("1_289", 0.3037306097547197);
+        tbr.put("3_71", 0.3021418241800453);
+        tbr.put("2_52", 0.29324462496186904);
+        tbr.put("2_75", 0.2805343403644744);
+        tbr.put("1_69", 0.27227265537616785);
+        tbr.put("2_50", 0.27100162691642843);
+        tbr.put("2_3", 0.26613641242331454);
+        tbr.put("1_178", 0.2649242278737482);
+        tbr.put("2_67", 0.26198517070696786);
+        tbr.put("1_38", 0.25549507970760693);
+        tbr.put("1_270", 0.24613654423367334);
+        tbr.put("1_244", 0.24558105772163905);
+        tbr.put("3_34", 0.2422128323033295);
+        tbr.put("3_10", 0.23708635084904695);
+        tbr.put("1_272", 0.23414180158398384);
+        tbr.put("3_75", 0.23322383658528312);
+        tbr.put("1_44", 0.2291636067833376);
+        tbr.put("1_153", 0.22651563082554702);
+        tbr.put("3_1", 0.2254352566347685);
+        tbr.put("1_298", 0.22430058272475756);
+        tbr.put("3_17", 0.22333805967619838);
+        tbr.put("1_34", 0.22193992837048496);
+        tbr.put("1_31", 0.2217069064861994);
+        tbr.put("1_163", 0.21888946006711021);
+        tbr.put("1_94", 0.21751251256905912);
+        tbr.put("1_195", 0.2150763746878918);
+        tbr.put("2_48", 0.21429963507360664);
+        tbr.put("1_36", 0.21145394357763433);
+        tbr.put("1_62", 0.20935674661906423);
+        tbr.put("1_279", 0.20935674661906423);
+        tbr.put("2_7", 0.20935674661906423);
+        tbr.put("3_57", 0.20591869309401584);
+        tbr.put("1_147", 0.20554366123984583);
+        tbr.put("1_299", 0.20431301171144636);
+        tbr.put("1_162", 0.20406079470348312);
+        tbr.put("1_66", 0.20306515574335385);
+        tbr.put("1_190", 0.20173057586062743);
+        tbr.put("2_12", 0.19956982747907034);
+        tbr.put("1_262", 0.19904258604391917);
+        tbr.put("1_108", 0.19863773994192804);
+        tbr.put("2_4", 0.19483171583193043);
+        tbr.put("3_8", 0.1946763679090734);
+        tbr.put("3_29", 0.19397730225621668);
+        tbr.put("2_38", 0.19257917095050325);
+        tbr.put("1_296", 0.19245742890483572);
+        tbr.put("2_74", 0.19156234818271167);
+        tbr.put("1_217", 0.1902913197229722);
+        tbr.put("2_112", 0.18908384268621972);
+        tbr.put("1_280", 0.1869019104970003);
+        tbr.put("1_120", 0.1864782343437538);
+        tbr.put("3_106", 0.184967122730508);
+        tbr.put("3_108", 0.18411904988633945);
+        tbr.put("1_159", 0.18372433934765164);
+        tbr.put("2_82", 0.18280637434895092);
+        tbr.put("1_233", 0.18245331088791217);
+        tbr.put("3_39", 0.18209318615765266);
+        tbr.put("3_7", 0.18102991593009776);
+        tbr.put("3_50", 0.1807586062749262);
+        tbr.put("1_9", 0.18013770454911743);
+        tbr.put("3_40", 0.17999598919908252);
+        tbr.put("1_317", 0.17961744752583497);
+        tbr.put("3_43", 0.1787262577071591);
+        tbr.put("1_87", 0.17789879224051242);
+        tbr.put("3_61", 0.17433285128402112);
+        tbr.put("1_209", 0.17419162589960563);
+        tbr.put("1_186", 0.1731324355164894);
+        tbr.put("1_136", 0.1731324355164894);
+        tbr.put("3_58", 0.172518889679751);
+        tbr.put("1_199", 0.1712258928268802);
+        tbr.put("1_259", 0.1712258928268802);
+        tbr.put("3_63", 0.17039583342460135);
+        tbr.put("3_104", 0.16995486436714075);
+        tbr.put("1_263", 0.169319350137271);
+        tbr.put("3_85", 0.16804832167753156);
+        tbr.put("1_92", 0.16647120881320177);
+        tbr.put("1_150", 0.16632335448217084);
+        tbr.put("1_286", 0.16561521005460167);
+        tbr.put("1_155", 0.1655062647580526);
+        tbr.put("1_123", 0.1655062647580526);
+        tbr.put("2_10", 0.16474494465002498);
+        tbr.put("1_133", 0.16422226662015252);
+        tbr.put("2_83", 0.1619756301476652);
+        tbr.put("1_207", 0.16042215091909473);
+        tbr.put("1_132", 0.159786636689225);
+        tbr.put("1_247", 0.159786636689225);
+        tbr.put("1_176", 0.1590594700670203);
+        tbr.put("1_288", 0.1590240196133813);
+        tbr.put("1_284", 0.1590240196133813);
+        tbr.put("3_93", 0.15851560822948552);
+        tbr.put("1_291", 0.1569268226548112);
+        tbr.put("3_12", 0.15684914869338265);
+        tbr.put("1_156", 0.1563626416548248);
+        tbr.put("1_129", 0.1559735513100066);
+        tbr.put("3_69", 0.15479532810288302);
+        tbr.put("3_27", 0.15413056004338435);
+        tbr.put("1_2", 0.1540929479767186);
+        tbr.put("3_77", 0.15343149439052767);
+        tbr.put("2_100", 0.15343149439052767);
+        tbr.put("3_99", 0.1527959801606579);
+        tbr.put("1_318", 0.15273242873767096);
+        tbr.put("3_5", 0.1516449932776716);
+        tbr.put("2_39", 0.15088943747104872);
+        tbr.put("1_158", 0.15007148310171978);
+        tbr.put("2_94", 0.14961840901130927);
+        tbr.put("2_60", 0.14942789884988344);
+        tbr.put("1_181", 0.14855921862819305);
+        tbr.put("1_118", 0.14853803482053068);
+        tbr.put("1_208", 0.1483473805515698);
+        tbr.put("1_204", 0.1483473805515698);
+        tbr.put("1_146", 0.14815283537916069);
+        tbr.put("3_25", 0.14737292539910288);
+        tbr.put("1_196", 0.14721901855159697);
+        tbr.put("1_282", 0.14644083786196058);
+        tbr.put("2_51", 0.14487150680452718);
+        tbr.put("2_37", 0.14421746034564129);
+        tbr.put("1_281", 0.14383393255167862);
+        tbr.put("3_102", 0.14326326671261191);
+        tbr.put("2_18", 0.14311294013675632);
+        tbr.put("1_311", 0.14310910047154285);
+        tbr.put("1_218", 0.14241591440611895);
+        tbr.put("3_74", 0.14239429827585126);
+        tbr.put("2_101", 0.14147604506208034);
+        tbr.put("1_260", 0.14093304786975624);
+        tbr.put("2_47", 0.14039696783911781);
+        tbr.put("2_96", 0.14014924698625023);
+        tbr.put("1_180", 0.1397873929655693);
+        tbr.put("1_224", 0.13881466710352378);
+        tbr.put("1_205", 0.13881466710352378);
+        tbr.put("1_73", 0.13851809379625124);
+        tbr.put("1_80", 0.1380520500276801);
+        tbr.put("1_102", 0.13693925164150003);
+        tbr.put("3_91", 0.1369081244139146);
+        tbr.put("1_172", 0.1369081244139146);
+        tbr.put("1_267", 0.13676219151668523);
+        tbr.put("3_20", 0.1366539187219667);
+        tbr.put("1_145", 0.13617490527523493);
+        tbr.put("1_235", 0.1360607721074216);
+        tbr.put("2_5", 0.13521298747832328);
+        tbr.put("2_71", 0.13486035633988988);
+        tbr.put("1_303", 0.13459191282347235);
+        tbr.put("1_164", 0.1341542294178124);
+        tbr.put("1_316", 0.13409067799482544);
+        tbr.put("1_121", 0.13391212875881442);
+        tbr.put("1_187", 0.13360085648295983);
+        tbr.put("1_228", 0.1330950390346962);
+        tbr.put("1_253", 0.1330950390346962);
+        tbr.put("2_1", 0.13245952480482645);
+        tbr.put("1_258", 0.13245952480482645);
+        tbr.put("1_3", 0.13206005871747975);
+        tbr.put("1_307", 0.13176045915196974);
+        tbr.put("1_138", 0.13153867765542337);
+        tbr.put("1_191", 0.13134413248301424);
+        tbr.put("1_142", 0.130341144038594);
+        tbr.put("1_161", 0.13012930596197075);
+        tbr.put("1_79", 0.12966326219339963);
+        tbr.put("2_102", 0.1295919289635163);
+        tbr.put("3_96", 0.12930392204860908);
+        tbr.put("1_276", 0.1292819536554778);
+        tbr.put("1_245", 0.1292819536554778);
+        tbr.put("1_188", 0.12907011557885453);
+        tbr.put("3_19", 0.1289641965405429);
+        tbr.put("1_257", 0.12885827750223128);
+        tbr.put("1_283", 0.12881504524169593);
+        tbr.put("2_16", 0.12842047881054325);
+        tbr.put("2_44", 0.12836110650607468);
+        tbr.put("3_52", 0.12737541096586857);
+        tbr.put("1_117", 0.12671006647622945);
+        tbr.put("1_152", 0.12610351786091842);
+        tbr.put("1_314", 0.1254688682762594);
+        tbr.put("1_268", 0.12496305082799572);
+        tbr.put("2_43", 0.1241978398165199);
+        tbr.put("2_59", 0.1241978398165199);
+        tbr.put("1_116", 0.1241420702004293);
+        tbr.put("2_6", 0.12401588964268012);
+        tbr.put("1_41", 0.1240136703866393);
+        tbr.put("1_309", 0.12360469320197483);
+        tbr.put("1_216", 0.12356232558665017);
+        tbr.put("1_214", 0.12356232558665017);
+        tbr.put("1_212", 0.12356232558665017);
+        tbr.put("2_15", 0.12337167131768927);
+        tbr.put("2_29", 0.1233146047337826);
+        tbr.put("2_76", 0.12264436058794945);
+        tbr.put("2_61", 0.1220878172873243);
+        tbr.put("1_220", 0.12165578289704097);
+        tbr.put("1_170", 0.12165578289704097);
+        tbr.put("2_92", 0.12109088135937898);
+        tbr.put("3_81", 0.12102026866717124);
+        tbr.put("2_114", 0.12087944678385408);
+        tbr.put("1_154", 0.12081188917139082);
+        tbr.put("1_293", 0.1198763430534057);
+        tbr.put("1_210", 0.11974924020743177);
+        tbr.put("1_221", 0.11974924020743177);
+        tbr.put("1_26", 0.11969753442383149);
+        tbr.put("1_98", 0.11964332116912015);
+        tbr.put("2_106", 0.11941029928483458);
+        tbr.put("1_185", 0.11936014986261356);
+        tbr.put("1_71", 0.11917727740054902);
+        tbr.put("2_80", 0.11911372597756203);
+        tbr.put("1_223", 0.11869004982431555);
+        tbr.put("1_84", 0.11815007889022895);
+        tbr.put("2_64", 0.11786863687414378);
+        tbr.put("1_126", 0.11784269751782257);
+        tbr.put("1_124", 0.11784269751782257);
+        tbr.put("3_62", 0.11778188413800283);
+        tbr.put("2_103", 0.11754612421055004);
+        tbr.put("1_261", 0.11718124393163162);
+        tbr.put("2_90", 0.11710342586266799);
+        tbr.put("3_82", 0.11706595790353735);
+        tbr.put("1_59", 0.11690888069025888);
+        tbr.put("1_226", 0.11678350713470635);
+        tbr.put("1_5", 0.11645139690927375);
+        tbr.put("1_65", 0.11638101478912219);
+        tbr.put("1_11", 0.11635913926529129);
+        tbr.put("2_14", 0.11635248149716886);
+        tbr.put("1_200", 0.11593615482821337);
+        tbr.put("1_166", 0.11593615482821337);
+        tbr.put("1_68", 0.11575328236614882);
+        tbr.put("3_86", 0.11551247867496689);
+        tbr.put("1_160", 0.11535251931098606);
+        tbr.put("3_30", 0.11506848335926877);
+        tbr.put("3_18", 0.11498288348340877);
+        tbr.put("3_56", 0.11489858057536484);
+        tbr.put("1_182", 0.11476888379375876);
+        tbr.put("3_97", 0.11445328829185066);
+        tbr.put("1_19", 0.11438368435238873);
+        tbr.put("1_113", 0.11405079594626649);
+        tbr.put("1_227", 0.11402961213860417);
+        tbr.put("3_98", 0.11364052179378596);
+        tbr.put("2_19", 0.11358475217769536);
+        tbr.put("3_79", 0.11353532329314993);
+        tbr.put("1_269", 0.11321252241448594);
+        tbr.put("3_111", 0.11318528609034867);
+        tbr.put("1_213", 0.11318225983211119);
+        tbr.put("1_17", 0.11311870840912423);
+        tbr.put("1_103", 0.11301408633862865);
+        tbr.put("1_23", 0.11288568652483864);
+        tbr.put("2_11", 0.11288568652483864);
+        tbr.put("3_44", 0.11288568652483864);
+        tbr.put("2_109", 0.11288568652483864);
+        tbr.put("2_54", 0.11275858367886471);
+        tbr.put("3_54", 0.11275858367886471);
+        tbr.put("1_255", 0.11270670496622227);
+        tbr.put("2_89", 0.11260698255192071);
+        tbr.put("2_41", 0.11233490752561823);
+        tbr.put("1_194", 0.11233490752561823);
+        tbr.put("2_28", 0.11226429483341047);
+        tbr.put("3_94", 0.11222682687427983);
+        tbr.put("2_27", 0.11218662087198195);
+        tbr.put("1_63", 0.11218662087198195);
+        tbr.put("2_53", 0.11212306944899497);
+        tbr.put("2_95", 0.11201931202371011);
+        tbr.put("3_31", 0.11195835453635526);
+        tbr.put("2_13", 0.11187592502626786);
+        tbr.put("1_101", 0.11173008820072858);
+        tbr.put("1_8", 0.11164448832486858);
+        tbr.put("1_109", 0.11148755521912523);
+        tbr.put("3_49", 0.11146161586280402);
+        tbr.put("2_8", 0.11125453333483967);
+        tbr.put("2_88", 0.11082610163293428);
+        tbr.put("1_115", 0.11078848956626852);
+        tbr.put("3_24", 0.11071081560484);
+        tbr.put("3_55", 0.11067046549500702);
+        tbr.put("1_198", 0.11064020291263225);
+        tbr.put("2_87", 0.11064020291263225);
+        tbr.put("1_29", 0.11055546768198296);
+        tbr.put("1_135", 0.11042836483600901);
+        tbr.put("1_105", 0.1103224457976974);
+        tbr.put("1_167", 0.11021652675938577);
+        tbr.put("1_251", 0.11021652675938577);
+        tbr.put("2_97", 0.11008942391341182);
+        tbr.put("2_30", 0.10993407599055478);
+        tbr.put("3_89", 0.10993407599055478);
+        tbr.put("2_72", 0.10986346329834704);
+        tbr.put("1_202", 0.10979285060613928);
+        tbr.put("3_14", 0.10967569118008846);
+        tbr.put("1_304", 0.10946169149043845);
+        tbr.put("3_3", 0.10939035826055513);
+        tbr.put("3_53", 0.10929856176068505);
+        tbr.put("2_42", 0.10916598282837661);
+        tbr.put("2_68", 0.10915733637626954);
+        tbr.put("3_73", 0.10915733637626954);
+        tbr.put("1_219", 0.10894549829964631);
+        tbr.put("1_274", 0.10894549829964631);
+        tbr.put("2_2", 0.10891955894332508);
+        tbr.put("1_106", 0.10886249235941842);
+        tbr.put("1_119", 0.10877689248355842);
+        tbr.put("1_93", 0.10869129260769841);
+        tbr.put("1_100", 0.10869129260769841);
+        tbr.put("1_310", 0.10869129260769841);
+        tbr.put("1_377", 0.10869129260769841);
+        tbr.put("1_248", 0.10854343827666749);
+        tbr.put("1_232", 0.10852182214639981);
+        tbr.put("2_56", 0.10845120945419207);
+        tbr.put("2_57", 0.10830998406977657);
+        tbr.put("1_157", 0.10830998406977657);
+        tbr.put("3_28", 0.10827755987437504);
+        tbr.put("1_64", 0.10822524883912726);
+        tbr.put("1_70", 0.10822524883912726);
+        tbr.put("3_78", 0.10808949954104626);
+        tbr.put("1_201", 0.10803762082840382);
+        tbr.put("1_4", 0.10800649360081838);
+        tbr.put("2_113", 0.1079922269548417);
+        tbr.put("1_42", 0.10792089372495837);
+        tbr.put("3_101", 0.10792089372495836);
+        tbr.put("1_174", 0.10792089372495836);
+        tbr.put("1_107", 0.10779249391116835);
+        tbr.put("1_275", 0.10767446983990683);
+        tbr.put("1_197", 0.10753180338014016);
+        tbr.put("3_95", 0.10750586402381894);
+        tbr.put("2_78", 0.10739201907107584);
+        tbr.put("2_36", 0.107293161301985);
+        tbr.put("2_98", 0.107293161301985);
+        tbr.put("3_6", 0.107293161301985);
+        tbr.put("1_238", 0.10725079368666034);
+        tbr.put("1_21", 0.10723609471807834);
+        tbr.put("2_107", 0.10721548734055647);
+        tbr.put("1_168", 0.10718162206980378);
+        tbr.put("1_277", 0.10714271303532195);
+        tbr.put("3_114", 0.1070648949663583);
+        tbr.put("2_33", 0.10706013941769942);
+        tbr.put("1_266", 0.10690925882843103);
+        tbr.put("3_26", 0.10690479149484239);
+        tbr.put("1_24", 0.10685089527670831);
+        tbr.put("1_301", 0.10682711753341385);
+        tbr.put("1_239", 0.10682711753341385);
+        tbr.put("1_149", 0.10667580462154011);
+        tbr.put("2_69", 0.1066628349433795);
+        tbr.put("3_92", 0.10661527945679061);
+        tbr.put("2_65", 0.10659798655257646);
+        tbr.put("1_28", 0.10659409564912829);
+        tbr.put("1_35", 0.10659409564912829);
+        tbr.put("1_55", 0.10659409564912829);
+        tbr.put("1_60", 0.10659409564912829);
+        tbr.put("1_378", 0.10659409564912829);
+        tbr.put("1_111", 0.10659409564912829);
+        tbr.put("1_271", 0.10657118255104456);
+        tbr.put("3_112", 0.10652276241924495);
+        tbr.put("2_110", 0.10649866763937324);
+        tbr.put("2_31", 0.10643874772627124);
+        tbr.put("2_73", 0.10640344138016737);
+        tbr.put("1_169", 0.10640344138016737);
+        tbr.put("1_252", 0.10640344138016737);
+        tbr.put("1_243", 0.10640344138016737);
+        tbr.put("1_278", 0.10636453234568555);
+        tbr.put("1_46", 0.10636107376484272);
+        tbr.put("3_76", 0.10635156266752493);
+        tbr.put("2_55", 0.10631265363304311);
+        tbr.put("1_192", 0.10616998717327644);
+        tbr.put("1_141", 0.10616998717327644);
+        tbr.put("3_37", 0.10599489651810826);
+        tbr.put("1_249", 0.10597976522692087);
+        tbr.put("1_297", 0.10590929664224825);
+        tbr.put("3_23", 0.10589502999627158);
+        tbr.put("3_45", 0.10589502999627158);
+        tbr.put("3_110", 0.10589502999627158);
+        tbr.put("1_58", 0.10586649670431825);
+        tbr.put("3_59", 0.10586274990840518);
+        tbr.put("1_306", 0.10582369676638825);
+        tbr.put("3_70", 0.10580683618477946);
+        tbr.put("3_32", 0.10578089682845825);
+        tbr.put("1_193", 0.10578089682845825);
+        tbr.put("1_104", 0.10573809689052824);
+        tbr.put("1_67", 0.10565249701466824);
+        tbr.put("1_110", 0.10565249701466824);
+        tbr.put("2_79", 0.10562670176588214);
+        tbr.put("3_72", 0.10562670176588214);
+        tbr.put("3_22", 0.1056239637227149);
+        tbr.put("1_85", 0.10560969707673823);
+        tbr.put("2_111", 0.10558433415055749);
+        tbr.put("1_43", 0.10556689713880822);
+        tbr.put("2_81", 0.10548547638146664);
+        tbr.put("1_134", 0.10546962455260367);
+        tbr.put("2_26", 0.10545276397099489);
+        tbr.put("1_74", 0.10542898622770044);
+        tbr.put("1_91", 0.10542898622770044);
+        tbr.put("3_46", 0.10542898622770044);
+        tbr.put("3_47", 0.10542898622770044);
+        tbr.put("2_70", 0.1054148636892589);
+        tbr.put("1_294", 0.1053956973870882);
+        tbr.put("3_87", 0.10536586712731882);
+        tbr.put("3_4", 0.10535131226627192);
+        tbr.put("1_211", 0.10534425099705114);
+        tbr.put("2_99", 0.10533863080318154);
+        tbr.put("1_171", 0.1053139884146764);
+        tbr.put("3_11", 0.10529583086525154);
+        tbr.put("2_35", 0.10528156421927487);
+        tbr.put("2_9", 0.1052244976353682);
+        tbr.put("2_40", 0.10522320066755214);
+        tbr.put("2_21", 0.10521023098939154);
+        tbr.put("3_33", 0.10521023098939154);
+        tbr.put("3_83", 0.10520302561263566);
+        tbr.put("1_77", 0.10519596434341487);
+        tbr.put("1_285", 0.10519596434341487);
+        tbr.put("1_370", 0.10519596434341487);
+        tbr.put("2_45", 0.10513241292042791);
+        tbr.put("2_34", 0.10511829038198636);
+        tbr.put("3_109", 0.10511036446755487);
+        tbr.put("3_84", 0.10506756452962487);
+        tbr.put("3_107", 0.10504061642055783);
+        tbr.put("3_48", 0.10502476459169485);
+        tbr.put("1_53", 0.10501049794571819);
+        tbr.put("3_88", 0.1049911875360124);
+        tbr.put("1_39", 0.10496769800778818);
+        tbr.put("3_90", 0.10492489806985819);
+        tbr.put("1_122", 0.10492489806985819);
+        tbr.put("2_23", 0.10491063142388152);
+        tbr.put("1_305", 0.10488209813192818);
+        tbr.put("1_315", 0.10483929819399819);
+        tbr.put("3_2", 0.10480759453627227);
+        tbr.put("1_25", 0.10479649825606818);
+        tbr.put("1_86", 0.10479649825606818);
+        tbr.put("3_16", 0.10475369831813819);
+        tbr.put("2_91", 0.1047433225756097);
+        tbr.put("1_54", 0.10472992057484373);
+        tbr.put("1_292", 0.10472992057484373);
+        tbr.put("1_61", 0.10466809844227817);
+        tbr.put("1_82", 0.10466809844227817);
+        tbr.put("3_36", 0.10466809844227817);
+        tbr.put("1_20", 0.10462529850434817);
+        tbr.put("2_58", 0.10461362579400363);
+        tbr.put("3_51", 0.10460065611584303);
+        tbr.put("1_300", 0.10458249856641817);
+        tbr.put("2_17", 0.10457457265198668);
+        tbr.put("2_124", 0.1045682319204415);
+        tbr.put("2_24", 0.10455396527446484);
+        tbr.put("1_18", 0.10453969862848816);
+        tbr.put("1_10", 0.10453969862848816);
+        tbr.put("1_312", 0.10453969862848816);
+        tbr.put("1_273", 0.10453580772504);
+        tbr.put("1_78", 0.10155036074151044);
+        tbr.put("2_62", 0.1005711212188776);
+        tbr.put("3_35", 0.09791877720157814);
+        tbr.put("1_32", 0.09722756701058019);
+        tbr.put("1_179", 0.09489847220649843);
+        tbr.put("1_6", 0.09448837098306004);
+        tbr.put("2_104", 0.09363015296841916);
+        tbr.put("2_63", 0.09285416271331655);
+        tbr.put("1_37", 0.09167023284780232);
+        tbr.put("1_76", 0.09072197644521982);
+        tbr.put("1_184", 0.09042393324108908);
+        tbr.put("1_151", 0.08466539613777965);
+        tbr.put("1_290", 0.08115666587273014);
+        tbr.put("1_177", 0.07898467710343386);
+        tbr.put("1_12", 0.06794871070639047);
+        tbr.put("1_7", 0.06714586841391089);
+        tbr.put("3_100", 0.046334008704504964);
+        tbr.put("1_48", 0.03582793852364858);
+        tbr.put("1_51", 0.009532713448046005);
         return tbr;
     }
 }
