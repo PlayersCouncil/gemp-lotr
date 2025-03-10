@@ -279,8 +279,17 @@ public class TournamentService {
     }
 
     private void addImmediateRecurringLimitedGames() {
+        addImmediateRecurringTableDraft("fotr_mixed_table_draft_queue", "FotR Mixed Table Draft 1v1", "fotrMixedTableDraftQueue-", "fotr_mixed_table_draft", 2);
+        addImmediateRecurringSoloTableDraft("fotr_mixed_solo_table_draft_queue", "FotR Mixed Solo Table Draft", "fotrMixedSoloTableDraftQueue-", "fotr_mixed_table_draft");
+
         addImmediateRecurringTableDraft("fotr_table_draft_queue", "FotR Table Draft 1v1", "fotrTableDraftQueue-", "fotr_table_draft", 2);
         addImmediateRecurringSoloTableDraft("fotr_solo_table_draft_queue", "FotR Solo Table Draft", "fotrSoloTableDraftQueue-", "fotr_table_draft");
+
+        addImmediateRecurringTableDraft("ttt_mixed_table_draft_queue", "TTT Mixed Table Draft 1v1", "tttMixedTableDraftQueue-", "ttt_mixed_table_draft", 2);
+        addImmediateRecurringSoloTableDraft("ttt_mixed_solo_table_draft_queue", "TTT Mixed Solo Table Draft", "tttMixedSoloTableDraftQueue-", "ttt_mixed_table_draft");
+
+        addImmediateRecurringTableDraft("ttt_table_draft_queue", "TTT Table Draft 1v1", "tttTableDraftQueue-", "ttt_table_draft", 2);
+        addImmediateRecurringSoloTableDraft("ttt_solo_table_draft_queue", "TTT Solo Table Draft", "tttSoloTableDraftQueue-", "ttt_table_draft");
 
         addImmediateRecurringDraft("fotr_draft_queue", "FotR Draft", "fotrDraftQueue-", "fotr_draft");
         addImmediateRecurringDraft("ttt_draft_queue", "TTT Draft", "tttDraftQueue-", "ttt_draft");

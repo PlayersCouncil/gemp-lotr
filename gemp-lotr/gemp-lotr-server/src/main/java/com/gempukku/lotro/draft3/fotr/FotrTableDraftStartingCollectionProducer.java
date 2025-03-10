@@ -34,6 +34,7 @@ public class FotrTableDraftStartingCollectionProducer implements StartingCollect
     public FotrTableDraftStartingCollectionProducer(CollectionsManager collectionsManager, LotroCardBlueprintLibrary cardLibrary,
                                                     LotroFormatLibrary formatLibrary){
         possibleRareCards = new SortAndFilterCards().process(RARE_FOTR_FILTER, collectionsManager.getCompleteCardCollection().getAll(), cardLibrary, formatLibrary).stream().map(CardCollection.Item::getBlueprintId).collect(Collectors.toList());
+        possibleRareCards.removeIf(cardId -> !cardId.startsWith("1_"));
     }
 
     @Override
