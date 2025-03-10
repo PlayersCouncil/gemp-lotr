@@ -32,10 +32,17 @@ public class WeightDraftBot extends DraftPlayer implements DraftBot {
 
     private List<String> getTopCards(List<String> cardsToPickFrom) {
         // Sort the cards by value in descending order
-        return cardsToPickFrom.stream()
+        List<String> sortedCards = cardsToPickFrom.stream()
                 .sorted((card1, card2) -> Double.compare(cardValues.getOrDefault(card2, 0.1), cardValues.getOrDefault(card1, 0.1)))
                 .limit(2) // Choose from two highest ranked cards
                 .collect(Collectors.toList());
+
+        // If we have at least one card, duplicate the best one
+        if (!sortedCards.isEmpty()) {
+            sortedCards.add(0, sortedCards.get(0)); // Add the better card twice to ensure at least 66 % to pick it
+        }
+
+        return sortedCards;
     }
 
     private double getTotalValue(List<String> topCards) {

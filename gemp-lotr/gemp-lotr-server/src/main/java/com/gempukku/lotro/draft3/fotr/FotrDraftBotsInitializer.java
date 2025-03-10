@@ -60,6 +60,7 @@ public class FotrDraftBotsInitializer {
         if (!READ_NEW_DATA) {
             return getCachedValuesMap();
         } else {
+            // Data from solo drafts do not contain one ring cards, add some value manually after
             Path summaryDir = Paths.get(AppConfig.getProperty("application.root"), "replay", "summaries");
 
             System.out.println("Game history reading started at " + new SimpleDateFormat("HH.mm.ss").format(new java.util.Date()));
@@ -254,6 +255,7 @@ public class FotrDraftBotsInitializer {
 
     private Map<String, Double> getCachedValuesMap(){
         Map<String, Double> tbr = new HashMap<>();
+        tbr.put("1_1", 0.5); // Manually added Isildur's Bane which was not part of solo draft data
         tbr.put("1_50", 1.0);
         tbr.put("1_90", 0.9832224243314389);
         tbr.put("1_313", 0.932889697325756);

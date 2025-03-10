@@ -63,6 +63,8 @@ public class FotrTableDraftBoosterProducer implements BoosterProducer {
                 }
             }
         }
+        // Add the rare ring to draft manually - it is neither fp nor shadow card
+        cardPools.get("rare-fotr-fp").add("1_1");
     }
 
     @Override
