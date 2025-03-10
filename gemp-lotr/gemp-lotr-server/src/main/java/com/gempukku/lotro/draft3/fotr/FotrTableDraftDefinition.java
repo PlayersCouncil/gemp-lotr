@@ -9,23 +9,22 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class FotrTableDraftDefinition implements TableDraftDefinition {
     private static final int DRAFT_ROUNDS = 6;
     private static final int PLAYER_COUNT = 6;
-    private static Map<String, Double> cardValuesForBots = new HashMap<>();
 
     private final StartingCollectionProducer startingCollectionProducer;
     private final BoosterProducer boosterProducer;
+    private final Map<String, Double> cardValues;
 
 
     public FotrTableDraftDefinition(CollectionsManager collectionsManager, LotroCardBlueprintLibrary cardLibrary,
                                     LotroFormatLibrary formatLibrary) {
-        startingCollectionProducer = new FotrTableDraftStartingCollectionProducer(collectionsManager, cardLibrary, formatLibrary);
-        boosterProducer = new FotrTableDraftBoosterProducer(collectionsManager, cardLibrary, formatLibrary);
-        cardValuesForBots = new FotrDraftBotsInitializer(cardLibrary).getValuesMap();
+        FotrDraftCardEvaluator evaluator = new FotrDraftCardEvaluator(cardLibrary);
+        cardValues = evaluator.getValuesMap();
+        Map<String, Double> cardPlayRates = evaluator.getPlayRateMap();
         // Print the card values for manual check
 //        cardValuesForBots.entrySet()
 //                .stream()
@@ -44,12 +43,15 @@ public class FotrTableDraftDefinition implements TableDraftDefinition {
 //                .forEach(entry -> {
 //                    System.out.println("tbr.put(\"" + entry.getKey() + "\", " + entry.getValue() + ");");
 //                });
+
+        startingCollectionProducer = new FotrTableDraftStartingCollectionProducer(collectionsManager, cardLibrary, formatLibrary);
+        boosterProducer = new FotrTableDraftBoosterProducer(collectionsManager, cardLibrary, formatLibrary, cardPlayRates);
     }
 
     @Override
     public TableDraft getTableDraft(CollectionsManager collectionsManager, CollectionType collectionType, DraftTimerProducer draftTimerProducer) {
         DraftTimer draftTimer = draftTimerProducer == null ? null : draftTimerProducer.getDraftTimer();
-        return new TableDraftClassic(collectionsManager, collectionType, startingCollectionProducer, boosterProducer, PLAYER_COUNT, DRAFT_ROUNDS, draftTimer, cardValuesForBots);
+        return new TableDraftClassic(collectionsManager, collectionType, startingCollectionProducer, boosterProducer, PLAYER_COUNT, DRAFT_ROUNDS, draftTimer, cardValues);
     }
 
     @Override

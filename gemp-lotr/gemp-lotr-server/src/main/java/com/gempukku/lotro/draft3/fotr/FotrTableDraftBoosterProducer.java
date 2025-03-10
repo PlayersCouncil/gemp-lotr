@@ -9,7 +9,6 @@ import com.gempukku.lotro.game.SortAndFilterCards;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class FotrTableDraftBoosterProducer implements BoosterProducer {
@@ -27,7 +26,7 @@ public class FotrTableDraftBoosterProducer implements BoosterProducer {
     private final Map<String, List<String>> cardPools = new HashMap<>();
 
     public FotrTableDraftBoosterProducer(CollectionsManager collectionsManager, LotroCardBlueprintLibrary cardLibrary,
-                                         LotroFormatLibrary formatLibrary) {
+                                         LotroFormatLibrary formatLibrary, Map<String, Double> cardPlayRates) {
         SortAndFilterCards sortAndFilterCards = new SortAndFilterCards();
 
         List<String> rarities = List.of("rare", "uncommon", "common");
@@ -63,6 +62,17 @@ public class FotrTableDraftBoosterProducer implements BoosterProducer {
                 }
             }
         }
+
+        // Remove bad cards from pools to make boosters better
+        cardPools.forEach((key, value) -> {
+            if (key.startsWith("common") || key.startsWith("uncommon")) {
+                value.removeIf(cardId -> !cardPlayRates.containsKey(cardId) || cardPlayRates.get(cardId) < 0.01); // (Un)common has really low play rate
+            }
+            if (key.startsWith("rare")) {
+                value.removeIf(cardId -> !cardPlayRates.containsKey(cardId)); // Rare was never played
+            }
+        });
+
         // Add the rare ring to draft manually - it is neither fp nor shadow card
         cardPools.get("rare-fotr-fp").add("1_1");
     }
