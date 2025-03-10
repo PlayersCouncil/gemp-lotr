@@ -108,32 +108,60 @@ var GempLotrTableDraftUI = Class.extend({
 
             // Check if picked cards changed and we should update
             let pickedCardsChanged = false;
-            let newDraftedIds = new Set();
+            let newDraftedIds = new Map();
+
+            // Count occurrences of picked cards
             for (var i = 0; i < pickedCards.length; i++) {
                 let blueprintId = pickedCards[i].getAttribute("blueprintId");
-                newDraftedIds.add(blueprintId);
+                newDraftedIds.set(blueprintId, (newDraftedIds.get(blueprintId) || 0) + 1);
             }
-            let existingDraftedIds = new Set();
+
+            // Count occurrences of existing drafted cards
+            let existingDraftedIds = new Map();
             $(".card", that.draftedDiv).each(function () {
-                existingDraftedIds.add($(this).data("blueprintId"));
+                let blueprintId = $(this).data("blueprintId");
+                existingDraftedIds.set(blueprintId, (existingDraftedIds.get(blueprintId) || 0) + 1);
             });
-            if (newDraftedIds.size !== existingDraftedIds.size || ![...newDraftedIds].every(id => existingDraftedIds.has(id))) {
+
+            // Compare the two maps
+            if (newDraftedIds.size !== existingDraftedIds.size) {
                 pickedCardsChanged = true;
+            } else {
+                for (let [id, count] of newDraftedIds) {
+                    if (existingDraftedIds.get(id) !== count) {
+                        pickedCardsChanged = true;
+                        break;
+                    }
+                }
             }
 
             // Check if cards to pick from changed and we should update
             let availablePicksChanged = false;
-            let newPickIds = new Set();
+            let newPickIds = new Map();
+
+            // Count occurrences of available picks
             for (var i = 0; i < availablePicks.length; i++) {
                 let id = availablePicks[i].getAttribute("id");
-                newPickIds.add(id);
+                newPickIds.set(id, (newPickIds.get(id) || 0) + 1);
             }
-            let existingPickIds = new Set();
+
+            // Count occurrences of existing picks
+            let existingPickIds = new Map();
             $(".card", that.picksDiv).each(function () {
-                existingPickIds.add($(this).data("choiceId"));
+                let id = $(this).data("choiceId");
+                existingPickIds.set(id, (existingPickIds.get(id) || 0) + 1);
             });
-            if (newPickIds.size !== existingPickIds.size || ![...newPickIds].every(id => existingPickIds.has(id))) {
+
+            // Compare the two maps
+            if (newPickIds.size !== existingPickIds.size) {
                 availablePicksChanged = true;
+            } else {
+                for (let [id, count] of newPickIds) {
+                    if (existingPickIds.get(id) !== count) {
+                        availablePicksChanged = true;
+                        break;
+                    }
+                }
             }
 
             // Check if pre picked card changed and we should update (highlight)
