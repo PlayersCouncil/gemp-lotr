@@ -208,9 +208,11 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
 
     private void clearCacheIfDraftFinished(String eventId, Player resourceOwner, DraftPlayer thisPlayer) {
         if (thisPlayer.draftFinished()) {
-            eventMap.get(eventId).remove(resourceOwner.getName());
-            if (eventMap.get(eventId).isEmpty()) {
-                eventMap.remove(eventId);
+            if (eventMap.containsKey(eventId)) {
+                eventMap.get(eventId).remove(resourceOwner.getName());
+                if (eventMap.get(eventId).isEmpty()) {
+                    eventMap.remove(eventId);
+                }
             }
         }
     }
