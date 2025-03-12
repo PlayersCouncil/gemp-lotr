@@ -48,7 +48,7 @@ public class WeightDraftBot extends DraftPlayer implements DraftBot {
     private double getTotalValue(List<String> topCards) {
         // Sum up the values of the top N cards
         return topCards.stream()
-                .mapToDouble(cardId -> cardValues.getOrDefault(cardId, 0.0))
+                .mapToDouble(cardId -> cardValues.getOrDefault(cardId, 0.1))
                 .sum();
     }
 

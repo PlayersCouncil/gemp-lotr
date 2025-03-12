@@ -1,4 +1,4 @@
-package com.gempukku.lotro.draft3.fotr;
+package com.gempukku.lotro.draft3.format.fotr;
 
 import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.common.Side;

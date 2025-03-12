@@ -1,18 +1,18 @@
-package com.gempukku.lotro.draft3.fotr_mixed;
+package com.gempukku.lotro.draft3.format.ttt_mixed;
 
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft3.*;
-import com.gempukku.lotro.draft3.fotr.FotrDraftCardEvaluator;
-import com.gempukku.lotro.draft3.fotr.FotrTableDraftStartingCollectionProducer;
 import com.gempukku.lotro.draft3.timer.DraftTimer;
 import com.gempukku.lotro.draft3.timer.DraftTimerProducer;
+import com.gempukku.lotro.draft3.format.ttt.TttDraftCardEvaluator;
+import com.gempukku.lotro.draft3.format.ttt.TttTableDraftStartingCollectionProducer;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 
 import java.util.Map;
 
-public class FotrMixedTableDraftDefinition implements TableDraftDefinition {
+public class TttMixedTableDraftDefinition implements TableDraftDefinition {
     private static final int DRAFT_ROUNDS = 6;
     private static final int PLAYER_COUNT = 6;
 
@@ -21,14 +21,14 @@ public class FotrMixedTableDraftDefinition implements TableDraftDefinition {
     private final Map<String, Double> cardValues;
 
 
-    public FotrMixedTableDraftDefinition(CollectionsManager collectionsManager, LotroCardBlueprintLibrary cardLibrary,
-                                         LotroFormatLibrary formatLibrary) {
-        FotrDraftCardEvaluator evaluator = new FotrDraftCardEvaluator(cardLibrary);
+    public TttMixedTableDraftDefinition(CollectionsManager collectionsManager, LotroCardBlueprintLibrary cardLibrary,
+                                        LotroFormatLibrary formatLibrary) {
+        TttDraftCardEvaluator evaluator = new TttDraftCardEvaluator(cardLibrary);
         cardValues = evaluator.getValuesMap();
         Map<String, Double> cardPlayRates = evaluator.getPlayRateMap();
 
-        startingCollectionProducer = new FotrTableDraftStartingCollectionProducer(collectionsManager, cardLibrary, formatLibrary);
-        boosterProducer = new FotrMixedTableDraftBoosterProducer(collectionsManager, cardLibrary, formatLibrary, cardPlayRates);
+        startingCollectionProducer = new TttTableDraftStartingCollectionProducer(collectionsManager, cardLibrary, formatLibrary);
+        boosterProducer = new TttMixedTableDraftBoosterProducer(collectionsManager, cardLibrary, formatLibrary, cardPlayRates);
     }
 
     @Override
@@ -44,11 +44,11 @@ public class FotrMixedTableDraftDefinition implements TableDraftDefinition {
 
     @Override
     public String getCode() {
-        return "fotr_mixed_table_draft";
+        return "ttt_mixed_table_draft";
     }
 
     @Override
     public String getFormat() {
-        return "limited_fotr";
+        return "limited_ttt";
     }
 }

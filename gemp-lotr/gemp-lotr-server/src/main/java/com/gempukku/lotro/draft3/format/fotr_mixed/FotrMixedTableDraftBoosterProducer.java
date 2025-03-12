@@ -1,4 +1,4 @@
-package com.gempukku.lotro.draft3.fotr_mixed;
+package com.gempukku.lotro.draft3.format.fotr_mixed;
 
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.draft3.Booster;

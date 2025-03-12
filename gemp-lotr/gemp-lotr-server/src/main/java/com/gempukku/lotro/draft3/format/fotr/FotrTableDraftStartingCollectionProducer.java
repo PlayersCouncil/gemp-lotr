@@ -1,4 +1,4 @@
-package com.gempukku.lotro.draft3.fotr;
+package com.gempukku.lotro.draft3.format.fotr;
 
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.draft3.StartingCollectionProducer;
@@ -39,7 +39,7 @@ public class FotrTableDraftStartingCollectionProducer implements StartingCollect
 
     @Override
     public MutableCardCollection getStartingCardCollection(String uniqueEventName, String playerName) {
-       long seed = uniqueEventName.hashCode() + (long) playerName.hashCode() * HIGH_ENOUGH_PRIME_NUMBER;
+        long seed = uniqueEventName.hashCode() + (long) playerName.hashCode() * HIGH_ENOUGH_PRIME_NUMBER;
         Random rnd = new Random(seed);
 
         final DefaultCardCollection startingCollection = new DefaultCardCollection();

@@ -1,10 +1,10 @@
 package com.gempukku.lotro.draft3;
 
 import com.gempukku.lotro.collection.CollectionsManager;
-import com.gempukku.lotro.draft3.fotr.FotrTableDraftDefinition;
-import com.gempukku.lotro.draft3.fotr_mixed.FotrMixedTableDraftDefinition;
-import com.gempukku.lotro.draft3.ttt.TttTableDraftDefinition;
-import com.gempukku.lotro.draft3.ttt_mixed.TttMixedTableDraftDefinition;
+import com.gempukku.lotro.draft3.format.fotr.FotrTableDraftDefinition;
+import com.gempukku.lotro.draft3.format.fotr_mixed.FotrMixedTableDraftDefinition;
+import com.gempukku.lotro.draft3.format.ttt.TttTableDraftDefinition;
+import com.gempukku.lotro.draft3.format.ttt_mixed.TttMixedTableDraftDefinition;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 

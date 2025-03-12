@@ -1,4 +1,4 @@
-package com.gempukku.lotro.draft3.fotr;
+package com.gempukku.lotro.draft3.format.ttt_mixed;
 
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.draft3.Booster;
@@ -11,32 +11,26 @@ import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class FotrTableDraftBoosterProducer implements BoosterProducer {
+public class TttMixedTableDraftBoosterProducer implements BoosterProducer {
     private static final int MAX_ROUND = 6;
 
     private static final String RARE_FILTER = "rarity:R";
     private static final String UNCOMMON_FILTER = "rarity:U"; // No P rarity cards in boosters
     private static final String COMMON_FILTER = "rarity:C";
-    private static final String FOTR_FILTER = "set:1";
-    private static final String MOM_FILTER = "set:2";
-    private static final String ROTEL_FILTER = "set:3";
+    private static final String TTT_BLOCK_FILTER = "set:4,5,6";
     private static final String FP_FILTER = "side:FREE_PEOPLE";
     private static final String SHADOW_FILTER = "side:SHADOW";
 
     private final Map<String, List<String>> cardPools = new HashMap<>();
 
-    public FotrTableDraftBoosterProducer(CollectionsManager collectionsManager, LotroCardBlueprintLibrary cardLibrary,
-                                         LotroFormatLibrary formatLibrary, Map<String, Double> cardPlayRates) {
+    public TttMixedTableDraftBoosterProducer(CollectionsManager collectionsManager, LotroCardBlueprintLibrary cardLibrary,
+                                             LotroFormatLibrary formatLibrary, Map<String, Double> cardPlayRates) {
         SortAndFilterCards sortAndFilterCards = new SortAndFilterCards();
 
         List<String> rarities = List.of("rare", "uncommon", "common");
-        List<String> sets = List.of("fotr", "mom", "rotel");
         List<String> types = List.of("fp", "shadow");
 
         Map<String, String> filters = Map.of(
-                "fotr", FOTR_FILTER,
-                "mom", MOM_FILTER,
-                "rotel", ROTEL_FILTER,
                 "fp", FP_FILTER,
                 "shadow", SHADOW_FILTER,
                 "rare", RARE_FILTER,
@@ -45,21 +39,19 @@ public class FotrTableDraftBoosterProducer implements BoosterProducer {
         );
 
         // Make 18 different lists of cards for combinations of rarity, set and side
-        for (String set : sets) {
-            for (String rarity : rarities) {
-                for (String type : types) {
-                    String key = rarity + "-" + set + "-" + type;
-                    List<String> filterSet = List.of(filters.get(rarity), filters.get(set), filters.get(type));
+        for (String rarity : rarities) {
+            for (String type : types) {
+                String key = rarity + "-" + type;
+                List<String> filterSet = List.of(TTT_BLOCK_FILTER, filters.get(rarity), filters.get(type));
 
-                    cardPools.put(key, sortAndFilterCards.process(
-                            joinFilters(filterSet),
-                            collectionsManager.getCompleteCardCollection().getAll(),
-                            cardLibrary,
-                            formatLibrary
-                    ).stream().map(CardCollection.Item::getBlueprintId).collect(Collectors.toList()));
-                    // Remove alternate versions from different sets
-                    cardPools.get(key).removeIf(s -> !s.startsWith((sets.indexOf(set) + 1) + "_"));
-                }
+                cardPools.put(key, sortAndFilterCards.process(
+                        joinFilters(filterSet),
+                        collectionsManager.getCompleteCardCollection().getAll(),
+                        cardLibrary,
+                        formatLibrary
+                ).stream().map(CardCollection.Item::getBlueprintId).collect(Collectors.toList()));
+                // Remove alternate versions from different sets
+                cardPools.get(key).removeIf(cardId -> !cardId.startsWith("4_") && !cardId.startsWith("5_") && !cardId.startsWith("6_"));
             }
         }
 
@@ -74,7 +66,7 @@ public class FotrTableDraftBoosterProducer implements BoosterProducer {
         });
 
         // Add the rare ring to draft manually - it is neither fp nor shadow card
-        cardPools.get("rare-fotr-fp").add("1_1");
+        cardPools.get("rare-fp").add("4_1");
     }
 
     @Override
@@ -82,17 +74,12 @@ public class FotrTableDraftBoosterProducer implements BoosterProducer {
         if (round < 1 || round > MAX_ROUND) {
             return null;
         }
-        String set = switch (round % 3) {
-            case 1 -> "fotr";
-            case 2 -> "mom";
-            default -> "rotel";
-        };
         String type = round <= 3 ? "fp" : "shadow";
 
         // Get the correct lists
-        List<String> rareCards = cardPools.get("rare-" + set + "-" + type);
-        List<String> uncommonCards = cardPools.get("uncommon-" + set + "-" + type);
-        List<String> commonCards = cardPools.get("common-" + set + "-" + type);
+        List<String> rareCards = cardPools.get("rare-" + type);
+        List<String> uncommonCards = cardPools.get("uncommon-" + type);
+        List<String> commonCards = cardPools.get("common-" + type);
 
         // Pick cards
         List<String> pickedCards = pickRandom(rareCards, 1);

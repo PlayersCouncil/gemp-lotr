@@ -1,4 +1,4 @@
-package com.gempukku.lotro.draft3.ttt;
+package com.gempukku.lotro.draft3.format.ttt;
 
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.draft3.Booster;
