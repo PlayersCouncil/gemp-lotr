@@ -943,11 +943,11 @@ public class HallServer extends AbstractServer {
             try {
                 //check-in callback
                 if (toWhom == null || toWhom.isEmpty()) {
-                    _hallChat.sendMessage("TournamentSystem", message, true);
+                    _hallChat.sendMessageNoHistory("TournamentSystem", message, true);
                 } else {
                     StringBuilder builder = new StringBuilder("TournamentSystemTo:");
                     toWhom.forEach(player -> builder.append(player).append(";"));
-                    _hallChat.sendMessage(builder.substring(0, builder.length() - 1), message, true);
+                    _hallChat.sendMessageNoHistory(builder.substring(0, builder.length() - 1), message, true);
                 }
             } catch (PrivateInformationException exp) {
                 // Ignore, sent as admin
@@ -998,11 +998,11 @@ public class HallServer extends AbstractServer {
             try {
                 //check-in callback
                 if (toWhom == null || toWhom.isEmpty()) {
-                    _hallChat.sendMessage("TournamentSystem", message, true);
+                    _hallChat.sendMessageNoHistory("TournamentSystem", message, true);
                 } else {
                     StringBuilder builder = new StringBuilder("TournamentSystemTo:");
                     toWhom.forEach(player -> builder.append(player).append(";"));
-                    _hallChat.sendMessage(builder.substring(0, builder.length() - 1), message, true);
+                    _hallChat.sendMessageNoHistory(builder.substring(0, builder.length() - 1), message, true);
                 }
             } catch (PrivateInformationException exp) {
                 // Ignore, sent as admin

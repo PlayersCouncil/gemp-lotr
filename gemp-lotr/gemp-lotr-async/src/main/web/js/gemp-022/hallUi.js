@@ -54,8 +54,6 @@ var GempLotrHallUI = Class.extend({
 		this.chat = chat;
 		this.chat.tournamentCallback = function(from, message) {
 		    var thisName = that.userInfo.name
-		    console.log(from);
-		    console.log(message);
 			if (from == "TournamentSystem" && that.inTournament) {
 				that.showDialog("Tournament Update", message, 320);
 			} else if (from.startsWith("TournamentSystemTo:")) {
@@ -841,8 +839,19 @@ var GempLotrHallUI = Class.extend({
 							$("table.tournaments", this.tablesDiv)
 							.append(row);
 							if (joined == "true") {
+                            // Display joined tournaments also as playing tables
                                 $("table.playingTables", this.tablesDiv)
                                     .append(tablesRow)
+                                if (type === "table_solodraft" || type === "table_draft") {
+                                    var tourneyId = tournament.getAttribute("id");
+                                    window.open("/gemp-lotr/tableDraft.html?eventId=" + tourneyId, '_blank');
+                                    this.PlaySound("gamestart");
+                                } else if (type === "solodraft") {
+                                    var tourneyId = tournament.getAttribute("id");
+                                    window.open("/gemp-lotr/soloDraft.html?eventId=" + tourneyId, '_blank');
+                                    this.PlaySound("gamestart");
+
+                                }
 							}
 						}
 						
