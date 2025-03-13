@@ -65,4 +65,14 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
         }
         return DateUtils.Now().isAfter(_startTime.minus(window)) && (maximumPlayers < 0 || _players.size() < maximumPlayers);
     }
+
+    @Override
+    public boolean isStartable(String byWhom) {
+        return false;
+    }
+
+    @Override
+    public boolean requestStart(String byWhom) {
+        return false;
+    }
 }

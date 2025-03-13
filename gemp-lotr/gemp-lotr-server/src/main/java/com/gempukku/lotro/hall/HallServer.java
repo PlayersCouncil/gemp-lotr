@@ -395,6 +395,30 @@ public class HallServer extends AbstractServer {
         }
     }
 
+    public boolean startQueueEarly(String queueId, Player player) throws HallException {
+        if (_shutdown)
+            throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
+
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            TournamentQueue tournamentQueue = _tournamentService.getTournamentQueue(queueId);
+            if (tournamentQueue == null)
+                throw new HallException("Tournament queue already finished accepting players, try again in a few seconds");
+            if (!tournamentQueue.isStartable(player.getName()))
+                throw new HallException("This queue cannot be started early by " + player.getName());
+            if (!tournamentQueue.requestStart(player.getName())) {
+                throw new HallException("This queue failed to be started early by " + player.getName());
+            }
+
+            hallChanged();
+
+            return true;
+        } finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+
+    }
+
     /**
      * @return If table joined, otherwise <code>false</code> (if the user already is sitting at a table or playing).
      */
@@ -915,10 +939,16 @@ public class HallServer extends AbstractServer {
         }
 
         @Override
-        public void broadcastMessage(String message) {
+        public void broadcastMessage(String message, Collection<String> toWhom) {
             try {
                 //check-in callback
-                _hallChat.sendMessage("TournamentSystem", message, true);
+                if (toWhom == null || toWhom.isEmpty()) {
+                    _hallChat.sendMessage("TournamentSystem", message, true);
+                } else {
+                    StringBuilder builder = new StringBuilder("TournamentSystemTo:");
+                    toWhom.forEach(player -> builder.append(player).append(";"));
+                    _hallChat.sendMessage(builder.substring(0, builder.length() - 1), message, true);
+                }
             } catch (PrivateInformationException exp) {
                 // Ignore, sent as admin
             } catch (ChatCommandErrorException e) {
@@ -964,10 +994,16 @@ public class HallServer extends AbstractServer {
         }
 
         @Override
-        public void broadcastMessage(String message) {
+        public void broadcastMessage(String message, Collection<String> toWhom) {
             try {
                 //check-in callback
-                _hallChat.sendMessage("TournamentSystem", message, true);
+                if (toWhom == null || toWhom.isEmpty()) {
+                    _hallChat.sendMessage("TournamentSystem", message, true);
+                } else {
+                    StringBuilder builder = new StringBuilder("TournamentSystemTo:");
+                    toWhom.forEach(player -> builder.append(player).append(";"));
+                    _hallChat.sendMessage(builder.substring(0, builder.length() - 1), message, true);
+                }
             } catch (PrivateInformationException exp) {
                 // Ignore, sent as admin
             } catch (ChatCommandErrorException e) {

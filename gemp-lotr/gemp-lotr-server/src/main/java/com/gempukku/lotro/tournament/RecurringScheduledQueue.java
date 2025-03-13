@@ -55,6 +55,16 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
     }
 
     @Override
+    public boolean isStartable(String byWhom) {
+        return false;
+    }
+
+    @Override
+    public boolean requestStart(String byWhom) {
+        return false;
+    }
+
+    @Override
     public boolean process(TournamentQueueCallback tournamentQueueCallback, CollectionsManager collectionsManager) throws SQLException, IOException {
         if (ZonedDateTime.now().isAfter(_nextStart)) {
             if (_players.size() >= _minimumPlayers) {

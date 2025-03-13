@@ -301,7 +301,9 @@ public abstract class BaseTournament implements Tournament {
         _tournamentInfo.Stage = Stage.FINISHED;
         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
         awardPrizes(collectionsManager);
-        return new BroadcastAction("Tournament " + getTournamentName() + " is finished.");
+        Set<String> activePlayers = new HashSet<>(_players);
+        activePlayers.removeAll(_droppedPlayers);
+        return new BroadcastAction("Tournament " + getTournamentName() + " is finished.", activePlayers);
     }
 
     protected void awardPrizes(CollectionsManager collectionsManager) {
@@ -344,7 +346,9 @@ public abstract class BaseTournament implements Tournament {
             }
 
             if (!byeResults.isEmpty()) {
-                actions.add(new BroadcastAction("Bye awarded to: "+ StringUtils.join(byeResults, ", ")));
+                Set<String> activePlayers = new HashSet<>(_players);
+                activePlayers.removeAll(_droppedPlayers);
+                actions.add(new BroadcastAction("Bye awarded to: "+ StringUtils.join(byeResults, ", "), activePlayers));
             }
 
             for (String bye : byeResults) {

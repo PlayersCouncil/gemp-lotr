@@ -16,10 +16,7 @@ import com.gempukku.lotro.tournament.action.BroadcastAction;
 import com.gempukku.lotro.tournament.action.TournamentProcessAction;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SoloTableDraftTournament extends BaseTournament implements Tournament {
 
@@ -131,6 +128,8 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
     @Override
     public List<TournamentProcessAction> advanceTournament(CollectionsManager collectionsManager) {
         writeLock.lock();
+        Set<String> activePlayers = new HashSet<>(_players);
+        activePlayers.removeAll(_droppedPlayers);
         try {
             List<TournamentProcessAction> result = new LinkedList<>();
             if (_nextTask == null) {
@@ -143,7 +142,7 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
                     String duration = DateUtils.HumanDuration(soloTableDraftInfo.deckbuildingDuration);
                     result.add(new BroadcastAction("Draft has been opened for tournament <b>" + getTournamentName() + "</b>. Use the 'Go to Draft' button in the Active Tournaments Section. Players now have "
                             + duration + " to solo draft and build a deck with the cards they got. "
-                            + "<br/><br/>Remember to return to the game hall and register your deck before " + DateUtils.FormatTime(soloTableDraftInfo.registrationDeadline) + "."));
+                            + "<br/><br/>Remember to return to the game hall and register your deck before " + DateUtils.FormatTime(soloTableDraftInfo.registrationDeadline) + ".", activePlayers));
                 }
                 else if (getTournamentStage() == Stage.DECK_BUILDING) {
                     if (DateUtils.Now().isAfter(soloTableDraftInfo.deckbuildingDeadline)) {
@@ -154,7 +153,7 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
                         result.add(new BroadcastAction("Deck building in tournament <b>" + getTournamentName() + "</b> has finished. Players now have "
                                 + duration + " to finish registering their decks.  Any player who has not turned in their deck by the deadline at "
                                 + DateUtils.FormatTime(soloTableDraftInfo.registrationDeadline) + " will be auto-disqualified."
-                                + "<br/><br/>Once the deadline has passed, the tournament will begin."));
+                                + "<br/><br/>Once the deadline has passed, the tournament will begin.", activePlayers));
                     }
                 }
 
@@ -181,12 +180,12 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
                                 result.add(new BroadcastAction("Deck registration for tournament <b>" + getTournamentName()
                                         + "</b> has closed. Round "
                                         + (getCurrentRound() + 1) + " will begin in " + DateUtils.HumanDuration(PairingDelayTime)
-                                        + " at " + DateUtils.FormatTime(DateUtils.Now().plus(PairingDelayTime))+ " server time."));
+                                        + " at " + DateUtils.FormatTime(DateUtils.Now().plus(PairingDelayTime))+ " server time.", activePlayers));
                             }
                             else {
                                 result.add(new BroadcastAction("Tournament " + getTournamentName() + " will start round "
                                         + (getCurrentRound() + 1) + " in " + DateUtils.HumanDuration(PairingDelayTime)
-                                        + " at " + DateUtils.FormatTime(DateUtils.Now().plus(PairingDelayTime))+ " server time."));
+                                        + " at " + DateUtils.FormatTime(DateUtils.Now().plus(PairingDelayTime))+ " server time.", activePlayers));
                             }
                             _nextTask = new PairPlayers();
                         }

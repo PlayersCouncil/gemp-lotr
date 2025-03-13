@@ -84,6 +84,8 @@ public class ConstructedTournament extends BaseTournament implements Tournament 
     @Override
     public List<TournamentProcessAction> advanceTournament(CollectionsManager collectionsManager) {
         writeLock.lock();
+        Set<String> activePlayers = new HashSet<>(_players);
+        activePlayers.removeAll(_droppedPlayers);
         try {
             List<TournamentProcessAction> result = new LinkedList<>();
             if (_nextTask == null) {
@@ -98,7 +100,7 @@ public class ConstructedTournament extends BaseTournament implements Tournament 
                             result.add(finishTournament(collectionsManager));
                         } else {
                             String duration = DurationFormatUtils.formatDurationWords(PairingDelayTime.toMillis(), true, true);
-                            result.add(new BroadcastAction("Tournament " + getTournamentName() + " will start round " + (getCurrentRound()+1) + " in " + duration + "."));
+                            result.add(new BroadcastAction("Tournament " + getTournamentName() + " will start round " + (getCurrentRound()+1) + " in " + duration + ".", activePlayers));
                             _nextTask = new PairPlayers();
                         }
                     }

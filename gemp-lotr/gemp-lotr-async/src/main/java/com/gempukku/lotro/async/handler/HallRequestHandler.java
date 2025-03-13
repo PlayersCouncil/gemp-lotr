@@ -69,7 +69,9 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         } else if (uri.startsWith("/format/") && request.method() == HttpMethod.GET) {
             getFormat(request, uri.substring(8), responseWriter);
         } else if (uri.startsWith("/queue/") && request.method() == HttpMethod.POST) {
-            if (uri.endsWith("/leave")) {
+            if (uri.endsWith("/start")) {
+                startQueue(request, uri.substring(7, uri.length() - 6), responseWriter);
+            } else if (uri.endsWith("/leave")) {
                 leaveQueue(request, uri.substring(7, uri.length() - 6), responseWriter);
             } else {
                 joinQueue(request, uri.substring(7), responseWriter);
@@ -220,7 +222,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         String msg = ex.getMessage();
 
         if(msg != null && (msg.contains("You don't have a deck registered yet") ||
-                msg.contains("Your selected deck is not valid for this format")))
+                msg.contains("Your selected deck is not valid for this format") ||
+                msg.contains("This queue cannot be started early by ")))
             return true;
 
         return false;
@@ -287,6 +290,27 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             }
             responseWriter.writeXmlResponse(marshalException(e));
         }
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    private void startQueue(HttpRequest request, String queueId, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+
+            try {
+                _hallServer.startQueueEarly(queueId, resourceOwner);
+                responseWriter.writeXmlResponse(null);
+            } catch (HallException e) {
+                if(!IgnoreError(e)) {
+                    _log.error("Error response for " + request.uri(), e);
+                }
+                responseWriter.writeXmlResponse(marshalException(e));
+            }
         } finally {
             postDecoder.destroy();
         }

@@ -329,7 +329,7 @@ public class TableDraftClassic implements TableDraft{
     @Override
     public DraftPlayer registerPlayer(String name) {
         // Only before draft starts
-        if (currentRound != 0) {
+        if (currentRound != 0 || name == null) {
             return null;
         }
         return registerPlayer(name, false);

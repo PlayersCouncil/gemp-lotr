@@ -7,21 +7,37 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
     private final int _playerCap;
     private final int maxPlayers;
 
+    private final boolean startableEarly;
+    private boolean startRequested = false;
+
     public ImmediateRecurringQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info) {
+        this(tournamentService, queueId, queueName, info, false);
+    }
+
+    public ImmediateRecurringQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info, boolean startableEarly) {
         super(tournamentService, queueId, queueName, info);
         _playerCap = info.Parameters().minimumPlayers;
         maxPlayers = info.Parameters().maximumPlayers;
+        this.startableEarly = startableEarly;
     }
 
     @Override
     public String getStartCondition() {
-        return "When " + _playerCap + " players join";
+        String playerLimit = "When " + _playerCap + " players join";
+        String orRequest = " or when start is requested";
+        if (startableEarly) {
+            return playerLimit + orRequest;
+        } else {
+            return playerLimit;
+        }
     }
 
     @Override
     public synchronized boolean process(TournamentQueueCallback tournamentQueueCallback, CollectionsManager collectionsManager) {
-        if (_players.size() < _playerCap)
+        if ((_players.size() < _playerCap) && !startRequested)
             return false;
+
+        startRequested = false;
 
         String tid = _tournamentInfo.generateTimestampId();
 
@@ -29,8 +45,10 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
 
         for (int i=0; i<_playerCap; i++) {
             String player = _players.poll();
-            _tournamentService.recordTournamentPlayer(tid, player, _playerDecks.get(player));
-            _playerDecks.remove(player);
+            if (player != null) { // If start requested we don't have playerCap players
+                _tournamentService.recordTournamentPlayer(tid, player, _playerDecks.get(player));
+                _playerDecks.remove(player);
+            }
         }
 
         TournamentInfo newInfo = getInfo(tid, tournamentName);
@@ -45,6 +63,20 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
     @Override
     public boolean isJoinable() {
         return maxPlayers < 0 || _players.size() < maxPlayers;
+    }
+
+    @Override
+    public boolean isStartable(String byWhom) {
+        return startableEarly && byWhom.equals(_players.peek());
+    }
+
+    @Override
+    public boolean requestStart(String byWhom) {
+        if (isStartable(byWhom)) {
+            startRequested = true;
+            return true;
+        }
+        return false;
     }
 
     private TournamentInfo getInfo(String tournamentId, String tournamentName) {

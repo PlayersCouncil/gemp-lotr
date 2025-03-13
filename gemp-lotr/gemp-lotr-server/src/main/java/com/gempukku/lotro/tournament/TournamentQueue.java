@@ -41,4 +41,8 @@ public interface TournamentQueue {
     boolean isPlayerSignedUp(String player);
 
     boolean isJoinable();
+
+    boolean isStartable(String byWhom);
+
+    boolean requestStart(String byWhom);
 }

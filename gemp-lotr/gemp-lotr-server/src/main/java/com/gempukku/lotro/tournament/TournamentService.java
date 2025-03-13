@@ -173,12 +173,12 @@ public class TournamentService {
         draftParams.name = queueName;
         draftParams.cost = 0;
         draftParams.minimumPlayers = players;
-        draftParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
+        draftParams.playoff = Tournament.PairingType.SWISS_3;
         draftParams.prizes = Tournament.PrizeType.NONE;
 
         _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
                 new TableDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
-                        draftParams, _tableDraftLibrary))
+                        draftParams, _tableDraftLibrary), true)
         );
     }
 
@@ -279,16 +279,14 @@ public class TournamentService {
     }
 
     private void addImmediateRecurringLimitedGames() {
-        addImmediateRecurringTableDraft("fotr_mixed_table_draft_queue", "FotR Mixed Table Draft 1v1", "fotrMixedTableDraftQueue-", "fotr_mixed_table_draft", 2);
+        addImmediateRecurringTableDraft("fotr_mixed_table_draft_queue", "FotR Mixed Table Draft", "fotrMixedTableDraftQueue-", "fotr_mixed_table_draft", 6);
+        addImmediateRecurringTableDraft("fotr_table_draft_queue", "FotR Table Draft", "fotrTableDraftQueue-", "fotr_table_draft", 6);
+        addImmediateRecurringTableDraft("ttt_mixed_table_draft_queue", "TTT Mixed Table Draft", "tttMixedTableDraftQueue-", "ttt_mixed_table_draft", 6);
+        addImmediateRecurringTableDraft("ttt_table_draft_queue", "TTT Table Draft", "tttTableDraftQueue-", "ttt_table_draft", 6);
+
         addImmediateRecurringSoloTableDraft("fotr_mixed_solo_table_draft_queue", "FotR Mixed Solo Table Draft", "fotrMixedSoloTableDraftQueue-", "fotr_mixed_table_draft");
-
-        addImmediateRecurringTableDraft("fotr_table_draft_queue", "FotR Table Draft 1v1", "fotrTableDraftQueue-", "fotr_table_draft", 2);
         addImmediateRecurringSoloTableDraft("fotr_solo_table_draft_queue", "FotR Solo Table Draft", "fotrSoloTableDraftQueue-", "fotr_table_draft");
-
-        addImmediateRecurringTableDraft("ttt_mixed_table_draft_queue", "TTT Mixed Table Draft 1v1", "tttMixedTableDraftQueue-", "ttt_mixed_table_draft", 2);
         addImmediateRecurringSoloTableDraft("ttt_mixed_solo_table_draft_queue", "TTT Mixed Solo Table Draft", "tttMixedSoloTableDraftQueue-", "ttt_mixed_table_draft");
-
-        addImmediateRecurringTableDraft("ttt_table_draft_queue", "TTT Table Draft 1v1", "tttTableDraftQueue-", "ttt_table_draft", 2);
         addImmediateRecurringSoloTableDraft("ttt_solo_table_draft_queue", "TTT Solo Table Draft", "tttSoloTableDraftQueue-", "ttt_table_draft");
 
         addImmediateRecurringDraft("fotr_draft_queue", "FotR Draft", "fotrDraftQueue-", "fotr_draft");
@@ -329,7 +327,7 @@ public class TournamentService {
             visitor.visitTournamentQueue(queueID, queue.getCost(), queue.getCollectionType().getFullName(),
                     formatLibrary.getFormat(queue.getFormatCode()).getName(), queue.getInfo().Parameters().type.toString(), queue.getTournamentQueueName(),
                     queue.getPrizesDescription(), queue.getPairingDescription(), queue.getStartCondition(),
-                    queue.getPlayerCount(), queue.getPlayerList(), queue.isPlayerSignedUp(player.getName()), queue.isJoinable());
+                    queue.getPlayerCount(), queue.getPlayerList(), queue.isPlayerSignedUp(player.getName()), queue.isJoinable(), queue.isStartable(player.getName()));
         }
 
         for (var entry : _activeTournaments.entrySet()) {
@@ -594,7 +592,7 @@ public class TournamentService {
                 _activeTournaments.put(tid, tournament);
             }
             else {
-                tournament.RefreshTournamentInfo();;
+                tournament.RefreshTournamentInfo();
             }
         } catch (Exception exp) {
             throw new RuntimeException("Unable to create/update Tournament", exp);
@@ -626,7 +624,7 @@ public class TournamentService {
                 _activeTournaments.put(tid, tournament);
             }
             else {
-                tournament.RefreshTournamentInfo();;
+                tournament.RefreshTournamentInfo();
             }
         } catch (Exception exp) {
             throw new RuntimeException("Unable to create/update Tournament", exp);
