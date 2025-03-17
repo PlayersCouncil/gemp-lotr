@@ -842,11 +842,12 @@ var GempLotrHallUI = Class.extend({
                             // Display joined tournaments also as playing tables
                                 $("table.playingTables", this.tablesDiv)
                                     .append(tablesRow)
-                                if (type === "table_solodraft" || type === "table_draft") {
+                                if ((type === "table_solodraft" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff"))
+                                || (type === "table_draft" && stage === "drafting")) {
                                     var tourneyId = tournament.getAttribute("id");
                                     window.open("/gemp-lotr/tableDraft.html?eventId=" + tourneyId, '_blank');
                                     this.PlaySound("gamestart");
-                                } else if (type === "solodraft") {
+                                } else if (type === "solodraft" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff")) {
                                     var tourneyId = tournament.getAttribute("id");
                                     window.open("/gemp-lotr/soloDraft.html?eventId=" + tourneyId, '_blank');
                                     this.PlaySound("gamestart");

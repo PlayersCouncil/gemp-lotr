@@ -3,6 +3,7 @@ package com.gempukku.lotro.draft3;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.draft3.format.fotr.FotrTableDraftDefinition;
 import com.gempukku.lotro.draft3.format.fotr_mixed.FotrMixedTableDraftDefinition;
+import com.gempukku.lotro.draft3.format.fotr_power_max.FotrPowerMaxTableDraftDefinition;
 import com.gempukku.lotro.draft3.format.ttt.TttTableDraftDefinition;
 import com.gempukku.lotro.draft3.format.ttt_mixed.TttMixedTableDraftDefinition;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
@@ -28,6 +29,9 @@ public class TableDraftDefinitions {
 
         TttMixedTableDraftDefinition tttMixedTableDraftDefinition = new TttMixedTableDraftDefinition(collectionsManager, cardLibrary, formatLibrary);
         draftTypes.put(tttMixedTableDraftDefinition.getCode(), tttMixedTableDraftDefinition);
+
+        FotrPowerMaxTableDraftDefinition fotrPowerMaxTableDraftDefinition = new FotrPowerMaxTableDraftDefinition(collectionsManager, cardLibrary, formatLibrary);
+        draftTypes.put(fotrPowerMaxTableDraftDefinition.getCode(), fotrPowerMaxTableDraftDefinition);
     }
 
     public TableDraftDefinition getTableDraftDefinition(String draftType) {

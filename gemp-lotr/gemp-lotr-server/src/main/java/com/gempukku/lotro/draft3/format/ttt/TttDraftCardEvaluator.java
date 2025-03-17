@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TttDraftCardEvaluator {
-    private static final boolean READ_NEW_DATA = false;
-
     private static final int RARES_IN_PACK = 1;
     private static final int UNCOMMONS_IN_PACK = 3;
     private static final int COMMONS_IN_PACK = 7;
@@ -56,74 +54,67 @@ public class TttDraftCardEvaluator {
     }
 
     public Map<String, Double> getValuesMap() {
-        if (!READ_NEW_DATA) {
-            return getCachedValuesMap();
-        } else {
-            // Data from solo drafts do not contain one ring cards, add some value manually after
-            Path summaryDir = Paths.get(AppConfig.getProperty("application.root"), "replay", "summaries");
+        // Data from solo drafts do not contain one ring cards, add some value manually after
+        Path summaryDir = Paths.get(AppConfig.getProperty("application.root"), "replay", "summaries");
 
-            System.out.println("Game history reading started at " + new SimpleDateFormat("HH.mm.ss").format(new Date()));
-            gamesAnalyzed = 0;
-            // Load FotR limited decks from the past
-            Map<String, Integer> winningMap = new HashMap<>();
-            Map<String, Integer> losingMap = new HashMap<>();
-            try (Stream<Path> paths = Files.walk(summaryDir)) {
-                paths.filter(Files::isRegularFile) // Keep only regular files
-                        .filter(path -> path.toString().endsWith(".json")) // Filter only JSON files
-                        .forEach(path -> countOccurrencesInDeck(path, winningMap, losingMap)); // Process each JSON file
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            System.out.println("Read data from " + gamesAnalyzed + " games at " + new SimpleDateFormat("HH.mm.ss").format(new Date()));
-
-            // Merge win and lose maps (they are kept separate for potential wr info)
-            Map<String, Integer> mergedMap = mergeMaps(winningMap, losingMap);
-
-            // Lower count of cards from Draft Packs
-            Map<String, Double> startingCollectionNormalizedCardCountMap = normalizeCountByDraftPackChance(mergedMap);
-
-            // Normalize for uneven set size
-            Map<String, Double> setNormalizedCardCountMap = normalizeCountBySetSize(startingCollectionNormalizedCardCountMap);
-
-            // Normalize count based on rarities
-            Map<String, Double> normalizedCardCountMap = normalizeCountByRarity(setNormalizedCardCountMap, library);
-
-            // Boost rarities (more likely to pick rares and uncommons)
-            Map<String, Double> rareInflatedMap = inflateRarity(normalizedCardCountMap, library);
-
-            // Boost FP cards (more likely to pick FP card in mixed draft)
-            Map<String, Double> fpInflatedMap = inflateFp(rareInflatedMap, library);
-
-            // Make sure all values are positive and in 0-1 range
-            Map<String, Double> shiftedMap = shift(fpInflatedMap);
-
-            return shiftedMap;
+        System.out.println("Game history reading started at " + new SimpleDateFormat("HH.mm.ss").format(new Date()));
+        gamesAnalyzed = 0;
+        // Load FotR limited decks from the past
+        Map<String, Integer> winningMap = new HashMap<>();
+        Map<String, Integer> losingMap = new HashMap<>();
+        try (Stream<Path> paths = Files.walk(summaryDir)) {
+            paths.filter(Files::isRegularFile) // Keep only regular files
+                    .filter(path -> path.toString().endsWith(".json")) // Filter only JSON files
+                    .forEach(path -> countOccurrencesInDeck(path, winningMap, losingMap)); // Process each JSON file
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        System.out.println("Read data from " + gamesAnalyzed + " games at " + new SimpleDateFormat("HH.mm.ss").format(new Date()));
+
+        // Merge win and lose maps (they are kept separate for potential wr info)
+        Map<String, Integer> mergedMap = mergeMaps(winningMap, losingMap);
+
+        // Lower count of cards from Draft Packs
+        Map<String, Double> startingCollectionNormalizedCardCountMap = normalizeCountByDraftPackChance(mergedMap);
+
+        // Normalize for uneven set size
+        Map<String, Double> setNormalizedCardCountMap = normalizeCountBySetSize(startingCollectionNormalizedCardCountMap);
+
+        // Normalize count based on rarities
+        Map<String, Double> normalizedCardCountMap = normalizeCountByRarity(setNormalizedCardCountMap, library);
+
+        // Boost rarities (more likely to pick rares and uncommons)
+        Map<String, Double> rareInflatedMap = inflateRarity(normalizedCardCountMap, library);
+
+        // Boost FP cards (more likely to pick FP card in mixed draft)
+        Map<String, Double> fpInflatedMap = inflateFp(rareInflatedMap, library);
+
+        // Make sure all values are positive and in 0-1 range
+        Map<String, Double> shiftedMap = shift(fpInflatedMap);
+
+        return shiftedMap;
+
     }
 
     public Map<String, Double> getPlayRateMap() {
-        if (!READ_NEW_DATA) {
-            return getCachedPlayRateMap();
-        } else {
-            // Data from solo drafts do not contain one ring cards, add some value manually after
-            Path summaryDir = Paths.get(AppConfig.getProperty("application.root"), "replay", "summaries");
+        // Data from solo drafts do not contain one ring cards, add some value manually after
+        Path summaryDir = Paths.get(AppConfig.getProperty("application.root"), "replay", "summaries");
 
-            System.out.println("Game history reading started at " + new SimpleDateFormat("HH.mm.ss").format(new Date()));
-            gamesAnalyzed = 0;
-            // Load FotR limited decks from the past
-            Map<String, Integer> countMap = new HashMap<>(); // How many decks contained what card (ignoring how many times it was including in said deck)
-            try (Stream<Path> paths = Files.walk(summaryDir)) {
-                paths.filter(Files::isRegularFile) // Keep only regular files
-                        .filter(path -> path.toString().endsWith(".json")) // Filter only JSON files
-                        .forEach(path -> countOccurrencesInGame(path, countMap)); // Process each JSON file
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Read data from " + gamesAnalyzed + " games at " + new SimpleDateFormat("HH.mm.ss").format(new Date()));
-
-            return convertCountToPlayRate(countMap);
+        System.out.println("Game history reading started at " + new SimpleDateFormat("HH.mm.ss").format(new Date()));
+        gamesAnalyzed = 0;
+        // Load FotR limited decks from the past
+        Map<String, Integer> countMap = new HashMap<>(); // How many decks contained what card (ignoring how many times it was including in said deck)
+        try (Stream<Path> paths = Files.walk(summaryDir)) {
+            paths.filter(Files::isRegularFile) // Keep only regular files
+                    .filter(path -> path.toString().endsWith(".json")) // Filter only JSON files
+                    .forEach(path -> countOccurrencesInGame(path, countMap)); // Process each JSON file
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        System.out.println("Read data from " + gamesAnalyzed + " games at " + new SimpleDateFormat("HH.mm.ss").format(new Date()));
+
+        return convertCountToPlayRate(countMap);
     }
 
     private Map<String, Double> convertCountToPlayRate(Map<String, Integer> countMap) {
@@ -161,11 +152,6 @@ public class TttDraftCardEvaluator {
         } catch (IOException e) {
             e.printStackTrace(); // Handle file reading exceptions
         }
-    }
-
-    private Map<String, Double> convertToDoubleMap(Map<String, Integer> intMap) {
-        return intMap.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().doubleValue()));
     }
 
     private void countOccurrencesInDeck(Path path, Map<String, Integer> winningMap, Map<String, Integer> losingMap) {
@@ -319,7 +305,7 @@ public class TttDraftCardEvaluator {
         return tbr;
     }
 
-    private Map<String, Double> getCachedValuesMap(){
+    public Map<String, Double> getCachedValuesMap(){
         Map<String, Double> tbr = new HashMap<>();
         tbr.put("4_1", 0.6); // Manually added Ring which was not part of solo draft data
         tbr.put("4_267", 1.0);
@@ -860,7 +846,7 @@ public class TttDraftCardEvaluator {
         return tbr;
     }
 
-    private Map<String, Double> getCachedPlayRateMap() {
+    public Map<String, Double> getCachedPlayRateMap() {
         Map<String, Double> tbr = new HashMap<>();
         // Missing rare Ring
         tbr.put("4_2", 0.9938825448613376);

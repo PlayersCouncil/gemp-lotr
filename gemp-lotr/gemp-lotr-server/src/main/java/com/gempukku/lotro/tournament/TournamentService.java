@@ -6,9 +6,9 @@ import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.GameHistoryDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
-import com.gempukku.lotro.draft3.timer.DraftTimerProducer;
 import com.gempukku.lotro.draft3.TableDraftDefinition;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
+import com.gempukku.lotro.draft3.timer.DraftTimerFactory;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -155,14 +155,14 @@ public class TournamentService {
         );
     }
 
-    private void addImmediateRecurringTableDraft(String queueId, String queueName, String prefix, String formatCode, int players) {
+    private void addImmediateRecurringTableDraft(String queueId, String queueName, String prefix, String formatCode, int players, DraftTimerFactory.Type draftTimer) {
 
         TableDraftTournamentParams draftParams = new TableDraftTournamentParams();
         draftParams.type = Tournament.TournamentType.TABLE_DRAFT;
 
         draftParams.deckbuildingDuration = 15;
         draftParams.turnInDuration = 2;
-        draftParams.draftTimerProducerType = DraftTimerProducer.Type.CLASSIC;
+        draftParams.draftTimerType = draftTimer;
 
         TableDraftDefinition tableDraft = _tableDraftLibrary.getTableDraftDefinition(formatCode);
         draftParams.tableDraftFormatCode = formatCode;
@@ -279,10 +279,12 @@ public class TournamentService {
     }
 
     private void addImmediateRecurringLimitedGames() {
-        addImmediateRecurringTableDraft("fotr_mixed_table_draft_queue", "FotR Mixed Table Draft", "fotrMixedTableDraftQueue-", "fotr_mixed_table_draft", 6);
-        addImmediateRecurringTableDraft("fotr_table_draft_queue", "FotR Table Draft", "fotrTableDraftQueue-", "fotr_table_draft", 6);
-        addImmediateRecurringTableDraft("ttt_mixed_table_draft_queue", "TTT Mixed Table Draft", "tttMixedTableDraftQueue-", "ttt_mixed_table_draft", 6);
-        addImmediateRecurringTableDraft("ttt_table_draft_queue", "TTT Table Draft", "tttTableDraftQueue-", "ttt_table_draft", 6);
+        addImmediateRecurringTableDraft("fotr_power_max_table_draft_queue", "FotR Power Max Table Draft", "fotrPowerMaxTableDraftQueue-", "fotr_power_max_table_draft", 8, DraftTimerFactory.Type.CLASSIC);
+
+        addImmediateRecurringTableDraft("fotr_mixed_table_draft_queue", "FotR Mixed Table Draft", "fotrMixedTableDraftQueue-", "fotr_mixed_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
+        addImmediateRecurringTableDraft("fotr_table_draft_queue", "FotR Table Draft", "fotrTableDraftQueue-", "fotr_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
+        addImmediateRecurringTableDraft("ttt_mixed_table_draft_queue", "TTT Mixed Table Draft", "tttMixedTableDraftQueue-", "ttt_mixed_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
+        addImmediateRecurringTableDraft("ttt_table_draft_queue", "TTT Table Draft", "tttTableDraftQueue-", "ttt_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
 
         addImmediateRecurringSoloTableDraft("fotr_mixed_solo_table_draft_queue", "FotR Mixed Solo Table Draft", "fotrMixedSoloTableDraftQueue-", "fotr_mixed_table_draft");
         addImmediateRecurringSoloTableDraft("fotr_solo_table_draft_queue", "FotR Solo Table Draft", "fotrSoloTableDraftQueue-", "fotr_table_draft");

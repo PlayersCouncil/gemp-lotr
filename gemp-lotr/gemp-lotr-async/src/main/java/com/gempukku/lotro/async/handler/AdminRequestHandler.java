@@ -11,8 +11,8 @@ import com.gempukku.lotro.db.PlayerDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
-import com.gempukku.lotro.draft3.timer.DraftTimerProducer;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
+import com.gempukku.lotro.draft3.timer.DraftTimerFactory;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
@@ -1045,7 +1045,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             tableDraftParams.tableDraftFormatCode = tableDraftFormatCodeStr;
             tableDraftParams.format = tableDraftDefinition.getFormat();
             tableDraftParams.requiresDeck = false;
-            tableDraftParams.draftTimerProducerType = DraftTimerProducer.getDraftTimerProducer(tableDraftTimer);
+            tableDraftParams.draftTimerType = DraftTimerFactory.getTypeFromString(tableDraftTimer);
             tableDraftParams.maximumPlayers = tableDraftDefinition.getMaxPlayers();
             params = tableDraftParams;
         }

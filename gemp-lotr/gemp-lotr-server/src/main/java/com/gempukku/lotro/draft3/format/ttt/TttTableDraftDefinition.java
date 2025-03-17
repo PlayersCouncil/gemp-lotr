@@ -4,7 +4,6 @@ import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft3.*;
 import com.gempukku.lotro.draft3.timer.DraftTimer;
-import com.gempukku.lotro.draft3.timer.DraftTimerProducer;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 
@@ -22,8 +21,8 @@ public class TttTableDraftDefinition implements TableDraftDefinition {
     public TttTableDraftDefinition(CollectionsManager collectionsManager, LotroCardBlueprintLibrary cardLibrary,
                                    LotroFormatLibrary formatLibrary) {
         TttDraftCardEvaluator evaluator = new TttDraftCardEvaluator(cardLibrary);
-        cardValues = evaluator.getValuesMap();
-        Map<String, Double> cardPlayRates = evaluator.getPlayRateMap();
+        cardValues = evaluator.getCachedValuesMap();
+        Map<String, Double> cardPlayRates = evaluator.getCachedPlayRateMap();
         // Print the card values for manual check
 //        cardValues.entrySet()
 //                .stream()
@@ -65,8 +64,7 @@ public class TttTableDraftDefinition implements TableDraftDefinition {
     }
 
     @Override
-    public TableDraft getTableDraft(CollectionsManager collectionsManager, CollectionType collectionType, DraftTimerProducer draftTimerProducer) {
-        DraftTimer draftTimer = draftTimerProducer == null ? null : draftTimerProducer.getDraftTimer();
+    public TableDraft getTableDraft(CollectionsManager collectionsManager, CollectionType collectionType, DraftTimer draftTimer) {
         return new TableDraftClassic(collectionsManager, collectionType, startingCollectionProducer, boosterProducer, PLAYER_COUNT, DRAFT_ROUNDS, draftTimer, cardValues);
     }
 
