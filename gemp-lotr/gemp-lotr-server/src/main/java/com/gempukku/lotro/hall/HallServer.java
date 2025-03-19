@@ -75,7 +75,8 @@ public class HallServer extends AbstractServer {
         tableHolder = new TableHolder(leagueService, ignoreDAO);
 
         _hallChat = _chatServer.createChatRoom("Game Hall", true, 300, true,
-                "You're now in the Game Hall, use /help to get a list of available commands.<br>Don't forget to check out the new Discord chat integration! Click the 'Switch to Discord' button in the lower right ---->");
+                "You're now in the Game Hall, use /help to get a list of available commands.<br>Don't forget to check out the new Discord chat integration! Click the 'Switch to Discord' button in the lower right ---->",
+                null);
         _hallChat.addChatCommandCallback("ban",
                 new ChatCommandCallback() {
                     @Override
@@ -942,7 +943,7 @@ public class HallServer extends AbstractServer {
         public void broadcastMessage(String message, Collection<String> toWhom) {
             try {
                 //check-in callback
-                if (toWhom == null || toWhom.isEmpty()) {
+                if (toWhom == null ) {
                     _hallChat.sendMessageNoHistory("TournamentSystem", message, true);
                 } else {
                     StringBuilder builder = new StringBuilder("TournamentSystemTo:");
@@ -997,7 +998,7 @@ public class HallServer extends AbstractServer {
         public void broadcastMessage(String message, Collection<String> toWhom) {
             try {
                 //check-in callback
-                if (toWhom == null || toWhom.isEmpty()) {
+                if (toWhom == null) {
                     _hallChat.sendMessageNoHistory("TournamentSystem", message, true);
                 } else {
                     StringBuilder builder = new StringBuilder("TournamentSystemTo:");

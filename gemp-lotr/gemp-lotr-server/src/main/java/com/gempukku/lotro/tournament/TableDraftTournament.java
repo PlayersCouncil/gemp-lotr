@@ -1,5 +1,6 @@
 package com.gempukku.lotro.tournament;
 
+import com.gempukku.lotro.chat.ChatServer;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.common.DateUtils;
@@ -23,11 +24,18 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
 
     private TableDraftTournamentInfo tableDraftInfo;
     private TableDraft table = null;
+    private final ChatServer chatServer;
 
     public TableDraftTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
                                 LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableDraftDefinitions tableDraftDefinitions,
-                                TableHolder tables, String tournamentId) {
+                                TableHolder tables, String tournamentId, ChatServer chatServer) {
         super(tournamentService, collectionsManager, productLibrary, formatLibrary, soloDraftDefinitions, tableDraftDefinitions, tables, tournamentId);
+        this.chatServer = chatServer;
+        // Create draft chat room
+        if (getTournamentStage() == Stage.STARTING || getTournamentStage() == Stage.DRAFT) {
+            chatServer.createChatRoom("Draft-" + tableDraftInfo.tableDraftParams.tournamentId, false, 30, false, null,
+                    "Welcome to room: " + _tableDraftLibrary.getTableDraftDefinition(tableDraftInfo.tableDraftParams.tableDraftFormatCode).getName());
+        }
     }
 
     @Override
@@ -185,6 +193,10 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
                     _tournamentInfo.Stage = Stage.PLAYING_GAMES;
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                 } else if (getTournamentStage() == Stage.PLAYING_GAMES) {
+
+                    // Chat room no longer needed - kept alive during deck-building if people stayed longer
+                    chatServer.destroyChatRoom("Draft-" + tableDraftInfo.tableDraftParams.tournamentId);
+
                     if (_currentlyPlayingPlayers.isEmpty()) {
                         if (_tournamentInfo.PairingMechanism.isFinished(getCurrentRound(), _players, _droppedPlayers)) {
                             result.add(finishTournament(collectionsManager));

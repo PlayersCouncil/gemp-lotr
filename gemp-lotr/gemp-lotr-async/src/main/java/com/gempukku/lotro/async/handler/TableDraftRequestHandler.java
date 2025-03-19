@@ -253,6 +253,8 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
                 // No timer
             }
 
+            appendRoundsInfo(doc, rootElement);
+
             return doc;
         }
 
@@ -275,6 +277,13 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
         private void appendTimeRemaining(Document doc, Element rootElement, int timeRemaining) {
             Element time = doc.createElement("timeRemaining");
             time.setAttribute("value", "" + timeRemaining);
+            rootElement.appendChild(time);
+        }
+
+        private void appendRoundsInfo(Document doc, Element rootElement) {
+            Element time = doc.createElement("roundsInfo");
+            time.setAttribute("currentRound", "" + draftPlayer.getTableStatus().getCurrentRound());
+            time.setAttribute("roundsTotal", "" + draftPlayer.getTableStatus().getRoundsTotal());
             rootElement.appendChild(time);
         }
 

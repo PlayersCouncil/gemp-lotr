@@ -57,6 +57,11 @@ public class FotrTableDraftDefinition implements TableDraftDefinition {
     }
 
     @Override
+    public String getName() {
+        return "FotR Booster Draft";
+    }
+
+    @Override
     public String getCode() {
         return "fotr_table_draft";
     }

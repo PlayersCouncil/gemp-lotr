@@ -2,10 +2,10 @@ package com.gempukku.lotro.draft3;
 
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.draft3.format.fotr.FotrTableDraftDefinition;
-import com.gempukku.lotro.draft3.format.fotr_mixed.FotrMixedTableDraftDefinition;
+import com.gempukku.lotro.draft3.format.fotr_fusion.FotrFusionTableDraftDefinition;
 import com.gempukku.lotro.draft3.format.fotr_power_max.FotrPowerMaxTableDraftDefinition;
 import com.gempukku.lotro.draft3.format.ttt.TttTableDraftDefinition;
-import com.gempukku.lotro.draft3.format.ttt_mixed.TttMixedTableDraftDefinition;
+import com.gempukku.lotro.draft3.format.ttt_fusion.TttFusionTableDraftDefinition;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 
@@ -21,14 +21,14 @@ public class TableDraftDefinitions {
         FotrTableDraftDefinition fotrTableDraftDefinition = new FotrTableDraftDefinition(collectionsManager, cardLibrary, formatLibrary);
         draftTypes.put(fotrTableDraftDefinition.getCode(), fotrTableDraftDefinition);
 
-        FotrMixedTableDraftDefinition fotrMixedTableDraftDefinition = new FotrMixedTableDraftDefinition(collectionsManager, cardLibrary, formatLibrary);
-        draftTypes.put(fotrMixedTableDraftDefinition.getCode(), fotrMixedTableDraftDefinition);
+        FotrFusionTableDraftDefinition fotrFusionTableDraftDefinition = new FotrFusionTableDraftDefinition(collectionsManager, cardLibrary, formatLibrary);
+        draftTypes.put(fotrFusionTableDraftDefinition.getCode(), fotrFusionTableDraftDefinition);
 
         TttTableDraftDefinition tttTableDraftDefinition = new TttTableDraftDefinition(collectionsManager, cardLibrary, formatLibrary);
         draftTypes.put(tttTableDraftDefinition.getCode(), tttTableDraftDefinition);
 
-        TttMixedTableDraftDefinition tttMixedTableDraftDefinition = new TttMixedTableDraftDefinition(collectionsManager, cardLibrary, formatLibrary);
-        draftTypes.put(tttMixedTableDraftDefinition.getCode(), tttMixedTableDraftDefinition);
+        TttFusionTableDraftDefinition tttFusionTableDraftDefinition = new TttFusionTableDraftDefinition(collectionsManager, cardLibrary, formatLibrary);
+        draftTypes.put(tttFusionTableDraftDefinition.getCode(), tttFusionTableDraftDefinition);
 
         FotrPowerMaxTableDraftDefinition fotrPowerMaxTableDraftDefinition = new FotrPowerMaxTableDraftDefinition(collectionsManager, cardLibrary, formatLibrary);
         draftTypes.put(fotrPowerMaxTableDraftDefinition.getCode(), fotrPowerMaxTableDraftDefinition);

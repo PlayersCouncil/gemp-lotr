@@ -96,6 +96,15 @@ public class ServerBuilder {
                         extract(objectMap, LoggedUserHolder.class)
                 ));
 
+        objectMap.put(MerchantService.class,
+                new MerchantService(
+                        extract(objectMap, LotroCardBlueprintLibrary.class),
+                        extract(objectMap, CollectionsManager.class)));
+
+        objectMap.put(ChatServer.class, new ChatServer(
+                extract(objectMap, IgnoreDAO.class),
+                extract(objectMap, PlayerDAO.class)));
+
         objectMap.put(TournamentService.class,
                 new TournamentService(
                         extract(objectMap, CollectionsManager.class),
@@ -108,16 +117,8 @@ public class ServerBuilder {
                         extract(objectMap, LotroCardBlueprintLibrary.class),
                         extract(objectMap, LotroFormatLibrary.class),
                         extract(objectMap, SoloDraftDefinitions.class),
-                        extract(objectMap, TableDraftDefinitions.class)));
-
-        objectMap.put(MerchantService.class,
-                new MerchantService(
-                        extract(objectMap, LotroCardBlueprintLibrary.class),
-                        extract(objectMap, CollectionsManager.class)));
-
-        objectMap.put(ChatServer.class, new ChatServer(
-                extract(objectMap, IgnoreDAO.class),
-                extract(objectMap, PlayerDAO.class)));
+                        extract(objectMap, TableDraftDefinitions.class),
+                        extract(objectMap, ChatServer.class)));
 
         objectMap.put(LotroServer.class,
                 new LotroServer(

@@ -1,4 +1,4 @@
-package com.gempukku.lotro.draft3.format.ttt_mixed;
+package com.gempukku.lotro.draft3.format.ttt_fusion;
 
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.draft3.Booster;
@@ -11,7 +11,7 @@ import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TttMixedTableDraftBoosterProducer implements BoosterProducer {
+public class TttFusionTableDraftBoosterProducer implements BoosterProducer {
     private static final int MAX_ROUND = 6;
 
     private static final String RARE_FILTER = "rarity:R";
@@ -23,8 +23,8 @@ public class TttMixedTableDraftBoosterProducer implements BoosterProducer {
 
     private final Map<String, List<String>> cardPools = new HashMap<>();
 
-    public TttMixedTableDraftBoosterProducer(CollectionsManager collectionsManager, LotroCardBlueprintLibrary cardLibrary,
-                                             LotroFormatLibrary formatLibrary, Map<String, Double> cardPlayRates) {
+    public TttFusionTableDraftBoosterProducer(CollectionsManager collectionsManager, LotroCardBlueprintLibrary cardLibrary,
+                                              LotroFormatLibrary formatLibrary, Map<String, Double> cardPlayRates) {
         SortAndFilterCards sortAndFilterCards = new SortAndFilterCards();
 
         List<String> rarities = List.of("rare", "uncommon", "common");

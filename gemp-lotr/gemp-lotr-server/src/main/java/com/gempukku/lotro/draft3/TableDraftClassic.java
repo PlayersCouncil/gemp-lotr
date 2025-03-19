@@ -379,6 +379,6 @@ public class TableDraftClassic implements TableDraft{
     public TableStatus getTableStatus() {
         List<PlayerStatus> statuses = new ArrayList<>();
         players.forEach(draftPlayer -> statuses.add(new PlayerStatus(draftPlayer.getName(), chosenCards.containsKey(draftPlayer))));
-        return new TableStatus(statuses, currentRound % 2 == 1); // Alternate pick order with each booster
+        return new TableStatus(statuses, currentRound % 2 == 1, currentRound, rounds); // Alternate pick order with each booster
     }
 }

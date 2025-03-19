@@ -8,6 +8,7 @@ public interface TableDraftDefinition {
     TableDraft getTableDraft(CollectionsManager collectionsManager, CollectionType collectionType, DraftTimer draftTimer);
     int getMaxPlayers();
 
+    String getName();
     String getCode();
     String getFormat();
 }

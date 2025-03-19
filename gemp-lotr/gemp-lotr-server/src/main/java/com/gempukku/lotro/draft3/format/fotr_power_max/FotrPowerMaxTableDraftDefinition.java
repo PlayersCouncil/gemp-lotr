@@ -40,6 +40,11 @@ public class FotrPowerMaxTableDraftDefinition implements TableDraftDefinition {
     }
 
     @Override
+    public String getName() {
+        return "FotR Block Power Max Draft";
+    }
+
+    @Override
     public String getCode() {
         return "fotr_power_max_table_draft";
     }

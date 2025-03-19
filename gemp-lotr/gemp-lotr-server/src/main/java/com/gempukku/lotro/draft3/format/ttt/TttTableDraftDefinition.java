@@ -74,6 +74,11 @@ public class TttTableDraftDefinition implements TableDraftDefinition {
     }
 
     @Override
+    public String getName() {
+        return "TTT Booster Draft";
+    }
+
+    @Override
     public String getCode() {
         return "ttt_table_draft";
     }

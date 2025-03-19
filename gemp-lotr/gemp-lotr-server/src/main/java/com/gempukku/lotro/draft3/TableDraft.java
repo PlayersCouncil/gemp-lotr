@@ -36,12 +36,16 @@ public interface TableDraft {
     }
 
     class TableStatus {
-        private List<PlayerStatus> playerStatuses;
-        private boolean pickOrderAscending;
+        private final List<PlayerStatus> playerStatuses;
+        private final boolean pickOrderAscending;
+        private final int currentRound;
+        private final int roundsTotal;
 
-        public TableStatus(List<PlayerStatus> playerStatuses, boolean pickOrderAscending) {
+        public TableStatus(List<PlayerStatus> playerStatuses, boolean pickOrderAscending, int currentRound, int roundsTotal) {
             this.playerStatuses = playerStatuses;
             this.pickOrderAscending = pickOrderAscending;
+            this.currentRound = currentRound;
+            this.roundsTotal = roundsTotal;
         }
 
         public List<PlayerStatus> getPlayerStatuses() {
@@ -50,6 +54,14 @@ public interface TableDraft {
 
         public boolean isPickOrderAscending() {
             return pickOrderAscending;
+        }
+
+        public int getCurrentRound() {
+            return currentRound;
+        }
+
+        public int getRoundsTotal() {
+            return roundsTotal;
         }
     }
 }

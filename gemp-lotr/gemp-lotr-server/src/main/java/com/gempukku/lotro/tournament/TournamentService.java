@@ -1,5 +1,6 @@
 package com.gempukku.lotro.tournament;
 
+import com.gempukku.lotro.chat.ChatServer;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
@@ -40,6 +41,7 @@ public class TournamentService {
     private TableHolder _tables;
     private final SoloDraftDefinitions _soloDraftLibrary;
     private final TableDraftDefinitions _tableDraftLibrary;
+    private final ChatServer _chatServer;
 
     private final CollectionsManager _collectionsManager;
 
@@ -52,7 +54,7 @@ public class TournamentService {
     public TournamentService(CollectionsManager collectionsManager, ProductLibrary productLibrary, DraftPackStorage draftPackStorage,
                              TournamentDAO tournamentDao, TournamentPlayerDAO tournamentPlayerDao, TournamentMatchDAO tournamentMatchDao,
                              GameHistoryDAO gameHistoryDao, LotroCardBlueprintLibrary bpLibrary, LotroFormatLibrary formatLibrary,
-                             SoloDraftDefinitions soloDraftLibrary, TableDraftDefinitions tableDraftDefinitions) {
+                             SoloDraftDefinitions soloDraftLibrary, TableDraftDefinitions tableDraftDefinitions, ChatServer chatServer) {
         _collectionsManager = collectionsManager;
         _productLibrary = productLibrary;
         _draftPackStorage = draftPackStorage;
@@ -64,6 +66,7 @@ public class TournamentService {
         _formatLibrary = formatLibrary;
         _soloDraftLibrary = soloDraftLibrary;
         _tableDraftLibrary = tableDraftDefinitions;
+        _chatServer = chatServer;
     }
 
     public PairingMechanism getPairingMechanism(Tournament.PairingType pairing) {
@@ -281,15 +284,16 @@ public class TournamentService {
     private void addImmediateRecurringLimitedGames() {
         addImmediateRecurringTableDraft("fotr_power_max_table_draft_queue", "FotR Power Max Table Draft", "fotrPowerMaxTableDraftQueue-", "fotr_power_max_table_draft", 8, DraftTimerFactory.Type.CLASSIC);
 
-        addImmediateRecurringTableDraft("fotr_mixed_table_draft_queue", "FotR Mixed Table Draft", "fotrMixedTableDraftQueue-", "fotr_mixed_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
+        addImmediateRecurringTableDraft("fotr_fusion_table_draft_queue", "FotR Fusion Table Draft", "fotrFusionTableDraftQueue-", "fotr_fusion_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
         addImmediateRecurringTableDraft("fotr_table_draft_queue", "FotR Table Draft", "fotrTableDraftQueue-", "fotr_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
-        addImmediateRecurringTableDraft("ttt_mixed_table_draft_queue", "TTT Mixed Table Draft", "tttMixedTableDraftQueue-", "ttt_mixed_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
+        addImmediateRecurringTableDraft("ttt_fusion_table_draft_queue", "TTT Fusion Table Draft", "tttFusionTableDraftQueue-", "ttt_fusion_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
         addImmediateRecurringTableDraft("ttt_table_draft_queue", "TTT Table Draft", "tttTableDraftQueue-", "ttt_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
 
-        addImmediateRecurringSoloTableDraft("fotr_mixed_solo_table_draft_queue", "FotR Mixed Solo Table Draft", "fotrMixedSoloTableDraftQueue-", "fotr_mixed_table_draft");
-        addImmediateRecurringSoloTableDraft("fotr_solo_table_draft_queue", "FotR Solo Table Draft", "fotrSoloTableDraftQueue-", "fotr_table_draft");
-        addImmediateRecurringSoloTableDraft("ttt_mixed_solo_table_draft_queue", "TTT Mixed Solo Table Draft", "tttMixedSoloTableDraftQueue-", "ttt_mixed_table_draft");
-        addImmediateRecurringSoloTableDraft("ttt_solo_table_draft_queue", "TTT Solo Table Draft", "tttSoloTableDraftQueue-", "ttt_table_draft");
+        // Solo table drafts are better for leagues, not for tournaments
+//        addImmediateRecurringSoloTableDraft("fotr_fusion_solo_table_draft_queue", "FotR Fusion Solo Table Draft", "fotrFusionSoloTableDraftQueue-", "fotr_fusion_table_draft");
+//        addImmediateRecurringSoloTableDraft("fotr_solo_table_draft_queue", "FotR Solo Table Draft", "fotrSoloTableDraftQueue-", "fotr_table_draft");
+//        addImmediateRecurringSoloTableDraft("ttt_fusion_solo_table_draft_queue", "TTT Fusion Solo Table Draft", "tttFusionSoloTableDraftQueue-", "ttt_fusion_table_draft");
+//        addImmediateRecurringSoloTableDraft("ttt_solo_table_draft_queue", "TTT Solo Table Draft", "tttSoloTableDraftQueue-", "ttt_table_draft");
 
         addImmediateRecurringDraft("fotr_draft_queue", "FotR Draft", "fotrDraftQueue-", "fotr_draft");
         addImmediateRecurringDraft("ttt_draft_queue", "TTT Draft", "tttDraftQueue-", "ttt_draft");
@@ -588,7 +592,7 @@ public class TournamentService {
                 } else if (info.Parameters().type == Tournament.TournamentType.TABLE_SOLODRAFT) {
                     tournament = new SoloTableDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
                 } else if (info.Parameters().type == Tournament.TournamentType.TABLE_DRAFT) {
-                    tournament = new TableDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
+                    tournament = new TableDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid, _chatServer);
                 }
 
                 _activeTournaments.put(tid, tournament);
@@ -620,7 +624,7 @@ public class TournamentService {
                 } else if (type == Tournament.TournamentType.TABLE_SOLODRAFT) {
                     tournament = new SoloTableDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
                 } else if (type == Tournament.TournamentType.TABLE_DRAFT) {
-                    tournament = new TableDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid);
+                    tournament = new TableDraftTournament(this, _collectionsManager, _productLibrary, _formatLibrary, _soloDraftLibrary, _tableDraftLibrary, _tables, tid, _chatServer);
                 }
 
                 _activeTournaments.put(tid, tournament);

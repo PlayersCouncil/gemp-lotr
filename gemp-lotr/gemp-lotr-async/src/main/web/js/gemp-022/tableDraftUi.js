@@ -13,10 +13,15 @@ var GempLotrTableDraftUI = Class.extend({
 
     eventId:null,
 
+    refreshInterval:null,
+
+    chatBoxDiv: null,
+    chatBox: null,
+
     init:function () {
         var that = this;
 
-        this.comm = new GempLotrCommunication("/gemp-lotr-server", that.processError);
+        this.comm = new GempLotrCommunication("/gemp-lotr-server", that.processError.bind(that));
 
         this.eventId = getUrlParam("eventId");
 
@@ -27,6 +32,7 @@ var GempLotrTableDraftUI = Class.extend({
         this.tableStatusDiv = $("#tableStatusDiv");
         this.picksDiv = $("#picksDiv");
         this.draftedDiv = $("#draftedDiv");
+        this.sideDiv = $("#sideDiv");
 
         this.picksCardGroup = new NormalCardGroup(this.picksDiv, function (card) {
             return true;
@@ -39,6 +45,8 @@ var GempLotrTableDraftUI = Class.extend({
         this.draftedCardGroup.maxCardHeight = 200;
 
         this.selectionFunc = this.addCardToDeckAndLayout;
+
+        this.addBottomLeftTabPane();
 
         $("body").click(
                 function (event) {
@@ -86,7 +94,50 @@ var GempLotrTableDraftUI = Class.extend({
         };
         this.infoDialog.swipe(swipeOptions);
 
+        this.refreshInterval = setInterval(function () {
+            that.getDraftState();
+        }, 500);
         this.getDraftState();
+
+        this.chatBox.beginGameChat();
+    },
+
+    addBottomLeftTabPane: function () {
+        var that = this;
+        var tabsLabels = "<li><a href='#chatBox' class='slimTab'>Chat</a></li><li><a href='#playersInRoomBox' class='slimTab'>Players</a></li>";
+        var tabsBodies = "<div id='chatBox' class='slimPanel'></div><div id='playersInRoomBox' class='slimPanel'></div>";
+
+        var tabsStr = "<div id='bottomLeftTabs'><ul>" + tabsLabels + "</ul>" + tabsBodies + "</div>";
+
+        this.tabPane = $(tabsStr).tabs();
+
+        $("#sideDiv").append(this.tabPane);
+
+        this.chatBoxDiv = $("#chatBox");
+
+        var playerListener = function (players) {
+            var val = "";
+            for (var i = 0; i < players.length; i++)
+                val += players[i] + "<br/>";
+            $("a[href='#playersInRoomBox']").html("Players(" + players.length + ")");
+            $("#playersInRoomBox").html(val);
+        };
+
+        var displayChatListener = function(title, message) {
+
+            var dialog = $("<div></div>").dialog({
+                title: title,
+                resizable: true,
+                height: 200,
+                modal: true,
+                buttons: {}
+            }).html(message);
+        }
+
+        var chatRoomName = ("Draft-" + getUrlParam("eventId"));
+        this.chatBox = new ChatBoxUI(chatRoomName, $("#chatBox"), this.comm.url, false, playerListener, false, displayChatListener);
+        this.chatBox.chatUpdateInterval = 3000;
+
     },
 
     processDraftStatus:function (xml, callUpdate) {
@@ -96,6 +147,7 @@ var GempLotrTableDraftUI = Class.extend({
             var pickedCards = root.getElementsByTagName("pickedCard");
             var availablePicks = root.getElementsByTagName("availablePick");
             var timeRemainingElements = root.getElementsByTagName("timeRemaining");
+            var roundsInfoElements = root.getElementsByTagName("roundsInfo");
             var playerElements = root.getElementsByTagName("player");
             var pickOrderAscendingElements = root.getElementsByTagName("pickOrderAscending");
 
@@ -103,6 +155,14 @@ var GempLotrTableDraftUI = Class.extend({
             var timeRemaining = null; // Default to null
             if (timeRemainingElements.length > 0) {
                 timeRemaining = timeRemainingElements[0].getAttribute("value");
+            }
+
+            // Get round info
+            var currentRound = null; // Default to null
+            var roundsTotal = null; // Default to null
+            if (roundsInfoElements.length > 0) {
+                currentRound = roundsInfoElements[0].getAttribute("currentRound");
+                roundsTotal = roundsInfoElements[0].getAttribute("roundsTotal");
             }
 
 
@@ -113,7 +173,7 @@ var GempLotrTableDraftUI = Class.extend({
             // Count occurrences of picked cards
             for (var i = 0; i < pickedCards.length; i++) {
                 let blueprintId = pickedCards[i].getAttribute("blueprintId");
-                newDraftedIds.set(blueprintId, (newDraftedIds.get(blueprintId) || 0) + 1);
+                newDraftedIds.set(blueprintId, pickedCards[i].getAttribute("count"));
             }
 
             // Count occurrences of existing drafted cards
@@ -128,11 +188,52 @@ var GempLotrTableDraftUI = Class.extend({
                 pickedCardsChanged = true;
             } else {
                 for (let [id, count] of newDraftedIds) {
-                    if (existingDraftedIds.get(id) !== count) {
+                    if (existingDraftedIds.get(id) != count) {
                         pickedCardsChanged = true;
                         break;
                     }
                 }
+            }
+
+            // Check if we can append just one card
+            let singleNewCard = null;
+            let totalDifference = 0;
+
+            for (let [id, newCount] of newDraftedIds) {
+                let existingCount = existingDraftedIds.get(id) || 0;
+                let difference = newCount - existingCount;
+
+                if (difference > 0) {
+                    singleNewCard = singleNewCard === null ? id : null; // Ensure only one new card
+                    totalDifference += difference;
+                }
+            }
+
+            // There is exactly one new card if totalDifference is 1 and singleNewCard is set
+            let isSingleNewCard = totalDifference === 1 && singleNewCard !== null;
+
+            if (isSingleNewCard) {
+                var card = new Card(singleNewCard, null, null, "drafted", "deck", "player");
+                var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, card.isFoil(), false, false, card.hasErrata(), false);
+                cardDiv.data("card", card);
+                cardDiv.data("blueprintId", singleNewCard);
+                that.draftedDiv.append(cardDiv);
+                that.draftedCardGroup.layoutCards();
+            } else if (pickedCardsChanged) {
+                $(".card", that.draftedDiv).remove();
+                for (var i = 0; i < pickedCards.length; i++) {
+                    var pickedCard = pickedCards[i];
+                    var blueprintId = pickedCard.getAttribute("blueprintId");
+                    var count = pickedCard.getAttribute("count");
+                    for (var no = 0; no < count; no++) {
+                        var card = new Card(blueprintId, null, null, "drafted", "deck", "player");
+                        var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, card.isFoil(), false, false, card.hasErrata(), false);
+                        cardDiv.data("card", card);
+                        cardDiv.data("blueprintId", blueprintId);
+                        that.draftedDiv.append(cardDiv);
+                    }
+                }
+                that.draftedCardGroup.layoutCards();
             }
 
             // Check if cards to pick from changed and we should update
@@ -181,23 +282,6 @@ var GempLotrTableDraftUI = Class.extend({
             });
             if (existingChosenIds.size !== newChosenIds.size || [...existingChosenIds].some(id => !newChosenIds.has(id))) {
                 chosenCardChanged = true;
-            }
-
-            if (pickedCardsChanged) {
-                $(".card", that.draftedDiv).remove();
-                for (var i = 0; i < pickedCards.length; i++) {
-                    var pickedCard = pickedCards[i];
-                    var blueprintId = pickedCard.getAttribute("blueprintId");
-                    var count = pickedCard.getAttribute("count");
-                    for (var no = 0; no < count; no++) {
-                        var card = new Card(blueprintId, null, null, "drafted", "deck", "player");
-                        var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, card.isFoil(), false, false, card.hasErrata(), false);
-                        cardDiv.data("card", card);
-                        cardDiv.data("blueprintId", blueprintId);
-                        that.draftedDiv.append(cardDiv);
-                    }
-                }
-                that.draftedCardGroup.layoutCards();
             }
 
             if (availablePicksChanged) {
@@ -279,26 +363,25 @@ var GempLotrTableDraftUI = Class.extend({
 
             if (newChosenIds.size != 0) {
                 let message = "Waiting for others to pick a card";
+                if (currentRound !== null && roundsTotal !== null) {
+                    message += " - Pack " + currentRound + "/" + roundsTotal;
+                }
                 if (timeRemaining !== null) {
                     message += " (" + formatTime(timeRemaining) + ")";
                 }
                 that.messageDiv.text(message);
-
-                setTimeout(function () {
-                    that.getDraftState();
-                }, 500);
             } else if (availablePicks.length > 0) {
                 let message = "Make a pick";
+                if (currentRound !== null && roundsTotal !== null) {
+                    message += " - Pack " + currentRound + "/" + roundsTotal;
+                }
                 if (timeRemaining !== null) {
                     message += " (" + formatTime(timeRemaining) + ")";
                 }
                 that.messageDiv.text(message);
-
-                setTimeout(function () {
-                    that.getDraftState();
-                }, 500);
             } else {
                 that.messageDiv.text("Draft is finished");
+                clearInterval(that.refreshInterval);
             }
         }
     },
@@ -410,6 +493,8 @@ var GempLotrTableDraftUI = Class.extend({
             var messageHeight = 40;
             var statusHeight = 20;
             var padding = 5;
+            var chatHeight = 200;
+            var chatWidth = 200;
 
             var topWidth = this.topDiv.width();
             var topHeight = this.topDiv.height();
@@ -428,8 +513,19 @@ var GempLotrTableDraftUI = Class.extend({
             this.picksDiv.css({position:"absolute", left:padding, top:messageHeight+statusHeight+padding*2, width:topWidth-padding*2, height:topHeight-messageHeight-statusHeight-padding*2});
             this.picksCardGroup.setBounds(0, 0, topWidth-padding*2, topHeight-messageHeight-statusHeight-padding*2);
 
-            this.draftedDiv.css({position:"absolute", left:padding, top:padding, width:bottomWidth-padding*2, height:bottomHeight-padding*2});
-            this.draftedCardGroup.setBounds(0, 0, bottomWidth-padding*2, bottomHeight-padding*2);
+            this.draftedDiv.css({position:"absolute", left:padding*2+chatWidth, top:padding, width:bottomWidth-padding*2-chatWidth, height:bottomHeight-padding*2});
+            this.draftedCardGroup.setBounds(0, 0, bottomWidth-padding*2-chatWidth, bottomHeight-padding*2);
+
+            this.sideDiv.css({position:"absolute", left:padding, top:padding, width:chatWidth, height:bottomHeight-padding*2});
+
+            this.tabPane.css({
+                position: "absolute",
+                left: 0,
+                top: bottomHeight - chatHeight - padding,
+                width: chatWidth - padding,
+                height: chatHeight - padding
+            });
+            this.chatBox.setBounds(4, 4 + 25, chatWidth - 8, chatHeight - 8 - 25);
         } else {
             this.picksCardGroup.layoutCards();
             this.draftedCardGroup.layoutCards();
@@ -437,7 +533,10 @@ var GempLotrTableDraftUI = Class.extend({
     },
 
     processError:function (xhr, ajaxOptions, thrownError) {
-        if (thrownError != "abort")
-            alert("There was a problem during communication with server");
+        if (thrownError != "abort") {
+            clearInterval(this.refreshInterval);
+            this.chatBox.appendMessage("There was a problem communicating with the server, if the draft is finished, table has been removed, otherwise you have lost connection to the server.", "warningMessage");
+            this.chatBox.appendMessage("Refresh the page (press F5) to resume the draft, or press back on your browser to get back to the Game Hall.", "warningMessage");
+        }
     }
 });
