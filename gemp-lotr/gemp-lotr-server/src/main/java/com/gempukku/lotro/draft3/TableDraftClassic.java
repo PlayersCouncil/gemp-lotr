@@ -18,9 +18,9 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 
-
 public class TableDraftClassic implements TableDraft{
     //TODO thread locks
+    private static final int MISSED_CARDS_ALLOWED = 4;
 
     private final StartingCollectionProducer startingCollectionProducer;
     private final BoosterProducer boosterProducer;
@@ -43,6 +43,7 @@ public class TableDraftClassic implements TableDraft{
     private final List<DraftPlayer> players = new ArrayList<>();
     private final Map<DraftPlayer, Booster> assignedBoosters = new HashMap<>();
     private final Map<DraftPlayer, String> chosenCards = new HashMap<>();
+    private final Map<DraftPlayer, Integer> missedPicksInARow = new HashMap<>();
     private final Map<DraftBot, MutableCardCollection> botCollections = new HashMap<>();
 
     public TableDraftClassic(CollectionsManager collectionsManager, CollectionType collectionType,
@@ -106,6 +107,7 @@ public class TableDraftClassic implements TableDraft{
             }
             startTimer();
             makeBotsDeclare();
+            makeAfkersDeclare();
         } else {
             if (choiceTimePassed()) {
                 forcePlayerDeclares();
@@ -226,6 +228,18 @@ public class TableDraftClassic implements TableDraft{
         });
     }
 
+    private void makeAfkersDeclare() {
+        // This does not advance the draft - if all players are afk, draft will go slow
+
+        assignedBoosters.forEach((draftPlayer, booster) -> {
+            if (missedPicksInARow.get(draftPlayer) > MISSED_CARDS_ALLOWED) {
+                // Player missed a lot of picks, choose one at random from current booster
+                chosenCards.put(draftPlayer, chooseLikeBot(assignedBoosters.get(draftPlayer).getCardsInPack()));
+                missedPicksInARow.put(draftPlayer, missedPicksInARow.get(draftPlayer) + 1);
+            }
+        });
+    }
+
     private void startTimer() {
         if (draftTimer == null) {
             return; // No timer for this draft
@@ -277,6 +291,8 @@ public class TableDraftClassic implements TableDraft{
             }
             // Player has not declared card, choose one at random from current booster
             chosenCards.put(draftPlayer, chooseLikeBot(assignedBoosters.get(draftPlayer).getCardsInPack()));
+            // Flag that inactivity
+            missedPicksInARow.put(draftPlayer, missedPicksInARow.get(draftPlayer) + 1);
         });
     }
 
@@ -309,6 +325,7 @@ public class TableDraftClassic implements TableDraft{
         }
 
         chosenCards.put(who, what);
+        missedPicksInARow.put(who, 0);
 
         //Check if all players chose
         if (!(who instanceof DraftBot)) {
@@ -346,6 +363,7 @@ public class TableDraftClassic implements TableDraft{
         // Register bot or regular player as requested
         DraftPlayer tbr = bot ? new WeightDraftBot(this, name, cardValuesForBots) : new DraftPlayer(this, name);
         players.add(tbr);
+        missedPicksInARow.put(tbr, 0);
         return tbr;
     }
 
@@ -362,8 +380,11 @@ public class TableDraftClassic implements TableDraft{
                 toRemove = player;
             }
         }
-
-        return players.remove(toRemove);
+        if (players.remove(toRemove)) {
+            missedPicksInARow.remove(toRemove);
+            return true;
+        }
+        return false;
     }
 
     @Override

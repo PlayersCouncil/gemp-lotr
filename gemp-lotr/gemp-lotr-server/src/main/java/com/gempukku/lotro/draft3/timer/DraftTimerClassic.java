@@ -6,29 +6,13 @@ import java.util.Map;
 public class DraftTimerClassic implements DraftTimer{
     private Map<Integer, Integer> durations = new HashMap<>();
     private boolean firstCardPicked = false;
+    private static final int SECS_PER_CARD = 6;
 
     public DraftTimerClassic() {
-        // 8 secs per card in pack
         durations.put(1, 5);
-        durations.put(2, 8);
-        durations.put(3, 16);
-        durations.put(4, 24);
-        durations.put(5, 32);
-        durations.put(6, 40);
-        durations.put(7, 48);
-        durations.put(8, 56);
-        durations.put(9, 64);
-        durations.put(10, 72);
-        durations.put(11, 80);
-        durations.put(12, 88);
-        durations.put(13, 96);
-        durations.put(14, 104);
-        durations.put(15, 112);
-        durations.put(16, 120);
-        durations.put(17, 128);
-        durations.put(18, 136);
-        durations.put(19, 144);
-        durations.put(20, 152);
+        for (int i = 2; i <= 20; i++) {
+            durations.put(i, (i - 1) * SECS_PER_CARD);
+        }
     }
 
     @Override

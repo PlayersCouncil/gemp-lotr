@@ -18,8 +18,8 @@ public interface TableDraft {
     TableStatus getTableStatus();
 
     class PlayerStatus {
-        private String name;
-        private boolean hasChosenCard;
+        private final String name;
+        private final boolean hasChosenCard;
 
         public PlayerStatus(String name, boolean hasChosenCard) {
             this.name = name;
