@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.official.set02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -20,8 +17,8 @@ public class Card_02_079_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "2_79");
-					// put other cards in here as needed for the test case
+					put("resistance", "2_79");
+					put("twigul", "2_82");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +43,7 @@ public class Card_02_079_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("resistance");
 
 		assertEquals("Resistance Becomes Unbearable", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +55,31 @@ public class Card_02_079_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ResistanceBecomesbrUnbearableTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ResistanceBecomesbrUnbearablePutsOnRingWhenRBWasAlreadyExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var resistance = scn.GetShadowCard("resistance");
+		var twigul = scn.GetShadowCard("twigul");
+		scn.ShadowMoveCardToHand(resistance);
+		scn.ShadowMoveCharToTable(twigul);
+
+		var frodo = scn.GetRingBearer();
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddWoundsToChar(frodo, 3);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(3, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(twigul));
+		assertFalse(scn.RBWearingOneRing());
+		assertTrue(scn.ShadowPlayAvailable(resistance));
+
+		scn.ShadowPlayCard(resistance);
+		assertEquals(3, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(twigul));
+		assertTrue(scn.RBWearingOneRing());
 	}
 }
