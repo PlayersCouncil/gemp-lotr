@@ -52,6 +52,7 @@
 						type: modifyStrength
 						select: choose(minion)
 						amount: -2
+						until: start(regroup)
 					}
 				}
 			]

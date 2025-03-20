@@ -201,21 +201,10 @@
 						memorize: revealedCards
 					}
 					{
-						type: Repeat
-						times: {
-							type: ForEachInMemory
-							memory: revealedCards
-							filter: knight
-						}
-						effect: {
-							type: playCardFromDrawDeck
-							select: choose(memory(revealedCards),knight)
-							showAll: false
-							shuffle: false
-						}
-					}
-					{
-						type: shuffleDeck
+						type: playCardFromDrawDeck
+						select: choose(memory(revealedCards),knight)
+						showAll: false
+						shuffle: true
 					}
 				]
 			}

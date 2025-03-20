@@ -980,8 +980,12 @@
 					text: Choose how many {raider} tokens to spot
 					from: 0
 					to: {
-						type: ForEachCultureToken
-						culture: raider
+						type: Min
+						firstNumber: {
+							type: ForEachCultureToken
+							culture: raider
+						}
+						secondNumber: 6
 					}
 					memorize: spotCount
 				}

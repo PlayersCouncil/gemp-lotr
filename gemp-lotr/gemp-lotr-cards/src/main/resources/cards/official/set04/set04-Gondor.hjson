@@ -817,13 +817,16 @@
 				phase: maneuver
 				effect: [
 					{
-						type: exert
-						select: choose(minion)
-						count: {
+						type: Repeat
+						times: {
 							type: ForEachCultureToken
 							filter: self
 							culture: gondor
 							limit: 3
+						}
+						effect: {
+							type: exert
+							select: choose(minion)
 						}
 					}
 					{
