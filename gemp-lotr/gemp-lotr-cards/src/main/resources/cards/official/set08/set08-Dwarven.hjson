@@ -127,7 +127,7 @@
 			type: event
 			cost: {
 				type: exert
-				select: choose(dwarf)
+				select: choose(dwarf,damage,CanExert,MinVitality(3))
 				times: 2
 				memorize: exertedDwarf
 			},
