@@ -1068,38 +1068,29 @@
 						memorize: revealedCard
 					}
 					{
-						type: choice
-						texts: [
-							Make the Shadow archery total +2
-							Exert this minion
-						]
-						effects: [
-							{
-								type: If
-								check: {
-									type: memoryMatches
-									memory: revealedCard
-									filter: side(shadow)
-								}
-								true: {
-									type: modifyArcheryTotal
-									side: shadow
-									amount: 2
-								}
-							}
-							{
-								type: If
-								check: {
-									type: memoryMatches
-									memory: revealedCard
-									filter: side(free people)
-								}
-								true: {
-									type: exert
-									select: self
-								}
-							}
-						]
+						type: If
+						check: {
+							type: memoryMatches
+							memory: revealedCard
+							filter: side(shadow)
+						}
+						true: {
+							type: modifyArcheryTotal
+							side: shadow
+							amount: 2
+						}
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: revealedCard
+							filter: not(side(shadow))
+						}
+						true: {
+							type: exert
+							select: self
+						}
 					}
 				]
 			}
