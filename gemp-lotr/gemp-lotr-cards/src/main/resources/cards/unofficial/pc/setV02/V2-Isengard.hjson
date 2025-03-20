@@ -709,10 +709,16 @@
 					type: cantUseSpecialAbilities
 					filter: any
 					phase: skirmish
-					requires: {
-						type: Location
-						filter: battleground
-					}
+					requires: [
+						{
+							type: Location
+							filter: battleground
+						}
+						{
+							type: CanSpot
+							filter: inSkirmish, self
+						}
+					]
 				}
 			}
 		]
