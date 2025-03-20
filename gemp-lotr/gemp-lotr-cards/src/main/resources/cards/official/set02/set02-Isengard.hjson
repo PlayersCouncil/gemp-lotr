@@ -31,15 +31,7 @@
 						type: discard
 						select: all(side(free people),possession,or(armor,helm,shield))
 					}
-				}
-				{
-					type: If
-					check: {
-						type: canSpot
-						filter: companion
-						count: 6
-					}
-					true: {
+					false: {
 						type: discard
 						select: choose(possession,or(armor,helm,shield))
 					}
