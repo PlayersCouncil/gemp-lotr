@@ -335,7 +335,7 @@
 			{
 				type: activated
 				phase: fellowship
-
+				text: Stack your tale or artifact from play
 				cost: {
 					type: StackCardsFromPlay
 					select: choose(your,or(tale,artifact),not(self))
@@ -349,6 +349,7 @@
 			{
 				type: activated
 				phase: fellowship
+				text: Stack your tale or artifact from hand
 				cost: {
 					type: stackcardsfromhand
 					select: choose(your,or(tale,artifact),not(self))
@@ -408,7 +409,7 @@
 							 select: choose(companion)
 							 count: 0-1
 						}
-				}
+					}
 					{
 						type: discard
 						select: self
