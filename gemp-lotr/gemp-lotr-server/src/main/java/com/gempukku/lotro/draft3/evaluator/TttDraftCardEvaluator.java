@@ -1,4 +1,4 @@
-package com.gempukku.lotro.draft3.format.ttt;
+package com.gempukku.lotro.draft3.evaluator;
 
 import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.common.Side;

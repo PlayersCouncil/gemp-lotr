@@ -58,8 +58,8 @@ public class TableDraftClassic implements TableDraft{
             throw new IllegalArgumentException("Too many players at the table - " + maxPlayers);
         }
         this.maxPlayers = maxPlayers;
-        if (rounds > boosterProducer.getMaxRound(maxPlayers)) {
-            throw new IllegalArgumentException("Booster producer cannot support " + rounds + " rounds with " + maxPlayers + " players");
+        if (rounds > boosterProducer.getMaxRound()) {
+            throw new IllegalArgumentException("Booster producer cannot support " + rounds + " rounds");
         }
         this.rounds = rounds;
         this.draftTimer = draftTimer;

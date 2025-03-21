@@ -132,32 +132,6 @@ public class TournamentService {
         );
     }
 
-    private void addImmediateRecurringSoloTableDraft(String queueId, String queueName, String prefix, String formatCode) {
-
-        SoloTableDraftTournamentParams soloDraftParams = new SoloTableDraftTournamentParams();
-        soloDraftParams.type = Tournament.TournamentType.TABLE_SOLODRAFT;
-
-        soloDraftParams.deckbuildingDuration = 25;
-        soloDraftParams.turnInDuration = 5;
-
-        TableDraftDefinition tableDraft = _tableDraftLibrary.getTableDraftDefinition(formatCode);
-        soloDraftParams.soloTableDraftFormatCode = formatCode;
-        soloDraftParams.format = tableDraft.getFormat();
-        soloDraftParams.requiresDeck = false;
-
-        soloDraftParams.tournamentId = prefix;
-        soloDraftParams.name = queueName;
-        soloDraftParams.cost = 0;
-        soloDraftParams.minimumPlayers = 2;
-        soloDraftParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
-        soloDraftParams.prizes = Tournament.PrizeType.NONE;
-
-        _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
-                new SoloTableDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
-                        soloDraftParams, _tableDraftLibrary))
-        );
-    }
-
     private void addImmediateRecurringTableDraft(String queueId, String queueName, String prefix, String formatCode, int players, DraftTimerFactory.Type draftTimer) {
 
         TableDraftTournamentParams draftParams = new TableDraftTournamentParams();
@@ -191,61 +165,15 @@ public class TournamentService {
                         new TournamentParams(prefix, queueName, formatCode, 0, 4, Tournament.PairingType.SWISS_3, Tournament.PrizeType.DAILY)), _tournamentRepeatPeriod));
     }
 
-    private void addRecurringScheduledSealed(String queueId, String queueName, String time, String prefix, String formatCode) {
-
-        var sealedParams = new SealedTournamentParams();
-        sealedParams.type = Tournament.TournamentType.SEALED;
-
-        sealedParams.deckbuildingDuration = 25;
-        sealedParams.turnInDuration = 5;
-
-        var sealedFormat = _formatLibrary.GetSealedTemplate(formatCode);
-        sealedParams.sealedFormatCode = formatCode;
-        sealedParams.format = sealedFormat.GetFormat().getCode();
-        sealedParams.requiresDeck = false;
-
-        sealedParams.tournamentId = prefix;
-        sealedParams.name = queueName;
-        sealedParams.cost = 0;
-        sealedParams.minimumPlayers = 4;
-        sealedParams.playoff = Tournament.PairingType.SWISS_3;
-        sealedParams.prizes = Tournament.PrizeType.DAILY;
-
-        _tournamentQueues.put(queueId, new RecurringScheduledQueue(this, queueId, queueName,
-                new SealedTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.ParseStringDate(time),
-                        sealedParams), _tournamentRepeatPeriod)
-        );
-    }
-
-    private void addRecurringScheduledDraft(String queueId, String queueName, String time, String prefix, String formatCode) {
-
-        var soloDraftParams = new SoloDraftTournamentParams();
-        soloDraftParams.type = Tournament.TournamentType.SOLODRAFT;
-
-        soloDraftParams.deckbuildingDuration = 25;
-        soloDraftParams.turnInDuration = 5;
-
-        var soloDraft = _soloDraftLibrary.getSoloDraft(formatCode);
-        soloDraftParams.soloDraftFormatCode = formatCode;
-        soloDraftParams.format = soloDraft.getFormat();
-        soloDraftParams.requiresDeck = false;
-
-        soloDraftParams.tournamentId = prefix;
-        soloDraftParams.name = queueName;
-        soloDraftParams.cost = 0;
-        soloDraftParams.minimumPlayers = 4;
-        soloDraftParams.playoff = Tournament.PairingType.SWISS_3;
-        soloDraftParams.prizes = Tournament.PrizeType.DAILY;
-
-        _tournamentQueues.put(queueId, new RecurringScheduledQueue(this, queueId, queueName,
-                new SoloDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.ParseStringDate(time),
-                        soloDraftParams, _soloDraftLibrary), _tournamentRepeatPeriod)
-        );
-    }
-
     public void reloadTournaments(TableHolder tables) {
         _tables = tables;
         clearCache();
+        reloadQueues();
+
+        getLiveTournaments();
+    }
+
+    public void reloadQueues() {
         _tournamentQueues.clear();
 
         addImmediateRecurringLimitedGames();
@@ -267,33 +195,17 @@ public class TournamentService {
             addRecurringScheduledQueue("movie_daily_eu", "Daily Gondor Movie Block", "2013-01-16 19:30:00", "movieDailyEu-", "movie");
             addRecurringScheduledQueue("movie_daily_us", "Daily Rohan Movie Block", "2013-01-17 00:30:00", "movieDailyUs-", "movie");
 
-//            addRecurringScheduledDraft("fotr_draft_daily_eu", "Daily Gondor Fellowship Draft", "2013-01-16 19:30:00", "fotrDraftDailyEu-", "fotr_draft");
-//            addRecurringScheduledDraft("fotr_draft_daily_us", "Daily Rohan Fellowship Draft", "2013-01-17 00:30:00", "fotrDraftDailyUS-", "fotr_draft");
-//
-//            addRecurringScheduledSealed("movie_sealed_daily_eu", "Daily Gondor Movie Sealed", "2013-01-15 19:30:00", "movieSealedDailyEu-", "single_movie_sealed");
-//            addRecurringScheduledSealed("movie_sealed_daily_us", "Daily Rohan Movie Sealed", "2013-01-16 00:30:00", "movieSealedDailyUs-", "single_movie_sealed");
-
         } catch (DateTimeParseException exp) {
             // Ignore, can't happen
             System.out.println(exp);
         }
-
-        getLiveTournaments();
     }
 
     private void addImmediateRecurringLimitedGames() {
-        addImmediateRecurringTableDraft("fotr_power_max_table_draft_queue", "FotR Power Max Table Draft", "fotrPowerMaxTableDraftQueue-", "fotr_power_max_table_draft", 8, DraftTimerFactory.Type.CLASSIC);
-
-        addImmediateRecurringTableDraft("fotr_fusion_table_draft_queue", "FotR Fusion Table Draft", "fotrFusionTableDraftQueue-", "fotr_fusion_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
-        addImmediateRecurringTableDraft("fotr_table_draft_queue", "FotR Table Draft", "fotrTableDraftQueue-", "fotr_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
-        addImmediateRecurringTableDraft("ttt_fusion_table_draft_queue", "TTT Fusion Table Draft", "tttFusionTableDraftQueue-", "ttt_fusion_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
-        addImmediateRecurringTableDraft("ttt_table_draft_queue", "TTT Table Draft", "tttTableDraftQueue-", "ttt_table_draft", 6, DraftTimerFactory.Type.CLASSIC);
-
-        // Solo table drafts are better for leagues, not for tournaments
-//        addImmediateRecurringSoloTableDraft("fotr_fusion_solo_table_draft_queue", "FotR Fusion Solo Table Draft", "fotrFusionSoloTableDraftQueue-", "fotr_fusion_table_draft");
-//        addImmediateRecurringSoloTableDraft("fotr_solo_table_draft_queue", "FotR Solo Table Draft", "fotrSoloTableDraftQueue-", "fotr_table_draft");
-//        addImmediateRecurringSoloTableDraft("ttt_fusion_solo_table_draft_queue", "TTT Fusion Solo Table Draft", "tttFusionSoloTableDraftQueue-", "ttt_fusion_table_draft");
-//        addImmediateRecurringSoloTableDraft("ttt_solo_table_draft_queue", "TTT Solo Table Draft", "tttSoloTableDraftQueue-", "ttt_table_draft");
+        _tableDraftLibrary.getAllTableDrafts().forEach(tableDraftDefinition -> {
+            String code = tableDraftDefinition.getCode();
+            addImmediateRecurringTableDraft(code + "_queue", tableDraftDefinition.getName(), code + "_queue-", code, tableDraftDefinition.getMaxPlayers(), DraftTimerFactory.Type.CLASSIC);
+        });
 
         addImmediateRecurringDraft("fotr_draft_queue", "FotR Draft", "fotrDraftQueue-", "fotr_draft");
         addImmediateRecurringDraft("ttt_draft_queue", "TTT Draft", "tttDraftQueue-", "ttt_draft");

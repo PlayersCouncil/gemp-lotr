@@ -276,19 +276,19 @@ $(document).ready(
 					if (Object.prototype.hasOwnProperty.call(tableDrafts, prop)) {
 						//console.log(prop);
 
-						let code = tableDrafts[prop].format;
-						let id = tableDrafts[prop].id;
+						let code = tableDrafts[prop].code;
 
 						var item = $("<option/>")
-							.attr("value", id)
+							.attr("value", code)
 							.text(prop);
 						$("#sch-tourney-solo-table-draft-format").append(item);
 						var item2 = $("<option/>")
-							.attr("value", id)
+							.attr("value", code)
 							.text(prop);
 						$("#sch-tourney-table-draft-format").append(item2);
 					}
 				}
+				sortOptionsByName("#sch-tourney-table-draft-format");
 
 				for (var prop in tableDraftTimers) {
 					if (Object.prototype.hasOwnProperty.call(tableDraftTimers, prop)) {

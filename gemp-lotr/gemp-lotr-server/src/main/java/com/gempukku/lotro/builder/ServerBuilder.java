@@ -72,11 +72,7 @@ public class ServerBuilder {
                 ));
 
         objectMap.put(TableDraftDefinitions.class,
-                new TableDraftDefinitions(
-                        extract(objectMap, CollectionsManager.class),
-                        extract(objectMap, LotroCardBlueprintLibrary.class),
-                        extract(objectMap, LotroFormatLibrary.class)
-                ));
+                new TableDraftDefinitions());
 
         objectMap.put(LeagueService.class,
                 new LeagueService(

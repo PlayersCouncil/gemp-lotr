@@ -114,8 +114,8 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                 data.DraftTemplates = _draftLibrary.getAllSoloDrafts().values().stream()
                         .map(soloDraft -> new JSONDefs.ItemStub(soloDraft.getCode(), soloDraft.getFormat()))
                         .collect(Collectors.toMap(x-> x.code, x-> x));
-                data.TableDraftTemplates = _tableDraftDefinitions.getAllTableDrafts().values().stream()
-                        .map(tableDraftDefinition -> new JSONDefs.ItemStub(tableDraftDefinition.getFormat(), tableDraftDefinition.getCode()))
+                data.TableDraftTemplates = _tableDraftDefinitions.getAllTableDrafts().stream()
+                        .map(tableDraftDefinition -> new JSONDefs.ItemStub(tableDraftDefinition.getCode(), tableDraftDefinition.getName()))
                         .collect(Collectors.toMap(itemStub -> itemStub.name, itemStub -> itemStub));
                 data.TableDraftTimerTypes = DraftTimerFactory.getAllTypes();
 

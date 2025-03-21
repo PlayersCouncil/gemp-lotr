@@ -1159,6 +1159,9 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
         _soloDraftDefinitions.ReloadDraftsFromFile();
 
+        _tableDraftLibrary.reloadDraftsFromFile();
+        _tournamentService.reloadQueues();
+
         _chatServer.sendSystemMessageToAllChatRooms("@everyone Card definition reload complete.  If you are mid-game and you notice any oddities, reload the page and please let the mod team know in the game hall ASAP if the problem doesn't go away.");
 
         responseWriter.writeHtmlResponse("OK");
