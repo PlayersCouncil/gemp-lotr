@@ -731,23 +731,30 @@
 		effects: [
 			{
 				type: event
-				cost: {
-					type: optional
-					text: Would you like to exert Théoden?
-					effect: {
-						type: costToEffect
-						cost: {
-							type: exert
-							select: choose(name(Théoden))
+				effect: [
+					{
+						type: If
+						check: {
+							type: CanSpot
+							filter: name(Theoden),CanExert
 						}
-						effect: {
-							type: MemorizeInfo
-							memory: exertedTheoden
-							info: yes
+						true: {
+							type: optional
+							text: Would you like to exert Théoden?
+							effect: {
+								type: costToEffect
+								cost: {
+									type: exert
+									select: choose(name(Théoden))
+								}
+								effect: {
+									type: MemorizeInfo
+									memory: exertedTheoden
+									info: yes
+								}
+							}
 						}
 					}
-				}
-				effect: [
 					{
 						type: modifyStrength
 						select: choose(your,culture(rohan),companion)
