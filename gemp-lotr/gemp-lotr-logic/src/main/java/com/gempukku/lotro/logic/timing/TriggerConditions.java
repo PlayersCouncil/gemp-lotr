@@ -71,7 +71,7 @@ public class TriggerConditions {
             if (playerId != null && !playerId.equals(tokenResult.getPerformingPlayer()))
                 return false;
             return Filters.accepts(game, from, tokenResult.getSource())
-                    && Filters.and(targetFilters).accepts(game, tokenResult.getSource());
+                    && Filters.and(targetFilters).accepts(game, tokenResult.getTarget());
         }
         return false;
     }
@@ -82,7 +82,7 @@ public class TriggerConditions {
             if (playerId != null && !playerId.equals(tokenResult.getPerformingPlayer()))
                 return false;
             return Filters.accepts(game, from, tokenResult.getSource())
-                    && Filters.and(targetFilters).accepts(game, tokenResult.getSource());
+                    && Filters.and(targetFilters).accepts(game, tokenResult.getTarget());
         }
         return false;
     }
