@@ -1,9 +1,11 @@
 package com.gempukku.lotro.cards.official.set15;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Race;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +20,13 @@ public class Card_15_038_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "15_38");
-					// put other cards in here as needed for the test case
+					put("treebeard", "15_38");
+
+					put("orc1", "1_272"); //strength 10
+					put("orc2", "1_262");
+					put("orc3", "1_266");
+					put("orc4", "1_267");
+					put("enduring", "10_68");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -42,12 +49,14 @@ public class Card_15_038_Tests
 		 * Strength: 12
 		 * Vitality: 4
 		 * Resistance: 6
-		 * Game Text: To play, spot 3 [gandalf] companions.<br>Each time Treebeard wins a skirmish, the first Shadow player must exert X minions, where X is the difference between Treebeard's strength and the losing character's strength.
+		 * Game Text: To play, spot 3 [gandalf] companions.<br>Each time Treebeard wins a skirmish, the first Shadow
+		 * player must exert X minions, where X is the difference between Treebeard's strength and the losing
+		 * character's strength.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("treebeard");
 
 		assertEquals("Treebeard", card.getBlueprint().getTitle());
 		assertEquals("Enraged Shepherd", card.getBlueprint().getSubtitle());
@@ -62,18 +71,74 @@ public class Card_15_038_Tests
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TreebeardTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void TreebeardExerts2MinionsAgainstStrength10Minion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var treebeard = scn.GetFreepsCard("treebeard");
+		scn.FreepsMoveCharToTable(treebeard);
+
+		var orc1 = scn.GetShadowCard("orc1");
+		var orc2 = scn.GetShadowCard("orc2");
+		var orc3 = scn.GetShadowCard("orc3");
+		var orc4 = scn.GetShadowCard("orc4");
+		scn.ShadowMoveCharToTable(orc1, orc2, orc3, orc4);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(5, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(treebeard, orc1); //10 strength orc
+		scn.ShadowDeclineAssignments();
+
+		scn.FreepsResolveSkirmish(treebeard);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
+		//Treebeard is strength 12, the orc is 10, so 2 minions must be exerted
+		assertEquals(2, scn.ShadowGetChoiceMin());
+		assertEquals(3, scn.GetShadowCardChoiceCount());
+		assertEquals(0, scn.GetWoundsOn(orc2));
+		assertEquals(0, scn.GetWoundsOn(orc3));
+
+		scn.ShadowChooseCards(orc2, orc3);
+		assertEquals(1, scn.GetWoundsOn(orc2));
+		assertEquals(1, scn.GetWoundsOn(orc3));
+	}
+
+	@Test
+	public void TreebeardDoesNotCrashIfAgainstEnduringMinionOf11Strength() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var treebeard = scn.GetFreepsCard("treebeard");
+		scn.FreepsMoveCharToTable(treebeard);
+
+		var enduring = scn.GetShadowCard("enduring");
+		var orc1 = scn.GetShadowCard("orc1"); //only here to slow down choices
+		scn.ShadowMoveCharToTable(enduring, orc1);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(treebeard, enduring); //11 strength enduring nazgul
+		scn.ShadowDeclineAssignments();
+
+		scn.FreepsResolveSkirmish(treebeard);
+		scn.PassCurrentPhaseActions();
+		assertEquals(11, scn.GetStrength(enduring));
+		assertEquals(0, scn.GetWoundsOn((enduring)));
+		scn.FreepsResolveRuleFirst();
+		assertEquals(13, scn.GetStrength(enduring));
+		assertEquals(1, scn.GetWoundsOn((enduring))); // Skirmish loss
+
+		//Treebeard is strength 12, the nazgul is 11.  However, 1 wound makes it 13
+		// at the time this is evaluated, so it should be an absolute calculation.
+		//With only 1 minion in play, it gets the exertion
+		assertNotEquals(-1, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.GetShadowCardChoiceCount());
+
+		scn.ShadowChooseCard(enduring);
+		assertEquals(2, scn.GetWoundsOn((enduring)));
 	}
 }

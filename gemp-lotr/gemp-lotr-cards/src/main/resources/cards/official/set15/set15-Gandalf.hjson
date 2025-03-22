@@ -718,14 +718,17 @@
 					player: shadow
 					select: choose(minion)
 					count: {
-						type: subtract
-						firstNumber: {
-							type: forEachStrength
-							filter: self
-						}
-						secondNumber: {
-							type: forEachStrength
-							filter: memory(losers)
+						type: abs
+						value: {
+							type: subtract
+							firstNumber: {
+								type: forEachStrength
+								filter: self
+							}
+							secondNumber: {
+								type: forEachStrength
+								filter: memory(losers)
+							}
 						}
 					}
 				}
