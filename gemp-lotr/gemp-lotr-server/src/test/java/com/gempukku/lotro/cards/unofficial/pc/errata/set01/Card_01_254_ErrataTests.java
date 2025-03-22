@@ -150,7 +150,7 @@ public class Card_01_254_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(mordor);
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCard(arwen);
 
 		scn.SkipToPhase(Phase.ARCHERY);

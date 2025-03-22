@@ -221,7 +221,7 @@ public class Card_V1_039_Tests
 		scn.ShadowUseCardAction(crown);
 		assertEquals(10, scn.GetTwilight());
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to transfer to"));
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCard(nazgul1);
 		assertEquals(3, scn.GetVitality(nazgul1));
 

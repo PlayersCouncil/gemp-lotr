@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -109,7 +108,7 @@ public class Card_V1_014_Tests
 		assertTrue(scn.FreepsDecisionAvailable("Choose card from discard"));
 
 		//4 cards in discard: 1 gandalf event, 1 elven event, 1 gandalf ally, 1 elven condition
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(sleep);
 
 		assertEquals(1, scn.GetWoundsOn(gandalf));

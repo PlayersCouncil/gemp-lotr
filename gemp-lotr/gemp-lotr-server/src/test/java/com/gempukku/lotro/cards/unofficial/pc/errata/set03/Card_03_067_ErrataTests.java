@@ -111,7 +111,7 @@ public class Card_03_067_ErrataTests
 
 		scn.ShadowUseCardAction(palantir);
 		assertEquals(21, scn.GetTwilight());
-		assertEquals(1, scn.GetShadowCardChoiceCount());
+		assertEquals(1, scn.ShadowGetCardChoiceCount());
 
 		scn.FreepsDismissRevealedCards();
 		scn.ShadowDismissRevealedCards();

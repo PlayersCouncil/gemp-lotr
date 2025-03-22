@@ -91,12 +91,12 @@ public class Card_01_036_Tests
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		scn.FreepsPlayCard(feet);
 		assertEquals(1, scn.GetWoundsOn(arwen));
-		assertEquals(8, scn.GetFreepsCardChoiceCount());
+		assertEquals(8, scn.FreepsGetCardChoiceCount());
 
 		scn.FreepsDismissRevealedCards();
 
 		assertEquals("4", scn.ShadowGetADParam("min")[0]);
-		assertEquals(8, scn.GetShadowCardChoiceCount());
+		assertEquals(8, scn.ShadowGetCardChoiceCount());
 
 		assertEquals(8, scn.GetShadowHandCount());
 		assertEquals(0, scn.GetShadowDiscardCount());

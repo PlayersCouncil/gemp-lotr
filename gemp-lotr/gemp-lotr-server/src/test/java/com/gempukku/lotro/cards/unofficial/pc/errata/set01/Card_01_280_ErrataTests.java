@@ -115,7 +115,7 @@ public class Card_01_280_ErrataTests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 
 		scn.ShadowAcceptOptionalTrigger();
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 	}
 
 	@Test

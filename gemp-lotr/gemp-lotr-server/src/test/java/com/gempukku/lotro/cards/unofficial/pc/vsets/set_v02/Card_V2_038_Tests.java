@@ -178,7 +178,7 @@ public class Card_V2_038_Tests
 
 		//5 skirmish action options: Ring, Sting, Site, Event (and cheated ring-removal ability).
 		// The first 3 should trigger the Balrog's ability, the event should not.
-		assertEquals(5, scn.GetFreepsCardChoiceCount());
+		assertEquals(5, scn.FreepsGetCardChoiceCount());
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
 		//Regular Free Peoples ability

@@ -84,7 +84,7 @@ public class Card_02_043_ErrataTests
 		assertTrue(scn.ShadowPlayAvailable(sword));
 		assertEquals(Zone.HAND, sword.getZone());
 		scn.ShadowPlayCard(sword);
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCard(captain);
 		assertEquals(Zone.ATTACHED, sword.getZone());
 		assertEquals(captain, sword.getAttachedTo());
@@ -118,7 +118,7 @@ public class Card_02_043_ErrataTests
 		assertEquals(Zone.FREE_CHARACTERS, aragorn.getZone());
 		scn.FreepsChooseMultipleChoiceOption("wound");
 		// both aragorn and frodo are valid targets, even tho aragorn is exhausted
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(Zone.DEAD, aragorn.getZone());
 	}

@@ -924,8 +924,8 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public boolean FreepsCanChooseCharacter(PhysicalCardImpl card) { return FreepsGetCardChoices().contains(String.valueOf(card.getCardId())); }
     public boolean ShadowCanChooseCharacter(PhysicalCardImpl card) { return ShadowGetCardChoices().contains(String.valueOf(card.getCardId())); }
 
-    public int GetFreepsCardChoiceCount() { return FreepsGetCardChoices().size(); }
-    public int GetShadowCardChoiceCount() { return ShadowGetCardChoices().size(); }
+    public int FreepsGetCardChoiceCount() { return FreepsGetCardChoices().size(); }
+    public int ShadowGetCardChoiceCount() { return ShadowGetCardChoices().size(); }
 
     public int FreepsGetFreepsAssignmentTargetCount() { return FreepsGetFreepsAssignmentTargets().size(); }
     public int FreepsGetShadowAssignmentTargetCount() { return FreepsGetShadowAssignmentTargets().size(); }

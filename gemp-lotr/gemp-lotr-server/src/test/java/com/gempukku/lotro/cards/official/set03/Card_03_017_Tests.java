@@ -248,7 +248,7 @@ public class Card_03_017_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 
-		assertEquals(3, scn.GetFreepsCardChoiceCount()); //celeborn and legolas and galadriel
+		assertEquals(3, scn.FreepsGetCardChoiceCount()); //celeborn and legolas and galadriel
 		scn.FreepsChooseCard(celeborn);
 		assertEquals(0, scn.GetWoundsOn(celeborn));
 		assertEquals(1, scn.GetWoundsOn(greenleaf));

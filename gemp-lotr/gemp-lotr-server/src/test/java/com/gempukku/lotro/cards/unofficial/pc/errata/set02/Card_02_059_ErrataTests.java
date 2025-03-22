@@ -81,7 +81,7 @@ public class Card_02_059_ErrataTests
 
 		assertTrue(scn.ShadowPlayAvailable(things));
 		scn.ShadowPlayCard(things);
-		assertEquals(5, scn.GetShadowCardChoiceCount());
+		assertEquals(5, scn.ShadowGetCardChoiceCount());
 	}
 
 	@Test

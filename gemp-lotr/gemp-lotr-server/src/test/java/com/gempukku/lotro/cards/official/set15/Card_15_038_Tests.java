@@ -96,7 +96,7 @@ public class Card_15_038_Tests
 		scn.FreepsResolveRuleFirst();
 		//Treebeard is strength 12, the orc is 10, so 2 minions must be exerted
 		assertEquals(2, scn.ShadowGetChoiceMin());
-		assertEquals(3, scn.GetShadowCardChoiceCount());
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
 		assertEquals(0, scn.GetWoundsOn(orc2));
 		assertEquals(0, scn.GetWoundsOn(orc3));
 
@@ -136,7 +136,7 @@ public class Card_15_038_Tests
 		//With only 1 minion in play, it gets the exertion
 		assertNotEquals(-1, scn.ShadowGetChoiceMin());
 		assertEquals(1, scn.ShadowGetChoiceMin());
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 
 		scn.ShadowChooseCard(enduring);
 		assertEquals(2, scn.GetWoundsOn((enduring)));

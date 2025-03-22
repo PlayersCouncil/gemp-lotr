@@ -207,7 +207,7 @@ public class Card_09_026_ErrataTests
 		assertEquals(Zone.HAND, chaff1.getZone());
 		assertEquals(Zone.HAND, chaff2.getZone());
 		assertEquals(Zone.HAND, chaff3.getZone());
-		assertEquals(3, scn.GetShadowCardChoiceCount());
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
 		assertEquals(3, scn.GetShadowHandCount());
 		assertEquals(4, scn.GetShadowDeckCount());
 		scn.ShadowChooseCards(chaff1, chaff2);
@@ -249,7 +249,7 @@ public class Card_09_026_ErrataTests
 		assertEquals(Zone.HAND, chaff1.getZone());
 		assertEquals(Zone.HAND, chaff2.getZone());
 		assertEquals(Zone.HAND, chaff3.getZone());
-		assertEquals(3, scn.GetShadowCardChoiceCount());
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
 		assertEquals(3, scn.GetShadowHandCount());
 		assertEquals(4, scn.GetShadowDeckCount());
 		scn.ShadowChooseCards(chaff1, chaff2);

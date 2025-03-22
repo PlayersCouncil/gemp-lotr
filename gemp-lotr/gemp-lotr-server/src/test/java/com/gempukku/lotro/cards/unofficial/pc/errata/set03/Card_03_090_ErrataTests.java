@@ -104,7 +104,7 @@ public class Card_03_090_ErrataTests
 		assertEquals(0, scn.GetWoundsOn(orc));
 		//aragorn automatically chosen as the only non-RB companion to target
 		assertTrue(scn.ShadowDecisionAvailable("Choose a possession attached to that companion to discard"));
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCard(bow);
 
 		//Freeps given option to prevent
@@ -162,7 +162,7 @@ public class Card_03_090_ErrataTests
 		assertEquals(0, scn.GetWoundsOn(orc));
 		//aragorn automatically chosen as the only non-RB companion to target
 		assertTrue(scn.ShadowDecisionAvailable("Choose a possession attached to that companion to discard"));
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCard(bow);
 
 		//Freeps given option to prevent

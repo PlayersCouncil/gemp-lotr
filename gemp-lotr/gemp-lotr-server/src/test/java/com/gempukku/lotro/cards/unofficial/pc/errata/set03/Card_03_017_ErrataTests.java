@@ -213,7 +213,7 @@ public class Card_03_017_ErrataTests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 		//The cheated Towers and Fellowship site 2, but not the Shadows variant (as that doesn't have a site number until played)
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		assertEquals(1, scn.GetWoundsOn(galadriel));
 	}
 
@@ -276,7 +276,7 @@ public class Card_03_017_ErrataTests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 
-		assertEquals(2, scn.GetFreepsCardChoiceCount()); //celeborn and legolas, but not galadriel
+		assertEquals(2, scn.FreepsGetCardChoiceCount()); //celeborn and legolas, but not galadriel
 		scn.FreepsChooseCard(celeborn);
 		assertEquals(0, scn.GetWoundsOn(celeborn));
 		assertEquals(1, scn.GetWoundsOn(greenleaf));

@@ -137,13 +137,13 @@ public class Card_V2_057_Tests
 		scn.ShadowDismissRevealedCards();
 
 		//4 minions, but 1 is a runner and 1 is Sauron, who can't be played with roaming
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(lurtz);
 		assertEquals(9, scn.GetTwilight()); // cost 7 + 2 roaming
 		assertEquals(Zone.SHADOW_CHARACTERS, lurtz.getZone());
 
 		scn.ShadowDismissRevealedCards();
-		assertEquals(1, scn.GetShadowCardChoiceCount());
+		assertEquals(1, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(army);
 		assertEquals(0, scn.GetTwilight()); // cost 7 + 2 roaming
 		assertEquals(Zone.SHADOW_CHARACTERS, army.getZone());
@@ -193,7 +193,7 @@ public class Card_V2_057_Tests
 		scn.ShadowPlayCard(insurance);
 
 		scn.ShadowDismissRevealedCards();
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 	}
 
 	@Test
@@ -222,13 +222,13 @@ public class Card_V2_057_Tests
 
 		scn.ShadowPlayCard(insurance);
 		scn.ShadowDismissRevealedCards();
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 
 		//Ensure that both minion plays are optional and independent of each other
 
 		scn.ShadowDeclineChoosing();
 		scn.ShadowDismissRevealedCards();
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowDeclineChoosing();
 		assertEquals(18, scn.GetTwilight());
 
@@ -274,13 +274,13 @@ public class Card_V2_057_Tests
 
 		scn.ShadowDismissRevealedCards();
 		//4 minions, but 1 is a runner; Sauron is finally not roaming
-		assertEquals(3, scn.GetShadowCardChoiceCount());
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(army);
 		assertEquals(18, scn.GetTwilight());
 		assertEquals(Zone.SHADOW_CHARACTERS, army.getZone());
 
 		scn.ShadowDismissRevealedCards();
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(sauron);
 		//Sauron's own game text makes him -1 for the burden
 		assertEquals(1, scn.GetTwilight());
@@ -317,7 +317,7 @@ public class Card_V2_057_Tests
 		scn.ShadowPlayCard(insurance);
 
 		scn.ShadowDismissRevealedCards();
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowDeclineChoosing();
 		scn.ShadowDismissRevealedCards();
 		scn.ShadowDeclineChoosing();
