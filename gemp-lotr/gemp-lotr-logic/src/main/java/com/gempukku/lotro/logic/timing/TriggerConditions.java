@@ -377,9 +377,14 @@ public class TriggerConditions {
         return false;
     }
 
-    public static boolean activated(LotroGame game, EffectResult effectResult, Filterable... filters) {
+    public static boolean activated(LotroGame game, String player, EffectResult effectResult, Filterable... filters) {
         if (effectResult.getType() == EffectResult.Type.ACTIVATE) {
-            PhysicalCard source = ((ActivateCardResult) effectResult).getSource();
+            var result = (ActivateCardResult) effectResult;
+            PhysicalCard source = result.getSource();
+            if(player != null) {
+                if(!player.equals(result.getPerformingPlayer()))
+                    return false;
+            }
             return Filters.and(filters).accepts(game, source);
         }
         return false;

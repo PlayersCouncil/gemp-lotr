@@ -15,8 +15,8 @@ import java.util.Collection;
 public class TransferPermanentAction extends ActivateCardAction {
     private final PhysicalCard _transferredCard;
 
-    public TransferPermanentAction(final PhysicalCard card, Filter filter) {
-        super(card);
+    public TransferPermanentAction(final PhysicalCard card, String performingPlayer, Filter filter) {
+        super(card, performingPlayer);
         _transferredCard = card;
         setText("Transfer " + GameUtils.getFullName(_transferredCard));
 
@@ -32,7 +32,7 @@ public class TransferPermanentAction extends ActivateCardAction {
                 new ChooseActiveCardsEffect(null, card.getOwner(), "Choose target to attach to", 1, 1, filter) {
                     @Override
                     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> target) {
-                        if (target.size() > 0) {
+                        if (!target.isEmpty()) {
                             appendEffect(new TransferPermanentEffect(card, target.iterator().next()));
                         }
                     }

@@ -4,7 +4,7 @@ import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.PhysicalCard;
 
 public class DiscardToHealResult extends ActivateCardResult {
-    public DiscardToHealResult(PhysicalCard source, Timeword actionTimeword) {
-        super(source, actionTimeword);
+    public DiscardToHealResult(PhysicalCard source, String performingPlayer, Timeword actionTimeword) {
+        super(source, performingPlayer, actionTimeword);
     }
 }

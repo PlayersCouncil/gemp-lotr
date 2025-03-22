@@ -1,10 +1,11 @@
 package com.gempukku.lotro.cards.official.set01;
 
+import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.ActivateCardAction;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -91,7 +92,7 @@ public class Card_01_002_Tests
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(frodo);
+				ActivateCardAction action = new ActivateCardAction(frodo, AbstractAtTest.P1);
 				action.appendEffect(new PutOnTheOneRingEffect());
 				return Collections.singletonList(action);
 			}

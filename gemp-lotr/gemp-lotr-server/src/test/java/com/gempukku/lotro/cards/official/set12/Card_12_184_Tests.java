@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.official.set12;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_12_184_Tests
 {
@@ -18,8 +18,11 @@ public class Card_12_184_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "12_184");
-					// put other cards in here as needed for the test case
+					put("beast", "12_184");
+					put("twk", "1_237");
+
+					put("fodder1", "1_302");
+					put("fodder2", "1_307");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -40,12 +43,14 @@ public class Card_12_184_Tests
 		 * Type: Possession
 		 * Subtype: Mount
 		 * Strength: 2
-		 * Game Text: Bearer must be a Nazgûl.<br>If bearer is The Witch-king, after all skirmishes and fierce skirmishes have been resolved, you may exert him twice to make him participate in one additional assignment and skirmish phase.
+		 * Game Text: Bearer must be a Nazgûl.
+		 * If bearer is The Witch-king, after all skirmishes and fierce skirmishes have been resolved,
+		 * you may exert him twice to make him participate in one additional assignment and skirmish phase.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("beast");
 
 		assertEquals("The Witch-king's Beast", card.getBlueprint().getTitle());
 		assertEquals("Fell Creature", card.getBlueprint().getSubtitle());
@@ -58,18 +63,49 @@ public class Card_12_184_Tests
 		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheWitchkingsBeastTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void TheWitchkingsBeastTriggersAThirdRoundOfSkirmishes() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var twk = scn.GetShadowCard("twk");
+		var beast = scn.GetShadowCard("beast");
+		scn.ShadowMoveCharToTable(twk);
+		scn.AttachCardsTo(twk, beast);
+
+		var frodo = scn.GetRingBearer();
+		var fodder1 = scn.GetFreepsCard("fodder1");
+		var fodder2 = scn.GetFreepsCard("fodder2");
+		scn.FreepsMoveCharToTable(fodder1, fodder2);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		assertEquals(2, scn.GetTwilight());
+		//First Regular Skirmish
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(fodder1, twk);
+		scn.FreepsResolveSkirmish(fodder1);
+		scn.PassCurrentPhaseActions();
+
+		//Fierce Skirmish
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(fodder2, twk);
+		scn.FreepsResolveSkirmish(fodder2);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(twk));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(2, scn.GetWoundsOn(twk));
+
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		scn.PassCurrentPhaseActions();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 	}
 }

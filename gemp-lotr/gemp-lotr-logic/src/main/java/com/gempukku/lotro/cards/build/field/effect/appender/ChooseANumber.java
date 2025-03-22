@@ -44,7 +44,11 @@ public class ChooseANumber implements EffectAppenderProducer {
                                 min, max, defaultAmount) {
                             @Override
                             public void decisionMade(String result) throws DecisionResultInvalidException {
-                                actionContext.setValueToMemory(memorize, String.valueOf(getValidatedResult(result)));
+                                final String value = String.valueOf(getValidatedResult(result));
+                                actionContext.getGame().getGameState().sendMessage(actionContext.getPerformingPlayer()
+                                        + " chooses " + value + ".");
+
+                                actionContext.setValueToMemory(memorize, value);
                             }
                         });
             }

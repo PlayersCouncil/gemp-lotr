@@ -855,7 +855,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 }
 
                 if (beforeActivatedTrigger.isValid(actionContext)) {
-                    ActivateCardAction action = new ActivateCardAction(self);
+                    ActivateCardAction action = new ActivateCardAction(self, playerId);
                     action.setActionTimeword(Timeword.RESPONSE);
                     beforeActivatedTrigger.createAction(action, actionContext);
                     result.add(action);
@@ -891,7 +891,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 }
 
                 if (afterActivatedTrigger.isValid(actionContext)) {
-                    ActivateCardAction action = new ActivateCardAction(self);
+                    ActivateCardAction action = new ActivateCardAction(self, playerId);
                     action.setActionTimeword(Timeword.RESPONSE);
                     afterActivatedTrigger.createAction(action, actionContext);
                     result.add(action);
@@ -1174,7 +1174,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         for (ActionSource inPlayPhaseAction : sources) {
             DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, null);
             if (inPlayPhaseAction.isValid(actionContext)) {
-                ActivateCardAction action = new ActivateCardAction(self);
+                ActivateCardAction action = new ActivateCardAction(self, playerId);
                 inPlayPhaseAction.createAction(action, actionContext);
                 result.add(action);
             }

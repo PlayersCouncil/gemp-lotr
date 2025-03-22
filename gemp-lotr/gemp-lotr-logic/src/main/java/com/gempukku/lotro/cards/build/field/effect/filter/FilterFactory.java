@@ -568,12 +568,17 @@ public class FilterFactory {
                 });
         parameterFilters.put("printedtwilightcostfrommemory",
                 (parameter, environment) -> actionContext -> {
-                    PhysicalCard card = actionContext.getCardFromMemory(parameter);
-                    if (card == null)
+                    String valueStr = actionContext.getValueFromMemory(parameter);
+                    if (valueStr == null)
                         return Filters.none;
 
-                    int memoryPrintedTwilightCost = card.getBlueprint().getTwilightCost();
-                    return Filters.printedTwilightCost(memoryPrintedTwilightCost);
+                    try {
+                        int twilight = Integer.parseInt(valueStr);
+                        return Filters.printedTwilightCost(twilight);
+                    }
+                    catch (NumberFormatException ex) {
+                        return Filters.none;
+                    }
                 });
         parameterFilters.put("race",
                 (parameter, environment) -> {

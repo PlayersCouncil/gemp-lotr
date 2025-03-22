@@ -5,7 +5,6 @@ import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.ActivateCardAction;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -147,7 +146,7 @@ public class Card_01_060_Tests
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(arwen);
+				ActivateCardAction action = new ActivateCardAction(arwen, AbstractAtTest.P1);
 				action.appendEffect(new PlaySiteEffect(action, AbstractAtTest.P2, SitesBlock.FELLOWSHIP, 3));
 				return Collections.singletonList(action);
 			}
@@ -181,7 +180,7 @@ public class Card_01_060_Tests
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(arwen);
+				ActivateCardAction action = new ActivateCardAction(arwen, AbstractAtTest.P1);
 				action.appendEffect(new PlaySiteEffect(action, playerId, SitesBlock.FELLOWSHIP, 3));
 				return Collections.singletonList(action);
 			}

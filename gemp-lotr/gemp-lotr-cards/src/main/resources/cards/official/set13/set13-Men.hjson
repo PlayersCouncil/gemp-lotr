@@ -606,6 +606,10 @@
 					against: culture(men),minion
 					memorize: loser
 				}
+				requires: {
+					type: CanSpot
+					filter: self,Zone(SUPPORT)
+				}
 				effect: {
 					type: transfer
 					fromSupport: true

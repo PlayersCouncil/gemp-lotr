@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.official.set09;
 
+import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Phase;
@@ -98,7 +99,7 @@ public class Card_09_001_Tests
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(frodo);
+				ActivateCardAction action = new ActivateCardAction(frodo, AbstractAtTest.P1);
 				action.appendEffect(new PutOnTheOneRingEffect());
 				return Collections.singletonList(action);
 			}

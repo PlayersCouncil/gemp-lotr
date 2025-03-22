@@ -7,9 +7,9 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.timing.results.DiscardToHealResult;
 
 public class DiscardToHealEffect extends ActivateCardEffect {
-    public DiscardToHealEffect(PhysicalCard source, Timeword actionTimeword) {
-        super(source, actionTimeword);
-        _activateCardResult = new DiscardToHealResult(_source, _actionTimeword);
+    public DiscardToHealEffect(PhysicalCard source, String performingPlayer, Timeword actionTimeword) {
+        super(source, performingPlayer, actionTimeword);
+        _activateCardResult = new DiscardToHealResult(_source, performingPlayer, _actionTimeword);
     }
 
     @Override
