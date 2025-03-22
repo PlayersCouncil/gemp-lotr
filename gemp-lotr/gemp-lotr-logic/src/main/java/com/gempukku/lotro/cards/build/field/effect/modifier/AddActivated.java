@@ -78,7 +78,7 @@ public class AddActivated implements ModifierSourceProducer {
                 for (ActionSource inPlayPhaseAction : actionSources) {
                     DefaultActionContext actionContext = new DefaultActionContext(card.getOwner(), game, card, null, null);
                     if (inPlayPhaseAction.isValid(actionContext)) {
-                        ActivateCardAction action = new ActivateCardAction(card);
+                        ActivateCardAction action = new ActivateCardAction(card, card.getOwner());
                         inPlayPhaseAction.createAction(action, actionContext);
                         result.add(action);
                     }
