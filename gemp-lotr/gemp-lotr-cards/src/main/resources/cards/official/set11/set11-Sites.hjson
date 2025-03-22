@@ -1154,7 +1154,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				player: free people
 				optional: true
 				trigger: {
