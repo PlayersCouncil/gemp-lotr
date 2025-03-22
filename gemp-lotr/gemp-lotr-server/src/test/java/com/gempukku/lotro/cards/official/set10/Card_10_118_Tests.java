@@ -17,10 +17,23 @@ public class Card_10_118_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "10_118");
-					// put other cards in here as needed for the test case
+					put("pippin", "1_306");
+					put("bowmen", "3_41");
+					put("knows", "9_50");
+
+					put("savage", "1_151");
 				}},
-				GenericCardTestHelper.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "7_330");
+					put("site2", "7_335");
+					put("site3", "8_117");
+					put("site4", "10_118"); //here
+					put("site5", "7_345");
+					put("site6", "7_350");
+					put("site7", "8_120");
+					put("site8", "10_120");
+					put("site9", "7_360");
+				}},
 				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing
 		);
@@ -39,14 +52,13 @@ public class Card_10_118_Tests
 		 * Type: Site
 		 * Subtype: 
 		 * Site Number: 4K
-		 * Game Text: <b>Plains</b>. <b>Shadow:</b> Exert a minion and remove a burden to make the Free Peoples player discard one of his or her conditions.
+		 * Game Text: <b>Plains</b>. <b>Shadow:</b> Exert a minion and remove a burden to make
+		 * the Free Peoples player discard one of his or her conditions.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(4);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(4);
 
 		assertEquals("Pelennor Prairie", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,18 +69,37 @@ public class Card_10_118_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void PelennorPrairieTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void PelennorPrairieIsNotBlockedByPippinFriendToFrodo() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var prairie = scn.GetShadowSite(4);
+
+		var pippin = scn.GetFreepsCard("pippin");
+		var bowmen = scn.GetFreepsCard("bowmen");
+		var knows = scn.GetFreepsCard("knows");
+		scn.FreepsMoveCharToTable(pippin);
+		scn.FreepsMoveCardToSupportArea(bowmen, knows);
+
+		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.SkipToSite(3);
+		scn.ShadowMoveCharToTable(savage);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(prairie, scn.GetCurrentSite());
+		assertTrue(scn.ShadowActionAvailable(prairie));
+
+		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(1, scn.GetBurdens());
+		scn.ShadowUseCardAction(prairie);
+
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+
 	}
 }

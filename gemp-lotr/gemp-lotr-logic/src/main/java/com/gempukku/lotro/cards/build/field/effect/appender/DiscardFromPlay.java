@@ -36,7 +36,7 @@ public class DiscardFromPlay implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         EffectAppender cardResolver = CardResolver.resolveCards(select,
-                (actionContext) -> Filters.canBeDiscarded(actionContext.getPerformingPlayer(), actionContext.getSource()),
+                (actionContext) -> Filters.canBeDiscarded(discardingPlayer.getPlayer(actionContext), actionContext.getSource()),
                 valueSource, memory, player, "Choose cards to discard", environment);
 
         EffectUtils.validatePreEvaluate(cost, effectObject, discardingPlayer, valueSource, cardResolver);
