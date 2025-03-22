@@ -24,7 +24,7 @@ public class RemovesCultureToken implements TriggerCheckerProducer {
             public boolean accepts(ActionContext actionContext) {
                 String playerId = playerSource != null ? playerSource.getPlayer(actionContext) : null;
                 return TriggerConditions.removedCultureToken(actionContext.getGame(), playerId, actionContext.getEffectResult(),
-                        onSourceFilter.getFilterable(actionContext), sourceFilter.getFilterable(actionContext));
+                        sourceFilter.getFilterable(actionContext), onSourceFilter.getFilterable(actionContext));
             }
 
             @Override

@@ -58,7 +58,7 @@
 												type: addmodifier
 												modifier: {
 													type: cantUseSpecialAbilities
-													filter: or(side(freeps),side(shadow),site,the one ring)
+													filter: or(side(freeps),side(shadow),site,the one ring),not(event)
 												}
 												until: end(skirmish)
 											}

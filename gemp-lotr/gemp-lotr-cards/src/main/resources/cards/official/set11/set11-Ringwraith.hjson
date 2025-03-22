@@ -594,6 +594,9 @@
 					filter: self
 					against: character,maxResistance(4)
 				}
+				requires: {
+					type: FierceSkirmish
+				}
 				cost: {
 					type: exert
 					select: self

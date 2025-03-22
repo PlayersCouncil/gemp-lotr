@@ -160,24 +160,27 @@
 			Archer
 		]
 		effects: [
-				{
-						type: activated
-						phase: archery
-						cost: {
-								type: removeTwilight
-								amount: 3
-						}
-						effect: {
-								type: modifyArcheryTotal
-								side: shadow
-								amount: {
-										type: forEachYouCanSpot
-										filter: companion
-										over: 4
-										limit: 4
-								}
-						}
+			{
+				type: activated
+				phase: archery
+				cost: {
+					type: removeTwilight
+					amount: 3
 				}
+				effect: {
+					type: modifyArcheryTotal
+					side: shadow
+					amount: {
+						type: cardPhaseLimit
+						limit:	4
+						amount: {
+							type: forEachYouCanSpot
+							filter: companion
+							over: 4
+						}
+					}
+				}
+			}
 		]
 		gametext: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Remove (3) to add 1 to the minion archery total for each companion over 4 (limit +4).
 		lore: "'But I've heard tales of the big folk down away in the Sunlands.'"

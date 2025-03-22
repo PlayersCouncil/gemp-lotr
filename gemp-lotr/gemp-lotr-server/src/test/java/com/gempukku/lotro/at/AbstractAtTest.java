@@ -284,10 +284,10 @@ public abstract class AbstractAtTest {
         return null;
     }
 
-    public String getCardActionId(AwaitingDecision awaitingDecision, String actionTextStart) {
+    public String getCardActionId(AwaitingDecision awaitingDecision, String actionTextPart) {
         String[] actionTexts = (String[]) awaitingDecision.getDecisionParameters().get("actionText");
         for (int i = 0; i < actionTexts.length; i++)
-            if (actionTexts[i].startsWith(actionTextStart))
+            if (actionTexts[i].contains(actionTextPart))
                 return ((String[]) awaitingDecision.getDecisionParameters().get("actionId"))[i];
         return null;
     }

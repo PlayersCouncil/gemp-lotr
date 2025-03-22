@@ -183,6 +183,22 @@ public class ValueResolver {
                         return true;
                     }
                 };
+            } else if (type.equalsIgnoreCase("abs")) {
+                FieldUtils.validateAllowedFields(object, "value");
+                ValueSource source = resolveEvaluator(object.get("value"), 0, environment);
+                return new ValueSource() {
+                    @Override
+                    public Evaluator getEvaluator(ActionContext actionContext) {
+                        var evaluator = source.getEvaluator(actionContext);
+
+                        return (game, cardAffected) -> Math.abs(evaluator.evaluateExpression(game, cardAffected));
+                    }
+
+                    @Override
+                    public boolean canPreEvaluate() {
+                        return source.canPreEvaluate();
+                    }
+                };
             }
 
             /**

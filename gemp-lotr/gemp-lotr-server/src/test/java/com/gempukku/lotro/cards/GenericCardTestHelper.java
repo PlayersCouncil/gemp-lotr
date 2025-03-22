@@ -774,6 +774,9 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
             if(current == Phase.FELLOWSHIP) {
                 FreepsPassCurrentPhaseAction();
+                if(_game.getFormat().getSiteBlock() == SitesBlock.SHADOWS) {
+                    ShadowChooseAnyCard();
+                }
             }
             else if(current == Phase.SHADOW) {
                 ShadowPassCurrentPhaseAction();
@@ -900,8 +903,8 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public void ShadowChooseCard(String name) throws DecisionResultInvalidException { ShadowChooseCard(GetShadowCard(name)); }
     public void ShadowChooseCard(PhysicalCardImpl card) throws DecisionResultInvalidException { playerDecided(P2, String.valueOf(card.getCardId())); }
 
-    public void FreepsChooseAnyCard() throws DecisionResultInvalidException { FreepsChoose(FreepsGetCardChoices().get(0)); }
-    public void ShadowChooseAnyCard() throws DecisionResultInvalidException { ShadowChoose(ShadowGetCardChoices().get(0)); }
+    public void FreepsChooseAnyCard() throws DecisionResultInvalidException { FreepsChoose(FreepsGetCardChoices().getFirst()); }
+    public void ShadowChooseAnyCard() throws DecisionResultInvalidException { ShadowChoose(ShadowGetCardChoices().getFirst()); }
 
     public void FreepsChooseCards(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCards(P1, cards); }
     public void ShadowChooseCards(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCards(P2, cards); }
