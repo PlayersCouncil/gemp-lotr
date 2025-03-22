@@ -275,14 +275,20 @@
 				}
 				{
 					type: If
-					check: {
-						type: IsLessThan
-						firstNumber: {
-							type: TwilightCostInMemory
+					check: [
+						{
+							type: HasInMemory
 							memory: discardedCard
 						}
-						secondNumber: memory(spotCount)
-					}
+						{
+							type: IsLessThan
+							firstNumber: {
+								type: TwilightCostInMemory
+								memory: discardedCard
+							}
+							secondNumber: memory(spotCount)
+						}
+					]
 					true: [
 						{
 							type: takeControlOfSite
