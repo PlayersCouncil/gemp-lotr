@@ -29,6 +29,16 @@
 					}
 				}
 				{
+					type: memorizeTopOfDeck
+					count: memory(cardCount)
+					memory: topCards
+				}
+				{
+					type: RevealCards
+					select: memory(topCards)
+					count: memory(cardCount)
+				}
+				{
 					type: modifyStrength
 					select: choose(elf)
 					amount: {
@@ -36,11 +46,6 @@
 						memory: cardCount
 						multiplier: 2
 					}
-				}
-				{
-					type: memorizeTopOfDeck
-					count: memory(cardCount)
-					memory: topCards
 				}
 				{
 					type: putCardsFromDeckOnBottomOfDeck
