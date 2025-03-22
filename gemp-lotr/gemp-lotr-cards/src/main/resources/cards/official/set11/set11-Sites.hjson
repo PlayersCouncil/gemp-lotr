@@ -212,6 +212,7 @@
 				modifier: {
 					type: CantUseSpecialAbilities
 					phase: skirmish
+					filter: not(event)
 				}
 			}
 		]
