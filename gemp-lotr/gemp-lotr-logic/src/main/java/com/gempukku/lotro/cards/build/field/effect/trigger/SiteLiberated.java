@@ -1,22 +1,39 @@
 package com.gempukku.lotro.cards.build.field.effect.trigger;
 
-import com.gempukku.lotro.cards.build.ActionContext;
-import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
+import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
+import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.results.SiteLiberatedResult;
 import org.json.simple.JSONObject;
 
 public class SiteLiberated implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value);
+        FieldUtils.validateAllowedFields(value, "player", "filter");
+
+        String player = FieldUtils.getString(value.get("player"), "player");
+        String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
+        PlayerSource playerSource = player != null ? PlayerResolver.resolvePlayer(player) : null;
+        final FilterableSource sourceFilter = environment.getFilterFactory().generateFilter(filter, environment);
 
         return new TriggerChecker() {
             @Override
             public boolean accepts(ActionContext actionContext) {
                 EffectResult effectResult = actionContext.getEffectResult();
-                return effectResult.getType() == EffectResult.Type.LIBERATE_SITE;
+
+                if (effectResult.getType() == EffectResult.Type.LIBERATE_SITE) {
+                    String playerId = playerSource != null ? playerSource.getPlayer(actionContext) : null;
+                    var siteFilter = sourceFilter.getFilterable(actionContext);
+                    var takeResult = (SiteLiberatedResult) effectResult;
+                    if(playerId != null && !takeResult.getPlayerId().equals(playerId))
+                        return false;
+
+                    return Filters.accepts(actionContext.getGame(), siteFilter, takeResult.getSite());
+                }
+
+                return false;
             }
 
             @Override

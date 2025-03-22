@@ -14,7 +14,6 @@ import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.SingleMemoryEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.results.CharacterLostSkirmishResult;
-import com.gempukku.lotro.logic.timing.results.CharacterWonSkirmishResult;
 
 import java.util.*;
 
@@ -555,7 +554,18 @@ public class FilterFactory {
                         };
                     };
                 });
+        parameterFilters.put("ownercontrols",
+                (parameter, environment) -> {
+                    var filter = environment.getFilterFactory().createFilter(parameter, environment);
+                    return (actionContext) -> {
+                        var game = actionContext.getGame();
+                        var card = Filters.findFirstActive(game, filter.getFilterable(actionContext));
+                        if(card == null || card.getCardController() == null)
+                            return Filters.none;
 
+                        return Filters.owner(card.getCardController());
+                    };
+                });
         parameterFilters.put("printedtwilightcostfrommemory",
                 (parameter, environment) -> actionContext -> {
                     PhysicalCard card = actionContext.getCardFromMemory(parameter);
