@@ -80,21 +80,27 @@
 						text: Choose cards to discard
 						memorize: chosenMount
 					}
-					{
-						type: memorizeActive
-						filter: hasAttached(memory(chosenMount))
-						memory: chosenMan
-					}
-					{
-						type: discard
-						select: memory(chosenMount)
-						ignoreCostCheckFailure: true
-					}
 				]
 				effect: {
-					type: alterOverwhelmMultiplier
-					select: memory(chosenMan)
-					multiplier: 3
+					type: CostToEffect
+					cost: [
+						{
+							type: memorizeActive
+							filter: hasAttached(memory(chosenMount))
+							memory: chosenMan
+							ignoreCostCheckFailure: true
+						}
+						{
+							type: discard
+							select: memory(chosenMount)
+							ignoreCostCheckFailure: true
+						}
+					]
+					effect: {
+						type: alterOverwhelmMultiplier
+						select: memory(chosenMan)
+						multiplier: 3
+					}
 				}
 			}
 		]
