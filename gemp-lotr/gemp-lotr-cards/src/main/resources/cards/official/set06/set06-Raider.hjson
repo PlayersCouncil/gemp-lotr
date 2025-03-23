@@ -263,16 +263,22 @@
 			}
 			effect: [
 				{
+					type: ChooseActiveCards
+					select: choose(companion,not(ringBearer))
+					memorize: discardedCompanion
+					text: Choose a companion to discard.
+				}
+				{
 					type: preventable
 					player: fp
-					text: Would you like to add (4) to prevent discarding a companion?
+					text: Would you like to add (4) to prevent discarding {discardedCompanion}?
 					cost: {
 							type: addTwilight
 							amount: 4
 					}
 					effect: {
 							type: discard
-							select: choose(companion,not(ringBearer))
+							select: memory(discardedCompanion)
 					}
 				}
 			]

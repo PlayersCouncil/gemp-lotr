@@ -88,7 +88,7 @@ public class Card_01_059_ErrataTests
 		assertTrue(scn.FreepsActionAvailable("Exert a Dwarf"));
 		scn.FreepsChooseAction("Exert a Dwarf");
 
-		assertEquals(4, scn.GetFreepsCardChoiceCount());
+		assertEquals(4, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(gimli);
 		scn.FreepsChooseCard(rumil);
 		assertEquals(1, scn.GetTwilight());
@@ -98,7 +98,7 @@ public class Card_01_059_ErrataTests
 		assertTrue(scn.FreepsActionAvailable("Exert a Dwarf"));
 		scn.FreepsChooseAction("Exert a Dwarf");
 
-		assertEquals(3, scn.GetFreepsCardChoiceCount());
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(grimir);
 		assertEquals(2, scn.GetTwilight());
 		assertEquals(2, scn.GetWoundsOn(grimir));
@@ -134,7 +134,7 @@ public class Card_01_059_ErrataTests
 		assertTrue(scn.FreepsActionAvailable("Exert an Elf"));
 		scn.FreepsChooseAction("Exert an Elf");
 
-		assertEquals(4, scn.GetFreepsCardChoiceCount());
+		assertEquals(4, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(legolas);
 		scn.FreepsChooseCard(gimli);
 		assertEquals(1, scn.GetTwilight());
@@ -144,7 +144,7 @@ public class Card_01_059_ErrataTests
 		assertTrue(scn.FreepsActionAvailable("Exert an Elf"));
 		scn.FreepsChooseAction("Exert an Elf");
 
-		assertEquals(3, scn.GetFreepsCardChoiceCount());
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(rumil);
 		assertEquals(2, scn.GetTwilight());
 		assertEquals(2, scn.GetWoundsOn(rumil));

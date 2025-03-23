@@ -334,6 +334,8 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public List<String> ShadowGetBPChoices() { return GetADParamAsList(P2, "blueprintId"); }
     public List<String> FreepsGetMultipleChoices() { return GetADParamAsList(P1, "results"); }
     public List<String> ShadowGetMultipleChoices() { return GetADParamAsList(P2, "results"); }
+    public int FreepsGetChoiceCount() { return GetADParamAsList(P1, "results").size(); }
+    public int ShadowGetChoiceCount() { return GetADParamAsList(P2, "results").size(); }
 
     public List<String> FreepsGetFreepsAssignmentTargets() { return GetADParamAsList(P1, "freeCharacters"); }
     public List<String> FreepsGetShadowAssignmentTargets() { return GetADParamAsList(P1, "minions"); }
@@ -924,8 +926,8 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public boolean FreepsCanChooseCharacter(PhysicalCardImpl card) { return FreepsGetCardChoices().contains(String.valueOf(card.getCardId())); }
     public boolean ShadowCanChooseCharacter(PhysicalCardImpl card) { return ShadowGetCardChoices().contains(String.valueOf(card.getCardId())); }
 
-    public int GetFreepsCardChoiceCount() { return FreepsGetCardChoices().size(); }
-    public int GetShadowCardChoiceCount() { return ShadowGetCardChoices().size(); }
+    public int FreepsGetCardChoiceCount() { return FreepsGetCardChoices().size(); }
+    public int ShadowGetCardChoiceCount() { return ShadowGetCardChoices().size(); }
 
     public int FreepsGetFreepsAssignmentTargetCount() { return FreepsGetFreepsAssignmentTargets().size(); }
     public int FreepsGetShadowAssignmentTargetCount() { return FreepsGetShadowAssignmentTargets().size(); }

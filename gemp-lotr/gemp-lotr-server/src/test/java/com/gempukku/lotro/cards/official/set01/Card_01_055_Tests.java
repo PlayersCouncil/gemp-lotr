@@ -132,7 +132,7 @@ public class Card_01_055_Tests
 		//assertEquals(Zone.HAND, card1.getZone());
 
 		scn.FreepsUseCardAction(mirror);
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsDismissRevealedCards();
 		scn.ShadowDismissRevealedCards();
 

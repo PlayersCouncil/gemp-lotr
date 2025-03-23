@@ -66,7 +66,7 @@ public class TransferItemRule {
                                                 });
 
                                         if (Filters.countActive(game, validTransferFilter) > 0)
-                                            result.add(new TransferPermanentAction(card, validTransferFilter));
+                                            result.add(new TransferPermanentAction(card, card.getOwner(), validTransferFilter));
                                     }
                                 }
                             }

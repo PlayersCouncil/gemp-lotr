@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set09;
 
+import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
@@ -107,7 +108,7 @@ public class Card_09_026_ErrataTests
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(frodo);
+				ActivateCardAction action = new ActivateCardAction(frodo, AbstractAtTest.P1);
 				action.appendEffect(new KillEffect(radagast, (PhysicalCard) null, KillEffect.Cause.CARD_EFFECT));
 				return Collections.singletonList(action);
 			}
@@ -137,7 +138,7 @@ public class Card_09_026_ErrataTests
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(frodo);
+				ActivateCardAction action = new ActivateCardAction(frodo, AbstractAtTest.P1);
 				action.appendEffect(new DiscardCardsFromPlayEffect(scn.P1, frodo, Filters.name("Radagast")));
 				return Collections.singletonList(action);
 			}
@@ -166,7 +167,7 @@ public class Card_09_026_ErrataTests
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(frodo);
+				ActivateCardAction action = new ActivateCardAction(frodo, AbstractAtTest.P1);
 				action.appendEffect(new ReturnCardsToHandEffect(frodo, Filters.name("Radagast")));
 				return Collections.singletonList(action);
 			}
@@ -206,7 +207,7 @@ public class Card_09_026_ErrataTests
 		assertEquals(Zone.HAND, chaff1.getZone());
 		assertEquals(Zone.HAND, chaff2.getZone());
 		assertEquals(Zone.HAND, chaff3.getZone());
-		assertEquals(3, scn.GetShadowCardChoiceCount());
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
 		assertEquals(3, scn.GetShadowHandCount());
 		assertEquals(4, scn.GetShadowDeckCount());
 		scn.ShadowChooseCards(chaff1, chaff2);
@@ -248,7 +249,7 @@ public class Card_09_026_ErrataTests
 		assertEquals(Zone.HAND, chaff1.getZone());
 		assertEquals(Zone.HAND, chaff2.getZone());
 		assertEquals(Zone.HAND, chaff3.getZone());
-		assertEquals(3, scn.GetShadowCardChoiceCount());
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
 		assertEquals(3, scn.GetShadowHandCount());
 		assertEquals(4, scn.GetShadowDeckCount());
 		scn.ShadowChooseCards(chaff1, chaff2);

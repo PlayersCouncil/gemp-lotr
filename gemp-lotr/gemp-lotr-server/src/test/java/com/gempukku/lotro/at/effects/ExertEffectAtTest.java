@@ -27,7 +27,7 @@ public class ExertEffectAtTest extends AbstractAtTest {
         _game.getGameState().addWound(merry);
         _game.getGameState().addWound(merry);
 
-        ActivateCardAction action = new ActivateCardAction(merry);
+        ActivateCardAction action = new ActivateCardAction(merry, AbstractAtTest.P1);
         ChooseAndExertCharactersEffect exertEffect = new ChooseAndExertCharactersEffect(action, P1, 1, 1, 2, CardType.COMPANION, Filters.not(Filters.ringBearer));
         action.appendEffect(exertEffect);
 

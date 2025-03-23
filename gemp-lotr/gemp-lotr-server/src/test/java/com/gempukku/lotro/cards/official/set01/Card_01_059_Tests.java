@@ -97,7 +97,7 @@ public class Card_01_059_Tests
 		assertTrue(scn.FreepsActionAvailable("Exert a Dwarf"));
 		scn.FreepsChooseAction("Exert a Dwarf");
 
-		assertEquals(4, scn.GetFreepsCardChoiceCount());
+		assertEquals(4, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(gimli);
 		scn.FreepsChooseCard(rumil);
 		assertEquals(1, scn.GetTwilight());
@@ -109,7 +109,7 @@ public class Card_01_059_Tests
 		scn.FreepsChooseAction("Exert a Dwarf");
 
 		//Legolas, Rumil, and Grimir
-		assertEquals(3, scn.GetFreepsCardChoiceCount());
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(grimir);
 		assertEquals(2, scn.GetTwilight());
 		assertEquals(2, scn.GetWoundsOn(grimir));
@@ -151,11 +151,11 @@ public class Card_01_059_Tests
 		scn.FreepsChooseAction("Exert an Elf");
 
 		//Initially either dwarves or elves can be selected
-		assertEquals(4, scn.GetFreepsCardChoiceCount());
+		assertEquals(4, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(legolas);
 
 		//Once an Elf has been selected, only Dwarves can be selected as a target
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(gimli);
 		assertEquals(1, scn.GetTwilight());
 		assertEquals(2, scn.GetWoundsOn(legolas));

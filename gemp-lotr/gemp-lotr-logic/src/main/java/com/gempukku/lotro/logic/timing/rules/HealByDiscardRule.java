@@ -36,7 +36,7 @@ public class HealByDiscardRule {
                             for (PhysicalCard card : Filters.filter(game, game.getGameState().getHand(playerId), Filters.or(CardType.COMPANION, CardType.ALLY), Filters.unique)) {
                                 PhysicalCard active = Filters.findFirstActive(game, Filters.name(card.getBlueprint().getTitle()));
                                 if (active != null && game.getGameState().getWounds(active) > 0) {
-                                    var action = new DiscardToHealAction(card);
+                                    var action = new DiscardToHealAction(card, playerId);
                                     action.appendCost(new DiscardCardsFromHandEffect(null, card.getOwner(), Collections.singleton(card), false));
                                     action.appendCost(
                                             new UnrespondableEffect() {

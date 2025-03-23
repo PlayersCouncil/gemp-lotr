@@ -110,7 +110,7 @@ public class Card_V1_005_Tests
 		scn.FreepsPlayCard(onedwarf);
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.FreepsDecisionAvailable("Choose cards to return to hand"));
-		assertEquals(5, scn.GetFreepsCardChoiceCount()); // There are 5 items on gimli
+		assertEquals(5, scn.FreepsGetCardChoiceCount()); // There are 5 items on gimli
 		String[] choices = scn.FreepsGetCardChoices().toArray(new String[0]);
 		scn.FreepsChoose(choices[0], choices[1], choices[2], choices[3], choices[4]);
 
@@ -148,7 +148,7 @@ public class Card_V1_005_Tests
 		assertEquals(0, scn.GetWoundsOn(gimli));
 		scn.FreepsPlayCard(onedwarf);
 		assertTrue(scn.FreepsDecisionAvailable("Choose cards to return to hand"));
-		assertEquals(5, scn.GetFreepsCardChoiceCount()); // There are 5 items on gimli
+		assertEquals(5, scn.FreepsGetCardChoiceCount()); // There are 5 items on gimli
 		String[] choices = scn.FreepsGetCardChoices().toArray(new String[0]);
 		scn.FreepsChoose(choices[0], choices[1], choices[2], choices[3], choices[4]);
 

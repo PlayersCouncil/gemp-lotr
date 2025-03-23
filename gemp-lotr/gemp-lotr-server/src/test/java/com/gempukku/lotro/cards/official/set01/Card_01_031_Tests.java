@@ -88,7 +88,7 @@ public class Card_01_031_Tests
 		assertTrue(scn.FreepsPlayAvailable(asfaloth));
 		scn.FreepsPlayCard(arwen);
 		scn.FreepsPlayCard(asfaloth);
-		assertEquals(2, scn.GetFreepsCardChoiceCount()); // can go on either arwen or orophin
+		assertEquals(2, scn.FreepsGetCardChoiceCount()); // can go on either arwen or orophin
 	}
 
 	@Test

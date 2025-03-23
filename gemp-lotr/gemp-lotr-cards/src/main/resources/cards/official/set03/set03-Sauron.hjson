@@ -29,7 +29,7 @@
 				{
 					type: If
 					check: {
-						type: hasInMemory
+						type: HasCardInMemory
 						memory: revealedCard
 					}
 					true: {

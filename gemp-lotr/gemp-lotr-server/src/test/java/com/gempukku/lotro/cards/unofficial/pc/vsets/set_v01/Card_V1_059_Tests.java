@@ -96,21 +96,21 @@ public class Card_V1_059_Tests
 
 		scn.FreepsUseCardAction(site3);
 		assertTrue(scn.FreepsDecisionAvailable("Choose cards to exert"));
-		assertEquals(3, scn.GetFreepsCardChoiceCount());
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 
 		scn.FreepsChooseCard(legolas);
 		assertTrue(scn.FreepsDecisionAvailable("Choose a companion"));
-		assertEquals(2, scn.GetFreepsCardChoiceCount()); //Legolas can only boost sam and frodo
+		assertEquals(2, scn.FreepsGetCardChoiceCount()); //Legolas can only boost sam and frodo
 		scn.FreepsChooseCard(sam);
 
 		assertEquals(4, scn.GetStrength(sam));
 
 		scn.FreepsUseCardAction(site3);
 		assertTrue(scn.FreepsDecisionAvailable("Choose cards to exert"));
-		assertEquals(3, scn.GetFreepsCardChoiceCount());
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(legolas);
 		assertTrue(scn.FreepsDecisionAvailable("Choose a companion"));
-		assertEquals(2, scn.GetFreepsCardChoiceCount()); //Legolas can only boost sam and frodo
+		assertEquals(2, scn.FreepsGetCardChoiceCount()); //Legolas can only boost sam and frodo
 		scn.FreepsChooseCard(sam);
 
 		assertEquals(5, scn.GetStrength(sam));

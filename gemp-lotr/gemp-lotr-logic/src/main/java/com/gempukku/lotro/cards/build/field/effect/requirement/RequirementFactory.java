@@ -48,7 +48,8 @@ public class RequirementFactory {
         requirementProducers.put("hascardinhand", new HasCardInHand());
         requirementProducers.put("hascardinremoved", new HasCardInRemoved());
         requirementProducers.put("hascardstacked", new HasCardStacked());
-        requirementProducers.put("hasinmemory", new HasInMemory());
+        requirementProducers.put("hascardinmemory", new HasCardInMemory());
+        requirementProducers.put("hasmemory", new HasMemory());
         requirementProducers.put("hasinzonedata", new HasInZoneData());
         requirementProducers.put("haveinitiative", new HaveInitiative());
         requirementProducers.put("isahead", new IsAhead());

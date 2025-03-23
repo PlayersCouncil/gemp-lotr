@@ -58,6 +58,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("choosehowmanytospot", new ChooseHowManyToSpot());
         effectAppenderProducers.put("choosehowmanythreatstospot", new ChooseHowManyThreatsToSpot());
         effectAppenderProducers.put("choosehowmanytwilighttokenstospot", new ChooseHowManyTwilightTokensToSpot());
+        effectAppenderProducers.put("chooseopponent", new ChooseOpponent());
         effectAppenderProducers.put("chooseyesorno", new ChooseYesOrNo());
         effectAppenderProducers.put("consumesurplusdamage", new ConsumeSurplusDamage());
         effectAppenderProducers.put("corruptringbearer", new CorruptRingBearer());

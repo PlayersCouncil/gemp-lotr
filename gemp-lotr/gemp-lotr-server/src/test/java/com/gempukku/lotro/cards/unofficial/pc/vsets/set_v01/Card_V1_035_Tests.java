@@ -94,7 +94,7 @@ public class Card_V1_035_Tests
 		assertTrue(scn.ShadowActionAvailable(darkness));
 		scn.ShadowUseCardAction(darkness);
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to take into hand"));
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCard(whip);
 		assertEquals(1, scn.GetStackedCards(darkness).size());
 

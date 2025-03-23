@@ -109,7 +109,7 @@ public class Card_V1_042_Tests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.ShadowDecisionAvailable(""));
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		assertEquals(0, scn.GetWoundsOn(twigul1));
 		assertEquals(Zone.DISCARD, filler1.getZone());
 		scn.ShadowChooseCard(twigul1);

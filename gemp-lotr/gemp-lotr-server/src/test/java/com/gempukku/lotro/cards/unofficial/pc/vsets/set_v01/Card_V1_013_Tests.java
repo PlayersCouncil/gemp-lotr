@@ -95,7 +95,7 @@ public class Card_V1_013_Tests
 		scn.FreepsDismissRevealedCards();
         assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		// Choices available should be 1 Elrond, 1 Galadriel, 1 Orophin
-		assertEquals(3, scn.GetFreepsCardChoiceCount());
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(scn.GetFreepsCard("elrond"));
 		assertTrue(scn.FreepsDecisionAvailable("Would you like to pay"));
 		scn.FreepsChooseYes();
@@ -128,7 +128,7 @@ public class Card_V1_013_Tests
 		scn.FreepsDismissRevealedCards();
         assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
 		// Choices available should be 1 Elrond, 1 Galadriel, 1 Orophin
-		assertEquals(3, scn.GetFreepsCardChoiceCount());
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(scn.GetFreepsCard("elrond"));
 		assertTrue(scn.FreepsDecisionAvailable("Would you like to pay"));
 		scn.FreepsChooseNo();

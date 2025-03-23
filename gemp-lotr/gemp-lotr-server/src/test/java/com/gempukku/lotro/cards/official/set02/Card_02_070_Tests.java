@@ -86,7 +86,7 @@ public class Card_02_070_Tests
 
 		assertEquals(Zone.HAND, balrog.getZone());
 		scn.ShadowPlayCard(power);
-		assertEquals(3, scn.GetShadowCardChoiceCount());
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCards(orc1, orc2, orc3);
 		scn.FreepsDismissRevealedCards();
 		assertEquals(Zone.SHADOW_CHARACTERS, balrog.getZone());

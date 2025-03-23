@@ -105,7 +105,7 @@ public class Card_01_016_ErrataTests
 		scn.ShadowPlayCard(runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		var choices = scn.FreepsGetBPChoices();
 		assertTrue(choices.contains(gimli.getBlueprintId()));
 		assertTrue(choices.contains(guard.getBlueprintId()));
@@ -138,7 +138,7 @@ public class Card_01_016_ErrataTests
 		scn.ShadowPlayCard(runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 
 		assertEquals(Zone.DISCARD, gimli.getZone());
 		scn.FreepsChooseCardBPFromSelection(gimli);

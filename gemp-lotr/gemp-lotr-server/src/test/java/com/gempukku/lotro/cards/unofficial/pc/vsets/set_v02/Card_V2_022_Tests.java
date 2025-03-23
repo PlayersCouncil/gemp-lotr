@@ -140,7 +140,7 @@ public class Card_V2_022_Tests
 		scn.ShadowPlayCard(insurance);
 		scn.ShadowDismissRevealedCards();
 		//8 cards, 7 items, but 2 are free peoples
-		assertEquals(5, scn.GetShadowCardChoiceCount());
+		assertEquals(5, scn.ShadowGetCardChoiceCount());
 		scn.ShadowDecisionAvailable("Choose cards from deck");
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(4, scn.ShadowGetChoiceMax());
@@ -193,7 +193,7 @@ public class Card_V2_022_Tests
 		scn.ShadowPlayCard(insurance);
 
 		scn.ShadowDismissRevealedCards();
-		assertEquals(5, scn.GetShadowCardChoiceCount());
+		assertEquals(5, scn.ShadowGetCardChoiceCount());
 	}
 
 	@Test
@@ -221,7 +221,7 @@ public class Card_V2_022_Tests
 
 		assertEquals(13, scn.GetTwilight());
 		scn.ShadowDismissRevealedCards();
-		assertEquals(5, scn.GetShadowCardChoiceCount());
+		assertEquals(5, scn.ShadowGetCardChoiceCount());
 
 		//Also ensure that region 3 does not trigger at 18 twilight
 
@@ -263,7 +263,7 @@ public class Card_V2_022_Tests
 
 		assertEquals(20, scn.GetTwilight());
 		scn.ShadowDismissRevealedCards();
-		assertEquals(5, scn.GetShadowCardChoiceCount());
+		assertEquals(5, scn.ShadowGetCardChoiceCount());
 	}
 
 	@Test
@@ -297,7 +297,7 @@ public class Card_V2_022_Tests
 		scn.ShadowPlayCard(insurance);
 		scn.ShadowDismissRevealedCards();
 		//8 cards, 7 items, but 2 are free peoples
-		assertEquals(5, scn.GetShadowCardChoiceCount());
+		assertEquals(5, scn.ShadowGetCardChoiceCount());
 		scn.ShadowDecisionAvailable("Choose cards from deck");
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(4, scn.ShadowGetChoiceMax());

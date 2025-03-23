@@ -1,10 +1,8 @@
 package com.gempukku.lotro.cards.official.set07;
 
+import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -20,8 +18,9 @@ public class Card_07_262_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "7_262");
-					// put other cards in here as needed for the test case
+					put("battlements", "7_262");
+					put("pillager", "7_275");
+					put("assassin", "1_262");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -41,12 +40,13 @@ public class Card_07_262_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-		 * Game Text: Play a besieger stacked on a site you control or remove a burden to play a [sauron] Orc from your discard pile.
+		 * Game Text: Play a besieger stacked on a site you control or remove a burden
+		 * to play a [sauron] Orc from your discard pile.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("battlements");
 
 		assertEquals("Above the Battlement", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +58,121 @@ public class Card_07_262_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AbovetheBattlementTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void AbovetheBattlementCanRemoveABurdenToPlaySauronOrcFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var site1 = scn.GetFreepsSite(1);
+
+		var pillager = scn.GetShadowCard("pillager");
+		var assassin = scn.GetShadowCard("assassin");
+		var battlements = scn.GetShadowCard("battlements");
+		scn.ShadowMoveCardToDiscard(assassin);
+		scn.ShadowMoveCardToHand(battlements);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SkipToSite(2);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowTakeControlOfSite();
+		assertTrue(scn.IsSiteControlled(site1));
+		scn.StackCardsOn(site1, pillager);
+
+		scn.SkipToSite(4);
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.IsSiteControlled(site1));
+		assertEquals(AbstractAtTest.P2, site1.getCardController());
+		assertEquals(Zone.STACKED, pillager.getZone());
+		assertEquals(Zone.DISCARD, assassin.getZone());
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.ShadowPlayAvailable(battlements));
+
+		scn.ShadowPlayCard(battlements);
+		assertEquals(2, scn.ShadowGetChoiceCount());
+
+		scn.ShadowChooseMultipleChoiceOption("burden");
+		assertEquals(Zone.STACKED, pillager.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, assassin.getZone());
+		assertEquals(0, scn.GetBurdens());
+	}
+
+	@Test
+	public void AbovetheBattlementCanRemoveABurdenToPlaySauronOrcFromDiscardWhenNoStackedOption() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var site1 = scn.GetFreepsSite(1);
+
+		var pillager = scn.GetShadowCard("pillager");
+		var assassin = scn.GetShadowCard("assassin");
+		var battlements = scn.GetShadowCard("battlements");
+		scn.ShadowMoveCardToDiscard(assassin);
+		scn.ShadowMoveCardToHand(battlements, pillager);
+
+		scn.StartGame();
+
+		scn.SkipToSite(2);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.SkipToSite(4);
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Zone.HAND, pillager.getZone());
+		assertEquals(Zone.DISCARD, assassin.getZone());
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.ShadowPlayAvailable(battlements));
+
+		scn.ShadowPlayCard(battlements);
+
+		assertEquals(Zone.HAND, pillager.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, assassin.getZone());
+		assertEquals(0, scn.GetBurdens());
+	}
+
+	@Test
+	public void AbovetheBattlementCanPlayStackedBesiegerToPlaySauronOrcFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var site1 = scn.GetFreepsSite(1);
+
+		var pillager = scn.GetShadowCard("pillager");
+		var assassin = scn.GetShadowCard("assassin");
+		var battlements = scn.GetShadowCard("battlements");
+		scn.ShadowMoveCardToDiscard(assassin);
+		scn.ShadowMoveCardToHand(battlements);
+
+		scn.StartGame();
+
+		scn.SkipToSite(2);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowTakeControlOfSite();
+		assertTrue(scn.IsSiteControlled(site1));
+		scn.StackCardsOn(site1, pillager);
+
+		scn.SkipToSite(4);
+		scn.SetTwilight(20);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.IsSiteControlled(site1));
+		assertEquals(AbstractAtTest.P2, site1.getCardController());
+		assertEquals(Zone.STACKED, pillager.getZone());
+		assertEquals(Zone.DISCARD, assassin.getZone());
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.ShadowPlayAvailable(battlements));
+
+		scn.ShadowPlayCard(battlements);
+		assertEquals(2, scn.ShadowGetChoiceCount());
+
+		scn.ShadowChooseMultipleChoiceOption("play");
+		assertEquals(Zone.SHADOW_CHARACTERS, pillager.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, assassin.getZone());
+		assertEquals(1, scn.GetBurdens());
 	}
 }

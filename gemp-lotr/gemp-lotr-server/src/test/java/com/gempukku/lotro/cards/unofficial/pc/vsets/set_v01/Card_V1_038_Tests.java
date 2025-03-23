@@ -120,7 +120,7 @@ public class Card_V1_038_Tests
 
 		scn.ShadowUseCardAction(harry);
 		assertTrue(scn.FreepsDecisionAvailable("assign"));
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(aragorn);
 		assertTrue(scn.IsCharAssigned(aragorn));
 	}

@@ -17,8 +17,11 @@ public class Card_06_091_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "6_91");
-					// put other cards in here as needed for the test case
+					put("blood", "6_91");
+					put("eowyn", "5_122");
+					put("mount", "4_287");
+
+					put("twk", "8_84");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -38,12 +41,14 @@ public class Card_06_091_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: 
-		 * Game Text: Plays to your support area.<br><b>Skirmish:</b> Discard a mount borne by a [rohan] Man to prevent that Man from being overwhelmed unless his or her strength is tripled.
+		 * Game Text: Plays to your support area.
+		 * <b>Skirmish:</b> Discard a mount borne by a [rohan] Man to prevent
+		 * that Man from being overwhelmed unless his or her strength is tripled.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("blood");
 
 		assertEquals("Blood Has Been Spilled", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,18 +60,42 @@ public class Card_06_091_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BloodHasBeenSpilledTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void BloodHasBeenSpilledDiscardsAMountOnARohanCompanionToAddOverwhelmProtection() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var blood = scn.GetFreepsCard("blood");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		var mount = scn.GetFreepsCard("mount");
+		scn.FreepsMoveCharToTable(eowyn);
+		scn.FreepsAttachCardsTo(eowyn, mount);
+		scn.FreepsMoveCardToSupportArea(blood);
+
+		var twk = scn.GetShadowCard("twk");
+		scn.ShadowMoveCharToTable(twk);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(eowyn, twk);
+		scn.FreepsResolveSkirmish(eowyn);
+
+		assertTrue(scn.FreepsActionAvailable(blood));
+		assertEquals(Zone.ATTACHED, mount.getZone());
+		assertEquals(6, scn.GetStrength(eowyn));
+		assertEquals(16, scn.GetStrength(twk)); //14 + 2 enduring due to the horse
+		scn.FreepsUseCardAction(blood);
+
+		assertEquals(Zone.DISCARD, mount.getZone());
+		assertEquals(6, scn.GetStrength(eowyn));
+		assertEquals(16, scn.GetStrength(twk)); //14 + 2 enduring due to the horse
+
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+		assertEquals(1, scn.GetWoundsOn(eowyn));
+		assertEquals(Zone.FREE_CHARACTERS, eowyn.getZone());
+		assertEquals(Phase.REGROUP, scn.getPhase());
+
 	}
 }
