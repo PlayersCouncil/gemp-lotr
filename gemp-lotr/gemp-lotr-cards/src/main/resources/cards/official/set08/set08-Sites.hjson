@@ -120,18 +120,31 @@
 					phase: regroup
 				}
 				player: free people
-				effect: {
-					type: choice
-					texts: [
-						Add 3 threats
-						Opponent takes control of site
-					]
-					effects: [
-						{
-							type: addThreats
-							amount: 3
+				effect: [
+					{
+						type: choice
+						texts: [
+							Add 3 threats
+							Choose an opponent to take control of a site
+						]
+						effects: [
+							{
+								type: addThreats
+								amount: 3
+							}
+							{
+								type: ChooseOpponent
+								memorize: opponent
+							}
+						]
+					}
+					{
+						type: If
+						check: {
+							type: HasMemory
+							memory: opponent
 						}
-						{
+						true: {
 							type: Optional
 							player: shadow
 							text: Would you like to take control of a site?
@@ -140,8 +153,8 @@
 								player: shadow
 							}
 						}
-					]
-				}
+					}
+				]
 			}
 		]
 		gametext: At the start of the regroup phase, the Free Peoples player must add 3 threats or choose an opponent who may take control of a site.
