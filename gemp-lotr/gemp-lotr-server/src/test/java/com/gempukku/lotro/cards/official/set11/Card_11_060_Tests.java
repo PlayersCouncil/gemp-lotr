@@ -20,7 +20,7 @@ public class Card_11_060_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "11_60");
+					put("quality", "11_60");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -41,12 +41,14 @@ public class Card_11_060_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-		 * Game Text: Exert any number of [gondor] companions who have total resistance 12 or more to make a minion skirmishing a [gondor] companion strength -3 for each companion exerted this way.
+		 * Game Text: Exert any number of [gondor] companions who have total resistance 12
+		 * or more to make a minion skirmishing a [gondor] companion strength -3 for each
+		 * companion exerted this way.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("quality");
 
 		assertEquals("The Highest Quality", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,17 +60,16 @@ public class Card_11_060_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
 	public void TheHighestQualityTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		var quality = scn.GetFreepsCard("quality");
+//		scn.FreepsMoveCardToHand(card);
+//
+//		scn.StartGame();
+//		scn.FreepsPlayCard(card);
 
 		assertEquals(2, scn.GetTwilight());
 	}
