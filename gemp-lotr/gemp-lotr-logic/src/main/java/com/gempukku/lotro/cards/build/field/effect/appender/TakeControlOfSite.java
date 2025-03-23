@@ -8,8 +8,7 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
-import com.gempukku.lotro.game.PhysicalCard;
-import com.gempukku.lotro.game.state.LotroGame;
+import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.TakeControlOfASiteEffect;
 import com.gempukku.lotro.logic.timing.Effect;
@@ -26,18 +25,7 @@ public class TakeControlOfSite implements EffectAppenderProducer {
         return new DelayedAppender() {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
-                final LotroGame game = actionContext.getGame();
-                int maxUnoccupiedSite = Integer.MAX_VALUE;
-                for (String playerId : game.getGameState().getPlayerOrder().getAllPlayers())
-                    maxUnoccupiedSite = Math.min(maxUnoccupiedSite, game.getGameState().getPlayerPosition(playerId) - 1);
-
-                for (int i = 1; i <= maxUnoccupiedSite; i++) {
-                    final PhysicalCard site = game.getGameState().getSite(i);
-                    if (site.getCardController() == null)
-                        return true;
-                }
-
-                return false;
+                return GameUtils.anySiteAvailableToControl(actionContext.getGame());
             }
 
             @Override
