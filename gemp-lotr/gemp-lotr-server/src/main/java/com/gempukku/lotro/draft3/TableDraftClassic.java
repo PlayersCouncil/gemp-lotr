@@ -5,10 +5,14 @@ import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft3.bot.DraftBot;
 import com.gempukku.lotro.draft3.bot.WeightDraftBot;
 import com.gempukku.lotro.draft3.timer.DraftTimer;
-import com.gempukku.lotro.game.CardCollection;
-import com.gempukku.lotro.game.DefaultCardCollection;
-import com.gempukku.lotro.game.MutableCardCollection;
+import com.gempukku.lotro.game.*;
+import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
@@ -16,11 +20,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 public class TableDraftClassic implements TableDraft{
-    //TODO thread locks
     private static final int MISSED_CARDS_ALLOWED = 4;
+
+    private final ReadWriteLock lock = new ReentrantReadWriteLock(true);
+    private final Lock readLock = lock.readLock();
+    private final Lock writeLock = lock.writeLock();
 
     private final StartingCollectionProducer startingCollectionProducer;
     private final BoosterProducer boosterProducer;
@@ -71,48 +81,63 @@ public class TableDraftClassic implements TableDraft{
 
     @Override
     public List<String> getCardsToPickFrom(DraftPlayer draftPlayer) {
-        if (!assignedBoosters.containsKey(draftPlayer)) {
-            return List.of();
+        readLock.lock();
+        try {
+            if (!assignedBoosters.containsKey(draftPlayer)) {
+                return List.of();
+            }
+            return assignedBoosters.get(draftPlayer).getCardsInPack();
+        } finally {
+            readLock.unlock();
         }
-        return assignedBoosters.get(draftPlayer).getCardsInPack();
     }
 
     @Override
     public String getChosenCard(DraftPlayer draftPlayer) {
-        return chosenCards.get(draftPlayer);
+        readLock.lock();
+        try {
+            return chosenCards.get(draftPlayer);
+        } finally {
+            readLock.unlock();
+        }
     }
 
     @Override
     public void advanceDraft() {
-        if (isFinished()) {
-            return;
-        }
+        writeLock.lock();
+        try {
+            if (isFinished()) {
+                return;
+            }
 
-        if (currentRound == 0) {
-            startDraft();
-            startTimer();
-            makeBotsDeclare();
-        } else if (haveAllPlayersDeclared()) {
-            pickDeclaredCards();
-            if (areBoostersEmpty()) {
-                if (currentRound < rounds) {
-                    openNextBoosters();
+            if (currentRound == 0) {
+                startDraft();
+                startTimer();
+                makeBotsDeclare();
+            } else if (haveAllPlayersDeclared()) {
+                pickDeclaredCards();
+                if (areBoostersEmpty()) {
+                    if (currentRound < rounds) {
+                        openNextBoosters();
+                    } else {
+                        // Draft finished, shutdown timer scheduler
+                        scheduler.shutdown();
+                        return;
+                    }
                 } else {
-                    // Draft finished, shutdown timer scheduler
-                    scheduler.shutdown();
-                    return;
+                    passBoosters();
                 }
+                startTimer();
+                makeBotsDeclare();
+                makeAfkersDeclare();
             } else {
-                passBoosters();
+                if (choiceTimePassed()) {
+                    forcePlayerDeclares();
+                    advanceDraft();
+                }
             }
-            startTimer();
-            makeBotsDeclare();
-            makeAfkersDeclare();
-        } else {
-            if (choiceTimePassed()) {
-                forcePlayerDeclares();
-                advanceDraft();
-            }
+        } finally {
+            writeLock.unlock();
         }
     }
 
@@ -277,11 +302,16 @@ public class TableDraftClassic implements TableDraft{
 
     @Override
     public int getSecondsRemainingForPick() throws IllegalStateException {
-        if (draftTimer == null || timerStartTime == 0) {
-            throw new IllegalStateException("No timer set.");
+        readLock.lock();
+        try {
+            if (draftTimer == null || timerStartTime == 0) {
+                throw new IllegalStateException("No timer set.");
+            }
+            int elapsedTime = (int) ((System.currentTimeMillis() - timerStartTime) / 1000); // Convert to seconds
+            return timerDuration - elapsedTime;
+        } finally {
+            readLock.unlock();
         }
-        int elapsedTime = (int) ((System.currentTimeMillis() - timerStartTime) / 1000); // Convert to seconds
-        return timerDuration - elapsedTime;
     }
 
     private void forcePlayerDeclares() {
@@ -314,42 +344,62 @@ public class TableDraftClassic implements TableDraft{
 
     @Override
     public void chooseCard(DraftPlayer who, String what) {
-        // Is player at this table
-        if (!players.contains(who)) {
-            return;
-        }
+        writeLock.lock();
+        try {
+            // Is player at this table
+            if (!players.contains(who)) {
+                return;
+            }
 
-        // Is chosen card in his booster
-        if (!assignedBoosters.get(who).getCardsInPack().contains(what)) {
-            return;
-        }
+            // Is chosen card in his booster
+            if (!assignedBoosters.get(who).getCardsInPack().contains(what)) {
+                return;
+            }
 
-        chosenCards.put(who, what);
-        missedPicksInARow.put(who, 0);
+            chosenCards.put(who, what);
+            missedPicksInARow.put(who, 0);
 
-        //Check if all players chose
-        if (!(who instanceof DraftBot)) {
-            advanceDraft();
+            //Check if all players chose
+            if (!(who instanceof DraftBot)) {
+                advanceDraft();
+            }
+        } finally {
+            writeLock.unlock();
         }
     }
 
     @Override
     public boolean isFinished() {
-        return areBoostersEmpty() && currentRound == rounds;
+        readLock.lock();
+        try {
+            return areBoostersEmpty() && currentRound == rounds;
+        } finally {
+            readLock.unlock();
+        }
     }
 
     @Override
     public DraftPlayer getPlayer(String name) {
-        return players.stream().filter(draftPlayer -> draftPlayer.getName().equals(name)).findFirst().orElse(null);
+        readLock.lock();
+        try {
+            return players.stream().filter(draftPlayer -> draftPlayer.getName().equals(name)).findFirst().orElse(null);
+        } finally {
+            readLock.unlock();
+        }
     }
 
     @Override
     public DraftPlayer registerPlayer(String name) {
-        // Only before draft starts
-        if (currentRound != 0 || name == null) {
-            return null;
+        writeLock.lock();
+        try {
+            // Only before draft starts
+            if (currentRound != 0 || name == null) {
+                return null;
+            }
+            return registerPlayer(name, false);
+        } finally {
+            writeLock.unlock();
         }
-        return registerPlayer(name, false);
     }
 
     private DraftPlayer registerPlayer(String name, boolean bot) {
@@ -369,37 +419,131 @@ public class TableDraftClassic implements TableDraft{
 
     @Override
     public boolean removePlayer(String name) {
-        // Only before draft starts
-        if (currentRound != 0) {
-            return false;
-        }
-
-        DraftPlayer toRemove = null;
-        for (DraftPlayer player : players) {
-            if (player.getName().equals(name)) {
-                toRemove = player;
+        writeLock.lock();
+        try {
+            // Only before draft starts
+            if (currentRound != 0) {
+                return false;
             }
+
+            DraftPlayer toRemove = null;
+            for (DraftPlayer player : players) {
+                if (player.getName().equals(name)) {
+                    toRemove = player;
+                }
+            }
+            if (players.remove(toRemove)) {
+                missedPicksInARow.remove(toRemove);
+                return true;
+            }
+            return false;
+        } finally {
+            writeLock.unlock();
         }
-        if (players.remove(toRemove)) {
-            missedPicksInARow.remove(toRemove);
-            return true;
-        }
-        return false;
     }
 
     @Override
     public CardCollection getPickedCards(DraftPlayer draftPlayer) {
-        if (draftPlayer instanceof DraftBot) {
-            return botCollections.get(((DraftBot) draftPlayer));
-        }
+        readLock.lock();
+        try {
+            if (draftPlayer instanceof DraftBot) {
+                return botCollections.get(((DraftBot) draftPlayer));
+            }
 
-        return collectionsManager.getPlayerCollection(draftPlayer.getName(), collectionType.getCode());
+            return collectionsManager.getPlayerCollection(draftPlayer.getName(), collectionType.getCode());
+        } finally {
+            readLock.unlock();
+        }
     }
 
     @Override
-    public TableStatus getTableStatus() {
-        List<PlayerStatus> statuses = new ArrayList<>();
-        players.forEach(draftPlayer -> statuses.add(new PlayerStatus(draftPlayer.getName(), chosenCards.containsKey(draftPlayer))));
-        return new TableStatus(statuses, currentRound % 2 == 1, currentRound, rounds); // Alternate pick order with each booster
+    public Document getDocument(DraftPlayer draftPlayer, LotroCardBlueprintLibrary cardLibrary, LotroFormatLibrary formatLibrary) throws ParserConfigurationException {
+        readLock.lock();
+        try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+
+            Document doc = documentBuilder.newDocument();
+
+            Element rootElement = doc.createElement("draftStatus");
+            doc.appendChild(rootElement);
+
+            appendPlayersInfo(doc, rootElement);
+            appendPickedCards(doc, rootElement, getPickedCards(draftPlayer), cardLibrary, formatLibrary);
+            appendAvailablePicks(doc, rootElement, getCardsToPickFrom(draftPlayer), getChosenCard(draftPlayer));
+            try {
+                appendTimeRemaining(doc, rootElement, getSecondsRemainingForPick());
+            } catch (IllegalStateException ignore) {
+                // No timer
+            }
+            appendRoundsInfo(doc, rootElement);
+
+            return doc;
+        } finally {
+            readLock.unlock();
+        }
+    }
+
+    private void appendPlayersInfo(Document doc, Element rootElement) {
+        players.forEach(draftPlayer -> {
+            Element playerElement = doc.createElement("player");
+            playerElement.setAttribute("name", draftPlayer.getName());
+            playerElement.setAttribute("hasChosen", String.valueOf(chosenCards.containsKey(draftPlayer)));
+            rootElement.appendChild(playerElement);
+        });
+
+        Element pickOrder = doc.createElement("pickOrderAscending");
+        pickOrder.setAttribute("value", String.valueOf(currentRound % 2 == 1)); // Alternate pick order with each booster
+        rootElement.appendChild(pickOrder);
+    }
+
+
+    private void appendTimeRemaining(Document doc, Element rootElement, int timeRemaining) {
+        Element time = doc.createElement("timeRemaining");
+        time.setAttribute("value", "" + timeRemaining);
+        rootElement.appendChild(time);
+    }
+
+    private void appendRoundsInfo(Document doc, Element rootElement) {
+        Element time = doc.createElement("roundsInfo");
+        time.setAttribute("currentRound", "" + currentRound);
+        time.setAttribute("roundsTotal", "" + rounds);
+        rootElement.appendChild(time);
+    }
+
+    private void appendPickedCards(Document doc, Element rootElement, CardCollection toAppend, LotroCardBlueprintLibrary cardLibrary, LotroFormatLibrary formatLibrary) {
+        if (toAppend == null) {
+            return;
+        }
+
+        SortAndFilterCards sortAndFilterCards = new SortAndFilterCards();
+        List<CardCollection.Item> pickedCards = sortAndFilterCards.process(
+                "sort:cardType,culture,name",
+                toAppend.getAll(),
+                cardLibrary,
+                formatLibrary
+        );
+        for (CardCollection.Item item : pickedCards) {
+            Element pickedCard = doc.createElement("pickedCard");
+            pickedCard.setAttribute("blueprintId", item.getBlueprintId());
+            pickedCard.setAttribute("count", String.valueOf(item.getCount()));
+            rootElement.appendChild(pickedCard);
+        }
+    }
+
+    private void appendAvailablePicks(Document doc, Element rootElement, List<String> availablePicks, String chosenCard) {
+        if (availablePicks == null || availablePicks.isEmpty()) {
+            return;
+        }
+
+        for (String availableChoice : availablePicks) {
+            Element availablePick = doc.createElement("availablePick");
+            availablePick.setAttribute("id", availableChoice);
+            availablePick.setAttribute("blueprintId", availableChoice);
+            if (chosenCard != null && chosenCard.equals(availableChoice)) {
+                availablePick.setAttribute("chosen", "true");
+            }
+            rootElement.appendChild(availablePick);
+        }
     }
 }
