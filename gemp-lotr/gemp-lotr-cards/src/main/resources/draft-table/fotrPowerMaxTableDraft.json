@@ -15,7 +15,7 @@
     {
       "size": 7,
       "card-list": [
-        "1_310", "1_296", "1_307", "1_365", "1_112", "1_92" , "1_365", "1_311",
+        "1_310", "3_106", "1_307", "1_365", "1_112", "1_92" , "1_365", "1_311",
         "1_317", "1_303", "2_122", "1_75" , "1_87" , "2_122", "2_114", "1_296",
         "1_303", "1_365", "1_92" , "1_112", "1_365", "1_307", "1_298", "1_303",
         "2_122", "2_29" , "1_75" , "2_122"
@@ -108,19 +108,19 @@
   ],
   "boosters": [
     {
-      "rounds": [1, 2, 3],
+      "rounds": [1, 2],
       "cards": [
         {"count": 2, "set-name": "rare-fp"    },
         {"count": 4, "set-name": "uncommon-fp"},
-        {"count": 8, "set-name": "common-fp"  }
+        {"count": 9, "set-name": "common-fp"  }
       ]
     },
     {
-      "rounds": [4, 5, 6],
+      "rounds": [3, 4],
       "cards": [
         {"count": 2, "set-name": "rare-shadow"    },
         {"count": 4, "set-name": "uncommon-shadow"},
-        {"count": 8, "set-name": "common-shadow"  }
+        {"count": 9, "set-name": "common-shadow"  }
       ]
     }
   ],
