@@ -117,13 +117,21 @@ class CardDisplay {
 		this.backside = null;
 	}
 
-	reloadFromCard(card, maxWidth, maxHeight, noborder) {
+	reloadFromCard(card, maxWidth, maxHeight, ignoreTengwar) {
 		this.baseDiv.data("card", card);
-		this.currentBP = card.blueprintId;
-		this.frontside = card.imageUrl;
-		if(!this.frontside) {
-			this.frontside = Card.getImageUrl(this.currentBP);
+		if(ignoreTengwar && card.isTengwar()) {
+			this.currentBP = card.bareBlueprint;
+			this.frontside = Card.GetBaseImageFromCache(this.currentBP).imageUrl;
 		}
+		else {
+			this.currentBP = card.blueprintId;
+			this.frontside = card.imageUrl;
+		}
+		
+		if(!this.frontside) {
+				this.frontside = Card.getImageUrl(this.currentBP);
+			}
+		
 		
 		let back = card.backSideImageUrl;
 		if(back && !back.includes("darkcardback") && !back.includes("lightcardback")) {
@@ -143,11 +151,9 @@ class CardDisplay {
 				this.backside = null;
 			}
 		}
-		
-		
 
-		this.reload(maxWidth, maxHeight, card.imageUrl, 
-			card.horizontal || card.effectivelyHorizontal(), card.foil, noborder, card.testingText);
+		this.reload(maxWidth, maxHeight, this.frontside, 
+			card.horizontal || card.effectivelyHorizontal(), card.foil, false, card.testingText);
 	}
 
 	reload(maxWidth, maxHeight, image, horizontal, foil, noborder, testingText) {
