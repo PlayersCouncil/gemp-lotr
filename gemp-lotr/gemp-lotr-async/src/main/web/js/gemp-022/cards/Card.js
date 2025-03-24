@@ -55,6 +55,49 @@ class Card {
     static GetAlternateImage(bpid) {
         return bpid.includes("^", 2);
     }
+    
+    static GetImageFromCache(blueprintid, tengwar) {
+        if(tengwar) 
+            return Card.GetTengwarImageFromCache(blueprintid);
+        
+        return Card.GetBaseImageFromCache(blueprintid);
+    }
+    
+    static GetBaseImageFromCache(blueprintid) {
+        let cached = Card.CardCache[blueprintid];
+        if(cached == null) {
+            cached = {
+                imageUrl:Card.getImageUrl(blueprintid),
+                backSideImageUrl:Card.getBackSideUrl(blueprintid),
+                incomplete:Card.isIncomplete(blueprintid),
+                errata:Card.isErrata(blueprintid)
+            };
+            
+            Card.CardCache[blueprintid] = cached;
+        }
+    
+
+        return cached;
+    }
+    
+    static GetTengwarImageFromCache(blueprintid) {
+        let tengwarid = blueprintid + "T";
+        
+        let cached = Card.CardCache[tengwarid];
+        if(cached == null) {
+            cached = {
+                imageUrl:Card.getImageUrl(tengwarid, true),
+                backSideImageUrl:Card.getBackSideUrl(tengwarid),
+                incomplete:Card.isIncomplete(tengwarid),
+                errata:Card.isErrata(tengwarid)
+            };
+            
+            Card.CardCache[tengwarid] = cached;
+        }
+    
+
+        return cached;
+    }
 
     //blueprintId, zone, cardId, owner, siteNumber
     constructor (blueprintId, testingText, backSideTestingText, zone, cardId, owner, siteNumber, upsideDown, onSide) {
@@ -106,32 +149,11 @@ class Card {
 
         this.horizontal = Card.isHorizontal(this.bareBlueprint, this.zone);
 
-        if (this.bareBlueprint != "-1_1" && this.bareBlueprint != "-1_2" && Card.CardCache[this.bareBlueprint] != null) {
-            var cardFromCache = Card.CardCache[this.bareBlueprint];
-            this.imageUrl = cardFromCache.imageUrl;
-            this.backSideImageUrl = cardFromCache.backSideImageUrl;
-            this.incomplete = cardFromCache.incomplete;
-            this.errata = cardFromCache.errata;
-        } else {
-            this.imageUrl = Card.getImageUrl(this.bareBlueprint, this.tengwar);
-            this.backSideImageUrl = Card.getBackSideUrl(this.bareBlueprint);
-            this.incomplete = Card.isIncomplete(this.bareBlueprint);
-            
-            var separator = this.bareBlueprint.indexOf("_");
-            var setNo = parseInt(this.bareBlueprint.substr(0, separator));
-            var cardNo = parseInt(this.bareBlueprint.substr(separator + 1));
-
-            this.errata = Card.getErrata(setNo, cardNo) != null;
-
-            if (this.bareBlueprint != "-1_1" && this.bareBlueprint != "-1_2") {
-                Card.CardCache[this.bareBlueprint] = {
-                    imageUrl:this.imageUrl,
-                    backSideImageUrl:this.backSideImageUrl,
-                    incomplete:this.incomplete,
-                    errata:this.errata
-                };
-            }
-        }
+        var cardFromCache = Card.GetImageFromCache(this.bareBlueprint, this.tengwar);
+        this.imageUrl = cardFromCache.imageUrl;
+        this.backSideImageUrl = cardFromCache.backSideImageUrl;
+        this.incomplete = cardFromCache.incomplete;
+        this.errata = cardFromCache.errata;
     }
     
     static getFixedImage (blueprintId) {
@@ -326,6 +348,14 @@ class Card {
         }
 
         return false;
+    }
+    
+    static isErrata(blueprintId) {
+        var separator = blueprintId.indexOf("_");
+        var setNo = parseInt(blueprintId.substr(0, separator));
+        var cardNo = parseInt(blueprintId.substr(separator + 1));
+        
+        return Card.getErrata(setNo, cardNo) != null;
     }
     
     static getImageUrl(blueprintId, tengwar, ignoreErrata) {

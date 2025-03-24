@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,10 @@ public class Card_02_076_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "52_76");
-					// put other cards in here as needed for the test case
+					put("sam", "1_311");
+					put("helpless", "52_76");
+					put("toto", "10_68");
+					put("nelya","1_233");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -45,7 +46,7 @@ public class Card_02_076_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("helpless");
 
 		assertEquals("Helpless", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,18 +58,96 @@ public class Card_02_076_ErrataTests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HelplessTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void HelplessBlocksSpecialAbilities() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
+
+		var helpless = scn.GetShadowCard("helpless");
+		var nelya = scn.GetShadowCard("nelya");
+		scn.ShadowAttachCardsTo(sam, helpless);
+		scn.ShadowMoveCharToTable(nelya);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		//The Fellowship burden-removing special ability should be blocked
+		assertFalse(scn.FreepsActionAvailable(sam));
 
-		assertEquals(1, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, nelya);
+		scn.FreepsResolveSkirmish(frodo);
+		scn.PassCurrentPhaseActions();
+
+		//The Response ring-bearer special ability should also be blocked
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 	}
+
+	@Test
+	public void HelplessDoesNotBlockAbilitiesWhileInSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
+
+		var helpless = scn.GetShadowCard("helpless");
+		var nelya = scn.GetShadowCard("nelya");
+		scn.ShadowMoveCardToSupportArea(helpless);
+		scn.ShadowMoveCharToTable(nelya);
+
+		scn.StartGame();
+		//The Fellowship burden-removing special ability should NOT be blocked
+		assertTrue(scn.FreepsActionAvailable(sam));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, nelya);
+		scn.FreepsResolveSkirmish(frodo);
+		scn.PassCurrentPhaseActions();
+
+		//The Response ring-bearer special ability should also NOT be blocked
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+	}
+
+	@Test
+	public void HelplessManeuverActionTransfersToRingBoundCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
+
+		var helpless = scn.GetShadowCard("helpless");
+		var toto = scn.GetShadowCard("toto");
+		var nelya = scn.GetShadowCard("nelya");
+		scn.ShadowMoveCardToSupportArea(helpless);
+		scn.ShadowMoveCharToTable(toto, nelya);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(helpless));
+		assertEquals(0, scn.GetWoundsOn(toto));
+		assertEquals(0, scn.GetWoundsOn(nelya));
+		assertEquals(Zone.SUPPORT, helpless.getZone());
+
+		scn.ShadowUseCardAction(helpless);
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		scn.ShadowChooseCard(toto);
+		assertEquals(1, scn.GetWoundsOn(toto));
+		assertEquals(0, scn.GetWoundsOn(nelya));
+
+		//Can go on either Sam or Frodo
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		scn.ShadowChooseCard(frodo);
+		assertEquals(Zone.ATTACHED, helpless.getZone());
+		assertEquals(frodo, helpless.getAttachedTo());
+	}
+
 }

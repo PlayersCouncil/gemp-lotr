@@ -23,6 +23,7 @@ public class Card_12_184_Tests
 
 					put("fodder1", "1_302");
 					put("fodder2", "1_307");
+					put("fodder3", "1_310");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -76,7 +77,8 @@ public class Card_12_184_Tests
 		var frodo = scn.GetRingBearer();
 		var fodder1 = scn.GetFreepsCard("fodder1");
 		var fodder2 = scn.GetFreepsCard("fodder2");
-		scn.FreepsMoveCharToTable(fodder1, fodder2);
+		var fodder3 = scn.GetFreepsCard("fodder3");
+		scn.FreepsMoveCharToTable(fodder1, fodder2, fodder3);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
@@ -103,8 +105,10 @@ public class Card_12_184_Tests
 
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 		scn.PassCurrentPhaseActions();
-		scn.FreepsDeclineAssignments();
-		scn.ShadowDeclineAssignments();
+		scn.FreepsAssignToMinions(fodder3, twk);
+		scn.FreepsResolveSkirmish(fodder3);
+		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+		scn.PassCurrentPhaseActions();
 
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 	}

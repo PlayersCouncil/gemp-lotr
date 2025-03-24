@@ -140,10 +140,15 @@
 					}
 					{
 						type: If
-						check: {
-							type: HasMemory
-							memory: opponent
-						}
+						check: [
+							{
+								type: HasMemory
+								memory: opponent
+							}
+							{
+								type: SiteAvailableToControl
+							}
+						]
 						true: {
 							type: Optional
 							player: shadow
