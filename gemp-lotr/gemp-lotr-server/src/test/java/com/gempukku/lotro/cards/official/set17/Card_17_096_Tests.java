@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set17;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,9 @@ public class Card_17_096_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "17_96");
-					// put other cards in here as needed for the test case
+					put("eowyn", "17_96");
+					put("scout", "1_270");
+					put("soldier", "1_271");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -42,12 +42,14 @@ public class Card_17_096_Tests
 		 * Strength: 6
 		 * Vitality: 3
 		 * Resistance: 7
-		 * Game Text: While the Ring-bearer is assigned to a skirmish, Éowyn cannot take wounds while skirmishing.<br><b>Assignment:</b> Exert Éowyn and assign a minion to the Ring-bearer to make that minion lose all game text keywords and unable to gain game text keywords until the regroup phase.
+		 * Game Text: While the Ring-bearer is assigned to a skirmish, Éowyn cannot take wounds while skirmishing.
+		 * <b>Assignment:</b> Exert Éowyn and assign a minion to the Ring-bearer to make that minion lose
+		 * all game text keywords and unable to gain game text keywords until the regroup phase.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("eowyn");
 
 		assertEquals("Éowyn", card.getBlueprint().getTitle());
 		assertEquals("Northwoman", card.getBlueprint().getSubtitle());
@@ -62,18 +64,39 @@ public class Card_17_096_Tests
 		assertEquals(7, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void EowynTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void EowynAbilityAssignsRingBearerToRemoveGameText() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var frodo = scn.GetRingBearer();
+		var eowyn = scn.GetFreepsCard("eowyn");
+		scn.FreepsMoveCharToTable(eowyn);
+
+		var scout = scn.GetShadowCard("scout");
+		scn.ShadowMoveCharToTable(scout);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.hasKeyword(scout, Keyword.TRACKER));
+		assertTrue(scn.FreepsActionAvailable(eowyn));
+		assertEquals(0, scn.GetWoundsOn(eowyn));
+		assertFalse(scn.IsCharAssigned(frodo));
+		assertFalse(GetScenario().IsCharAssigned(scout));
+
+		scn.FreepsUseCardAction(eowyn);
+		assertFalse(scn.hasKeyword(scout, Keyword.TRACKER));
+		assertFalse(scn.FreepsActionAvailable(eowyn));
+		assertEquals(1, scn.GetWoundsOn(eowyn));
+		assertTrue(scn.IsCharAssigned(frodo));
+		assertTrue(scn.IsCharAssigned(scout));
+
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsResolveSkirmish(frodo);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowAnyActionsAvailable());
 	}
 }
