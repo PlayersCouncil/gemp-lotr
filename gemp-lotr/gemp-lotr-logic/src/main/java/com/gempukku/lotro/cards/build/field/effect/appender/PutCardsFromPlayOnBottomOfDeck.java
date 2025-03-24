@@ -16,6 +16,7 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.ChooseArbitraryCardsEffect;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
 import org.json.simple.JSONObject;
 
 import java.util.*;
@@ -52,10 +53,25 @@ public class PutCardsFromPlayOnBottomOfDeck implements EffectAppenderProducer {
                                             }
 
                                             GameState gameState = game.getGameState();
-                                            gameState.sendMessage(card.getOwner() + " puts " + GameUtils.getCardLink(card) + " from play on the bottom of deck");
 
-                                            gameState.removeCardsFromZone(card.getOwner(), Collections.singleton(card));
+                                            Set<PhysicalCard> discardedFromPlayCards = new HashSet<>();
+                                            Set<PhysicalCard> toMoveToDiscardCards = new HashSet<>();
+
+                                            DiscardUtils.cardsToChangeZones(game, Collections.singleton(card), discardedFromPlayCards, toMoveToDiscardCards);
+
+                                            Set<PhysicalCard> removeFromPlay = new HashSet<>(toMoveToDiscardCards);
+                                            removeFromPlay.add(card);
+
+                                            gameState.removeCardsFromZone(card.getOwner(), removeFromPlay);
+
+                                            for (PhysicalCard attachedCard : toMoveToDiscardCards)
+                                                gameState.addCardToZone(game, attachedCard, Zone.DISCARD);
+
+                                            gameState.sendMessage(card.getOwner() + " puts " + GameUtils.getCardLink(card) + " from play on the bottom of deck");
                                             gameState.putCardOnBottomOfDeck(card);
+
+                                            for (PhysicalCard discardedCard : discardedFromPlayCards)
+                                                game.getActionsEnvironment().emitEffectResult(new DiscardCardsFromPlayResult(null, null, discardedCard));
                                         }
                                     });
                         }
