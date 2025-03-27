@@ -13,7 +13,7 @@ public class TournamentParams {
     public Tournament.TournamentType type = Tournament.TournamentType.CONSTRUCTED;
     public Tournament.PairingType playoff = Tournament.PairingType.SWISS;
     public boolean manualKickoff;
-    public boolean requiresDeck;
+    public boolean requiresDeck = true;
     public boolean customCollection;
     public int cost;
     public String tiebreaker;
