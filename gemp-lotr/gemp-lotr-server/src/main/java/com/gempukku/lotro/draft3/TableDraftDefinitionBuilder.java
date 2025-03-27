@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class TableDraftBuilder {
+public class TableDraftDefinitionBuilder {
     private static final int HIGH_ENOUGH_PRIME_NUMBER = 8963;
 
     public static TableDraftDefinition build(File jsonFile) {

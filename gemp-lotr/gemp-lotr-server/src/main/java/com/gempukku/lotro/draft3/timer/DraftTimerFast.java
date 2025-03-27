@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class DraftTimerFast implements DraftTimer{
     private Map<Integer, Integer> durations = new HashMap<>();
-    private boolean firstCardPicked = false;
 
     public DraftTimerFast() {
         // MtG timer from Tournament Guides until 15 cards, then extended to 20
@@ -39,12 +38,6 @@ public class DraftTimerFast implements DraftTimer{
         }
 
         // Look to map for info
-        int tbr = durations.get(cardsInPack);
-        // Add 5 extra minutes for the very first pick so players can get to draft
-        tbr += firstCardPicked ? 0 : 300;
-
-        firstCardPicked = true;
-
-        return tbr;
+        return durations.get(cardsInPack);
     }
 }

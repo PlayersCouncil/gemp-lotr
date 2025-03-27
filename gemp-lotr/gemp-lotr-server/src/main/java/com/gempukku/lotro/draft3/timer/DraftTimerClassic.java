@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class DraftTimerClassic implements DraftTimer{
     private Map<Integer, Integer> durations = new HashMap<>();
-    private boolean firstCardPicked = false;
     private static final int SECS_PER_CARD = 6;
 
     public DraftTimerClassic() {
@@ -23,12 +22,6 @@ public class DraftTimerClassic implements DraftTimer{
         }
 
         // Look to map for info
-        int tbr = durations.get(cardsInPack);
-        // Add 5 extra minutes for the very first pick so players can get to draft
-        tbr += firstCardPicked ? 0 : 300;
-
-        firstCardPicked = true;
-
-        return tbr;
+        return durations.get(cardsInPack);
     }
 }

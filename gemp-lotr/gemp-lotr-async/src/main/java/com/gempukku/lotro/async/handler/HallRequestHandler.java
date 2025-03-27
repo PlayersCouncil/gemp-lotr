@@ -73,6 +73,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
                 startQueue(request, uri.substring(7, uri.length() - 6), responseWriter);
             } else if (uri.endsWith("/leave")) {
                 leaveQueue(request, uri.substring(7, uri.length() - 6), responseWriter);
+            } else if (uri.endsWith("/ready")) {
+                confirmReadyCheckQueue(request, uri.substring(7, uri.length() - 6), responseWriter);
             } else {
                 joinQueue(request, uri.substring(7), responseWriter);
             }
@@ -326,6 +328,18 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         _hallServer.leaveQueue(queueId, resourceOwner);
 
         responseWriter.writeXmlResponse(null);
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    private void confirmReadyCheckQueue(HttpRequest request, String queueId, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            _hallServer.confirmReadyCheck(queueId, resourceOwner);
+            responseWriter.writeXmlResponse(null);
         } finally {
             postDecoder.destroy();
         }

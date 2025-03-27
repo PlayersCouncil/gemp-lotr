@@ -74,13 +74,17 @@ public class TournamentService {
     }
 
     private void addImmediateRecurringQueue(String queueId, String queueName, String prefix, String formatCode) {
+        TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
+
         _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
                 new TournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
-                        new TournamentParams(prefix, queueName, formatCode, 1500, 4, Tournament.PairingType.SINGLE_ELIMINATION, Tournament.PrizeType.ON_DEMAND)))
+                        new TournamentParams(prefix, queueName, formatCode, 1500, 4, Tournament.PairingType.SINGLE_ELIMINATION, Tournament.PrizeType.ON_DEMAND)),
+                        callback, _collectionsManager)
         );
     }
 
     private void addImmediateRecurringSealed(String queueId, String queueName, String prefix, String formatCode) {
+        TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
 
         var sealedParams = new SealedTournamentParams();
         sealedParams.type = Tournament.TournamentType.SEALED;
@@ -102,11 +106,12 @@ public class TournamentService {
 
         _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
                 new SealedTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
-                        sealedParams))
+                        sealedParams), callback, _collectionsManager)
         );
     }
 
     private void addImmediateRecurringDraft(String queueId, String queueName, String prefix, String formatCode) {
+        TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
 
         var soloDraftParams = new SoloDraftTournamentParams();
         soloDraftParams.type = Tournament.TournamentType.SOLODRAFT;
@@ -128,11 +133,12 @@ public class TournamentService {
 
         _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
                 new SoloDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
-                        soloDraftParams, _soloDraftLibrary))
+                        soloDraftParams, _soloDraftLibrary), callback, _collectionsManager)
         );
     }
 
     private void addImmediateRecurringTableDraft(String queueId, String queueName, String prefix, String formatCode, int players, DraftTimerFactory.Type draftTimer) {
+        TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
 
         TableDraftTournamentParams draftParams = new TableDraftTournamentParams();
         draftParams.type = Tournament.TournamentType.TABLE_DRAFT;
@@ -150,19 +156,23 @@ public class TournamentService {
         draftParams.name = queueName;
         draftParams.cost = 0;
         draftParams.minimumPlayers = players;
+        draftParams.maximumPlayers = players;
         draftParams.playoff = Tournament.PairingType.SWISS_3;
         draftParams.prizes = Tournament.PrizeType.NONE;
 
         _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
                 new TableDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
-                        draftParams, _tableDraftLibrary), true)
+                        draftParams, _tableDraftLibrary), true, 90, callback, _collectionsManager)
         );
     }
 
     private void addRecurringScheduledQueue(String queueId, String queueName, String time, String prefix, String formatCode) {
+        TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
+
         _tournamentQueues.put(queueId, new RecurringScheduledQueue(this, queueId, queueName,
                 new TournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.ParseStringDate(time),
-                        new TournamentParams(prefix, queueName, formatCode, 0, 4, Tournament.PairingType.SWISS_3, Tournament.PrizeType.DAILY)), _tournamentRepeatPeriod));
+                        new TournamentParams(prefix, queueName, formatCode, 0, 4, Tournament.PairingType.SWISS_3, Tournament.PrizeType.DAILY)),
+                        _tournamentRepeatPeriod, callback, _collectionsManager));
     }
 
     public void reloadTournaments(TableHolder tables) {
@@ -226,7 +236,7 @@ public class TournamentService {
 
     public void cancelAllTournamentQueues() throws SQLException, IOException {
         for (TournamentQueue tournamentQueue : _tournamentQueues.values())
-            tournamentQueue.leaveAllPlayers(_collectionsManager);
+            tournamentQueue.leaveAllPlayers();
     }
 
     public TournamentQueue getTournamentQueue(String queueId) {
@@ -245,7 +255,8 @@ public class TournamentService {
             visitor.visitTournamentQueue(queueID, queue.getCost(), queue.getCollectionType().getFullName(),
                     formatLibrary.getFormat(queue.getFormatCode()).getName(), queue.getInfo().Parameters().type.toString(), queue.getTournamentQueueName(),
                     queue.getPrizesDescription(), queue.getPairingDescription(), queue.getStartCondition(),
-                    queue.getPlayerCount(), queue.getPlayerList(), queue.isPlayerSignedUp(player.getName()), queue.isJoinable(), queue.isStartable(player.getName()));
+                    queue.getPlayerCount(), queue.getPlayerList(), queue.isPlayerSignedUp(player.getName()), queue.isJoinable(), queue.isStartable(player.getName()),
+                    queue.getSecondsRemainingForReadyCheck(), queue.hasConfirmedReadyCheck(player.getName()));
         }
 
         for (var entry : _activeTournaments.entrySet()) {
@@ -264,14 +275,8 @@ public class TournamentService {
         for (var entry : new HashMap<>(_tournamentQueues).entrySet()) {
             var queueID = entry.getKey();
             var queue = entry.getValue();
-            var callback = new TournamentQueueCallback() {
-                @Override
-                public void createTournament(Tournament tournament) {
-                    _activeTournaments.put(tournament.getTournamentId(), tournament);
-                }
-            };
             // If it's finished, remove it
-            if (queue.process(callback, _collectionsManager)) {
+            if (queue.process()) {
                 _tournamentQueues.remove(queueID);
                 queuesChanged = true;
             }
@@ -387,46 +392,55 @@ public class TournamentService {
     }
 
     public TournamentQueue getTournamentQueue(TournamentInfo info) {
+        TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
+
         if(info.Parameters().type == Tournament.TournamentType.SEALED) {
-            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
+            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info, callback, _collectionsManager);
         }
         else if(info.Parameters().type == Tournament.TournamentType.CONSTRUCTED) {
-            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
+            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info, callback, _collectionsManager);
         }
         else if(info.Parameters().type == Tournament.TournamentType.SOLODRAFT) {
-            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
+            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info, callback, _collectionsManager);
         }
         else if(info.Parameters().type == Tournament.TournamentType.TABLE_SOLODRAFT) {
-            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
+            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info, callback, _collectionsManager);
         }
         else if(info.Parameters().type == Tournament.TournamentType.TABLE_DRAFT) {
-            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info);
+            return new ScheduledTournamentQueue(this, info.Parameters().tournamentId, info.Parameters().name, info, callback, _collectionsManager);
         }
 
         return null;
     }
 
     public TournamentQueue getTournamentQueue(DBDefs.ScheduledTournament tourney) {
+        TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
+
         var type = Tournament.TournamentType.parse(tourney.type);
         if(type == Tournament.TournamentType.SEALED) {
             return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
-                    new SealedTournamentInfo(this, _productLibrary, _formatLibrary, tourney));
+                    new SealedTournamentInfo(this, _productLibrary, _formatLibrary, tourney),
+                    callback, _collectionsManager);
         }
         else if(type == Tournament.TournamentType.CONSTRUCTED) {
             return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
-                    new TournamentInfo(this, _productLibrary, _formatLibrary, tourney));
+                    new TournamentInfo(this, _productLibrary, _formatLibrary, tourney),
+                    callback, _collectionsManager);
         }
         else if(type == Tournament.TournamentType.SOLODRAFT) {
             return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
-                    new SoloDraftTournamentInfo(this, _productLibrary, _formatLibrary, tourney, _soloDraftLibrary));
+                    new SoloDraftTournamentInfo(this, _productLibrary, _formatLibrary, tourney, _soloDraftLibrary),
+                    callback, _collectionsManager);
         }
         else if(type == Tournament.TournamentType.TABLE_SOLODRAFT) {
             return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
-                    new SoloTableDraftTournamentInfo(this, _productLibrary, _formatLibrary, tourney, _tableDraftLibrary));
+                    new SoloTableDraftTournamentInfo(this, _productLibrary, _formatLibrary, tourney, _tableDraftLibrary),
+                    callback, _collectionsManager);
         }
         else if(type == Tournament.TournamentType.TABLE_DRAFT) {
             return new ScheduledTournamentQueue(this, tourney.tournament_id, tourney.name,
-                    new TableDraftTournamentInfo(this, _productLibrary, _formatLibrary, tourney, _tableDraftLibrary));
+                    new TableDraftTournamentInfo(this, _productLibrary, _formatLibrary, tourney, _tableDraftLibrary),
+                    callback, _collectionsManager);
         }
 
         return null;

@@ -14,8 +14,9 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
     private final ZonedDateTime _startTime;
     private final int maximumPlayers;
 
-    public ScheduledTournamentQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info) {
-        super(tournamentService, queueId, queueName, info);
+    public ScheduledTournamentQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info,
+                                    TournamentQueueCallback tournamentQueueCallback, CollectionsManager collectionsManager) {
+        super(tournamentService, queueId, queueName, info, tournamentQueueCallback, collectionsManager, true);
         _startTime = DateUtils.ParseDate(info.Parameters().startTime);
         maximumPlayers = info.Parameters().maximumPlayers;
     }
@@ -36,21 +37,18 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
     }
 
     @Override
-    public synchronized boolean process(TournamentQueueCallback tournamentQueueCallback, CollectionsManager collectionsManager) throws SQLException, IOException {
+    public synchronized boolean process() throws SQLException, IOException  {
+        if (shouldDestroy) {
+            return true; // Tournament started by Ready Check already, destroy the queue
+        }
+
         var now = ZonedDateTime.now();
         if (now.isAfter(_startTime)) {
             if (_players.size() >= _tournamentInfo.Parameters().minimumPlayers) {
-                for (String player : _players) {
-                    _tournamentService.recordTournamentPlayer(_tournamentInfo.Parameters().tournamentId, player,
-                            _playerDecks.get(player));
-                }
-
-                var tournament = _tournamentService.addTournament(_tournamentInfo);
-                tournamentQueueCallback.createTournament(tournament);
-
+                startTournament();
             } else {
                 _tournamentService.recordScheduledTournamentStarted(_tournamentInfo.Parameters().tournamentId);
-                leaveAllPlayers(collectionsManager);
+                leaveAllPlayers();
             }
             return true; //destroy the queue now that the tournament has started
         }
@@ -64,15 +62,5 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
             window = _wcSignupTimeBeforeStart;
         }
         return DateUtils.Now().isAfter(_startTime.minus(window)) && (maximumPlayers < 0 || _players.size() < maximumPlayers);
-    }
-
-    @Override
-    public boolean isStartable(String byWhom) {
-        return false;
-    }
-
-    @Override
-    public boolean requestStart(String byWhom) {
-        return false;
     }
 }

@@ -26,7 +26,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 public class TableDraftClassic implements TableDraft{
-    private static final int MISSED_CARDS_ALLOWED = 4;
+    private static final int MISSED_CARDS_ALLOWED = 2;
 
     private final ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private final Lock readLock = lock.readLock();

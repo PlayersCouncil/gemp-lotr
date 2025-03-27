@@ -386,7 +386,7 @@ public class HallServer extends AbstractServer {
             if (tournamentQueue.isRequiresDeck())
                 lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournamentQueue.getFormatCode()), player, deckName, tournamentQueue.getCollectionType());
 
-            tournamentQueue.joinPlayer(_collectionsManager, player, lotroDeck);
+            tournamentQueue.joinPlayer(player, lotroDeck);
 
             hallChanged();
 
@@ -411,9 +411,14 @@ public class HallServer extends AbstractServer {
                 throw new HallException("This queue failed to be started early by " + player.getName());
             }
 
+            _tournamentService.processTournamentQueues(); // Immediately refresh when start request was successful
+            _tournamentService.processTournaments(this);
+
             hallChanged();
 
             return true;
+        } catch (SQLException | IOException ex) {
+            throw new RuntimeException("Error during server cleanup.", ex);
         } finally {
             _hallDataAccessLock.writeLock().unlock();
         }
@@ -470,7 +475,24 @@ public class HallServer extends AbstractServer {
         try {
             TournamentQueue tournamentQueue = _tournamentService.getTournamentQueue(queueId);
             if (tournamentQueue != null && tournamentQueue.isPlayerSignedUp(player.getName())) {
-                tournamentQueue.leavePlayer(_collectionsManager, player);
+                tournamentQueue.leavePlayer(player);
+                hallChanged();
+            }
+        } finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+    }
+
+    public void confirmReadyCheck(String queueId, Player player) throws SQLException, IOException {
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            TournamentQueue tournamentQueue = _tournamentService.getTournamentQueue(queueId);
+            if (tournamentQueue != null && tournamentQueue.isPlayerSignedUp(player.getName())) {
+                tournamentQueue.confirmReadyCheck(player.getName());
+
+                _tournamentService.processTournamentQueues(); // Immediately refresh
+                _tournamentService.processTournaments(this);
+
                 hallChanged();
             }
         } finally {
@@ -484,7 +506,7 @@ public class HallServer extends AbstractServer {
             boolean result = false;
             for (TournamentQueue tournamentQueue : _tournamentService.getAllTournamentQueues()) {
                 if (tournamentQueue.isPlayerSignedUp(player.getName())) {
-                    tournamentQueue.leavePlayer(_collectionsManager, player);
+                    tournamentQueue.leavePlayer(player);
                     result = true;
                 }
             }
@@ -547,7 +569,7 @@ public class HallServer extends AbstractServer {
         }
     }
 
-    public String registerLimitedTournamentDeck(String tournamentId, Player player, String deckName) throws HallException {
+    public String registerLimitedTournamentDeck(String tournamentId, Player player, String deckName) {
         _hallDataAccessLock.writeLock().lock();
         try {
             String result = "";

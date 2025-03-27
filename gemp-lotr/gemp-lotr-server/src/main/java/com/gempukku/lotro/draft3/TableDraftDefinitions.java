@@ -78,7 +78,7 @@ public class TableDraftDefinitions {
 
     private void loadDrafts(File path) {
         if (path.isFile()) {
-            TableDraftDefinition tableDraftDefinition = TableDraftBuilder.build(path);
+            TableDraftDefinition tableDraftDefinition = TableDraftDefinitionBuilder.build(path);
             logger.debug("Loaded table draft definition: " + path);
 
             if(draftTypes.containsKey(tableDraftDefinition.getCode()))

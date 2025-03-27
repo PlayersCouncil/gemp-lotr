@@ -497,14 +497,34 @@ var GempLotrHallUI = Class.extend({
                                 function(queueInfo) {
                                     return function() {
                                         var queueId = queueInfo.getAttribute("id");
-                                        var queueName = queueInfo.getAttribute("queue");
-                                        var queueStart = queueInfo.getAttribute("start");
                                         that.comm.startQueue(queueId, function (xml) {
                                             var result = that.processResponse(xml);
                                         });
                                     }
                                 })(queue));
 						    actionsField.append(startBut);
+                        }
+
+                        if (+queue.getAttribute("readyCheckSecsRemaining") > -1) {
+                            if ($("button:contains('READY CHECK')").length === 0 && queue.getAttribute("confirmedReadyCheck") == "false") {
+                                that.showDialog("Ready Check", "Ready Check started for the <b>" + queue.getAttribute("queue")
+                                 + "</b> tournament.<br><br>To confirm you are present, click the Ready Check button within next "
+                                  + queue.getAttribute("readyCheckSecsRemaining") + " seconds.", 230);
+                            }
+                            var checkBut = $("<button>READY CHECK - " + queue.getAttribute("readyCheckSecsRemaining") + " s</button>");
+                            $(checkBut).button().click((
+                                function(queueInfo) {
+                                    return function() {
+                                        var queueId = queueInfo.getAttribute("id");
+                                        that.comm.confirmReadyCheckQueue(queueId, function (xml) {
+                                            var result = that.processResponse(xml);
+                                        });
+                                    }
+                                })(queue));
+						    actionsField.append(checkBut);
+						    if (queue.getAttribute("confirmedReadyCheck") == "true") {
+                                $(checkBut).prop("disabled", true).text("Waiting for others - " + queue.getAttribute("readyCheckSecsRemaining") + " s");
+						    }
                         }
 					}
                     var type = queue.getAttribute("type");
