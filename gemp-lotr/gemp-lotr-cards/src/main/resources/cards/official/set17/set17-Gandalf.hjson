@@ -181,6 +181,7 @@
 							on: self
 							showAll: true
 							shuffle: true
+							mustExist: true
 						}
 						{
 							type: playCardFromDiscard

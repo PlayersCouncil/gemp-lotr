@@ -472,6 +472,7 @@
 								select: choose(name(Gollum))
 								showAll: true
 								shuffle: true
+								mustExist: true
 							}
 							{
 								type: playCardFromDiscard

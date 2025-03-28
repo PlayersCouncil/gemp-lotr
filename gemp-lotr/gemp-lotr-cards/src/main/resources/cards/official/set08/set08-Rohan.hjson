@@ -402,6 +402,7 @@
 						{
 							type: playCardFromDrawDeck
 							select: choose(culture(rohan),companion)
+							mustExist: true
 							showAll: true
 							shuffle: true
 						}

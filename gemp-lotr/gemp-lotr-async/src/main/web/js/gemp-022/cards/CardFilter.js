@@ -583,7 +583,7 @@ var CardFilter = Class.extend({
 		this[id + "ValueInput"] = $("<input id='" + id + "ValueInput' type='number' min = '0' max='12' class='filterInput' style='width: 35px;'>");
 	},
 	
-	movieBlocks: ["ttt_block", "king_block"],
+	movieBlocks: ["ttt_block", "king_block", "pc_ttt_block", "pc_king_block"],
 	expandedBlocks: ["war_block", "hunter_block"],
 	hobbitBlocks: ["hobbit"],
 	

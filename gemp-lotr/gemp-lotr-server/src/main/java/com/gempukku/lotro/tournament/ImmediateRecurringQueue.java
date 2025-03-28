@@ -39,6 +39,7 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
             this.type = Tournament.TournamentType.CONSTRUCTED;
             this.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
             this.manualKickoff = false;
+            this.requiresDeck = true;
             this.cost = getCost();
             this.minimumPlayers = _playerCap;
         }};

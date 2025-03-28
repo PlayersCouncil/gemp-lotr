@@ -78,6 +78,7 @@
 							select: choose(enduring,minion)
 							showAll: true
 							shuffle: true
+							mustExist: true
 						}
 						{
 							type: playCardFromDiscard

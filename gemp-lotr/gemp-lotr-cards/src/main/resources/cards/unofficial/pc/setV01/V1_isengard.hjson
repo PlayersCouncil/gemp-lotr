@@ -504,6 +504,7 @@
 							}
 							showAll: true
 							shuffle: true
+							mustExist: true
 						}
 						{
 							type: PlayCardFromDiscard
