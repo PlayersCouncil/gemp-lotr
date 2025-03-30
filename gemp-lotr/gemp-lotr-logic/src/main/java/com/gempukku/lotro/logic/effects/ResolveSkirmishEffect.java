@@ -3,6 +3,7 @@ package com.gempukku.lotro.logic.effects;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
+import com.gempukku.lotro.logic.modifiers.CantBeOverwhelmedModifier;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.timing.results.*;
@@ -45,12 +46,14 @@ public class ResolveSkirmishEffect extends AbstractEffect {
 		final PhysicalCard fellowshipCharacter = skirmish.getFellowshipCharacter();
 
 		int multiplier = 2;
-		if (fellowshipCharacter != null)
+		if (fellowshipCharacter != null) {
 			multiplier = game.getModifiersQuerying().getOverwhelmMultiplier(game, fellowshipCharacter);
+		}
 
-		if (fpStrength == 0 && shadowStrength == 0)
+		if (fpStrength == 0 && shadowStrength == 0) {
 			return Result.FELLOWSHIP_LOSES;
-		else if (fpStrength * multiplier <= shadowStrength) {
+		} else if (multiplier < CantBeOverwhelmedModifier.ImmuneToOverwhelmThreshold
+				&& fpStrength * multiplier <= shadowStrength) {
 			return Result.FELLOWSHIP_OVERWHELMED;
 		} else if (fpStrength <= shadowStrength) {
 			return Result.FELLOWSHIP_LOSES;

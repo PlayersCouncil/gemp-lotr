@@ -17,12 +17,18 @@ public class Card_10_116_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "10_116");
-					// put other cards in here as needed for the test case
+					put("totgr", "10_116");
+					put("sam", "1_311");
+
+					put("sauron", "9_48");
+					put("evil", "1_246"); //skirmish event
+					put("spies", "2_91"); //response event
+					put("frost1", "1_135");
+					put("frost2", "1_135");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				GenericCardTestHelper.ATARRing
 		);
 	}
 
@@ -38,12 +44,14 @@ public class Card_10_116_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: <b>Tale</b>.<br><b>Skirmish:</b> Prevent a Hobbit from being overwhelmed unless a Shadow event is (or was) played during this skirmish. Discard this condition.
+		 * Game Text: <b>Tale</b>.
+		 * <b>Skirmish:</b> Prevent a Hobbit from being overwhelmed unless a
+		 * Shadow event is (or was) played during this skirmish. Discard this condition.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("totgr");
 
 		assertEquals("The Tale of the Great Ring", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +64,154 @@ public class Card_10_116_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheTaleoftheGreatRingTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void TOTGRPreventsOverwhelmWithNoEvents() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var sam = scn.GetFreepsCard("sam");
+		var totgr = scn.GetFreepsCard("totgr");
+		scn.FreepsMoveCardToSupportArea(totgr);
+		scn.FreepsMoveCharToTable(sam);
+
+		var sauron = scn.GetShadowCard("sauron");
+		scn.ShadowMoveCharToTable(sauron);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(sam, sauron);
+		scn.FreepsResolveSkirmish(sam);
+
+		assertTrue(scn.FreepsActionAvailable(totgr));
+		scn.FreepsUseCardAction(totgr);
+		scn.FreepsChooseCard(sam);
+		assertEquals(3, scn.GetStrength(sam));
+		assertEquals(24, scn.GetStrength(sauron));
+
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+
+		//Sam survived skirmish and now we're in the fierce assignment phase
+		assertEquals(Zone.FREE_CHARACTERS, sam.getZone());
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+	}
+
+	@Test
+	public void TOTGRDoesNotPreventOverwhelmWithShadowSkirmishEvent() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var totgr = scn.GetFreepsCard("totgr");
+		scn.FreepsMoveCardToSupportArea(totgr);
+		scn.FreepsMoveCharToTable(sam);
+
+		var sauron = scn.GetShadowCard("sauron");
+		var evil = scn.GetShadowCard("evil");
+		scn.ShadowMoveCharToTable(sauron);
+		scn.ShadowMoveCardToHand(evil);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(sam, sauron);
+		scn.FreepsResolveSkirmish(sam);
+
+		assertTrue(scn.FreepsActionAvailable(totgr));
+		scn.FreepsUseCardAction(totgr);
+		scn.FreepsChooseCard(sam);
+		assertEquals(3, scn.GetStrength(sam));
+		assertEquals(24, scn.GetStrength(sauron));
+
+		assertTrue(scn.ShadowPlayAvailable(evil));
+		scn.ShadowPlayCard(evil);
+		scn.ShadowChoose("1");
+
+		scn.PassCurrentPhaseActions();
+
+		//Sam got overwhelmed and now we're in the fierce assignment phase
+		assertEquals(Zone.DEAD, sam.getZone());
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+	}
+
+	@Test
+	public void TOTGRDoesNotPreventOverwhelmWithShadowResponseEvent() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var ring = scn.GetFreepsRing();
+		var sam = scn.GetFreepsCard("sam");
+		var totgr = scn.GetFreepsCard("totgr");
+		scn.FreepsMoveCardToSupportArea(totgr);
+		scn.FreepsMoveCharToTable(sam);
+
+		var sauron = scn.GetShadowCard("sauron");
+		var spies = scn.GetShadowCard("spies");
+		scn.ShadowMoveCharToTable(sauron);
+		scn.ShadowMoveCardToHand(spies);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(sam, sauron);
+		scn.FreepsResolveSkirmish(sam);
+
+		assertTrue(scn.FreepsActionAvailable(totgr));
+		scn.FreepsUseCardAction(totgr);
+		scn.FreepsChooseCard(sam);
+		assertEquals(3, scn.GetStrength(sam));
+		assertEquals(24, scn.GetStrength(sauron));
+
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsUseCardAction(ring);
+		assertTrue(scn.ShadowPlayAvailable(spies));
+		scn.ShadowPlayCard(spies);
+
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+
+		//Sam got overwhelmed and now we're in the fierce assignment phase
+		assertEquals(Zone.DEAD, sam.getZone());
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+	}
+
+	@Test
+	public void TOTGRPreventsOverwhelmEvenWhenStrengthReducedToZero() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var totgr = scn.GetFreepsCard("totgr");
+		scn.FreepsMoveCardToSupportArea(totgr);
+		scn.FreepsMoveCharToTable(sam);
+
+		var sauron = scn.GetShadowCard("sauron");
+		var frost1 = scn.GetShadowCard("frost1");
+		var frost2 = scn.GetShadowCard("frost2");
+		scn.ShadowMoveCharToTable(sauron);
+
+		scn.StartGame();
+
+		scn.FreepsPassCurrentPhaseAction();
+		var site2 = scn.GetCurrentSite();
+		scn.ShadowAttachCardsTo(site2, frost1, frost2);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(sam, sauron);
+		scn.FreepsResolveSkirmish(sam);
+
+		assertTrue(scn.FreepsActionAvailable(totgr));
+		scn.FreepsUseCardAction(totgr);
+		scn.FreepsChooseCard(sam);
+		assertEquals(0, scn.GetStrength(sam));
+		assertEquals(24, scn.GetStrength(sauron));
+
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+
+		//Sam survived skirmish even with 0 strength and now we're in the fierce assignment phase
+		assertEquals(Zone.FREE_CHARACTERS, sam.getZone());
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 	}
 }
