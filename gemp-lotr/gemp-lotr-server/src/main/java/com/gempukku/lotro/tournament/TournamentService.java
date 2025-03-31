@@ -217,9 +217,9 @@ public class TournamentService {
             addImmediateRecurringTableDraft(code + "_queue", tableDraftDefinition.getName(), code + "_queue-", code, tableDraftDefinition.getMaxPlayers(), DraftTimerFactory.Type.CLASSIC);
         });
 
-        addImmediateRecurringDraft("fotr_draft_queue", "FotR Draft", "fotrDraftQueue-", "fotr_draft");
-        addImmediateRecurringDraft("ttt_draft_queue", "TTT Draft", "tttDraftQueue-", "ttt_draft");
-        addImmediateRecurringDraft("hobbit_draft_queue", "Hobbit Draft", "hobbitDraftQueue-", "hobbit_random_draft");
+        addImmediateRecurringDraft("fotr_solo_draft_queue", "FotR Solo Draft", "fotrSoloDraftQueue-", "fotr_draft");
+        addImmediateRecurringDraft("ttt_solo_draft_queue", "TTT Solo Draft", "tttSoloDraftQueue-", "ttt_draft");
+        addImmediateRecurringDraft("hobbit_solo_draft_queue", "Hobbit Solo Draft", "hobbitSoloDraftQueue-", "hobbit_random_draft");
 
         addImmediateRecurringSealed("fotr_sealed_queue", "Fellowship Block Sealed", "fotrSealedQueue-", "single_fotr_block_sealed");
         addImmediateRecurringSealed("ttt_sealed_queue", "Towers Block Sealed", "tttSealedQueue-", "single_ttt_block_sealed");
