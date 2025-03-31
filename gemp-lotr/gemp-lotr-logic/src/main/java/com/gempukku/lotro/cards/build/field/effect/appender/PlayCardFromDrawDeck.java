@@ -15,6 +15,7 @@ import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.ShuffleDeckEffect;
 import com.gempukku.lotro.logic.effects.StackActionEffect;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
+import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.RangeEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.ExtraFilters;
@@ -26,7 +27,7 @@ import java.util.Collection;
 public class PlayCardFromDrawDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "memorize", "shuffle", "showAll");
+        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "mustExist", "memorize", "shuffle", "showAll");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
@@ -34,6 +35,20 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         boolean shuffle = FieldUtils.getBoolean(effectObject.get("shuffle"), "shuffle");
         boolean showAll = FieldUtils.getBoolean(effectObject.get("showAll"), "showAll");
+
+        final boolean mustExist = FieldUtils.getBoolean(effectObject.get("mustExist"), "mustExist", false);
+
+        // If the card is not in the deck, you can still attempt this action to no effect.
+        // If the card is in the deck, you can choose to not play it.
+        ValueSource countSource = actionContext -> new RangeEvaluator(0, 1);
+        if(mustExist)
+        {
+            //HOWEVER, if we are in a situation where a card can be played "from draw deck or discard pile", we
+            // DO NOT WANT to pretend that there is a card in the draw deck if it's not actually there.  Else the
+            // player will be offered a "play from draw deck" button that lies to them and will cause the effect to
+            // fizzle.
+            countSource = actionContext -> new ConstantEvaluator(1);;
+        }
 
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
@@ -52,9 +67,7 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
                             }
                             return Filters.playable(actionContext.getGame(), costModifier, false, false, true);
                         },
-                        // Even if you have the matching card in deck, you can choose not to play it
-                        actionContext -> new RangeEvaluator(0, 1),
-                        memorize, "you", "you", showAll, "Choose card to play", environment));
+                        countSource, memorize, "you", "you", showAll, "Choose card to play", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
