@@ -176,10 +176,8 @@ public class TriggerConditions {
             return Filters.acceptsAny(game, woundResult.getSources(), woundedBy) &&
                     Filters.accepts(game, woundResult.getWoundedCard(), filters) &&
                     (
-                            (Filters.or(CardType.ALLY, CardType.COMPANION).accepts(game, wounded) &&
-                                    wounded.getZone() == Zone.DEAD) ||
-                                    (Filters.accepts(game, wounded, CardType.MINION) &&
-                                            wounded.getZone() != Zone.SHADOW_CHARACTERS)
+                            (Filters.or(CardType.ALLY, CardType.COMPANION).accepts(game, wounded) && wounded.getZone() == Zone.DEAD)
+                                    || (Filters.accepts(game, wounded, CardType.MINION) && wounded.getZone() != Zone.SHADOW_CHARACTERS)
                     );
         }
         return false;
@@ -296,39 +294,55 @@ public class TriggerConditions {
         return false;
     }
 
-    public static boolean forEachKilled(LotroGame game, EffectResult effectResult, Filterable... filters) {
-        return forEachKilledBy(game, effectResult, Filters.any, null, filters);
-    }
-
-    public static boolean forEachKilledBy(LotroGame game, EffectResult effectResult, Filterable killedBy, KillEffect.Cause cause, Filterable... killed) {
-        if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
-            return forEachMortallyWoundedBy(game, effectResult, killedBy, killed);
-        } else if (effectResult.getType() == EffectResult.Type.FOR_EACH_KILLED) {
-            if (forEachKilledInASkirmish(game, effectResult, killedBy, cause, killed))
-                return true;
-
-            ForEachKilledResult killResult = (ForEachKilledResult) effectResult;
-            var killers = killResult.getKillers();
-
-            if (killedBy != Filters.any && (killers == null || killers.isEmpty() || killers.stream().allMatch(Objects::isNull)))
-                return false;
-
-            return Filters.acceptsAny(game, killers, killedBy) &&
-                    Filters.and(killed).accepts(game, killResult.getKilledCard());
-        }
-        return false;
-    }
-
-    public static boolean forEachKilledInASkirmish(LotroGame game, EffectResult effectResult, Filterable killedBy, KillEffect.Cause cause, Filterable... killed) {
-        if (effectResult.getType() == EffectResult.Type.FOR_EACH_KILLED
-                && game.getGameState().getCurrentPhase() == Phase.SKIRMISH
-                && Filters.countActive(game, Filters.inSkirmish, killedBy) > 0) {
-            ForEachKilledResult killResult = (ForEachKilledResult) effectResult;
+    public static boolean forEachKilled(LotroGame game, EffectResult effectResult, boolean inSkirmish, KillEffect.Cause cause, Filterable... killedFilter) {
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_KILLED) {
+            var killResult = (ForEachKilledResult) effectResult;
 
             if(cause != null && killResult.getCause() != cause)
                 return false;
 
-            return Filters.and(killed).accepts(game, killResult.getKilledCard());
+            if(inSkirmish) {
+                if(game.getGameState().getCurrentPhase() != Phase.SKIRMISH || Filters.countActive(game, Filters.inSkirmish) == 0)
+                    return false;
+            }
+
+            return Filters.and(killedFilter).accepts(game, killResult.getKilledCard());
+        }
+        return false;
+    }
+
+    /**
+     * Standard deaths that come about via vitality being reduced to zero are invoked by the CharacterDeathRule
+     * that is checked in between every effect.  As this is a contextless action, such deaths will never have their
+     * killer properly recorded.  Thus, standard Killed triggers which do not define a trigger simply use the standard
+     * FOR_EACH_KILLED trigger in the method above, while Killed triggers which must be aware of their killer have
+     * to split attention here between FOR_EACH_KILLED (for overwhelms and direct kill effects) and FOR_EACH_WOUNDED (for
+     * mortal wounds and direct vitality subtraction).  To avoid triggering twice when mortally wounded, we abort early
+     * if we detect the killer information has not been provided at all (as it will be when fired by a zero-vitality
+     * check).
+     */
+    public static boolean forEachKilledBy(LotroGame game, EffectResult effectResult, boolean inSkirmish, KillEffect.Cause cause, Filterable killedBy, Filterable... killed) {
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
+            return forEachMortallyWoundedBy(game, effectResult, killedBy, killed);
+        } else
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_KILLED) {
+            ForEachKilledResult killResult = (ForEachKilledResult) effectResult;
+            var killers = killResult.getKillers();
+
+            //If killers is not provided at all, then this event was triggered by the CharacterDeathRule
+            // and we must skip this evaluation, as we would have triggered already on the mortal wound above.
+            if (killers == null || killers.isEmpty() || killers.stream().allMatch(Objects::isNull))
+                return false;
+
+            if(cause != null && killResult.getCause() != cause)
+                return false;
+
+            if(inSkirmish) {
+                if(game.getGameState().getCurrentPhase() != Phase.SKIRMISH || Filters.countActive(game, Filters.inSkirmish) == 0)
+                    return false;
+            }
+
+            return Filters.acceptsAny(game, killers, killedBy) && Filters.accepts(game, killResult.getKilledCard(), killed);
         }
         return false;
     }

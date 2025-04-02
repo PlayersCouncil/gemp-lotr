@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.official.set10;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -20,8 +17,10 @@ public class Card_10_003_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "10_3");
-					// put other cards in here as needed for the test case
+					put("more", "10_3");
+					put("gimli", "1_12");
+					put("runner", "1_178");
+					put("savage", "1_151");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +45,7 @@ public class Card_10_003_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("more");
 
 		assertEquals("More Yet to Come", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +57,37 @@ public class Card_10_003_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MoreYettoComeTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	//Migrated from legacy AT
+	@Test
+	public void MoreYetToComeAppliesExtraDamageToMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var gimli = scn.GetFreepsCard("gimli");
+		var more = scn.GetFreepsCard("more");
+		scn.FreepsMoveCharToTable(gimli);
+		scn.FreepsMoveCardToHand(more);
+
+		var runner = scn.GetShadowCard("runner");
+		var savage = scn.GetShadowCard("savage");
+		scn.ShadowMoveCharToTable(runner, savage);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, runner);
+		scn.ShadowDeclineAssignments();
+
+		scn.FreepsResolveSkirmish(gimli);
+		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(0, scn.GetWoundsOn(savage));
+
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(Zone.DISCARD, runner.getZone());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(1, scn.GetWoundsOn(savage));
 	}
 }

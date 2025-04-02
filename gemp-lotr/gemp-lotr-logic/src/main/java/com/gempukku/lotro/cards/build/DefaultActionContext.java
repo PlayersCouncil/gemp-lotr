@@ -92,7 +92,7 @@ public class DefaultActionContext implements ActionContext {
             memory = memory.toLowerCase();
         }
         final Collection<PhysicalCard> physicalCards = cardMemory.get(memory);
-        if (physicalCards.size() == 0)
+        if (physicalCards.isEmpty())
             return null;
         if (physicalCards.size() != 1)
             throw new RuntimeException("Unable to retrieve one card from memory: " + memory);
