@@ -40,8 +40,8 @@ public class Card_07_262_Tests
 		 * Twilight Cost: 0
 		 * Type: Event
 		 * Subtype: Shadow
-		 * Game Text: Play a besieger stacked on a site you control or remove a burden
-		 * to play a [sauron] Orc from your discard pile.
+		 * Game Text: Play a besieger stacked on a site you control or
+		 * remove a burden to play a [sauron] Orc from your discard pile.
 		*/
 
 		var scn = GetScenario();
@@ -68,8 +68,7 @@ public class Card_07_262_Tests
 		var pillager = scn.GetShadowCard("pillager");
 		var assassin = scn.GetShadowCard("assassin");
 		var battlements = scn.GetShadowCard("battlements");
-		scn.ShadowMoveCardToDiscard(assassin);
-		scn.ShadowMoveCardToHand(battlements);
+		scn.ShadowMoveCardToDiscard(assassin, battlements);
 
 		scn.StartGame();
 
@@ -79,6 +78,7 @@ public class Card_07_262_Tests
 		scn.ShadowTakeControlOfSite();
 		assertTrue(scn.IsSiteControlled(site1));
 		scn.StackCardsOn(site1, pillager);
+		scn.ShadowMoveCardToHand(battlements);
 
 		scn.SkipToSite(4);
 		scn.SetTwilight(20);
@@ -111,7 +111,7 @@ public class Card_07_262_Tests
 		var assassin = scn.GetShadowCard("assassin");
 		var battlements = scn.GetShadowCard("battlements");
 		scn.ShadowMoveCardToDiscard(assassin);
-		scn.ShadowMoveCardToHand(battlements, pillager);
+		scn.ShadowMoveCardToHand(pillager, battlements);
 
 		scn.StartGame();
 
@@ -135,7 +135,7 @@ public class Card_07_262_Tests
 	}
 
 	@Test
-	public void AbovetheBattlementCanPlayStackedBesiegerToPlaySauronOrcFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AbovetheBattlementCanPlayStackedBesieger() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -144,8 +144,7 @@ public class Card_07_262_Tests
 		var pillager = scn.GetShadowCard("pillager");
 		var assassin = scn.GetShadowCard("assassin");
 		var battlements = scn.GetShadowCard("battlements");
-		scn.ShadowMoveCardToDiscard(assassin);
-		scn.ShadowMoveCardToHand(battlements);
+		scn.ShadowMoveCardToDiscard(assassin, battlements);
 
 		scn.StartGame();
 
@@ -155,6 +154,7 @@ public class Card_07_262_Tests
 		scn.ShadowTakeControlOfSite();
 		assertTrue(scn.IsSiteControlled(site1));
 		scn.StackCardsOn(site1, pillager);
+		scn.ShadowMoveCardToHand(battlements);
 
 		scn.SkipToSite(4);
 		scn.SetTwilight(20);
@@ -172,7 +172,7 @@ public class Card_07_262_Tests
 
 		scn.ShadowChooseMultipleChoiceOption("play");
 		assertEquals(Zone.SHADOW_CHARACTERS, pillager.getZone());
-		assertEquals(Zone.SHADOW_CHARACTERS, assassin.getZone());
+		assertEquals(Zone.DISCARD, assassin.getZone());
 		assertEquals(1, scn.GetBurdens());
 	}
 }
