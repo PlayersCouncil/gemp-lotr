@@ -49,13 +49,14 @@ public class MarkdownParser {
     public String renderMarkdown(String markdown, boolean shredLinks) {
         String newMsg = markdown.trim().replaceAll("\n\n\n+", "\n\n\n");
         newMsg = QuoteExtender.matcher(newMsg).replaceAll("$1\n");
-        //Escaping underscores so that URLs with lots of underscores (i.e. wiki links) aren't mangled
-        // Besides, who uses _this_ instead of *this*?
-        newMsg = newMsg.replace("_", "\\_");
 
         //Need to preserve any commands being made
         if(newMsg.startsWith("/"))
             return newMsg;
+
+        //Escaping underscores so that URLs with lots of underscores (i.e. wiki links) aren't mangled
+        // Besides, who uses _this_ instead of *this*?
+        newMsg = newMsg.replace("_", "\\_");
 
 
         if(shredLinks) {

@@ -110,7 +110,7 @@ public class Card_01_055_ErrataTests
 		assertEquals(Zone.HAND, card1.getZone());
 
 		scn.FreepsUseCardAction(mirror);
-		assertEquals(3, scn.GetFreepsCardChoiceCount());
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		scn.FreepsDismissRevealedCards();
 		scn.ShadowDismissRevealedCards();
 		scn.FreepsChooseCardBPFromSelection(card1);
@@ -147,7 +147,7 @@ public class Card_01_055_ErrataTests
 		assertEquals(Zone.HAND, card1.getZone());
 
 		scn.FreepsUseCardAction(mirror);
-		assertEquals(3, scn.GetFreepsCardChoiceCount());
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		scn.FreepsDismissRevealedCards();
 		scn.ShadowDismissRevealedCards();
 	}

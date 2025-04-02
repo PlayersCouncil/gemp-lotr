@@ -204,13 +204,12 @@
 				{
 					type: exert
 					select: choose(ringBearer)
-					memorize: ringBearer
 				}
 				{
 					type: If
 					check: {
 						type: canSpot
-						filter: memory(ringBearer),exhausted
+						filter: ringBearer,exhausted
 					}
 					true: {
 						type: putOnRing

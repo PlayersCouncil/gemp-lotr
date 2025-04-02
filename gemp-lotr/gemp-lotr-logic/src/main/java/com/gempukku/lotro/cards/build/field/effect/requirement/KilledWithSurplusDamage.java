@@ -21,8 +21,7 @@ public class KilledWithSurplusDamage implements RequirementProducer {
             public boolean accepts(ActionContext actionContext) {
                 LotroGame game = actionContext.getGame();
                 final ResolveSkirmishDamageAction resolveSkirmishDamageAction = game.getActionsEnvironment().findTopmostActionOfType(ResolveSkirmishDamageAction.class);
-                if (resolveSkirmishDamageAction != null
-                        && resolveSkirmishDamageAction.getRemainingDamage() > 0) {
+                if (resolveSkirmishDamageAction != null && resolveSkirmishDamageAction.getRemainingDamage() > 0) {
                     if (memory != null) {
                         actionContext.setValueToMemory(memory, String.valueOf(resolveSkirmishDamageAction.getRemainingDamage()));
                     }

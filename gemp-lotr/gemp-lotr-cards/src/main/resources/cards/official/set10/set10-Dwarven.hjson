@@ -135,7 +135,7 @@
 				inSkirmish: true
 				memorize: killedMinion
 			}
-			text: Play for {killedMinion}
+			text: Play More Yet to Come for {killedMinion}
 			requires: {
 				type: killedWithSurplusDamage
 				memorize: surplusDamage

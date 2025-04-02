@@ -60,7 +60,7 @@ public class CharacterDeathRule {
                 if (!_charactersAlreadyOnWayToDeath.contains(character) && game.getModifiersQuerying().getVitality(game, character) <= 0)
                     deadChars.add(character);
 
-            if (deadChars.size() > 0) {
+            if (!deadChars.isEmpty()) {
                 _charactersAlreadyOnWayToDeath.addAll(deadChars);
                 game.getActionsEnvironment().emitEffectResult(new ZeroVitalityResult(deadChars));
             }

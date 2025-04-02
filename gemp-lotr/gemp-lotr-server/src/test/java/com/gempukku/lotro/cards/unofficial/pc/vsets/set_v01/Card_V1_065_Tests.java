@@ -1,9 +1,11 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +20,12 @@ public class Card_V1_065_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "101_65");
-					// put other cards in here as needed for the test case
+					put("dam", "101_65");
+					put("foul", "2_58");
+					put("watcher", "2_73");
+
+					put("aragorn", "1_89");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +52,7 @@ public class Card_V1_065_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("dam");
 
 		assertEquals("Sirannon Dam", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +64,76 @@ public class Card_V1_065_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SirannonDamTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SirannonDamMakesCompanionsDefenderPlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var frodo = scn.GetRingBearer();
+
+		var dam = scn.GetShadowCard("dam");
+		scn.ShadowMoveCardToSupportArea(dam);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertTrue(scn.hasKeyword(frodo, Keyword.DEFENDER));
+	}
 
-		assertEquals(0, scn.GetTwilight());
+	@Test
+	public void SirannonDamMakesSitesWithNoKeywordGainMarsh() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+
+		var dam = scn.GetShadowCard("dam");
+		scn.ShadowMoveCardToHand(dam);
+
+		scn.StartGame();
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertFalse(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		scn.ShadowPlayCard(dam);
+		assertTrue(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+	}
+
+	@Test
+	public void SirannonDamCanRemove2BurdensToMakeWatcherReplaceTentacleInSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCharToTable(aragorn);
+
+		var dam = scn.GetShadowCard("dam");
+		var foul = scn.GetShadowCard("foul");
+		var watcher = scn.GetShadowCard("watcher");
+		scn.ShadowMoveCardToSupportArea(dam);
+		scn.ShadowMoveCardToHand(foul, watcher);
+
+		scn.StartGame();
+		scn.AddBurdens(2);
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(foul);
+		scn.ShadowDeclineOptionalTrigger();
+		scn.ShadowPlayCard(watcher);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, foul);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(3, scn.GetBurdens());
+		assertTrue(scn.IsCharSkirmishing(foul));
+		assertFalse(scn.IsCharSkirmishing(watcher));
+		assertTrue(scn.ShadowActionAvailable(dam));
+
+		scn.ShadowUseCardAction(dam);
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.IsCharSkirmishing(watcher));
+		assertFalse(scn.IsCharSkirmishing(foul));
 	}
 }

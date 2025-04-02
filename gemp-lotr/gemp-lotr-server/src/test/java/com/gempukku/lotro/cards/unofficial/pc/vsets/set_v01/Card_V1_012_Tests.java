@@ -92,7 +92,7 @@ public class Card_V1_012_Tests
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCardIDFromSelection(vilya);
 		// vilya put on the bottom of the deck, and then drew one card to get back to 2
 		assertEquals(2, scn.GetFreepsHandCount());

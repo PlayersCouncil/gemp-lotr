@@ -828,6 +828,7 @@
 				}
 				effect: {
 					type: choice
+					player: free people
 					texts: [
 						Add a burden
 						Discard a card from hand

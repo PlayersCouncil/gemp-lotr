@@ -348,4 +348,19 @@ public class GameUtils {
         }
         return total;
     }
+
+    public static boolean anySiteAvailableToControl(LotroGame game) {
+        int maxUnoccupiedSite = Integer.MAX_VALUE;
+        for (String playerId : game.getGameState().getPlayerOrder().getAllPlayers()) {
+            maxUnoccupiedSite = Math.min(maxUnoccupiedSite, game.getGameState().getPlayerPosition(playerId) - 1);
+        }
+
+        for (int i = 1; i <= maxUnoccupiedSite; i++) {
+            final PhysicalCard site = game.getGameState().getSite(i);
+            if (site.getCardController() == null)
+                return true;
+        }
+
+        return false;
+    }
 }

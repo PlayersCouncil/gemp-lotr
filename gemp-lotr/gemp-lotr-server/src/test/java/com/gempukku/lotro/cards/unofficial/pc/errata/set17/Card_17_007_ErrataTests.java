@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set17;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -58,6 +57,8 @@ public class Card_17_007_ErrataTests
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.ELF, card.getBlueprint().getRace());
 		assertTrue(scn.hasKeyword(card, Keyword.VALIANT));
+		assertTrue(scn.hasKeyword(card, Keyword.HUNTER));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.HUNTER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());

@@ -270,7 +270,7 @@ public class RequirementsAtTest extends AbstractAtTest {
         obj.put("memory", "m");
 
         DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
-        Requirement requirement = new HasInMemory().getPlayRequirement(obj, lotroCardBlueprintBuilder);
+        Requirement requirement = new HasCardInMemory().getPlayRequirement(obj, lotroCardBlueprintBuilder);
         assertFalse(requirement.accepts(actionContext));
         actionContext.setCardMemory("m", createCard(P1, "1_3"));
         assertTrue(requirement.accepts(actionContext));

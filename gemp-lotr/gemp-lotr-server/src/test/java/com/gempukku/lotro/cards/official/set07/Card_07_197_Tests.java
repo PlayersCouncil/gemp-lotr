@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.at.AbstractAtTest.P1;
 import static org.junit.Assert.*;
 
 public class Card_07_197_Tests
@@ -19,7 +20,7 @@ public class Card_07_197_Tests
 				new HashMap<>()
 				{{
 					put("card", "7_197");
-					// put other cards in here as needed for the test case
+					put("enquea", "1_231");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -62,18 +63,38 @@ public class Card_07_197_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MorgulRegimentTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void MustExertToAssignMorgulRegiment() throws DecisionResultInvalidException, CardNotFoundException {
+		// Arrange
+		GenericCardTestHelper scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var card = scn.GetShadowCard("card");
+		var enquea = scn.GetShadowCard("enquea");
+		var frodo = scn.GetRingBearer();
+
+		scn.ShadowMoveCardToHand(card);
+		scn.ShadowMoveCardToHand(enquea);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(7, scn.GetTwilight());
+		scn.SetTwilight(20);
+
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(card);
+		scn.ShadowPlayCard(enquea);
+		scn.ShadowPassCurrentPhaseAction();
+
+		scn.SkipToAssignments();
+
+		assertTrue(scn.FreepsDecisionAvailable(
+				"Would you like to exert a companion for each Nazgûl you can spot to be able to assign Morgul Regiment to skirmish?"));
+
+		// Act
+		scn.playerDecided(P1, "0");
+
+		// Assert
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsCanAssign(card));
 	}
 }

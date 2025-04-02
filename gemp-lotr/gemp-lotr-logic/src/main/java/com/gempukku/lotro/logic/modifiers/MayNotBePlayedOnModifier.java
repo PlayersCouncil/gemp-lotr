@@ -15,6 +15,6 @@ public class MayNotBePlayedOnModifier extends AbstractModifier {
 
     @Override
     public boolean canHavePlayedOn(LotroGame game, PhysicalCard playedCard, PhysicalCard target) {
-        return !Filters.accepts(game, _unplayableCardFilter, playedCard);
+        return !Filters.accepts(game, playedCard, _unplayableCardFilter);
     }
 }

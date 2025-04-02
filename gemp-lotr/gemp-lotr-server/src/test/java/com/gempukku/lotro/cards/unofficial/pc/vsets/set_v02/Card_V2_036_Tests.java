@@ -83,20 +83,14 @@ public class Card_V2_036_Tests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 
-		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
-
-		assertEquals(3, scn.GetShadowCardChoiceCount());
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
 		assertEquals(Zone.DISCARD, warg1.getZone());
 		scn.ShadowChooseCardBPFromSelection(warg1);
 		assertEquals(Zone.STACKED, warg1.getZone());
 		assertSame(pit, warg1.getStackedOn());
 
 		//We now optionally do it all again a second time
-		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
-
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		assertEquals(Zone.DISCARD, warg2.getZone());
 		scn.ShadowChooseCardBPFromSelection(warg2);
 		assertEquals(Zone.STACKED, warg2.getZone());
@@ -174,18 +168,13 @@ public class Card_V2_036_Tests
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
 		scn.ShadowChooseMultipleChoiceOption("deck");
-		scn.ShadowDismissRevealedCards();
 
-		assertEquals(1, scn.ShadowGetSelectableCount());
 		assertEquals(Zone.DECK, warg1.getZone());
-		scn.ShadowChooseCardBPFromSelection(warg1);
+		scn.ShadowDismissRevealedCards();
 		assertEquals(Zone.STACKED, warg1.getZone());
 		assertSame(pit, warg1.getStackedOn());
 
 		//We now optionally do it all again a second time
-		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
-
 		assertEquals(2, scn.ShadowGetSelectableCount());
 		assertEquals(Zone.DISCARD, warg2.getZone());
 		scn.ShadowChooseCardBPFromSelection(warg2);
@@ -219,17 +208,17 @@ public class Card_V2_036_Tests
 		scn.ShadowUseCardAction(pit);
 		assertEquals(Zone.STACKED, warg1.getZone());
 		//choosing exert cost: 2 warg-riders and an uruk
-		assertEquals(3, scn.GetShadowCardChoiceCount());
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
 		assertEquals(3, scn.GetVitality(uruk));
 		scn.ShadowChooseCard(uruk);
 		assertEquals(2, scn.GetVitality(uruk));
 
 		//choosing the mount to play that's stacked on pit
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(warg1);
 
 		//choosing the warg-rider for it to go on
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCard(rider1);
 		assertEquals(Zone.ATTACHED, warg1.getZone());
 		assertSame(rider1, warg1.getAttachedTo());

@@ -18,7 +18,10 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		keywords: Valiant
+		keywords: [
+			Valiant
+			Hunter 1
+		]
 		effects: [
 			{
 				type: modifier

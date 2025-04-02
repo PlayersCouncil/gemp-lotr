@@ -129,7 +129,7 @@ public class Card_V1_011_Tests
 		scn.FreepsPlayCard(gondorart);
 		scn.FreepsPlayCard(shireart);
 
-		assertTrue(scn.FreepsActionAvailable(library));
+		assertTrue(scn.FreepsActionAvailable("Stack your tale or artifact from play"));
 
 		assertEquals(0, scn.GetFreepsHandCount());
 		scn.FreepsUseCardAction(library);
@@ -195,7 +195,7 @@ public class Card_V1_011_Tests
 
 		scn.StartGame();
 
-		assertTrue(scn.FreepsActionAvailable(library));
+		assertTrue(scn.FreepsActionAvailable("Stack your tale or artifact from hand"));
 
 		assertEquals(9, scn.GetFreepsHandCount());
 		scn.FreepsUseCardAction(library);

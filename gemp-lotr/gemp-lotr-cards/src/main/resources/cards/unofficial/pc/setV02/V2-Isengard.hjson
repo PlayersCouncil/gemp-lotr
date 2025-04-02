@@ -709,10 +709,16 @@
 					type: cantUseSpecialAbilities
 					filter: any
 					phase: skirmish
-					requires: {
-						type: Location
-						filter: battleground
-					}
+					requires: [
+						{
+							type: Location
+							filter: battleground
+						}
+						{
+							type: CanSpot
+							filter: inSkirmish, self
+						}
+					]
 				}
 			}
 		]
@@ -1292,7 +1298,7 @@
 							{
 								type: StackCardsFromDeck
 								select: choose(culture(isengard),mount)
-								count: 0-1
+								count: 1
 								where: self
 								shuffle: true
 								showAll: true
@@ -1322,7 +1328,7 @@
 								{
 									type: StackCardsFromDeck
 									select: choose(culture(isengard),mount)
-									count: 0-1
+									count: 1
 									where: self
 									shuffle: true
 									showAll: true

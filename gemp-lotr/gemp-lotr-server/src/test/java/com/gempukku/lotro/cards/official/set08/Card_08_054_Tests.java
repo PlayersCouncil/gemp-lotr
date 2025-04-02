@@ -17,8 +17,9 @@ public class Card_08_054_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "8_54");
-					// put other cards in here as needed for the test case
+					put("freebooter", "8_54");
+					put("wargalley", "8_59");
+					put("leaders", "7_112");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +47,7 @@ public class Card_08_054_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("freebooter");
 
 		assertEquals("Corsair Freebooter", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +63,40 @@ public class Card_08_054_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CorsairFreebooterTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void CorsairFreebooterRemovesArbitraryTokensToReinforceRaiderTokenTwice() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var freebooter = scn.GetShadowCard("freebooter");
+		var wargalley = scn.GetShadowCard("wargalley");
+		scn.ShadowMoveCardToHand(freebooter);
+		scn.ShadowMoveCardToSupportArea(wargalley);
+
+		var leaders = scn.GetFreepsCard("leaders");
+		scn.FreepsMoveCardToSupportArea(leaders);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(10);
+		scn.AddTokensToCard(leaders, 3);
+		scn.AddTokensToCard(wargalley, 1);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowPlayAvailable(freebooter));
+		assertEquals(3, scn.GetCultureTokensOn(leaders));
+		assertEquals(1, scn.GetCultureTokensOn(wargalley));
+
+		scn.ShadowPlayCard(freebooter);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+
+		scn.ShadowAcceptOptionalTrigger();
+		//Both Noble Leaders and Corsair War Galley have tokens on them to remove
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		scn.ShadowChooseCard(leaders);
+		scn.ShadowChooseCard(leaders);
+
+		assertEquals(1, scn.GetCultureTokensOn(leaders));
+		assertEquals(3, scn.GetCultureTokensOn(wargalley));
 	}
 }

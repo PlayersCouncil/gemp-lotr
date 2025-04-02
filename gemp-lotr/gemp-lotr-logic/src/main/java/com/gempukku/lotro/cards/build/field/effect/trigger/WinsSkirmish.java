@@ -58,7 +58,7 @@ public class WinsSkirmish implements TriggerCheckerProducer {
             private boolean checkResult(EffectResult effectResult, LotroGame game, Filterable winnerFilter, Filterable againstFilter) {
                 if (effectResult.getType() == EffectResult.Type.CHARACTER_WON_SKIRMISH) {
                     CharacterWonSkirmishResult wonResult = (CharacterWonSkirmishResult) effectResult;
-                    return Filters.accepts(game, winnerFilter, wonResult.getWinner())
+                    return Filters.accepts(game, wonResult.getWinner(), winnerFilter)
                             && Filters.acceptsAny(game, wonResult.getInvolving(), againstFilter);
                 }
                 return false;

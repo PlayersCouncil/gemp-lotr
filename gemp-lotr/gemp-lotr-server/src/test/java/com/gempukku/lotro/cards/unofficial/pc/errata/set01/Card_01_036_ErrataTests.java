@@ -86,7 +86,7 @@ public class Card_01_036_ErrataTests
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		scn.FreepsPlayCard(feet);
 		assertEquals(1, scn.GetWoundsOn(arwen));
-		assertEquals(4, scn.GetFreepsCardChoiceCount());
+		assertEquals(4, scn.FreepsGetCardChoiceCount());
 	}
 
 	@Test

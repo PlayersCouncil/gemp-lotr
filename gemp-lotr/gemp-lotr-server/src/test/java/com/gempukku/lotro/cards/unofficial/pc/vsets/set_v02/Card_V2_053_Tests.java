@@ -285,7 +285,8 @@ public class Card_V2_053_Tests
 		scn.ShadowPassCurrentPhaseAction();
 		assertTrue(scn.FreepsDecisionAvailable("maneuver"));
 		assertFalse(scn.FreepsPlayAvailable(valor));
-		assertFalse(scn.FreepsActionAvailable(albert));
+		assertFalse(scn.FreepsPlayAvailable(valor));
+		assertFalse(scn.FreepsActionAvailable(red));
 
 		assertEquals(Zone.DISCARD,  freeps1.getZone());
 		assertEquals(Zone.DISCARD,  freeps2.getZone());

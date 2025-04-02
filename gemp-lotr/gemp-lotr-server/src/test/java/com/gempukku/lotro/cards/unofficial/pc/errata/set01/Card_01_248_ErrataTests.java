@@ -79,7 +79,7 @@ public class Card_01_248_ErrataTests
         scn.ShadowPlayCard(forces1);
 
         assertTrue(scn.ShadowDecisionAvailable("Exert"));
-        assertEquals(3, scn.GetShadowCardChoiceCount());
+        assertEquals(3, scn.ShadowGetCardChoiceCount());
         scn.ShadowChoose(scn.ShadowGetCardChoices().get(1));
 
         //There are 3 minions, but only 2 orcs

@@ -17,8 +17,13 @@ public class Card_08_032_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "8_32");
-					// put other cards in here as needed for the test case
+					put("catapult", "8_32");
+					put("fodder1", "8_33");
+					put("fodder2", "8_34");
+
+					put("runner", "1_178");
+					put("shelob", "8_25");
+					put("larder", "8_23");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -43,7 +48,7 @@ public class Card_08_032_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("catapult");
 
 		assertEquals("Catapult", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,18 +60,63 @@ public class Card_08_032_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CatapultTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void CatapultCantBeUsedWithLessThanTwoCardsInHand() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var catapult = scn.GetFreepsCard("catapult");
+		scn.FreepsMoveCardToHand("fodder1");
+		scn.FreepsMoveCardToSupportArea(catapult);
+
+		scn.ShadowMoveCharToTable("runner");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertFalse(scn.FreepsActionAvailable(catapult));
+	}
+
+	@Test
+	public void CatapultRevealsTopOfOpponentDeckAndDiscardsShadowCardOfSameCost() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var catapult = scn.GetFreepsCard("catapult");
+		scn.FreepsMoveCardToHand("fodder1", "fodder2");
+		scn.FreepsMoveCardToSupportArea(catapult);
+
+		var runner = scn.GetShadowCard("runner");
+		var shelob = scn.GetShadowCard("shelob");
+		var larder = scn.GetShadowCard("larder");
+		var evilcatapult = scn.GetShadowCard("catapult");
+		scn.ShadowMoveCharToTable(runner, shelob);
+		scn.ShadowMoveCardToSupportArea(larder);
+		scn.ShadowMoveCardsToTopOfDeck(evilcatapult);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertTrue(scn.FreepsActionAvailable(catapult));
+
+		scn.FreepsUseCardAction(catapult);
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(2, scn.GetFreepsDiscardCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(evilcatapult));
+		scn.DismissRevealedCards();
+
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(runner));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(larder));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(shelob));
+
+		assertEquals(Zone.SUPPORT, larder.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
+		scn.ShadowChooseCard(larder);
+		assertEquals(Zone.DISCARD, larder.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
 	}
 }

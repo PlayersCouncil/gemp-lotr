@@ -171,7 +171,7 @@ public class Card_15_112_ErrataTests
 		assertEquals(Zone.DISCARD, orc1.getZone());
 
 		scn.ShadowUseCardAction(troll);
-		assertEquals(5, scn.GetShadowCardChoiceCount());
+		assertEquals(5, scn.ShadowGetCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(orc1);
 
 		assertEquals(13, scn.GetTwilight()); // -2 for ability, -3 for orc, -2 for roaming

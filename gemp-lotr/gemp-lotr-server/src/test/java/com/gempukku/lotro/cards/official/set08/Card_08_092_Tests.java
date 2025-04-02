@@ -17,8 +17,12 @@ public class Card_08_092_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "8_92");
-					// put other cards in here as needed for the test case
+					put("theoden", "8_92");
+					put("rider", "4_286");
+					put("eomer", "4_266");
+
+					put("sauron", "9_48");
+					put("bowman", "2_60");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -42,12 +46,14 @@ public class Card_08_092_Tests
 		 * Vitality: 3
 		 * Resistance: 6
 		 * Signet: Aragorn
-		 * Game Text: <b>Valiant</b>.<br>While you can spot a [rohan] Man, Théoden's twilight cost is -1.<br>When Théoden is killed, you may play a [rohan] companion from your discard pile or draw deck.
+		 * Game Text: <b>Valiant</b>.
+		 * While you can spot a [rohan] Man, Théoden's twilight cost is -1.
+		 * When Théoden is killed, you may play a [rohan] companion from your discard pile or draw deck.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("theoden");
 
 		assertEquals("Théoden", card.getBlueprint().getTitle());
 		assertEquals("Tall and Proud", card.getBlueprint().getSubtitle());
@@ -64,18 +70,152 @@ public class Card_08_092_Tests
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheodenTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void TheodenPlaysRohanCompanionFromDeckWhenDyingFromWound() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var theoden = scn.GetFreepsCard("theoden");
+		var eomer = scn.GetFreepsCard("eomer");
+		var rider = scn.GetFreepsCard("rider");
+		scn.FreepsMoveCharToTable(theoden);
+		scn.FreepsMoveCardsToTopOfDeck(eomer, rider);
+
+		var bowman = scn.GetShadowCard("bowman");
+		scn.ShadowMoveCharToTable(bowman);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.AddWoundsToChar(theoden, 2);
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(Zone.FREE_CHARACTERS, theoden.getZone());
+		assertEquals(Zone.DECK, eomer.getZone());
+		assertEquals(Zone.DECK, rider.getZone());
+
+		//arrow
+		scn.FreepsChooseCard(theoden);
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsDismissRevealedCards();
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		scn.FreepsChooseCardBPFromSelection(rider);
+
+		assertEquals(Zone.DEAD, theoden.getZone());
+		assertEquals(Zone.DECK, eomer.getZone());
+		assertEquals(Zone.FREE_CHARACTERS, rider.getZone());
+	}
+
+	@Test
+	public void TheodenPlaysRohanCompanionFromDiscardWhenDyingFromWound() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var theoden = scn.GetFreepsCard("theoden");
+		var eomer = scn.GetFreepsCard("eomer");
+		var rider = scn.GetFreepsCard("rider");
+		scn.FreepsMoveCharToTable(theoden);
+		scn.FreepsMoveCardToDiscard(eomer, rider);
+
+		var bowman = scn.GetShadowCard("bowman");
+		scn.ShadowMoveCharToTable(bowman);
+
+		scn.StartGame();
+
+		scn.AddWoundsToChar(theoden, 2);
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(Zone.FREE_CHARACTERS, theoden.getZone());
+		assertEquals(Zone.DISCARD, eomer.getZone());
+		assertEquals(Zone.DISCARD, rider.getZone());
+
+		//arrow
+		scn.FreepsChooseCard(theoden);
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		scn.FreepsChooseCardBPFromSelection(rider);
+
+		assertEquals(Zone.DEAD, theoden.getZone());
+		assertEquals(Zone.DISCARD, eomer.getZone());
+		assertEquals(Zone.FREE_CHARACTERS, rider.getZone());
+	}
+
+	@Test
+	public void TheodenOffersChoiceWhenValidOptionsInBothDrawDeckAndDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var theoden = scn.GetFreepsCard("theoden");
+		var eomer = scn.GetFreepsCard("eomer");
+		var rider = scn.GetFreepsCard("rider");
+		scn.FreepsMoveCharToTable(theoden);
+		scn.FreepsMoveCardsToTopOfDeck(eomer);
+		scn.FreepsMoveCardToDiscard(rider);
+
+		var bowman = scn.GetShadowCard("bowman");
+		scn.ShadowMoveCharToTable(bowman);
+
+		scn.StartGame();
+
+		scn.AddWoundsToChar(theoden, 2);
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(Zone.FREE_CHARACTERS, theoden.getZone());
+		assertEquals(Zone.DECK, eomer.getZone());
+		assertEquals(Zone.DISCARD, rider.getZone());
+
+		//arrow
+		scn.FreepsChooseCard(theoden);
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsChoiceAvailable("draw deck"));
+		assertTrue(scn.FreepsChoiceAvailable("discard pile"));
+	}
+
+	@Test
+	public void TheodenTriggersWhenKilledByThreats() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var theoden = scn.GetFreepsCard("theoden");
+		var eomer = scn.GetFreepsCard("eomer");
+		var rider = scn.GetFreepsCard("rider");
+		scn.FreepsMoveCharToTable(theoden, rider);
+		scn.FreepsMoveCardsToTopOfDeck(eomer);
+
+		var bowman = scn.GetShadowCard("bowman");
+		scn.ShadowMoveCharToTable(bowman);
+
+		scn.StartGame();
+
+		scn.AddThreats(3);
+		scn.AddWoundsToChar(theoden, 2);
+		scn.AddWoundsToChar(rider, 2);
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(Zone.FREE_CHARACTERS, theoden.getZone());
+		assertEquals(Zone.DECK, eomer.getZone());
+		assertEquals(Zone.FREE_CHARACTERS, rider.getZone());
+
+		//arrow
+		scn.FreepsChooseCard(rider);
+		//threats
+		scn.FreepsChooseCard(theoden);
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(Zone.DEAD, theoden.getZone());
+		assertEquals(Zone.FREE_CHARACTERS, eomer.getZone());
+		assertEquals(Zone.DEAD, rider.getZone());
 	}
 }

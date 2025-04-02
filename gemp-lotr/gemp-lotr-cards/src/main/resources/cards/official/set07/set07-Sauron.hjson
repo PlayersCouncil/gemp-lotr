@@ -15,11 +15,11 @@
 		timewords: Shadow
 		effects: {
 			type: event
-			cost: {
+			effect: {
 				type: choice
 				texts: [
 					Play a besieger stacked on a site you control
-					Remove a burden
+					Remove a burden to play a {SAURON} Orc from discard
 				]
 				effects: [
 					{
@@ -28,16 +28,17 @@
 						on: controlledSite
 					}
 					{
-						type: removeBurdens
+						type: costToEffect
+						cost: {
+							type: removeBurdens
+						}
+						effect: {
+							type: playCardFromDiscard
+							select: choose(culture(sauron),orc)
+						}
 					}
 				]
-			},
-			effect: [
-				{
-					type: playCardFromDiscard
-					select: choose(culture(sauron),orc)
-				}
-			]
+			}
 		}
 		gametext: Play a besieger stacked on a site you control or remove a burden to play a [sauron] Orc from your discard pile.
 		lore: "...they began to throw missiles marvellously high...."
@@ -275,14 +276,20 @@
 				}
 				{
 					type: If
-					check: {
-						type: IsLessThan
-						firstNumber: {
-							type: TwilightCostInMemory
+					check: [
+						{
+							type: HasCardInMemory
 							memory: discardedCard
 						}
-						secondNumber: memory(spotCount)
-					}
+						{
+							type: IsLessThan
+							firstNumber: {
+								type: TwilightCostInMemory
+								memory: discardedCard
+							}
+							secondNumber: memory(spotCount)
+						}
+					]
 					true: [
 						{
 							type: takeControlOfSite

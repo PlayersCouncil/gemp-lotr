@@ -102,7 +102,7 @@ public class Card_01_224_Tests
         assertTrue(scn.ShadowPlayAvailable(rtim));
         scn.ShadowPlayCard(rtim);
 
-        assertEquals(2, scn.GetShadowCardChoiceCount()); // both enquea and TWK
+        assertEquals(2, scn.ShadowGetCardChoiceCount()); // both enquea and TWK
         scn.ShadowChooseCard(enquea);
 
         assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());

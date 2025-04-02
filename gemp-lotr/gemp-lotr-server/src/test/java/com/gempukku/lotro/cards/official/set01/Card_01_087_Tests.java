@@ -78,7 +78,7 @@ public class Card_01_087_Tests
 		assertTrue(scn.FreepsDecisionAvailable("You may inspect the contents of your deck before retrieving cards"));
 		scn.FreepsDismissRevealedCards();
         assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(gandalf);
 
 		assertEquals(Zone.FREE_CHARACTERS, gandalf.getZone());
@@ -106,7 +106,7 @@ public class Card_01_087_Tests
 		assertTrue(scn.FreepsDecisionAvailable("You may inspect the contents of your deck before retrieving cards"));
 		scn.FreepsDismissRevealedCards();
         assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCardBPFromSelection(bb);
 
 		assertEquals(Zone.DECK, gandalf.getZone());

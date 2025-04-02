@@ -25,9 +25,12 @@ public class Card_01_009_Tests
 				{{
 					put("axe", "1_9");
 					put("gimli", "1_13");
+					put("preparations", "7_12");
+					put("dcard", "2_10");
 
-					put("runner", "1_178");
-					put("runner2", "1_178");
+					put("orc1", "1_178");
+					put("orc2", "1_181");
+					put("orc3", "1_184");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -91,28 +94,28 @@ public class Card_01_009_Tests
 		scn.FreepsMoveCharToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 
-		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		var orc1 = scn.GetShadowCard("orc1");
+		scn.ShadowMoveCharToTable(orc1);
 
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
 		scn.PassCurrentPhaseActions();
-		scn.FreepsAssignToMinions(gimli, runner);
+		scn.FreepsAssignToMinions(gimli, orc1);
 
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassCurrentPhaseActions();
 
 		var topcard = scn.GetShadowTopOfDeck();
 		assertEquals(Zone.DECK, topcard.getZone());
-		assertEquals(3, scn.GetShadowDeckCount());
+		assertEquals(6, scn.GetShadowDeckCount());
 		assertEquals(0, scn.GetShadowDiscardCount());
 
 		scn.FreepsResolveActionOrder("Axe");
 		assertEquals(Zone.DISCARD, topcard.getZone());
-		assertEquals(2, scn.GetShadowDeckCount());
-		assertEquals(2, scn.GetShadowDiscardCount());//runner, and a card discarded from the deck
+		assertEquals(5, scn.GetShadowDeckCount());
+		assertEquals(2, scn.GetShadowDiscardCount());//orc1, and a card discarded from the deck
 
 	}
 
@@ -126,9 +129,9 @@ public class Card_01_009_Tests
 		scn.FreepsMoveCharToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 
-		var runner = scn.GetShadowCard("runner");
-		var runner2 = scn.GetShadowCard("runner2");
-		scn.ShadowMoveCharToTable(runner, runner2);
+		var orc1 = scn.GetShadowCard("orc1");
+		var orc2 = scn.GetShadowCard("orc2");
+		scn.ShadowMoveCharToTable(orc1, orc2);
 
 		scn.StartGame();
 
@@ -136,7 +139,7 @@ public class Card_01_009_Tests
 
 		scn.PassCurrentPhaseActions();
 		scn.FreepsDeclineAssignments();
-		scn.ShadowAssignToMinions(gimli, runner, runner2);
+		scn.ShadowAssignToMinions(gimli, orc1, orc2);
 
 		scn.FreepsResolveSkirmish(gimli);
 		scn.FreepsUseCardAction(gimli);
@@ -148,21 +151,80 @@ public class Card_01_009_Tests
 		//Should only have "resolve skirmish wounds" and one instance of "dwarven axe required trigger".
 		// If there are two axe-triggers, then the card is violating the latest Decipher "clarification":
 		//
+		// https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.1#Section_Three:_Individual_Card_Rulings
 		//"This card can trigger only once for each Shadow player with a minion in that skirmish,
 		// regardless of how many minions that player had."
 		assertEquals(3, scn.FreepsGetAvailableActions().size());
 
 		var topcard = scn.GetShadowTopOfDeck();
 		assertEquals(Zone.DECK, topcard.getZone());
-		assertEquals(2, scn.GetShadowDeckCount());
+		assertEquals(5, scn.GetShadowDeckCount());
 		assertEquals(0, scn.GetShadowDiscardCount());
 
 		//Ideally we shouldn't have both triggers, but at least we can squelch the results of the second
 		scn.FreepsResolveActionOrder("Axe");
 		scn.FreepsResolveActionOrder("Axe");
 		assertEquals(Zone.DISCARD, topcard.getZone());
-		assertEquals(1, scn.GetShadowDeckCount());
+		assertEquals(4, scn.GetShadowDeckCount());
 		assertEquals(3, scn.GetShadowDiscardCount());//2 dead runners, and a card discarded from the deck
+	}
+
+
+	/**
+	 * https://github.com/PlayersCouncil/gemp-lotr/issues/571
+	 * Basic issue is that based on the last CRD:
+	 * 	 > A losing character is any character on the losing side when a skirmish revolves.
+	 * 	 > If a character is removed from his or her skirmish and there are still one or more characters
+	 * 	 > on each side of that skirmish, the removed character is neither a losing nor a winning character.
+	 * 	 > A character removed from a skirmish is not wounded (or overwhelmed) when that skirmish resolves.
+	 * This supercedes the Comprehensive Rules 4.0, which states:
+	 *   > A losing character is any character on the losing side in a skirmish when it resolves.
+	 *   > Also, any character removed during his or her skirmish is a losing character, even if
+	 *   > that character’s side eventually wins.
+	 *
+	 * From a basic functionality standpoint, killed characters should not stick around as part of the
+	 * tracked losing characters lists, or at the very least the skirmish resolution should check to see
+	 * if they are still in the skirmish and disqualify them for trigger emission if so.
+	 */
+
+	@Test
+	public void AxeDoesNotTriggerOnMinionKilledBeforeSkirmishResolves() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var axe = scn.GetFreepsCard("axe");
+		var gimli = scn.GetFreepsCard("gimli");
+		var preparations = scn.GetFreepsCard("preparations");
+		scn.FreepsMoveCharToTable(gimli);
+		scn.AttachCardsTo(gimli, axe);
+		scn.FreepsMoveCardToSupportArea(preparations);
+		scn.FreepsStackCardsOn(preparations, "dcard");
+
+		var orc1 = scn.GetShadowCard("orc1");
+		var orc2 = scn.GetShadowCard("orc2");
+		var orc3 = scn.GetShadowCard("orc3");
+		scn.ShadowMoveCharToTable(orc1, orc2, orc3);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowAssignToMinions(gimli, orc1, orc2, orc3);
+
+		scn.FreepsResolveSkirmish(gimli);
+		scn.FreepsUseCardAction(preparations);
+		scn.FreepsChooseCard(orc3);
+		assertEquals(Zone.DISCARD, orc3.getZone());
+
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+
+		//There should not be any axe trigger here; we should go straight to regroup
+
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 	}
 
 	@Test

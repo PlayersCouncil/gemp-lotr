@@ -115,7 +115,7 @@ public class Card_01_234_Tests
 		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
 		scn.ShadowChooseYes();
 		//twk, attea, rit, and runner
-		assertEquals(4, scn.GetShadowCardChoiceCount());
+		assertEquals(4, scn.ShadowGetCardChoiceCount());
 		assertEquals(Zone.DISCARD, twk.getZone());
 		scn.ShadowChooseCardBPFromSelection(twk);
 		assertEquals(Zone.SHADOW_CHARACTERS, twk.getZone());
@@ -148,7 +148,7 @@ public class Card_01_234_Tests
 		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
 		scn.ShadowChooseYes();
 		//twk, attea, rit, and runner
-		assertEquals(4, scn.GetShadowCardChoiceCount());
+		assertEquals(4, scn.ShadowGetCardChoiceCount());
 		assertEquals(Zone.DISCARD, twk.getZone());
 		scn.ShadowChooseCardBPFromSelection(twk);
 		assertEquals(Zone.SHADOW_CHARACTERS, twk.getZone());
@@ -213,7 +213,7 @@ public class Card_01_234_Tests
 		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
 		scn.ShadowChooseYes();
-		assertEquals(4, scn.GetShadowCardChoiceCount());
+		assertEquals(4, scn.ShadowGetCardChoiceCount());
 		assertEquals(Zone.DISCARD, twk.getZone());
 		scn.ShadowChooseCardBPFromSelection(twk);
 		assertEquals(Zone.SHADOW_CHARACTERS, twk.getZone());

@@ -97,6 +97,7 @@
 				cost: {
 					type: removeTokensCumulative
 					culture: shire
+					count: 2
 				}
 				effect: {
 					type: discard

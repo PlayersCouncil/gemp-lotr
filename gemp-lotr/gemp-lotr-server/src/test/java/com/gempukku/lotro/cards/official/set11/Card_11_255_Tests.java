@@ -17,12 +17,25 @@ public class Card_11_255_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "11_255");
-					// put other cards in here as needed for the test case
+					put("gandalf", "1_72");
+					put("radagast", "9_26");
+					put("merry", "1_302");
+					put("pippin", "1_306");
 				}},
-				GenericCardTestHelper.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "11_239");
+					put("site2", "11_255");
+					put("site3", "11_234");
+					put("site4", "17_148");
+					put("site5", "18_138");
+					put("site6", "11_230");
+					put("site7", "12_187");
+					put("site8", "12_185");
+					put("site9", "17_146");
+				}},
 				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				GenericCardTestHelper.RulingRing,
+				GenericCardTestHelper.Shadows
 		);
 	}
 
@@ -44,9 +57,7 @@ public class Card_11_255_Tests
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite();
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite("Pinnacle of Zirakzigil");
 
 		assertEquals("Pinnacle of Zirakzigil", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +67,37 @@ public class Card_11_255_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void PinnacleofZirakzigilTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void PinnacleofZirakzigilExerts3CompanionsAtStartOfFellowshipPhaseToPlayWizardFromDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var pinnacle = scn.GetFreepsSite("Pinnacle of Zirakzigil");
 
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var radagast = scn.GetFreepsCard("radagast");
+		var merry = scn.GetFreepsCard("merry");
+		var pippin = scn.GetFreepsCard("pippin");
+		var frodo = scn.GetRingBearer();
+		scn.FreepsMoveCardToDeadPile(gandalf, radagast);
+		scn.FreepsMoveCharToTable(merry, pippin);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.StartGame(pinnacle);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(pippin));
+		assertEquals(Zone.DEAD, gandalf.getZone());
+		assertEquals(Zone.DEAD, radagast.getZone());
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(2, scn.FreepsGetSelectableCount());
+		scn.FreepsChooseCardBPFromSelection(gandalf);
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(merry));
+		assertEquals(1, scn.GetWoundsOn(pippin));
+		assertEquals(Zone.FREE_CHARACTERS, gandalf.getZone());
+		assertEquals(Zone.DEAD, radagast.getZone());
+
 	}
 }

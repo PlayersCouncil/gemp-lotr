@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,10 @@ public class Card_V2_052_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_52");
-					// put other cards in here as needed for the test case
+					put("ruin", "102_52");
+					put("eowyn", "13_124");
+					put("arrowslits", "5_80");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -45,7 +46,7 @@ public class Card_V2_052_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("ruin");
 
 		assertEquals("Now for Ruin", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,18 +58,26 @@ public class Card_V2_052_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void NowforRuinTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void NowforRuinTriggersOnReinforceOfSecondToken() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var ruin = scn.GetFreepsCard("ruin");
+		var arrowslits = scn.GetFreepsCard("arrowslits");
+		scn.FreepsMoveCardToSupportArea(ruin);
+		scn.FreepsMoveCardToDiscard(arrowslits);
+		scn.FreepsMoveCharToTable("eowyn"); // On a regroup move, reinforces a Rohan token
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddTokensToCard(ruin, 2);
+		scn.SkipToMovementDecision();
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(2, scn.GetCultureTokensOn(ruin));
+		assertEquals(Zone.DISCARD, arrowslits.getZone());
+		scn.FreepsChooseToMove();
+		scn.FreepsAcceptOptionalTrigger(); //Eowyn's reinforcement
+		assertEquals(0, scn.GetCultureTokensOn(ruin));
+		assertEquals(Zone.SUPPORT, arrowslits.getZone());
 	}
 }

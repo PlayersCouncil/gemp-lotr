@@ -215,12 +215,15 @@
 					filter: another,nazgul
 				}
 				effect: {
-					type: exert
-					player: fp
-					select: choose(ringBound,companion)
-					count: {
+					type: Repeat
+					times: {
 						type: forEachFPCulture
 						over: 2
+					}
+					effect: {
+						type: exert
+						player: fp
+						select: choose(ringBound,companion)
 					}
 				}
 			}

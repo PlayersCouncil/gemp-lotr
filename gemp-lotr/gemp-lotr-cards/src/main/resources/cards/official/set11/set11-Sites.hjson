@@ -212,6 +212,7 @@
 				modifier: {
 					type: CantUseSpecialAbilities
 					phase: skirmish
+					filter: not(event)
 				}
 			}
 		]
@@ -1154,7 +1155,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				player: free people
 				optional: true
 				trigger: {

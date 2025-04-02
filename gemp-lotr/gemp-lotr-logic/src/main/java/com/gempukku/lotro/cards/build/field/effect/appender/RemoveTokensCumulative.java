@@ -19,6 +19,8 @@ import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
+import java.util.Collection;
+
 public class RemoveTokensCumulative implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
@@ -35,7 +37,12 @@ public class RemoveTokensCumulative implements EffectAppenderProducer {
         String memory = "_temp";
 
         EffectAppender resolveCardEffect = CardResolver.resolveCard("choose(" + filter + ")",
-                actionContext -> Filters.hasToken(token, 1),
+                actionContext -> {
+                    if(token == null)
+                        return Filters.hasAnyCultureTokens();
+
+                    return Filters.hasToken(token, 1);
+                },
                 memory, "you", "Choose card to remove a token from", environment);
 
         EffectAppender removeTokenEffect = new DelayedAppender() {
@@ -43,7 +50,15 @@ public class RemoveTokensCumulative implements EffectAppenderProducer {
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 PhysicalCard cardFromMemory = actionContext.getCardFromMemory(memory);
                 if (cardFromMemory != null) {
-                    return new RemoveTokenEffect(actionContext.getPerformingPlayer(), actionContext.getSource(), cardFromMemory, token, 1);
+                    if(token == null) {
+                        return new RemoveTokenEffect(actionContext.getPerformingPlayer(), actionContext.getSource(), cardFromMemory,
+                                Token.findTokenForCulture(cardFromMemory.getBlueprint().getCulture()), 1);
+                    }
+                    else {
+                        return new RemoveTokenEffect(actionContext.getPerformingPlayer(), actionContext.getSource(), cardFromMemory,
+                                token, 1);
+                    }
+
                 } else {
                     return null;
                 }
@@ -59,9 +74,26 @@ public class RemoveTokensCumulative implements EffectAppenderProducer {
 
                 final int requiredCount = valueSource.getEvaluator(actionContext).evaluateExpression(game, null);
 
+                Collection<PhysicalCard> targets;
+
+                if(token == null) {
+                    targets = Filters.filterActive(actionContext.getGame(), Filters.hasAnyCultureTokens(), filterableSource.getFilterable(actionContext));
+                }
+                else {
+                    targets = Filters.filterActive(actionContext.getGame(), Filters.hasToken(token), filterableSource.getFilterable(actionContext));
+                }
+
                 int totalCount = 0;
-                for (PhysicalCard physicalCard : Filters.filterActive(actionContext.getGame(), Filters.hasToken(token), filterableSource.getFilterable(actionContext))) {
-                    Integer count = actionContext.getGame().getGameState().getTokens(physicalCard).get(token);
+                for (var card : targets) {
+                    Integer count = null;
+                    if(token == null){
+                        count = actionContext.getGame().getGameState().getTokens(card)
+                                .get(Token.findTokenForCulture(card.getBlueprint().getCulture()));
+                    }
+                    else {
+                        count = actionContext.getGame().getGameState().getTokens(card).get(token);
+                    }
+
                     if (count != null) {
                         totalCount += count;
                         if (totalCount >= requiredCount)

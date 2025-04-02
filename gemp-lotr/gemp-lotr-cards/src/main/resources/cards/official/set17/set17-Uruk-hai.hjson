@@ -714,7 +714,7 @@
 				}
 				effect: {
 					type: modifyStrength
-					select: choose(culture(uruk-hai),minion)
+					select: choose(culture(uruk-hai),hunter,minion)
 					amount: 2
 				}
 			}

@@ -126,7 +126,7 @@
 			#    Hobbiton Woods
 			1x2_116
 			#    Weathertop
-			1x1_316
+			1x1_336
 			#    House of Elrond
 			1x3_119
 			#    Eregion Hills
@@ -236,7 +236,7 @@
 			#Ring-bearer (2 cards)
 			#    Frodo, Reluctant Adventurer
 			#    The One Ring, The Ruling Ring
-			1x1_102
+			1x2_102
 			1x1_2
 			#Adventure Deck (9 cards) 
 			#    Westfarthing
@@ -289,7 +289,7 @@
 			#    Endurance of Dwarves
 			4x2_4
 			#    Shoulder to Shoulder
-			1x1_99
+			1x1_59
 			#Shadow (30 cards)
 			#    Morgul Slayer
 			1x3_93
@@ -725,7 +725,7 @@
 			#    Narsil, Blade of the Faithful
 			1x9_34
 			#    Ancient Enmity
-			1x1_29
+			2x1_29
 			#    Flee in Terror
 			1x2_33
 			#    Might of Numenor
@@ -1350,9 +1350,9 @@
 		type: pack
 		items: [
 			#Ring-bearer (2 cards)
-			#    Frodo, Little Master
+			#    Frodo, Old Bilbo's Heir
 			#    The One Ring, The Ruling Ring
-			1x19_28
+			1x1_289
 			1x1_2
 			#Free Peoples (30 cards)
 			#    Sam, Great Elf Warrior

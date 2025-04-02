@@ -121,7 +121,7 @@ public class KillEffect extends AbstractSuccessfulEffect {
         for (PhysicalCard discardedCard : toAddToDiscard)
             gameState.addCardToZone(game, discardedCard, Zone.DISCARD);
 
-        if (killedCards.size() > 0)
+        if (!killedCards.isEmpty())
             game.getActionsEnvironment().emitEffectResult(new KilledResult(killedCards, new HashSet<>(_killers), _cause));
         for (PhysicalCard killedCard : killedCards)
             game.getActionsEnvironment().emitEffectResult(new ForEachKilledResult(killedCard, _killers, _cause));

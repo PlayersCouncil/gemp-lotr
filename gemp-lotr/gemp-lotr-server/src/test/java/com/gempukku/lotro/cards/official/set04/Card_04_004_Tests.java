@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set04;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,10 @@ public class Card_04_004_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "4_4");
-					// put other cards in here as needed for the test case
+					put("band", "4_4");
+
+					put("sam", "1_311");
+					put("gimli", "1_13");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +48,7 @@ public class Card_04_004_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("band");
 
 		assertEquals("Band of Wild Men", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +63,75 @@ public class Card_04_004_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BandofWildMenTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void BandofWildMenBecomesFierceIfWinningSkirmishNormally() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var band = scn.GetShadowCard("band");
+		scn.ShadowMoveCharToTable(band);
+
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.FreepsMoveCharToTable(gimli);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, band);
+		scn.FreepsResolveSkirmish(gimli);
+		scn.PassCurrentPhaseActions();
 
-		assertEquals(5, scn.GetTwilight());
+		assertFalse(scn.hasKeyword(band, Keyword.FIERCE));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		assertTrue(scn.hasKeyword(band, Keyword.FIERCE));
+	}
+
+	@Test
+	public void BandofWildMenBecomesFierceIfWinningSkirmishWithOverwhelm() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var band = scn.GetShadowCard("band");
+		scn.ShadowMoveCharToTable(band);
+
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(sam, band);
+		scn.FreepsResolveSkirmish(sam);
+		scn.PassCurrentPhaseActions();
+
+		assertFalse(scn.hasKeyword(band, Keyword.FIERCE));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		assertTrue(scn.hasKeyword(band, Keyword.FIERCE));
+	}
+
+	@Test
+	public void BandofWildMenBecomesFierceIfWinningSkirmishKillsOpponentWithWound() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var band = scn.GetShadowCard("band");
+		scn.ShadowMoveCharToTable(band);
+
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.FreepsMoveCharToTable(gimli);
+
+		scn.StartGame();
+
+		scn.AddWoundsToChar(gimli, 2);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, band);
+		scn.FreepsResolveSkirmish(gimli);
+		scn.PassCurrentPhaseActions();
+
+		assertFalse(scn.hasKeyword(band, Keyword.FIERCE));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		assertTrue(scn.hasKeyword(band, Keyword.FIERCE));
 	}
 }
