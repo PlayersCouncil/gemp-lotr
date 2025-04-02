@@ -40,7 +40,7 @@ public class TriggerConditions {
     public static boolean losesSkirmishInvolving(LotroGame game, EffectResult effectResult, Filterable loserFilter, Filterable involvingFilter) {
         if (effectResult.getType() == EffectResult.Type.CHARACTER_LOST_SKIRMISH) {
             CharacterLostSkirmishResult wonResult = (CharacterLostSkirmishResult) effectResult;
-            return Filters.accepts(game, loserFilter, wonResult.getLoser())
+            return Filters.accepts(game, wonResult.getLoser(), loserFilter)
                     && Filters.acceptsAny(game, wonResult.getInvolving(), involvingFilter);
         }
         return false;
@@ -70,7 +70,7 @@ public class TriggerConditions {
             var tokenResult = (AddCultureTokenResult) effectResult;
             if (playerId != null && !playerId.equals(tokenResult.getPerformingPlayer()))
                 return false;
-            return Filters.accepts(game, from, tokenResult.getSource())
+            return Filters.accepts(game, tokenResult.getSource(), from)
                     && Filters.and(targetFilters).accepts(game, tokenResult.getTarget());
         }
         return false;
@@ -81,7 +81,7 @@ public class TriggerConditions {
             var tokenResult = (RemoveCultureTokenResult) effectResult;
             if (playerId != null && !playerId.equals(tokenResult.getPerformingPlayer()))
                 return false;
-            return Filters.accepts(game, from, tokenResult.getSource())
+            return Filters.accepts(game, tokenResult.getSource(), from)
                     && Filters.and(targetFilters).accepts(game, tokenResult.getTarget());
         }
         return false;
@@ -162,7 +162,7 @@ public class TriggerConditions {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_DISCARDED_FROM_HAND) {
             DiscardCardFromHandResult discardResult = (DiscardCardFromHandResult) effectResult;
             if (discardResult.getSource() != null
-                    && Filters.accepts(game, discardedBy, discardResult.getSource()))
+                    && Filters.accepts(game, discardResult.getSource(), discardedBy))
                 return Filters.and(discarded).accepts(game, discardResult.getDiscardedCard());
         }
         return false;
@@ -174,11 +174,11 @@ public class TriggerConditions {
             var wounded = woundResult.getWoundedCard();
 
             return Filters.acceptsAny(game, woundResult.getSources(), woundedBy) &&
-                    Filters.and(filters).accepts(game, woundResult.getWoundedCard()) &&
+                    Filters.accepts(game, woundResult.getWoundedCard(), filters) &&
                     (
                             (Filters.or(CardType.ALLY, CardType.COMPANION).accepts(game, wounded) &&
                                     wounded.getZone() == Zone.DEAD) ||
-                                    (Filters.accepts(game, CardType.MINION, wounded) &&
+                                    (Filters.accepts(game, wounded, CardType.MINION) &&
                                             wounded.getZone() != Zone.SHADOW_CHARACTERS)
                     );
         }
@@ -211,7 +211,7 @@ public class TriggerConditions {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_EXERTED) {
             ExertResult exertResult = (ExertResult) effectResult;
             if (exertResult.getAction().getActionSource() != null
-                    && Filters.accepts(game, exertedBy, exertResult.getAction().getActionSource()))
+                    && Filters.accepts(game, exertResult.getAction().getActionSource(), exertedBy))
                 return Filters.and(exerted).accepts(game, exertResult.getExertedCard());
         }
         return false;
@@ -313,7 +313,7 @@ public class TriggerConditions {
             if (killedBy != Filters.any && (killers == null || killers.isEmpty() || killers.stream().allMatch(Objects::isNull)))
                 return false;
 
-            return Filters.acceptsAny(game, killResult.getKillers(), killedBy) &&
+            return Filters.acceptsAny(game, killers, killedBy) &&
                     Filters.and(killed).accepts(game, killResult.getKilledCard());
         }
         return false;
@@ -361,7 +361,7 @@ public class TriggerConditions {
     public static boolean isGettingDiscardedBy(Effect effect, LotroGame game, Filterable sourceFilter, Filterable... filters) {
         if (effect.getType() == Effect.Type.BEFORE_DISCARD_FROM_PLAY) {
             PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
-            if (effect.getSource() != null && Filters.accepts(game, sourceFilter, effect.getSource()))
+            if (effect.getSource() != null && Filters.accepts(game, effect.getSource(), sourceFilter))
                 return Filters.acceptsAny(game, preventableEffect.getAffectedCardsMinusPrevented(game), filters);
         }
         return false;
@@ -370,7 +370,7 @@ public class TriggerConditions {
     public static boolean isGettingDiscardedByOpponent(Effect effect, LotroGame game, String playerId, Filterable sourceFilter, Filterable... filters) {
         if (effect.getType() == Effect.Type.BEFORE_DISCARD_FROM_PLAY) {
             PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
-            if (effect.getSource() != null && Filters.accepts(game, sourceFilter, effect.getSource())
+            if (effect.getSource() != null && Filters.accepts(game, effect.getSource(), sourceFilter)
                     && !effect.getPerformingPlayer().equals(playerId))
                 return Filters.acceptsAny(game, preventableEffect.getAffectedCardsMinusPrevented(game), filters);
         }
@@ -398,11 +398,11 @@ public class TriggerConditions {
             final var zone = playResult.getPlayedFrom();
 
             if (targetFilter != null && targetFilter != Filters.any &&
-                    (attachedTo == null || !Filters.accepts(game, targetFilter, attachedTo)))
+                    (attachedTo == null || !Filters.accepts(game, attachedTo, targetFilter)))
                 return false;
 
             if(fromFilter != null && fromFilter != Filters.any && cardPlayedFrom != null
-                    && !Filters.accepts(game, fromFilter, cardPlayedFrom))
+                    && !Filters.accepts(game, cardPlayedFrom, fromFilter))
                 return false;
 
             if(fromZone != null && zone != fromZone)
@@ -444,9 +444,9 @@ public class TriggerConditions {
     public static boolean transferredCard(LotroGame game, EffectResult effectResult, Filterable transferredCard, Filterable transferredFrom, Filterable transferredTo) {
         if (effectResult.getType() == EffectResult.Type.CARD_TRANSFERRED) {
             CardTransferredResult transferResult = (CardTransferredResult) effectResult;
-            return (Filters.accepts(game, transferredCard, transferResult.getTransferredCard())
-                    && (transferredFrom == null || (transferResult.getTransferredFrom() != null && Filters.accepts(game, transferredFrom, transferResult.getTransferredFrom())))
-                    && (transferredTo == null || (transferResult.getTransferredTo() != null && Filters.accepts(game, transferredTo, transferResult.getTransferredTo()))));
+            return (Filters.accepts(game, transferResult.getTransferredCard(), transferredCard)
+                    && (transferredFrom == null || (transferResult.getTransferredFrom() != null && Filters.accepts(game, transferResult.getTransferredFrom(), transferredFrom)))
+                    && (transferredTo == null || (transferResult.getTransferredTo() != null && Filters.accepts(game, transferResult.getTransferredTo(), transferredTo))));
         }
         return false;
     }

@@ -20,7 +20,7 @@ public class ExtraPossessionClassEffectProcessor implements EffectProcessor {
                 (game, self, attachedTo) -> {
                     DefaultActionContext actionContext = new DefaultActionContext(self.getOwner(), game, self, null, null);
                     final Filterable attachedFilterable = attachedFilterableSource.getFilterable(actionContext);
-                    return Filters.accepts(game, attachedFilterable, attachedTo);
+                    return Filters.accepts(game, attachedTo, attachedFilterable);
                 });
     }
 }

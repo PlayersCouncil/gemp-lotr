@@ -33,7 +33,7 @@ public class RevealsCardFromTopOfDrawDeck implements TriggerCheckerProducer {
                     RevealCardFromTopOfDeckResult revealCardFromTopOfDeckResult = (RevealCardFromTopOfDeckResult) actionContext.getEffectResult();
                     final Filterable filterable = filterableSource.getFilterable(actionContext);
                     final PhysicalCard revealedCard = revealCardFromTopOfDeckResult.getRevealedCard();
-                    return Filters.accepts(actionContext.getGame(), filterable, revealedCard);
+                    return Filters.accepts(actionContext.getGame(), revealedCard, filterable);
                 }
                 return false;
             }
