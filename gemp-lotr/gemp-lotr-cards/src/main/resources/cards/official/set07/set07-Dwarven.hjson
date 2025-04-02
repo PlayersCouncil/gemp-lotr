@@ -530,7 +530,7 @@
 				phase: regroup
 				cost: {
 					type: exert
-					select: choose(dwarf)
+					select: choose(dwarf,companion)
 				}
 				effect: {
 					type: stackCardsFromDiscard
