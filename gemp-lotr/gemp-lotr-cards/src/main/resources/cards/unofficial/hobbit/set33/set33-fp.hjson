@@ -605,22 +605,12 @@
 		]
 		effects: [
 		  {
-			type: If
-			check: {
-			  type: cantSpot
-			  filter: culture(dwarven),possession
-			}
-			true: {
-			  type: exert
-			  select: choose(dwarf,companion)
-			}
+			type: exert
+			select: choose(dwarf,companion)
 		  }
 		  {
-			type: If
-			check: {
-			  type: canSpot
-			  filter: culture(dwarven),possession
-			}
+			type: spot
+			filter: culture(dwarven),possession
 		  }
 		]
 	  }
