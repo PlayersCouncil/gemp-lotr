@@ -427,6 +427,26 @@ public class FilterFactory {
                                 return Filters.filter(game, game.getGameState().getSkirmish().getShadowCharacters(), filterable).size() >= count;
                             });
                 });
+        parameterFilters.put("matchestwilight",
+                (parameter, environment) -> {
+                    if (parameter.startsWith("memory(") && parameter.endsWith(")")) {
+                        String memory = parameter.substring(parameter.indexOf("(") + 1, parameter.lastIndexOf(")"));
+                        return actionContext -> {
+                            try {
+                                final int value = Integer.parseInt(actionContext.getValueFromMemory(memory));
+                                return Filters.printedTwilightCost(value);
+                            } catch (IllegalArgumentException ex) {
+                                return Filters.minPrintedTwilightCost(0);
+                            }
+                        };
+                    } else {
+                        final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
+                        return actionContext -> {
+                            final int value = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                            return Filters.printedTwilightCost(value);
+                        };
+                    }
+                });
         parameterFilters.put("maxtwilight",
                 (parameter, environment) -> {
                     if (parameter.startsWith("memory(") && parameter.endsWith(")")) {
@@ -467,6 +487,7 @@ public class FilterFactory {
                         };
                     }
                 });
+
         parameterFilters.put("maxresistance",
                 (parameter, environment) -> {
                     final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
@@ -568,17 +589,11 @@ public class FilterFactory {
                 });
         parameterFilters.put("printedtwilightcostfrommemory",
                 (parameter, environment) -> actionContext -> {
-                    String valueStr = actionContext.getValueFromMemory(parameter);
-                    if (valueStr == null)
+                    var card = actionContext.getCardFromMemory(parameter).getBlueprint();
+                    if (card.getCardType() == CardType.THE_ONE_RING || card.getCardType() == CardType.MAP)
                         return Filters.none;
 
-                    try {
-                        int twilight = Integer.parseInt(valueStr);
-                        return Filters.printedTwilightCost(twilight);
-                    }
-                    catch (NumberFormatException ex) {
-                        return Filters.none;
-                    }
+                    return Filters.printedTwilightCost(card.getTwilightCost());
                 });
         parameterFilters.put("race",
                 (parameter, environment) -> {

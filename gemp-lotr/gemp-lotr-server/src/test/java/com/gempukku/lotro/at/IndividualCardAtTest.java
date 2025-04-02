@@ -515,62 +515,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
         assertEquals(1, _game.getGameState().getTokenCount(corsairWarGalley, Token.RAIDER));
     }
 
-
-    @Test
-    public void moreYetToComeWorks() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl gimli = new PhysicalCardImpl(100, "1_12", P1, _cardLibrary.getLotroCardBlueprint("1_12"));
-        PhysicalCardImpl moreYetToCome = new PhysicalCardImpl(101, "10_3", P1, _cardLibrary.getLotroCardBlueprint("10_3"));
-        PhysicalCardImpl goblinRunner = new PhysicalCardImpl(102, "1_178", P2, _cardLibrary.getLotroCardBlueprint("1_178"));
-        PhysicalCardImpl goblinRunner2 = new PhysicalCardImpl(103, "1_178", P2, _cardLibrary.getLotroCardBlueprint("1_178"));
-
-        _game.getGameState().addCardToZone(_game, moreYetToCome, Zone.HAND);
-
-        skipMulligans();
-
-        _game.getGameState().addCardToZone(_game, gimli, Zone.FREE_CHARACTERS);
-
-        // End fellowship
-        playerDecided(P1, "");
-
-        _game.getGameState().addCardToZone(_game, goblinRunner, Zone.SHADOW_CHARACTERS);
-        _game.getGameState().addCardToZone(_game, goblinRunner2, Zone.SHADOW_CHARACTERS);
-
-        // End shadow
-        playerDecided(P2, "");
-
-        // End maneuver
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // End archery
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // End assignment
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // Assign Gimli to goblin runner
-        playerDecided(P1, gimli.getCardId() + " " + goblinRunner.getCardId());
-
-        playerDecided(P2, "");
-
-        // Choose skirmish to start
-        playerDecided(P1, gimli.getCardId() + "");
-
-        // End skirmish
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        assertEquals(Zone.DISCARD, goblinRunner.getZone());
-        AwaitingDecision playMoreYetToCome = _userFeedback.getAwaitingDecision(P1);
-        playerDecided(P1, getCardActionId(playMoreYetToCome, moreYetToCome));
-
-        assertEquals(Zone.DISCARD, goblinRunner2.getZone());
-    }
-
     @Test
     public void treebeardEarthborn() throws DecisionResultInvalidException, CardNotFoundException {
         initializeSimplestGame();

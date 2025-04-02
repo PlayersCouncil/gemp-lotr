@@ -124,6 +124,55 @@ public class Card_07_183_Tests
     }
 
     @Test
+    public void MindAndBodyTriggersOnlyOnceOnNormalSkirmishNazgulKill() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = GetScenario();
+
+        var frodo = scn.GetRingBearer();
+        var sam = scn.GetFreepsCard("sam");
+        var merry = scn.GetFreepsCard("merry");
+        var pippin = scn.GetFreepsCard("pippin");
+        var greenleaf = scn.GetFreepsCard("greenleaf");
+        scn.FreepsMoveCharToTable(sam, merry, pippin, greenleaf);
+
+        var mind = scn.GetShadowCard("mind");
+        var shotgun = scn.GetShadowCard("shotgun");
+        var breath1 = scn.GetShadowCard("breath1");
+        var breath2 = scn.GetShadowCard("breath2");
+        var breath3 = scn.GetShadowCard("breath3");
+        scn.ShadowMoveCharToTable(shotgun);
+        scn.AttachCardsTo(merry, breath1);
+        scn.AttachCardsTo(pippin, breath2);
+        scn.AttachCardsTo(pippin, breath3);
+        scn.ShadowMoveCardToHand(mind);
+
+        scn.StartGame();
+
+        scn.AddWoundsToChar(greenleaf, 2);
+        scn.SkipToAssignments();
+        scn.FreepsAssignToMinions(greenleaf, shotgun);
+        scn.FreepsResolveSkirmish(greenleaf);
+
+        assertEquals(1, scn.GetVitality(greenleaf));
+        assertEquals(11, scn.GetStrength(shotgun));
+        assertEquals(6, scn.GetStrength(greenleaf));
+        assertEquals(Zone.FREE_CHARACTERS, greenleaf.getZone());
+        assertEquals(Zone.HAND, mind.getZone());
+
+        scn.PassCurrentPhaseActions();
+
+        assertEquals(Zone.DEAD, greenleaf.getZone());
+
+        assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+        assertTrue(scn.ShadowPlayAvailable(mind));
+
+        //Ensure we're not double-dipping
+        scn.ShadowDeclineOptionalTrigger();
+        assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+
+    }
+
+    @Test
     public void MindAndBodyTriggersOnNazgulOverwhelm() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
         var scn = GetScenario();
@@ -155,6 +204,10 @@ public class Card_07_183_Tests
         assertEquals(Zone.DEAD, sam.getZone());
         assertTrue(scn.ShadowHasOptionalTriggerAvailable());
         assertTrue(scn.ShadowPlayAvailable(mind));
+
+        //Ensure we're not double-dipping
+        scn.ShadowDeclineOptionalTrigger();
+        assertFalse(scn.ShadowHasOptionalTriggerAvailable());
     }
 
     @Test
@@ -190,6 +243,10 @@ public class Card_07_183_Tests
         assertEquals(Zone.DEAD, bounder.getZone());
         assertTrue(scn.ShadowHasOptionalTriggerAvailable());
         assertTrue(scn.ShadowPlayAvailable(mind));
+
+        //Ensure we're not double-dipping
+        scn.ShadowDeclineOptionalTrigger();
+        assertFalse(scn.ShadowHasOptionalTriggerAvailable());
     }
 
     @Test
@@ -224,6 +281,10 @@ public class Card_07_183_Tests
         assertEquals(Zone.DEAD, sam.getZone());
         assertTrue(scn.ShadowHasOptionalTriggerAvailable());
         assertTrue(scn.ShadowPlayAvailable(mind));
+
+        //Ensure we're not double-dipping
+        scn.ShadowDeclineOptionalTrigger();
+        assertFalse(scn.ShadowHasOptionalTriggerAvailable());
     }
 
     @Test

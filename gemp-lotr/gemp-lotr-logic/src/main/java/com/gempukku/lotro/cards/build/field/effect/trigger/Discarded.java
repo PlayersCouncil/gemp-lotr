@@ -99,7 +99,8 @@ public class Discarded implements TriggerCheckerProducer {
                     return false;
 
                 if (result && bySource != null) {
-                    if (source == null || !Filters.accepts(actionContext.getGame(), bySource.getFilterable(actionContext), source))
+                    if (source == null || !Filters.accepts(actionContext.getGame(), source,
+							bySource.getFilterable(actionContext)))
                         result = false;
                 }
 

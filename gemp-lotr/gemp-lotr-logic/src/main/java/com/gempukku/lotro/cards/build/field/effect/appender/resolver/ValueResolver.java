@@ -550,7 +550,7 @@ public class ValueResolver {
                                 int count = 0;
                                 for (PhysicalCard physicalCard : game.getGameState().getDeck(deckPlayer)) {
                                     count++;
-                                    if (Filters.accepts(game, filterable, physicalCard))
+                                    if (Filters.accepts(game, physicalCard, filterable))
                                         break;
                                 }
 

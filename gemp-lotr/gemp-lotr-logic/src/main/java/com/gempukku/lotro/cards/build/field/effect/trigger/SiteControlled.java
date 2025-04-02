@@ -30,7 +30,7 @@ public class SiteControlled implements TriggerCheckerProducer {
                     if(playerId != null && !takeResult.getPlayerId().equals(playerId))
                         return false;
 
-                    return Filters.accepts(actionContext.getGame(), siteFilter, takeResult.getSite());
+                    return Filters.accepts(actionContext.getGame(), takeResult.getSite(), siteFilter);
                 }
                 return false;
             }

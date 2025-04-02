@@ -45,8 +45,7 @@ public class RevealTopCardsOfDrawDeck implements EffectAppenderProducer {
                 return new RevealTopCardsOfDrawDeckEffect(actionContext.getSource(), deckId, count) {
                     @Override
                     protected void cardsRevealed(List<PhysicalCard> revealedCards) {
-                        if (memorize != null)
-                            actionContext.setCardMemory(memorize, revealedCards);
+						actionContext.setCardMemory(memorize, revealedCards);
                     }
                 };
             }

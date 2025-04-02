@@ -965,6 +965,32 @@ public class GenericCardTestHelper extends AbstractAtTest {
         playerDecided(player, String.join(",", bps));
     }
 
+    public boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card) throws DecisionResultInvalidException { return HasCardChoiceAvailable(P1, card);}
+    public boolean ShadowHasCardChoiceAvailable(PhysicalCardImpl card) throws DecisionResultInvalidException { return HasCardChoiceAvailable(P2, card);}
+
+    public boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card) throws DecisionResultInvalidException {
+        String[] choices = GetAwaitingDecisionParam(player,"blueprintId");
+        if(choices != null) {
+            for (String choice : choices) {
+                if (card.getBlueprintId().equals(choice))
+                    return true;
+            }
+            return false;
+        }
+
+        choices = GetAwaitingDecisionParam(player,"cardId");
+        if(choices != null) {
+            for (String choice : choices) {
+                if (card.getCardId() == Integer.parseInt(choice))
+                    return true;
+            }
+            return false;
+        }
+
+
+        return false;
+    }
+
     public void FreepsChooseCardIDFromSelection(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCardIDFromSelection(P1, cards);}
     public void ShadowChooseCardIDFromSelection(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCardIDFromSelection(P2, cards);}
 

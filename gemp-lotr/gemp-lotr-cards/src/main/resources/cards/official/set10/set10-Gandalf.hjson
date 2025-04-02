@@ -132,7 +132,7 @@
 				}
 				{
 					type: modifyStrength
-					select: all(minion,printedTwilightCostFromMemory(chosenNumber))
+					select: all(minion,matchesTwilight(memory(chosenNumber)))
 					amount: -2
 					until: regroup
 				}
