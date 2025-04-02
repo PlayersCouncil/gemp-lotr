@@ -21,7 +21,11 @@ public class Card_11_060_Tests
 				new HashMap<>()
 				{{
 					put("quality", "11_60");
-					// put other cards in here as needed for the test case
+					put("man1", "14_7");
+					put("man2", "14_8");
+					put("man3", "14_9");
+
+					put("sauron", "9_48");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -60,17 +64,43 @@ public class Card_11_060_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	//@Test
-	public void TheHighestQualityTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void TheHighestQualityExerts12ResWorthOfMenToDebuffAMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var quality = scn.GetFreepsCard("quality");
-//		scn.FreepsMoveCardToHand(card);
-//
-//		scn.StartGame();
-//		scn.FreepsPlayCard(card);
+		var man1 = scn.GetFreepsCard("man1");
+		var man2 = scn.GetFreepsCard("man2");
+		var man3 = scn.GetFreepsCard("man3");
+		scn.FreepsMoveCardToHand(quality);
+		scn.FreepsMoveCharToTable(man1, man2, man3);
 
-		assertEquals(2, scn.GetTwilight());
+		var sauron = scn.GetShadowCard("sauron");
+		scn.ShadowMoveCharToTable(sauron);
+
+		scn.StartGame();
+		scn.RemoveBurdens(1);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(man1, sauron);
+		scn.FreepsResolveSkirmish(man1);
+
+		assertEquals(5, scn.GetResistance(man1));
+		assertEquals(5, scn.GetResistance(man2));
+		assertEquals(6, scn.GetResistance(man3));
+		assertEquals(0, scn.GetWoundsOn(man1));
+		assertEquals(0, scn.GetWoundsOn(man2));
+		assertEquals(0, scn.GetWoundsOn(man3));
+		assertEquals(24, scn.GetStrength(sauron));
+		assertTrue(scn.FreepsPlayAvailable(quality));
+
+		scn.FreepsPlayCard(quality);
+		scn.FreepsChooseCards(man1, man2, man3);
+		assertEquals(1, scn.GetWoundsOn(man1));
+		assertEquals(1, scn.GetWoundsOn(man2));
+		assertEquals(1, scn.GetWoundsOn(man3));
+		assertEquals(15, scn.GetStrength(sauron));
+
 	}
 }
