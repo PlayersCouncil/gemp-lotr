@@ -101,7 +101,7 @@ public class LotroServer extends AbstractServer {
                     allowedUsers.add(participant.getPlayerId());
                 _chatServer.createPrivateChatRoom(getChatRoomName(gameId), false, allowedUsers, 30);
             } else
-                _chatServer.createChatRoom(getChatRoomName(gameId), false, 30, false, null);
+                _chatServer.createChatRoom(getChatRoomName(gameId), false, 30, false, null, null);
 
             // Allow spectators for leagues, but not tournaments
             // Also: yes, yes, we're very proud that you found a way to assign this boolean in one line.

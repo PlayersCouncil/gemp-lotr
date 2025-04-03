@@ -7,6 +7,7 @@ import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.collection.TransferDAO;
 import com.gempukku.lotro.db.*;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
+import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.HallServer;
@@ -70,6 +71,9 @@ public class ServerBuilder {
                     extract(objectMap, LotroFormatLibrary.class)
                 ));
 
+        objectMap.put(TableDraftDefinitions.class,
+                new TableDraftDefinitions());
+
         objectMap.put(LeagueService.class,
                 new LeagueService(
                         extract(objectMap, LeagueDAO.class),
@@ -88,6 +92,15 @@ public class ServerBuilder {
                         extract(objectMap, LoggedUserHolder.class)
                 ));
 
+        objectMap.put(MerchantService.class,
+                new MerchantService(
+                        extract(objectMap, LotroCardBlueprintLibrary.class),
+                        extract(objectMap, CollectionsManager.class)));
+
+        objectMap.put(ChatServer.class, new ChatServer(
+                extract(objectMap, IgnoreDAO.class),
+                extract(objectMap, PlayerDAO.class)));
+
         objectMap.put(TournamentService.class,
                 new TournamentService(
                         extract(objectMap, CollectionsManager.class),
@@ -98,16 +111,10 @@ public class ServerBuilder {
                         extract(objectMap, TournamentMatchDAO.class),
                         extract(objectMap, GameHistoryDAO.class),
                         extract(objectMap, LotroCardBlueprintLibrary.class),
-                        extract(objectMap, LotroFormatLibrary.class)));
-
-        objectMap.put(MerchantService.class,
-                new MerchantService(
-                        extract(objectMap, LotroCardBlueprintLibrary.class),
-                        extract(objectMap, CollectionsManager.class)));
-
-        objectMap.put(ChatServer.class, new ChatServer(
-                extract(objectMap, IgnoreDAO.class),
-                extract(objectMap, PlayerDAO.class)));
+                        extract(objectMap, LotroFormatLibrary.class),
+                        extract(objectMap, SoloDraftDefinitions.class),
+                        extract(objectMap, TableDraftDefinitions.class),
+                        extract(objectMap, ChatServer.class)));
 
         objectMap.put(LotroServer.class,
                 new LotroServer(

@@ -81,7 +81,7 @@ public class ConstructedTournamentTest extends AbstractAtTest {
 
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
 
-        var tournament = new ConstructedTournament(tournamentService, null, _productLibrary, _formatLibrary, tables, tournamentId);
+        var tournament = new ConstructedTournament(tournamentService, null, _productLibrary, _formatLibrary, null, null, tables, tournamentId);
 
         tournament.setWaitForPairingsTime(_waitForPairingsTime);
 
@@ -141,11 +141,11 @@ public class ConstructedTournamentTest extends AbstractAtTest {
                         return null;
                     }
                 }
-        ).when(tournamentCallback).broadcastMessage(Mockito.anyString());
+        ).when(tournamentCallback).broadcastMessage(Mockito.anyString(), Mockito.anyCollection());
 
         advanceTournament(tournament, collectionsManager, tournamentCallback);
 
-        Mockito.verify(tournamentCallback).broadcastMessage(Mockito.anyString());
+        Mockito.verify(tournamentCallback).broadcastMessage(Mockito.anyString(), Mockito.anyCollection());
         Mockito.verifyNoMoreInteractions(collectionsManager, tournamentCallback);
 
         Thread.sleep(_waitForPairingsTime + 10);
@@ -181,7 +181,7 @@ public class ConstructedTournamentTest extends AbstractAtTest {
         tournament.reportGameFinished("p7", "p8");
 
         advanceTournament(tournament, collectionsManager, tournamentCallback);
-        Mockito.verify(tournamentCallback, new Times(2)).broadcastMessage(Mockito.anyString());
+        Mockito.verify(tournamentCallback, new Times(2)).broadcastMessage(Mockito.anyString(), Mockito.anyCollection());
         Mockito.verifyNoMoreInteractions(collectionsManager, tournamentCallback);
 
         Thread.sleep(_waitForPairingsTime);
@@ -205,7 +205,7 @@ public class ConstructedTournamentTest extends AbstractAtTest {
         tournament.reportGameFinished("p5", "p7");
 
         advanceTournament(tournament, collectionsManager, tournamentCallback);
-        Mockito.verify(tournamentCallback, new Times(3)).broadcastMessage(Mockito.anyString());
+        Mockito.verify(tournamentCallback, new Times(3)).broadcastMessage(Mockito.anyString(), Mockito.anyCollection());
         Mockito.verifyNoMoreInteractions(collectionsManager, tournamentCallback);
 
         Thread.sleep(_waitForPairingsTime);
@@ -223,7 +223,7 @@ public class ConstructedTournamentTest extends AbstractAtTest {
         tournament.reportGameFinished("p1", "p5");
 
         advanceTournament(tournament, collectionsManager, tournamentCallback);
-        Mockito.verify(tournamentCallback, new Times(4)).broadcastMessage(Mockito.anyString());
+        Mockito.verify(tournamentCallback, new Times(4)).broadcastMessage(Mockito.anyString(), Mockito.anyCollection());
 
         Mockito.verify(collectionsManager).addItemsToPlayerCollection(Mockito.eq(true), Mockito.anyString(), Mockito.eq("p1"), Mockito.eq(CollectionType.MY_CARDS), Mockito.anyCollection());
         Mockito.verify(collectionsManager).addItemsToPlayerCollection(Mockito.eq(true), Mockito.anyString(), Mockito.eq("p5"), Mockito.eq(CollectionType.MY_CARDS), Mockito.anyCollection());

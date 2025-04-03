@@ -1,9 +1,9 @@
 package com.gempukku.lotro.async.handler;
 
-import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.collection.CollectionsManager;
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
 import com.gempukku.lotro.draft2.SoloDraft;
@@ -17,18 +17,21 @@ import com.gempukku.lotro.league.LeagueData;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.league.SoloDraftLeague;
 import com.gempukku.lotro.packs.ProductLibrary;
+import com.gempukku.lotro.tournament.SoloDraftTournament;
+import com.gempukku.lotro.tournament.Tournament;
+import com.gempukku.lotro.tournament.TournamentService;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;import org.w3c.dom.Document;
+import org.apache.logging.log4j.Logger;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.lang.reflect.Type;
-import java.time.ZonedDateTime;
 import java.util.*;
 
 public class SoloDraftRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
@@ -38,11 +41,13 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
     private final LotroFormatLibrary _formatLibrary;
     private final ProductLibrary _productLibrary;
     private final LeagueService _leagueService;
+    private final TournamentService _tournamentService;
 
     private static final Logger _log = LogManager.getLogger(SoloDraftRequestHandler.class);
 
     public SoloDraftRequestHandler(Map<Type, Object> context) {
         super(context);
+        _tournamentService = extractObject(context, TournamentService.class);
         _leagueService = extractObject(context, LeagueService.class);
         _cardLibrary = extractObject(context, LotroCardBlueprintLibrary.class);
         _formatLibrary = extractObject(context, LotroFormatLibrary.class);
@@ -62,23 +67,36 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
         }
     }
 
-    private void getAvailablePicks(HttpRequest request, String leagueType, ResponseWriter responseWriter) throws Exception {
+    private void getAvailablePicks(HttpRequest request, String eventId, ResponseWriter responseWriter) throws Exception {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
         String participantId = getQueryParameterSafely(queryDecoder, "participantId");
 
-        League league = findLeagueByType(leagueType);
+        SoloDraft soloDraft;
+        CollectionType collectionType;
 
-        if (league == null)
+        League league = findLeagueById(eventId);
+        Tournament tournament = findTournamentById(eventId);
+
+        if (league != null) {
+            LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
+            var leagueStart = leagueData.getSeries().getFirst().getStart();
+
+            if (!leagueData.isSoloDraftLeague() || DateUtils.Today().isBefore(leagueStart))
+                throw new HttpProcessingException(404);
+
+            SoloDraftLeague soloDraftLeague = (SoloDraftLeague) leagueData;
+            collectionType = soloDraftLeague.getCollectionType();
+            soloDraft = soloDraftLeague.getSoloDraft();
+        } else if (tournament != null) {
+            if (!(tournament instanceof SoloDraftTournament) || (tournament.getTournamentStage() != Tournament.Stage.DECK_BUILDING && tournament.getTournamentStage() != Tournament.Stage.DECK_REGISTRATION)) {
+                throw new HttpProcessingException(404);
+            }
+
+            collectionType = tournament.getCollectionType();
+            soloDraft = ((SoloDraftTournament) tournament).getSoloDraft();
+        } else {
             throw new HttpProcessingException(404);
-
-        LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
-        var leagueStart = leagueData.getSeries().getFirst().getStart();
-
-        if (!leagueData.isSoloDraftLeague() || DateUtils.Today().isBefore(leagueStart))
-            throw new HttpProcessingException(404);
-
-        SoloDraftLeague soloDraftLeague = (SoloDraftLeague) leagueData;
-        CollectionType collectionType = soloDraftLeague.getCollectionType();
+        }
 
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
@@ -97,7 +115,6 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
                 for (String card : draftPoolList)
                     draftPool.addItem(card, 1);
 
-            SoloDraft soloDraft = soloDraftLeague.getSoloDraft();
             availableChoices = soloDraft.getAvailableChoices(playerSeed, stage, draftPool);
         } else {
             availableChoices = Collections.emptyList();
@@ -115,99 +132,121 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
         responseWriter.writeXmlResponse(doc);
     }
 
-    private League findLeagueByType(String leagueType) {
+    private League findLeagueById(String leagueId) {
         for (League activeLeague : _leagueService.getActiveLeagues()) {
-            if (activeLeague.getCodeStr().equals(leagueType))
+            if (activeLeague.getCodeStr().equals(leagueId))
                 return activeLeague;
         }
         return null;
     }
 
-    private void makePick(HttpRequest request, String leagueType, ResponseWriter responseWriter) throws Exception {
+    private Tournament findTournamentById(String tournamentId) {
+        for (Tournament activeTournament : _tournamentService.getLiveTournaments()) {
+            if (activeTournament.getTournamentId().equals(tournamentId)) {
+                return activeTournament;
+            }
+        }
+        return null;
+    }
+
+    private void makePick(HttpRequest request, String eventId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
-        String selectedChoiceId = getFormParameterSafely(postDecoder, "choiceId");
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+            String selectedChoiceId = getFormParameterSafely(postDecoder, "choiceId");
 
-        League league = findLeagueByType(leagueType);
+            SoloDraft soloDraft;
+            CollectionType collectionType;
 
-        if (league == null)
-            throw new HttpProcessingException(404);
+            League league = findLeagueById(eventId);
+            Tournament tournament = findTournamentById(eventId);
 
-        LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
-        var leagueStart = leagueData.getSeries().getFirst().getStart();
+            if (league != null) {
+                LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
+                var leagueStart = leagueData.getSeries().getFirst().getStart();
 
-        if (!leagueData.isSoloDraftLeague() || DateUtils.Today().isBefore(leagueStart))
-            throw new HttpProcessingException(404);
+                if (!leagueData.isSoloDraftLeague() || DateUtils.Today().isBefore(leagueStart))
+                    throw new HttpProcessingException(404);
 
-        SoloDraftLeague soloDraftLeague = (SoloDraftLeague) leagueData;
-        CollectionType collectionType = soloDraftLeague.getCollectionType();
+                SoloDraftLeague soloDraftLeague = (SoloDraftLeague) leagueData;
+                collectionType = soloDraftLeague.getCollectionType();
+                soloDraft = soloDraftLeague.getSoloDraft();
+            } else if (tournament != null) {
+                if (!(tournament instanceof SoloDraftTournament) || (tournament.getTournamentStage() != Tournament.Stage.DECK_BUILDING && tournament.getTournamentStage() != Tournament.Stage.DECK_REGISTRATION)) {
+                    throw new HttpProcessingException(404);
+                }
 
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+                collectionType = tournament.getCollectionType();
+                soloDraft = ((SoloDraftTournament) tournament).getSoloDraft();
 
-        CardCollection collection = _collectionsManager.getPlayerCollection(resourceOwner, collectionType.getCode());
-        boolean finished = (Boolean) collection.getExtraInformation().get("finished");
-        if (finished)
-            throw new HttpProcessingException(404);
-
-        int stage = ((Number) collection.getExtraInformation().get("stage")).intValue();
-        long playerSeed = ((Number) collection.getExtraInformation().get("seed")).longValue();
-        List<String> draftPoolList = (List<String>) collection.getExtraInformation().get("draftPool");
-        DefaultCardCollection draftPool = new DefaultCardCollection();
-        
-        if (draftPoolList != null)
-            for (String card : draftPoolList)
-                draftPool.addItem(card, 1);
-
-        SoloDraft soloDraft = soloDraftLeague.getSoloDraft();
-        Iterable<SoloDraft.DraftChoice> possibleChoices = soloDraft.getAvailableChoices(playerSeed, stage, draftPool);
-
-        SoloDraft.DraftChoice draftChoice = getSelectedDraftChoice(selectedChoiceId, possibleChoices);
-        if (draftChoice == null)
-            throw new HttpProcessingException(400);
-
-        CardCollection selectedCards = soloDraft.getCardsForChoiceId(selectedChoiceId, playerSeed, stage);
-        Map<String, Object> extraInformationChanges = new HashMap<>();
-        boolean hasNextStage = soloDraft.hasNextStage(playerSeed, stage);
-        extraInformationChanges.put("stage", stage + 1);
-        if (!hasNextStage)
-            extraInformationChanges.put("finished", true);
-
-        if (draftPoolList != null) {
-            List<String> draftPoolListUpdate = new ArrayList<>();
-            for (CardCollection.Item item : draftPool.getAll()) {
-                String blueprint = item.getBlueprintId();
-                for (int i = 0; i < draftPool.getItemCount(blueprint); i++)
-                    draftPoolListUpdate.add(blueprint);
+            } else {
+                throw new HttpProcessingException(404);
             }
 
-            if (draftPoolList != draftPoolListUpdate) 
-                extraInformationChanges.put("draftPool",draftPoolListUpdate);
-        }
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
-        _collectionsManager.addItemsToPlayerCollection(false, "Draft pick", resourceOwner, collectionType, selectedCards.getAll(), extraInformationChanges);
+            CardCollection collection = _collectionsManager.getPlayerCollection(resourceOwner, collectionType.getCode());
+            boolean finished = (Boolean) collection.getExtraInformation().get("finished");
+            if (finished)
+                throw new HttpProcessingException(404);
 
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            int stage = ((Number) collection.getExtraInformation().get("stage")).intValue();
+            long playerSeed = ((Number) collection.getExtraInformation().get("seed")).longValue();
+            List<String> draftPoolList = (List<String>) collection.getExtraInformation().get("draftPool");
+            DefaultCardCollection draftPool = new DefaultCardCollection();
 
-        Document doc = documentBuilder.newDocument();
+            if (draftPoolList != null)
+                for (String card : draftPoolList)
+                    draftPool.addItem(card, 1);
 
-        Element pickResultElem = doc.createElement("pickResult");
-        doc.appendChild(pickResultElem);
+            Iterable<SoloDraft.DraftChoice> possibleChoices = soloDraft.getAvailableChoices(playerSeed, stage, draftPool);
 
-        for (CardCollection.Item item : selectedCards.getAll()) {
-            Element pickedCard = doc.createElement("pickedCard");
-            pickedCard.setAttribute("blueprintId", item.getBlueprintId());
-            pickedCard.setAttribute("count", String.valueOf(item.getCount()));
-            pickResultElem.appendChild(pickedCard);
-        }
+            SoloDraft.DraftChoice draftChoice = getSelectedDraftChoice(selectedChoiceId, possibleChoices);
+            if (draftChoice == null)
+                throw new HttpProcessingException(400);
 
-        if (hasNextStage) {
-            Iterable<SoloDraft.DraftChoice> availableChoices = soloDraft.getAvailableChoices(playerSeed, stage + 1, draftPool);
-            appendAvailablePics(doc, pickResultElem, availableChoices);
-        }
+            CardCollection selectedCards = soloDraft.getCardsForChoiceId(selectedChoiceId, playerSeed, stage);
+            Map<String, Object> extraInformationChanges = new HashMap<>();
+            boolean hasNextStage = soloDraft.hasNextStage(playerSeed, stage);
+            extraInformationChanges.put("stage", stage + 1);
+            if (!hasNextStage)
+                extraInformationChanges.put("finished", true);
 
-        responseWriter.writeXmlResponse(doc);
+            if (draftPoolList != null) {
+                List<String> draftPoolListUpdate = new ArrayList<>();
+                for (CardCollection.Item item : draftPool.getAll()) {
+                    String blueprint = item.getBlueprintId();
+                    for (int i = 0; i < draftPool.getItemCount(blueprint); i++)
+                        draftPoolListUpdate.add(blueprint);
+                }
+
+                if (draftPoolList != draftPoolListUpdate)
+                    extraInformationChanges.put("draftPool", draftPoolListUpdate);
+            }
+
+            _collectionsManager.addItemsToPlayerCollection(false, "Draft pick", resourceOwner, collectionType, selectedCards.getAll(), extraInformationChanges);
+
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+
+            Document doc = documentBuilder.newDocument();
+
+            Element pickResultElem = doc.createElement("pickResult");
+            doc.appendChild(pickResultElem);
+
+            for (CardCollection.Item item : selectedCards.getAll()) {
+                Element pickedCard = doc.createElement("pickedCard");
+                pickedCard.setAttribute("blueprintId", item.getBlueprintId());
+                pickedCard.setAttribute("count", String.valueOf(item.getCount()));
+                pickResultElem.appendChild(pickedCard);
+            }
+
+            if (hasNextStage) {
+                Iterable<SoloDraft.DraftChoice> availableChoices = soloDraft.getAvailableChoices(playerSeed, stage + 1, draftPool);
+                appendAvailablePics(doc, pickResultElem, availableChoices);
+            }
+
+            responseWriter.writeXmlResponse(doc);
         } finally {
             postDecoder.destroy();
         }
