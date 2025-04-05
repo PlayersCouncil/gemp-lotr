@@ -521,7 +521,7 @@
 				}
 				effect: {
 					type: playCardFromDiscard
-					select: choose(culture(wraith),minion)
+					select: choose(culture(wraith),minion,not(self))
 				}
 			}
 			{
