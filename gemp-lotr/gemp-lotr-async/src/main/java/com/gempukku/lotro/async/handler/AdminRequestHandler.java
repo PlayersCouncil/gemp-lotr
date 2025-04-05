@@ -477,7 +477,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         List<String> maxMatchesStr = getFormMultipleParametersSafely(postDecoder, "maxMatches[]");
 
         Throw400IfStringNull("name", name);
-        Throw400IfValidationFails("name", name, name.length() > 45, "League name must be 45 characters or less.");
+        Throw400IfValidationFails("name", name, name.length() <= 45, "League name must be 45 characters or less.");
         int cost = Throw400IfNullOrNonInteger("cost", costStr);
         if(startStr.length() != 8)
             throw new HttpProcessingException(400, "Parameter 'start' must be exactly 8 digits long: YYYYMMDD");
@@ -633,7 +633,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
 
         Throw400IfStringNull("name", name);
-        Throw400IfValidationFails("name", name, name.length() > 45, "League name must be 45 characters or less.");
+        Throw400IfValidationFails("name", name, name.length() <= 45, "League name must be 45 characters or less.");
         int cost = Throw400IfNullOrNonInteger("cost", costStr);
         if(startStr.length() != 8)
             throw new HttpProcessingException(400, "Parameter 'start' must be exactly 8 digits long: YYYYMMDD");
@@ -784,7 +784,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
 
         Throw400IfStringNull("name", name);
-        Throw400IfValidationFails("name", name, name.length() > 45, "League name must be 45 characters or less.");
+        Throw400IfValidationFails("name", name, name.length() <= 45, "League name must be 45 characters or less.");
         int cost = Throw400IfNullOrNonInteger("cost", costStr);
         if(startStr.length() != 8)
             throw new HttpProcessingException(400, "Parameter 'start' must be exactly 8 digits long: YYYYMMDD");
@@ -958,7 +958,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         var type = Tournament.TournamentType.parse(typeStr);
         Throw400IfValidationFails("type", typeStr, type != null);
         Throw400IfStringNull("name", name);
-        Throw400IfValidationFails("name", name, name.length() > 45, "Tournament name must be 45 characters or less.");
+        Throw400IfValidationFails("name", name, name.length() <= 45, "Tournament name must be 45 characters or less.");
         boolean wc = ParseBoolean("wc", wcStr, false);
         Throw400IfStringNull("tournamentId", tournamentId);
         Throw400IfStringNull("format", formatStr);
