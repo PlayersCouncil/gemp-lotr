@@ -114,10 +114,10 @@ class AutoZoom {
 		var targetShort = Math.min(maxShortSide, CardDisplay.TargetShort);
 
 		if(card.horizontal || card.effectivelyHorizontal()) {
-			this.cardDisplay.reloadFromCard(card, targetLong, targetShort);
+			this.cardDisplay.reloadFromCard(card, targetLong, targetShort, true);
 		}
 		else {
-			this.cardDisplay.reloadFromCard(card, targetShort, targetLong);
+			this.cardDisplay.reloadFromCard(card, targetShort, targetLong, true);
 		}
 		
 		// get position and size of the reference image (or card hint):
@@ -206,7 +206,7 @@ class AutoZoom {
 		// However if shift IS held AND it's rotated, we act like it's not.  
 		// This is basically XOR; when they are the same they cancel out,
 		// but when they are different they cause a rotation.
-		this.cardDisplay.setInvert(shiftHeld != invertShift);
+		//this.cardDisplay.setInvert(shiftHeld != invertShift);
 	}
 	
 	setPreviewMessage(reversible) {

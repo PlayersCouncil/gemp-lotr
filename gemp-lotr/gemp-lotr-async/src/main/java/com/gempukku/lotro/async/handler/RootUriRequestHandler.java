@@ -35,6 +35,7 @@ public class RootUriRequestHandler implements UriRequestHandler {
     private final SoloDraftRequestHandler _soloDraftRequestHandler;
     private final PlaytestRequestHandler _playtestRequestHandler;
     private final PlayerInfoRequestHandler _playerInfoRequestHandler;
+    private final TableDraftRequestHandler _tableDraftRequestHandler;
 
     private final Pattern originPattern;
 
@@ -62,6 +63,7 @@ public class RootUriRequestHandler implements UriRequestHandler {
         _soloDraftRequestHandler = new SoloDraftRequestHandler(context);
         _playtestRequestHandler = new PlaytestRequestHandler(context);
         _playerInfoRequestHandler = new PlayerInfoRequestHandler(context);
+        _tableDraftRequestHandler = new TableDraftRequestHandler(context);
     }
 
     @Override
@@ -114,13 +116,12 @@ public class RootUriRequestHandler implements UriRequestHandler {
                 _tournamentRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 10), request, context, responseWriter, remoteIp);
             } else if (uri.startsWith(_serverContextPath + "soloDraft")) {
                 _soloDraftRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 9), request, context, responseWriter, remoteIp);
-
             } else if (uri.startsWith(_serverContextPath + "playtesting")) {
                 _playtestRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 11), request, context, responseWriter, remoteIp);
-
             } else if (uri.startsWith(_serverContextPath + "player")) {
                 _playerInfoRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 6), request, context, responseWriter, remoteIp);
-
+            } else if (uri.startsWith(_serverContextPath + "tableDraft")) {
+                _tableDraftRequestHandler.handleRequest(uri.substring(_serverContextPath.length() + 10), request, context, responseWriter, remoteIp);
             } else {
                 throw new HttpProcessingException(404);
             }

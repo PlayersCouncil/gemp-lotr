@@ -150,7 +150,7 @@ public class Card_02_044_ErrataTests
 		scn.FreepsUseCardAction(mirror);
 		assertTrue(scn.FreepsDecisionAvailable("Opponent's hand"));
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsDismissRevealedCards();
 		scn.FreepsChooseAnyCard();
 

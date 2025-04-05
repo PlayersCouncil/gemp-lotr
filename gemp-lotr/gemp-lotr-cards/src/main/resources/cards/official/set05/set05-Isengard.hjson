@@ -949,7 +949,7 @@
 				}
 				effect: {
 					type: preventDiscard
-					select: choose(machine)
+					select: all(machine)
 				}
 			}
 		]

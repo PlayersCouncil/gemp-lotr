@@ -1,9 +1,9 @@
 package com.gempukku.lotro.cards.official.set08;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,10 +18,21 @@ public class Card_08_119_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "8_119");
-					// put other cards in here as needed for the test case
+					put("merry", "4_310");
+					put("pippin", "4_314");
+					put("sam", "1_311");
 				}},
-				GenericCardTestHelper.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "7_330");
+					put("site2", "7_335");
+					put("site3", "8_117");
+					put("site4", "7_342");
+					put("site5", "8_119"); //
+					put("site6", "7_350");
+					put("site7", "8_120");
+					put("site8", "10_120");
+					put("site9", "7_360");
+				}},
 				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing
 		);
@@ -44,10 +55,7 @@ public class Card_08_119_Tests
 		*/
 
 		var scn = GetScenario();
-
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(5);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(5);
 
 		assertEquals("Crashed Gate", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,18 +65,134 @@ public class Card_08_119_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CrashedGateTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void CrashedGateOffers3ThreatsChoiceWhenBothAvailable() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var site1 = scn.GetFreepsSite(1);
+
+		//Threat limit is now 4
+		scn.FreepsMoveCharToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(4);
+		scn.SkipToPhase(Phase.REGROUP);
 
-		assertEquals(7, scn.GetTwilight());
+		assertEquals(0, scn.GetThreats());
+		assertFalse(scn.IsSiteControlled(site1));
+		assertEquals(2, scn.FreepsGetChoiceCount());
+		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
+
+		scn.FreepsChooseMultipleChoiceOption("threat");
+		assertEquals(3, scn.GetThreats());
+		assertFalse(scn.IsSiteControlled(site1));
+	}
+
+	@Test
+	public void CrashedGateOffersSiteControlChoiceWhenBothAvailable() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var site1 = scn.GetFreepsSite(1);
+
+		//Threat limit is now 4
+		scn.FreepsMoveCharToTable("sam", "merry", "pippin");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(0, scn.GetThreats());
+		assertFalse(scn.IsSiteControlled(site1));
+		assertEquals(2, scn.FreepsGetChoiceCount());
+		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
+
+		scn.FreepsChooseMultipleChoiceOption("opponent");
+		assertTrue(scn.ShadowDecisionAvailable("Would you like to take control of a site?"));
+		scn.ShadowChooseYes();
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.IsSiteControlled(site1));
+	}
+
+	@Test
+	public void CrashedGateOffersOpponentChoiceWhenSiteControlNotAvailable() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var site1 = scn.GetFreepsSite(1);
+
+		//Threat limit is now 4
+		scn.FreepsMoveCharToTable("sam", "merry", "pippin");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(2, scn.FreepsGetChoiceCount());
+		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
+
+		scn.FreepsChooseMultipleChoiceOption("opponent");
+		assertFalse(scn.ShadowDecisionAvailable("Would you like to take control of a site?"));
+
+		assertTrue(scn.FreepsAnyDecisionsAvailable());
+	}
+
+	@Test
+	public void CrashedGateChoosesOpponentChoiceAutomaticallyWhen3ThreatsCantBeAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var site1 = scn.GetFreepsSite(1);
+
+		//Threat limit is now 4
+		scn.FreepsMoveCharToTable("sam", "merry", "pippin");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.FreepsPassCurrentPhaseAction();
+
+		//Only 2 threat slots left
+		scn.AddThreats(2);
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(2, scn.GetThreats());
+		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
+		assertTrue(scn.ShadowDecisionAvailable("Would you like to take control of a site?"));
+
+	}
+
+	@Test
+	public void CrashedGateChoosesOpponentChoiceAutomaticallyWhen3ThreatsCantBeAddedAndNoSiteAvailableToControl() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var site1 = scn.GetFreepsSite(1);
+
+		//Threat limit is now 4
+		scn.FreepsMoveCharToTable("sam", "merry", "pippin");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.FreepsPassCurrentPhaseAction();
+
+		//Only 2 threat slots left
+		scn.AddThreats(2);
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(2, scn.GetThreats());
+		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
+		assertFalse(scn.ShadowDecisionAvailable("Would you like to take control of a site?"));
+
+		assertTrue(scn.FreepsAnyDecisionsAvailable());
 	}
 }

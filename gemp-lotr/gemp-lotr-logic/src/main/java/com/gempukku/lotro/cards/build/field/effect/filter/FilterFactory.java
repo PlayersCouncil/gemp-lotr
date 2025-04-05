@@ -14,7 +14,6 @@ import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.SingleMemoryEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.results.CharacterLostSkirmishResult;
-import com.gempukku.lotro.logic.timing.results.CharacterWonSkirmishResult;
 
 import java.util.*;
 
@@ -428,6 +427,26 @@ public class FilterFactory {
                                 return Filters.filter(game, game.getGameState().getSkirmish().getShadowCharacters(), filterable).size() >= count;
                             });
                 });
+        parameterFilters.put("matchestwilight",
+                (parameter, environment) -> {
+                    if (parameter.startsWith("memory(") && parameter.endsWith(")")) {
+                        String memory = parameter.substring(parameter.indexOf("(") + 1, parameter.lastIndexOf(")"));
+                        return actionContext -> {
+                            try {
+                                final int value = Integer.parseInt(actionContext.getValueFromMemory(memory));
+                                return Filters.printedTwilightCost(value);
+                            } catch (IllegalArgumentException ex) {
+                                return Filters.minPrintedTwilightCost(0);
+                            }
+                        };
+                    } else {
+                        final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
+                        return actionContext -> {
+                            final int value = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
+                            return Filters.printedTwilightCost(value);
+                        };
+                    }
+                });
         parameterFilters.put("maxtwilight",
                 (parameter, environment) -> {
                     if (parameter.startsWith("memory(") && parameter.endsWith(")")) {
@@ -468,6 +487,7 @@ public class FilterFactory {
                         };
                     }
                 });
+
         parameterFilters.put("maxresistance",
                 (parameter, environment) -> {
                     final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
@@ -555,15 +575,25 @@ public class FilterFactory {
                         };
                     };
                 });
+        parameterFilters.put("ownercontrols",
+                (parameter, environment) -> {
+                    var filter = environment.getFilterFactory().createFilter(parameter, environment);
+                    return (actionContext) -> {
+                        var game = actionContext.getGame();
+                        var card = Filters.findFirstActive(game, filter.getFilterable(actionContext));
+                        if(card == null || card.getCardController() == null)
+                            return Filters.none;
 
+                        return Filters.owner(card.getCardController());
+                    };
+                });
         parameterFilters.put("printedtwilightcostfrommemory",
                 (parameter, environment) -> actionContext -> {
-                    PhysicalCard card = actionContext.getCardFromMemory(parameter);
-                    if (card == null)
+                    var card = actionContext.getCardFromMemory(parameter).getBlueprint();
+                    if (card.getCardType() == CardType.THE_ONE_RING || card.getCardType() == CardType.MAP)
                         return Filters.none;
 
-                    int memoryPrintedTwilightCost = card.getBlueprint().getTwilightCost();
-                    return Filters.printedTwilightCost(memoryPrintedTwilightCost);
+                    return Filters.printedTwilightCost(card.getTwilightCost());
                 });
         parameterFilters.put("race",
                 (parameter, environment) -> {

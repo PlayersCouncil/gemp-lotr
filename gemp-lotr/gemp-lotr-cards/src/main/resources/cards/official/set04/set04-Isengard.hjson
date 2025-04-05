@@ -1410,6 +1410,7 @@
 										text: Would you like to put {revealedCard} beneath your deck?
 										effect: {
 											type: putCardsFromDeckOnBottomOfDeck
+											deck: shadow
 											select: memory(revealedCard)
 											reveal: true
 										}
@@ -1429,6 +1430,7 @@
 										text: Would you like to put {revealedCard} beneath their deck?
 										effect: {
 											type: putCardsFromDeckOnBottomOfDeck
+											deck: fp
 											select: memory(revealedCard)
 											reveal: true
 										}

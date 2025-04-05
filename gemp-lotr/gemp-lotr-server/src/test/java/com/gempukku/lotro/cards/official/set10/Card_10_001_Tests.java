@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.official.set10;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -20,8 +17,12 @@ public class Card_10_001_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "10_1");
-					// put other cards in here as needed for the test case
+					put("great", "10_1");
+					put("gimli", "8_5");
+
+					put("troll", "8_102");
+					put("assassin", "8_95");
+					put("towers", "7_281");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +47,7 @@ public class Card_10_001_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("great");
 
 		assertEquals("Great Day, Great Hour", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +59,96 @@ public class Card_10_001_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GreatDayGreatHourTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GreatDayGreatHourExertsMinionTwiceWithDamagePlus2() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var great = scn.GetFreepsCard("great");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.FreepsMoveCardToHand(great);
+		scn.FreepsMoveCharToTable(gimli);
+
+		var troll = scn.GetShadowCard("troll");
+		scn.ShadowMoveCardToHand(troll);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(15);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(3, scn.GetTwilight());
+		scn.ShadowPlayCard(troll);
+
+		assertEquals(0, scn.GetWoundsOn(gimli));
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.FreepsPlayAvailable(great));
+		scn.FreepsPlayCard(great);
+
+		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(2, scn.GetWoundsOn(troll));
+	}
+
+	@Test
+	public void GreatDayGreatHourExertsMinionOnceWithDamagePlus2IfOnly2Vitality() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var great = scn.GetFreepsCard("great");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.FreepsMoveCardToHand(great);
+		scn.FreepsMoveCharToTable(gimli);
+
+		var assassin = scn.GetShadowCard("assassin");
+		scn.ShadowMoveCardToHand(assassin);
+
+		scn.StartGame();
+		scn.SetTwilight(15);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(assassin);
+
+		assertEquals(0, scn.GetWoundsOn(gimli));
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.FreepsPlayAvailable(great));
+		scn.FreepsPlayCard(great);
+
+		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(assassin));
+	}
+
+	@Test
+	public void GreatDayGreatHourExertsMinionPlayedFromAbility() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var great = scn.GetFreepsCard("great");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.FreepsMoveCardToHand(great);
+		scn.FreepsMoveCharToTable(gimli);
+
+		var assassin = scn.GetShadowCard("assassin");
+		var towers = scn.GetShadowCard("towers");
+		scn.ShadowMoveCardToHand(assassin);
+		scn.ShadowMoveCardToSupportArea(towers);
+
+		scn.StartGame();
+		scn.SetTwilight(15);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(Zone.HAND, assassin.getZone());
+		scn.ShadowUseCardAction(towers);
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.FreepsPlayAvailable(great));
+		scn.FreepsPlayCard(great);
+
+		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(Zone.SHADOW_CHARACTERS, assassin.getZone());
+		assertEquals(1, scn.GetWoundsOn(assassin));
 	}
 }

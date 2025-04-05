@@ -86,7 +86,7 @@ public class LiberateASiteEffect extends AbstractEffect {
 
                 game.getGameState().sendMessage(_liberatingPlayer + " liberated a " + GameUtils.getCardLink(siteToLiberate) + " using " + GameUtils.getCardLink(_source));
 
-                game.getActionsEnvironment().emitEffectResult(new SiteLiberatedResult(_liberatingPlayer));
+                game.getActionsEnvironment().emitEffectResult(new SiteLiberatedResult(_liberatingPlayer, siteToLiberate));
                 liberatedSiteCallback(siteToLiberate);
 
                 return new FullEffectResult(true);

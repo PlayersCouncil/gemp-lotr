@@ -134,7 +134,7 @@ public class Card_17_010_ErrataTests
 		scn.FreepsUseCardAction(namarie);
 
 		//Card to discard from hand
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(gimli);
 		assertEquals(Zone.DISCARD, gimli.getZone());
 		assertEquals(Zone.HAND, legolas.getZone());
@@ -143,7 +143,7 @@ public class Card_17_010_ErrataTests
 		assertEquals(1, scn.GetFreepsDiscardCount());
 
 		//Condition to discard from play
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(bladetip);
 		assertEquals(Zone.SUPPORT, namarie.getZone());
 		assertEquals(Zone.DISCARD, bladetip.getZone());
@@ -181,7 +181,7 @@ public class Card_17_010_ErrataTests
 		scn.FreepsUseCardAction(namarie);
 
 		//Card to discard from hand
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(gimli);
 		assertEquals(Zone.DISCARD, gimli.getZone());
 		assertEquals(Zone.HAND, legolas.getZone());

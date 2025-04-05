@@ -389,6 +389,7 @@
 					modifier: {
 						type: cantMove
 					}
+					until: EndOfTurn
 				}
 			}
 		]

@@ -193,25 +193,38 @@
 			{
 				type: activated
 				phase: assignment
+				requires: [
+					{
+						type: CanSpot
+						filter: ringBearer,AssignableToSkirmishAgainst(minion)
+					}
+					{
+						type: CanSpot
+						filter: minion,AssignableToSkirmishAgainst(ringBearer)
+					}
+				]
 				cost: [
 					{
 						type: exert
 						select: self
 					}
-					{
+				]
+				effect: {
+					type: CostToEffect
+					cost: {
 						type: assignFPCharacterToSkirmish
 						fpCharacter: choose(ringBearer)
 						minion: choose(minion)
 						memorizeMinion: chosenMinion
 					}
-				]
-				effect: {
-					type: addModifier
-					modifier: {
-						type: removeAllKeywords
-						filter: memory(chosenMinion)
+					effect: {
+						type: addModifier
+						modifier: {
+							type: removeAllKeywords
+							filter: memory(chosenMinion)
+						}
+						until: regroup
 					}
-					until: regroup
 				}
 			}
 		]
@@ -433,40 +446,49 @@
 			{
 				type: activated
 				phase: assignment
-				cost: {
-					type: assignFPCharacterToSkirmish
-					fpCharacter: choose(name(Frodo))
-					minion: choose(minion)
-					memorizeMinion: chosenMinion
-				}
-				effect: {
-					type: doWhile
-					check: {
-						type: memoryIs
-						memory: choice
-						value: yes
+				requires: [
+					{
+						type: CanSpot
+						filter: name(Frodo,AssignableToSkirmishAgainst(minion))
 					}
-					effect: [
-						{
-							type: chooseAKeyword
-							memorize: keyword
+					{
+						type: CanSpot
+						filter: minion,AssignableToSkirmishAgainst(name(Frodo))
+					}
+				]
+				effect: {
+					type: CostToEffect
+					cost: {
+						type: assignFPCharacterToSkirmish
+						fpCharacter: choose(name(Frodo))
+						minion: choose(minion)
+						memorizeMinion: chosenMinion
+					}
+					effect: {
+						type: doWhile
+						check: {
+							type: memoryIs
+							memory: choice
+							value: yes
 						}
-						{
-							type: sendMessage
-							text: '{player} chose "{keyword}"'
-						}
-						{
-							type: removeKeyword
-							select: memory(chosenMinion)
-							keywordFromMemory: keyword
-							until: regroup
-						}
-						{
-							type: chooseYesOrNo
-							text: Would you like to choose more keywords?
-							memorize: choice
-						}
-					]
+						effect: [
+							{
+								type: chooseAKeyword
+								memorize: keyword
+							}
+							{
+								type: removeKeyword
+								select: memory(chosenMinion)
+								keywordFromMemory: keyword
+								until: regroup
+							}
+							{
+								type: chooseYesOrNo
+								text: Would you like to choose more keywords?
+								memorize: choice
+							}
+						]
+					}
 				}
 			}
 		]

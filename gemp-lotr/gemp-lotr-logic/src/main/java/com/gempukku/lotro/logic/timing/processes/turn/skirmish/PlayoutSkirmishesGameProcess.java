@@ -30,7 +30,7 @@ public class PlayoutSkirmishesGameProcess implements GameProcess {
             final GameState gameState = game.getGameState();
             final List<Assignment> assignments = gameState.getAssignments();
 
-            if (assignments.size() > 0) {
+            if (!assignments.isEmpty()) {
                 Set<PhysicalCard> nonLurkerSkirmishFps = new HashSet<>();
                 Set<PhysicalCard> lurkerSkirmishFps = new HashSet<>();
                 for (Assignment assignment : assignments) {
@@ -51,7 +51,7 @@ public class PlayoutSkirmishesGameProcess implements GameProcess {
                 SystemQueueAction chooseNextSkirmishAction = new SystemQueueAction();
 
                 Set<PhysicalCard> skirmishChoice;
-                if (nonLurkerSkirmishFps.size() > 0)
+                if (!nonLurkerSkirmishFps.isEmpty())
                     skirmishChoice = nonLurkerSkirmishFps;
                 else
                     skirmishChoice = lurkerSkirmishFps;

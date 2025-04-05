@@ -152,7 +152,7 @@ public class Card_V1_018_Tests
 
 		scn.FreepsUseCardAction(council);
 		//the only 2 elven allies are chosen automatically
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(1, scn.GetWoundsOn(galadriel));
 		assertEquals(1, scn.GetWoundsOn(elrond));
@@ -163,7 +163,7 @@ public class Card_V1_018_Tests
 
 		assertTrue(scn.FreepsActionAvailable(council));
 		scn.FreepsUseCardAction(council);
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(2, scn.GetWoundsOn(galadriel));
 		assertEquals(2, scn.GetWoundsOn(elrond));

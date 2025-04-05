@@ -24,7 +24,7 @@ public class AddsCultureToken implements TriggerCheckerProducer {
             public boolean accepts(ActionContext actionContext) {
                 String playerId = playerSource != null ? playerSource.getPlayer(actionContext) : null;
                 return TriggerConditions.addedCultureToken(actionContext.getGame(), playerId, actionContext.getEffectResult(),
-                        onSourceFilter.getFilterable(actionContext), sourceFilter.getFilterable(actionContext));
+                        sourceFilter.getFilterable(actionContext), onSourceFilter.getFilterable(actionContext));
             }
 
             @Override

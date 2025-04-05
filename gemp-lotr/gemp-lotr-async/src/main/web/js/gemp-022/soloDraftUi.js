@@ -11,14 +11,14 @@ var GempLotrSoloDraftUI = Class.extend({
     picksCardGroup:null,
     draftedCardGroup:null,
 
-    leagueType:null,
+    eventId:null,
 
     init:function () {
         var that = this;
 
         this.comm = new GempLotrCommunication("/gemp-lotr-server", that.processError);
 
-        this.leagueType = getUrlParam("leagueType");
+        this.eventId = getUrlParam("eventId");
 
         this.topDiv = $("#topDiv");
         this.bottomDiv = $("#bottomDiv");
@@ -90,7 +90,7 @@ var GempLotrSoloDraftUI = Class.extend({
 
     getDraftState:function () {
         var that = this;
-        this.comm.getDraft(this.leagueType,
+        this.comm.getDraft(this.eventId,
             function (xml) {
                 var root = xml.documentElement;
                 if (root.tagName == "availablePicks") {
@@ -123,7 +123,7 @@ var GempLotrSoloDraftUI = Class.extend({
                 }
             });
 
-        this.comm.getCollection(this.leagueType, "sort:cardType,culture,name", 0, 1000,
+        this.comm.getCollection(this.eventId, "sort:cardType,culture,name", 0, 1000,
             function (xml) {
                 var root = xml.documentElement;
                 if (root.tagName == "collection") {
@@ -169,7 +169,7 @@ var GempLotrSoloDraftUI = Class.extend({
                     } else {
                         if (selectedCardElem.data("card").zone == "picks") {
                             var choiceId = selectedCardElem.data("choiceId");
-                            that.comm.makeDraftPick(that.leagueType, choiceId, function (xml) {
+                            that.comm.makeDraftPick(that.eventId, choiceId, function (xml) {
                                 var root = xml.documentElement;
                                 if (root.tagName == "pickResult") {
                                     var pickedCards = root.getElementsByTagName("pickedCard");

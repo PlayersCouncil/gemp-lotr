@@ -109,9 +109,9 @@
 			"0_56", "0_57", "0_58", "0_59", "0_60"
 		]
 		blocks: [
-			Fellowship Block|The Fellowship of the Ring:1,Mines of Moria:2,Realms of the Elf-lords:3,V1 - Shadow of the Past:101
-			Towers Block|The Two Towers:4,Battle of Helm's Deep:5,Ents of Fangorn:6,V2 - King of the Golden Hall:102
-			king_block
+			pc_fotr_block
+			pc_ttt_block
+			pc_king_block
 			Additional Sets|Promotional:0,Reflections:9
 			Player's Council V-sets|V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102
 			Player's Council Errata|The Fellowship of the Ring Errata:51,Mines of Moria Errata:52,Realms of the Elf-lords Errata:53,The Two Towers Errata:54,Battle of Helm's Deep Errata:55,Ents of Fangorn Errata:56,Return of the King Errata:57,Siege of Gondor Errata:58,Reflections Errata:59,Mount Doom Errata:60
@@ -119,6 +119,44 @@
 		]
 		errataSets: [
 			51,52,53,54,55,56,57,58,59,60
+		]
+	}
+	{
+		name: Towers Block (PC)
+		code: pc_ttt_block
+		hall: false
+		order: 9
+		sites: TWO_TOWERS
+		cancelRingBearerSkirmish: true
+		sets: [
+			4, 5, 6, 102
+		]
+		errataSets: [
+			54,55,66
+		]
+		blocks: [
+			ttt_block
+		]
+	}
+	{
+		name: King Block (PC)
+		code: pc_king_block
+		
+		hall: false
+		order: 118
+		sites: KING
+		cancelRingBearerSkirmish: true
+		restricted: [
+			"7_49"
+		]
+		sets: [
+			7, 8, 10
+		]
+		errataSets: [
+			57,58,60
+		]
+		blocks: [
+			king_block
 		]
 	}
 	{

@@ -1013,7 +1013,7 @@
 			}
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: usesSpecialAbility
 					filter: minion

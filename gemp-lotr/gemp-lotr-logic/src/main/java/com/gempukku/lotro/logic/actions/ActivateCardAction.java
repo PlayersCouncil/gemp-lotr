@@ -8,6 +8,7 @@ import com.gempukku.lotro.logic.timing.Effect;
 
 public class ActivateCardAction extends AbstractCostToEffectAction {
     protected final PhysicalCard _physicalCard;
+    protected final String _player;
 
     protected ActivateCardEffect _activateCardEffect;
 
@@ -18,10 +19,15 @@ public class ActivateCardAction extends AbstractCostToEffectAction {
 
     protected boolean _prevented;
 
-    public ActivateCardAction(PhysicalCard physicalCard) {
+    public ActivateCardAction(PhysicalCard physicalCard, String performingPlayer) {
         _physicalCard = physicalCard;
+        _player = performingPlayer;
         setText("Use " + GameUtils.getFullName(_physicalCard));
         _message = GameUtils.getCardLink(_physicalCard) + " is used";
+    }
+
+    public String getPerformingPlayer() {
+        return _player;
     }
 
     @Override
@@ -74,6 +80,6 @@ public class ActivateCardAction extends AbstractCostToEffectAction {
     }
 
     protected void generateCardEffect() {
-        _activateCardEffect = new ActivateCardEffect(_physicalCard, getActionTimeword());
+        _activateCardEffect = new ActivateCardEffect(_physicalCard, _player, getActionTimeword());
     }
 }

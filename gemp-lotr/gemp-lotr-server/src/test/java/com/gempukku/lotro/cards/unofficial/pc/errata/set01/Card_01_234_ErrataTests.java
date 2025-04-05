@@ -113,7 +113,7 @@ public class Card_01_234_ErrataTests
 		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
 		scn.ShadowChooseYes();
 		//twk and attea, but not rit or runner
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		assertEquals(Zone.DISCARD, twk.getZone());
 		scn.ShadowChooseCardBPFromSelection(twk);
 		assertEquals(Zone.SHADOW_CHARACTERS, twk.getZone());
@@ -145,7 +145,7 @@ public class Card_01_234_ErrataTests
 		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
 		scn.ShadowChooseYes();
 		//twk and attea, but not rit or runner
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		assertEquals(Zone.DISCARD, twk.getZone());
 		scn.ShadowChooseCardBPFromSelection(twk);
 		assertEquals(Zone.SHADOW_CHARACTERS, twk.getZone());
@@ -210,7 +210,7 @@ public class Card_01_234_ErrataTests
 		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
 		scn.ShadowChooseYes();
 		//twk and attea, but not rit or runner
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		assertEquals(Zone.DISCARD, twk.getZone());
 		scn.ShadowChooseCardBPFromSelection(twk);
 		assertEquals(Zone.SHADOW_CHARACTERS, twk.getZone());

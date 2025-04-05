@@ -92,12 +92,12 @@ public class Card_03_091_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 		assertTrue(scn.ShadowActionAvailable(cruelty));
 		scn.ShadowUseCardAction(cruelty);
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		assertEquals(Zone.SHADOW_CHARACTERS, soldier1.getZone());
 		scn.ShadowChooseCard(soldier1);
 		assertEquals(Zone.DISCARD, soldier1.getZone());
 		assertTrue(scn.FreepsDecisionAvailable("revealed"));
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 	}
 
 	@Test

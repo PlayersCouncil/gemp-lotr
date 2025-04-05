@@ -73,8 +73,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                 final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory(fpCharacterMemory);
                 final Collection<? extends PhysicalCard> minion = actionContext.getCardsFromMemory(minionMemory);
                 if (fpChar.size() == 1 && minion.size() == 1) {
-                    AssignmentEffect effect = new AssignmentEffect(assigningPlayer, fpChar.iterator().next(), minion.iterator().next(), ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
-                    return effect;
+					return new AssignmentEffect(assigningPlayer, fpChar.iterator().next(), minion.iterator().next(), ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
                 } else {
                     return null;
                 }

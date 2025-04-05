@@ -1420,7 +1420,7 @@
 		effects: [
 			{
 				type: assignmentCost
-				text: Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?
+				text: Would you like to exert a companion to be able to assign Morgul Spearman to skirmish?
 				requires: {
 					type: canSpot
 					filter: nazgul

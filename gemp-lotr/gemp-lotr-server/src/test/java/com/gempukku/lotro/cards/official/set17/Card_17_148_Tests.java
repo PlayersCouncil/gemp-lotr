@@ -17,12 +17,23 @@ public class Card_17_148_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "17_148");
-					// put other cards in here as needed for the test case
+					put("hunter", "15_157");
+					put("insurance", "102_5");
 				}},
-				GenericCardTestHelper.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "11_239");
+					put("site2", "13_185");
+					put("site3", "11_234");
+					put("site4", "17_148");
+					put("site5", "18_138");
+					put("site6", "11_230");
+					put("site7", "12_187");
+					put("site8", "12_185");
+					put("site9", "17_146");
+				}},
 				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				GenericCardTestHelper.RulingRing,
+				GenericCardTestHelper.Shadows
 		);
 	}
 
@@ -44,9 +55,7 @@ public class Card_17_148_Tests
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite();
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite("Nurn");
 
 		assertEquals("Nurn", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +65,50 @@ public class Card_17_148_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void NurnTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void NurnGrantsStrengthToHunterMinionsOwnedByControllerAndNotOtherPlayer() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var hunter1 = scn.GetShadowCard("hunter");
+		var insurance = scn.GetShadowCard("insurance");
+		var hunter2 = scn.GetFreepsCard("hunter");
+		scn.FreepsMoveCardToHand(hunter2);
+		scn.ShadowMoveCardToHand(hunter1);
+		scn.ShadowMoveCardToSupportArea(insurance);
 
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		var nurn = scn.GetFreepsSite("Nurn");
+		var nurn2 = scn.GetShadowSite("Nurn");
+		scn.ShadowMoveCardToDiscard(nurn2); //Need to ensure we don't have two on the table
 
-		assertEquals(1, scn.GetTwilight());
+		scn.StartGame(nurn);
+
+		scn.AddTokensToCard(insurance, 1);
+		scn.SkipToSite(2);
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowChooseAnyCard();
+
+		scn.ShadowUseCardAction("control");
+		assertTrue(scn.IsSiteControlled(nurn));
+		scn.ShadowPlayCard(hunter1);
+
+		//Base 10 strength, +1 from controlling Nurn
+		assertEquals(11, scn.GetStrength(hunter1));
+		scn.ShadowMoveCardToDiscard(hunter1);
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToStay();
+		scn.FreepsDeclineReconciliation();
+
+		//Now we flip sides and confirm that player 1 does not get a boost from
+		// Nurn while player 2 controls it
+		// (Remember that freeps and shadow have swapped rolws, so the names are backwards)
+
+		scn.SetTwilight(10);
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPlayCard(hunter2);
+
+		//Base 10 strength, no bonus from opponent controlling Nurn
+		assertEquals(10, scn.GetStrength(hunter2));
 	}
 }

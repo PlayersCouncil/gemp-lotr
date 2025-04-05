@@ -11,33 +11,33 @@ import java.util.List;
 import java.util.Map;
 
 public interface ActionsEnvironment {
-    public List<Action> getRequiredBeforeTriggers(Effect effect);
+    List<Action> getRequiredBeforeTriggers(Effect effect);
 
-    public List<Action> getOptionalBeforeTriggers(String playerId, Effect effect);
+    List<Action> getOptionalBeforeTriggers(String playerId, Effect effect);
 
-    public List<Action> getOptionalBeforeActions(String playerId, Effect effect);
+    List<Action> getOptionalBeforeActions(String playerId, Effect effect);
 
-    public List<Action> getRequiredAfterTriggers(Collection<? extends EffectResult> effectResults);
+    List<Action> getRequiredAfterTriggers(Collection<? extends EffectResult> effectResults);
 
-    public Map<OptionalTriggerAction, EffectResult> getOptionalAfterTriggers(String playerId, Collection<? extends EffectResult> effectResults);
+    Map<OptionalTriggerAction, EffectResult> getOptionalAfterTriggers(String playerId, Collection<? extends EffectResult> effectResults);
 
-    public List<Action> getOptionalAfterActions(String playerId, Collection<? extends EffectResult> effectResults);
+    List<Action> getOptionalAfterActions(String playerId, Collection<? extends EffectResult> effectResults);
 
-    public List<Action> getPhaseActions(String playerId);
+    List<Action> getPhaseActions(String playerId);
 
-    public void addUntilStartOfPhaseActionProxy(ActionProxy actionProxy, Phase phase);
+    void addUntilStartOfPhaseActionProxy(ActionProxy actionProxy, Phase phase);
 
-    public void addUntilEndOfPhaseActionProxy(ActionProxy actionProxy, Phase phase);
+    void addUntilEndOfPhaseActionProxy(ActionProxy actionProxy, Phase phase);
 
-    public void addUntilEndOfTurnActionProxy(ActionProxy actionProxy);
+    void addUntilEndOfTurnActionProxy(ActionProxy actionProxy);
 
-    public void addActionToStack(Action action);
+    void addActionToStack(Action action);
 
-    public void emitEffectResult(EffectResult effectResult);
+    void emitEffectResult(EffectResult effectResult);
 
-    public <T extends Action> T findTopmostActionOfType(Class<T> clazz);
+    <T extends Action> T findTopmostActionOfType(Class<T> clazz);
 
-    public List<EffectResult> getTurnEffectResults();
+    List<EffectResult> getTurnEffectResults();
 
-    public List<EffectResult> getPhaseEffectResults();
+    List<EffectResult> getPhaseEffectResults();
 }

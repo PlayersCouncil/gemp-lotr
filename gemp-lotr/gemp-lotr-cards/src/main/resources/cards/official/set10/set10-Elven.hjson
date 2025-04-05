@@ -33,7 +33,7 @@
 					}
 					{
 						type: modifyStrength
-						select: choose(minion,inSkirmishAgainst(culture(elven),companion))
+						select: choose(minion,inSkirmishAgainst(culture(elven),unbound,companion))
 						amount: {
 							type: fromMemory
 							memory: spotCount

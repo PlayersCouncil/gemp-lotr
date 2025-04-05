@@ -12,13 +12,15 @@ public class ActivateCardEffect extends AbstractEffect {
     protected final PhysicalCard _source;
     protected final Timeword _actionTimeword;
 
+    private final String _player;
+
     protected ActivateCardResult _activateCardResult;
 
-    public ActivateCardEffect(PhysicalCard source, Timeword actionTimeword) {
+    public ActivateCardEffect(PhysicalCard source, String performingPlayer, Timeword actionTimeword) {
         _source = source;
         _actionTimeword = actionTimeword;
-
-        _activateCardResult = new ActivateCardResult(_source, _actionTimeword);
+        _player = performingPlayer;
+        _activateCardResult = new ActivateCardResult(_source, performingPlayer, _actionTimeword);
     }
 
     public ActivateCardResult getActivateCardResult() {
@@ -52,5 +54,9 @@ public class ActivateCardEffect extends AbstractEffect {
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
         game.getActionsEnvironment().emitEffectResult(_activateCardResult);
         return new FullEffectResult(true);
+    }
+
+    public String getPerformingPlayer() {
+        return _player;
     }
 }

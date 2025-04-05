@@ -334,6 +334,8 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public List<String> ShadowGetBPChoices() { return GetADParamAsList(P2, "blueprintId"); }
     public List<String> FreepsGetMultipleChoices() { return GetADParamAsList(P1, "results"); }
     public List<String> ShadowGetMultipleChoices() { return GetADParamAsList(P2, "results"); }
+    public int FreepsGetChoiceCount() { return GetADParamAsList(P1, "results").size(); }
+    public int ShadowGetChoiceCount() { return GetADParamAsList(P2, "results").size(); }
 
     public List<String> FreepsGetFreepsAssignmentTargets() { return GetADParamAsList(P1, "freeCharacters"); }
     public List<String> FreepsGetShadowAssignmentTargets() { return GetADParamAsList(P1, "minions"); }
@@ -774,6 +776,9 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
             if(current == Phase.FELLOWSHIP) {
                 FreepsPassCurrentPhaseAction();
+                if(_game.getFormat().getSiteBlock() == SitesBlock.SHADOWS) {
+                    ShadowChooseAnyCard();
+                }
             }
             else if(current == Phase.SHADOW) {
                 ShadowPassCurrentPhaseAction();
@@ -900,8 +905,8 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public void ShadowChooseCard(String name) throws DecisionResultInvalidException { ShadowChooseCard(GetShadowCard(name)); }
     public void ShadowChooseCard(PhysicalCardImpl card) throws DecisionResultInvalidException { playerDecided(P2, String.valueOf(card.getCardId())); }
 
-    public void FreepsChooseAnyCard() throws DecisionResultInvalidException { FreepsChoose(FreepsGetCardChoices().get(0)); }
-    public void ShadowChooseAnyCard() throws DecisionResultInvalidException { ShadowChoose(ShadowGetCardChoices().get(0)); }
+    public void FreepsChooseAnyCard() throws DecisionResultInvalidException { FreepsChoose(FreepsGetCardChoices().getFirst()); }
+    public void ShadowChooseAnyCard() throws DecisionResultInvalidException { ShadowChoose(ShadowGetCardChoices().getFirst()); }
 
     public void FreepsChooseCards(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCards(P1, cards); }
     public void ShadowChooseCards(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCards(P2, cards); }
@@ -921,8 +926,8 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public boolean FreepsCanChooseCharacter(PhysicalCardImpl card) { return FreepsGetCardChoices().contains(String.valueOf(card.getCardId())); }
     public boolean ShadowCanChooseCharacter(PhysicalCardImpl card) { return ShadowGetCardChoices().contains(String.valueOf(card.getCardId())); }
 
-    public int GetFreepsCardChoiceCount() { return FreepsGetCardChoices().size(); }
-    public int GetShadowCardChoiceCount() { return ShadowGetCardChoices().size(); }
+    public int FreepsGetCardChoiceCount() { return FreepsGetCardChoices().size(); }
+    public int ShadowGetCardChoiceCount() { return ShadowGetCardChoices().size(); }
 
     public int FreepsGetFreepsAssignmentTargetCount() { return FreepsGetFreepsAssignmentTargets().size(); }
     public int FreepsGetShadowAssignmentTargetCount() { return FreepsGetShadowAssignmentTargets().size(); }
@@ -958,6 +963,32 @@ public class GenericCardTestHelper extends AbstractAtTest {
         }
 
         playerDecided(player, String.join(",", bps));
+    }
+
+    public boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card) throws DecisionResultInvalidException { return HasCardChoiceAvailable(P1, card);}
+    public boolean ShadowHasCardChoiceAvailable(PhysicalCardImpl card) throws DecisionResultInvalidException { return HasCardChoiceAvailable(P2, card);}
+
+    public boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card) throws DecisionResultInvalidException {
+        String[] choices = GetAwaitingDecisionParam(player,"blueprintId");
+        if(choices != null) {
+            for (String choice : choices) {
+                if (card.getBlueprintId().equals(choice))
+                    return true;
+            }
+            return false;
+        }
+
+        choices = GetAwaitingDecisionParam(player,"cardId");
+        if(choices != null) {
+            for (String choice : choices) {
+                if (card.getCardId() == Integer.parseInt(choice))
+                    return true;
+            }
+            return false;
+        }
+
+
+        return false;
     }
 
     public void FreepsChooseCardIDFromSelection(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCardIDFromSelection(P1, cards);}

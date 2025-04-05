@@ -44,6 +44,7 @@
 								select: choose(culture(orc),possession)
 								showAll: true
 								shuffle: true
+								mustExist: true
 							}
 						]
 					}

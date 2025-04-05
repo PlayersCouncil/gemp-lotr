@@ -132,7 +132,7 @@ public class Card_08_057_ErrataTests
 
         scn.ShadowAcceptOptionalTrigger();
         assertTrue(scn.ShadowDecisionAvailable("Choose cards to discard"));
-        assertEquals(2, scn.GetShadowCardChoiceCount()); //2x Black Sails, no gandalf's cart
+        assertEquals(2, scn.ShadowGetCardChoiceCount()); //2x Black Sails, no gandalf's cart
 
         scn.ShadowChooseCard(blacksails2);
 

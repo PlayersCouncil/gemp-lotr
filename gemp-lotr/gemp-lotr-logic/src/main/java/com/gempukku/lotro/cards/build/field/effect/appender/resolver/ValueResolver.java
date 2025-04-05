@@ -183,6 +183,22 @@ public class ValueResolver {
                         return true;
                     }
                 };
+            } else if (type.equalsIgnoreCase("abs")) {
+                FieldUtils.validateAllowedFields(object, "value");
+                ValueSource source = resolveEvaluator(object.get("value"), 0, environment);
+                return new ValueSource() {
+                    @Override
+                    public Evaluator getEvaluator(ActionContext actionContext) {
+                        var evaluator = source.getEvaluator(actionContext);
+
+                        return (game, cardAffected) -> Math.abs(evaluator.evaluateExpression(game, cardAffected));
+                    }
+
+                    @Override
+                    public boolean canPreEvaluate() {
+                        return source.canPreEvaluate();
+                    }
+                };
             }
 
             /**
@@ -534,7 +550,7 @@ public class ValueResolver {
                                 int count = 0;
                                 for (PhysicalCard physicalCard : game.getGameState().getDeck(deckPlayer)) {
                                     count++;
-                                    if (Filters.accepts(game, filterable, physicalCard))
+                                    if (Filters.accepts(game, physicalCard, filterable))
                                         break;
                                 }
 

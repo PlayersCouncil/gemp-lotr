@@ -17,10 +17,13 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
     private String _nextStartText;
 
     private final int _minimumPlayers;
+    private final int _maximumPlayers;
 
-    public RecurringScheduledQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info, Duration repeatEvery, int minPlayers) {
-        super(tournamentService, queueId, queueName, info);
-        _minimumPlayers = minPlayers;
+    public RecurringScheduledQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info, Duration repeatEvery,
+                                   TournamentQueueCallback tournamentQueueCallback, CollectionsManager collectionsManager) {
+        super(tournamentService, queueId, queueName, info, tournamentQueueCallback, collectionsManager, false);
+        _minimumPlayers = info._params.minimumPlayers;
+        _maximumPlayers = info._params.maximumPlayers;
 
         _repeatEvery = repeatEvery;
         var sinceOriginal = Duration.between(info.StartTime, ZonedDateTime.now());
@@ -49,40 +52,16 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
 
     @Override
     public boolean isJoinable() {
-        return ZonedDateTime.now().isAfter(_nextStart.minus(_signupTimeBeforeStart));
+        return ZonedDateTime.now().isAfter(_nextStart.minus(_signupTimeBeforeStart)) && (_maximumPlayers < 0 || _players.size() < _maximumPlayers);
     }
 
     @Override
-    public boolean process(TournamentQueueCallback tournamentQueueCallback, CollectionsManager collectionsManager) throws SQLException, IOException {
+    public boolean process() throws SQLException, IOException {
         if (ZonedDateTime.now().isAfter(_nextStart)) {
             if (_players.size() >= _minimumPlayers) {
-                String tid = _tournamentInfo.generateTimestampId();
-                String tournamentName = _tournamentQueueName + " - " + DateUtils.getStringDateWithHour();
-
-                for (String player : _players) {
-                    _tournamentService.recordTournamentPlayer(tid, player, _playerDecks.get(player));
-                }
-
-                var params = new TournamentParams() {{
-                    this.tournamentId = tid;
-                    this.name = tournamentName;
-                    this.format = getFormatCode();
-                    this.startTime = DateUtils.Now().toLocalDateTime();
-                    this.type = Tournament.TournamentType.CONSTRUCTED;
-                    this.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
-                    this.manualKickoff = false;
-                    this.cost = getCost();
-                    this.minimumPlayers = _minimumPlayers;
-                }};
-
-                var newInfo = new TournamentInfo(_tournamentInfo, params);
-                var tournament = _tournamentService.addTournament(newInfo);
-                tournamentQueueCallback.createTournament(tournament);
-
-                _players.clear();
-                _playerDecks.clear();
+                startTournament();
             } else {
-                leaveAllPlayers(collectionsManager);
+                leaveAllPlayers();
             }
             _nextStart = _nextStart.plus(_repeatEvery);
             _nextStartText = DateUtils.FormatDateTime(_nextStart);

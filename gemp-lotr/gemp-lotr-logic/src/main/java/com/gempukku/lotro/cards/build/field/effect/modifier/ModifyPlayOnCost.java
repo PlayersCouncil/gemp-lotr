@@ -34,7 +34,7 @@ public class ModifyPlayOnCost implements ModifierSourceProducer {
                     RequirementCondition.createCondition(conditions, actionContext), ModifierEffect.TWILIGHT_COST_MODIFIER) {
                 @Override
                 public int getTwilightCostModifier(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, boolean ignoreRoamingPenalty) {
-                    if (target != null && Filters.accepts(game, onFilterable, target))
+                    if (target != null && Filters.accepts(game, target, onFilterable))
                         return evaluator.evaluateExpression(game, null);
                     return 0;
                 }

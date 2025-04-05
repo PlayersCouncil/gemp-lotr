@@ -393,23 +393,16 @@
 				type: Response
 				trigger: {
 					type: aboutToTakeWound
-					filter: bearer
+					filter: exhausted,bearer
 				}
-				cost: [
-					{
-						type: memorizeActive
-						filter: bearer
-						memory: bearer
-					}
-					{
-						type: discard
-						select: self
-					}
-					{
-						type: preventWound
-						select: memory(bearer)
-					}
-				]
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: preventWound
+					select: memory(bearer)
+				}
 			}
 		]
 		gametext: <b>Spell</b>. To play, spot a [gandalf] Wizard. Bearer must be a companion. Limit 1 per bearer.<br><b>Response:</b> If bearer is about to take a wound that would kill him or her, discard this condition to prevent that wound.

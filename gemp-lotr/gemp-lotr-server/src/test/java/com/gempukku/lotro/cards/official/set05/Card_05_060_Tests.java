@@ -17,8 +17,14 @@ public class Card_05_060_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "5_60");
-					// put other cards in here as needed for the test case
+					put("siege", "5_60");
+					put("devilry", "5_49");
+					put("ram", "5_44");
+					put("ladder", "5_57");
+
+					put("gandalf", "1_364");
+					put("sleep", "1_84");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -43,7 +49,7 @@ public class Card_05_060_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("siege");
 
 		assertEquals("Siege Engine", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +62,44 @@ public class Card_05_060_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SiegeEngineTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SiegeEngineThwartsSimultaneousDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var sleep = scn.GetFreepsCard("sleep");
+		scn.FreepsMoveCharToTable("gandalf");
+		scn.FreepsMoveCardToHand(sleep);
+
+		var siege = scn.GetShadowCard("siege");
+		var devilry = scn.GetShadowCard("devilry");
+		var ram = scn.GetShadowCard("ram");
+		var ladder = scn.GetShadowCard("ladder");
+		scn.ShadowMoveCardToSupportArea(siege, devilry, ram, ladder);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(Zone.SUPPORT, siege.getZone());
+		assertEquals(Zone.SUPPORT, devilry.getZone());
+		assertEquals(Zone.SUPPORT, ram.getZone());
+		assertEquals(Zone.SUPPORT, ladder.getZone());
+
+		assertTrue(scn.hasKeyword(devilry, Keyword.MACHINE));
+		assertTrue(scn.hasKeyword(ram, Keyword.MACHINE));
+		assertTrue(scn.hasKeyword(ladder, Keyword.MACHINE));
+
+		scn.FreepsPlayCard(sleep);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.ShadowActionAvailable(siege));
+
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(Zone.DISCARD, siege.getZone());
+		assertEquals(Zone.SUPPORT, devilry.getZone());
+		assertEquals(Zone.SUPPORT, ram.getZone());
+		assertEquals(Zone.SUPPORT, ladder.getZone());
+
+		assertTrue(scn.FreepsAnyDecisionsAvailable());
 	}
 }

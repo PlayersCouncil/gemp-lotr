@@ -3,13 +3,13 @@ package com.gempukku.lotro.logic.decisions;
 import java.util.Map;
 
 public interface AwaitingDecision {
-    public int getAwaitingDecisionId();
+    int getAwaitingDecisionId();
 
-    public String getText();
+    String getText();
 
-    public AwaitingDecisionType getDecisionType();
+    AwaitingDecisionType getDecisionType();
 
-    public Map<String, String[]> getDecisionParameters();
+    Map<String, String[]> getDecisionParameters();
 
-    public void decisionMade(String result) throws DecisionResultInvalidException;
+    void decisionMade(String result) throws DecisionResultInvalidException;
 }

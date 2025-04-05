@@ -28,6 +28,7 @@
 						select: choose(culture(wraith),item)
 						showAll: true
 						shuffle: true
+						mustExist: true
 					}
 					{
 						type: playCardFromDiscard

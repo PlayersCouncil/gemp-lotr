@@ -24,7 +24,7 @@ public class Location implements RequirementProducer {
             final Filterable filterable = filterableSource.getFilterable(actionContext);
             final LotroGame game = actionContext.getGame();
             final PhysicalCard currentSite = game.getGameState().getCurrentSite();
-            return Filters.accepts(game, filterable, currentSite);
+            return Filters.accepts(game, currentSite, filterable);
         };
     }
 }

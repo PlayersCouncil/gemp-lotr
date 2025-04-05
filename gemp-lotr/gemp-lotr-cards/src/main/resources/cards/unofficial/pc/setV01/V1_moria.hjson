@@ -640,8 +640,8 @@
 				effect: [
 					{
 							type: replaceInSkirmish
-							filter: tentacle
-							with: choose(name(Water in the Water))
+							filter: tentacle,InSkirmishAgainst(unbound,companion)
+							with: choose(name(Watcher in the Water))
 					}
 				]
 			}

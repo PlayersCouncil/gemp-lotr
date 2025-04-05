@@ -7,11 +7,13 @@ import com.gempukku.lotro.logic.timing.EffectResult;
 public class ActivateCardResult extends EffectResult {
     private final PhysicalCard _source;
     private final Timeword _actionTimeword;
+    private final String _player;
     private boolean _effectCancelled;
 
-    public ActivateCardResult(PhysicalCard source, Timeword actionTimeword) {
+    public ActivateCardResult(PhysicalCard source, String performingPlayer, Timeword actionTimeword) {
         super(Type.ACTIVATE);
         _source = source;
+        _player = performingPlayer;
         _actionTimeword = actionTimeword;
     }
 
@@ -22,6 +24,7 @@ public class ActivateCardResult extends EffectResult {
     public PhysicalCard getSource() {
         return _source;
     }
+    public String getPerformingPlayer() { return _player; }
 
     public void cancelEffect() {
         _effectCancelled = true;

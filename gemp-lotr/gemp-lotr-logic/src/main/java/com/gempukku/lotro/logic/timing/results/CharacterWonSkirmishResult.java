@@ -11,10 +11,6 @@ public class CharacterWonSkirmishResult extends EffectResult {
     private final Set<PhysicalCard> _involving;
     private final SkirmishType _type;
 
-    public enum SkirmishType {
-        OVERWHELM, NORMAL
-    }
-
     public CharacterWonSkirmishResult(SkirmishType type, PhysicalCard winner, Set<PhysicalCard> involving) {
         super(EffectResult.Type.CHARACTER_WON_SKIRMISH);
         _type = type;

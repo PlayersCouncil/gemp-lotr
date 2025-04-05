@@ -835,7 +835,7 @@
 				}
 				effect: {
 					type: wound
-					select: choose(culture(wraith),minion)
+					select: choose(other,culture(wraith),minion)
 					count: 0-3
 				}
 			}

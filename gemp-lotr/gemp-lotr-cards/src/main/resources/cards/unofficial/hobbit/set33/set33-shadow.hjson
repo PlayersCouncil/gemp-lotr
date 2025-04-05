@@ -379,54 +379,26 @@
 					}
 					{
 						type: canSpot
-						filter: culture(gundabad),orc
+						filter: culture(gundabad),orc,assignableToSkirmishAgainst(name(Bilbo))
 					}
 				]
-				effect: [
-					{
-						type: chooseActiveCards
-						text: Choose minion to assign to Bilbo
-						select: choose(culture(gundabad),orc,assignableToSkirmishAgainst(name(Bilbo)))
-						memorize: chosenMinion
+				effect: {
+					type: assignFpCharacterToSkirmish
+					fpCharacter: choose(name(Bilbo))
+					minion: choose(culture(gundabad),orc,assignableToSkirmishAgainst(name(Bilbo)))
+					memorizeFPCharacter: bilbo
+					memorizeMinion: chosenMinion
+					preventText: Would you like to add a burden and assign {chosenMinion} to prevent assigning Bilbo to that minion?
+					preventCost: {
+						type: addBurdens
 					}
-					{
-						type: optional
-						player: fp
-						text: Would you like to add a doubt to assign {chosenMinion} to a companion?
-						effect: [
-							{
-								type: addBurdens
-							}
-							{
-								type: assignFpCharacterToSkirmish
-								player: fp
-								fpCharacter: choose(companion)
-								minion: choose(memory(chosenMinion))
-							}
-						]
+					insteadEffect: {
+						type: assignFpCharacterToSkirmish
+						player: free people
+						fpCharacter: choose(any)
+						minion: choose(memory(chosenMinion))
 					}
-					{
-						type: preventable
-						player: fp
-						text: assignFpCharacterToSkirmish doesn't work here for some reason, so this cost registers as unable to be attempted and the effect assigns the minion if the FP passed on the optional above
-						cost: [
-							{
-								type: addBurdens
-							}
-							{
-								type: assignFpCharacterToSkirmish
-								player: shadowPlayer
-								fpCharacter: choose(companion)
-								minion: choose(memory(chosenMinion))
-							}
-						]
-						effect: {
-							type: assignFpCharacterToSkirmish
-							fpCharacter: choose(name(Bilbo))
-							minion: choose(memory(chosenMinion))
-						}
-					}
-				]
+				}
 			}
 		]
 	}
@@ -1068,38 +1040,29 @@
 						memorize: revealedCard
 					}
 					{
-						type: choice
-						texts: [
-							Make the Shadow archery total +2
-							Exert this minion
-						]
-						effects: [
-							{
-								type: If
-								check: {
-									type: memoryMatches
-									memory: revealedCard
-									filter: side(shadow)
-								}
-								true: {
-									type: modifyArcheryTotal
-									side: shadow
-									amount: 2
-								}
-							}
-							{
-								type: If
-								check: {
-									type: memoryMatches
-									memory: revealedCard
-									filter: side(free people)
-								}
-								true: {
-									type: exert
-									select: self
-								}
-							}
-						]
+						type: If
+						check: {
+							type: memoryMatches
+							memory: revealedCard
+							filter: side(shadow)
+						}
+						true: {
+							type: modifyArcheryTotal
+							side: shadow
+							amount: 2
+						}
+					}
+					{
+						type: If
+						check: {
+							type: memoryMatches
+							memory: revealedCard
+							filter: not(side(shadow))
+						}
+						true: {
+							type: exert
+							select: self
+						}
 					}
 				]
 			}

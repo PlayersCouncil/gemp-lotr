@@ -699,8 +699,9 @@ public class Filters {
         };
     }
 
-    public static boolean accepts(LotroGame game, Filterable filterable, PhysicalCard physicalCard) {
-        return changeToFilter(filterable).accepts(game, physicalCard);
+    public static boolean accepts(LotroGame game, PhysicalCard card, Filterable... filterable) {
+        Filter filter = and(filterable);
+        return filter.accepts(game, card);
     }
 
     public static boolean acceptsAny(LotroGame game, Iterable<? extends PhysicalCard> cards, Filterable... filterable) {

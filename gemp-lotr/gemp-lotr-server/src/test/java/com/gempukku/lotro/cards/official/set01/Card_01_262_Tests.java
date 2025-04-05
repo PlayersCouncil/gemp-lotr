@@ -83,7 +83,7 @@ public class Card_01_262_Tests
 
 		assertTrue(scn.ShadowActionAvailable(assassin));
 		scn.ShadowUseCardAction(assassin);
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 
 		assertTrue(scn.CanBeAssignedViaAction(sam));
 		scn.FreepsChooseCard(sam);
@@ -124,7 +124,7 @@ public class Card_01_262_Tests
 
 		assertTrue(scn.ShadowActionAvailable(assassin));
 		scn.ShadowUseCardAction(assassin);
-		assertEquals(2, scn.GetFreepsCardChoiceCount());
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
 
 		assertTrue(scn.CanBeAssignedViaAction(sam));
 		scn.FreepsChooseCard(sam);

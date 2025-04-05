@@ -460,11 +460,8 @@
 				modifier: {
 					type: modifyCost
 					requires: {
-						type: not
-						requires: {
-							type: hasInZoneData
-							filter: self
-						}
+						type: perPhaseLimit
+						limit: 1
 					}
 					filter: orc
 					amount: -2
@@ -476,28 +473,14 @@
 				trigger: {
 					type: played
 					filter: orc
-					memorize: playedOrc
 				}
 				requires: {
-					type: not
-					requires: {
-						type: hasInZoneData
-						filter: self
+						type: perPhaseLimit
+						limit: 1
 					}
-				}
 				effect: {
-					type: storeWhileInZone
-					memory: playedOrc
-				}
-			}
-			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: endOfTurn
-				}
-				effect: {
-					type: resetWhileInZoneData
+					type: incrementPerPhaseLimit
+					limit: 1
 				}
 			}
 		]

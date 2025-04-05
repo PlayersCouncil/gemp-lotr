@@ -23,7 +23,7 @@ public class PlayerPlaysPhaseActionsUntilPassesGameProcess implements GameProces
     public void process(final LotroGame game) {
         final List<Action> playableActions = game.getActionsEnvironment().getPhaseActions(_playerId);
 
-        if (playableActions.size() == 0 && game.shouldAutoPass(_playerId, game.getGameState().getCurrentPhase())) {
+        if (playableActions.isEmpty() && game.shouldAutoPass(_playerId, game.getGameState().getCurrentPhase())) {
             playerPassed();
         } else {
             game.getUserFeedback().sendAwaitingDecision(_playerId,

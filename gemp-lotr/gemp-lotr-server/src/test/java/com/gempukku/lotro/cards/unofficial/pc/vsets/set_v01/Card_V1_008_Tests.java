@@ -95,7 +95,7 @@ public class Card_V1_008_Tests
 		assertEquals(Zone.HAND, lament.getZone());
 		scn.FreepsPlayCard(lament);
 		assertTrue(scn.FreepsDecisionAvailable("Choose"));
-		assertEquals(2, scn.GetFreepsCardChoiceCount()); // gimli, guard, but not frodo
+		assertEquals(2, scn.FreepsGetCardChoiceCount()); // gimli, guard, but not frodo
 		scn.FreepsChooseCard(gimli);
 		assertEquals(1, scn.GetWoundsOn(elrond));
 		assertEquals(Zone.ATTACHED, lament.getZone());
@@ -184,7 +184,7 @@ public class Card_V1_008_Tests
 
 		scn.SkipToPhase(Phase.REGROUP);
 		assertTrue(scn.FreepsDecisionAvailable("Choose cards to discard"));
-		assertEquals(3, scn.GetFreepsCardChoiceCount());
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(bladetip);
 		assertEquals(Zone.ATTACHED, lament.getZone());
 		assertEquals(Zone.DISCARD, bladetip.getZone());

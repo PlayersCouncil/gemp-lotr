@@ -20,8 +20,12 @@ public class Card_11_060_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "11_60");
-					// put other cards in here as needed for the test case
+					put("quality", "11_60");
+					put("man1", "14_7");
+					put("man2", "14_8");
+					put("man3", "14_9");
+
+					put("sauron", "9_48");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -41,12 +45,14 @@ public class Card_11_060_Tests
 		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Skirmish
-		 * Game Text: Exert any number of [gondor] companions who have total resistance 12 or more to make a minion skirmishing a [gondor] companion strength -3 for each companion exerted this way.
+		 * Game Text: Exert any number of [gondor] companions who have total resistance 12
+		 * or more to make a minion skirmishing a [gondor] companion strength -3 for each
+		 * companion exerted this way.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("quality");
 
 		assertEquals("The Highest Quality", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +64,43 @@ public class Card_11_060_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheHighestQualityTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void TheHighestQualityExerts12ResWorthOfMenToDebuffAMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var quality = scn.GetFreepsCard("quality");
+		var man1 = scn.GetFreepsCard("man1");
+		var man2 = scn.GetFreepsCard("man2");
+		var man3 = scn.GetFreepsCard("man3");
+		scn.FreepsMoveCardToHand(quality);
+		scn.FreepsMoveCharToTable(man1, man2, man3);
+
+		var sauron = scn.GetShadowCard("sauron");
+		scn.ShadowMoveCharToTable(sauron);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.RemoveBurdens(1);
 
-		assertEquals(2, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(man1, sauron);
+		scn.FreepsResolveSkirmish(man1);
+
+		assertEquals(5, scn.GetResistance(man1));
+		assertEquals(5, scn.GetResistance(man2));
+		assertEquals(6, scn.GetResistance(man3));
+		assertEquals(0, scn.GetWoundsOn(man1));
+		assertEquals(0, scn.GetWoundsOn(man2));
+		assertEquals(0, scn.GetWoundsOn(man3));
+		assertEquals(24, scn.GetStrength(sauron));
+		assertTrue(scn.FreepsPlayAvailable(quality));
+
+		scn.FreepsPlayCard(quality);
+		scn.FreepsChooseCards(man1, man2, man3);
+		assertEquals(1, scn.GetWoundsOn(man1));
+		assertEquals(1, scn.GetWoundsOn(man2));
+		assertEquals(1, scn.GetWoundsOn(man3));
+		assertEquals(15, scn.GetStrength(sauron));
+
 	}
 }

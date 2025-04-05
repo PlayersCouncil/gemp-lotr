@@ -19,6 +19,7 @@ public class Card_08_113_Tests
 				{{
 					put("sting", "8_113");
 					put("shelob", "8_25");
+					put("sauron", "9_48");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -85,13 +86,43 @@ public class Card_08_113_Tests
 		scn.FreepsResolveSkirmish(frodo);
 		scn.PassCurrentPhaseActions();
 
-		scn.FreepsDeclineOptionalTrigger(); //Ring converting burdens
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-
 		assertEquals(0, scn.GetThreats());
 		assertEquals(Zone.SHADOW_CHARACTERS, shelob.getZone());
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(1, scn.GetThreats());
 		assertEquals(Zone.DISCARD, shelob.getZone());
+	}
+
+	@Test
+	public void StingTriggersOnOverwhelm() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sting = scn.GetFreepsCard("sting");
+		scn.FreepsAttachCardsTo(frodo, sting);
+
+		var sauron = scn.GetShadowCard("sauron");
+		scn.ShadowMoveCharToTable(sauron);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		//Fierce assignment
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(frodo, sauron);
+		scn.FreepsResolveSkirmish(frodo);
+		scn.PassCurrentPhaseActions();
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(Zone.SHADOW_CHARACTERS, sauron.getZone());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetThreats());
+		assertEquals(Zone.DISCARD, sauron.getZone());
 	}
 }
