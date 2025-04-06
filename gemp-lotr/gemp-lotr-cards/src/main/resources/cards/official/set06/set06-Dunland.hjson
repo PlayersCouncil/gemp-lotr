@@ -310,7 +310,7 @@
 						type: addKeyword
 						select: memory(playedMan)
 						keyword: damage
-						amount: 1
+						amount: 2
 						until: regroup
 					}
 				]
