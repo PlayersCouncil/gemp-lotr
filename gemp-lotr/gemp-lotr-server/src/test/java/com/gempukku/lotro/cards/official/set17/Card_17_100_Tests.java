@@ -17,8 +17,9 @@ public class Card_17_100_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "17_100");
-					// put other cards in here as needed for the test case
+					put("caves", "17_100");
+
+					put("sauron", "9_48");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -38,12 +39,14 @@ public class Card_17_100_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: To play, spot 3 [rohan] companions.<br><b>Assignment:</b> Assign a minion to Frodo to make that minion lose all game text keywords of your choice and unable to gain game text keywords until the regroup phase.
+		 * Game Text: To play, spot 3 [rohan] companions.
+		 * <b>Assignment:</b> Assign a minion to Frodo to make that minion lose all game text keywords of your choice
+		 * and unable to gain game text keywords until the regroup phase.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("caves");
 
 		assertEquals("Into the Caves", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,18 +58,48 @@ public class Card_17_100_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void IntotheCavesTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void IntotheCavesAssignsFrodoToMinionToRemoveKeywords() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var frodo = scn.GetRingBearer();
+		var caves = scn.GetFreepsCard("caves");
+		scn.FreepsMoveCardToSupportArea(caves);
+
+		var sauron = scn.GetShadowCard("sauron");
+		scn.ShadowMoveCharToTable(sauron);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		assertTrue(scn.hasKeyword(sauron, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(sauron, Keyword.ENDURING));
+		assertTrue(scn.hasKeyword(sauron, Keyword.FIERCE));
+		assertFalse(scn.IsCharAssigned(frodo));
+		assertFalse(scn.IsCharAssigned(sauron));
+		assertTrue(scn.FreepsActionAvailable(caves));
+
+		scn.FreepsUseCardAction(caves);
+		assertTrue(scn.IsCharAssigned(frodo));
+		assertTrue(scn.IsCharAssigned(sauron));
+
+		assertTrue(scn.FreepsDecisionAvailable("keyword"));
+		scn.FreepsChooseMultipleChoiceOption("DAMAGE");
+		assertFalse(scn.hasKeyword(sauron, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(sauron, Keyword.ENDURING));
+		assertTrue(scn.hasKeyword(sauron, Keyword.FIERCE));
+		scn.FreepsChooseYes();
+		scn.FreepsChooseMultipleChoiceOption("ENDURING");
+		assertFalse(scn.hasKeyword(sauron, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(sauron, Keyword.ENDURING));
+		assertTrue(scn.hasKeyword(sauron, Keyword.FIERCE));
+		scn.FreepsChooseNo();
+		assertFalse(scn.hasKeyword(sauron, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(sauron, Keyword.ENDURING));
+		assertTrue(scn.hasKeyword(sauron, Keyword.FIERCE));
+
+		assertTrue(scn.ShadowAnyDecisionsAvailable());
 	}
 }
