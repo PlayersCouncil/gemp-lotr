@@ -50,6 +50,12 @@ public class ResolveSkirmishEffect extends AbstractEffect {
 			multiplier = game.getModifiersQuerying().getOverwhelmMultiplier(game, fellowshipCharacter);
 		}
 
+		int shadowMult = 2;
+		for(var minion : skirmish.getShadowCharacters()) {
+			var mult = game.getModifiersQuerying().getOverwhelmMultiplier(game, minion);
+			shadowMult = Math.max(shadowMult, mult);
+		}
+
 		if (fpStrength == 0 && shadowStrength == 0) {
 			return Result.FELLOWSHIP_LOSES;
 		} else if (multiplier < CantBeOverwhelmedModifier.ImmuneToOverwhelmThreshold
@@ -57,7 +63,7 @@ public class ResolveSkirmishEffect extends AbstractEffect {
 			return Result.FELLOWSHIP_OVERWHELMED;
 		} else if (fpStrength <= shadowStrength) {
 			return Result.FELLOWSHIP_LOSES;
-		} else if (fpStrength >= 2 * shadowStrength) {
+		} else if (fpStrength >= shadowMult * shadowStrength) {
 			return Result.SHADOW_OVERWHELMED;
 		} else {
 			return Result.SHADOW_LOSES;

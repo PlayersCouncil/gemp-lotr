@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,10 @@ public class Card_V2_026_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_26");
-					// put other cards in here as needed for the test case
+					put("grunt", "102_26");
+					put("worker", "3_62");
+
+					put("mithrandir", "6_30");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +48,7 @@ public class Card_V2_026_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("grunt");
 
 		assertEquals("Isengard Grunt", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +63,36 @@ public class Card_V2_026_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void IsengardGruntTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void IsengardGruntCanExertToPreventIsenorcOverwhelm() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var grunt = scn.GetShadowCard("grunt");
+		var worker = scn.GetShadowCard("worker");
+		scn.ShadowMoveCharToTable(grunt, worker);
+
+		var mithrandir = scn.GetFreepsCard("mithrandir");
+		scn.FreepsMoveCharToTable(mithrandir);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToAssignments();
 
-		assertEquals(2, scn.GetTwilight());
+		scn.FreepsAssignToMinions(mithrandir, worker);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(mithrandir);
+
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(0, scn.GetWoundsOn(grunt));
+		assertTrue(scn.ShadowActionAvailable(grunt));
+		scn.ShadowUseCardAction(grunt);
+		assertEquals(1, scn.GetWoundsOn(grunt));
+		assertEquals(0, scn.GetWoundsOn(worker));
+		assertEquals(Zone.SHADOW_CHARACTERS, worker.getZone());
+
+		scn.PassCurrentPhaseActions();
+		assertEquals(Zone.SHADOW_CHARACTERS, worker.getZone());
+		assertEquals(2, scn.GetWoundsOn(worker)); //Mithrandir is damage +1
 	}
 }
