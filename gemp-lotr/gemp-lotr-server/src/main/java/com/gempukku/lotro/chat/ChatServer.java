@@ -20,10 +20,14 @@ public class ChatServer extends AbstractServer {
     }
 
     public ChatRoomMediator createChatRoom(String name, boolean muteJoinPartMessages, int secondsTimeoutPeriod,
-            boolean allowIncognito, String welcomeMessage) {
+            boolean allowIncognito, String welcomeMessage, String startMessage) {
         ChatRoomMediator chatRoom = new ChatRoomMediator(_ignoreDAO, _playerDAO, name, muteJoinPartMessages, secondsTimeoutPeriod, allowIncognito, welcomeMessage);
         try {
-            chatRoom.sendMessage("System", "Welcome to room: " + name, true);
+            if (startMessage == null) {
+                chatRoom.sendMessage("System", "Welcome to room: " + name, true);
+            } else {
+                chatRoom.sendMessage("System", startMessage, true);
+            }
         } catch (PrivateInformationException exp) {
             // Ignore, sent as admin
         } catch (ChatCommandErrorException e) {

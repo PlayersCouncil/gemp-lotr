@@ -744,6 +744,30 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
+    startQueue:function (queueId, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/hall/queue/" + queueId + "/start",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId")},
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
+    confirmReadyCheckQueue:function (queueId, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/hall/queue/" + queueId + "/ready",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId")},
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
     joinTournamentLate:function(tournamentId, deckName, callback, errorMap) {
         $.ajax({
             type:"POST",
@@ -758,7 +782,7 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
-    registerSealedTournamentDeck:function(tournamentId, deckName, callback, errorMap) {
+    registerLimitedTournamentDeck:function(tournamentId, deckName, callback, errorMap) {
         $.ajax({
             type:"POST",
             url:this.url + "/hall/tournament/" + tournamentId + "/registerdeck",
@@ -1191,6 +1215,9 @@ var GempLotrCommunication = Class.extend({
     
     processScheduledTournament:function (preview, name, type, wc, tournamentId, 
                                          formatCode, sealedFormatCode, deckbuildingDuration, turnInDuration,
+                                         soloDraftFormatCode, soloDraftDeckbuildingDuration, soloDraftTurnInDuration,
+                                         soloTableDraftFormatCode, soloTableDraftDeckbuildingDuration, soloTableDraftTurnInDuration,
+                                         tableDraftFormatCode, tableDraftTimer, tableDraftDeckbuildingDuration, tableDraftTurnInDuration,
                                          start, cost, playoff, tiebreaker, prizeStructure, minPlayers, manualKickoff,
                                        callback, errorMap) {
         $.ajax({
@@ -1207,6 +1234,16 @@ var GempLotrCommunication = Class.extend({
                 sealedFormatCode:sealedFormatCode, 
                 deckbuildingDuration:deckbuildingDuration, 
                 turnInDuration:turnInDuration,
+                soloDraftFormatCode:soloDraftFormatCode,
+                soloDraftDeckbuildingDuration:soloDraftDeckbuildingDuration,
+                soloDraftTurnInDuration:soloDraftTurnInDuration,
+                soloTableDraftFormatCode:soloTableDraftFormatCode,
+                soloTableDraftDeckbuildingDuration:soloTableDraftDeckbuildingDuration,
+                soloTableDraftTurnInDuration:soloTableDraftTurnInDuration,
+                tableDraftFormatCode:tableDraftFormatCode,
+                tableDraftTimer:tableDraftTimer,
+                tableDraftDeckbuildingDuration:tableDraftDeckbuildingDuration,
+                tableDraftTurnInDuration:tableDraftTurnInDuration,
                 start:start,
                 cost:cost,
                 playoff:playoff,
@@ -1346,10 +1383,10 @@ var GempLotrCommunication = Class.extend({
             dataType:"html"
         });
     },
-    getDraft:function (leagueType, callback, errorMap) {
+    getDraft:function (eventId, callback, errorMap) {
         $.ajax({
             type:"GET",
-            url:this.url + "/soloDraft/"+leagueType,
+            url:this.url + "/soloDraft/" + eventId,
             cache:false,
             data:{
                 participantId:getUrlParam("participantId")},
@@ -1358,10 +1395,35 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
-    makeDraftPick:function (leagueType, choiceId, callback, errorMap) {
+    makeDraftPick:function (eventId, choiceId, callback, errorMap) {
         $.ajax({
             type:"POST",
-            url:this.url + "/soloDraft/"+leagueType,
+            url:this.url + "/soloDraft/" + eventId,
+            cache:false,
+            data:{
+                choiceId:choiceId,
+                participantId:getUrlParam("participantId")},
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
+    getTableDraft:function (eventId, callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/tableDraft/" + eventId,
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId")},
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"xml"
+        });
+    },
+    makeTableDraftPick:function (eventId, choiceId, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/tableDraft/" + eventId,
             cache:false,
             data:{
                 choiceId:choiceId,

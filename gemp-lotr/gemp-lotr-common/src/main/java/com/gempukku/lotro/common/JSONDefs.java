@@ -84,6 +84,12 @@ public class JSONDefs {
         public Map<String, Format> Formats;
         public Map<String, SealedTemplate> SealedTemplates;
         public Map<String, ItemStub> DraftTemplates;
+        public Map<String, ItemStub> TableDraftTemplates;
+        public List<String> TableDraftTimerTypes;
+    }
+
+    public static class TimerType {
+        public String type;
     }
 
     public static class ErrataInfo {

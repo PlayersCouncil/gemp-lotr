@@ -69,8 +69,12 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         } else if (uri.startsWith("/format/") && request.method() == HttpMethod.GET) {
             getFormat(request, uri.substring(8), responseWriter);
         } else if (uri.startsWith("/queue/") && request.method() == HttpMethod.POST) {
-            if (uri.endsWith("/leave")) {
+            if (uri.endsWith("/start")) {
+                startQueue(request, uri.substring(7, uri.length() - 6), responseWriter);
+            } else if (uri.endsWith("/leave")) {
                 leaveQueue(request, uri.substring(7, uri.length() - 6), responseWriter);
+            } else if (uri.endsWith("/ready")) {
+                confirmReadyCheckQueue(request, uri.substring(7, uri.length() - 6), responseWriter);
             } else {
                 joinQueue(request, uri.substring(7), responseWriter);
             }
@@ -79,7 +83,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         } else if (uri.startsWith("/tournament/") && uri.endsWith("/join") && request.method() == HttpMethod.POST) {
             joinTournamentLate(request, uri.substring(12, uri.length() - 5), responseWriter);
         } else if (uri.startsWith("/tournament/") && uri.endsWith("/registerdeck") && request.method() == HttpMethod.POST) {
-            registerSealedTournamentDeck(request, uri.substring(12, uri.length() - 13), responseWriter);
+            registerLimitedTournamentDeck(request, uri.substring(12, uri.length() - 13), responseWriter);
         } else if (uri.startsWith("/") && uri.endsWith("/leave") && request.method() == HttpMethod.POST) {
             leaveTable(request, uri.substring(1, uri.length() - 6), responseWriter);
         } else if (uri.startsWith("/") && request.method() == HttpMethod.POST) {
@@ -220,7 +224,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         String msg = ex.getMessage();
 
         if(msg != null && (msg.contains("You don't have a deck registered yet") ||
-                msg.contains("Your selected deck is not valid for this format")))
+                msg.contains("Your selected deck is not valid for this format") ||
+                msg.contains("This queue cannot be started early by ")))
             return true;
 
         return false;
@@ -255,14 +260,14 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         }
     }
 
-    private void registerSealedTournamentDeck(HttpRequest request, String tournamentId, ResponseWriter responseWriter) throws Exception {
+    private void registerLimitedTournamentDeck(HttpRequest request, String tournamentId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
             String participantId = getFormParameterSafely(postDecoder, "participantId");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
             Player resourceOwner = getResourceOwnerSafely(request, participantId);
 
-            String response = _hallServer.registerSealedTournamentDeck(tournamentId, resourceOwner, deckName);
+            String response = _hallServer.registerLimitedTournamentDeck(tournamentId, resourceOwner, deckName);
 
             responseWriter.writeXmlResponse(marshalResponse(response));
         } finally {
@@ -292,6 +297,27 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         }
     }
 
+    private void startQueue(HttpRequest request, String queueId, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+
+            try {
+                _hallServer.startQueueEarly(queueId, resourceOwner);
+                responseWriter.writeXmlResponse(null);
+            } catch (HallException e) {
+                if(!IgnoreError(e)) {
+                    _log.error("Error response for " + request.uri(), e);
+                }
+                responseWriter.writeXmlResponse(marshalException(e));
+            }
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
     private void leaveQueue(HttpRequest request, String queueId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
@@ -302,6 +328,18 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
         _hallServer.leaveQueue(queueId, resourceOwner);
 
         responseWriter.writeXmlResponse(null);
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    private void confirmReadyCheckQueue(HttpRequest request, String queueId, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            _hallServer.confirmReadyCheck(queueId, resourceOwner);
+            responseWriter.writeXmlResponse(null);
         } finally {
             postDecoder.destroy();
         }
