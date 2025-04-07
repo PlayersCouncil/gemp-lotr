@@ -18,8 +18,8 @@ public class Card_17_096_Tests
 				new HashMap<>()
 				{{
 					put("eowyn", "17_96");
+
 					put("scout", "1_270");
-					put("soldier", "1_271");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,

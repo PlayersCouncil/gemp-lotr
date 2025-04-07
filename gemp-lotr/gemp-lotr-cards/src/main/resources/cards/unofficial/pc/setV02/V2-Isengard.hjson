@@ -855,7 +855,7 @@
 			{
 				type: modifier
 				modifier: {
-					type: cancelKeywordBonus
+					type: RemoveKeyword
 					filter: companion,inSkirmishAgainst(culture(isengard),orc)
 					keyword: damage
 				}

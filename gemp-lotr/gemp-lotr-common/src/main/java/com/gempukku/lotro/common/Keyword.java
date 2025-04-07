@@ -115,4 +115,15 @@ public enum Keyword implements Filterable {
     public boolean isRealKeyword() {
         return realKeyword;
     }
+
+    public static Keyword parse(String name) {
+        String nameCaps = name.toUpperCase().trim().replace(' ', '_').replace('-', '_');
+        String nameLower = name.toLowerCase();
+
+        for (Keyword keyword : values()) {
+            if (keyword.getHumanReadable().toLowerCase().equals(nameLower) || keyword.toString().equals(nameCaps))
+                return keyword;
+        }
+        return null;
+    }
 }

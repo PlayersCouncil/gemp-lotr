@@ -17,8 +17,11 @@ public class Card_12_032_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "12_32");
-					// put other cards in here as needed for the test case
+					put("salve", "12_32");
+					put("aragorn", "1_89");
+
+					put("marksman", "1_176");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -38,12 +41,13 @@ public class Card_12_032_Tests
 		 * Twilight Cost: 0
 		 * Type: Condition
 		 * Subtype: 
-		 * Game Text: <b>Spell</b>. To play, spot a [gandalf] Wizard. Bearer must be a companion. Limit 1 per bearer.<br><b>Response:</b> If bearer is about to take a wound that would kill him or her, discard this condition to prevent that wound.
+		 * Game Text: <b>Spell</b>. To play, spot a [gandalf] Wizard. Bearer must be a companion. Limit 1 per bearer.
+		 * <b>Response:</b> If bearer is about to take a wound that would kill him or her, discard this condition to prevent that wound.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("salve");
 
 		assertEquals("Salve", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,18 +59,34 @@ public class Card_12_032_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SalveTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SalveProtectsBearerFromLethalDamage() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var salve = scn.GetFreepsCard("salve");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCharToTable(aragorn);
+		scn.FreepsAttachCardsTo(aragorn, salve);
+
+		scn.ShadowMoveCharToTable("marksman");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddWoundsToChar(aragorn, 3);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsChooseCard(aragorn);
+
+		assertEquals(1, scn.GetVitality(aragorn));
+		assertEquals(Zone.ATTACHED, salve.getZone());
+		assertEquals(Zone.FREE_CHARACTERS, aragorn.getZone());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(Zone.DISCARD, salve.getZone());
+		assertEquals(Zone.FREE_CHARACTERS, aragorn.getZone());
+		assertEquals(1, scn.GetVitality(aragorn));
+
 	}
 }

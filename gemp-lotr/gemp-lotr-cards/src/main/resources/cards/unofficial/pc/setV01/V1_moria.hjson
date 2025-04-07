@@ -717,7 +717,7 @@
 				]
 				effect: {
 					type: StackCardsFromDiscard
-					select: choose(tentacle)
+					select: choose(other,tentacle)
 					count: 2
 					where: memory(stacker)
 				}
