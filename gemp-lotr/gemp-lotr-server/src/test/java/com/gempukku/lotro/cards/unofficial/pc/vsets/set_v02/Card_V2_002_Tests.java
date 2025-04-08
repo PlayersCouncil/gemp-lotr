@@ -1,9 +1,11 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Race;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +20,12 @@ public class Card_V2_002_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_2");
-					// put other cards in here as needed for the test case
+					put("raider", "102_2");
+
+					put("card1", "102_3");
+					put("card2", "102_4");
+					put("card3", "102_5");
+					put("card4", "102_6");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +53,7 @@ public class Card_V2_002_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("raider");
 
 		assertEquals("Dunlending Raider", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +68,45 @@ public class Card_V2_002_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DunlendingRaiderTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void DunlendingRaiderCosts3IfFreepsHasInitiative() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var raider = scn.GetShadowCard("raider");
+		scn.ShadowMoveCardToHand(raider);
+
+		scn.FreepsMoveCardToHand("card1", "card2", "card3", "card4");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(7);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowPlayAvailable(raider));
+		assertEquals(10, scn.GetTwilight());
+
+		scn.ShadowPlayCard(raider);
+		//10 in the pool, -3 for full price -2 for roaming
+		assertEquals(5, scn.GetTwilight());
+	}
+
+	@Test
+	public void DunlendingRaiderCosts1IfShadowHasInitiative() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var raider = scn.GetShadowCard("raider");
+		scn.ShadowMoveCardToHand(raider);
+
+		scn.StartGame();
+		scn.SetTwilight(7);
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowPlayAvailable(raider));
+		assertEquals(10, scn.GetTwilight());
+
+		scn.ShadowPlayCard(raider);
+		//10 in the pool, -1 for full price -2 for roaming
+		assertEquals(7, scn.GetTwilight());
 	}
 }
