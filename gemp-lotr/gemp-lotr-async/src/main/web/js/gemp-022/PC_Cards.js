@@ -962,9 +962,9 @@ var PCCards = {
 	// Saelbeth, Elven Councilor (3U25) [Errata]
 	'53_25'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E025.2_card.jpg',
 	// Gandalf, Lathspell (V213) [Errata]
-	'102_13' : 'https://i.lotrtcgpc.net/sets/V2/LOTR-ENV2E013.1_card.jpg',
+	'102_13' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E013.1_card.jpg',
 	// Now for Wrath (V251) [Errata]
-	'102_51' : 'https://i.lotrtcgpc.net/sets/V2/LOTR-ENV2E051.1_card.jpg',
+	'102_51' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E051.1_card.jpg',
 	// Demands of the Sackville-Bagginses (2C40) [Errata]
 	'52_40'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E040.1_card.jpg',
 	// Uruk Raider (3C74) [Errata]
