@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,14 @@ public class Card_V2_021_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_21");
-					// put other cards in here as needed for the test case
+					put("shot", "102_21");
+					put("ram", "5_44");
+					put("ladder", "5_57");
+					put("fighter", "1_146"); // 3
+					put("guard", "1_147"); // 4
+
+					put("merry", "1_302");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -44,7 +49,7 @@ public class Card_V2_021_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("shot");
 
 		assertEquals("Breaching Shot", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +61,191 @@ public class Card_V2_021_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BreachingShotTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void BreachingShotCanRemove3TokensToAssignAnUrukCosting3() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var shot = scn.GetShadowCard("shot");
+		var ladder = scn.GetShadowCard("ladder");
+		var fighter = scn.GetShadowCard("fighter");
+		var guard = scn.GetShadowCard("guard");
+		scn.ShadowMoveCardToHand(shot);
+		scn.ShadowMoveCardToSupportArea(ladder);
+		scn.ShadowMoveCharToTable(fighter, guard);
+
+		var frodo = scn.GetRingBearer();
+		var merry = scn.GetFreepsCard("merry");
+		scn.FreepsMoveCharToTable(merry);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddTokensToCard(ladder, 3);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(shot));
+		assertEquals(3, scn.GetCultureTokensOn(ladder));
+		assertEquals(3, fighter.getBlueprint().getTwilightCost());
+		assertEquals(4, guard.getBlueprint().getTwilightCost());
+		assertFalse(scn.IsCharAssigned(merry));
+		assertFalse(scn.IsCharAssigned(fighter));
+		assertFalse(scn.IsCharAssigned(guard));
+		scn.ShadowPlayCard(shot);
+		scn.ShadowChoose("3");
+
+		assertEquals(0, scn.GetCultureTokensOn(ladder));
+		assertTrue(scn.IsCharAssigned(merry));
+		assertTrue(scn.IsCharAssigned(fighter));
+		assertFalse(scn.IsCharAssigned(guard));
+	}
+
+	@Test
+	public void BreachingShotCanRemove3TokensFromVariousMachinesToAssignAnUrukCosting3() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var shot = scn.GetShadowCard("shot");
+		var ladder = scn.GetShadowCard("ladder");
+		var ram = scn.GetShadowCard("ram");
+		var fighter = scn.GetShadowCard("fighter");
+		var guard = scn.GetShadowCard("guard");
+		scn.ShadowMoveCardToHand(shot);
+		scn.ShadowMoveCardToSupportArea(ladder, ram);
+		scn.ShadowMoveCharToTable(fighter, guard);
+
+		var merry = scn.GetFreepsCard("merry");
+		scn.FreepsMoveCharToTable(merry);
+
+		scn.StartGame();
+		scn.AddTokensToCard(ladder, 2);
+		scn.AddTokensToCard(ram, 2);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowPlayAvailable(shot));
+		assertEquals(2, scn.GetCultureTokensOn(ladder));
+		assertEquals(2, scn.GetCultureTokensOn(ram));
+		assertEquals(3, fighter.getBlueprint().getTwilightCost());
+		assertEquals(4, guard.getBlueprint().getTwilightCost());
+		assertFalse(scn.IsCharAssigned(merry));
+		assertFalse(scn.IsCharAssigned(fighter));
+		assertFalse(scn.IsCharAssigned(guard));
+		scn.ShadowPlayCard(shot);
+		scn.ShadowChoose("3");
+
+		assertEquals(2, scn.ShadowGetCardChoiceCount()); //2 machines with tokens
+		scn.ShadowChooseCard(ram);
+		scn.ShadowChooseCard(ladder);
+		scn.ShadowChooseCard(ram);
+
+		assertEquals(0, scn.GetCultureTokensOn(ram));
+		assertEquals(1, scn.GetCultureTokensOn(ladder));
+		assertTrue(scn.IsCharAssigned(merry));
+		assertTrue(scn.IsCharAssigned(fighter));
+		assertFalse(scn.IsCharAssigned(guard));
+	}
+
+	@Test
+	public void BreachingShotCanRemove4TokensToAssignAnUrukCosting3Or4() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var shot = scn.GetShadowCard("shot");
+		var ladder = scn.GetShadowCard("ladder");
+		var fighter = scn.GetShadowCard("fighter");
+		var guard = scn.GetShadowCard("guard");
+		scn.ShadowMoveCardToHand(shot);
+		scn.ShadowMoveCardToSupportArea(ladder);
+		scn.ShadowMoveCharToTable(fighter, guard);
+
+		var frodo = scn.GetRingBearer();
+		var merry = scn.GetFreepsCard("merry");
+		scn.FreepsMoveCharToTable(merry);
+
+		scn.StartGame();
+		scn.AddTokensToCard(ladder, 4);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowPlayAvailable(shot));
+		assertEquals(4, scn.GetCultureTokensOn(ladder));
+		assertEquals(3, fighter.getBlueprint().getTwilightCost());
+		assertEquals(4, guard.getBlueprint().getTwilightCost());
+		assertFalse(scn.IsCharAssigned(merry));
+		assertFalse(scn.IsCharAssigned(fighter));
+		assertFalse(scn.IsCharAssigned(guard));
+		scn.ShadowPlayCard(shot);
+		scn.ShadowChoose("4");
+
+		assertEquals(2, scn.ShadowGetCardChoiceCount()); //Both uruks, one costing 3, the other 4
+		scn.ShadowChooseCard(guard);
+
+		assertEquals(0, scn.GetCultureTokensOn(ladder));
+		assertTrue(scn.IsCharAssigned(merry));
+		assertFalse(scn.IsCharAssigned(fighter));
+		assertTrue(scn.IsCharAssigned(guard));
+	}
+
+	@Test
+	public void BreachingShotNotPlayableIfFewerTokensThanTwilightCostOfUruk() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var shot = scn.GetShadowCard("shot");
+		var ladder = scn.GetShadowCard("ladder");
+		var fighter = scn.GetShadowCard("fighter");
+		var guard = scn.GetShadowCard("guard");
+		scn.ShadowMoveCardToHand(shot);
+		scn.ShadowMoveCardToSupportArea(ladder);
+		scn.ShadowMoveCharToTable(fighter, guard);
+
+		var frodo = scn.GetRingBearer();
+		var merry = scn.GetFreepsCard("merry");
+		scn.FreepsMoveCharToTable(merry);
+
+		scn.StartGame();
+		scn.AddTokensToCard(ladder, 2);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertFalse(scn.ShadowPlayAvailable(shot));
+	}
+
+	@Test
+	public void BreachingShotDoesNotCrashIfTooFewTokensAreRemovedToAssign() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var shot = scn.GetShadowCard("shot");
+		var ladder = scn.GetShadowCard("ladder");
+		var fighter = scn.GetShadowCard("fighter");
+		var guard = scn.GetShadowCard("guard");
+		scn.ShadowMoveCardToHand(shot);
+		scn.ShadowMoveCardToSupportArea(ladder);
+		scn.ShadowMoveCharToTable(fighter, guard);
+
+		var frodo = scn.GetRingBearer();
+		var merry = scn.GetFreepsCard("merry");
+		scn.FreepsMoveCharToTable(merry);
+
+		scn.StartGame();
+		scn.AddTokensToCard(ladder, 3);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowPlayAvailable(shot));
+		assertEquals(3, scn.GetCultureTokensOn(ladder));
+
+		assertFalse(scn.IsCharAssigned(merry));
+		assertFalse(scn.IsCharAssigned(fighter));
+		assertFalse(scn.IsCharAssigned(guard));
+		scn.ShadowPlayCard(shot);
+		scn.ShadowChoose("2");
+
+		assertEquals(1, scn.GetCultureTokensOn(ladder));
+		assertFalse(scn.IsCharAssigned(merry));
+		assertFalse(scn.IsCharAssigned(fighter));
+		assertFalse(scn.IsCharAssigned(guard));
+		assertTrue(scn.FreepsAnyDecisionsAvailable());
 	}
 }

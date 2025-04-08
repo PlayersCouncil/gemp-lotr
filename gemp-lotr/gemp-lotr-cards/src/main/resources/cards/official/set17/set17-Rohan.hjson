@@ -449,7 +449,7 @@
 				requires: [
 					{
 						type: CanSpot
-						filter: name(Frodo,AssignableToSkirmishAgainst(minion))
+						filter: name(Frodo),AssignableToSkirmishAgainst(minion)
 					}
 					{
 						type: CanSpot

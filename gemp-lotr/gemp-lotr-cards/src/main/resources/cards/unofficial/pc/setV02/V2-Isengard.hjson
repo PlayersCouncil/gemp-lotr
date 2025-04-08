@@ -183,11 +183,18 @@
 		timewords: Assignment
 		effects: {
 			type: event
-			requires: {
-				type: CanSpotCultureTokens
-				culture: isengard
-				filter: machine
-			}
+			requires: [
+				{
+					type: CanSpotCultureTokens
+					culture: isengard
+					filter: machine
+					memorize: tokenCount
+				}
+				{
+					type: CanSpot
+					filter: uruk-hai,MaxTwilight(memory(tokenCount))
+				}
+			]
 			cost: [
 				{
 					type: ChooseANumber
@@ -199,7 +206,6 @@
 					}
 					memorize: removed
 				}
-				
 			],
 			effect: [
 				{
@@ -855,7 +861,7 @@
 			{
 				type: modifier
 				modifier: {
-					type: cancelKeywordBonus
+					type: RemoveKeyword
 					filter: companion,inSkirmishAgainst(culture(isengard),orc)
 					keyword: damage
 				}

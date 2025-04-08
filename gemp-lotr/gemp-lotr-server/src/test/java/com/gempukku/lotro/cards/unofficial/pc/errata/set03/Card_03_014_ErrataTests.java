@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_03_014_ErrataTests
 {
@@ -40,7 +40,7 @@ public class Card_03_014_ErrataTests
 		 * Type: Ally
 		 * Subtype: Elf
 		 * Strength: 5
-		 * Vitality: 3
+		 * Vitality: 2
 		 * Site Number: 3
 		 * Game Text: To play, spot an Elf.<br><b>Response:</b> If an Elf is about to take a wound from a [sauron] or [ringwraith] card, exert Erestor to prevent that wound.
 		*/
@@ -58,7 +58,7 @@ public class Card_03_014_ErrataTests
 		assertEquals(Race.ELF, card.getBlueprint().getRace());
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(2, card.getBlueprint().getVitality());
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
@@ -70,6 +70,17 @@ public class Card_03_014_ErrataTests
 
 		var card = scn.GetFreepsCard("card");
 		scn.FreepsMoveCardToHand(card);
+		scn.FreepsMoveCharToTable(card);
+		scn.FreepsMoveCardToSupportArea(card);
+		scn.FreepsMoveCardToDiscard(card);
+		scn.FreepsMoveCardsToTopOfDeck(card);
+
+//		var card = scn.GetShadowCard("card");
+//		scn.ShadowMoveCardToHand(card);
+//		scn.ShadowMoveCharToTable(card);
+//		scn.ShadowMoveCardToSupportArea(card);
+//		scn.ShadowMoveCardToDiscard(card);
+//		scn.ShadowMoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);

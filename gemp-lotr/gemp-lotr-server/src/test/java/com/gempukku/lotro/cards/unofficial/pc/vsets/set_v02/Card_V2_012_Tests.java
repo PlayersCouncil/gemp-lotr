@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,12 @@ public class Card_V2_012_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_12");
-					// put other cards in here as needed for the test case
+					put("friends", "102_12");
+					put("aragorn", "4_109");
+					put("gimli", "4_49");
+					put("legolas", "4_74");
+
+					put("uruk", "4_190");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -44,7 +47,7 @@ public class Card_V2_012_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("friends");
 
 		assertEquals("Your Friends Are With You", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +59,141 @@ public class Card_V2_012_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void YourFriendsAreWithYouTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void FriendsLetsAragornPumpGimliOrLegolas() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var friends = scn.GetFreepsCard("friends");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var legolas = scn.GetFreepsCard("legolas");
+		scn.FreepsMoveCardToSupportArea(friends);
+		scn.FreepsMoveCharToTable(aragorn, gimli, legolas);
+
+		var uruk = scn.GetShadowCard("uruk");
+		scn.ShadowMoveCharToTable(uruk);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, uruk);
+		scn.FreepsResolveSkirmish(aragorn);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(6, scn.GetStrength(legolas));
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas));
+		scn.FreepsChooseCard(gimli);
+
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(7, scn.GetStrength(gimli));
+		assertEquals(6, scn.GetStrength(legolas));
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(6, scn.GetStrength(legolas));
+	}
+
+	@Test
+	public void FriendsLetsGimliPumpAragornOrLegolas() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var friends = scn.GetFreepsCard("friends");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var legolas = scn.GetFreepsCard("legolas");
+		scn.FreepsMoveCardToSupportArea(friends);
+		scn.FreepsMoveCharToTable(aragorn, gimli, legolas);
+
+		var uruk = scn.GetShadowCard("uruk");
+		scn.ShadowMoveCharToTable(uruk);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+
+		scn.RemoveWoundsFromChar(uruk, 1); //else the damage+1 gimli will kill him
+
+		scn.FreepsAssignToMinions(gimli, uruk);
+		scn.FreepsResolveSkirmish(gimli);
+
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(6, scn.GetStrength(legolas));
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas));
+		scn.FreepsChooseCard(legolas);
+
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(7, scn.GetStrength(legolas));
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(6, scn.GetStrength(legolas));
+	}
+
+	@Test
+	public void FriendsLetsLegolasPumpAragornOrGimli() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var friends = scn.GetFreepsCard("friends");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var legolas = scn.GetFreepsCard("legolas");
+		scn.FreepsMoveCardToSupportArea(friends);
+		scn.FreepsMoveCharToTable(aragorn, gimli, legolas);
+
+		var uruk = scn.GetShadowCard("uruk");
+		scn.ShadowMoveCharToTable(uruk);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(legolas, uruk);
+		scn.FreepsResolveSkirmish(legolas);
+
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(6, scn.GetStrength(legolas));
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli));
+		scn.FreepsChooseCard(aragorn);
+
+		assertEquals(9, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(6, scn.GetStrength(legolas));
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(6, scn.GetStrength(legolas));
 	}
 }

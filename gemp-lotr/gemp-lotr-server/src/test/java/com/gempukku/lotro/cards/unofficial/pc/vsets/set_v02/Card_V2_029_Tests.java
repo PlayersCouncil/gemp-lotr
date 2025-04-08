@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_V2_029_Tests
 {
@@ -18,8 +18,12 @@ public class Card_V2_029_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_29");
-					// put other cards in here as needed for the test case
+					put("saruman", "102_29");
+					put("worker", "3_62");
+
+					put("legolas", "1_50");
+					put("gimli", "1_13");
+					put("axe", "1_14");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -49,7 +53,7 @@ public class Card_V2_029_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("saruman");
 
 		assertEquals("Saruman", card.getBlueprint().getTitle());
 		assertEquals("Mind of Metal and Wheels", card.getBlueprint().getSubtitle());
@@ -64,18 +68,84 @@ public class Card_V2_029_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SarumanTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SarumanCannotBeAssignedToSkirmishes() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var saruman = scn.GetShadowCard("saruman");
+		scn.ShadowMoveCharToTable(saruman);
+		scn.ShadowMoveCharToTable("worker");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToAssignments();
+		//Worker but not Saruman
+		assertEquals(1, scn.FreepsGetShadowAssignmentTargetCount());
+	}
 
-		assertEquals(4, scn.GetTwilight());
+	@Test
+	public void Saruman_CAN_TakeArcheryWounds() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var saruman = scn.GetShadowCard("saruman");
+		scn.ShadowMoveCharToTable(saruman);
+
+		scn.FreepsMoveCharToTable("legolas");
+
+		scn.StartGame();
+		scn.SkipToArcheryWounds();
+
+		assertEquals(1, scn.GetWoundsOn(saruman));
+	}
+
+	@Test
+	public void SarumanNegatesAllDamageBonusesOnCompanionsSkirmishingIsenorcs() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var saruman = scn.GetShadowCard("saruman");
+		var worker = scn.GetShadowCard("worker");
+		scn.ShadowMoveCharToTable(saruman, worker);
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var axe = scn.GetFreepsCard("axe");
+		scn.FreepsMoveCharToTable(gimli);
+		scn.FreepsAttachCardsTo(gimli, axe);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+
+		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		scn.FreepsAssignToMinions(gimli, worker);
+		scn.FreepsResolveSkirmish(gimli);
+		assertEquals(0, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		scn.PassCurrentPhaseActions();
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(worker));
+	}
+
+	@Test
+	public void SarumanCanExertToPreventWoundsToIsenorcs() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var saruman = scn.GetShadowCard("saruman");
+		var worker = scn.GetShadowCard("worker");
+		scn.ShadowMoveCharToTable(saruman, worker);
+
+		scn.FreepsMoveCharToTable("legolas");
+
+		scn.StartGame();
+		scn.SkipToArcheryWounds();
+
+		scn.ShadowChooseCard(worker); //archery wound
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(saruman));
+		assertEquals(0, scn.GetWoundsOn(worker));
+
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(saruman));
+		assertEquals(0, scn.GetWoundsOn(worker));
 	}
 }

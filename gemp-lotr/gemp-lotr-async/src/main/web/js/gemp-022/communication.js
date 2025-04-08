@@ -165,7 +165,7 @@ var GempLotrCommunication = Class.extend({
         };
     },
     
-    getStatus:function (callback) {
+    extractStatus:function (callback) {
         var that = this;
         return function (xml, status, request) {
             callback(xml, request.status);
@@ -1351,7 +1351,7 @@ var GempLotrCommunication = Class.extend({
                 login:login,
                 password:password,
                 participantId:getUrlParam("participantId")},
-            success:this.getStatus(callback),
+            success:this.extractStatus(callback),
             error:this.errorCheck(errorMap),
             dataType:"html"
         });

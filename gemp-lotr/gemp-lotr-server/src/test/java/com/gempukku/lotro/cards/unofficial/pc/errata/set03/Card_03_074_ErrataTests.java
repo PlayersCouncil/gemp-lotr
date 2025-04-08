@@ -1,9 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,14 +10,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_03_085_ErrataTests
+public class Card_03_074_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "53_85");
+					put("card", "53_74");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -29,38 +27,47 @@ public class Card_03_085_ErrataTests
 	}
 
 	@Test
-	public void TooGreatandTerribleStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UrukRaiderStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 3
-		 * Name: Too Great and Terrible
+		 * Name: Uruk Raider
 		 * Unique: False
 		 * Side: Shadow
-		 * Culture: Wraith
-		 * Twilight Cost: 1
-		 * Type: Condition
-		 * Subtype: 
-		 * Game Text: To play, exert a [ringwraith] minion. Bearer must
-		* 	be a companion or ally (except the Ring-bearer). Limit 1 per bearer.
-		* 	Each time bearer is exerted by a Free Peoples card, exert bearer unless the Free Peoples player discards a card from hand of bearer's culture.
+		 * Culture: Isengard
+		 * Twilight Cost: 2
+		 * Type: Minion
+		 * Subtype: Uruk-hai
+		 * Strength: 6
+		 * Vitality: 2
+		 * Site Number: 5
+		 * Game Text: Damage +1.
+		* 	While an ally is in the dead pile, this minion is strength +3 and <b>fierce</b>.
+		* 	Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Too Great and Terrible", card.getBlueprint().getTitle());
+		assertEquals("Uruk Raider", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void TooGreatandTerribleTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UrukRaiderTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -81,6 +88,6 @@ public class Card_03_085_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

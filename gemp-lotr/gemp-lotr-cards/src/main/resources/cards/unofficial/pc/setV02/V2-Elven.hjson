@@ -84,6 +84,12 @@
 		timewords: Maneuver
 		effects: {
 			type: event
+			requires: [
+				{
+					type: CanSpot
+					filter: or(elf,dwarf), companion
+				}
+			]
 			effect: [
 				{
 					type: Choice
@@ -91,13 +97,16 @@
 						Spot an {elven} companion to reinforce a {dwarven} token.
 						Spot a {dwarven} companion to reinforce an {elven} token.
 					]
+					
 					effects: [
 						{
 							type: CostToEffect
-							requires: {
-								type: CanSpot
-								filter: HasCultureToken(dwarven)
-							}
+							requires: [
+								{
+									type: CanSpot
+									filter: HasCultureToken(dwarven)
+								}
+							]
 							cost: {
 								type: Spot
 								filter: elf, companion
@@ -110,10 +119,12 @@
 						}
 						{
 							type: CostToEffect
-							requires: {
-								type: CanSpot
-								filter: HasCultureToken(elven)
-							}
+							requires: [
+								{
+									type: CanSpot
+									filter: HasCultureToken(elven)
+								}
+							]
 							cost: {
 								type: Spot
 								filter: dwarf, companion

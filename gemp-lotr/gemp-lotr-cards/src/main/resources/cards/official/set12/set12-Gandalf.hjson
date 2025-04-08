@@ -379,7 +379,7 @@
 		culture: Gandalf
 		twilight: 0
 		type: Condition
-		target: companion,not(hasAttached(name(Salve)))
+		target: companion,OnePerBearer
 		keywords: Spell
 		effects: [
 			{
@@ -395,10 +395,17 @@
 					type: aboutToTakeWound
 					filter: exhausted,bearer
 				}
-				cost: {
-					type: discard
-					select: self
-				}
+				cost: [
+					{
+						type: memorize
+						filter: bearer
+						memory: bearer
+					}
+					{
+						type: discard
+						select: self
+					}
+				]
 				effect: {
 					type: preventWound
 					select: memory(bearer)

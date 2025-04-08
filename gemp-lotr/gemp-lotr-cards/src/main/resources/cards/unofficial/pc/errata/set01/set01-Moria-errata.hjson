@@ -1,4 +1,66 @@
 {
+	51_172: {
+		cardInfo: {
+			//id: 51_172.1
+			parent: 1_172
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E172.1_card.jpg
+			collInfo: 1R172
+			rarity: R
+		}
+		title: Goblin Archer
+		unique: false
+		side: Shadow
+		culture: Moria
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 4
+		vitality: 3
+		site: 4
+		keywords: Archer
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyArcheryTotal
+					side: free people
+					amount: {
+						type: ForEachYouCanSpot
+						filter: culture(moria),archer
+						multiplier: -1
+					}
+				}
+			}
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: cantBeAssignedToSkirmish
+						filter: culture(moria),archer
+					}
+				}
+			}
+		]
+		gametext: <b>Archer</b>.<br>The fellowship archery total is -1 for each [moria] archer you can spot.<br>Assignment: Exert this minion to prevent [moria] archers from being assigned to skirmishes.
+		lore: "An arrow whistled over Frodo's head."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	# 51_177: {
 	# 	cardInfo: {
 	# 		imagePath: errata/LOTR-EN01E177.1_card.jpg

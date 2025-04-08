@@ -1,4 +1,126 @@
 {
+	
+	55_10: {
+		cardInfo: {
+			//id: 5_10.1
+			parent: 5_10
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN05E010.1_card.jpg
+			collInfo: 5U10
+			rarity: U
+		}
+		title: Balglin
+		subtitle: Elven Warrior
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 5
+		vitality: 3
+		resistance: 6
+		keywords: Valiant
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeMoreWoundsThan
+					filter: self
+					requires: {
+						type: canSpot
+						filter: self,inSkirmishAgainst(wounded,minion)
+					}
+					amount: 1
+					phase: skirmish
+				}
+			}
+		]
+		gametext: <b>Valiant.</b> <br>To play, spot an Elf.<br>While skirmishing a wounded minion, Balglin takes no more than 1 wound during each skirmish phase.
+		lore: He is a strong fighter. He asks for no quarter and gives none.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	55_13: {
+		cardInfo: {
+			//id: 5_13.1
+			parent: 5_13
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN05E013.1_card.jpg
+			collInfo: 5U13
+			rarity: U
+		}
+		title: Taurnil
+		subtitle: Sharp-eyed Bowman
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 2
+		type: Companion
+		race: Elf
+		strength: 6
+		vitality: 3
+		resistance: 6
+		keywords: Valiant
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: elf
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					requires: {
+						type: canSpot
+						filter: self,hasAttached(ranged weapon)
+					}
+					filter: side(shadow),possession
+					amount: 2
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: doesNotAddToArcheryTotal
+					filter: self
+					requires: {
+						type: canSpot
+						filter: self,hasAttached(ranged weapon)
+					}
+				}
+			}
+		]
+		gametext: <b>Valiant.</b> <br>To play, spot an Elf.<br>While Taurnil bears a ranged weapon, the twilight cost of each Shadow possession is +2, and he does not add to the fellowship archery total.
+		lore: Taurnil's careful aim can disarm his enemies at long range.
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 
 	55_121: {
 		cardInfo: {
