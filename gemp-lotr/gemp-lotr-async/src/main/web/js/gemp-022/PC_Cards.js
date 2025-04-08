@@ -972,7 +972,7 @@ var PCCards = {
 	// Rivendell Gateway (V1U59) [Errata]
 	'101_59' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E059.1_card.jpg',
 	// Gandalf's Staff, Old Man's Crutch (V2_77) 
-	'102_77' : 'https://i.lotrtcgpc.net/sets/V2/LOTR-ENV2S077.0_card.jpg',
+	'102_77' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S077.0_card.jpg',
 	// Goblin Archer (1R172) [Errata]
 	'51_172' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E172.1_card.jpg',
 	
