@@ -40,8 +40,8 @@ public class Card_03_085_ErrataTests
 		 * Type: Condition
 		 * Subtype: 
 		 * Game Text: To play, exert a [ringwraith] minion. Bearer must
-		* 	be a companion or ally (except the Ring-bearer). Limit 1 per bearer.
-		* 	Each time bearer is exerted by a Free Peoples card, exert bearer unless the Free Peoples player discards a card from hand of bearer's culture.
+		* 	be a companion or ally.
+		* 	Each time bearer exerts, the Free Peoples player may discard a card from hand of bearer's culture.  If they do not, reveal their hand and discard 1 revealed Free Peoples card.
 		*/
 
 		var scn = GetScenario();
@@ -65,17 +65,6 @@ public class Card_03_085_ErrataTests
 
 		var card = scn.GetFreepsCard("card");
 		scn.FreepsMoveCardToHand(card);
-		scn.FreepsMoveCharToTable(card);
-		scn.FreepsMoveCardToSupportArea(card);
-		scn.FreepsMoveCardToDiscard(card);
-		scn.FreepsMoveCardsToTopOfDeck(card);
-
-		var card = scn.GetShadowCard("card");
-		scn.ShadowMoveCardToHand(card);
-		scn.ShadowMoveCharToTable(card);
-		scn.ShadowMoveCardToSupportArea(card);
-		scn.ShadowMoveCardToDiscard(card);
-		scn.ShadowMoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);

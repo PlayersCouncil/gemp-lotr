@@ -40,9 +40,10 @@ public class Card_03_025_ErrataTests
 		 * Type: Ally
 		 * Subtype: Elf
 		 * Strength: 4
-		 * Vitality: 3
+		 * Vitality: 2
 		 * Site Number: 3
-		 * Game Text: To play, spot an Elf.<br><b>Skirmish:</b> Exert Saelbeth to make a minion strength -1 (or -1 for each Elf you can spot if that minion is an Uruk-hai).  
+		 * Game Text: To play, spot an Elf.<br><b>Skirmish:</b> Exert Saelbeth to make a minion strength -1 (or -1 for each Elf you can spot if that minion is an
+		* 	Uruk-hai).  
 		*/
 
 		var scn = GetScenario();
@@ -58,8 +59,8 @@ public class Card_03_025_ErrataTests
 		assertEquals(Race.ELF, card.getBlueprint().getRace());
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(4, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
+		assertEquals(2, card.getBlueprint().getVitality());
+		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.SHADOWS, 3)));
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
@@ -70,6 +71,17 @@ public class Card_03_025_ErrataTests
 
 		var card = scn.GetFreepsCard("card");
 		scn.FreepsMoveCardToHand(card);
+		scn.FreepsMoveCharToTable(card);
+		scn.FreepsMoveCardToSupportArea(card);
+		scn.FreepsMoveCardToDiscard(card);
+		scn.FreepsMoveCardsToTopOfDeck(card);
+
+		var card = scn.GetShadowCard("card");
+		scn.ShadowMoveCardToHand(card);
+		scn.ShadowMoveCharToTable(card);
+		scn.ShadowMoveCardToSupportArea(card);
+		scn.ShadowMoveCardToDiscard(card);
+		scn.ShadowMoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);

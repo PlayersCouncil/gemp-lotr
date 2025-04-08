@@ -1,0 +1,45 @@
+{
+
+	53_85: {
+		cardInfo: {
+			//id: 53_85.4
+			parent: 3_85
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 4
+			image: errata/LOTR-EN03E085.4_card.jpg
+			collInfo: 3R85
+			rarity: R
+		}
+		title: Too Great and Terrible
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		#target: 
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, exert a [ringwraith] minion. Bearer must<br>be a companion or ally (except the Ring-bearer). Limit 1 per bearer.<br>Each time bearer is exerted by a Free Peoples card, exert bearer unless the Free Peoples player discards a card from hand of bearer's culture.
+		lore: “‘Do not tempt me!'”
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

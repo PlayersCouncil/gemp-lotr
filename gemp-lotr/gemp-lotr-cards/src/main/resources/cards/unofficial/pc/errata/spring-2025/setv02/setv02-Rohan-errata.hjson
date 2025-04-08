@@ -1,0 +1,45 @@
+{
+
+	102_51: {
+		cardInfo: {
+			//id: 102_51.1
+			parent: 102_51
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: sets/V2/LOTR-ENV2E051.1_card.jpg
+			collInfo: V251
+			rarity: 
+		}
+		title: Now for Wrath
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time a [rohan] item or [rohan] ally is discarded or killed (except during the fellowship phase), add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove 2 [rohan] tokens here and exert a valiant companion to wound that minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

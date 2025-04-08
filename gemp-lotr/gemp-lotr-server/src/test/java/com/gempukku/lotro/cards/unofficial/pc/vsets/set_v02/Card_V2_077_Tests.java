@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_V2_013_ErrataTests
+public class Card_V2_077_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_13");
+					put("card", "102_77");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,46 +28,41 @@ public class Card_V2_013_ErrataTests
 	}
 
 	@Test
-	public void GandalfStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GandalfsStaffStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: V2
-		 * Name: Gandalf, Lathspell
+		 * Name: Gandalf's Staff, Old Man's Crutch
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Gandalf
-		 * Twilight Cost: 4
-		 * Type: Companion
-		 * Subtype: Wizard
-		 * Strength: 7
-		 * Vitality: 4
-		 * Resistance: 6
-		 * Signet: Theoden
-		 * Game Text: Each mounted companion gains <b>valiant</b>.
-		* 	Response: If a minion's special ability is used (except during a skirmish), spot 3 valiant companions and exert Gandalf to prevent that. 
+		 * Twilight Cost: 2
+		 * Type: Artifact
+		 * Subtype: Staff
+		 * Vitality: 1
+		 * Game Text: Bearer must be Gandalf.
+		* 	Discard any weapon he bears.
+		* 	Each time Gandalf is exerted by a Free Peoples card, you may wound a minion (limit once per phase).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Gandalf", card.getBlueprint().getTitle());
-		assertEquals("Lathspell", card.getBlueprint().getSubtitle());
+		assertEquals("Gandalf's Staff", card.getBlueprint().getTitle());
+		assertEquals("Old Man's Crutch", card.getBlueprint().getSubtitle());
 		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.WIZARD, card.getBlueprint().getRace());
-		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(7, card.getBlueprint().getStrength());
-		assertEquals(4, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
+		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.STAFF));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void GandalfTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GandalfsStaffTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -88,6 +83,6 @@ public class Card_V2_013_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }
