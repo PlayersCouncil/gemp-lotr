@@ -1,13 +1,11 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
-import com.gempukku.lotro.cards.build.ActionContext;
-import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
-import com.gempukku.lotro.cards.build.ValueSource;
+import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
@@ -25,24 +23,26 @@ public class PutCardsFromHandOnBottomOfDeck implements EffectAppenderProducer {
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "player", "select", "count", "reveal");
 
-        final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
+        final String playerName = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final ValueSource count = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final boolean reveal = FieldUtils.getBoolean(effectObject.get("reveal"), "reveal", false);
+        final PlayerSource player = PlayerResolver.resolvePlayer(playerName);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInHand(select, count, "_temp", player, player, "Choose cards from hand", environment));
+                CardResolver.resolveCardsInHand(select, count, "_temp", playerName, playerName, "Choose cards from hand", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
                     protected List<Effect> createEffects(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final List<? extends PhysicalCard> cards = new ArrayList<>(actionContext.getCardsFromMemory("_temp"));
                         List<Effect> result = new LinkedList<>();
+
                         for (int i = 0; i < cards.size(); i++) {
                             result.add(
-                                    new ChooseArbitraryCardsEffect(actionContext.getPerformingPlayer(),
+                                    new ChooseArbitraryCardsEffect(player.getPlayer(actionContext),
                                             "Choose card to put beneath draw deck", cards, 1, 1) {
                                         @Override
                                         protected void cardsSelected(LotroGame game, Collection<PhysicalCard> selectedCards) {
