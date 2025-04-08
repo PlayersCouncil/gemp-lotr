@@ -94,6 +94,71 @@
 		}
 	}
 
+	# 101_59: {
+	# 	cardInfo: {
+	# 		//id: 101_59
+	# 		image: sets/vset1/LOTR-ENV1S059.0_card.jpg
+	# 		collInfo: V1U59
+	# 		rarity: U
+	# 	}
+	# 	title: Rivendell Gateway
+	# 	unique: false
+	# 	twilight: 0
+	# 	type: Site
+	# 	site: 3
+	# 	block: Fellowship
+	# 	direction: Right
+	# 	keywords: [
+	# 		Forest
+	# 		Sanctuary
+	# 	]
+	# 	effects: {
+	# 		type: activated
+	# 		phase: fellowship
+	# 		requires: [
+	# 			{
+	# 				type: perTurnLimit
+	# 				limit: 6
+	# 			}
+	# 		]
+	# 		cost: {
+	# 			type: exert
+	# 			select: choose(companion)
+	# 			memorize: exertedComp
+	# 		}
+	# 		effect: [
+	# 			{
+	# 				type: incrementPerTurnLimit
+	# 				limit: 6
+	# 			}
+	# 			{
+	# 				type: chooseActiveCards
+	# 				text: Choose a companion of a different culture to make strength +1 until the end of the turn.
+	# 				select: choose(companion,not(cultureFromMemory(exertedComp)))
+	# 				memorize: pumpedComp 
+	# 			}
+	# 			{
+	# 				type: addModifier
+	# 				modifier: {
+	# 					type: modifyStrength
+	# 					filter: memory(pumpedComp)
+	# 					amount: 1
+	# 				}
+	# 				until: endofturn
+	# 			}
+	# 		]
+	# 	}
+	# 	gametext: Forest. Sanctuary. Fellowship: Exert a companion to make one of another culture strength +1 until the end of the turn (limit +6).
+	# 	lore: ""
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	101_59: {
 		cardInfo: {
 			//id: 101_59
@@ -108,10 +173,7 @@
 		site: 3
 		block: Fellowship
 		direction: Right
-		keywords: [
-			Forest
-			Sanctuary
-		]
+		keywords: Sanctuary
 		effects: {
 			type: activated
 			phase: fellowship
@@ -123,7 +185,7 @@
 			]
 			cost: {
 				type: exert
-				select: choose(companion)
+				select: choose(unbound,companion)
 				memorize: exertedComp
 			}
 			effect: [
@@ -134,7 +196,7 @@
 				{
 					type: chooseActiveCards
 					text: Choose a companion of a different culture to make strength +1 until the end of the turn.
-					select: choose(companion,not(cultureFromMemory(exertedComp)))
+					select: choose(unbound,companion,not(cultureFromMemory(exertedComp)))
 					memorize: pumpedComp 
 				}
 				{
@@ -148,7 +210,7 @@
 				}
 			]
 		}
-		gametext: Forest. Sanctuary. Fellowship: Exert a companion to make one of another culture strength +1 until the end of the turn (limit +6).
+		gametext: Sanctuary. Fellowship: Exert an unbound companion to make one of another culture strength +1 until the end of the turn (limit +6).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -158,6 +220,7 @@
 			}
 		}
 	}
+
 
 	101_60: {
 		cardInfo: {

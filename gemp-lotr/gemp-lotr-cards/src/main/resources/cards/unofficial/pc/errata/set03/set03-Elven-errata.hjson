@@ -196,14 +196,72 @@
 		}
 	}
 	
+	# 53_14: {
+	# 	cardInfo: {
+	# 		//id: 3_14.1
+	# 		parent: 3_14
+	# 		variant: ERRATA
+	# 		variantPath: errata/pc
+	# 		revision: 1
+	# 		image: errata/LOTR-EN03E014.1_card.jpg
+	# 		collInfo: 3C14
+	# 		rarity: C
+	# 	}
+	# 	title: Erestor
+	# 	subtitle: Chief Advisor to Elrond
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Elven
+	# 	twilight: 2
+	# 	type: Ally
+	# 	allyHome: 3F
+	# 	race: Elf
+	# 	strength: 5
+	# 	vitality: 3
+	# 	effects: [
+	# 		{
+	# 			type: toPlay
+	# 			requires: {
+	# 				type: canSpot
+	# 				filter: elf
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Response
+	# 			trigger: {
+	# 				type: aboutToTakeWound
+	# 				filter: elf
+	# 				source: or(culture(sauron),culture(ringwraith))
+	# 			}
+	# 			cost: {
+	# 				type: exert
+	# 				select: self
+	# 			}
+	# 			effect: {
+	# 				type: preventWound
+	# 				select: choose(elf)
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: To play, spot an Elf.<br><b>Response:</b> If an Elf is about to take a wound from a [sauron] or [ringwraith] card, exert Erestor to prevent that wound.
+	# 	lore: "'Then there are but two courses... to hide the Ring for ever, or to unmake it.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_14: {
 		cardInfo: {
-			//id: 3_14.1
+			//id: 53_14.2
 			parent: 3_14
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 1
-			image: errata/LOTR-EN03E014.1_card.jpg
+			revision: 2
+			image: errata/LOTR-EN03E014.2_card.jpg
 			collInfo: 3C14
 			rarity: C
 		}
@@ -214,10 +272,10 @@
 		culture: Elven
 		twilight: 2
 		type: Ally
-		allyHome: 3F
+		allyHome: 3
 		race: Elf
 		strength: 5
-		vitality: 3
+		vitality: 2
 		effects: [
 			{
 				type: toPlay
@@ -328,14 +386,90 @@
 		}
 	}
 	
+	# 53_20: {
+	# 	cardInfo: {
+	# 		//id: 3_20.1
+	# 		parent: 3_20
+	# 		variant: ERRATA
+	# 		variantPath: errata/pc
+	# 		revision: 1
+	# 		image: errata/LOTR-EN03E020.1_card.jpg
+	# 		collInfo: 3U20
+	# 		rarity: U
+	# 	}
+	# 	title: Golradir
+	# 	subtitle: Councilor of Imladris
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Elven
+	# 	twilight: 2
+	# 	type: Ally
+	# 	allyHome: 3F
+	# 	race: Elf
+	# 	strength: 4
+	# 	vitality: 3
+	# 	effects: [
+	# 		{
+	# 			type: toPlay
+	# 			requires: {
+	# 				type: canSpot
+	# 				filter: elf
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: skirmish
+	# 			cost: {
+	# 				type: exert
+	# 				select: self
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: ChooseActiveCards
+	# 					text: Choose a minion to debuff
+	# 					select: choose(minion)
+	# 					memorize: chosenMinion
+	# 				}
+	# 				{
+	# 					type: modifyStrength
+	# 					select: memory(chosenMinion)
+	# 					amount: {
+	# 						type: Conditional
+	# 						requires: {
+	# 							type: MemoryMatches
+	# 							memory: chosenMinion
+	# 							filter: Orc
+	# 						}
+	# 						true: {
+	# 							type: ForEachYouCanSpot
+	# 							filter: Elf
+	# 							multiplier: -1
+	# 						}
+	# 						false: -1
+	# 					}
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: To play, spot an Elf.<br><b>Skirmish:</b> Exert Golradir to make a minion strength -1 (or -1 for each Elf you can spot if that minion is an Orc).  
+	# 	lore: Their stay at Rivendell provided the Fellowship with counsel from many sources.
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_20: {
 		cardInfo: {
-			//id: 3_20.1
+			//id: 53_20.2
 			parent: 3_20
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 1
-			image: errata/LOTR-EN03E020.1_card.jpg
+			revision: 2
+			image: errata/LOTR-EN03E020.2_card.jpg
 			collInfo: 3U20
 			rarity: U
 		}
@@ -346,10 +480,10 @@
 		culture: Elven
 		twilight: 2
 		type: Ally
-		allyHome: 3F
+		allyHome: 3
 		race: Elf
 		strength: 4
-		vitality: 3
+		vitality: 2
 		effects: [
 			{
 				type: toPlay
@@ -450,14 +584,90 @@
 		}
 	}
 	
+	# 53_25: {
+	# 	cardInfo: {
+	# 		//id: 3_25.1
+	# 		parent: 3_25
+	# 		variant: ERRATA
+	# 		variantPath: errata/pc
+	# 		revision: 1
+	# 		image: errata/LOTR-EN03E025.1_card.jpg
+	# 		collInfo: 3U25
+	# 		rarity: U
+	# 	}
+	# 	title: Saelbeth
+	# 	subtitle: Elven Councilor
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Elven
+	# 	twilight: 2
+	# 	type: Ally
+	# 	allyHome: 3F
+	# 	race: Elf
+	# 	strength: 4
+	# 	vitality: 3
+	# 	effects: [
+	# 		{
+	# 			type: toPlay
+	# 			requires: {
+	# 				type: canSpot
+	# 				filter: elf
+	# 			}
+	# 		}
+	# 		{
+	# 			type: activated
+	# 			phase: skirmish
+	# 			cost: {
+	# 				type: exert
+	# 				select: self
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: ChooseActiveCards
+	# 					text: Choose a minion to debuff
+	# 					select: choose(minion)
+	# 					memorize: chosenMinion
+	# 				}
+	# 				{
+	# 					type: modifyStrength
+	# 					select: memory(chosenMinion)
+	# 					amount: {
+	# 						type: Conditional
+	# 						requires: {
+	# 							type: MemoryMatches
+	# 							memory: chosenMinion
+	# 							filter: Uruk-hai
+	# 						}
+	# 						true: {
+	# 							type: ForEachYouCanSpot
+	# 							filter: Elf
+	# 							multiplier: -1
+	# 						}
+	# 						false: -1
+	# 					}
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: To play, spot an Elf.<br><b>Skirmish:</b> Exert Saelbeth to make a minion strength -1 (or -1 for each Elf you can spot if that minion is an Uruk-hai).  
+	# 	lore: The wisdom of Saelbeth prepared the Company for the dangers they would face.
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_25: {
 		cardInfo: {
-			//id: 3_25.1
+			//id: 53_25.2
 			parent: 3_25
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 1
-			image: errata/LOTR-EN03E025.1_card.jpg
+			revision: 2
+			image: errata/LOTR-EN03E025.2_card.jpg
 			collInfo: 3U25
 			rarity: U
 		}
@@ -468,10 +678,10 @@
 		culture: Elven
 		twilight: 2
 		type: Ally
-		allyHome: 3F
+		allyHome: 3
 		race: Elf
 		strength: 4
-		vitality: 3
+		vitality: 2
 		effects: [
 			{
 				type: toPlay
@@ -515,7 +725,7 @@
 				]
 			}
 		]
-		gametext: To play, spot an Elf.<br><b>Skirmish:</b> Exert Saelbeth to make a minion strength -1 (or -1 for each Elf you can spot if that minion is an Uruk-hai).  
+		gametext: To play, spot an Elf.<br><b>Skirmish:</b> Exert Saelbeth to make a minion strength -1 (or -1 for each Elf you can spot if that minion is an<br>Uruk-hai).  
 		lore: The wisdom of Saelbeth prepared the Company for the dangers they would face.
 		promotext: ""
 		alts: {
