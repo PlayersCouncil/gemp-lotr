@@ -272,7 +272,7 @@
 		culture: Elven
 		twilight: 2
 		type: Ally
-		allyHome: 3
+		allyHome: 3F
 		race: Elf
 		strength: 5
 		vitality: 2
@@ -480,7 +480,7 @@
 		culture: Elven
 		twilight: 2
 		type: Ally
-		allyHome: 3
+		allyHome: 3F
 		race: Elf
 		strength: 4
 		vitality: 2
@@ -678,7 +678,7 @@
 		culture: Elven
 		twilight: 2
 		type: Ally
-		allyHome: 3
+		allyHome: 3F
 		race: Elf
 		strength: 4
 		vitality: 2

@@ -1,17 +1,17 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.setv01;
+package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class Card_V1_019_ErrataTests
+public class Card_V1_019_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -44,7 +44,7 @@ public class Card_V1_019_ErrataTests
 		 * Resistance: 6
 		 * Signet: Gandalf
 		 * Game Text: When you play Aragorn (except in your starting fellowship), you may play an Elf with a twilight cost of 2 or less from your draw deck.
-		* 	Skirmish: If Aragorn is skirmishing, discard an [elven] card from hand to make him strength +2 (limit once per phase).
+		 * Skirmish: Discard an [elven] card from hand to make Aragorn strength +2 or <b>damage +1</b>.
 		*/
 
 		var scn = GetScenario();
@@ -73,17 +73,6 @@ public class Card_V1_019_ErrataTests
 
 		var card = scn.GetFreepsCard("card");
 		scn.FreepsMoveCardToHand(card);
-		scn.FreepsMoveCharToTable(card);
-		scn.FreepsMoveCardToSupportArea(card);
-		scn.FreepsMoveCardToDiscard(card);
-		scn.FreepsMoveCardsToTopOfDeck(card);
-
-		var card = scn.GetShadowCard("card");
-		scn.ShadowMoveCardToHand(card);
-		scn.ShadowMoveCharToTable(card);
-		scn.ShadowMoveCardToSupportArea(card);
-		scn.ShadowMoveCardToDiscard(card);
-		scn.ShadowMoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);

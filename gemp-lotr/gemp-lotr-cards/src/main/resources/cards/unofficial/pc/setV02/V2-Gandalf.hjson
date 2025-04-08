@@ -207,7 +207,7 @@
 			revision: 0
 			image: sets/V2/LOTR-ENV2S077.0_card.jpg
 			collInfo: V277
-			rarity: 
+			rarity: _
 		}
 		title: Gandalf's Staff
 		subtitle: Old Man's Crutch
@@ -234,7 +234,7 @@
 				}
 				effect: {
 					type: discard
-					select: weapon,attachedTo(bearer)
+					select: all(weapon,attachedTo(bearer))
 				}
 			}
 			{

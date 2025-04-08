@@ -1,17 +1,17 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.setv02;
+package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class Card_V2_013_ErrataTests
+public class Card_V2_013_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -77,13 +77,6 @@ public class Card_V2_013_ErrataTests
 		scn.FreepsMoveCardToSupportArea(card);
 		scn.FreepsMoveCardToDiscard(card);
 		scn.FreepsMoveCardsToTopOfDeck(card);
-
-		var card = scn.GetShadowCard("card");
-		scn.ShadowMoveCardToHand(card);
-		scn.ShadowMoveCharToTable(card);
-		scn.ShadowMoveCardToSupportArea(card);
-		scn.ShadowMoveCardToDiscard(card);
-		scn.ShadowMoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
