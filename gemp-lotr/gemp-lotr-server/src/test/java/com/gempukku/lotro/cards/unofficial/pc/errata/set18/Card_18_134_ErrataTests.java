@@ -137,7 +137,7 @@ public class Card_18_134_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(onegoodturn));
 		scn.FreepsPlayCard(onegoodturn);
 		//This ensures that we have skipped over choosing a site and instead OGT has moved on to its other clause.
-		assertTrue(scn.FreepsDecisionAvailable("Do you want to return"));
+		assertTrue(scn.FreepsDecisionAvailable("Do you want to add a burden"));
 
 		assertNotEquals(scn.GetSite(3), freepsSite3);
 		assertEquals(scn.GetSite(3), doorway);
