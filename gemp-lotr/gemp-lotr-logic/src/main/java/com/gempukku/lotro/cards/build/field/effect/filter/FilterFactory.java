@@ -633,11 +633,14 @@ public class FilterFactory {
                 });
         parameterFilters.put("printedtwilightcostfrommemory",
                 (parameter, environment) -> actionContext -> {
-                    var card = actionContext.getCardFromMemory(parameter).getBlueprint();
-                    if (card.getCardType() == CardType.THE_ONE_RING || card.getCardType() == CardType.MAP)
+                    var card = actionContext.getCardFromMemory(parameter);
+                    if(card == null)
+                        return Filters.none;
+                    var bp = card.getBlueprint();
+                    if (bp.getCardType() == CardType.THE_ONE_RING || bp.getCardType() == CardType.MAP)
                         return Filters.none;
 
-                    return Filters.printedTwilightCost(card.getTwilightCost());
+                    return Filters.printedTwilightCost(bp.getTwilightCost());
                 });
         parameterFilters.put("race",
                 (parameter, environment) -> {
