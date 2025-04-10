@@ -17,6 +17,7 @@
 		effects: [
 			{
 				type: Activated
+				text: Discard a {SAURON} tracker to make an {Isengard} tracker strength +2
 				phase: Skirmish
 				cost: {
 					type: Discard
@@ -30,6 +31,7 @@
 			}
 			{
 				type: Activated
+				text: Exert an {ISENGARD} tracker to make a {SAURON} tracker fierce until regroup
 				phase: Skirmish
 				cost: {
 					type: Exert
