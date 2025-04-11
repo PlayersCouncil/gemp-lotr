@@ -350,19 +350,16 @@
 				{
 					type: optional
 					text: Would you like to discard {spottedPossession} to make {spottedMinion} damage +1?
+					cost: {
+						type: discard
+						select: memory(spottedPossession)
+						ignoreCostCheckFailure: true
+					}
 					effect: {
-						type: costToEffect
-						cost: {
-							type: discard
-							select: memory(spottedPossession)
-							ignoreCostCheckFailure: true
-						}
-						effect: {
-							type: addKeyword
-							select: memory(spottedMinion)
-							keyword: damage
-							amount: 1
-						}
+						type: addKeyword
+						select: memory(spottedMinion)
+						keyword: damage
+						amount: 1
 					}
 				}
 			]
@@ -435,19 +432,16 @@
 					type: winsSkirmish
 					filter: bearer
 				}
+				cost: {
+					type: transfer
+					select: self
+					where: choose(not(bearer),culture(men),minion)
+					checkTarget: true
+				}
 				effect: {
-					type: costToEffect
-					cost: {
-						type: transfer
-						select: self
-						where: choose(not(bearer),culture(men),minion)
-						checkTarget: true
-					}
-					effect: {
-						type: StackCardsFromPlay
-						select: choose(culture(men),minion)
-						where: choose(culture(men),possession,zone(support))
-					}
+					type: StackCardsFromPlay
+					select: choose(culture(men),minion)
+					where: choose(culture(men),possession,zone(support))
 				}
 			}
 		]

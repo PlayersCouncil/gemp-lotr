@@ -28,19 +28,16 @@
 					type: optional
 					player: fp
 					text: Would you like to discard 2 cards from hand to discard Dunlending Rampager?
+					cost: {
+						type: discardFromHand
+						forced: false
+						player: fp
+						hand: fp
+						count: 2
+					}
 					effect: {
-						type: costToEffect
-						cost: {
-							type: discardFromHand
-							forced: false
-							player: fp
-							hand: fp
-							count: 2
-						}
-						effect: {
-							type: discard
-							select: self
-						}
+						type: discard
+						select: self
 					}
 				}
 			}
@@ -84,19 +81,16 @@
 					type: optional
 					player: fp
 					text: Would you like to discard 2 cards from hand to discard Dunlending Rampager?
+					cost: {
+						type: discardFromHand
+						forced: false
+						player: fp
+						hand: fp
+						count: 2
+					}
 					effect: {
-						type: costToEffect
-						cost: {
-							type: discardFromHand
-							forced: false
-							player: fp
-							hand: fp
-							count: 2
-						}
-						effect: {
-							type: discard
-							select: self
-						}
+						type: discard
+						select: self
 					}
 				}
 			}
@@ -204,19 +198,16 @@
 					type: optional
 					player: fp
 					text: Would you like to discard 4 cards from hand to discard Wild Men of the Hills?
+					cost: {
+						type: discardFromHand
+						forced: false
+						player: fp
+						hand: fp
+						count: 4
+					}
 					effect: {
-						type: costToEffect
-						cost: {
-							type: discardFromHand
-							forced: false
-							player: fp
-							hand: fp
-							count: 4
-						}
-						effect: {
-							type: discard
-							select: self
-						}
+						type: discard
+						select: self
 					}
 				}
 			}

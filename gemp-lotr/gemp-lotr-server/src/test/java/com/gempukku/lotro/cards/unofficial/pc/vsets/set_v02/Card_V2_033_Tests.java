@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,8 @@ public class Card_V2_033_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_33");
-					// put other cards in here as needed for the test case
+					put("grumbler", "102_33");
+					put("orc", "1_261");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -43,12 +42,13 @@ public class Card_V2_033_Tests
 		 * Vitality: 1
 		 * Site Number: 5
 		 * Game Text: Tracker. Fierce.
-		* 	Each time this minion is assigned to skirmish a companion, you may spot a [sauron] tracker and discard this minion to wound that companion. 
+		* 	Each time this minion is assigned to skirmish a companion, you may spot a [sauron] tracker
+		 * 	and discard this minion to wound that companion.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("grumbler");
 
 		assertEquals("Uruk Grumbler", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -65,18 +65,29 @@ public class Card_V2_033_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukGrumblerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void UrukGrumblerSpotsASauronTrackerAndSelfDiscardsToWoundCompanionUponAssignment() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var grumbler = scn.GetShadowCard("grumbler");
+		var orc = scn.GetShadowCard("orc");
+		scn.ShadowMoveCharToTable(grumbler, orc);
+
+		var frodo = scn.GetRingBearer();
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, grumbler);
 
-		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(Zone.SHADOW_CHARACTERS, grumbler.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, orc.getZone());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(Zone.DISCARD, grumbler.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, orc.getZone());
+		assertEquals(1, scn.GetWoundsOn(frodo));
 	}
 }

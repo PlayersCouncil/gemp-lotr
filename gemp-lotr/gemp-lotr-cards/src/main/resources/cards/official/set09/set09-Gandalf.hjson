@@ -168,17 +168,17 @@
 					type: optional
 					player: shadowPlayer
 					text: Would you like to discard 2 cards to draw 2 cards?
+					cost: {
+						type: discardFromHand
+						player: shadow
+						hand: shadow
+						forced: false
+						count: 2
+					}
 					effect: {
-						type: costToEffect
-						cost: {
-							type: discardFromHand
-							forced: false
-							count: 2
-						}
-						effect: {
-							type: drawCards
-							count: 2
-						}
+						type: drawCards
+						player: shadow
+						count: 2
 					}
 				}
 			}

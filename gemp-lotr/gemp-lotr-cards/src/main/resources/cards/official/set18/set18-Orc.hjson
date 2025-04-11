@@ -671,31 +671,28 @@
 						type: optional
 						player: free people
 						text: Would you like to add a burden or exert the Ring-bearer twice to discard Orkish Sneak?
+						cost: {
+							type: choice
+							player: free people
+							texts: [
+								Add a burden
+								Exert the Ring-bearer twice
+							]
+							effects: [
+								{
+									type: addBurdens
+								}
+								{
+									type: exert
+									select: choose(ringBearer)
+									times: 2
+								}
+							]
+						}
 						effect: {
-							type: costToEffect
-							cost: {
-								type: choice
-								player: free people
-								texts: [
-									Add a burden
-									Exert the Ring-bearer twice
-								]
-								effects: [
-									{
-										type: addBurdens
-									}
-									{
-										type: exert
-										select: choose(ringBearer)
-										times: 2
-									}
-								]
-							}
-							effect: {
-								type: discard
-								player: free people
-								select: self
-							}
+							type: discard
+							player: free people
+							select: self
 						}
 					}
 				]

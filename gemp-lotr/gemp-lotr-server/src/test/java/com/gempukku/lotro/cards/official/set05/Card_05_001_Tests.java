@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set05;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,7 +17,7 @@ public class Card_05_001_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "5_1");
+					put("rampager", "5_1");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -47,7 +46,7 @@ public class Card_05_001_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("rampager");
 
 		assertEquals("Dunlending Rampager", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +61,21 @@ public class Card_05_001_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DunlendingRampagerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void DunlendingRampagerDoesNotOfferChoiceWhenNotEnoughCardsInFreepsHand() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var rampager = scn.GetShadowCard("rampager");
+		scn.ShadowMoveCardToHand(rampager);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowPlayAvailable(rampager));
+		scn.ShadowPlayCard(rampager);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(Zone.SHADOW_CHARACTERS, rampager.getZone());
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertFalse(scn.FreepsDecisionAvailable("Would you like to discard 2 cards from hand to discard Dunlending Rampager?"));
 	}
 }

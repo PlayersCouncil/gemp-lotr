@@ -381,15 +381,12 @@
 				}
 				{
 					type: optional
-					text: Do you want to return it to hand?
+					text: Do you want to add a burden to return {self} to hand?
+					cost: {
+						type: addBurdens
+					}
 					effect: {
-						type: costToEffect
-						cost: {
-							type: addBurdens
-						}
-						effect: {
-							type: putPlayedEventIntoHand
-						}
+						type: putPlayedEventIntoHand
 					}
 				}
 			]

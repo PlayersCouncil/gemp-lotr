@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,9 @@ public class Card_V2_018_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_18");
-					// put other cards in here as needed for the test case
+					put("menu", "102_18");
+					put("uruk", "2_47");
+					put("orc", "1_261");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -45,7 +45,7 @@ public class Card_V2_018_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("menu");
 
 		assertEquals("Back on the Menu", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,18 +57,68 @@ public class Card_V2_018_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BackontheMenuTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void BackontheMenuDiscardsASauronTrackerToMakeAnIsengardTrackerStrengthPlus2() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var menu = scn.GetShadowCard("menu");
+		var uruk = scn.GetShadowCard("uruk");
+		var orc = scn.GetShadowCard("orc");
+		scn.ShadowMoveCardToSupportArea(menu);
+		scn.ShadowMoveCharToTable(uruk, orc);
+
+		var frodo = scn.GetRingBearer();
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, uruk);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(frodo);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(7, scn.GetStrength(uruk));
+		assertEquals(Zone.SHADOW_CHARACTERS, orc.getZone());
+		assertTrue(scn.ShadowActionAvailable("Discard"));
+		scn.ShadowUseCardAction("Discard");
+
+		assertEquals(9, scn.GetStrength(uruk));
+		assertEquals(Zone.DISCARD, orc.getZone());
+	}
+
+	@Test
+	public void BackontheMenuExertsAnIsengardTrackerToMakeASauronTrackerFierce() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var menu = scn.GetShadowCard("menu");
+		var uruk = scn.GetShadowCard("uruk");
+		var orc = scn.GetShadowCard("orc");
+		scn.ShadowMoveCardToSupportArea(menu);
+		scn.ShadowMoveCharToTable(uruk, orc);
+
+		var frodo = scn.GetRingBearer();
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, orc);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(frodo);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(0, scn.GetWoundsOn(uruk));
+		assertFalse(scn.hasKeyword(orc, Keyword.FIERCE));
+		assertTrue(scn.ShadowActionAvailable("Exert"));
+		scn.ShadowUseCardAction("Exert");
+
+		assertEquals(1, scn.GetWoundsOn(uruk));
+		assertTrue(scn.hasKeyword(orc, Keyword.FIERCE));
+
+		//Have to make sure fierce persists or it won't matter lol
+		scn.PassCurrentPhaseActions();
+		scn.FreepsDeclineAssignments(); //ring
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 	}
 }

@@ -199,19 +199,16 @@
 						}
 						true: {
 							type: optional
-							text: Discard the card?
+							text: Discard the card to wound each minion in this skirmish?
+							cost: {
+								type: discardCardsFromDrawDeck
+								select: memory(revealedCard)
+								showAll: false
+								shuffle: false
+							}
 							effect: {
-								type: costToEffect
-								cost: {
-									type: discardCardsFromDrawDeck
-									select: memory(revealedCard)
-									showAll: false
-									shuffle: false
-								}
-								effect: {
-									type: wound
-									select: all(minion,inSkirmish)
-								}
+								type: wound
+								select: all(minion,inSkirmish)
 							}
 						}
 					}

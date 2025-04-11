@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,13 @@ public class Card_V2_009_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_9");
-					// put other cards in here as needed for the test case
+					put("leithio", "102_9");
+					put("haldir", "102_8");
+					put("troop", "56_22");
+					put("bow1", "1_41");
+					put("bow2", "1_41");
+
+					put("smith", "3_60");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -44,7 +48,7 @@ public class Card_V2_009_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("leithio");
 
 		assertEquals("Leithio i Phillin!", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +60,79 @@ public class Card_V2_009_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LeithioiPhillinTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void LeithioiPhillinCannotPlayWithout2ValiantElves() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var leithio = scn.GetFreepsCard("leithio");
+		var haldir = scn.GetFreepsCard("haldir");
+		var troop = scn.GetFreepsCard("troop");
+		var bow1 = scn.GetFreepsCard("bow1");
+		var bow2 = scn.GetFreepsCard("bow2");
+		scn.FreepsMoveCharToTable(haldir);
+		scn.FreepsMoveCardToHand(leithio);
+
+		var smith = scn.GetShadowCard("smith");
+		scn.ShadowMoveCharToTable(smith);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToPhase(Phase.ARCHERY);
 
-		assertEquals(0, scn.GetTwilight());
+		assertFalse(scn.FreepsPlayAvailable(leithio));
+	}
+
+	@Test
+	public void LeithioiPhillinSpots2ValiantElvesToWoundAMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var leithio = scn.GetFreepsCard("leithio");
+		var haldir = scn.GetFreepsCard("haldir");
+		var troop = scn.GetFreepsCard("troop");
+		var bow1 = scn.GetFreepsCard("bow1");
+		var bow2 = scn.GetFreepsCard("bow2");
+		scn.FreepsMoveCharToTable(haldir, troop);
+		scn.FreepsMoveCardToHand(leithio);
+
+		var smith = scn.GetShadowCard("smith");
+		scn.ShadowMoveCharToTable(smith);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		assertTrue(scn.FreepsPlayAvailable(leithio));
+		assertEquals(0, scn.GetWoundsOn(smith));
+
+		scn.FreepsPlayCard(leithio);
+		assertEquals(1, scn.GetWoundsOn(smith));
+	}
+
+	@Test
+	public void LeithioiPhillinSpots2ValiantElvesToWoundAMinionTwice() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var leithio = scn.GetFreepsCard("leithio");
+		var haldir = scn.GetFreepsCard("haldir");
+		var troop = scn.GetFreepsCard("troop");
+		var bow1 = scn.GetFreepsCard("bow1");
+		var bow2 = scn.GetFreepsCard("bow2");
+		scn.FreepsMoveCharToTable(haldir, troop);
+		scn.FreepsMoveCardToHand(leithio);
+		scn.FreepsAttachCardsTo(haldir, bow1);
+		scn.FreepsAttachCardsTo(troop, bow2);
+
+		var smith = scn.GetShadowCard("smith");
+		scn.ShadowMoveCharToTable(smith);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		assertTrue(scn.FreepsPlayAvailable(leithio));
+		assertEquals(0, scn.GetWoundsOn(smith));
+
+		scn.FreepsPlayCard(leithio);
+		assertEquals(2, scn.GetWoundsOn(smith));
 	}
 }

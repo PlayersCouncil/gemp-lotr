@@ -20,8 +20,12 @@ public class Card_V2_031_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_31");
-					// put other cards in here as needed for the test case
+					put("trail", "102_31");
+					put("ladder", "5_57");
+					put("ram", "5_44");
+					put("savage", "1_151");
+
+					put("sam", "1_311");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +51,7 @@ public class Card_V2_031_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("trail");
 
 		assertEquals("Trail of Savagery", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -59,18 +63,67 @@ public class Card_V2_031_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TrailofSavageryTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void TrailofSavageryMakesControlledSitesGainBattleground() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var trail = scn.GetShadowCard("trail");
+		scn.ShadowMoveCardToDiscard(trail);
+		//For inscrutible reasons, the site control function only works if there are 0 valid
+		// actions for the shadow player to take.  Thus we can't have any cards in hand.
+		scn.ShadowMoveCardToDiscard("ram", "ladder");
+
+		var site1 = scn.GetFreepsSite(1);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		scn.SkipToSite(2);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowTakeControlOfSite();
+
+		assertTrue(scn.ShadowControls(site1));
+		assertFalse(scn.hasKeyword(site1, Keyword.BATTLEGROUND));
+		scn.ShadowMoveCardToSupportArea(trail);
+		assertTrue(scn.hasKeyword(site1, Keyword.BATTLEGROUND));
+	}
+
+	@Test
+	public void TrailofSavageryRemoves2IsengardTokensToCancelAnUrukSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var trail = scn.GetShadowCard("trail");
+		var ram = scn.GetShadowCard("ram");
+		var ladder = scn.GetShadowCard("ladder");
+		var savage = scn.GetShadowCard("savage");
+		scn.ShadowMoveCardToSupportArea(trail, ladder, ram);
+		scn.ShadowMoveCharToTable(savage);
+		scn.AddTokensToCard(ram, 1);
+		scn.AddTokensToCard(ladder, 1);
+
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(sam, savage);
+		scn.FreepsResolveSkirmish(sam);
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertEquals(1, scn.GetCultureTokensOn(ram));
+		assertEquals(1, scn.GetCultureTokensOn(ladder));
+		assertTrue(scn.IsCharSkirmishing(savage));
+		assertTrue(scn.ShadowActionAvailable(trail));
+
+		scn.ShadowUseCardAction(trail);
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		scn.ShadowChooseCard(ram);
+
+		assertEquals(0, scn.GetCultureTokensOn(ram));
+		assertEquals(0, scn.GetCultureTokensOn(ladder));
+		assertFalse(scn.IsCharSkirmishing(savage));
+
 	}
 }

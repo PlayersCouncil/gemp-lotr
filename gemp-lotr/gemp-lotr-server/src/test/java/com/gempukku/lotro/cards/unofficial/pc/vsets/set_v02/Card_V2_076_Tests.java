@@ -1,9 +1,8 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -51,20 +50,5 @@ public class Card_V2_076_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.MAP, card.getBlueprint().getCardType());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void JourneyoftheKingTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(0, scn.GetTwilight());
 	}
 }

@@ -19,7 +19,6 @@
 		twilight: 4
 		type: Companion
 		race: Wizard
-		#keyword: damage+1
 		strength: 7
 		vitality: 4
 		signet: Gandalf
@@ -42,17 +41,17 @@
 					type: optional
 					player: shadowPlayer
 					text: Would you like to discard 2 cards to draw 2 cards?
+					cost: {
+						type: discardFromHand
+						player: shadow
+						hand: shadow
+						forced: false
+						count: 2
+					}
 					effect: {
-						type: costToEffect
-						cost: {
-							type: discardFromHand
-							forced: false
-							count: 2
-						}
-						effect: {
-							type: drawCards
-							count: 2
-						}
+						type: drawCards
+						player: shadow
+						count: 2
 					}
 				}
 			}

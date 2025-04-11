@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,10 @@ public class Card_V2_006_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_6");
-					// put other cards in here as needed for the test case
+					put("arwen", "102_6");
+					put("aragorn", "1_89");
+
+					put("marksman", "1_176");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -48,7 +49,7 @@ public class Card_V2_006_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("arwen");
 
 		assertEquals("Arwen", card.getBlueprint().getTitle());
 		assertEquals("Lady of Rivendell", card.getBlueprint().getSubtitle());
@@ -63,18 +64,78 @@ public class Card_V2_006_Tests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ArwenTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ArwenMakesAragornStrengthPlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var arwen = scn.GetFreepsCard("arwen");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCardToHand(arwen);
+		scn.FreepsMoveCharToTable(aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertEquals(8, scn.getStrength(aragorn));
+		scn.FreepsPlayCard(arwen);
+		assertEquals(9, scn.getStrength(aragorn));
+	}
 
-		assertEquals(2, scn.GetTwilight());
+	@Test
+	public void ArwenMakesAragornDefenderPlus1WhileSheIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var arwen = scn.GetFreepsCard("arwen");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCharToTable(aragorn, arwen);
+
+		scn.StartGame();
+
+		assertEquals(3, scn.GetVitality(arwen));
+		assertFalse(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		scn.AddWoundsToChar(arwen, 1);
+
+		assertEquals(2, scn.GetVitality(arwen));
+		assertFalse(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		scn.AddWoundsToChar(arwen, 1);
+
+		assertEquals(1, scn.GetVitality(arwen));
+		assertTrue(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		scn.AddWoundsToChar(arwen, 1);
+		scn.PassCurrentPhaseActions(); //Death is only processed when there's change in the game process
+
+		assertEquals(Zone.DEAD, arwen.getZone());
+		assertFalse(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+	}
+
+	@Test
+	public void ArwenSelfWoundsToPreventWoundToAragorn() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var arwen = scn.GetFreepsCard("arwen");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCharToTable(aragorn, arwen);
+
+		var marksman = scn.GetShadowCard("marksman");
+		scn.ShadowMoveCharToTable(marksman);
+
+		scn.StartGame();
+
+		scn.AddWoundsToChar(arwen, 2);
+
+		scn.SkipToArcheryWounds();
+		scn.FreepsChooseCard(aragorn);
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetVitality(arwen));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(Zone.DEAD, arwen.getZone());
+		assertFalse(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 	}
 }

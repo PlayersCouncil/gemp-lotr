@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,11 @@ public class Card_V2_028_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_28");
-					// put other cards in here as needed for the test case
+					put("machinery", "102_28");
+					put("saruman", "3_69");
+					put("isenorc", "3_62");
+
+					put("gandalf", "1_72");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +48,7 @@ public class Card_V2_028_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("machinery");
 
 		assertEquals("Machinery of War", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +60,158 @@ public class Card_V2_028_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MachineryofWarTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void MachineryofWarStartsWithNoTokensByDefault() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var machinery = scn.GetShadowCard("machinery");
+		scn.ShadowMoveCardToHand(machinery);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(machinery));
+
+		scn.ShadowPlayCard(machinery);
+		assertEquals(0, scn.GetCultureTokensOn(machinery));
+	}
+
+	@Test
+	public void MachineryofWarCanSpotSarumanToAdd2TokensToItself() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var machinery = scn.GetShadowCard("machinery");
+		var saruman = scn.GetShadowCard("saruman");
+
+		scn.ShadowMoveCardToHand(machinery);
+		scn.ShadowMoveCharToTable(saruman);
+
+		scn.StartGame();
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Zone.SHADOW_CHARACTERS, saruman.getZone());
+		assertTrue(scn.ShadowPlayAvailable(machinery));
+
+		scn.ShadowPlayCard(machinery);
+		assertEquals(2, scn.GetCultureTokensOn(machinery));
+	}
+
+	@Test
+	public void MachineryofWarCanSpotGandalfToAdd2TokensToItself() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var machinery = scn.GetShadowCard("machinery");
+		scn.ShadowMoveCardToHand(machinery);
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCharToTable(gandalf);
+
+		scn.StartGame();
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Zone.FREE_CHARACTERS, gandalf.getZone());
+		assertTrue(scn.ShadowPlayAvailable(machinery));
+
+		scn.ShadowPlayCard(machinery);
+		assertEquals(2, scn.GetCultureTokensOn(machinery));
+	}
+
+	@Test
+	public void MachineryofWarAddsTokenToItselfWhenIsenorcLosesSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var machinery = scn.GetShadowCard("machinery");
+		var isenorc = scn.GetShadowCard("isenorc");
+		scn.ShadowMoveCardToSupportArea(machinery);
+		scn.ShadowMoveCharToTable(isenorc);
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCharToTable(gandalf);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gandalf, isenorc);
+		scn.FreepsResolveSkirmish(gandalf);
+
+		assertTrue(scn.IsCharSkirmishing(isenorc));
+		assertEquals(0, scn.GetWoundsOn(isenorc));
+		assertEquals(0, scn.GetCultureTokensOn(machinery));
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
+
+		assertFalse(scn.IsCharSkirmishing(isenorc));
+		assertEquals(1, scn.GetWoundsOn(isenorc));
+		assertEquals(1, scn.GetCultureTokensOn(machinery));
+	}
+
+	@Test
+	public void MachineryofWarRemoves2TokensToCancelIsenorcSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var machinery = scn.GetShadowCard("machinery");
+		var isenorc = scn.GetShadowCard("isenorc");
+		scn.ShadowMoveCardToSupportArea(machinery);
+		scn.ShadowMoveCharToTable(isenorc);
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCharToTable(gandalf);
+
+		scn.AddTokensToCard(machinery, 2);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gandalf, isenorc);
+		scn.FreepsResolveSkirmish(gandalf);
+
+		assertTrue(scn.IsCharSkirmishing(isenorc));
+		assertEquals(0, scn.GetWoundsOn(isenorc));
+		assertEquals(2, scn.GetCultureTokensOn(machinery));
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowActionAvailable(machinery));
+		scn.ShadowUseCardAction(machinery);
+
+		assertFalse(scn.IsCharSkirmishing(isenorc));
+		assertEquals(0, scn.GetWoundsOn(isenorc));
+		assertEquals(0, scn.GetCultureTokensOn(machinery));
+	}
+
+	@Test
+	public void MachineryofWarSelfDiscardsToCancelIsenorcSkirmishIfNotEnoughCultureTokens() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var machinery = scn.GetShadowCard("machinery");
+		var isenorc = scn.GetShadowCard("isenorc");
+		scn.ShadowMoveCardToSupportArea(machinery);
+		scn.ShadowMoveCharToTable(isenorc);
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCharToTable(gandalf);
+
+		scn.AddTokensToCard(machinery, 1);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gandalf, isenorc);
+		scn.FreepsResolveSkirmish(gandalf);
+
+		assertTrue(scn.IsCharSkirmishing(isenorc));
+		assertEquals(0, scn.GetWoundsOn(isenorc));
+		assertEquals(1, scn.GetCultureTokensOn(machinery));
+		assertEquals(Zone.SUPPORT, machinery.getZone());
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowActionAvailable(machinery));
+		scn.ShadowUseCardAction(machinery);
+
+		assertFalse(scn.IsCharSkirmishing(isenorc));
+		assertEquals(0, scn.GetWoundsOn(isenorc));
+		assertEquals(Zone.DISCARD, machinery.getZone());
 	}
 }

@@ -1092,17 +1092,14 @@
 					type: optional
 					player: shadow
 					text: Would you like to place a random card from hand beneath draw deck to reduce the bonus to +2 for {chosenMan}?
+					cost: {
+						type: putRandomCardFromHandBeneathDrawDeck
+						hand: shadow
+					}
 					effect: {
-						type: costToEffect
-						cost: {
-							type: putRandomCardFromHandBeneathDrawDeck
-							hand: shadow
-						}
-						effect: {
-							type: modifyStrength
-							select: memory(chosenMan)
-							amount: -2
-						}
+						type: modifyStrength
+						select: memory(chosenMan)
+						amount: -2
 					}
 				}
 			]

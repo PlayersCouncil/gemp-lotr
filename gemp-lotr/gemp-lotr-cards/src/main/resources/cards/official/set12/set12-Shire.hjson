@@ -349,17 +349,14 @@
 					}
 					true: {
 						type: optional
-						text: Would you like to discard 2 cards to return this event to your hand?
+						text: Would you like to discard 2 cards to return {self} to your hand?
+						cost: {
+							type: discardFromHand
+							forced: false
+							count: 2
+						}
 						effect: {
-							type: costToEffect
-							cost: {
-								type: discardFromHand
-								forced: false
-								count: 2
-							}
-							effect: {
-								type: putPlayedEventIntoHand
-							}
+							type: putPlayedEventIntoHand
 						}
 					}
 				}

@@ -52,6 +52,7 @@ public interface ModifiersQuerying {
 
     // Twilight cost
     int getTwilightCostToPlay(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, int twilightCostModifier, boolean ignoreRoamingPenalty);
+    int getCurrentTwilightCost(LotroGame game, PhysicalCard physicalCard);
 
     int getRoamingPenalty(LotroGame game, PhysicalCard physicalCard);
 

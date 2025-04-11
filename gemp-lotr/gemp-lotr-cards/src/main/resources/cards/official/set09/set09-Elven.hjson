@@ -240,20 +240,17 @@
 					{
 						type: optional
 						text: Would you like to exert Glorfindel to make a Nazgul he is skirmishing strength -X, where X is the twilight cost the the card revealed?
+						cost: {
+							type: exert
+							select: self
+						}
 						effect: {
-							type: costToEffect
-							cost: {
-								type: exert
-								select: self
-							}
-							effect: {
-								type: modifyStrength
-								select: choose(nazgul,inSkirmishAgainst(self))
-								amount: {
-									type: twilightCostInMemory
-									memory: revealedCard
-									multiplier: -1
-								}
+							type: modifyStrength
+							select: choose(nazgul,inSkirmishAgainst(self))
+							amount: {
+								type: twilightCostInMemory
+								memory: revealedCard
+								multiplier: -1
 							}
 						}
 					}

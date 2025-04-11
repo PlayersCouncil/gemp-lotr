@@ -255,7 +255,9 @@ var GameAnimations = Class.extend({
 
                 if (targetCardId != null) {
                     var targetCardData = $(".card:cardId(" + targetCardId + ")").data("card");
-                    targetCardData.attachedCards.push(cardDiv);
+                    if(targetCardData != null) {
+                        targetCardData.attachedCards.push(cardDiv);    
+                    }
                 }
 
                 next();

@@ -79,17 +79,14 @@
 				{
 					type: Optional
 					text: Would you like to make the Free Peoples player discard a tentacle to shuffle a {moria} card from discard into your draw deck?
+					cost: {
+						type: Discard
+						player: freeps
+						select: choose(tentacle)
+					}
 					effect: {
-						type: CostToEffect
-						cost: {
-							type: Discard
-							player: freeps
-							select: choose(tentacle)
-						}
-						effect: {
-							type: ShuffleCardsFromDiscardIntoDrawDeck
-							select: choose(culture(moria))
-						}
+						type: ShuffleCardsFromDiscardIntoDrawDeck
+						select: choose(culture(moria))
 					}
 				}
 			]

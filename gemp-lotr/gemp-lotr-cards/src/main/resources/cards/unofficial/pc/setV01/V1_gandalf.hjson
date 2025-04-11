@@ -29,24 +29,21 @@
 			}
 			effect: {
 				type: optional
-				text: Would you like to pay this card's twilight cost to take it into hand?
+				text: Would you like to pay {chosenAlly} twilight cost to take it into hand?
+				cost: {
+					type: addtwilight
+					amount: {
+						type: twilightCostInMemory
+						memory: chosenAlly
+					}
+				}
 				effect: {
-					type: costToEffect
-					cost: {
-						type: addtwilight
-						amount: {
-							type: twilightCostInMemory
-							memory: chosenAlly
-						}
-					}
-					effect: {
-						type: putcardsfromdeckintohand
-						count: 1
-						select: memory(chosenAlly)
-						reveal: true
-						shuffle: false
-						showAll: false
-					}
+					type: putcardsfromdeckintohand
+					count: 1
+					select: memory(chosenAlly)
+					reveal: true
+					shuffle: false
+					showAll: false
 				}
 			}
 		}

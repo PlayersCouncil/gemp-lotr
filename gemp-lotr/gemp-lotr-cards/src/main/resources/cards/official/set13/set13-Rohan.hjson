@@ -740,10 +740,8 @@
 						}
 						true: {
 							type: optional
-							text: Would you like to exert Théoden?
-							effect: {
-								type: costToEffect
-								cost: {
+							text: Would you like to exert Théoden to add +3 strength and damage +1?
+							cost: {
 									type: exert
 									select: choose(name(Théoden))
 								}
@@ -752,7 +750,6 @@
 									memory: exertedTheoden
 									info: yes
 								}
-							}
 						}
 					}
 					{

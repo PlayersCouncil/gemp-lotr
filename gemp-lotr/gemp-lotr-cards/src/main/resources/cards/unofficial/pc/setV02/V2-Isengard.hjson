@@ -17,6 +17,7 @@
 		effects: [
 			{
 				type: Activated
+				text: Discard a {SAURON} tracker to make an {Isengard} tracker strength +2
 				phase: Skirmish
 				cost: {
 					type: Discard
@@ -30,6 +31,7 @@
 			}
 			{
 				type: Activated
+				text: Exert an {ISENGARD} tracker to make a {SAURON} tracker fierce until regroup
 				phase: Skirmish
 				cost: {
 					type: Exert
@@ -183,11 +185,18 @@
 		timewords: Assignment
 		effects: {
 			type: event
-			requires: {
-				type: CanSpotCultureTokens
-				culture: isengard
-				filter: machine
-			}
+			requires: [
+				{
+					type: CanSpotCultureTokens
+					culture: isengard
+					filter: machine
+					memorize: tokenCount
+				}
+				{
+					type: CanSpot
+					filter: uruk-hai,MaxTwilight(memory(tokenCount))
+				}
+			]
 			cost: [
 				{
 					type: ChooseANumber
@@ -199,7 +208,6 @@
 					}
 					memorize: removed
 				}
-				
 			],
 			effect: [
 				{
@@ -696,10 +704,6 @@
 							type: CanSpot
 							filter: SiteYouControl, battleground
 						}
-						{
-							type: CanSpot
-							filter: self,inSkirmish
-						}
 					]
 				}
 			}
@@ -964,7 +968,7 @@
 				phase: Skirmish
 				requires: {
 					type: CanSpot
-					filter: uruk-hai
+					filter: uruk-hai, inSkirmish
 				}
 				cost: {
 					type: RemoveTokensCumulative

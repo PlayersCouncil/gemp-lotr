@@ -25,15 +25,12 @@
 				}
 				{
 					type: optional
-					text: Would you like to remove (1) to place this event on the bottom of your draw deck?
+					text: Would you like to remove (1) to place {self} on the bottom of your draw deck?
+					cost: {
+						type: removeTwilight
+					}
 					effect: {
-						type: costToEffect
-						cost: {
-							type: removeTwilight
-						}
-						effect: {
-							type: putPlayedEventOnBottomOfDrawDeck
-						}
+						type: putPlayedEventOnBottomOfDrawDeck
 					}
 				}
 			]

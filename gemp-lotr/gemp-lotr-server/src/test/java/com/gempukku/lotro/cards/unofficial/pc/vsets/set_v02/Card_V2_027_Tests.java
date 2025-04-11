@@ -2,9 +2,10 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -18,8 +19,11 @@ public class Card_V2_027_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_27");
-					// put other cards in here as needed for the test case
+					put("legion", "102_27");
+					put("runner", "1_178");
+
+					put("gimli", "1_13");
+					put("naith", "4_68");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -49,7 +53,7 @@ public class Card_V2_027_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("legion");
 
 		assertEquals("Legion of Isengard", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -66,18 +70,70 @@ public class Card_V2_027_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LegionofIsengardTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void LegionofIsengardIsDamagePlus1WhenControllingABattleground() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var legion = scn.GetShadowCard("legion");
+		scn.ShadowMoveCardToHand(legion);
+
+		var site1 = scn.GetFreepsSite(1);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(2);
 
-		assertEquals(8, scn.GetTwilight());
+		//cheating to ensure site 1 qualifies
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(1), null, Keyword.BATTLEGROUND));
+
+		scn.ShadowMoveCharToTable(legion);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.hasKeyword(site1, Keyword.BATTLEGROUND));
+		assertTrue(scn.hasKeyword(legion, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(legion, Keyword.DAMAGE));
+
+		scn.ShadowTakeControlOfSite();
+		assertTrue(scn.hasKeyword(site1, Keyword.BATTLEGROUND));
+		assertTrue(scn.ShadowControls(site1));
+		assertTrue(scn.hasKeyword(legion, Keyword.DAMAGE));
+		assertEquals(2, scn.GetKeywordCount(legion, Keyword.DAMAGE));
+	}
+
+	@Test
+	public void LegionofIsengardPreventsSkirmishActionsDuringOwnSkrimishAtBattleground() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var legion = scn.GetShadowCard("legion");
+		var runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCharToTable(legion, runner);
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var naith = scn.GetFreepsCard("naith");
+		scn.FreepsMoveCharToTable(gimli, naith);
+
+		var site2 = scn.GetShadowSite(2);
+
+		scn.StartGame();
+
+		//cheating to ensure site 2 qualifies
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.BATTLEGROUND));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, legion);
+		scn.ShadowAssignToMinions(naith, runner);
+		scn.FreepsResolveSkirmish(gimli);
+
+		assertTrue(scn.hasKeyword(site2, Keyword.BATTLEGROUND));
+		assertTrue(scn.IsCharSkirmishing(legion));
+		assertFalse(scn.FreepsActionAvailable(gimli));
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveSkirmish(naith);
+
+		assertTrue(scn.hasKeyword(site2, Keyword.BATTLEGROUND));
+		assertFalse(scn.IsCharSkirmishing(legion));
+		assertTrue(scn.FreepsActionAvailable(naith));
 	}
 }

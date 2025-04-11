@@ -1129,46 +1129,46 @@
 	}
   }
   30_30: {
-	title: He Gives Me Courage
-	culture: gandalf
-	twilight: 2
-	type: event
-	timeword: maneuver
-	effects: {
-	  type: event
-	  requires: {
-		type: canSpot
-		filter: name(Gandalf)
-	  }
-	  effect: {
-		type: choice
-		texts: [
-		  Remove a burden
-		  Exert Gandalf and an [ELVEN] Wise Ally to remove 2 burdens
-		]
-		effects: [
-		  {
-			type: removeBurdens
-			amount: 1
+		title: He Gives Me Courage
+		culture: gandalf
+		twilight: 2
+		type: event
+		timeword: maneuver
+		effects: {
+		  type: event
+		  requires: {
+				type: canSpot
+				filter: name(Gandalf)
 		  }
-		  {
-			type: costToEffect
-			cost: [
+		  effect: {
+			type: choice
+			texts: [
+			  Remove a burden
+			  Exert Gandalf and an [ELVEN] Wise Ally to remove 2 burdens
+			]
+			effects: [
 			  {
-				type: exert
-				select: choose(name(Gandalf))
+					type: removeBurdens
+					amount: 1
 			  }
 			  {
-				type: exert
-				select: choose(culture(elven),wise,ally)
+					type: costToEffect
+					cost: [
+					  {
+						type: exert
+						select: choose(name(Gandalf))
+					  }
+					  {
+						type: exert
+						select: choose(culture(elven),wise,ally)
+					  }
+					]
+					effect: {
+					  type: removeBurdens
+					  amount: 2
+					}
 			  }
 			]
-			effect: {
-			  type: removeBurdens
-			  amount: 2
-			}
-		  }
-		]
 	  }
 	}
   }

@@ -23,16 +23,13 @@
 					type: startOfTurn
 				}
 				optional: true
+				cost: {
+					type: AddTwilight
+					amount: 2
+				}
 				effect: {
-					type: CostToEffect
-					cost: {
-						type: AddTwilight
-						amount: 2
-					}
-					effect: {
-						type: heal
-						select: choose(culture(shire),companion)
-					}
+					type: heal
+					select: choose(culture(shire),companion)
 				}
 			}
 			{

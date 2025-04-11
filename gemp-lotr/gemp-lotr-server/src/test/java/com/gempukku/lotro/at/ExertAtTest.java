@@ -55,7 +55,7 @@ public class ExertAtTest extends AbstractAtTest{
         // Pass on viewing revealed card
         playerDecided(P2, "");
         // Can't exert (already exhausted)
-        playerDecided(P1, "0");
+        //playerDecided(P1, "0");
         assertEquals(10, _game.getModifiersQuerying().getStrength(_game, cantea));
     }
 }
