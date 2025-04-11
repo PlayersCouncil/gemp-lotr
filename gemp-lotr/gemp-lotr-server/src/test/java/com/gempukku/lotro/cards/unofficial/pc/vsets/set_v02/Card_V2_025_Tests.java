@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,11 @@ public class Card_V2_025_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_25");
-					// put other cards in here as needed for the test case
+					put("foreman", "102_25");
+					put("isenorc", "3_58");
+
+					put("comp2", "1_7");
+					put("comp3", "1_7");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -48,7 +50,7 @@ public class Card_V2_025_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("foreman");
 
 		assertEquals("Isengard Foreman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +65,60 @@ public class Card_V2_025_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void IsengardForemanTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void IsengardForemanPlaysIsenorcFromDiscardOnPlayAndPumpsPlus1UntilRegroup() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var foreman = scn.GetShadowCard("foreman");
+		var isenorc = scn.GetShadowCard("isenorc");
+		scn.ShadowMoveCardToDiscard(isenorc);
+		scn.ShadowMoveCardToHand(foreman);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(foreman));
+		assertEquals(Zone.DISCARD, isenorc.getZone());
+		scn.ShadowPlayCard(foreman);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(Zone.SHADOW_CHARACTERS, isenorc.getZone());
+		//Base 7 +1 from the foreman
+		assertEquals(8, scn.GetStrength(isenorc));
+
+		scn.SkipToAssignments();
+		assertEquals(8, scn.GetStrength(isenorc));
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertEquals(7, scn.GetStrength(isenorc));
+	}
+
+	@Test
+	public void IsengardForemanRegroupActionSelfDiscardsToAdd2Threats() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var foreman = scn.GetShadowCard("foreman");
+
+		scn.FreepsMoveCharToTable("comp2", "comp3");
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+
+		scn.ShadowMoveCharToTable(foreman);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(Zone.SHADOW_CHARACTERS, foreman.getZone());
+		assertTrue(scn.ShadowActionAvailable(foreman));
+
+		scn.ShadowUseCardAction(foreman);
+		assertEquals(2, scn.GetThreats());
+		assertEquals(Zone.DISCARD, foreman.getZone());
 	}
 }

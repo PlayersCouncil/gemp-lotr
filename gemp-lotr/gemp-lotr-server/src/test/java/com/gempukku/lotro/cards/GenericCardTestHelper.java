@@ -1050,6 +1050,10 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public int FreepsGetStrength(String name) { return GetStrength(GetFreepsCard(name)); }
     public int ShadowGetStrength(String name) { return GetStrength(GetShadowCard(name)); }
+    public int GetTwilightCost(PhysicalCardImpl card)
+    {
+        return _game.getModifiersQuerying().getCurrentTwilightCost(_game, card);
+    }
     public int GetStrength(PhysicalCardImpl card)
     {
         return _game.getModifiersQuerying().getStrength(_game, card);
@@ -1119,6 +1123,14 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public Boolean IsSiteControlled(PhysicalCardImpl card) {
         return card.getCardController() != null;
+    }
+
+    public Boolean FreepsControls(PhysicalCardImpl card) {
+        return card.getCardController() != null && card.getCardController().equals(P1);
+    }
+
+    public Boolean ShadowControls(PhysicalCardImpl card) {
+        return card.getCardController() != null && card.getCardController().equals(P2);
     }
 
 

@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,9 @@ public class Card_V2_032_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_32");
-					// put other cards in here as needed for the test case
+					put("alliance", "102_32");
+					put("uruk", "2_47");
+					put("orc", "1_261");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +46,7 @@ public class Card_V2_032_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("alliance");
 
 		assertEquals("Uneasy Alliance", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -59,18 +59,60 @@ public class Card_V2_032_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UneasyAllianceTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void UneasyAlliancePumpsIsengardAndSauronTrackersIfOneOfEach() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var alliance = scn.GetShadowCard("alliance");
+		var uruk = scn.GetShadowCard("uruk");
+		var orc = scn.GetShadowCard("orc");
+		scn.ShadowMoveCardToHand(alliance, orc);
+		scn.ShadowMoveCharToTable(uruk);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(7, scn.GetStrength(uruk));
+		scn.ShadowPlayCard(alliance);
+		assertEquals(7, scn.GetStrength(uruk));
+
+		scn.ShadowPlayCard(orc);
+		assertTrue(scn.hasKeyword(uruk, Keyword.TRACKER));
+		assertEquals(8, scn.GetStrength(uruk));
+		assertEquals(5, orc.getBlueprint().getStrength());
+		assertTrue(scn.hasKeyword(orc, Keyword.TRACKER));
+		assertEquals(6, scn.GetStrength(orc));
+	}
+
+	@Test
+	public void UneasyAllianceTradesSauronTrackerInHandForIsengardTrackerInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var alliance = scn.GetShadowCard("alliance");
+		var uruk = scn.GetShadowCard("uruk");
+		var orc = scn.GetShadowCard("orc");
+		scn.ShadowMoveCardToSupportArea(alliance);
+		scn.ShadowMoveCardToHand(orc);
+		scn.ShadowMoveCardToDiscard(uruk);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Zone.HAND, orc.getZone());
+		assertEquals(Zone.DISCARD, uruk.getZone());
+		assertEquals(Zone.SUPPORT, alliance.getZone());
+		assertTrue(orc.getBlueprint().hasKeyword(Keyword.TRACKER));
+		assertTrue(uruk.getBlueprint().hasKeyword(Keyword.TRACKER));
+		assertTrue(scn.ShadowActionAvailable(alliance));
+
+		scn.ShadowUseCardAction(alliance);
+
+		assertEquals(Zone.DISCARD, orc.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, uruk.getZone());
+		assertEquals(Zone.DISCARD, alliance.getZone());
 	}
 }

@@ -704,10 +704,6 @@
 							type: CanSpot
 							filter: SiteYouControl, battleground
 						}
-						{
-							type: CanSpot
-							filter: self,inSkirmish
-						}
 					]
 				}
 			}
@@ -972,7 +968,7 @@
 				phase: Skirmish
 				requires: {
 					type: CanSpot
-					filter: uruk-hai
+					filter: uruk-hai, inSkirmish
 				}
 				cost: {
 					type: RemoveTokensCumulative
