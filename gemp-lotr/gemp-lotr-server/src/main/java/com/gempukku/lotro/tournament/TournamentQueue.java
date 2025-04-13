@@ -1,6 +1,5 @@
 package com.gempukku.lotro.tournament;
 
-import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.logic.vo.LotroDeck;
@@ -27,13 +26,13 @@ public interface TournamentQueue {
 
     boolean isRequiresDeck();
 
-    boolean process(TournamentQueueCallback tournamentQueueCallback, CollectionsManager collectionsManager) throws SQLException, IOException;
+    boolean process() throws SQLException, IOException ;
 
-    void joinPlayer(CollectionsManager collectionsManager, Player player, LotroDeck deck) throws SQLException, IOException;
+    void joinPlayer(Player player, LotroDeck deck) throws SQLException, IOException;
 
-    void leavePlayer(CollectionsManager collectionsManager, Player player) throws SQLException, IOException;
+    void leavePlayer(Player player) throws SQLException, IOException;
 
-    void leaveAllPlayers(CollectionsManager collectionsManager) throws SQLException, IOException;
+    void leaveAllPlayers() throws SQLException, IOException;
 
     int getPlayerCount();
     String getPlayerList();
@@ -41,4 +40,14 @@ public interface TournamentQueue {
     boolean isPlayerSignedUp(String player);
 
     boolean isJoinable();
+
+    boolean isStartable(String byWhom);
+
+    boolean requestStart(String byWhom);
+
+    int getSecondsRemainingForReadyCheck();
+
+    boolean confirmReadyCheck(String player);
+
+    boolean hasConfirmedReadyCheck(String player);
 }
