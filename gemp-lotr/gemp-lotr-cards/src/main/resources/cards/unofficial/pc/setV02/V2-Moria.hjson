@@ -34,14 +34,14 @@
 				requires: [
 					{
 						type: HasCardStacked
-						filter: playable, unique, culture(moria), minion	
+						filter: playable, unique, minion	
 						on: self
 					}
 				]
 				effect: [
 					{
 						type: ChooseCardsFromSingleStack
-						select: choose(playable, unique, culture(moria), minion)
+						select: choose(playable, unique, minion)
 						count: 1
 						on: self
 						memorize: chosenMinion

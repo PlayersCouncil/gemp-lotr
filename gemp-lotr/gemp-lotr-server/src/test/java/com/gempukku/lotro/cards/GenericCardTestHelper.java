@@ -332,10 +332,18 @@ public class GenericCardTestHelper extends AbstractAtTest {
     }
     public List<String> FreepsGetBPChoices() { return GetADParamAsList(P1, "blueprintId"); }
     public List<String> ShadowGetBPChoices() { return GetADParamAsList(P2, "blueprintId"); }
+    public List<String> FreepsGetActionChoices() { return GetADParamAsList(P1, "actionId"); }
+    public List<String> ShadowGetActionChoices() { return GetADParamAsList(P2, "actionId"); }
     public List<String> FreepsGetMultipleChoices() { return GetADParamAsList(P1, "results"); }
     public List<String> ShadowGetMultipleChoices() { return GetADParamAsList(P2, "results"); }
-    public int FreepsGetChoiceCount() { return GetADParamAsList(P1, "results").size(); }
-    public int ShadowGetChoiceCount() { return GetADParamAsList(P2, "results").size(); }
+    public int FreepsGetChoiceCount() { return GetChoiceCount(FreepsGetMultipleChoices()); }
+    public int ShadowGetChoiceCount() { return GetChoiceCount(ShadowGetMultipleChoices()); }
+
+    public int GetChoiceCount(List<String> list) {
+        if(list == null)
+            return 0;
+        return list.size();
+    }
 
     public List<String> FreepsGetFreepsAssignmentTargets() { return GetADParamAsList(P1, "freeCharacters"); }
     public List<String> FreepsGetShadowAssignmentTargets() { return GetADParamAsList(P1, "minions"); }
@@ -344,7 +352,13 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public List<String> ShadowGetShadowAssignmentTargets() { return GetADParamAsList(P2, "minions"); }
     public List<String> FreepsGetADParamAsList(String paramName) { return GetADParamAsList(P1, paramName); }
     public List<String> ShadowGetADParamAsList(String paramName) { return GetADParamAsList(P2, paramName); }
-    public List<String> GetADParamAsList(String playerID, String paramName) { return Arrays.asList(GetAwaitingDecisionParam(playerID, paramName)); }
+    public List<String> GetADParamAsList(String playerID, String paramName) {
+        var paramList = GetAwaitingDecisionParam(playerID, paramName);
+        if(paramList == null)
+            return null;
+
+        return Arrays.asList(paramList);
+    }
 
     public int GetADParamEqualsCount(String playerID, String paramName, String value) {
         return (int) Arrays.stream(GetAwaitingDecisionParam(playerID, paramName)).filter(s -> s.equals(value)).count();
@@ -753,6 +767,21 @@ public class GenericCardTestHelper extends AbstractAtTest {
         PassCurrentPhaseActions();
     }
 
+    public void SkipPassedAllAssignments() throws DecisionResultInvalidException {
+        SkipToAssignments();
+        if(FreepsDecisionAvailable("Assign minions to companions or allies at home")) {
+            FreepsDeclineAssignments();
+        }
+        if(ShadowDecisionAvailable("Assign minions to companions or allies at home")) {
+            ShadowDeclineAssignments();
+        }
+        if(FreepsDecisionAvailable("Assignment action")) {
+            PassFierceAssignmentActions();
+            FreepsDeclineAssignments();
+            ShadowDeclineAssignments();
+        }
+    }
+
     public void SkipToArcheryWounds() throws DecisionResultInvalidException {
         SkipToPhase(Phase.ARCHERY);
         PassCurrentPhaseActions();
@@ -833,6 +862,14 @@ public class GenericCardTestHelper extends AbstractAtTest {
         }
     }
 
+    public void PassManeuverActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+    public void PassArcheryActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+    public void PassAssignmentActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+    public void PassFierceAssignmentActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+    public void PassSkirmishActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+    public void PassFierceSkirmishActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+    public void PassRegroupActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+
     public void PassCurrentPhaseActions() throws DecisionResultInvalidException {
         FreepsPassCurrentPhaseAction();
         ShadowPassCurrentPhaseAction();
@@ -859,6 +896,16 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public void FreepsDeclineAssignments() throws DecisionResultInvalidException { FreepsPassCurrentPhaseAction(); }
     public void ShadowDeclineAssignments() throws DecisionResultInvalidException { ShadowPassCurrentPhaseAction(); }
+
+    public void FreepsAssignAndResolve(PhysicalCardImpl comp, PhysicalCardImpl...minions) throws DecisionResultInvalidException {
+        AssignToMinions(P1, comp, minions);
+
+        if(ShadowDecisionAvailable("Assign minions to companions or allies at home")) {
+            ShadowDeclineAssignments();
+        }
+
+        FreepsResolveSkirmish(comp);
+    }
 
     public void FreepsAssignToMinions(PhysicalCardImpl comp, PhysicalCardImpl...minions) throws DecisionResultInvalidException { AssignToMinions(P1, comp, minions); }
     public void ShadowAssignToMinions(PhysicalCardImpl comp, PhysicalCardImpl...minions) throws DecisionResultInvalidException { AssignToMinions(P2, comp, minions); }
@@ -913,8 +960,22 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public void FreepsChooseAnyCard() throws DecisionResultInvalidException { FreepsChoose(FreepsGetCardChoices().getFirst()); }
     public void ShadowChooseAnyCard() throws DecisionResultInvalidException { ShadowChoose(ShadowGetCardChoices().getFirst()); }
 
-    public void FreepsChooseCards(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCards(P1, cards); }
-    public void ShadowChooseCards(PhysicalCardImpl...cards) throws DecisionResultInvalidException { ChooseCards(P2, cards); }
+    public void FreepsChooseCards(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+        if(GetChoiceCount(FreepsGetBPChoices()) > 0) {
+            ChooseCardBPFromSelection(P1, cards);
+        }
+        else {
+            ChooseCards(P1, cards);
+        }
+    }
+    public void ShadowChooseCards(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+        if(GetChoiceCount(ShadowGetBPChoices()) > 0) {
+            ChooseCardBPFromSelection(P2, cards);
+        }
+        else {
+            ChooseCards(P2, cards);
+        }
+    }
     public void ChooseCards(String player, PhysicalCardImpl...cards) throws DecisionResultInvalidException {
         String[] ids = new String[cards.length];
 
@@ -957,7 +1018,32 @@ public class GenericCardTestHelper extends AbstractAtTest {
                 if(found.contains(card))
                     continue;
 
-                if(card.getBlueprintId() == choices[i])
+                if(card.getBlueprintId().equals(choices[i]))
+                {
+                    // I have no idea why the spacing is required, but the BP parser skips to the fourth position
+                    bps.add("    " + i);
+                    found.add(card);
+                    break;
+                }
+            }
+        }
+
+        playerDecided(player, String.join(",", bps));
+        //ChooseCardBPFromSelection(player, Arrays.stream(cards).distinct().map(PhysicalCardImpl::getBlueprintId).toArray(String[]::new));
+    }
+
+    public void ChooseCardBPFromSelection(String player, String...bpids) throws DecisionResultInvalidException {
+        String[] choices = GetAwaitingDecisionParam(player,"blueprintId");
+        ArrayList<String> bps = new ArrayList<>();
+        ArrayList<String> found = new ArrayList<>();
+
+        for(int i = 0; i < choices.length; i++)
+        {
+            for(String card : bpids)
+            {
+                if(found.contains(card))
+                    continue;
+                if(card.equals(choices[i]))
                 {
                     // I have no idea why the spacing is required, but the BP parser skips to the fourth position
                     bps.add("    " + i);
@@ -972,6 +1058,39 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card) throws DecisionResultInvalidException { return HasCardChoiceAvailable(P1, card);}
     public boolean ShadowHasCardChoiceAvailable(PhysicalCardImpl card) throws DecisionResultInvalidException { return HasCardChoiceAvailable(P2, card);}
+
+    public boolean FreepsHasCardChoicesAvailable(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+        for(var card : cards) {
+            if(!HasCardChoiceAvailable(P1, card))
+                return false;
+        }
+        return true;
+    }
+    public boolean ShadowHasCardChoicesAvailable(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+        for(var card : cards) {
+            if(!HasCardChoiceAvailable(P2, card))
+                return false;
+        }
+        return true;
+    }
+
+    public boolean FreepsHasCardChoiceNotAvailable(PhysicalCardImpl card) throws DecisionResultInvalidException { return !HasCardChoiceAvailable(P1, card);}
+    public boolean ShadowHasCardChoicenotAvailable(PhysicalCardImpl card) throws DecisionResultInvalidException { return !HasCardChoiceAvailable(P2, card);}
+
+    public boolean FreepsHasCardChoicesNotAvailable(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+        for(var card : cards) {
+            if(HasCardChoiceAvailable(P1, card))
+                return false;
+        }
+        return true;
+    }
+    public boolean ShadowHasCardChoicesNotAvailable(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+        for(var card : cards) {
+            if(HasCardChoiceAvailable(P2, card))
+                return false;
+        }
+        return true;
+    }
 
     public boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card) throws DecisionResultInvalidException {
         String[] choices = GetAwaitingDecisionParam(player,"blueprintId");
@@ -1156,9 +1275,23 @@ public class GenericCardTestHelper extends AbstractAtTest {
         assertTrue(effect.wasCarriedOut());
     }
 
-    public void FreepsChoose(String choice) throws DecisionResultInvalidException { playerDecided(P1, choice); }
+    public void FreepsChoose(String choice) throws DecisionResultInvalidException {
+        if(FreepsGetChoiceCount() > 0) {
+            FreepsChooseMultipleChoiceOption(choice);
+        }
+        else {
+            playerDecided(P1, choice);
+        }
+    }
     public void FreepsChoose(String...choices) throws DecisionResultInvalidException { playerDecided(P1, String.join(",", choices)); }
-    public void ShadowChoose(String choice) throws DecisionResultInvalidException { playerDecided(P2, choice); }
+    public void ShadowChoose(String choice) throws DecisionResultInvalidException {
+        if(ShadowGetChoiceCount() > 0) {
+            ShadowChooseMultipleChoiceOption(choice);
+        }
+        else {
+            playerDecided(P2, choice);
+        }
+    }
     public void ShadowChoose(String...choices) throws DecisionResultInvalidException { playerDecided(P2, String.join(",", choices)); }
 
 
@@ -1206,6 +1339,18 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public boolean GameIsFinished() {
         return _game.isFinished();
+    }
+
+    public void FreepsChooseAny() throws DecisionResultInvalidException {
+        if (GetChoiceCount(FreepsGetActionChoices()) > 0){
+            ChooseAction(P1, "actionId", FreepsGetActionChoices().getFirst());
+        }
+        else if(FreepsGetBPChoices().size() > 1) {
+            ChooseCardBPFromSelection(P1, FreepsGetBPChoices().getFirst());
+        }
+        else {
+            FreepsResolveRuleFirst();
+        }
     }
 
     public void FreepsResolveRuleFirst() throws DecisionResultInvalidException { FreepsResolveActionOrder(GetADParamAsList(P1, "actionText").getFirst()); }

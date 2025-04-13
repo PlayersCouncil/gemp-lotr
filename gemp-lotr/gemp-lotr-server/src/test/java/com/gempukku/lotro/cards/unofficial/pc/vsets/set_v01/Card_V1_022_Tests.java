@@ -106,7 +106,7 @@ public class Card_V1_022_Tests
 		assertEquals(Zone.DEAD, aragorn.getZone());
 		//There is a tie between evaluating a rule (threat rule?) and Gilraen's automatic trigger. Freeps chooses
 		// to evaluate the rule first (it shouldn't matter for our purposes).
-		scn.FreepsChoose("0");
+		scn.FreepsResolveRuleFirst();
 		assertEquals(Zone.DISCARD, memorial.getZone());
 	}
 
