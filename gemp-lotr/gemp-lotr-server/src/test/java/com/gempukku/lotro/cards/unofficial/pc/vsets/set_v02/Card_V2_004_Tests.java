@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,16 @@ public class Card_V2_004_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_4");
-					// put other cards in here as needed for the test case
+					put("horsemen", "102_4");
+					put("band", "4_4");
+					put("chief", "4_20");
+					put("club", "4_36");
+					put("hides", "4_19");
+
+					put("card1", "1_3");
+					put("card2", "1_4");
+					put("card3", "1_5");
+					put("card4", "1_6");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -44,7 +51,7 @@ public class Card_V2_004_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("horsemen");
 
 		assertEquals("Horsemen Took Your Lands", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +63,75 @@ public class Card_V2_004_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HorsemenTookYourLandsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void HorsemenTookYourLandsPlaysNonUniqueDunlendingFromDiscardWithPossessionWithInitiative() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var horsemen = scn.GetShadowCard("horsemen");
+		var band = scn.GetShadowCard("band");
+		var chief = scn.GetShadowCard("chief");
+		var club = scn.GetShadowCard("club");
+		var hides = scn.GetShadowCard("hides");
+		scn.ShadowMoveCardToHand(horsemen);
+		scn.ShadowMoveCardToDiscard(band, chief, club, hides);
+
+		var card1 = scn.GetFreepsCard("card1");
+		var card2 = scn.GetFreepsCard("card2");
+		var card3 = scn.GetFreepsCard("card3");
+		var card4 = scn.GetFreepsCard("card4");
+		scn.FreepsMoveCardToHand(card1, card2, card3);
+		scn.FreepsMoveCardToDiscard(card4);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(Zone.DISCARD, band.getZone());
+		assertEquals(Zone.DISCARD, chief.getZone());
+		assertEquals(Zone.DISCARD, club.getZone());
+		assertEquals(Zone.DISCARD, hides.getZone());
+		assertTrue(scn.ShadowPlayAvailable(horsemen));
+		scn.ShadowPlayCard(horsemen);
+		assertEquals(Zone.SHADOW_CHARACTERS, band.getZone());
+		assertEquals(Zone.DISCARD, chief.getZone());
+		assertEquals(Zone.ATTACHED, club.getZone());
+		assertEquals(band, club.getAttachedTo());
+		assertEquals(Zone.DISCARD, hides.getZone());
+	}
+
+	@Test
+	public void HorsemenTookYourLandsPlaysNonUniqueDunlendingFromDiscardWithNoPossessionWithNoInitiative() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var horsemen = scn.GetShadowCard("horsemen");
+		var band = scn.GetShadowCard("band");
+		var chief = scn.GetShadowCard("chief");
+		var club = scn.GetShadowCard("club");
+		var hides = scn.GetShadowCard("hides");
+		scn.ShadowMoveCardToHand(horsemen);
+		scn.ShadowMoveCardToDiscard(band, chief, club, hides);
+
+		var card1 = scn.GetFreepsCard("card1");
+		var card2 = scn.GetFreepsCard("card2");
+		var card3 = scn.GetFreepsCard("card3");
+		var card4 = scn.GetFreepsCard("card4");
+		scn.FreepsMoveCardToHand(card1, card2, card3, card4);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Zone.DISCARD, band.getZone());
+		assertEquals(Zone.DISCARD, chief.getZone());
+		assertEquals(Zone.DISCARD, club.getZone());
+		assertEquals(Zone.DISCARD, hides.getZone());
+		assertTrue(scn.ShadowPlayAvailable(horsemen));
+		scn.ShadowPlayCard(horsemen);
+		assertEquals(Zone.SHADOW_CHARACTERS, band.getZone());
+		assertEquals(Zone.DISCARD, chief.getZone());
+		assertEquals(Zone.DISCARD, club.getZone());
+		assertEquals(Zone.DISCARD, hides.getZone());
 	}
 }

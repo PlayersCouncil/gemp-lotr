@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,11 @@ public class Card_V2_041_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_41");
-					// put other cards in here as needed for the test case
+					put("peak", "102_41");
+					put("runner", "1_178");
+					put("troll", "1_165");
+
+					put("aragorn", "1_89");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -44,7 +46,7 @@ public class Card_V2_041_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("peak");
 
 		assertEquals("To Highest Peak", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +58,85 @@ public class Card_V2_041_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ToHighestPeakTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ToHighestPeakDiscardsMinionsToAddThreats() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var peak = scn.GetShadowCard("peak");
+		var runner = scn.GetShadowCard("runner");
+		var troll = scn.GetShadowCard("troll");
+		scn.ShadowMoveCardToHand(peak);
+		scn.ShadowMoveCharToTable(runner, troll);
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCharToTable(aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipPassedAllAssignments();
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, troll.getZone());
+		assertTrue(scn.ShadowPlayAvailable(peak));
+
+		scn.ShadowPlayCard(peak);
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		scn.ShadowChooseCards(runner, troll);
+
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to exert"));
+		scn.FreepsChooseNo();
+
+		assertEquals(2, scn.GetThreats());
+		assertEquals(Zone.DISCARD, runner.getZone());
+		assertEquals(Zone.DISCARD, troll.getZone());
+
+	}
+
+	@Test
+	public void ToHighestPeakCanBePreventedByExertingXCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var peak = scn.GetShadowCard("peak");
+		var runner = scn.GetShadowCard("runner");
+		var troll = scn.GetShadowCard("troll");
+		scn.ShadowMoveCardToHand(peak);
+		scn.ShadowMoveCharToTable(runner, troll);
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCharToTable(aragorn);
+
+		scn.StartGame();
+		scn.SkipPassedAllAssignments();
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, troll.getZone());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowPlayAvailable(peak));
+
+		scn.ShadowPlayCard(peak);
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		scn.ShadowChooseCards(runner, troll);
+
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to exert"));
+		scn.FreepsChooseYes();
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(Zone.DISCARD, runner.getZone());
+		assertEquals(Zone.DISCARD, troll.getZone());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+
 	}
 }

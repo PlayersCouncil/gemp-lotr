@@ -106,7 +106,7 @@ public class GameUtils {
         return result;
     }
 
-    public static List<PhysicalCard> getRandomCards(List<? extends PhysicalCard> cards, int count) {
+    public static List<PhysicalCard> getRandomCards(Collection<? extends PhysicalCard> cards, int count) {
         List<PhysicalCard> randomizedCards = new ArrayList<>(cards);
         Collections.shuffle(randomizedCards, ThreadLocalRandom.current());
 

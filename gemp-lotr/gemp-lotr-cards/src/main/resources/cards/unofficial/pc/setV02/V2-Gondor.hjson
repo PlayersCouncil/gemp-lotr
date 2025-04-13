@@ -94,6 +94,7 @@
 				}
 				{
 					type: addTrigger
+					optional: false
 					until: endOfTurn
 					trigger: {
 						type: killed

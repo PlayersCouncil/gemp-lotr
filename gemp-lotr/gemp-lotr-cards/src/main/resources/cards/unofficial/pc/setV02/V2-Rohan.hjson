@@ -84,17 +84,19 @@
 		timewords: Skirmish
 		effects: {
 			type: event
-			requires: {
-				type: CanSpot
-				filter: HasCultureTokenCount(2,rohan)
-			}
+			requires: [
+				{
+					type: CanSpot
+					filter: condition,HasCultureTokenCount(2,rohan)
+				}
+			]
 			cost: [
 				{
 					type: ChooseActiveCards
 					text: Choose how many {rohan} conditions to remove 2 tokens from.
 					count: {
 						type: Range
-						from: 0
+						from: 1
 						to: {
 							type: ForEachYouCanSpot
 							filter: condition,HasCultureTokenCount(2,rohan)
@@ -102,23 +104,26 @@
 					}
 					select: choose(HasCultureTokenCount(2,rohan))
 					memorize: chosenConditions
-				}
-				{
-					type: RemoveCultureTokens
-					select: memory(chosenConditions)
-					count: 2
-					ignoreCostCheckFailure: true
-				}				
+				}			
 			]
 			effect: [
 				{
-					type: ModifyStrength
-					select: choose(valiant, companion)
-					count: 3
-					until: start(regroup)
-					amount: {
-						type: ForEachInMemory
-						memory: chosenConditions
+					type: CostToEffect
+					cost: {
+						type: RemoveCultureTokens
+						select: memory(chosenConditions)
+						count: 2
+						ignoreCostCheckFailure: true
+					}
+					effect: {
+						type: ModifyStrength
+						select: choose(valiant, companion)
+						count: 3
+						until: start(regroup)
+						amount: {
+							type: ForEachInMemory
+							memory: chosenConditions
+						}
 					}
 				}
 			]

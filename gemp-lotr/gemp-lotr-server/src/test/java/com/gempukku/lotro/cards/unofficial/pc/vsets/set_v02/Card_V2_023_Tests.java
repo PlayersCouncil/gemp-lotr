@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,12 @@ public class Card_V2_023_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_23");
-					// put other cards in here as needed for the test case
+					put("fires", "102_23");
+					put("saruman", "3_69");
+					put("orc1", "3_58");
+					put("orc2", "5_50");
+
+					put("gandalf", "1_72");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -45,7 +48,7 @@ public class Card_V2_023_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("fires");
 
 		assertEquals("Fires of Industry", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,18 +60,132 @@ public class Card_V2_023_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FiresofIndustryTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void FiresofIndustryCanSpot2IsenorcsToAdd2TokensToItself() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var fires = scn.GetShadowCard("fires");
+		var saruman = scn.GetShadowCard("saruman");
+		var orc1 = scn.GetShadowCard("orc1");
+		var orc2 = scn.GetShadowCard("orc2");
+		scn.ShadowMoveCardToHand(fires);
+		scn.ShadowMoveCharToTable(orc1, orc2);
+
+		var gandalf = scn.GetFreepsCard("gandalf");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(Zone.SHADOW_CHARACTERS, orc1.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, orc1.getZone());
+		assertTrue(scn.ShadowPlayAvailable(fires));
+
+		scn.ShadowPlayCard(fires);
+		assertEquals(2, scn.GetCultureTokensOn(fires));
+	}
+
+	@Test
+	public void FiresofIndustryCanSpotSarumanToAdd2TokensToItself() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var fires = scn.GetShadowCard("fires");
+		var saruman = scn.GetShadowCard("saruman");
+		var orc1 = scn.GetShadowCard("orc1");
+		var orc2 = scn.GetShadowCard("orc2");
+		scn.ShadowMoveCardToHand(fires);
+		scn.ShadowMoveCharToTable(saruman);
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+
+		scn.StartGame();
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Zone.SHADOW_CHARACTERS, saruman.getZone());
+		assertTrue(scn.ShadowPlayAvailable(fires));
+
+		scn.ShadowPlayCard(fires);
+		assertEquals(2, scn.GetCultureTokensOn(fires));
+	}
+
+	@Test
+	public void FiresofIndustryCanSpotGandalfToAdd2TokensToItself() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var fires = scn.GetShadowCard("fires");
+		var saruman = scn.GetShadowCard("saruman");
+		var orc1 = scn.GetShadowCard("orc1");
+		var orc2 = scn.GetShadowCard("orc2");
+		scn.ShadowMoveCardToHand(fires);
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCharToTable(gandalf);
+
+		scn.StartGame();
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Zone.FREE_CHARACTERS, gandalf.getZone());
+		assertTrue(scn.ShadowPlayAvailable(fires));
+
+		scn.ShadowPlayCard(fires);
+		assertEquals(2, scn.GetCultureTokensOn(fires));
+	}
+
+	@Test
+	public void FiresofIndustryRemovesOneTokenToHealAnIsenorcAtStartOfRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var fires = scn.GetShadowCard("fires");
+		var isenorc = scn.GetShadowCard("orc1");
+		scn.ShadowMoveCardToSupportArea(fires);
+		scn.ShadowMoveCharToTable(isenorc);
+
+		scn.AddWoundsToChar(isenorc,2);
+		scn.AddTokensToCard(fires, 2);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(2, scn.GetWoundsOn(isenorc));
+		assertEquals(2, scn.GetCultureTokensOn(fires));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(1, scn.GetWoundsOn(isenorc));
+		assertEquals(1, scn.GetCultureTokensOn(fires));
+	}
+
+	@Test
+	public void FiresofIndustrySelfDiscardToHealAnIsenorcAtStartOfRegroupPhaseIfNoTokens() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var fires = scn.GetShadowCard("fires");
+		var isenorc = scn.GetShadowCard("orc1");
+		scn.ShadowMoveCardToSupportArea(fires);
+		scn.ShadowMoveCharToTable(isenorc);
+
+		scn.AddWoundsToChar(isenorc,2);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(2, scn.GetWoundsOn(isenorc));
+		assertEquals(0, scn.GetCultureTokensOn(fires));
+		assertEquals(Zone.SUPPORT, fires.getZone());
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(1, scn.GetWoundsOn(isenorc));
+		assertEquals(Zone.DISCARD, fires.getZone());
 	}
 }

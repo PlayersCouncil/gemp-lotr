@@ -241,7 +241,7 @@ public class ValueResolver {
                             return (game, cardAffected) -> {
                                 int result = 0;
                                 for (PhysicalCard physicalCard : Filters.filterActive(game, filterable)) {
-                                    result += game.getModifiersQuerying().getTwilightCostToPlay(game, physicalCard, null, 0, false);
+                                    result += game.getModifiersQuerying().getCurrentTwilightCost(game, physicalCard);
                                 }
                                 return result;
                             };

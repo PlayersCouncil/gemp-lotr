@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,11 @@ public class Card_V2_040_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_40");
-					// put other cards in here as needed for the test case
+					put("fire", "102_40");
+					put("runner", "1_178");
+					put("troll", "1_165");
+
+					put("aragorn", "1_89");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -44,7 +46,7 @@ public class Card_V2_040_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("fire");
 
 		assertEquals("Through Fire and Water", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +58,73 @@ public class Card_V2_040_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ThroughFireandWaterTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ThroughFireAndWaterRemovesThreatToExertCompanionWhenUniqueMoriaMinionWins() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var fire = scn.GetShadowCard("fire");
+		var runner = scn.GetShadowCard("runner");
+		var troll = scn.GetShadowCard("troll");
+		scn.ShadowMoveCardToSupportArea(fire);
+		scn.ShadowMoveCharToTable(runner, troll);
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCharToTable(aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddThreats(2);
+		scn.AddWoundsToChar(aragorn, 1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, runner);
+		scn.PassSkirmishActions();
 
-		assertEquals(0, scn.GetTwilight());
+		//Runner isn't unique
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignAndResolve(aragorn, troll);
+		scn.PassFierceSkirmishActions();
+
+		assertEquals(2, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetThreats());
+
+		assertEquals(1, scn.GetWoundsOn(frodo));
+	}
+
+	@Test
+	public void ThroughFireAndWaterNeedsAThreat() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var fire = scn.GetShadowCard("fire");
+		var runner = scn.GetShadowCard("runner");
+		var troll = scn.GetShadowCard("troll");
+		scn.ShadowMoveCardToSupportArea(fire);
+		scn.ShadowMoveCharToTable(runner, troll);
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.FreepsMoveCharToTable(aragorn);
+
+		scn.StartGame();
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, runner);
+		scn.PassSkirmishActions();
+
+		//Runner isn't unique
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignAndResolve(aragorn, troll);
+		scn.PassFierceSkirmishActions();
+
+		//No threats
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(frodo));
 	}
 }

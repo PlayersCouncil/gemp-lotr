@@ -179,7 +179,7 @@ public class Card_01_031_Tests
 		assertEquals(Zone.ATTACHED, asfaloth.getZone());
 		scn.FreepsPassCurrentPhaseAction();
 
-		scn.FreepsChoose("0"); // timing tie between Asfaloth and Site
+		scn.FreepsChooseAny(); // timing tie between Asfaloth and Site
 		assertEquals(Zone.DISCARD, asfaloth.getZone());
 	}
 

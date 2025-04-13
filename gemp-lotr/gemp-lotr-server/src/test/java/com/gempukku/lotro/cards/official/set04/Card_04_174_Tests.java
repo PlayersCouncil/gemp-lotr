@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set04;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,11 @@ public class Card_04_174_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "4_174");
-					// put other cards in here as needed for the test case
+					put("staff", "4_174");
+					put("saruman", "3_69");
+					put("orc", "3_58");
+
+					put("sam", "1_311");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -40,12 +42,14 @@ public class Card_04_174_Tests
 		 * Type: Artifact
 		 * Subtype: Staff
 		 * Strength: 2
-		 * Game Text: Plays on Saruman.<br>He is <b>fierce</b> and <b>damage +1</b>.<br><b>Maneuver:</b> Make the first sentence of Saruman's game text not apply until the regroup phase.
+		 * Game Text: Plays on Saruman.
+		 * He is <b>fierce</b> and <b>damage +1</b>.
+		 * <b>Maneuver:</b> Make the first sentence of Saruman's game text not apply until the regroup phase.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("staff");
 
 		assertEquals("Saruman's Staff", card.getBlueprint().getTitle());
 		assertEquals("Wizard's Device", card.getBlueprint().getSubtitle());
@@ -58,18 +62,76 @@ public class Card_04_174_Tests
 		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SarumansStaffTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SarumansStaffMakesSarumanDamagePlus1AndFierce() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var saruman = scn.GetShadowCard("saruman");
+		var staff = scn.GetShadowCard("staff");
+		scn.ShadowMoveCharToTable(saruman);
+		scn.ShadowMoveCardToHand(staff);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(2, scn.GetTwilight());
+		assertFalse(scn.hasKeyword(saruman, Keyword.DAMAGE));
+		assertFalse(scn.hasKeyword(saruman, Keyword.FIERCE));
+
+		scn.ShadowPlayCard(staff);
+		assertTrue(scn.hasKeyword(saruman, Keyword.DAMAGE));
+		assertTrue(scn.hasKeyword(saruman, Keyword.FIERCE));
+	}
+
+	@Test
+	public void SarumansStaffManeuverActionPermitsSarumanToSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var saruman = scn.GetShadowCard("saruman");
+		var staff = scn.GetShadowCard("staff");
+		scn.ShadowMoveCharToTable(saruman);
+		scn.AttachCardsTo(saruman, staff);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(staff));
+		scn.ShadowUseCardAction(staff);
+		scn.SkipToAssignments();
+
+		assertEquals(1, scn.FreepsGetShadowAssignmentTargetCount());
+	}
+
+	@Test
+	public void SarumansStaffDoesNotImpedeAbilityToUseSarumansAssignmentAbility() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var saruman = scn.GetShadowCard("saruman");
+		var staff = scn.GetShadowCard("staff");
+		var orc = scn.GetShadowCard("orc");
+		scn.ShadowMoveCharToTable(saruman, orc);
+		scn.AttachCardsTo(saruman, staff);
+
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowUseCardAction(staff);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(saruman));
+		scn.ShadowUseCardAction(saruman);
+		scn.ShadowChooseCard(saruman);
+		scn.FreepsChooseNo();
+
+		assertTrue(scn.IsCharAssigned(saruman));
+		assertTrue(scn.IsCharAssigned(sam));
+
 	}
 }

@@ -115,7 +115,7 @@ public class Card_V1_024_Tests
 		scn.PassCurrentPhaseActions();
 
 		//Freeps tiebreaker between resolving the skirmish or processing the required trigger for You Have My Sword.
-		scn.FreepsChoose("0");
+		scn.FreepsResolveRuleFirst();
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 		String[] choices = scn.FreepsGetMultipleChoices().toArray(new String[0]);
@@ -137,7 +137,7 @@ public class Card_V1_024_Tests
 		scn.PassCurrentPhaseActions();
 
 		//Freeps tiebreaker between resolving the skirmish or processing the required trigger for You Have My Sword.
-		scn.FreepsChoose("0");
+		scn.FreepsResolveRuleFirst();
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 		choices = scn.FreepsGetMultipleChoices().toArray(new String[0]);

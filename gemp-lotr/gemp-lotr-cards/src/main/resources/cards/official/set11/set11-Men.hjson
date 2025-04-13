@@ -1733,16 +1733,13 @@
 					true: {
 						type: optional
 						text: Would you like to remove (3) to wound {woundedCharacter} again?
+						cost: {
+							type: removeTwilight
+							amount: 3
+						}
 						effect: {
-							type: costToEffect
-							cost: {
-								type: removeTwilight
-								amount: 3
-							}
-							effect: {
-								type: wound
-								select: memory(woundedCharacter)
-							}
+							type: wound
+							select: memory(woundedCharacter)
 						}
 					}
 				}

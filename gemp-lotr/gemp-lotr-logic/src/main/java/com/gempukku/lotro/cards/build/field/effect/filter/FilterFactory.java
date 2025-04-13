@@ -406,6 +406,50 @@ public class FilterFactory {
                         );
                     };
                 });
+        parameterFilters.put("highesttwilight",
+                (parameter, environment) -> {
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return actionContext -> {
+                        final Filterable sourceFilterable = filterableSource.getFilterable(actionContext);
+                        return Filters.and(
+                                sourceFilterable, Filters.strengthEqual(
+                                        new SingleMemoryEvaluator(
+                                                new Evaluator() {
+                                                    @Override
+                                                    public int evaluateExpression(LotroGame game, PhysicalCard cardAffected) {
+                                                        int maxTwilight = Integer.MIN_VALUE;
+                                                        for (PhysicalCard card : Filters.filterActive(game, sourceFilterable))
+                                                            maxTwilight = Math.max(maxTwilight, game.getModifiersQuerying().getCurrentTwilightCost(game, card));
+                                                        return maxTwilight;
+                                                    }
+                                                }
+                                        )
+                                )
+                        );
+                    };
+                });
+        parameterFilters.put("lowesttwilight",
+                (parameter, environment) -> {
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return actionContext -> {
+                        final Filterable sourceFilterable = filterableSource.getFilterable(actionContext);
+                        return Filters.and(
+                                sourceFilterable, Filters.strengthEqual(
+                                        new SingleMemoryEvaluator(
+                                                new Evaluator() {
+                                                    @Override
+                                                    public int evaluateExpression(LotroGame game, PhysicalCard cardAffected) {
+                                                        int minTwilight = Integer.MAX_VALUE;
+                                                        for (PhysicalCard card : Filters.filterActive(game, sourceFilterable))
+                                                            minTwilight = Math.min(minTwilight, game.getModifiersQuerying().getCurrentTwilightCost(game, card));
+                                                        return minTwilight;
+                                                    }
+                                                }
+                                        )
+                                )
+                        );
+                    };
+                });
         parameterFilters.put("inskirmishagainst",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
@@ -589,11 +633,14 @@ public class FilterFactory {
                 });
         parameterFilters.put("printedtwilightcostfrommemory",
                 (parameter, environment) -> actionContext -> {
-                    var card = actionContext.getCardFromMemory(parameter).getBlueprint();
-                    if (card.getCardType() == CardType.THE_ONE_RING || card.getCardType() == CardType.MAP)
+                    var card = actionContext.getCardFromMemory(parameter);
+                    if(card == null)
+                        return Filters.none;
+                    var bp = card.getBlueprint();
+                    if (bp.getCardType() == CardType.THE_ONE_RING || bp.getCardType() == CardType.MAP)
                         return Filters.none;
 
-                    return Filters.printedTwilightCost(card.getTwilightCost());
+                    return Filters.printedTwilightCost(bp.getTwilightCost());
                 });
         parameterFilters.put("race",
                 (parameter, environment) -> {

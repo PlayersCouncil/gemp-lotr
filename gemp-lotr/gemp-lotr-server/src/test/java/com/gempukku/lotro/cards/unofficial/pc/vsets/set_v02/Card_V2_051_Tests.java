@@ -19,6 +19,8 @@ public class Card_V2_051_Tests
 				{{
 					put("wrath", "102_51");
 					put("javelin", "7_248");
+
+					//NEEDS MORE TESTS
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,

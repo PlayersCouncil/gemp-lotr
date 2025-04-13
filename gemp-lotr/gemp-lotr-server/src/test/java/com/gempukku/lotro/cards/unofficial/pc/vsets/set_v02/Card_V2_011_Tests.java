@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,14 @@ public class Card_V2_011_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_11");
-					// put other cards in here as needed for the test case
+					put("honour", "102_11");
+					put("haldir", "102_8");
+					put("troop", "56_22");
+					put("than", "54_85");
+					put("veowyn", "4_270");
+					put("arwen", "1_30");
+					put("bow", "1_41");
+					put("ring", "3_23"); //to ensure artifacts are not selectable
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -44,7 +49,7 @@ public class Card_V2_011_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("honour");
 
 		assertEquals("To Honour That Allegiance", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +61,143 @@ public class Card_V2_011_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ToHonourThatAllegianceTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ToHonourThatAllegianceCanExertAValiantNonElfCompanionToTakeAValiantElfIntoHandFromDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var honour = scn.GetFreepsCard("honour");
+		var haldir = scn.GetFreepsCard("haldir");
+		var troop = scn.GetFreepsCard("troop");
+		var than = scn.GetFreepsCard("than");
+		var veowyn = scn.GetFreepsCard("veowyn");
+		var bow = scn.GetFreepsCard("bow");
+		scn.FreepsMoveCardToHand(honour);
+		scn.FreepsMoveCharToTable(veowyn, troop);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(Zone.FREE_CHARACTERS, veowyn.getZone());
+		assertEquals(Zone.FREE_CHARACTERS, troop.getZone());
+		assertEquals(Zone.DECK, than.getZone());
+		assertEquals(Zone.DECK, haldir.getZone());
+		assertEquals(Zone.DECK, bow.getZone());
+		assertEquals(0, scn.GetWoundsOn(veowyn));
+		assertTrue(scn.FreepsPlayAvailable(honour));
+
+		scn.FreepsPlayCard(honour);
+		scn.FreepsChooseCard(veowyn); //to exert
+		scn.FreepsDismissRevealedCards();
+		assertEquals(3, scn.FreepsGetSelectableCount()); //Haldir, Thandronen, bow
+
+		scn.FreepsChooseCardBPFromSelection(haldir);
+		assertEquals(Zone.HAND, haldir.getZone());
+		assertEquals(Zone.DECK, bow.getZone());
+		assertEquals(1, scn.GetWoundsOn(veowyn));
+	}
+
+	@Test
+	public void ToHonourThatAllegianceCanExertAValiantNonElfCompanionToTakeAnElvenPossessionIntoHandFromDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var honour = scn.GetFreepsCard("honour");
+		var haldir = scn.GetFreepsCard("haldir");
+		var troop = scn.GetFreepsCard("troop");
+		var than = scn.GetFreepsCard("than");
+		var veowyn = scn.GetFreepsCard("veowyn");
+		var bow = scn.GetFreepsCard("bow");
+		scn.FreepsMoveCardToHand(honour);
+		scn.FreepsMoveCharToTable(veowyn, troop);
+
+		scn.StartGame();
+
+		assertEquals(Zone.FREE_CHARACTERS, veowyn.getZone());
+		assertEquals(Zone.FREE_CHARACTERS, troop.getZone());
+		assertEquals(Zone.DECK, than.getZone());
+		assertEquals(Zone.DECK, haldir.getZone());
+		assertEquals(Zone.DECK, bow.getZone());
+		assertEquals(0, scn.GetWoundsOn(veowyn));
+		assertTrue(scn.FreepsPlayAvailable(honour));
+
+		scn.FreepsPlayCard(honour);
+		scn.FreepsChooseCard(veowyn); //to exert
+		scn.FreepsDismissRevealedCards();
+		assertEquals(3, scn.FreepsGetSelectableCount()); //Haldir, Thandronen, bow
+
+		scn.FreepsChooseCardBPFromSelection(bow);
+		assertEquals(Zone.DECK, haldir.getZone());
+		assertEquals(Zone.HAND, bow.getZone());
+		assertEquals(1, scn.GetWoundsOn(veowyn));
+	}
+
+	@Test
+	public void ToHonourThatAllegianceCanSpot2ValiantElvesToTakeAValiantElfIntoHandFromDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var honour = scn.GetFreepsCard("honour");
+		var haldir = scn.GetFreepsCard("haldir");
+		var troop = scn.GetFreepsCard("troop");
+		var than = scn.GetFreepsCard("than");
+		var veowyn = scn.GetFreepsCard("veowyn");
+		var bow = scn.GetFreepsCard("bow");
+		scn.FreepsMoveCardToHand(honour);
+		scn.FreepsMoveCharToTable(veowyn, troop, than);
+
+		scn.StartGame();
+
+		assertEquals(Zone.FREE_CHARACTERS, veowyn.getZone());
+		assertEquals(Zone.FREE_CHARACTERS, troop.getZone());
+		assertEquals(Zone.FREE_CHARACTERS, than.getZone());
+		assertEquals(Zone.DECK, haldir.getZone());
+		assertEquals(Zone.DECK, bow.getZone());
+		assertTrue(scn.FreepsPlayAvailable(honour));
+
+		scn.FreepsPlayCard(honour);
+		scn.FreepsDismissRevealedCards();
+		assertEquals(2, scn.FreepsGetSelectableCount()); //Haldir, bow
+
+		scn.FreepsChooseCardBPFromSelection(haldir);
+		assertEquals(Zone.HAND, haldir.getZone());
+		assertEquals(Zone.DECK, bow.getZone());
+		assertEquals(0, scn.GetWoundsOn(veowyn));
+		assertEquals(0, scn.GetWoundsOn(haldir));
+		assertEquals(0, scn.GetWoundsOn(troop));
+	}
+
+	@Test
+	public void ToHonourThatAllegianceCanSpot2ValiantElvesToTakeAnElvenPossessionIntoHandFromDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var honour = scn.GetFreepsCard("honour");
+		var haldir = scn.GetFreepsCard("haldir");
+		var troop = scn.GetFreepsCard("troop");
+		var than = scn.GetFreepsCard("than");
+		var veowyn = scn.GetFreepsCard("veowyn");
+		var bow = scn.GetFreepsCard("bow");
+		scn.FreepsMoveCardToHand(honour);
+		scn.FreepsMoveCharToTable(veowyn, troop, than);
+
+		scn.StartGame();
+
+		assertEquals(Zone.FREE_CHARACTERS, veowyn.getZone());
+		assertEquals(Zone.FREE_CHARACTERS, troop.getZone());
+		assertEquals(Zone.FREE_CHARACTERS, than.getZone());
+		assertEquals(Zone.DECK, haldir.getZone());
+		assertEquals(Zone.DECK, bow.getZone());
+		assertTrue(scn.FreepsPlayAvailable(honour));
+
+		scn.FreepsPlayCard(honour);
+		scn.FreepsDismissRevealedCards();
+		assertEquals(2, scn.FreepsGetSelectableCount()); //Haldir, bow
+
+		scn.FreepsChooseCardBPFromSelection(bow);
+		assertEquals(Zone.DECK, haldir.getZone());
+		assertEquals(Zone.HAND, bow.getZone());
+		assertEquals(0, scn.GetWoundsOn(veowyn));
+		assertEquals(0, scn.GetWoundsOn(haldir));
+		assertEquals(0, scn.GetWoundsOn(troop));
 	}
 }

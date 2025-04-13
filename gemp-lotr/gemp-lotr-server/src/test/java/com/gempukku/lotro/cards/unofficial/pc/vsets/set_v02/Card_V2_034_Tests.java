@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,9 @@ public class Card_V2_034_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_34");
-					// put other cards in here as needed for the test case
+					put("occupier", "102_34");
+					put("filler", "1_3");
+					put("trail", "102_31");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -49,7 +49,7 @@ public class Card_V2_034_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("occupier");
 
 		assertEquals("Uruk Occupier", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -66,18 +66,66 @@ public class Card_V2_034_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukOccupierTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void UrukOccupierIsStrengthPlus1PerControlledBattleground() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var occupier = scn.GetShadowCard("occupier");
+		var trail = scn.GetShadowCard("trail");
+		scn.ShadowMoveCardToDiscard(occupier);
+		scn.ShadowMoveCardToSupportArea(trail); //makes all controlled sites battleground
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(8);
+		scn.FreepsPassCurrentPhaseAction();
 
-		assertEquals(3, scn.GetTwilight());
+		scn.ShadowMoveCharToTable(occupier);
+		assertEquals(8, scn.GetStrength(occupier));
+		scn.ShadowTakeControlOfSite();
+		assertEquals(9, scn.GetStrength(occupier));
+		scn.ShadowTakeControlOfSite();
+		assertEquals(10, scn.GetStrength(occupier));
+		scn.ShadowTakeControlOfSite();
+		assertEquals(11, scn.GetStrength(occupier));
+		scn.ShadowTakeControlOfSite();
+		assertEquals(12, scn.GetStrength(occupier));
+		scn.ShadowTakeControlOfSite();
+		assertEquals(13, scn.GetStrength(occupier));
+		scn.ShadowTakeControlOfSite();
+		assertEquals(14, scn.GetStrength(occupier));
+		scn.ShadowTakeControlOfSite();
+		assertEquals(15, scn.GetStrength(occupier));
+	}
+
+	@Test
+	public void UrukOccupierDiscardsCardFromHandToPlayFromDiscardIf3BattlegroundsControlled() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var occupier = scn.GetShadowCard("occupier");
+		var trail = scn.GetShadowCard("trail");
+		var filler = scn.GetShadowCard("filler");
+		scn.ShadowMoveCardToDiscard(occupier);
+		scn.ShadowMoveCardToSupportArea(trail); //makes all controlled sites battleground
+
+		scn.StartGame();
+		scn.SkipToSite(8);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertFalse(scn.ShadowActionAvailable(occupier));
+		scn.ShadowTakeControlOfSite();
+		assertFalse(scn.ShadowActionAvailable(occupier));
+		scn.ShadowTakeControlOfSite();
+		assertFalse(scn.ShadowActionAvailable(occupier));
+		scn.ShadowTakeControlOfSite();
+		assertTrue(scn.ShadowActionAvailable(occupier));
+
+		assertEquals(Zone.HAND, filler.getZone());
+		assertEquals(Zone.DISCARD, occupier.getZone());
+
+		scn.ShadowUseCardAction(occupier);
+		assertEquals(Zone.DISCARD, filler.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, occupier.getZone());
 	}
 }
