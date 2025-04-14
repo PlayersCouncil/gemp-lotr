@@ -276,6 +276,14 @@ public abstract class BaseTournament implements Tournament {
             _tournamentService.recordPlayerTournamentAbandon(_tournamentId, player);
             _droppedPlayers.add(player);
             regeneratePlayerList();
+
+            // if last player dropped, finish the tournament
+            Set<String> activePlayers = new HashSet<>(_players);
+            activePlayers.removeAll(_droppedPlayers);
+            if (activePlayers.size() == 0) {
+                finishTournament(null);
+            }
+
             return "You have successfully dropped from the tournament.  Thanks for playing!";
         } finally {
             writeLock.unlock();
@@ -300,7 +308,9 @@ public abstract class BaseTournament implements Tournament {
     protected TournamentProcessAction finishTournament(CollectionsManager collectionsManager) {
         _tournamentInfo.Stage = Stage.FINISHED;
         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
-        awardPrizes(collectionsManager);
+        if (collectionsManager != null) {
+            awardPrizes(collectionsManager);
+        }
         Set<String> activePlayers = new HashSet<>(_players);
         activePlayers.removeAll(_droppedPlayers);
         return new BroadcastAction("Tournament " + getTournamentName() + " is finished.", activePlayers);
