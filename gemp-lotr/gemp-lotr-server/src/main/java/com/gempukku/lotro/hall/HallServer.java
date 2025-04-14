@@ -917,10 +917,11 @@ public class HallServer extends AbstractServer {
         private HallTournamentCallback(Tournament tournament) {
             tournamentId = tournament.getTournamentId();
             tournamentName = tournament.getTournamentName();
-            // Tournaments with just 2 players can be spectated
-            boolean privateGame = tournament.getPlayersInCompetitionCount() != 2;
+            // Tournaments with no prizes and no entry are not competitive
+            boolean casual = tournament.getInfo().Parameters().prizes == Tournament.PrizeType.NONE
+                            && tournament.getInfo().Parameters().cost == 0;
             tournamentGameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
-                    tournamentId, null, null, true, privateGame, false,
+                    tournamentId, null, null, !casual, !casual, false,
                     false, GameTimer.TOURNAMENT_TIMER, null);
 
             wcGameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
