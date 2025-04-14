@@ -813,9 +813,13 @@ var GempLotrHallUI = Class.extend({
 						}
 						
 						rowhtml += "<td>" + tournament.getAttribute("name") + "</td>" +
-						"<td>" + tournament.getAttribute("system") + "</td>" +
-						"<td>" + tournament.getAttribute("stage") + "</td>" +
-						"<td>" + tournament.getAttribute("round") + "</td>" +
+						"<td>" + tournament.getAttribute("system") + "</td>";
+						if (tournament.hasAttribute("timeRemaining")) {
+						    rowhtml += "<td>" + tournament.getAttribute("stage") + " - " + tournament.getAttribute("timeRemaining") + "</td>";
+						} else {
+						    rowhtml += "<td>" + tournament.getAttribute("stage") + "</td>";
+						}
+						rowhtml += "<td>" + tournament.getAttribute("round") + "</td>" +
 						"<td><div class='prizeHint' title='Competing Players' value='" + tournament.getAttribute("playerList") + "<br><br>* = abandoned'>" + tournament.getAttribute("playerCount") + "</div></td>" +
 						"</tr>";
 						
@@ -843,7 +847,11 @@ var GempLotrHallUI = Class.extend({
                     var tablesRow = $("<tr class='table" + id + "'></tr>");
                     tablesRow.append("<td>" + tournament.getAttribute("format") + "</td>");
                     tablesRow.append("<td> Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
-                    tablesRow.append("<td>" + tournament.getAttribute("stage") + "</td>");
+                    if (tournament.hasAttribute("timeRemaining")) {
+                        tablesRow.append("<td>" + tournament.getAttribute("stage") + " - " + tournament.getAttribute("timeRemaining") + "</td>");
+                    } else {
+                        tablesRow.append("<td>" + tournament.getAttribute("stage") + "</td>");
+                    }
                     tablesRow.append("<td>" + tournament.getAttribute("playerList") + "</td>");
                     var actionsFieldClone = actionsField.clone(true);
                     tablesRow.append(actionsFieldClone);

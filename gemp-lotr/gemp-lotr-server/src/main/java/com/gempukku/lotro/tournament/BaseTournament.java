@@ -7,25 +7,21 @@ import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.competitive.ModifiedMedianStandingsProducer;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.CollectionType;
-import com.gempukku.lotro.draft.Draft;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.TableHolder;
-import com.gempukku.lotro.logic.actions.AbstractCostToEffectAction;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.tournament.action.BroadcastAction;
 import com.gempukku.lotro.tournament.action.CreateGameAction;
 import com.gempukku.lotro.tournament.action.TournamentProcessAction;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.time.Duration;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -518,5 +514,10 @@ public abstract class BaseTournament implements Tournament {
             readLock.unlock();
         }
         return _tournamentReport;
+    }
+
+    @Override
+    public long getSecondsRemaining() throws IllegalStateException{
+        throw new IllegalStateException();
     }
 }

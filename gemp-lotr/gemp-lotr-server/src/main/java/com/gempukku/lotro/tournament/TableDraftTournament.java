@@ -18,6 +18,8 @@ import com.gempukku.lotro.tournament.action.BroadcastAction;
 import com.gempukku.lotro.tournament.action.TournamentProcessAction;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class TableDraftTournament extends BaseTournament implements Tournament {
@@ -25,6 +27,7 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
     private TableDraftTournamentInfo tableDraftInfo;
     private TableDraft table = null;
     private final ChatServer chatServer;
+    private ZonedDateTime nextRoundStart = null;
 
     public TableDraftTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
                                 LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableDraftDefinitions tableDraftDefinitions,
@@ -201,6 +204,7 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
                         if (_tournamentInfo.PairingMechanism.isFinished(getCurrentRound(), _players, _droppedPlayers)) {
                             result.add(finishTournament(collectionsManager));
                         } else {
+                            nextRoundStart = DateUtils.Now().plus(PairingDelayTime);
                             if(getCurrentRound() == 0) {
                                 result.add(new BroadcastAction("Deck registration for tournament <b>" + getTournamentName()
                                         + "</b> has closed. Round "
@@ -261,5 +265,18 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
     @Override
     public boolean isJoinable() {
         return false; // cannot join draft in progress
+    }
+
+    @Override
+    public long getSecondsRemaining() throws IllegalStateException {
+        if (getTournamentStage() == Stage.DECK_BUILDING) {
+            return Duration.between(DateUtils.Now(), tableDraftInfo.deckbuildingDeadline).getSeconds();
+        } else if (getTournamentStage() == Stage.DECK_REGISTRATION) {
+            return Duration.between(DateUtils.Now(), tableDraftInfo.registrationDeadline).getSeconds();
+        } else if (getTournamentStage() == Stage.PLAYING_GAMES && nextRoundStart != null && DateUtils.Now().isBefore(nextRoundStart)) {
+            return Duration.between(DateUtils.Now(), nextRoundStart).getSeconds();
+        } else {
+            throw new IllegalStateException();
+        }
     }
 }

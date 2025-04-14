@@ -18,7 +18,8 @@ public interface HallInfoVisitor {
                                      int readyCheckSecsRemaining, boolean confirmedReadyCheck);
 
     public void visitTournament(String tournamentKey, String collectionName, String formatName, String tournamentName, String type,
-                                String pairingDescription, String tournamentStage, int round, int playerCount, String playerList, boolean playerInCompetition, boolean abandoned, boolean joinable);
+                                String pairingDescription, String tournamentStage, int round, int playerCount, String playerList, boolean playerInCompetition, boolean abandoned, boolean joinable,
+                                long secsRemaining);
 
     public void runningPlayerGame(String gameId);
 }

@@ -264,11 +264,17 @@ public class TournamentService {
         for (var entry : _activeTournaments.entrySet()) {
             var tourneyID = entry.getKey();
             var tournament = entry.getValue();
+            long secsRemaining = -1;
+            try {
+                secsRemaining = tournament.getSecondsRemaining();
+            } catch (IllegalStateException ignore) {
+
+            }
             visitor.visitTournament(tourneyID, tournament.getCollectionType().getFullName(),
                     formatLibrary.getFormat(tournament.getFormatCode()).getName(), tournament.getTournamentName(), tournament.getInfo().Parameters().type.toString(), tournament.getPlayOffSystem(),
                     tournament.getTournamentStage().getHumanReadable(),
                     tournament.getCurrentRound(), tournament.getPlayersInCompetitionCount(), tournament.getPlayerList(), tournament.isPlayerInCompetition(player.getName()), tournament.isPlayerAbandoned(player.getName()),
-                    tournament.isJoinable());
+                    tournament.isJoinable(), secsRemaining);
         }
 
     }

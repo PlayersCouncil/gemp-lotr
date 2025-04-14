@@ -206,4 +206,5 @@ public interface Tournament {
     TournamentInfo getInfo();
 
     boolean isJoinable();
+    long getSecondsRemaining() throws IllegalStateException;
 }
