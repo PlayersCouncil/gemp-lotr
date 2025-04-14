@@ -196,7 +196,7 @@ var GempLotrHallUI = Class.extend({
 				return $(visibilityToggle[index]).hasClass("hidden") ? "0" : "1";
 			};
 
-		var newHallSettings = getSettingValue(0) + "|" + getSettingValue(1) + "|" + getSettingValue(2) + "|" + getSettingValue(3) + "|" + getSettingValue(4)+ "|" + getSettingValue(5) + "|" + getSettingValue(6) + "|" + getSettingValue(7);
+		var newHallSettings = getSettingValue(0) + "|" + getSettingValue(1) + "|" + getSettingValue(2) + "|" + getSettingValue(3) + "|" + getSettingValue(4)+ "|" + getSettingValue(5) + "|" + getSettingValue(6) + "|" + getSettingValue(7) + "|" + getSettingValue(8);
 		console.log("New settings: " + newHallSettings);
 		$.cookie("hallSettings", newHallSettings, { expires:365 });
 	},
