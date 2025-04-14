@@ -666,6 +666,7 @@ var GempLotrHallUI = Class.extend({
 				var stage = tournament.getAttribute("stage");
 					if(stage !== null)
 						stage = stage.toLowerCase();
+				var joinable = tournament.getAttribute("joinable") === "true";
 				var abandoned = tournament.getAttribute("abandoned") === "true";
 				if (action == "add" || action == "update") {
 					var actionsField = $("<td></td>");
@@ -763,8 +764,7 @@ var GempLotrHallUI = Class.extend({
 						actionsField.append(but);
 					}
 					else if(!abandoned){
-						if(!(type === "table_draft") && (stage === "deck-building" || stage === "drafting" || stage === "awaiting kickoff"
-						   || stage === "preparing" || stage === "paused between rounds")) {
+						if(joinable) {
 							var but = $("<button>Join Tournament</button>");
 							$(but).button().click((
 								function(tourneyInfo) {

@@ -238,4 +238,13 @@ public class SealedTournament extends BaseTournament implements Tournament {
         //This is for draft only
     }
 
+    @Override
+    public boolean isJoinable() {
+        Set<String> activePlayers = new HashSet<>(_players);
+        activePlayers.removeAll(_droppedPlayers);
+        int maximumPlayers = _tournamentInfo._params.maximumPlayers;
+        return (getTournamentStage() == Stage.STARTING || getTournamentStage() == Stage.DECK_BUILDING || getTournamentStage() == Stage.DECK_REGISTRATION ||
+                getTournamentStage() == Tournament.Stage.PAUSED || getTournamentStage() == Tournament.Stage.AWAITING_KICKOFF)
+                && (maximumPlayers > activePlayers.size() || maximumPlayers < 0);
+    }
 }

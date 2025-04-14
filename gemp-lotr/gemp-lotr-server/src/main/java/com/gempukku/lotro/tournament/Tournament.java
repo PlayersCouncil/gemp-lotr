@@ -204,4 +204,6 @@ public interface Tournament {
     String produceReport(DeckRenderer renderer) throws CardNotFoundException;
 
     TournamentInfo getInfo();
+
+    boolean isJoinable();
 }

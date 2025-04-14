@@ -101,6 +101,7 @@ public class TournamentService {
         sealedParams.name = queueName;
         sealedParams.cost = 0;
         sealedParams.minimumPlayers = 2;
+        sealedParams.maximumPlayers = 2;
         sealedParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
         sealedParams.prizes = Tournament.PrizeType.NONE;
 
@@ -128,6 +129,7 @@ public class TournamentService {
         soloDraftParams.name = queueName;
         soloDraftParams.cost = 0;
         soloDraftParams.minimumPlayers = 2;
+        soloDraftParams.maximumPlayers = 2;
         soloDraftParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
         soloDraftParams.prizes = Tournament.PrizeType.NONE;
 
@@ -265,7 +267,8 @@ public class TournamentService {
             visitor.visitTournament(tourneyID, tournament.getCollectionType().getFullName(),
                     formatLibrary.getFormat(tournament.getFormatCode()).getName(), tournament.getTournamentName(), tournament.getInfo().Parameters().type.toString(), tournament.getPlayOffSystem(),
                     tournament.getTournamentStage().getHumanReadable(),
-                    tournament.getCurrentRound(), tournament.getPlayersInCompetitionCount(), tournament.getPlayerList(), tournament.isPlayerInCompetition(player.getName()), tournament.isPlayerAbandoned(player.getName()));
+                    tournament.getCurrentRound(), tournament.getPlayersInCompetitionCount(), tournament.getPlayerList(), tournament.isPlayerInCompetition(player.getName()), tournament.isPlayerAbandoned(player.getName()),
+                    tournament.isJoinable());
         }
 
     }

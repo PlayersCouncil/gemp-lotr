@@ -257,4 +257,9 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
     public CollectionType getCollectionType() {
         return tableDraftInfo.generateCollectionInfo();
     }
+
+    @Override
+    public boolean isJoinable() {
+        return false; // cannot join draft in progress
+    }
 }

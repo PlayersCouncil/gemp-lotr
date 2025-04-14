@@ -128,7 +128,7 @@ public class HallCommunicationChannel implements LongPollableResource {
 
                     @Override
                     public void visitTournament(String tournamentKey, String collectionName, String formatName, String tournamentName, String type, String pairingDescription,
-                                                String tournamentStage, int round, int playerCount, String playerList, boolean playerInCompetition, boolean abandoned) {
+                                                String tournamentStage, int round, int playerCount, String playerList, boolean playerInCompetition, boolean abandoned, boolean joinable) {
                         Map<String, String> props = new HashMap<>();
                         props.put("collection", collectionName);
                         props.put("format", formatName);
@@ -141,6 +141,7 @@ public class HallCommunicationChannel implements LongPollableResource {
                         props.put("playerList", playerList);
                         props.put("signedUp", String.valueOf(playerInCompetition));
                         props.put("abandoned", String.valueOf(abandoned));
+                        props.put("joinable", String.valueOf(joinable));
 
                         tournamentsOnServer.put(tournamentKey, props);
                     }
