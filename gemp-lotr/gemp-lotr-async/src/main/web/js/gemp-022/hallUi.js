@@ -858,10 +858,11 @@ var GempLotrHallUI = Class.extend({
 						else {
 							$("table.tournaments", this.tablesDiv)
 							.append(row);
+                            // Display running tournaments also as playing tables
+                            $("table.playingTables", this.tablesDiv)
+                                .append(tablesRow)
 							if (joined == "true") {
-                            // Display joined tournaments also as playing tables
-                                $("table.playingTables", this.tablesDiv)
-                                    .append(tablesRow)
+							    // Open draft window
                                 if ((type === "table_solodraft" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff"))
                                 || (type === "table_draft" && stage === "drafting")) {
                                     var tourneyId = tournament.getAttribute("id");
@@ -883,19 +884,14 @@ var GempLotrHallUI = Class.extend({
 						else {
 							$(".tournament" + id, this.tablesDiv).replaceWith(row);
 
-                            // Display joined tournaments also as playing tables
-                            if (joined == "true") {
-                                var existingRow = $(".table" + id, this.tablesDiv);
-                                if (existingRow.length > 0) {
-                                    // If the row exists, replace it
-                                    existingRow.replaceWith(tablesRow);
-                                } else {
-                                    // If the row does not exist, append it
-                                    $("table.playingTables", this.tablesDiv).append(tablesRow);
-                                }
-                            } else if (joined == "false") {
-                                // Remove tournament displayed as playing table
-                                $(".table" + id, this.tablesDiv).remove();
+                            // Display tournaments also as playing tables
+                            var existingRow = $(".table" + id, this.tablesDiv);
+                            if (existingRow.length > 0) {
+                                // If the row exists, replace it
+                                existingRow.replaceWith(tablesRow);
+                            } else {
+                                // If the row does not exist, append it
+                                $("table.playingTables", this.tablesDiv).append(tablesRow);
                             }
 						}
 						
