@@ -251,7 +251,7 @@ public class TableHolder {
 
     private String getTournamentName(GameTable table) {
         final League league = table.getGameSettings().league();
-        final Tournament tournament = tournamentService.getTournamentById(table.getGameSettings().tournamentId());
+        final Tournament tournament = tournamentService.getLiveTournaments().stream().filter(tournament1 -> tournament1.getTournamentId().equals(table.getGameSettings().tournamentId())).findFirst().orElse(null);
         if (league != null) {
             return league.getName() + " - " + table.getGameSettings().leagueSerie().getName();
         } else if (tournament != null) {
