@@ -128,7 +128,15 @@ public abstract class BaseTournament implements Tournament {
 
         for(var player : _players) {
             if(!_droppedPlayers.contains(player)) {
-                _playerList += player + ", ";
+                _playerList += player;
+                if (!_tournamentInfo._params.requiresDeck) {
+                    // limited game, show who already made a deck
+                    var registeredDeck = getPlayerDeck(player);
+                    if (registeredDeck != null && !StringUtils.isEmpty(registeredDeck.getDeckName())) {
+                        _playerList += "✔";
+                    }
+                }
+                _playerList += ", ";
             }
         }
 
@@ -137,7 +145,10 @@ public abstract class BaseTournament implements Tournament {
         }
 
         if(!_droppedPlayers.isEmpty()) {
-            _playerList += ", " + String.join("*, ", _droppedPlayers);
+            if (!_playerList.isEmpty()) {
+                _playerList += ", ";
+            }
+            _playerList += String.join("*, ", _droppedPlayers);
             if(!_droppedPlayers.isEmpty()) {
                 _playerList += "*";
             }

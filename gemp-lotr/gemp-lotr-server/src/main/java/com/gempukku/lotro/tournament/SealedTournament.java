@@ -48,6 +48,8 @@ public class SealedTournament extends BaseTournament implements Tournament {
                 _tournamentService.updateRecordedPlayerDeck(_tournamentId, player, deck);
                 _playerDecks.put(player, deck);
 
+                regeneratePlayerList();
+
                 // If all registered the deck, skip the wait and start playing
                 Set<String> activePlayers = new HashSet<>(_players);
                 activePlayers.removeAll(_droppedPlayers);
