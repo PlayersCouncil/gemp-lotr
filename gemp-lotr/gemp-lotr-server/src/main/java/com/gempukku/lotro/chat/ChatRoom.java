@@ -66,6 +66,10 @@ public class ChatRoom {
         }
     }
 
+    public long getSecsSinceLastMessage() {
+        return (System.currentTimeMillis() - _lastMessages.getLast().getWhen().getTime()) / 1000;
+    }
+
     private void shrinkLastMessages() {
         while (_lastMessages.size() > MAX_MESSAGE_HISTORY_COUNT) {
             _lastMessages.removeFirst();

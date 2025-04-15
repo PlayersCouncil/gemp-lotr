@@ -189,4 +189,8 @@ public class ChatRoomMediator {
             _lock.readLock().unlock();
         }
     }
+
+    public long getSecsSinceLastMessage() {
+        return _chatRoom.getSecsSinceLastMessage();
+    }
 }

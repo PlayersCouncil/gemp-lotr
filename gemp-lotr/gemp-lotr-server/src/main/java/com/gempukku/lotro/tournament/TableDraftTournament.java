@@ -199,10 +199,6 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
                     _tournamentInfo.Stage = Stage.PLAYING_GAMES;
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                 } else if (getTournamentStage() == Stage.PLAYING_GAMES) {
-
-                    // Chat room no longer needed - kept alive during deck-building if people stayed longer
-                    chatServer.destroyChatRoom("Draft-" + tableDraftInfo.tableDraftParams.tournamentId);
-
                     if (_currentlyPlayingPlayers.isEmpty()) {
                         if (_tournamentInfo.PairingMechanism.isFinished(getCurrentRound(), _players, _droppedPlayers)) {
                             result.add(finishTournament(collectionsManager));
