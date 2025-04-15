@@ -53,16 +53,17 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
                 _tournamentService.updateRecordedPlayerDeck(_tournamentId, player, deck);
                 _playerDecks.put(player, deck);
 
-                // If 1v1 and both registered the deck, skip the wait and start playing
-                var players = _tournamentService.retrieveTournamentPlayers(_tournamentId);
+                // If all registered the deck, skip the wait and start playing
+                Set<String> activePlayers = new HashSet<>(_players);
+                activePlayers.removeAll(_droppedPlayers);
                 boolean everyoneSubmitted = true;
-                for(var playerName : players) {
+                for(var playerName : activePlayers) {
                     var registeredDeck = getPlayerDeck(playerName);
                     if(registeredDeck == null || StringUtils.isEmpty(registeredDeck.getDeckName())) {
                         everyoneSubmitted = false;
                     }
                 }
-                if (players.size() == 2 && everyoneSubmitted) {
+                if (everyoneSubmitted) {
                     _tournamentInfo.Stage = soloTableDraftInfo.postRegistrationStage();
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                 }
