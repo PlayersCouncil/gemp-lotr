@@ -207,4 +207,5 @@ public interface Tournament {
 
     boolean isJoinable();
     long getSecondsRemaining() throws IllegalStateException;
+    String getTableDescription();
 }

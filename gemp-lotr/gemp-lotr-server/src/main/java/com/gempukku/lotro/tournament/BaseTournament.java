@@ -531,4 +531,9 @@ public abstract class BaseTournament implements Tournament {
     public long getSecondsRemaining() throws IllegalStateException{
         throw new IllegalStateException();
     }
+
+    @Override
+    public String getTableDescription() {
+        return null;
+    }
 }

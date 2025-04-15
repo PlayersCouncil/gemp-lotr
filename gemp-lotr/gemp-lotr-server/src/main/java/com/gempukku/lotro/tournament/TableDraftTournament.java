@@ -278,4 +278,13 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
             throw new IllegalStateException();
         }
     }
+
+    @Override
+    public String getTableDescription() {
+        if (tableDraftInfo._params.prizes == PrizeType.NONE && tableDraftInfo._params.cost == 0) {
+            return "Casual - " + _tableDraftLibrary.getTableDraftDefinition(tableDraftInfo.tableDraftParams.tableDraftFormatCode).getName();
+        } else {
+            return "Competitive - " + _tableDraftLibrary.getTableDraftDefinition(tableDraftInfo.tableDraftParams.tableDraftFormatCode).getName();
+        }
+    }
 }

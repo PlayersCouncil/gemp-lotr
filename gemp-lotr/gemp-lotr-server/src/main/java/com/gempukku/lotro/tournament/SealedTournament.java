@@ -267,4 +267,13 @@ public class SealedTournament extends BaseTournament implements Tournament {
             throw new IllegalStateException();
         }
     }
+
+    @Override
+    public String getTableDescription() {
+        if (_sealedInfo._params.prizes == PrizeType.NONE && _sealedInfo._params.cost == 0) {
+            return "Casual - " + _sealedInfo.SealedDefinition.GetName();
+        } else {
+            return "Competitive - " + _sealedInfo.SealedDefinition.GetName();
+        }
+    }
 }

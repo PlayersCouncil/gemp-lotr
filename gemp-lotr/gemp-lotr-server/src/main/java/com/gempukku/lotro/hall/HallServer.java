@@ -78,7 +78,7 @@ public class HallServer extends AbstractServer {
         _collectionsManager = collectionsManager;
         _adminService = adminService;
 
-        tableHolder = new TableHolder(leagueService, ignoreDAO);
+        tableHolder = new TableHolder(leagueService, tournamentService, ignoreDAO);
 
         _hallChat = _chatServer.createChatRoom("Game Hall", true, 300, true,
                 "You're now in the Game Hall, use /help to get a list of available commands.<br>Don't forget to check out the new Discord chat integration! Click the 'Switch to Discord' button in the lower right ---->",

@@ -265,4 +265,13 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
             throw new IllegalStateException();
         }
     }
+
+    @Override
+    public String getTableDescription() {
+        if (soloTableDraftInfo._params.prizes == PrizeType.NONE && soloTableDraftInfo._params.cost == 0) {
+            return "Casual - " + _tableDraftLibrary.getTableDraftDefinition(soloTableDraftInfo.soloTableDraftParams.soloTableDraftFormatCode).getName();
+        } else {
+            return "Competitive - " + _tableDraftLibrary.getTableDraftDefinition(soloTableDraftInfo.soloTableDraftParams.soloTableDraftFormatCode).getName();
+        }
+    }
 }
