@@ -99,7 +99,7 @@ public class Card_01_018_Tests
         assertTrue(choices.contains(fcard2.getBlueprintId()));
         assertTrue(choices.contains(fcard3.getBlueprintId()));
 
-        scn.AcknowledgeReveal();
+        scn.DismissRevealedCards();
         assertTrue(scn.FreepsDecisionAvailable("Would you like to discard"));
         scn.FreepsChooseYes();
         assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
@@ -158,7 +158,7 @@ public class Card_01_018_Tests
         assertTrue(choices.contains(scard2.getBlueprintId()));
         assertTrue(choices.contains(scard3.getBlueprintId()));
 
-        scn.AcknowledgeReveal();
+        scn.DismissRevealedCards();
         assertTrue(scn.FreepsDecisionAvailable("Would you like to discard"));
         scn.FreepsChooseYes();
         assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));

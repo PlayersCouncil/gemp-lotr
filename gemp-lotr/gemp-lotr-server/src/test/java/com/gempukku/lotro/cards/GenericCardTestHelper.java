@@ -330,6 +330,8 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public int ShadowGetSelectableCount() {
         return GetADParamEqualsCount(P2, "selectable", "true");
     }
+    public boolean FreepsHasBPChoice(PhysicalCardImpl card) { return FreepsGetBPChoices().contains(card.getBlueprintId()); }
+    public boolean ShadowHasBPChoice(PhysicalCardImpl card) { return ShadowGetBPChoices().contains(card.getBlueprintId()); }
     public List<String> FreepsGetBPChoices() { return GetADParamAsList(P1, "blueprintId"); }
     public List<String> ShadowGetBPChoices() { return GetADParamAsList(P2, "blueprintId"); }
     public List<String> FreepsGetActionChoices() { return GetADParamAsList(P1, "actionId"); }
@@ -1389,12 +1391,6 @@ public class GenericCardTestHelper extends AbstractAtTest {
                 return Collections.singletonList(action);
             }
         });
-    }
-
-    public void AcknowledgeReveal() throws DecisionResultInvalidException
-    {
-        playerDecided(P1, "");
-        playerDecided(P2, "");
     }
 
     public int GetOverwhelmMultiplier(PhysicalCardImpl card)
