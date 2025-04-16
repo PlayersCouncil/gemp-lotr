@@ -196,7 +196,7 @@ var GempLotrHallUI = Class.extend({
 				return $(visibilityToggle[index]).hasClass("hidden") ? "0" : "1";
 			};
 
-		var newHallSettings = getSettingValue(0) + "|" + getSettingValue(1) + "|" + getSettingValue(2) + "|" + getSettingValue(3) + "|" + getSettingValue(4)+ "|" + getSettingValue(5) + "|" + getSettingValue(6) + "|" + getSettingValue(7);
+		var newHallSettings = getSettingValue(0) + "|" + getSettingValue(1) + "|" + getSettingValue(2) + "|" + getSettingValue(3) + "|" + getSettingValue(4)+ "|" + getSettingValue(5) + "|" + getSettingValue(6) + "|" + getSettingValue(7) + "|" + getSettingValue(8);
 		console.log("New settings: " + newHallSettings);
 		$.cookie("hallSettings", newHallSettings, { expires:365 });
 	},
@@ -666,6 +666,7 @@ var GempLotrHallUI = Class.extend({
 				var stage = tournament.getAttribute("stage");
 					if(stage !== null)
 						stage = stage.toLowerCase();
+				var joinable = tournament.getAttribute("joinable") === "true";
 				var abandoned = tournament.getAttribute("abandoned") === "true";
 				if (action == "add" || action == "update") {
 					var actionsField = $("<td></td>");
@@ -763,8 +764,7 @@ var GempLotrHallUI = Class.extend({
 						actionsField.append(but);
 					}
 					else if(!abandoned){
-						if(!(type === "table_draft") && (stage === "deck-building" || stage === "drafting" || stage === "awaiting kickoff"
-						   || stage === "preparing" || stage === "paused between rounds")) {
+						if(joinable) {
 							var but = $("<button>Join Tournament</button>");
 							$(but).button().click((
 								function(tourneyInfo) {
@@ -813,9 +813,13 @@ var GempLotrHallUI = Class.extend({
 						}
 						
 						rowhtml += "<td>" + tournament.getAttribute("name") + "</td>" +
-						"<td>" + tournament.getAttribute("system") + "</td>" +
-						"<td>" + tournament.getAttribute("stage") + "</td>" +
-						"<td>" + tournament.getAttribute("round") + "</td>" +
+						"<td>" + tournament.getAttribute("system") + "</td>";
+						if (tournament.hasAttribute("timeRemaining")) {
+						    rowhtml += "<td>" + tournament.getAttribute("stage") + " - " + tournament.getAttribute("timeRemaining") + "</td>";
+						} else {
+						    rowhtml += "<td>" + tournament.getAttribute("stage") + "</td>";
+						}
+						rowhtml += "<td>" + tournament.getAttribute("round") + "</td>" +
 						"<td><div class='prizeHint' title='Competing Players' value='" + tournament.getAttribute("playerList") + "<br><br>* = abandoned'>" + tournament.getAttribute("playerCount") + "</div></td>" +
 						"</tr>";
 						
@@ -843,7 +847,11 @@ var GempLotrHallUI = Class.extend({
                     var tablesRow = $("<tr class='table" + id + "'></tr>");
                     tablesRow.append("<td>" + tournament.getAttribute("format") + "</td>");
                     tablesRow.append("<td> Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
-                    tablesRow.append("<td>" + tournament.getAttribute("stage") + "</td>");
+                    if (tournament.hasAttribute("timeRemaining")) {
+                        tablesRow.append("<td>" + tournament.getAttribute("stage") + " - " + tournament.getAttribute("timeRemaining") + "</td>");
+                    } else {
+                        tablesRow.append("<td>" + tournament.getAttribute("stage") + "</td>");
+                    }
                     tablesRow.append("<td>" + tournament.getAttribute("playerList") + "</td>");
                     var actionsFieldClone = actionsField.clone(true);
                     tablesRow.append(actionsFieldClone);
@@ -858,10 +866,11 @@ var GempLotrHallUI = Class.extend({
 						else {
 							$("table.tournaments", this.tablesDiv)
 							.append(row);
+                            // Display running tournaments also as playing tables
+                            $("table.playingTables", this.tablesDiv)
+                                .append(tablesRow)
 							if (joined == "true") {
-                            // Display joined tournaments also as playing tables
-                                $("table.playingTables", this.tablesDiv)
-                                    .append(tablesRow)
+							    // Open draft window
                                 if ((type === "table_solodraft" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff"))
                                 || (type === "table_draft" && stage === "drafting")) {
                                     var tourneyId = tournament.getAttribute("id");
@@ -883,19 +892,14 @@ var GempLotrHallUI = Class.extend({
 						else {
 							$(".tournament" + id, this.tablesDiv).replaceWith(row);
 
-                            // Display joined tournaments also as playing tables
-                            if (joined == "true") {
-                                var existingRow = $(".table" + id, this.tablesDiv);
-                                if (existingRow.length > 0) {
-                                    // If the row exists, replace it
-                                    existingRow.replaceWith(tablesRow);
-                                } else {
-                                    // If the row does not exist, append it
-                                    $("table.playingTables", this.tablesDiv).append(tablesRow);
-                                }
-                            } else if (joined == "false") {
-                                // Remove tournament displayed as playing table
-                                $(".table" + id, this.tablesDiv).remove();
+                            // Display tournaments also as playing tables
+                            var existingRow = $(".table" + id, this.tablesDiv);
+                            if (existingRow.length > 0) {
+                                // If the row exists, replace it
+                                existingRow.replaceWith(tablesRow);
+                            } else {
+                                // If the row does not exist, append it
+                                $("table.playingTables", this.tablesDiv).append(tablesRow);
                             }
 						}
 						

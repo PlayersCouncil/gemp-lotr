@@ -101,6 +101,7 @@ public class TournamentService {
         sealedParams.name = queueName;
         sealedParams.cost = 0;
         sealedParams.minimumPlayers = 2;
+        sealedParams.maximumPlayers = 2;
         sealedParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
         sealedParams.prizes = Tournament.PrizeType.NONE;
 
@@ -128,6 +129,7 @@ public class TournamentService {
         soloDraftParams.name = queueName;
         soloDraftParams.cost = 0;
         soloDraftParams.minimumPlayers = 2;
+        soloDraftParams.maximumPlayers = 2;
         soloDraftParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
         soloDraftParams.prizes = Tournament.PrizeType.NONE;
 
@@ -186,7 +188,7 @@ public class TournamentService {
     public void reloadQueues() {
         _tournamentQueues.clear();
 
-        addImmediateRecurringLimitedGames();
+        addImmediateRecurringCasualLimitedGames();
 
         addImmediateRecurringQueue("fotr_queue", "Fellowship Block", "fotrQueue-", "fotr_block");
         addImmediateRecurringQueue("pc_fotr_queue", "PC-Fellowship", "pcfotrQueue-", "pc_fotr_block");
@@ -211,23 +213,25 @@ public class TournamentService {
         }
     }
 
-    private void addImmediateRecurringLimitedGames() {
+    private void addImmediateRecurringCasualLimitedGames() {
+        String casual = "Casual ";
+
         _tableDraftLibrary.getAllTableDrafts().forEach(tableDraftDefinition -> {
             String code = tableDraftDefinition.getCode();
-            addImmediateRecurringTableDraft(code + "_queue", tableDraftDefinition.getName(), code + "_queue-", code, tableDraftDefinition.getMaxPlayers(), DraftTimerFactory.Type.CLASSIC);
+            addImmediateRecurringTableDraft(code + "_queue", casual + tableDraftDefinition.getName(), code + "_queue-", code, tableDraftDefinition.getMaxPlayers(), DraftTimerFactory.Type.CLASSIC);
         });
 
-        addImmediateRecurringDraft("fotr_solo_draft_queue", "FotR Solo Draft", "fotrSoloDraftQueue-", "fotr_draft");
-        addImmediateRecurringDraft("ttt_solo_draft_queue", "TTT Solo Draft", "tttSoloDraftQueue-", "ttt_draft");
-        addImmediateRecurringDraft("hobbit_solo_draft_queue", "Hobbit Solo Draft", "hobbitSoloDraftQueue-", "hobbit_random_draft");
+        addImmediateRecurringDraft("fotr_solo_draft_queue", casual + "FotR Solo Draft", "fotrSoloDraftQueue-", "fotr_draft");
+        addImmediateRecurringDraft("ttt_solo_draft_queue", casual + "TTT Solo Draft", "tttSoloDraftQueue-", "ttt_draft");
+        addImmediateRecurringDraft("hobbit_solo_draft_queue", casual + "Hobbit Solo Draft", "hobbitSoloDraftQueue-", "hobbit_random_draft");
 
-        addImmediateRecurringSealed("fotr_sealed_queue", "Fellowship Block Sealed", "fotrSealedQueue-", "single_fotr_block_sealed");
-        addImmediateRecurringSealed("ttt_sealed_queue", "Towers Block Sealed", "tttSealedQueue-", "single_ttt_block_sealed");
-        addImmediateRecurringSealed("ts_sealed_queue", "Towers Standard Sealed", "tsSealedQueue-", "single_ts_sealed");
-        addImmediateRecurringSealed("king_sealed_queue", "King Block Sealed", "rotkSealedQueue-", "single_rotk_block_sealed");
-        addImmediateRecurringSealed("movie_sealed_queue", "Movie Sealed", "movieSealedQueue-", "single_movie_sealed");
-        addImmediateRecurringSealed("wotr_sealed_queue", "War of the Ring Block Sealed", "wotrSealedQueue-", "single_wotr_block_sealed");
-        addImmediateRecurringSealed("th_sealed_queue", "Hunters Block Sealed", "thSealedQueue-", "single_th_block_sealed");
+        addImmediateRecurringSealed("fotr_sealed_queue", casual + "Fellowship Block Sealed", "fotrSealedQueue-", "single_fotr_block_sealed");
+        addImmediateRecurringSealed("ttt_sealed_queue", casual + "Towers Block Sealed", "tttSealedQueue-", "single_ttt_block_sealed");
+        addImmediateRecurringSealed("ts_sealed_queue", casual + "Towers Standard Sealed", "tsSealedQueue-", "single_ts_sealed");
+        addImmediateRecurringSealed("king_sealed_queue", casual + "King Block Sealed", "rotkSealedQueue-", "single_rotk_block_sealed");
+        addImmediateRecurringSealed("movie_sealed_queue", casual + "Movie Sealed", "movieSealedQueue-", "single_movie_sealed");
+        addImmediateRecurringSealed("wotr_sealed_queue", casual + "War of the Ring Block Sealed", "wotrSealedQueue-", "single_wotr_block_sealed");
+        addImmediateRecurringSealed("th_sealed_queue", casual + "Hunters Block Sealed", "thSealedQueue-", "single_th_block_sealed");
     }
 
     public void clearCache() {
@@ -262,10 +266,17 @@ public class TournamentService {
         for (var entry : _activeTournaments.entrySet()) {
             var tourneyID = entry.getKey();
             var tournament = entry.getValue();
+            long secsRemaining = -1;
+            try {
+                secsRemaining = tournament.getSecondsRemaining();
+            } catch (IllegalStateException ignore) {
+
+            }
             visitor.visitTournament(tourneyID, tournament.getCollectionType().getFullName(),
                     formatLibrary.getFormat(tournament.getFormatCode()).getName(), tournament.getTournamentName(), tournament.getInfo().Parameters().type.toString(), tournament.getPlayOffSystem(),
                     tournament.getTournamentStage().getHumanReadable(),
-                    tournament.getCurrentRound(), tournament.getPlayersInCompetitionCount(), tournament.getPlayerList(), tournament.isPlayerInCompetition(player.getName()), tournament.isPlayerAbandoned(player.getName()));
+                    tournament.getCurrentRound(), tournament.getPlayersInCompetitionCount(), tournament.getPlayerList(), tournament.isPlayerInCompetition(player.getName()), tournament.isPlayerAbandoned(player.getName()),
+                    tournament.isJoinable(), secsRemaining);
         }
 
     }

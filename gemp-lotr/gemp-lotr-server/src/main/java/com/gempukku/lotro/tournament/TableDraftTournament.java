@@ -18,6 +18,8 @@ import com.gempukku.lotro.tournament.action.BroadcastAction;
 import com.gempukku.lotro.tournament.action.TournamentProcessAction;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class TableDraftTournament extends BaseTournament implements Tournament {
@@ -25,6 +27,7 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
     private TableDraftTournamentInfo tableDraftInfo;
     private TableDraft table = null;
     private final ChatServer chatServer;
+    private ZonedDateTime nextRoundStart = null;
 
     public TableDraftTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
                                 LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableDraftDefinitions tableDraftDefinitions,
@@ -56,16 +59,19 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
                 _tournamentService.updateRecordedPlayerDeck(_tournamentId, player, deck);
                 _playerDecks.put(player, deck);
 
-                // If 1v1 and both registered the deck, skip the wait and start playing
-                var players = _tournamentService.retrieveTournamentPlayers(_tournamentId);
+                regeneratePlayerList();
+
+                // If all registered the deck, skip the wait and start playing
+                Set<String> activePlayers = new HashSet<>(_players);
+                activePlayers.removeAll(_droppedPlayers);
                 boolean everyoneSubmitted = true;
-                for(var playerName : players) {
+                for(var playerName : activePlayers) {
                     var registeredDeck = getPlayerDeck(playerName);
                     if(registeredDeck == null || StringUtils.isEmpty(registeredDeck.getDeckName())) {
                         everyoneSubmitted = false;
                     }
                 }
-                if (players.size() == 2 && everyoneSubmitted) {
+                if (everyoneSubmitted) {
                     _tournamentInfo.Stage = tableDraftInfo.postRegistrationStage();
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                 }
@@ -193,14 +199,11 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
                     _tournamentInfo.Stage = Stage.PLAYING_GAMES;
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                 } else if (getTournamentStage() == Stage.PLAYING_GAMES) {
-
-                    // Chat room no longer needed - kept alive during deck-building if people stayed longer
-                    chatServer.destroyChatRoom("Draft-" + tableDraftInfo.tableDraftParams.tournamentId);
-
                     if (_currentlyPlayingPlayers.isEmpty()) {
                         if (_tournamentInfo.PairingMechanism.isFinished(getCurrentRound(), _players, _droppedPlayers)) {
                             result.add(finishTournament(collectionsManager));
                         } else {
+                            nextRoundStart = DateUtils.Now().plus(PairingDelayTime);
                             if(getCurrentRound() == 0) {
                                 result.add(new BroadcastAction("Deck registration for tournament <b>" + getTournamentName()
                                         + "</b> has closed. Round "
@@ -256,5 +259,32 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
     @Override
     public CollectionType getCollectionType() {
         return tableDraftInfo.generateCollectionInfo();
+    }
+
+    @Override
+    public boolean isJoinable() {
+        return false; // cannot join draft in progress
+    }
+
+    @Override
+    public long getSecondsRemaining() throws IllegalStateException {
+        if (getTournamentStage() == Stage.DECK_BUILDING) {
+            return Duration.between(DateUtils.Now(), tableDraftInfo.deckbuildingDeadline).getSeconds();
+        } else if (getTournamentStage() == Stage.DECK_REGISTRATION) {
+            return Duration.between(DateUtils.Now(), tableDraftInfo.registrationDeadline).getSeconds();
+        } else if (getTournamentStage() == Stage.PLAYING_GAMES && nextRoundStart != null && DateUtils.Now().isBefore(nextRoundStart)) {
+            return Duration.between(DateUtils.Now(), nextRoundStart).getSeconds();
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    @Override
+    public String getTableDescription() {
+        if (tableDraftInfo._params.prizes == PrizeType.NONE && tableDraftInfo._params.cost == 0) {
+            return "Casual - " + _tableDraftLibrary.getTableDraftDefinition(tableDraftInfo.tableDraftParams.tableDraftFormatCode).getName();
+        } else {
+            return "Competitive - " + _tableDraftLibrary.getTableDraftDefinition(tableDraftInfo.tableDraftParams.tableDraftFormatCode).getName();
+        }
     }
 }

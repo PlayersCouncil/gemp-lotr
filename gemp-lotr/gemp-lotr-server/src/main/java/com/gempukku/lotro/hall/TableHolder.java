@@ -8,11 +8,14 @@ import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.lotro.tournament.Tournament;
+import com.gempukku.lotro.tournament.TournamentService;
 
 import java.util.*;
 
 public class TableHolder {
     private final LeagueService leagueService;
+    private final TournamentService tournamentService;
     private final IgnoreDAO ignoreDAO;
 
     private final Map<String, GameTable> awaitingTables = new LinkedHashMap<>();
@@ -20,8 +23,9 @@ public class TableHolder {
 
     private int _nextTableId = 1;
 
-    public TableHolder(LeagueService leagueService, IgnoreDAO ignoreDAO) {
+    public TableHolder(LeagueService leagueService, TournamentService tournamentService, IgnoreDAO ignoreDAO) {
         this.leagueService = leagueService;
+        this.tournamentService = tournamentService;
         this.ignoreDAO = ignoreDAO;
     }
 
@@ -247,10 +251,18 @@ public class TableHolder {
 
     private String getTournamentName(GameTable table) {
         final League league = table.getGameSettings().league();
-        if (league != null)
+        final Tournament tournament = tournamentService.getLiveTournaments().stream().filter(tournament1 -> tournament1.getTournamentId().equals(table.getGameSettings().tournamentId())).findFirst().orElse(null);
+        if (league != null) {
             return league.getName() + " - " + table.getGameSettings().leagueSerie().getName();
-        else
+        } else if (tournament != null) {
+            String tournamentTableDescription = tournament.getTableDescription();
+            if (tournamentTableDescription == null || tournamentTableDescription.isEmpty()) {
+                return "Casual - " + table.getGameSettings().timeSettings().name();
+            }
+            return tournamentTableDescription;
+        } else {
             return "Casual - " + table.getGameSettings().timeSettings().name();
+        }
     }
 
     public List<GameTable> getTournamentTables(String tournamentId) {
