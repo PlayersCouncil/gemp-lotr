@@ -93,9 +93,9 @@ public class Card_08_032_Tests
 		var evilcatapult = scn.GetShadowCard("catapult");
 		scn.ShadowMoveCharToTable(runner, shelob);
 		scn.ShadowMoveCardToSupportArea(larder);
-		scn.ShadowMoveCardsToTopOfDeck(evilcatapult);
 
 		scn.StartGame();
+		scn.ShadowMoveCardsToTopOfDeck(evilcatapult);
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertEquals(2, scn.GetFreepsHandCount());

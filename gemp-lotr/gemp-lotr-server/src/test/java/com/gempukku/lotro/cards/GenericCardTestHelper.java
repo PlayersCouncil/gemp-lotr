@@ -100,62 +100,127 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public GenericCardTestHelper(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String format) throws CardNotFoundException, DecisionResultInvalidException {
         super();
 
-        if(siteIDs == null || ringBearerID == null || ringID == null) {
-            initializeSimplestGame();
+        if(siteIDs == null ) {
+            siteIDs = KingSites;
         }
-        else {
-            Map<String, LotroDeck> decks = new HashMap<>();
-            decks.put(P1, new LotroDeck(P1));
-            decks.put(P2, new LotroDeck(P2));
 
-            for(String name : siteIDs.keySet()) {
-                String id = siteIDs.get(name);
-                decks.get(P1).addSite(id);
-                decks.get(P2).addSite(id);
-            }
-
-            decks.get(P1).setRingBearer(ringBearerID);
-            decks.get(P2).setRingBearer(ringBearerID);
-
-            decks.get(P1).setRing(ringID);
-            decks.get(P2).setRing(ringID);
-
-            initializeGameWithDecks(decks, format);
+        if(ringBearerID == null ) {
+            ringBearerID = FOTRFrodo;
         }
+
+        if(ringID == null) {
+            ringID = RulingRing;
+        }
+
+        Map<String, LotroDeck> decks = new HashMap<>();
+        decks.put(P1, new LotroDeck(P1));
+        decks.put(P2, new LotroDeck(P2));
+
+        for(String name : siteIDs.keySet()) {
+            String id = siteIDs.get(name);
+            decks.get(P1).addSite(id);
+            decks.get(P2).addSite(id);
+        }
+
+        for(String name : cardIDs.keySet()) {
+            String id = cardIDs.get(name);
+            decks.get(P1).addCard(id);
+            decks.get(P2).addCard(id);
+        }
+
+        decks.get(P1).setRingBearer(ringBearerID);
+        decks.get(P2).setRingBearer(ringBearerID);
+
+        decks.get(P1).setRing(ringID);
+        decks.get(P2).setRing(ringID);
+
+        initializeGameWithDecks(decks, format);
+
 
         Cards.put(P1, new HashMap<>());
         Cards.put(P2, new HashMap<>());
 
         if(cardIDs != null) {
-            for(String name : cardIDs.keySet()) {
-                String id = cardIDs.get(name);
-                PhysicalCardImpl card = createCard(P1, id);
-                Cards.get(P1).put(name, card);
-                FreepsMoveCardsToBottomOfDeck(card);
-
-                card = createCard(P2, id);
-                Cards.get(P2).put(name, card);
-                ShadowMoveCardsToBottomOfDeck(card);
+//            for(String name : cardIDs.keySet()) {
+//                String id = cardIDs.get(name);
+//                PhysicalCardImpl card = createCard(P1, id);
+//                Cards.get(P1).put(name, card);
+//                FreepsMoveCardsToBottomOfDeck(card);
+//
+//                card = createCard(P2, id);
+//                Cards.get(P2).put(name, card);
+//                ShadowMoveCardsToBottomOfDeck(card);
+//            }
+            for(var card : _game.getGameState().getHand(P1).stream().toList()) {
+                FreepsMoveCardsToTopOfDeck((PhysicalCardImpl)card);
             }
-        }
 
-        if(siteIDs != null) {
-            for (var card : _game.getGameState().getAdventureDeck(P1)) {
-                String name = siteIDs.entrySet()
+            for (var card : _game.getGameState().getDeck(P1)) {
+                String name = cardIDs.entrySet()
                         .stream()
-                        .filter(x -> x.getValue().equals(card.getBlueprintId()))
+                        .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P1).containsKey(x.getKey()))
                         .map(Map.Entry::getKey)
                         .findFirst().get();
 
                 Cards.get(P1).put(name, (PhysicalCardImpl) card);
             }
 
-            for (var card : _game.getGameState().getAdventureDeck(P2)) {
-                String name = siteIDs.entrySet()
+            for(var card : _game.getGameState().getHand(P2).stream().toList()) {
+                ShadowMoveCardsToTopOfDeck((PhysicalCardImpl)card);
+            }
+
+            for (var card : _game.getGameState().getDeck(P2)) {
+                String name = cardIDs.entrySet()
                         .stream()
-                        .filter(x -> x.getValue().equals(card.getBlueprintId()))
+                        .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P2).containsKey(x.getKey()))
                         .map(Map.Entry::getKey)
                         .findFirst().get();
+
+                Cards.get(P2).put(name, (PhysicalCardImpl) card);
+            }
+        }
+
+        if(siteIDs != null) {
+            for (var card : _game.getGameState().getAdventureDeck(P1)) {
+                String name = null;
+
+                if(cardIDs != null) {
+                    name = cardIDs.entrySet()
+                            .stream()
+                            .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P1).containsKey(x.getKey()))
+                            .map(Map.Entry::getKey)
+                            .findFirst().orElse(null);
+                }
+
+                if(name == null) {
+                    name = siteIDs.entrySet()
+                            .stream()
+                            .filter(x -> x.getValue().equals(card.getBlueprintId()))
+                            .map(Map.Entry::getKey)
+                            .findFirst().get();
+                }
+
+                Cards.get(P1).put(name, (PhysicalCardImpl) card);
+            }
+
+            for (var card : _game.getGameState().getAdventureDeck(P2)) {
+                String name = null;
+
+                if(cardIDs != null) {
+                    name = cardIDs.entrySet()
+                            .stream()
+                            .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P2).containsKey(x.getKey()))
+                            .map(Map.Entry::getKey)
+                            .findFirst().orElse(null);
+                }
+
+                if(name == null) {
+                    name = siteIDs.entrySet()
+                            .stream()
+                            .filter(x -> x.getValue().equals(card.getBlueprintId()))
+                            .map(Map.Entry::getKey)
+                            .findFirst().get();
+                }
 
                 Cards.get(P2).put(name, (PhysicalCardImpl) card);
             }
@@ -164,7 +229,29 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
 
     public void StartGame() throws DecisionResultInvalidException {
+        StartGame(true);
+    }
+
+    public void StartGame(boolean resetHand) throws DecisionResultInvalidException {
+        var freepsHand = GetFreepsHand().stream().toList();
+        var shadowHand = GetShadowHand().stream().toList();
+
         SkipStartingFellowships();
+
+        if(resetHand) {
+            for(var card : GetFreepsHand().stream().toList().reversed()) {
+                if(!freepsHand.contains(card)) {
+                    FreepsMoveCardsToTopOfDeck((PhysicalCardImpl) card);
+                }
+            }
+
+            for(var card : GetShadowHand().stream().toList().reversed()) {
+                if(!shadowHand.contains(card)) {
+                    ShadowMoveCardsToTopOfDeck((PhysicalCardImpl) card);
+                }
+            }
+        }
+
         SkipMulligans();
     }
 
@@ -172,8 +259,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public void StartGame(PhysicalCardImpl site1) throws DecisionResultInvalidException {
         //Choosing first site, since that can't be automatic
         FreepsChooseCardBPFromSelection(site1);
-        SkipStartingFellowships();
-        SkipMulligans();
+        StartGame(true);
     }
 
     public void SkipStartingFellowships() throws DecisionResultInvalidException {
@@ -470,6 +556,9 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public PhysicalCardImpl GetFromTopOfPlayerDeck(String player, int index)
     {
         var deck = _game.getGameState().getDeck(player);
+        if(deck.isEmpty())
+            return null;
+
         return (PhysicalCardImpl) deck.get(index - 1);
     }
     public int GetFreepsDiscardCount() { return GetPlayerDiscardCount(P1); }

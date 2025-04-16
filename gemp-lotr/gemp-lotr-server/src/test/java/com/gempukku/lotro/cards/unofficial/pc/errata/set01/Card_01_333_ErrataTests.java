@@ -19,7 +19,6 @@ public class Card_01_333_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("moors", "51_333");
 					put("goblin1", "1_174");
 					put("goblin2", "1_174");
 					put("goblin3", "1_174");
