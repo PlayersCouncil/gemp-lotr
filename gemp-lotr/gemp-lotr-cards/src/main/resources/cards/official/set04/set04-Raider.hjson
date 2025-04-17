@@ -1747,7 +1747,7 @@
 					}
 					{
 						type: canSpot
-						filter: self,notAssignedToSkirmish
+						filter: self,notAssignedToSkirmish,AssignableToSkirmishAgainst(any)
 					}
 				]
 				effect: {

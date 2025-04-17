@@ -5,6 +5,7 @@ import com.gempukku.lotro.PrivateInformationException;
 import com.gempukku.lotro.db.IgnoreDAO;
 import com.gempukku.lotro.db.PlayerDAO;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,10 +21,14 @@ public class ChatServer extends AbstractServer {
     }
 
     public ChatRoomMediator createChatRoom(String name, boolean muteJoinPartMessages, int secondsTimeoutPeriod,
-            boolean allowIncognito, String welcomeMessage) {
+            boolean allowIncognito, String welcomeMessage, String startMessage) {
         ChatRoomMediator chatRoom = new ChatRoomMediator(_ignoreDAO, _playerDAO, name, muteJoinPartMessages, secondsTimeoutPeriod, allowIncognito, welcomeMessage);
         try {
-            chatRoom.sendMessage("System", "Welcome to room: " + name, true);
+            if (startMessage == null) {
+                chatRoom.sendMessage("System", "Welcome to room: " + name, true);
+            } else {
+                chatRoom.sendMessage("System", startMessage, true);
+            }
         } catch (PrivateInformationException exp) {
             // Ignore, sent as admin
         } catch (ChatCommandErrorException e) {
@@ -68,6 +73,20 @@ public class ChatServer extends AbstractServer {
     }
 
     protected void cleanup() {
+        // remove draft chat rooms if they are unused
+        Set<String> toRemove = new HashSet<>();
+        _chatRooms.forEach((roomName, chatRoomMediator) -> {
+            if (roomName.startsWith("Draft-")
+                    && chatRoomMediator.getUsersInRoom(true).size() == 0
+                    && chatRoomMediator.getSecsSinceLastMessage() > 5 * 60) {
+
+                // empty draft chat room without any messages sends in last 45 minutes
+                toRemove.add(roomName);
+            }
+        });
+
+        toRemove.forEach(this::destroyChatRoom);
+
         for (ChatRoomMediator chatRoomMediator : _chatRooms.values())
             chatRoomMediator.cleanup();
     }

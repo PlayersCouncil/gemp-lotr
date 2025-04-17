@@ -405,9 +405,9 @@ var ChatBoxUI = Class.extend({
                 if (from == "System") {
                     msgClass = "systemMessage";
                 }
-                else if(from == "TournamentSystem") {
+                else if(from.startsWith("TournamentSystem")) {
                     if(this.tournamentCallback) {
-                        this.tournamentCallback(text);
+                        this.tournamentCallback(from, text);
                     }
                 }
                 var prefix = "<div class='msg-identifier'>";

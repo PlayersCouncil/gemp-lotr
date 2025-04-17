@@ -241,7 +241,10 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
         }
 
         for (var tourney : _tournamentService.getLiveTournaments()) {
-            if(tourney.getInfo().Parameters().type != Tournament.TournamentType.SEALED)
+            if (tourney.getInfo().Parameters().type == Tournament.TournamentType.CONSTRUCTED)
+                continue;
+
+            if (!tourney.isPlayerInCompetition(resourceOwner.getName()))
                 continue;
 
             CollectionType collectionType = tourney.getCollectionType();

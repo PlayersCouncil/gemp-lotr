@@ -1,6 +1,9 @@
 package com.gempukku.lotro.hall;
 
-import com.gempukku.lotro.*;
+import com.gempukku.lotro.AbstractServer;
+import com.gempukku.lotro.PrivateInformationException;
+import com.gempukku.lotro.SubscriptionConflictException;
+import com.gempukku.lotro.SubscriptionExpiredException;
 import com.gempukku.lotro.chat.ChatCommandCallback;
 import com.gempukku.lotro.chat.ChatCommandErrorException;
 import com.gempukku.lotro.chat.ChatRoomMediator;
@@ -18,7 +21,10 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.service.AdminService;
-import com.gempukku.lotro.tournament.*;
+import com.gempukku.lotro.tournament.Tournament;
+import com.gempukku.lotro.tournament.TournamentCallback;
+import com.gempukku.lotro.tournament.TournamentQueue;
+import com.gempukku.lotro.tournament.TournamentService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -72,10 +78,11 @@ public class HallServer extends AbstractServer {
         _collectionsManager = collectionsManager;
         _adminService = adminService;
 
-        tableHolder = new TableHolder(leagueService, ignoreDAO);
+        tableHolder = new TableHolder(leagueService, tournamentService, ignoreDAO);
 
         _hallChat = _chatServer.createChatRoom("Game Hall", true, 300, true,
-                "You're now in the Game Hall, use /help to get a list of available commands.<br>Don't forget to check out the new Discord chat integration! Click the 'Switch to Discord' button in the lower right ---->");
+                "You're now in the Game Hall, use /help to get a list of available commands.<br>Don't forget to check out the new Discord chat integration! Click the 'Switch to Discord' button in the lower right ---->",
+                null);
         _hallChat.addChatCommandCallback("ban",
                 new ChatCommandCallback() {
                     @Override
@@ -385,7 +392,7 @@ public class HallServer extends AbstractServer {
             if (tournamentQueue.isRequiresDeck())
                 lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournamentQueue.getFormatCode()), player, deckName, tournamentQueue.getCollectionType());
 
-            tournamentQueue.joinPlayer(_collectionsManager, player, lotroDeck);
+            tournamentQueue.joinPlayer(player, lotroDeck);
 
             hallChanged();
 
@@ -393,6 +400,35 @@ public class HallServer extends AbstractServer {
         } finally {
             _hallDataAccessLock.writeLock().unlock();
         }
+    }
+
+    public boolean startQueueEarly(String queueId, Player player) throws HallException {
+        if (_shutdown)
+            throw new HallException("Server is in shutdown mode. Server will be restarted after all running games are finished.");
+
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            TournamentQueue tournamentQueue = _tournamentService.getTournamentQueue(queueId);
+            if (tournamentQueue == null)
+                throw new HallException("Tournament queue already finished accepting players, try again in a few seconds");
+            if (!tournamentQueue.isStartable(player.getName()))
+                throw new HallException("This queue cannot be started early by " + player.getName());
+            if (!tournamentQueue.requestStart(player.getName())) {
+                throw new HallException("This queue failed to be started early by " + player.getName());
+            }
+
+            _tournamentService.processTournamentQueues(); // Immediately refresh when start request was successful
+            _tournamentService.processTournaments(this);
+
+            hallChanged();
+
+            return true;
+        } catch (SQLException | IOException ex) {
+            throw new RuntimeException("Error during server cleanup.", ex);
+        } finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+
     }
 
     /**
@@ -445,7 +481,24 @@ public class HallServer extends AbstractServer {
         try {
             TournamentQueue tournamentQueue = _tournamentService.getTournamentQueue(queueId);
             if (tournamentQueue != null && tournamentQueue.isPlayerSignedUp(player.getName())) {
-                tournamentQueue.leavePlayer(_collectionsManager, player);
+                tournamentQueue.leavePlayer(player);
+                hallChanged();
+            }
+        } finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+    }
+
+    public void confirmReadyCheck(String queueId, Player player) throws SQLException, IOException {
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            TournamentQueue tournamentQueue = _tournamentService.getTournamentQueue(queueId);
+            if (tournamentQueue != null && tournamentQueue.isPlayerSignedUp(player.getName())) {
+                tournamentQueue.confirmReadyCheck(player.getName());
+
+                _tournamentService.processTournamentQueues(); // Immediately refresh
+                _tournamentService.processTournaments(this);
+
                 hallChanged();
             }
         } finally {
@@ -459,7 +512,7 @@ public class HallServer extends AbstractServer {
             boolean result = false;
             for (TournamentQueue tournamentQueue : _tournamentService.getAllTournamentQueues()) {
                 if (tournamentQueue.isPlayerSignedUp(player.getName())) {
-                    tournamentQueue.leavePlayer(_collectionsManager, player);
+                    tournamentQueue.leavePlayer(player);
                     result = true;
                 }
             }
@@ -493,23 +546,20 @@ public class HallServer extends AbstractServer {
         try {
             String result = "";
             var tournament = _tournamentService.getTournamentById(tournamentId);
-            if (tournament != null) {
-                var stage = tournament.getInfo().Stage;
-                if(stage == Tournament.Stage.STARTING || stage == Tournament.Stage.DECK_BUILDING ||
-                        stage == Tournament.Stage.PAUSED || stage == Tournament.Stage.AWAITING_KICKOFF) {
-                    LotroDeck lotroDeck = null;
-                    if (tournament.getInfo().Parameters().requiresDeck) {
-                        lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournament.getFormatCode()), player, deckName, tournament.getCollectionType());
-                    }
-
-                    _tournamentService.recordTournamentPlayer(tournamentId, player.getName(), lotroDeck);
-                    tournament.issuePlayerMaterial(player.getName());
+            if (tournament == null) {
+                result = "That tournament is already over.";
+            } else if (!tournament.isJoinable()) {
+                result = "That tournament does not allow late joining.";
+            } else {
+                LotroDeck lotroDeck = null;
+                if (tournament.getInfo().Parameters().requiresDeck) {
+                    lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournament.getFormatCode()), player, deckName, tournament.getCollectionType());
                 }
+
+                _tournamentService.recordTournamentPlayer(tournamentId, player.getName(), lotroDeck);
+                tournament.issuePlayerMaterial(player.getName());
                 result = "Joined tournament <b>" + tournament.getTournamentName() + "</b> successfully.";
                 hallChanged();
-            }
-            else {
-                result = "That tournament is already over.";
             }
 
             return result;
@@ -522,7 +572,7 @@ public class HallServer extends AbstractServer {
         }
     }
 
-    public String registerSealedTournamentDeck(String tournamentId, Player player, String deckName) throws HallException {
+    public String registerLimitedTournamentDeck(String tournamentId, Player player, String deckName) {
         _hallDataAccessLock.writeLock().lock();
         try {
             String result = "";
@@ -867,8 +917,11 @@ public class HallServer extends AbstractServer {
         private HallTournamentCallback(Tournament tournament) {
             tournamentId = tournament.getTournamentId();
             tournamentName = tournament.getTournamentName();
+            // Tournaments with no prizes and no entry are not competitive
+            boolean casual = tournament.getInfo().Parameters().prizes == Tournament.PrizeType.NONE
+                            && tournament.getInfo().Parameters().cost == 0;
             tournamentGameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
-                    tournamentId, null, null, true, true, false,
+                    tournamentId, null, null, !casual, !casual, false,
                     false, GameTimer.TOURNAMENT_TIMER, null);
 
             wcGameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
@@ -913,10 +966,16 @@ public class HallServer extends AbstractServer {
         }
 
         @Override
-        public void broadcastMessage(String message) {
+        public void broadcastMessage(String message, Collection<String> toWhom) {
             try {
                 //check-in callback
-                _hallChat.sendMessage("TournamentSystem", message, true);
+                if (toWhom == null ) {
+                    _hallChat.sendMessageNoHistory("TournamentSystem", message, true);
+                } else {
+                    StringBuilder builder = new StringBuilder("TournamentSystemTo:");
+                    toWhom.forEach(player -> builder.append(player).append(";"));
+                    _hallChat.sendMessageNoHistory(builder.substring(0, builder.length() - 1), message, true);
+                }
             } catch (PrivateInformationException exp) {
                 // Ignore, sent as admin
             } catch (ChatCommandErrorException e) {
@@ -962,10 +1021,16 @@ public class HallServer extends AbstractServer {
         }
 
         @Override
-        public void broadcastMessage(String message) {
+        public void broadcastMessage(String message, Collection<String> toWhom) {
             try {
                 //check-in callback
-                _hallChat.sendMessage("TournamentSystem", message, true);
+                if (toWhom == null) {
+                    _hallChat.sendMessageNoHistory("TournamentSystem", message, true);
+                } else {
+                    StringBuilder builder = new StringBuilder("TournamentSystemTo:");
+                    toWhom.forEach(player -> builder.append(player).append(";"));
+                    _hallChat.sendMessageNoHistory(builder.substring(0, builder.length() - 1), message, true);
+                }
             } catch (PrivateInformationException exp) {
                 // Ignore, sent as admin
             } catch (ChatCommandErrorException e) {

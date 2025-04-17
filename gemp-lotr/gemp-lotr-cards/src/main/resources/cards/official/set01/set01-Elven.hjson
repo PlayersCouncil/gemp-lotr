@@ -688,20 +688,17 @@
 					}
 					true: {
 						type: optional
-						text: Would you like to discard an ISENGARD minion revealed to draw 2 cards?
+						text: Would you like to discard an {ISENGARD} minion revealed to draw 2 cards?
+						cost: {
+							type: discardFromHand
+							hand: shadowPlayer
+							forced: true
+							player: you
+							select: choose(memory(revealedCards),culture(isengard),minion)
+						}
 						effect: {
-							type: costToEffect
-							cost: {
-								type: discardFromHand
-								hand: shadowPlayer
-								forced: true
-								player: you
-								select: choose(memory(revealedCards),culture(isengard),minion)
-							}
-							effect: {
-								type: drawCards
-								count: 2
-							}
+							type: drawCards
+							count: 2
 						}
 					}
 				}

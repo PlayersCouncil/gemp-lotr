@@ -143,25 +143,22 @@
 				{
 					type: optional
 					text: Would you like to liberate a site to make {chosenUrukHai} strength +2 and damage +1?
-					effect: {
-						type: costToEffect
-						cost: {
-							type: liberateSite
-						}
-						effect: [
-							{
-								type: modifyStrength
-								select: memory(chosenUrukHai)
-								amount: 2
-							}
-							{
-								type: addKeyword
-								select: memory(chosenUrukHai)
-								keyword: damage
-								amount: 1
-							}
-						]
+					cost: {
+						type: liberateSite
 					}
+					effect: [
+						{
+							type: modifyStrength
+							select: memory(chosenUrukHai)
+							amount: 2
+						}
+						{
+							type: addKeyword
+							select: memory(chosenUrukHai)
+							keyword: damage
+							amount: 1
+						}
+					]
 				}
 			]
 		}

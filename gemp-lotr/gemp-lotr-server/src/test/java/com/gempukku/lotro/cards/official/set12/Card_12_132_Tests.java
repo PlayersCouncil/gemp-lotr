@@ -17,8 +17,10 @@ public class Card_12_132_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "12_132");
-					// put other cards in here as needed for the test case
+					put("fury", "12_132");
+					put("merry", "4_310");
+
+					put("savage", "1_151");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -38,12 +40,13 @@ public class Card_12_132_Tests
 		 * Twilight Cost: 2
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Each time a [shire] companion loses a skirmish, add a [shire] token here.<br><b>Skirmish:</b> Remove a [shire] token from here to make a [shire] companion strength +1.
+		 * Game Text: Each time a [shire] companion loses a skirmish, add a [shire] token here.
+		 * <b>Skirmish:</b> Remove a [shire] token from here to make a [shire] companion strength +1.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("fury");
 
 		assertEquals("Sudden Fury", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,17 +58,65 @@ public class Card_12_132_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SuddenFuryTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SuddenFuryAddsATokenWhenAHobbitLosesAStandardSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var fury = scn.GetFreepsCard("fury");
+		var merry = scn.GetFreepsCard("merry");
+		scn.FreepsMoveCardToSupportArea(fury);
+		scn.FreepsMoveCharToTable(merry);
+
+		var savage = scn.GetShadowCard("savage");
+		scn.ShadowMoveCharToTable(savage);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(merry, savage);
+
+		assertEquals(0, scn.GetCultureTokensOn(fury));
+		scn.PassSkirmishActions();
+		scn.FreepsResolveRuleFirst();
+		assertEquals(1, scn.GetCultureTokensOn(fury));
+	}
+
+	@Test
+	public void SuddenFuryAddsATokenWhenAHobbitIsTheLastFreepsSkirmisherAndIsRemoved() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var fury = scn.GetFreepsCard("fury");
+		var merry = scn.GetFreepsCard("merry");
+		scn.FreepsMoveCardToSupportArea(fury);
+		scn.FreepsMoveCharToTable(merry);
+
+		var savage = scn.GetShadowCard("savage");
+		scn.ShadowMoveCharToTable(savage);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(merry, savage);
+
+		assertEquals(0, scn.GetCultureTokensOn(fury));
+		scn.FreepsUseCardAction(merry);
+		scn.ShadowChooseNo();
+		scn.FreepsResolveRuleFirst();
+		assertEquals(1, scn.GetCultureTokensOn(fury));
+	}
+
+	@Test
+	public void SuddenFuryDoesNotAddTokenWhenHobbitRemovedBeforeSkirmishBegins() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var fury = scn.GetFreepsCard("fury");
+		scn.FreepsMoveCardToHand(fury);
+
+		scn.StartGame();
+		scn.FreepsPlayCard(fury);
 
 		assertEquals(2, scn.GetTwilight());
 	}

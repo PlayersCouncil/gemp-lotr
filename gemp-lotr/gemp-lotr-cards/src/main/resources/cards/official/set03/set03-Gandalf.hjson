@@ -246,16 +246,19 @@
 					true: {
 						type: optional
 						text: Would you like to add twilight to discard {revealedCard}
+						cost: {
+							type: addTwilight
+							amount: {
+								type: twilightCostInMemory
+								memory: revealedCard
+							}
+						}
 						effect: [
 							{
-								type: addTwilight
-								amount: {
-									type: twilightCostInMemory
-									memory: revealedCard
-								}
-							}
-							{
-								type: discard
+								type: DiscardFromHand
+								forced: true
+								hand: shadow
+								player: shadow
 								select: memory(revealedCard)
 							}
 						]

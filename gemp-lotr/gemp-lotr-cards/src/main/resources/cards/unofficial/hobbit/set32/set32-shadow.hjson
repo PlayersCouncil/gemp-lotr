@@ -1133,10 +1133,8 @@
 		}
 		{
 		  type: optional
-		  text: Would you like to discard 2 Orcs to take this event back into hand?
-		  effect: {
-			type: costToEffect
-			cost: {
+		  text: Would you like to discard 2 Orcs to take {self} back into hand?
+		  cost: {
 			  type: discard
 			  select: choose(orc)
 			  count: 2
@@ -1144,7 +1142,6 @@
 			effect: {
 			  type: putPlayedEventIntoHand
 			}
-		  }
 		}
 	  ]
 	}

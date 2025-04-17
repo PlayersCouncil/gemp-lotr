@@ -108,6 +108,24 @@ public class ChatRoomMediator {
         }
     }
 
+    public void sendMessageNoHistory(String playerId, String message, boolean admin) throws PrivateInformationException, ChatCommandErrorException {
+        if (message.trim().startsWith("/")) {
+            processIfKnownCommand(playerId, message.trim().substring(1), admin);
+            return;
+        }
+
+        _lock.writeLock().lock();
+        try {
+            if (!admin && _allowedPlayers != null && !_allowedPlayers.contains(playerId))
+                throw new PrivateInformationException();
+
+            _logger.trace(playerId+": "+message);
+            _chatRoom.postMessage(playerId, message, false, admin);
+        } finally {
+            _lock.writeLock().unlock();
+        }
+    }
+
     public void setIncognito(String username, boolean incognito) {
         _lock.writeLock().lock();
         try {
@@ -170,5 +188,9 @@ public class ChatRoomMediator {
         } finally {
             _lock.readLock().unlock();
         }
+    }
+
+    public long getSecsSinceLastMessage() {
+        return _chatRoom.getSecsSinceLastMessage();
     }
 }

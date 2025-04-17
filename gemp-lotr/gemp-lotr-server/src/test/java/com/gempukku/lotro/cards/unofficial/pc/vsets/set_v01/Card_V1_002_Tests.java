@@ -76,9 +76,10 @@ public class Card_V1_002_Tests
         scn.FreepsMoveCardToDiscard("axe");
         scn.FreepsMoveCardToDiscard("runner");
         scn.FreepsMoveCardToDiscard("plunder");
-        scn.FreepsMoveCardsToTopOfDeck(strike);
 
         scn.StartGame();
+
+        scn.FreepsMoveCardsToTopOfDeck(strike);
 
         scn.FreepsUseCardAction("Discard 1");
 

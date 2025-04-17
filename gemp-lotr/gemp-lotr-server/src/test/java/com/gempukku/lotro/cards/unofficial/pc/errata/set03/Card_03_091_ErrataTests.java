@@ -120,9 +120,9 @@ public class Card_03_091_ErrataTests
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
 		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardsToTopOfDeck(shadow1,shadow2);
 
 		scn.StartGame();
+		scn.FreepsMoveCardsToTopOfDeck(shadow1,shadow2);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
@@ -162,9 +162,10 @@ public class Card_03_091_ErrataTests
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
 		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardsToTopOfDeck(freeps1,shadow1);
 
 		scn.StartGame();
+
+		scn.FreepsMoveCardsToTopOfDeck(freeps1,shadow1);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
@@ -209,9 +210,9 @@ public class Card_03_091_ErrataTests
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
 		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardsToTopOfDeck(freeps1,freeps2);
 
 		scn.StartGame();
+		scn.FreepsMoveCardsToTopOfDeck(freeps1,freeps2);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
@@ -256,9 +257,10 @@ public class Card_03_091_ErrataTests
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
 		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardsToTopOfDeck(freeps1,shadow1);
 
 		scn.StartGame();
+
+		scn.FreepsMoveCardsToTopOfDeck(freeps1,shadow1);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
@@ -307,9 +309,10 @@ public class Card_03_091_ErrataTests
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
 		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardsToTopOfDeck(freeps1,freeps2);
 
 		scn.StartGame();
+
+		scn.FreepsMoveCardsToTopOfDeck(freeps1,freeps2);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();

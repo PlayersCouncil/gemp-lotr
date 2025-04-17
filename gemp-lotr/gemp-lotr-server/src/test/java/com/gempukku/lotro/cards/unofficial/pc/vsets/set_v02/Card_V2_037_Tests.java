@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,11 @@ public class Card_V2_037_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_37");
-					// put other cards in here as needed for the test case
+					put("evil", "102_37");
+					put("runner", "1_178");
+					put("balrog", "102_38");
+
+					put("sam", "1_311");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -45,7 +47,7 @@ public class Card_V2_037_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("evil");
 
 		assertEquals("Ancient Evil", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,18 +59,71 @@ public class Card_V2_037_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AncientEvilTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void AncientEvilStacksWinningMoriaCards() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var evil = scn.GetShadowCard("evil");
+		var runner = scn.GetShadowCard("runner");
+		var balrog = scn.GetShadowCard("balrog");
+		scn.ShadowMoveCardToSupportArea(evil);
+		scn.ShadowMoveCharToTable(runner, balrog);
+
+		var sam = scn.GetFreepsCard("sam");
+		scn.FreepsMoveCharToTable(sam);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(sam, runner);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, balrog.getZone());
+		scn.PassSkirmishActions();
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(Zone.STACKED, runner.getZone());
+		assertEquals(evil, runner.getStackedOn());
+		assertEquals(Zone.SHADOW_CHARACTERS, balrog.getZone());
+
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignAndResolve(sam, balrog);
+		scn.PassFierceSkirmishActions();
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(Zone.STACKED, balrog.getZone());
+		assertEquals(evil, balrog.getStackedOn());
+	}
+
+	@Test
+	public void AncientEvilPlaysStackedUniqueMoriaMinionsWithDiscountThenSelfDiscards() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var evil = scn.GetShadowCard("evil");
+		var runner = scn.GetShadowCard("runner");
+		var balrog = scn.GetShadowCard("balrog");
+		scn.ShadowMoveCardToSupportArea(evil);
+		scn.StackCardsOn(evil, runner, balrog);
+
+		scn.StartGame();
+		scn.SetTwilight(17);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(Zone.STACKED, runner.getZone());
+		assertEquals(evil, runner.getStackedOn());
+		assertEquals(Zone.STACKED, balrog.getZone());
+		assertEquals(evil, balrog.getStackedOn());
+		assertEquals(20, scn.GetTwilight());
+		assertTrue(scn.ShadowActionAvailable(evil));
+
+		scn.ShadowUseCardAction(evil);
+		assertEquals(Zone.SHADOW_CHARACTERS, balrog.getZone());
+		assertEquals(Zone.DISCARD, evil.getZone());
+		assertEquals(Zone.DISCARD, runner.getZone());
+		//20 to start, -14 for balrog, -2 for roaming, +1 for discount of 1 stacked card besides balrog
+		assertEquals(5, scn.GetTwilight());
 	}
 }

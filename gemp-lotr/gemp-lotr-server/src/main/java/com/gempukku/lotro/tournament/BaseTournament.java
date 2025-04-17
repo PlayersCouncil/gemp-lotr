@@ -7,23 +7,21 @@ import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.competitive.ModifiedMedianStandingsProducer;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.CollectionType;
-import com.gempukku.lotro.draft.Draft;
+import com.gempukku.lotro.draft2.SoloDraftDefinitions;
+import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.TableHolder;
-import com.gempukku.lotro.logic.actions.AbstractCostToEffectAction;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.tournament.action.BroadcastAction;
 import com.gempukku.lotro.tournament.action.CreateGameAction;
 import com.gempukku.lotro.tournament.action.TournamentProcessAction;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.time.Duration;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -52,6 +50,9 @@ public abstract class BaseTournament implements Tournament {
     protected final LotroFormatLibrary _formatLibrary;
     protected final TableHolder _tables;
 
+    protected final SoloDraftDefinitions _soloDraftLibrary;
+    protected final TableDraftDefinitions _tableDraftLibrary;
+
     protected final ReadWriteLock lock = new ReentrantReadWriteLock();
     protected final Lock readLock = lock.readLock();
     protected final Lock writeLock = lock.writeLock();
@@ -63,13 +64,16 @@ public abstract class BaseTournament implements Tournament {
     protected String _tournamentReport;
 
     public BaseTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
-            LotroFormatLibrary formatLibrary,  TableHolder tables, String tournamentId) {
+                          LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftLibrary, TableDraftDefinitions tableDraftDefinitions,
+                          TableHolder tables, String tournamentId) {
         _tournamentService = tournamentService;
         _collectionsManager = collectionsManager;
         _productLibrary = productLibrary;
         _formatLibrary = formatLibrary;
         _tournamentId = tournamentId;
         _tables = tables;
+        _soloDraftLibrary = soloDraftLibrary;
+        _tableDraftLibrary = tableDraftDefinitions;
 
         RefreshTournamentInfo();
     }
@@ -124,7 +128,15 @@ public abstract class BaseTournament implements Tournament {
 
         for(var player : _players) {
             if(!_droppedPlayers.contains(player)) {
-                _playerList += player + ", ";
+                _playerList += player;
+                if (!_tournamentInfo._params.requiresDeck) {
+                    // limited game, show who already made a deck
+                    var registeredDeck = getPlayerDeck(player);
+                    if (registeredDeck != null && !StringUtils.isEmpty(registeredDeck.getDeckName())) {
+                        _playerList += "✔";
+                    }
+                }
+                _playerList += ", ";
             }
         }
 
@@ -133,7 +145,10 @@ public abstract class BaseTournament implements Tournament {
         }
 
         if(!_droppedPlayers.isEmpty()) {
-            _playerList += ", " + String.join("*, ", _droppedPlayers);
+            if (!_playerList.isEmpty()) {
+                _playerList += ", ";
+            }
+            _playerList += String.join("*, ", _droppedPlayers);
             if(!_droppedPlayers.isEmpty()) {
                 _playerList += "*";
             }
@@ -268,6 +283,14 @@ public abstract class BaseTournament implements Tournament {
             _tournamentService.recordPlayerTournamentAbandon(_tournamentId, player);
             _droppedPlayers.add(player);
             regeneratePlayerList();
+
+            // if last player dropped, finish the tournament
+            Set<String> activePlayers = new HashSet<>(_players);
+            activePlayers.removeAll(_droppedPlayers);
+            if (activePlayers.size() == 0) {
+                finishTournament(null);
+            }
+
             return "You have successfully dropped from the tournament.  Thanks for playing!";
         } finally {
             writeLock.unlock();
@@ -292,8 +315,12 @@ public abstract class BaseTournament implements Tournament {
     protected TournamentProcessAction finishTournament(CollectionsManager collectionsManager) {
         _tournamentInfo.Stage = Stage.FINISHED;
         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
-        awardPrizes(collectionsManager);
-        return new BroadcastAction("Tournament " + getTournamentName() + " is finished.");
+        if (collectionsManager != null) {
+            awardPrizes(collectionsManager);
+        }
+        Set<String> activePlayers = new HashSet<>(_players);
+        activePlayers.removeAll(_droppedPlayers);
+        return new BroadcastAction("Tournament " + getTournamentName() + " is finished.", activePlayers);
     }
 
     protected void awardPrizes(CollectionsManager collectionsManager) {
@@ -336,7 +363,9 @@ public abstract class BaseTournament implements Tournament {
             }
 
             if (!byeResults.isEmpty()) {
-                actions.add(new BroadcastAction("Bye awarded to: "+ StringUtils.join(byeResults, ", ")));
+                Set<String> activePlayers = new HashSet<>(_players);
+                activePlayers.removeAll(_droppedPlayers);
+                actions.add(new BroadcastAction("Bye awarded to: "+ StringUtils.join(byeResults, ", "), activePlayers));
             }
 
             for (String bye : byeResults) {
@@ -496,5 +525,15 @@ public abstract class BaseTournament implements Tournament {
             readLock.unlock();
         }
         return _tournamentReport;
+    }
+
+    @Override
+    public long getSecondsRemaining() throws IllegalStateException{
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public String getTableDescription() {
+        return null;
     }
 }

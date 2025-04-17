@@ -93,9 +93,9 @@ public class Card_08_032_Tests
 		var evilcatapult = scn.GetShadowCard("catapult");
 		scn.ShadowMoveCharToTable(runner, shelob);
 		scn.ShadowMoveCardToSupportArea(larder);
-		scn.ShadowMoveCardsToTopOfDeck(evilcatapult);
 
 		scn.StartGame();
+		scn.ShadowMoveCardsToTopOfDeck(evilcatapult);
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertEquals(2, scn.GetFreepsHandCount());
@@ -118,5 +118,37 @@ public class Card_08_032_Tests
 		scn.ShadowChooseCard(larder);
 		assertEquals(Zone.DISCARD, larder.getZone());
 		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
+	}
+
+	@Test
+	public void CatapultBehavesWhenOpponentHas0CardsInDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var catapult = scn.GetFreepsCard("catapult");
+		scn.FreepsMoveCardToHand("fodder1", "fodder2");
+		scn.FreepsMoveCardToSupportArea(catapult);
+
+		var runner = scn.GetShadowCard("runner");
+		var shelob = scn.GetShadowCard("shelob");
+		var larder = scn.GetShadowCard("larder");
+		scn.ShadowMoveCharToTable(runner, shelob);
+		scn.ShadowMoveCardToSupportArea(larder);
+		scn.ShadowMoveCardToDiscard("catapult", "fodder1", "fodder2");
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertEquals(0, scn.GetShadowDeckCount());
+		assertTrue(scn.FreepsActionAvailable(catapult));
+
+		scn.FreepsUseCardAction(catapult);
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(2, scn.GetFreepsDiscardCount());
+
+		//Skipped right to the other player's maneuver action
+		assertTrue(scn.ShadowAnyDecisionsAvailable());
 	}
 }

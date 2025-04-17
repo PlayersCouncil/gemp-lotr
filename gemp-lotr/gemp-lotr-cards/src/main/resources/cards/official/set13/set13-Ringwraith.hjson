@@ -53,15 +53,12 @@
 						effect: {
 							type: optional
 							text: Would you like to heal {exhaustedCompanion} to add a burden?
+							cost: {
+								type: heal
+								select: memory(exhaustedCompanion)
+							}
 							effect: {
-								type: costToEffect
-								cost: {
-									type: heal
-									select: memory(exhaustedCompanion)
-								}
-								effect: {
-									type: addBurdens
-								}
+								type: addBurdens
 							}
 						}
 					}

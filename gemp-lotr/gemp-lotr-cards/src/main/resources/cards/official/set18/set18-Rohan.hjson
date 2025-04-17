@@ -318,6 +318,7 @@
 					type: transfer
 					select: choose(culture(rohan),possession)
 					where: self
+					checkTarget: true
 				}
 			}
 		]

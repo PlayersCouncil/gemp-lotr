@@ -856,15 +856,12 @@
 						effect: {
 							type: optional
 							text: Would you like to heal the Ring-beaer to add a burden?
+							cost: {
+								type: heal
+								select: choose(ringBearer)
+							}
 							effect: {
-								type: costToEffect
-								cost: {
-									type: heal
-									select: choose(ringBearer)
-								}
-								effect: {
-									type: addBurdens
-								}
+								type: addBurdens
 							}
 						}
 					}

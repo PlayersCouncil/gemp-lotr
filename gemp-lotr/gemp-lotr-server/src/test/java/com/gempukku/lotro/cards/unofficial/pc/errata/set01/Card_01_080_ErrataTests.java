@@ -89,9 +89,9 @@ public class Card_01_080_ErrataTests
 		PhysicalCardImpl chaff2 = scn.GetFreepsCard("chaff2");
 		scn.FreepsMoveCardToHand(chaff1);
 		scn.FreepsMoveCharToTable(ottar);
-		scn.FreepsMoveCardsToTopOfDeck(chaff2);
 
 		scn.StartGame();
+		scn.FreepsMoveCardsToTopOfDeck(chaff2);
 
 		assertEquals(0, scn.GetWoundsOn(ottar));
 		assertEquals(Zone.HAND, chaff1.getZone());

@@ -112,7 +112,7 @@ class Card {
                 this.bareBlueprint = this.bareBlueprint + "ai";
         }
         
-        this.tengwar = this.blueprintId.includes("T");
+        this.tengwar = this.blueprintId.match(/(_\d+)T/);
         
         this.hasWiki = Card.getFixedImage(this.bareBlueprint) == null
             && packBlueprints[this.bareBlueprint] == null;
