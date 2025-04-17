@@ -1043,10 +1043,10 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public void FreepsResolveSkirmish(String name) throws DecisionResultInvalidException { FreepsResolveSkirmish(GetFreepsCard(name)); }
     public void FreepsResolveSkirmish(PhysicalCardImpl comp) throws DecisionResultInvalidException { FreepsChooseCard(comp); }
 
-    public void FreepsChooseCard(String name) throws DecisionResultInvalidException { FreepsChooseCard(GetFreepsCard(name)); }
-    public void FreepsChooseCard(PhysicalCardImpl card) throws DecisionResultInvalidException { playerDecided(P1, String.valueOf(card.getCardId())); }
-    public void ShadowChooseCard(String name) throws DecisionResultInvalidException { ShadowChooseCard(GetShadowCard(name)); }
-    public void ShadowChooseCard(PhysicalCardImpl card) throws DecisionResultInvalidException { playerDecided(P2, String.valueOf(card.getCardId())); }
+    public void FreepsChooseCard(String name) throws DecisionResultInvalidException { FreepsChooseCards(GetFreepsCard(name)); }
+    public void FreepsChooseCard(PhysicalCardImpl card) throws DecisionResultInvalidException { FreepsChooseCards(card); }
+    public void ShadowChooseCard(String name) throws DecisionResultInvalidException { ShadowChooseCards(GetShadowCard(name)); }
+    public void ShadowChooseCard(PhysicalCardImpl card) throws DecisionResultInvalidException { ShadowChooseCards(card); }
 
     public void FreepsChooseAnyCard() throws DecisionResultInvalidException { FreepsChoose(FreepsGetCardChoices().getFirst()); }
     public void ShadowChooseAnyCard() throws DecisionResultInvalidException { ShadowChoose(ShadowGetCardChoices().getFirst()); }
