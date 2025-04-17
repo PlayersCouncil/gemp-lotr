@@ -101,15 +101,7 @@
 				}
 				effect: {
 					type: discard
-					select: all(other,possession,attachedTo(bearer))
-				}
-			}
-			{
-				type: modifier
-				modifier: {
-					type: CantBear
-					filter: bearer
-					cardFilter: hand weapon
+					select: all(other,or(possession,weapon),attachedTo(bearer))
 				}
 			}
 			{
