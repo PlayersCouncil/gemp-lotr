@@ -270,37 +270,11 @@
 		]
 		effects: [
 			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: constantlyCheck
+				type: PermanentSiteModifier
+				modifier: {
+					type: CantReplaceSite
+					filter: inSameRegion
 				}
-				requires: {
-					type: not
-					requires: {
-						type: hasInZoneData
-						filter: self
-					}
-				}
-				effect: [
-					{
-						type: MemorizeInfo
-						memory: used
-						info: yes
-					}
-					{
-						type: storeWhileInZone
-						memory: used
-					}
-					{
-						type: addModifier
-						modifier: {
-							type: cantReplaceSite
-							filter: inSameRegion
-						}
-						until: endOfGame
-					}
-				]
 			}
 		]
 		gametext: <b>Battleground</b>. <b>Mountain</b>. <b>Underground</b>. Until the end of the game, sites in this region cannot be replaced.
