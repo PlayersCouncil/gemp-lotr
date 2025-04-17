@@ -1347,12 +1347,12 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public void ApplyAdHocModifier(Modifier mod)
     {
-        _game.getModifiersEnvironment().addUntilEndOfTurnModifier(mod);
+        _game.getModifiersEnvironment().addAlwaysOnModifier(mod);
     }
 
     public void ApplyAdHocAction(ActionProxy action)
     {
-        _game.getActionsEnvironment().addUntilEndOfTurnActionProxy(action);
+        _game.getActionsEnvironment().addAlwaysOnActionProxy(action);
     }
 
     public void ShadowTakeControlOfSite() throws DecisionResultInvalidException {

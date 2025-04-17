@@ -30,6 +30,7 @@ public interface ActionsEnvironment {
     void addUntilEndOfPhaseActionProxy(ActionProxy actionProxy, Phase phase);
 
     void addUntilEndOfTurnActionProxy(ActionProxy actionProxy);
+    void addAlwaysOnActionProxy(ActionProxy actionProxy);
 
     void addActionToStack(Action action);
 
