@@ -8,10 +8,8 @@ import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.draft3.DraftPlayer;
 import com.gempukku.lotro.draft3.TableDraft;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
-import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
-import com.gempukku.lotro.game.SortAndFilterCards;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.packs.ProductLibrary;
@@ -25,15 +23,10 @@ import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TableDraftRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
