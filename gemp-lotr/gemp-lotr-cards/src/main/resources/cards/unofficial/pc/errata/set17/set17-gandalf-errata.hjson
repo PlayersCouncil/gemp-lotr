@@ -96,14 +96,12 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
 				trigger: {
-					type: Played
-					filter: self
+					type: ConstantlyCheck
 				}
 				effect: {
-					type: Discard
-					select: all(attachedTo(bearer),or(possession,weapon),another)
+					type: discard
+					select: all(other,possession,attachedTo(bearer))
 				}
 			}
 			{
