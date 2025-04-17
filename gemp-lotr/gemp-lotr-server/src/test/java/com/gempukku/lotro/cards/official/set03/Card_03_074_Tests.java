@@ -17,8 +17,10 @@ public class Card_03_074_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "3_74");
-					// put other cards in here as needed for the test case
+					put("raider", "3_74");
+					put("demands", "2_40");
+
+					put("celeborn", "1_34");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +48,7 @@ public class Card_03_074_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("raider");
 
 		assertEquals("Uruk Raider", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +65,27 @@ public class Card_03_074_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukRaiderTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void UrukRaiderIsStrengthPlus3AndFierceWhileAllyIsInDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var celeborn = scn.GetFreepsCard("celeborn");
+		scn.FreepsMoveCardToHand(celeborn);
+
+		var raider = scn.GetShadowCard("raider");
+		scn.ShadowMoveCharToTable(raider);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(Zone.HAND,  celeborn.getZone());
+		assertEquals(6, scn.GetStrength(raider));
+		assertFalse(scn.hasKeyword(raider, Keyword.FIERCE));
+
+		scn.FreepsMoveCardToDeadPile(celeborn);
+
+		assertEquals(Zone.DEAD,  celeborn.getZone());
+		assertEquals(9, scn.GetStrength(raider));
+		assertTrue(scn.hasKeyword(raider, Keyword.FIERCE));
 	}
 }
