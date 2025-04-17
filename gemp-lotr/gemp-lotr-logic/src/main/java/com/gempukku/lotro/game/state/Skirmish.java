@@ -3,7 +3,7 @@ package com.gempukku.lotro.game.state;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class Skirmish {
@@ -14,7 +14,7 @@ public class Skirmish {
     private Evaluator _fpStrengthOverrideEvaluator;
     private Evaluator _shadowStrengthOverrideEvaluator;
 
-    private final Set<PhysicalCard> _removedFromSkirmish = new HashSet<>();
+    private final Set<PhysicalCard> _removedFromSkirmish = new LinkedHashSet<>();
 
     public Skirmish(PhysicalCard fellowshipCharacter, Set<PhysicalCard> shadowCharacters) {
         _fellowshipCharacter = fellowshipCharacter;

@@ -78,6 +78,7 @@ public class ResolveSkirmishEffect extends AbstractEffect {
 
 		var shadow = skirmish.getShadowCharacters();
 		var freeps = fpList(skirmish.getFellowshipCharacter());
+		var removed = skirmish.getRemovedFromSkirmish();
 
 		Set<PhysicalCard> involving = new HashSet<>();
 		involving.addAll(freeps);
@@ -125,9 +126,21 @@ public class ResolveSkirmishEffect extends AbstractEffect {
 		for (PhysicalCard loser : losers) {
 			game.getActionsEnvironment().emitEffectResult(new CharacterLostSkirmishResult(skirmishType, loser, involving));
 		}
+		// Legacy Ruling #2: The final removed character from a skirmish counts as a loser
+		// https://wiki.lotrtcgpc.net/wiki/Legacy_Ruling_2
+		if(losers.isEmpty()) {
+			PhysicalCard finalRemoved = null;
+			for(var card : removed) {
+				finalRemoved = card;
+			}
+			if(finalRemoved != null) {
+				game.getActionsEnvironment().emitEffectResult(new CharacterLostSkirmishResult(skirmishType, finalRemoved, involving));
+			}
+		}
 		for (PhysicalCard winner : winners) {
 			game.getActionsEnvironment().emitEffectResult(new CharacterWonSkirmishResult(skirmishType, winner, involving));
 		}
+
 
 		return new FullEffectResult(true);
 	}
