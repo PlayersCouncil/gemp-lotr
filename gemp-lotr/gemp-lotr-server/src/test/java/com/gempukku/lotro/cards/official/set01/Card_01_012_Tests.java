@@ -99,9 +99,9 @@ public class Card_01_012_Tests
 		var card3 = scn.GetFreepsCard("card3");
 		scn.FreepsMoveCharToTable(gimli);
 		scn.FreepsMoveCardToHand(card1);
-		scn.FreepsMoveCardsToBottomOfDeck(card3);
 
 		scn.StartGame();
+		scn.FreepsMoveCardsToBottomOfDeck(card3);
 
 		assertTrue(scn.FreepsActionAvailable(gimli));
 		assertEquals(Zone.HAND, card1.getZone());
