@@ -99,6 +99,10 @@
 				trigger: {
 					type: ConstantlyCheck
 				}
+				requires: {
+					type: canSpot
+					filter: another,or(possession,weapon),attachedTo(bearer)
+				}
 				effect: {
 					type: discard
 					select: all(other,or(possession,weapon),attachedTo(bearer))

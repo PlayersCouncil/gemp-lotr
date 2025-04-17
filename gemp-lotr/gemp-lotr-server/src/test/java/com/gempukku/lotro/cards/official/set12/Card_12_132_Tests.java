@@ -82,6 +82,13 @@ public class Card_12_132_Tests
 		assertEquals(1, scn.GetCultureTokensOn(fury));
 	}
 
+	/**
+	 * Legacy Ruling #2 decided that Sudden Fury (and other such cards that care about skirmish losers)
+	 * does indeed trigger when the final character is removed from a skirmish.  Characters removed before
+	 * the final removed one remain counting as "neither winning nor losing".
+	 *
+	 * <a href="https://wiki.lotrtcgpc.net/wiki/Legacy_Ruling_2">Legacy Ruling #2 on the wiki</a>
+	 */
 	@Test
 	public void SuddenFuryAddsATokenWhenAHobbitIsTheLastFreepsSkirmisherAndIsRemoved() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
