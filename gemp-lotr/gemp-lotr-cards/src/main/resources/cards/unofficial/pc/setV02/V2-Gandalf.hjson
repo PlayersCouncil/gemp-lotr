@@ -106,7 +106,8 @@
 				}
 			}
 			{
-				type: Response
+				type: Trigger
+				optional: true
 				trigger: {
 					type: UsesSpecialAbility
 					filter: minion

@@ -19,6 +19,7 @@ public class Card_V2_013_Tests
 				{{
 					put("gandalf", "102_13");
 					put("shadowfax", "4_100");
+					put("crutch", "102_77");
 
 					put("valiant1", "65_14");
 					put("valiant2", "7_224");
@@ -116,7 +117,7 @@ public class Card_V2_013_Tests
 	}
 
 	@Test
-	public void GandalfCanBlockMinionAbilityAndWoundItIf3ValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GandalfCanBlockMinionAbilityIf3ValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -151,7 +152,48 @@ public class Card_V2_013_Tests
 	}
 
 	@Test
-	public void GandalfCanBlockGrishnakhAndWoundHimIf3ValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GandalfCanBlockMinionAbilityAndWoundItIf3ValiantCompanionsAndBearingNewStaff() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var crutch = scn.GetFreepsCard("crutch");
+		var valiant1 = scn.GetFreepsCard("valiant1");
+		scn.FreepsMoveCharToTable(gandalf);
+		scn.FreepsAttachCardsTo(gandalf, crutch);
+		scn.FreepsMoveCharToTable("valiant1", "valiant2", "valiant3");
+
+		var shotgun = scn.GetShadowCard("shotgun");
+		scn.ShadowMoveCharToTable(shotgun);
+
+		scn.StartGame();
+
+		scn.AddBurdens(4);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.ShadowActionAvailable(shotgun));
+
+		assertEquals(0, scn.GetWoundsOn(valiant1));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(shotgun));
+		scn.ShadowUseCardAction(shotgun);
+		//Enquea's own exertion
+		assertEquals(1, scn.GetWoundsOn(shotgun));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(0, scn.GetWoundsOn(valiant1));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+
+		assertEquals(1, scn.GetWoundsOn(shotgun));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		//Lathspell's retribution no longer wounds, but his staff does
+		assertEquals(2, scn.GetWoundsOn(shotgun));
+	}
+
+	@Test
+	public void GandalfCanBlockGrishnakhIf3ValiantCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -173,7 +215,7 @@ public class Card_V2_013_Tests
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		assertEquals(0, scn.GetWoundsOn(grishnakh));
 		assertEquals(0, scn.GetShadowHandCount());
-		assertEquals(6, scn.GetShadowDeckCount());
+		assertEquals(7, scn.GetShadowDeckCount());
 		scn.ShadowUseCardAction(grishnakh);
 		//Grishnakh's own exertions
 		assertEquals(2, scn.GetWoundsOn(grishnakh));
@@ -184,7 +226,52 @@ public class Card_V2_013_Tests
 		assertEquals(Zone.SHADOW_CHARACTERS, grishnakh.getZone());
 		assertEquals(2, scn.GetWoundsOn(grishnakh));
 		assertEquals(0, scn.GetShadowHandCount());
-		assertEquals(6, scn.GetShadowDeckCount());
+		assertEquals(7, scn.GetShadowDeckCount());
+	}
+
+	@Test
+	public void GandalfCanBlockGrishnakhAndWoundHimIf3ValiantCompanionsAndBearingNewStaff() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var crutch = scn.GetFreepsCard("crutch");
+		var valiant1 = scn.GetFreepsCard("valiant1");
+		scn.FreepsMoveCharToTable(gandalf);
+		scn.AttachCardsTo(gandalf, crutch);
+		scn.FreepsMoveCharToTable("valiant1", "valiant2", "valiant3");
+
+		var grishnakh = scn.GetShadowCard("grishnakh");
+		scn.ShadowMoveCharToTable(grishnakh);
+		scn.ShadowMoveCharToTable("marauder");
+
+		scn.StartGame();
+
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(grishnakh));
+
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(grishnakh));
+		assertEquals(0, scn.GetShadowHandCount());
+		assertEquals(7, scn.GetShadowDeckCount());
+		scn.ShadowUseCardAction(grishnakh);
+		//Grishnakh's own exertions
+		assertEquals(2, scn.GetWoundsOn(grishnakh));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		//Lathspell's retribution no longer wounds
+		assertEquals(Zone.SHADOW_CHARACTERS, grishnakh.getZone());
+		assertEquals(2, scn.GetWoundsOn(grishnakh));
+		assertEquals(0, scn.GetShadowHandCount());
+		assertEquals(7, scn.GetShadowDeckCount());
+
+		//The staff makes up for it tho
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsChooseCard(grishnakh);
+		assertEquals(Zone.DISCARD, grishnakh.getZone());
 	}
 
 	@Test
