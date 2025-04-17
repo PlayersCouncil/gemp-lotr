@@ -28,6 +28,8 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
     private SoloDraftTournamentInfo _soloDraftInfo;
     private ZonedDateTime nextRoundStart = null;
 
+    private boolean collectionsCreated = false;
+
     public SoloDraftTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
                                LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableDraftDefinitions tableDraftDefinitions, TableHolder tables, String tournamentId) {
         super(tournamentService, collectionsManager, productLibrary, formatLibrary, soloDraftDefinitions, tableDraftDefinitions, tables, tournamentId);
@@ -112,6 +114,10 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
     }
 
     private void createStartingCollections() {
+        if (collectionsCreated) {
+            return;
+        }
+
         var collDef = _soloDraftInfo.generateCollectionInfo();
         var collections = _collectionsManager.getPlayersCollection(collDef.getCode());
 
@@ -134,6 +140,8 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
 
             _collectionsManager.addPlayerCollection(false, "Draft tournament product", playerName, collDef, startingCollection);
         }
+
+        collectionsCreated = true;
     }
 
     private long getSeed(String playerName, CollectionType collectionType) {

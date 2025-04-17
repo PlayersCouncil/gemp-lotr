@@ -25,6 +25,8 @@ public class SealedTournament extends BaseTournament implements Tournament {
     private SealedTournamentInfo _sealedInfo;
     private ZonedDateTime nextRoundStart = null;
 
+    private boolean collectionsCreated = false;
+
     public SealedTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
                             LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableDraftDefinitions tableDraftDefinitions, TableHolder tables, String tournamentId) {
         super(tournamentService, collectionsManager, productLibrary, formatLibrary, soloDraftDefinitions, tableDraftDefinitions, tables, tournamentId);
@@ -90,7 +92,11 @@ public class SealedTournament extends BaseTournament implements Tournament {
         _collectionsManager.addPlayerCollection(true, "Sealed tournament product", player, collDef, newCollection);
     }
 
-    public void createAndPopulateCollections() {
+    private void createAndPopulateCollections() {
+        if (collectionsCreated) {
+            return;
+        }
+
         var collDef = _sealedInfo.generateCollectionInfo();
         var collections = _collectionsManager.getPlayersCollection(collDef.getCode());
         var sealedDef = _sealedInfo.SealedDefinition;
@@ -107,6 +113,8 @@ public class SealedTournament extends BaseTournament implements Tournament {
 
             _collectionsManager.addPlayerCollection(true, "Sealed tournament product", playerName, collDef, newCollection);
         }
+
+        collectionsCreated = true;
     }
 
     public void disqualifyUnregisteredPlayers() {
@@ -169,6 +177,8 @@ public class SealedTournament extends BaseTournament implements Tournament {
                 if(getTournamentStage() == Stage.STARTING) {
                     _tournamentInfo.Stage = Stage.DECK_BUILDING;
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
+
+                    createAndPopulateCollections();
 
                     String duration = DateUtils.HumanDuration(_sealedInfo.DeckbuildingDuration);
                     result.add(new BroadcastAction("Sealed product has been issued for tournament <b>" + getTournamentName() + "</b>.  Players now have "
