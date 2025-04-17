@@ -24,7 +24,18 @@
 						$("#shutdown-response").html(string);
 					});
 				});
-			
+
+			hall.comm.getLiveTournaments(
+				function (xml) {
+					var root = xml.documentElement;
+					if (root.tagName == 'tournaments') {
+						var tournaments = root.getElementsByTagName("tournament");
+						if (tournaments.length > 0) {
+							$("#cache-response").html("Ready.<br>Live tournaments: " + tournaments.length + "<br>THE ABOVE TOURNAMENTS WILL BE INTERRUPTED AND MAY NOT BE ABLE TO BE RESUMED");
+						}
+					}
+            	});
+
 			$("#clear-cache-button").button().click(
 				function () {
 					$("#cache-response").html("Processing...");
