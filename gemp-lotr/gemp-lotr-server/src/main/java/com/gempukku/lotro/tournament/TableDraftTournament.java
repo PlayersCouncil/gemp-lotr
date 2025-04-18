@@ -28,6 +28,8 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
     private TableDraft table = null;
     private final ChatServer chatServer;
     private ZonedDateTime nextRoundStart = null;
+    public ZonedDateTime deckbuildingDeadline = null;
+    public ZonedDateTime registrationDeadline = null;
 
     public TableDraftTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
                                 LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableDraftDefinitions tableDraftDefinitions,
@@ -89,13 +91,13 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
         if (getTournamentStage() == Stage.DRAFT) {
             createTable();
         } else if (getTournamentStage() == Stage.DECK_BUILDING) {
-            if (tableDraftInfo.deckbuildingDeadline == null || tableDraftInfo.registrationDeadline == null) {
-                tableDraftInfo.deckbuildingDeadline = DateUtils.Now().plus(tableDraftInfo.deckbuildingDuration);
-                tableDraftInfo.registrationDeadline = tableDraftInfo.deckbuildingDeadline.plus(tableDraftInfo.registrationDuration);
+            if (deckbuildingDeadline == null) {
+                deckbuildingDeadline = DateUtils.Now().plus(tableDraftInfo.deckbuildingDuration);
+                registrationDeadline = deckbuildingDeadline.plus(tableDraftInfo.registrationDuration);
             }
         } else if (getTournamentStage() == Stage.DECK_REGISTRATION) {
-            if (tableDraftInfo.registrationDeadline == null) {
-                tableDraftInfo.registrationDeadline = DateUtils.Now().plus(tableDraftInfo.registrationDuration);
+            if (registrationDeadline == null) {
+                registrationDeadline = DateUtils.Now().plus(tableDraftInfo.registrationDuration);
             }
         } else if (_tournamentInfo.Stage == Stage.PLAYING_GAMES) {
             var matchesToCreate = new HashMap<String, String>();
@@ -162,30 +164,37 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
                         _tournamentInfo.Stage = Stage.DECK_BUILDING;
                         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
 
-                        tableDraftInfo.deckbuildingDeadline = DateUtils.Now().plus(tableDraftInfo.deckbuildingDuration);
-                        tableDraftInfo.registrationDeadline = tableDraftInfo.deckbuildingDeadline.plus(tableDraftInfo.registrationDuration);
+                        deckbuildingDeadline = DateUtils.Now().plus(tableDraftInfo.deckbuildingDuration);
+                        registrationDeadline = deckbuildingDeadline.plus(tableDraftInfo.registrationDuration);
 
                         String duration = DateUtils.HumanDuration(tableDraftInfo.deckbuildingDuration);
                         result.add(new BroadcastAction("Draft has finished for tournament <b>" + getTournamentName() + "</b>. " +
                                 "Players now have " + duration + " to build a deck with the cards they got. "
-                                + "<br/><br/>Remember to return to the game hall and register your deck before " + DateUtils.FormatTime(tableDraftInfo.registrationDeadline) + ".", activePlayers));
+                                + "<br/><br/>Remember to return to the game hall and register your deck before " + DateUtils.FormatTime(registrationDeadline) + ".", activePlayers));
                     }
                 }
                 else if (getTournamentStage() == Stage.DECK_BUILDING) {
-                    if (DateUtils.Now().isAfter(tableDraftInfo.deckbuildingDeadline)) {
+                    if (deckbuildingDeadline == null) {
+                        deckbuildingDeadline = DateUtils.Now().plus(tableDraftInfo.deckbuildingDuration);
+                        registrationDeadline = deckbuildingDeadline.plus(tableDraftInfo.registrationDuration);
+                    }
+                    if (DateUtils.Now().isAfter(deckbuildingDeadline)) {
                         _tournamentInfo.Stage = Stage.DECK_REGISTRATION;
                         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
 
                         String duration = DateUtils.HumanDuration(tableDraftInfo.registrationDuration);
                         result.add(new BroadcastAction("Deck building in tournament <b>" + getTournamentName() + "</b> has finished. Players now have "
                                 + duration + " to finish registering their decks.  Any player who has not turned in their deck by the deadline at "
-                                + DateUtils.FormatTime(tableDraftInfo.registrationDeadline) + " will be auto-disqualified."
+                                + DateUtils.FormatTime(registrationDeadline) + " will be auto-disqualified."
                                 + "<br/><br/>Once the deadline has passed, the tournament will begin.", activePlayers));
                     }
                 }
 
                 if (getTournamentStage() == Stage.DECK_REGISTRATION) {
-                    if (DateUtils.Now().isAfter(tableDraftInfo.registrationDeadline)) {
+                    if (registrationDeadline == null) {
+                        registrationDeadline = DateUtils.Now().plus(tableDraftInfo.registrationDuration);
+                    }
+                    if (DateUtils.Now().isAfter(registrationDeadline)) {
                         disqualifyUnregisteredPlayers();
 
                         _tournamentInfo.Stage = tableDraftInfo.postRegistrationStage();
@@ -268,10 +277,10 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
 
     @Override
     public long getSecondsRemaining() throws IllegalStateException {
-        if (getTournamentStage() == Stage.DECK_BUILDING) {
-            return Duration.between(DateUtils.Now(), tableDraftInfo.deckbuildingDeadline).getSeconds();
-        } else if (getTournamentStage() == Stage.DECK_REGISTRATION) {
-            return Duration.between(DateUtils.Now(), tableDraftInfo.registrationDeadline).getSeconds();
+        if (getTournamentStage() == Stage.DECK_BUILDING && deckbuildingDeadline != null && DateUtils.Now().isBefore(deckbuildingDeadline)) {
+            return Duration.between(DateUtils.Now(), deckbuildingDeadline).getSeconds();
+        } else if (getTournamentStage() == Stage.DECK_REGISTRATION && registrationDeadline != null && DateUtils.Now().isBefore(registrationDeadline)) {
+            return Duration.between(DateUtils.Now(), registrationDeadline).getSeconds();
         } else if (getTournamentStage() == Stage.PLAYING_GAMES && nextRoundStart != null && DateUtils.Now().isBefore(nextRoundStart)) {
             return Duration.between(DateUtils.Now(), nextRoundStart).getSeconds();
         } else {
