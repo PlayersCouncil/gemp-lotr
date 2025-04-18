@@ -544,7 +544,7 @@
 				}
 			}
 		]
-		gametext: Each time a [rohan] item or [rohan] ally is discarded or killed (except during the fellowship phase), add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove 2 [rohan] tokens here and exert a valiant companion to wound that minion.
+		gametext: Each time a [rohan] item or [rohan] ally is killed or discarded from play or from hand (except during the fellowship phase), add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove 2 [rohan] tokens here and exert a valiant companion to wound that minion.
 		lore: ""
 		promotext: ""
 		alts: {
