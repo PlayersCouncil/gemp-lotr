@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.ArcheryTotalModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -17,8 +18,8 @@ public class Card_01_172_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "1_172");
-					// put other cards in here as needed for the test case
+					put("archer", "1_172");
+					put("runner", "1_178");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +47,7 @@ public class Card_01_172_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("archer");
 
 		assertEquals("Goblin Archer", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +63,38 @@ public class Card_01_172_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GoblinArcherTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GoblinArcherSpotsAnotherMoriaOrcToMakeFellowshipArcheryTotalMinus6() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var archer = scn.GetShadowCard("archer");
+		var runner = scn.GetShadowCard("runner");
+
+		scn.ShadowMoveCharToTable(runner);
+		scn.ShadowMoveCardToHand(archer);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, 7));
+		scn.SkipToPhase(Phase.ARCHERY);
 
-		assertEquals(5, scn.GetTwilight());
+		assertEquals(7, scn.GetFreepsArcheryTotal());
+		scn.FreepsMoveCharToTable(archer);
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+	}
+
+	@Test
+	public void GoblinArcherDoesNotAlterFellowshipArcheryTotalIfNoOtherMoriaOrc() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var archer = scn.GetShadowCard("archer");
+		scn.ShadowMoveCharToTable(archer);
+
+		scn.StartGame();
+		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, 7));
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		assertEquals(7, scn.GetFreepsArcheryTotal());
 	}
 }

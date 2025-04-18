@@ -1,18 +1,14 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.PossessionClass;
-import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_V2_077_Tests
 {
@@ -21,8 +17,13 @@ public class Card_V2_077_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_77");
-					// put other cards in here as needed for the test case
+					put("crutch", "102_77");
+					put("gandalf", "1_364");
+					put("glamdring", "1_75");
+					put("glamdring2", "6_31");
+					put("betrayal", "3_29");
+
+					put("shotgun", "1_231");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -50,7 +51,7 @@ public class Card_V2_077_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("crutch");
 
 		assertEquals("Gandalf's Staff", card.getBlueprint().getTitle());
 		assertEquals("Old Man's Crutch", card.getBlueprint().getSubtitle());
@@ -63,29 +64,71 @@ public class Card_V2_077_Tests
 		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GandalfsStaffTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GandalfsStaffDiscardsWeaponsOnBearerBothBeforeAndAfterPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
-		scn.FreepsMoveCharToTable(card);
-		scn.FreepsMoveCardToSupportArea(card);
-		scn.FreepsMoveCardToDiscard(card);
-		scn.FreepsMoveCardsToTopOfDeck(card);
+		var crutch = scn.GetFreepsCard("crutch");
+		var glamdring = scn.GetFreepsCard("glamdring");
+		var glamdring2 = scn.GetFreepsCard("glamdring2");
 
-//		var card = scn.GetShadowCard("card");
-//		scn.ShadowMoveCardToHand(card);
-//		scn.ShadowMoveCharToTable(card);
-//		scn.ShadowMoveCardToSupportArea(card);
-//		scn.ShadowMoveCardToDiscard(card);
-//		scn.ShadowMoveCardsToTopOfDeck(card);
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCardToHand(crutch, glamdring2);
+		scn.FreepsMoveCharToTable(gandalf);
+		scn.AttachCardsTo(gandalf, glamdring);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(Zone.HAND, crutch.getZone());
+		assertEquals(Zone.ATTACHED, glamdring.getZone());
+		scn.FreepsPlayCard(crutch);
+		assertEquals(Zone.ATTACHED, crutch.getZone());
+		assertEquals(Zone.DISCARD, glamdring.getZone());
+
+		assertEquals(Zone.HAND, glamdring2.getZone());
+		scn.FreepsPlayCard(glamdring2);
+		assertEquals(Zone.DISCARD, glamdring2.getZone());
+	}
+
+	@Test
+	public void GandalfsStaffCanWoundAMinionWhenExertingOncePerPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var crutch = scn.GetFreepsCard("crutch");
+		var betrayal = scn.GetFreepsCard("betrayal");
+		scn.FreepsMoveCharToTable(gandalf);
+		scn.FreepsAttachCardsTo(gandalf, crutch);
+		scn.FreepsMoveCardToSupportArea(betrayal);
+
+		var shotgun = scn.GetShadowCard("shotgun");
+		scn.ShadowMoveCharToTable(shotgun);
+
+		scn.StartGame();
+
+		scn.AddBurdens(4);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(shotgun));
+
+		scn.FreepsUseCardAction(betrayal);
+
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(shotgun));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(shotgun));
+
+		scn.ShadowPassCurrentPhaseAction();
+
+		//Staff doesn't trigger a second time
+		scn.FreepsUseCardAction(betrayal);
+		assertEquals(2, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetWoundsOn(shotgun));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 	}
 }

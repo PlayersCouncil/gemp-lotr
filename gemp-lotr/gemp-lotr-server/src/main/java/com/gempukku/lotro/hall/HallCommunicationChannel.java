@@ -1,11 +1,13 @@
 package com.gempukku.lotro.hall;
 
+import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.polling.LongPollableResource;
 import com.gempukku.polling.WaitingRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableObject;
 
+import java.time.Duration;
 import java.util.*;
 
 public class HallCommunicationChannel implements LongPollableResource {
@@ -128,7 +130,8 @@ public class HallCommunicationChannel implements LongPollableResource {
 
                     @Override
                     public void visitTournament(String tournamentKey, String collectionName, String formatName, String tournamentName, String type, String pairingDescription,
-                                                String tournamentStage, int round, int playerCount, String playerList, boolean playerInCompetition, boolean abandoned) {
+                                                String tournamentStage, int round, int playerCount, String playerList, boolean playerInCompetition, boolean abandoned, boolean joinable,
+                                                long secsRemaining) {
                         Map<String, String> props = new HashMap<>();
                         props.put("collection", collectionName);
                         props.put("format", formatName);
@@ -141,6 +144,10 @@ public class HallCommunicationChannel implements LongPollableResource {
                         props.put("playerList", playerList);
                         props.put("signedUp", String.valueOf(playerInCompetition));
                         props.put("abandoned", String.valueOf(abandoned));
+                        props.put("joinable", String.valueOf(joinable));
+                        if (secsRemaining >= 0) {
+                            props.put("timeRemaining", DateUtils.HumanDuration(Duration.ofSeconds(secsRemaining)));
+                        }
 
                         tournamentsOnServer.put(tournamentKey, props);
                     }

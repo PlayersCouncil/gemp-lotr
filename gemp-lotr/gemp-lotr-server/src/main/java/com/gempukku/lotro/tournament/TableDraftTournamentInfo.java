@@ -15,9 +15,7 @@ import java.time.ZonedDateTime;
 public class TableDraftTournamentInfo extends TournamentInfo {
 
     public final TableDraftDefinition tableDraftDefinition;
-    public ZonedDateTime deckbuildingDeadline;
     public final Duration deckbuildingDuration;
-    public ZonedDateTime registrationDeadline;
     public final Duration registrationDuration;
     protected TableDraftTournamentParams tableDraftParams;
 
@@ -30,9 +28,6 @@ public class TableDraftTournamentInfo extends TournamentInfo {
 
         deckbuildingDuration = Duration.ofMinutes(tableDraftParams.deckbuildingDuration);
         registrationDuration = Duration.ofMinutes(tableDraftParams.turnInDuration);
-//
-        deckbuildingDeadline = StartTime.plus(deckbuildingDuration);
-//        registrationDeadline = deckbuildingDeadline.plus(registrationDuration);
     }
 
     //Used by tournament queues to duplicate a template info with fresh parameters

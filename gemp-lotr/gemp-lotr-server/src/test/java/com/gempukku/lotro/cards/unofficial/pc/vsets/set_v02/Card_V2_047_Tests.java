@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,13 @@ public class Card_V2_047_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_47");
-					// put other cards in here as needed for the test case
+					put("erkenbrand", "102_47");
+					put("eowyn", "5_122");
+					put("elite", "4_265");
+					put("rider", "4_286");
+					put("guard", "5_83");
+					put("veteran", "7_246");
+					put("dwarfguard", "1_7");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -49,7 +53,7 @@ public class Card_V2_047_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("erkenbrand");
 
 		assertEquals("Erkenbrand", card.getBlueprint().getTitle());
 		assertEquals("Kinsman of the House of Eorl", card.getBlueprint().getSubtitle());
@@ -65,18 +69,75 @@ public class Card_V2_047_Tests
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ErkenbrandTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ErkenbrandBanishes3NonUniqueRohanCompanionsFromDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var frodo = scn.GetRingBearer();
+		var erkenbrand = scn.GetFreepsCard("erkenbrand");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		var elite = scn.GetFreepsCard("elite");
+		var rider = scn.GetFreepsCard("rider");
+		var guard = scn.GetFreepsCard("guard");
+		var veteran = scn.GetFreepsCard("veteran");
+		var dwarfguard = scn.GetFreepsCard("dwarfguard");
+		scn.FreepsMoveCardToDeadPile(eowyn, elite, rider, guard, veteran, dwarfguard);
+		scn.FreepsMoveCardToHand(erkenbrand);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(5, scn.GetTwilight());
+		assertEquals(Zone.DEAD, eowyn.getZone());
+		assertEquals(Zone.DEAD, elite.getZone());
+		assertEquals(Zone.DEAD, rider.getZone());
+		assertEquals(Zone.DEAD, guard.getZone());
+		assertEquals(Zone.DEAD, veteran.getZone());
+		assertEquals(Zone.DEAD, dwarfguard.getZone());
+
+		scn.FreepsPlayCard(erkenbrand);
+		assertEquals(4, scn.FreepsGetCardChoiceCount());
+		assertTrue(scn.FreepsHasCardChoicesAvailable(elite, rider, guard, veteran));
+		assertTrue(scn.FreepsHasCardChoicesNotAvailable(eowyn, dwarfguard));
+
+		scn.FreepsChooseCards(elite, rider, guard);
+		assertEquals(Zone.DEAD, eowyn.getZone());
+		assertEquals(Zone.REMOVED, elite.getZone());
+		assertEquals(Zone.REMOVED, rider.getZone());
+		assertEquals(Zone.REMOVED, guard.getZone());
+		assertEquals(Zone.DEAD, veteran.getZone());
+		assertEquals(Zone.DEAD, dwarfguard.getZone());
+	}
+
+	@Test
+	public void ErkenbrandMakesExhaustedCompanionsValiant() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var erkenbrand = scn.GetFreepsCard("erkenbrand");
+		var elite = scn.GetFreepsCard("elite");
+		var rider = scn.GetFreepsCard("rider");
+		var guard = scn.GetFreepsCard("guard");
+		var veteran = scn.GetFreepsCard("veteran");
+		var dwarfguard = scn.GetFreepsCard("dwarfguard");
+		scn.FreepsMoveCharToTable(elite, rider, guard, dwarfguard);
+		scn.FreepsMoveCardToHand(erkenbrand);
+
+		scn.StartGame();
+
+		scn.AddWoundsToChar(frodo, 3);
+		scn.AddWoundsToChar(elite, 2);
+		scn.AddWoundsToChar(rider, 1);
+
+		assertEquals(1, scn.GetVitality(frodo));
+		assertFalse(scn.hasKeyword(frodo, Keyword.VALIANT));
+		assertEquals(1, scn.GetVitality(elite));
+		assertFalse(scn.hasKeyword(elite, Keyword.VALIANT));
+		assertEquals(2, scn.GetVitality(rider));
+		assertFalse(scn.hasKeyword(rider, Keyword.VALIANT));
+		assertEquals(2, scn.GetVitality(dwarfguard));
+		assertFalse(scn.hasKeyword(dwarfguard, Keyword.VALIANT));
+
+		scn.FreepsPlayCard(erkenbrand);
 	}
 }

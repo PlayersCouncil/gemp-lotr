@@ -1183,7 +1183,6 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
     private void clearCacheInternal() throws SQLException, IOException {
         _leagueService.clearCache();
-        _tournamentService.clearCache();
         _cacheManager.clearCaches();
         _hallServer.cleanup(true);
     }

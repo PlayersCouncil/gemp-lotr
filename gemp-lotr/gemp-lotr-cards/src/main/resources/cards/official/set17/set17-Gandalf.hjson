@@ -608,8 +608,7 @@
 				type: Trigger
 				optional: false
 				trigger: {
-					type: played
-					filter: self
+					type: ConstantlyCheck
 				}
 				effect: {
 					type: discard

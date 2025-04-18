@@ -45,8 +45,12 @@ public class Wound implements EffectAppenderProducer {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
                         final int timesCount = times.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
                         List<Effect> result = new LinkedList<>();
-                        for (int i = 0; i < timesCount; i++)
-                            result.add(new WoundCharactersEffect(actionContext.getSource(), Filters.in(cardsFromMemory)));
+                        for(var card : cardsFromMemory) {
+                            for (int i = 0; i < timesCount; i++) {
+                                result.add(new WoundCharactersEffect(actionContext.getSource(), card));
+                            }
+                        }
+
                         return result;
                     }
                 });

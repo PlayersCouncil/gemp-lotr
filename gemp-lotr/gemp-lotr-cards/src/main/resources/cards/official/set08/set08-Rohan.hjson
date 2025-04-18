@@ -388,6 +388,7 @@
 			{
 				type: killedTrigger
 				optional: true
+				player: owner
 				effect: {
 					type: choice
 					texts: [

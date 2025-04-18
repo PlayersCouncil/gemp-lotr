@@ -23,12 +23,12 @@ public class Card_01_055_Tests
 					put("allyHome6_1", "1_56");
 
 					put("runner", "1_178");
-					put("card1", "1_178");
-					put("card2", "1_178");
-					put("card3", "1_178");
-					put("card4", "1_178");
-					put("card5", "1_178");
-					put("card6", "1_178");
+					put("card1", "1_179");
+					put("card2", "1_180");
+					put("card3", "1_181");
+					put("card4", "1_182");
+					put("card5", "1_183");
+					put("card6", "1_184");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -50,7 +50,8 @@ public class Card_01_055_Tests
 		 * Subtype: Support Area
 		 * Game Text: Plays to your support area.
 		 * 	Each Elf ally whose home is site 6 is strength +1.
-		 * 	Fellowship: Exert Galadriel to look at 2 of cards at random from an opponent's hand. Discard one and replace the other.
+		 * 	Maneuver: If an opponent has at least 7 cards in hand, exert Galadriel to look at
+		 * 	2 of those cards at random. Discard one and replace the other.
 		 */
 
 		var scn = GetScenario();
@@ -136,8 +137,7 @@ public class Card_01_055_Tests
 		scn.FreepsDismissRevealedCards();
 		scn.ShadowDismissRevealedCards();
 
-		var card = scn.FreepsGetCardChoices().get(0);
-		scn.FreepsChoose(card);
+		scn.FreepsChooseAny();
 		assertEquals(1, scn.GetWoundsOn(galadriel));
 		assertEquals(6, scn.GetShadowHandCount());
 		assertEquals(1, scn.GetShadowDiscardCount());

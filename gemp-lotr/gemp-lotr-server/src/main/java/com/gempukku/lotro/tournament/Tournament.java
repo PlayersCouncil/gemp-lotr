@@ -204,4 +204,8 @@ public interface Tournament {
     String produceReport(DeckRenderer renderer) throws CardNotFoundException;
 
     TournamentInfo getInfo();
+
+    boolean isJoinable();
+    long getSecondsRemaining() throws IllegalStateException;
+    String getTableDescription();
 }

@@ -292,7 +292,7 @@
 				}
 				{
 					type: discard
-					select: memory(smeagol)
+					select: choose(name(Sméagol),canBeDiscarded)
 					ignoreCostCheckFailure: true
 				}
 			]

@@ -70,6 +70,16 @@ public class CostToEffect implements EffectAppenderProducer {
 
                 return true;
             }
+
+            @Override
+            public boolean isPlayabilityCheckedForEffect() {
+                //This is done intentinally, even though one would think that you would want to
+                // check the "cost" part of "CostToEffect".  The reason for this is because CostToEffect
+                // is frequently used as a wrapper in contexts where the Cost cannot actually be checked
+                // ahead of time, such as when memory values are crucial to the execution (which of course
+                // are not popuulated before the action itself is executed at time of checking).
+                return false;
+            }
         };
     }
 }

@@ -16,11 +16,16 @@ import com.gempukku.lotro.tournament.action.BroadcastAction;
 import com.gempukku.lotro.tournament.action.TournamentProcessAction;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class SealedTournament extends BaseTournament implements Tournament {
 
     private SealedTournamentInfo _sealedInfo;
+    private ZonedDateTime nextRoundStart = null;
+
+    private boolean collectionsCreated = false;
 
     public SealedTournament(TournamentService tournamentService, CollectionsManager collectionsManager, ProductLibrary productLibrary,
                             LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, TableDraftDefinitions tableDraftDefinitions, TableHolder tables, String tournamentId) {
@@ -45,16 +50,19 @@ public class SealedTournament extends BaseTournament implements Tournament {
                 _tournamentService.updateRecordedPlayerDeck(_tournamentId, player, deck);
                 _playerDecks.put(player, deck);
 
-                // If 1v1 and both registered the deck, skip the wait and start playing
-                var players = _tournamentService.retrieveTournamentPlayers(_tournamentId);
+                regeneratePlayerList();
+
+                // If all registered the deck, skip the wait and start playing
+                Set<String> activePlayers = new HashSet<>(_players);
+                activePlayers.removeAll(_droppedPlayers);
                 boolean everyoneSubmitted = true;
-                for(var playerName : players) {
+                for(var playerName : activePlayers) {
                     var registeredDeck = getPlayerDeck(playerName);
                     if(registeredDeck == null || StringUtils.isEmpty(registeredDeck.getDeckName())) {
                         everyoneSubmitted = false;
                     }
                 }
-                if (players.size() == 2 && everyoneSubmitted) {
+                if (everyoneSubmitted) {
                     _tournamentInfo.Stage = _sealedInfo.PostRegistrationStage();
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                 }
@@ -84,7 +92,11 @@ public class SealedTournament extends BaseTournament implements Tournament {
         _collectionsManager.addPlayerCollection(true, "Sealed tournament product", player, collDef, newCollection);
     }
 
-    public void createAndPopulateCollections() {
+    private void createAndPopulateCollections() {
+        if (collectionsCreated) {
+            return;
+        }
+
         var collDef = _sealedInfo.generateCollectionInfo();
         var collections = _collectionsManager.getPlayersCollection(collDef.getCode());
         var sealedDef = _sealedInfo.SealedDefinition;
@@ -101,6 +113,8 @@ public class SealedTournament extends BaseTournament implements Tournament {
 
             _collectionsManager.addPlayerCollection(true, "Sealed tournament product", playerName, collDef, newCollection);
         }
+
+        collectionsCreated = true;
     }
 
     public void disqualifyUnregisteredPlayers() {
@@ -164,6 +178,8 @@ public class SealedTournament extends BaseTournament implements Tournament {
                     _tournamentInfo.Stage = Stage.DECK_BUILDING;
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
 
+                    createAndPopulateCollections();
+
                     String duration = DateUtils.HumanDuration(_sealedInfo.DeckbuildingDuration);
                     result.add(new BroadcastAction("Sealed product has been issued for tournament <b>" + getTournamentName() + "</b>.  Players now have "
                             + duration + " to open packs and build a deck with the cards you open. "
@@ -201,6 +217,7 @@ public class SealedTournament extends BaseTournament implements Tournament {
                         if (_tournamentInfo.PairingMechanism.isFinished(getCurrentRound(), _players, _droppedPlayers)) {
                             result.add(finishTournament(collectionsManager));
                         } else {
+                            nextRoundStart = DateUtils.Now().plus(PairingDelayTime);
                             if(getCurrentRound() == 0) {
                                 result.add(new BroadcastAction("Deck registration for tournament <b>" + getTournamentName()
                                         + "</b> has closed. Round "
@@ -238,4 +255,35 @@ public class SealedTournament extends BaseTournament implements Tournament {
         //This is for draft only
     }
 
+    @Override
+    public boolean isJoinable() {
+        Set<String> activePlayers = new HashSet<>(_players);
+        activePlayers.removeAll(_droppedPlayers);
+        int maximumPlayers = _tournamentInfo._params.maximumPlayers;
+        return (getTournamentStage() == Stage.STARTING || getTournamentStage() == Stage.DECK_BUILDING || getTournamentStage() == Stage.DECK_REGISTRATION ||
+                getTournamentStage() == Tournament.Stage.PAUSED || getTournamentStage() == Tournament.Stage.AWAITING_KICKOFF)
+                && (maximumPlayers > activePlayers.size() || maximumPlayers < 0);
+    }
+
+    @Override
+    public long getSecondsRemaining() throws IllegalStateException {
+        if (getTournamentStage() == Stage.DECK_BUILDING) {
+            return Duration.between(DateUtils.Now(), _sealedInfo.DeckbuildingDeadline).getSeconds();
+        } else if (getTournamentStage() == Stage.DECK_REGISTRATION) {
+            return Duration.between(DateUtils.Now(), _sealedInfo.RegistrationDeadline).getSeconds();
+        } else if (getTournamentStage() == Stage.PLAYING_GAMES && nextRoundStart != null && DateUtils.Now().isBefore(nextRoundStart)) {
+            return Duration.between(DateUtils.Now(), nextRoundStart).getSeconds();
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    @Override
+    public String getTableDescription() {
+        if (_sealedInfo._params.prizes == PrizeType.NONE && _sealedInfo._params.cost == 0) {
+            return "Casual - " + _sealedInfo.SealedDefinition.GetName();
+        } else {
+            return "Competitive - " + _sealedInfo.SealedDefinition.GetName();
+        }
+    }
 }

@@ -152,7 +152,7 @@ public class Card_02_044_ErrataTests
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsDismissRevealedCards();
-		scn.FreepsChooseAnyCard();
+		scn.FreepsChooseAny();
 
 		scn.ShadowMoveCardToSupportArea(business); //slide in No Business between actions
 		scn.ShadowPassCurrentPhaseAction();

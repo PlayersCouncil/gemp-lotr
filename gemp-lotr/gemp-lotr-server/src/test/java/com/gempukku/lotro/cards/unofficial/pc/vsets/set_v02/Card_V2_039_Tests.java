@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -88,7 +87,7 @@ public class Card_V2_039_Tests
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
-		scn.AcknowledgeReveal();
+		scn.DismissRevealedCards();
 		assertEquals(1, scn.GetThreats());
 
 		scn.SkipToPhase(Phase.REGROUP);
@@ -97,7 +96,7 @@ public class Card_V2_039_Tests
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
-		scn.AcknowledgeReveal();
+		scn.DismissRevealedCards();
 		assertEquals(2, scn.GetThreats());
 	}
 

@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -16,12 +17,22 @@ public class Card_V1_059_Tests
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<>()
-				{{
-					put("card", "101_59");
-					// put other cards in here as needed for the test case
+				new HashMap<>() {{
+					put("merry", "1_302");
+					put("legolas", "1_50");
+					put("boromir", "3_122");
 				}},
-				GenericCardTestHelper.FellowshipSites,
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_327");
+					put("site3", "101_59");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_350");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				GenericCardTestHelper.FOTRFrodo,
 				GenericCardTestHelper.RulingRing
 		);
@@ -46,41 +57,119 @@ public class Card_V1_059_Tests
 		var scn = GetScenario();
 
 		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(3);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(3);
 
 		assertEquals("Rivendell Gateway", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
 		assertTrue(scn.hasKeyword(card, Keyword.SANCTUARY));
+		assertFalse(scn.hasKeyword(card, Keyword.FOREST));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void RivendellGatewayTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void FellowshipActionExertsCompanionOfOneCultureToPumpAnotherUntilEndOfTurn() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = GetScenario();
+		GenericCardTestHelper scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
-		scn.FreepsMoveCharToTable(card);
-		scn.FreepsMoveCardToSupportArea(card);
-		scn.FreepsMoveCardToDiscard(card);
-		scn.FreepsMoveCardsToTopOfDeck(card);
-
-//		var card = scn.GetShadowCard("card");
-//		scn.ShadowMoveCardToHand(card);
-//		scn.ShadowMoveCharToTable(card);
-//		scn.ShadowMoveCardToSupportArea(card);
-//		scn.ShadowMoveCardToDiscard(card);
-//		scn.ShadowMoveCardsToTopOfDeck(card);
+		var frodo = scn.GetRingBearer();
+		var legolas = scn.GetFreepsCard("legolas");
+		var merry = scn.GetFreepsCard("merry");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.FreepsMoveCharToTable(legolas, merry, boromir);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SkipToSite(3);
+		var site3 = scn.GetCurrentSite();
+		assertEquals(3, scn.GetStrength(merry));
+		assertTrue(scn.FreepsActionAvailable(site3));
+
+		scn.FreepsUseCardAction(site3);
+		assertTrue(scn.FreepsDecisionAvailable("Choose cards to exert"));
+		assertEquals(3, scn.FreepsGetCardChoiceCount()); //Frodo is not allowed
+
+		scn.FreepsChooseCard(legolas);
+		assertTrue(scn.FreepsDecisionAvailable("Choose a companion"));
+		assertEquals(2, scn.FreepsGetCardChoiceCount()); //Legolas can only boost merry or boromir, not frodo
+		scn.FreepsChooseCard(merry);
+
+		assertEquals(4, scn.GetStrength(merry));
+
+		scn.FreepsUseCardAction(site3);
+		assertTrue(scn.FreepsDecisionAvailable("Choose cards to exert"));
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
+		scn.FreepsChooseCard(legolas);
+		assertTrue(scn.FreepsDecisionAvailable("Choose a companion"));
+		assertEquals(2, scn.FreepsGetCardChoiceCount()); //Legolas can only boost merry or boromir, not frodo
+		scn.FreepsChooseCard(merry);
+
+		assertEquals(5, scn.GetStrength(merry));
+
+		scn.SkipToPhase(Phase.REGROUP);
+		assertEquals(5, scn.GetStrength(merry));
+		scn.PassCurrentPhaseActions();
+		scn.ShadowDeclineReconciliation();
+		scn.FreepsChooseToMove();
+
+		scn.SkipToPhase(Phase.REGROUP);
+		assertEquals(5, scn.GetStrength(merry));
+	}
+
+	@Test
+	public void FellowshipActionLimitedTo6PerTurn() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		GenericCardTestHelper scn = GetScenario();
+
+		var merry = scn.GetFreepsCard("merry");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.FreepsMoveCharToTable(boromir, merry);
+
+		scn.StartGame();
+
+		scn.SkipToSite(3);
+		var site3 = scn.GetCurrentSite();
+		assertEquals(3, scn.GetStrength(merry));
+
+		assertTrue(scn.FreepsActionAvailable(site3));
+		scn.FreepsUseCardAction(site3);
+		scn.FreepsChooseCard(boromir);
+		assertEquals(4, scn.GetStrength(merry));
+		scn.FreepsUseCardAction(boromir);
+
+		assertTrue(scn.FreepsActionAvailable(site3));
+		scn.FreepsUseCardAction(site3);
+		scn.FreepsChooseCard(boromir);
+		assertEquals(5, scn.GetStrength(merry));
+		scn.FreepsUseCardAction(boromir);
+
+		assertTrue(scn.FreepsActionAvailable(site3));
+		scn.FreepsUseCardAction(site3);
+		scn.FreepsChooseCard(boromir);
+		assertEquals(6, scn.GetStrength(merry));
+		scn.FreepsUseCardAction(boromir);
+
+		assertTrue(scn.FreepsActionAvailable(site3));
+		scn.FreepsUseCardAction(site3);
+		scn.FreepsChooseCard(boromir);
+		assertEquals(7, scn.GetStrength(merry));
+		scn.FreepsUseCardAction(boromir);
+
+		assertTrue(scn.FreepsActionAvailable(site3));
+		scn.FreepsUseCardAction(site3);
+		scn.FreepsChooseCard(boromir);
+		assertEquals(8, scn.GetStrength(merry));
+		scn.FreepsUseCardAction(boromir);
+
+		assertTrue(scn.FreepsActionAvailable(site3));
+		scn.FreepsUseCardAction(site3);
+		scn.FreepsChooseCard(boromir);
+		assertEquals(9, scn.GetStrength(merry));
+		scn.FreepsUseCardAction(boromir);
+
+		assertFalse(scn.FreepsActionAvailable(site3));
+
 	}
 }

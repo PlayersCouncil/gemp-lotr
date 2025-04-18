@@ -207,18 +207,15 @@
 						type: Optional
 						player: freeps
 						text: Would you like to exert {bearer} twice to discard Can You Protect Me From Yourself?
+						cost: {
+							type: exert
+							player: freeps
+							times: 2
+							select: bearer
+						}
 						effect: {
-							type: CostToEffect
-							cost: {
-								type: exert
-								player: freeps
-								times: 2
-								select: bearer
-							}
-							effect: {
-								type: Discard
-								select: self
-							}
+							type: Discard
+							select: self
 						}
 					}
 				]
@@ -268,27 +265,24 @@
 					phase: Shadow
 				}
 				optional: true
+				cost: {
+					type: discardfromhand
+					forced: false
+					select: choose(culture(isengard))
+					count: 1
+					memorize: discardedCard
+				}
 				effect: {
-					type: costToEffect
-					cost: {
-						type: discardfromhand
-						forced: false
-						select: choose(culture(isengard))
-						count: 1
-						memorize: discardedCard
-					}
-					effect: {
-						type: addTwilight
-						amount: {
-							type: Conditional
-							requires: {
-								type: MemoryMatches
-								memory: discardedCard
-								filter: Orc
-							}
-							true: 5
-							false: 3
+					type: addTwilight
+					amount: {
+						type: Conditional
+						requires: {
+							type: MemoryMatches
+							memory: discardedCard
+							filter: Orc
 						}
+						true: 5
+						false: 3
 					}
 				}
 			}
@@ -621,7 +615,10 @@
 		strength: 6
 		vitality: 2
 		site: 5
-		keywords: Damage+1
+		keywords: [
+			Tracker
+			Damage+1
+		]
 		effects: [
 			{
 				type: modifier
@@ -669,7 +666,7 @@
 				}
 			}
 		]
-		gametext: Damage +1.<br>While an ally is in the dead pile, this minion is strength +3 and <b>fierce</b>.<br>Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
+		gametext: Tracker. Damage +1.<br>While an ally is in the dead pile, this minion is strength +3 and <b>fierce</b>.<br>Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
 		lore: "'There is no safety where Saruman's emblem is shown.'"
 		promotext: ""
 		alts: {

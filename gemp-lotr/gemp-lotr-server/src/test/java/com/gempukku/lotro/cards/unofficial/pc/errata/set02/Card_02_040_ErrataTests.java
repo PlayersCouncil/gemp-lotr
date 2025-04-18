@@ -20,8 +20,12 @@ public class Card_02_040_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "52_40");
-					// put other cards in here as needed for the test case
+					put("demands", "52_40");
+					put("savage", "1_151");
+
+					put("celeborn", "1_34");
+					put("rosie", "1_309");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +50,7 @@ public class Card_02_040_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("demands");
 
 		assertEquals("Demands of the Sackville-Bagginses", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,29 +62,58 @@ public class Card_02_040_ErrataTests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DemandsoftheSackvilleBagginsesTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void DemandsoftheSackvilleBagginsesRequiresIsengardMinionToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-//		var card = scn.GetFreepsCard("card");
-//		scn.FreepsMoveCardToHand(card);
-//		scn.FreepsMoveCharToTable(card);
-//		scn.FreepsMoveCardToSupportArea(card);
-//		scn.FreepsMoveCardToDiscard(card);
-//		scn.FreepsMoveCardsToTopOfDeck(card);
-
-		var card = scn.GetShadowCard("card");
-		scn.ShadowMoveCardToHand(card);
-		scn.ShadowMoveCharToTable(card);
-		scn.ShadowMoveCardToSupportArea(card);
-		scn.ShadowMoveCardToDiscard(card);
-		scn.ShadowMoveCardsToTopOfDeck(card);
+		var demands = scn.GetShadowCard("demands");
+		var savage = scn.GetShadowCard("savage");
+		scn.ShadowMoveCardToHand(demands, savage);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(10);
+		scn.FreepsPassCurrentPhaseAction();
 
+		assertFalse(scn.ShadowPlayAvailable(demands));
+		scn.ShadowPlayCard(savage);
+		assertTrue(scn.ShadowPlayAvailable(demands));
+	}
+
+
+	@Test
+	public void DemandsoftheSackvilleBagginsesAdds1WhenNonShireAllyExerts() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var celeborn = scn.GetFreepsCard("celeborn");
+		scn.FreepsMoveCardToSupportArea(celeborn);
+
+		var demands = scn.GetShadowCard("demands");
+		scn.ShadowMoveCardToSupportArea(demands);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetTwilight());
+		scn.FreepsUseCardAction(celeborn);
 		assertEquals(1, scn.GetTwilight());
+	}
+
+	@Test
+	public void DemandsoftheSackvilleBagginsesAdds2WhenShireAllyExerts() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var rosie = scn.GetFreepsCard("rosie");
+		scn.FreepsMoveCardToSupportArea(rosie);
+
+		var demands = scn.GetShadowCard("demands");
+		scn.ShadowMoveCardToSupportArea(demands);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetTwilight());
+		scn.FreepsUseCardAction(rosie);
+		assertEquals(2, scn.GetTwilight());
 	}
 }

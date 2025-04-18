@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,12 @@ public class Card_V2_017_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_17");
-					// put other cards in here as needed for the test case
+					put("die", "102_17");
+					put("aragorn", "1_89");
+					put("theoden", "4_292");
+					put("vcompanion", "5_122");
+
+					put("sauron", "9_48");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -45,7 +48,7 @@ public class Card_V2_017_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("die");
 
 		assertEquals("I Will Die as One of Them", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,18 +60,77 @@ public class Card_V2_017_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void IWillDieasOneofThemTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void IWillDieasPumpsValiantCompanionsUntilRegroupAndEnddOfTurnIfAragornDies() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var frodo = scn.GetRingBearer();
+		var die = scn.GetFreepsCard("die");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var theoden = scn.GetFreepsCard("theoden");
+		var vcompanion = scn.GetFreepsCard("vcompanion");
+		scn.FreepsMoveCardToHand(die);
+		scn.FreepsMoveCharToTable(aragorn, theoden, vcompanion);
+
+		var sauron = scn.GetShadowCard("sauron");
+		scn.ShadowMoveCharToTable(sauron);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(4, scn.GetStrength(frodo));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(theoden));
+		assertEquals(6, scn.GetStrength(vcompanion));
+		assertFalse(scn.hasKeyword(frodo, Keyword.VALIANT));
+		assertFalse(scn.hasKeyword(aragorn, Keyword.VALIANT));
+		assertFalse(scn.hasKeyword(theoden, Keyword.VALIANT));
+		assertTrue(scn.hasKeyword(vcompanion, Keyword.VALIANT));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsPlayAvailable(die));
+
+		scn.FreepsPlayCard(die);
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertEquals(4, scn.GetStrength(frodo));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(theoden));
+		assertEquals(8, scn.GetStrength(vcompanion));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, sauron);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
+		assertEquals(Zone.DEAD, aragorn.getZone());
+
+		assertEquals(4, scn.GetStrength(frodo));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(theoden));
+		//+2 until regroup, +1 until end of turn
+		assertEquals(9, scn.GetStrength(vcompanion));
+
+		scn.AddWoundsToChar(sauron, 5); //we're done with him
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+
+		assertEquals(4, scn.GetStrength(frodo));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(theoden));
+		//+2 until regroup wore off, +1 until end of turn
+		assertEquals(7, scn.GetStrength(vcompanion));
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsChooseToMove();
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(4, scn.GetStrength(frodo));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(theoden));
+		//+2 until regroup wore off, +1 until end of turn
+		assertEquals(7, scn.GetStrength(vcompanion));
+
 	}
 }

@@ -8,11 +8,14 @@ import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.lotro.tournament.Tournament;
+import com.gempukku.lotro.tournament.TournamentService;
 
 import java.util.*;
 
 public class TableHolder {
     private final LeagueService leagueService;
+    private final TournamentService tournamentService;
     private final IgnoreDAO ignoreDAO;
 
     private final Map<String, GameTable> awaitingTables = new LinkedHashMap<>();
@@ -20,8 +23,9 @@ public class TableHolder {
 
     private int _nextTableId = 1;
 
-    public TableHolder(LeagueService leagueService, IgnoreDAO ignoreDAO) {
+    public TableHolder(LeagueService leagueService, TournamentService tournamentService, IgnoreDAO ignoreDAO) {
         this.leagueService = leagueService;
+        this.tournamentService = tournamentService;
         this.ignoreDAO = ignoreDAO;
     }
 
@@ -171,13 +175,20 @@ public class TableHolder {
             final GameTable table = tableInformation.getValue();
 
             List<String> players;
-            if (table.getGameSettings().league() != null)
+            if (table.getGameSettings().league() != null) {
                 players = Collections.emptyList();
-            else
+            }
+            else {
                 players = table.getPlayerNames();
+            }
 
-            if (isAdmin || isNoIgnores(players, player.getName()))
-                visitor.visitTable(tableInformation.getKey(), null, false, HallInfoVisitor.TableStatus.WAITING, "Waiting", table.getGameSettings().format().getName(), getTournamentName(table), table.getGameSettings().userDescription(), players, table.getPlayerNames().contains(player.getName()), table.getGameSettings().privateGame(), table.getGameSettings().isInviteOnly(), null);
+            if (isAdmin || isNoIgnores(players, player.getName())) {
+                visitor.visitTable(tableInformation.getKey(), null, false, HallInfoVisitor.TableStatus.WAITING,
+                        "Waiting", table.getGameSettings().format().getName(), getTournamentName(table),
+                        table.getGameSettings().userDescription(), players,
+                        table.getPlayerNames().contains(player.getName()), table.getGameSettings().privateGame(),
+                        table.getGameSettings().isInviteOnly(), null);
+            }
         }
 
         // Then non-finished
@@ -190,9 +201,19 @@ public class TableHolder {
                 if (isAdmin || (lotroGameMediator.isVisibleToUser(player.getName()) &&
                         isNoIgnores(lotroGameMediator.getPlayersPlaying(), player.getName()))) {
                     if (lotroGameMediator.isFinished())
+                    {
                         finishedTables.put(runningGame.getKey(), runningTable);
-                    else
-                        visitor.visitTable(runningGame.getKey(), lotroGameMediator.getGameId(), isAdmin || lotroGameMediator.isAllowSpectators(), HallInfoVisitor.TableStatus.PLAYING, lotroGameMediator.getGameStatus(), runningTable.getGameSettings().format().getName(), getTournamentName(runningTable), runningTable.getGameSettings().userDescription(), lotroGameMediator.getPlayersPlaying(), lotroGameMediator.getPlayersPlaying().contains(player.getName()), runningTable.getGameSettings().privateGame(),  runningTable.getGameSettings().isInviteOnly(), lotroGameMediator.getWinner());
+                    }
+                    else {
+                        visitor.visitTable(runningGame.getKey(), lotroGameMediator.getGameId(),
+                                isAdmin || lotroGameMediator.isAllowSpectators(), HallInfoVisitor.TableStatus.PLAYING,
+                                lotroGameMediator.getGameStatus(), runningTable.getGameSettings().format().getName(),
+                                getTournamentName(runningTable), runningTable.getGameSettings().userDescription(),
+                                lotroGameMediator.getPlayersPlaying(),
+                                lotroGameMediator.getPlayersPlaying().contains(player.getName()),
+                                runningTable.getGameSettings().privateGame(),
+                                runningTable.getGameSettings().isInviteOnly(), lotroGameMediator.getWinner());
+                    }
 
                     if (!lotroGameMediator.isFinished() && lotroGameMediator.getPlayersPlaying().contains(player.getName()))
                         visitor.runningPlayerGame(lotroGameMediator.getGameId());
@@ -247,10 +268,16 @@ public class TableHolder {
 
     private String getTournamentName(GameTable table) {
         final League league = table.getGameSettings().league();
-        if (league != null)
+        if (league != null) {
             return league.getName() + " - " + table.getGameSettings().leagueSerie().getName();
-        else
-            return "Casual - " + table.getGameSettings().timeSettings().name();
+        } else if (table.getGameSettings().tournamentId() != null) {
+            final String tournamentTableDescription = tournamentService.getActiveTournamentTableDescription(table.getGameSettings().tournamentId());
+            if (tournamentTableDescription != null) {
+                return tournamentTableDescription;
+            }
+        }
+
+        return "Casual - " + table.getGameSettings().timeSettings().name();
     }
 
     public List<GameTable> getTournamentTables(String tournamentId) {

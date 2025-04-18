@@ -8,8 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_03_020_ErrataTests
 {
@@ -18,8 +17,15 @@ public class Card_03_020_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "53_20");
-					// put other cards in here as needed for the test case
+					put("golradir", "53_20");
+					put("erestor", "53_14");
+					put("saelbeth", "53_25");
+					put("arwen", "3_7");
+
+					put("nazgul", "12_161");
+					put("uruk", "1_151");
+					put("orc", "1_178");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +53,7 @@ public class Card_03_020_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("golradir");
 
 		assertEquals("Golradir", card.getBlueprint().getTitle());
 		assertEquals("Councilor of Imladris", card.getBlueprint().getSubtitle());
@@ -62,29 +68,81 @@ public class Card_03_020_ErrataTests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GolradirTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GolradirSpotsAnElfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
-		scn.FreepsMoveCharToTable(card);
-		scn.FreepsMoveCardToSupportArea(card);
-		scn.FreepsMoveCardToDiscard(card);
-		scn.FreepsMoveCardsToTopOfDeck(card);
-
-//		var card = scn.GetShadowCard("card");
-//		scn.ShadowMoveCardToHand(card);
-//		scn.ShadowMoveCharToTable(card);
-//		scn.ShadowMoveCardToSupportArea(card);
-//		scn.ShadowMoveCardToDiscard(card);
-//		scn.ShadowMoveCardsToTopOfDeck(card);
+		var golradir = scn.GetFreepsCard("golradir");
+		var erestor = scn.GetFreepsCard("erestor");
+		var saelbeth = scn.GetFreepsCard("saelbeth");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.FreepsMoveCardToHand(arwen, golradir);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertFalse(scn.FreepsPlayAvailable(golradir));
+		scn.FreepsPlayCard(arwen);
+		assertTrue(scn.FreepsPlayAvailable(golradir));
 	}
+
+	@Test
+	public void GolradirExertsToMakeANonOrcStrengthMinus1() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var golradir = scn.GetFreepsCard("golradir");
+		var erestor = scn.GetFreepsCard("erestor");
+		var saelbeth = scn.GetFreepsCard("saelbeth");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.FreepsMoveCharToTable(arwen, golradir);
+
+		var nazgul = scn.GetShadowCard("nazgul");
+		scn.ShadowMoveCharToTable(nazgul);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(arwen, nazgul);
+
+		assertEquals(0, scn.GetWoundsOn(golradir));
+		assertEquals(10, scn.GetStrength(nazgul));
+		assertTrue(scn.FreepsActionAvailable(golradir));
+
+		scn.FreepsUseCardAction(golradir);
+		assertEquals(1, scn.GetWoundsOn(golradir));
+		assertEquals(9, scn.GetStrength(nazgul));
+	}
+
+	@Test
+	public void GolradirExertsToMakeAnOrcStrengthMinus1PerElf() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var golradir = scn.GetFreepsCard("golradir");
+		var erestor = scn.GetFreepsCard("erestor");
+		var saelbeth = scn.GetFreepsCard("saelbeth");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.FreepsMoveCharToTable(arwen);
+		scn.FreepsMoveCardToSupportArea(golradir, erestor, saelbeth);
+
+		var orc = scn.GetShadowCard("orc");
+		scn.ShadowMoveCharToTable(orc);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(arwen, orc);
+
+		assertEquals(0, scn.GetWoundsOn(golradir));
+		assertEquals(5, scn.GetStrength(orc));
+		assertTrue(scn.FreepsActionAvailable(golradir));
+
+		scn.FreepsUseCardAction(golradir);
+		assertEquals(1, scn.GetWoundsOn(golradir));
+		// -4 for 4 elves
+		assertEquals(1, scn.GetStrength(orc));
+	}
+
+
 }

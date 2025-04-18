@@ -96,22 +96,16 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
 				trigger: {
-					type: Played
-					filter: self
+					type: ConstantlyCheck
+				}
+				requires: {
+					type: canSpot
+					filter: another,or(possession,weapon),attachedTo(bearer)
 				}
 				effect: {
-					type: Discard
-					select: all(attachedTo(bearer),or(possession,weapon),another)
-				}
-			}
-			{
-				type: modifier
-				modifier: {
-					type: CantBear
-					filter: bearer
-					cardFilter: hand weapon
+					type: discard
+					select: all(other,or(possession,weapon),attachedTo(bearer))
 				}
 			}
 			{

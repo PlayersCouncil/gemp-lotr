@@ -21,6 +21,8 @@ public class Card_V2_052_Tests
 					put("eowyn", "13_124");
 					put("arrowslits", "5_80");
 
+					//NEEDS MORE TESTS
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,

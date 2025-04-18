@@ -8,8 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Card_03_025_ErrataTests
 {
@@ -18,8 +17,15 @@ public class Card_03_025_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "53_25");
-					// put other cards in here as needed for the test case
+					put("golradir", "53_20");
+					put("erestor", "53_14");
+					put("saelbeth", "53_25");
+					put("arwen", "3_7");
+
+					put("nazgul", "12_161");
+					put("uruk", "1_151");
+					put("orc", "1_178");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -48,7 +54,7 @@ public class Card_03_025_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("saelbeth");
 
 		assertEquals("Saelbeth", card.getBlueprint().getTitle());
 		assertEquals("Elven Councilor", card.getBlueprint().getSubtitle());
@@ -63,29 +69,79 @@ public class Card_03_025_ErrataTests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SaelbethTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void SaelbethSpotsAnElfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
-		scn.FreepsMoveCharToTable(card);
-		scn.FreepsMoveCardToSupportArea(card);
-		scn.FreepsMoveCardToDiscard(card);
-		scn.FreepsMoveCardsToTopOfDeck(card);
-
-//		var card = scn.GetShadowCard("card");
-//		scn.ShadowMoveCardToHand(card);
-//		scn.ShadowMoveCharToTable(card);
-//		scn.ShadowMoveCardToSupportArea(card);
-//		scn.ShadowMoveCardToDiscard(card);
-//		scn.ShadowMoveCardsToTopOfDeck(card);
+		var golradir = scn.GetFreepsCard("golradir");
+		var erestor = scn.GetFreepsCard("erestor");
+		var saelbeth = scn.GetFreepsCard("saelbeth");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.FreepsMoveCardToHand(arwen, saelbeth);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertFalse(scn.FreepsPlayAvailable(saelbeth));
+		scn.FreepsPlayCard(arwen);
+		assertTrue(scn.FreepsPlayAvailable(saelbeth));
+	}
+
+	@Test
+	public void SaelbethExertsToMakeANonUrukStrengthMinus1() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var golradir = scn.GetFreepsCard("golradir");
+		var erestor = scn.GetFreepsCard("erestor");
+		var saelbeth = scn.GetFreepsCard("saelbeth");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.FreepsMoveCharToTable(arwen, saelbeth);
+
+		var nazgul = scn.GetShadowCard("nazgul");
+		scn.ShadowMoveCharToTable(nazgul);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(arwen, nazgul);
+
+		assertEquals(0, scn.GetWoundsOn(saelbeth));
+		assertEquals(10, scn.GetStrength(nazgul));
+		assertTrue(scn.FreepsActionAvailable(saelbeth));
+
+		scn.FreepsUseCardAction(saelbeth);
+		assertEquals(1, scn.GetWoundsOn(saelbeth));
+		assertEquals(9, scn.GetStrength(nazgul));
+	}
+
+	@Test
+	public void SaelbethExertsToMakeAnOrcStrengthMinus1PerElf() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var golradir = scn.GetFreepsCard("golradir");
+		var erestor = scn.GetFreepsCard("erestor");
+		var saelbeth = scn.GetFreepsCard("saelbeth");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.FreepsMoveCharToTable(arwen);
+		scn.FreepsMoveCardToSupportArea(golradir, erestor, saelbeth);
+
+		var uruk = scn.GetShadowCard("uruk");
+		scn.ShadowMoveCharToTable(uruk);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(arwen, uruk);
+
+		assertEquals(0, scn.GetWoundsOn(saelbeth));
+		assertEquals(5, scn.GetStrength(uruk));
+		assertTrue(scn.FreepsActionAvailable(saelbeth));
+
+		scn.FreepsUseCardAction(saelbeth);
+		assertEquals(1, scn.GetWoundsOn(saelbeth));
+		// -4 for 4 elves
+		assertEquals(1, scn.GetStrength(uruk));
 	}
 }

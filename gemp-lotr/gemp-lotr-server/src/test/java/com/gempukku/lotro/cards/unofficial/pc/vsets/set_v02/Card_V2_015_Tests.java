@@ -202,7 +202,7 @@ public class Card_V2_015_Tests
 
 		scn.SetTwilight(14);
 		scn.ShadowMoveCardsToTopOfDeck("filler1", "filler2", "filler3", "filler4",
-				"filler5", "filler6", "filler7", "filler8", "filler9", "bill");
+				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(4, scn.GetCurrentSiteNumber());
@@ -225,7 +225,7 @@ public class Card_V2_015_Tests
 		scn.SetTwilight(11);
 		scn.ShadowMoveCardToHand(insurance);
 		scn.ShadowMoveCardsToTopOfDeck("filler1", "filler2", "filler3", "filler4",
-				"filler5", "filler6", "filler7", "filler8", "filler9", "bill");
+				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(7, scn.GetCurrentSiteNumber());
@@ -247,7 +247,7 @@ public class Card_V2_015_Tests
 
 		scn.SetTwilight(18);
 		scn.ShadowMoveCardsToTopOfDeck("filler1", "filler2", "filler3", "filler4",
-				"filler5", "filler6", "filler7", "filler8", "filler9", "bill");
+				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(7, scn.GetCurrentSiteNumber());
@@ -279,7 +279,7 @@ public class Card_V2_015_Tests
 		scn.SetTwilight(17);
 		scn.ShadowMoveCardsToTopOfDeck(insurance);
 		scn.ShadowMoveCardsToTopOfDeck("filler1", "filler2", "filler3", "filler4",
-				"filler5", "filler6", "filler7", "filler8", "filler9", "bill");
+				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 
 		scn.FreepsPassCurrentPhaseAction();
 
@@ -305,7 +305,7 @@ public class Card_V2_015_Tests
 		scn.SetTwilight(11);
 		scn.ShadowMoveCardsToTopOfDeck(insurance);
 		scn.ShadowMoveCardsToTopOfDeck("filler1", "filler2", "filler3", "filler4",
-				"filler5", "filler6", "filler7", "filler8", "filler9", "bill");
+				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 
 		scn.FreepsPassCurrentPhaseAction();
 
@@ -320,7 +320,7 @@ public class Card_V2_015_Tests
 		scn.SetTwilight(11);
 		scn.ShadowMoveCardsToTopOfDeck(insurance);
 		scn.ShadowMoveCardsToTopOfDeck("filler1", "filler2", "filler3", "filler4",
-				"filler5", "filler6", "filler7", "filler8", "filler9", "bill");
+				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 
 		scn.FreepsPassCurrentPhaseAction();
 

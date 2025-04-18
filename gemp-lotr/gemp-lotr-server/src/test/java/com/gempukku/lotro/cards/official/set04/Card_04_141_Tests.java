@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.official.set04;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -21,7 +18,10 @@ public class Card_04_141_Tests
 				new HashMap<>()
 				{{
 					put("card", "4_141");
-					// put other cards in here as needed for the test case
+					put("uruk", "1_151");
+					put("cantea", "1_230");
+					put("enquea", "1_231");
+					put("gandalf", "1_364");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -58,18 +58,59 @@ public class Card_04_141_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BeyondDarkMountainsTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void MayChooseNotToAddBurden() throws DecisionResultInvalidException, CardNotFoundException {
+		// Arrange
+		GenericCardTestHelper scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var card = scn.GetShadowCard("card");
+		var uruk = scn.GetShadowCard("uruk");
+		var cantea = scn.GetShadowCard("cantea");
+		var enquea = scn.GetShadowCard("enquea");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var frodo = scn.GetRingBearer();
+
+		scn.ShadowMoveCardToHand(card);
+		scn.ShadowMoveCardToHand(uruk);
+		scn.ShadowMoveCardToHand(cantea);
+		scn.ShadowMoveCardToHand(enquea);
+		scn.FreepsMoveCardToHand(gandalf);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SetTwilight(20);
+
+		scn.FreepsPlayCard(gandalf);
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.ShadowPlayCard(uruk);
+		scn.ShadowPlayCard(cantea);
+		scn.ShadowPlayCard(enquea);
+		scn.ShadowPassCurrentPhaseAction();
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(frodo, uruk);
+		scn.ShadowAssignToMinions(gandalf, cantea, enquea);
+
+		scn.FreepsResolveSkirmish(frodo);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+
+		scn.FreepsResolveSkirmish(gandalf);
+		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowDecisionAvailable(
+				"Optional responses"));
+
+		// Act
+		scn.ShadowPassCurrentPhaseAction();
+
+		// Assert
+		assertEquals(1, scn.GetBurdens());
 	}
 }

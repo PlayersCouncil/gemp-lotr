@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,8 @@ public class Card_V2_045_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_45");
-					// put other cards in here as needed for the test case
+					put("hope", "102_45");
+					put("eomer", "4_267");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +46,7 @@ public class Card_V2_045_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("hope");
 
 		assertEquals("Do Not Trust to Hope", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -59,18 +58,57 @@ public class Card_V2_045_Tests
 		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DoNotTrusttoHopeTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void DoNotTrusttoHopeMakesBearerValiant() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var hope = scn.GetFreepsCard("hope");
+		var eomer = scn.GetFreepsCard("eomer");
+		scn.FreepsMoveCardToHand(hope);
+		scn.FreepsMoveCharToTable(eomer);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertFalse(scn.hasKeyword(eomer, Keyword.VALIANT));
+		assertTrue(scn.FreepsPlayAvailable(hope));
+
+		scn.FreepsPlayCard(hope);
+		assertEquals(eomer, hope.getAttachedTo());
+		assertTrue(scn.hasKeyword(eomer, Keyword.VALIANT));
+	}
+
+	@Test
+	public void DoNotTrusttoHopeWoundsAtStartOfRegroupUnlessDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var hope = scn.GetFreepsCard("hope");
+		var eomer = scn.GetFreepsCard("eomer");
+		scn.FreepsMoveCharToTable(eomer);
+		scn.AttachCardsTo(eomer, hope);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.REGROUP);
+		assertTrue(scn.FreepsDecisionAvailable(""));
+		assertEquals(0, scn.GetWoundsOn(eomer));
+		assertEquals(Zone.ATTACHED, hope.getZone());
+
+		scn.FreepsChoose("Wound");
+		assertEquals(1, scn.GetWoundsOn(eomer));
+		assertEquals(Zone.ATTACHED, hope.getZone());
+
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+
+		scn.SkipToPhase(Phase.REGROUP);
+		assertTrue(scn.FreepsDecisionAvailable(""));
+		assertEquals(1, scn.GetWoundsOn(eomer));
+		assertEquals(Zone.ATTACHED, hope.getZone());
+
+		scn.FreepsChoose("Discard");
+		assertEquals(1, scn.GetWoundsOn(eomer));
+		assertEquals(Zone.DISCARD, hope.getZone());
 	}
 }

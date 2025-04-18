@@ -281,17 +281,14 @@
 				{
 					type: optional
 					player: fp
-					text: Would you like to add a burden to discard this minion?
+					text: Would you like to add a burden to discard {self}?
+					cost: {
+						type: addBurdens
+						amount: 1
+					}
 					effect: {
-						type: costToEffect
-						cost: {
-							type: addBurdens
-							amount: 1
-						}
-						effect: {
-							type: discard
-							select: self
-						}
+						type: discard
+						select: self
 					}
 				}
 			]

@@ -29,7 +29,7 @@ public class IfEffect implements EffectAppenderProducer {
         return new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                EffectAppender[] effects = checkConditions(actionContext) ? trueEffectAppenders : falseEffectAppenders;
+                EffectAppender[] effects = checkRequirements(actionContext) ? trueEffectAppenders : falseEffectAppenders;
 
                 if(effects == null || effects.length == 0)
                     return null;
@@ -41,7 +41,7 @@ public class IfEffect implements EffectAppenderProducer {
                 return new StackActionEffect(subAction);
             }
 
-            private boolean checkConditions(ActionContext actionContext) {
+            private boolean checkRequirements(ActionContext actionContext) {
                 for (Requirement condition : conditions) {
                     if (!condition.accepts(actionContext))
                         return false;
@@ -52,7 +52,7 @@ public class IfEffect implements EffectAppenderProducer {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
 
-                boolean check = checkConditions(actionContext);
+                boolean check = checkRequirements(actionContext);
                 EffectAppender[] effects = check ? trueEffectAppenders : falseEffectAppenders;
 
                 if(effects == null || effects.length == 0)

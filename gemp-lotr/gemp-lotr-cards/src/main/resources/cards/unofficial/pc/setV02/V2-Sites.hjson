@@ -32,18 +32,15 @@
 					effect: {
 						type: Optional
 						text: Would you like to discard 2 cards to draw 2?
+						cost: {
+							type: DiscardFromHand
+							forced: false
+							select: choose(any)
+							count: 2
+						}
 						effect: {
-							type: CostToEffect
-							cost: {
-								type: DiscardFromHand
-								forced: false
-								select: choose(any)
-								count: 2
-							}
-							effect: {
-								type: DrawCards
-								count: 2
-							}
+							type: DrawCards
+							count: 2
 						}
 					}
 				}

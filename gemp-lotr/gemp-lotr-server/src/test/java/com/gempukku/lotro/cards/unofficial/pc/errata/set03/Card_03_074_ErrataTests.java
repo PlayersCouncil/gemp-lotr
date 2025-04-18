@@ -17,8 +17,10 @@ public class Card_03_074_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "53_74");
-					// put other cards in here as needed for the test case
+					put("raider", "53_74");
+					put("demands", "2_40");
+
+					put("rosie", "1_309");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -41,14 +43,14 @@ public class Card_03_074_ErrataTests
 		 * Strength: 6
 		 * Vitality: 2
 		 * Site Number: 5
-		 * Game Text: Damage +1.
+		 * Game Text: Tracker. Damage +1.
 		* 	While an ally is in the dead pile, this minion is strength +3 and <b>fierce</b>.
 		* 	Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("raider");
 
 		assertEquals("Uruk Raider", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -57,12 +59,117 @@ public class Card_03_074_ErrataTests
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
 		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
 		assertEquals(5, card.getBlueprint().getSiteNumber());
+	}
+
+	@Test
+	public void UrukRaiderIsStrengthPlus3AndFierceWhileAllyIsInDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var rosie = scn.GetFreepsCard("rosie");
+		scn.FreepsMoveCardToHand(rosie);
+
+		var raider = scn.GetShadowCard("raider");
+		scn.ShadowMoveCharToTable(raider);
+
+		scn.StartGame();
+
+		assertEquals(Zone.HAND,  rosie.getZone());
+		assertEquals(6, scn.GetStrength(raider));
+		assertFalse(scn.hasKeyword(raider, Keyword.FIERCE));
+
+		scn.FreepsMoveCardToDeadPile(rosie);
+
+		assertEquals(Zone.DEAD,  rosie.getZone());
+		assertEquals(9, scn.GetStrength(raider));
+		assertTrue(scn.hasKeyword(raider, Keyword.FIERCE));
+	}
+
+	@Test
+	public void UrukRaiderCannotRespondToAllyExertionIfNoOtherIsengardCard() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var rosie = scn.GetFreepsCard("rosie");
+		scn.FreepsMoveCardToSupportArea(rosie);
+
+		var raider = scn.GetShadowCard("raider");
+		scn.ShadowMoveCharToTable(raider);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetWoundsOn(raider));
+		assertEquals(0, scn.GetWoundsOn(rosie));
+		assertEquals(Zone.SUPPORT,  rosie.getZone());
+
+		scn.FreepsUseCardAction(rosie);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+
+		assertEquals(Zone.SUPPORT,  rosie.getZone());
+		assertEquals(0, scn.GetWoundsOn(raider));
+		assertEquals(1, scn.GetWoundsOn(rosie));
+	}
+
+	@Test
+	public void UrukRaiderCannotRespondToAllyExertionIfSpotsOtherIsengardCardButCannotExert() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var rosie = scn.GetFreepsCard("rosie");
+		scn.FreepsMoveCardToSupportArea(rosie);
+
+		var raider = scn.GetShadowCard("raider");
+		var demands = scn.GetShadowCard("demands");
+		scn.ShadowMoveCharToTable(raider);
+		scn.ShadowMoveCardToSupportArea(demands);
+		scn.AddWoundsToChar(raider, 1);
+
+		scn.StartGame();
+
+		assertEquals(1, scn.GetWoundsOn(raider));
+		assertEquals(0, scn.GetWoundsOn(rosie));
+		assertEquals(Zone.SUPPORT,  rosie.getZone());
+
+		scn.FreepsUseCardAction(rosie);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+
+		assertEquals(Zone.SUPPORT,  rosie.getZone());
+		assertEquals(1, scn.GetWoundsOn(raider));
+		assertEquals(1, scn.GetWoundsOn(rosie));
+	}
+
+	@Test
+	public void UrukRaiderCanSpotAnotherIsengardCardAndExertToWoundExertingAlly() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var rosie = scn.GetFreepsCard("rosie");
+		scn.FreepsMoveCardToSupportArea(rosie);
+
+		var raider = scn.GetShadowCard("raider");
+		var demands = scn.GetShadowCard("demands");
+		scn.ShadowMoveCharToTable(raider);
+		scn.ShadowMoveCardToSupportArea(demands);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetWoundsOn(raider));
+		assertEquals(0, scn.GetWoundsOn(rosie));
+		assertEquals(Zone.SUPPORT,  rosie.getZone());
+
+		scn.FreepsUseCardAction(rosie);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(Zone.DEAD,  rosie.getZone());
+		assertEquals(1, scn.GetWoundsOn(raider));
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

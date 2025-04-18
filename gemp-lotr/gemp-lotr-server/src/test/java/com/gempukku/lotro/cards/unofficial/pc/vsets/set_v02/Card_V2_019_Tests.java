@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,9 @@ public class Card_V2_019_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_19");
-					// put other cards in here as needed for the test case
+					put("deathseeker", "102_19");
+					put("savage", "1_151");
+					put("machine", "5_60");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -49,7 +49,7 @@ public class Card_V2_019_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("deathseeker");
 
 		assertEquals("Berserk Deathseeker", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -66,18 +66,60 @@ public class Card_V2_019_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BerserkDeathseekerTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void BerserkDeathseekerIsStrenghtPlus1ForEachWoundOnEachCharacterInSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var deathseeker = scn.GetShadowCard("deathseeker");
+		var savage = scn.GetShadowCard("savage");
+		var machine = scn.GetShadowCard("machine");
+		scn.ShadowMoveCharToTable(deathseeker, savage);
+		scn.ShadowMoveCardToSupportArea(machine);
+
+		var frodo = scn.GetRingBearer();
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(5, scn.GetTwilight());
+		scn.addWounds(frodo, 1);
+		scn.addWounds(deathseeker, 1);
+		scn.addWounds(savage, 1);
+
+		//not in skirmish, should be base
+		assertEquals(10, scn.getStrength(deathseeker));
+
+		scn.SkipToAssignments();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowAssignToMinions(frodo, deathseeker, savage);
+		scn.FreepsResolveSkirmish(frodo);
+
+		//Base strength of 10, +1 strength for the single wound on each of itself, the savage, and frodo
+		assertEquals(13, scn.getStrength(deathseeker));
+	}
+
+	@Test
+	public void BerserkDeathseekerDyingAdds3TokensToMachine() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var deathseeker = scn.GetShadowCard("deathseeker");
+		var machine = scn.GetShadowCard("machine");
+		scn.ShadowMoveCharToTable(deathseeker);
+		scn.ShadowMoveCardToSupportArea(machine);
+
+		scn.StartGame();
+
+		scn.addWounds(deathseeker, 2);
+
+		assertEquals(1, scn.GetVitality(deathseeker));
+		assertEquals(0, scn.GetCultureTokensOn(machine));
+		assertEquals(Zone.SHADOW_CHARACTERS, deathseeker.getZone());
+
+		scn.addWounds(deathseeker, 1);
+
+		scn.FreepsPassCurrentPhaseAction(); //to get the game to realize he's died
+
+		assertEquals(3, scn.GetCultureTokensOn(machine));
+		assertEquals(Zone.DISCARD, deathseeker.getZone());
 	}
 }

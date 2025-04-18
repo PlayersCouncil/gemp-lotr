@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class Card_03_014_ErrataTests
 {
@@ -18,8 +19,13 @@ public class Card_03_014_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "53_14");
-					// put other cards in here as needed for the test case
+					put("erestor", "53_14");
+					put("arwen", "3_7");
+
+					put("enquea", "1_231");
+					put("hate", "1_250");
+					put("orc", "1_271");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +53,7 @@ public class Card_03_014_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("erestor");
 
 		assertEquals("Erestor", card.getBlueprint().getTitle());
 		assertEquals("Chief Advisor to Elrond", card.getBlueprint().getSubtitle());
@@ -62,29 +68,147 @@ public class Card_03_014_ErrataTests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)));
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ErestorTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ErestorSpotsAnElfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
-		scn.FreepsMoveCharToTable(card);
-		scn.FreepsMoveCardToSupportArea(card);
-		scn.FreepsMoveCardToDiscard(card);
-		scn.FreepsMoveCardsToTopOfDeck(card);
-
-//		var card = scn.GetShadowCard("card");
-//		scn.ShadowMoveCardToHand(card);
-//		scn.ShadowMoveCharToTable(card);
-//		scn.ShadowMoveCardToSupportArea(card);
-//		scn.ShadowMoveCardToDiscard(card);
-//		scn.ShadowMoveCardsToTopOfDeck(card);
+		var erestor = scn.GetFreepsCard("erestor");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.FreepsMoveCardToHand(arwen, erestor);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertFalse(scn.FreepsPlayAvailable(erestor));
+		scn.FreepsPlayCard(arwen);
+		assertTrue(scn.FreepsPlayAvailable(erestor));
 	}
+
+	@Test
+	public void ErestorCanBlockEnquea() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var erestor = scn.GetFreepsCard("erestor");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.FreepsMoveCharToTable(arwen);
+		scn.FreepsMoveCardToSupportArea(erestor);
+
+		var enquea = scn.GetShadowCard("enquea");
+		scn.ShadowMoveCharToTable(enquea);
+
+		scn.StartGame();
+		scn.AddBurdens(5);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(0, scn.GetWoundsOn(erestor));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.GetWoundsOn(enquea));
+		scn.ShadowUseCardAction(enquea);
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(erestor));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(1, scn.GetWoundsOn(enquea));
+	}
+
+	@Test
+	public void ErestorCanBlockEnqueaSkirmishWin() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var erestor = scn.GetFreepsCard("erestor");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.FreepsMoveCharToTable(arwen);
+		scn.FreepsMoveCardToSupportArea(erestor);
+
+		var enquea = scn.GetShadowCard("enquea");
+		scn.ShadowMoveCharToTable(enquea);
+
+		scn.StartGame();
+		scn.AddBurdens(5);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(arwen, enquea);
+
+		assertEquals(0, scn.GetWoundsOn(erestor));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.GetWoundsOn(enquea));
+		scn.PassSkirmishActions();
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(erestor));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.GetWoundsOn(enquea));
+	}
+
+	@Test
+	public void ErestorCanBlockHate() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var erestor = scn.GetFreepsCard("erestor");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.FreepsMoveCharToTable(arwen);
+		scn.FreepsMoveCardToSupportArea(erestor);
+
+		var hate = scn.GetShadowCard("hate");
+		var orc = scn.GetShadowCard("orc");
+
+		scn.ShadowMoveCharToTable(orc);
+		scn.ShadowMoveCardToHand(hate);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertEquals(0, scn.GetWoundsOn(erestor));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.GetWoundsOn(orc));
+		scn.ShadowPlayCard(hate);
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(erestor));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(1, scn.GetWoundsOn(orc));
+	}
+
+	@Test
+	public void ErestorCanBlockSauronOrcSkirmishWin() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var erestor = scn.GetFreepsCard("erestor");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.FreepsMoveCharToTable(arwen);
+		scn.FreepsMoveCardToSupportArea(erestor);
+
+		var orc = scn.GetShadowCard("orc");
+		scn.ShadowMoveCharToTable(orc);
+
+		scn.StartGame();
+		scn.AddBurdens(5);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(arwen, orc);
+
+		assertEquals(0, scn.GetWoundsOn(erestor));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.GetWoundsOn(orc));
+		scn.PassSkirmishActions();
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(erestor));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.GetWoundsOn(orc));
+	}
+
+
 }
