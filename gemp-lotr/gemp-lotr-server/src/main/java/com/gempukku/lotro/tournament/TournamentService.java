@@ -179,10 +179,8 @@ public class TournamentService {
 
     public void reloadTournaments(TableHolder tables) {
         _tables = tables;
-        clearCache();
         reloadQueues();
-
-        getLiveTournaments();
+        reloadLiveTournamentsFromDb();
     }
 
     public void reloadQueues() {
@@ -232,10 +230,6 @@ public class TournamentService {
         addImmediateRecurringSealed("movie_sealed_queue", casual + "Movie Sealed", "movieSealedQueue-", "single_movie_sealed");
         addImmediateRecurringSealed("wotr_sealed_queue", casual + "War of the Ring Block Sealed", "wotrSealedQueue-", "single_wotr_block_sealed");
         addImmediateRecurringSealed("th_sealed_queue", casual + "Hunters Block Sealed", "thSealedQueue-", "single_th_block_sealed");
-    }
-
-    public void clearCache() {
-        _activeTournaments.clear();
     }
 
     public void cancelAllTournamentQueues() throws SQLException, IOException {
@@ -474,13 +468,19 @@ public class TournamentService {
         return result;
     }
 
-    public List<Tournament> getLiveTournaments() {
+    private List<Tournament> reloadLiveTournamentsFromDb() {
+        _activeTournaments.clear();
+
         List<Tournament> result = new ArrayList<>();
         for (var dbinfo : _tournamentDao.getUnfinishedTournaments()) {
             var tournament = upsertTournamentInCache(dbinfo);
             result.add(tournament);
         }
         return result;
+    }
+
+    public List<Tournament> getLiveTournaments() {
+        return new ArrayList<>(_activeTournaments.values());
     }
 
     public Tournament getTournamentById(String tournamentId) {
@@ -493,6 +493,15 @@ public class TournamentService {
             tournament = upsertTournamentInCache(dbinfo);
         }
         return tournament;
+    }
+
+    public String getActiveTournamentTableDescription(String tournamentId) {
+        Tournament tournament = _activeTournaments.get(tournamentId);
+        if (tournament == null) {
+            return null;
+        } else {
+            return tournament.getTableDescription();
+        }
     }
 
     public synchronized CollectionType getCollectionTypeByCode(String collectionTypeCode) {

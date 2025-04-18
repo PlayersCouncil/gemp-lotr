@@ -135,6 +135,16 @@ public class CollectionsManager {
         }
     }
 
+
+    public void removeFromPlayerCollection(String player, String collectionType, CardCollection cardCollection, String reason) throws SQLException, IOException {
+        _readWriteLock.writeLock().lock();
+        try {
+            removeFromPlayerCollection(_playerDAO.getPlayer(player), collectionType, cardCollection, reason);
+        } finally {
+            _readWriteLock.writeLock().unlock();
+        }
+    }
+
     private void removeFromPlayerCollection(Player player, String collectionType, CardCollection cardCollection, String reason) {
         if (collectionType.contains("+"))
             throw new IllegalArgumentException("Invalid collection type: " + collectionType);
@@ -306,10 +316,6 @@ public class CollectionsManager {
         } finally {
             _readWriteLock.writeLock().unlock();
         }
-    }
-
-    public boolean sellCardInPlayerCollection(String player, CollectionType collectionType, String blueprintId, int currency) throws SQLException, IOException {
-        return sellCardInPlayerCollection(_playerDAO.getPlayer(player), collectionType, blueprintId, currency);
     }
 
     public boolean sellCardInPlayerCollection(Player player, CollectionType collectionType, String blueprintId, int currency) throws SQLException, IOException {

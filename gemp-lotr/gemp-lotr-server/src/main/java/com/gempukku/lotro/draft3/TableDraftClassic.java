@@ -164,11 +164,7 @@ public class TableDraftClassic implements TableDraft{
                     if (draftPlayer instanceof DraftBot) {
                         botCollections.remove(draftPlayer);
                     } else {
-                        for (CardCollection.Item item : collection.getAll()) {
-                            for (int i = 0; i < item.getCount(); i++) {
-                                collectionsManager.sellCardInPlayerCollection(draftPlayer.getName(), collectionType, item.getBlueprintId(), 0);
-                            }
-                        }
+                        collectionsManager.removeFromPlayerCollection(draftPlayer.getName(), collectionType.getCode(), collection, "Duplicate tournament collection");
                     }
                 }
             } catch (SQLException | IOException ignore) {

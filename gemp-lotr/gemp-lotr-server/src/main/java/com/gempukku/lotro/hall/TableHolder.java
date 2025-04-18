@@ -268,18 +268,16 @@ public class TableHolder {
 
     private String getTournamentName(GameTable table) {
         final League league = table.getGameSettings().league();
-        final Tournament tournament = null; //tournamentService.getLiveTournaments().stream().filter(tournament1 -> tournament1.getTournamentId().equals(table.getGameSettings().tournamentId())).findFirst().orElse(null);
         if (league != null) {
             return league.getName() + " - " + table.getGameSettings().leagueSerie().getName();
-        } else if (tournament != null) {
-            String tournamentTableDescription = tournament.getTableDescription();
-            if (tournamentTableDescription == null || tournamentTableDescription.isEmpty()) {
-                return "Casual - " + table.getGameSettings().timeSettings().name();
+        } else if (table.getGameSettings().tournamentId() != null) {
+            final String tournamentTableDescription = tournamentService.getActiveTournamentTableDescription(table.getGameSettings().tournamentId());
+            if (tournamentTableDescription != null) {
+                return tournamentTableDescription;
             }
-            return tournamentTableDescription;
-        } else {
-            return "Casual - " + table.getGameSettings().timeSettings().name();
         }
+
+        return "Casual - " + table.getGameSettings().timeSettings().name();
     }
 
     public List<GameTable> getTournamentTables(String tournamentId) {
