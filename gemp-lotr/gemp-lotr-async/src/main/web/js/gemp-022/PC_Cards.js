@@ -976,6 +976,6 @@ var PCCards = {
 	// Goblin Archer (1R172) [Errata]
 	'51_172' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E172.1_card.jpg',
 	// Shadowfax, Greatest of the Mearas (17R24) [Errata]
-	'67_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN17E024.1_card.jpg',
+	'67_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN17E024.2_card.jpg',
 }
 
