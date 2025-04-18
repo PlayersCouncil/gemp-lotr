@@ -43,7 +43,7 @@ public class Card_03_074_ErrataTests
 		 * Strength: 6
 		 * Vitality: 2
 		 * Site Number: 5
-		 * Game Text: Damage +1.
+		 * Game Text: Tracker. Damage +1.
 		* 	While an ally is in the dead pile, this minion is strength +3 and <b>fierce</b>.
 		* 	Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
 		*/
@@ -59,6 +59,7 @@ public class Card_03_074_ErrataTests
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
+		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
 		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(2, card.getBlueprint().getTwilightCost());

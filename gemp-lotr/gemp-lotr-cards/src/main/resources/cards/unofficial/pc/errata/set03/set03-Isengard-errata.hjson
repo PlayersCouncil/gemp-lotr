@@ -615,7 +615,10 @@
 		strength: 6
 		vitality: 2
 		site: 5
-		keywords: Damage+1
+		keywords: [
+			Tracker
+			Damage+1
+		]
 		effects: [
 			{
 				type: modifier
@@ -663,7 +666,7 @@
 				}
 			}
 		]
-		gametext: Damage +1.<br>While an ally is in the dead pile, this minion is strength +3 and <b>fierce</b>.<br>Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
+		gametext: Tracker. Damage +1.<br>While an ally is in the dead pile, this minion is strength +3 and <b>fierce</b>.<br>Each time an ally exerts, you may spot another [isengard] card and exert this minion to wound that ally.
 		lore: "'There is no safety where Saruman's emblem is shown.'"
 		promotext: ""
 		alts: {
