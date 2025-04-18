@@ -1,7 +1,10 @@
-package com.gempukku.lotro.cards.official.set02;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -10,14 +13,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_02_040_Tests
+public class Card_02_040_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("demands", "2_40");
+					put("demands", "52_40");
 					put("savage", "1_151");
 
 					put("celeborn", "1_34");
@@ -31,7 +34,7 @@ public class Card_02_040_Tests
 	}
 
 	@Test
-	public void DemandsofthebrSackvilleBagginsesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DemandsoftheSackvilleBagginsesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 2
@@ -41,8 +44,8 @@ public class Card_02_040_Tests
 		 * Culture: Isengard
 		 * Twilight Cost: 1
 		 * Type: Condition
-		 * Subtype: 
-		 * Game Text: To play, spot an [isengard] minion. Plays to your support area.<br>Each time a [shire] ally exerts, add (1).
+		 * Subtype: Support area
+		 * Game Text: To play, spot an [isengard] minion. <br>Each time an ally exerts, add (1) (or (2) if that ally is [shire]).
 		*/
 
 		var scn = GetScenario();
@@ -79,7 +82,7 @@ public class Card_02_040_Tests
 
 
 	@Test
-	public void DemandsoftheSackvilleBagginsesAddsNothingWhenNonShireAllyExerts() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DemandsoftheSackvilleBagginsesAdds1WhenNonShireAllyExerts() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -93,11 +96,11 @@ public class Card_02_040_Tests
 
 		assertEquals(0, scn.GetTwilight());
 		scn.FreepsUseCardAction(celeborn);
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 
 	@Test
-	public void DemandsoftheSackvilleBagginsesAdds1WhenShireAllyExerts() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DemandsoftheSackvilleBagginsesAdds2WhenShireAllyExerts() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -111,6 +114,6 @@ public class Card_02_040_Tests
 
 		assertEquals(0, scn.GetTwilight());
 		scn.FreepsUseCardAction(rosie);
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

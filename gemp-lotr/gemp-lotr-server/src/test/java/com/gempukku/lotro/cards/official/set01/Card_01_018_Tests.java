@@ -76,17 +76,18 @@ public class Card_01_018_Tests
         var fcard1 = scn.GetFreepsCard("fcard1");
         var fcard2 = scn.GetFreepsCard("fcard2");
         var fcard3 = scn.GetFreepsCard("fcard3");
-        scn.FreepsMoveCardsToTopOfDeck(fcard3, fcard2, fcard1);
 
         var scard1 = scn.GetShadowCard("scard1");
         var scard2 = scn.GetShadowCard("scard2");
         var scard3 = scn.GetShadowCard("scard3");
-        scn.ShadowMoveCardsToTopOfDeck(scard3, scard2, scard1);
 
         scn.StartGame();
 
         assertTrue(scn.FreepsPlayAvailable(halls));
         assertEquals(0, scn.GetWoundsOn(gimli));
+
+        scn.FreepsMoveCardsToTopOfDeck(fcard3, fcard2, fcard1);
+        scn.ShadowMoveCardsToTopOfDeck(scard3, scard2, scard1);
 
         scn.FreepsPlayCard(halls);
 
@@ -99,7 +100,7 @@ public class Card_01_018_Tests
         assertTrue(choices.contains(fcard2.getBlueprintId()));
         assertTrue(choices.contains(fcard3.getBlueprintId()));
 
-        scn.AcknowledgeReveal();
+        scn.DismissRevealedCards();
         assertTrue(scn.FreepsDecisionAvailable("Would you like to discard"));
         scn.FreepsChooseYes();
         assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));
@@ -135,14 +136,15 @@ public class Card_01_018_Tests
         var fcard1 = scn.GetFreepsCard("fcard1");
         var fcard2 = scn.GetFreepsCard("fcard2");
         var fcard3 = scn.GetFreepsCard("fcard3");
-        scn.FreepsMoveCardsToTopOfDeck(fcard3, fcard2, fcard1);
 
         var scard1 = scn.GetShadowCard("scard1");
         var scard2 = scn.GetShadowCard("scard2");
         var scard3 = scn.GetShadowCard("scard3");
-        scn.ShadowMoveCardsToTopOfDeck(scard3, scard2, scard1);
 
         scn.StartGame();
+
+        scn.FreepsMoveCardsToTopOfDeck(fcard3, fcard2, fcard1);
+        scn.ShadowMoveCardsToTopOfDeck(scard3, scard2, scard1);
 
         assertTrue(scn.FreepsPlayAvailable(halls));
         assertEquals(0, scn.GetWoundsOn(gimli));
@@ -158,7 +160,7 @@ public class Card_01_018_Tests
         assertTrue(choices.contains(scard2.getBlueprintId()));
         assertTrue(choices.contains(scard3.getBlueprintId()));
 
-        scn.AcknowledgeReveal();
+        scn.DismissRevealedCards();
         assertTrue(scn.FreepsDecisionAvailable("Would you like to discard"));
         scn.FreepsChooseYes();
         assertTrue(scn.FreepsDecisionAvailable("Choose cards from deck"));

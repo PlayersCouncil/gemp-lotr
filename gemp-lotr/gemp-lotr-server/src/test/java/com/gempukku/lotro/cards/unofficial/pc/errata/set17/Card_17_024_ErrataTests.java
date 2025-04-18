@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set17;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_17_024_ErrataTests
 {
@@ -18,8 +18,12 @@ public class Card_17_024_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "67_24");
-					// put other cards in here as needed for the test case
+					put("shadowfax", "67_24");
+					put("glamdring", "1_75");
+					put("glamdring2", "6_31");
+					put("pipe", "1_74");
+					put("staff", "2_29");
+					put("gandalf", "1_364");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -43,13 +47,13 @@ public class Card_17_024_ErrataTests
 		 * Vitality: 1
 		 * Resistance: 1
 		 * Game Text: Bearer must be a [gandalf] Wizard.
-		* 	When you play this, discard all other possessions and weapons on bearer. Bearer may not bear a hand weapon.
-		* 	Each time the fellowship moves, you may exert bearer and add a threat to remove a burden.
+		 *  Discard all other possessions and weapons on bearer.
+		 *  Each time the fellowship moves, you may exert bearer and add a threat to remove a burden.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("shadowfax");
 
 		assertEquals("Shadowfax", card.getBlueprint().getTitle());
 		assertEquals("Greatest of the Mearas", card.getBlueprint().getSubtitle());
@@ -64,18 +68,89 @@ public class Card_17_024_ErrataTests
 		assertEquals(1, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ShadowfaxTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void ShadowfaxPlaysOnaGandalfWizard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var shadowfax = scn.GetFreepsCard("shadowfax");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCardToHand(shadowfax);
+		scn.FreepsMoveCharToTable(gandalf);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.RemoveBurdens(1);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(Zone.HAND, shadowfax.getZone());
+		assertEquals(7, scn.GetStrength(gandalf));
+		assertEquals(4, scn.GetVitality(gandalf));
+		assertEquals(6, scn.GetResistance(gandalf));
+
+		scn.FreepsPlayCard(shadowfax);
+		assertEquals(Zone.ATTACHED, shadowfax.getZone());
+		assertEquals(gandalf, shadowfax.getAttachedTo());
+		assertEquals(8, scn.GetStrength(gandalf));
+		assertEquals(5, scn.GetVitality(gandalf));
+		assertEquals(7, scn.GetResistance(gandalf));
+	}
+
+	@Test
+	public void ShadowfaxDiscardsPossessionsAndWeaponsOnBearerBothBeforeAndAfterPlay() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var shadowfax = scn.GetFreepsCard("shadowfax");
+		var glamdring = scn.GetFreepsCard("glamdring");
+		var glamdring2 = scn.GetFreepsCard("glamdring2");
+		var pipe = scn.GetFreepsCard("pipe");
+		var staff = scn.GetFreepsCard("staff");
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCardToHand(shadowfax, staff, glamdring2);
+		scn.FreepsMoveCharToTable(gandalf);
+		scn.AttachCardsTo(gandalf, pipe, glamdring);
+
+		scn.StartGame();
+
+		assertEquals(Zone.HAND, shadowfax.getZone());
+		assertEquals(Zone.ATTACHED, glamdring.getZone());
+		assertEquals(Zone.ATTACHED, pipe.getZone());
+		scn.FreepsPlayCard(shadowfax);
+		assertEquals(Zone.ATTACHED, shadowfax.getZone());
+		assertEquals(Zone.DISCARD, glamdring.getZone());
+		assertEquals(Zone.DISCARD, pipe.getZone());
+
+		assertEquals(Zone.HAND, staff.getZone());
+		scn.FreepsPlayCard(staff);
+		assertEquals(Zone.DISCARD, staff.getZone());
+
+		assertEquals(Zone.HAND, glamdring2.getZone());
+		scn.FreepsPlayCard(glamdring2);
+		assertEquals(Zone.DISCARD, glamdring2.getZone());
+	}
+
+	@Test
+	public void ShadowfaxExertsBearerAndAddsThreatToRemoveBurdenWhenMoving() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var shadowfax = scn.GetFreepsCard("shadowfax");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCharToTable(gandalf);
+		scn.AttachCardsTo(gandalf, shadowfax);
+
+		scn.StartGame();
+
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+
+		scn.FreepsPassCurrentPhaseAction();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(1, scn.GetThreats());
+		assertEquals(1, scn.GetWoundsOn(gandalf));
 	}
 }

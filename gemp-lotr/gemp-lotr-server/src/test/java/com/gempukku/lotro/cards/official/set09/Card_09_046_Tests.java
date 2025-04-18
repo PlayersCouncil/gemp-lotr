@@ -17,8 +17,13 @@ public class Card_09_046_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "9_46");
-					// put other cards in here as needed for the test case
+					put("arrow", "9_46");
+					put("aragorn", "1_89");
+					put("eomer", "4_267");
+					put("spear", "4_268");
+
+					put("runner", "1_178");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -43,7 +48,7 @@ public class Card_09_046_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("arrow");
 
 		assertEquals("The Red Arrow", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,18 +60,75 @@ public class Card_09_046_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheRedArrowTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void TheRedArrowExertsAGondorCompToPlayRohanCompDuringAssignment() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var arrow = scn.GetFreepsCard("arrow");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var eomer = scn.GetFreepsCard("eomer");
+		var spear = scn.GetFreepsCard("spear");
+		scn.FreepsMoveCardToSupportArea(arrow);
+		scn.FreepsMoveCharToTable(aragorn);
+		scn.FreepsMoveCardToHand(eomer, spear);
+
+		scn.ShadowMoveCharToTable("runner");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		assertEquals(Zone.FREE_CHARACTERS, aragorn.getZone());
+		assertEquals(Zone.HAND, eomer.getZone());
+		assertEquals(Zone.HAND, spear.getZone());
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		assertTrue(scn.FreepsActionAvailable(arrow));
+		scn.FreepsUseCardAction(arrow);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(Zone.FREE_CHARACTERS, eomer.getZone());
+
+		assertTrue(scn.FreepsDecisionAvailable("Would you like exert the played"));
+		scn.FreepsChooseNo();
+		assertTrue(scn.ShadowAnyDecisionsAvailable());
+		assertEquals(Zone.HAND, spear.getZone());
+	}
+
+	@Test
+	public void TheRedArrowCanOptionallyPlayPossessionOnPlayedCompByExerting() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var arrow = scn.GetFreepsCard("arrow");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var eomer = scn.GetFreepsCard("eomer");
+		var spear = scn.GetFreepsCard("spear");
+		scn.FreepsMoveCardToSupportArea(arrow);
+		scn.FreepsMoveCharToTable(aragorn);
+		scn.FreepsMoveCardToHand(eomer, spear);
+
+		scn.ShadowMoveCharToTable("runner");
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		assertEquals(Zone.FREE_CHARACTERS, aragorn.getZone());
+		assertEquals(Zone.HAND, eomer.getZone());
+		assertEquals(Zone.HAND, spear.getZone());
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		assertTrue(scn.FreepsActionAvailable(arrow));
+		scn.FreepsUseCardAction(arrow);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(Zone.FREE_CHARACTERS, eomer.getZone());
+
+		assertEquals(0, scn.GetWoundsOn(eomer));
+		assertTrue(scn.FreepsDecisionAvailable("Would you like exert the played"));
+		scn.FreepsChooseYes();
+
+		assertEquals(1, scn.GetWoundsOn(eomer));
+		assertEquals(Zone.ATTACHED, spear.getZone());
+		assertEquals(eomer, spear.getAttachedTo());
+		assertTrue(scn.ShadowAnyDecisionsAvailable());
 	}
 }

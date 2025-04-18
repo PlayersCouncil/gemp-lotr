@@ -257,6 +257,8 @@
 							{
 								type: DiscardFromHand
 								forced: true
+								hand: shadow
+								player: shadow
 								select: memory(revealedCard)
 							}
 						]

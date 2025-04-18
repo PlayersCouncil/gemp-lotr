@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.official.set03;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -20,8 +17,11 @@ public class Card_03_033_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "3_33");
-					// put other cards in here as needed for the test case
+					put("check", "3_33");
+					put("gandalf", "1_364");
+
+					put("runner", "1_178");
+					put("sauron", "9_48");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +46,7 @@ public class Card_03_033_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("check");
 
 		assertEquals("His First Serious Check", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +58,85 @@ public class Card_03_033_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HisFirstSeriousCheckTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void HisFirstSeriousCheckSpotsGandalf() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var check = scn.GetFreepsCard("check");
+		scn.FreepsMoveCardToHand(check);
+
+		scn.ShadowMoveCharToTable("runner");
+		scn.ShadowMoveCardToHand("sauron", "check", "gandalf");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertFalse(scn.FreepsPlayAvailable(check));
+	}
 
-		assertEquals(1, scn.GetTwilight());
+	@Test
+	public void HisFirstSeriousCheckRevealsACardAtRandom() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var check = scn.GetFreepsCard("check");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCardToHand(check);
+		scn.FreepsMoveCharToTable(gandalf);
+
+		scn.ShadowMoveCharToTable("runner");
+		scn.ShadowMoveCardToHand("sauron", "check", "gandalf");
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertTrue(scn.FreepsPlayAvailable(check));
+		assertEquals(3, scn.GetShadowHandCount());
+
+		scn.FreepsPlayCard(check);
+		assertEquals(1, scn.FreepsGetCardChoiceCount());
+		scn.DismissRevealedCards();
+
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to add twilight to discard"));
+		scn.FreepsChooseNo();
+		assertEquals(3, scn.GetShadowHandCount());
+		assertTrue(scn.ShadowAnyDecisionsAvailable());
+	}
+
+	@Test
+	public void HisFirstSeriousCheckCanAddRevealedCardsTwilightToDiscardIt() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var check = scn.GetFreepsCard("check");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.FreepsMoveCardToHand(check);
+		scn.FreepsMoveCharToTable(gandalf);
+
+		var sauron = scn.GetShadowCard("sauron");
+		scn.ShadowMoveCharToTable("runner");
+		scn.ShadowMoveCardToHand(sauron);
+
+		scn.StartGame();
+		scn.FreepsPassCurrentPhaseAction();
+		scn.SetTwilight(0);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.FreepsPlayAvailable(check));
+		assertEquals(1, scn.GetShadowHandCount());
+
+		scn.FreepsPlayCard(check);
+		assertEquals(1, scn.FreepsGetCardChoiceCount());
+		assertTrue(scn.FreepsHasBPChoice(sauron));
+		scn.DismissRevealedCards();
+
+		assertEquals(Zone.HAND, sauron.getZone());
+		assertEquals(1, scn.GetTwilight()); // 0 + HFSC's cost
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to add twilight to discard"));
+		scn.FreepsChooseYes();
+
+		assertEquals(0, scn.GetShadowHandCount());
+		assertEquals(Zone.DISCARD, sauron.getZone());
+		assertEquals(19, scn.GetTwilight());
+		assertTrue(scn.ShadowAnyDecisionsAvailable());
 	}
 }

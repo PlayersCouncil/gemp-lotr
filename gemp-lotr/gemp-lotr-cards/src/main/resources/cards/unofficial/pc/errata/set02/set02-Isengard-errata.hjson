@@ -1,4 +1,64 @@
 {
+	52_40: {
+		cardInfo: {
+			//id: 52_40.1
+			parent: 2_40
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN02E040.1_card.jpg
+			collInfo: 2C40
+			rarity: C
+		}
+		title: Demands of the Sackville-Bagginses
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(isengard),minion
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Exerted
+					filter: ally
+					memorize: exertedAlly
+				}
+				effect: {
+					type: addTwilight
+					amount: {
+						type: Conditional
+						requires: {
+							type: MemoryMatches
+							memory: exertedAlly
+							filter: culture(shire)
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+		]
+		gametext: To play, spot an [isengard] minion. <br>Each time an ally exerts, add (1) (or (2) if that ally is [shire]).
+		lore: "In the middle of the commotion, the Sackville- Bagginses arrived."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	52_43: {
 		cardInfo: {
 			//id: 2_43.1

@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.official.set01;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,19 +11,24 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_01_172_Tests
+public class Card_01_172_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("archer", "1_172");
+					put("archer", "51_172");
+					put("marksman", "1_176");
+					put("commander", "2_49");
+					put("bowman", "2_60");
+					put("troop", "2_67");
 					put("runner", "1_178");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				GenericCardTestHelper.ATARRing
 		);
 	}
 
@@ -42,7 +47,9 @@ public class Card_01_172_Tests
 		 * Strength: 4
 		 * Vitality: 3
 		 * Site Number: 4
-		 * Game Text: <b>Archer</b>.<br>While you can spot another [moria] Orc, the fellowship archery total is -6.
+		 * Game Text: <b>Archer</b>.
+		* 	The fellowship archery total is -1 for each [moria] archer you can spot.
+		* 	Assignment: Exert this minion to prevent [moria] archers from being assigned to skirmishes.
 		*/
 
 		var scn = GetScenario();
@@ -64,37 +71,62 @@ public class Card_01_172_Tests
 	}
 
 	@Test
-	public void GoblinArcherSpotsAnotherMoriaOrcToMakeFellowshipArcheryTotalMinus6() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GoblinArcherMakesFellowshipArcheryTotalMinus1PerMoriaArcher() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var archer = scn.GetShadowCard("archer");
+		var marksman = scn.GetShadowCard("marksman");
+		var commander = scn.GetShadowCard("commander");
+		var bowman = scn.GetShadowCard("bowman");
+		var troop = scn.GetShadowCard("troop");
 		var runner = scn.GetShadowCard("runner");
 
-		scn.ShadowMoveCharToTable(runner);
+		scn.ShadowMoveCharToTable(marksman, commander, bowman, troop, runner);
 		scn.ShadowMoveCardToHand(archer);
 
 		scn.StartGame();
-		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, 7));
+		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, 6));
 		scn.SkipToPhase(Phase.ARCHERY);
 
-		assertEquals(7, scn.GetFreepsArcheryTotal());
+		assertEquals(6, scn.GetFreepsArcheryTotal());
 		scn.FreepsMoveCharToTable(archer);
+		// -5 for the 5 archers, the runner doesn't count
 		assertEquals(1, scn.GetFreepsArcheryTotal());
 	}
 
 	@Test
-	public void GoblinArcherDoesNotAlterFellowshipArcheryTotalIfNoOtherMoriaOrc() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GoblinArcherAssignmentAbilityPreventsMoriaArchersFromSkirmishing() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var archer = scn.GetShadowCard("archer");
-		scn.ShadowMoveCharToTable(archer);
+		var marksman = scn.GetShadowCard("marksman");
+		var commander = scn.GetShadowCard("commander");
+		var bowman = scn.GetShadowCard("bowman");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCharToTable(archer, marksman, commander, bowman, troop, runner);
+
+		var frodo = scn.GetRingBearer();
+
+		//so frodo doesn't die to all the arrows
+		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.SHADOW, -6));
 
 		scn.StartGame();
-		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, 7));
-		scn.SkipToPhase(Phase.ARCHERY);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		assertEquals(7, scn.GetFreepsArcheryTotal());
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.ShadowActionAvailable(archer));
+		assertEquals(0, scn.GetWoundsOn(archer));
+		scn.ShadowUseCardAction(archer);
+
+		assertEquals(1, scn.GetWoundsOn(archer));
+		scn.PassAssignmentActions();
+
+		//Only the runner is now assignable
+		assertEquals(1, scn.FreepsGetShadowAssignmentTargetCount());
+
 	}
 }

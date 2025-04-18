@@ -114,9 +114,9 @@ public class Card_04_337_Tests
 		var fodder20 = scn.GetFreepsCard("fodder20");
 
 		scn.FreepsMoveCardToHand(fodder01, fodder02, fodder03, fodder04, fodder05, fodder06, fodder07, fodder08);
-		scn.FreepsMoveCardsToTopOfDeck(fodder20, fodder19, fodder18, fodder17, fodder16, fodder15, fodder14, fodder13, fodder12, fodder11, fodder10, fodder09);
 
 		scn.StartGame();
+		scn.FreepsMoveCardsToTopOfDeck(fodder20, fodder19, fodder18, fodder17, fodder16, fodder15, fodder14, fodder13, fodder12, fodder11, fodder10, fodder09);
 
 		assertEquals(8, scn.GetFreepsHandCount());
 

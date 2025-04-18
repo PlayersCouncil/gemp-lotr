@@ -219,14 +219,86 @@
 	# 	}
 	# }
 	
+	# 53_85: {
+	# 	cardInfo: {
+	# 		//id: 3_85.3
+	# 		parent: 3_85
+	# 		variant: ERRATA
+	# 		variantPath: errata/pc
+	# 		revision: 3
+	# 		image: errata/LOTR-EN03E085.3_card.jpg
+	# 		collInfo: 3R85
+	# 		rarity: R
+	# 	}
+	# 	title: Too Great and Terrible
+	# 	unique: false
+	# 	side: Shadow
+	# 	culture: Wraith
+	# 	twilight: 1
+	# 	type: Condition
+	# 	target: or(companion,ally),not(hasAttached(name(Too Great and Terrible)))
+	# 	effects: [
+	# 		{
+	# 			type: ExtraCost
+	# 			cost: {
+	# 				type: exert
+	# 				select: choose(culture(ringwraith), minion)
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Trigger
+	# 			optional: false
+	# 			trigger: {
+	# 				type: Exerted
+	# 				filter: bearer
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					# We do this just to make the option prompt a little more elegant.
+	# 					type: Memorize
+	# 					filter: bearer
+	# 					memory: bearer
+	# 				}
+	# 				{
+	# 					type: Preventable
+	# 					text: Discard a card from hand sharing a culture with {bearer} to prevent exhausting {bearer}?
+	# 					player: Freeps
+	# 					cost: {
+	# 						type: DiscardFromHand
+	# 						player: freeps
+	# 						hand: freeps
+	# 						select: choose(CultureFromMemory(bearer))
+	# 						forced: false
+	# 					}
+	# 					effect: [
+	# 						{
+	# 							type: Exhaust
+	# 							select: bearer
+	# 						}
+	# 					]
+	# 				}					
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: To play, exert a [ringwraith] minion. Bearer must be a companion or ally. Limit 1 per bearer.<br/>Each time bearer exerts, exhaust bearer unless the Free Peoples player discards a card from hand of bearer's culture.
+	# 	lore: "His eyes flashed and his face was lit as by a fire within. 'Do not tempt me! For I do not wish to become like the Dark Lord himself.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	53_85: {
 		cardInfo: {
-			//id: 3_85.3
+			//id: 53_85.4
 			parent: 3_85
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 3
-			image: errata/LOTR-EN03E085.3_card.jpg
+			revision: 4
+			image: errata/LOTR-EN03E085.4_card.jpg
 			collInfo: 3R85
 			rarity: R
 		}
@@ -236,7 +308,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		target: or(companion,ally),not(hasAttached(name(Too Great and Terrible)))
+		target: or(companion,ally),not(Ring-bearer),OnePerBearer
 		effects: [
 			{
 				type: ExtraCost
@@ -251,6 +323,7 @@
 				trigger: {
 					type: Exerted
 					filter: bearer
+					source: side(freeps)
 				}
 				effect: [
 					{
@@ -261,7 +334,7 @@
 					}
 					{
 						type: Preventable
-						text: Discard a card from hand sharing a culture with {bearer} to prevent exhausting {bearer}?
+						text: Discard a card from hand sharing a culture with {bearer} to prevent exerting {bearer}?
 						player: Freeps
 						cost: {
 							type: DiscardFromHand
@@ -272,7 +345,7 @@
 						}
 						effect: [
 							{
-								type: Exhaust
+								type: Exert
 								select: bearer
 							}
 						]
@@ -280,8 +353,8 @@
 				]
 			}
 		]
-		gametext: To play, exert a [ringwraith] minion. Bearer must be a companion or ally. Limit 1 per bearer.<br/>Each time bearer exerts, exhaust bearer unless the Free Peoples player discards a card from hand of bearer's culture.
-		lore: "His eyes flashed and his face was lit as by a fire within. 'Do not tempt me! For I do not wish to become like the Dark Lord himself.'"
+		gametext: To play, exert a [ringwraith] minion. Bearer must<br>be a companion or ally (except the Ring-bearer). Limit 1 per bearer.<br>Each time bearer is exerted by a Free Peoples card, exert bearer unless the Free Peoples player discards a card from hand of bearer's culture.
+		lore: “‘Do not tempt me!'”
 		promotext: ""
 		alts: {
 			promos: {

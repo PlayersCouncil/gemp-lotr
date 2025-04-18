@@ -382,6 +382,89 @@
 		}
 	}
 	
+	# 102_51: {
+	# 	cardInfo: {
+	# 		//id: 102_51
+	# 		image: sets/V2/LOTR-ENV2S051.0_card.jpg
+	# 		collInfo: V2_51
+	# 		rarity: _
+	# 	}
+	# 	title: Now for Wrath
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Rohan
+	# 	twilight: 1
+	# 	type: Condition
+	# 	keywords: Support Area
+	# 	effects: [
+	# 		{
+	# 			type: Trigger
+	# 			optional: false
+	# 			trigger: [
+	# 				{
+	# 					type: Discarded
+	# 					filter: your, culture(rohan), or(item, ally)
+	# 				}
+	# 				{
+	# 					type: Discarded
+	# 					fromZone: hand
+	# 					filter: your, culture(rohan), or(item, ally)
+	# 				}
+	# 				{
+	# 					type: Discarded
+	# 					fromZone: deck
+	# 					filter: your, culture(rohan), or(item, ally)
+	# 				}
+	# 				{
+	# 					type: Killed
+	# 					filter: your, culture(rohan), ally
+	# 				}
+	# 			]
+	# 			effect: {
+	# 				type: AddCultureTokens
+	# 				culture: rohan
+	# 				count: 1
+	# 				select: self
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: Exerted
+	# 				filter: minion
+	# 				source: side(freeps)
+	# 				memorize: hurtMinion
+	# 			}
+	# 			cost: [
+	# 				{
+	# 					type: RemoveCultureTokens
+	# 					count: 1
+	# 					select: self
+	# 				}
+	# 				{
+	# 					type: Exert
+	# 					select: choose(valiant, companion)
+	# 					times: 1
+	# 				}
+	# 			]
+	# 			effect: {
+	# 				type: Wound
+	# 				select: memory(hurtMinion)
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Each time a [rohan] item or [rohan] ally is discarded or killed, add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove a [rohan] token here and exert a valiant companion to wound that minion.
+	# 	lore: "'How shall any tower withstand such numbers and such reckless hate?'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	102_51: {
 		cardInfo: {
 			//id: 102_51
@@ -400,6 +483,13 @@
 			{
 				type: Trigger
 				optional: false
+				requires: {
+					type: Not
+					requires: {
+						type: Phase
+						phase: fellowship
+					}
+				}
 				trigger: [
 					{
 						type: Discarded
@@ -439,7 +529,7 @@
 				cost: [
 					{
 						type: RemoveCultureTokens
-						count: 1
+						count: 2
 						select: self
 					}
 					{
@@ -454,8 +544,8 @@
 				}
 			}
 		]
-		gametext: Each time a [rohan] item or [rohan] ally is discarded or killed, add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove a [rohan] token here and exert a valiant companion to wound that minion.
-		lore: "'How shall any tower withstand such numbers and such reckless hate?'"
+		gametext: Each time a [rohan] item or [rohan] ally is discarded or killed (except during the fellowship phase), add a [rohan] token here.<br>Each time a minion is exerted by a Free Peoples card, you may remove 2 [rohan] tokens here and exert a valiant companion to wound that minion.
+		lore: ""
 		promotext: ""
 		alts: {
 			promos: {

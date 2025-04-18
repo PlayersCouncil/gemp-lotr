@@ -52,6 +52,7 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
         return result;
     }
 
+    @Override
     public void addAlwaysOnActionProxy(ActionProxy actionProxy) {
         _actionProxies.add(actionProxy);
     }

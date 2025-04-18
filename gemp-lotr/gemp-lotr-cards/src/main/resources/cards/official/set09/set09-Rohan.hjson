@@ -81,15 +81,18 @@
 				{
 					type: optional
 					text: Would you like exert the played {ROHAN} Man to play a possession on him or her?
-					cost: {
-						type: exert
-						select: memory(playedRohanMan)
-						ignoreCostCheckFailure: true
-					}
 					effect: {
-						type: PlayCardFromHand
-						select: choose(possession)
-						on: memory(playedRohanMan)
+						type: CostToEffect
+						cost: {
+							type: exert
+							select: memory(playedRohanMan)
+							ignoreCostCheckFailure: true
+						}
+						effect: {
+							type: PlayCardFromHand
+							select: choose(possession)
+							on: memory(playedRohanMan)
+						}
 					}
 				}
 				{

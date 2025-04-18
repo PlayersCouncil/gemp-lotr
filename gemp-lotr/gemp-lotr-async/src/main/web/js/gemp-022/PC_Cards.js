@@ -139,7 +139,7 @@ var PCCards = {
 	'101_16': 'https://i.lotrtcgpc.net/sets/vset1/V1_016.jpg',
 	'101_17': 'https://i.lotrtcgpc.net/sets/vset1/V1_017.jpg',
 	'101_18': 'https://i.lotrtcgpc.net/sets/vset1/V1_018.jpg',
-	'101_19': 'https://i.lotrtcgpc.net/sets/vset1/V1_019.jpg',
+	//'101_19': 'https://i.lotrtcgpc.net/sets/vset1/V1_019.jpg',
 	'101_20': 'https://i.lotrtcgpc.net/sets/vset1/V1_020.jpg',
 	'101_21': 'https://i.lotrtcgpc.net/sets/vset1/V1_021.jpg',
 	'101_22': 'https://i.lotrtcgpc.net/sets/vset1/V1_022.jpg',
@@ -179,7 +179,7 @@ var PCCards = {
 	'101_56': 'https://i.lotrtcgpc.net/sets/vset1/V1_056.jpg',
 	'101_57': 'https://i.lotrtcgpc.net/sets/vset1/V1_057.jpg',
 	'101_58': 'https://i.lotrtcgpc.net/sets/vset1/V1_058.jpg',
-	'101_59': 'https://i.lotrtcgpc.net/sets/vset1/V1_059.jpg',
+	//'101_59': 'https://i.lotrtcgpc.net/sets/vset1/V1_059.jpg',
 	'101_60': 'https://i.lotrtcgpc.net/sets/vset1/V1_060.jpg',
 	'101_61': 'https://i.lotrtcgpc.net/sets/vset1/V1_061.jpg',
 	'101_62': 'https://i.lotrtcgpc.net/sets/vset1/V1_062.jpg',
@@ -526,7 +526,7 @@ var PCCards = {
 	// Gandalf, Olorin (V1R14) [Errata]
 	'101_14' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S014.1_card.jpg',
 	// Aragorn, Estel (V1R19) [Errata]
-	'101_19' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S019.1_card.jpg',
+	//'101_19' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S019.1_card.jpg',
 	// Just a Wisp of Cloud (V1C28) [Errata]
 	'101_28' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S028.1_card.jpg',
 	// Crebain Flock (V1C25) [Errata]
@@ -664,7 +664,7 @@ var PCCards = {
 	// Your Friends Are With You (V212)
 	'102_12' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S012.0_card.jpg',
 	// Gandalf, Lathspell (V213)
-	'102_13' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S013.0_card.jpg',
+	//'102_13' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S013.0_card.jpg',
 	// Remember Your Old Strength (V214)
 	'102_14' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S014.0_card.jpg',
 	// Watching and Waiting (V215)
@@ -740,7 +740,7 @@ var PCCards = {
 	// Let This Be the Hour (V250)
 	'102_50' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S050.0_card.jpg',
 	// Now for Wrath (V251)
-	'102_51' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S051.0_card.jpg',
+	//'102_51' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S051.0_card.jpg',
 	// Now for Ruin (V252)
 	'102_52' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S052.0_card.jpg',
 	// And the Red Dawn (V253)
@@ -885,7 +885,7 @@ var PCCards = {
 	// Such a Little Thing (3R80) [Errata]
 	'53_80'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E080.3_card.jpg',
 	// Too Great and Terrible (3R85) [Errata]
-	'53_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.3_card.jpg',
+	//'53_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.3_card.jpg',
 	// Terrible as the Dawn (3R103) [Errata]
 	'53_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.4_card.jpg',
 	// Guided by One Purpose (V1U31) [Errata]
@@ -909,11 +909,11 @@ var PCCards = {
 	// Arwen, Elven Rider (3U7) [Errata]
 	'53_7'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E007.1_card.jpg',
 	// Erestor, Chief Advisor to Elrond (3C14) [Errata]
-	'53_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E014.1_card.jpg',
+	//'53_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E014.1_card.jpg',
 	// Golradir, Councilor of Imladris (3U20) [Errata]
-	'53_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E020.1_card.jpg',
+	//'53_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E020.1_card.jpg',
 	// Saelbeth, Elven Councilor (3U25) [Errata]
-	'53_25'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E025.1_card.jpg',
+	//'53_25'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E025.1_card.jpg',
 	// Arwen, Lady Undomiel (3R8) [Errata]
 	'53_8'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E008.1_card.jpg',
 	// Denethor, Lord of Minas Tirith (10R28) [Errata]
@@ -921,7 +921,7 @@ var PCCards = {
 	// Saved From the Fire (8R20) [Errata]
 	'58_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN08E020.1_card.jpg',
 	// Aragorn, Estel (V1R19) [Errata]
-	'101_19' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E019.2_card.jpg',
+	//'101_19' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E019.2_card.jpg',
 	// Elendil, The Tall (9R+32) [Errata]
 	'59_32'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E032.1_card.jpg',
 	// Sapling of the White Tree (9R35) [Errata]
@@ -950,7 +950,31 @@ var PCCards = {
 	// 2024 Yuletide Frodo, Reluctant Adventurer
 	'2_130' : 'https://i.lotrtcgpc.net/promos/LOTR-EN02H102.0_card.jpg',
 	// 2024 Yuletide Sam, Resolute Halfling
-	'7_369' : 'https://i.lotrtcgpc.net/promos/LOTR-EN07H327.0_card.jpg'
+	'7_369' : 'https://i.lotrtcgpc.net/promos/LOTR-EN07H327.0_card.jpg',
+	
+	//Spring 2025 PC Errata
+	// Too Great and Terrible (3R85) [Errata]
+	'53_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.4_card.jpg',
+	// Erestor, Chief Advisor to Elrond (3C14) [Errata]
+	'53_14'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E014.2_card.jpg',
+	// Golradir, Councilor of Imladris (3U20) [Errata]
+	'53_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E020.2_card.jpg',
+	// Saelbeth, Elven Councilor (3U25) [Errata]
+	'53_25'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E025.2_card.jpg',
+	// Gandalf, Lathspell (V213) [Errata]
+	'102_13' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E013.1_card.jpg',
+	// Now for Wrath (V251) [Errata]
+	'102_51' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2E051.1_card.jpg',
+	// Demands of the Sackville-Bagginses (2C40) [Errata]
+	'52_40'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E040.1_card.jpg',
+	// Uruk Raider (3C74) [Errata]
+	'53_74'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E074.1_card.jpg',
+	// Rivendell Gateway (V1U59) [Errata]
+	'101_59' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E059.1_card.jpg',
+	// Gandalf's Staff, Old Man's Crutch (V2_77) 
+	'102_77' : 'https://i.lotrtcgpc.net/sets/v02/LOTR-ENV2S077.0_card.jpg',
+	// Goblin Archer (1R172) [Errata]
+	'51_172' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E172.1_card.jpg',
 	
 }
 

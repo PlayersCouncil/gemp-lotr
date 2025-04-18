@@ -38,6 +38,7 @@
 			Additional Sets|Reflections:9,Expanded Middle-earth:14,The Wraith Collection:16,Age's End:19
 			Player's Council V-sets|V0 - PC Kitchen Sink:100,V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102
 			Player's Council Errata|Promotional Errata:50,The Fellowship of the Ring Errata:51,Mines of Moria Errata:52,Realms of the Elf-lords Errata:53,The Two Towers Errata:54,Battle of Helm's Deep Errata:55,Ents of Fangorn Errata:56,Return of the King Errata:57,Siege of Gondor Errata:58,Reflections Errata:59,Mount Doom Errata:60,Shadows Errata:61,Black Rider Errata:62,Bloodlines Errata:63,Expanded Middle-earth Errata:64,The Hunters Errata:65,The Wraith Collection Errata:66,Rise of Saruman Errata:67,Treachery & Deceit Errata:68,Age's End Errata:69
+			Latest PC Errata|Latest PC Errata:pc_errata
 			hobbit
 		]
 	}
@@ -166,21 +167,11 @@
 		hall: false
 		# Fill this up with the current batch of errata for it to show up on the playtest server.
 		valid: [
-			"51_50", "51_63", "51_303", "51_310", 
-			"52_76", "52_85", "52_104", "52_110",
-			"53_7", "53_8", "53_14", "53_20", "53_25", "53_50", "53_80", "53_85", "53_103", 
-			"54_65", "54_67", "54_68", "54_71", "54_76", "54_78", "54_80", "54_81", "54_85", "54_86", "54_245", "54_276", "54_280", "54_289", 
-			"55_7", "55_10", "55_13", "55_50", "55_85", "55_86", "55_92", "55_121", 
-			"56_22", "56_23", 
-			"57_236", 
-			"58_20", 
-			"59_32", "59_35", 
-			"60_28", "60_8", 
-			"63_20", "63_23", 
-			"65_14", "65_17", 
-			"67_7", 
-			"68_9", "68_14", 
-			"101_19", "101_20", "101_31", "101_33", "101_34", "101_52", "101_54", "101_61", "101_65", "101_66"
+			"51_172",
+			"52_40",
+			"53_14", "53_20", "53_25", "53_74", "53_85",
+			"101_59",
+			"102_13", "102_51", "102_77"
 		]
 		sets: [
 			100
