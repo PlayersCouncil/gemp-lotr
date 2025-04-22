@@ -935,6 +935,7 @@ var GempLotrDeckBuildingUI = Class.extend({
         {
             this.comm.getDeckStats(deckContents, 
                    $("#formatSelect").val(),
+                   "default", // TODO - collection name for limited formats, now it does not check card availability
                     function (html) 
                     {
                         $("#deckStats").html(html);
