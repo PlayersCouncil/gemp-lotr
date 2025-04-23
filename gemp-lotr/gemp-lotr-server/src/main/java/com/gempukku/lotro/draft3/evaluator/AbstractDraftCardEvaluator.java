@@ -29,7 +29,7 @@ public abstract class AbstractDraftCardEvaluator {
 
 
     // This is what bots pick according to
-    public final Map<String, Double> getValuesMap(Map<String, Integer> winningMap, Map<String, Integer> losingMap, int gamesAnalyzed) {
+    public Map<String, Double> getValuesMap(Map<String, Integer> winningMap, Map<String, Integer> losingMap, int gamesAnalyzed) {
         // Merge win and lose maps (they are kept separate for potential wr info)
         Map<String, Integer> mergedMap = mergeMaps(winningMap, losingMap);
 
@@ -54,7 +54,7 @@ public abstract class AbstractDraftCardEvaluator {
         return shiftedMap;
     }
 
-    private static Map<String, Integer> mergeMaps(Map<String, Integer> map1, Map<String, Integer> map2) {
+    static Map<String, Integer> mergeMaps(Map<String, Integer> map1, Map<String, Integer> map2) {
         Map<String, Integer> result = new HashMap<>(map1);
 
         map2.forEach((key, value) -> result.merge(key, value, Integer::sum));
@@ -62,7 +62,7 @@ public abstract class AbstractDraftCardEvaluator {
         return result;
     }
 
-    private Map<String, Double> normalizeCountByDraftPackChance(Map<String, Integer> map, int gamesAnalyzed) {
+    Map<String, Double> normalizeCountByDraftPackChance(Map<String, Integer> map, int gamesAnalyzed) {
         Map<String, Double> normalizedMap = new HashMap<>();
 
         map.forEach((key, value) -> {
@@ -155,7 +155,7 @@ public abstract class AbstractDraftCardEvaluator {
         return fpInflatedMap;
     }
 
-    private Map<String, Double> shift(Map<String, Double> map) {
+    Map<String, Double> shift(Map<String, Double> map) {
         double min = map.values().stream().min(Double::compareTo).orElse(0.0);
 
         double positiveShift;

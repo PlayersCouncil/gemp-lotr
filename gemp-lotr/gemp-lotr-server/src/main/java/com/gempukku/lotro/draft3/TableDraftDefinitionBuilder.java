@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TableDraftDefinitionBuilder {
     private static final int HIGH_ENOUGH_PRIME_NUMBER = 8963;
@@ -45,7 +47,8 @@ public class TableDraftDefinitionBuilder {
         int maxPlayers = ((Number) definition.get("max-players")).intValue();
 
         StartingCollectionProducer startingCollectionProducer = buildStartingCollectionProducer((JSONArray) definition.get("starting-collection"));
-        BoosterProducer boosterProducer = buildBoosterProducer((JSONArray) definition.get("card-sets"), (JSONArray) definition.get("boosters"));
+        // test if booster producer can be made from this json
+        BoosterProducer testBoosterProducer = buildBoosterProducer((JSONArray) definition.get("card-sets"), (JSONArray) definition.get("boosters"), (JSONArray) definition.get("pools"));
 
         Map<String, Double> cardValues = buildCardValues((JSONArray) definition.get("card-values"));
 
@@ -53,6 +56,7 @@ public class TableDraftDefinitionBuilder {
         return new TableDraftDefinition() {
             @Override
             public TableDraft getTableDraft(CollectionsManager collectionsManager, CollectionType collectionType, DraftTimer draftTimer) {
+                BoosterProducer boosterProducer = buildBoosterProducer((JSONArray) definition.get("card-sets"), (JSONArray) definition.get("boosters"), (JSONArray) definition.get("pools"));
                 return new TableDraftClassic(collectionsManager, collectionType, startingCollectionProducer, boosterProducer, maxPlayers, boosterProducer.getMaxRound(), draftTimer, cardValues);
             }
 
@@ -90,13 +94,43 @@ public class TableDraftDefinitionBuilder {
         return tbr;
     }
 
-    private static BoosterProducer buildBoosterProducer(JSONArray cardSets, JSONArray boosters) {
+    private static BoosterProducer buildBoosterProducer(JSONArray cardSets, JSONArray boosters, JSONArray pools) {
         Map<String, List<String>> cardPools = new HashMap<>();
+        Map<String, List<String>> setPools = new HashMap<>();
+        Map<String, List<String>> draftPools = new HashMap<>();
 
         for (JSONObject cardSet : (Iterable<JSONObject>) cardSets) {
             String name = (String) cardSet.get("set-name");
-            List<String> cards = (List<String>) cardSet.get("card-set");
-            cardPools.put(name, cards);
+            if (cardSet.containsKey("card-set")) {
+                List<String> cards = (List<String>) cardSet.get("card-set");
+                cardPools.put(name, cards);
+            } else if (cardSet.containsKey("set-set") && cardSet.containsKey("choose")) {
+                List<String> setNames = (List<String>) cardSet.get("set-set");
+                Collections.shuffle(setNames);
+                int howMany = ((Number) cardSet.get("choose")).intValue();
+                List<String> chosenSetNames = new ArrayList<>();
+                if (howMany <= setNames.size()) {
+                    for (int i = 0; i < howMany; i++) {
+                        chosenSetNames.add(setNames.get(i));
+                    }
+                    setPools.put(name, chosenSetNames);
+                } else {
+                    throw new IllegalArgumentException("Invalid JSON content");
+                }
+            } else {
+                throw new IllegalArgumentException("Invalid JSON content");
+            }
+        }
+
+        if (pools != null) {
+            for (JSONObject cardSet : (Iterable<JSONObject>) pools) {
+                String name = (String) cardSet.get("pool-name");
+                draftPools.put(name, new ArrayList<>());
+                List<String> sets = (List<String>) cardSet.get("set-set");
+                for (String set : sets) {
+                    addSetToPool(cardPools, setPools, draftPools, name, set);
+                }
+            }
         }
 
         Map<Integer, List<Pair<String, Integer>>> boosterPlan = new HashMap<>();
@@ -132,10 +166,25 @@ public class TableDraftDefinitionBuilder {
         }
 
         return new BoosterProducer() {
+            Lock poolLock = new ReentrantLock();
+
             @Override
             public Booster getBooster(int round) {
                 List<String> pickedCards = new ArrayList<>();
-                boosterPlan.get(round).forEach(pair -> pickedCards.addAll(pickRandom(cardPools.get(pair.getLeft()), pair.getRight())));
+                boosterPlan.get(round).forEach(pair -> {
+                    if (draftPools.get(pair.getLeft()) == null) {
+                        // opening boosters
+                        pickedCards.addAll(pickRandom(cardPools.get(pair.getLeft()), pair.getRight(), false));
+                    } else {
+                        // opening cards from draft pool
+                        poolLock.lock();
+                        try {
+                            pickedCards.addAll(pickRandom(draftPools.get(pair.getLeft()), pair.getRight(), true));
+                        } finally {
+                            poolLock.unlock();
+                        }
+                    }
+                });
                 return new Booster(pickedCards);
             }
 
@@ -144,7 +193,7 @@ public class TableDraftDefinitionBuilder {
                 return boosterPlan.keySet().stream().max(Comparator.naturalOrder()).orElse(-1);
             }
 
-            private List<String> pickRandom(List<String> source, int count) {
+            private List<String> pickRandom(List<String> source, int count, boolean remove) {
                 if (source.isEmpty() || count <= 0) return Collections.emptyList();
 
                 int size = source.size();
@@ -154,15 +203,35 @@ public class TableDraftDefinitionBuilder {
                 List<String> result = new ArrayList<>();
 
                 Random rand = new Random();
-                while (selectedIndexes.size() < count) {
-                    int randomIndex = rand.nextInt(size);
-                    if (selectedIndexes.add(randomIndex)) {
-                        result.add(source.get(randomIndex));
+                while (result.size() < count) {
+                    int chosenIndex;
+                    if (size > 0) {
+                        chosenIndex = rand.nextInt(size);
+                    } else {
+                        chosenIndex = 0;
+                    }
+                    if (remove) {
+                        result.add(source.remove(chosenIndex));
+                        size--;
+                    } else if (selectedIndexes.add(chosenIndex)) {
+                        result.add(source.get(chosenIndex));
                     }
                 }
                 return result;
             }
         };
+    }
+
+    private static void addSetToPool(Map<String, List<String>> cardPools, Map<String, List<String>> setPools, Map<String, List<String>> draftPools, String poolName, String setToAdd) {
+        if (cardPools.containsKey(setToAdd)) {
+            draftPools.get(poolName).addAll(cardPools.get(setToAdd));
+        } else if (setPools.containsKey(setToAdd)) {
+            for (String setName : setPools.get(setToAdd)) {
+                addSetToPool(cardPools, setPools, draftPools, poolName, setName);
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid JSON content");
+        }
     }
 
     private static StartingCollectionProducer buildStartingCollectionProducer(JSONArray jsonArray) {
