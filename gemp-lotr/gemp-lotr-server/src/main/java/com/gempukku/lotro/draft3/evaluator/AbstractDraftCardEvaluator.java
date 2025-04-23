@@ -1,11 +1,14 @@
 package com.gempukku.lotro.draft3.evaluator;
 
+import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class AbstractDraftCardEvaluator {
@@ -30,6 +33,28 @@ public abstract class AbstractDraftCardEvaluator {
 
     // This is what bots pick according to
     public Map<String, Double> getValuesMap(Map<String, Integer> winningMap, Map<String, Integer> losingMap, int gamesAnalyzed) {
+        // Remove sites from value maps
+        Set<String> sitesToRemove = new HashSet<>();
+        winningMap.keySet().stream().filter(s -> {
+            try {
+                return library.getLotroCardBlueprint(s).getCardType().equals(CardType.SITE);
+            } catch (CardNotFoundException e) {
+                return false;
+            }
+        }).forEach(sitesToRemove::add);
+        losingMap.keySet().stream().filter(s -> {
+            try {
+                return library.getLotroCardBlueprint(s).getCardType().equals(CardType.SITE);
+            } catch (CardNotFoundException e) {
+                return false;
+            }
+        }).forEach(sitesToRemove::add);
+        sitesToRemove.forEach(siteKey -> {
+            winningMap.remove(siteKey);
+            losingMap.remove(siteKey);
+        });
+
+
         // Merge win and lose maps (they are kept separate for potential wr info)
         Map<String, Integer> mergedMap = mergeMaps(winningMap, losingMap);
 

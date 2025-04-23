@@ -1,6 +1,7 @@
 package com.gempukku.lotro.draft3.evaluator;
 
 import com.gempukku.lotro.common.AppConfig;
+import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.ReplayMetadata;
@@ -78,7 +79,7 @@ public class Evaluator {
 
         // Data from solo drafts do not contain rare one ring cards, don't forget to add some value manually after
         System.out.println("===FOTR VALUES");
-        System.out.println("Games analyzes: " + assignmentList.get(0).gamesAnalyzed);
+        System.out.println("Games analyzed: " + assignmentList.get(0).gamesAnalyzed);
         printJsonStyle(fotrValues); // For json file
         System.out.println("===FOTR PLAY RATES");
         // Regular draft - all rares included, U/C with play rate lower than 0.01 are cut
@@ -86,13 +87,13 @@ public class Evaluator {
         printHumanReadable(fotrPlayRates, library);
 
         System.out.println("===TTT VALUES");
-        System.out.println("Games analyzes: " + assignmentList.get(1).gamesAnalyzed);
+        System.out.println("Games analyzed: " + assignmentList.get(1).gamesAnalyzed);
         printJsonStyle(tttValues);
         System.out.println("===TTT PLAY RATES");
         printHumanReadable(tttPlayRates, library);
 
         System.out.println("===HOBBIT VALUES");
-        System.out.println("Games analyzes: " + assignmentList.get(2).gamesAnalyzed);
+        System.out.println("Games analyzed: " + assignmentList.get(2).gamesAnalyzed);
         printJsonStyle(hobbitValues);
         printHumanReadable(hobbitValues, library);
     }
@@ -119,6 +120,7 @@ public class Evaluator {
                         }
                         Set<String> winningCardSet = new HashSet<>(winningDeck.DrawDeck);
                         winningCardSet.forEach(card -> assignment.deckCount.merge(card.replace("*", "").replace("T", ""), 1, Integer::sum));
+                        winningDeck.AdventureDeck.forEach(siteCard -> assignment.deckCount.merge(siteCard.replace("*", "").replace("T", ""), 1, Integer::sum));
 
                         assignment.deckCount.merge(losingDeck.RingBearer.replace("*", "").replace("T", ""), 1, Integer::sum);
                         if (losingDeck.Ring != null) {
@@ -126,18 +128,21 @@ public class Evaluator {
                         }
                         Set<String> losingCardSet = new HashSet<>(losingDeck.DrawDeck);
                         losingCardSet.forEach(card -> assignment.deckCount.merge(card.replace("*", "").replace("T", ""), 1, Integer::sum));
+                        losingDeck.AdventureDeck.forEach(siteCard -> assignment.deckCount.merge(siteCard.replace("*", "").replace("T", ""), 1, Integer::sum));
 
                         assignment.winningMap.merge(winningDeck.RingBearer.replace("*", "").replace("T", ""), 1, Integer::sum);
                         if (winningDeck.Ring != null) {
                             assignment.winningMap.merge(winningDeck.Ring.replace("*", "").replace("T", ""), 1, Integer::sum);
                         }
                         winningDeck.DrawDeck.forEach(card -> assignment.winningMap.merge(card.replace("*", "").replace("T", ""), 1, Integer::sum));
+                        winningDeck.AdventureDeck.forEach(siteCard -> assignment.winningMap.merge(siteCard.replace("*", "").replace("T", ""), 1, Integer::sum));
 
                         assignment.losingMap.merge(losingDeck.RingBearer.replace("*", "").replace("T", ""), 1, Integer::sum);
                         if (losingDeck.Ring != null) {
                             assignment.losingMap.merge(losingDeck.Ring.replace("*", "").replace("T", ""), 1, Integer::sum);
                         }
                         losingDeck.DrawDeck.forEach(card -> assignment.losingMap.merge(card.replace("*", "").replace("T", ""), 1, Integer::sum));
+                        losingDeck.AdventureDeck.forEach(siteCard -> assignment.losingMap.merge(siteCard.replace("*", "").replace("T", ""), 1, Integer::sum));
                     }
                 }
             });
