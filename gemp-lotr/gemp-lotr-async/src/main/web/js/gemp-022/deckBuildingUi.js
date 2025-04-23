@@ -336,6 +336,10 @@ var GempLotrDeckBuildingUI = Class.extend({
 				that.updateDeckStats();
 			}
 		}, this.checkDirtyInterval);
+
+		$("#formatSelect").change(function () {
+				that.deckValidationDirty = true;
+        });
 		
 		this.updateFormatOptions();
 		this.comm.forcePackDelivery();
@@ -458,7 +462,10 @@ var GempLotrDeckBuildingUI = Class.extend({
 					for (var i = 0; i < collections.length; i++) {
 						var collection = collections[i];
 						$("#collectionSelect").append("<option value='" + collection.getAttribute("type") + "'>" + collection.getAttribute("name") + "</option>");
-						$("#formatSelect").append("<option value='" + collection.getAttribute("format") + "'>" + collection.getAttribute("name") + "</option>");
+						$("#formatSelect").append(
+                          "<option value='" + collection.getAttribute("format") + "' data-type='" + collection.getAttribute("type") + "'>" +
+                          collection.getAttribute("name") + "</option>"
+                        );
 					}
 					
 					$("#collectionSelect").val("default");
@@ -1055,11 +1062,13 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 	updateDeckStats:function () {
 		var that = this;
+		var selectedOption = $("#formatSelect option:selected");
 		var deckContents = this.getDeckContents();
 		if (deckContents != null && deckContents != "") 
 		{
 			this.comm.getDeckStats(deckContents, 
-				  $("#formatSelect").val(),
+				  selectedOption.val(), // format
+				  selectedOption.data("type"), // collection name
 					function (html) 
 					{
 						$("#deckStats").html(html);
@@ -1094,6 +1103,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 						
 						var option = $("<option/>")
 							.attr("value", code)
+							.attr("data-type", "default") // default collection for non-limited formats
 							.text(format.name);
 						options[format.order] = option;
 						if(format.order > max) {

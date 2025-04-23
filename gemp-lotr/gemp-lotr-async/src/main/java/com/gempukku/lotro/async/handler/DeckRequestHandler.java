@@ -3,6 +3,7 @@ package com.gempukku.lotro.async.handler;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.chat.MarkdownParser;
+import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.db.DeckDAO;
@@ -44,6 +45,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private final LotroServer _lotroServer;
     private final MarkdownParser _markdownParser;
     private final TableDraftDefinitions _tableDraftDefinitions;
+    private final CollectionsManager _collectionsManager;
 
     private static final Logger _log = LogManager.getLogger(DeckRequestHandler.class);
 
@@ -57,6 +59,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         _draftLibrary = extractObject(context, SoloDraftDefinitions.class);
         _markdownParser = extractObject(context, MarkdownParser.class);
         _tableDraftDefinitions = extractObject(context, TableDraftDefinitions.class);
+        _collectionsManager = extractObject(context, CollectionsManager.class);
     }
 
     @Override
@@ -141,10 +144,11 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         try {
             String participantId = getFormParameterSafely(postDecoder, "participantId");
             String targetFormat = getFormParameterSafely(postDecoder, "targetFormat");
+            String collectionName = getFormParameterSafely(postDecoder, "collectionName");
             String contents = getFormParameterSafely(postDecoder, "deckContents");
 
             //check for valid access
-            getResourceOwnerSafely(request, participantId);
+            Player player = getResourceOwnerSafely(request, participantId);
 
             LotroDeck deck = _lotroServer.createDeckWithValidate("tempDeck", contents, targetFormat, "");
             if (deck == null)
@@ -179,6 +183,47 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                 LotroDeck deckWithErrata = format.applyErrata(deck);
                 errataValidation = format.validateDeck(deckWithErrata);
             }
+
+            if (!collectionName.equals("default")) {
+                // Check collection
+                try {
+                    CardCollection collection = _collectionsManager.getPlayerCollection(player, collectionName);
+
+                    Map<String, Integer> deckCardCounts = CollectionUtils.getTotalCardCountForDeck(deck);
+
+                    for (Map.Entry<String, Integer> cardCount : deckCardCounts.entrySet()) {
+                        String overtID = cardCount.getKey();
+                        String errataID = format.applyErrata(cardCount.getKey());
+                        var baseIDs = format.findBaseCards(cardCount.getKey());
+
+                        int collectionCount = collection.getItemCount(cardCount.getKey());
+
+                        if (!errataID.equals(overtID)) {
+                            collection.getItemCount(errataID);
+                        }
+
+                        var alts = _library.getAllAlternates(cardCount.getKey());
+                        if (alts != null) {
+                            for (String id : alts) {
+                                collectionCount += collection.getItemCount(id);
+                            }
+                        }
+
+                        if (collectionCount < cardCount.getValue()) {
+                            String cardName = null;
+                            try {
+                                cardName = GameUtils.getFullName(_library.getLotroCardBlueprint(cardCount.getKey()));
+                                validation.add("You don't have the required cards in collection: " + cardName + " required " + cardCount.getValue() + ", owned " + collectionCount);
+                            } catch (CardNotFoundException e) {
+                                // Ignore, card player has in a collection, should not disappear
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    validation.add("You don't have cards in the required collection to play in this format");
+                }
+            }
+
             if(validation.size() == 0) {
                 valid.append("<b>" + format.getName() + "</b>: <font color='green'>Valid</font><br/>");
             }
