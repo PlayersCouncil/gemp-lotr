@@ -9,7 +9,6 @@ import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.draft3.TableDraftDefinition;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
-import com.gempukku.lotro.draft3.timer.DraftTimerFactory;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -139,7 +138,7 @@ public class TournamentService {
         );
     }
 
-    private void addImmediateRecurringTableDraft(String queueId, String queueName, String prefix, String formatCode, int players, DraftTimerFactory.Type draftTimer) {
+    private void addImmediateRecurringTableDraft(String queueId, String queueName, String prefix, String formatCode, int players) {
         TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
 
         TableDraftTournamentParams draftParams = new TableDraftTournamentParams();
@@ -147,11 +146,11 @@ public class TournamentService {
 
         draftParams.deckbuildingDuration = 15;
         draftParams.turnInDuration = 2;
-        draftParams.draftTimerType = draftTimer;
 
         TableDraftDefinition tableDraft = _tableDraftLibrary.getTableDraftDefinition(formatCode);
         draftParams.tableDraftFormatCode = formatCode;
         draftParams.format = tableDraft.getFormat();
+        draftParams.draftTimerType = tableDraft.getRecommendedTimer();
         draftParams.requiresDeck = false;
 
         draftParams.tournamentId = prefix;
@@ -216,7 +215,7 @@ public class TournamentService {
 
         _tableDraftLibrary.getAllTableDrafts().forEach(tableDraftDefinition -> {
             String code = tableDraftDefinition.getCode();
-            addImmediateRecurringTableDraft(code + "_queue", casual + tableDraftDefinition.getName(), code + "-", code, tableDraftDefinition.getMaxPlayers(), DraftTimerFactory.Type.CLASSIC);
+            addImmediateRecurringTableDraft(code + "_queue", casual + tableDraftDefinition.getName(), code + "-", code, tableDraftDefinition.getMaxPlayers());
         });
 
         addImmediateRecurringDraft("fotr_solo_draft_queue", casual + "FotR Solo Draft", "fotrSoloDraft-", "fotr_draft");

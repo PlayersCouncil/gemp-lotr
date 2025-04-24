@@ -3,6 +3,7 @@
   "code": "hobbit_table_draft",
   "format": "limited_hobbit",
   "max-players": 4,
+  "timer": "SLOW",
   "starting-collection": [
     {
       "size": 68,

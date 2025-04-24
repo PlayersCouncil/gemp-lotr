@@ -43,6 +43,7 @@ public class TableDraftDefinitionBuilder {
         String name = (String) definition.get("name");
         String code = (String) definition.get("code");
         String format = (String) definition.get("format");
+        String timer = (String) definition.get("timer");
 
         int maxPlayers = ((Number) definition.get("max-players")).intValue();
 
@@ -78,6 +79,15 @@ public class TableDraftDefinitionBuilder {
             @Override
             public String getFormat() {
                 return format;
+            }
+
+            @Override
+            public DraftTimer.Type getRecommendedTimer() {
+                if (timer == null) {
+                    return DraftTimer.Type.CLASSIC;
+                } else {
+                    return DraftTimer.getTypeFromString(timer);
+                }
             }
         };
     }
