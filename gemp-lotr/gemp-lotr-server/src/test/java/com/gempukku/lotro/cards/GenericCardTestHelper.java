@@ -68,6 +68,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
     }};
 
     public static final String FOTRFrodo = "1_290";
+    public static final String MDFrodo = "10_121";
     public static final String GimliRB = "9_4";
     public static final String GaladrielRB = "9_14";
 
@@ -105,7 +106,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
         }
 
         if(ringBearerID == null ) {
-            ringBearerID = FOTRFrodo;
+            ringBearerID = MDFrodo;
         }
 
         if(ringID == null) {
@@ -495,6 +496,10 @@ public class GenericCardTestHelper extends AbstractAtTest {
     public void ShadowPlayCard(PhysicalCardImpl card) throws DecisionResultInvalidException {
         playerDecided(P2, getCardActionId(P2, card.getCardId()));
     }
+
+    public boolean IsHindered(PhysicalCardImpl card) { return hasKeyword(card, Keyword.HINDERED); }
+    public void HinderCard(PhysicalCardImpl card) {  _game.getGameState().hinder(card); }
+    public void RestoreCard(PhysicalCardImpl card) {  _game.getGameState().restore(card); }
 
     public int FreepsGetWoundsOn(String cardName) { return GetWoundsOn(GetFreepsCard(cardName)); }
     public int ShadowGetWoundsOn(String cardName) { return GetWoundsOn(GetShadowCard(cardName)); }
