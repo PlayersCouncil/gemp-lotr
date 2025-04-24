@@ -490,17 +490,27 @@ public class GameState {
         if (zone == Zone.DISCARD && game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.REMOVE_CARDS_GOING_TO_DISCARD))
             zone = Zone.REMOVED;
 
-        if (zone.isInPlay())
+        //Hindered cards that are being discarded, banished, moved to a deck, or killed do not remain hindered
+        if(card.isFlipped() && (zone == Zone.REMOVED || zone == Zone.DISCARD || zone == Zone.DEAD
+                || zone == Zone.DECK || zone == Zone.ADVENTURE_DECK)) {
+            card.setFlipped(false);
+        }
+
+        if (zone.isInPlay()) {
             assignNewCardId(card);
+        }
 
         List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), card.getBlueprint().getCardType(), zone);
-        if (end)
+        if (end) {
             zoneCards.add((PhysicalCardImpl) card);
-        else
+        }
+        else {
             zoneCards.addFirst((PhysicalCardImpl) card);
+        }
 
-        if (card.getZone() != null)
+        if (card.getZone() != null) {
             _log.error("Card was in " + card.getZone() + " when tried to add to zone: " + zone);
+        }
 
         ((PhysicalCardImpl) card).setZone(zone);
 
@@ -857,6 +867,51 @@ public class GameState {
     public void removeWound(PhysicalCard card) {
         removeTokens(card, Token.WOUND, 1);
     }
+
+    public void hinder(PhysicalCard card) {
+        card.setFlipped(true);
+        //TODO: check if card should stop affecting?  figure out how to manage that.
+
+    }
+
+    public void restore(PhysicalCard card) {
+        card.setFlipped(false);
+        //TODO: check if card should stop affecting?  figure out how to manage that.
+
+    }
+
+    public boolean isHindered(PhysicalCard card) {
+        return card.isFlipped();
+    }
+
+    public boolean canBeHindered(PhysicalCard card) {
+        //Cannot hinder if it is already hindered
+        if(card.isFlipped())
+            return false;
+
+        var zone = card.getZone();
+
+        //Cards in hand can be hindered
+        if(zone == Zone.HAND)
+            return true;
+
+        //Cards stacked on active cards can be hindered
+        if(zone == Zone.STACKED && isCardInPlayActive(card.getStackedOn()))
+            return true;
+
+        //Cards can be intercepted on being played and preemptively hindered
+        if(zone == Zone.VOID)
+            return true;
+
+        var bp = card.getBlueprint();
+        //An event card that is in the process of being resolved can be hindered (to cancel its effect)
+        if(bp.getCardType() == CardType.EVENT)
+            return zone == Zone.VOID_FROM_HAND;
+
+        //Finally, anything currently active on the table can be hindered
+        return isCardInPlayActive(card);
+    }
+
 
     public void addTokens(PhysicalCard card, Token token, int count) {
         Map<Token, Integer> tokens = _cardTokens.get(card);

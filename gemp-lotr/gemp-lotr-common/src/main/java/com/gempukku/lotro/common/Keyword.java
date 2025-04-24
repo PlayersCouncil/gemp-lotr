@@ -4,6 +4,7 @@ public enum Keyword implements Filterable {
     // TODO: not a real keyword - count be refactored out to separate systems
     ROAMING("Roaming", true, false, false, false),
     MOUNTED("Mounted", false, false, false, false),
+    HINDERED("Hindered", true, false, false, false),
 
     // ----------------------------------------- Loaded keywords -----------------------------------------
     // Numeric

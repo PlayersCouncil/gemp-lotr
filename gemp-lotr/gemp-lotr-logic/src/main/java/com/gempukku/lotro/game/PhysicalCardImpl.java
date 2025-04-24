@@ -10,6 +10,7 @@ import java.util.List;
 
 public class PhysicalCardImpl implements PhysicalCard {
     private int _cardId;
+    private boolean _flipped;
     private final String _blueprintId;
     private final String _owner;
     private String _cardController;
@@ -48,6 +49,16 @@ public class PhysicalCardImpl implements PhysicalCard {
 
     public void setZone(Zone zone) {
         _zone = zone;
+    }
+
+    @Override
+    public boolean isFlipped() {
+        return _flipped;
+    }
+
+    @Override
+    public void setFlipped(boolean flipped) {
+        _flipped = flipped;
     }
 
     @Override
