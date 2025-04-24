@@ -59,7 +59,7 @@ public class TurnProcedure {
             _characterDeathRule.checkCharactersZeroVitality(_game);
 
             Set<EffectResult> effectResults = ((DefaultActionsEnvironment) _game.getActionsEnvironment()).consumeEffectResults();
-            if (effectResults.size() > 0) {
+            if (!effectResults.isEmpty()) {
                 _actionStack.stackAction(new PlayOutEffectResults(effectResults));
             } else {
                 if (_actionStack.isEmpty()) {

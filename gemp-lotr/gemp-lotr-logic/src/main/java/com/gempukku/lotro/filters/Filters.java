@@ -172,16 +172,16 @@ public class Filters {
         };
     }
 
-    public static Filter printedTwilightCost(final int printedTwilightCost) {
-        return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() == printedTwilightCost;
+    public static Filter printedTwilightCost(final Evaluator evaluator) {
+        return andInternal(unhindered, (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() == evaluator.evaluateExpression(game, null));
     }
 
     public static Filter maxPrintedTwilightCost(final int printedTwilightCost) {
-        return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() <= printedTwilightCost;
+        return andInternal(unhindered, (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() <= printedTwilightCost);
     }
 
     public static Filter minPrintedTwilightCost(final int printedTwilightCost) {
-        return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() >= printedTwilightCost;
+        return andInternal(unhindered, (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() >= printedTwilightCost);
     }
 
     public static Filter hasToken(final Token token) {
