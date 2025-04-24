@@ -34,7 +34,7 @@
 					memory: topCards
 				}
 				{
-					type: RevealCards
+					type: RevealCardsFromDrawDeck
 					select: memory(topCards)
 					count: memory(cardCount)
 				}
