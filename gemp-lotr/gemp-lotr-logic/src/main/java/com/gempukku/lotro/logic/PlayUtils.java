@@ -169,7 +169,7 @@ public class PlayUtils {
     }
 
     private static int getTotalCompanions(String playerId, LotroGame game) {
-        return Filters.countActive(game, CardType.COMPANION)
+        return Filters.countActive(game, Filters.companionIgnoringHinder)
                 + Filters.filter(game, game.getGameState().getDeadPile(playerId), CardType.COMPANION).size();
     }
 
