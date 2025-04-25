@@ -7,7 +7,9 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 public class TableDraftDefinitionHtmlBuilder {
@@ -21,8 +23,67 @@ public class TableDraftDefinitionHtmlBuilder {
         builder.append(getStartingCollection(definition, library));
         builder.append(getCardSets(definition, library, formatLibrary));
 
+        builder.append(getExcludedCards(definition, library, formatLibrary));
+
         builder.append(getClosingSection());
 
+        return builder.toString();
+    }
+
+    private static String getExcludedCards(JSONObject definition, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
+        SortAndFilterCards sortAndFilterCards = new SortAndFilterCards();
+
+        StringBuilder builder = new StringBuilder();
+        String code = (String) definition.get("code");
+
+        Set<String> notIncluded = new HashSet<>();
+
+        if (code.contains("fotr")) {
+            for (int i = 1; i <= 363; i++) {
+                notIncluded.add("1_" + i);
+            }
+            for (int i = 1; i <= 121; i++) {
+                notIncluded.add("2_" + i);
+                notIncluded.add("3_" + i);
+            }
+        } else if (code.contains("ttt")) {
+            for (int i = 1; i <= 363; i++) {
+                notIncluded.add("4_" + i);
+            }
+            for (int i = 1; i <= 121; i++) {
+                notIncluded.add("5_" + i);
+                notIncluded.add("6_" + i);
+            }
+        }
+
+        if (notIncluded.isEmpty()) {
+            return "";
+        }
+
+        JSONArray cardSets = (JSONArray) definition.get("card-sets");
+        for (JSONObject cardSet : (Iterable<JSONObject>) cardSets) {
+            if (cardSet.containsKey("card-set")) {
+                List<String> cardList = (List<String>) cardSet.get("card-set");
+                cardList.forEach(notIncluded::remove);
+            }
+        }
+
+        builder.append("<h2>Excluded from Draft:</h2>");
+        DefaultCardCollection setCards = new DefaultCardCollection();
+        for (String card : notIncluded) {
+            setCards.addItem(library.getBaseBlueprintId(card), 1);
+        }
+        builder.append("<br/>");
+        builder.append("<b>FP Cards:</b><br/>");
+        for (CardCollection.Item item : sortAndFilterCards.process("side:FREE_PEOPLE sort:side,cardType,culture,name", setCards.getAll(), library, formatLibrary)) {
+            builder.append(generateCardTooltip(item.getBlueprintId(), library)).append("<br/>");
+        }
+        builder.append("<b>Shadow Cards:</b><br/>");
+        for (CardCollection.Item item : sortAndFilterCards.process("side:SHADOW sort:side,cardType,culture,name", setCards.getAll(), library, formatLibrary)) {
+            builder.append(generateCardTooltip(item.getBlueprintId(), library)).append("<br/>");
+        }
+
+        builder.delete(builder.length() - 5, builder.length());
         return builder.toString();
     }
 
@@ -88,7 +149,7 @@ public class TableDraftDefinitionHtmlBuilder {
             int size = ((Number) wheel.get("size")).intValue();
             List<String> cardList = (List<String>) wheel.get("card-list");
 
-            if (size == cardList. size()) {
+            if (size == cardList.size()) {
                 builder.append("<b>All of Those:</b><br/>");
             } else {
                 builder.append("<b>").append(size).append(" Card");
@@ -117,7 +178,7 @@ public class TableDraftDefinitionHtmlBuilder {
             builder.append("<b>Rounds:</b> ");
             JSONArray rounds = (JSONArray) booster.get("rounds");
             for (Object round : rounds) {
-                int roundNumber  = ((Number) round).intValue();
+                int roundNumber = ((Number) round).intValue();
                 builder.append(roundNumber).append(", ");
             }
             builder.delete(builder.length() - 2, builder.length());
@@ -212,19 +273,17 @@ public class TableDraftDefinitionHtmlBuilder {
         String set = String.format("%02d", setnum);
         String subset = "S";
         int version = 0;
-        if(setnum >= 50 && setnum <= 69) {
+        if (setnum >= 50 && setnum <= 69) {
             setnum -= 50;
             set = String.format("%02d", setnum);
             subset = "E";
             version = 1;
-        }
-        else if(setnum >= 70 && setnum <= 89) {
+        } else if (setnum >= 70 && setnum <= 89) {
             setnum -= 70;
             set = String.format("%02d", setnum);
             subset = "E";
             version = 1;
-        }
-        else if(setnum >= 100 && setnum <= 149) {
+        } else if (setnum >= 100 && setnum <= 149) {
             setnum -= 100;
             set = "V" + setnum;
         }
