@@ -586,6 +586,12 @@ table.tables tr.privateForPlayer {
 	cursor: pointer;
 }
 
+.draftFormatInfo {
+	display: inline;
+	color: #6f6fff;
+	cursor: pointer;
+}
+
 .clickableFormat {
 	cursor: pointer;
 	color: #6f6fff;

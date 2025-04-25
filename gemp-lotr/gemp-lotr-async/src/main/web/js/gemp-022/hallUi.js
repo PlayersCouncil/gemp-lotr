@@ -554,7 +554,11 @@ var GempLotrHallUI = Class.extend({
 					} else if (type.includes("Sealed") || type.includes("Draft")) {
 						// No prizes and cost displayed for limited games
 					    rowstr += "<td>" + type + "</td>";
-						rowstr += "<td>" + queue.getAttribute("queue") + "</td>" +
+						rowstr += "<td><div";
+						if (type.includes("Table") && queue.hasAttribute("draftCode")) {
+						    rowstr += " class='draftFormatInfo' draftCode='"+ queue.getAttribute("draftCode") + "'";
+						}
+						rowstr += ">" + queue.getAttribute("queue") + "</div></td>" +
 						"<td>" + queue.getAttribute("start") + "</td>" +
 						"<td>" + queue.getAttribute("system") + "</td>" +
 						"<td><div class='prizeHint' title='Queued Players' value='" + queue.getAttribute("playerList") + "'>" + queue.getAttribute("playerCount") + "</div></td>" +
@@ -570,18 +574,6 @@ var GempLotrHallUI = Class.extend({
 						"<td>" + queue.getAttribute("prizes") + "</td>" +
 						"</tr>";
 					}
-
-					if (type.includes("Table") && queue.hasAttribute("draftCode")) {
-                        var infoBut = $("<button>Format Info</button>");
-                        $(infoBut).button().click(
-                            (function (queue) {
-                                return function () {
-                                    window.open('/gemp-lotr-server/deck/draftHtml?draftCode=' + queue.getAttribute("draftCode"), "_blank");
-                                };
-                            })(queue));
-
-						actionsField.append(infoBut);
-					}
 						
 					var row = $(rowstr);
 					row.append(actionsField);
@@ -589,7 +581,12 @@ var GempLotrHallUI = Class.extend({
 					// Row for tournament queue waiting table
                     var tablesRow = $("<tr class='table" + id + "'></tr>");
                     tablesRow.append("<td>" + queue.getAttribute("format") + "</td>");
-                    tablesRow.append("<td> Tournament - " + type + " - " + queue.getAttribute("queue") + "</td>");
+                    let htmlTd = "<td> Tournament - " + type + " - <div style='display:inline'";
+                    if (type.includes("Table") && queue.hasAttribute("draftCode")) {
+                       htmlTd += " class='draftFormatInfo' draftCode='"+ queue.getAttribute("draftCode") + "'";
+                    }
+                    htmlTd += ">" + queue.getAttribute("queue") + "</div></td>";
+                    tablesRow.append(htmlTd);
                     tablesRow.append("<td>" + queue.getAttribute("start") + "</td>");
                     tablesRow.append("<td>" + queue.getAttribute("playerList") + "</td>");
                     var actionsFieldClone = actionsField.clone(true);
