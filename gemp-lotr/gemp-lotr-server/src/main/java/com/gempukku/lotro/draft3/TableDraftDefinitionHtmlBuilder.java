@@ -144,8 +144,12 @@ public class TableDraftDefinitionHtmlBuilder {
         String name = (String) definition.get("name");
         String timer = (String) definition.get("timer");
         int maxPlayers = ((Number) definition.get("max-players")).intValue();
+        String htmlDescription = (String) definition.get("html-description");
 
         builder.append("<h1>").append(StringEscapeUtils.escapeHtml3(name)).append("</h1>");
+        if (htmlDescription != null) {
+            builder.append(htmlDescription);
+        }
         builder.append("<h2>Max Players: ").append(maxPlayers).append("</h2>");
         if (timer != null) {
             builder.append("<h2>Recommended Timer: ").append(StringEscapeUtils.escapeHtml3(timer)).append("</h2>");

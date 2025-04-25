@@ -4,6 +4,7 @@
   "format": "limited_hobbit",
   "max-players": 4,
   "timer": "SLOW",
+  "html-description": "Hobbit Draft Game is based on the rules of the Lord of the Rings TCG produced by Decipher Inc, except that the Ring-bearer is replaced by a Burglar.<br/>Each player takes a main deck, a random Gandalf, and a random Bilbo.<br/>Originally, each player would receive 3 booster packs of 15 cards, but this was adjusted to 5 booster packs of 9 cards due to the 4-player draft format.<br/>Those booster packs are made from a draft pool that is randomly selected for each draft.<br/><br/>Hobbit Draft Game was designed by Enola: <a href=\"http://hobbitdraftgame.free.fr/\" target=\"_blank\">http://hobbitdraftgame.free.fr/</a>",
   "starting-collection": [
     {
       "size": 68,
