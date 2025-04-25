@@ -13,4 +13,6 @@ public interface TableDraftDefinition {
     String getFormat();
 
     DraftTimer.Type getRecommendedTimer();
+
+    String getHtmlInfo();
 }

@@ -570,6 +570,18 @@ var GempLotrHallUI = Class.extend({
 						"<td>" + queue.getAttribute("prizes") + "</td>" +
 						"</tr>";
 					}
+
+					if (type.includes("Table") && queue.hasAttribute("draftCode")) {
+                        var infoBut = $("<button>Format Info</button>");
+                        $(infoBut).button().click(
+                            (function (queue) {
+                                return function () {
+                                    window.open('/gemp-lotr-server/deck/draftHtml?draftCode=' + queue.getAttribute("draftCode"), "_blank");
+                                };
+                            })(queue));
+
+						actionsField.append(infoBut);
+					}
 						
 					var row = $(rowstr);
 					row.append(actionsField);
