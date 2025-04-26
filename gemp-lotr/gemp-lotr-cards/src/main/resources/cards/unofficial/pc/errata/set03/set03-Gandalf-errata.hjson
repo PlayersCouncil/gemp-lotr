@@ -1,0 +1,57 @@
+{
+	
+	53_30: {
+		cardInfo: {
+			//id: 53_30.1
+			parent: 3_30
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN03E030.1_card.jpg
+			collInfo: 3C30
+			rarity: C
+		}
+		title: Deep in Thought
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Event
+		timewords: Maneuver
+		keywords: Spell
+		effects: {
+			type: event
+			requires: [
+				{
+					type: canSpot
+					filter: name(Gandalf)
+				}
+				{
+					type: canSpotTwilight
+					amount: 4
+				}
+			]
+			effect: [
+				{
+					type: discard
+					count: 2
+					select: choose(side(shadow),condition)
+				}
+				{
+					type: hinder
+					select: all(side(shadow),condition)
+				}
+			]
+		}
+		gametext: <b>Spell</b>.<br>Spot Gandalf and 4 twilight tokens to discard a Shadow conditions, then hinder all remaining Shadow conditions.
+		lore: "He was... trying to recall every memory of his former journey in the Mines, and considering anxiously the next course that he should take...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
+}

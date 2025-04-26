@@ -465,6 +465,22 @@ public class TriggerConditions {
         return false;
     }
 
+
+    public static boolean reconciles(LotroGame game, EffectResult effectResult) {
+        return playerReconciles(game, effectResult, null);
+    }
+
+    public static boolean playerReconciles(LotroGame game, EffectResult effectResult, String player) {
+        if(effectResult.getType() == EffectResult.Type.RECONCILE) {
+            if(player == null)
+                return true;
+
+            var result = (ReconcileResult) effectResult;
+            return result.getPlayerId().equals(player);
+        }
+        return false;
+    }
+
     public static boolean skirmishCancelled(LotroGame game, EffectResult effectResult, Filterable... fpCharacterFilter) {
         if (effectResult.getType() == EffectResult.Type.SKIRMISH_CANCELLED) {
             SkirmishCancelledResult cancelledResult = (SkirmishCancelledResult) effectResult;

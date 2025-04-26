@@ -35,6 +35,55 @@
 		}
 	}
 	
+	51_136: {
+		cardInfo: {
+			//id: 51_136.1
+			parent: 1_136
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E136.1_card.jpg
+			collInfo: 1U136
+			rarity: U
+		}
+		title: Saruman's Power
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Event
+		timewords: Shadow
+		keywords: Spell
+		effects: {
+			type: event
+			cost: {
+				type: Exert
+				count: 1
+				select: choose(culture(isengard),minion)
+			}
+			effect: [
+				{
+					type: Discard
+					count: 1
+					select: choose(side(Free Peoples), condition)
+				}
+				{
+					type: Hinder
+					select: all(condition)
+				}
+			]
+		}
+		gametext: <b>Spell</b>.<br>Exert an [isengard] minion to discard a Free Peoples condition and then hinder all conditions.
+		lore: "The Uruks of Saruman are bred to be the instruments of his will, destroying his enemies with foul cruelty."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	51_138: {
 		cardInfo: {
 			//id: 1_138.1

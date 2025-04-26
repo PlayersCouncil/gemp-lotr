@@ -861,6 +861,7 @@
 				effect: {
 					type: exert
 					select: choose(ringBound,companion)
+					times: 2
 				}
 			}
 		]

@@ -10,6 +10,7 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.effects.DiscardCardsFromPlayEffect;
+import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.modifiers.evaluator.SingleMemoryEvaluator;
 import com.gempukku.lotro.logic.timing.Effect;
@@ -412,7 +413,7 @@ public class FilterFactory {
                     return actionContext -> {
                         final Filterable sourceFilterable = filterableSource.getFilterable(actionContext);
                         return Filters.and(
-                                sourceFilterable, Filters.strengthEqual(
+                                sourceFilterable, Filters.printedTwilightCost(
                                         new SingleMemoryEvaluator(
                                                 new Evaluator() {
                                                     @Override
@@ -434,7 +435,7 @@ public class FilterFactory {
                     return actionContext -> {
                         final Filterable sourceFilterable = filterableSource.getFilterable(actionContext);
                         return Filters.and(
-                                sourceFilterable, Filters.strengthEqual(
+                                sourceFilterable, Filters.printedTwilightCost(
                                         new SingleMemoryEvaluator(
                                                 new Evaluator() {
                                                     @Override
@@ -478,17 +479,14 @@ public class FilterFactory {
                         return actionContext -> {
                             try {
                                 final int value = Integer.parseInt(actionContext.getValueFromMemory(memory));
-                                return Filters.printedTwilightCost(value);
+                                return Filters.printedTwilightCost(new ConstantEvaluator(value));
                             } catch (IllegalArgumentException ex) {
                                 return Filters.minPrintedTwilightCost(0);
                             }
                         };
                     } else {
                         final ValueSource valueSource = ValueResolver.resolveEvaluator(parameter, environment);
-                        return actionContext -> {
-                            final int value = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                            return Filters.printedTwilightCost(value);
-                        };
+                        return actionContext -> Filters.printedTwilightCost(valueSource.getEvaluator(actionContext));
                     }
                 });
         parameterFilters.put("maxtwilight",
@@ -640,7 +638,7 @@ public class FilterFactory {
                     if (bp.getCardType() == CardType.THE_ONE_RING || bp.getCardType() == CardType.MAP)
                         return Filters.none;
 
-                    return Filters.printedTwilightCost(bp.getTwilightCost());
+                    return Filters.printedTwilightCost(new ConstantEvaluator(bp.getTwilightCost()));
                 });
         parameterFilters.put("race",
                 (parameter, environment) -> {

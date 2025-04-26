@@ -1,65 +1,161 @@
 {
+	# 60_72: {
+	# 	cardInfo: {
+	# 		//id: 0_72.1
+	# 		revision: 1
+	# 		image: errata/LOTR-EN10E072.1.jpg
+	# 		collInfo: 10R72
+	# 		rarity: R
+	# 	}
+	# 	title: Éowyn
+	# 	subtitle: Lady of Ithilien
+	# 	unique: true
+	# 	culture: rohan
+	# 	twilight: 2
+	# 	type: companion
+	# 	race: man
+	# 	strength: 6
+	# 	vitality: 3
+	# 	resistance: 6
+	# 	signet: gandalf
+	# 	effects: [
+	# 		{
+	# 			type: activated
+	# 			phase: skirmish
+	# 			requires: {
+	# 				type: or
+	# 				requires: [
+	# 					{
+	# 						type: CanSpot
+	# 						filter: another,culture(Rohan),man
+	# 					}
+	# 					{
+	# 						type: perTurnLimit
+	# 						limit: 1
+	# 					}
+	# 				]
+	# 			}
+	# 			cost: {
+	# 				type: exert
+	# 				select: self
+	# 			}
+	# 			effect: [
+	# 				{
+	# 					type: Repeat
+	# 					times: {
+	# 						type: ForEachWound
+	# 						filter: minion,InSkirmishAgainst(self)
+	# 					}
+	# 					effect: {
+	# 						type: Wound
+	# 						player: shadow
+	# 						select: choose(minion)
+	# 					}
+	# 				}
+	# 				{
+	# 					type: incrementPerTurnLimit
+	# 					limit: 1
+	# 				}
+	# 			]
+	# 		}
+	# 	]
+	# 	gametext: <b>Skirmish:</b> Exert Eowyn to choose an opponent. That opponent must wound a minion for each wound on each minion skirmishing Eowyn (limit once per turn unless you can spot another [rohan] Man).
+	# 	lore: "'Yet now that I have leave to depart, I would remain. For this House has become to me of all dwellings the most blessed.'"
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	60_72: {
 		cardInfo: {
-			//id: 0_72.1
-			revision: 1
-			image: errata/LOTR-EN10E072.1.jpg
+			//id: 60_72.2
+			parent: 10_72
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 2
+			image: errata/LOTR-EN10E072.2_card.jpg
 			collInfo: 10R72
 			rarity: R
 		}
-		title: Éowyn
+		title: Eowyn
 		subtitle: Lady of Ithilien
 		unique: true
-		culture: rohan
+		side: Free Peoples
+		culture: Rohan
 		twilight: 2
-		type: companion
-		race: man
+		type: Companion
+		race: Man
 		strength: 6
 		vitality: 3
+		signet: Gandalf
 		resistance: 6
-		signet: gandalf
 		effects: [
 			{
 				type: activated
 				phase: skirmish
-				requires: {
-					type: or
-					requires: [
-						{
-							type: CanSpot
-							filter: another,culture(Rohan),man
-						}
-						{
-							type: perTurnLimit
-							limit: 1
-						}
-					]
-				}
 				cost: {
 					type: exert
 					select: self
 				}
 				effect: [
-					{
-						type: Repeat
-						times: {
-							type: ForEachWound
-							filter: minion,InSkirmishAgainst(self)
-						}
-						effect: {
-							type: Wound
-							player: shadow
-							select: choose(minion)
-						}
+				{
+					type: Repeat
+					times: {
+						type: forEachWound
+						filter: minion,inSkirmishAgainst(self)
 					}
-					{
-						type: incrementPerTurnLimit
-						limit: 1
-					}
-				]
+					effect: [
+						{
+							type: ChooseActiveCards
+							text: Choose Shadow card to hinder or exert
+							count: 1
+							player: Shadow
+							select: choose(side(shadow))
+							memorize: chosenCard
+						}
+						{
+							type: If
+							check: {
+								type: MemoryMatches
+								memory: chosenCard
+								filter: CanWound, minion
+							}
+							true: {
+								type: Choice
+								player: Shadow
+								texts: [
+									Wound {chosenCard}
+									Hinder {chosenCard}
+								]
+								effects: [
+									{
+										type: Wound
+										player: Shadow
+										select: memory(chosenCard)
+									}
+									{
+										type: Hinder
+										player: Shadow
+										select: memory(chosenCard)
+									}
+								]
+							}
+							false: {
+								type: Hinder
+								player: Shadow
+								select: memory(chosenCard)
+							}
+						}
+					]
+				}
+			]
 			}
 		]
-		gametext: <b>Skirmish:</b> Exert Eowyn to choose an opponent. That opponent must wound a minion for each wound on each minion skirmishing Eowyn (limit once per turn unless you can spot another [rohan] Man).
+		gametext: Skirmish: Exert Eowyn to make an opponent wound or hinder a minion for each wound on each minion skirmishing Eowyn.
 		lore: "'Yet now that I have leave to depart, I would remain. For this House has become to me of all dwellings the most blessed.'"
 		promotext: ""
 		alts: {
@@ -69,4 +165,5 @@
 			}
 		}
 	}
+	
 }

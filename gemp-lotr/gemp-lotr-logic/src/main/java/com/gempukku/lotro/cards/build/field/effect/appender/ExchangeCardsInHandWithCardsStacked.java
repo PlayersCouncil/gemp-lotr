@@ -53,6 +53,12 @@ public class ExchangeCardsInHandWithCardsStacked implements EffectAppenderProduc
                         return new AbstractEffect() {
                             @Override
                             protected FullEffectResult playEffectReturningResult(LotroGame game) {
+                                int hand = countHand.getEvaluator(actionContext).evaluateExpression(game, null);
+                                if(handCards.size() < hand) {
+                                    game.getGameState().sendMessage(performingPlayer + " did not have " + hand + " card in hand to exchange.");
+                                    return new FullEffectResult(false);
+                                }
+
                                 Set<PhysicalCard> cardsToRemove = new HashSet<>();
                                 cardsToRemove.addAll(handCards);
                                 cardsToRemove.addAll(stackedCards);
@@ -69,7 +75,8 @@ public class ExchangeCardsInHandWithCardsStacked implements EffectAppenderProduc
 
                             @Override
                             public boolean isPlayableInFull(LotroGame game) {
-                                return true;
+                                int hand = countHand.getEvaluator(actionContext).evaluateExpression(game, null);
+                                return handCards.size() >= hand;
                             }
                         };
                     }

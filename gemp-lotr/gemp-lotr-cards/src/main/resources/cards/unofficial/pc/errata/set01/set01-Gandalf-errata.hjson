@@ -104,6 +104,54 @@
 		}
 	}
 	
+	51_84: {
+		cardInfo: {
+			//id: 51_84.1
+			parent: 1_84
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN01E084.1_card.jpg
+			collInfo: 1C84
+			rarity: C
+		}
+		title: Sleep, Caradhras
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		timewords: Fellowship
+		keywords: Spell
+		effects: {
+			type: event
+			cost: {
+				type: Exert
+				select: choose(name(Gandalf))
+			}
+			effect: [
+				{
+					type: Discard
+					count: 1
+					select: choose(side(Shadow), condition)
+				}
+				{
+					type: Hinder
+					select: all(condition)
+				}
+			]
+		}
+		gametext: <b>Spell</b>.<br>Exert Gandalf to discard a Shadow condition and then hinder all condition.
+		lore: "'Losto Caradhras, sedho, hodo, nuitho i ruith.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	51_87: {
 		cardInfo: {
 			//id: 1_87.1

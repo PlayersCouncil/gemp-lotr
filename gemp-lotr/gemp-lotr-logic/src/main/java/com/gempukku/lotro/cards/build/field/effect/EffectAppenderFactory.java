@@ -85,6 +85,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("exhaust", new Exhaust());
         effectAppenderProducers.put("getcardsfromtopofdeck", new GetCardsFromTopOfDeck());
         effectAppenderProducers.put("heal", new Heal());
+        effectAppenderProducers.put("hinder", new HinderCardsInPlay());
         effectAppenderProducers.put("incrementperphaselimit", new IncrementPerPhaseLimit());
         effectAppenderProducers.put("incrementperturnlimit", new IncrementPerTurnLimit());
         effectAppenderProducers.put("incrementtoil", new IncrementToil());
@@ -160,9 +161,12 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("reordertopcardsofdrawdeck", new ReorderTopCardsOfDrawDeck());
         effectAppenderProducers.put("replaceinskirmish", new ReplaceInSkirmish());
         effectAppenderProducers.put("resetwhileinzonedata", new ResetWhileInZoneData());
+        effectAppenderProducers.put("restore", new RestoreCardsInPlay());
         effectAppenderProducers.put("returntohand", new ReturnToHand());
         effectAppenderProducers.put("revealbottomcardsofdrawdeck", new RevealBottomCardsOfDrawDeck());
-        effectAppenderProducers.put("revealcards", new RevealCards());
+        effectAppenderProducers.put("revealcards", new RevealCardsFromPlay());
+        effectAppenderProducers.put("revealcardsfromdiscard", new RevealCardsFromDiscard());
+        effectAppenderProducers.put("revealcardsfromdrawdeck", new RevealCardsFromDrawDeck());
         effectAppenderProducers.put("revealcardsfromadventuredeck", new RevealCardsFromAdventureDeck());
         effectAppenderProducers.put("revealcardsfromhand", new RevealCardsFromHand());
         effectAppenderProducers.put("revealhand", new RevealHand());

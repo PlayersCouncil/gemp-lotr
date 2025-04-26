@@ -286,6 +286,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean hasTextRemoved(LotroGame game, PhysicalCard card) {
+        if(hasKeyword(game, card, Keyword.HINDERED))
+            return true;
+
         for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.TEXT_MODIFIER, card)) {
             if (modifier.hasRemovedText(game, card))
                 return true;
@@ -294,6 +297,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     private boolean hasAllKeywordsRemoved(LotroGame game, PhysicalCard card) {
+        if(hasKeyword(game, card, Keyword.HINDERED))
+            return true;
+
         for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.LOSE_ALL_KEYWORDS_MODIFIER, card)) {
             if (modifier.lostAllKeywords(game, card))
                 return true;
@@ -305,17 +311,24 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean hasKeyword(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
         LoggingThreadLocal.logMethodStart(physicalCard, "hasKeyword " + keyword.getHumanReadable());
         try {
-            if (isCandidateForKeywordRemovalWithTextRemoval(game, physicalCard, keyword) &&
-                    (hasTextRemoved(game, physicalCard) || hasAllKeywordsRemoved(game, physicalCard)))
-                return false;
-
-            for (Modifier modifier : getKeywordModifiersAffectingCard(game, ModifierEffect.REMOVE_KEYWORD_MODIFIER, keyword, physicalCard)) {
-                if (modifier.isKeywordRemoved(game, physicalCard, keyword))
+            //This'll be an infinite loop if this first clause isn't here
+            if(keyword != Keyword.HINDERED) {
+                if (hasKeyword(game, physicalCard, Keyword.HINDERED))
                     return false;
-            }
 
-            if (physicalCard.getBlueprint().hasKeyword(keyword))
-                return true;
+                if (isCandidateForKeywordRemovalWithTextRemoval(game, physicalCard, keyword) &&
+                        (hasTextRemoved(game, physicalCard) || hasAllKeywordsRemoved(game, physicalCard)))
+                    return false;
+
+                for (Modifier modifier : getKeywordModifiersAffectingCard(game, ModifierEffect.REMOVE_KEYWORD_MODIFIER,
+                        keyword, physicalCard)) {
+                    if (modifier.isKeywordRemoved(game, physicalCard, keyword))
+                        return false;
+                }
+
+                if (physicalCard.getBlueprint().hasKeyword(keyword))
+                    return true;
+            }
 
             for (Modifier modifier : getKeywordModifiersAffectingCard(game, ModifierEffect.GIVE_KEYWORD_MODIFIER, keyword, physicalCard)) {
                 if (appliesKeywordModifier(game, physicalCard, modifier.getSource(), keyword)) {

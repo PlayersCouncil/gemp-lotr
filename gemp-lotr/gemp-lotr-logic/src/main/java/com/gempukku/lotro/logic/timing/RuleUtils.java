@@ -10,7 +10,6 @@ import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -148,6 +147,9 @@ public class RuleUtils {
                     @Override
                     public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
                         final CardType thisType = blueprint.getCardType();
+                        if(game.getGameState().isHindered(physicalCard))
+                            return false;
+
                         if (thisType == CardType.POSSESSION || thisType == CardType.ARTIFACT) {
                             final CardType targetType = physicalCard.getBlueprint().getCardType();
                             return targetType == CardType.COMPANION || targetType == CardType.ALLY
@@ -164,7 +166,7 @@ public class RuleUtils {
                             for (PossessionClass possessionClass : possessionClasses) {
                                 List<PhysicalCard> attachedCards = game.getGameState().getAttachedCards(attachedTo);
 
-                                Collection<PhysicalCard> matchingClassPossessions = Filters.filter(game, attachedCards, Filters.or(CardType.POSSESSION, CardType.ARTIFACT), possessionClass);
+                                Collection<PhysicalCard> matchingClassPossessions = Filters.filter(game, attachedCards, Filters.itemIgnoringHinder, possessionClass);
                                 if (matchingClassPossessions.size() > 1)
                                     return false;
 

@@ -1,40 +1,115 @@
 {
 
+	# 60_17: {
+	# 	cardInfo: {
+	# 		//id: 0_17.1
+	# 		revision: 1
+	# 		image: errata/60_17.jpg
+	# 		collInfo: 10R17
+	# 		rarity: R
+	# 	}
+	# 	title: Out of the High Airs
+	# 	twilight: 3
+	# 	culture: Gandalf
+	# 	type: event
+	# 	timeword: response
+	# 	effects: {
+	# 		type: responseEvent
+	# 		requires: {
+	# 			type: phase
+	# 			phase: regroup
+	# 		}
+	# 		trigger: {
+	# 			type: moves
+	# 		}
+	# 		cost: {
+	# 			type: exert
+	# 			select: choose(your,wizard)
+	# 			times: 2
+	# 		}
+	# 		effect: {
+	# 			type: discard
+	# 			count: 0-3
+	# 			select: choose(minion)
+	# 		}
+	# 	}
+	# 	gametext: If the fellowship moves during the regroup phase, exert your Wizard twice to discard up to 3 minions.
+	# 	lore: "...the Nazgul turned and fled, and vanished into Mordor's shadows...."
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	60_17: {
 		cardInfo: {
-			//id: 0_17.1
+			//id: 60_17.1
+			parent: 10_17
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
-			image: errata/60_17.jpg
+			image: errata/LOTR-EN10E017.1_card.jpg
 			collInfo: 10R17
 			rarity: R
 		}
 		title: Out of the High Airs
-		twilight: 3
+		unique: false
+		side: Free Peoples
 		culture: Gandalf
-		type: event
-		timeword: response
+		twilight: 3
+		type: Event
+		timewords: Response
 		effects: {
 			type: responseEvent
-			requires: {
-				type: phase
-				phase: regroup
-			}
+			requires: [
+				{
+					type: phase
+					phase: regroup
+				}
+				{
+					type: canSpot
+					filter: your,wizard,canExert
+				}
+			]
 			trigger: {
 				type: moves
 			}
-			cost: {
-				type: exert
-				select: choose(your,wizard)
-				times: 2
-			}
+			cost: [
+				{
+					type: ChooseActiveCards
+					text: Choose a Wizard to exert
+					select: choose(your,wizard,canExert)
+					memorize: chosenWizard
+				}
+				{
+					type: chooseANumber
+					text: Choose how many times you wish to exert {chosenWizard}
+					from: 1
+					to: {
+						type: forEachVitality
+						filter: memory(chosenWizard)
+						over: 1
+					}
+					memorize: exertCount
+				}
+				{
+					type: exert
+					select: memory(chosenWizard)
+					times: memory(exertCount)
+					ignoreCostCheckFailure: true
+				}
+			]
 			effect: {
 				type: discard
 				count: 0-3
 				select: choose(minion)
 			}
 		}
-		gametext: If the fellowship moves during the regroup phase, exert your Wizard twice to discard up to 3 minions.
-		lore: "...the Nazgul turned and fled, and vanished into Mordor's shadows...."
+		gametext: If the fellowship moves during the regroup phase, exert your Wizard X times to hinder X minions.
+		lore: "...the Nazgûl turned and fled, and vanished into Mordor's shadows...."
 		promotext: ""
 		alts: {
 			promos: {
@@ -43,4 +118,5 @@
 			}
 		}
 	}
+	
 }

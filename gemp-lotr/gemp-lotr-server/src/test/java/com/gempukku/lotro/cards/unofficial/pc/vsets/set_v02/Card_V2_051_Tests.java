@@ -49,7 +49,7 @@ public class Card_V2_051_Tests
 		 * Twilight Cost: 1
 		 * Type: Condition
 		 * Subtype: Support area
-		 * Game Text: Each time a [rohan] item or [rohan] ally is discarded or killed (except during the fellowship phase), add a [rohan] token here.
+		 * Game Text: Each time a [rohan] item or [rohan] ally is killed or discarded from play or from hand (except during the fellowship phase), add a [rohan] token here.
 		* 	Each time a minion is exerted by a Free Peoples card, you may remove 2 [rohan] tokens here and exert a valiant companion to wound that minion.
 		*/
 

@@ -1,6 +1,5 @@
 package com.gempukku.lotro.logic.timing;
 
-import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Side;
@@ -61,7 +60,7 @@ public class PlayConditions {
     }
 
     public static int getMaxAddThreatCount(LotroGame game) {
-        return Filters.countActive(game, CardType.COMPANION) - game.getGameState().getThreats();
+        return Filters.countActive(game, Filters.companionIgnoringHinder) - game.getGameState().getThreats();
     }
 
     public static boolean canPlayFromDiscard(String playerId, LotroGame game, Filterable... filters) {

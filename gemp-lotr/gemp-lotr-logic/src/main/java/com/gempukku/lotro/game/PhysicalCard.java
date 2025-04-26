@@ -4,6 +4,8 @@ import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.Zone;
 
 public interface PhysicalCard extends Filterable {
+    boolean isFlipped();
+    void setFlipped(boolean flipped);
     Zone getZone();
     void setPlayedFromZone(Zone zone);
     Zone getPlayedFromZone();

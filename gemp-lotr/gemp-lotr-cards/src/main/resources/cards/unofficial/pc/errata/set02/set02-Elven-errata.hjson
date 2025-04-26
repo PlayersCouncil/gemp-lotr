@@ -1,12 +1,84 @@
 {
+	# 52_20: {
+	# 	cardInfo: {
+	# 		//id: 2_20.1
+	# 		parent: 2_20
+	# 		variant: ERRATA
+	# 		variantPath: promos/pc
+	# 		revision: 1
+	# 		image: errata/LOTR-EN02E020.1_card.jpg
+	# 		collInfo: 2R20
+	# 		rarity: R
+	# 	}
+	# 	title: Secret Sentinels
+	# 	unique: false
+	# 	side: Free Peoples
+	# 	culture: Elven
+	# 	twilight: 2
+	# 	type: Event
+	# 	timeword: maneuver
+	# 	effects: {
+	# 		type: event
+	# 		cost: {
+	# 			type: exert
+	# 			select: choose(Elf,ally)
+	# 			memorize: firstAlly
+	# 		}
+	# 		effect: [
+	# 			{
+	# 				type: Discard
+	# 				count: 1
+	# 				select: choose(condition)
+	# 			}
+	# 			{
+	# 				type: If
+	# 				check: [
+	# 					{
+	# 						type: CanSpot
+	# 						filter: Orc
+	# 						count: 1
+	# 					}
+	# 					{
+	# 						type: CanSpot
+	# 						filter: Elf,ally,not(exhausted),not(memory(firstAlly))
+	# 					}
+	# 				]
+	# 				true: {
+	# 					type: Optional
+	# 					player: you
+	# 					text: Would you like to exert another Elf ally to discard another condition?
+	# 					cost: {
+	# 						type: exert
+	# 						select: choose(Elf,ally,not(memory(firstAlly)))
+	# 					}
+	# 					effect: {
+	# 						type: Discard
+	# 						count: 1
+	# 						select: choose(condition)
+	# 					}
+	# 				}
+	# 			}
+	# 		]
+	# 	}
+	# 	gametext: Exert an Elf ally to discard a condition.  If you can spot an Orc, you may exert another Elf ally to discard another condition.
+	# 	lore: “‘Yet so little faith and trust do we find now in the world beyond Lothlórien... that we dare not by our own trust endanger our land.'”
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	52_20: {
 		cardInfo: {
-			//id: 2_20.1
+			//id: 52_20.2
 			parent: 2_20
 			variant: ERRATA
-			variantPath: promos/pc
-			revision: 1
-			image: errata/LOTR-EN02E020.1_card.jpg
+			variantPath: errata/pc
+			revision: 2
+			image: errata/LOTR-EN02E020.2_card.jpg
 			collInfo: 2R20
 			rarity: R
 		}
@@ -16,7 +88,7 @@
 		culture: Elven
 		twilight: 2
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			cost: {
@@ -38,30 +110,17 @@
 							filter: Orc
 							count: 1
 						}
-						{
-							type: CanSpot
-							filter: Elf,ally,not(exhausted),not(memory(firstAlly))
-						}
 					]
 					true: {
-						type: Optional
-						player: you
-						text: Would you like to exert another Elf ally to discard another condition?
-						cost: {
-							type: exert
-							select: choose(Elf,ally,not(memory(firstAlly)))
-						}
-						effect: {
-							type: Discard
-							count: 1
-							select: choose(condition)
-						}
+						type: Hinder
+						count: 1
+						select: choose(condition)
 					}
 				}
 			]
 		}
-		gametext: Exert an Elf ally to discard a condition.  If you can spot an Orc, you may exert another Elf ally to discard another condition.
-		lore: “‘Yet so little faith and trust do we find now in the world beyond Lothlórien... that we dare not by our own trust endanger our land.'”
+		gametext: Exert an Elf ally to discard a condition (and hinder another Shadow condition if you can spot an Orc).
+		lore: "'Yet so little faith and trust do we find now in the world beyond Lothlórien... that we dare not by our own trust endanger our land.'"
 		promotext: ""
 		alts: {
 			promos: {
