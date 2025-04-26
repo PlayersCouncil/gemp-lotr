@@ -46,8 +46,8 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
         if (now.isAfter(_startTime)) {
             if (_players.size() >= _tournamentInfo.Parameters().minimumPlayers) {
                 startTournament();
-            } else {
                 _tournamentService.recordScheduledTournamentStarted(_tournamentInfo.Parameters().tournamentId);
+            } else {
                 leaveAllPlayers();
             }
             return true; //destroy the queue now that the tournament has started
