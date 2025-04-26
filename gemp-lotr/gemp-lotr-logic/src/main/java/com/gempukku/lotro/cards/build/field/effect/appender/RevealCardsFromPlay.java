@@ -17,7 +17,7 @@ import org.json.simple.JSONObject;
 
 import java.util.Collection;
 
-public class RevealCards implements EffectAppenderProducer {
+public class RevealCardsFromPlay implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "count", "select", "memorize");

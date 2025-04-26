@@ -921,7 +921,7 @@ var PCCards = {
 	// Saved From the Fire (8R20) [Errata]
 	'58_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN08E020.1_card.jpg',
 	// Aragorn, Estel (V1R19) [Errata]
-	//'101_19' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E019.2_card.jpg',
+	'101_19' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1E019.2_card.jpg',
 	// Elendil, The Tall (9R+32) [Errata]
 	'59_32'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN09E032.1_card.jpg',
 	// Sapling of the White Tree (9R35) [Errata]

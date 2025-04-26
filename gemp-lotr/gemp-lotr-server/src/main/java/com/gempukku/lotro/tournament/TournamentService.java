@@ -188,13 +188,13 @@ public class TournamentService {
 
         addImmediateRecurringCasualLimitedGames();
 
-        addImmediateRecurringQueue("fotr_queue", "Fellowship Block", "fotrQueue-", "fotr_block");
-        addImmediateRecurringQueue("pc_fotr_queue", "PC-Fellowship", "pcfotrQueue-", "pc_fotr_block");
-        addImmediateRecurringQueue("ts_queue", "Towers Standard", "tsQueue-", "towers_standard");
-        addImmediateRecurringQueue("movie_queue", "Movie Block", "movieQueue-", "movie");
-        addImmediateRecurringQueue("pc_movie_queue", "PC-Movie", "pcmovieQueue-", "pc_movie");
-        addImmediateRecurringQueue("expanded_queue", "Expanded", "expandedQueue-", "expanded");
-        addImmediateRecurringQueue("pc_expanded_queue", "PC-Expanded", "pcexpandedQueue-", "pc_expanded");
+        addImmediateRecurringQueue("fotr_queue", "Fellowship Block", "fotr-", "fotr_block");
+        addImmediateRecurringQueue("pc_fotr_queue", "PC-Fellowship", "pcfotr-", "pc_fotr_block");
+        addImmediateRecurringQueue("ts_queue", "Towers Standard", "ts-", "towers_standard");
+        addImmediateRecurringQueue("movie_queue", "Movie Block", "movie-", "movie");
+        addImmediateRecurringQueue("pc_movie_queue", "PC-Movie", "pcmovie-", "pc_movie");
+        addImmediateRecurringQueue("expanded_queue", "Expanded", "expanded-", "expanded");
+        addImmediateRecurringQueue("pc_expanded_queue", "PC-Expanded", "pcexpanded-", "pc_expanded");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -216,20 +216,20 @@ public class TournamentService {
 
         _tableDraftLibrary.getAllTableDrafts().forEach(tableDraftDefinition -> {
             String code = tableDraftDefinition.getCode();
-            addImmediateRecurringTableDraft(code + "_queue", casual + tableDraftDefinition.getName(), code + "_queue-", code, tableDraftDefinition.getMaxPlayers(), DraftTimerFactory.Type.CLASSIC);
+            addImmediateRecurringTableDraft(code + "_queue", casual + tableDraftDefinition.getName(), code + "-", code, tableDraftDefinition.getMaxPlayers(), DraftTimerFactory.Type.CLASSIC);
         });
 
-        addImmediateRecurringDraft("fotr_solo_draft_queue", casual + "FotR Solo Draft", "fotrSoloDraftQueue-", "fotr_draft");
-        addImmediateRecurringDraft("ttt_solo_draft_queue", casual + "TTT Solo Draft", "tttSoloDraftQueue-", "ttt_draft");
-        addImmediateRecurringDraft("hobbit_solo_draft_queue", casual + "Hobbit Solo Draft", "hobbitSoloDraftQueue-", "hobbit_random_draft");
+        addImmediateRecurringDraft("fotr_solo_draft_queue", casual + "FotR Solo Draft", "fotrSoloDraft-", "fotr_draft");
+        addImmediateRecurringDraft("ttt_solo_draft_queue", casual + "TTT Solo Draft", "tttSoloDraft-", "ttt_draft");
+        addImmediateRecurringDraft("hobbit_solo_draft_queue", casual + "Hobbit Solo Draft", "hobbitSoloDraft-", "hobbit_random_draft");
 
-        addImmediateRecurringSealed("fotr_sealed_queue", casual + "Fellowship Block Sealed", "fotrSealedQueue-", "single_fotr_block_sealed");
-        addImmediateRecurringSealed("ttt_sealed_queue", casual + "Towers Block Sealed", "tttSealedQueue-", "single_ttt_block_sealed");
-        addImmediateRecurringSealed("ts_sealed_queue", casual + "Towers Standard Sealed", "tsSealedQueue-", "single_ts_sealed");
-        addImmediateRecurringSealed("king_sealed_queue", casual + "King Block Sealed", "rotkSealedQueue-", "single_rotk_block_sealed");
-        addImmediateRecurringSealed("movie_sealed_queue", casual + "Movie Sealed", "movieSealedQueue-", "single_movie_sealed");
-        addImmediateRecurringSealed("wotr_sealed_queue", casual + "War of the Ring Block Sealed", "wotrSealedQueue-", "single_wotr_block_sealed");
-        addImmediateRecurringSealed("th_sealed_queue", casual + "Hunters Block Sealed", "thSealedQueue-", "single_th_block_sealed");
+        addImmediateRecurringSealed("fotr_sealed_queue", casual + "Fellowship Block Sealed", "fotrSealed-", "single_fotr_block_sealed");
+        addImmediateRecurringSealed("ttt_sealed_queue", casual + "Towers Block Sealed", "tttSealed-", "single_ttt_block_sealed");
+        addImmediateRecurringSealed("ts_sealed_queue", casual + "Towers Standard Sealed", "tsSealed-", "single_ts_sealed");
+        addImmediateRecurringSealed("king_sealed_queue", casual + "King Block Sealed", "rotkSealed-", "single_rotk_block_sealed");
+        addImmediateRecurringSealed("movie_sealed_queue", casual + "Movie Sealed", "movieSealed-", "single_movie_sealed");
+        addImmediateRecurringSealed("wotr_sealed_queue", casual + "War of the Ring Block Sealed", "wotrSealed-", "single_wotr_block_sealed");
+        addImmediateRecurringSealed("th_sealed_queue", casual + "Hunters Block Sealed", "thSealed-", "single_th_block_sealed");
     }
 
     public void cancelAllTournamentQueues() throws SQLException, IOException {
