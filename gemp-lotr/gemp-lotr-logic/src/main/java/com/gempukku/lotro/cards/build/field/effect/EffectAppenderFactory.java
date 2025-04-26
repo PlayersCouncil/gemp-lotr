@@ -162,7 +162,9 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("resetwhileinzonedata", new ResetWhileInZoneData());
         effectAppenderProducers.put("returntohand", new ReturnToHand());
         effectAppenderProducers.put("revealbottomcardsofdrawdeck", new RevealBottomCardsOfDrawDeck());
-        effectAppenderProducers.put("revealcards", new RevealCards());
+        effectAppenderProducers.put("revealcards", new RevealCardsFromPlay());
+        effectAppenderProducers.put("revealcardsfromdiscard", new RevealCardsFromDiscard());
+        effectAppenderProducers.put("revealcardsfromdrawdeck", new RevealCardsFromDrawDeck());
         effectAppenderProducers.put("revealcardsfromadventuredeck", new RevealCardsFromAdventureDeck());
         effectAppenderProducers.put("revealcardsfromhand", new RevealCardsFromHand());
         effectAppenderProducers.put("revealhand", new RevealHand());

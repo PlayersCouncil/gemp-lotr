@@ -363,6 +363,7 @@
 						type: discardStackedCards
 						on: self
 						count: 2
+						memorize: discardedCards
 					}
 					{
 						type: removeTwilight
@@ -372,7 +373,7 @@
 				effect: {
 					type: playCardFromDiscard
 					removedTwilight: 1
-					select: choose(culture(isengard),orc)
+					select: choose(culture(isengard),orc,not(memory(discardedCards)))
 				}
 			}
 		]

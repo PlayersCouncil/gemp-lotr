@@ -167,7 +167,7 @@
 						text: Choose card to reveal and put beneath your deck
 					}
 					{
-						type: revealCards
+						type: RevealCardsFromDiscard
 						select: memory(chosenCard)
 					}
 					{
