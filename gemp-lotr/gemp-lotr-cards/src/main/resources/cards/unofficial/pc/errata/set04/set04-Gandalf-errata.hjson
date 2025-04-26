@@ -1,0 +1,52 @@
+{
+	54_92: {
+		cardInfo: {
+			//id: 54_92.1
+			parent: 4_92
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E092.1_card.jpg
+			collInfo: 4R92
+			rarity: R
+		}
+		title: Grown Suddenly Tall
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 0
+		type: Event
+		timewords: Fellowship
+		keywords: Spell
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			effect: [
+				{
+					type: hinder
+					select: all(condition)
+					memorize: hinderedCards
+				}
+				{
+					type: AddTwilight
+					amount: {
+						type: ForEachInMemory
+						memory: hinderedCards
+					}
+				}
+			]
+		}
+		gametext: <b>Spell</b>.<br>Spot Gandalf to hinder all conditions.  Add (1) for each Shadow condition hindered (limit (5)).
+		lore: "His hood and grey rags were flung away. His white garments shone."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

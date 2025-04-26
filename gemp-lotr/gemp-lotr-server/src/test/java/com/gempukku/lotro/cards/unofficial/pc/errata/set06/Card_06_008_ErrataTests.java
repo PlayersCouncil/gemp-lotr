@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set10;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set06;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_10_017_ErrataTests
+public class Card_06_008_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "60_17");
+					put("card", "56_8");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,37 +28,37 @@ public class Card_10_017_ErrataTests
 	}
 
 	@Test
-	public void OutoftheHighAirsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TooLongHaveThesePeasantsStoodStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 10
-		 * Name: Out of the High Airs
+		 * Set: 6
+		 * Name: Too Long Have These Peasants Stood
 		 * Unique: False
-		 * Side: Free Peoples
-		 * Culture: Gandalf
-		 * Twilight Cost: 3
+		 * Side: Shadow
+		 * Culture: Dunland
+		 * Twilight Cost: 2
 		 * Type: Event
 		 * Subtype: Response
-		 * Game Text: If the fellowship moves during the regroup phase, exert your Wizard X times to hinder X minions.
+		 * Game Text: If a [dunland] Man wins a skirmish, discard 2 Free Peoles conditions and then hinder all conditions.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Out of the High Airs", card.getBlueprint().getTitle());
+		assertEquals("Too Long Have These Peasants Stood", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.DUNLAND, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
 		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void OutoftheHighAirsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TooLongHaveThesePeasantsStoodTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -79,6 +79,6 @@ public class Card_10_017_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

@@ -218,7 +218,7 @@ var PCCards = {
 	'58_103': 'https://i.lotrtcgpc.net/errata/balancing/58_103.jpg',
 	
 	'60_8': 'https://i.lotrtcgpc.net/errata/balancing/60_008.jpg',
-	'60_17': 'https://i.lotrtcgpc.net/errata/balancing/60_017.jpg',
+	//'60_17': 'https://i.lotrtcgpc.net/errata/balancing/60_017.jpg',
 	
 	'65_15': 'https://i.lotrtcgpc.net/errata/balancing/65_015.jpg',
 	'65_62': 'https://i.lotrtcgpc.net/errata/balancing/65_062.jpg',
@@ -245,7 +245,7 @@ var PCCards = {
 	//Durin III, Dwarven Lord MW
 	'9_55':'https://i.lotrtcgpc.net/promos/2021/12/PCPROMO_MW_09003.jpg',
 	//Eowyn, Lady of Ithilien MW
-	'10_124':'https://i.lotrtcgpc.net/promos/2021/12/PCPROMO_MW_10072.jpg',
+	//'10_124':'https://i.lotrtcgpc.net/promos/2021/12/PCPROMO_MW_10072.jpg',
 	//Halbarad, Ranger of the North MW
 	'14_16':'https://i.lotrtcgpc.net/promos/2021/12/PCPROMO_MW_14009.jpg',
 	//Gandalf, Leader of the Company MW
@@ -459,7 +459,7 @@ var PCCards = {
 	'54_73': 'https://i.lotrtcgpc.net/errata/LOTR-EN04E073.2_card.jpg',
 	'59_16': 'https://i.lotrtcgpc.net/errata/LOTR-EN09E016.1_card.jpg',
 	'59_26': 'https://i.lotrtcgpc.net/errata/LOTR-EN09E026.1_card.jpg',
-	'60_11': 'https://i.lotrtcgpc.net/errata/LOTR-EN10E011.2_card.jpg',
+	//'60_11': 'https://i.lotrtcgpc.net/errata/LOTR-EN10E011.2_card.jpg',
 	
 	'55_8': 'https://i.lotrtcgpc.net/errata/LOTR-EN05E008.1_card.jpg',
 	'51_59': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E059.1_card.jpg',
@@ -467,7 +467,7 @@ var PCCards = {
 	'54_73': 'https://i.lotrtcgpc.net/errata/LOTR-EN04E073.2_card.jpg',
 	'59_12': 'https://i.lotrtcgpc.net/errata/LOTR-EN09E012.1_card.jpg',
 	'59_16': 'https://i.lotrtcgpc.net/errata/LOTR-EN09E016.1_card.jpg',
-	'60_11': 'https://i.lotrtcgpc.net/errata/LOTR-EN10E011.2_card.jpg',
+	//'60_11': 'https://i.lotrtcgpc.net/errata/LOTR-EN10E011.2_card.jpg',
 	'59_26': 'https://i.lotrtcgpc.net/errata/LOTR-EN09E026.1_card.jpg',
 	'59_27': 'https://i.lotrtcgpc.net/errata/LOTR-EN09E027.1_card.jpg',
 	'58_43': 'https://i.lotrtcgpc.net/errata/LOTR-EN08E043.1_card.jpg',
@@ -536,9 +536,9 @@ var PCCards = {
 	// Murder of Crows (V1R29) [Errata]
 	'101_29' : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S029.1_card.jpg',
 	// Galadriel, Lady Redeemed (10R11) [Errata]
-	'60_11'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E011.3_card.jpg',
+	//'60_11'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E011.3_card.jpg',
 	// Vilya (3R27) [Errata]
-	'53_27'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E027.2_card.jpg',
+	//'53_27'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E027.2_card.jpg',
 	// Castamir of Umbar (8R51) [Errata]
 	'58_51'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN08E051.2_card.jpg',
 	// Dwarven Axe (1C9) [Errata]
@@ -558,7 +558,7 @@ var PCCards = {
 	// Goblin Patrol Troop (1C177) [Errata]
 	//'51_177' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E177.1_card.jpg',
 	// Secret Sentinels (2R20) [Errata]
-	'52_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E020.1_card.jpg',
+	//'52_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E020.1_card.jpg',
 	// Helpless (2U76) [Errata]
 	//'52_76'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E076.1_card.jpg',
 	// Elrond, Herald to Gil-galad (3R13) [Errata]
@@ -977,5 +977,37 @@ var PCCards = {
 	'51_172' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E172.1_card.jpg',
 	// Shadowfax, Greatest of the Mearas (17R24) [Errata]
 	'67_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN17E024.2_card.jpg',
+	
+	//V3 Hinder Errata
+	// Blood Runs Chill (8R3) [Errata]
+	'58_3'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN08E003.1_card.jpg',
+	// Secret Sentinels (2R20) [Errata]
+	'52_20'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02E020.2_card.jpg',
+	// Vilya (3R27) [Errata]
+	'53_27'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E027.3_card.jpg',
+	// Sleep, Caradhras (1C84) [Errata]
+	'51_84'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E084.1_card.jpg',
+	// Deep in Thought (3C30) [Errata]
+	'53_30'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E030.1_card.jpg',
+	// Grown Suddenly Tall (4R92) [Errata]
+	'54_92'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E092.1_card.jpg',
+	// Fool's Hope (7U35) [Errata]
+	'57_35'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E035.1_card.jpg',
+	// Out of the High Airs (10R17) [Errata]
+	'60_17'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E017.1_card.jpg',
+	// Too Long Have These Peasants Stood (6U8) [Errata]
+	'56_8'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN06E008.1_card.jpg',
+	// Saruman's Power (1U136) [Errata]
+	'51_136' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E136.1_card.jpg',
+	// Grima, Wormtongue (4R154) [Errata]
+	'54_154' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E154.1_card.jpg',
+	// Grima, Chief Counselor (5R51) [Errata]
+	'55_51'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN05E051.1_card.jpg',
+	// Eowyn, Lady of Ithilien (10R72) [Errata]
+	'60_72'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E072.2_card.jpg',
+	// Galadriel, Lady Redeemed (10R11) [Errata]
+	'60_11'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E011.4_card.jpg',
+	// Clever Hobbits (7U54) [Errata]
+	'57_54'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E054.1_card.jpg'
 }
 

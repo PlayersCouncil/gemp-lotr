@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set10;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set08;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_10_017_ErrataTests
+public class Card_08_003_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "60_17");
+					put("card", "58_3");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,37 +28,37 @@ public class Card_10_017_ErrataTests
 	}
 
 	@Test
-	public void OutoftheHighAirsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BloodRunsChillStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 10
-		 * Name: Out of the High Airs
+		 * Set: 8
+		 * Name: Blood Runs Chill
 		 * Unique: False
 		 * Side: Free Peoples
-		 * Culture: Gandalf
-		 * Twilight Cost: 3
+		 * Culture: Dwarven
+		 * Twilight Cost: 2
 		 * Type: Event
-		 * Subtype: Response
-		 * Game Text: If the fellowship moves during the regroup phase, exert your Wizard X times to hinder X minions.
+		 * Subtype: Maneuver
+		 * Game Text: Spot a Dwarf who is damage +X and exert that Dwarf twice to make an opponent hinder or exert X Shadow cards. X is limited to the number of [dwarven] companions you can spot.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Out of the High Airs", card.getBlueprint().getTitle());
+		assertEquals("Blood Runs Chill", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
+		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void OutoftheHighAirsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void BloodRunsChillTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -79,6 +79,6 @@ public class Card_10_017_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

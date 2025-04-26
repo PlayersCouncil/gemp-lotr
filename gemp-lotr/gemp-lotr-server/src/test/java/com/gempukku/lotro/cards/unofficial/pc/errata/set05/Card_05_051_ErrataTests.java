@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set10;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set05;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_10_017_ErrataTests
+public class Card_05_051_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "60_17");
+					put("card", "55_51");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,37 +28,43 @@ public class Card_10_017_ErrataTests
 	}
 
 	@Test
-	public void OutoftheHighAirsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GrimaStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 10
-		 * Name: Out of the High Airs
-		 * Unique: False
-		 * Side: Free Peoples
-		 * Culture: Gandalf
-		 * Twilight Cost: 3
-		 * Type: Event
-		 * Subtype: Response
-		 * Game Text: If the fellowship moves during the regroup phase, exert your Wizard X times to hinder X minions.
+		 * Set: 5
+		 * Name: Grima, Chief Counselor
+		 * Unique: True
+		 * Side: Shadow
+		 * Culture: Isengard
+		 * Twilight Cost: 2
+		 * Type: Minion
+		 * Subtype: Man
+		 * Strength: 4
+		 * Vitality: 3
+		 * Site Number: 3
+		 * Game Text: Maneuver: Exert Grima to hinder a condition borne by an unbound companion (or hinder that companion and all Free Peoples cards they bear if you can spot 4 Free Peoples cultures).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Out of the High Airs", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals("Grima", card.getBlueprint().getTitle());
+		assertEquals("Chief Counselor", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(4, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void OutoftheHighAirsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GrimaTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -79,6 +85,6 @@ public class Card_10_017_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

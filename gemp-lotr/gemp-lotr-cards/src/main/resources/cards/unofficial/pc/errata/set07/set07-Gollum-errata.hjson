@@ -1,0 +1,71 @@
+{
+	57_54: {
+		cardInfo: {
+			//id: 57_54.1
+			parent: 7_54
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN07E054.1_card.jpg
+			collInfo: 7U54
+			rarity: U
+		}
+		title: Clever Hobbits
+		unique: false
+		side: Free Peoples
+		culture: Gollum
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: {
+			type: event
+			effect: [
+				{
+					type: ChooseActiveCards
+					text: Choose {Gollum} cards
+					count: any
+					select: choose(culture(gollum),condition)
+					memorize: chosenCards
+				}
+				{
+					type: modifyStrength
+					select: choose(name(Sméagol))
+					amount: {
+						type: forEachInMemory
+						memory: chosenCards
+						multiplier: 3
+					}
+					memorize: chosenSmeagol
+				}
+				{
+					type: addKeyword
+					select: memory(chosenSmeagol)
+					keyword: damage
+					amount: {
+						type: forEachInMemory
+						memory: chosenCards
+					}
+				}
+				{
+					type: discard
+					select: all(memory(chosenCards),side(freeps))
+					count: any
+				}
+				{
+					type: hinder
+					select: all(memory(chosenCards),side(shadow))
+					count: any
+				}
+			]
+		}
+		gametext: Spot any number of [gollum] conditions. Make Smeagol strength +3 and damage +1 for each condition spotted. Discard each of yours spotted and hinder each of your opponent's spotted. 
+		lore: "'Clever hobbits to climb so high, very clever hobbits!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

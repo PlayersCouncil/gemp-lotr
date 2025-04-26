@@ -41,8 +41,8 @@ public class Card_10_011_ErrataTests
 		 * Subtype: Elf
 		 * Strength: 3
 		 * Vitality: 3
-		 * Game Text: When Galadriel is in your starting fellowship, her twilight cost is –3.
-		* 	Regroup: Discard an [elven] event from hand to discard a Shadow condition or Shadow possession (limit once per phase).
+		 * Resistance: 6
+		 * Game Text: <b>Fellowship</b> <i>or</i> <b>Regroup</b>: Discard an [elven] event from hand to hinder a Shadow condition or possession.
 		*/
 
 		var scn = GetScenario();
@@ -59,6 +59,7 @@ public class Card_10_011_ErrataTests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
@@ -69,6 +70,17 @@ public class Card_10_011_ErrataTests
 
 		var card = scn.GetFreepsCard("card");
 		scn.FreepsMoveCardToHand(card);
+		scn.FreepsMoveCharToTable(card);
+		scn.FreepsMoveCardToSupportArea(card);
+		scn.FreepsMoveCardToDiscard(card);
+		scn.FreepsMoveCardsToTopOfDeck(card);
+
+		//var card = scn.GetShadowCard("card");
+		scn.ShadowMoveCardToHand(card);
+		scn.ShadowMoveCharToTable(card);
+		scn.ShadowMoveCardToSupportArea(card);
+		scn.ShadowMoveCardToDiscard(card);
+		scn.ShadowMoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);

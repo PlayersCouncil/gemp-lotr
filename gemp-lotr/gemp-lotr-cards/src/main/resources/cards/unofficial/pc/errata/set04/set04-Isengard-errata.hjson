@@ -95,6 +95,72 @@
 			}
 		}
 	}
+	
+	54_154: {
+		cardInfo: {
+			//id: 54_154.1
+			parent: 4_154
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN04E154.1_card.jpg
+			collInfo: 4R154
+			rarity: R
+		}
+		title: Grima
+		subtitle: Wormtongue
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 4
+		vitality: 3
+		site: 3
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: If
+					check: {
+						type: canSpot
+						filter: unbound,companion,hasAttachedCount(3,any)
+					}
+					true: [
+						{
+							type: chooseActiveCards
+							text: Choose unbound companion to hinder cards on
+							select: choose(unbound,companion,hasAttachedCount(3,any))
+							memorize: chosenCompanion
+						}
+						{
+							type: Hinder
+							select: all(attachedTo(memory(chosenCompanion)),side(free))
+						}
+					]
+					false: {
+						type: Hinder
+						select: choose(attachedTo(unbound,companion),possession)
+					}
+				}
+			}
+		]
+		gametext: Maneuver: Exert Grima to hinder a possession borne by an unbound companion (or all Free Peoples cards borne by that companion if they are bearing 3 or more cards).
+		lore: "'I care for you and yours as best I may. But do not weary yourself, or tax too heavily your strength.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 
 	54_192: {
 		cardInfo: {

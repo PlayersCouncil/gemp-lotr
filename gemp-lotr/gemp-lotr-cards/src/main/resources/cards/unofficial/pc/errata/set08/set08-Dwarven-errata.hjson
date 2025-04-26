@@ -55,4 +55,99 @@
 			}
 		}
 	}
+	
+	58_3: {
+		cardInfo: {
+			//id: 58_3.1
+			parent: 8_3
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN08E003.1_card.jpg
+			collInfo: 8R3
+			rarity: R
+		}
+		title: Blood Runs Chill
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(dwarf,damage,CanExert,MinVitality(3))
+				times: 2
+				memorize: exertedDwarf
+			},
+			effect: [
+				{
+					type: Repeat
+					times: {
+						type: forEachKeywordOnCardInMemory
+						memory: exertedDwarf
+						keyword: damage
+						limit: {
+							type: ForEachYouCanSpot
+							filter: culture(dwarven), companion
+						}
+					}
+					effect: [
+						{
+							type: ChooseActiveCards
+							text: Choose Shadow card to hinder or exert
+							count: 1
+							player: Shadow
+							select: choose(side(shadow))
+							memorize: chosenCard
+						}
+						{
+							type: If
+							check: {
+								type: MemoryMatches
+								memory: chosenCard
+								filter: canExert, minion
+							}
+							true: {
+								type: Choice
+								player: Shadow
+								texts: [
+									Exert {chosenCard}
+									Hinder {chosenCard}
+								]
+								effects: [
+									{
+										type: Exert
+										player: Shadow
+										select: memory(chosenCard)
+									}
+									{
+										type: Hinder
+										player: Shadow
+										select: memory(chosenCard)
+									}
+								]
+							}
+							false: {
+								type: Hinder
+								player: Shadow
+								select: memory(chosenCard)
+							}
+						}
+					]
+				}
+			]
+		}
+		gametext: Spot a Dwarf who is damage +X and exert that Dwarf twice to make an opponent hinder or exert X Shadow cards. X is limited to the number of [dwarven] companions you can spot.
+		lore: "...the Dark Door gaped before them like the mouth of night."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 }

@@ -1,4 +1,78 @@
 {
+	
+	57_35: {
+		cardInfo: {
+			//id: 57_35.1
+			parent: 7_35
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN07E035.1_card.jpg
+			collInfo: 7U35
+			rarity: U
+		}
+		title: Fool's Hope
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		timewords: Fellowship
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			cost: {
+				type: discardFromHand
+				forced: false
+				count: any
+				memorize: discardedCards
+			},
+			effect: [
+				{
+					type: MemorizeNumber
+					amount: {
+						type: forEachInMemory
+						memory: discardedCards
+					}
+					memory: discardedCount
+				}
+				{
+					type: Choice
+					player: Shadow
+					texts: [
+						Discard {discardedCount} Shadow conditions
+						Make your opponent hinder {discardedCount} of your Shadow conditions
+					]
+					effects: [
+						{
+							type: Discard
+							player: Shadow
+							count: memory(discardedCount)
+							select: choose(side(Shadow),condition)
+						}
+						{
+							type: Hinder
+							player: Free Peoples
+							count: memory(discardedCount)
+							select: choose(side(Shadow),condition)
+						}
+					]
+				}
+			]
+		}
+		gametext: Spot Gandalf and discard X cards from hand to make an opponent choose to discard X Shadow conditions or make you hinder X Shadow conditions.
+		lore: "'There never was much hope....'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 
 	57_49: {
 		cardInfo: {

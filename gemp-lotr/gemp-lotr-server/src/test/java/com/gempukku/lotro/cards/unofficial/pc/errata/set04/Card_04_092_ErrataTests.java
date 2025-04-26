@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set10;
+package com.gempukku.lotro.cards.unofficial.pc.errata.set04;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_10_017_ErrataTests
+public class Card_04_092_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "60_17");
+					put("card", "54_92");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,37 +28,39 @@ public class Card_10_017_ErrataTests
 	}
 
 	@Test
-	public void OutoftheHighAirsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GrownSuddenlyTallStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		 * Set: 10
-		 * Name: Out of the High Airs
+		 * Set: 4
+		 * Name: Grown Suddenly Tall
 		 * Unique: False
 		 * Side: Free Peoples
 		 * Culture: Gandalf
-		 * Twilight Cost: 3
+		 * Twilight Cost: 0
 		 * Type: Event
-		 * Subtype: Response
-		 * Game Text: If the fellowship moves during the regroup phase, exert your Wizard X times to hinder X minions.
+		 * Subtype: Fellowship
+		 * Game Text: <b>Spell</b>.
+		* 	Spot Gandalf to hinder all conditions.  Add (1) for each Shadow condition hindered (limit (5)).
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Out of the High Airs", card.getBlueprint().getTitle());
+		assertEquals("Grown Suddenly Tall", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertTrue(scn.hasTimeword(card, Timeword.FELLOWSHIP));
+		assertTrue(scn.hasKeyword(card, Keyword.SPELL));
+		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void OutoftheHighAirsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GrownSuddenlyTallTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -79,6 +81,6 @@ public class Card_10_017_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 	}
 }

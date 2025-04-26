@@ -1,0 +1,48 @@
+{
+	56_8: {
+		cardInfo: {
+			//id: 56_8.1
+			parent: 6_8
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN06E008.1_card.jpg
+			collInfo: 6U8
+			rarity: U
+		}
+		title: Too Long Have These Peasants Stood
+		unique: false
+		side: Shadow
+		culture: Dunland
+		twilight: 2
+		type: Event
+		timewords: Response
+		effects: {
+			type: responseEvent
+			trigger: {
+				type: winsSkirmish
+				filter: culture(dunland),man
+			}
+			effect: [
+				{
+					type: discard
+					count: 2
+					select: choose(side(freeps), condition)
+				}
+				{
+					type: hinder
+					select: all(condition)
+				}
+			]
+		}
+		gametext: If a [dunland] Man wins a skirmish, discard 2 Free Peoples conditions and then hinder all conditions.
+		lore: "The rabble of Dunland pillaged their way across the Mark."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+}

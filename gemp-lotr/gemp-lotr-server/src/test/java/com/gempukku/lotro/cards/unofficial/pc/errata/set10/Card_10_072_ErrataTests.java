@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_10_017_ErrataTests
+public class Card_10_072_ErrataTests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "60_17");
+					put("card", "60_72");
 					// put other cards in here as needed for the test case
 				}},
 				GenericCardTestHelper.FellowshipSites,
@@ -28,37 +28,45 @@ public class Card_10_017_ErrataTests
 	}
 
 	@Test
-	public void OutoftheHighAirsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EowynStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 10
-		 * Name: Out of the High Airs
-		 * Unique: False
+		 * Name: Eowyn, Lady of Ithilien
+		 * Unique: True
 		 * Side: Free Peoples
-		 * Culture: Gandalf
-		 * Twilight Cost: 3
-		 * Type: Event
-		 * Subtype: Response
-		 * Game Text: If the fellowship moves during the regroup phase, exert your Wizard X times to hinder X minions.
+		 * Culture: Rohan
+		 * Twilight Cost: 2
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 6
+		 * Vitality: 3
+		 * Resistance: 6
+		 * Signet: Gandalf
+		 * Game Text: Skirmish: Exert Eowyn to make an opponent wound or hinder a minion for each wound on each minion skirmishing Eowyn.
 		*/
 
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
 
-		assertEquals("Out of the High Airs", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals("Eowyn", card.getBlueprint().getTitle());
+		assertEquals("Lady of Ithilien", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(3, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
 	//@Test
-	public void OutoftheHighAirsTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EowynTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -79,6 +87,6 @@ public class Card_10_017_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 	}
 }

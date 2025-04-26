@@ -61,6 +61,72 @@
 		}
 	}
 	
+	55_51: {
+		cardInfo: {
+			//id: 55_51.1
+			parent: 5_51
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 1
+			image: errata/LOTR-EN05E051.1_card.jpg
+			collInfo: 5R51
+			rarity: R
+		}
+		title: Grima
+		subtitle: Chief Counselor
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 4
+		vitality: 3
+		site: 3
+		effects: [
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: If
+					check: {
+						type: canSpotFPCultures
+						amount: 4
+					}
+					true: [
+						{
+							type: chooseActiveCards
+							text: Choose unbound companion to hinder cards on
+							select: choose(unbound,companion,hasAttachedCount(3,any))
+							memorize: chosenCompanion
+						}
+						{
+							type: Hinder
+							select: all(attachedTo(memory(chosenCompanion)),side(free))
+						}
+					]
+					false: {
+						type: Hinder
+						select: choose(attachedTo(unbound,companion),condition)
+					}
+				}
+			}
+		]
+		gametext: Maneuver: Exert Grima to hinder a condition borne by an unbound companion (or hinder that companion and all Free Peoples cards they bear if you can spot 4 Free Peoples cultures).
+		lore: "'I care for you and yours as best I may.... Let others deal with these irksome guests.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+	
 	55_57: {
 		cardInfo: {
 			//id: 5_57.1
