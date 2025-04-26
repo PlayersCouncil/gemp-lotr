@@ -1289,4 +1289,9 @@ public class HinderTests
     public void HinderedSiteDoesNotCountAsControlled() throws DecisionResultInvalidException, CardNotFoundException {
 
     }
+
+    //@Test
+    public void BearerCannotBeUsedIfBearerIsHindered() throws DecisionResultInvalidException, CardNotFoundException {
+
+    }
 }
