@@ -130,7 +130,7 @@
 		]
 	}
 	{
-		name: (R)Movie Random
+		name: (R)Movie Random - Booster
 		type: random
 		items: [
 			1xFotR - Booster
@@ -145,7 +145,7 @@
 		]
 	}
 	{
-		name: (R)Expanded Random
+		name: (R)Expanded Random - Booster
 		type: random
 		items: [
 			1xSH - Booster
