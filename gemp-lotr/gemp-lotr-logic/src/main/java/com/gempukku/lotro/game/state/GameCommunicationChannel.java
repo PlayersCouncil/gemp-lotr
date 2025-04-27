@@ -144,6 +144,15 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
     }
 
     @Override
+    public void cardsFlipped(Collection<PhysicalCard> cards, boolean down) {
+        appendEvent(new GameEvent(FLIP_CARDS_IN_PLAY)
+                .otherCardIds(getCardIds(cards))
+                .hindered(down)
+        );
+    }
+
+
+    @Override
     public void cardsRemoved(String playerPerforming, Collection<PhysicalCard> cards) {
         Set<PhysicalCard> removedCardsVisibleByPlayer = new HashSet<>();
         for (PhysicalCard card : cards) {

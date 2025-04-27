@@ -145,11 +145,11 @@ var GempLotrGameUI = Class.extend({
             });
             slowerBut.click(
                 function () {
-                    that.animations.replaySpeed = Math.min(2, that.animations.replaySpeed + 0.2);
+                    that.animations.replaySpeed = Math.min(5, that.animations.replaySpeed + 0.5);
                 });
             fasterBut.click(
                 function () {
-                    that.animations.replaySpeed = Math.max(0.2, that.animations.replaySpeed - 0.2);
+                    that.animations.replaySpeed = Math.max(0.25, that.animations.replaySpeed - 0.5);
                 });
             replayDiv.append(slowerBut);
             replayDiv.append(fasterBut);
@@ -1282,6 +1282,8 @@ var GempLotrGameUI = Class.extend({
             this.animations.putCardInPlay(gameEvent, animate);
         } else if (eventType == "MCIP") {
             this.animations.moveCardInPlay(gameEvent, animate);
+        } else if (eventType == "FCIP") {
+            this.animations.flipCardsInPlay(gameEvent, animate);
         } else if (eventType == "P") {
             this.participant(gameEvent);
         } else if (eventType == "RCFP") {
@@ -1874,7 +1876,7 @@ var GempLotrGameUI = Class.extend({
     },
 
     createCardDiv: function (card, text) {
-        var cardDiv = Card.CreateCardDiv(card.imageUrl, card.testingText, text, card.isFoil(), true, false, card.hasErrata(), card.incomplete);
+        var cardDiv = Card.CreateCardDiv(card.getVisibleFace(), card.testingText, text, card.isFoil(), true, false, card.hasErrata(), card.incomplete);
 
         cardDiv.data("card", card);
 

@@ -994,7 +994,7 @@ var PCCards = {
 	// Fool's Hope (7U35) [Errata]
 	'57_35'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN07E035.1_card.jpg',
 	// Out of the High Airs (10R17) [Errata]
-	'60_17'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E017.1_card.jpg',
+	'60_17'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN10E017.2_card.jpg',
 	// Too Long Have These Peasants Stood (6U8) [Errata]
 	'56_8'   : 'https://i.lotrtcgpc.net/errata/LOTR-EN06E008.1_card.jpg',
 	// Saruman's Power (1U136) [Errata]

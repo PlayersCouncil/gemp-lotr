@@ -868,14 +868,26 @@ public class GameState {
         removeTokens(card, Token.WOUND, 1);
     }
 
-    public void hinder(PhysicalCard card) {
-        card.setFlipped(true);
+    public void hinder(Collection<PhysicalCard> cards) {
+        for(var card : cards) {
+            card.setFlipped(true);
+        }
+
+        for (GameStateListener listener : getAllGameStateListeners()) {
+            listener.cardsFlipped(cards, true);
+        }
         //TODO: check if card should stop affecting?  figure out how to manage that.
 
     }
 
-    public void restore(PhysicalCard card) {
-        card.setFlipped(false);
+    public void restore(Collection<PhysicalCard> cards) {
+        for(var card : cards) {
+            card.setFlipped(false);
+        }
+
+        for (GameStateListener listener : getAllGameStateListeners()) {
+            listener.cardsFlipped(cards, false);
+        }
         //TODO: check if card should stop affecting?  figure out how to manage that.
 
     }

@@ -498,8 +498,8 @@ public class GenericCardTestHelper extends AbstractAtTest {
     }
 
     public boolean IsHindered(PhysicalCardImpl card) { return hasKeyword(card, Keyword.HINDERED); }
-    public void HinderCard(PhysicalCardImpl card) {  _game.getGameState().hinder(card); }
-    public void RestoreCard(PhysicalCardImpl card) {  _game.getGameState().restore(card); }
+    public void HinderCard(PhysicalCardImpl card) {  _game.getGameState().hinder(Collections.singletonList(card)); }
+    public void RestoreCard(PhysicalCardImpl card) {  _game.getGameState().restore(Collections.singletonList(card)); }
 
     public int FreepsGetWoundsOn(String cardName) { return GetWoundsOn(GetFreepsCard(cardName)); }
     public int ShadowGetWoundsOn(String cardName) { return GetWoundsOn(GetShadowCard(cardName)); }

@@ -17,7 +17,7 @@ public class GameEvent {
     public enum Type {
         PARTICIPANTS("P"), GAME_PHASE_CHANGE("GPC"), TURN_CHANGE("TC"), PLAYER_POSITION("PP"),
         TWILIGHT_POOL_UPDATE("TP"),
-        PUT_CARD_INTO_PLAY("PCIP"), MOVE_CARD_IN_PLAY("MCIP"), REMOVE_CARD_FROM_PLAY("RCFP"),
+        PUT_CARD_INTO_PLAY("PCIP"), MOVE_CARD_IN_PLAY("MCIP"), FLIP_CARDS_IN_PLAY("FCIP"), REMOVE_CARD_FROM_PLAY("RCFP"),
         ADD_ASSIGNMENT("AA"), REMOVE_ASSIGNMENT("RA"),
         START_SKIRMISH("SS"), REMOVE_FROM_SKIRMISH("RFS"), ADD_TO_SKIRMISH("ATS"), END_SKIRMISH("ES"),
         ADD_TOKENS("AT"), REMOVE_TOKENS("RT"),
@@ -54,6 +54,7 @@ public class GameEvent {
     private String _phase;
     private Integer _count;
     private Token _token;
+    private Boolean _hindered;
     private int[] _otherCardIds;
     private Map<String, LotroDeck> _decks;
     private GameStats _gameStats;
@@ -111,6 +112,14 @@ public class GameEvent {
 
     public GameEvent zone(Zone zone) {
         _zone = zone;
+        return this;
+    }
+
+    public Boolean getHindered() {
+        return _hindered;
+    }
+    public GameEvent hindered(boolean hindered) {
+        _hindered = hindered;
         return this;
     }
 
@@ -205,7 +214,11 @@ public class GameEvent {
     }
 
     public GameEvent card(PhysicalCard physicalCard) {
-        GameEvent gameEvent = cardId(physicalCard.getCardId()).blueprintId(physicalCard.getBlueprintId()).participantId(physicalCard.getOwner()).zone(physicalCard.getZone());
+        GameEvent gameEvent = cardId(physicalCard.getCardId())
+                .blueprintId(physicalCard.getBlueprintId())
+                .participantId(physicalCard.getOwner())
+                .zone(physicalCard.getZone())
+                .hindered(physicalCard.isFlipped());
         if (physicalCard.getCardController() != null)
             gameEvent = gameEvent.controllerId(physicalCard.getCardController());
         PhysicalCard attachedTo = physicalCard.getAttachedTo();
