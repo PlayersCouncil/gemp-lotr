@@ -56,8 +56,9 @@ public class HinderCardsInPlayEffect extends AbstractPreventableCardEffect {
             game.getGameState().sendMessage(_sourceText + " hinders " + getAppendedNames(cards));
         }
 
+        game.getGameState().hinder(cards);
+
         for (var card : cards) {
-            game.getGameState().hinder(card);
             game.getActionsEnvironment().emitEffectResult(new HinderedResult(_source, card));
         }
     }

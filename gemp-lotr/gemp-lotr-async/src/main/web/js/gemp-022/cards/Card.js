@@ -1,5 +1,6 @@
 class Card {
     blueprintId = null;
+    backsideBPId = null;
     bareBlueprint = null;
     foil = null;
     alternateImage = null;
@@ -20,18 +21,25 @@ class Card {
     owner = null;
     attachedCards = null;
     locationIndex = null;
+    flipped = false;
+    //Upside-down due to being owned by the opponent; not used in LOTR
     inverted = false;
+    //Upside-down due to being rotated by a card effect by 180 degrees; not used in LOTR
     upsideDown = false;
+    //Rotated by 90 degrees; not used in LOTR (yet)
     sideways = false;
+    //No idea what the difference between these two is
     onSide = false;
-    inBattle = false;
-    attackingInAttack = false;
-    defendingInAttack = false;
-    inDuelOrLightsaberCombat = false;
+    
+    //Used to render beta development text without requiring card images
     incomplete = null;
+    
+    //SWCCG-only statuses
     frozen = null;
     suspended = null;
     collapsed = null;
+    
+    static StandardBackId = "-1_1";
     
     static CardCache = {};
     static CardScale = 350 / 490;
@@ -99,10 +107,11 @@ class Card {
         return cached;
     }
 
-    //blueprintId, zone, cardId, owner, siteNumber
-    constructor (blueprintId, testingText, backSideTestingText, zone, cardId, owner, siteNumber, upsideDown, onSide) {
+    //blueprintId, zone, cardId, owner, siteNumber, flipped
+    constructor (blueprintId, testingText, backSideTestingText, zone, cardId, owner, siteNumber, flipped, upsideDown, onSide) {
         this.blueprintId = blueprintId;
         this.bareBlueprint = Card.StripBlueprintId(this.blueprintId);
+        this.backsideBPId = Card.getBackSideBlueprintId(this.blueprintId);
         
         this.foil = Card.GetFoil(blueprintId);
         this.alternateImage = Card.GetAlternateImage(blueprintId);
@@ -133,6 +142,7 @@ class Card {
         if (siteNumber !== undefined) {
             this.siteNumber = parseInt(siteNumber);
         }
+    
         this.inverted = false;
         if (upsideDown !== undefined) {
             this.upsideDown = upsideDown;
@@ -154,6 +164,8 @@ class Card {
         this.backSideImageUrl = cardFromCache.backSideImageUrl;
         this.incomplete = cardFromCache.incomplete;
         this.errata = cardFromCache.errata;
+        
+        this.flipOverCard(flipped);
     }
     
     static getFixedImage (blueprintId) {
@@ -172,32 +184,45 @@ class Card {
         return null;
     }
 
-    flipOverCard() {
-        this.bareBlueprint = Card.getBackSideBlueprintId(this.bareBlueprint);
-        this.horizontal = Card.isHorizontal(this.bareBlueprint, this.zone);
-        var tempText = this.testingText;
-        this.testingText = this.backSideTestingText;
-        this.backSideTestingText = tempText;
+    flipOverCard(facedown) {
+        this.flipped = facedown;
+        
+        $(".card:cardId(" + this.cardId + ") > img").attr('src', this.getVisibleFace());
+        
+        // var backBP = this.backsideBPId;
+        // this.horizontal = Card.isHorizontal(backBP, this.zone);
+        // var tempText = this.testingText;
+        // this.testingText = this.backSideTestingText;
+        // this.backSideTestingText = tempText;
 
-        if (this.bareBlueprint != "-1_1" && this.bareBlueprint != "-1_2" && Card.CardCache[this.bareBlueprint] != null) {
-            var cardFromCache = Card.CardCache[this.bareBlueprint];
-            this.imageUrl = cardFromCache.imageUrl;
-            this.backSideImageUrl = cardFromCache.backSideImageUrl;
-            this.incomplete = cardFromCache.incomplete;
-        } else {
-            this.imageUrl = Card.getImageUrl(this.bareBlueprint);
-            this.backSideImageUrl = Card.getBackSideUrl(this.bareBlueprint);
-            this.incomplete = Card.isIncomplete(this.bareBlueprint);
+        // if (this.bareBlueprint != "-1_1" && this.bareBlueprint != "-1_2" && Card.CardCache[this.bareBlueprint] != null) {
+        //     var cardFromCache = Card.CardCache[this.bareBlueprint];
+        //     this.imageUrl = cardFromCache.imageUrl;
+        //     this.backSideImageUrl = cardFromCache.backSideImageUrl;
+        //     this.incomplete = cardFromCache.incomplete;
+        // } else {
+        //     this.imageUrl = Card.getImageUrl(this.bareBlueprint);
+        //     this.backSideImageUrl = Card.getBackSideUrl(this.bareBlueprint);
+        //     this.incomplete = Card.isIncomplete(this.bareBlueprint);
 
-            if (this.bareBlueprint != "-1_1" && this.bareBlueprint != "-1_2") {
-                Card.CardCache[this.bareBlueprint] = {
-                    imageUrl:this.imageUrl,
-                    backSideImageUrl:this.backSideImageUrl,
-                    incomplete:this.incomplete
-                };
-            }
+        //     if (this.bareBlueprint != "-1_1" && this.bareBlueprint != "-1_2") {
+        //         Card.CardCache[this.bareBlueprint] = {
+        //             imageUrl:this.imageUrl,
+        //             backSideImageUrl:this.backSideImageUrl,
+        //             incomplete:this.incomplete
+        //         };
+        //     }
+        // }
+        
+    }
+    
+    getVisibleFace() {
+        if(this.flipped) {
+            return this.backSideImageUrl;
         }
-        $(".card:cardId(" + this.cardId + ") > img").attr('src', this.imageUrl);
+        else {
+            return this.imageUrl;
+        }
     }
 
     turnCardOver(tempBlueprintId) {
@@ -398,20 +423,17 @@ class Card {
     }
 
     static getBackSideBlueprintId(blueprintId) {
-        if (blueprintId.endsWith("_BACK")) {
-            return blueprintId.substring(0, blueprintId.length - 5);
-        }
-        var backSideUrl = Card.getImageUrl(blueprintId.concat("_BACK"));
-        if (backSideUrl != null) {
-            return blueprintId.concat("_BACK");
-        }
-        var genericBackUrl = Card.getImageUrl(blueprintId);
-        if (genericBackUrl != null) {
-            if (Card.getImageUrl(blueprintId).includes("-Dark/"))
-                    return "-1_2";
-                else
-                    return "-1_1";
-        }
+        // if (blueprintId.endsWith("_BACK")) {
+        //     return blueprintId.substring(0, blueprintId.length - 5);
+        // }
+        // var backSideUrl = Card.getImageUrl(blueprintId.concat("_BACK"));
+        // if (backSideUrl != null) {
+        //     return blueprintId.concat("_BACK");
+        // }
+        // var genericBackUrl = Card.getImageUrl(blueprintId);
+        // if (genericBackUrl != null) {
+            return Card.StandardBackId;
+        //}
     }
 
     static getBackSideUrl(blueprintId) {

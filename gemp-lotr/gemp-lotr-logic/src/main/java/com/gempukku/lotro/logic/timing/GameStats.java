@@ -8,9 +8,7 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.PlayerOrder;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GameStats {
     private Integer wearingRing;
@@ -38,6 +36,7 @@ public class GameStats {
     private Map<Integer, Integer> _charVitalities = new HashMap<>();
     private Map<Integer, Integer> _siteNumbers = new HashMap<>();
     private Map<Integer, String> _charResistances = new HashMap<>();
+    private Set<Integer> _hinderedStatus = new HashSet<>();
 
     /**
      * @return If the stats have changed
@@ -166,6 +165,7 @@ public class GameStats {
         Map<Integer, Integer> newCharVitalities = new HashMap<>();
         Map<Integer, Integer> newSiteNumbers = new HashMap<>();
         Map<Integer, String> newCharResistances = new HashMap<>();
+        Set<Integer> newHindered = new HashSet<>();
         for (PhysicalCard character : Filters.filterActive(game, Filters.or(CardType.COMPANION, CardType.ALLY, CardType.MINION))) {
             newCharStrengths.put(character.getCardId(), game.getModifiersQuerying().getStrength(game, character));
             newCharVitalities.put(character.getCardId(), game.getModifiersQuerying().getVitality(game, character));
@@ -194,6 +194,12 @@ public class GameStats {
             }
         }
 
+        for(var card : game.getGameState().getAllCards()) {
+            if(card.isFlipped()) {
+                newHindered.add(card.getCardId());
+            }
+        }
+
         if (!newCharStrengths.equals(_charStrengths)) {
             changed = true;
             _charStrengths = newCharStrengths;
@@ -212,6 +218,11 @@ public class GameStats {
         if (!newCharResistances.equals(_charResistances)) {
             changed = true;
             _charResistances = newCharResistances;
+        }
+
+        if (!newHindered.equals(_hinderedStatus)) {
+            changed = true;
+            _hinderedStatus = newHindered;
         }
 
         Map<String, Integer> newThreats = new HashMap<>();
@@ -294,6 +305,9 @@ public class GameStats {
     public Map<Integer, String> getCharResistances() {
         return _charResistances;
     }
+    public Set<Integer> getHindered() {
+        return _hinderedStatus;
+    }
 
     public GameStats makeACopy() {
         GameStats copy = new GameStats();
@@ -315,6 +329,7 @@ public class GameStats {
         copy._charVitalities = _charVitalities;
         copy._siteNumbers = _siteNumbers;
         copy._charResistances = _charResistances;
+        copy._hinderedStatus = _hinderedStatus;
         return copy;
     }
 }

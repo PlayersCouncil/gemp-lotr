@@ -15,6 +15,7 @@ public interface GameStateListener {
     void cardCreated(PhysicalCard card, boolean overridePlayerVisibility);
 
     void cardMoved(PhysicalCard card);
+    void cardsFlipped(Collection<PhysicalCard> cards, boolean down);
 
     void cardsRemoved(String playerPerforming, Collection<PhysicalCard> cards);
 
