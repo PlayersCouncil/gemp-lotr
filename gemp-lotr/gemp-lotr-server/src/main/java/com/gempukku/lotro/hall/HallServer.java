@@ -555,10 +555,11 @@ public class HallServer extends AbstractServer {
                 if (tournament.getInfo().Parameters().requiresDeck) {
                     lotroDeck = validateUserAndDeck(_formatLibrary.getFormat(tournament.getFormatCode()), player, deckName, tournament.getCollectionType());
                 }
-
-                _tournamentService.recordTournamentPlayer(tournamentId, player.getName(), lotroDeck);
-                tournament.issuePlayerMaterial(player.getName());
-                result = "Joined tournament <b>" + tournament.getTournamentName() + "</b> successfully.";
+                if (_tournamentService.joinTournamentLate(tournamentId, player.getName(), lotroDeck)) {
+                    result = "Joined tournament <b>" + tournament.getTournamentName() + "</b> successfully.";
+                } else {
+                    result = "Joining tournament <b>" + tournament.getTournamentName() + "</b> failed.";
+                }
                 hallChanged();
             }
 
