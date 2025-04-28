@@ -73,11 +73,11 @@ public class TableDraftDefinitionHtmlBuilder {
         for (String card : notIncluded) {
             setCards.addItem(library.getBaseBlueprintId(card), 1);
         }
-        builder.append("<br/>");
         builder.append("<b>FP Cards:</b><br/>");
         for (CardCollection.Item item : sortAndFilterCards.process("side:FREE_PEOPLE sort:side,cardType,culture,name", setCards.getAll(), library, formatLibrary)) {
             builder.append(generateCardTooltip(item.getBlueprintId(), library)).append("<br/>");
         }
+        builder.append("<br/>");
         builder.append("<b>Shadow Cards:</b><br/>");
         for (CardCollection.Item item : sortAndFilterCards.process("side:SHADOW sort:side,cardType,culture,name", setCards.getAll(), library, formatLibrary)) {
             builder.append(generateCardTooltip(item.getBlueprintId(), library)).append("<br/>");
