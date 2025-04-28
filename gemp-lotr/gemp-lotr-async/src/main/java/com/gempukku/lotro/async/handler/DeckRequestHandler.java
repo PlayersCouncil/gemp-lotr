@@ -10,7 +10,7 @@ import com.gempukku.lotro.db.DeckDAO;
 import com.gempukku.lotro.db.DeckSerialization;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
-import com.gempukku.lotro.draft3.timer.DraftTimerFactory;
+import com.gempukku.lotro.draft3.timer.DraftTimer;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.league.SealedEventDefinition;
@@ -120,7 +120,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                 data.TableDraftTemplates = _tableDraftDefinitions.getAllTableDrafts().stream()
                         .map(tableDraftDefinition -> new JSONDefs.ItemStub(tableDraftDefinition.getCode(), tableDraftDefinition.getName()))
                         .collect(Collectors.toMap(itemStub -> itemStub.name, itemStub -> itemStub));
-                data.TableDraftTimerTypes = DraftTimerFactory.getAllTypes();
+                data.TableDraftTimerTypes = DraftTimer.getAllTypes();
 
                 json = JsonUtils.Serialize(data);
             }

@@ -409,6 +409,7 @@ var ChatBoxUI = Class.extend({
                     if(this.tournamentCallback) {
                         this.tournamentCallback(from, text);
                     }
+                    from = "TournamentSystem";
                 }
                 var prefix = "<div class='msg-identifier'>";
                 if (this.showTimestamps) {

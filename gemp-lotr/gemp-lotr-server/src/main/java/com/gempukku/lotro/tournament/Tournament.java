@@ -206,6 +206,7 @@ public interface Tournament {
     TournamentInfo getInfo();
 
     boolean isJoinable();
+    boolean join(String playerName, LotroDeck lotroDeck);
     long getSecondsRemaining() throws IllegalStateException;
     String getTableDescription();
 }

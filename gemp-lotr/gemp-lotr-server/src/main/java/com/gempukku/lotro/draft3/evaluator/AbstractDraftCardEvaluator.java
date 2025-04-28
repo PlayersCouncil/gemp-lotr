@@ -1,11 +1,14 @@
 package com.gempukku.lotro.draft3.evaluator;
 
+import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class AbstractDraftCardEvaluator {
@@ -29,7 +32,29 @@ public abstract class AbstractDraftCardEvaluator {
 
 
     // This is what bots pick according to
-    public final Map<String, Double> getValuesMap(Map<String, Integer> winningMap, Map<String, Integer> losingMap, int gamesAnalyzed) {
+    public Map<String, Double> getValuesMap(Map<String, Integer> winningMap, Map<String, Integer> losingMap, int gamesAnalyzed) {
+        // Remove sites from value maps
+        Set<String> sitesToRemove = new HashSet<>();
+        winningMap.keySet().stream().filter(s -> {
+            try {
+                return library.getLotroCardBlueprint(s).getCardType().equals(CardType.SITE);
+            } catch (CardNotFoundException e) {
+                return false;
+            }
+        }).forEach(sitesToRemove::add);
+        losingMap.keySet().stream().filter(s -> {
+            try {
+                return library.getLotroCardBlueprint(s).getCardType().equals(CardType.SITE);
+            } catch (CardNotFoundException e) {
+                return false;
+            }
+        }).forEach(sitesToRemove::add);
+        sitesToRemove.forEach(siteKey -> {
+            winningMap.remove(siteKey);
+            losingMap.remove(siteKey);
+        });
+
+
         // Merge win and lose maps (they are kept separate for potential wr info)
         Map<String, Integer> mergedMap = mergeMaps(winningMap, losingMap);
 
@@ -54,7 +79,7 @@ public abstract class AbstractDraftCardEvaluator {
         return shiftedMap;
     }
 
-    private static Map<String, Integer> mergeMaps(Map<String, Integer> map1, Map<String, Integer> map2) {
+    static Map<String, Integer> mergeMaps(Map<String, Integer> map1, Map<String, Integer> map2) {
         Map<String, Integer> result = new HashMap<>(map1);
 
         map2.forEach((key, value) -> result.merge(key, value, Integer::sum));
@@ -62,7 +87,7 @@ public abstract class AbstractDraftCardEvaluator {
         return result;
     }
 
-    private Map<String, Double> normalizeCountByDraftPackChance(Map<String, Integer> map, int gamesAnalyzed) {
+    Map<String, Double> normalizeCountByDraftPackChance(Map<String, Integer> map, int gamesAnalyzed) {
         Map<String, Double> normalizedMap = new HashMap<>();
 
         map.forEach((key, value) -> {
@@ -155,7 +180,7 @@ public abstract class AbstractDraftCardEvaluator {
         return fpInflatedMap;
     }
 
-    private Map<String, Double> shift(Map<String, Double> map) {
+    Map<String, Double> shift(Map<String, Double> map) {
         double min = map.values().stream().min(Double::compareTo).orElse(0.0);
 
         double positiveShift;
