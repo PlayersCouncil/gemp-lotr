@@ -145,7 +145,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         Document doc = documentBuilder.newDocument();
         Element tournaments = doc.createElement("tournaments");
 
-        for (Tournament tournament : _tournamentService.getOldTournaments(ZonedDateTime.now().minus(RecentTournamentDuration))) {
+        for (Tournament tournament : _tournamentService.getOldTournaments(ZonedDateTime.now().minus(RecentTournamentDuration)).reversed()) {
             Element tournamentElem = doc.createElement("tournament");
 
             tournamentElem.setAttribute("id", tournament.getTournamentId());
@@ -155,6 +155,10 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             tournamentElem.setAttribute("round", String.valueOf(tournament.getCurrentRound()));
             tournamentElem.setAttribute("stage", tournament.getTournamentStage().getHumanReadable());
 
+            if (tournament.getTournamentStage().equals(Tournament.Stage.FINISHED) && tournament.getCurrentRound() == 0) {
+                // do NOT include past tournaments with 0 games played (for example draft of one player against bots)
+                continue;
+            }
             tournaments.appendChild(tournamentElem);
         }
 

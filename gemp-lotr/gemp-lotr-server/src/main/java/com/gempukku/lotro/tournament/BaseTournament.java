@@ -536,4 +536,26 @@ public abstract class BaseTournament implements Tournament {
     public String getTableDescription() {
         return null;
     }
+
+    @Override
+    public boolean join(String playerName, LotroDeck lotroDeck) {
+        // Assumes the deck is validated for the tournament or null if the tournament is limited
+        writeLock.lock();
+        try {
+            if (!isJoinable()) {
+                return false;
+            }
+
+            if (_players.contains(playerName)) {
+                return false;
+            }
+            _tournamentService.recordTournamentPlayer(_tournamentId, playerName, lotroDeck);
+            issuePlayerMaterial(playerName);
+            _players.add(playerName);
+            regeneratePlayerList();
+            return true;
+        } finally {
+            writeLock.unlock();
+        }
+    }
 }

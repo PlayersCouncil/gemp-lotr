@@ -332,6 +332,15 @@ public class TournamentService {
         _tournamentPlayerDao.addPlayer(tournamentId, playerName, deck);
     }
 
+    public boolean joinTournamentLate(String tournamentId, String playerName, LotroDeck deck) {
+        // Assumes the deck is validated for the tournament or null if the tournament is limited
+        Tournament tournament = getTournamentById(tournamentId);
+        if (tournament == null) {
+            return false;
+        }
+        return tournament.join(playerName, deck);
+    }
+
     public void recordPlayerTournamentAbandon(String tournamentId, String playerName) {
         _tournamentPlayerDao.dropPlayer(tournamentId, playerName);
     }
