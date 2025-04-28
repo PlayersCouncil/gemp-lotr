@@ -9,7 +9,7 @@ import com.gempukku.lotro.draft.Draft;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.draft3.TableDraft;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
-import com.gempukku.lotro.draft3.timer.DraftTimerFactory;
+import com.gempukku.lotro.draft3.timer.DraftTimer;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.TableHolder;
 import com.gempukku.lotro.logic.vo.LotroDeck;
@@ -131,7 +131,7 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
     private void createTable() {
         // Create one table for all players and start
         if (table == null) {
-            table = _tableDraftLibrary.getTableDraftDefinition(tableDraftInfo.tableDraftParams.tableDraftFormatCode).getTableDraft(_collectionsManager, getCollectionType(), DraftTimerFactory.getDraftTimer(tableDraftInfo.tableDraftParams.draftTimerType));
+            table = _tableDraftLibrary.getTableDraftDefinition(tableDraftInfo.tableDraftParams.tableDraftFormatCode).getTableDraft(_collectionsManager, getCollectionType(), DraftTimer.get(tableDraftInfo.tableDraftParams.draftTimerType));
             for (String playerName : _players) {
                 table.registerPlayer(playerName);
             }

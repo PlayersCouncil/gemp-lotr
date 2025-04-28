@@ -841,7 +841,7 @@
 				}
 				effect: {
 					type: exert
-					count: 2
+					times: 2
 					select: all(ringBound,companion)
 				}
 			}
@@ -861,7 +861,7 @@
 				effect: {
 					type: exert
 					select: choose(ringBound,companion)
-					times: 2
+					times: 1
 				}
 			}
 		]
