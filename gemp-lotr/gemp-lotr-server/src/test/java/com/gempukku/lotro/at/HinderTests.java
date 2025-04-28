@@ -1294,4 +1294,31 @@ public class HinderTests
     public void BearerCannotBeUsedIfBearerIsHindered() throws DecisionResultInvalidException, CardNotFoundException {
 
     }
+
+    //@Test
+    public void HinderingAnAssignedMinionCancelsThatAssignment() throws DecisionResultInvalidException, CardNotFoundException {
+
+    }
+
+    //@Test
+    public void HinderingAnAssignedCompanionCancelsThatAssignment() throws DecisionResultInvalidException, CardNotFoundException {
+
+    }
+
+    //@Test
+    public void HinderingASkirmishingMinionEndsThatSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+
+    }
+
+    //@Test
+    public void HinderingASkirmishingCompanionEndsThatSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+
+    }
+
+    //@Test
+    public void HinderingACompanionMidAbilityAlsoCancelsTheAbility() throws DecisionResultInvalidException, CardNotFoundException {
+
+    }
+
+
 }
