@@ -229,11 +229,30 @@ public class TableDraftDefinitionHtmlBuilder {
                     <style>
                         body {
                             margin:50;
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            background-color: #f8f9fa;
+                            color: #212529;
+                            line-height: 1.6;
+                        }
+                        h1, h2 {
+                            color: #2c3e50;
+                            margin-top: 30px;
+                            border-bottom: 2px solid #dee2e6;
+                            padding-bottom: 5px;
+                        }
+                
+                        b {
+                            color: #343a40;
+                        }
+                         
+                        br {
+                            margin-bottom: 10px;
                         }
                         
                         .tooltip {
-                          border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-                          color:#0000FF;
+                          border-bottom: 1px dotted #0000ff;
+                          color: #0000ff;
+                          cursor: pointer;
                         }
                         
                         .tooltip span, .tooltip title {
