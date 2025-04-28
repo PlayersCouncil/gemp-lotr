@@ -583,13 +583,13 @@ public class HallServer extends AbstractServer {
                 var submitted = tournament.playerSubmittedDeck(player.getName(), lotroDeck);
 
                 if(submitted) {
-                    result = "Registered deck '" + deckName + "' with tournament <b>" + tournament.getTournamentName() + "</b> successfully."
-                            + "<br/><br/>If you make an update to your deck, you will need to register it here again for any changes to take effect.";
+                    result = "Registered deck '" + deckName + "' with tournament '" + tournament.getTournamentName() + "' successfully. "
+                            + "If you make an update to your deck, you will need to register it here again for any changes to take effect.";
                     _log.trace("Player '" + player.getName() + "' registered deck '" + deckName + "' for tournament '" + tournament.getTournamentName() + "' successfully.");
                 }
                 else {
-                    result = "Could not register deck with tournament <b>" + tournament.getTournamentName() + "</b>."
-                            + "<br/><br/>Please contact an administrator if you think this was in error.";
+                    result = "Could not register deck with tournament '" + tournament.getTournamentName() + "'. "
+                            + "Please contact an administrator if you think this was in error.";
 
                     _log.trace("Player '" + player.getName() + "' failed to register deck '" + deckName + "' for tournament '" + tournament.getTournamentName() + "'.");
                 }
