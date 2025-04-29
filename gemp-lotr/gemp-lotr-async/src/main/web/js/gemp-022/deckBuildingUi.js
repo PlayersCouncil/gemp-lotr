@@ -61,6 +61,8 @@ var GempLotrDeckBuildingUI = Class.extend({
 	cardInfoDialog: null,
 	
 	formats: null,
+	
+	lastCardId: 0,
 
 	init:function () {
 		var that = this;
@@ -68,6 +70,12 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.comm = new GempLotrCommunication("/gemp-lotr-server", that.processError);
 
 		this.collectionType = "default";
+		
+		$.expr[':'].cardId = function (obj, index, meta, stack) {
+            var cardIds = meta[3].split(",");
+            var cardData = $(obj).data("card");
+            return (cardData != null && ($.inArray(cardData.cardId, cardIds) > -1));
+        };
 		
 		this.cardFilter = new CardFilter($("#collectionDiv"),
 				function (filter, start, count, callback) {
@@ -1228,7 +1236,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 	addCardToCollection:function (type, blueprintId, count, side, contents) {
 		if (type == "pack") {
-			var card = new Card(blueprintId, null, null, "pack", "collection", "player");
+			var card = new Card(blueprintId, null, null, "pack", this.lastCardId++, "player");
 			card.tokens = {"count":count};
 			var cardDiv = Card.CreateCardDiv(card.imageUrl, null, null, false, true, true);
 			cardDiv.data("card", card);
@@ -1241,7 +1249,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 			}
 			this.normalCollectionDiv.append(cardDiv);
 		} else if (type == "card") {
-			var card = new Card(blueprintId, null, null, side, "collection", "player");
+			var card = new Card(blueprintId, null, null, side, this.lastCardId++, "player");
 			var countInDeck = 0;
 			$(".card", this.deckDiv).each(
 					function () {
