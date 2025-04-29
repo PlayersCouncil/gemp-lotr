@@ -868,7 +868,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 						var selection = selectedCardElem.data("selection");
 						var blueprintIds = selection.split("|");
 						for (var i = 0; i < blueprintIds.length; i++) {
-							var card = new Card(blueprintIds[i], null, null, "selection", "selection" + i, "player");
+							var card = new Card(blueprintIds[i], null, null, "selection", this.lastCardId++, "player");
 							var cardDiv = Card.CreateCardDiv(card.imageUrl, card.testingText, null, card.isFoil(), false, card.isPack(), card.hasErrata(), card.incomplete);
 							cardDiv.data("card", card);
 							cardDiv.addClass("cardToSelect");
@@ -978,7 +978,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 	},
 
 	addCardToContainer:function (blueprintId, zone, container, tokens) {
-		var card = new Card(blueprintId, null, null, zone, "deck", "player");
+		var card = new Card(blueprintId, null, null, zone, this.lastCardId++, "player");
 		var cardDiv = Card.CreateCardDiv(card.imageUrl, card.testingText, null, card.isFoil(), tokens, card.isPack(), card.hasErrata(), card.incomplete);
 		cardDiv.data("card", card);
 		container.append(cardDiv);
