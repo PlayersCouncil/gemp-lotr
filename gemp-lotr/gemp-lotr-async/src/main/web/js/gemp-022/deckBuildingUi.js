@@ -69,12 +69,6 @@ var GempLotrDeckBuildingUI = Class.extend({
 
 		this.collectionType = "default";
 		
-		$.expr[':'].cardId = function (obj, index, meta, stack) {
-            var cardIds = meta[3].split(",");
-            var cardData = $(obj).data("card");
-            return (cardData != null && ($.inArray(cardData.cardId, cardIds) > -1));
-        };
-		
 		this.cardFilter = new CardFilter($("#collectionDiv"),
 				function (filter, start, count, callback) {
 					that.comm.getCollection(that.collectionType, filter, start, count, function (xml) {
