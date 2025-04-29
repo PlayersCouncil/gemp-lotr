@@ -21,7 +21,10 @@ public class StatModifiersRule {
                             @Override
                             public int evaluateExpression(LotroGame game, PhysicalCard cardAffected) {
                                 int sum = 0;
-                                for (PhysicalCard attachedCard : game.getGameState().getAttachedCards(cardAffected)) {
+                                var gameState = game.getGameState();
+                                for (PhysicalCard attachedCard : gameState.getAttachedCards(cardAffected)) {
+                                    if(gameState.isHindered(attachedCard))
+                                        continue;
                                     final int strength = attachedCard.getBlueprint().getStrength();
                                     if (strength <= 0 || modifiersLogic.appliesStrengthBonusModifier(game, attachedCard, cardAffected))
                                         sum += strength;
@@ -36,8 +39,12 @@ public class StatModifiersRule {
                             @Override
                             public int evaluateExpression(LotroGame game, PhysicalCard cardAffected) {
                                 int sum = 0;
-                                for (PhysicalCard attachedCard : game.getGameState().getAttachedCards(cardAffected))
+                                var gameState = game.getGameState();
+                                for (PhysicalCard attachedCard : gameState.getAttachedCards(cardAffected)) {
+                                    if (gameState.isHindered(attachedCard))
+                                        continue;
                                     sum += attachedCard.getBlueprint().getVitality();
+                                }
 
                                 return sum;
                             }
@@ -48,8 +55,12 @@ public class StatModifiersRule {
                             @Override
                             public int evaluateExpression(LotroGame game, PhysicalCard cardAffected) {
                                 int sum = 0;
-                                for (PhysicalCard attachedCard : game.getGameState().getAttachedCards(cardAffected))
+                                var gameState = game.getGameState();
+                                for (PhysicalCard attachedCard : gameState.getAttachedCards(cardAffected)) {
+                                    if (gameState.isHindered(attachedCard))
+                                        continue;
                                     sum += attachedCard.getBlueprint().getResistance();
+                                }
 
                                 return sum;
                             }
@@ -60,8 +71,12 @@ public class StatModifiersRule {
                             @Override
                             public int evaluateExpression(LotroGame game, PhysicalCard cardAffected) {
                                 int sum = 0;
-                                for (PhysicalCard attachedCard : game.getGameState().getAttachedCards(cardAffected))
+                                var gameState = game.getGameState();
+                                for (PhysicalCard attachedCard : gameState.getAttachedCards(cardAffected)) {
+                                    if (gameState.isHindered(attachedCard))
+                                        continue;
                                     sum += attachedCard.getBlueprint().getSiteNumber();
+                                }
 
                                 return sum;
                             }
