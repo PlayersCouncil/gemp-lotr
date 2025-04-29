@@ -35,13 +35,11 @@ var TournamentResultsUI = Class.extend({
             });
     },
 
-    loadedTournament:function (xml) {
+    loadedTournament:function (xml, targetDiv) {
         var that = this;
         log(xml);
         var root = xml.documentElement;
         if (root.tagName == 'tournament') {
-            $("#tournamentExtraInfo").html("");
-
             var tournament = root;
 
             var tournamentId = tournament.getAttribute("id");
@@ -51,16 +49,16 @@ var TournamentResultsUI = Class.extend({
             var tournamentRound = tournament.getAttribute("round");
             var tournamentStage = tournament.getAttribute("stage");
 
-            $("#tournamentExtraInfo").append("<div class='tournamentName'>" + tournamentName + "</div>");
-            
-            $("#tournamentExtraInfo").append("<div class='tournamentFormat'><b>Format:</b> " + tournamentFormat + "</div>");
-            $("#tournamentExtraInfo").append("<div class='tournamentCollection'><b>Collection:</b> " + tournamentCollection + "</div>");
+            targetDiv.append("<div class='tournamentFormat'><b>Format:</b> " + tournamentFormat + "</div>");
+            targetDiv.append("<div class='tournamentCollection'><b>Collection:</b> " + tournamentCollection + "</div>");
             if (tournamentStage == "Playing games")
-                $("#tournamentExtraInfo").append("<div class='tournamentRound'><b>Round:</b> " + tournamentRound + "</div>");
+                targetDiv.append("<div class='tournamentRound'><b>Round:</b> " + tournamentRound + "</div>");
 
             var standings = tournament.getElementsByTagName("tournamentStanding");
             if (standings.length > 0)
-                $("#tournamentExtraInfo").append(this.createStandingsTable(standings, tournamentId, tournamentStage));
+                targetDiv.append(this.createStandingsTable(standings, tournamentId, tournamentStage));
+
+            targetDiv.show();
         }
     },
 
@@ -90,22 +88,25 @@ var TournamentResultsUI = Class.extend({
                 $("#tournamentResults").append("<div class='tournamentRound'><b>Rounds:</b> " + tournamentRound + "</div>");
 
                 var detailsBut = $("<button>See details</button>").button();
+                $("#tournamentResults").append(detailsBut);
+
+                var extraInfoDiv = $("<div class='tournamentExtraInfo' style='display:none;'></div>");
+                $("#tournamentResults").append(extraInfoDiv);
+
                 detailsBut.click(
-                    (function (id) {
+                    (function (id, extraInfoTarget) {
                         return function () {
+                            var btn = $(this);
                             that.communication.getTournament(id,
                                 function (xml) {
-                                    that.loadedTournament(xml);
+                                    that.loadedTournament(xml, extraInfoTarget);
+                                    btn.hide();
                                 });
                         };
-                    })(tournamentId));
-                $("#tournamentResults").append(detailsBut);
+                    })(tournamentId, extraInfoDiv));
             }
             if (tournaments.length == 0)
                 $("#tournamentResults").append("<i>There is no running tournaments at the moment</i>");
-
-            $("#tournamentResults").append("<hr />");
-            $("#tournamentResults").append("<div id='tournamentExtraInfo'></div>");
         }
     },
 

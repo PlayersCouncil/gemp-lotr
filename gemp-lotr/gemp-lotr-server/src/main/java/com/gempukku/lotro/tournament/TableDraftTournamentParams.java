@@ -1,9 +1,9 @@
 package com.gempukku.lotro.tournament;
 
-import com.gempukku.lotro.draft3.timer.DraftTimerFactory;
+import com.gempukku.lotro.draft3.timer.DraftTimer;
 
 public class TableDraftTournamentParams extends TournamentParams {
-    public DraftTimerFactory.Type draftTimerType;
+    public DraftTimer.Type draftTimerType;
     public int deckbuildingDuration;
     public int turnInDuration;
     public String tableDraftFormatCode;

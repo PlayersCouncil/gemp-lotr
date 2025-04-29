@@ -3,23 +3,24 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_V1_054_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<>()
-				{{
-					put("card", "101_54");
-					// put other cards in here as needed for the test case
+				new HashMap<>() {{
+					put("sam", "101_54");
+					put("boromir", "1_97");
+
+					put("runner", "1_178");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -49,7 +50,7 @@ public class Card_V1_054_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("sam");
 
 		assertEquals("Sam", card.getBlueprint().getTitle());
 		assertEquals("Of Bagshot Row", card.getBlueprint().getSubtitle());
@@ -65,18 +66,38 @@ public class Card_V1_054_Tests
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SamTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void EachTimeFrodoSignetWinsSkirmishTheyHeal() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var sam = scn.GetFreepsCard("sam");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.FreepsMoveCharToTable(sam, boromir);
+
+		var runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCharToTable(runner);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		scn.AddWoundsToChar(boromir, 1);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(boromir, runner);
+		scn.FreepsResolveSkirmish(boromir);
+
+		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetBurdens()); //1 from the bidding
+
+		scn.PassCurrentPhaseActions();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetBurdens());
 	}
+
 }

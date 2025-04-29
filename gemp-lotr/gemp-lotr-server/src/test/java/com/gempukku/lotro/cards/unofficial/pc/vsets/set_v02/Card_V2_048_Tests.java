@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -20,8 +17,16 @@ public class Card_V2_048_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_48");
-					// put other cards in here as needed for the test case
+					put("stronghold", "102_48");
+					put("eowyn", "5_122"); //valiant
+					put("guard", "5_83"); //valiant
+					put("elite", "4_265");
+					put("rider", "4_286");
+
+					put("sword", "4_272");
+					put("helm", "5_89");
+
+					put("bowman", "2_60");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -47,7 +52,7 @@ public class Card_V2_048_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("stronghold");
 
 		assertEquals("Stronghold of My Fathers", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -60,18 +65,113 @@ public class Card_V2_048_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void StrongholdofMyFathersTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void StrongholdofMyFathersCanSpot3RohanCompanionsToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var stronghold = scn.GetFreepsCard("stronghold");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		var elite = scn.GetFreepsCard("elite");
+		var rider = scn.GetFreepsCard("rider");
+		scn.FreepsMoveCardToHand(stronghold, eowyn, elite, rider);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertFalse(scn.FreepsPlayAvailable(stronghold));
+		scn.FreepsPlayCard(eowyn);
+		assertFalse(scn.FreepsPlayAvailable(stronghold));
+		scn.FreepsPlayCard(elite);
+		assertFalse(scn.FreepsPlayAvailable(stronghold));
+		scn.FreepsPlayCard(rider);
+		assertTrue(scn.FreepsPlayAvailable(stronghold));
+	}
+
+	@Test
+	public void StrongholdofMyFathersCanSpot2ValiantCompanionsToPlay() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var stronghold = scn.GetFreepsCard("stronghold");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		var guard = scn.GetFreepsCard("guard");
+		scn.FreepsMoveCardToHand(stronghold, eowyn, guard);
+
+		scn.StartGame();
+
+		assertFalse(scn.FreepsPlayAvailable(stronghold));
+		scn.FreepsPlayCard(eowyn);
+		assertFalse(scn.FreepsPlayAvailable(stronghold));
+		scn.FreepsPlayCard(guard);
+		assertTrue(scn.FreepsPlayAvailable(stronghold));
+	}
+
+	@Test
+	public void StrongholdofMyFathersCanDiscardSelfToPreventWoundToRohanCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var stronghold = scn.GetFreepsCard("stronghold");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		scn.FreepsMoveCharToTable(eowyn);
+		scn.FreepsMoveCardToSupportArea(stronghold);
+
+		var bowman = scn.GetShadowCard("bowman");
+		scn.ShadowMoveCharToTable(bowman);
+
+		scn.StartGame();
+
+		scn.SkipToArcheryWounds();
+
+		assertEquals(0, scn.GetWoundsOn(eowyn));
+		assertEquals(Zone.SUPPORT, stronghold.getZone());
+
+		scn.FreepsChooseCard(eowyn);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(0, scn.GetWoundsOn(eowyn));
+		assertEquals(Zone.DISCARD, stronghold.getZone());
+	}
+
+	@Test
+	public void StrongholdofMyFathersCanDiscard2OtherRohanPossessionsToPreventWoundToRohanCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var stronghold = scn.GetFreepsCard("stronghold");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		var sword = scn.GetFreepsCard("sword");
+		var helm = scn.GetFreepsCard("helm");
+		scn.FreepsMoveCharToTable(eowyn);
+		scn.AttachCardsTo(eowyn, sword);
+		scn.AttachCardsTo(eowyn, helm);
+		scn.FreepsMoveCardToSupportArea(stronghold);
+
+		var bowman = scn.GetShadowCard("bowman");
+		scn.ShadowMoveCharToTable(bowman);
+
+		scn.StartGame();
+
+		scn.SkipToArcheryWounds();
+
+		assertEquals(0, scn.GetWoundsOn(eowyn));
+		assertEquals(Zone.SUPPORT, stronghold.getZone());
+		assertEquals(Zone.ATTACHED, sword.getZone());
+		assertEquals(Zone.ATTACHED, helm.getZone());
+
+		scn.FreepsChooseCard(eowyn);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertTrue(scn.FreepsChoiceAvailable("Discard Stronghold"));
+		assertTrue(scn.FreepsChoiceAvailable("Discard 2 other"));
+
+		scn.FreepsChoose("Discard 2 other");
+
+		assertEquals(0, scn.GetWoundsOn(eowyn));
+		assertEquals(Zone.SUPPORT, stronghold.getZone());
+		assertEquals(Zone.DISCARD, sword.getZone());
+		assertEquals(Zone.DISCARD, helm.getZone());
 	}
 }
