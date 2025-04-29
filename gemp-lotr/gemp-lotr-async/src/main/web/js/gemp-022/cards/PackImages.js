@@ -223,8 +223,8 @@ const packBlueprints = {
     "The Nine - Toldea Starter": "/gemp-lotr/images/boosters/gala_2025/nine_toldea.jpg",
     "The Nine - Witch-King Starter": "/gemp-lotr/images/boosters/gala_2025/nine_twk.jpg",
     
-    "(R)Movie Random": "/gemp-lotr/images/boosters/gala_2025/random-movie-booster.jpg",
-    "(R)Expanded Random": "/gemp-lotr/images/boosters/gala_2025/random-expanded-booster.jpg",
+    "(R)Movie Random - Booster": "/gemp-lotr/images/boosters/gala_2025/random-movie-booster.jpg",
+    "(R)Expanded Random - Booster": "/gemp-lotr/images/boosters/gala_2025/random-expanded-booster.jpg",
     "(S)Ringbearer Choice": "/gemp-lotr/images/boosters/gala_2025/ring-bearer-selection.jpg",
     "(S)Ages End Choice": "/gemp-lotr/images/boosters/gala_2025/ages-end-selection.jpg",
     

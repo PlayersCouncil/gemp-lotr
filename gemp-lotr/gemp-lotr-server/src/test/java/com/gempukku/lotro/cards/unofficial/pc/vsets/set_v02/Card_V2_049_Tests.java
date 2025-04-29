@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,12 @@ public class Card_V2_049_Tests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "102_49");
-					// put other cards in here as needed for the test case
+					put("guthwine", "102_49");
+					put("eowyn", "5_122");
+					put("eomer", "4_267");
+					put("condition", "6_97");
+
+					put("runner", "1_178");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -46,7 +49,7 @@ public class Card_V2_049_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("guthwine");
 
 		assertEquals("Gúthwinë", card.getBlueprint().getTitle());
 		assertEquals("Eomer's Blade", card.getBlueprint().getSubtitle());
@@ -59,18 +62,125 @@ public class Card_V2_049_Tests
 		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GuthwineTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void GuthwineCanBeBorneByAnyRohanCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var guthwine = scn.GetFreepsCard("guthwine");
+		var eomer = scn.GetFreepsCard("eomer");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		scn.FreepsMoveCardToHand(guthwine);
+		scn.FreepsMoveCharToTable(eomer, eowyn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.FreepsPlayCard(guthwine);
 
-		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(eomer));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(eowyn));
+
+		scn.FreepsChooseCard(eowyn);
+		assertEquals(Zone.ATTACHED, guthwine.getZone());
+		assertEquals(eowyn, guthwine.getAttachedTo());
+	}
+
+	@Test
+	public void GuthwineMakesEomerBearerDamagePlus1() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var guthwine = scn.GetFreepsCard("guthwine");
+		var eomer = scn.GetFreepsCard("eomer");
+		scn.FreepsMoveCardToHand(guthwine);
+		scn.FreepsMoveCharToTable(eomer);
+
+		scn.StartGame();
+
+		assertFalse(scn.hasKeyword(eomer, Keyword.DAMAGE));
+
+		scn.FreepsPlayCard(guthwine);
+
+		assertEquals(Zone.ATTACHED, guthwine.getZone());
+		assertEquals(eomer, guthwine.getAttachedTo());
+		assertTrue(scn.hasKeyword(eomer, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(eomer, Keyword.DAMAGE));
+	}
+
+	@Test
+	public void GuthwineDoesNotMakeNonEomerBearerDamagePlus1() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var guthwine = scn.GetFreepsCard("guthwine");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		scn.FreepsMoveCardToHand(guthwine);
+		scn.FreepsMoveCharToTable(eowyn);
+
+		scn.StartGame();
+
+		assertFalse(scn.hasKeyword(eowyn, Keyword.DAMAGE));
+
+		scn.FreepsPlayCard(guthwine);
+
+		assertEquals(Zone.ATTACHED, guthwine.getZone());
+		assertEquals(eowyn, guthwine.getAttachedTo());
+		assertFalse(scn.hasKeyword(eowyn, Keyword.DAMAGE));
+	}
+
+	@Test
+	public void GuthwineReinforcesRohanTokenWhenEomerWinsSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var guthwine = scn.GetFreepsCard("guthwine");
+		var eomer = scn.GetFreepsCard("eomer");
+		var condition = scn.GetFreepsCard("condition");
+		scn.FreepsMoveCharToTable(eomer);
+		scn.AttachCardsTo(eomer, guthwine);
+		scn.FreepsMoveCardToSupportArea(condition);
+		scn.AddTokensToCard(condition, 1);
+
+		var runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCharToTable(runner);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(eomer, runner);
+		scn.PassSkirmishActions();
+
+		assertEquals(1, scn.GetCultureTokensOn(condition));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(2, scn.GetCultureTokensOn(condition));
+	}
+
+	@Test
+	public void GuthwineDoesNotReinforceRohanTokenWhenNonEomerWinsSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var guthwine = scn.GetFreepsCard("guthwine");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		var condition = scn.GetFreepsCard("condition");
+		scn.FreepsMoveCharToTable(eowyn);
+		scn.AttachCardsTo(eowyn, guthwine);
+		scn.FreepsMoveCardToSupportArea(condition);
+		scn.AddTokensToCard(condition, 1);
+
+		var runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCharToTable(runner);
+
+		scn.StartGame();
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(eowyn, runner);
+		scn.PassSkirmishActions();
+
+		assertEquals(1, scn.GetCultureTokensOn(condition));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+
+		assertEquals(1, scn.GetCultureTokensOn(condition));
 	}
 }
