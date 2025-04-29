@@ -184,7 +184,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                 errataValidation = format.validateDeck(deckWithErrata);
             }
 
-            if (!collectionName.equals("default")) {
+            if (collectionName != null && !collectionName.equals("default")) {
                 // Check collection
                 try {
                     CardCollection collection = _collectionsManager.getPlayerCollection(player, collectionName);
@@ -224,10 +224,10 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
                 }
             }
 
-            if(validation.size() == 0) {
+            if(validation.isEmpty()) {
                 valid.append("<b>" + format.getName() + "</b>: <font color='green'>Valid</font><br/>");
             }
-            else if(errataValidation != null && errataValidation.size() == 0) {
+            else if(errataValidation != null && errataValidation.isEmpty()) {
                 valid.append("<b>" + format.getName() + "</b>: <font color='green'>Valid</font> <font color='yellow'>(with errata automatically applied)</font><br/>");
                 String output = String.join("<br>", validation).replace("\n", "<br>");
                 invalid.append("<font color='yellow'>" + output + "</font><br/>");
