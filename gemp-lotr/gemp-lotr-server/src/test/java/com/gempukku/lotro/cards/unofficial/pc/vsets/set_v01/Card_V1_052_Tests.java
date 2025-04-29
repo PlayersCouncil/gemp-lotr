@@ -3,23 +3,22 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_V1_052_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<>()
-				{{
-					put("card", "101_52");
-					// put other cards in here as needed for the test case
+				new HashMap<>() {{
+					put("merry", "101_52");
+					put("shelob", "8_26");
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -48,7 +47,7 @@ public class Card_V1_052_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("merry");
 
 		assertEquals("Merry", card.getBlueprint().getTitle());
 		assertEquals("Of Buckland", card.getBlueprint().getSubtitle());
@@ -64,18 +63,99 @@ public class Card_V1_052_Tests
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MerryTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void MerryExertsTwiceToPreventMinionSkirmishing() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		var merry = scn.GetFreepsCard("merry");
+		scn.FreepsMoveCharToTable(merry);
+
+		var shelob = scn.GetShadowCard("shelob");
+		scn.ShadowMoveCharToTable(shelob);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		assertEquals(0, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(shelob));
+		assertTrue(scn.FreepsActionAvailable(merry));
+
+		scn.FreepsUseCardAction(merry);
+		assertEquals(2, scn.GetWoundsOn(merry));
+		scn.ShadowChooseNo();
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+		//immediately skips to the fierce skirmish
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 	}
+
+	@Test
+	public void MinionCanExhaustToPreventAbility() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var merry = scn.GetFreepsCard("merry");
+		scn.FreepsMoveCharToTable(merry);
+
+		var shelob = scn.GetShadowCard("shelob");
+		scn.ShadowMoveCharToTable(shelob);
+
+		scn.StartGame();
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		assertEquals(0, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(shelob));
+		assertTrue(scn.FreepsActionAvailable(merry));
+
+		scn.FreepsUseCardAction(merry);
+		assertEquals(2, scn.GetWoundsOn(merry));
+		assertTrue(scn.ShadowDecisionAvailable("Would you like to exhaust"));
+
+		scn.ShadowChooseYes();
+		assertEquals(7, scn.GetWoundsOn(shelob));
+
+		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPassCurrentPhaseAction();
+
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+	}
+
+//	@Test
+//	public void ExhaustedMinionCannotExertToPreventAbility() throws DecisionResultInvalidException, CardNotFoundException {
+//		//Pre-game setup
+//		var scn = GetScenario();
+//
+//		var merry = scn.GetFreepsCard("merry");
+//		scn.FreepsMoveCharToTable(merry);
+//
+//		var shelob = scn.GetShadowCard("shelob");
+//		scn.ShadowMoveCharToTable(shelob);
+//
+//		scn.StartGame();
+//
+//		scn.SkipToPhase(Phase.ASSIGNMENT);
+//		assertEquals(0, scn.GetWoundsOn(merry));
+//		assertEquals(0, scn.GetWoundsOn(shelob));
+//		assertTrue(scn.FreepsActionAvailable(merry));
+//
+//		scn.FreepsUseCardAction(merry);
+//		assertEquals(2, scn.GetWoundsOn(merry));
+//		assertTrue(scn.ShadowDecisionAvailable("Would you like to exhaust"));
+//
+//		scn.ShadowChooseYes();
+//		assertEquals(7, scn.GetWoundsOn(shelob));
+//
+//		scn.PassAssignmentActions();
+//		//Cheating to do it again during fierce
+//		scn.RemoveWoundsFromChar(merry, 2);
+//
+//		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+//		scn.FreepsDeclineAssignments();
+//		scn.ShadowDeclineAssignments();
+//
+//		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+//	}
 }
