@@ -82,7 +82,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         } else if (uri.equals("/libraryHtml") && request.method() == HttpMethod.GET) {
             getLibraryDeckInHtml(request, responseWriter);
         } else if (uri.equals("/draftHtml") && request.method() == HttpMethod.GET) {
-            getDraftDeckInHtml(request, responseWriter);
+            getDraftInHtml(request, responseWriter);
         } else if (uri.equals("/rename") && request.method() == HttpMethod.POST) {
             renameDeck(request, responseWriter);
         } else if (uri.equals("/delete") && request.method() == HttpMethod.POST) {
@@ -375,7 +375,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
         responseWriter.writeHtmlResponse(result);
     }
 
-    private void getDraftDeckInHtml(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, CardNotFoundException {
+    private void getDraftInHtml(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, CardNotFoundException {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
         String draftCode = getQueryParameterSafely(queryDecoder, "draftCode");
 
