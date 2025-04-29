@@ -1215,6 +1215,52 @@ public class HinderTests
     }
 
     @Test
+    public void HinderedItemsDoNotGrantPassiveStatBonuses() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        var scn = new GenericCardTestHelper(
+                new HashMap<>() {{
+                    put("aragorn", "7_81");
+                    put("anduril", "7_79");
+                    put("steed", "12_49");
+                }}
+        );
+
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var anduril = scn.GetFreepsCard("anduril");
+        var steed = scn.GetFreepsCard("steed");
+        scn.FreepsMoveCharToTable(aragorn);
+        scn.AttachCardsTo(aragorn, anduril, steed);
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, anduril, steed));
+                action.setText("Hinder Aragorn");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+        scn.RemoveBurdens(1);
+        scn.FreepsDeclineOptionalTrigger(); //Knight Aragorn's start of phase action
+
+        assertEquals(11, scn.GetStrength(aragorn)); //base 8 + 2 from anduril +1 from steed
+        assertEquals(5, scn.GetVitality(aragorn)); //base 4 + 1 from anduril
+        assertEquals(7, scn.GetResistance(aragorn)); //base 7 + 1 from steed
+
+        scn.FreepsUseCardAction(frodo);
+
+        assertTrue(scn.IsHindered(anduril));
+        assertTrue(scn.IsHindered(steed));
+        assertFalse(scn.IsHindered(aragorn));
+
+        assertEquals(8, scn.GetStrength(aragorn));
+        assertEquals(4, scn.GetVitality(aragorn));
+        assertEquals(6, scn.GetResistance(aragorn));
+    }
+
+    @Test
     public void ItemsCannotBePlayedOntoHinderedCompanions() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
         var scn = new GenericCardTestHelper(
@@ -1283,11 +1329,6 @@ public class HinderTests
 
         assertTrue(scn.IsHindered(aragorn));
         assertFalse(scn.FreepsActionAvailable("Transfer Andúril"));
-    }
-
-    //@Test
-    public void HinderedSiteDoesNotCountAsControlled() throws DecisionResultInvalidException, CardNotFoundException {
-
     }
 
     //@Test

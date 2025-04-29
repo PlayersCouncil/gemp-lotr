@@ -920,6 +920,9 @@ public class GameState {
         if(bp.getCardType() == CardType.EVENT)
             return zone == Zone.VOID_FROM_HAND;
 
+        if(bp.getCardType() == CardType.SITE)
+            return false;
+
         //Finally, anything currently active on the table can be hindered
         return isCardInPlayActive(card);
     }
