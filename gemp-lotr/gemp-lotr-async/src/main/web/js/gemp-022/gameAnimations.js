@@ -59,7 +59,7 @@ var GameAnimations = Class.extend({
             // Play-out game event animation only if it's not the player who initiated it
             if (this.game.spectatorMode || this.game.replayMode || (participantId != this.game.bottomPlayerId)) {
                 var card = new Card(blueprintId, testingText, backSideTestingText, "ANIMATION", "anim", participantId);
-                var cardDiv = Card.CreateSimpleCardDiv(card.imageUrl, card.testingText, card.foil, card.incomplete, 16);
+                var cardDiv = Card.CreateSimpleCardDiv(card.imageUrl, card.testingText, card.foil, card.incomplete, 8);
                 
                 // var display = new CardDisplay(card, $("#main").width() / 2, $("#main").width() / 2)
                 // var cardDiv = display.baseDiv;
@@ -139,7 +139,7 @@ var GameAnimations = Class.extend({
                             var targetCardId = targetCardIds[i];
 
                             var card = new Card(blueprintId, testingText, backSideTestingText, "ANIMATION", "anim" + i, participantId);
-                            var cardDiv = Card.CreateSimpleCardDiv(card.imageUrl, card.testingText, card.foil, card.incomplete, 16);
+                            var cardDiv = Card.CreateSimpleCardDiv(card.imageUrl, card.testingText, card.foil, card.incomplete, 8);
                 
                             // var display = new CardDisplay(card, $("#main").width() / 2, $("#main").width() / 2)
                             // var cardDiv = display.baseDiv;
