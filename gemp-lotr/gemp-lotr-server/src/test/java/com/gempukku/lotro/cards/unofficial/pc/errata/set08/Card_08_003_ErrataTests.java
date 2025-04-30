@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set08;
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,17 @@ public class Card_08_003_ErrataTests
 		return new GenericCardTestHelper(
 				new HashMap<>()
 				{{
-					put("card", "58_3");
-					// put other cards in here as needed for the test case
+					put("brc", "58_3");
+					put("gimli", "8_5");
+					put("ring", "9_7");
+					put("guard1", "1_7");
+					put("guard2", "1_7");
+
+					put("runner", "1_178");
+					put("troll", "1_165");
+					put("swarms", "1_183");
+					put("grond", "8_103");
+
 				}},
 				GenericCardTestHelper.FellowshipSites,
 				GenericCardTestHelper.FOTRFrodo,
@@ -44,7 +52,7 @@ public class Card_08_003_ErrataTests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("brc");
 
 		assertEquals("Blood Runs Chill", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,29 +64,63 @@ public class Card_08_003_ErrataTests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BloodRunsChillTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void BloodRunsChillLoopsThroughChoicesProperly() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
-		scn.FreepsMoveCharToTable(card);
-		scn.FreepsMoveCardToSupportArea(card);
-		scn.FreepsMoveCardToDiscard(card);
-		scn.FreepsMoveCardsToTopOfDeck(card);
+		var brc = scn.GetFreepsCard("brc");
+		var gimli = scn.GetFreepsCard("gimli");
+		var ring = scn.GetFreepsCard("ring");
+		scn.FreepsMoveCardToHand(brc);
+		scn.FreepsMoveCharToTable(gimli);
+		scn.AttachCardsTo(gimli, ring);
+		scn.FreepsMoveCharToTable("guard1", "guard2");
 
-		//var card = scn.GetShadowCard("card");
-		scn.ShadowMoveCardToHand(card);
-		scn.ShadowMoveCharToTable(card);
-		scn.ShadowMoveCardToSupportArea(card);
-		scn.ShadowMoveCardToDiscard(card);
-		scn.ShadowMoveCardsToTopOfDeck(card);
+		var runner = scn.GetShadowCard("runner");
+		var troll = scn.GetShadowCard("troll");
+		var swarms = scn.GetShadowCard("swarms");
+		var grond = scn.GetShadowCard("grond");
+		scn.ShadowMoveCharToTable(runner, troll);
+		scn.ShadowMoveCardToSupportArea(swarms, grond);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(3, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
+		assertEquals(Zone.SHADOW_CHARACTERS, troll.getZone());
+		assertEquals(Zone.SUPPORT, swarms.getZone());
+		assertEquals(Zone.SUPPORT, grond.getZone());
+		assertFalse(scn.IsHindered(runner));
+		assertFalse(scn.IsHindered(troll));
+		assertFalse(scn.IsHindered(swarms));
+		assertFalse(scn.IsHindered(grond));
+
+		assertTrue(scn.FreepsPlayAvailable(brc));
+		scn.FreepsPlayCard(brc);
+		assertEquals(2, scn.GetWoundsOn(gimli));
+
+ 		assertTrue(scn.ShadowDecisionAvailable("Choose Shadow card to hinder or exert"));
+		assertTrue(scn.ShadowHasCardChoicesAvailable(runner, troll, swarms, grond));
+
+		scn.ShadowChooseCard(grond);
+		assertTrue(scn.IsHindered(grond));
+
+		assertTrue(scn.ShadowDecisionAvailable("Choose Shadow card to hinder or exert"));
+		assertTrue(scn.ShadowHasCardChoicesAvailable(runner, troll, swarms));
+
+		scn.ShadowChooseCard(troll);
+		assertEquals(0, scn.GetWoundsOn(troll));
+		assertTrue(scn.ShadowDecisionAvailable(""));
+		scn.ShadowChoose("exert");
+		assertEquals(1, scn.GetWoundsOn(troll));
+
+		assertTrue(scn.ShadowDecisionAvailable("Choose Shadow card to hinder or exert"));
+		assertTrue(scn.ShadowHasCardChoicesAvailable(runner, troll, swarms));
+
+		scn.ShadowChooseCard(runner);
+		assertTrue(scn.IsHindered(runner));
 	}
 }

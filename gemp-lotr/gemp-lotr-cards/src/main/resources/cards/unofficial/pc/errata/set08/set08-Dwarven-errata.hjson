@@ -76,16 +76,20 @@
 		timewords: Maneuver
 		effects: {
 			type: event
-			cost: {
-				type: exert
-				select: choose(dwarf,damage,CanExert,MinVitality(3))
-				times: 2
-				memorize: exertedDwarf
-			},
-			effect: [
+			requires: {
+				type: CanSpot
+				filter: dwarf,damage,CanExert,MinVitality(3)
+			}
+			cost: [
 				{
-					type: Repeat
-					times: {
+					type: ChooseActiveCards
+					select: choose(dwarf,damage,CanExert,MinVitality(3))
+					memorize: exertedDwarf
+					text: Choose a Dwarf to exert twice
+				}
+				{
+					type: MemorizeNumber
+					amount: {
 						type: forEachKeywordOnCardInMemory
 						memory: exertedDwarf
 						keyword: damage
@@ -94,6 +98,21 @@
 							filter: culture(dwarven), companion
 						}
 					}
+					memory: damageAmount
+				}
+			],
+			effect: {
+					type: CostToEffect
+					cost: {
+						type: exert
+						select: memory(exertedDwarf)
+						times: 2
+						memorize: exertedDwarf
+						ignoreCostCheckFailure: true
+					}
+					effect: {
+					type: Repeat
+					times: memory(damageAmount)
 					effect: [
 						{
 							type: ChooseActiveCards
@@ -138,7 +157,7 @@
 						}
 					]
 				}
-			]
+			}
 		}
 		gametext: Spot a Dwarf who is damage +X and exert that Dwarf twice to make an opponent hinder or exert X Shadow cards. X is limited to the number of [dwarven] companions you can spot.
 		lore: "...the Dark Door gaped before them like the mouth of night."
