@@ -359,6 +359,14 @@ public class Filters {
         return (game, physicalCard) -> game.getModifiersQuerying().canBeReturnedToHand(game, physicalCard, source);
     }
 
+    public static Filter canBeHindered(final PhysicalCard source) {
+        return (game, physicalCard) -> game.getGameState().canBeHindered(physicalCard);
+    }
+
+    public static Filter canBeRestored(final PhysicalCard source) {
+        return (game, physicalCard) -> game.getGameState().isHindered(physicalCard);
+    }
+
     public static Filter canExert(final PhysicalCard source) {
         return canExert(source, 1);
     }

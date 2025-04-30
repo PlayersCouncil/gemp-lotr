@@ -110,6 +110,10 @@ public class FilterFactory {
                 }));
         simpleFilters.put("hasrace",
                 (actionContext -> (Filter) (game, physicalCard) -> !game.getModifiersQuerying().getRaces(game, physicalCard).isEmpty()));
+        simpleFilters.put("hinderable",
+                (actionContext -> (Filter) (game, physicalCard) -> game.getGameState().canBeHindered(physicalCard)));
+        simpleFilters.put("hindered",
+                (actionContext -> (Filter) (game, physicalCard) -> game.getGameState().isHindered(physicalCard)));
         simpleFilters.put("idinstored",
                 (actionContext ->
                         (Filter) (game, physicalCard) -> {

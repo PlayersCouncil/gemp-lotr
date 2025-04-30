@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
+import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.HinderCardsInPlayEffect;
@@ -35,7 +36,9 @@ public class HinderCardsInPlay implements EffectAppenderProducer {
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCards(select,count, memory, player, "Choose cards to hinder", environment));
+                CardResolver.resolveCards(select,
+                        (actionContext) -> Filters.canBeHindered(actionContext.getSource()),
+                        count, memory, player, "Choose cards to hinder", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
