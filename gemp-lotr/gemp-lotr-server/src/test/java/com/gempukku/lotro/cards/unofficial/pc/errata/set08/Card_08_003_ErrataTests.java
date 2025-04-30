@@ -103,6 +103,7 @@ public class Card_08_003_ErrataTests
 		assertEquals(2, scn.GetWoundsOn(gimli));
 
  		assertTrue(scn.ShadowDecisionAvailable("Choose Shadow card to hinder or exert"));
+		//The following are all valid shadow cards to target
 		assertTrue(scn.ShadowHasCardChoicesAvailable(runner, troll, swarms, grond));
 
 		scn.ShadowChooseCard(grond);
@@ -110,6 +111,8 @@ public class Card_08_003_ErrataTests
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose Shadow card to hinder or exert"));
 		assertTrue(scn.ShadowHasCardChoicesAvailable(runner, troll, swarms));
+		//Grond is already hindered and should not be hinderable again
+		assertFalse(scn.ShadowHasCardChoicesAvailable(grond));
 
 		scn.ShadowChooseCard(troll);
 		assertEquals(0, scn.GetWoundsOn(troll));
