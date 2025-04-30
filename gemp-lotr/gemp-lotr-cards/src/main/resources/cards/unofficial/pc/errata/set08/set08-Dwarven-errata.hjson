@@ -119,7 +119,7 @@
 							text: Choose Shadow card to hinder or exert
 							count: 1
 							player: Shadow
-							select: choose(side(shadow))
+							select: choose(side(shadow),hinderable)
 							memorize: chosenCard
 						}
 						{
