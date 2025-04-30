@@ -1697,8 +1697,7 @@ var GempLotrGameUI = Class.extend({
         var results = this.getDecisionParameters(decision, "results");
 
         var that = this;
-        this.smallDialog
-            .html(text);
+        this.smallDialog.html(text);
 
         if (results.length > 2 || this.settingsAlwaysDropDown) {
             var html = "<br /><select id='multipleChoiceDecision' selectedIndex='0'>";
@@ -1721,8 +1720,14 @@ var GempLotrGameUI = Class.extend({
             for (var i = 0; i < results.length; i++) {
                 if (i > 0)
                     this.smallDialog.append(" ");
+                
+                //Since we will be presenting the text as buttons, we don't
+                // want any card hints that will cause a click on that button
+                // to also open a card info box.
+                var content = results[i].replace("cardHint", "");
+                content = content.replace("<div", "<div style='display:inline'");
 
-                var but = $("<button></button>").html(results[i]).button();
+                var but = $("<button></button>").html(content).button();
                 if (!this.replayMode) {
                     but.click(
                         (function (ind) {
