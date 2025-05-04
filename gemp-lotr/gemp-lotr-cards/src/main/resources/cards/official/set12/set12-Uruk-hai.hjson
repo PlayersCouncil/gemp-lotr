@@ -459,17 +459,6 @@
 		keywords: Lurker
 		effects: [
 			{
-				type: modifier
-				modifier: {
-					type: addKeyword
-					requires: {
-						type: sarumanFirstSentenceActive
-					}
-					filter: self
-					keyword: lurker
-				}
-			}
-			{
 				type: activated
 				phase: skirmish
 				cost: {
