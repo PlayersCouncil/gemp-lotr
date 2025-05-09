@@ -85,6 +85,10 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: CanSpot
+					filter: self,Zone(SUPPORT)
+				}
 				cost: {
 					type: choice
 					texts: [
@@ -143,6 +147,10 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: CanSpot
+					filter: self,Zone(SUPPORT)
+				}
 				cost: {
 					type: choice
 					texts: [
@@ -382,6 +390,10 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: CanSpot
+					filter: self,Zone(SUPPORT)
+				}
 				cost: {
 					type: exert
 					select: choose(culture(gondor),man)

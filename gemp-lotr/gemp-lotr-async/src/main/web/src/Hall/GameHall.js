@@ -82,6 +82,12 @@ var chat;
 
 					event.stopPropagation();
 					return false;
+				} else if (tar.hasClass("draftFormatInfo")) {
+					var draftCode = tar.attr("draftCode");
+                    window.open('/gemp-lotr-server/deck/draftHtml?draftCode=' + draftCode, "_blank");
+
+					event.stopPropagation();
+					return false;
 				}
 
 				return true;

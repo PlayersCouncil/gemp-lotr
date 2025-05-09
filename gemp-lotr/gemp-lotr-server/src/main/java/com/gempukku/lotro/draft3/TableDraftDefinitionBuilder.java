@@ -4,7 +4,9 @@ import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft3.timer.DraftTimer;
 import com.gempukku.lotro.game.DefaultCardCollection;
+import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.MutableCardCollection;
+import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.google.common.collect.Iterables;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.simple.JSONArray;
@@ -24,13 +26,13 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TableDraftDefinitionBuilder {
     private static final int HIGH_ENOUGH_PRIME_NUMBER = 8963;
 
-    public static TableDraftDefinition build(File jsonFile) {
+    public static TableDraftDefinition build(File jsonFile, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
         try {
             final InputStreamReader reader = new InputStreamReader(new FileInputStream(jsonFile), StandardCharsets.UTF_8);
             try {
                 JSONParser parser = new JSONParser();
                 JSONObject object = (JSONObject) parser.parse(reader);
-                return build(object);
+                return build(object, library, formatLibrary);
             } catch (ParseException e) {
                 throw new RuntimeException("Problem loading solo draft " + jsonFile, e);
             }
@@ -39,7 +41,7 @@ public class TableDraftDefinitionBuilder {
         }
     }
 
-    public static TableDraftDefinition build(JSONObject definition) {
+    private static TableDraftDefinition build(JSONObject definition, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
         String name = (String) definition.get("name");
         String code = (String) definition.get("code");
         String format = (String) definition.get("format");
@@ -89,6 +91,11 @@ public class TableDraftDefinitionBuilder {
                     return DraftTimer.getTypeFromString(timer);
                 }
             }
+
+            @Override
+            public String getHtmlInfo() {
+                return TableDraftDefinitionHtmlBuilder.buildHtml(definition, library, formatLibrary);
+            }
         };
     }
 
@@ -115,7 +122,7 @@ public class TableDraftDefinitionBuilder {
                 List<String> cards = (List<String>) cardSet.get("card-set");
                 cardPools.put(name, cards);
             } else if (cardSet.containsKey("set-set") && cardSet.containsKey("choose")) {
-                List<String> setNames = (List<String>) cardSet.get("set-set");
+                List<String> setNames = new ArrayList<>((List<String>) cardSet.get("set-set"));
                 Collections.shuffle(setNames);
                 int howMany = ((Number) cardSet.get("choose")).intValue();
                 List<String> chosenSetNames = new ArrayList<>();

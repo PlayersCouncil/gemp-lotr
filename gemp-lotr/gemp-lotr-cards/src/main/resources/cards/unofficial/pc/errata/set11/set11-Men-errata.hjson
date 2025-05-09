@@ -30,7 +30,7 @@
 			effect: {
 				type: transfer
 				select: choose(or(possession,condition),attachedTo(character))
-				where: choose(any)
+				where: choose(character)
 				checkTarget: true
 			}
 		}

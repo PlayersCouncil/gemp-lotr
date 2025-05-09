@@ -197,7 +197,7 @@
 					text: Would you like to exhaust {chosenMinion} to permit it to skirmish?
 					cost: {
 						type: exhaust
-						select: memory(chosenMinion)
+						select: choose(CanExert,memory(chosenMinion))
 					}
 					effect: {
 						type: disableSkirmishAssignment

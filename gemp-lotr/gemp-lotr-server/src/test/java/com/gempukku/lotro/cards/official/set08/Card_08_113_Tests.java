@@ -89,13 +89,14 @@ public class Card_08_113_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		assertEquals(0, scn.GetThreats());
 		assertEquals(Zone.SHADOW_CHARACTERS, shelob.getZone());
-		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsDeclineOptionalTrigger(); //Ring converting burdens
+		scn.FreepsAcceptOptionalTrigger(); //Sting
 		assertEquals(1, scn.GetThreats());
 		assertEquals(Zone.DISCARD, shelob.getZone());
 	}
 
 	@Test
-	public void StingTriggersOnOverwhelm() throws DecisionResultInvalidException, CardNotFoundException {
+	public void Sting_DOESNOT_TriggerOnOverwhelm() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -117,12 +118,10 @@ public class Card_08_113_Tests
 		scn.FreepsResolveSkirmish(frodo);
 		scn.PassCurrentPhaseActions();
 
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
 		assertEquals(0, scn.GetThreats());
 		assertEquals(Zone.SHADOW_CHARACTERS, sauron.getZone());
-		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(1, scn.GetThreats());
-		assertEquals(Zone.DISCARD, sauron.getZone());
+
 	}
 }
