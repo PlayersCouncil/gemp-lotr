@@ -42,8 +42,6 @@ public class SkirmishPhaseAction extends SystemQueueAction {
                     }
                 });
         appendEffect(
-                new TriggeringResultEffect(null, new SkirmishAboutToEndResult(fellowshipCharacter, shadowCharacters), "Skirmish about to end"));
-        appendEffect(
                 new UnrespondableEffect() {
                     @Override
                     protected void doPlayEffect(LotroGame game) {
@@ -53,7 +51,8 @@ public class SkirmishPhaseAction extends SystemQueueAction {
                         }
                     }
                 });
-
+        appendEffect(
+                new TriggeringResultEffect(null, new SkirmishAboutToEndResult(fellowshipCharacter, shadowCharacters), "Skirmish about to end"));
         appendEffect(
                 new TriggeringResultEffect(null, new EndOfPhaseResult(Phase.SKIRMISH), "End of skirmish phase"));
         appendEffect(
