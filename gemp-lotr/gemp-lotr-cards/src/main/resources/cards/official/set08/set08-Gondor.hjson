@@ -241,6 +241,10 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: CanSpot
+					filter: self,Zone(SUPPORT)
+				}
 				cost: {
 					type: choice
 					texts: [
