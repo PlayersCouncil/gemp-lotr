@@ -112,6 +112,7 @@
 					amount: {
 						type: forEachWound
 						filter: character,inSkirmish
+						multiplier: 2
 					}
 				}
 			}
