@@ -455,6 +455,7 @@
 					}
 					filter: site,zone(adventure path)
 					from: siteYouControl
+					terrain: true
 				}
 			}
 		]

@@ -20,7 +20,11 @@ public enum Keyword implements Filterable {
     FIERCE("Fierce", true, false, false, true),
     LURKER("Lurker", true, false, false, true),
     MUSTER("Muster", true, false, false, true),
-    SANCTUARY("Sanctuary", true, false, true, true),
+    /**
+     * As per Modern Ruling #1, Sanctuary is not considered a terrain keyword.
+     * https://wiki.lotrtcgpc.net/wiki/Modern_Ruling_1
+      */
+    SANCTUARY("Sanctuary", true, false, false, true),
     RING_BEARER("Ring-Bearer", true, false, true, true),
     UNHASTY("Unhasty", true, false, false, true),
 
