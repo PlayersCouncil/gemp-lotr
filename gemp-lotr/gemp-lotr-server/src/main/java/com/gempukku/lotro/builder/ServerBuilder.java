@@ -17,7 +17,10 @@ import com.gempukku.lotro.packs.DraftPackStorage;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.service.LoggedUserHolder;
-import com.gempukku.lotro.tournament.*;
+import com.gempukku.lotro.tournament.TournamentDAO;
+import com.gempukku.lotro.tournament.TournamentMatchDAO;
+import com.gempukku.lotro.tournament.TournamentPlayerDAO;
+import com.gempukku.lotro.tournament.TournamentService;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -72,7 +75,10 @@ public class ServerBuilder {
                 ));
 
         objectMap.put(TableDraftDefinitions.class,
-                new TableDraftDefinitions());
+                new TableDraftDefinitions(
+                        extract(objectMap, LotroCardBlueprintLibrary.class),
+                        extract(objectMap, LotroFormatLibrary.class)
+                ));
 
         objectMap.put(LeagueService.class,
                 new LeagueService(

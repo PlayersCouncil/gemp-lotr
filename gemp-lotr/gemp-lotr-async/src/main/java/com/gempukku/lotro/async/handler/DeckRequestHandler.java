@@ -9,6 +9,7 @@ import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.db.DeckDAO;
 import com.gempukku.lotro.db.DeckSerialization;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
+import com.gempukku.lotro.draft3.TableDraftDefinition;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.draft3.timer.DraftTimer;
 import com.gempukku.lotro.game.*;
@@ -80,6 +81,8 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             getDeckInHtml(request, responseWriter);
         } else if (uri.equals("/libraryHtml") && request.method() == HttpMethod.GET) {
             getLibraryDeckInHtml(request, responseWriter);
+        } else if (uri.equals("/draftHtml") && request.method() == HttpMethod.GET) {
+            getDraftInHtml(request, responseWriter);
         } else if (uri.equals("/rename") && request.method() == HttpMethod.POST) {
             renameDeck(request, responseWriter);
         } else if (uri.equals("/delete") && request.method() == HttpMethod.POST) {
@@ -368,6 +371,20 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             throw new HttpProcessingException(404);
 
         String result = convertDeckToHTML(deck, null);
+
+        responseWriter.writeHtmlResponse(result);
+    }
+
+    private void getDraftInHtml(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, CardNotFoundException {
+        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
+        String draftCode = getQueryParameterSafely(queryDecoder, "draftCode");
+
+        TableDraftDefinition tableDraftDefinition = _tableDraftDefinitions.getTableDraftDefinition(draftCode);
+
+        if (tableDraftDefinition == null)
+            throw new HttpProcessingException(404);
+
+        String result = tableDraftDefinition.getHtmlInfo();
 
         responseWriter.writeHtmlResponse(result);
     }

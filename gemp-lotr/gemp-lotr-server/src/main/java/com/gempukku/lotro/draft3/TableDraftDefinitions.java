@@ -1,6 +1,8 @@
 package com.gempukku.lotro.draft3;
 
 import com.gempukku.lotro.common.AppConfig;
+import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
+import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,8 +16,8 @@ public class TableDraftDefinitions {
     private final Map<String, TableDraftDefinition> draftTypes = new HashMap<>();
     private final Semaphore collectionReady = new Semaphore(1);
 
-    public TableDraftDefinitions() {
-        reloadDraftsFromFile();
+    public TableDraftDefinitions(LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
+        reloadDraftsFromFile(library, formatLibrary);
     }
 
     public TableDraftDefinition getTableDraftDefinition(String draftType) {
@@ -65,20 +67,20 @@ public class TableDraftDefinitions {
         }
     }
 
-    public void reloadDraftsFromFile() {
+    public void reloadDraftsFromFile(LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
         try {
             collectionReady.acquire();
             draftTypes.clear();
-            loadDrafts(AppConfig.getTableDraftPath());
+            loadDrafts(AppConfig.getTableDraftPath(), library, formatLibrary);
             collectionReady.release();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void loadDrafts(File path) {
+    private void loadDrafts(File path, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary) {
         if (path.isFile()) {
-            TableDraftDefinition tableDraftDefinition = TableDraftDefinitionBuilder.build(path);
+            TableDraftDefinition tableDraftDefinition = TableDraftDefinitionBuilder.build(path, library, formatLibrary);
             logger.debug("Loaded table draft definition: " + path);
 
             if(draftTypes.containsKey(tableDraftDefinition.getCode()))
@@ -88,7 +90,7 @@ public class TableDraftDefinitions {
         }
         else if (path.isDirectory()) {
             for (File file : path.listFiles()) {
-                loadDrafts(file);
+                loadDrafts(file, library, formatLibrary);
             }
         }
     }

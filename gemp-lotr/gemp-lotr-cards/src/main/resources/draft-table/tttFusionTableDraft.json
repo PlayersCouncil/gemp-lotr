@@ -3,6 +3,7 @@
   "code": "ttt_fusion_table_draft",
   "format": "limited_ttt",
   "max-players": 6,
+  "html-description": "Each player begins with a <a href=\"https://wiki.lotrtcgpc.net/wiki/Towers_Draft_Pack\" target=\"_blank\">Towers Draft Pack</a>, which includes semi-random Free Peoples and Shadow cards, and one random Two Towers rare card. Players also receive common Frodo, common Ring, and one copy of each site card.<br/>Then, players draft six booster packs in the following order:<ul><li><strong>3x The Two Towers Block Free Peoples booster</strong></li><li><strong>3x The Two Towers Block Shadow booster</strong></li></ul>The <strong>TTT Block booster</strong> consists of cards from the <strong>The Two Towers</strong>, <strong>Battle of Helm's Deep</strong>, and <strong>Ents of Fangorn</strong> sets combined into a single draft pool. This means that each booster may contain cards from any of these three sets, depending on the random distribution.<br/>Note that not all cards from these sets are included in the draft. Based on past draft analyses, some common and uncommon cards have been cut, as these cards appeared in less than 1% of decks.",
   "starting-collection": [
     { "size": 3, "card-list": ["4_2", "4_302", "Towers Site Pack"] },
     {

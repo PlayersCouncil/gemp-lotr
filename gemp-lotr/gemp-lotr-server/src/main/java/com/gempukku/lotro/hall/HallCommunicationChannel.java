@@ -124,6 +124,9 @@ public class HallCommunicationChannel implements LongPollableResource {
                         props.put("startable", String.valueOf(startable));
                         props.put("readyCheckSecsRemaining", String.valueOf(readyCheckSecsRemaining));
                         props.put("confirmedReadyCheck", String.valueOf(confirmedReadyCheck));
+                        if (tournamentQueueKey.contains("table")) {
+                            props.put("draftCode", tournamentQueueKey.replace("_queue", ""));
+                        }
 
                         tournamentQueuesOnServer.put(tournamentQueueKey, props);
                     }

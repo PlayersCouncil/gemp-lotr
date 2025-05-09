@@ -3,6 +3,7 @@
   "code": "fotr_table_draft",
   "format": "limited_fotr",
   "max-players": 6,
+  "html-description": "Each player begins with a <a href=\"https://wiki.lotrtcgpc.net/wiki/Fellowship_Draft_Pack\" target=\"_blank\">Fellowship Draft Pack</a>, which includes semi-random Free Peoples and Shadow cards, and one random Fellowship of the Ring rare card. Players also receive common Frodo, common Ring, and one copy of each site card.<br/>Then, players draft six booster packs in the following order:<ol><li><strong>Fellowship of the Ring Free Peoples</strong> <strong>booster</strong></li><li><strong>Mines of Moria Free Peoples</strong> <strong>booster</strong></li><li><strong>Realms of the Elf-lords Free Peoples</strong> <strong>booster</strong></li><li><strong>Fellowship of the Ring Shadow</strong> <strong>booster</strong></li><li><strong>Mines of Moria Shadow</strong> <strong>booster</strong></li><li><strong>Realms of the Elf-lords Shadow</strong> <strong>booster</strong></li></ol>Note that not all cards from these sets are included in the draft. Based on past draft analyses, some common and uncommon cards have been cut, as these cards appeared in less than 1% of decks.",
   "starting-collection": [
     { "size": 3, "card-list": ["1_2", "1_290", "Fellowship Site Pack"] },
     {
