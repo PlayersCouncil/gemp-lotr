@@ -145,11 +145,11 @@ var GempLotrGameUI = Class.extend({
             });
             slowerBut.click(
                 function () {
-                    that.animations.replaySpeed = Math.min(2, that.animations.replaySpeed + 0.2);
+                    that.animations.replaySpeed = Math.min(16, that.animations.replaySpeed * 2);
                 });
             fasterBut.click(
                 function () {
-                    that.animations.replaySpeed = Math.max(0.2, that.animations.replaySpeed - 0.2);
+                    that.animations.replaySpeed = Math.max(0.0625, that.animations.replaySpeed / 2);
                 });
             replayDiv.append(slowerBut);
             replayDiv.append(fasterBut);
