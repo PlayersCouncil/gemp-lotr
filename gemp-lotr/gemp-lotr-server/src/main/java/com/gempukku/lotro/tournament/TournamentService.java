@@ -199,10 +199,10 @@ public class TournamentService {
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         try {
-            addRecurringScheduledQueue("fotr_daily_eu", "Daily Gondor Fellowship Block", "2013-01-15 19:30:00", "fotrDailyEu-", "fotr_block");
-            addRecurringScheduledQueue("fotr_daily_us", "Daily Rohan Fellowship Block", "2013-01-16 00:30:00", "fotrDailyUS-", "fotr_block");
-            addRecurringScheduledQueue("movie_daily_eu", "Daily Gondor Movie Block", "2013-01-16 19:30:00", "movieDailyEu-", "movie");
-            addRecurringScheduledQueue("movie_daily_us", "Daily Rohan Movie Block", "2013-01-17 00:30:00", "movieDailyUs-", "movie");
+            addRecurringScheduledQueue("fotr_daily_eu", "Daily Fellowship Block", "2013-01-15 19:30:00", "fotrDailyEu-", "fotr_block");
+            addRecurringScheduledQueue("fotr_daily_us", "Daily Fellowship Block", "2013-01-16 00:30:00", "fotrDailyUS-", "fotr_block");
+            addRecurringScheduledQueue("movie_daily_eu", "Daily Movie Block", "2013-01-16 19:30:00", "movieDailyEu-", "movie");
+            addRecurringScheduledQueue("movie_daily_us", "Daily Movie Block", "2013-01-17 00:30:00", "movieDailyUs-", "movie");
 
         } catch (DateTimeParseException exp) {
             // Ignore, can't happen
