@@ -979,8 +979,8 @@ var PCCards = {
 	'67_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN17E024.2_card.jpg',
 	
 	// Watcher in the Water FA
-	'2_131'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02U073.0_card.jpg',
+	'2_131'  : 'https://i.lotrtcgpc.net/promos/LOTR-EN02U073.0_card.jpg',
 	// Pale Crown FA
-	'101_103'  : 'https://i.lotrtcgpc.net/errata/LOTR-ENV1U039.0_card.jpg',
+	'101_103'  : 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U039.0_card.jpg',
 }
 
