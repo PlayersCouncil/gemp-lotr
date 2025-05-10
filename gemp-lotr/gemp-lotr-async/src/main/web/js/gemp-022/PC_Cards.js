@@ -977,5 +977,10 @@ var PCCards = {
 	'51_172' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E172.1_card.jpg',
 	// Shadowfax, Greatest of the Mearas (17R24) [Errata]
 	'67_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN17E024.2_card.jpg',
+	
+	// Watcher in the Water FA
+	'2_131'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN02U073.0_card.jpg',
+	// Pale Crown FA
+	'101_103'  : 'https://i.lotrtcgpc.net/errata/LOTR-ENV1U039.0_card.jpg',
 }
 
