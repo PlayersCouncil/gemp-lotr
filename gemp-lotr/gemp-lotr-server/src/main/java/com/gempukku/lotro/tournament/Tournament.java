@@ -209,4 +209,6 @@ public interface Tournament {
     boolean join(String playerName, LotroDeck lotroDeck);
     long getSecondsRemaining() throws IllegalStateException;
     String getTableDescription();
+
+    boolean isWC();
 }

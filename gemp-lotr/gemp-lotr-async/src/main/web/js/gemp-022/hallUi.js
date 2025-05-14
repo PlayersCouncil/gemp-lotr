@@ -404,7 +404,7 @@ var GempLotrHallUI = Class.extend({
 			for (var i = 0; i < queues.length; i++) {
 				var queue = queues[i];
 				var id = queue.getAttribute("id");
-				var isWC = id.toLowerCase().includes("wc");
+				var isWC = queue.getAttribute("wc") == "true";
 				var action = queue.getAttribute("action");
 				if (action == "add" || action == "update") {
 					var actionsField = $("<td></td>");
@@ -660,7 +660,7 @@ var GempLotrHallUI = Class.extend({
 			for (var i = 0; i < tournaments.length; i++) {
 				var tournament = tournaments[i];
 				var id = tournament.getAttribute("id");
-				var isWC = id.toLowerCase().includes("wc");
+				var isWC = tournament.getAttribute("wc") == "true";
 				var action = tournament.getAttribute("action");
 				var type = tournament.getAttribute("type");
 				if(type !== null)
