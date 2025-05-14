@@ -965,11 +965,6 @@ var GempLotrHallUI = Class.extend({
 					}
 					
 					name += "</td>";
-					
-					//TODO: Replace this with an actual fix on the server side 
-					if(name.includes("Casual - WC")) {
-						name = "<td><b>2024 World Championship" + userDesc + "</b></td>"
-					}
 					row.append(name);
 					row.append("<td>" + statusDescription + "</td>");
 
