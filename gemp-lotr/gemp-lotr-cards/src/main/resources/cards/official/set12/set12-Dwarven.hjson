@@ -23,6 +23,7 @@
 				{
 					type: chooseActiveCards
 					text: Choose a race to spare, all other will be discarded
+					player: shadow
 					select: choose(minion,hasRace)
 					memorize: chosenMinion
 				}
