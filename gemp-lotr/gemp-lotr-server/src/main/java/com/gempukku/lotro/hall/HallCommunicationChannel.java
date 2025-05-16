@@ -107,7 +107,7 @@ public class HallCommunicationChannel implements LongPollableResource {
                     @Override
                     public void visitTournamentQueue(String tournamentQueueKey, int cost, String collectionName, String formatName, String type, String tournamentQueueName,
                                                      String tournamentPrizes, String pairingDescription, String startCondition, int playerCount, String playerList, boolean playerSignedUp,
-                                                     boolean joinable, boolean startable, int readyCheckSecsRemaining, boolean confirmedReadyCheck) {
+                                                     boolean joinable, boolean startable, int readyCheckSecsRemaining, boolean confirmedReadyCheck, boolean wc) {
                         Map<String, String> props = new HashMap<>();
                         props.put("cost", String.valueOf(cost));
                         props.put("collection", collectionName);
@@ -124,6 +124,7 @@ public class HallCommunicationChannel implements LongPollableResource {
                         props.put("startable", String.valueOf(startable));
                         props.put("readyCheckSecsRemaining", String.valueOf(readyCheckSecsRemaining));
                         props.put("confirmedReadyCheck", String.valueOf(confirmedReadyCheck));
+                        props.put("wc", String.valueOf(wc));
                         if (tournamentQueueKey.contains("table")) {
                             props.put("draftCode", tournamentQueueKey.replace("_queue", ""));
                         }
@@ -134,7 +135,7 @@ public class HallCommunicationChannel implements LongPollableResource {
                     @Override
                     public void visitTournament(String tournamentKey, String collectionName, String formatName, String tournamentName, String type, String pairingDescription,
                                                 String tournamentStage, int round, int playerCount, String playerList, boolean playerInCompetition, boolean abandoned, boolean joinable,
-                                                long secsRemaining) {
+                                                long secsRemaining, boolean wc) {
                         Map<String, String> props = new HashMap<>();
                         props.put("collection", collectionName);
                         props.put("format", formatName);
@@ -148,6 +149,7 @@ public class HallCommunicationChannel implements LongPollableResource {
                         props.put("signedUp", String.valueOf(playerInCompetition));
                         props.put("abandoned", String.valueOf(abandoned));
                         props.put("joinable", String.valueOf(joinable));
+                        props.put("wc", String.valueOf(wc));
                         if (secsRemaining >= 0) {
                             props.put("timeRemaining", DateUtils.HumanDuration(Duration.ofSeconds(secsRemaining)));
                         }

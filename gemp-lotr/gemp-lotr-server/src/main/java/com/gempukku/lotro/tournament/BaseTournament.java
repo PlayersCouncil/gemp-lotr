@@ -558,4 +558,9 @@ public abstract class BaseTournament implements Tournament {
             writeLock.unlock();
         }
     }
+
+    @Override
+    public boolean isWC() {
+        return _tournamentInfo._params.wc;
+    }
 }

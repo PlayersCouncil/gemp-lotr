@@ -982,7 +982,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         int minPlayers = Throw400IfNullOrNonInteger("minPlayers", minPlayersStr);
         boolean manualKickoff = ParseBoolean("manualKickoff", manualKickoffStr, false);
 
-        if(wc) {
+        if (wc) {
             tournamentId = DateUtils.Now().getYear() + "-wc-" + tournamentId;
         }
 
@@ -1070,6 +1070,10 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         params.prizes = Tournament.PrizeType.DAILY;
         params.minimumPlayers = minPlayers;
         params.manualKickoff = manualKickoff;
+
+        if (wc) {
+            params.wc = true;
+        }
 
         TournamentInfo info;
 

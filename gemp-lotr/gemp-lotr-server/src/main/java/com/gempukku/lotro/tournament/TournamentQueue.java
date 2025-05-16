@@ -50,4 +50,6 @@ public interface TournamentQueue {
     boolean confirmReadyCheck(String player);
 
     boolean hasConfirmedReadyCheck(String player);
+
+    boolean isWC();
 }

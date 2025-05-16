@@ -222,10 +222,12 @@ public class DbTournamentDAO implements TournamentDAO {
                     SELECT id, tournament_id, name, format, start_date, type, parameters, started
                     FROM scheduled_tournament
                     WHERE started = 0
-                        AND start_date <= :start;
+                        AND start_date <= :start
+                        AND start_date >= :now;
                         """;
                 List<DBDefs.ScheduledTournament> result = conn.createQuery(sql)
                         .addParameter("start", tillDate)
+                        .addParameter("now", ZonedDateTime.now())
                         .executeAndFetch(DBDefs.ScheduledTournament.class);
 
                 return result;

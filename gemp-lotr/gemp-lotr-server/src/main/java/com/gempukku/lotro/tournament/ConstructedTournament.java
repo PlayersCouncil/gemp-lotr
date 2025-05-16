@@ -136,4 +136,12 @@ public class ConstructedTournament extends BaseTournament implements Tournament 
                 getTournamentStage() == Tournament.Stage.PAUSED || getTournamentStage() == Tournament.Stage.AWAITING_KICKOFF)
                 && (maximumPlayers > activePlayers.size() || maximumPlayers < 0);
     }
+
+    @Override
+    public String getTableDescription() {
+        if (isWC()) {
+            return DateUtils.Now().getYear() + " World Championship";
+        }
+        return null;
+    }
 }

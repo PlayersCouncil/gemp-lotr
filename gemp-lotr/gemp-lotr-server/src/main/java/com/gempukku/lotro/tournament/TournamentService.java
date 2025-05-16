@@ -253,7 +253,7 @@ public class TournamentService {
                     formatLibrary.getFormat(queue.getFormatCode()).getName(), queue.getInfo().Parameters().type.toString(), queue.getTournamentQueueName(),
                     queue.getPrizesDescription(), queue.getPairingDescription(), queue.getStartCondition(),
                     queue.getPlayerCount(), queue.getPlayerList(), queue.isPlayerSignedUp(player.getName()), queue.isJoinable(), queue.isStartable(player.getName()),
-                    queue.getSecondsRemainingForReadyCheck(), queue.hasConfirmedReadyCheck(player.getName()));
+                    queue.getSecondsRemainingForReadyCheck(), queue.hasConfirmedReadyCheck(player.getName()), queue.isWC());
         }
 
         for (var entry : _activeTournaments.entrySet()) {
@@ -269,7 +269,7 @@ public class TournamentService {
                     formatLibrary.getFormat(tournament.getFormatCode()).getName(), tournament.getTournamentName(), tournament.getInfo().Parameters().type.toString(), tournament.getPlayOffSystem(),
                     tournament.getTournamentStage().getHumanReadable(),
                     tournament.getCurrentRound(), tournament.getPlayersInCompetitionCount(), tournament.getPlayerList(), tournament.isPlayerInCompetition(player.getName()), tournament.isPlayerAbandoned(player.getName()),
-                    tournament.isJoinable(), secsRemaining);
+                    tournament.isJoinable(), secsRemaining, tournament.isWC());
         }
 
     }
