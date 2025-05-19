@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_195_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("relics", "1_195");
@@ -22,9 +22,9 @@ public class Card_01_195_Tests
 					put("scimitar", "1_180");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,7 +54,7 @@ public class Card_01_195_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -66,9 +66,9 @@ public class Card_01_195_Tests
 		var relics = scn.GetShadowCard("relics");
 		var runner = scn.GetShadowCard("runner");
 		var scimitar = scn.GetShadowCard("scimitar");
-		scn.ShadowMoveCardToSupportArea(relics);
-		scn.ShadowMoveCharToTable(runner);
-		scn.ShadowMoveCardToDiscard(scimitar);
+		scn.MoveCardsToSupportArea(relics);
+		scn.MoveMinionsToTable(runner);
+		scn.MoveCardsToDiscard(scimitar);
 
 		scn.StartGame();
 
@@ -92,8 +92,8 @@ public class Card_01_195_Tests
 		var relics = scn.GetShadowCard("relics");
 		var runner = scn.GetShadowCard("runner");
 		var scimitar = scn.GetShadowCard("scimitar");
-		scn.ShadowMoveCardToSupportArea(relics);
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveCardsToSupportArea(relics);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 

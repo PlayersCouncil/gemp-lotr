@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_02_091_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("spies", "52_91");
 					put("troop", "101_48");
 					put("goblinarcher", "1_176");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.IsildursBaneRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.IsildursBaneRing
 		);
 	}
 
@@ -52,7 +52,7 @@ public class Card_02_091_ErrataTests
 		assertEquals(Side.SHADOW, spies.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, spies.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, spies.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(spies, Timeword.RESPONSE));
+        assertTrue(scn.HasTimeword(spies, Timeword.RESPONSE));
 		assertEquals(0, spies.getBlueprint().getTwilightCost());
 	}
 
@@ -65,8 +65,8 @@ public class Card_02_091_ErrataTests
 
 		var spies = scn.GetShadowCard("spies");
 		var goblinarcher = scn.GetShadowCard("goblinarcher");
-		scn.ShadowMoveCardToHand(spies);
-		scn.ShadowMoveCharToTable(goblinarcher);
+		scn.MoveCardsToHand(spies);
+		scn.MoveMinionsToTable(goblinarcher);
 
 		scn.StartGame();
 
@@ -88,8 +88,8 @@ public class Card_02_091_ErrataTests
 
 		var spies = scn.GetShadowCard("spies");
 		var troop = scn.GetShadowCard("troop");
-		scn.ShadowMoveCardToHand(spies);
-		scn.ShadowMoveCharToTable(troop);
+		scn.MoveCardsToHand(spies);
+		scn.MoveMinionsToTable(troop);
 
 		scn.StartGame();
 
@@ -123,8 +123,8 @@ public class Card_02_091_ErrataTests
 
 		var spies = scn.GetShadowCard("spies");
 		var troop = scn.GetShadowCard("troop");
-		scn.ShadowMoveCardToHand(spies);
-		scn.ShadowMoveCharToTable(troop);
+		scn.MoveCardsToHand(spies);
+		scn.MoveMinionsToTable(troop);
 
 		scn.StartGame();
 

@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,16 +17,16 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_048_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("troop", "101_48");
 					put("guard1", "1_7");
 					put("guard2", "1_7");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -50,7 +50,7 @@ public class Card_V1_048_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl troop = scn.GetFreepsCard("troop");
 
@@ -59,7 +59,7 @@ public class Card_V1_048_Tests
 		assertEquals(Culture.SAURON, troop.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, troop.getBlueprint().getCardType());
 		assertEquals(Race.ORC, troop.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(troop, Keyword.TRACKER)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(troop, Keyword.TRACKER)); // test for keywords as needed
 		assertEquals(3, troop.getBlueprint().getTwilightCost());
 		assertEquals(8, troop.getBlueprint().getStrength());
 		assertEquals(2, troop.getBlueprint().getVitality());
@@ -72,29 +72,29 @@ public class Card_V1_048_Tests
 	@Test
 	public void TroopIsArcherIfOneExhaustedCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl troop = scn.GetShadowCard("troop");
-		scn.ShadowMoveCharToTable(troop);
+		scn.MoveMinionsToTable(troop);
 
 		scn.StartGame();
 
-		assertFalse(scn.hasKeyword(troop, Keyword.ARCHER));
+		assertFalse(scn.HasKeyword(troop, Keyword.ARCHER));
 		scn.AddWoundsToChar(scn.GetRingBearer(), 3);
-		assertTrue(scn.hasKeyword(troop, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(troop, Keyword.ARCHER));
 	}
 
 	@Test
 	public void TroopIsStrengthPlus3IfThreeExhaustedCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl troop = scn.GetShadowCard("troop");
-		scn.ShadowMoveCharToTable(troop);
+		scn.MoveMinionsToTable(troop);
 
 		PhysicalCardImpl guard1 = scn.GetFreepsCard("guard1");
 		PhysicalCardImpl guard2 = scn.GetFreepsCard("guard2");
-		scn.FreepsMoveCharToTable(guard1, guard2);
+		scn.MoveCompanionToTable(guard1, guard2);
 
 		scn.StartGame();
 

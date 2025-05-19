@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set08;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_08_050_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("blacksails", "8_50");
 					put("corsair", "8_53");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -51,7 +51,7 @@ public class Card_08_050_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -61,7 +61,7 @@ public class Card_08_050_Tests
 		var scn = GetScenario();
 
 		var blacksails = scn.GetShadowCard("blacksails");
-		scn.ShadowMoveCardToHand(blacksails);
+		scn.MoveCardsToHand(blacksails);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.SHADOW);
@@ -82,8 +82,8 @@ public class Card_08_050_Tests
 
 		var blacksails = scn.GetShadowCard("blacksails");
 		var corsair = scn.GetShadowCard("corsair");
-		scn.ShadowMoveCardToSupportArea(blacksails);
-		scn.ShadowMoveCardsToTopOfDeck(corsair);
+		scn.MoveCardsToSupportArea(blacksails);
+		scn.MoveCardsToTopOfDeck(corsair);
 
 		scn.StartGame();
 		scn.SetTwilight(50);
@@ -100,8 +100,8 @@ public class Card_08_050_Tests
 
 		var blacksails = scn.GetShadowCard("blacksails");
 		var corsair = scn.GetShadowCard("corsair");
-		scn.ShadowMoveCardToSupportArea(blacksails);
-		scn.ShadowMoveCardToDiscard(corsair);
+		scn.MoveCardsToSupportArea(blacksails);
+		scn.MoveCardsToDiscard(corsair);
 
 		scn.StartGame();
 		scn.SetTwilight(47);
@@ -127,8 +127,8 @@ public class Card_08_050_Tests
 
 		var blacksails = scn.GetShadowCard("blacksails");
 		var corsair = scn.GetShadowCard("corsair");
-		scn.ShadowMoveCardToSupportArea(blacksails);
-		scn.ShadowMoveCardToDiscard(corsair);
+		scn.MoveCardsToSupportArea(blacksails);
+		scn.MoveCardsToDiscard(corsair);
 
 		scn.StartGame();
 		scn.SetTwilight(47);
@@ -154,8 +154,8 @@ public class Card_08_050_Tests
 
 		var blacksails = scn.GetShadowCard("blacksails");
 		var corsair = scn.GetShadowCard("corsair");
-		scn.ShadowMoveCardToSupportArea(blacksails);
-		scn.ShadowMoveCardToDiscard(corsair);
+		scn.MoveCardsToSupportArea(blacksails);
+		scn.MoveCardsToDiscard(corsair);
 
 		scn.StartGame();
 		scn.SetTwilight(47);
@@ -181,8 +181,8 @@ public class Card_08_050_Tests
 
 		var blacksails = scn.GetShadowCard("blacksails");
 		var corsair = scn.GetShadowCard("corsair");
-		scn.ShadowMoveCardToSupportArea(blacksails);
-		scn.ShadowMoveCardToDiscard(corsair);
+		scn.MoveCardsToSupportArea(blacksails);
+		scn.MoveCardsToDiscard(corsair);
 
 		scn.StartGame();
 		scn.SetTwilight(47);
@@ -208,8 +208,8 @@ public class Card_08_050_Tests
 
 		var blacksails = scn.GetShadowCard("blacksails");
 		var corsair = scn.GetShadowCard("corsair");
-		scn.ShadowMoveCardToSupportArea(blacksails);
-		scn.ShadowMoveCardToDiscard(corsair);
+		scn.MoveCardsToSupportArea(blacksails);
+		scn.MoveCardsToDiscard(corsair);
 
 		scn.StartGame();
 		scn.SetTwilight(47);
@@ -235,8 +235,8 @@ public class Card_08_050_Tests
 
 		var blacksails = scn.GetShadowCard("blacksails");
 		var corsair = scn.GetShadowCard("corsair");
-		scn.ShadowMoveCardToSupportArea(blacksails);
-		scn.ShadowMoveCardToDiscard(corsair);
+		scn.MoveCardsToSupportArea(blacksails);
+		scn.MoveCardsToDiscard(corsair);
 
 		scn.StartGame();
 		scn.AddTokensToCard(blacksails, 5);
@@ -261,8 +261,8 @@ public class Card_08_050_Tests
 
 		var blacksails = scn.GetShadowCard("blacksails");
 		var corsair = scn.GetShadowCard("corsair");
-		scn.ShadowMoveCardToSupportArea(blacksails);
-		scn.ShadowMoveCardToDiscard(corsair);
+		scn.MoveCardsToSupportArea(blacksails);
+		scn.MoveCardsToDiscard(corsair);
 
 		scn.StartGame();
 		scn.AddTokensToCard(blacksails, 5);

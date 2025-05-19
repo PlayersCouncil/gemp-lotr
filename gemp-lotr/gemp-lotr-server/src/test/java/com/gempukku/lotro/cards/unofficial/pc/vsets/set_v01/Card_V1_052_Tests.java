@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,15 +14,15 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_052_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("merry", "101_52");
 					put("shelob", "8_26");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -69,10 +69,10 @@ public class Card_V1_052_Tests
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
-		scn.FreepsMoveCharToTable(merry);
+		scn.MoveCompanionToTable(merry);
 
 		var shelob = scn.GetShadowCard("shelob");
-		scn.ShadowMoveCharToTable(shelob);
+		scn.MoveMinionsToTable(shelob);
 
 		scn.StartGame();
 
@@ -98,10 +98,10 @@ public class Card_V1_052_Tests
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
-		scn.FreepsMoveCharToTable(merry);
+		scn.MoveCompanionToTable(merry);
 
 		var shelob = scn.GetShadowCard("shelob");
-		scn.ShadowMoveCharToTable(shelob);
+		scn.MoveMinionsToTable(shelob);
 
 		scn.StartGame();
 
@@ -129,10 +129,10 @@ public class Card_V1_052_Tests
 //		var scn = GetScenario();
 //
 //		var merry = scn.GetFreepsCard("merry");
-//		scn.FreepsMoveCharToTable(merry);
+//		scn.MoveCompanionToTable(merry);
 //
 //		var shelob = scn.GetShadowCard("shelob");
-//		scn.ShadowMoveCharToTable(shelob);
+//		scn.MoveMinionToTable(shelob);
 //
 //		scn.StartGame();
 //

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_03_069_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("saruman", "3_69");
@@ -24,9 +24,9 @@ public class Card_03_069_Tests
 					put("sam", "2_114");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -72,10 +72,10 @@ public class Card_03_069_Tests
 
 		var saruman = scn.GetShadowCard("saruman");
 		var savage = scn.GetShadowCard("savage");
-		scn.ShadowMoveCharToTable(saruman, savage);
+		scn.MoveMinionsToTable(saruman, savage);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionToTable(sam);
 
 		scn.StartGame();
 
@@ -103,11 +103,11 @@ public class Card_03_069_Tests
 		var saruman = scn.GetShadowCard("saruman");
 		var savage = scn.GetShadowCard("savage");
 		var shaman = scn.GetShadowCard("shaman");
-		scn.ShadowMoveCharToTable(saruman, savage, shaman);
+		scn.MoveMinionsToTable(saruman, savage, shaman);
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionToTable(sam);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set11;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_11_157_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("rush", "11_157");
 					put("scout", "10_78");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -53,7 +53,7 @@ public class Card_11_157_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
@@ -63,10 +63,10 @@ public class Card_11_157_Tests
 		var scn = GetScenario();
 
 		var rush = scn.GetFreepsCard("rush");
-		scn.FreepsMoveCardToSupportArea(rush);
+		scn.MoveCardsToSupportArea(rush);
 
 		var scout = scn.GetShadowCard("scout");
-		scn.ShadowMoveCharToTable(scout);
+		scn.MoveMinionsToTable(scout);
 
 		scn.StartGame();
 
@@ -74,7 +74,7 @@ public class Card_11_157_Tests
 
 		assertTrue(scn.ShadowActionAvailable(scout));
 		scn.ShadowUseCardAction(scout);
-		scn.ShadowChooseMultipleChoiceOption("exert");
+		scn.ShadowChooseOption("exert");
 
 		assertEquals(Zone.SUPPORT, rush.getZone());
 		assertEquals(Zone.SHADOW_CHARACTERS, scout.getZone());

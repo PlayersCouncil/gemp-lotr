@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -12,8 +12,8 @@ import static org.junit.Assert.assertEquals;
 public class DwarfErrataTests
 {
 
-    protected GenericCardTestHelper GetSimpleDeckScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetSimpleDeckScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("guard", "51_7");
                     put("farin", "51_11");
@@ -31,7 +31,7 @@ public class DwarfErrataTests
         // Each of these dwarves (and lorien elf) had their strength boosted by 1.
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetSimpleDeckScenario();
+        VirtualTableScenario scn = GetSimpleDeckScenario();
 
         assertEquals(5, scn.GetFreepsCard("guard").getBlueprint().getStrength());
         assertEquals(5, scn.GetFreepsCard("elf").getBlueprint().getStrength());

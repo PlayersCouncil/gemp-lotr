@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 
 public class Card_03_068_ErrataTests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("legolas", "1_50");
                     put("tale", "1_66");
@@ -66,7 +66,7 @@ public class Card_03_068_ErrataTests
     @Test
     public void SarumanImmunityAndWoundBlock() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
 
@@ -75,11 +75,11 @@ public class Card_03_068_ErrataTests
         PhysicalCardImpl uruk2 = scn.GetShadowCard("uruk2");
 
 
-        scn.FreepsMoveCharToTable(legolas);
+        scn.MoveCompanionToTable(legolas);
 
-        scn.ShadowMoveCharToTable(saruman);
-        scn.ShadowMoveCharToTable(uruk1);
-        scn.ShadowMoveCharToTable(uruk2);
+        scn.MoveMinionsToTable(saruman);
+        scn.MoveMinionsToTable(uruk1);
+        scn.MoveMinionsToTable(uruk2);
 
         scn.StartGame();
 
@@ -98,7 +98,7 @@ public class Card_03_068_ErrataTests
         assertEquals(0, scn.GetWoundsOn(uruk1));
         assertEquals(1, scn.GetWoundsOn(saruman));
         //Old version made them fierce, ensure that was removed
-        assertFalse(scn.hasKeyword(uruk1, Keyword.FIERCE));
+        assertFalse(scn.HasKeyword(uruk1, Keyword.FIERCE));
 
         //shadow has to skip archery actions
         scn.ShadowPassCurrentPhaseAction();
@@ -120,13 +120,13 @@ public class Card_03_068_ErrataTests
     @Test
     public void SarumanAbilityGrantsFierce() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
         PhysicalCardImpl uruk1 = scn.GetShadowCard("uruk1");
 
-        scn.ShadowMoveCharToTable(saruman);
-        scn.ShadowMoveCharToTable(uruk1);
+        scn.MoveMinionsToTable(saruman);
+        scn.MoveMinionsToTable(uruk1);
 
         scn.StartGame();
 
@@ -137,12 +137,12 @@ public class Card_03_068_ErrataTests
 
         scn.ShadowUseCardAction(saruman);
 
-        assertTrue(scn.hasKeyword(uruk1, Keyword.FIERCE));
+        assertTrue(scn.HasKeyword(uruk1, Keyword.FIERCE));
 
         assertEquals(0, scn.GetWoundsOn(uruk1));
         assertEquals(1, scn.GetWoundsOn(saruman));
 
         scn.SkipToPhase(Phase.ASSIGNMENT);
-        assertTrue(scn.hasKeyword(uruk1, Keyword.FIERCE));
+        assertTrue(scn.HasKeyword(uruk1, Keyword.FIERCE));
     }
 }

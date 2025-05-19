@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -18,8 +18,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_028_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("wisp", "101_28");
                     put("wisp2", "101_28");
@@ -44,9 +44,9 @@ public class Card_V1_028_Tests
                     put("filler8", "1_12");
                     put("filler9", "1_12");
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -66,7 +66,7 @@ public class Card_V1_028_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl wisp = scn.GetFreepsCard("wisp");
 
@@ -90,7 +90,7 @@ public class Card_V1_028_Tests
 	@Test
 	public void WispTopdecksSarumanFromDeckOrDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl wisp = scn.GetShadowCard("wisp");
 		PhysicalCardImpl wisp2 = scn.GetShadowCard("wisp2");
@@ -100,11 +100,11 @@ public class Card_V1_028_Tests
 		PhysicalCardImpl saruman2 = scn.GetShadowCard("saruman2");
 		PhysicalCardImpl saruman3 = scn.GetShadowCard("saruman3");
 
-		scn.ShadowMoveCardToHand(wisp, wisp2, wisp3);
-		scn.ShadowMoveCharToTable("flock2");
-		scn.ShadowMoveCardsToBottomOfDeck(saruman1);
-		scn.ShadowMoveCardToDiscard(saruman2);
-		scn.ShadowMoveCardToDiscard(saruman3);
+		scn.MoveCardsToHand(wisp, wisp2, wisp3);
+		scn.MoveMinionToTable("flock2");
+		scn.MoveCardsToBottomOfDeck(saruman1);
+		scn.MoveCardToDiscard(saruman2);
+		scn.MoveCardToDiscard(saruman3);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -123,7 +123,7 @@ public class Card_V1_028_Tests
 		// must first decide between deck and discard, and then choose among the revealed copies.
 		scn.ShadowPlayCard(wisp);
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
+		scn.ShadowChooseOption("discard");
 		assertEquals(2, scn.GetShadowCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(saruman2);
 		assertEquals(Zone.DECK, saruman2.getZone());
@@ -147,7 +147,7 @@ public class Card_V1_028_Tests
 		// chooses between deck/discard, but then does not have to choose among copies (as there is only 1)
 		scn.ShadowPlayCard(wisp2);
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
+		scn.ShadowChooseOption("discard");
 //		assertEquals(1, scn.GetShadowCardChoiceCount());
 //		scn.ShadowChooseCardBPFromSelection(weather1);
 		assertEquals(Zone.DECK, saruman3.getZone());
@@ -171,7 +171,7 @@ public class Card_V1_028_Tests
 		// does not need to choose either pile source nor which copy
 		scn.ShadowPlayCard(wisp3);
 		assertFalse(scn.ShadowDecisionAvailable("Choose action to perform"));
-//		scn.ShadowChooseMultipleChoiceOption("draw deck");
+//		scn.ShadowChooseOption("draw deck");
 //		assertEquals(1, scn.GetShadowCardChoiceCount());
 //		scn.ShadowChooseCardBPFromSelection(weather1);
 		assertEquals(Zone.DECK, saruman1.getZone());
@@ -181,7 +181,7 @@ public class Card_V1_028_Tests
 	@Test
 	public void WispOptionallyDiscardsCardsFromHandBasedOnCrows() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl wisp = scn.GetShadowCard("wisp");
 		PhysicalCardImpl wisp2 = scn.GetShadowCard("wisp2");
@@ -191,9 +191,9 @@ public class Card_V1_028_Tests
 		PhysicalCardImpl saruman2 = scn.GetShadowCard("saruman2");
 		PhysicalCardImpl saruman3 = scn.GetShadowCard("saruman3");
 
-		scn.ShadowMoveCardToHand(wisp, wisp2, wisp3, saruman1, saruman2);
-		scn.ShadowMoveCardToDiscard(saruman3);
-		scn.ShadowMoveCharToTable("flock", "flock2", "flock3", "flock4");
+		scn.MoveCardsToHand(wisp, wisp2, wisp3, saruman1, saruman2);
+		scn.MoveCardToDiscard(saruman3);
+		scn.MoveMinionToTable("flock", "flock2", "flock3", "flock4");
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 
 public class Card_01_138_ErrataTests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("boromir", "1_97");
                     put("event", "1_116");
@@ -45,7 +45,7 @@ public class Card_01_138_ErrataTests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl snows = scn.GetFreepsCard("snows");
 
@@ -55,20 +55,20 @@ public class Card_01_138_ErrataTests
         assertEquals(Culture.ISENGARD, snows.getBlueprint().getCulture());
         assertEquals(CardType.CONDITION, snows.getBlueprint().getCardType());
         assertEquals(Culture.ISENGARD, snows.getBlueprint().getCulture());
-        assertTrue(scn.hasKeyword(snows, Keyword.SPELL));
-        assertTrue(scn.hasKeyword(snows, Keyword.WEATHER));
+        assertTrue(scn.HasKeyword(snows, Keyword.SPELL));
+        assertTrue(scn.HasKeyword(snows, Keyword.WEATHER));
     }
 
     @Test
     public void ExertsMinionWhenPlayed() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl snows = scn.GetShadowCard("snows");
         PhysicalCardImpl uruk = scn.GetShadowCard("uruk");
 
-        scn.ShadowMoveCardToHand(snows);
-        scn.ShadowMoveCardToHand(uruk);
+        scn.MoveCardsToHand(snows);
+        scn.MoveCardsToHand(uruk);
 
         scn.StartGame();
 
@@ -91,13 +91,13 @@ public class Card_01_138_ErrataTests
     @Test
     public void DiscardsAtEndOfTurn() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl snows = scn.GetShadowCard("snows");
         PhysicalCardImpl uruk = scn.GetShadowCard("uruk");
 
-        scn.ShadowMoveCardToHand(snows);
-        scn.ShadowMoveCharToTable(uruk);
+        scn.MoveCardsToHand(snows);
+        scn.MoveMinionsToTable(uruk);
 
         scn.StartGame();
 
@@ -107,7 +107,7 @@ public class Card_01_138_ErrataTests
         scn.ShadowPlayCard(snows);
         scn.ShadowChoose(scn.ShadowGetCardChoices().get(1));
 
-        scn.ShadowMoveCardToDiscard(uruk);
+        scn.MoveCardsToDiscard(uruk);
         scn.SkipToPhase(Phase.REGROUP);
         scn.FreepsPassCurrentPhaseAction();
         scn.ShadowPassCurrentPhaseAction();
@@ -126,7 +126,7 @@ public class Card_01_138_ErrataTests
     @Test
     public void OnlyBlocksSkirmishStuffAgainstAnIsengardMinion() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl snows = scn.GetShadowCard("snows");
         PhysicalCardImpl uruk = scn.GetShadowCard("uruk");
@@ -135,12 +135,12 @@ public class Card_01_138_ErrataTests
         PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
         PhysicalCardImpl event = scn.GetFreepsCard("event");
 
-        scn.ShadowMoveCardToHand(snows);
-        scn.ShadowMoveCharToTable(uruk);
-        scn.ShadowMoveCharToTable(runner);
+        scn.MoveCardsToHand(snows);
+        scn.MoveMinionsToTable(uruk);
+        scn.MoveMinionsToTable(runner);
 
-        scn.FreepsMoveCardToHand(event);
-        scn.FreepsMoveCharToTable(boromir);
+        scn.MoveCardsToHand(event);
+        scn.MoveCompanionToTable(boromir);
 
         scn.StartGame();
 

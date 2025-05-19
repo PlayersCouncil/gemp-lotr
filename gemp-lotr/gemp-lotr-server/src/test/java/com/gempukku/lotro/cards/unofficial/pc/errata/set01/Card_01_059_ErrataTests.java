@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_059_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("sts", "51_59");
@@ -25,9 +25,9 @@ public class Card_01_059_ErrataTests
 
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_01_059_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, sts.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, sts.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, sts.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(sts, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(sts, Keyword.SUPPORT_AREA));
 		assertEquals(1, sts.getBlueprint().getTwilightCost());
 	}
 
@@ -69,8 +69,8 @@ public class Card_01_059_ErrataTests
 		var gimli = scn.GetFreepsCard("gimli");
 		var rumil = scn.GetFreepsCard("rumil");
 		var grimir = scn.GetFreepsCard("grimir");
-		scn.FreepsMoveCharToTable(legolas, gimli);
-		scn.FreepsMoveCardToSupportArea(rumil, grimir, sts);
+		scn.MoveCompanionToTable(legolas, gimli);
+		scn.MoveCardsToSupportArea(rumil, grimir, sts);
 
 		scn.StartGame();
 
@@ -115,8 +115,8 @@ public class Card_01_059_ErrataTests
 		var gimli = scn.GetFreepsCard("gimli");
 		var rumil = scn.GetFreepsCard("rumil");
 		var grimir = scn.GetFreepsCard("grimir");
-		scn.FreepsMoveCharToTable(legolas, gimli);
-		scn.FreepsMoveCardToSupportArea(rumil, grimir, sts);
+		scn.MoveCompanionToTable(legolas, gimli);
+		scn.MoveCardsToSupportArea(rumil, grimir, sts);
 
 		scn.StartGame();
 
@@ -161,11 +161,11 @@ public class Card_01_059_ErrataTests
 		var gimli = scn.GetFreepsCard("gimli");
 		var rumil = scn.GetFreepsCard("rumil");
 		var grimir = scn.GetFreepsCard("grimir");
-		scn.FreepsMoveCharToTable(legolas, gimli);
-		scn.FreepsMoveCardToSupportArea(rumil, grimir, sts);
+		scn.MoveCompanionToTable(legolas, gimli);
+		scn.MoveCardsToSupportArea(rumil, grimir, sts);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 

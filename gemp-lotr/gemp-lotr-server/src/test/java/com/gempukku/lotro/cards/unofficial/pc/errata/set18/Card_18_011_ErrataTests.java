@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set18;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_18_011_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("ewer", "68_11");
@@ -26,9 +26,9 @@ public class Card_18_011_ErrataTests
 
 					put("savage", "1_151");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.GaladrielRB,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.GaladrielRB,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -59,7 +59,7 @@ public class Card_18_011_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -70,7 +70,7 @@ public class Card_18_011_ErrataTests
 
 		var galadriel = scn.GetRingBearer();
 		var ewer = scn.GetFreepsCard("ewer");
-		scn.FreepsMoveCardToHand(ewer);
+		scn.MoveCardsToHand(ewer);
 
 		scn.StartGame();
 

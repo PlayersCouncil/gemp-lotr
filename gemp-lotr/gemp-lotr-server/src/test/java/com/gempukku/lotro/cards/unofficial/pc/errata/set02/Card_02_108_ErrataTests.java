@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_02_108_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("elbereth", "52_108");
@@ -22,10 +22,10 @@ public class Card_02_108_ErrataTests
 					put("nelya", "1_233");
 					put("goblinarcher", "1_176");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.IsildursBaneRing,
-				GenericCardTestHelper.Fellowship //We need the Ring-bearer's skirmish to be cancelable
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.IsildursBaneRing,
+				VirtualTableScenario.Fellowship //We need the Ring-bearer's skirmish to be cancelable
 		);
 	}
 
@@ -46,7 +46,7 @@ public class Card_02_108_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var elbereth = scn.GetFreepsCard("elbereth");
 
@@ -54,7 +54,7 @@ public class Card_02_108_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, elbereth.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, elbereth.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, elbereth.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(elbereth, Keyword.TALE));
+		assertTrue(scn.HasKeyword(elbereth, Keyword.TALE));
 		assertEquals(1, elbereth.getBlueprint().getTwilightCost());
 		assertEquals(1, elbereth.getBlueprint().getStrength());
 	}
@@ -62,10 +62,10 @@ public class Card_02_108_ErrataTests
 	@Test
 	public void OElberethGilthonielGoesOnRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var elbereth = scn.GetFreepsCard("elbereth");
-		scn.FreepsMoveCardToHand(elbereth);
+		scn.MoveCardsToHand(elbereth);
 
 		scn.StartGame();
 		assertEquals(Zone.HAND, elbereth.getZone());
@@ -77,14 +77,14 @@ public class Card_02_108_ErrataTests
 	@Test
 	public void SkirmishAbilityCanDiscardToTakeOffRing() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var elbereth = scn.GetFreepsCard("elbereth");
 		scn.AttachCardsTo(frodo, elbereth);
 
 		var goblinarcher = scn.GetShadowCard("goblinarcher");
-		scn.ShadowMoveCharToTable(goblinarcher);
+		scn.MoveMinionsToTable(goblinarcher);
 
 		scn.StartGame();
 
@@ -108,14 +108,14 @@ public class Card_02_108_ErrataTests
 	@Test
 	public void SkirmishAbilityCanMakeRBStrengthPlus4IfSkirmishingNazgul() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var elbereth = scn.GetFreepsCard("elbereth");
 		scn.AttachCardsTo(frodo, elbereth);
 
 		var nelya = scn.GetShadowCard("nelya");
-		scn.ShadowMoveCharToTable(nelya);
+		scn.MoveMinionsToTable(nelya);
 
 		scn.StartGame();
 
@@ -134,14 +134,14 @@ public class Card_02_108_ErrataTests
 	@Test
 	public void SkirmishAbilityCantMakeRBStrengthPlus4IfNotSkirmishingNazgul() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var elbereth = scn.GetFreepsCard("elbereth");
 		scn.AttachCardsTo(frodo, elbereth);
 
 		var goblinarcher = scn.GetShadowCard("goblinarcher");
-		scn.ShadowMoveCharToTable(goblinarcher);
+		scn.MoveMinionsToTable(goblinarcher);
 
 		scn.StartGame();
 

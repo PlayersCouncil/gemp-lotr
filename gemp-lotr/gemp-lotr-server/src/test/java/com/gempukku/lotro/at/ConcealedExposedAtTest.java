@@ -1,6 +1,6 @@
 package com.gempukku.lotro.at;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
@@ -19,8 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class ConcealedExposedAtTest extends AbstractAtTest {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("arwen", "1_30");
@@ -32,11 +32,11 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
     @Test
     public void ConcealedDoesNothingIfNoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
         scn.StartGame();
 
@@ -52,12 +52,12 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
     @Test
     public void ConcealedRemovesOneIfAvailable() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
         PhysicalCardImpl nostranger = scn.GetFreepsCard("nostranger");
 
-        scn.FreepsMoveCardToHand(aragorn);
+        scn.MoveCardsToHand(aragorn);
 
         scn.StartGame();
 
@@ -75,13 +75,13 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
     @Test
     public void TwoConcealedRemovesTwoIfAvailable() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
         PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
 
-        scn.FreepsMoveCardToHand(aragorn);
-        scn.FreepsMoveCharToTable(arwen);
+        scn.MoveCardsToHand(aragorn);
+        scn.MoveCompanionToTable(arwen);
 
         scn.StartGame();
 
@@ -100,11 +100,11 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
     @Test
     public void ConcealedRemovesNothingIfExposed() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 
-        scn.FreepsMoveCardToHand(aragorn);
+        scn.MoveCardsToHand(aragorn);
 
         scn.StartGame();
 

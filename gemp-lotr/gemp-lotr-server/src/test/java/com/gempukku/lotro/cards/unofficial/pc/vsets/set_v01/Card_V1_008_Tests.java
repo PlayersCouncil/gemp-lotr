@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_008_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("lament", "101_8");
 					put("gandalf", "1_364");
@@ -29,9 +29,9 @@ public class Card_V1_008_Tests
 					put("marksman", "1_176");
 					put("bladetip", "1_209");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -52,7 +52,7 @@ public class Card_V1_008_Tests
 		 */
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl card = scn.GetFreepsCard("lament");
 
@@ -72,7 +72,7 @@ public class Card_V1_008_Tests
 	@Test
 	public void LamentExertsAnElfAndSpotsADeadCompToPlayOnAnUnboundComp() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl lament = scn.GetFreepsCard("lament");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
@@ -80,8 +80,8 @@ public class Card_V1_008_Tests
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
 
-		scn.FreepsMoveCharToTable(gimli, gandalf);
-		scn.FreepsMoveCardToHand(lament, guard, elrond);
+		scn.MoveCompanionToTable(gimli, gandalf);
+		scn.MoveCardsToHand(lament, guard, elrond);
 
 		scn.StartGame();
 		assertFalse(scn.FreepsPlayAvailable(lament));
@@ -105,15 +105,15 @@ public class Card_V1_008_Tests
 //	@Test
 //	public void BearerOfLamentCannotBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 //		//Pre-game setup
-//		GenericCardTestHelper scn = GetScenario();
+//		VirtualTableScenario scn = GetScenario();
 //
 //		PhysicalCardImpl lament = scn.GetFreepsCard("lament");
 //		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 //		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
 //
-//		scn.FreepsMoveCharToTable(gimli);
-//		scn.FreepsAttachCardsTo(gimli, lament);
-//		scn.FreepsMoveCardToHand(guard);
+//		scn.MoveCompanionToTable(gimli);
+//		scn.AttachCardsTo(gimli, lament);
+//		scn.MoveCardsToHand(guard);
 //
 //		scn.StartGame();
 //
@@ -123,19 +123,19 @@ public class Card_V1_008_Tests
 	@Test
 	public void BearerOfLamentCannotBeExertedOrWoundedOrAssignedToSkimish() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl lament = scn.GetFreepsCard("lament");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
 
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsAttachCardsTo(gimli, lament);
-		scn.FreepsMoveCardToHand(guard);
+		scn.MoveCompanionToTable(gimli);
+		scn.AttachCardsTo(gimli, lament);
+		scn.MoveCardsToHand(guard);
 
 		PhysicalCardImpl marksman = scn.GetShadowCard("marksman");
-		scn.ShadowMoveCharToTable(marksman);
+		scn.MoveMinionsToTable(marksman);
 
 		scn.StartGame();
 
@@ -155,7 +155,7 @@ public class Card_V1_008_Tests
 	@Test
 	public void AtStartOfRegroupBearerDiscardsAnAttachedCondition() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl lament = scn.GetFreepsCard("lament");
@@ -163,11 +163,11 @@ public class Card_V1_008_Tests
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
 
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCompanionToTable(gimli);
 		scn.AddWoundsToChar(gimli, 1);
-		scn.FreepsAttachCardsTo(gimli, lament);
-		scn.FreepsAttachCardsTo(gimli, lastalliance); //can't usually go there but who cares
-		scn.FreepsMoveCardToHand(guard);
+		scn.AttachCardsTo(gimli, lament);
+		scn.AttachCardsTo(gimli, lastalliance); //can't usually go there but who cares
+		scn.MoveCardsToHand(guard);
 
 		PhysicalCardImpl bladetip = scn.GetShadowCard("bladetip");
 		scn.AttachCardsTo(gimli, bladetip);
@@ -195,7 +195,7 @@ public class Card_V1_008_Tests
 	@Test
 	public void AtStartOfRegroupBearerDiscardsAndHealsIfGandalfIsDead() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl lament = scn.GetFreepsCard("lament");
@@ -204,12 +204,12 @@ public class Card_V1_008_Tests
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
 
-		scn.FreepsMoveCharToTable(gimli, gandalf);
+		scn.MoveCompanionToTable(gimli, gandalf);
 		scn.AddWoundsToChar(gimli, 1);
 		scn.AddWoundsToChar(gandalf, 4);
-		scn.FreepsAttachCardsTo(gimli, lament);
-		scn.FreepsAttachCardsTo(gimli, lastalliance); //can't usually go there but who cares
-		scn.FreepsMoveCardToHand(guard);
+		scn.AttachCardsTo(gimli, lament);
+		scn.AttachCardsTo(gimli, lastalliance); //can't usually go there but who cares
+		scn.MoveCardsToHand(guard);
 
 		PhysicalCardImpl bladetip = scn.GetShadowCard("bladetip");
 		scn.AttachCardsTo(gimli, bladetip);

@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,17 +15,17 @@ import static org.junit.Assert.*;
 public class Card_V1_004_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("friend", "101_4");
 					put("legolas", "1_50");
 					put("gimli", "1_13");
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -44,14 +44,14 @@ public class Card_V1_004_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl friend = scn.GetFreepsCard("friend");
 
 		assertFalse(friend.getBlueprint().isUnique());
 		assertEquals(1, friend.getBlueprint().getTwilightCost());
 		assertEquals(CardType.EVENT, friend.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(friend, Timeword.MANEUVER));
+        assertTrue(scn.HasTimeword(friend, Timeword.MANEUVER));
 		assertEquals(Culture.DWARVEN, friend.getBlueprint().getCulture());
 		assertEquals(Side.FREE_PEOPLE, friend.getBlueprint().getSide());
 	}
@@ -59,15 +59,15 @@ public class Card_V1_004_Tests
 	@Test
 	public void ElfriendExertsElfToPumpADwarf() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl friend = scn.GetFreepsCard("friend");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
-		scn.FreepsMoveCardToHand(friend);
-		scn.FreepsMoveCharToTable(gimli, legolas);
+		scn.MoveCardsToHand(friend);
+		scn.MoveCompanionToTable(gimli, legolas);
 
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 

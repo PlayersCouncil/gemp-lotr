@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_01_009_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("axe", "51_9");
@@ -25,9 +25,9 @@ public class Card_01_009_ErrataTests
 					put("scout", "1_191");
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -68,7 +68,7 @@ public class Card_01_009_ErrataTests
 
 		var axe = scn.GetFreepsCard("axe");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(axe, gimli);
+		scn.MoveCardsToHand(axe, gimli);
 
 		scn.StartGame();
 		assertFalse(scn.FreepsPlayAvailable(axe));
@@ -84,12 +84,12 @@ public class Card_01_009_ErrataTests
 		var axe = scn.GetFreepsCard("axe");
 		var gimli = scn.GetFreepsCard("gimli");
 		var frodo = scn.GetRingBearer();
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCompanionToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 
 		var scout = scn.GetShadowCard("scout");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner,scout);
+		scn.MoveMinionToTable(runner,scout);
 
 		scn.ApplyAdHocModifier(new KeywordModifier(null, Race.ORC, Keyword.FIERCE));
 
@@ -105,7 +105,7 @@ public class Card_01_009_ErrataTests
 		assertTrue(scn.ShadowDecisionAvailable("choose"));
 
 		assertEquals(0, scn.GetWoundsOn(scout));
-		scn.ShadowChooseMultipleChoiceOption("exert");
+		scn.ShadowChooseOption("exert");
 		assertEquals(1, scn.GetWoundsOn(scout));
 
 		scn.FreepsResolveSkirmish(frodo);
@@ -136,12 +136,12 @@ public class Card_01_009_ErrataTests
 
 		var axe = scn.GetFreepsCard("axe");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCompanionToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 
 		var scout = scn.GetShadowCard("scout");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(scout, runner);
+		scn.MoveMinionToTable(scout, runner);
 
 		scn.StartGame();
 
@@ -158,7 +158,7 @@ public class Card_01_009_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 		scn.FreepsResolveActionOrder("Axe");
 		assertTrue(scn.ShadowDecisionAvailable("choose"));
-		scn.ShadowChooseMultipleChoiceOption("exert");
+		scn.ShadowChooseOption("exert");
 
 		assertEquals(2, scn.GetShadowDeckCount());
 		assertEquals(0, scn.GetShadowDiscardCount());

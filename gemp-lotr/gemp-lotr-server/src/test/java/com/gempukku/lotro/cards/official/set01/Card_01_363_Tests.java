@@ -1,14 +1,12 @@
 
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -18,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_01_363_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
 					put("tracker1", "1_261");
 					put("tracker2", "1_262");
@@ -38,8 +36,8 @@ public class Card_01_363_Tests
                     put("site8", "1_356");
                     put("site9", "1_363");
                 }},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -63,7 +61,7 @@ public class Card_01_363_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.RIVER));
+		assertTrue(scn.HasKeyword(card, Keyword.RIVER));
 		assertEquals(9, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getSiteNumber());
 	}
@@ -78,9 +76,9 @@ public class Card_01_363_Tests
 		var tracker2 = scn.GetShadowCard("tracker2");
 		var tracker3 = scn.GetShadowCard("tracker3");
 		var hollowing = scn.GetShadowCard("hollowing");
-		scn.ShadowMoveCardToSupportArea(hollowing);
-		scn.ShadowMoveCardToDiscard(tracker1, tracker2, tracker3);
-		scn.ShadowMoveCardToDiscard("shelob");
+		scn.MoveCardsToSupportArea(hollowing);
+		scn.MoveCardsToDiscard(tracker1, tracker2, tracker3);
+		scn.MoveCardsToShadowDiscard("shelob");
 
 		scn.StartGame();
 
@@ -121,13 +119,13 @@ public class Card_01_363_Tests
 	@Test
 	public void TolBrandirActionCanPlay0TrackersAndDecline3() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var tolbrandir = scn.GetShadowSite(9);
 		var tracker1 = scn.GetShadowCard("tracker1");
 		var tracker2 = scn.GetShadowCard("tracker2");
 		var tracker3 = scn.GetShadowCard("tracker3");
-		scn.ShadowMoveCardToDiscard(tracker1, tracker2, tracker3);
+		scn.MoveCardsToDiscard(tracker1, tracker2, tracker3);
 
 		scn.StartGame();
 
@@ -158,13 +156,13 @@ public class Card_01_363_Tests
 	@Test
 	public void TolBrandirActionCanPlay1TrackerAndDecline2() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var tolbrandir = scn.GetShadowSite(9);
 		var tracker1 = scn.GetShadowCard("tracker1");
 		var tracker2 = scn.GetShadowCard("tracker2");
 		var tracker3 = scn.GetShadowCard("tracker3");
-		scn.ShadowMoveCardToDiscard(tracker1, tracker2, tracker3);
+		scn.MoveCardsToDiscard(tracker1, tracker2, tracker3);
 
 		scn.StartGame();
 
@@ -198,13 +196,13 @@ public class Card_01_363_Tests
 	@Test
 	public void TolBrandirActionCanPlay2TrackersAndDecline1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var tolbrandir = scn.GetShadowSite(9);
 		var tracker1 = scn.GetShadowCard("tracker1");
 		var tracker2 = scn.GetShadowCard("tracker2");
 		var tracker3 = scn.GetShadowCard("tracker3");
-		scn.ShadowMoveCardToDiscard(tracker1, tracker2, tracker3);
+		scn.MoveCardsToDiscard(tracker1, tracker2, tracker3);
 
 		scn.StartGame();
 

@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_V1_057_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("cond", "1_317");
 					put("farmer", "1_295");
@@ -33,8 +33,8 @@ public class Card_V1_057_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,7 +54,7 @@ public class Card_V1_057_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl site1 = scn.GetFreepsSite(1);
 
@@ -76,7 +76,7 @@ public class Card_V1_057_Tests
 	@Test
 	public void WhenMovingAwayExertsAShireCompanionToPlayACondition() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl cond = scn.GetFreepsCard("cond");
@@ -98,10 +98,10 @@ public class Card_V1_057_Tests
 	@Test
 	public void HobbitFarmerDoesntCopyStudy() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl farmer = scn.GetRingBearer();
-		scn.FreepsMoveCharToTable(farmer);
+		scn.MoveCompanionToTable(farmer);
 
 		scn.StartGame();
 

@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_020_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("boromir", "101_20");
 					put("sam", "1_311");
@@ -28,9 +28,9 @@ public class Card_V1_020_Tests
 					put("runner3", "1_178");
 					put("nelya", "1_233");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_V1_020_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl card = scn.GetFreepsCard("boromir");
 
@@ -76,15 +76,15 @@ public class Card_V1_020_Tests
 	@Test
 	public void BoromirIsStrengthPlus2PerMinionHeIsSkirmishing() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
-		scn.FreepsMoveCharToTable(boromir);
+		scn.MoveCompanionToTable(boromir);
 
 		PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
 		PhysicalCardImpl runner2 = scn.GetShadowCard("runner2");
 		PhysicalCardImpl runner3 = scn.GetShadowCard("runner3");
-		scn.ShadowMoveCharToTable(runner1, runner2, runner3);
+		scn.MoveMinionsToTable(runner1, runner2, runner3);
 
 		scn.StartGame();
 
@@ -103,24 +103,24 @@ public class Card_V1_020_Tests
 	@Test
 	public void AssignmentActionSpotsAragornSignetToMakeBoromirDefenderPlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
 		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(boromir, sam);
+		scn.MoveCompanionToTable(boromir, sam);
 
 		PhysicalCardImpl nelya = scn.GetShadowCard("nelya");
-		scn.ShadowMoveCharToTable(nelya);
+		scn.MoveMinionsToTable(nelya);
 
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		assertFalse(scn.hasKeyword(boromir, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
 		assertEquals(0, scn.GetWoundsOn(sam));
 
 		scn.FreepsAcceptOptionalTrigger();
-		assertTrue(scn.hasKeyword(boromir, Keyword.DEFENDER));
+		assertTrue(scn.HasKeyword(boromir, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 		assertEquals(0, scn.GetWoundsOn(sam));
 
@@ -130,7 +130,7 @@ public class Card_V1_020_Tests
 		scn.PassCurrentPhaseActions();
 
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
-		assertTrue(scn.hasKeyword(boromir, Keyword.DEFENDER));
+		assertTrue(scn.HasKeyword(boromir, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 	}
 }

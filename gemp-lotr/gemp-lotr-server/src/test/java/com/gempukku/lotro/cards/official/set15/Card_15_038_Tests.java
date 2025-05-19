@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set15;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Race;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_15_038_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("treebeard", "15_38");
@@ -28,9 +28,9 @@ public class Card_15_038_Tests
 					put("orc4", "1_267");
 					put("enduring", "10_68");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -77,13 +77,13 @@ public class Card_15_038_Tests
 		var scn = GetScenario();
 
 		var treebeard = scn.GetFreepsCard("treebeard");
-		scn.FreepsMoveCharToTable(treebeard);
+		scn.MoveCompanionToTable(treebeard);
 
 		var orc1 = scn.GetShadowCard("orc1");
 		var orc2 = scn.GetShadowCard("orc2");
 		var orc3 = scn.GetShadowCard("orc3");
 		var orc4 = scn.GetShadowCard("orc4");
-		scn.ShadowMoveCharToTable(orc1, orc2, orc3, orc4);
+		scn.MoveMinionsToTable(orc1, orc2, orc3, orc4);
 
 		scn.StartGame();
 
@@ -111,11 +111,11 @@ public class Card_15_038_Tests
 		var scn = GetScenario();
 
 		var treebeard = scn.GetFreepsCard("treebeard");
-		scn.FreepsMoveCharToTable(treebeard);
+		scn.MoveCompanionToTable(treebeard);
 
 		var enduring = scn.GetShadowCard("enduring");
 		var orc1 = scn.GetShadowCard("orc1"); //only here to slow down choices
-		scn.ShadowMoveCharToTable(enduring, orc1);
+		scn.MoveMinionsToTable(enduring, orc1);
 
 		scn.StartGame();
 

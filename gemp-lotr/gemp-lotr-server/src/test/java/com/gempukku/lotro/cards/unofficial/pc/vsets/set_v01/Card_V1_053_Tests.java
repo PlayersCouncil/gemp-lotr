@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,17 +16,17 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_053_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("pippin", "101_53");
 					put("sam", "1_310");
 
 					put("nazgul", "1_232");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -48,7 +48,7 @@ public class Card_V1_053_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
 
@@ -70,15 +70,15 @@ public class Card_V1_053_Tests
 	@Test
 	public void SkirmishAbilityExertsPippinToPreventShireOverwhelmUnlessTripled() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
 		//PhysicalCardImpl sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(pippin);
+		scn.MoveCompanionToTable(pippin);
 
 		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
-		scn.FreepsMoveCharToTable(nazgul);
+		scn.MoveCompanionToTable(nazgul);
 
 		scn.StartGame();
 
@@ -106,15 +106,15 @@ public class Card_V1_053_Tests
 	@Test
 	public void SkirmishAbilityPumpsIfThreeFrodoSignets() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
 		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(pippin, sam);
+		scn.MoveCompanionToTable(pippin, sam);
 
 		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
-		scn.FreepsMoveCharToTable(nazgul);
+		scn.MoveCompanionToTable(nazgul);
 
 		scn.StartGame();
 

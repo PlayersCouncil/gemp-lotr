@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set08;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_08_059_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("galley", "58_59");
@@ -25,9 +25,9 @@ public class Card_08_059_ErrataTests
 					put("chaff2", "4_251");
 					put("chaff3", "4_252");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_08_059_ErrataTests
 		assertEquals(Side.SHADOW, galley.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, galley.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, galley.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(galley, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(galley, Keyword.SUPPORT_AREA));
 		assertEquals(1, galley.getBlueprint().getTwilightCost());
 	}
 
@@ -66,7 +66,7 @@ public class Card_08_059_ErrataTests
 		var scn = GetScenario();
 
 		var galley = scn.GetShadowCard("galley");
-		scn.ShadowMoveCardToHand(galley);
+		scn.MoveCardsToHand(galley);
 
 		scn.StartGame();
 
@@ -88,8 +88,8 @@ public class Card_08_059_ErrataTests
 
 		var galley = scn.GetShadowCard("galley");
 		var raider = scn.GetShadowCard("raider");
-		scn.ShadowMoveCardToHand(raider);
-		scn.ShadowMoveCardToSupportArea(galley);
+		scn.MoveCardsToHand(raider);
+		scn.MoveCardsToSupportArea(galley);
 
 		scn.StartGame();
 
@@ -136,8 +136,8 @@ public class Card_08_059_ErrataTests
 
 		var galley = scn.GetShadowCard("galley");
 		var raider = scn.GetShadowCard("raider");
-		scn.ShadowMoveCardToHand(raider);
-		scn.ShadowMoveCardToSupportArea(galley);
+		scn.MoveCardsToHand(raider);
+		scn.MoveCardsToSupportArea(galley);
 
 		scn.StartGame();
 
@@ -145,7 +145,7 @@ public class Card_08_059_ErrataTests
 
 		scn.SkipToPhase(Phase.REGROUP);
 
-		scn.ShadowMoveCharToTable(raider);
+		scn.MoveMinionsToTable(raider);
 		scn.AddTokensToCard(raider, 3);
 		scn.AddTokensToCard(galley, 3);
 		assertEquals(3, scn.GetTwilight());

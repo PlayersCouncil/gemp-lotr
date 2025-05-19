@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set11;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_11_255_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("gandalf", "1_72");
@@ -33,9 +33,9 @@ public class Card_11_255_Tests
 					put("site8", "12_185");
 					put("site9", "17_146");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing,
-				GenericCardTestHelper.Shadows
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Shadows
 		);
 	}
 
@@ -63,7 +63,7 @@ public class Card_11_255_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.MOUNTAIN));
+		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
@@ -79,8 +79,8 @@ public class Card_11_255_Tests
 		var merry = scn.GetFreepsCard("merry");
 		var pippin = scn.GetFreepsCard("pippin");
 		var frodo = scn.GetRingBearer();
-		scn.FreepsMoveCardToDeadPile(gandalf, radagast);
-		scn.FreepsMoveCharToTable(merry, pippin);
+		scn.MoveCardsToDeadPile(gandalf, radagast);
+		scn.MoveCompanionToTable(merry, pippin);
 
 		scn.StartGame(pinnacle);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());

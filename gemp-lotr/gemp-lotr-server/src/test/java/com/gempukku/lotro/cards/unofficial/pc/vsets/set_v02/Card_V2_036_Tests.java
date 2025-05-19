@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_036_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("pit", "102_36");
@@ -26,9 +26,9 @@ public class Card_V2_036_Tests
 					put("uruk", "1_151");
 					// put other cards in here as needed for the test case
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -58,7 +58,7 @@ public class Card_V2_036_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -71,8 +71,8 @@ public class Card_V2_036_Tests
 		var warg1 = scn.GetShadowCard("warg1");
 		var warg2 = scn.GetShadowCard("warg2");
 		var warg3 = scn.GetShadowCard("warg3");
-		scn.ShadowMoveCardToHand(pit);
-		scn.ShadowMoveCardToDiscard(warg1, warg2, warg3);
+		scn.MoveCardsToHand(pit);
+		scn.MoveCardsToDiscard(warg1, warg2, warg3);
 
 		scn.StartGame();
 
@@ -108,8 +108,8 @@ public class Card_V2_036_Tests
 		var warg1 = scn.GetShadowCard("warg1");
 		var warg2 = scn.GetShadowCard("warg2");
 		var warg3 = scn.GetShadowCard("warg3");
-		scn.ShadowMoveCardToHand(pit);
-		scn.ShadowMoveCardsToTopOfDeck(warg1, warg2, warg3);
+		scn.MoveCardsToHand(pit);
+		scn.MoveCardsToTopOfDeck(warg1, warg2, warg3);
 
 		scn.StartGame();
 
@@ -121,7 +121,7 @@ public class Card_V2_036_Tests
 		scn.ShadowAcceptOptionalTrigger();
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("deck");
+		scn.ShadowChooseOption("deck");
 		scn.ShadowDismissRevealedCards();
 
 		assertEquals(3, scn.ShadowGetSelectableCount());
@@ -132,7 +132,7 @@ public class Card_V2_036_Tests
 
 		//We now optionally do it all again a second time
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("deck");
+		scn.ShadowChooseOption("deck");
 		scn.ShadowDismissRevealedCards();
 
 		assertEquals(2, scn.ShadowGetSelectableCount());
@@ -153,9 +153,9 @@ public class Card_V2_036_Tests
 		var warg1 = scn.GetShadowCard("warg1");
 		var warg2 = scn.GetShadowCard("warg2");
 		var warg3 = scn.GetShadowCard("warg3");
-		scn.ShadowMoveCardToHand(pit);
-		scn.ShadowMoveCardsToTopOfDeck(warg1);
-		scn.ShadowMoveCardToDiscard(warg2, warg3);
+		scn.MoveCardsToHand(pit);
+		scn.MoveCardsToTopOfDeck(warg1);
+		scn.MoveCardsToDiscard(warg2, warg3);
 
 		scn.StartGame();
 
@@ -167,7 +167,7 @@ public class Card_V2_036_Tests
 		scn.ShadowAcceptOptionalTrigger();
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("deck");
+		scn.ShadowChooseOption("deck");
 
 		assertEquals(Zone.DECK, warg1.getZone());
 		scn.ShadowDismissRevealedCards();
@@ -195,8 +195,8 @@ public class Card_V2_036_Tests
 		var rider1 = scn.GetShadowCard("rider1");
 		var rider2 = scn.GetShadowCard("rider2");
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCardToSupportArea(pit);
-		scn.ShadowMoveCharToTable(rider1, rider2, uruk);
+		scn.MoveCardsToSupportArea(pit);
+		scn.MoveMinionsToTable(rider1, rider2, uruk);
 		scn.StackCardsOn(pit, warg1, warg2);
 
 		scn.StartGame();

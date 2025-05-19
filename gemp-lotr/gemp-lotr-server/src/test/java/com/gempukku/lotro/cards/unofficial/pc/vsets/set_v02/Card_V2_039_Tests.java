@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_039_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("dungeon", "102_39");
@@ -31,9 +31,9 @@ public class Card_V2_039_Tests
 					put("fodder7", "1_7");
 					put("fodder8", "1_7");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -63,7 +63,7 @@ public class Card_V2_039_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -74,11 +74,11 @@ public class Card_V2_039_Tests
 
 		var dungeon = scn.GetShadowCard("dungeon");
 		var balrog1 = scn.GetShadowCard("balrog1");
-		scn.ShadowMoveCardToSupportArea(dungeon);
-		scn.ShadowMoveCardToHand(balrog1);
-		scn.ShadowMoveCardToDiscard("balrog2"); // So we don't draw it later
+		scn.MoveCardsToSupportArea(dungeon);
+		scn.MoveCardsToHand(balrog1);
+		scn.MoveCardsToShadowDiscard("balrog2"); // So we don't draw it later
 
-		scn.FreepsMoveCharToTable("fodder1");
+		scn.MoveCompanionToTable("fodder1");
 
 		scn.StartGame();
 
@@ -107,8 +107,8 @@ public class Card_V2_039_Tests
 
 		var dungeon = scn.GetShadowCard("dungeon");
 		var balrog1 = scn.GetShadowCard("balrog1");
-		scn.ShadowMoveCardToSupportArea(dungeon);
-		scn.ShadowMoveCardToHand(balrog1);
+		scn.MoveCardsToSupportArea(dungeon);
+		scn.MoveCardsToHand(balrog1);
 
 		scn.StartGame();
 
@@ -127,8 +127,8 @@ public class Card_V2_039_Tests
 		var scn = GetScenario();
 
 		var dungeon = scn.GetShadowCard("dungeon");
-		scn.ShadowMoveCardToSupportArea(dungeon);
-		scn.ShadowMoveCardToDiscard("balrog1", "balrog2");
+		scn.MoveCardsToSupportArea(dungeon);
+		scn.MoveCardsToShadowDiscard("balrog1", "balrog2");
 
 		scn.StartGame();
 
@@ -148,10 +148,10 @@ public class Card_V2_039_Tests
 
 		var dungeon = scn.GetShadowCard("dungeon");
 		var balrog1 = scn.GetShadowCard("balrog1");
-		scn.ShadowMoveCardToSupportArea(dungeon);
-		scn.ShadowMoveCardToDiscard(balrog1);
+		scn.MoveCardsToSupportArea(dungeon);
+		scn.MoveCardsToDiscard(balrog1);
 
-		scn.FreepsMoveCharToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
+		scn.MoveCompanionToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
 
 		scn.StartGame();
 
@@ -182,10 +182,10 @@ public class Card_V2_039_Tests
 
 		var dungeon = scn.GetShadowCard("dungeon");
 		var balrog1 = scn.GetShadowCard("balrog1");
-		scn.ShadowMoveCardToSupportArea(dungeon);
-		scn.ShadowMoveCardToDiscard(balrog1);
+		scn.MoveCardsToSupportArea(dungeon);
+		scn.MoveCardsToDiscard(balrog1);
 
-		scn.FreepsMoveCharToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
+		scn.MoveCompanionToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
 
 		scn.StartGame();
 
@@ -216,10 +216,10 @@ public class Card_V2_039_Tests
 
 		var dungeon = scn.GetShadowCard("dungeon");
 		var balrog1 = scn.GetShadowCard("balrog1");
-		scn.ShadowMoveCardToSupportArea(dungeon);
-		scn.ShadowMoveCardToDiscard(balrog1);
+		scn.MoveCardsToSupportArea(dungeon);
+		scn.MoveCardsToDiscard(balrog1);
 
-		scn.FreepsMoveCharToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
+		scn.MoveCompanionToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
 
 		scn.StartGame();
 
@@ -250,10 +250,10 @@ public class Card_V2_039_Tests
 
 		var dungeon = scn.GetShadowCard("dungeon");
 		var balrog1 = scn.GetShadowCard("balrog1");
-		scn.ShadowMoveCardToSupportArea(dungeon);
-		scn.ShadowMoveCardToDiscard(balrog1);
+		scn.MoveCardsToSupportArea(dungeon);
+		scn.MoveCardsToDiscard(balrog1);
 
-		scn.FreepsMoveCharToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
+		scn.MoveCompanionToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
 
 		scn.StartGame();
 
@@ -283,10 +283,10 @@ public class Card_V2_039_Tests
 
 		var dungeon = scn.GetShadowCard("dungeon");
 		var balrog1 = scn.GetShadowCard("balrog1");
-		scn.ShadowMoveCardToSupportArea(dungeon);
-		scn.ShadowMoveCardToDiscard(balrog1);
+		scn.MoveCardsToSupportArea(dungeon);
+		scn.MoveCardsToDiscard(balrog1);
 
-		scn.FreepsMoveCharToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
+		scn.MoveCompanionToTable("fodder1", "fodder2", "fodder3", "fodder4", "fodder5", "fodder6", "fodder7", "fodder8");
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_02_040_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("demands", "52_40");
@@ -27,9 +27,9 @@ public class Card_02_040_ErrataTests
 					put("rosie", "1_309");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -58,7 +58,7 @@ public class Card_02_040_ErrataTests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -69,7 +69,7 @@ public class Card_02_040_ErrataTests
 
 		var demands = scn.GetShadowCard("demands");
 		var savage = scn.GetShadowCard("savage");
-		scn.ShadowMoveCardToHand(demands, savage);
+		scn.MoveCardsToHand(demands, savage);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -87,10 +87,10 @@ public class Card_02_040_ErrataTests
 		var scn = GetScenario();
 
 		var celeborn = scn.GetFreepsCard("celeborn");
-		scn.FreepsMoveCardToSupportArea(celeborn);
+		scn.MoveCardsToSupportArea(celeborn);
 
 		var demands = scn.GetShadowCard("demands");
-		scn.ShadowMoveCardToSupportArea(demands);
+		scn.MoveCardsToSupportArea(demands);
 
 		scn.StartGame();
 
@@ -105,10 +105,10 @@ public class Card_02_040_ErrataTests
 		var scn = GetScenario();
 
 		var rosie = scn.GetFreepsCard("rosie");
-		scn.FreepsMoveCardToSupportArea(rosie);
+		scn.MoveCardsToSupportArea(rosie);
 
 		var demands = scn.GetShadowCard("demands");
-		scn.ShadowMoveCardToSupportArea(demands);
+		scn.MoveCardsToSupportArea(demands);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set17;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_17_015_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<String, String>()
 				{{
 					put("light", "67_15");
@@ -26,9 +26,9 @@ public class Card_17_015_ErrataTests
 					put("runner4", "1_178");
 					put("balrog", "19_18");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -59,8 +59,8 @@ public class Card_17_015_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, light.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, light.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, light.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(light, Timeword.FELLOWSHIP));
-		assertTrue(scn.hasKeyword(light, Keyword.SPELL));
+        assertTrue(scn.HasTimeword(light, Timeword.FELLOWSHIP));
+		assertTrue(scn.HasKeyword(light, Keyword.SPELL));
 		assertEquals(1, light.getBlueprint().getTwilightCost());
 	}
 
@@ -71,7 +71,7 @@ public class Card_17_015_ErrataTests
 
 		var light = scn.GetFreepsCard("light");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(light, gandalf);
+		scn.MoveCardsToHand(light, gandalf);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
@@ -79,8 +79,8 @@ public class Card_17_015_ErrataTests
 		var runner4 = scn.GetShadowCard("runner4");
 		var balrog = scn.GetShadowCard("balrog");
 
-		scn.ShadowMoveCardToDiscard(runner1, runner2, runner3);
-		scn.ShadowMoveCardToHand(runner4, balrog);
+		scn.MoveCardsToDiscard(runner1, runner2, runner3);
+		scn.MoveCardsToHand(runner4, balrog);
 
 		scn.StartGame();
 		assertFalse(scn.FreepsPlayAvailable(light));
@@ -120,7 +120,7 @@ public class Card_17_015_ErrataTests
 
 		var light = scn.GetFreepsCard("light");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(light, gandalf);
+		scn.MoveCardsToHand(light, gandalf);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
@@ -128,8 +128,8 @@ public class Card_17_015_ErrataTests
 		var runner4 = scn.GetShadowCard("runner4");
 		var balrog = scn.GetShadowCard("balrog");
 
-		//scn.ShadowMoveCardToDiscard(runner1, runner2, runner3);
-		scn.ShadowMoveCardToHand(runner4, balrog);
+		//scn.MoveCardToDiscard(runner1, runner2, runner3);
+		scn.MoveCardsToHand(runner4, balrog);
 
 		scn.StartGame();
 		assertFalse(scn.FreepsPlayAvailable(light));

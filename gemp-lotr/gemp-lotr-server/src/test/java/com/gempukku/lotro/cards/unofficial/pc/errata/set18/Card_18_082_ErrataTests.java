@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set18;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 public class Card_18_082_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<String, String>()
 				{{
 					put("grond", "68_82");
@@ -27,9 +27,9 @@ public class Card_18_082_ErrataTests
 					put("chaff4", "4_109");
 					put("chaff5", "4_364");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,7 +57,7 @@ public class Card_18_082_ErrataTests
 		assertEquals(Side.SHADOW, grond.getBlueprint().getSide());
 		assertEquals(Culture.ORC, grond.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, grond.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(grond, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(grond, Keyword.SUPPORT_AREA));
 		assertEquals(3, grond.getBlueprint().getTwilightCost());
 	}
 
@@ -68,7 +68,7 @@ public class Card_18_082_ErrataTests
 
 		var grond = scn.GetShadowCard("grond");
 		var goblin = scn.GetShadowCard("goblin");
-		scn.ShadowMoveCardToHand(grond, goblin);
+		scn.MoveCardsToHand(grond, goblin);
 
 		scn.StartGame();
 		scn.SetTwilight(20);
@@ -85,7 +85,7 @@ public class Card_18_082_ErrataTests
 		var scn = GetScenario();
 
 		var grond = scn.GetShadowCard("grond");
-		scn.ShadowMoveCardToSupportArea(grond);
+		scn.MoveCardsToSupportArea(grond);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -109,10 +109,10 @@ public class Card_18_082_ErrataTests
 		var chaff5 = scn.GetFreepsCard("chaff5");
 		var shadow1 = scn.GetFreepsCard("grond");
 		var shadow2 = scn.GetFreepsCard("goblin");
-		scn.FreepsMoveCardToHand(chaff1, chaff2, shadow1);
+		scn.MoveCardsToHand(chaff1, chaff2, shadow1);
 
 		var grond = scn.GetShadowCard("grond");
-		scn.ShadowMoveCardToSupportArea(grond);
+		scn.MoveCardsToSupportArea(grond);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();

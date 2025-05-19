@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 
 public class Card_01_019_Tests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("balin", "1_19");
                     put("gimli", "1_13");
@@ -53,7 +53,7 @@ public class Card_01_019_Tests
         assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
         assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
         assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+        assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
         assertEquals(0, card.getBlueprint().getTwilightCost());
     }
 
@@ -64,13 +64,13 @@ public class Card_01_019_Tests
 
         var gimli = scn.GetFreepsCard("gimli");
         var balin = scn.GetFreepsCard("balin");
-        scn.FreepsMoveCharToTable(gimli);
-        scn.FreepsMoveCardToHand(balin);
+        scn.MoveCompanionToTable(gimli);
+        scn.MoveCardsToHand(balin);
 
         var runner1 = scn.GetShadowCard("runner1");
         var runner2 = scn.GetShadowCard("runner2");
         var scout = scn.GetShadowCard("scout");
-        scn.ShadowMoveCharToTable(runner1, runner2);
+        scn.MoveMinionsToTable(runner1, runner2);
 
         scn.StartGame();
 
@@ -84,7 +84,7 @@ public class Card_01_019_Tests
         scn.FreepsPlayCard(balin);
 
         assertTrue(scn.FreepsDecisionAvailable("Choose action"));
-        scn.FreepsChooseMultipleChoiceOption("Wound 2 Orcs");
+        scn.FreepsChooseOption("Wound 2 Orcs");
 
         assertEquals(1, scn.GetWoundsOn(gimli));
         assertEquals(Zone.DISCARD, runner1.getZone());
@@ -98,13 +98,13 @@ public class Card_01_019_Tests
 
         var gimli = scn.GetFreepsCard("gimli");
         var balin = scn.GetFreepsCard("balin");
-        scn.FreepsMoveCharToTable(gimli);
-        scn.FreepsMoveCardToHand(balin);
+        scn.MoveCompanionToTable(gimli);
+        scn.MoveCardsToHand(balin);
 
         var runner1 = scn.GetShadowCard("runner1");
         var runner2 = scn.GetShadowCard("runner2");
         var scout = scn.GetShadowCard("scout");
-        scn.ShadowMoveCharToTable(scout);
+        scn.MoveMinionsToTable(scout);
 
         scn.StartGame();
 
@@ -128,13 +128,13 @@ public class Card_01_019_Tests
 
         var gimli = scn.GetFreepsCard("gimli");
         var balin = scn.GetFreepsCard("balin");
-        scn.FreepsMoveCharToTable(gimli);
-        scn.FreepsMoveCardToHand(balin);
+        scn.MoveCompanionToTable(gimli);
+        scn.MoveCardsToHand(balin);
 
         var runner1 = scn.GetShadowCard("runner1");
         var runner2 = scn.GetShadowCard("runner2");
         var scout = scn.GetShadowCard("scout");
-        scn.ShadowMoveCharToTable(runner1, runner2, scout);
+        scn.MoveMinionsToTable(runner1, runner2, scout);
 
         scn.StartGame();
 
@@ -158,13 +158,13 @@ public class Card_01_019_Tests
 
         var gimli = scn.GetFreepsCard("gimli");
         var balin = scn.GetFreepsCard("balin");
-        scn.FreepsMoveCharToTable(gimli);
-        scn.FreepsMoveCardToHand(balin);
+        scn.MoveCompanionToTable(gimli);
+        scn.MoveCardsToHand(balin);
 
         var runner1 = scn.GetShadowCard("runner1");
         var runner2 = scn.GetShadowCard("runner2");
         var scout = scn.GetShadowCard("scout");
-        scn.ShadowMoveCharToTable(runner1);
+        scn.MoveMinionsToTable(runner1);
 
         scn.StartGame();
 

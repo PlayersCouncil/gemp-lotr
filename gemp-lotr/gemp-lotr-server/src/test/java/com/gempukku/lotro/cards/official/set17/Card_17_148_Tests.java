@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set17;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_17_148_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("hunter", "15_157");
@@ -31,9 +31,9 @@ public class Card_17_148_Tests
 					put("site8", "12_185");
 					put("site9", "17_146");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing,
-				GenericCardTestHelper.Shadows
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Shadows
 		);
 	}
 
@@ -61,7 +61,7 @@ public class Card_17_148_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.PLAINS));
+		assertTrue(scn.HasKeyword(card, Keyword.PLAINS));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -73,13 +73,13 @@ public class Card_17_148_Tests
 		var hunter1 = scn.GetShadowCard("hunter");
 		var insurance = scn.GetShadowCard("insurance");
 		var hunter2 = scn.GetFreepsCard("hunter");
-		scn.FreepsMoveCardToHand(hunter2);
-		scn.ShadowMoveCardToHand(hunter1);
-		scn.ShadowMoveCardToSupportArea(insurance);
+		scn.MoveCardsToHand(hunter2);
+		scn.MoveCardsToHand(hunter1);
+		scn.MoveCardsToSupportArea(insurance);
 
 		var nurn = scn.GetFreepsSite("Nurn");
 		var nurn2 = scn.GetShadowSite("Nurn");
-		scn.ShadowMoveCardToDiscard(nurn2); //Need to ensure we don't have two on the table
+		scn.MoveCardsToDiscard(nurn2); //Need to ensure we don't have two on the table
 
 		scn.StartGame(nurn);
 
@@ -89,13 +89,13 @@ public class Card_17_148_Tests
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowChooseAnyCard();
 
-		scn.ShadowUseCardAction("control");
+		scn.ShadowChooseAction("control");
 		assertTrue(scn.IsSiteControlled(nurn));
 		scn.ShadowPlayCard(hunter1);
 
 		//Base 10 strength, +1 from controlling Nurn
 		assertEquals(11, scn.GetStrength(hunter1));
-		scn.ShadowMoveCardToDiscard(hunter1);
+		scn.MoveCardsToDiscard(hunter1);
 		scn.SkipToMovementDecision();
 		scn.FreepsChooseToStay();
 		scn.FreepsDeclineReconciliation();

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_265_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("butchery", "51_265");
@@ -26,9 +26,9 @@ public class Card_01_265_ErrataTests
 					put("guard1", "1_7");
 					put("guard2", "1_7");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,7 +57,7 @@ public class Card_01_265_ErrataTests
 		assertEquals(Side.SHADOW, butchery.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, butchery.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, butchery.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(butchery, Timeword.RESPONSE));
+        assertTrue(scn.HasTimeword(butchery, Timeword.RESPONSE));
 		assertEquals(0, butchery.getBlueprint().getTwilightCost());
 	}
 
@@ -68,11 +68,11 @@ public class Card_01_265_ErrataTests
 
 		var butchery = scn.GetShadowCard("butchery");
 		var slayer = scn.GetShadowCard("slayer");
-		scn.ShadowMoveCardToHand(butchery);
-		scn.ShadowMoveCharToTable(slayer);
+		scn.MoveCardsToHand(butchery);
+		scn.MoveMinionsToTable(slayer);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionToTable(sam);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -91,12 +91,13 @@ public class Card_01_265_ErrataTests
 
 		var butchery = scn.GetShadowCard("butchery");
 		var slayer = scn.GetShadowCard("slayer");
-		scn.ShadowMoveCardToHand(butchery);
-		scn.ShadowMoveCharToTable(slayer);
+		scn.MoveCardsToHand(butchery);
+		scn.MoveMinionsToTable(slayer);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsAttachCardsTo(sam, "sword");
+		var sword = scn.GetFreepsCard("sword");
+		scn.MoveCompanionToTable(sam);
+		scn.AttachCardsTo(sam, sword);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(sam, 3);
@@ -116,11 +117,11 @@ public class Card_01_265_ErrataTests
 
 		var butchery = scn.GetShadowCard("butchery");
 		var slayer = scn.GetShadowCard("slayer");
-		scn.ShadowMoveCardToHand(butchery);
-		scn.ShadowMoveCharToTable(slayer);
+		scn.MoveCardsToHand(butchery);
+		scn.MoveMinionsToTable(slayer);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionToTable(sam);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(sam, 3);
@@ -142,12 +143,12 @@ public class Card_01_265_ErrataTests
 
 		var butchery = scn.GetShadowCard("butchery");
 		var slayer = scn.GetShadowCard("slayer");
-		scn.ShadowMoveCardToHand(butchery);
-		scn.ShadowMoveCharToTable(slayer);
+		scn.MoveCardsToHand(butchery);
+		scn.MoveMinionsToTable(slayer);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardToDiscard("sword", "guard1", "guard2");
+		scn.MoveCompanionToTable(sam);
+		scn.MoveCardsToFreepsDiscard("sword", "guard1", "guard2");
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -171,11 +172,11 @@ public class Card_01_265_ErrataTests
 
 		var butchery = scn.GetShadowCard("butchery");
 		var slayer = scn.GetShadowCard("slayer");
-		scn.ShadowMoveCardToHand(butchery);
-		scn.ShadowMoveCharToTable(slayer);
+		scn.MoveCardsToHand(butchery);
+		scn.MoveMinionsToTable(slayer);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionToTable(sam);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -191,7 +192,7 @@ public class Card_01_265_ErrataTests
 		assertTrue(scn.FreepsChoiceAvailable("Discard the top 4 cards of your draw deck"));
 
 		assertEquals(6, scn.GetFreepsDeckCount());
-		scn.FreepsChooseMultipleChoiceOption("Discard");
+		scn.FreepsChooseOption("Discard");
 		assertEquals(2, scn.GetFreepsDeckCount());
 	}
 
@@ -202,12 +203,14 @@ public class Card_01_265_ErrataTests
 
 		var butchery = scn.GetShadowCard("butchery");
 		var slayer = scn.GetShadowCard("slayer");
-		scn.ShadowMoveCardToHand(butchery);
-		scn.ShadowMoveCharToTable(slayer);
+		scn.MoveCardsToHand(butchery);
+		scn.MoveMinionsToTable(slayer);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardToDeadPile("guard1", "guard2");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		scn.MoveCompanionToTable(sam);
+		scn.MoveCardsToDeadPile(guard1, guard2);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -220,15 +223,15 @@ public class Card_01_265_ErrataTests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.FreepsChoiceAvailable("Add a burden"));
-		scn.FreepsChooseMultipleChoiceOption("Burden");
+		scn.FreepsChooseOption("Burden");
 
 		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.FreepsChoiceAvailable("Add a burden"));
-		scn.FreepsChooseMultipleChoiceOption("Burden");
+		scn.FreepsChooseOption("Burden");
 
 		assertEquals(3, scn.GetBurdens());
 		assertTrue(scn.FreepsChoiceAvailable("Add a burden"));
-		scn.FreepsChooseMultipleChoiceOption("Burden");
+		scn.FreepsChooseOption("Burden");
 		assertEquals(4, scn.GetBurdens());
 	}
 }

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V1_014_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("gandalf", "101_14");
 					put("elrond", "1_40");
@@ -31,9 +31,9 @@ public class Card_V1_014_Tests
 					put("saruman", "3_68");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -84,9 +84,9 @@ public class Card_V1_014_Tests
 		var defiance = scn.GetFreepsCard("defiance");
 		var sleep = scn.GetFreepsCard("sleep");
 
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCharToTable("galadriel", "orophin");
-		scn.FreepsMoveCardToDiscard(boats, bb, defiance, sleep);
+		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionToTable("galadriel", "orophin");
+		scn.MoveCardsToDiscard(boats, bb, defiance, sleep);
 
 		scn.StartGame();
 
@@ -97,7 +97,7 @@ public class Card_V1_014_Tests
 		//only 2 elven allies
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
-		scn.FreepsMoveCharToTable("celeborn");
+		scn.MoveCompanionToTable("celeborn");
 
 		scn.SkipCurrentSite(); //Also skips through Shadow turn
 
@@ -128,11 +128,11 @@ public class Card_V1_014_Tests
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var celeborn = scn.GetFreepsCard("celeborn");
 
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCardToHand(elrondcomp, galadriel, celeborn);
+		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCardsToHand(elrondcomp, galadriel, celeborn);
 
 		var saruman = scn.GetShadowCard("saruman");
-		scn.ShadowMoveCardToHand(saruman);
+		scn.MoveCardsToHand(saruman);
 
 		scn.StartGame();
 

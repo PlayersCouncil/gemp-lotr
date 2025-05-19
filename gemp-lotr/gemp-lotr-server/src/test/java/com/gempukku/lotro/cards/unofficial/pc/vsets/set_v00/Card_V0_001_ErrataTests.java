@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v00;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_V0_001_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<String, String>()
 				{{
 					put("dummy", "1_311");
@@ -32,8 +32,8 @@ public class Card_V0_001_ErrataTests
 					put("site8", "11_238");
 					put("site9", "11_238");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.ATARRing,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.ATARRing,
 				"open"
 		);
 	}
@@ -53,7 +53,7 @@ public class Card_V0_001_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl rath = scn.GetFreepsSite("Rath Dínen");
 
@@ -66,7 +66,7 @@ public class Card_V0_001_ErrataTests
 	@Test
 	public void SantuaryHealingOnlyHeals3() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl site1 = scn.GetFreepsSite("East Road");

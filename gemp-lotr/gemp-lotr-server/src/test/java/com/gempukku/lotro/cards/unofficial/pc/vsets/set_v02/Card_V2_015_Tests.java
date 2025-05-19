@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_015_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("insurance", "102_15");
@@ -32,9 +32,9 @@ public class Card_V2_015_Tests
 
 					put("bill", "3_106");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -64,7 +64,7 @@ public class Card_V2_015_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
+		assertTrue(scn.HasTimeword(card, Timeword.SHADOW));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -75,7 +75,7 @@ public class Card_V2_015_Tests
 
 		var insurance = scn.GetShadowCard("insurance");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCardToHand(insurance, runner);
+		scn.MoveCardsToHand(insurance, runner);
 
 		scn.StartGame();
 		scn.SetTwilight(8);
@@ -103,11 +103,12 @@ public class Card_V2_015_Tests
 
 		var insurance = scn.GetShadowCard("insurance");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCardToHand(insurance);
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveCardsToHand(insurance);
+		scn.MoveMinionsToTable(runner);
 
 		var frodo = scn.GetRingBearer();
-		scn.FreepsAttachCardsTo(frodo, "bill");
+		var bill = scn.GetFreepsCard("bill");
+		scn.AttachCardsTo(frodo, bill);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -123,7 +124,7 @@ public class Card_V2_015_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		scn.ShadowMoveCardToHand(insurance);
+		scn.MoveCardsToHand(insurance);
 
 		scn.StartGame();
 		scn.SetTwilight(15);
@@ -149,8 +150,8 @@ public class Card_V2_015_Tests
 
 		var insurance = scn.GetShadowCard("insurance");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCardToHand(insurance);
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveCardsToHand(insurance);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SetTwilight(15);
@@ -171,19 +172,19 @@ public class Card_V2_015_Tests
 
 		var insurance = scn.GetShadowCard("insurance");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCardToHand(insurance);
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveCardsToHand(insurance);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.ShadowMoveCardsToTopOfDeck(insurance);
+		scn.MoveCardsToTopOfDeck(insurance);
 
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(18, scn.GetTwilight());
 		assertTrue(scn.ShadowActionAvailable(insurance));
 
-		scn.ShadowPlayCard(insurance);
+		scn.ShadowUseCardAction(insurance);
 
 		assertEquals(8, scn.GetShadowHandCount());
 	}
@@ -194,14 +195,14 @@ public class Card_V2_015_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		scn.ShadowMoveCardToHand(insurance);
+		scn.MoveCardsToHand(insurance);
 
 		scn.StartGame();
 
 		scn.SkipToSite(3);
 
 		scn.SetTwilight(14);
-		scn.ShadowMoveCardsToTopOfDeck("filler1", "filler2", "filler3", "filler4",
+		scn.MoveCardsToTopOfShadowDeck("filler1", "filler2", "filler3", "filler4",
 				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 		scn.FreepsPassCurrentPhaseAction();
 
@@ -223,8 +224,8 @@ public class Card_V2_015_Tests
 		scn.SkipToSite(6);
 
 		scn.SetTwilight(11);
-		scn.ShadowMoveCardToHand(insurance);
-		scn.ShadowMoveCardsToTopOfDeck("filler1", "filler2", "filler3", "filler4",
+		scn.MoveCardsToHand(insurance);
+		scn.MoveCardsToTopOfShadowDeck("filler1", "filler2", "filler3", "filler4",
 				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 		scn.FreepsPassCurrentPhaseAction();
 
@@ -239,14 +240,14 @@ public class Card_V2_015_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		scn.ShadowMoveCardToHand(insurance);
+		scn.MoveCardsToHand(insurance);
 
 		scn.StartGame();
 
 		scn.SkipToSite(6);
 
 		scn.SetTwilight(18);
-		scn.ShadowMoveCardsToTopOfDeck("filler1", "filler2", "filler3", "filler4",
+		scn.MoveCardsToTopOfShadowDeck("filler1", "filler2", "filler3", "filler4",
 				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 		scn.FreepsPassCurrentPhaseAction();
 
@@ -270,15 +271,15 @@ public class Card_V2_015_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		scn.ShadowMoveCardToHand(insurance);
+		scn.MoveCardsToHand(insurance);
 
 		scn.StartGame();
 
 		scn.SkipToSite(2);
 
 		scn.SetTwilight(17);
-		scn.ShadowMoveCardsToTopOfDeck(insurance);
-		scn.ShadowMoveCardsToTopOfDeck("filler1", "filler2", "filler3", "filler4",
+		scn.MoveCardsToTopOfDeck(insurance);
+		scn.MoveCardsToTopOfShadowDeck("filler1", "filler2", "filler3", "filler4",
 				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 
 		scn.FreepsPassCurrentPhaseAction();
@@ -291,7 +292,7 @@ public class Card_V2_015_Tests
 		assertEquals(0, scn.GetShadowHandCount());
 		assertEquals(12, scn.GetShadowDeckCount());
 
-		scn.ShadowPlayCard(insurance);
+		scn.ShadowUseCardAction(insurance);
 
 		assertEquals(15, scn.GetTwilight());
 		assertEquals(8, scn.GetShadowHandCount());
@@ -303,8 +304,8 @@ public class Card_V2_015_Tests
 		scn.SkipToSite(4);
 
 		scn.SetTwilight(11);
-		scn.ShadowMoveCardsToTopOfDeck(insurance);
-		scn.ShadowMoveCardsToTopOfDeck("filler1", "filler2", "filler3", "filler4",
+		scn.MoveCardsToTopOfDeck(insurance);
+		scn.MoveCardsToTopOfShadowDeck("filler1", "filler2", "filler3", "filler4",
 				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 
 		scn.FreepsPassCurrentPhaseAction();
@@ -318,8 +319,8 @@ public class Card_V2_015_Tests
 		scn.SkipToSite(6);
 
 		scn.SetTwilight(11);
-		scn.ShadowMoveCardsToTopOfDeck(insurance);
-		scn.ShadowMoveCardsToTopOfDeck("filler1", "filler2", "filler3", "filler4",
+		scn.MoveCardsToTopOfDeck(insurance);
+		scn.MoveCardsToTopOfShadowDeck("filler1", "filler2", "filler3", "filler4",
 				"filler5", "filler6", "filler7", "filler8", "filler9", "runner", "bill");
 
 		scn.FreepsPassCurrentPhaseAction();
