@@ -61,6 +61,7 @@ var GempLotrDeckBuildingUI = Class.extend({
 	cardInfoDialog: null,
 	
 	formats: null,
+	formatsInitialized:false,
 
 	init:function () {
 		var that = this;
@@ -110,14 +111,14 @@ var GempLotrDeckBuildingUI = Class.extend({
 						that.setMapVisibility(false);
 					}
 					
-					//PC format or Anything Goes
-					if(formatCode.includes("pc") || formatCode == "rev_tow_sta") {
+					//PC format or Anything Goes (if chosen, not when being default when page loads)
+					if((formatCode.includes("pc") || formatCode == "rev_tow_sta") && that.formatsInitialized) {
 						$("#convertErrataBut").button("option", "disabled", false);
 					}
 					else {
 						$("#convertErrataBut").button("option", "disabled", true);
 					}
-					
+
 					that.cardFilter.updateFormat(formatCode, that.formats[formatCode].blockFilters);
 				});
 		
@@ -1032,6 +1033,12 @@ var GempLotrDeckBuildingUI = Class.extend({
 			this.deckValidationDirty = true;
 			this.deckContentsDirty = true;
 			$("#editingDeck").html("<font color='orange'>*" + name + " - modified</font>");
+
+            //Enable the errata button if user starts adding cards to empty 'Anything Goes' deck after the page was initialized
+			let formatCode = this.formatSelect.val();
+            if(formatCode == "rev_tow_sta") {
+                $("#convertErrataBut").button("option", "disabled", false);
+            }
 		}
 		else
 		{
@@ -1121,6 +1128,8 @@ var GempLotrDeckBuildingUI = Class.extend({
 					that.formatSelect.change();
 					const sleep = ms => new Promise(r => setTimeout(r, ms));
 					that.showNormalFilter();
+
+					that.formatsInitialized = true;
 
 					that.getCollectionTypes();
 				}, 
