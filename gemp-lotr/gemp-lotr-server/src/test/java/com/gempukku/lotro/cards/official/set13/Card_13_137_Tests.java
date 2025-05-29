@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set13;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_13_137_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("theoden", "13_137");
@@ -22,9 +22,9 @@ public class Card_13_137_Tests
 					put("eomer", "4_267");
 					put("theodred", "13_138");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -70,17 +70,17 @@ public class Card_13_137_Tests
 
 		var theoden = scn.GetFreepsCard("theoden");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.FreepsMoveCardToHand(eowyn);
-		scn.FreepsMoveCharToTable(theoden);
+		scn.MoveCardsToHand(eowyn);
+		scn.MoveCompanionToTable(theoden);
 
 		scn.StartGame();
 
-		assertFalse(scn.hasKeyword(theoden, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(theoden, Keyword.DEFENDER));
 		assertEquals(0, scn.GetKeywordCount(theoden, Keyword.DEFENDER));
 
 		scn.FreepsPlayCard(eowyn);
 
-		assertTrue(scn.hasKeyword(theoden, Keyword.DEFENDER));
+		assertTrue(scn.HasKeyword(theoden, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(theoden, Keyword.DEFENDER));
 	}
 
@@ -91,17 +91,17 @@ public class Card_13_137_Tests
 
 		var theoden = scn.GetFreepsCard("theoden");
 		var eomer = scn.GetFreepsCard("eomer");
-		scn.FreepsMoveCardToHand(eomer);
-		scn.FreepsMoveCharToTable(theoden);
+		scn.MoveCardsToHand(eomer);
+		scn.MoveCompanionToTable(theoden);
 
 		scn.StartGame();
 
-		assertFalse(scn.hasKeyword(theoden, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(theoden, Keyword.DAMAGE));
 		assertEquals(0, scn.GetKeywordCount(theoden, Keyword.DAMAGE));
 
 		scn.FreepsPlayCard(eomer);
 
-		assertTrue(scn.hasKeyword(theoden, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(theoden, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(theoden, Keyword.DAMAGE));
 	}
 
@@ -112,8 +112,8 @@ public class Card_13_137_Tests
 
 		var theoden = scn.GetFreepsCard("theoden");
 		var theodred = scn.GetFreepsCard("theodred");
-		scn.FreepsMoveCardToHand(theodred);
-		scn.FreepsMoveCharToTable(theoden);
+		scn.MoveCardsToHand(theodred);
+		scn.MoveCompanionToTable(theoden);
 
 		scn.StartGame();
 

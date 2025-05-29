@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_041_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("eyes", "101_41");
 					put("twigul", "2_83");
@@ -28,9 +28,9 @@ public class Card_V1_041_Tests
 					put("filler3", "2_75");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -50,7 +50,7 @@ public class Card_V1_041_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl eyes = scn.GetFreepsCard("eyes");
 
@@ -59,7 +59,7 @@ public class Card_V1_041_Tests
 		assertEquals(Culture.WRAITH, eyes.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, eyes.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(eyes, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(eyes, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, eyes.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());
 		//assertEquals(, card.getBlueprint().getVitality());
@@ -72,11 +72,11 @@ public class Card_V1_041_Tests
 	@Test
 	public void RequiresATwigulToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl eyes = scn.GetShadowCard("eyes");
 		PhysicalCardImpl twigul = scn.GetShadowCard("twigul");
-		scn.ShadowMoveCardToHand(eyes, twigul);
+		scn.MoveCardsToHand(eyes, twigul);
 
 		scn.StartGame();
 
@@ -91,12 +91,12 @@ public class Card_V1_041_Tests
 	@Test
 	public void EachMoveDrawsACardIfRingBearerIsWounded() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 
 		PhysicalCardImpl eyes = scn.GetShadowCard("eyes");
-		scn.ShadowMoveCardToSupportArea(eyes);
+		scn.MoveCardsToSupportArea(eyes);
 
 		scn.StartGame();
 
@@ -115,12 +115,12 @@ public class Card_V1_041_Tests
 	@Test
 	public void MovingDrawsNoCardsIfRingBearerUnwounded() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 
 		PhysicalCardImpl eyes = scn.GetShadowCard("eyes");
-		scn.ShadowMoveCardToSupportArea(eyes);
+		scn.MoveCardsToSupportArea(eyes);
 
 		scn.StartGame();
 
@@ -137,12 +137,12 @@ public class Card_V1_041_Tests
 	@Test
 	public void MovingDraws2CardsIfRingBearerExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 
 		PhysicalCardImpl eyes = scn.GetShadowCard("eyes");
-		scn.ShadowMoveCardToSupportArea(eyes);
+		scn.MoveCardsToSupportArea(eyes);
 
 		scn.StartGame();
 

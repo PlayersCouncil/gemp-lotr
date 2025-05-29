@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set08;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 
 public class Card_08_057_ErrataTests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("marauder", "58_57");
                     put("corsair", "8_56");
@@ -47,7 +47,7 @@ public class Card_08_057_ErrataTests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl marauder = scn.GetFreepsCard("marauder");
 
@@ -65,16 +65,16 @@ public class Card_08_057_ErrataTests
     @Test
     public void IfYouCannotSpotAnotherCorsairOnPlayNothingHappens() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl marauder = scn.GetShadowCard("marauder");
         PhysicalCardImpl corsair = scn.GetShadowCard("corsair");
         PhysicalCardImpl blacksails1 = scn.GetShadowCard("blacksails1");
         PhysicalCardImpl blacksails2 = scn.GetShadowCard("blacksails2");
-        scn.ShadowMoveCardToHand(marauder, corsair, blacksails1, blacksails2);
+        scn.MoveCardsToHand(marauder, corsair, blacksails1, blacksails2);
 
         PhysicalCardImpl cart = scn.GetFreepsCard("cart");
-        scn.FreepsMoveCardToSupportArea(cart);
+        scn.MoveCardsToSupportArea(cart);
 
         scn.StartGame();
 
@@ -99,17 +99,17 @@ public class Card_08_057_ErrataTests
     @Test
     public void IfAnotherCorsairOnPlayCanDiscardAShadowPossessionToAdd2Tokens() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl marauder = scn.GetShadowCard("marauder");
         PhysicalCardImpl corsair = scn.GetShadowCard("corsair");
         PhysicalCardImpl blacksails1 = scn.GetShadowCard("blacksails1");
         PhysicalCardImpl blacksails2 = scn.GetShadowCard("blacksails2");
-        scn.ShadowMoveCardToHand(marauder, blacksails1, blacksails2);
-        scn.ShadowMoveCharToTable(corsair);
+        scn.MoveCardsToHand(marauder, blacksails1, blacksails2);
+        scn.MoveMinionsToTable(corsair);
 
         PhysicalCardImpl cart = scn.GetFreepsCard("cart");
-        scn.FreepsMoveCardToSupportArea(cart);
+        scn.MoveCardsToSupportArea(cart);
 
         scn.StartGame();
 
@@ -145,18 +145,18 @@ public class Card_08_057_ErrataTests
     @Test
     public void IfAnotherCorsairOnPlayCanRemove2TokensToDiscardAnyPossession() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl marauder = scn.GetShadowCard("marauder");
         PhysicalCardImpl corsair = scn.GetShadowCard("corsair");
         var boldmen = scn.GetShadowCard("boldmen");
-        scn.ShadowMoveCardToHand(marauder);
-        scn.ShadowMoveCharToTable(corsair);
-        scn.ShadowMoveCardToSupportArea(boldmen);
+        scn.MoveCardsToHand(marauder);
+        scn.MoveMinionsToTable(corsair);
+        scn.MoveCardsToSupportArea(boldmen);
         scn.AddTokensToCard(boldmen, 2);
 
         PhysicalCardImpl cart = scn.GetFreepsCard("cart");
-        scn.FreepsMoveCardToSupportArea(cart);
+        scn.MoveCardsToSupportArea(cart);
 
         scn.StartGame();
 
@@ -179,17 +179,17 @@ public class Card_08_057_ErrataTests
     @Test
     public void ChoiceIsOfferedIfBothTokensAndPossessionsOnTable() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var marauder = scn.GetShadowCard("marauder");
         var corsair = scn.GetShadowCard("corsair");
         var blacksails1 = scn.GetShadowCard("blacksails1");
         var blacksails2 = scn.GetShadowCard("blacksails2");
-        scn.ShadowMoveCardToHand(marauder, blacksails1, blacksails2);
-        scn.ShadowMoveCharToTable(corsair);
+        scn.MoveCardsToHand(marauder, blacksails1, blacksails2);
+        scn.MoveMinionsToTable(corsair);
 
         var cart = scn.GetFreepsCard("cart");
-        scn.FreepsMoveCardToSupportArea(cart);
+        scn.MoveCardsToSupportArea(cart);
 
         scn.StartGame();
 

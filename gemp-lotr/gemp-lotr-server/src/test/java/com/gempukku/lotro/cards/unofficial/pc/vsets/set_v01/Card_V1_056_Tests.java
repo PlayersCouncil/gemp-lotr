@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
@@ -18,17 +18,17 @@ import static org.junit.Assert.*;
 public class Card_V1_056_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("coming", "101_56");
 					put("pippin", "1_306");
 					put("merry", "1_302");
 					put("gimli", "2_121");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -47,7 +47,7 @@ public class Card_V1_056_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl coming = scn.GetFreepsCard("coming");
 
@@ -56,7 +56,7 @@ public class Card_V1_056_Tests
 		assertEquals(Culture.SHIRE, coming.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, coming.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, coming.getBlueprint().getRace());
-        assertTrue(scn.hasTimeword(coming, Timeword.FELLOWSHIP)); // test for keywords as needed
+        assertTrue(scn.HasTimeword(coming, Timeword.FELLOWSHIP)); // test for keywords as needed
 		assertEquals(2, coming.getBlueprint().getTwilightCost());
 		//assertEquals(, coming.getBlueprint().getStrength());
 		//assertEquals(, coming.getBlueprint().getVitality());
@@ -69,15 +69,15 @@ public class Card_V1_056_Tests
 	@Test
 	public void WereComingTooTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl coming = scn.GetFreepsCard("coming");
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl merry = scn.GetFreepsCard("merry");
 		PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsMoveCardToHand(coming, merry, pippin);
+		scn.MoveCompanionToTable(gimli);
+		scn.MoveCardsToHand(coming, merry, pippin);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(gimli, 1);

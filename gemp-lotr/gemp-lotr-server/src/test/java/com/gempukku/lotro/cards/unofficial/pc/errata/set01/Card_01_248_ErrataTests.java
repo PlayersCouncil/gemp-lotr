@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
@@ -15,8 +15,8 @@ import static org.junit.Assert.assertTrue;
 
 public class Card_01_248_ErrataTests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("forces1", "51_248");
                     put("forces2", "51_248");
@@ -44,7 +44,7 @@ public class Card_01_248_ErrataTests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var forces = scn.GetFreepsCard("forces1");
 
@@ -57,7 +57,7 @@ public class Card_01_248_ErrataTests
     @Test
     public void ExertsMinionWhenPlayed() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var forces1 = scn.GetShadowCard("forces1");
         var forces2 = scn.GetShadowCard("forces2");
@@ -67,8 +67,8 @@ public class Card_01_248_ErrataTests
         var orc3 = scn.GetShadowCard("orc3");
         var orc4 = scn.GetShadowCard("orc4");
 
-        scn.ShadowMoveCardToHand(forces1,forces2);
-        scn.ShadowMoveCharToTable(troll, orc1, orc2);
+        scn.MoveCardsToHand(forces1,forces2);
+        scn.MoveMinionsToTable(troll, orc1, orc2);
 
         scn.StartGame();
 
@@ -85,7 +85,7 @@ public class Card_01_248_ErrataTests
         //There are 3 minions, but only 2 orcs
         assertEquals(4, scn.GetTwilight());
 
-        scn.ShadowMoveCharToTable(orc3, orc4);
+        scn.MoveMinionsToTable(orc3, orc4);
         scn.ShadowPlayCard(forces2);
         scn.ShadowChoose(scn.ShadowGetCardChoices().get(1));
 

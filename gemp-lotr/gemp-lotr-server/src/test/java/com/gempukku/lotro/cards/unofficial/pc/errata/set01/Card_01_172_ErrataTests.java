@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 public class Card_01_172_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("archer", "51_172");
@@ -26,9 +26,9 @@ public class Card_01_172_ErrataTests
 					put("runner", "1_178");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.ATARRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.ATARRing
 		);
 	}
 
@@ -63,7 +63,7 @@ public class Card_01_172_ErrataTests
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(card, Keyword.ARCHER));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(4, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
@@ -82,15 +82,15 @@ public class Card_01_172_ErrataTests
 		var troop = scn.GetShadowCard("troop");
 		var runner = scn.GetShadowCard("runner");
 
-		scn.ShadowMoveCharToTable(marksman, commander, bowman, troop, runner);
-		scn.ShadowMoveCardToHand(archer);
+		scn.MoveMinionsToTable(marksman, commander, bowman, troop, runner);
+		scn.MoveCardsToHand(archer);
 
 		scn.StartGame();
 		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, 6));
 		scn.SkipToPhase(Phase.ARCHERY);
 
 		assertEquals(6, scn.GetFreepsArcheryTotal());
-		scn.FreepsMoveCharToTable(archer);
+		scn.MoveCompanionToTable(archer);
 		// -5 for the 5 archers, the runner doesn't count
 		assertEquals(1, scn.GetFreepsArcheryTotal());
 	}
@@ -106,7 +106,7 @@ public class Card_01_172_ErrataTests
 		var bowman = scn.GetShadowCard("bowman");
 		var troop = scn.GetShadowCard("troop");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(archer, marksman, commander, bowman, troop, runner);
+		scn.MoveMinionsToTable(archer, marksman, commander, bowman, troop, runner);
 
 		var frodo = scn.GetRingBearer();
 

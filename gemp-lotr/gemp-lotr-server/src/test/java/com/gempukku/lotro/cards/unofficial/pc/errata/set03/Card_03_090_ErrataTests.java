@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_03_090_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("hand", "53_90");
@@ -27,9 +27,9 @@ public class Card_03_090_ErrataTests
 					put("orc", "1_266");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -59,7 +59,7 @@ public class Card_03_090_ErrataTests
 		assertEquals(Side.SHADOW, hand.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, hand.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, hand.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(hand, Timeword.MANEUVER));
+        assertTrue(scn.HasTimeword(hand, Timeword.MANEUVER));
 		assertEquals(0, hand.getBlueprint().getTwilightCost());
 	}
 
@@ -72,15 +72,15 @@ public class Card_03_090_ErrataTests
 		var anduril = scn.GetFreepsCard("anduril");
 		var bow = scn.GetFreepsCard("bow");
 		var pipe = scn.GetFreepsCard("pipe");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 		scn.AttachCardsTo(aragorn, anduril, bow, pipe);
-		scn.FreepsMoveCardToHand("warden", "orc");
+		scn.FreepsDrawCards(2);
 
 		var hand = scn.GetShadowCard("hand");
 		var warden = scn.GetShadowCard("warden");
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToHand(hand);
-		scn.ShadowMoveCharToTable(warden, orc);
+		scn.MoveCardsToHand(hand);
+		scn.MoveMinionsToTable(warden, orc);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -130,15 +130,15 @@ public class Card_03_090_ErrataTests
 		var anduril = scn.GetFreepsCard("anduril");
 		var bow = scn.GetFreepsCard("bow");
 		var pipe = scn.GetFreepsCard("pipe");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 		scn.AttachCardsTo(aragorn, anduril, bow, pipe);
-		scn.FreepsMoveCardToHand("warden", "orc");
+		scn.FreepsDrawCards(2);
 
 		var hand = scn.GetShadowCard("hand");
 		var warden = scn.GetShadowCard("warden");
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToHand(hand);
-		scn.ShadowMoveCharToTable(warden, orc);
+		scn.MoveCardsToHand(hand);
+		scn.MoveMinionsToTable(warden, orc);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);

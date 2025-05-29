@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set07;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_07_071_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("smeagol", "7_71");
 					put("balrog", "12_79");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_07_071_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.RING_BOUND));
+		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
@@ -69,13 +69,13 @@ public class Card_07_071_Tests
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
-		scn.FreepsMoveCardToHand(smeagol);
+		scn.MoveCardsToHand(smeagol);
 
 		scn.StartGame();
 
-		assertEquals(1, scn.getBurdens());
+		assertEquals(1, scn.GetBurdens());
 		scn.FreepsPlayCard(smeagol);
-		assertEquals(2, scn.getBurdens());
+		assertEquals(2, scn.GetBurdens());
 	}
 
 	@Test
@@ -84,10 +84,10 @@ public class Card_07_071_Tests
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
-		scn.FreepsMoveCharToTable(smeagol);
+		scn.MoveCompanionToTable(smeagol);
 
 		var balrog = scn.GetShadowCard("balrog");
-		scn.ShadowMoveCharToTable(balrog);
+		scn.MoveMinionsToTable(balrog);
 
 		scn.StartGame();
 		scn.AddThreats(2);
@@ -102,16 +102,16 @@ public class Card_07_071_Tests
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
-		scn.FreepsMoveCharToTable(smeagol);
+		scn.MoveCompanionToTable(smeagol);
 
 		var balrog = scn.GetShadowCard("balrog");
-		scn.ShadowMoveCharToTable(balrog);
+		scn.MoveMinionsToTable(balrog);
 
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		assertEquals(0, scn.getThreats());
+		assertEquals(0, scn.GetThreats());
 		assertEquals(5, scn.GetVitality(balrog));
 		assertFalse(scn.IsCharAssigned(smeagol));
 		assertFalse(scn.IsCharAssigned(balrog));
@@ -120,7 +120,7 @@ public class Card_07_071_Tests
 
 		scn.FreepsUseCardAction(smeagol);
 
-		assertEquals(2, scn.getThreats());
+		assertEquals(2, scn.GetThreats());
 		assertTrue(scn.IsCharAssigned(smeagol));
 		assertTrue(scn.IsCharAssigned(balrog));
 		assertEquals(1, scn.GetVitality(balrog));

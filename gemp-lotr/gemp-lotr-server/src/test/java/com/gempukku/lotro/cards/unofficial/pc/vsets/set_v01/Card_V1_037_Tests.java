@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_V1_037_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("fell", "101_37");
 					put("fell2", "101_37");
@@ -24,9 +24,9 @@ public class Card_V1_037_Tests
 					put("blade", "1_216");
 					put("ring", "9_44");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -45,7 +45,7 @@ public class Card_V1_037_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl fell = scn.GetFreepsCard("fell");
 
@@ -54,7 +54,7 @@ public class Card_V1_037_Tests
 		assertEquals(Culture.WRAITH, fell.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, fell.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, fell.getBlueprint().getRace());
-        assertTrue(scn.hasTimeword(fell, Timeword.SHADOW)); // test for keywords as needed
+        assertTrue(scn.HasTimeword(fell, Timeword.SHADOW)); // test for keywords as needed
 		assertEquals(0, fell.getBlueprint().getTwilightCost());
 		//assertEquals(, fell.getBlueprint().getStrength());
 		//assertEquals(, fell.getBlueprint().getVitality());
@@ -67,17 +67,17 @@ public class Card_V1_037_Tests
 	@Test
 	public void FellVoicesCallPullsItemsFromDiscardOrDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl fell = scn.GetShadowCard("fell");
 		PhysicalCardImpl fell2 = scn.GetShadowCard("fell2");
 		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
 		PhysicalCardImpl blade = scn.GetShadowCard("blade");
 		PhysicalCardImpl ring = scn.GetShadowCard("ring");
-		scn.FreepsMoveCardToHand(fell, fell2);
-		scn.FreepsMoveCharToTable(nazgul);
-		scn.FreepsMoveCardToDiscard(ring);
-		scn.FreepsMoveCardsToTopOfDeck(blade);
+		scn.MoveCardsToHand(fell, fell2);
+		scn.MoveCompanionToTable(nazgul);
+		scn.MoveCardsToDiscard(ring);
+		scn.MoveCardsToTopOfDeck(blade);
 
 		scn.StartGame();
 
@@ -90,7 +90,7 @@ public class Card_V1_037_Tests
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
 		assertEquals(2, scn.ShadowGetMultipleChoices().size());
-		scn.ShadowChooseMultipleChoiceOption("discard");
+		scn.ShadowChooseOption("discard");
 		assertEquals(Zone.ATTACHED, ring.getZone());
 		assertEquals(nazgul, ring.getAttachedTo());
 

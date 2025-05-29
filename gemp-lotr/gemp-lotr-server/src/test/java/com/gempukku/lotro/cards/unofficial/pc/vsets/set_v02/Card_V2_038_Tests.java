@@ -1,8 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.at.AbstractAtTest;
-import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -22,8 +21,8 @@ import static org.junit.Assert.*;
 public class Card_V2_038_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("balrog", "102_38");
@@ -47,8 +46,8 @@ public class Card_V2_038_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.ATARRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.ATARRing
 		);
 	}
 
@@ -83,8 +82,8 @@ public class Card_V2_038_Tests
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.BALROG, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.FIERCE));
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(14, card.getBlueprint().getTwilightCost());
 		assertEquals(17, card.getBlueprint().getStrength());
@@ -99,11 +98,11 @@ public class Card_V2_038_Tests
 
 		var balrog = scn.GetShadowCard("balrog");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(balrog, runner);
+		scn.MoveMinionsToTable(balrog, runner);
 
 		//Added to increase threat threshold to 3
-		scn.FreepsMoveCharToTable("companion1");
-		scn.FreepsMoveCharToTable("companion2");
+		scn.MoveCompanionToTable("companion1");
+		scn.MoveCompanionToTable("companion2");
 
 		//cheating to add fellowship archery
 		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, null, 3));
@@ -146,16 +145,16 @@ public class Card_V2_038_Tests
 		var balrog = scn.GetShadowCard("balrog");
 		var drums = scn.GetShadowCard("drums");
 		var dark = scn.GetShadowCard("dark");
-		scn.ShadowMoveCharToTable(balrog);
-		scn.ShadowMoveCardToSupportArea(dark);
-		scn.ShadowMoveCardToHand(drums);
+		scn.MoveMinionsToTable(balrog);
+		scn.MoveCardsToSupportArea(dark);
+		scn.MoveCardsToHand(drums);
 
 		var frodo = scn.GetRingBearer();
-		var ring = scn.GetFreepsRing();
+		var ring = scn.GetRing();
 		var sting = scn.GetFreepsCard("sting");
 		var severed = scn.GetFreepsCard("severed");
 		scn.AttachCardsTo(frodo, sting);
-		scn.FreepsMoveCardToHand(severed);
+		scn.MoveCardsToHand(severed);
 
 		var ettenmoors = scn.GetShadowSite(2);
 
@@ -165,7 +164,7 @@ public class Card_V2_038_Tests
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(frodo, AbstractAtTest.P1);
+				ActivateCardAction action = new ActivateCardAction(frodo, VirtualTableScenario.P1);
 				action.appendEffect(new TakeOffTheOneRingEffect());
 				return Collections.singletonList(action);
 			}

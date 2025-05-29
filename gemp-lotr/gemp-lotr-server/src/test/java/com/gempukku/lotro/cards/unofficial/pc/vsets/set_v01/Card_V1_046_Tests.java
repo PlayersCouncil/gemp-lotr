@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,16 +17,16 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_046_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("iseeyou", "101_46");
 					put("orc", "1_271");
 					put("orc2", "1_271");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.GreatRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.GreatRing
 		);
 	}
 
@@ -47,7 +47,7 @@ public class Card_V1_046_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl iseeyou = scn.GetFreepsCard("iseeyou");
 
@@ -56,7 +56,7 @@ public class Card_V1_046_Tests
 		assertEquals(Culture.SAURON, iseeyou.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, iseeyou.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, iseeyou.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(iseeyou, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(iseeyou, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(0, iseeyou.getBlueprint().getTwilightCost());
 		//assertEquals(, iseeyou.getBlueprint().getStrength());
 		//assertEquals(, iseeyou.getBlueprint().getVitality());
@@ -69,14 +69,14 @@ public class Card_V1_046_Tests
 	@Test
 	public void SiteNumberIsReducedPerBurden() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl iseeyou = scn.GetShadowCard("iseeyou");
 		PhysicalCardImpl orc = scn.GetShadowCard("orc");
 		PhysicalCardImpl orc2 = scn.GetShadowCard("orc2");
-		scn.ShadowMoveCardToSupportArea(iseeyou);
-		scn.ShadowMoveCharToTable(orc);
-		scn.ShadowMoveCardToHand(orc2);
+		scn.MoveCardsToSupportArea(iseeyou);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToHand(orc2);
 
 		scn.StartGame();
 
@@ -101,12 +101,12 @@ public class Card_V1_046_Tests
 	@Test
 	public void SauronMinionsWithSiteNumber1OrLessAreStrengthPlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl iseeyou = scn.GetShadowCard("iseeyou");
 		PhysicalCardImpl orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToSupportArea(iseeyou);
-		scn.ShadowMoveCharToTable(orc);
+		scn.MoveCardsToSupportArea(iseeyou);
+		scn.MoveMinionsToTable(orc);
 
 		scn.StartGame();
 
@@ -132,14 +132,14 @@ public class Card_V1_046_Tests
 	@Test
 	public void DiscardsWhenRingRemoved() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl iseeyou = scn.GetShadowCard("iseeyou");
 		PhysicalCardImpl orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToSupportArea(iseeyou);
-		scn.ShadowMoveCharToTable(orc);
+		scn.MoveCardsToSupportArea(iseeyou);
+		scn.MoveMinionsToTable(orc);
 
-		PhysicalCardImpl ring = scn.GetFreepsCard(GenericCardTestHelper.GreatRing);
+		PhysicalCardImpl ring = scn.GetFreepsCard(VirtualTableScenario.GreatRing);
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);

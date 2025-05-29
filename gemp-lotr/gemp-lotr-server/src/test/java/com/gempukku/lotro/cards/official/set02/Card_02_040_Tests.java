@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_02_040_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("demands", "2_40");
@@ -24,9 +24,9 @@ public class Card_02_040_Tests
 					put("rosie", "1_309");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_02_040_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -66,7 +66,7 @@ public class Card_02_040_Tests
 
 		var demands = scn.GetShadowCard("demands");
 		var savage = scn.GetShadowCard("savage");
-		scn.ShadowMoveCardToHand(demands, savage);
+		scn.MoveCardsToHand(demands, savage);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -84,10 +84,10 @@ public class Card_02_040_Tests
 		var scn = GetScenario();
 
 		var celeborn = scn.GetFreepsCard("celeborn");
-		scn.FreepsMoveCardToSupportArea(celeborn);
+		scn.MoveCardsToSupportArea(celeborn);
 
 		var demands = scn.GetShadowCard("demands");
-		scn.ShadowMoveCardToSupportArea(demands);
+		scn.MoveCardsToSupportArea(demands);
 
 		scn.StartGame();
 
@@ -102,10 +102,10 @@ public class Card_02_040_Tests
 		var scn = GetScenario();
 
 		var rosie = scn.GetFreepsCard("rosie");
-		scn.FreepsMoveCardToSupportArea(rosie);
+		scn.MoveCardsToSupportArea(rosie);
 
 		var demands = scn.GetShadowCard("demands");
-		scn.ShadowMoveCardToSupportArea(demands);
+		scn.MoveCardsToSupportArea(demands);
 
 		scn.StartGame();
 

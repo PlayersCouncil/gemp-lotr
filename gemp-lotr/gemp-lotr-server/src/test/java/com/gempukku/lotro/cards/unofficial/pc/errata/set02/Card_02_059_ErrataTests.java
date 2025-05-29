@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_02_059_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("things", "52_59");
@@ -32,9 +32,9 @@ public class Card_02_059_ErrataTests
 
 					put("stealth", "1_298");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -71,9 +71,9 @@ public class Card_02_059_ErrataTests
 		var scn = GetScenario();
 
 		var things = scn.GetShadowCard("things");
-		scn.ShadowMoveCardToHand(things);
-		scn.ShadowMoveCardToDiscard("runner2", "armory", "host", "scimitar", "terror1", "relentless");
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveCardsToHand(things);
+		scn.MoveCardsToShadowDiscard("runner2", "armory", "host", "scimitar", "terror1", "relentless");
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 		scn.SetTwilight(20);
@@ -90,8 +90,8 @@ public class Card_02_059_ErrataTests
 		var scn = GetScenario();
 
 		var things = scn.GetShadowCard("things");
-		scn.ShadowMoveCardToHand(things);
-		scn.ShadowMoveCardToDiscard("things2", "runner");
+		scn.MoveCardsToHand(things);
+		scn.MoveCardsToShadowDiscard("things2", "runner");
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -105,11 +105,11 @@ public class Card_02_059_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.FreepsMoveCardToHand("stealth");
+		scn.MoveCardsToFreepsHand("stealth");
 
 		var things = scn.GetShadowCard("things");
-		scn.ShadowMoveCardToHand(things);
-		scn.ShadowMoveCardToDiscard("relentless");
+		scn.MoveCardsToHand(things);
+		scn.MoveCardsToShadowDiscard("relentless");
 
 		scn.StartGame();
 		//scn.SetTwilight(-1);

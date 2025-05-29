@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.SitesBlock;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_01_333_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("goblin1", "1_174");
@@ -34,8 +34,8 @@ public class Card_01_333_ErrataTests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -62,7 +62,7 @@ public class Card_01_333_ErrataTests
 
 		assertFalse(moors.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, moors.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(moors, Keyword.PLAINS));
+		assertTrue(scn.HasKeyword(moors, Keyword.PLAINS));
 		assertEquals(1, moors.getBlueprint().getTwilightCost());
 		assertEquals(2, moors.getBlueprint().getSiteNumber());
 		assertEquals(SitesBlock.FELLOWSHIP, moors.getBlueprint().getSiteBlock());
@@ -75,7 +75,10 @@ public class Card_01_333_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 
-		scn.ShadowMoveCardToHand("goblin1", "goblin2", "goblin3");
+		var goblin1 = scn.GetShadowCard("goblin1");
+		var goblin2 = scn.GetShadowCard("goblin2");
+		var goblin3 = scn.GetShadowCard("goblin3");
+		scn.MoveCardsToHand(goblin1, goblin2, goblin3);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -84,11 +87,11 @@ public class Card_01_333_ErrataTests
 		assertEquals("Midgewater Moors", scn.GetCurrentSite().getBlueprint().getTitle());
 
 		assertEquals(0, scn.GetWoundsOn(frodo));
-		scn.ShadowPlayCard("goblin1");
+		scn.ShadowPlayCard(goblin1);
 		assertEquals(1, scn.GetWoundsOn(frodo));
-		scn.ShadowPlayCard("goblin2");
+		scn.ShadowPlayCard(goblin2);
 		assertEquals(2, scn.GetWoundsOn(frodo));
-		scn.ShadowPlayCard("goblin3");
+		scn.ShadowPlayCard(goblin3);
 		assertEquals(3, scn.GetWoundsOn(frodo));
 	}
 
@@ -98,9 +101,12 @@ public class Card_01_333_ErrataTests
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
+		scn.FreepsDrawCards(3);
 
-		scn.ShadowMoveCardToHand("goblin1", "goblin2", "goblin3");
-		scn.FreepsMoveCardToHand("goblin1", "goblin2", "goblin3");
+		var goblin1 = scn.GetShadowCard("goblin1");
+		var goblin2 = scn.GetShadowCard("goblin2");
+		var goblin3 = scn.GetShadowCard("goblin3");
+		scn.MoveCardsToHand(goblin1, goblin2, goblin3);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -110,13 +116,13 @@ public class Card_01_333_ErrataTests
 		assertEquals("Midgewater Moors", scn.GetCurrentSite().getBlueprint().getTitle());
 
 		assertEquals(3, scn.GetFreepsHandCount());
-		scn.ShadowPlayCard("goblin1");
-		scn.FreepsChooseCard("goblin1");
+		scn.ShadowPlayCard(goblin1);
+		scn.FreepsChooseAnyCard();
 		assertEquals(2, scn.GetFreepsHandCount());
-		scn.ShadowPlayCard("goblin2");
-		scn.FreepsChooseCard("goblin2");
+		scn.ShadowPlayCard(goblin2);
+		scn.FreepsChooseAnyCard();
 		assertEquals(1, scn.GetFreepsHandCount());
-		scn.ShadowPlayCard("goblin3");
+		scn.ShadowPlayCard(goblin3);
 		assertEquals(0, scn.GetFreepsHandCount());
 	}
 
@@ -126,9 +132,12 @@ public class Card_01_333_ErrataTests
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
+		scn.FreepsDrawCards(3);
 
-		scn.ShadowMoveCardToHand("goblin1", "goblin2", "goblin3");
-		scn.FreepsMoveCardToHand("goblin1", "goblin2", "goblin3");
+		var goblin1 = scn.GetShadowCard("goblin1");
+		var goblin2 = scn.GetShadowCard("goblin2");
+		var goblin3 = scn.GetShadowCard("goblin3");
+		scn.MoveCardsToHand(goblin1, goblin2, goblin3);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -138,7 +147,7 @@ public class Card_01_333_ErrataTests
 
 		assertEquals(3, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetWoundsOn(frodo));
-		scn.ShadowPlayCard("goblin1");
+		scn.ShadowPlayCard(goblin1);
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 		scn.FreepsChoiceAvailable("Exert a companion");
 		scn.FreepsChoiceAvailable("Discard a card from hand");

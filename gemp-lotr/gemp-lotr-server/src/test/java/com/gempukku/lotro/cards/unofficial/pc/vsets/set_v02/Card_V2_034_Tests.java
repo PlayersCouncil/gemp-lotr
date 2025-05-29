@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_V2_034_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("occupier", "102_34");
 					put("filler", "1_3");
 					put("trail", "102_31");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -58,7 +58,7 @@ public class Card_V2_034_Tests
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
@@ -73,14 +73,14 @@ public class Card_V2_034_Tests
 
 		var occupier = scn.GetShadowCard("occupier");
 		var trail = scn.GetShadowCard("trail");
-		scn.ShadowMoveCardToDiscard(occupier);
-		scn.ShadowMoveCardToSupportArea(trail); //makes all controlled sites battleground
+		scn.MoveCardsToDiscard(occupier);
+		scn.MoveCardsToSupportArea(trail); //makes all controlled sites battleground
 
 		scn.StartGame();
 		scn.SkipToSite(8);
 		scn.FreepsPassCurrentPhaseAction();
 
-		scn.ShadowMoveCharToTable(occupier);
+		scn.MoveMinionsToTable(occupier);
 		assertEquals(8, scn.GetStrength(occupier));
 		scn.ShadowTakeControlOfSite();
 		assertEquals(9, scn.GetStrength(occupier));
@@ -106,8 +106,8 @@ public class Card_V2_034_Tests
 		var occupier = scn.GetShadowCard("occupier");
 		var trail = scn.GetShadowCard("trail");
 		var filler = scn.GetShadowCard("filler");
-		scn.ShadowMoveCardToDiscard(occupier);
-		scn.ShadowMoveCardToSupportArea(trail); //makes all controlled sites battleground
+		scn.MoveCardsToDiscard(occupier);
+		scn.MoveCardsToSupportArea(trail); //makes all controlled sites battleground
 
 		scn.StartGame();
 		scn.SkipToSite(8);

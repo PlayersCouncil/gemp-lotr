@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_150_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("aragorn", "1_89");
@@ -24,9 +24,9 @@ public class Card_01_150_ErrataTests
 
 					put("rager", "51_150");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -59,7 +59,7 @@ public class Card_01_150_ErrataTests
 		assertEquals(Culture.ISENGARD, rager.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, rager.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, rager.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(rager, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(rager, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(rager, Keyword.DAMAGE));
 		assertEquals(4, rager.getBlueprint().getTwilightCost());
 		assertEquals(9, rager.getBlueprint().getStrength());
@@ -73,10 +73,10 @@ public class Card_01_150_ErrataTests
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 
 		var rager = scn.GetShadowCard("rager");
-		scn.ShadowMoveCharToTable(rager);
+		scn.MoveMinionsToTable(rager);
 
 		scn.StartGame();
 
@@ -89,7 +89,7 @@ public class Card_01_150_ErrataTests
 		assertTrue(scn.FreepsAnyDecisionsAvailable());
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 
-		scn.FreepsChooseMultipleChoiceOption("Exert");
+		scn.FreepsChooseOption("Exert");
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(3, scn.GetWoundsOn(aragorn)); //loss, damage+1, exertion
 	}
@@ -100,10 +100,10 @@ public class Card_01_150_ErrataTests
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 
 		var rager = scn.GetShadowCard("rager");
-		scn.ShadowMoveCharToTable(rager);
+		scn.MoveMinionsToTable(rager);
 
 		scn.StartGame();
 
@@ -117,7 +117,7 @@ public class Card_01_150_ErrataTests
 		assertEquals(4, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
 
-		scn.FreepsChooseMultipleChoiceOption("Discard");
+		scn.FreepsChooseOption("Discard");
 		assertEquals(1, scn.GetFreepsDeckCount());
 		assertEquals(3, scn.GetFreepsDiscardCount());
 	}

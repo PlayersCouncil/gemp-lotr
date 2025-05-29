@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set05;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_05_057_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("ladder", "5_57");
 					put("troop", "1_143");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -51,8 +51,8 @@ public class Card_05_057_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.MACHINE));
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.MACHINE));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -63,8 +63,8 @@ public class Card_05_057_Tests
 
 		var ladder = scn.GetShadowCard("ladder");
 		var troop = scn.GetShadowCard("troop");
-		scn.ShadowMoveCardToSupportArea(ladder);
-		scn.ShadowMoveCardToHand(troop);
+		scn.MoveCardsToSupportArea(ladder);
+		scn.MoveCardsToHand(troop);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -74,17 +74,17 @@ public class Card_05_057_Tests
 		scn.ShadowPlayCard(troop);
 
 		assertEquals(0, scn.GetCultureTokensOn(ladder));
-		assertEquals(0, scn.getWounds(troop));
+		assertEquals(0, scn.GetWoundsOn(troop));
 		assertTrue(scn.ShadowActionAvailable(ladder));
 
 		scn.ShadowUseCardAction(ladder);
 		assertEquals(1, scn.GetCultureTokensOn(ladder));
-		assertEquals(1, scn.getWounds(troop));
+		assertEquals(1, scn.GetWoundsOn(troop));
 		assertTrue(scn.ShadowActionAvailable(ladder));
 
 		scn.ShadowUseCardAction(ladder);
 		assertEquals(2, scn.GetCultureTokensOn(ladder));
-		assertEquals(2, scn.getWounds(troop));
+		assertEquals(2, scn.GetWoundsOn(troop));
 
 		assertTrue(scn.ShadowActionAvailable(ladder));
 	}

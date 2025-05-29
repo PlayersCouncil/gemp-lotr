@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 
 public class Card_03_038_ErrataTests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "53_38");
                     put("gimli", "1_13");
@@ -45,7 +45,7 @@ public class Card_03_038_ErrataTests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var aragorn = scn.GetFreepsCard("aragorn");
 
@@ -60,18 +60,18 @@ public class Card_03_038_ErrataTests
         assertEquals(6, aragorn.getBlueprint().getResistance());
         assertEquals(Signet.FRODO, aragorn.getBlueprint().getSignet());
 
-        assertTrue(scn.hasKeyword(aragorn, Keyword.RANGER));
+        assertTrue(scn.HasKeyword(aragorn, Keyword.RANGER));
     }
 
 
     @Test
     public void AragornAbilityOnlyWorksDuringFellowship() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl frodo = scn.GetRingBearer();
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
         scn.StartGame();
         scn.SetTwilight(2);
@@ -96,11 +96,11 @@ public class Card_03_038_ErrataTests
     @Test
     public void AragornAbilityOnlyWorksIfTwilightInPool() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl frodo = scn.GetRingBearer();
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
         scn.StartGame();
 

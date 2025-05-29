@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set04;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_04_201_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("veteran", "4_201");
 					put("child", "4_148"); // source of easy site control
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_04_201_Tests
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
@@ -70,18 +70,18 @@ public class Card_04_201_Tests
 
 		var veteran = scn.GetShadowCard("veteran");
 		var child = scn.GetShadowCard("child");
-		scn.ShadowMoveCardToHand(child, veteran);
+		scn.MoveCardsToHand(child, veteran);
 
 		scn.StartGame();
 
 		scn.SkipToSite(2);
 
-		scn.ShadowMoveCardToSupportArea(child);
+		scn.MoveCardsToSupportArea(child);
 		scn.AddTokensToCard(child, 2);
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowUseCardAction(child); //should take control of site
 
-		scn.ShadowMoveCharToTable(veteran);
+		scn.MoveMinionsToTable(veteran);
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPassCurrentPhaseAction();
 
@@ -101,13 +101,13 @@ public class Card_04_201_Tests
 
 		var veteran = scn.GetShadowCard("veteran");
 		var child = scn.GetShadowCard("child");
-		scn.ShadowMoveCardToHand(child, veteran);
+		scn.MoveCardsToHand(child, veteran);
 
 		scn.StartGame();
 
 		scn.SkipToSite(2);
 
-		scn.ShadowMoveCardToSupportArea(child);
+		scn.MoveCardsToSupportArea(child);
 		scn.AddTokensToCard(child, 2);
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowUseCardAction(child); //should take control of site

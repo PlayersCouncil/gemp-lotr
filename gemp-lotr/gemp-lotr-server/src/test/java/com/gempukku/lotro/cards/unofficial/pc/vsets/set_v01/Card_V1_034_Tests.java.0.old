@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -17,17 +17,17 @@ import static org.junit.Assert.*;
 public class Card_V1_034_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("darkwaters", "101_34");
                     put("ftentacle1", "2_58");
                     put("ftentacle2", "2_58");
                     put("song", "3_5");
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -48,12 +48,12 @@ public class Card_V1_034_Tests
 		 */
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl darkwaters = scn.GetFreepsCard("darkwaters");
 
 		assertFalse(darkwaters.getBlueprint().isUnique());
-		assertTrue(scn.hasKeyword(darkwaters, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(darkwaters, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(0, darkwaters.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, darkwaters.getBlueprint().getCardType());
 		assertEquals(Culture.MORIA, darkwaters.getBlueprint().getCulture());
@@ -63,12 +63,12 @@ public class Card_V1_034_Tests
 	@Test
 	public void DarkWatersCanAdd1ToStackOrPlayTentacles() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl darkwaters = scn.GetShadowCard("darkwaters");
 		PhysicalCardImpl ftentacle1 = scn.GetShadowCard("ftentacle1");
 		PhysicalCardImpl ftentacle2 = scn.GetShadowCard("ftentacle2");
-		scn.ShadowMoveCardToHand(darkwaters, ftentacle1, ftentacle2);
+		scn.MoveCardsToHand(darkwaters, ftentacle1, ftentacle2);
 
 		scn.StartGame();
 		scn.SetTwilight(4);
@@ -88,7 +88,7 @@ public class Card_V1_034_Tests
 		assertTrue(scn.ShadowActionAvailable("Dark Waters"));
 		scn.ShadowUseCardAction(darkwaters);
 		assertEquals(2, scn.ShadowGetMultipleChoices().size());
-		scn.ShadowChooseMultipleChoiceOption("stack");
+		scn.ShadowChooseOption("stack");
 		assertEquals(5, scn.GetTwilight());
 		assertEquals(2, scn.GetStackedCards(darkwaters).size());
 
@@ -103,16 +103,16 @@ public class Card_V1_034_Tests
 	@Test
 	public void DarkWatersCanBurnAStackedTentacleToPreventSelfDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl song = scn.GetFreepsCard("song");
-		scn.FreepsMoveCardToSupportArea(song);
+		scn.MoveCardsToSupportArea(song);
 
 		PhysicalCardImpl darkwaters = scn.GetShadowCard("darkwaters");
 		PhysicalCardImpl ftentacle1 = scn.GetShadowCard("ftentacle1");
 		PhysicalCardImpl ftentacle2 = scn.GetShadowCard("ftentacle2");
-		scn.ShadowMoveCardToSupportArea(darkwaters);
-		//scn.ShadowMoveCardToHand(ftentacle1, ftentacle2);
+		scn.MoveCardsToSupportArea(darkwaters);
+		//scn.MoveCardsToHand(ftentacle1, ftentacle2);
 
 		scn.StartGame();
 		scn.StackCardsOn(darkwaters, ftentacle1, ftentacle2);

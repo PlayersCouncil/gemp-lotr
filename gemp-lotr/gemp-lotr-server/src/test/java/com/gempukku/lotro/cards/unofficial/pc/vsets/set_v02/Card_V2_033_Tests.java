@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_V2_033_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("grumbler", "102_33");
 					put("orc", "1_261");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,8 +57,8 @@ public class Card_V2_033_Tests
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
-		assertTrue(scn.hasKeyword(card, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(1, card.getBlueprint().getVitality());
@@ -72,7 +72,7 @@ public class Card_V2_033_Tests
 
 		var grumbler = scn.GetShadowCard("grumbler");
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCharToTable(grumbler, orc);
+		scn.MoveMinionsToTable(grumbler, orc);
 
 		var frodo = scn.GetRingBearer();
 

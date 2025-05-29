@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -9,12 +9,13 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertAttachedTo;
 import static org.junit.Assert.*;
 
 public class Card_02_032_ErrataTests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("brand", "52_32");
                     put("brand2", "52_32");
@@ -63,17 +64,17 @@ public class Card_02_032_ErrataTests
     @Test
     public void CanBeBorneByRangers() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
         PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
         PhysicalCardImpl brand = scn.GetFreepsCard("brand");
 
-        scn.FreepsMoveCharToTable(arwen);
-        scn.FreepsMoveCharToTable(boromir);
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(brand);
+        scn.MoveCompanionToTable(arwen);
+        scn.MoveCompanionToTable(boromir);
+        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCardsToHand(brand);
 
         scn.StartGame();
 
@@ -85,22 +86,22 @@ public class Card_02_032_ErrataTests
         //There are 3 companions in play, but only 2 rangers, so we should only see 2 options
         assertEquals(2, scn.FreepsGetADParamAsList("cardId").size());
         scn.FreepsChooseCard(aragorn);
-        assertTrue(scn.IsAttachedTo(brand, aragorn));
+        assertAttachedTo( brand, aragorn);
 
     }
 
     @Test
     public void CanBeBorneTwice() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
         PhysicalCardImpl brand = scn.GetFreepsCard("brand");
         PhysicalCardImpl brand2 = scn.GetFreepsCard("brand2");
 
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(brand);
-        scn.FreepsMoveCardToHand(brand2);
+        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCardsToHand(brand);
+        scn.MoveCardsToHand(brand2);
 
         scn.StartGame();
 
@@ -114,18 +115,18 @@ public class Card_02_032_ErrataTests
     @Test
     public void SkirmishAbilityAvailableWhenSkirmishingNazgul() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
         PhysicalCardImpl brand = scn.GetFreepsCard("brand");
         PhysicalCardImpl runner = scn.GetShadowCard("runner");
         PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
 
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(brand);
+        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCardsToHand(brand);
 
-        scn.ShadowMoveCharToTable(runner);
-        scn.ShadowMoveCharToTable(nazgul);
+        scn.MoveMinionsToTable(runner);
+        scn.MoveMinionsToTable(nazgul);
 
         scn.StartGame();
 
@@ -152,26 +153,26 @@ public class Card_02_032_ErrataTests
         assertTrue(scn.FreepsAnyActionsAvailable());
         assertTrue(scn.FreepsActionAvailable(brand));
 
-        assertFalse(scn.hasKeyword(aragorn, Keyword.DAMAGE));
+        assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
         scn.FreepsUseCardAction(brand);
         assertEquals(11, scn.GetStrength(aragorn));
-        assertTrue(scn.hasKeyword(aragorn, Keyword.DAMAGE));
+        assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));
         assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
     }
 
     @Test
     public void SkirmishAbilityLastsUntilRegroupAndSelfDiscards() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
         PhysicalCardImpl brand = scn.GetFreepsCard("brand");
         PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
 
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsAttachCardsTo(aragorn, brand);
+        scn.MoveCompanionToTable(aragorn);
+        scn.AttachCardsTo(aragorn, brand);
 
-        scn.ShadowMoveCharToTable(nazgul);
+        scn.MoveMinionsToTable(nazgul);
 
         scn.StartGame();
 
@@ -183,10 +184,10 @@ public class Card_02_032_ErrataTests
 
         assertTrue(scn.FreepsActionAvailable(brand));
         assertEquals(9, scn.GetStrength(aragorn));
-        assertFalse(scn.hasKeyword(aragorn, Keyword.DAMAGE));
+        assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
         scn.FreepsUseCardAction(brand);
         assertEquals(11, scn.GetStrength(aragorn));
-        assertTrue(scn.hasKeyword(aragorn, Keyword.DAMAGE));
+        assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));
 
         scn.ShadowPassCurrentPhaseAction();
         scn.FreepsPassCurrentPhaseAction();
@@ -196,9 +197,9 @@ public class Card_02_032_ErrataTests
 
         scn.FreepsAssignToMinions(aragorn, nazgul);
         scn.FreepsResolveSkirmish(aragorn);
-        assertTrue(scn.IsAttachedTo(brand, aragorn));
+        assertAttachedTo(brand, aragorn);
         assertEquals(11, scn.GetStrength(aragorn));
-        assertTrue(scn.hasKeyword(aragorn, Keyword.DAMAGE));
+        assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));
 
         scn.PassCurrentPhaseActions();
 

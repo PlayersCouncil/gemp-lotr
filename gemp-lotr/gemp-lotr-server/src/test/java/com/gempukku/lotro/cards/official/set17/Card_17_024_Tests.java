@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set17;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_17_024_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("shadowfax", "17_24");
@@ -24,9 +24,9 @@ public class Card_17_024_Tests
 					put("staff", "2_29");
 					put("gandalf", "1_364");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -72,8 +72,8 @@ public class Card_17_024_Tests
 
 		var shadowfax = scn.GetFreepsCard("shadowfax");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(shadowfax);
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCardsToHand(shadowfax);
+		scn.MoveCompanionToTable(gandalf);
 
 		scn.StartGame();
 		scn.RemoveBurdens(1);
@@ -109,8 +109,8 @@ public class Card_17_024_Tests
 		var staff = scn.GetFreepsCard("staff");
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(shadowfax, staff, glamdring2);
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCardsToHand(shadowfax, staff, glamdring2);
+		scn.MoveCompanionToTable(gandalf);
 		scn.AttachCardsTo(gandalf, pipe, glamdring);
 
 		scn.StartGame();
@@ -138,7 +138,7 @@ public class Card_17_024_Tests
 
 		var shadowfax = scn.GetFreepsCard("shadowfax");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCompanionToTable(gandalf);
 		scn.AttachCardsTo(gandalf, shadowfax);
 
 		scn.StartGame();

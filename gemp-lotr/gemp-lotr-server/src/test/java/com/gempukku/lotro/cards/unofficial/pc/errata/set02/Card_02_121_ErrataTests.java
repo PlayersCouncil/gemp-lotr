@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Signet;
 import com.gempukku.lotro.filters.Filters;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 
 public class Card_02_121_ErrataTests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("gimli", "52_121");
                 }}
@@ -44,7 +44,7 @@ public class Card_02_121_ErrataTests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 
@@ -55,17 +55,17 @@ public class Card_02_121_ErrataTests
         assertEquals(3, gimli.getBlueprint().getVitality());
         assertEquals(Signet.FRODO, gimli.getBlueprint().getSignet());
 
-        assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE));
+        assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
     }
 
 
     @Test
     public void GimliRemovesTwilightWhenUnderground() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        scn.FreepsMoveCharToTable(gimli);
+        scn.MoveCompanionToTable(gimli);
 
         scn.StartGame();
 
@@ -80,10 +80,10 @@ public class Card_02_121_ErrataTests
     @Test
     public void GimliDoesNotRemoveTwilightWhenNotUnderground() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        scn.FreepsMoveCharToTable(gimli);
+        scn.MoveCompanionToTable(gimli);
 
         scn.StartGame();
 
@@ -96,10 +96,10 @@ public class Card_02_121_ErrataTests
     @Test
     public void GimliIsStrengthPlus1WhenUnderground() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        scn.FreepsMoveCharToTable(gimli);
+        scn.MoveCompanionToTable(gimli);
 
         scn.StartGame();
 

@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,15 +17,15 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_032_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("terror", "101_32");
                     put("balrog", "2_51");
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -44,12 +44,12 @@ public class Card_V1_032_Tests
 		 */
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl terror = scn.GetFreepsCard("terror");
 
 		assertTrue(terror.getBlueprint().isUnique());
-		assertTrue(scn.hasKeyword(terror, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(terror, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(0, terror.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, terror.getBlueprint().getCardType());
 		assertEquals(Culture.MORIA, terror.getBlueprint().getCulture());
@@ -59,10 +59,10 @@ public class Card_V1_032_Tests
 	@Test
 	public void TerrorDoesNothingIfNoBalrog() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl terror = scn.GetShadowCard("terror");
-		scn.ShadowMoveCardToSupportArea(terror);
+		scn.MoveCardsToSupportArea(terror);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -73,12 +73,12 @@ public class Card_V1_032_Tests
 	@Test
 	public void TerrorAddsTwilightDuringEachMoveIfBalrogPresent() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl terror = scn.GetShadowCard("terror");
 		PhysicalCardImpl balrog = scn.GetShadowCard("balrog");
-		scn.ShadowMoveCardToSupportArea(terror);
-		scn.ShadowMoveCardToHand(balrog);
+		scn.MoveCardsToSupportArea(terror);
+		scn.MoveCardsToHand(balrog);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();

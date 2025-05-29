@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 public class Card_01_254_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("mordor", "51_254");
@@ -25,9 +25,9 @@ public class Card_01_254_ErrataTests
 					put("arwen", "3_7");
 					put("bow", "1_41");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -47,7 +47,7 @@ public class Card_01_254_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl mordor = scn.GetFreepsCard("mordor");
 
@@ -55,22 +55,22 @@ public class Card_01_254_ErrataTests
 		assertEquals(Side.SHADOW, mordor.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, mordor.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, mordor.getBlueprint().getCardType());
-		assertFalse(scn.hasKeyword(mordor, Keyword.SUPPORT_AREA));
+		assertFalse(scn.HasKeyword(mordor, Keyword.SUPPORT_AREA));
 		assertEquals(1, mordor.getBlueprint().getTwilightCost());
 	}
 
 	@Test
 	public void MordorRequiresASauronMinionExertion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var mordor = scn.GetShadowCard("mordor");
 		var wraith = scn.GetShadowCard("wraith");
-		scn.ShadowMoveCardToHand(mordor);
-		scn.ShadowMoveCharToTable(wraith);
+		scn.MoveCardsToHand(mordor);
+		scn.MoveMinionsToTable(wraith);
 
 		var greenleaf = scn.GetFreepsCard("greenleaf");
-		scn.FreepsMoveCharToTable(greenleaf);
+		scn.MoveCompanionToTable(greenleaf);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(wraith, 1);
@@ -85,15 +85,15 @@ public class Card_01_254_ErrataTests
 	@Test
 	public void MordorRequiresAFreepsArcher() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var mordor = scn.GetShadowCard("mordor");
 		var wraith = scn.GetShadowCard("wraith");
-		scn.ShadowMoveCardToHand(mordor);
-		scn.ShadowMoveCharToTable(wraith);
+		scn.MoveCardsToHand(mordor);
+		scn.MoveMinionsToTable(wraith);
 
 		var greenleaf = scn.GetFreepsCard("greenleaf");
-		scn.FreepsMoveCardToHand(greenleaf);
+		scn.MoveCardsToHand(greenleaf);
 
 		scn.StartGame();
 
@@ -107,15 +107,15 @@ public class Card_01_254_ErrataTests
 	@Test
 	public void MordorPlaysOnAFreepsArcher() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var mordor = scn.GetShadowCard("mordor");
 		var wraith = scn.GetShadowCard("wraith");
-		scn.ShadowMoveCardToHand(mordor);
-		scn.ShadowMoveCharToTable(wraith);
+		scn.MoveCardsToHand(mordor);
+		scn.MoveMinionsToTable(wraith);
 
 		var greenleaf = scn.GetFreepsCard("greenleaf");
-		scn.FreepsMoveCharToTable(greenleaf);
+		scn.MoveCompanionToTable(greenleaf);
 
 		scn.StartGame();
 
@@ -133,17 +133,17 @@ public class Card_01_254_ErrataTests
 	@Test
 	public void MordorExertsBearerEachTimeFreepsUsesArcheryAbility() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var mordor = scn.GetShadowCard("mordor");
 		var wraith = scn.GetShadowCard("wraith");
-		scn.ShadowMoveCardToHand(mordor);
-		scn.ShadowMoveCharToTable(wraith);
+		scn.MoveCardsToHand(mordor);
+		scn.MoveMinionsToTable(wraith);
 
 		var greenleaf = scn.GetFreepsCard("greenleaf");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCharToTable(greenleaf, arwen);
-		scn.FreepsAttachCardsTo(arwen, "bow");
+		scn.MoveCompanionToTable(greenleaf, arwen);
+		scn.AttachCardsTo(arwen, scn.GetFreepsCard("bow"));
 
 		scn.StartGame();
 

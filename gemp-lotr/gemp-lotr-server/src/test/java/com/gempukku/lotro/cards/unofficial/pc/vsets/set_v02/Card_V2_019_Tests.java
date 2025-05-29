@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_V2_019_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("deathseeker", "102_19");
 					put("savage", "1_151");
 					put("machine", "5_60");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -58,7 +58,7 @@ public class Card_V2_019_Tests
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(10, card.getBlueprint().getStrength());
@@ -74,19 +74,19 @@ public class Card_V2_019_Tests
 		var deathseeker = scn.GetShadowCard("deathseeker");
 		var savage = scn.GetShadowCard("savage");
 		var machine = scn.GetShadowCard("machine");
-		scn.ShadowMoveCharToTable(deathseeker, savage);
-		scn.ShadowMoveCardToSupportArea(machine);
+		scn.MoveMinionsToTable(deathseeker, savage);
+		scn.MoveCardsToSupportArea(machine);
 
 		var frodo = scn.GetRingBearer();
 
 		scn.StartGame();
 
-		scn.addWounds(frodo, 1);
-		scn.addWounds(deathseeker, 1);
-		scn.addWounds(savage, 1);
+		scn.AddWoundsToChar(frodo, 1);
+		scn.AddWoundsToChar(deathseeker, 1);
+		scn.AddWoundsToChar(savage, 1);
 
 		//not in skirmish, should be base
-		assertEquals(10, scn.getStrength(deathseeker));
+		assertEquals(10, scn.GetStrength(deathseeker));
 
 		scn.SkipToAssignments();
 		scn.FreepsDeclineAssignments();
@@ -94,7 +94,7 @@ public class Card_V2_019_Tests
 		scn.FreepsResolveSkirmish(frodo);
 
 		//Base strength of 10, +1 strength for the single wound on each of itself, the savage, and frodo
-		assertEquals(13, scn.getStrength(deathseeker));
+		assertEquals(13, scn.GetStrength(deathseeker));
 	}
 
 	@Test
@@ -104,18 +104,18 @@ public class Card_V2_019_Tests
 
 		var deathseeker = scn.GetShadowCard("deathseeker");
 		var machine = scn.GetShadowCard("machine");
-		scn.ShadowMoveCharToTable(deathseeker);
-		scn.ShadowMoveCardToSupportArea(machine);
+		scn.MoveMinionsToTable(deathseeker);
+		scn.MoveCardsToSupportArea(machine);
 
 		scn.StartGame();
 
-		scn.addWounds(deathseeker, 2);
+		scn.AddWoundsToChar(deathseeker, 2);
 
 		assertEquals(1, scn.GetVitality(deathseeker));
 		assertEquals(0, scn.GetCultureTokensOn(machine));
 		assertEquals(Zone.SHADOW_CHARACTERS, deathseeker.getZone());
 
-		scn.addWounds(deathseeker, 1);
+		scn.AddWoundsToChar(deathseeker, 1);
 
 		scn.FreepsPassCurrentPhaseAction(); //to get the game to realize he's died
 

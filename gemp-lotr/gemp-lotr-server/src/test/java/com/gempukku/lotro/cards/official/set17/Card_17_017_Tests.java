@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set17;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Race;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_17_017_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("gandalf", "17_17");
@@ -26,9 +26,9 @@ public class Card_17_017_Tests
 
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -74,11 +74,11 @@ public class Card_17_017_Tests
 
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var evenstar = scn.GetFreepsCard("evenstar");
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCardToSupportArea(evenstar);
+		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCardsToSupportArea(evenstar);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.AddTokensToCard(evenstar, 1);
@@ -101,10 +101,10 @@ public class Card_17_017_Tests
 		var scn = GetScenario();
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCompanionToTable(gandalf);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SkipToAssignments();

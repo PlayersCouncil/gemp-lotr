@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_041_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("peak", "102_41");
@@ -23,9 +23,9 @@ public class Card_V2_041_Tests
 
 					put("aragorn", "1_89");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,7 +54,7 @@ public class Card_V2_041_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.REGROUP));
+		assertTrue(scn.HasTimeword(card, Timeword.REGROUP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -66,15 +66,15 @@ public class Card_V2_041_Tests
 		var peak = scn.GetShadowCard("peak");
 		var runner = scn.GetShadowCard("runner");
 		var troll = scn.GetShadowCard("troll");
-		scn.ShadowMoveCardToHand(peak);
-		scn.ShadowMoveCharToTable(runner, troll);
+		scn.MoveCardsToHand(peak);
+		scn.MoveMinionsToTable(runner, troll);
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 
 		scn.StartGame();
-		scn.SkipPassedAllAssignments();
+		scn.SkipPastAllAssignments();
 
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 		scn.FreepsPassCurrentPhaseAction();
@@ -105,15 +105,15 @@ public class Card_V2_041_Tests
 		var peak = scn.GetShadowCard("peak");
 		var runner = scn.GetShadowCard("runner");
 		var troll = scn.GetShadowCard("troll");
-		scn.ShadowMoveCardToHand(peak);
-		scn.ShadowMoveCharToTable(runner, troll);
+		scn.MoveCardsToHand(peak);
+		scn.MoveMinionsToTable(runner, troll);
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 
 		scn.StartGame();
-		scn.SkipPassedAllAssignments();
+		scn.SkipPastAllAssignments();
 
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 		scn.FreepsPassCurrentPhaseAction();

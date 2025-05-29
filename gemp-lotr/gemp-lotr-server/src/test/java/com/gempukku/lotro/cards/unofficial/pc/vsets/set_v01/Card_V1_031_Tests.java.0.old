@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -17,8 +17,8 @@ import static org.junit.Assert.*;
 public class Card_V1_031_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("purpose", "101_31");
                     put("merry", "1_303");
@@ -32,9 +32,9 @@ public class Card_V1_031_Tests
                     put("htentacle", "2_66");
 
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,12 +54,12 @@ public class Card_V1_031_Tests
 		 */
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl purpose = scn.GetFreepsCard("purpose");
 
 		assertFalse(purpose.getBlueprint().isUnique());
-		assertTrue(scn.hasKeyword(purpose, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(purpose, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(0, purpose.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, purpose.getBlueprint().getCardType());
 		assertEquals(Culture.MORIA, purpose.getBlueprint().getCulture());
@@ -69,16 +69,16 @@ public class Card_V1_031_Tests
 	@Test
 	public void PurposeStacksMinionsThatWin() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl merry = scn.GetFreepsCard("merry");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(merry, aragorn);
+		scn.MoveCompanionToTable(merry, aragorn);
 
 		PhysicalCardImpl purpose = scn.GetShadowCard("purpose");
 		PhysicalCardImpl ftentacle1 = scn.GetShadowCard("ftentacle1");
 		PhysicalCardImpl ftentacle2 = scn.GetShadowCard("ftentacle2");
-		scn.ShadowMoveCardToHand(purpose, ftentacle1, ftentacle2);
+		scn.MoveCardsToHand(purpose, ftentacle1, ftentacle2);
 
 		scn.StartGame();
 		scn.SetTwilight(8);
@@ -112,16 +112,16 @@ public class Card_V1_031_Tests
 	@Test
 	public void PurposeSpots4StackedTentaclesToAssignToRBIfPreventionDeclined() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl merry = scn.GetFreepsCard("merry");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(merry, aragorn);
+		scn.MoveCompanionToTable(merry, aragorn);
 
 		PhysicalCardImpl purpose = scn.GetShadowCard("purpose");
 		PhysicalCardImpl htentacle = scn.GetShadowCard("htentacle");
-		scn.ShadowMoveCardToHand(htentacle);
-		scn.ShadowMoveCardToSupportArea(purpose);
+		scn.MoveCardsToHand(htentacle);
+		scn.MoveCardsToSupportArea(purpose);
 		scn.StackCardsOn(purpose,scn.GetShadowCard("ftentacle1"), scn.GetShadowCard("ftentacle2"), scn.GetShadowCard("ftentacle3"), scn.GetShadowCard("ftentacle4"));
 
 		scn.StartGame();
@@ -145,17 +145,17 @@ public class Card_V1_031_Tests
 	@Test
 	public void PurposeRBAssignmentCanBePreventedByExertingRBTwice() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		PhysicalCardImpl merry = scn.GetFreepsCard("merry");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(merry, aragorn);
+		scn.MoveCompanionToTable(merry, aragorn);
 
 		PhysicalCardImpl purpose = scn.GetShadowCard("purpose");
 		PhysicalCardImpl htentacle = scn.GetShadowCard("htentacle");
-		scn.ShadowMoveCardToHand(htentacle);
-		scn.ShadowMoveCardToSupportArea(purpose);
+		scn.MoveCardsToHand(htentacle);
+		scn.MoveCardsToSupportArea(purpose);
 		scn.StackCardsOn(purpose,scn.GetShadowCard("ftentacle1"), scn.GetShadowCard("ftentacle2"), scn.GetShadowCard("ftentacle3"), scn.GetShadowCard("ftentacle4"));
 
 		scn.StartGame();

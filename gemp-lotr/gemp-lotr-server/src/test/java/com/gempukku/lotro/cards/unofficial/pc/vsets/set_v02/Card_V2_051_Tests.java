@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 public class Card_V2_051_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("wrath", "102_51");
@@ -31,9 +31,9 @@ public class Card_V2_051_Tests
 					put("cantea", "1_230");
 					put("terror", "1_226");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -63,7 +63,7 @@ public class Card_V2_051_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -75,9 +75,9 @@ public class Card_V2_051_Tests
 		var wrath = scn.GetFreepsCard("wrath");
 		var javelin = scn.GetFreepsCard("javelin");
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCardToHand(javelin);
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardToSupportArea(wrath);
+		scn.MoveCardsToHand(javelin);
+		scn.MoveCompanionToTable(sam);
+		scn.MoveCardsToSupportArea(wrath);
 
 		//cheating to get around Sam's initiative requirement
 		scn.ApplyAdHocModifier(new HasInitiativeModifier(null, null, Side.FREE_PEOPLE));
@@ -101,15 +101,15 @@ public class Card_V2_051_Tests
 		var deor = scn.GetFreepsCard("deor");
 		var bounder = scn.GetFreepsCard("bounder");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.FreepsMoveCharToTable(eowyn);
-		scn.FreepsMoveCardToSupportArea(wrath, deor, bounder);
+		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCardsToSupportArea(wrath, deor, bounder);
 
 		scn.AddWoundsToChar(deor, 1);
 		scn.AddWoundsToChar(bounder, 1);
 
 		var terror = scn.GetShadowCard("terror");
-		scn.ShadowMoveCharToTable("cantea");
-		scn.ShadowMoveCardToHand(terror);
+		scn.MoveMinionsToTable("cantea");
+		scn.MoveCardsToHand(terror);
 
 		scn.StartGame();
 
@@ -135,11 +135,11 @@ public class Card_V2_051_Tests
 		var wrath = scn.GetFreepsCard("wrath");
 		var javelin = scn.GetFreepsCard("javelin");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.FreepsMoveCharToTable(eowyn);
+		scn.MoveCompanionToTable(eowyn);
 		scn.AttachCardsTo(eowyn, javelin);
-		scn.FreepsMoveCardToSupportArea(wrath);
+		scn.MoveCardsToSupportArea(wrath);
 
-		scn.ShadowMoveCharToTable("cantea");
+		scn.MoveMinionsToTable("cantea");
 
 		scn.StartGame();
 
@@ -160,12 +160,12 @@ public class Card_V2_051_Tests
 		var wrath = scn.GetFreepsCard("wrath");
 		var javelin = scn.GetFreepsCard("javelin");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.FreepsMoveCharToTable(eowyn);
+		scn.MoveCompanionToTable(eowyn);
 		scn.AttachCardsTo(eowyn, javelin);
-		scn.FreepsMoveCardToSupportArea(wrath);
+		scn.MoveCardsToSupportArea(wrath);
 
 		var cantea = scn.GetShadowCard("cantea");
-		scn.ShadowMoveCharToTable(cantea);
+		scn.MoveMinionsToTable(cantea);
 
 		scn.StartGame();
 
@@ -188,8 +188,8 @@ public class Card_V2_051_Tests
 
 		var wrath = scn.GetFreepsCard("wrath");
 		var javelin = scn.GetFreepsCard("javelin");
-		scn.FreepsMoveCardToSupportArea(wrath);
-		scn.FreepsMoveCardToHand(javelin);
+		scn.MoveCardsToSupportArea(wrath);
+		scn.MoveCardsToHand(javelin);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
@@ -209,8 +209,8 @@ public class Card_V2_051_Tests
 
 		var wrath = scn.GetFreepsCard("wrath");
 		var deor = scn.GetFreepsCard("deor");
-		scn.FreepsMoveCardToSupportArea(wrath);
-		scn.FreepsMoveCardToHand(deor);
+		scn.MoveCardsToSupportArea(wrath);
+		scn.MoveCardsToHand(deor);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
@@ -232,12 +232,12 @@ public class Card_V2_051_Tests
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var castout = scn.GetFreepsCard("castout");
 
-		scn.FreepsMoveCharToTable(eowyn);
-		scn.FreepsMoveCardToSupportArea(wrath, castout);
+		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCardsToSupportArea(wrath, castout);
 		scn.AddTokensToCard(wrath, 1);
 
 		var cantea = scn.GetShadowCard("cantea");
-		scn.ShadowMoveCharToTable(cantea);
+		scn.MoveMinionsToTable(cantea);
 		scn.AddWoundsToChar(cantea, 1);
 
 		scn.StartGame();
@@ -245,7 +245,7 @@ public class Card_V2_051_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 		assertTrue(scn.FreepsActionAvailable("Exert a Minion"));
 		assertEquals(1, scn.GetCultureTokensOn(wrath));
-		assertTrue(scn.hasKeyword(eowyn, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(eowyn, Keyword.VALIANT));
 		assertEquals(0, scn.GetWoundsOn(eowyn));
 		assertEquals(1, scn.GetWoundsOn(cantea));
 
@@ -265,11 +265,11 @@ public class Card_V2_051_Tests
 		var deor = scn.GetFreepsCard("deor");
 		var castout = scn.GetFreepsCard("castout");
 
-		scn.FreepsMoveCardToSupportArea(wrath, castout, deor);
+		scn.MoveCardsToSupportArea(wrath, castout, deor);
 		scn.AddTokensToCard(wrath, 2);
 
 		var cantea = scn.GetShadowCard("cantea");
-		scn.ShadowMoveCharToTable(cantea);
+		scn.MoveMinionsToTable(cantea);
 		scn.AddWoundsToChar(cantea, 1);
 
 		scn.StartGame();
@@ -277,7 +277,7 @@ public class Card_V2_051_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 		assertTrue(scn.FreepsActionAvailable("Exert a Minion"));
 		assertEquals(2, scn.GetCultureTokensOn(wrath));
-		assertFalse(scn.hasKeyword(deor, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(deor, Keyword.VALIANT));
 		assertEquals(0, scn.GetWoundsOn(deor));
 		assertEquals(1, scn.GetWoundsOn(cantea));
 
@@ -297,12 +297,12 @@ public class Card_V2_051_Tests
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var castout = scn.GetFreepsCard("castout");
 
-		scn.FreepsMoveCharToTable(eowyn);
-		scn.FreepsMoveCardToSupportArea(wrath, castout);
+		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCardsToSupportArea(wrath, castout);
 		scn.AddTokensToCard(wrath, 3);
 
 		var cantea = scn.GetShadowCard("cantea");
-		scn.ShadowMoveCharToTable(cantea);
+		scn.MoveMinionsToTable(cantea);
 		scn.AddWoundsToChar(cantea, 1);
 
 		scn.StartGame();
@@ -310,7 +310,7 @@ public class Card_V2_051_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 		assertTrue(scn.FreepsActionAvailable("Exert a Minion"));
 		assertEquals(3, scn.GetCultureTokensOn(wrath));
-		assertTrue(scn.hasKeyword(eowyn, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(eowyn, Keyword.VALIANT));
 		assertEquals(0, scn.GetWoundsOn(eowyn));
 		assertEquals(1, scn.GetWoundsOn(cantea));
 		assertEquals(Zone.SHADOW_CHARACTERS, cantea.getZone());

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set08;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,8 +15,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_08_103_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<String, String>()
 				{{
 					put("grond", "58_103");
@@ -30,9 +30,9 @@ public class Card_08_103_ErrataTests
 					put("bow", "1_41");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -52,7 +52,7 @@ public class Card_08_103_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl grond = scn.GetFreepsCard("grond");
 
@@ -60,35 +60,35 @@ public class Card_08_103_ErrataTests
 		assertEquals(Side.SHADOW, grond.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, grond.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, grond.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(grond, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(grond, Keyword.SUPPORT_AREA));
 		assertEquals(3, grond.getBlueprint().getTwilightCost());
 	}
 
 	@Test
 	public void GrondAddsTokensWhenAbilityUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl grond = scn.GetShadowCard("grond");
 		PhysicalCardImpl soldier1 = scn.GetShadowCard("soldier1");
 		PhysicalCardImpl soldier2 = scn.GetShadowCard("soldier2");
 		PhysicalCardImpl soldier3 = scn.GetShadowCard("soldier3");
-		scn.ShadowMoveCardToSupportArea(grond);
-		scn.ShadowMoveCharToTable(soldier1, soldier2, soldier3);
+		scn.MoveCardsToSupportArea(grond);
+		scn.MoveMinionsToTable(soldier1, soldier2, soldier3);
 
 		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
 		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
 		PhysicalCardImpl gwemegil = scn.GetFreepsCard("gwemegil");
 		PhysicalCardImpl bow = scn.GetFreepsCard("bow");
 
-		scn.FreepsMoveCardToHand(arwen, elrond, gwemegil, bow);
+		scn.MoveCardsToHand(arwen, elrond, gwemegil, bow);
 
 		scn.StartGame();
 
-		scn.FreepsMoveCharToTable(arwen);
-		scn.FreepsMoveCardToSupportArea(elrond);
-		scn.FreepsAttachCardsTo(arwen, gwemegil);
-		scn.FreepsAttachCardsTo(elrond, bow);
+		scn.MoveCompanionToTable(arwen);
+		scn.MoveCardsToSupportArea(elrond);
+		scn.AttachCardsTo(arwen, gwemegil);
+		scn.AttachCardsTo(elrond, bow);
 
 		scn.AddTokensToCard(grond, 10);
 

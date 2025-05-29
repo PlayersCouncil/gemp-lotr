@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_03_103_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("dawn", "53_103");
@@ -25,9 +25,9 @@ public class Card_03_103_ErrataTests
 
 					put("otherfrodo", "1_290");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_03_103_ErrataTests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+		assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -66,18 +66,19 @@ public class Card_03_103_ErrataTests
 		var scn = GetScenario();
 
 		var dawn = scn.GetShadowCard("dawn");
-		scn.ShadowMoveCardToHand(dawn);
-		scn.ShadowMoveCardToSupportArea("ithil"); //For spot requirement
+		scn.MoveCardsToHand(dawn);
+
+		scn.MoveCardsToSupportArea(scn.GetShadowCard("ithil")); //For spot requirement
 
 		var frodo = scn.GetRingBearer();
 		var otherfrodo = scn.GetFreepsCard("otherfrodo");
-		scn.FreepsMoveCardToHand(otherfrodo);
+		scn.MoveCardsToHand(otherfrodo);
 
 		scn.AddWoundsToChar(frodo, 1);
 		scn.StartGame();
 
 		assertTrue(scn.FreepsActionAvailable("heal by discard"));
-		scn.FreepsPlayCard(otherfrodo);
+		scn.FreepsDiscardToHeal(otherfrodo);
 
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 	}

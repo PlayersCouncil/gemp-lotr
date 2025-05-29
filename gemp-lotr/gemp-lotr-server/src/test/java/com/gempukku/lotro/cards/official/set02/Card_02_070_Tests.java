@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_02_070_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("power", "2_70");
@@ -24,9 +24,9 @@ public class Card_02_070_Tests
 					put("orc2", "1_179");
 					put("orc3", "1_181");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_02_070_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
+        assertTrue(scn.HasTimeword(card, Timeword.SHADOW));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -69,7 +69,7 @@ public class Card_02_070_Tests
 		var orc1 = scn.GetShadowCard("orc1");
 		var orc2 = scn.GetShadowCard("orc2");
 		var orc3 = scn.GetShadowCard("orc3");
-		scn.ShadowMoveCardToHand(power, balrog, orc1, orc2, orc3);
+		scn.MoveCardsToHand(power, balrog, orc1, orc2, orc3);
 
 		scn.StartGame();
 		scn.SetTwilight(7);

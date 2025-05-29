@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_027_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("frostbite", "101_27");
 					put("frostbite2", "101_27");
@@ -29,9 +29,9 @@ public class Card_V1_027_Tests
 					put("seven", "4_318");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -52,7 +52,7 @@ public class Card_V1_027_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frostbite = scn.GetFreepsCard("frostbite");
 
@@ -74,14 +74,14 @@ public class Card_V1_027_Tests
 	@Test
 	public void RequiresAWeatherConditionToPlayOnACompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frostbite = scn.GetShadowCard("frostbite");
 		PhysicalCardImpl frostbite2 = scn.GetShadowCard("frostbite");
 		PhysicalCardImpl weather_condition = scn.GetShadowCard("weather_condition");
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
-		scn.ShadowMoveCardToHand(frostbite, frostbite2, weather_condition);
-		scn.ShadowMoveCharToTable(saruman);
+		scn.MoveCardsToHand(frostbite, frostbite2, weather_condition);
+		scn.MoveMinionsToTable(saruman);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -103,7 +103,7 @@ public class Card_V1_027_Tests
 	@Test
 	public void EachTimeWeatherIsPlayedAdds2Twilight() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 
@@ -114,8 +114,8 @@ public class Card_V1_027_Tests
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
 
 		scn.AttachCardsTo(frodo, frostbite, frostbite2);
-		scn.ShadowMoveCardToHand(weather_condition, weather_event);
-		scn.ShadowMoveCharToTable(saruman);
+		scn.MoveCardsToHand(weather_condition, weather_event);
+		scn.MoveMinionsToTable(saruman);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -136,18 +136,18 @@ public class Card_V1_027_Tests
 	@Test
 	public void FreepsDiscardingFrostbiteWoundsBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl seven = scn.GetFreepsCard("seven");
-		scn.FreepsMoveCardToHand(seven);
+		scn.MoveCardsToHand(seven);
 
 		PhysicalCardImpl frostbite = scn.GetShadowCard("frostbite");
 		PhysicalCardImpl frostbite2 = scn.GetShadowCard("frostbite2");
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
 
 		scn.AttachCardsTo(frodo, frostbite, frostbite2);
-		scn.ShadowMoveCardToHand(saruman);
+		scn.MoveCardsToHand(saruman);
 
 		scn.StartGame();
 

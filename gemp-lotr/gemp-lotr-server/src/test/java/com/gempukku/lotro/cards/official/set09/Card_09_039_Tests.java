@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set09;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_09_039_Tests
 {
 
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("library", "9_39");
                     put("troop1", "1_143");
@@ -57,7 +57,7 @@ public class Card_09_039_Tests
         assertEquals(Side.SHADOW, card.getBlueprint().getSide());
         assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
         assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+        assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
         assertEquals(2, card.getBlueprint().getTwilightCost());
     }
 
@@ -70,7 +70,7 @@ public class Card_09_039_Tests
         var troop1 = scn.GetShadowCard("troop1");
         var troop2 = scn.GetShadowCard("troop2");
 
-        scn.ShadowMoveCardToHand(library, troop1, troop2);
+        scn.MoveCardsToHand(library, troop1, troop2);
 
         scn.StartGame();
         scn.SetTwilight(20);
@@ -106,8 +106,8 @@ public class Card_09_039_Tests
         var troop2 = scn.GetShadowCard("troop2");
         var axe1 = scn.GetShadowCard("axe1");
 
-        scn.ShadowMoveCardToSupportArea(library);
-        scn.ShadowMoveCharToTable(troop1);
+        scn.MoveCardsToSupportArea(library);
+        scn.MoveMinionsToTable(troop1);
         scn.StackCardsOn(library, axe1, troop2);
 
         scn.StartGame();
@@ -145,7 +145,7 @@ public class Card_09_039_Tests
         var runner = scn.GetShadowCard("runner");
         var axe1 = scn.GetShadowCard("axe1");
 
-        scn.ShadowMoveCardToSupportArea(library);
+        scn.MoveCardsToSupportArea(library);
         scn.StackCardsOn(library, axe1, runner, troop1);
 
         scn.StartGame();

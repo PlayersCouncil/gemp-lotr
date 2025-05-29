@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
@@ -17,8 +17,8 @@ import static org.junit.Assert.*;
 public class Card_01_139_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("aragorn", "1_89");
@@ -30,9 +30,9 @@ public class Card_01_139_ErrataTests
 					put("uruk", "1_151");
 					put("uruk2", "1_151");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -61,7 +61,7 @@ public class Card_01_139_ErrataTests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
+        assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -72,13 +72,13 @@ public class Card_01_139_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 
 		var savagery = scn.GetShadowCard("savagery");
 		var uruk = scn.GetShadowCard("uruk");
 		var uruk2 = scn.GetShadowCard("uruk2");
-		scn.ShadowMoveCardToHand(savagery);
-		scn.ShadowMoveCharToTable(uruk, uruk2);
+		scn.MoveCardsToHand(savagery);
+		scn.MoveMinionsToTable(uruk, uruk2);
 
 		scn.StartGame();
 
@@ -105,13 +105,13 @@ public class Card_01_139_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 
 		var savagery = scn.GetShadowCard("savagery");
 		var uruk = scn.GetShadowCard("uruk");
 		var uruk2 = scn.GetShadowCard("uruk2");
-		scn.ShadowMoveCardToHand(savagery);
-		scn.ShadowMoveCharToTable(uruk, uruk2);
+		scn.MoveCardsToHand(savagery);
+		scn.MoveMinionsToTable(uruk, uruk2);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set10;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_10_047_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("call", "10_47");
 					put("southron", "4_220");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -53,7 +53,7 @@ public class Card_10_047_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -64,15 +64,15 @@ public class Card_10_047_Tests
 
 		var call = scn.GetShadowCard("call");
 		var southron = scn.GetShadowCard("southron");
-		scn.ShadowMoveCardToSupportArea(call);
-		scn.ShadowMoveCardToHand(southron);
+		scn.MoveCardsToSupportArea(call);
+		scn.MoveCardsToHand(southron);
 
 		scn.StartGame();
 		scn.SetTwilight(7);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(10, scn.GetTwilight());
-		assertEquals(0, scn.getThreats());
+		assertEquals(0, scn.GetThreats());
 		assertTrue(scn.ShadowActionAvailable(call));
 		assertTrue(scn.ShadowPlayAvailable(southron));
 		assertEquals(Zone.HAND, southron.getZone());
@@ -81,7 +81,7 @@ public class Card_10_047_Tests
 
 		//10 twiliight -4 base -2 roaming -1 extra tax from Call
 		assertEquals(3, scn.GetTwilight());
-		assertEquals(1, scn.getThreats());
+		assertEquals(1, scn.GetThreats());
 		assertEquals(Zone.SHADOW_CHARACTERS, southron.getZone());
 	}
 
@@ -92,15 +92,15 @@ public class Card_10_047_Tests
 
 		var call = scn.GetShadowCard("call");
 		var southron = scn.GetShadowCard("southron");
-		scn.ShadowMoveCardToSupportArea(call);
-		scn.ShadowMoveCardToHand(southron);
+		scn.MoveCardsToSupportArea(call);
+		scn.MoveCardsToHand(southron);
 
 		scn.StartGame();
 		scn.SetTwilight(4);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(7, scn.GetTwilight());
-		assertEquals(0, scn.getThreats());
+		assertEquals(0, scn.GetThreats());
 		assertTrue(scn.ShadowActionAvailable(call));
 		assertTrue(scn.ShadowPlayAvailable(southron));
 		assertEquals(Zone.HAND, southron.getZone());
@@ -110,7 +110,7 @@ public class Card_10_047_Tests
 		//We must ensure that the final tally results in an empty twilight pool
 		// as it is here that PlayCardFromHand falters if set up incorrectly
 		assertEquals(0, scn.GetTwilight());
-		assertEquals(1, scn.getThreats());
+		assertEquals(1, scn.GetThreats());
 		assertEquals(Zone.SHADOW_CHARACTERS, southron.getZone());
 	}
 }

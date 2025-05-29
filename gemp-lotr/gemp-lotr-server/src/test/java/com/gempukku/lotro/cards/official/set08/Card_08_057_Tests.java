@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set08;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 
 public class Card_08_057_Tests
 {
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("marauder", "8_57");
                     put("corsair", "8_56");
@@ -56,7 +56,7 @@ public class Card_08_057_Tests
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.CORSAIR));
+		assertTrue(scn.HasKeyword(card, Keyword.CORSAIR));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(9, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
@@ -72,10 +72,10 @@ public class Card_08_057_Tests
         var corsair = scn.GetShadowCard("corsair");
         var blacksails1 = scn.GetShadowCard("blacksails1");
         var blacksails2 = scn.GetShadowCard("blacksails2");
-        scn.ShadowMoveCardToHand(marauder, corsair, blacksails1, blacksails2);
+        scn.MoveCardsToHand(marauder, corsair, blacksails1, blacksails2);
 
         PhysicalCardImpl cart = scn.GetFreepsCard("cart");
-        scn.FreepsMoveCardToSupportArea(cart);
+        scn.MoveCardsToSupportArea(cart);
 
         scn.StartGame();
 
@@ -106,11 +106,11 @@ public class Card_08_057_Tests
         var corsair = scn.GetShadowCard("corsair");
         var blacksails1 = scn.GetShadowCard("blacksails1");
         var blacksails2 = scn.GetShadowCard("blacksails2");
-        scn.ShadowMoveCardToHand(marauder, blacksails1, blacksails2);
-        scn.ShadowMoveCharToTable(corsair);
+        scn.MoveCardsToHand(marauder, blacksails1, blacksails2);
+        scn.MoveMinionsToTable(corsair);
 
         var cart = scn.GetFreepsCard("cart");
-        scn.FreepsMoveCardToSupportArea(cart);
+        scn.MoveCardsToSupportArea(cart);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set08;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_08_092_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("theoden", "8_92");
@@ -24,9 +24,9 @@ public class Card_08_092_Tests
 					put("sauron", "9_48");
 					put("bowman", "2_60");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -62,7 +62,7 @@ public class Card_08_092_Tests
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(card, Keyword.VALIANT));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
@@ -78,11 +78,11 @@ public class Card_08_092_Tests
 		var theoden = scn.GetFreepsCard("theoden");
 		var eomer = scn.GetFreepsCard("eomer");
 		var rider = scn.GetFreepsCard("rider");
-		scn.FreepsMoveCharToTable(theoden);
-		scn.FreepsMoveCardsToTopOfDeck(eomer, rider);
+		scn.MoveCompanionToTable(theoden);
+		scn.MoveCardsToTopOfDeck(eomer, rider);
 
 		var bowman = scn.GetShadowCard("bowman");
-		scn.ShadowMoveCharToTable(bowman);
+		scn.MoveMinionsToTable(bowman);
 
 		scn.StartGame();
 
@@ -116,11 +116,11 @@ public class Card_08_092_Tests
 		var theoden = scn.GetFreepsCard("theoden");
 		var eomer = scn.GetFreepsCard("eomer");
 		var rider = scn.GetFreepsCard("rider");
-		scn.FreepsMoveCharToTable(theoden);
-		scn.FreepsMoveCardToDiscard(eomer, rider);
+		scn.MoveCompanionToTable(theoden);
+		scn.MoveCardsToDiscard(eomer, rider);
 
 		var bowman = scn.GetShadowCard("bowman");
-		scn.ShadowMoveCharToTable(bowman);
+		scn.MoveMinionsToTable(bowman);
 
 		scn.StartGame();
 
@@ -153,12 +153,12 @@ public class Card_08_092_Tests
 		var theoden = scn.GetFreepsCard("theoden");
 		var eomer = scn.GetFreepsCard("eomer");
 		var rider = scn.GetFreepsCard("rider");
-		scn.FreepsMoveCharToTable(theoden);
-		scn.FreepsMoveCardsToTopOfDeck(eomer);
-		scn.FreepsMoveCardToDiscard(rider);
+		scn.MoveCompanionToTable(theoden);
+		scn.MoveCardsToTopOfDeck(eomer);
+		scn.MoveCardsToDiscard(rider);
 
 		var bowman = scn.GetShadowCard("bowman");
-		scn.ShadowMoveCharToTable(bowman);
+		scn.MoveMinionsToTable(bowman);
 
 		scn.StartGame();
 
@@ -188,11 +188,11 @@ public class Card_08_092_Tests
 		var theoden = scn.GetFreepsCard("theoden");
 		var eomer = scn.GetFreepsCard("eomer");
 		var rider = scn.GetFreepsCard("rider");
-		scn.FreepsMoveCharToTable(theoden, rider);
-		scn.FreepsMoveCardsToTopOfDeck(eomer);
+		scn.MoveCompanionToTable(theoden, rider);
+		scn.MoveCardsToTopOfDeck(eomer);
 
 		var bowman = scn.GetShadowCard("bowman");
-		scn.ShadowMoveCharToTable(bowman);
+		scn.MoveMinionsToTable(bowman);
 
 		scn.StartGame();
 

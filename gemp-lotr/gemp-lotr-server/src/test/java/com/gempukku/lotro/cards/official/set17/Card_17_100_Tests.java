@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set17;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_17_100_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("caves", "17_100");
 
 					put("sauron", "9_48");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,7 +54,7 @@ public class Card_17_100_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -65,18 +65,18 @@ public class Card_17_100_Tests
 
 		var frodo = scn.GetRingBearer();
 		var caves = scn.GetFreepsCard("caves");
-		scn.FreepsMoveCardToSupportArea(caves);
+		scn.MoveCardsToSupportArea(caves);
 
 		var sauron = scn.GetShadowCard("sauron");
-		scn.ShadowMoveCharToTable(sauron);
+		scn.MoveMinionsToTable(sauron);
 
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.ARCHERY);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		assertTrue(scn.hasKeyword(sauron, Keyword.DAMAGE));
-		assertTrue(scn.hasKeyword(sauron, Keyword.ENDURING));
-		assertTrue(scn.hasKeyword(sauron, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(sauron, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(sauron, Keyword.ENDURING));
+		assertTrue(scn.HasKeyword(sauron, Keyword.FIERCE));
 		assertFalse(scn.IsCharAssigned(frodo));
 		assertFalse(scn.IsCharAssigned(sauron));
 		assertTrue(scn.FreepsActionAvailable(caves));
@@ -86,19 +86,19 @@ public class Card_17_100_Tests
 		assertTrue(scn.IsCharAssigned(sauron));
 
 		assertTrue(scn.FreepsDecisionAvailable("keyword"));
-		scn.FreepsChooseMultipleChoiceOption("DAMAGE");
-		assertFalse(scn.hasKeyword(sauron, Keyword.DAMAGE));
-		assertTrue(scn.hasKeyword(sauron, Keyword.ENDURING));
-		assertTrue(scn.hasKeyword(sauron, Keyword.FIERCE));
+		scn.FreepsChooseOption("DAMAGE");
+		assertFalse(scn.HasKeyword(sauron, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(sauron, Keyword.ENDURING));
+		assertTrue(scn.HasKeyword(sauron, Keyword.FIERCE));
 		scn.FreepsChooseYes();
-		scn.FreepsChooseMultipleChoiceOption("ENDURING");
-		assertFalse(scn.hasKeyword(sauron, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(sauron, Keyword.ENDURING));
-		assertTrue(scn.hasKeyword(sauron, Keyword.FIERCE));
+		scn.FreepsChooseOption("ENDURING");
+		assertFalse(scn.HasKeyword(sauron, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(sauron, Keyword.ENDURING));
+		assertTrue(scn.HasKeyword(sauron, Keyword.FIERCE));
 		scn.FreepsChooseNo();
-		assertFalse(scn.hasKeyword(sauron, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(sauron, Keyword.ENDURING));
-		assertTrue(scn.hasKeyword(sauron, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(sauron, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(sauron, Keyword.ENDURING));
+		assertTrue(scn.HasKeyword(sauron, Keyword.FIERCE));
 
 		assertTrue(scn.ShadowAnyDecisionsAvailable());
 	}

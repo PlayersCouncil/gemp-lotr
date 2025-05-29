@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,15 +13,15 @@ import static org.junit.Assert.*;
 public class Card_V2_005_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("insurance", "102_5");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -52,7 +52,7 @@ public class Card_V2_005_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.DUNLAND, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -62,7 +62,7 @@ public class Card_V2_005_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		scn.ShadowMoveCardToHand(insurance);
+		scn.MoveCardsToHand(insurance);
 
 		scn.StartGame();
 
@@ -89,7 +89,7 @@ public class Card_V2_005_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		scn.ShadowMoveCardToSupportArea(insurance);
+		scn.MoveCardsToSupportArea(insurance);
 
 		scn.StartGame();
 		scn.SetTwilight(15);
@@ -108,7 +108,7 @@ public class Card_V2_005_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		scn.ShadowMoveCardToSupportArea(insurance);
+		scn.MoveCardsToSupportArea(insurance);
 
 		scn.StartGame();
 
@@ -144,7 +144,7 @@ public class Card_V2_005_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		scn.ShadowMoveCardToSupportArea(insurance);
+		scn.MoveCardsToSupportArea(insurance);
 
 		var site1 = scn.GetFreepsSite(1);
 		var site2 = scn.GetShadowSite(2);
@@ -175,7 +175,7 @@ public class Card_V2_005_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		scn.ShadowMoveCardToSupportArea(insurance);
+		scn.MoveCardsToSupportArea(insurance);
 
 		var site1 = scn.GetFreepsSite(1);
 		var site2 = scn.GetShadowSite(2);
@@ -212,7 +212,7 @@ public class Card_V2_005_Tests
 		scn.SkipToSite(2);
 
 		scn.SetTwilight(17);
-		scn.ShadowMoveCardsToTopOfDeck(insurance);
+		scn.MoveCardsToTopOfDeck(insurance);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(18, scn.GetTwilight());
@@ -220,7 +220,7 @@ public class Card_V2_005_Tests
 		// currently in hand.
 		assertTrue(scn.ShadowActionAvailable(insurance));
 
-		scn.ShadowPlayCard(insurance);
+		scn.ShadowUseCardAction(insurance);
 
 		assertEquals(18, scn.GetTwilight());
 		assertEquals(Zone.SUPPORT, insurance.getZone());
@@ -230,7 +230,7 @@ public class Card_V2_005_Tests
 		scn.SkipToSite(4);
 
 		scn.SetTwilight(11);
-		scn.ShadowMoveCardsToTopOfDeck(insurance);
+		scn.MoveCardsToTopOfDeck(insurance);
 
 		scn.FreepsPassCurrentPhaseAction();
 
@@ -243,7 +243,7 @@ public class Card_V2_005_Tests
 		scn.SkipToSite(6);
 
 		scn.SetTwilight(11);
-		scn.ShadowMoveCardsToTopOfDeck(insurance);
+		scn.MoveCardsToTopOfDeck(insurance);
 
 		scn.FreepsPassCurrentPhaseAction();
 

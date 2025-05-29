@@ -2,7 +2,7 @@
 package com.gempukku.lotro.cards.official.set01;
 
 import com.gempukku.lotro.at.AbstractAtTest;
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -24,8 +24,8 @@ import static org.junit.Assert.*;
 public class Card_01_031_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("asfaloth", "1_31");
                     put("arwen", "3_7");
@@ -33,9 +33,9 @@ public class Card_01_031_Tests
                     put("erestor", "3_14");
                     put("orophin", "1_56");
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -79,7 +79,7 @@ public class Card_01_031_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var erestor = scn.GetFreepsCard("erestor");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCardToHand(asfaloth, arwen, erestor, orophin);
+		scn.MoveCardsToHand(asfaloth, arwen, erestor, orophin);
 
 		scn.StartGame();
 
@@ -100,8 +100,8 @@ public class Card_01_031_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var erestor = scn.GetFreepsCard("erestor");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCharToTable(arwen, erestor, orophin);
-		scn.FreepsMoveCardToHand(asfaloth);
+		scn.MoveCompanionToTable(arwen, erestor, orophin);
+		scn.MoveCardsToHand(asfaloth);
 
 		scn.StartGame();
 
@@ -120,8 +120,8 @@ public class Card_01_031_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var erestor = scn.GetFreepsCard("erestor");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCharToTable(arwen, erestor, orophin);
-		scn.FreepsMoveCardToHand(asfaloth);
+		scn.MoveCompanionToTable(arwen, erestor, orophin);
+		scn.MoveCardsToHand(asfaloth);
 
 		scn.StartGame();
 
@@ -140,8 +140,8 @@ public class Card_01_031_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var erestor = scn.GetFreepsCard("erestor");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCharToTable(arwen, erestor, orophin);
-		scn.FreepsMoveCardToHand(asfaloth);
+		scn.MoveCompanionToTable(arwen, erestor, orophin);
+		scn.MoveCardsToHand(asfaloth);
 
 		//cheating to ensure site 2 qualifies
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.PLAINS));
@@ -166,8 +166,8 @@ public class Card_01_031_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var erestor = scn.GetFreepsCard("erestor");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCharToTable(arwen, erestor, orophin);
-		scn.FreepsMoveCardToHand(asfaloth);
+		scn.MoveCompanionToTable(arwen, erestor, orophin);
+		scn.MoveCardsToHand(asfaloth);
 
 		//cheating to ensure site 2 qualifies
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
@@ -196,8 +196,8 @@ public class Card_01_031_Tests
 		var legolas = scn.GetFreepsCard("legolas");
 		var erestor = scn.GetFreepsCard("erestor");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCharToTable(arwen, legolas, erestor, orophin);
-		scn.FreepsMoveCardToHand(asfaloth);
+		scn.MoveCompanionToTable(arwen, legolas, erestor, orophin);
+		scn.MoveCardsToHand(asfaloth);
 
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
 

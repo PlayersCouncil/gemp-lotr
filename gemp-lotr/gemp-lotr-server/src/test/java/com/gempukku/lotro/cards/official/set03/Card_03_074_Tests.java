@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_03_074_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("raider", "3_74");
@@ -22,9 +22,9 @@ public class Card_03_074_Tests
 
 					put("celeborn", "1_34");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,7 +57,7 @@ public class Card_03_074_Tests
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
@@ -71,21 +71,21 @@ public class Card_03_074_Tests
 		var scn = GetScenario();
 
 		var celeborn = scn.GetFreepsCard("celeborn");
-		scn.FreepsMoveCardToHand(celeborn);
+		scn.MoveCardsToHand(celeborn);
 
 		var raider = scn.GetShadowCard("raider");
-		scn.ShadowMoveCharToTable(raider);
+		scn.MoveMinionsToTable(raider);
 
 		scn.StartGame();
 
 		assertEquals(Zone.HAND,  celeborn.getZone());
 		assertEquals(6, scn.GetStrength(raider));
-		assertFalse(scn.hasKeyword(raider, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(raider, Keyword.FIERCE));
 
-		scn.FreepsMoveCardToDeadPile(celeborn);
+		scn.MoveCardsToDeadPile(celeborn);
 
 		assertEquals(Zone.DEAD,  celeborn.getZone());
 		assertEquals(9, scn.GetStrength(raider));
-		assertTrue(scn.hasKeyword(raider, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(raider, Keyword.FIERCE));
 	}
 }

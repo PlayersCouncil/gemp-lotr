@@ -1,35 +1,33 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
-import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class Card_01_224_Tests
 {
 
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>()
                 {{
                     put("rtim", "1_224");
-                    put("enquea", "2_83");
+                    put("nelya", "1_233");
+                    put("enquea", "2_83"); //twilight
                     put("twk", "1_237");
 
                     put("guard", "1_7");
+                    put("sword", "1_299");
                 }},
-                GenericCardTestHelper.FellowshipSites,
-                GenericCardTestHelper.FOTRFrodo,
-                GenericCardTestHelper.ATARRing
+                VirtualTableScenario.FellowshipSites,
+                VirtualTableScenario.FOTRFrodo,
+                VirtualTableScenario.ATARRing
         );
     }
 
@@ -45,7 +43,9 @@ public class Card_01_224_Tests
          * Twilight Cost: 0
          * Type: Event
          * Subtype:
-         * Game Text: <b>Response:</b> If the Ring-bearer wears The One Ring at the end of a skirmish phase, cancel all remaining assignments and assign a Nazgûl to skirmish the Ring-bearer; The One Ring's game text does not apply during this skirmish.
+         * Game Text: <b>Response:</b> If the Ring-bearer wears The One Ring at the end of a skirmish phase,
+         * cancel all remaining assignments and assign a Nazgûl to skirmish the Ring-bearer;
+         * The One Ring's game text does not apply during this skirmish.
          */
 
         var scn = GetScenario();
@@ -58,8 +58,86 @@ public class Card_01_224_Tests
         assertEquals(Side.SHADOW, card.getBlueprint().getSide());
         assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
         assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+        assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
         assertEquals(0, card.getBlueprint().getTwilightCost());
+    }
+
+    @Test
+    public void ReturnToItsMasterTriggersDuringNormalSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+        var scn = GetScenario();
+
+        var frodo = scn.GetRingBearer();
+        var ring = scn.GetRing();
+        var sword = scn.GetFreepsCard("sword");
+        scn.AttachCardsTo(frodo, sword);
+
+        var rtim = scn.GetShadowCard("rtim");
+        var nelya = scn.GetShadowCard("nelya");
+        scn.MoveCardsToHand(rtim);
+        scn.MoveMinionsToTable(nelya);
+
+        scn.StartGame();
+
+        scn.SkipToAssignments();
+        scn.FreepsAssignAndResolve(frodo, nelya);
+        scn.FreepsUseCardAction(ring);
+
+        assertTrue(scn.RBWearingOneRing());
+
+        scn.ShadowPass();
+        scn.FreepsPass();
+
+        assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+        scn.ShadowAcceptOptionalTrigger();
+
+        scn.FreepsResolveSkirmish(frodo);
+
+        assertTrue(scn.IsCharSkirmishing(frodo));
+        assertTrue(scn.IsCharSkirmishing(nelya));
+    }
+
+    //Converted from Legacy AT test
+    @Test
+    public void ReturnToItsMasterTriggersDuringFierceSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+        var scn = GetScenario();
+
+        var frodo = scn.GetRingBearer();
+        var ring = scn.GetRing();
+        var sword = scn.GetFreepsCard("sword");
+        scn.AttachCardsTo(frodo, sword);
+
+        var rtim = scn.GetShadowCard("rtim");
+        var nelya = scn.GetShadowCard("nelya");
+        scn.MoveCardsToHand(rtim);
+        scn.MoveMinionsToTable(nelya);
+
+        scn.StartGame();
+
+        scn.SkipToAssignments();
+        scn.FreepsAssignAndResolve(frodo, nelya);
+        scn.FreepsUseCardAction(ring);
+
+        assertTrue(scn.RBWearingOneRing());
+
+        scn.ShadowPass();
+        scn.FreepsPass();
+
+        assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+        scn.ShadowDeclineOptionalTrigger();
+
+        scn.PassFierceAssignmentActions();
+        scn.FreepsAssignAndResolve(frodo, nelya);
+
+        assertTrue(scn.RBWearingOneRing());
+        scn.PassSkirmishActions();
+
+        assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+        scn.ShadowAcceptOptionalTrigger();
+
+        scn.FreepsResolveSkirmish(frodo);
+
+        assertTrue(scn.IsCharSkirmishing(frodo));
+        assertTrue(scn.IsCharSkirmishing(nelya));
     }
 
     @Test
@@ -70,13 +148,13 @@ public class Card_01_224_Tests
         var rtim = scn.GetShadowCard("rtim");
         var enquea = scn.GetShadowCard("enquea");
         var twk = scn.GetShadowCard("twk");
-        scn.ShadowMoveCardToHand(rtim);
-        scn.ShadowMoveCharToTable(enquea, twk);
+        scn.MoveCardsToHand(rtim);
+        scn.MoveMinionsToTable(enquea, twk);
 
         var frodo = scn.GetRingBearer();
-        var onering = scn.GetFreepsRing();
+        var onering = scn.GetRing();
         var guard = scn.GetFreepsCard("guard");
-        scn.FreepsMoveCharToTable(guard);
+        scn.MoveCompanionToTable(guard);
 
         scn.StartGame();
 
@@ -110,92 +188,6 @@ public class Card_01_224_Tests
     }
 
 
-    //Legacy AT test
-    @Test
-    public void returnToItsMaster() throws DecisionResultInvalidException, CardNotFoundException {
-        var scn = GetScenario();
 
-        var p1Deck = scn.createSimplestDeck();
-        p1Deck.setRing("4_1");
-        var p2Deck = scn.createSimplestDeck();
-
-        Map<String, LotroDeck> decks = new HashMap<>();
-        decks.put(scn.P1, p1Deck);
-        decks.put(scn.P2, p2Deck);
-
-        scn.initializeGameWithDecks(decks);
-
-        scn.skipMulligans();
-
-        PhysicalCardImpl returnToItsMaster = new PhysicalCardImpl(102, "1_224", scn.P2, scn._cardLibrary.getLotroCardBlueprint("1_224"));
-        scn._game.getGameState().addCardToZone(scn._game, returnToItsMaster, Zone.HAND);
-
-        PhysicalCardImpl nelya = new PhysicalCardImpl(102, "1_233", scn.P2, scn._cardLibrary.getLotroCardBlueprint("1_233"));
-        scn._game.getGameState().addCardToZone(scn._game, nelya, Zone.SHADOW_CHARACTERS);
-
-        PhysicalCardImpl hobbitSword = new PhysicalCardImpl(102, "1_299", scn.P1, scn._cardLibrary.getLotroCardBlueprint("1_299"));
-        scn._game.getGameState().attachCard(scn._game, hobbitSword, scn._game.getGameState().getRingBearer(scn.P1));
-
-        // End fellowship
-        scn.playerDecided(scn.P1, "");
-
-        // End shadow
-        scn.playerDecided(scn.P2, "");
-
-        // End maneuvers phase
-        scn.playerDecided(scn.P1, "");
-        scn.playerDecided(scn.P2, "");
-
-        // End archery phase
-        scn.playerDecided(scn.P1, "");
-        scn.playerDecided(scn.P2, "");
-
-        // End assignment phase
-        scn.playerDecided(scn.P1, "");
-        scn.playerDecided(scn.P2, "");
-
-        // Assign
-        scn.playerDecided(scn.P1, scn._game.getGameState().getRingBearer(scn.P1).getCardId() + " " + nelya.getCardId());
-
-        // Choose skirmish to resolve
-        scn.playerDecided(scn.P1, "" + scn._game.getGameState().getRingBearer(scn.P1).getCardId());
-
-        // Skirmish phase
-        AwaitingDecision skirmishAction = scn._userFeedback.getAwaitingDecision(scn.P1);
-        scn.playerDecided(scn.P1, scn.getCardActionId(skirmishAction, "Use The One"));
-
-        assertTrue(scn._game.getGameState().isWearingRing());
-
-        // End skirmish phase
-        scn.playerDecided(scn.P2, "");
-        scn.playerDecided(scn.P1, "");
-
-        // Don't use Return to Its Master
-        scn.playerDecided(scn.P2, "");
-
-        // End assignment phase
-        scn.playerDecided(scn.P1, "");
-        scn.playerDecided(scn.P2, "");
-
-        // Assign
-        scn.playerDecided(scn.P1, scn._game.getGameState().getRingBearer(scn.P1).getCardId() + " " + nelya.getCardId());
-
-        // Choose skirmish to resolve
-        scn.playerDecided(scn.P1, "" + scn._game.getGameState().getRingBearer(scn.P1).getCardId());
-
-        // End fierce skirmish phase
-        scn.playerDecided(scn.P1, "");
-        scn.playerDecided(scn.P2, "");
-
-        AwaitingDecision playeReturnDecision = scn._userFeedback.getAwaitingDecision(scn.P2);
-        scn.playerDecided(scn.P2, scn.getCardActionId(playeReturnDecision, "Play Return"));
-
-        // Choose skirmish to resolve
-        scn.playerDecided(scn.P1, "" + scn._game.getGameState().getRingBearer(scn.P1).getCardId());
-
-        assertEquals(scn._game.getGameState().getRingBearer(scn.P1), scn._game.getGameState().getSkirmish().getFellowshipCharacter());
-        assertEquals(1, scn._game.getGameState().getSkirmish().getShadowCharacters().size());
-        assertEquals(nelya, scn._game.getGameState().getSkirmish().getShadowCharacters().iterator().next());
-    }
 
 }

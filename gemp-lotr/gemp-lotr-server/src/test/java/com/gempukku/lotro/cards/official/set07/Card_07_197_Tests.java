@@ -1,30 +1,32 @@
 package com.gempukku.lotro.cards.official.set07;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Race;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.gempukku.lotro.at.AbstractAtTest.P1;
+import static com.gempukku.lotro.framework.VirtualTableScenario.P1;
 import static org.junit.Assert.*;
 
 public class Card_07_197_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("card", "7_197");
 					put("enquea", "1_231");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -66,14 +68,14 @@ public class Card_07_197_Tests
 	@Test
 	public void MustExertToAssignMorgulRegiment() throws DecisionResultInvalidException, CardNotFoundException {
 		// Arrange
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var card = scn.GetShadowCard("card");
 		var enquea = scn.GetShadowCard("enquea");
 		var frodo = scn.GetRingBearer();
 
-		scn.ShadowMoveCardToHand(card);
-		scn.ShadowMoveCardToHand(enquea);
+		scn.MoveCardsToHand(card);
+		scn.MoveCardsToHand(enquea);
 
 		scn.StartGame();
 
@@ -91,7 +93,7 @@ public class Card_07_197_Tests
 				"Would you like to exert a companion for each Nazgûl you can spot to be able to assign Morgul Regiment to skirmish?"));
 
 		// Act
-		scn.playerDecided(P1, "0");
+		scn.PlayerDecided(P1, "0");
 
 		// Assert
 		assertEquals(1, scn.GetWoundsOn(frodo));

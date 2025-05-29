@@ -1,9 +1,8 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set09;
 
-import com.gempukku.lotro.at.AbstractAtTest;
-import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -26,8 +25,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_09_026_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("radagast", "59_26");
@@ -39,9 +38,9 @@ public class Card_09_026_ErrataTests
 					put("chaff5", "1_3");
 					put("chaff6", "1_3");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -87,7 +86,7 @@ public class Card_09_026_ErrataTests
 		var scn = GetScenario();
 
 		var radagast = scn.GetFreepsCard("radagast");
-		scn.FreepsMoveCardToHand(radagast);
+		scn.MoveCardsToHand(radagast);
 
 		scn.StartGame();
 		assertEquals(2, scn.GetMoveLimit());
@@ -102,13 +101,13 @@ public class Card_09_026_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var radagast = scn.GetFreepsCard("radagast");
-		scn.FreepsMoveCardToHand(radagast);
+		scn.MoveCardsToHand(radagast);
 
 		scn.StartGame();
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(frodo, AbstractAtTest.P1);
+				ActivateCardAction action = new ActivateCardAction(frodo, VirtualTableScenario.P1);
 				action.appendEffect(new KillEffect(radagast, (PhysicalCard) null, KillEffect.Cause.CARD_EFFECT));
 				return Collections.singletonList(action);
 			}
@@ -132,13 +131,13 @@ public class Card_09_026_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var radagast = scn.GetFreepsCard("radagast");
-		scn.FreepsMoveCardToHand(radagast);
+		scn.MoveCardsToHand(radagast);
 
 		scn.StartGame();
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(frodo, AbstractAtTest.P1);
+				ActivateCardAction action = new ActivateCardAction(frodo, VirtualTableScenario.P1);
 				action.appendEffect(new DiscardCardsFromPlayEffect(scn.P1, frodo, Filters.name("Radagast")));
 				return Collections.singletonList(action);
 			}
@@ -161,13 +160,13 @@ public class Card_09_026_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var radagast = scn.GetFreepsCard("radagast");
-		scn.FreepsMoveCardToHand(radagast);
+		scn.MoveCardsToHand(radagast);
 
 		scn.StartGame();
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(frodo, AbstractAtTest.P1);
+				ActivateCardAction action = new ActivateCardAction(frodo, VirtualTableScenario.P1);
 				action.appendEffect(new ReturnCardsToHandEffect(frodo, Filters.name("Radagast")));
 				return Collections.singletonList(action);
 			}
@@ -190,12 +189,12 @@ public class Card_09_026_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var radagast = scn.GetFreepsCard("radagast");
-		scn.FreepsMoveCharToTable(radagast);
+		scn.MoveCompanionToTable(radagast);
 
 		var chaff1 = scn.GetShadowCard("chaff1");
 		var chaff2 = scn.GetShadowCard("chaff2");
 		var chaff3 = scn.GetShadowCard("chaff3");
-		scn.ShadowMoveCardToHand(chaff1, chaff2, chaff3);
+		scn.MoveCardsToHand(chaff1, chaff2, chaff3);
 
 		scn.StartGame();
 
@@ -225,12 +224,16 @@ public class Card_09_026_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var radagast = scn.GetFreepsCard("radagast");
-		scn.FreepsMoveCharToTable(radagast);
+		scn.MoveCompanionToTable(radagast);
 
 		var chaff1 = scn.GetShadowCard("chaff1");
 		var chaff2 = scn.GetShadowCard("chaff2");
 		var chaff3 = scn.GetShadowCard("chaff3");
-		scn.ShadowMoveCardToHand(chaff1, chaff2, chaff3);
+		var chaff4 = scn.GetShadowCard("chaff4");
+		var chaff5 = scn.GetShadowCard("chaff5");
+		var chaff6 = scn.GetShadowCard("chaff6");
+		var evilradagast = scn.GetShadowCard("radagast");
+		scn.MoveCardsToHand(chaff1, chaff2, chaff3);
 
 		scn.StartGame();
 
@@ -240,7 +243,7 @@ public class Card_09_026_ErrataTests
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.PassCurrentPhaseActions();
 		scn.ShadowDeclineReconciliation();
-		scn.ShadowMoveCardsToBottomOfDeck("chaff4", "chaff5", "chaff6", "radagast");
+		scn.MoveCardsToBottomOfDeck(chaff4, chaff5, chaff6, evilradagast);
 		scn.FreepsChooseToMove();
 
 		assertTrue(scn.ShadowDecisionAvailable("Would you like to discard 2 cards to draw 2 cards?"));

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_02_075_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("ferny", "2_75");
@@ -23,9 +23,9 @@ public class Card_02_075_Tests
 
 					put("gimli", "1_13");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -72,7 +72,7 @@ public class Card_02_075_Tests
 
 		var frodo = scn.GetRingBearer();
 		var ferny = scn.GetShadowCard("ferny");
-		scn.ShadowMoveCharToTable(ferny);
+		scn.MoveMinionsToTable(ferny);
 
 		scn.StartGame();
 
@@ -93,11 +93,11 @@ public class Card_02_075_Tests
 
 		var frodo = scn.GetRingBearer();
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCompanionToTable(gimli);
 
 		var ferny = scn.GetShadowCard("ferny");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(ferny, runner);
+		scn.MoveMinionsToTable(ferny, runner);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_024_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("hound", "102_24");
@@ -23,9 +23,9 @@ public class Card_V2_024_Tests
 					put("voices", "5_68");
 					put("power", "1_136");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -71,8 +71,8 @@ public class Card_V2_024_Tests
 		var hound = scn.GetShadowCard("hound");
 		var isenorc = scn.GetShadowCard("isenorc");
 		var wargrider = scn.GetShadowCard("wargrider");
-		scn.ShadowMoveCharToTable(isenorc, wargrider);
-		scn.ShadowMoveCardToHand(hound);
+		scn.MoveMinionsToTable(isenorc, wargrider);
+		scn.MoveCardsToHand(hound);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -93,9 +93,9 @@ public class Card_V2_024_Tests
 		var wargrider = scn.GetShadowCard("wargrider");
 		var voices = scn.GetShadowCard("voices");
 		var power = scn.GetShadowCard("power");
-		scn.ShadowMoveCharToTable(wargrider);
-		scn.ShadowMoveCardToHand(hound);
-		scn.ShadowMoveCardToDiscard(voices, power);
+		scn.MoveMinionsToTable(wargrider);
+		scn.MoveCardsToHand(hound);
+		scn.MoveCardsToDiscard(voices, power);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();

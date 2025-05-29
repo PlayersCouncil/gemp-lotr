@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -17,17 +17,17 @@ import static org.junit.Assert.*;
 public class Card_V1_035_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("darkness", "101_35");
                     put("balrog", "2_51");
                     put("whip", "2_74");
                     put("spear", "1_182");
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -47,12 +47,12 @@ public class Card_V1_035_Tests
 		 */
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl darkness = scn.GetFreepsCard("darkness");
 
 		assertFalse(darkness.getBlueprint().isUnique());
-		assertTrue(scn.hasKeyword(darkness, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(darkness, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, darkness.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, darkness.getBlueprint().getCardType());
 		assertEquals(Culture.MORIA, darkness.getBlueprint().getCulture());
@@ -62,13 +62,13 @@ public class Card_V1_035_Tests
 	@Test
 	public void TheDarknessGrewStacksAndRetrievesItems() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl darkness = scn.GetShadowCard("darkness");
 		PhysicalCardImpl balrog = scn.GetShadowCard("balrog");
 		PhysicalCardImpl whip = scn.GetShadowCard("whip");
 		PhysicalCardImpl spear = scn.GetShadowCard("spear");
-		scn.ShadowMoveCardToHand(darkness, balrog, whip, spear);
+		scn.MoveCardsToHand(darkness, balrog, whip, spear);
 
 		//so the balrog doesn't self-discard
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));

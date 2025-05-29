@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,16 +15,16 @@ import static org.junit.Assert.*;
 public class Card_V1_043_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("faces", "101_43");
 					put("twigul", "2_82");
 					put("wk", "2_85");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -43,7 +43,7 @@ public class Card_V1_043_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl faces = scn.GetFreepsCard("faces");
 
@@ -52,7 +52,7 @@ public class Card_V1_043_Tests
 		assertEquals(Culture.WRAITH, faces.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, faces.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, faces.getBlueprint().getRace());
-        assertTrue(scn.hasTimeword(faces, Timeword.SKIRMISH)); // test for keywords as needed
+        assertTrue(scn.HasTimeword(faces, Timeword.SKIRMISH)); // test for keywords as needed
 		assertEquals(1, faces.getBlueprint().getTwilightCost());
 		//assertEquals(, faces.getBlueprint().getStrength());
 		//assertEquals(, faces.getBlueprint().getVitality());
@@ -65,14 +65,14 @@ public class Card_V1_043_Tests
 	@Test
 	public void FacesAddsOneStrengthPerWoundOnTheRB() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 
 		PhysicalCardImpl faces = scn.GetShadowCard("faces");
 		PhysicalCardImpl twigul = scn.GetShadowCard("twigul");
-		scn.ShadowMoveCharToTable(twigul);
-		scn.ShadowMoveCardToHand(faces);
+		scn.MoveMinionsToTable(twigul);
+		scn.MoveCardsToHand(faces);
 
 		scn.StartGame();
 
@@ -94,14 +94,14 @@ public class Card_V1_043_Tests
 	@Test
 	public void FacesMakesWitchKingDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 
 		PhysicalCardImpl faces = scn.GetShadowCard("faces");
 		PhysicalCardImpl wk = scn.GetShadowCard("wk");
-		scn.ShadowMoveCharToTable(wk);
-		scn.ShadowMoveCardToHand(faces);
+		scn.MoveMinionsToTable(wk);
+		scn.MoveCardsToHand(faces);
 
 		scn.StartGame();
 
@@ -112,13 +112,13 @@ public class Card_V1_043_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(14, scn.GetStrength(wk));
-		assertFalse(scn.hasKeyword(wk, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(wk, Keyword.DAMAGE));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertTrue(scn.ShadowPlayAvailable(faces));
 
 		scn.ShadowPlayCard(faces);
 		assertEquals(14, scn.GetStrength(wk));
-		assertTrue(scn.hasKeyword(wk, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(wk, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(wk, Keyword.DAMAGE));
 	}
 }

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_01_268_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("inquisitor", "51_268");
 					put("filler1", "1_269");
 					put("filler2", "1_270");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -67,7 +67,7 @@ public class Card_01_268_ErrataTests
 		var scn = GetScenario();
 
 		var inquisitor = scn.GetShadowCard("inquisitor");
-		scn.ShadowMoveCardToHand(inquisitor);
+		scn.MoveCardsToHand(inquisitor);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -91,9 +91,9 @@ public class Card_01_268_ErrataTests
 		var scn = GetScenario();
 
 		var inquisitor = scn.GetShadowCard("inquisitor");
-		scn.ShadowMoveCardToHand(inquisitor);
+		scn.MoveCardsToHand(inquisitor);
 
-		scn.FreepsMoveCardToHand("filler1", "filler2");
+		scn.FreepsDrawCards(2);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
