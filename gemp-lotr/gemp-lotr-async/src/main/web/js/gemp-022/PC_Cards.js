@@ -274,7 +274,7 @@ var PCCards = {
 	
 	//August Weekend League Promos
 	// Boromir, Redeemed FA (V1_20)
-	'101_101': 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U020.0_card.jpg',
+	'101_101': 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U020.1_card.jpg',
 	// I See You FA (V1_46)
 	'101_102': 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U046.0_card.jpg',
 	
