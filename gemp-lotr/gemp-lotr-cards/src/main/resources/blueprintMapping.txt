@@ -415,4 +415,4 @@ gl_theOneRing,1_2
 #May 2025 WC Circuit: Watcher in the Water
 2_131,2_73
 #2025 WC Circuit: Pale Crown
-101_103,101_39
+101_104,101_39
