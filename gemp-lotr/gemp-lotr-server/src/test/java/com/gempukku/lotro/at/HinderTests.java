@@ -1,6 +1,6 @@
 package com.gempukku.lotro.at;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Signet;
@@ -35,7 +35,7 @@ public class HinderTests
     @Test
     public void HinderingACompanionInPlayFlipsItOver() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                 }}
@@ -43,7 +43,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -66,7 +66,7 @@ public class HinderTests
     @Test
     public void HinderingACompanionInPlayGrantsItTheHinderedStatus() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                 }}
@@ -74,7 +74,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -101,7 +101,7 @@ public class HinderTests
     //@Test
     public void HinderingACompanionInHandGrantsItTheHinderedStatus() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                 }}
@@ -109,7 +109,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCardToHand(aragorn);
+        scn.MoveCardsToHand(aragorn);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -140,7 +140,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotBeSpottedByCardType() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("sam", "1_311");
@@ -153,15 +153,15 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var sam = scn.GetFreepsCard("sam");
-        scn.FreepsMoveCharToTable(aragorn, sam);
+        scn.MoveCompanionToTable(aragorn, sam);
         scn.AddWoundsToChar(aragorn, 1);
         scn.AddWoundsToChar(frodo, 2);
         scn.AddWoundsToChar(sam, 2);
 
         var wall = scn.GetShadowCard("wall");
         var dunlending = scn.GetShadowCard("dunlending");
-        scn.ShadowMoveCharToTable(dunlending);
-        scn.ShadowMoveCardToHand(wall);
+        scn.MoveMinionsToTable(dunlending);
+        scn.MoveCardsToHand(wall);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -193,7 +193,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotBeTargeted() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("gandalf", "1_364");
@@ -207,10 +207,10 @@ public class HinderTests
         var aragorn = scn.GetFreepsCard("aragorn");
         var gandalf = scn.GetFreepsCard("gandalf");
         var flame = scn.GetFreepsCard("flame");
-        scn.FreepsMoveCharToTable(aragorn, gandalf);
-        scn.FreepsMoveCardToHand(flame);
+        scn.MoveCompanionToTable(aragorn, gandalf);
+        scn.MoveCardsToHand(flame);
 
-        scn.ShadowMoveCharToTable("runner");
+        scn.MoveMinionsToTable("runner");
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -238,7 +238,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotBeCounted() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("gandalf", "1_364");
@@ -252,11 +252,11 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCharToTable("gandalf", "sam", "merry", "gimli");
+        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionToTable("gandalf", "sam", "merry", "gimli");
 
         var enquea = scn.GetShadowCard("enquea");
-        scn.ShadowMoveCharToTable(enquea);
+        scn.MoveMinionsToTable(enquea);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -281,7 +281,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotBeSpottedByCulture() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("boromir", "3_122");
@@ -299,10 +299,10 @@ public class HinderTests
         var gimli = scn.GetFreepsCard("gimli");
         var gandalf = scn.GetFreepsCard("gandalf");
         var beacons = scn.GetFreepsCard("beacons");
-        scn.FreepsMoveCharToTable(aragorn, boromir, gimli, gandalf);
-        scn.FreepsMoveCardToHand(beacons);
+        scn.MoveCompanionToTable(aragorn, boromir, gimli, gandalf);
+        scn.MoveCardsToHand(beacons);
 
-        scn.ShadowMoveCharToTable("runner");
+        scn.MoveMinionsToTable("runner");
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -335,7 +335,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotBeSpottedByRace() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("armor", "1_92");
@@ -345,8 +345,8 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var armor = scn.GetFreepsCard("armor");
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(armor);
+        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCardsToHand(armor);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -367,7 +367,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotBeCountedByRace() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("gandalf", "1_72");
@@ -377,7 +377,7 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var gandalf = scn.GetFreepsCard("gandalf");
-        scn.FreepsMoveCharToTable(aragorn, gandalf);
+        scn.MoveCompanionToTable(aragorn, gandalf);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -398,7 +398,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotBeSpottedByKeyword() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("pathfinder", "1_110");
@@ -408,8 +408,8 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var pathfinder = scn.GetFreepsCard("pathfinder");
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(pathfinder);
+        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCardsToHand(pathfinder);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -430,7 +430,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotBeSpottedByTwilightCost() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("barricade", "15_58");
@@ -444,12 +444,12 @@ public class HinderTests
         var aragorn = scn.GetFreepsCard("aragorn");
         var barricade = scn.GetFreepsCard("barricade");
         var guardian = scn.GetFreepsCard("guardian");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
         //These are 4-cost decoys that Grond can target instead
-        scn.FreepsMoveCardToSupportArea(barricade, guardian);
+        scn.MoveCardsToSupportArea(barricade, guardian);
 
         var grond = scn.GetShadowCard("grond");
-        scn.ShadowMoveCardToSupportArea(grond);
+        scn.MoveCardsToSupportArea(grond);
         scn.AddTokensToCard(grond, 4);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -479,7 +479,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotBeSpottedAs0TwilightCost() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("kingdom", "1_16");
@@ -493,12 +493,12 @@ public class HinderTests
         var aragorn = scn.GetFreepsCard("aragorn");
         var kingdom = scn.GetFreepsCard("kingdom");
         var stairs = scn.GetFreepsCard("stairs");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
         //These are 0-cost decoys that Grond can target instead
-        scn.FreepsMoveCardToSupportArea(kingdom, stairs);
+        scn.MoveCardsToSupportArea(kingdom, stairs);
 
         var grond = scn.GetShadowCard("grond");
-        scn.ShadowMoveCardToSupportArea(grond);
+        scn.MoveCardsToSupportArea(grond);
         scn.AddTokensToCard(grond, 4);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -527,7 +527,7 @@ public class HinderTests
 
     @Test
     public void HinderedCompanionsCannotBeSpottedByStrength() throws DecisionResultInvalidException, CardNotFoundException {
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("gandalf", "1_72");
@@ -537,17 +537,17 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var gandalf = scn.GetFreepsCard("gandalf");
-        scn.FreepsMoveCharToTable(aragorn, gandalf);
+        scn.MoveCompanionToTable(aragorn, gandalf);
 
         //This version of the hinder-izing ability requires that the player choose a character with at least 4 strength.
         //After hindering Aragorn, we will attempt to use it again and see whether he is still selectable.
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
-                var action = new ActivateCardAction(frodo, AbstractAtTest.P1);
+                var action = new ActivateCardAction(frodo, scn.P1);
 
                 //action.setText("Hinder Aragorn");
-                action.appendCost(new ChooseActiveCardEffect(null, AbstractAtTest.P1, "Can't pick aragorn", Filters.minStrength(4)) {
+                action.appendCost(new ChooseActiveCardEffect(null, scn.P1, "Can't pick aragorn", Filters.minStrength(4)) {
                     @Override
                     protected void cardSelected(LotroGame game, PhysicalCard card) {
                         var name = card.getCardId();
@@ -577,7 +577,7 @@ public class HinderTests
 
     @Test
     public void HinderedCompanionsCannotBeSpottedByVitality() throws DecisionResultInvalidException, CardNotFoundException {
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("gandalf", "1_72");
@@ -587,17 +587,17 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var gandalf = scn.GetFreepsCard("gandalf");
-        scn.FreepsMoveCharToTable(aragorn, gandalf);
+        scn.MoveCompanionToTable(aragorn, gandalf);
 
         //This version of the hinder-izing ability requires that the player choose a character with at least 4 strength.
         //After hindering Aragorn, we will attempt to use it again and see whether he is still selectable.
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
-                var action = new ActivateCardAction(frodo, AbstractAtTest.P1);
+                var action = new ActivateCardAction(frodo, scn.P1);
 
                 //action.setText("Hinder Aragorn");
-                action.appendCost(new ChooseActiveCardEffect(null, AbstractAtTest.P1, "Can't pick aragorn", Filters.minVitality(4)) {
+                action.appendCost(new ChooseActiveCardEffect(null, scn.P1, "Can't pick aragorn", Filters.minVitality(4)) {
                     @Override
                     protected void cardSelected(LotroGame game, PhysicalCard card) { }
                 });
@@ -625,7 +625,7 @@ public class HinderTests
 
     @Test
     public void HinderedCompanionsCannotBeSpottedByResistance() throws DecisionResultInvalidException, CardNotFoundException {
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("gandalf", "1_72");
@@ -635,17 +635,17 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var gandalf = scn.GetFreepsCard("gandalf");
-        scn.FreepsMoveCharToTable(aragorn, gandalf);
+        scn.MoveCompanionToTable(aragorn, gandalf);
 
         //This version of the hinder-izing ability requires that the player choose a character with at least 4 strength.
         //After hindering Aragorn, we will attempt to use it again and see whether he is still selectable.
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
-                var action = new ActivateCardAction(frodo, AbstractAtTest.P1);
+                var action = new ActivateCardAction(frodo, scn.P1);
 
                 //action.setText("Hinder Aragorn");
-                action.appendCost(new ChooseActiveCardEffect(null, AbstractAtTest.P1, "Can't pick aragorn", Filters.minResistance(4)) {
+                action.appendCost(new ChooseActiveCardEffect(null, scn.P1, "Can't pick aragorn", Filters.minResistance(4)) {
                     @Override
                     protected void cardSelected(LotroGame game, PhysicalCard card) {
                         var name = card.getCardId();
@@ -675,7 +675,7 @@ public class HinderTests
 
     @Test
     public void HinderedCompanionsCannotBeSpottedBySignet() throws DecisionResultInvalidException, CardNotFoundException {
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("gandalf", "7_36");
@@ -687,17 +687,17 @@ public class HinderTests
         var aragorn = scn.GetFreepsCard("aragorn");
         var gandalf = scn.GetFreepsCard("gandalf");
         var gimli = scn.GetFreepsCard("gimli");
-        scn.FreepsMoveCharToTable(aragorn, gandalf, gimli);
+        scn.MoveCompanionToTable(aragorn, gandalf, gimli);
 
         //This version of the hinder-izing ability requires that the player choose a character with at least 4 strength.
         //After hindering Aragorn, we will attempt to use it again and see whether he is still selectable.
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
-                var action = new ActivateCardAction(frodo, AbstractAtTest.P1);
+                var action = new ActivateCardAction(frodo, scn.P1);
 
                 //action.setText("Hinder Aragorn");
-                action.appendCost(new ChooseActiveCardEffect(null, AbstractAtTest.P1, "Can't pick aragorn", Signet.GANDALF) {
+                action.appendCost(new ChooseActiveCardEffect(null, scn.P1, "Can't pick aragorn", Signet.GANDALF) {
                     @Override
                     protected void cardSelected(LotroGame game, PhysicalCard card) {
                         var name = card.getCardId();
@@ -728,7 +728,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotBeExerted() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
 
@@ -738,10 +738,10 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
         var lord = scn.GetShadowCard("lord");
-        scn.ShadowMoveCharToTable(lord);
+        scn.MoveMinionsToTable(lord);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -815,7 +815,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotUseSpecialAbilities() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
 
@@ -825,9 +825,9 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
-        scn.ShadowMoveCharToTable("runner");
+        scn.MoveMinionsToTable("runner");
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -850,7 +850,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotUseModifiers() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "7_364");
                 }}
@@ -858,7 +858,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -882,7 +882,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotUseTriggers() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "3_38");
                 }}
@@ -890,7 +890,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -914,7 +914,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsLoseKeywords() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "4_109");
                 }}
@@ -922,7 +922,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -935,11 +935,11 @@ public class HinderTests
         });
         scn.StartGame();
 
-        assertTrue(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+        assertTrue(scn.HasKeyword(aragorn, Keyword.DEFENDER));
         scn.FreepsUseCardAction(frodo);
 
         assertTrue(scn.IsHindered(aragorn));
-        assertFalse(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+        assertFalse(scn.HasKeyword(aragorn, Keyword.DEFENDER));
     }
 
     //@Test
@@ -950,7 +950,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotBeAssignedToSkirmishByAssignmentAbilities() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
 
@@ -960,10 +960,10 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
         var troll = scn.GetShadowCard("troll");
-        scn.ShadowMoveCharToTable(troll);
+        scn.MoveMinionsToTable(troll);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -992,7 +992,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionsCannotBeAssignedToSkirmishesNormally() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
 
@@ -1002,9 +1002,9 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
-        scn.ShadowMoveCharToTable("runner");
+        scn.MoveMinionsToTable("runner");
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -1034,7 +1034,7 @@ public class HinderTests
     public void HinderedCompanionsCannotBeAssignedToFierceSkirmishesNormally() throws DecisionResultInvalidException, CardNotFoundException {
 
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
 
@@ -1044,9 +1044,9 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
 
-        scn.ShadowMoveCharToTable("enquea");
+        scn.MoveMinionsToTable("enquea");
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -1074,7 +1074,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionStillCountsTowardsRuleOf9() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("gandalf", "1_364");
@@ -1093,9 +1093,9 @@ public class HinderTests
         var gandalf = scn.GetFreepsCard("gandalf");
         var arwen = scn.GetFreepsCard("arwen");
 
-        scn.FreepsMoveCharToTable("legolas", "gimli", "boromir", "sam", "merry", "pippin");
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(gandalf, arwen);
+        scn.MoveCompanionToTable("legolas", "gimli", "boromir", "sam", "merry", "pippin");
+        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCardsToHand(gandalf, arwen);
 
         scn.HinderCard(aragorn);
 
@@ -1115,7 +1115,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionStillCountsTowardsUniqueness() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("httwc", "3_38");
@@ -1125,8 +1125,8 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var httwc = scn.GetFreepsCard("httwc");
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(httwc);
+        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCardsToHand(httwc);
 
         scn.HinderCard(aragorn);
 
@@ -1139,7 +1139,7 @@ public class HinderTests
     @Test
     public void HinderedCompanionStillCountsTowardsThreatLimit() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("deadman", "10_27");
@@ -1149,8 +1149,8 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var deadman = scn.GetFreepsCard("deadman");
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(deadman);
+        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCardsToHand(deadman);
 
         scn.AddThreats(1);
 
@@ -1177,7 +1177,7 @@ public class HinderTests
     @Test
     public void HinderedItemsStillEnforceItemClass() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("anduril", "7_79");
@@ -1189,9 +1189,9 @@ public class HinderTests
         var aragorn = scn.GetFreepsCard("aragorn");
         var anduril = scn.GetFreepsCard("anduril");
         var sword = scn.GetFreepsCard("sword");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
         scn.AttachCardsTo(aragorn, anduril);
-        scn.FreepsMoveCardToHand(sword);
+        scn.MoveCardsToHand(sword);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -1217,7 +1217,7 @@ public class HinderTests
     @Test
     public void HinderedItemsDoNotGrantPassiveStatBonuses() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "7_81");
                     put("anduril", "7_79");
@@ -1229,7 +1229,7 @@ public class HinderTests
         var aragorn = scn.GetFreepsCard("aragorn");
         var anduril = scn.GetFreepsCard("anduril");
         var steed = scn.GetFreepsCard("steed");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionToTable(aragorn);
         scn.AttachCardsTo(aragorn, anduril, steed);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -1263,7 +1263,7 @@ public class HinderTests
     @Test
     public void ItemsCannotBePlayedOntoHinderedCompanions() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("anduril", "7_79");
@@ -1273,8 +1273,8 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var anduril = scn.GetFreepsCard("anduril");
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(anduril);
+        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCardsToHand(anduril);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -1297,7 +1297,7 @@ public class HinderTests
     @Test
     public void ItemsCannotBeTransferredToHinderedCompanions() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        var scn = new GenericCardTestHelper(
+        var scn = new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("anduril", "7_79");
@@ -1310,7 +1310,7 @@ public class HinderTests
         var anduril = scn.GetFreepsCard("anduril");
         var arwen = scn.GetFreepsCard("arwen");
         //Cheating and putting it on arwen for the transfer effect
-        scn.FreepsMoveCharToTable(arwen, aragorn);
+        scn.MoveCompanionToTable(arwen, aragorn);
         scn.AttachCardsTo(arwen, anduril);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {

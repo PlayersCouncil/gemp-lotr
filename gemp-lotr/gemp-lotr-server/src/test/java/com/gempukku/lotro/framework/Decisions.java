@@ -93,20 +93,18 @@ public interface Decisions extends TestBase  {
 
 	/**
 	 * Causes the Free Peoples player to pass the current decision.
-	 * @throws DecisionResultInvalidException This operation will fail if the current decision is not passable.
 	 */
 	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
-	default void FreepsPass() throws DecisionResultInvalidException {
+	default void FreepsPass() {
 		if(FreepsAnyDecisionsAvailable()) {
 			PlayerDecided(P1, "");
 		}
 	}
 	/**
 	 * Causes the Shadow player to pass the current decision.
-	 * @throws DecisionResultInvalidException This operation will fail if the current decision is not passable.
 	 */
 	// If this seems out of place organization-wise, it's because of the chain of inheritance between the various test interfaces.
-	default void ShadowPass() throws DecisionResultInvalidException {
+	default void ShadowPass() {
 		if(ShadowAnyDecisionsAvailable()) {
 			PlayerDecided(P2, "");
 		}
@@ -116,46 +114,42 @@ public interface Decisions extends TestBase  {
 	 * Causes Free Peoples to decide to use the given answer.  Integers usually indicate an index between multiple choices,
 	 * but they may be literal integers if the player is asked to choose a number.
 	 * @param answer The integer answer to return to the server
-	 * @throws DecisionResultInvalidException This operation will fail if the answer is incompatible with the current
 	 * decision.
 	 */
-	default void FreepsDecided(int answer) throws DecisionResultInvalidException { PlayerDecided(P1, String.valueOf(answer));}
+	default void FreepsDecided(int answer) { PlayerDecided(P1, String.valueOf(answer));}
 
 	/**
 	 * Causes Free Peoples to decide to use the given answer.  Answers may take different forms depending on the exact
 	 * nature of the decision at hand.
 	 * @param answer The answer to return to the server
-	 * @throws DecisionResultInvalidException This operation will fail if the answer is incompatible with the current
 	 * decision.
 	 */
-	default void FreepsDecided(String answer) throws DecisionResultInvalidException { PlayerDecided(P1, answer);}
+	default void FreepsDecided(String answer) { PlayerDecided(P1, answer);}
 
 	/**
 	 * Causes Shadow to decide to use the given answer.  Integers usually indicate an index between multiple choices,
 	 * but they may be literal integers if the player is asked to choose a number.
 	 * @param answer The integer answer to return to the server
-	 * @throws DecisionResultInvalidException This operation will fail if the answer is incompatible with the current
 	 * decision.
 	 */
-	default void ShadowDecided(int answer) throws DecisionResultInvalidException { PlayerDecided(P2, String.valueOf(answer));}
+	default void ShadowDecided(int answer) { PlayerDecided(P2, String.valueOf(answer));}
 	/**
 	 * Causes Shadow to decide to use the given answer.  Answers may take different forms depending on the exact
 	 * nature of the decision at hand.
 	 * @param answer The answer to return to the server
-	 * @throws DecisionResultInvalidException This operation will fail if the answer is incompatible with the current
 	 * decision.
 	 */
-	default void ShadowDecided(String answer) throws DecisionResultInvalidException { PlayerDecided(P2, answer);}
+	default void ShadowDecided(String answer) { PlayerDecided(P2, answer);}
 
 	// As this is actually related to the heart of the table simulation, this is left to be implemented on the main Scenario class.
-	void PlayerDecided(String player, String answer) throws DecisionResultInvalidException;
+	void PlayerDecided(String player, String answer);
 
 	default boolean FreepsHasOptionalTriggerAvailable() { return FreepsDecisionAvailable("Optional"); }
 	default boolean ShadowHasOptionalTriggerAvailable() { return ShadowDecisionAvailable("Optional"); }
 
-	default void FreepsAcceptOptionalTrigger() throws DecisionResultInvalidException { PlayerDecided(P1, "0"); }
-	default void FreepsDeclineOptionalTrigger() throws DecisionResultInvalidException { PlayerDecided(P1, ""); }
-	default void ShadowAcceptOptionalTrigger() throws DecisionResultInvalidException { PlayerDecided(P2, "0"); }
-	default void ShadowDeclineOptionalTrigger() throws DecisionResultInvalidException { PlayerDecided(P2, ""); }
+	default void FreepsAcceptOptionalTrigger() { PlayerDecided(P1, "0"); }
+	default void FreepsDeclineOptionalTrigger() { PlayerDecided(P1, ""); }
+	default void ShadowAcceptOptionalTrigger() { PlayerDecided(P2, "0"); }
+	default void ShadowDeclineOptionalTrigger() { PlayerDecided(P2, ""); }
 
 }

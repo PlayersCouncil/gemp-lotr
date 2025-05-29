@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set08;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_08_003_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("brc", "58_3");
@@ -29,9 +29,9 @@ public class Card_08_003_ErrataTests
 					put("grond", "8_103");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -60,7 +60,7 @@ public class Card_08_003_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -72,17 +72,17 @@ public class Card_08_003_ErrataTests
 		var brc = scn.GetFreepsCard("brc");
 		var gimli = scn.GetFreepsCard("gimli");
 		var ring = scn.GetFreepsCard("ring");
-		scn.FreepsMoveCardToHand(brc);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToHand(brc);
+		scn.MoveCompanionToTable(gimli);
 		scn.AttachCardsTo(gimli, ring);
-		scn.FreepsMoveCharToTable("guard1", "guard2");
+		scn.MoveCompanionToTable("guard1", "guard2");
 
 		var runner = scn.GetShadowCard("runner");
 		var troll = scn.GetShadowCard("troll");
 		var swarms = scn.GetShadowCard("swarms");
 		var grond = scn.GetShadowCard("grond");
-		scn.ShadowMoveCharToTable(runner, troll);
-		scn.ShadowMoveCardToSupportArea(swarms, grond);
+		scn.MoveMinionsToTable(runner, troll);
+		scn.MoveCardsToSupportArea(swarms, grond);
 
 		scn.StartGame();
 

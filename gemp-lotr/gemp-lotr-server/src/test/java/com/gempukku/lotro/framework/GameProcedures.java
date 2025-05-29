@@ -18,20 +18,20 @@ import org.junit.Assert;
  */
 public interface GameProcedures extends Actions, GameProperties, PileProperties {
 
-	default void SkipToArcheryWounds() throws DecisionResultInvalidException {
+	default void SkipToArcheryWounds() {
 		SkipToPhase(Phase.ARCHERY);
 		PassCurrentPhaseActions();
 	}
 
 
-	default void SkipToAssignments() throws DecisionResultInvalidException {
+	default void SkipToAssignments() {
 		SkipToPhase(Phase.ASSIGNMENT);
 		PassCurrentPhaseActions();
 	}
 
-	default void FreepsResolveSkirmish(PhysicalCardImpl comp) throws DecisionResultInvalidException { FreepsChooseCard(comp); }
+	default void FreepsResolveSkirmish(PhysicalCardImpl comp) { FreepsChooseCard(comp); }
 
-	default void SkipToMovementDecision() throws DecisionResultInvalidException {
+	default void SkipToMovementDecision() {
 		SkipToPhase(Phase.REGROUP);
 		PassCurrentPhaseActions();
 		if(ShadowDecisionAvailable("reconcile")) {
@@ -45,70 +45,62 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 
 	/**
 	 * Causes both players to pass during the Maneuver phase.
-	 * @throws DecisionResultInvalidException
 	 */
-	default void PassManeuverActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+	default void PassManeuverActions() { PassCurrentPhaseActions(); }
 	/**
 	 * Causes both players to pass during the Archery phase.
-	 * @throws DecisionResultInvalidException
 	 */
-	default void PassArcheryActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+	default void PassArcheryActions() { PassCurrentPhaseActions(); }
 	/**
 	 * Causes both players to pass during the Assignment phase.
-	 * @throws DecisionResultInvalidException
 	 */
-	default void PassAssignmentActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+	default void PassAssignmentActions() { PassCurrentPhaseActions(); }
 	/**
 	 * Causes both players to pass during the Fierce Assignment phase.
-	 * @throws DecisionResultInvalidException
 	 */
-	default void PassFierceAssignmentActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+	default void PassFierceAssignmentActions() { PassCurrentPhaseActions(); }
 	/**
 	 * Causes both players to pass during a Skirmish phase.
-	 * @throws DecisionResultInvalidException
 	 */
-	default void PassSkirmishActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+	default void PassSkirmishActions() { PassCurrentPhaseActions(); }
 	/**
 	 * Causes both players to pass during a fierce Skirmish phase.
-	 * @throws DecisionResultInvalidException
 	 */
-	default void PassFierceSkirmishActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+	default void PassFierceSkirmishActions() { PassCurrentPhaseActions(); }
 	/**
 	 * Causes both players to pass during the Regroup phase.
-	 * @throws DecisionResultInvalidException
 	 */
-	default void PassRegroupActions() throws DecisionResultInvalidException { PassCurrentPhaseActions(); }
+	default void PassRegroupActions() { PassCurrentPhaseActions(); }
 
 
-	default void FreepsChooseToMove() throws DecisionResultInvalidException { PlayerDecided(P1, "0"); }
-	default void FreepsChooseToStay() throws DecisionResultInvalidException { PlayerDecided(P1, "1"); }
+	default void FreepsChooseToMove() { PlayerDecided(P1, "0"); }
+	default void FreepsChooseToStay() { PlayerDecided(P1, "1"); }
 
 	//These two are only used in situations where the play is inverted, such as when skipping to a site.
-	default void ShadowChooseToMove() throws DecisionResultInvalidException { PlayerDecided(P2, "0"); }
-	default void ShadowChooseToStay() throws DecisionResultInvalidException { PlayerDecided(P2, "1"); }
+	default void ShadowChooseToMove() { PlayerDecided(P2, "0"); }
+	default void ShadowChooseToStay() { PlayerDecided(P2, "1"); }
 
-	default void FreepsDeclineReconciliation() throws DecisionResultInvalidException { FreepsPassCurrentPhaseAction(); }
-	default void ShadowDeclineReconciliation() throws DecisionResultInvalidException { ShadowPassCurrentPhaseAction(); }
+	default void FreepsDeclineReconciliation() { FreepsPassCurrentPhaseAction(); }
+	default void ShadowDeclineReconciliation() { ShadowPassCurrentPhaseAction(); }
 
 
 
 	/**
 	 * Causes both players to pass, first by making the current player pass and then their opponent. Both will check
 	 * to ensure that they have a currently available decision to be passing first.
-	 * @throws DecisionResultInvalidException
 	 */
-	default void PassCurrentPhaseActions() throws DecisionResultInvalidException {
+	default void PassCurrentPhaseActions() {
 		FreepsPassCurrentPhaseAction();
 		ShadowPassCurrentPhaseAction();
 	}
 
-	default void FreepsPassCurrentPhaseAction() throws DecisionResultInvalidException {
+	default void FreepsPassCurrentPhaseAction() {
 		if(userFeedback().getAwaitingDecision(P1) != null) {
 			PlayerDecided(P1, "");
 		}
 	}
 
-	default void ShadowPassCurrentPhaseAction() throws DecisionResultInvalidException {
+	default void ShadowPassCurrentPhaseAction() {
 		if(userFeedback().getAwaitingDecision(P2) != null) {
 			PlayerDecided(P2, "");
 		}
@@ -117,9 +109,8 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	/**
 	 * Causes both players to pass any decisions that contain the provided text.
 	 * @param text
-	 * @throws DecisionResultInvalidException
 	 */
-	default void BothPass(String text) throws DecisionResultInvalidException {
+	default void BothPass(String text) {
 		var currentPlayer = GetCurrentPlayer();
 		var offPlayer = GetOffPlayer();
 		if(DecisionAvailable(currentPlayer, text)) {
@@ -134,9 +125,8 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	/**
 	 * Causes both players to pass, but makes the opponent pass before the current player. Both will check
 	 * to ensure that they have a currently available decision to be passing first.
-	 * @throws DecisionResultInvalidException
 	 */
-	default void BothPassInverted() throws DecisionResultInvalidException {
+	default void BothPassInverted() {
 		var currentPlayer = GetCurrentPlayer();
 		var offPlayer = GetOffPlayer();
 
@@ -153,9 +143,8 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	 * Causes both players to pass any decisions that contain the provided text.  First the off-player will pass, and
 	 * then the current player.
 	 * @param text
-	 * @throws DecisionResultInvalidException
 	 */
-	default void BothPassInverted(String text) throws DecisionResultInvalidException {
+	default void BothPassInverted(String text) {
 		var currentPlayer = GetCurrentPlayer();
 		var offPlayer = GetOffPlayer();
 
@@ -175,9 +164,8 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	 * first option of any required triggers, but may be brittle if there are any reacts that interrupt the pass-fest.
 	 * Only 20 rounds of passing will be attempted to avoid infinite loops.
 	 * @param target The phase the tester actually wants to be in
-	 * @throws DecisionResultInvalidException
 	 */
-    default void SkipToPhase(Phase target) throws DecisionResultInvalidException {
+    default void SkipToPhase(Phase target) {
 		for(int attempts = 1; attempts <= 20; attempts++)
 		{
 			Phase current = gameState().getCurrentPhase();
@@ -209,12 +197,12 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 
 			if(attempts == 20)
 			{
-				throw new DecisionResultInvalidException("Could not arrive at target '" + target + "' after 20 attempts!");
+				throw new RuntimeException("Could not arrive at target '" + target + "' after 20 attempts!");
 			}
 		}
     }
 
-	default void SkipToPhaseInverted(Phase target) throws DecisionResultInvalidException {
+	default void SkipToPhaseInverted(Phase target) {
 		for(int attempts = 1; attempts <= 20; attempts++)
 		{
 			Phase current = gameState().getCurrentPhase();
@@ -233,19 +221,19 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 
 			if(attempts == 20)
 			{
-				throw new DecisionResultInvalidException("Could not arrive at target '" + target + "' after 20 attempts!");
+				throw new RuntimeException("Could not arrive at target '" + target + "' after 20 attempts!");
 			}
 		}
 	}
 
-	default void SkipToSite(int siteNum) throws DecisionResultInvalidException {
+	default void SkipToSite(int siteNum) {
 		for(int i = GetCurrentSite().getSiteNumber(); i < siteNum; i = GetCurrentSite().getSiteNumber())
 		{
 			SkipCurrentSite();
 		}
 	}
 
-	default void SkipCurrentSite() throws DecisionResultInvalidException {
+	default void SkipCurrentSite() {
 		SkipToPhase(Phase.REGROUP);
 		PhysicalCardImpl site = GetCurrentSite();
 		if(site.getSiteNumber() == 9)
@@ -304,9 +292,9 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 
 
 
-	default void FreepsDismissRevealedCards() throws DecisionResultInvalidException { FreepsPassCurrentPhaseAction(); }
-	default void ShadowDismissRevealedCards() throws DecisionResultInvalidException { ShadowPassCurrentPhaseAction(); }
-	default void DismissRevealedCards() throws DecisionResultInvalidException {
+	default void FreepsDismissRevealedCards() { FreepsPassCurrentPhaseAction(); }
+	default void ShadowDismissRevealedCards() { ShadowPassCurrentPhaseAction(); }
+	default void DismissRevealedCards() {
 		FreepsDismissRevealedCards();
 		ShadowDismissRevealedCards();
 	}

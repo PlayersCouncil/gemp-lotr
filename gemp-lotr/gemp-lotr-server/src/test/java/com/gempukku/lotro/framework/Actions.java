@@ -3,7 +3,6 @@ package com.gempukku.lotro.framework;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
-import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -99,35 +98,32 @@ public interface Actions extends Decisions, Choices {
 	}
 
 
-	default void FreepsUseCardAction(PhysicalCardImpl card) throws DecisionResultInvalidException { FreepsDecided(GetCardActionId(P1, card)); }
-	default void ShadowUseCardAction(PhysicalCardImpl card) throws DecisionResultInvalidException { ShadowDecided(GetCardActionId(P2, card)); }
+	default void FreepsUseCardAction(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1, card)); }
+	default void ShadowUseCardAction(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2, card)); }
 
-	default void FreepsTransferCard(PhysicalCardImpl card) throws DecisionResultInvalidException { FreepsDecided(GetCardActionId(P1, card, "Transfer")); }
-	default void ShadowTransferCard(PhysicalCardImpl card) throws DecisionResultInvalidException { ShadowDecided(GetCardActionId(P2, card, "Transfer ")); }
+	default void FreepsTransferCard(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1, card, "Transfer")); }
+	default void ShadowTransferCard(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2, card, "Transfer ")); }
 
 	/**
 	 * Causes the Free Peoples player to play that card from hand as if they had clicked it in the UI.
 	 * @param card The card to play.
-	 * @throws DecisionResultInvalidException This error will be thrown if the card is not in hand or is otherwise not
 	 * legal to play (due to costs, requirements, or other rules).
 	 */
-	default void FreepsPlayCard(PhysicalCardImpl card) throws DecisionResultInvalidException { FreepsDecided(GetCardActionId(P1, card, "Play")); }
+	default void FreepsPlayCard(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1, card, "Play")); }
 	/**
 	 * Causes the Shadow player to play that card from hand as if they had clicked it in the UI.
 	 * @param card The card to play.
-	 * @throws DecisionResultInvalidException This error will be thrown if the card is not in hand or is otherwise not
 	 * legal to play (due to costs, requirements, or other rules).
 	 */
-	default void ShadowPlayCard(PhysicalCardImpl card) throws DecisionResultInvalidException { ShadowDecided(GetCardActionId(P2, card, "Play")); }
+	default void ShadowPlayCard(PhysicalCardImpl card) { ShadowDecided(GetCardActionId(P2, card, "Play")); }
 
 	/**
 	 * Causes the Free Peoples player to select a unique character in hand, which will then be discarded to heal a
 	 * copy of that character in play.
 	 * @param card The card to discard from hand.
-	 * @throws DecisionResultInvalidException This error will be thrown if the card is not in hand or is otherwise not
 	 * legal to use (due to costs, requirements, or other rules).
 	 */
-	default void FreepsDiscardToHeal(PhysicalCardImpl card) throws DecisionResultInvalidException { FreepsDecided(GetCardActionId(P1, card, "Heal by discard")); }
+	default void FreepsDiscardToHeal(PhysicalCardImpl card) { FreepsDecided(GetCardActionId(P1, card, "Heal by discard")); }
 	/**
 	 * Searches the currently available actions on the current decision for the given player and returns the ID of an
 	 * action which contains the provided text in its description.

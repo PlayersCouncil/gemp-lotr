@@ -126,7 +126,7 @@ public class Card_02_075_ErrataTests
         try {
             scn.FreepsAssignToMinions(gimli, ferny);
         }
-        catch (DecisionResultInvalidException ex) {
+        catch (RuntimeException ex) {
             exc = true;
         }
         assertTrue(exc); // If an exception wasn't thrown, then freeps assigning was permitted even with a hobbit
@@ -144,7 +144,7 @@ public class Card_02_075_ErrataTests
         try {
             scn.FreepsAssignToMinions(gimli, ferny);
         }
-        catch (DecisionResultInvalidException ex) {
+        catch (RuntimeException ex) {
             exc2 = true;
         }
         assertFalse(exc2); // If an exception wasn't thrown, then freeps assigning was permitted with no hobbit to spot

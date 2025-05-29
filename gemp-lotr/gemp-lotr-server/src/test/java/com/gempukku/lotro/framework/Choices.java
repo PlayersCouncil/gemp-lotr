@@ -2,7 +2,6 @@ package com.gempukku.lotro.framework;
 
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
-import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,8 +15,8 @@ import java.util.Map;
  */
 public interface Choices extends Decisions {
 
-	default void FreepsDeclineChoosing() throws DecisionResultInvalidException { PlayerDecided(P1, ""); }
-	default void ShadowDeclineChoosing() throws DecisionResultInvalidException { PlayerDecided(P2, ""); }
+	default void FreepsDeclineChoosing() { PlayerDecided(P1, ""); }
+	default void ShadowDeclineChoosing() { PlayerDecided(P2, ""); }
 
 	/**
 	 * Determines whether the Free Peoples player has any choices on the current decision whose description matches the
@@ -53,9 +52,8 @@ public interface Choices extends Decisions {
 	 * This is a catch-all that either selects the provided choice if part of a multiple choice decision, or else
 	 * falls back on providing the provided choice as a top-level response to the current decision.
 	 * @param choice The choice (or decision response)
-	 * @throws DecisionResultInvalidException This error will be thrown if the response is invalid for the current decision.
 	 */
-	default void FreepsChoose(String choice) throws DecisionResultInvalidException {
+	default void FreepsChoose(String choice) {
 		if(FreepsGetChoiceCount() > 0) {
 			FreepsChooseOption(choice);
 		}
@@ -67,9 +65,8 @@ public interface Choices extends Decisions {
 	 * Causes the Free Peoples player to choose the given options.  This will automatically format the response to contain
 	 * all the provided options in a comma-separated list.
 	 * @param choices The choices the player wishes to make.
-	 * @throws DecisionResultInvalidException This error will be thrown if the response is invalid for the current decision.
 	 */
-	default void FreepsChoose(String...choices) throws DecisionResultInvalidException { PlayerDecided(
+	default void FreepsChoose(String...choices) { PlayerDecided(
 			P1, String.join(",", choices)); }
 
 	/**
@@ -77,9 +74,8 @@ public interface Choices extends Decisions {
 	 * This is a catch-all that either selects the provided choice if part of a multiple choice decision, or else
 	 * falls back on providing the provided choice as a top-level response to the current decision.
 	 * @param choice The choice (or decision response)
-	 * @throws DecisionResultInvalidException This error will be thrown if the response is invalid for the current decision.
 	 */
-	default void ShadowChoose(String choice) throws DecisionResultInvalidException {
+	default void ShadowChoose(String choice) {
 		if(ShadowGetChoiceCount() > 0) {
 			ShadowChooseOption(choice);
 		}
@@ -91,9 +87,8 @@ public interface Choices extends Decisions {
 	 * Causes the Shadow player to choose the given options.  This will automatically format the response to contain
 	 * all the provided options in a comma-separated list.
 	 * @param choices The choices the player wishes to make.
-	 * @throws DecisionResultInvalidException This error will be thrown if the response is invalid for the current decision.
 	 */
-	default void ShadowChoose(String...choices) throws DecisionResultInvalidException { PlayerDecided(
+	default void ShadowChoose(String...choices) { PlayerDecided(
 			P2, String.join(",", choices)); }
 
 
@@ -101,36 +96,32 @@ public interface Choices extends Decisions {
 
 	/**
 	 * Causes the Free Peoples player to return a canned "Yes" response to a Yes or No question.
-	 * @throws DecisionResultInvalidException This error will be thrown if the response is invalid for the current decision.
 	 */
-	default void FreepsChooseYes() throws DecisionResultInvalidException { ChooseOption(P1, "Yes"); }
+	default void FreepsChooseYes() { ChooseOption(P1, "Yes"); }
 	/**
 	 * Causes the Shadow player to return a canned "Yes" response to a Yes or No question.
-	 * @throws DecisionResultInvalidException This error will be thrown if the response is invalid for the current decision.
 	 */
-	default void ShadowChooseYes() throws DecisionResultInvalidException { ChooseOption(P2, "Yes"); }
+	default void ShadowChooseYes() { ChooseOption(P2, "Yes"); }
 	/**
 	 * Causes the Free Peoples player to return a canned "No" response to a Yes or No question.
-	 * @throws DecisionResultInvalidException This error will be thrown if the response is invalid for the current decision.
 	 */
-	default void FreepsChooseNo() throws DecisionResultInvalidException { ChooseOption(P1, "No"); }
+	default void FreepsChooseNo() { ChooseOption(P1, "No"); }
 	/**
 	 * Causes the Shadow player to return a canned "No" response to a Yes or No question.
-	 * @throws DecisionResultInvalidException This error will be thrown if the response is invalid for the current decision.
 	 */
-	default void ShadowChooseNo() throws DecisionResultInvalidException { ChooseOption(P2, "No"); }
+	default void ShadowChooseNo() { ChooseOption(P2, "No"); }
 
-	default void FreepsChooseOption(String option) throws DecisionResultInvalidException { ChooseOption(P1, option); }
-	default void ShadowChooseOption(String option) throws DecisionResultInvalidException { ChooseOption(P2, option); }
-	default void ChooseOption(String playerID, String option) throws DecisionResultInvalidException {
+	default void FreepsChooseOption(String option) { ChooseOption(P1, option); }
+	default void ShadowChooseOption(String option) { ChooseOption(P2, option); }
+	default void ChooseOption(String playerID, String option) {
 		ChooseAction(playerID, "results", option);
 	}
 
-	default void FreepsChooseAction(String paramName, String option) throws DecisionResultInvalidException { ChooseAction(P1, paramName, option); }
-	default void FreepsChooseAction(String option) throws DecisionResultInvalidException { ChooseAction(P1, "actionText", option); }
-	default void ShadowChooseAction(String paramName, String option) throws DecisionResultInvalidException { ChooseAction(P2, paramName, option); }
-	default void ShadowChooseAction(String option) throws DecisionResultInvalidException { ChooseAction(P2, "actionText", option); }
-	default void ChooseAction(String playerID, String paramName, String option) throws DecisionResultInvalidException {
+	default void FreepsChooseAction(String paramName, String option) { ChooseAction(P1, paramName, option); }
+	default void FreepsChooseAction(String option) { ChooseAction(P1, "actionText", option); }
+	default void ShadowChooseAction(String paramName, String option) { ChooseAction(P2, paramName, option); }
+	default void ShadowChooseAction(String option) { ChooseAction(P2, "actionText", option); }
+	default void ChooseAction(String playerID, String paramName, String option) {
 		List<String> choices = GetADParamAsList(playerID, paramName);
 		for(String choice : choices){
 			if(option == null && choice == null // This only happens when a rule is the source of an action
@@ -143,7 +134,7 @@ public interface Choices extends Decisions {
 		PlayerDecided(playerID, option);
 	}
 
-	default void FreepsChooseAny() throws DecisionResultInvalidException {
+	default void FreepsChooseAny() {
 		if (GetChoiceCount(FreepsGetActionChoices()) > 0){
 			ChooseAction(P1, "actionId", FreepsGetActionChoices().getFirst());
 		}
@@ -155,10 +146,10 @@ public interface Choices extends Decisions {
 		}
 	}
 
-    default void FreepsResolveRuleFirst() throws DecisionResultInvalidException {
+    default void FreepsResolveRuleFirst() {
 		FreepsResolveActionOrder(GetADParamAsList(P1, "actionText").getFirst());
 	}
-    default void FreepsResolveActionOrder(String option) throws DecisionResultInvalidException {
+    default void FreepsResolveActionOrder(String option) {
 		ChooseAction(P1, "actionText", option);
 	}
 
@@ -253,11 +244,11 @@ public interface Choices extends Decisions {
 
 
 
-	default void FreepsChooseAnyCard() throws DecisionResultInvalidException { FreepsChoose(FreepsGetCardChoices().getFirst()); }
-	default void ShadowChooseAnyCard() throws DecisionResultInvalidException { ShadowChoose(ShadowGetCardChoices().getFirst()); }
+	default void FreepsChooseAnyCard() { FreepsChoose(FreepsGetCardChoices().getFirst()); }
+	default void ShadowChooseAnyCard() { ShadowChoose(ShadowGetCardChoices().getFirst()); }
 
-	default void FreepsChooseCard(PhysicalCardImpl card) throws DecisionResultInvalidException { FreepsChooseCards(card); }
-	default void FreepsChooseCards(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default void FreepsChooseCard(PhysicalCardImpl card) { FreepsChooseCards(card); }
+	default void FreepsChooseCards(PhysicalCardImpl...cards) {
 		if(GetChoiceCount(FreepsGetBPChoices()) > 0) {
 			ChooseCardBPFromSelection(P1, cards);
 		}
@@ -265,8 +256,8 @@ public interface Choices extends Decisions {
 			ChooseCards(P1, cards);
 		}
 	}
-	default void ShadowChooseCard(PhysicalCardImpl card) throws DecisionResultInvalidException { ShadowChooseCards(card); }
-	default void ShadowChooseCards(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default void ShadowChooseCard(PhysicalCardImpl card) { ShadowChooseCards(card); }
+	default void ShadowChooseCards(PhysicalCardImpl...cards) {
 		if(GetChoiceCount(ShadowGetBPChoices()) > 0) {
 			ChooseCardBPFromSelection(P2, cards);
 		}
@@ -274,7 +265,7 @@ public interface Choices extends Decisions {
 			ChooseCards(P2, cards);
 		}
 	}
-	default void ChooseCards(String player, PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default void ChooseCards(String player, PhysicalCardImpl...cards) {
 		String[] ids = new String[cards.length];
 
 		for(int i = 0; i < cards.length; i++)
@@ -292,10 +283,10 @@ public interface Choices extends Decisions {
 	default int FreepsGetCardChoiceCount() { return FreepsGetCardChoices().size(); }
 	default int ShadowGetCardChoiceCount() { return ShadowGetCardChoices().size(); }
 
-	default void FreepsChooseCardBPFromSelection(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default void FreepsChooseCardBPFromSelection(PhysicalCardImpl...cards) {
 		ChooseCardBPFromSelection(P1, cards);
 	}
-	default void ShadowChooseCardBPFromSelection(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default void ShadowChooseCardBPFromSelection(PhysicalCardImpl...cards) {
 		ChooseCardBPFromSelection(P2, cards);
 	}
 
@@ -306,10 +297,9 @@ public interface Choices extends Decisions {
 	 * as when choosing active cards to target for a card effect).
 	 * @param player The player to issue a decision for.
 	 * @param cards The cards to include in the decision response.
-	 * @throws DecisionResultInvalidException This error will be thrown if the current decision does not accept blueprint
 	 * IDs.
 	 */
-	default void ChooseCardBPFromSelection(String player, PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default void ChooseCardBPFromSelection(String player, PhysicalCardImpl...cards) {
 		String[] choices = GetAwaitingDecisionParam(player,"blueprintId");
 		ArrayList<String> bps = new ArrayList<>();
 		ArrayList<PhysicalCardImpl> found = new ArrayList<>();
@@ -343,10 +333,9 @@ public interface Choices extends Decisions {
 	 * as when choosing active cards to target for a card effect).
 	 * @param player The player to issue a decision for.
 	 * @param bpids The card blueprint IDs to include in the decision response.
-	 * @throws DecisionResultInvalidException This error will be thrown if the current decision does not accept blueprint
 	 * IDs.
 	 */
-	default void ChooseCardBPFromSelection(String player, String...bpids) throws DecisionResultInvalidException {
+	default void ChooseCardBPFromSelection(String player, String...bpids) {
 		String[] choices = GetAwaitingDecisionParam(player,"blueprintId");
 		ArrayList<String> bps = new ArrayList<>();
 		ArrayList<String> found = new ArrayList<>();
@@ -370,21 +359,21 @@ public interface Choices extends Decisions {
 		PlayerDecided(player, String.join(",", bps));
 	}
 
-	default boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card) throws DecisionResultInvalidException {
+	default boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card) {
 		return HasCardChoiceAvailable(P1, card);
 	}
-	default boolean ShadowHasCardChoiceAvailable(PhysicalCardImpl card) throws DecisionResultInvalidException {
+	default boolean ShadowHasCardChoiceAvailable(PhysicalCardImpl card) {
 		return HasCardChoiceAvailable(P2, card);
 	}
 
-	default boolean FreepsHasCardChoicesAvailable(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default boolean FreepsHasCardChoicesAvailable(PhysicalCardImpl...cards) {
 		for(var card : cards) {
 			if(!HasCardChoiceAvailable(P1, card))
 				return false;
 		}
 		return true;
 	}
-	default boolean ShadowHasCardChoicesAvailable(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default boolean ShadowHasCardChoicesAvailable(PhysicalCardImpl...cards) {
 		for(var card : cards) {
 			if(!HasCardChoiceAvailable(P2, card))
 				return false;
@@ -392,21 +381,21 @@ public interface Choices extends Decisions {
 		return true;
 	}
 
-	default boolean FreepsHasCardChoiceNotAvailable(PhysicalCardImpl card) throws DecisionResultInvalidException {
+	default boolean FreepsHasCardChoiceNotAvailable(PhysicalCardImpl card) {
 		return !HasCardChoiceAvailable(P1, card);
 	}
-	default boolean ShadowHasCardChoicenotAvailable(PhysicalCardImpl card) throws DecisionResultInvalidException {
+	default boolean ShadowHasCardChoicenotAvailable(PhysicalCardImpl card) {
 		return !HasCardChoiceAvailable(P2, card);
 	}
 
-	default boolean FreepsHasCardChoicesNotAvailable(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default boolean FreepsHasCardChoicesNotAvailable(PhysicalCardImpl...cards) {
 		for(var card : cards) {
 			if(HasCardChoiceAvailable(P1, card))
 				return false;
 		}
 		return true;
 	}
-	default boolean ShadowHasCardChoicesNotAvailable(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default boolean ShadowHasCardChoicesNotAvailable(PhysicalCardImpl...cards) {
 		for(var card : cards) {
 			if(HasCardChoiceAvailable(P2, card))
 				return false;
@@ -414,7 +403,8 @@ public interface Choices extends Decisions {
 		return true;
 	}
 
-	default boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card) throws DecisionResultInvalidException {
+	default boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card) {
+
 		String[] choices = GetAwaitingDecisionParam(player,"blueprintId");
 		if(choices != null) {
 			for (String choice : choices) {
@@ -443,9 +433,8 @@ public interface Choices extends Decisions {
 	 * succeed if being used to target currently live cards; it will not work if being presented with a choice of
 	 * out-of-play cards (such as when choosing from the reserve deck).
 	 * @param cards The cards to include in the decision response.
-	 * @throws DecisionResultInvalidException This error will be thrown if the current decision does not accept card IDs.
 	 */
-	default void FreepsChooseCardIDFromSelection(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default void FreepsChooseCardIDFromSelection(PhysicalCardImpl...cards) {
 		ChooseCardIDFromSelection(P1, cards);
 	}
 	/**
@@ -454,9 +443,8 @@ public interface Choices extends Decisions {
 	 * succeed if being used to target currently live cards; it will not work if being presented with a choice of
 	 * out-of-play cards (such as when choosing from the reserve deck).
 	 * @param cards The cards to include in the decision response.
-	 * @throws DecisionResultInvalidException This error will be thrown if the current decision does not accept card IDs.
 	 */
-	default void ShadowChooseCardIDFromSelection(PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default void ShadowChooseCardIDFromSelection(PhysicalCardImpl...cards) {
 		ChooseCardIDFromSelection(P2, cards);
 	}
 
@@ -466,9 +454,8 @@ public interface Choices extends Decisions {
 	 * choice of out-of-play cards (such as when choosing from the reserve deck).
 	 * @param player The player to issue a decision for.
 	 * @param cards The cards to include in the decision response.
-	 * @throws DecisionResultInvalidException This error will be thrown if the current decision does not accept card IDs.
 	 */
-	default void ChooseCardIDFromSelection(String player, PhysicalCardImpl...cards) throws DecisionResultInvalidException {
+	default void ChooseCardIDFromSelection(String player, PhysicalCardImpl...cards) {
 		AwaitingDecision decision = userFeedback().getAwaitingDecision(player);
 		//PlayerDecided(player, "" + card.getCardId());
 

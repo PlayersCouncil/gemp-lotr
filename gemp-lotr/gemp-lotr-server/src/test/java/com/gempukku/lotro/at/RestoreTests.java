@@ -1,6 +1,6 @@
 package com.gempukku.lotro.at;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.AbstractActionProxy;
@@ -22,7 +22,7 @@ public class RestoreTests {
 	@Test
 	public void RestoringACompanionInPlayFlipsItOver() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = new GenericCardTestHelper(
+		var scn = new VirtualTableScenario(
 				new HashMap<>() {{
 					put("aragorn", "1_89");
 				}}
@@ -30,7 +30,7 @@ public class RestoreTests {
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 		scn.HinderCard(aragorn);
 
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -54,7 +54,7 @@ public class RestoreTests {
 	@Test
 	public void RestoringACompanionInPlayRemovesTheHinderedStatus() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = new GenericCardTestHelper(
+		var scn = new VirtualTableScenario(
 				new HashMap<>() {{
 					put("aragorn", "1_89");
 				}}
@@ -62,7 +62,7 @@ public class RestoreTests {
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 		scn.HinderCard(aragorn);
 
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -89,7 +89,7 @@ public class RestoreTests {
 	@Test
 	public void OnlyPlayerReconcileRestoresPlayerHinderedCards() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = new GenericCardTestHelper(
+		var scn = new VirtualTableScenario(
 				new HashMap<>() {{
 					put("aragorn", "1_89");
 					put("fodder", "1_90");
@@ -98,7 +98,7 @@ public class RestoreTests {
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 		scn.HinderCard(aragorn);
 
 		//So that there's something to reconcile
@@ -126,7 +126,7 @@ public class RestoreTests {
 	@Test
 	public void ArtificialReconcileTriggersRestore() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		var scn = new GenericCardTestHelper(
+		var scn = new VirtualTableScenario(
 				new HashMap<>() {{
 					put("aragorn", "1_89");
 					put("fodder", "1_90");
@@ -137,7 +137,7 @@ public class RestoreTests {
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var lembas = scn.GetFreepsCard("lembas");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 		scn.HinderCard(aragorn);
 		scn.AttachCardsTo(frodo, lembas);
 

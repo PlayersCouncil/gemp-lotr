@@ -5,18 +5,17 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.game.state.Skirmish;
-import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 
 import java.util.List;
 
 public interface Skirmishes extends TestBase, Decisions, GameProcedures {
 
-	default void SkipToShadowAssignments() throws DecisionResultInvalidException {
+	default void SkipToShadowAssignments() {
 		SkipToAssignments();
 		FreepsDeclineAssignments();
 	}
 
-	default void SkipPastAllAssignments() throws DecisionResultInvalidException {
+	default void SkipPastAllAssignments() {
 		SkipToAssignments();
 		if(FreepsDecisionAvailable("Assign minions to companions or allies at home")) {
 			FreepsDeclineAssignments();
@@ -79,10 +78,10 @@ public interface Skirmishes extends TestBase, Decisions, GameProcedures {
 
 
 
-	default void FreepsDeclineAssignments() throws DecisionResultInvalidException { FreepsPassCurrentPhaseAction(); }
-	default void ShadowDeclineAssignments() throws DecisionResultInvalidException { ShadowPassCurrentPhaseAction(); }
+	default void FreepsDeclineAssignments() { FreepsPassCurrentPhaseAction(); }
+	default void ShadowDeclineAssignments() { ShadowPassCurrentPhaseAction(); }
 
-	default void FreepsAssignAndResolve(PhysicalCardImpl comp, PhysicalCardImpl...minions) throws DecisionResultInvalidException {
+	default void FreepsAssignAndResolve(PhysicalCardImpl comp, PhysicalCardImpl...minions) {
 		AssignToMinions(P1, comp, minions);
 
 		if(ShadowDecisionAvailable("Assign minions to companions or allies at home")) {
@@ -92,9 +91,9 @@ public interface Skirmishes extends TestBase, Decisions, GameProcedures {
 		FreepsResolveSkirmish(comp);
 	}
 
-	default void FreepsAssignToMinions(PhysicalCardImpl comp, PhysicalCardImpl...minions) throws DecisionResultInvalidException { AssignToMinions(P1, comp, minions); }
-	default void ShadowAssignToMinions(PhysicalCardImpl comp, PhysicalCardImpl...minions) throws DecisionResultInvalidException { AssignToMinions(P2, comp, minions); }
-	default void AssignToMinions(String player, PhysicalCardImpl comp, PhysicalCardImpl...minions) throws DecisionResultInvalidException {
+	default void FreepsAssignToMinions(PhysicalCardImpl comp, PhysicalCardImpl...minions) { AssignToMinions(P1, comp, minions); }
+	default void ShadowAssignToMinions(PhysicalCardImpl comp, PhysicalCardImpl...minions) { AssignToMinions(P2, comp, minions); }
+	default void AssignToMinions(String player, PhysicalCardImpl comp, PhysicalCardImpl...minions) {
 		String result = comp.getCardId() + "";
 
 		for (PhysicalCardImpl minion : minions) {
@@ -104,9 +103,9 @@ public interface Skirmishes extends TestBase, Decisions, GameProcedures {
 		PlayerDecided(player, result);
 	}
 
-	default void FreepsAssignToMinions(PhysicalCardImpl[]...groups) throws DecisionResultInvalidException { AssignToMinions(P1, groups); }
-	default void ShadowAssignToMinions(PhysicalCardImpl[]...groups) throws DecisionResultInvalidException { AssignToMinions(P2, groups); }
-	default void AssignToMinions(String player, PhysicalCardImpl[]...groups) throws DecisionResultInvalidException {
+	default void FreepsAssignToMinions(PhysicalCardImpl[]...groups) { AssignToMinions(P1, groups); }
+	default void ShadowAssignToMinions(PhysicalCardImpl[]...groups) { AssignToMinions(P2, groups); }
+	default void AssignToMinions(String player, PhysicalCardImpl[]...groups) {
 		String result = "";
 
 		for (PhysicalCardImpl[] group : groups) {
