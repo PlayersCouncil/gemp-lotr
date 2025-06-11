@@ -87,7 +87,8 @@ public interface Tournament {
     enum PrizeType {
         NONE,
         DAILY,
-        ON_DEMAND;
+        ON_DEMAND,
+        LIMITED;
 
         public static PrizeType parse(String name) {
             String nameCaps = name.toUpperCase().trim().replace(' ', '_').replace('-', '_');
@@ -109,6 +110,9 @@ public interface Tournament {
             case ON_DEMAND -> {
                 //Currently busted, reverting to Daily for now
                 return new DailyTournamentPrizes(prize.name(), productLibrary);
+            }
+            case LIMITED -> {
+                return new LimitedTournamentPrizes(prize.name(), productLibrary);
             }
         }
 

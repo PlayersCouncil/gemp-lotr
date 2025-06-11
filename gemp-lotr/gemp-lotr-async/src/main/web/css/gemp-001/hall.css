@@ -849,3 +849,31 @@ table.standings {
 #announcement-dialog ul {
 	margin-bottom: 5px;
 }
+
+#limitedGameForm {
+  display: grid;
+  margin-left: 20px;
+  padding-bottom: 20px;
+  gap: 8px;
+  max-width: 400px;
+}
+
+form#limitedGameForm select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+form#limitedGameForm input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#dynamicFields {
+  display: grid;
+  gap: 8px;
+}
+
+#advancedFields {
+  display: grid;
+  gap: 8px;
+}

@@ -404,6 +404,20 @@ public class TournamentService {
         return true;
     }
 
+    public boolean addPlayerMadeLimitedQueue(TournamentInfo info, Player player, boolean startableEarly, int readyCheckTimeSecs) throws SQLException, IOException {
+        if (_tournamentQueues.containsKey(info._params.tournamentId))
+            return false;
+
+        TournamentQueue tournamentQueue = new PlayerMadeLimitedQueue(this, info.Parameters().tournamentId,
+                info.Parameters().name, info, startableEarly, readyCheckTimeSecs,
+                tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament), _collectionsManager);
+        _tournamentQueues.put(info._params.tournamentId, tournamentQueue);
+
+        tournamentQueue.joinPlayer(player);
+
+        return true;
+    }
+
     public TournamentQueue getTournamentQueue(TournamentInfo info) {
         TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
 

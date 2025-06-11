@@ -1433,5 +1433,37 @@ var GempLotrCommunication = Class.extend({
             error:this.errorCheck(errorMap),
             dataType:"xml"
         });
+    },
+    getLimitedTournamentAvailableFormats:function (callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/tournament/limitedFormats",
+            cache:false,
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+    createTournament:function (type, maxPlayers, sealedFormatCode, soloDraftFormatCode, tableDraftFormatCode, tableDraftTimer,
+                               playoff, deckbuildingDuration, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/tournament/create",
+            cache:false,
+            data:{
+                type:type,
+                maxPlayers:maxPlayers,
+                sealedFormatCode:sealedFormatCode,
+                soloDraftFormatCode:soloDraftFormatCode,
+                tableDraftFormatCode:tableDraftFormatCode,
+                tableDraftTimer:tableDraftTimer,
+                playoff:playoff,
+                deckbuildingDuration:deckbuildingDuration,
+                participantId:getUrlParam("participantId")
+            },
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
     }
 });

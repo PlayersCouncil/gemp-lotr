@@ -90,12 +90,14 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
             return;
         }
 
-        TournamentInfo tournamentInfo = _tournamentInfo;
+        TournamentInfo tournamentInfo;
 
         if (!destroyWhenTournamentStarts) {
             String tid = _tournamentInfo.generateTimestampId();
             String tournamentName = _tournamentQueueName + " - " + DateUtils.getStringDateWithHour();
             tournamentInfo = getNewInfo(tid, tournamentName);
+        } else {
+            tournamentInfo = getNewInfo(_tournamentInfo._params.tournamentId, _tournamentInfo._params.name);
         }
 
 
@@ -228,6 +230,19 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
     }
 
     @Override
+    public final synchronized void joinPlayer(Player player) throws SQLException, IOException {
+        if (_tournamentInfo._params.requiresDeck) { // Only for limited games
+            return;
+        }
+        if (!_players.contains(player.getName()) && isJoinable()) {
+            if (_tournamentInfo._params.cost <= 0 || collectionsManager.removeCurrencyFromPlayerCollection("Joined "+getTournamentQueueName()+" queue", player, _currencyCollection, _tournamentInfo._params.cost)) {
+                _players.add(player.getName());
+                regeneratePlayerList();
+            }
+        }
+    }
+
+    @Override
     public final synchronized void leavePlayer(Player player) throws SQLException, IOException {
         leavePlayer(player.getName());
     }
@@ -323,7 +338,7 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
         return readyCheckTimeSecs - elapsedTime;
     }
 
-    private boolean isReadyCheckTimerRunning() {
+    protected boolean isReadyCheckTimerRunning() {
         return readyCheckTask != null
                 && !readyCheckTask.isCancelled()
                 && !readyCheckTask.isDone()

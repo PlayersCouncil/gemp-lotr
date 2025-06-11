@@ -30,6 +30,8 @@ public interface TournamentQueue {
 
     void joinPlayer(Player player, LotroDeck deck) throws SQLException, IOException;
 
+    void joinPlayer(Player player) throws SQLException, IOException;
+
     void leavePlayer(Player player) throws SQLException, IOException;
 
     void leaveAllPlayers() throws SQLException, IOException;

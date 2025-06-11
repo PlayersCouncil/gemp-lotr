@@ -271,6 +271,31 @@
 							</tr>
 						</table>
 					</div>
+
+					<div id="limitedGamesHeader" class='eventHeader limitedGames'>Limited Games</div>
+					<div id="limitedGamesContent" class='visibilityToggle'>
+						<form id="limitedGameForm">
+							<!-- Game Type Selection -->
+							<label for="gameTypeSelect">Type of Game:</label>
+							<select id="gameTypeSelect" name="gameType">
+								<option value="" disabled selected>Select game type</option>
+								<option value="sealed">Sealed</option>
+								<option value="solodraft">Solo Draft</option>
+								<option value="table_draft">Live Draft</option>
+							</select>
+
+							<!-- Placeholder for dynamic fields -->
+							<div id="dynamicFields"></div>
+
+							<!-- Toggle for advanced fields -->
+							<button type="button" id="toggleAdvancedFields" style="display: none;">Show advanced settings</button>
+
+							<!-- Advanced settings section -->
+							<div id="advancedFields" style="display: none;"></div>
+
+							<button type="button" id="createTournamentButton" style="display: none;">Create</button>
+						</form>
+					</div>
 					
 				</div>
 			</div>

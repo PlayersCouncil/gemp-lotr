@@ -51,6 +51,11 @@ var GempLotrHallUI = Class.extend({
 					that.userInfo = json;
 				});
 
+		this.comm.getLimitedTournamentAvailableFormats(function(json)
+				{
+                    that.setupTournamentSpawner(json);
+				});
+
 		this.chat = chat;
 		this.chat.tournamentCallback = function(from, message) {
 				var thisName = that.userInfo.name
@@ -168,6 +173,195 @@ var GempLotrHallUI = Class.extend({
 		
 		
 	},
+
+	setupTournamentSpawner: function(json) {
+		var that = this;
+
+
+        function validateTournamentForm() {
+            const gameType = $("#gameTypeSelect").val();
+            const format = $("#formatSelect").val();
+            const pairingType = $("#pairingType").val();
+            const playerCount = parseInt($("#numPlayers").val(), 10);
+            const deckDuration = parseInt($("#deckDuration").val(), 10);
+            const draftTimer = $("#draftTimer").val();
+
+            const validPlayerCount = Number.isInteger(playerCount) && playerCount >= 2;
+            const validDeckDuration = Number.isInteger(deckDuration) && deckDuration >= 5;
+            const draftValid = gameType !== "table_draft" || draftTimer;
+
+            const allValid =
+                gameType &&
+                format &&
+                pairingType &&
+                validPlayerCount &&
+                validDeckDuration &&
+                draftValid;
+
+            $("#createTournamentButton").prop("disabled", !allValid);
+        };
+
+        $("#gameTypeSelect").on("change", function () {
+            // Advanced settings toggle
+            const $advanced = $("#advancedFields").empty();
+            const $toggleAdvanced = $("#toggleAdvancedFields").show().text("Show advanced settings");
+            let advancedVisible = false;
+            $toggleAdvanced.off("click").on("click", function () {
+                advancedVisible = !advancedVisible;
+                $advanced.toggle(advancedVisible);
+                $(this).text(advancedVisible ? "Hide advanced settings" : "Show advanced settings");
+            });
+
+
+            const gameType = $(this).val();
+            const formatListMap = {
+                sealed: json.sealed,
+                solodraft: json.soloDrafts,
+                table_draft: json.tableDrafts
+            };
+
+            const formats = formatListMap[gameType] || [];
+
+            const $fields = $("#dynamicFields");
+            $fields.empty(); // clear previous dynamic fields
+            if (formats.length === 0) return;
+
+            // Create Format label and select
+            const $label = $("<label>").attr("for", "formatSelect").text("Format:");
+            const $select = $("<select>")
+              .attr("id", "formatSelect")
+              .attr("name", "format")
+              .append($("<option disabled selected>").text("Select format"));
+
+            // Fill options
+            for (const format of formats) {
+                $select.append(
+                    $("<option>")
+                        .val(format.code)
+                        .text(format.name)
+                );
+            }
+
+            // Number of players
+            const $playersLabel = $("<label>").attr("for", "numPlayers").text("Number of players:");
+            const $playersInput = $("<input>")
+                .attr({ type: "number", id: "numPlayers", name: "numPlayers", min: 2 })
+                .val(4);
+
+            // Pairing type
+            const $pairingLabel = $("<label>").attr("for", "pairingType").text("Pairing type:");
+            const $pairingSelect = $("<select>")
+                .attr({ id: "pairingType", name: "pairingType" })
+                .append($("<option>").val("SWISS").text("Swiss"))
+                .append($("<option>").val("SINGLE_ELIMINATION").text("Single elimination"));
+
+            // Deck-building duration
+            const $durationLabel = $("<label>").attr("for", "deckDuration").text("Deck-building duration (minutes, minimum 5):");
+            const $durationInput = $("<input>")
+                .attr({ type: "number", id: "deckDuration", name: "deckDuration", min: 5 })
+                .val(15);
+
+            // Append to form
+            $fields.append(
+                $("<div>").append($label),
+                $("<div>").append($select),
+                $("<div>").append($playersLabel),
+                $("<div>").append($playersInput)
+            );
+
+            // Add live draft timer
+            const $timerLabel = $("<label>").attr("for", "draftTimer").text("Draft timer:");
+            const $timerSelect = $("<select>")
+                .attr({ id: "draftTimer", name: "draftTimer" })
+                .append($("<option disabled selected>").text("Select timer"));
+            if (gameType === "table_draft") {
+                for (const timerType of json.draftTimerTypes) {
+                    $timerSelect.append(
+                        $("<option>").val(timerType).text(timerType.replace("_", " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase()))
+                    );
+                }
+
+                $fields.append(
+                    $("<div>").append($timerLabel),
+                    $("<div>").append($timerSelect)
+                );
+            }
+
+            // Append to form
+            $advanced.append(
+                $("<div>").append($pairingLabel),
+                $("<div>").append($pairingSelect),
+                $("<div>").append($durationLabel),
+                $("<div>").append($durationInput)
+            );
+
+            // Add validating listeners
+            $select.on("change", validateTournamentForm);
+            $playersInput.on("input", validateTournamentForm);
+            $pairingSelect.on("change", validateTournamentForm);
+            $durationInput.on("input", validateTournamentForm);
+            if (gameType === "table_draft") {
+                $timerSelect.on("change", validateTournamentForm);
+            }
+
+            // Submit button
+            $('#createTournamentButton').show();
+            $('#createTournamentButton').off('click').on('click', () => {
+                that.createTournament();
+            });
+            validateTournamentForm();
+
+            // Scroll to bottom so that the new field can be seen
+            $("#limitedGameForm").get(0).scrollIntoView({ behavior: "smooth", block: "end" });
+        });
+	},
+
+	createTournament: function() {
+	    const type = $("#gameTypeSelect").val();
+            // Depending on the type, pick the correct format code from the formatSelect dropdown
+            const formatCode = $("#formatSelect").val();
+
+            // Assign the format codes based on the selected game type
+            let sealedFormatCode = null;
+            let soloDraftFormatCode = null;
+            let tableDraftFormatCode = null;
+
+            if (type === "sealed") {
+                sealedFormatCode = formatCode;
+            } else if (type === "solodraft") {
+                soloDraftFormatCode = formatCode;
+            } else if (type === "table_draft") {
+                tableDraftFormatCode = formatCode;
+            }
+
+            // Draft timer only applies to table draft
+            const tableDraftTimer = type === "table_draft" ? $("#draftTimer").val() : null;
+
+            // Pairing
+            const playoff = $("#pairingType").val();
+
+            // Deck building duration (number input)
+            const deckbuildingDuration = parseInt($("#deckDuration").val(), 10) || 15;
+            const maxPlayers = parseInt($("#numPlayers").val(), 10) || 4;
+
+            // Call the communication layer with all gathered values
+            this.comm.createTournament(
+                type,
+                maxPlayers,
+                sealedFormatCode,
+                soloDraftFormatCode,
+                tableDraftFormatCode,
+                tableDraftTimer,
+                playoff,
+                deckbuildingDuration,
+                function(json) {
+                    // Success callback — handle your response here
+                    console.log("Tournament created successfully:", json);
+                    // You can add preview or other logic here as needed
+                },
+                this.hallErrorMap()
+            );
+    },
 	
 	initTable: function(displayed, headerID, tableID) {
 		var header = $("#" + headerID);
@@ -238,6 +432,9 @@ var GempLotrHallUI = Class.extend({
 			},
 			"410":function() {
 				that.showErrorDialog("Inactivity error", "You were inactive for too long and have been removed from the Game Hall. If you wish to re-enter, click \"Refresh page\".", true, false);
+			},
+			"400":function() {
+				that.showErrorDialog("Tournament creation error", "Something went wrong, check all tournament parameters.", false, false);
 			}
 		};
 	},

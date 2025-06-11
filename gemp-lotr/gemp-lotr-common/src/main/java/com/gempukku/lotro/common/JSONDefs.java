@@ -88,6 +88,13 @@ public class JSONDefs {
         public List<String> TableDraftTimerTypes;
     }
 
+    public static class PlayerMadeTournamentAvailableFormats {
+        public List<ItemStub> sealed;
+        public List<ItemStub> soloDrafts;
+        public List<ItemStub> tableDrafts;
+        public List<String> draftTimerTypes;
+    }
+
     public static class TimerType {
         public String type;
     }
