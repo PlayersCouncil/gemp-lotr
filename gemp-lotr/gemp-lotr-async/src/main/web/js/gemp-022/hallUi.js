@@ -189,7 +189,13 @@ var GempLotrHallUI = Class.extend({
             const startableEarly = $("#startableEarlySelect").val();
             const readyCheck = $("#readyCheckSelect").val();
 
-            const validPlayerCount = Number.isInteger(playerCount) && playerCount >= 1;
+            const formatMaxPlayers = $("#formatSelect").find("option:selected").data("maxplayers");
+            var validMaxPlayers = true;
+            if (formatMaxPlayers) {
+                validMaxPlayers = playerCount <= formatMaxPlayers;
+            }
+
+            const validPlayerCount = Number.isInteger(playerCount) && playerCount >= 1 && validMaxPlayers;
             const validDeckDuration = Number.isInteger(deckDuration) && deckDuration >= 5;
             const draftValid = gameType !== "table_draft" || draftTimer;
             const validPlayerReadyCombo = playerCount > 2 || readyCheck < 0;
@@ -247,11 +253,16 @@ var GempLotrHallUI = Class.extend({
 
             // Fill options
             for (const format of formats) {
-                $select.append(
-                    $("<option>")
-                        .val(format.code)
-                        .text(format.name)
-                );
+                const $option = $("<option>")
+                    .val(format.code)
+                    .text(format.name);
+
+                // For live draft, save the table capacity
+                if (gameType === "table_draft" && format.maxPlayers) {
+                    $option.attr("data-maxplayers", format.maxPlayers);
+                }
+
+                $select.append($option);
             }
 
             // Number of players
@@ -259,6 +270,22 @@ var GempLotrHallUI = Class.extend({
             const $playersInput = $("<input>")
                 .attr({ type: "number", id: "numPlayers", name: "numPlayers", min: 1 })
                 .val(4);
+
+            // Modify the max number of players based on format selected (if needed)
+            $select.on("change", function () {
+                const selectedFormat = $(this).find("option:selected");
+                const maxPlayers = selectedFormat.data("maxplayers");
+
+                if (maxPlayers) {
+                    $playersInput.attr("max", maxPlayers);
+                    const currentVal = parseInt($playersInput.val(), 10);
+                    if (currentVal > maxPlayers) {
+                        $playersInput.val(maxPlayers);
+                    }
+                } else {
+                    $playersInput.removeAttr("max");
+                }
+            });
 
             // Pairing type
             const $pairingLabel = $("<label>").attr("for", "pairingType").text("Pairing type:");

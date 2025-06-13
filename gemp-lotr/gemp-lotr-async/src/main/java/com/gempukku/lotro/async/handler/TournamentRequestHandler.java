@@ -116,7 +116,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
                 .filter(code -> _soloDraftDefinitions.getAllSoloDrafts().values().stream().anyMatch(soloDraft -> code.equals(soloDraft.getCode()))).map(code -> new JSONDefs.ItemStub(code, availableSoloDraftFormats.get(code)))
                 .collect(Collectors.toList());
         data.tableDrafts = _tableDraftLibrary.getAllTableDrafts().stream()
-                .map(tableDraftDefinition -> new JSONDefs.ItemStub(tableDraftDefinition.getCode(), tableDraftDefinition.getName()))
+                .map(tableDraftDefinition -> new JSONDefs.LiveDraftInfo(tableDraftDefinition.getCode(), tableDraftDefinition.getName(), tableDraftDefinition.getMaxPlayers(), tableDraftDefinition.getRecommendedTimer().name()))
                 .collect(Collectors.toList());
         data.draftTimerTypes = DraftTimer.getAllTypes();
 
@@ -228,6 +228,8 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             Throw400IfStringNull("tableDraftFormatCode", tableDraftFormatCodeStr);
             var tableDraftDefinition = _tableDraftLibrary.getTableDraftDefinition(tableDraftFormatCodeStr);
             Throw400IfValidationFails("tableDraftFormatCode", tableDraftFormatCodeStr,tableDraftDefinition != null);
+            //Check if all players can get to one table
+            Throw400IfValidationFails("maxPlayers", maxPlayersStr, tableDraftDefinition.getMaxPlayers() < maxPlayers);
             tableDraftParams.tableDraftFormatCode = tableDraftFormatCodeStr;
             tableDraftParams.format = tableDraftDefinition.getFormat();
             tableDraftParams.draftTimerType = DraftTimer.getTypeFromString(tableDraftTimer);
@@ -244,7 +246,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         params.cost = 0; // Gold is not being used, they can be free to enter
         params.playoff = Tournament.PairingType.parse(playoff);
         params.tiebreaker = "owr";
-        params.prizes = Tournament.PrizeType.LIMITED; // At 4+ players, get one Event Award for each win or buy
+        params.prizes = Tournament.PrizeType.LIMITED; // At 4+ players, get one Event Award for each win or bye
         params.maximumPlayers = maxPlayers;
         params.manualKickoff = false;
 

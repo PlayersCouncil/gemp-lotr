@@ -31,6 +31,19 @@ public class JSONDefs {
         }
     }
 
+    public static class LiveDraftInfo {
+        public String code;
+        public String name;
+        public int maxPlayers;
+        public String recommendedTimer;
+        public LiveDraftInfo(String c, String n, int p, String t) {
+            code = c;
+            name = n;
+            maxPlayers = p;
+            recommendedTimer = t;
+        }
+    }
+
     public static class Format {
         public String adventure;
         public String code;
@@ -91,7 +104,7 @@ public class JSONDefs {
     public static class PlayerMadeTournamentAvailableFormats {
         public List<ItemStub> sealed;
         public List<ItemStub> soloDrafts;
-        public List<ItemStub> tableDrafts;
+        public List<LiveDraftInfo> tableDrafts;
         public List<String> draftTimerTypes;
     }
 
