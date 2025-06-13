@@ -82,91 +82,6 @@ public class TournamentService {
         );
     }
 
-    private void addImmediateRecurringSealed(String queueId, String queueName, String prefix, String formatCode) {
-        TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
-
-        var sealedParams = new SealedTournamentParams();
-        sealedParams.type = Tournament.TournamentType.SEALED;
-
-        sealedParams.deckbuildingDuration = 25;
-        sealedParams.turnInDuration = 5;
-
-        var sealedFormat = _formatLibrary.GetSealedTemplate(formatCode);
-        sealedParams.sealedFormatCode = formatCode;
-        sealedParams.format = sealedFormat.GetFormat().getCode();
-        sealedParams.requiresDeck = false;
-
-        sealedParams.tournamentId = prefix;
-        sealedParams.name = queueName;
-        sealedParams.cost = 0;
-        sealedParams.minimumPlayers = 2;
-        sealedParams.maximumPlayers = 2;
-        sealedParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
-        sealedParams.prizes = Tournament.PrizeType.NONE;
-
-        _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
-                new SealedTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
-                        sealedParams), callback, _collectionsManager)
-        );
-    }
-
-    private void addImmediateRecurringDraft(String queueId, String queueName, String prefix, String formatCode) {
-        TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
-
-        var soloDraftParams = new SoloDraftTournamentParams();
-        soloDraftParams.type = Tournament.TournamentType.SOLODRAFT;
-
-        soloDraftParams.deckbuildingDuration = 25;
-        soloDraftParams.turnInDuration = 5;
-
-        var soloDraft = _soloDraftLibrary.getSoloDraft(formatCode);
-        soloDraftParams.soloDraftFormatCode = formatCode;
-        soloDraftParams.format = soloDraft.getFormat();
-        soloDraftParams.requiresDeck = false;
-
-        soloDraftParams.tournamentId = prefix;
-        soloDraftParams.name = queueName;
-        soloDraftParams.cost = 0;
-        soloDraftParams.minimumPlayers = 2;
-        soloDraftParams.maximumPlayers = 2;
-        soloDraftParams.playoff = Tournament.PairingType.SINGLE_ELIMINATION;
-        soloDraftParams.prizes = Tournament.PrizeType.NONE;
-
-        _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
-                new SoloDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
-                        soloDraftParams, _soloDraftLibrary), callback, _collectionsManager)
-        );
-    }
-
-    private void addImmediateRecurringTableDraft(String queueId, String queueName, String prefix, String formatCode, int players) {
-        TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
-
-        TableDraftTournamentParams draftParams = new TableDraftTournamentParams();
-        draftParams.type = Tournament.TournamentType.TABLE_DRAFT;
-
-        draftParams.deckbuildingDuration = 15;
-        draftParams.turnInDuration = 2;
-
-        TableDraftDefinition tableDraft = _tableDraftLibrary.getTableDraftDefinition(formatCode);
-        draftParams.tableDraftFormatCode = formatCode;
-        draftParams.format = tableDraft.getFormat();
-        draftParams.draftTimerType = tableDraft.getRecommendedTimer();
-        draftParams.requiresDeck = false;
-
-        draftParams.tournamentId = prefix;
-        draftParams.name = queueName;
-        draftParams.cost = 0;
-        draftParams.minimumPlayers = players;
-        draftParams.maximumPlayers = players;
-        draftParams.playoff = Tournament.PairingType.SWISS_3;
-        draftParams.prizes = Tournament.PrizeType.NONE;
-
-        _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
-                new TableDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
-                        draftParams, _tableDraftLibrary), true, 90, callback, _collectionsManager)
-        );
-    }
-
     private void addRecurringScheduledQueue(String queueId, String queueName, String time, String prefix, String formatCode) {
         TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
 
@@ -184,8 +99,6 @@ public class TournamentService {
 
     public void reloadQueues() {
         _tournamentQueues.clear();
-
-        addImmediateRecurringCasualLimitedGames();
 
         addImmediateRecurringQueue("fotr_queue", "Fellowship Block", "fotr-", "fotr_block");
         addImmediateRecurringQueue("pc_fotr_queue", "PC-Fellowship", "pcfotr-", "pc_fotr_block");
@@ -208,27 +121,6 @@ public class TournamentService {
             // Ignore, can't happen
             System.out.println(exp);
         }
-    }
-
-    private void addImmediateRecurringCasualLimitedGames() {
-        String casual = "Casual ";
-
-        _tableDraftLibrary.getAllTableDrafts().forEach(tableDraftDefinition -> {
-            String code = tableDraftDefinition.getCode();
-            addImmediateRecurringTableDraft(code + "_queue", casual + tableDraftDefinition.getName(), code + "-", code, tableDraftDefinition.getMaxPlayers());
-        });
-
-        addImmediateRecurringDraft("fotr_solo_draft_queue", casual + "FotR Solo Draft", "fotrSoloDraft-", "fotr_draft");
-        addImmediateRecurringDraft("ttt_solo_draft_queue", casual + "TTT Solo Draft", "tttSoloDraft-", "ttt_draft");
-        addImmediateRecurringDraft("hobbit_solo_draft_queue", casual + "Hobbit Solo Draft", "hobbitSoloDraft-", "hobbit_random_draft");
-
-        addImmediateRecurringSealed("fotr_sealed_queue", casual + "Fellowship Block Sealed", "fotrSealed-", "single_fotr_block_sealed");
-        addImmediateRecurringSealed("ttt_sealed_queue", casual + "Towers Block Sealed", "tttSealed-", "single_ttt_block_sealed");
-        addImmediateRecurringSealed("ts_sealed_queue", casual + "Towers Standard Sealed", "tsSealed-", "single_ts_sealed");
-        addImmediateRecurringSealed("king_sealed_queue", casual + "King Block Sealed", "rotkSealed-", "single_rotk_block_sealed");
-        addImmediateRecurringSealed("movie_sealed_queue", casual + "Movie Sealed", "movieSealed-", "single_movie_sealed");
-        addImmediateRecurringSealed("wotr_sealed_queue", casual + "War of the Ring Block Sealed", "wotrSealed-", "single_wotr_block_sealed");
-        addImmediateRecurringSealed("th_sealed_queue", casual + "Hunters Block Sealed", "thSealed-", "single_th_block_sealed");
     }
 
     public void cancelAllTournamentQueues() throws SQLException, IOException {

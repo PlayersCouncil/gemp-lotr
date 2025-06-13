@@ -229,7 +229,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             var tableDraftDefinition = _tableDraftLibrary.getTableDraftDefinition(tableDraftFormatCodeStr);
             Throw400IfValidationFails("tableDraftFormatCode", tableDraftFormatCodeStr,tableDraftDefinition != null);
             //Check if all players can get to one table
-            Throw400IfValidationFails("maxPlayers", maxPlayersStr, tableDraftDefinition.getMaxPlayers() < maxPlayers);
+            Throw400IfValidationFails("maxPlayers", maxPlayersStr, tableDraftDefinition.getMaxPlayers() > maxPlayers);
             tableDraftParams.tableDraftFormatCode = tableDraftFormatCodeStr;
             tableDraftParams.format = tableDraftDefinition.getFormat();
             tableDraftParams.draftTimerType = DraftTimer.getTypeFromString(tableDraftTimer);
