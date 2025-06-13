@@ -314,8 +314,12 @@ var GempLotrHallUI = Class.extend({
             const $durationRow = $("<div>").addClass("formRow");
             const $durationLabel = $("<label>").attr("for", "deckDuration").text("Deck-building duration (minutes, minimum 5):");
             const $durationInput = $("<input>")
-                .attr({ type: "number", id: "deckDuration", name: "deckDuration", min: 5 })
-                .val(15);
+                .attr({ type: "number", id: "deckDuration", name: "deckDuration", min: 5 });
+            if (gameType === "table_draft") {
+                $durationInput.val("15");
+            } else {
+                $durationInput.val("30");
+            }
             $durationRow.append($durationLabel, $durationInput);
 
             // Competitive
