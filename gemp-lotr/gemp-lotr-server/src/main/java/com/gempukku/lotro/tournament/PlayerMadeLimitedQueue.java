@@ -9,9 +9,6 @@ public class PlayerMadeLimitedQueue extends AbstractTournamentQueue implements T
     public PlayerMadeLimitedQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info, boolean startableEarly, int readyCheckTimeSecs,
                                   TournamentQueueCallback tournamentQueueCallback, CollectionsManager collectionsManager) {
         super(tournamentService, queueId, queueName, info, startableEarly, readyCheckTimeSecs, tournamentQueueCallback, collectionsManager, true);
-        System.out.println("PLAYER MADE QUEUE");
-        System.out.println(queueId);
-        System.out.println(queueName);
     }
 
     @Override

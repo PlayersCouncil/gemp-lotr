@@ -141,6 +141,9 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         String startableStr = getFormParameterSafely(postDecoder, "startable");
         boolean startable = Throw400IfNullOrNonBoolean("startable", startableStr);
 
+        String readyCheckStr = getFormParameterSafely(postDecoder, "readyCheck");
+        int readyCheck = Throw400IfNullOrNonInteger("readyCheck", readyCheckStr);
+
         String sealedFormatCodeStr = getFormParameterSafely(postDecoder, "sealedFormatCode");
 
         String soloDraftFormatCodeStr = getFormParameterSafely(postDecoder, "soloDraftFormatCode");
@@ -161,12 +164,9 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
 
         var params = new TournamentParams();
 
-
         String casualPrefix = "Casual ";
         String competitivePrefix = "Competitive ";
         String prefix = competitive ? competitivePrefix : casualPrefix;
-
-        //TODO ready check, ready check time
 
         if(type == Tournament.TournamentType.SEALED) {
             var sealedParams = new SealedTournamentParams();
@@ -266,7 +266,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             return;
         }
 
-        if (_hallServer.addPlayerMadeLimitedQueue(info, resourceOwner, startable, -1)) {
+        if (_hallServer.addPlayerMadeLimitedQueue(info, resourceOwner, startable, readyCheck)) {
             responseWriter.sendJsonOK();
         } else {
             Throw400IfValidationFails("Error", "Error", false, "Error while creating queue or joining");

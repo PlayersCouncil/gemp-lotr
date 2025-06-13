@@ -187,10 +187,12 @@ var GempLotrHallUI = Class.extend({
             const draftTimer = $("#draftTimer").val();
             const competitive = $("#competitiveSelect").val();
             const startableEarly = $("#startableEarlySelect").val();
+            const readyCheck = $("#readyCheckSelect").val();
 
             const validPlayerCount = Number.isInteger(playerCount) && playerCount >= 1;
             const validDeckDuration = Number.isInteger(deckDuration) && deckDuration >= 5;
             const draftValid = gameType !== "table_draft" || draftTimer;
+            const validPlayerReadyCombo = playerCount > 2 || readyCheck < 0;
 
             const allValid =
                 gameType &&
@@ -200,6 +202,8 @@ var GempLotrHallUI = Class.extend({
                 validDeckDuration &&
                 competitive &&
                 startableEarly &&
+                readyCheck &&
+                validPlayerReadyCombo &&
                 draftValid;
 
             $("#createTournamentButton").prop("disabled", !allValid);
@@ -283,6 +287,16 @@ var GempLotrHallUI = Class.extend({
                 .append($("<option>").val("true").text("Can be started with less players"))
                 .append($("<option>").val("false").text("Starts only with all player slots filled"));
 
+            // Ready check
+            const $readyCheckLabel = $("<label>").attr("for", "readyCheckSelect").text("Ready check:");
+            const $readyCheckSelect = $("<select>")
+                .attr({ id: "readyCheckSelect", name: "readyCheck" })
+                .append($("<option>").val("-1").text("No ready check, just start the tournament"))
+                .append($("<option>").val("90").text("90 seconds to confirm"))
+                .append($("<option>").val("180").text("3 minutes to confirm"));
+            // Set default to 90 seconds as we start with 4 players
+            $readyCheckSelect.val("90");
+
             // Append to form
             $fields.append(
                 $("<div>").append($label),
@@ -318,19 +332,43 @@ var GempLotrHallUI = Class.extend({
                 $("<div>").append($competitiveLabel),
                 $("<div>").append($competitiveSelect),
                 $("<div>").append($earlyStartLabel),
-                $("<div>").append($earlyStartSelect)
+                $("<div>").append($earlyStartSelect),
+                $("<div>").append($readyCheckLabel),
+                $("<div>").append($readyCheckSelect)
             );
 
             // Add validating listeners
             $select.on("change", validateTournamentForm);
-            $playersInput.on("input", validateTournamentForm);
             $pairingSelect.on("change", validateTournamentForm);
             $durationInput.on("input", validateTournamentForm);
             $competitiveSelect.on("change", validateTournamentForm);
             $earlyStartSelect.on("change", validateTournamentForm);
+            $readyCheckSelect.on("change", validateTournamentForm);
             if (gameType === "table_draft") {
                 $timerSelect.on("change", validateTournamentForm);
             }
+
+            // Add listener for ready check / player count combo
+            $playersInput.on("input", function () {
+                const playerCount = parseInt($(this).val(), 10);
+                const $readyCheck = $("#readyCheckSelect");
+
+                if (playerCount <= 2) {
+                    // Set to -1 (no ready check) and disable other options
+                    $readyCheck.val("-1");
+                    $readyCheck.find("option").each(function () {
+                        if ($(this).val() !== "-1") {
+                            $(this).prop("disabled", true);
+                        }
+                    });
+                } else {
+                    // Enable all options and select 90 seconds
+                    $readyCheck.find("option").prop("disabled", false);
+                    $readyCheck.val("90");
+                }
+
+                validateTournamentForm();
+            });
 
             // Submit button
             $('#createTournamentButton').show();
@@ -368,6 +406,7 @@ var GempLotrHallUI = Class.extend({
             const playoff = $("#pairingType").val();
             const competitive = $("#competitiveSelect").val();
             const startableEarly = $("#startableEarlySelect").val();
+            const readyCheck = $("#readyCheckSelect").val();
 
 
             // Number input
@@ -386,6 +425,7 @@ var GempLotrHallUI = Class.extend({
                 deckbuildingDuration,
                 competitive,
                 startableEarly,
+                readyCheck,
                 function(json) {
                     // Success callback — handle your response here
                     console.log("Tournament created successfully:", json);
