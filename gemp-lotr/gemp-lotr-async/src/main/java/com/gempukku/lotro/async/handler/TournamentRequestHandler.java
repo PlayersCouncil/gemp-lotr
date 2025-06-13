@@ -35,7 +35,6 @@ import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TournamentRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
@@ -139,6 +138,9 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         String competitiveStr = getFormParameterSafely(postDecoder, "competitive");
         boolean competitive = Throw400IfNullOrNonBoolean("competitive", competitiveStr);
 
+        String startableStr = getFormParameterSafely(postDecoder, "startable");
+        boolean startable = Throw400IfNullOrNonBoolean("startable", startableStr);
+
         String sealedFormatCodeStr = getFormParameterSafely(postDecoder, "sealedFormatCode");
 
         String soloDraftFormatCodeStr = getFormParameterSafely(postDecoder, "soloDraftFormatCode");
@@ -164,7 +166,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         String competitivePrefix = "Competitive ";
         String prefix = competitive ? competitivePrefix : casualPrefix;
 
-        //TODO ready check, ready check time, startable early
+        //TODO ready check, ready check time
 
         if(type == Tournament.TournamentType.SEALED) {
             var sealedParams = new SealedTournamentParams();
@@ -264,7 +266,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             return;
         }
 
-        if (_hallServer.addPlayerMadeLimitedQueue(info, resourceOwner, false, -1)) {
+        if (_hallServer.addPlayerMadeLimitedQueue(info, resourceOwner, startable, -1)) {
             responseWriter.sendJsonOK();
         } else {
             Throw400IfValidationFails("Error", "Error", false, "Error while creating queue or joining");
