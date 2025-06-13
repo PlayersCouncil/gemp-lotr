@@ -853,6 +853,7 @@ table.standings {
 #limitedGameForm {
   display: grid;
   margin-left: 20px;
+  padding-top: 8px;
   padding-bottom: 20px;
   gap: 8px;
   max-width: 400px;
@@ -875,5 +876,12 @@ form#limitedGameForm input {
 
 #advancedFields {
   display: grid;
+  gap: 8px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
   gap: 8px;
 }

@@ -212,7 +212,13 @@ var GempLotrHallUI = Class.extend({
                 validPlayerReadyCombo &&
                 draftValid;
 
-            $("#createTournamentButton").prop("disabled", !allValid);
+            if (allValid) {
+                $("#createTournamentButton").prop("disabled", false);
+                $("#createTournamentButton").removeClass("ui-state-disabled");
+            } else {
+                $("#createTournamentButton").prop("disabled", true);
+                $("#createTournamentButton").addClass("ui-state-disabled");
+            }
         };
 
         $("#gameTypeSelect").on("change", function () {
@@ -245,13 +251,15 @@ var GempLotrHallUI = Class.extend({
             if (formats.length === 0) return;
 
             // Create Format label and select
+            const $formatRow = $("<div>").addClass("formRow");
             const $label = $("<label>").attr("for", "formatSelect").text("Format:");
             const $select = $("<select>")
               .attr("id", "formatSelect")
               .attr("name", "format")
               .append($("<option disabled selected>").text("Select format"));
+            $formatRow.append($label, $select);
 
-            // Fill options
+            // Fill format options
             for (const format of formats) {
                 const $option = $("<option>")
                     .val(format.code)
@@ -270,10 +278,12 @@ var GempLotrHallUI = Class.extend({
             }
 
             // Number of players
+            const $playersRow = $("<div>").addClass("formRow");
             const $playersLabel = $("<label>").attr("for", "numPlayers").text("Number of players:");
             const $playersInput = $("<input>")
                 .attr({ type: "number", id: "numPlayers", name: "numPlayers", min: 1 })
                 .val(4);
+            $playersRow.append($playersLabel, $playersInput);
 
             // Modify the max number of players based on format selected (if needed)
             $select.on("change", function () {
@@ -292,69 +302,75 @@ var GempLotrHallUI = Class.extend({
             });
 
             // Pairing type
+            const $pairingRow = $("<div>").addClass("formRow");
             const $pairingLabel = $("<label>").attr("for", "pairingType").text("Pairing type:");
             const $pairingSelect = $("<select>")
                 .attr({ id: "pairingType", name: "pairingType" })
-                .append($("<option>").val("SWISS").text("Swiss"))
+                .append($("<option>").val("SWISS").text("Swiss - losers play next rounds too"))
                 .append($("<option>").val("SINGLE_ELIMINATION").text("Single elimination"));
+            $pairingRow.append($pairingLabel, $pairingSelect);
 
             // Deck-building duration
+            const $durationRow = $("<div>").addClass("formRow");
             const $durationLabel = $("<label>").attr("for", "deckDuration").text("Deck-building duration (minutes, minimum 5):");
             const $durationInput = $("<input>")
                 .attr({ type: "number", id: "deckDuration", name: "deckDuration", min: 5 })
                 .val(15);
+            $durationRow.append($durationLabel, $durationInput);
 
             // Competitive
+            const $competitiveRow = $("<div>").addClass("formRow");
             const $competitiveLabel = $("<label>").attr("for", "competitiveSelect").text("Competitive:");
             const $competitiveSelect = $("<select>")
                 .attr({ id: "competitiveSelect", name: "competitive" })
                 .append($("<option>").val("false").text("Games can be spectated"))
                 .append($("<option>").val("true").text("No spectate; hidden names in queue"));
+            $competitiveRow.append($competitiveLabel, $competitiveSelect);
 
             // Early start
+            const $earlyStartRow = $("<div>").addClass("formRow");
             const $earlyStartLabel = $("<label>").attr("for", "startableEarlySelect").text("Early start:");
             const $earlyStartSelect = $("<select>")
                 .attr({ id: "startableEarlySelect", name: "startableEarly" })
                 .append($("<option>").val("true").text("Can be started with less players"))
                 .append($("<option>").val("false").text("Starts only with all player slots filled"));
+            $earlyStartRow.append($earlyStartLabel, $earlyStartSelect);
 
             // Ready check
+            const $readyCheckRow = $("<div>").addClass("formRow");
             const $readyCheckLabel = $("<label>").attr("for", "readyCheckSelect").text("Ready check:");
             const $readyCheckSelect = $("<select>")
                 .attr({ id: "readyCheckSelect", name: "readyCheck" })
-                .append($("<option>").val("-1").text("No ready check, just start the tournament"))
-                .append($("<option>").val("90").text("90 seconds to confirm"))
+                .append($("<option>").val("-1").text("No, just start the tournament"))
+                .append($("<option>").val("60").text("1 minute to confirm"))
+                .append($("<option>").val("90").text("1 minute 30 seconds to confirm"))
                 .append($("<option>").val("180").text("3 minutes to confirm"));
+            $readyCheckRow.append($readyCheckLabel, $readyCheckSelect);
             // Set default to 90 seconds as we start with 4 players
             $readyCheckSelect.val("90");
 
             // Append to form
             $fields.append(
-                $("<div>").append($label),
-                $("<div>").append($select),
-                $("<div>").append($playersLabel),
-                $("<div>").append($playersInput)
+                $("<div>").append($formatRow),
+                $("<div>").append($playersRow)
             );
 
             // Append to form
             $advanced.append(
-                $("<div>").append($pairingLabel),
-                $("<div>").append($pairingSelect),
-                $("<div>").append($durationLabel),
-                $("<div>").append($durationInput),
-                $("<div>").append($competitiveLabel),
-                $("<div>").append($competitiveSelect),
-                $("<div>").append($earlyStartLabel),
-                $("<div>").append($earlyStartSelect),
-                $("<div>").append($readyCheckLabel),
-                $("<div>").append($readyCheckSelect)
+                $("<div>").append($pairingRow),
+                $("<div>").append($durationRow),
+                $("<div>").append($competitiveRow),
+                $("<div>").append($earlyStartRow),
+                $("<div>").append($readyCheckRow)
             );
 
             // Add live draft timer
+            const $timerRow = $("<div>").addClass("formRow");
             const $timerLabel = $("<label>").attr("for", "draftTimer").text("Draft timer:");
             const $timerSelect = $("<select>")
                 .attr({ id: "draftTimer", name: "draftTimer" })
                 .append($("<option disabled selected>").text("Select timer"));
+            $timerRow.append($timerLabel, $timerSelect);
             if (gameType === "table_draft") {
                 for (const timerType of json.draftTimerTypes) {
                     $timerSelect.append(
@@ -363,8 +379,7 @@ var GempLotrHallUI = Class.extend({
                 }
 
                 $advanced.append(
-                    $("<div>").append($timerLabel),
-                    $("<div>").append($timerSelect)
+                    $("<div>").append($timerRow)
                 );
 
                 // Modify the timer based on format selected
