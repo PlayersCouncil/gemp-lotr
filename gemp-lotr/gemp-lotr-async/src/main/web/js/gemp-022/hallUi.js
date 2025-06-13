@@ -261,6 +261,10 @@ var GempLotrHallUI = Class.extend({
                 if (gameType === "table_draft" && format.maxPlayers) {
                     $option.attr("data-maxplayers", format.maxPlayers);
                 }
+                // And recommended timer
+                if (gameType === "table_draft" && format.recommendedTimer) {
+                    $option.attr("data-recommendedtimer", format.recommendedTimer);
+                }
 
                 $select.append($option);
             }
@@ -332,24 +336,6 @@ var GempLotrHallUI = Class.extend({
                 $("<div>").append($playersInput)
             );
 
-            // Add live draft timer
-            const $timerLabel = $("<label>").attr("for", "draftTimer").text("Draft timer:");
-            const $timerSelect = $("<select>")
-                .attr({ id: "draftTimer", name: "draftTimer" })
-                .append($("<option disabled selected>").text("Select timer"));
-            if (gameType === "table_draft") {
-                for (const timerType of json.draftTimerTypes) {
-                    $timerSelect.append(
-                        $("<option>").val(timerType).text(timerType.replace("_", " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase()))
-                    );
-                }
-
-                $fields.append(
-                    $("<div>").append($timerLabel),
-                    $("<div>").append($timerSelect)
-                );
-            }
-
             // Append to form
             $advanced.append(
                 $("<div>").append($pairingLabel),
@@ -363,6 +349,34 @@ var GempLotrHallUI = Class.extend({
                 $("<div>").append($readyCheckLabel),
                 $("<div>").append($readyCheckSelect)
             );
+
+            // Add live draft timer
+            const $timerLabel = $("<label>").attr("for", "draftTimer").text("Draft timer:");
+            const $timerSelect = $("<select>")
+                .attr({ id: "draftTimer", name: "draftTimer" })
+                .append($("<option disabled selected>").text("Select timer"));
+            if (gameType === "table_draft") {
+                for (const timerType of json.draftTimerTypes) {
+                    $timerSelect.append(
+                        $("<option>").val(timerType).text(timerType.replace("_", " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase()))
+                    );
+                }
+
+                $advanced.append(
+                    $("<div>").append($timerLabel),
+                    $("<div>").append($timerSelect)
+                );
+
+                // Modify the timer based on format selected
+                $select.on("change", function () {
+                    const selectedFormat = $(this).find("option:selected");
+                    const recommendedTimer = selectedFormat.data("recommendedtimer");
+
+                    if (recommendedTimer) {
+                        $timerSelect.val(recommendedTimer);
+                    }
+                });
+            }
 
             // Add validating listeners
             $select.on("change", validateTournamentForm);
