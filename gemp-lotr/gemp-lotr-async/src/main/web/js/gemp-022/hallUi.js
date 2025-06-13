@@ -209,6 +209,10 @@ var GempLotrHallUI = Class.extend({
             $toggleAdvanced.off("click").on("click", function () {
                 advancedVisible = !advancedVisible;
                 $advanced.toggle(advancedVisible);
+                if (advancedVisible) {
+                    // Scroll to bottom so that the new field can be seen
+                    $("#limitedGameForm").get(0).scrollIntoView({ behavior: "smooth", block: "end" });
+                }
                 $(this).text(advancedVisible ? "Hide advanced settings" : "Show advanced settings");
             });
 
@@ -255,6 +259,13 @@ var GempLotrHallUI = Class.extend({
                 .append($("<option>").val("SWISS").text("Swiss"))
                 .append($("<option>").val("SINGLE_ELIMINATION").text("Single elimination"));
 
+            // Competitive
+            const $competitiveLabel = $("<label>").attr("for", "competitiveSelect").text("Competitive:");
+            const $competitiveSelect = $("<select>")
+                .attr({ id: "competitiveSelect", name: "competitive" })
+                .append($("<option>").val("false").text("Games can be spectated"))
+                .append($("<option>").val("true").text("No spectate; hidden names in queue"));
+
             // Deck-building duration
             const $durationLabel = $("<label>").attr("for", "deckDuration").text("Deck-building duration (minutes, minimum 5):");
             const $durationInput = $("<input>")
@@ -292,7 +303,9 @@ var GempLotrHallUI = Class.extend({
                 $("<div>").append($pairingLabel),
                 $("<div>").append($pairingSelect),
                 $("<div>").append($durationLabel),
-                $("<div>").append($durationInput)
+                $("<div>").append($durationInput),
+                $("<div>").append($competitiveLabel),
+                $("<div>").append($competitiveSelect)
             );
 
             // Add validating listeners
@@ -340,6 +353,9 @@ var GempLotrHallUI = Class.extend({
             // Pairing
             const playoff = $("#pairingType").val();
 
+            const competitive = $("#competitiveSelect").val();
+
+
             // Deck building duration (number input)
             const deckbuildingDuration = parseInt($("#deckDuration").val(), 10) || 15;
             const maxPlayers = parseInt($("#numPlayers").val(), 10) || 4;
@@ -354,6 +370,7 @@ var GempLotrHallUI = Class.extend({
                 tableDraftTimer,
                 playoff,
                 deckbuildingDuration,
+                competitive,
                 function(json) {
                     // Success callback — handle your response here
                     console.log("Tournament created successfully:", json);

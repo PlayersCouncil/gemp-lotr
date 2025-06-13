@@ -21,10 +21,7 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.service.AdminService;
-import com.gempukku.lotro.tournament.Tournament;
-import com.gempukku.lotro.tournament.TournamentCallback;
-import com.gempukku.lotro.tournament.TournamentQueue;
-import com.gempukku.lotro.tournament.TournamentService;
+import com.gempukku.lotro.tournament.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -476,6 +473,21 @@ public class HallServer extends AbstractServer {
         }
     }
 
+
+    public boolean addPlayerMadeLimitedQueue(TournamentInfo info, Player player, boolean startableEarly, int readyCheckTimeSecs) throws SQLException, IOException {
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            boolean success = _tournamentService.addPlayerMadeLimitedQueue(info, player, startableEarly, readyCheckTimeSecs);
+            if (success) {
+                hallChanged();
+            }
+            return success;
+        } finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+
+    }
+
     public void leaveQueue(String queueId, Player player) throws SQLException, IOException {
         _hallDataAccessLock.writeLock().lock();
         try {
@@ -916,9 +928,9 @@ public class HallServer extends AbstractServer {
         private HallTournamentCallback(Tournament tournament) {
             tournamentId = tournament.getTournamentId();
             tournamentName = tournament.getTournamentName();
-            // Tournaments with no prizes and no entry are not competitive
+            // Tournaments with no prizes or with 'casual' in their names are not competitive
             boolean casual = tournament.getInfo().Parameters().prizes == Tournament.PrizeType.NONE
-                            && tournament.getInfo().Parameters().cost == 0;
+                            || tournamentName.toLowerCase().contains("casual");
 
             if (tournament.isWC()) {
                 gameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),

@@ -283,7 +283,11 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
 
     @Override
     public String getPlayerList() {
-        return _playerList;
+        if (_tournamentQueueName.toLowerCase().contains("competitive")) {
+            return "Competitive, player count: " + _players.size();
+        } else {
+            return _playerList;
+        }
     }
 
     @Override

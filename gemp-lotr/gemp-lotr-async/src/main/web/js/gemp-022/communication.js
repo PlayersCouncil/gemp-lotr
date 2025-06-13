@@ -1445,7 +1445,7 @@ var GempLotrCommunication = Class.extend({
         });
     },
     createTournament:function (type, maxPlayers, sealedFormatCode, soloDraftFormatCode, tableDraftFormatCode, tableDraftTimer,
-                               playoff, deckbuildingDuration, callback, errorMap) {
+                               playoff, deckbuildingDuration, competitive, callback, errorMap) {
         $.ajax({
             type:"POST",
             url:this.url + "/tournament/create",
@@ -1459,6 +1459,7 @@ var GempLotrCommunication = Class.extend({
                 tableDraftTimer:tableDraftTimer,
                 playoff:playoff,
                 deckbuildingDuration:deckbuildingDuration,
+                competitive:competitive,
                 participantId:getUrlParam("participantId")
             },
             success:this.deliveryCheck(callback),
