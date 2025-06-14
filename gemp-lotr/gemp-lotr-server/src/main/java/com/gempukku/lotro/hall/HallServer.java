@@ -911,9 +911,7 @@ public class HallServer extends AbstractServer {
     public class HallTournamentCallback implements TournamentCallback {
         private final String tournamentId;
         private final String tournamentName;
-        private final GameSettings tournamentGameSettings;
-
-        private final GameSettings wcGameSettings;
+        private final GameSettings gameSettings;
 
         private HallTournamentCallback(Tournament tournament) {
             tournamentId = tournament.getTournamentId();
@@ -921,13 +919,16 @@ public class HallServer extends AbstractServer {
             // Tournaments with no prizes and no entry are not competitive
             boolean casual = tournament.getInfo().Parameters().prizes == Tournament.PrizeType.NONE
                             && tournament.getInfo().Parameters().cost == 0;
-            tournamentGameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
-                    tournamentId, null, null, !casual, !casual, false,
-                    false, GameTimer.TOURNAMENT_TIMER, null);
 
-            wcGameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
-                    tournamentId, null, null, true, true, false,
-                    false, GameTimer.CHAMPIONSHIP_TIMER, null);
+            if (tournament.isWC()) {
+                gameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
+                        tournamentId, null, null, true, true, false,
+                        false, GameTimer.CHAMPIONSHIP_TIMER, null);
+            } else {
+                gameSettings = new GameSettings(null, _formatLibrary.getFormat(tournament.getFormatCode()),
+                        tournamentId, null, null, !casual, !casual, false,
+                        false, GameTimer.TOURNAMENT_TIMER, null);
+            }
         }
 
         @Override
@@ -942,11 +943,7 @@ public class HallServer extends AbstractServer {
             _hallDataAccessLock.writeLock().lock();
             try {
                 if (!_shutdown) {
-                    var settings = tournamentGameSettings;
-                    if (tournamentId.toLowerCase().contains("wc")) {
-                        settings = wcGameSettings;
-                    }
-                    final GameTable gameTable = tableHolder.setupTournamentTable(settings, participants);
+                    final GameTable gameTable = tableHolder.setupTournamentTable(gameSettings, participants);
                     final LotroGameMediator mediator = createGameMediator(participants,
                             new GameResultListener() {
                                 @Override
@@ -958,7 +955,7 @@ public class HallServer extends AbstractServer {
                                 public void gameCancelled() {
                                     createGameInternal(participants);
                                 }
-                            }, tournamentName, settings);
+                            }, tournamentName, gameSettings);
                     gameTable.startGame(mediator);
                 }
             } finally {

@@ -1,9 +1,6 @@
 package com.gempukku.lotro.tournament;
 
-import com.gempukku.lotro.game.LotroFormat;
-
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 public class TournamentParams {
     public String tournamentId;
@@ -20,6 +17,8 @@ public class TournamentParams {
     public int minimumPlayers = 2;
     public int maximumPlayers = -1; // Negative value = no maximum set
     public Tournament.PrizeType prizes = Tournament.PrizeType.NONE;
+
+    public boolean wc = false;
 
     public Tournament.Stage getInitialStage() {
         if(manualKickoff)

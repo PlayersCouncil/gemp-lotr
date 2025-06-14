@@ -15,11 +15,11 @@ public interface HallInfoVisitor {
 
     public void visitTournamentQueue(String tournamentQueueKey, int cost, String collectionName, String formatName, String type, String tournamentQueueName, String tournamentPrizes,
                                      String pairingDescription, String startCondition, int playerCount, String playerList, boolean playerSignedUp, boolean joinable, boolean startable,
-                                     int readyCheckSecsRemaining, boolean confirmedReadyCheck);
+                                     int readyCheckSecsRemaining, boolean confirmedReadyCheck, boolean wc);
 
     public void visitTournament(String tournamentKey, String collectionName, String formatName, String tournamentName, String type,
                                 String pairingDescription, String tournamentStage, int round, int playerCount, String playerList, boolean playerInCompetition, boolean abandoned, boolean joinable,
-                                long secsRemaining);
+                                long secsRemaining, boolean wc);
 
     public void runningPlayerGame(String gameId);
 }
