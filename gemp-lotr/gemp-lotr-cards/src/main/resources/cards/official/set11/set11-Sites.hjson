@@ -1396,6 +1396,7 @@
 				effect: {
 					type: heal
 					select: all(hobbit,companion)
+					count: any
 				}
 			}
 		]

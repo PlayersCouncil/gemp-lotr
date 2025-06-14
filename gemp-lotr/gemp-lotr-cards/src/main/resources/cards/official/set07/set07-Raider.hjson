@@ -1987,7 +1987,7 @@
 				requires: [
 					{
 						type: canSpot
-						filter: culture(raider),man
+						filter: another,culture(raider),man
 					}
 					{
 						type: canSpot

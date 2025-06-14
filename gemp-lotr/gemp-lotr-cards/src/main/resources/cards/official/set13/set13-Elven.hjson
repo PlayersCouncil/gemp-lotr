@@ -43,6 +43,7 @@
 					amount: {
 						type: forEachYouCanSpot
 						filter: other,companion,assignedToSkirmish(any)
+						multiplier: -1
 					}
 				}
 			}
