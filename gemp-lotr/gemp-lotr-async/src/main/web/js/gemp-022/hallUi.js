@@ -1118,8 +1118,9 @@ var GempLotrHallUI = Class.extend({
 				for (var i = 0; i < formats.length; i++) {
 					var format = formats[i].childNodes[0].nodeValue;
 					var type = formats[i].getAttribute("type");
-					
-					var item = "<option value='" + type + "'>" + format + "</option>"
+
+                    var selected = (format === "Fellowship Block") ? " selected" : "";
+                    var item = "<option value='" + type + "'" + selected + ">" + format + "</option>";
 					
 					this.supportedFormatsSelect.append(item);
 				}
