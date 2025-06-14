@@ -532,6 +532,7 @@
 			}
 			cost: {
 				type: exert
+				count: 2
 				select: choose(culture(gondor),companion)
 			}
 			effect: {
