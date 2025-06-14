@@ -100,12 +100,12 @@
 				trigger: [
 					{
 						type: usesSpecialAbility
-						filter: side(free people)
+						player: Free Peoples
 						phase: maneuver
 					}
 					{
 						type: usesSpecialAbility
-						filter: side(free people)
+						player: Free Peoples
 						phase: archery
 					}
 				]
