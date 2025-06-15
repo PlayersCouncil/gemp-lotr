@@ -86,7 +86,7 @@ public class Card_01_247_Tests
 		assertTrue(scn.ShadowHasCardChoicesAvailable(soldier, band));
 		assertFalse(scn.HasKeyword(soldier, Keyword.FIERCE));
 		assertFalse(scn.HasKeyword(band, Keyword.FIERCE));
-		
+
 		scn.ShadowChooseCard(band);
 		assertFalse(scn.HasKeyword(soldier, Keyword.FIERCE));
 		assertTrue(scn.HasKeyword(band, Keyword.FIERCE));
