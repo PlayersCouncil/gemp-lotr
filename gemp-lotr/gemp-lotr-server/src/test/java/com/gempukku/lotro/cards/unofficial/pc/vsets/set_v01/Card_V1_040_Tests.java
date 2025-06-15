@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,15 +17,15 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_040_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("rit", "101_40");
 					// put other cards in here as needed for the test case
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -49,7 +49,7 @@ public class Card_V1_040_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl rit = scn.GetFreepsCard("rit");
 
@@ -58,7 +58,7 @@ public class Card_V1_040_Tests
 		assertEquals(Culture.WRAITH, rit.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, rit.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, rit.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(rit, Keyword.TWILIGHT)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(rit, Keyword.TWILIGHT)); // test for keywords as needed
 		assertEquals(4, rit.getBlueprint().getTwilightCost());
 		assertEquals(9, rit.getBlueprint().getStrength());
 		assertEquals(3, rit.getBlueprint().getVitality());
@@ -71,12 +71,12 @@ public class Card_V1_040_Tests
 	@Test
 	public void RITIsStrengthPlusOnePerWoundOnTheRB() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 
 		PhysicalCardImpl rit = scn.GetShadowCard("rit");
-		scn.ShadowMoveCharToTable(rit);
+		scn.MoveMinionsToTable(rit);
 
 		scn.StartGame();
 
@@ -92,42 +92,42 @@ public class Card_V1_040_Tests
 	@Test
 	public void ManeuverActionMakesRITFierce() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 
 		PhysicalCardImpl rit = scn.GetShadowCard("rit");
-		scn.ShadowMoveCharToTable(rit);
+		scn.MoveMinionsToTable(rit);
 
 		scn.StartGame();
 
-		assertFalse(scn.hasKeyword(rit, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(rit, Keyword.FIERCE));
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 		scn.FreepsChooseNo();
 
-		assertTrue(scn.hasKeyword(rit, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(rit, Keyword.FIERCE));
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		assertTrue(scn.hasKeyword(rit, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(rit, Keyword.FIERCE));
 	}
 
 	@Test
 	public void FreepsCanPreventManeuverActionByExertingRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 
 		PhysicalCardImpl rit = scn.GetShadowCard("rit");
-		scn.ShadowMoveCharToTable(rit);
+		scn.MoveMinionsToTable(rit);
 
 		scn.StartGame();
 
-		assertFalse(scn.hasKeyword(rit, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(rit, Keyword.FIERCE));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -135,6 +135,6 @@ public class Card_V1_040_Tests
 		assertTrue(scn.FreepsDecisionAvailable("prevent"));
 		scn.FreepsChooseYes();
 
-		assertFalse(scn.hasKeyword(rit, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(rit, Keyword.FIERCE));
 	}
 }

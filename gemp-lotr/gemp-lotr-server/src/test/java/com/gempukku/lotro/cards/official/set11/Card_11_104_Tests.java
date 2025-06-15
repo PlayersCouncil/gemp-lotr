@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set11;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -15,16 +15,16 @@ import static org.junit.Assert.*;
 public class Card_11_104_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("death", "11_104");
 					put("mouth", "12_73");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,7 +54,7 @@ public class Card_11_104_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
+        assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
@@ -65,8 +65,8 @@ public class Card_11_104_Tests
 
 		var death = scn.GetShadowCard("death");
 		var mouth = scn.GetShadowCard("mouth");
-		scn.ShadowMoveCharToTable(mouth);
-		scn.ShadowMoveCardToHand(death);
+		scn.MoveMinionsToTable(mouth);
+		scn.MoveCardsToHand(death);
 
 		var frodo = scn.GetRingBearer();
 
@@ -84,7 +84,7 @@ public class Card_11_104_Tests
 
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(10, scn.GetTwilight());
-		assertTrue(scn.hasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
 		assertTrue(scn.ShadowPlayAvailable(death));
 
 		scn.ShadowPlayCard(death);
@@ -106,8 +106,8 @@ public class Card_11_104_Tests
 
 		var death = scn.GetShadowCard("death");
 		var mouth = scn.GetShadowCard("mouth");
-		scn.ShadowMoveCharToTable(mouth);
-		scn.ShadowMoveCardToHand(death);
+		scn.MoveMinionsToTable(mouth);
+		scn.MoveCardsToHand(death);
 
 		var frodo = scn.GetRingBearer();
 
@@ -122,7 +122,7 @@ public class Card_11_104_Tests
 
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(10, scn.GetTwilight());
-		assertFalse(scn.hasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
 		assertTrue(scn.ShadowPlayAvailable(death));
 
 		scn.ShadowPlayCard(death);
@@ -141,8 +141,8 @@ public class Card_11_104_Tests
 
 		var death = scn.GetShadowCard("death");
 		var mouth = scn.GetShadowCard("mouth");
-		scn.ShadowMoveCharToTable(mouth);
-		scn.ShadowMoveCardToHand(death);
+		scn.MoveMinionsToTable(mouth);
+		scn.MoveCardsToHand(death);
 
 		var frodo = scn.GetRingBearer();
 
@@ -160,7 +160,7 @@ public class Card_11_104_Tests
 
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(5, scn.GetTwilight());
-		assertTrue(scn.hasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
 		assertTrue(scn.ShadowPlayAvailable(death));
 
 		scn.ShadowPlayCard(death);

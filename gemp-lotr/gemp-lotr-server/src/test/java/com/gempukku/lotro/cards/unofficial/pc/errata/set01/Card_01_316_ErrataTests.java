@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,8 +15,8 @@ import static org.junit.Assert.assertTrue;
 
 public class Card_01_316_ErrataTests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("talent", "51_316");
                     put("sam", "1_311");
@@ -42,7 +42,7 @@ public class Card_01_316_ErrataTests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var talent = scn.GetFreepsCard("talent");
 
@@ -52,14 +52,14 @@ public class Card_01_316_ErrataTests
         assertEquals(CardType.CONDITION, talent.getBlueprint().getCardType());
         assertEquals(0, talent.getBlueprint().getTwilightCost());
 
-        assertTrue(scn.hasKeyword(talent, Keyword.STEALTH));
-        assertFalse(scn.hasKeyword(talent, Keyword.SUPPORT_AREA));
+        assertTrue(scn.HasKeyword(talent, Keyword.STEALTH));
+        assertFalse(scn.HasKeyword(talent, Keyword.SUPPORT_AREA));
     }
 
     @Test
     public void TalentOnlyPlaysOnMerryOrPippin() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl frodo = scn.GetRingBearer();
         PhysicalCardImpl sam = scn.GetFreepsCard("sam");
@@ -67,10 +67,10 @@ public class Card_01_316_ErrataTests
         PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
         PhysicalCardImpl talent = scn.GetFreepsCard("talent");
 
-        scn.FreepsMoveCharToTable(sam);
-        scn.FreepsMoveCharToTable(merry);
-        scn.FreepsMoveCharToTable(pippin);
-        scn.FreepsMoveCardToHand(talent);
+        scn.MoveCompanionToTable(sam);
+        scn.MoveCompanionToTable(merry);
+        scn.MoveCompanionToTable(pippin);
+        scn.MoveCardsToHand(talent);
 
         scn.StartGame();
 
@@ -84,14 +84,14 @@ public class Card_01_316_ErrataTests
     @Test
     public void TalentReducesTwilightIfOnlyHobbits() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl frodo = scn.GetRingBearer();
         PhysicalCardImpl merry = scn.GetFreepsCard("merry");
         PhysicalCardImpl talent = scn.GetFreepsCard("talent");
 
-        scn.FreepsMoveCharToTable(merry);
-        scn.FreepsMoveCardToHand(talent);
+        scn.MoveCompanionToTable(merry);
+        scn.MoveCardsToHand(talent);
 
         scn.StartGame();
 

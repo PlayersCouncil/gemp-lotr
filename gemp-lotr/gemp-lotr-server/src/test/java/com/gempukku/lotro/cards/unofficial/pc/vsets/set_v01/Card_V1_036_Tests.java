@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -17,8 +17,8 @@ import static org.junit.Assert.*;
 public class Card_V1_036_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("vile", "101_36");
                     put("spear", "1_182");
@@ -31,9 +31,9 @@ public class Card_V1_036_Tests
                     put("watcher", "2_73");
 
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,12 +56,12 @@ public class Card_V1_036_Tests
 		 */
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl vile = scn.GetFreepsCard("vile");
 
 		assertFalse(vile.getBlueprint().isUnique());
-		assertTrue(scn.hasKeyword(vile, Keyword.TENTACLE)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(vile, Keyword.TENTACLE)); // test for keywords as needed
 		assertEquals(2, vile.getBlueprint().getTwilightCost());
 		assertEquals(7, vile.getBlueprint().getStrength());
 		assertEquals(2, vile.getBlueprint().getVitality());
@@ -75,11 +75,11 @@ public class Card_V1_036_Tests
 	@Test
 	public void VileTentacleCannotBearPossessions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl vile = scn.GetShadowCard("vile");
 		PhysicalCardImpl spear = scn.GetShadowCard("spear");
-		scn.ShadowMoveCardToHand(vile, spear);
+		scn.MoveCardsToHand(vile, spear);
 
 		scn.StartGame();
 		scn.SetTwilight(3);
@@ -93,10 +93,10 @@ public class Card_V1_036_Tests
 	@Test
 	public void VileTentacleDoesNotSelfDiscardAtAMarsh() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl vile = scn.GetShadowCard("vile");
-		scn.ShadowMoveCardToHand(vile);
+		scn.MoveCardsToHand(vile);
 
 		scn.StartGame();
 		scn.SetTwilight(5);
@@ -109,11 +109,11 @@ public class Card_V1_036_Tests
 	@Test
 	public void VileTentacleHandDiscardToAddMarsh() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl vile = scn.GetShadowCard("vile");
 		PhysicalCardImpl spear = scn.GetShadowCard("spear");
-		scn.ShadowMoveCardToHand(vile, spear);
+		scn.MoveCardsToHand(vile, spear);
 
 		scn.StartGame();
 		scn.SetTwilight(5);
@@ -125,16 +125,16 @@ public class Card_V1_036_Tests
 		assertEquals(3, scn.GetStrength(vile));
 		assertEquals(0, scn.GetShadowDiscardCount());
 		assertEquals(1, scn.GetShadowHandCount());
-		assertFalse(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		scn.ShadowUseCardAction(vile);
 
 		assertEquals(7, scn.GetStrength(vile));
 		assertEquals(1, scn.GetShadowDiscardCount());
 		assertEquals(0, scn.GetShadowHandCount());
-		assertTrue(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 
 		scn.SkipToPhase(Phase.REGROUP);
-		assertTrue(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 	}
 
 }

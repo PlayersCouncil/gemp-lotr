@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_01_316_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("talent1", "71_316");
@@ -26,9 +26,9 @@ public class Card_01_316_ErrataTests
 					put("merry", "1_302");
 					put("pippin", "1_306");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.FOTRRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.FOTRRing
 		);
 	}
 
@@ -64,7 +64,7 @@ public class Card_01_316_ErrataTests
 	@Test
 	public void TalentExertsAndPlaysOnMerryOrPippin() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
@@ -73,7 +73,7 @@ public class Card_01_316_ErrataTests
 		var talent1 = scn.GetFreepsCard("talent1");
 		var talent2 = scn.GetFreepsCard("talent2");
 
-		scn.FreepsMoveCardToHand(talent1,talent2, sam, merry, pippin);
+		scn.MoveCardsToHand(talent1,talent2, sam, merry, pippin);
 
 		scn.StartGame();
 
@@ -105,14 +105,14 @@ public class Card_01_316_ErrataTests
 	@Test
 	public void TalentReducesShadowBy1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var merry = scn.GetFreepsCard("merry");
 		var talent1 = scn.GetFreepsCard("talent1");
 
-		scn.FreepsMoveCharToTable(merry);
-		scn.FreepsAttachCardsTo(merry, talent1);
+		scn.MoveCompanionToTable(merry);
+		scn.AttachCardsTo(merry, talent1);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_023_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("nobody", "1_23");
@@ -28,9 +28,9 @@ public class Card_01_023_Tests
 					put("deck5", "1_130");
 					put("deck6", "1_131");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -60,7 +60,7 @@ public class Card_01_023_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+        assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -71,11 +71,11 @@ public class Card_01_023_Tests
 
 		var nobody = scn.GetFreepsCard("nobody");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(nobody);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToHand(nobody);
+		scn.MoveCompanionToTable(gimli);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 
@@ -93,11 +93,11 @@ public class Card_01_023_Tests
 
 		var nobody = scn.GetFreepsCard("nobody");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(nobody);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToHand(nobody);
+		scn.MoveCompanionToTable(gimli);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveMinionsToTable(uruk);
 		scn.StartGame();
 
 		scn.SkipToAssignments();

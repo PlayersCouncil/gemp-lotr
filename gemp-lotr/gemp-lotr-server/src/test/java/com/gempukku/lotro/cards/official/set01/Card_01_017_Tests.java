@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_01_017_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("grimir", "1_17");
@@ -26,9 +26,9 @@ public class Card_01_017_Tests
 					put("runner2", "1_178");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -75,8 +75,8 @@ public class Card_01_017_Tests
 		var grimir = scn.GetFreepsCard("grimir");
 		var guard = scn.GetFreepsCard("guard");
 		var event = scn.GetFreepsCard("event");
-		scn.FreepsMoveCharToTable(grimir);
-		scn.FreepsMoveCardToDiscard(guard, event);
+		scn.MoveCompanionToTable(grimir);
+		scn.MoveCardsToDiscard(guard, event);
 
 		scn.StartGame();
 

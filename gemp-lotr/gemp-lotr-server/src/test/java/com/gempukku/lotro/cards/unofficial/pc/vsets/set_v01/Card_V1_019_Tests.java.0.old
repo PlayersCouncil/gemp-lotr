@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_019_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("aragorn", "101_19");
 					put("elrond", "1_40");
@@ -28,9 +28,9 @@ public class Card_V1_019_Tests
 
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -53,7 +53,7 @@ public class Card_V1_019_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 
@@ -75,7 +75,7 @@ public class Card_V1_019_Tests
 	@Test
 	public void OnPlayTutorsAnElvenAllyOfCost2OrLess() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
@@ -83,7 +83,7 @@ public class Card_V1_019_Tests
 		PhysicalCardImpl celeborn = scn.GetFreepsCard("celeborn");
 		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
 
-		scn.FreepsMoveCardToHand(aragorn);
+		scn.MoveCardsToHand(aragorn);
 
 		scn.StartGame();
 
@@ -104,17 +104,17 @@ public class Card_V1_019_Tests
 	@Test
 	public void SkirmishAbilityDiscardsElvenEventToPumpAragorn() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl defiance = scn.GetFreepsCard("defiance");
 
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToHand(defiance);
+		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCardsToHand(defiance);
 
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
 
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionToTable(runner);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set06;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_06_063_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("gnawing", "6_63");
 					put("artisan", "6_65");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -51,7 +51,7 @@ public class Card_06_063_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -62,8 +62,8 @@ public class Card_06_063_Tests
 
 		var gnawing = scn.GetShadowCard("gnawing");
 		var artisan = scn.GetShadowCard("artisan");
-		scn.ShadowMoveCharToTable(artisan);
-		scn.ShadowMoveCardToSupportArea(gnawing);
+		scn.MoveMinionsToTable(artisan);
+		scn.MoveCardsToSupportArea(gnawing);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
@@ -84,8 +84,8 @@ public class Card_06_063_Tests
 
 		var gnawing = scn.GetShadowCard("gnawing");
 		var artisan = scn.GetShadowCard("artisan");
-		scn.ShadowMoveCharToTable(artisan);
-		scn.ShadowMoveCardToSupportArea(gnawing);
+		scn.MoveMinionsToTable(artisan);
+		scn.MoveCardsToSupportArea(gnawing);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
@@ -93,6 +93,6 @@ public class Card_06_063_Tests
 		scn.PassCurrentPhaseActions();
 		scn.FreepsChooseToStay();
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-		assertEquals(Phase.FELLOWSHIP, scn.getPhase());
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 	}
 }

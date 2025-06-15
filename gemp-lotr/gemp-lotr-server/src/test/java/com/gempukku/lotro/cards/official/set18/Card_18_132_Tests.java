@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set18;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 
 public class Card_18_132_Tests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("flees", "18_132");
                     put("nazgul", "1_232");
@@ -59,7 +59,7 @@ public class Card_18_132_Tests
         assertEquals(Side.SHADOW, card.getBlueprint().getSide());
         assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
         assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
+        assertTrue(scn.HasTimeword(card, Timeword.SHADOW));
         assertEquals(2, card.getBlueprint().getTwilightCost());
 
     }
@@ -71,7 +71,7 @@ public class Card_18_132_Tests
 
         var flees = scn.GetShadowCard("flees");
         var nazgul = scn.GetShadowCard("nazgul");
-        scn.ShadowMoveCardToHand(flees, nazgul);
+        scn.MoveCardsToHand(flees, nazgul);
 
         scn.StartGame();
 
@@ -92,14 +92,14 @@ public class Card_18_132_Tests
         var nazgul = scn.GetShadowCard("nazgul");
         var orc = scn.GetShadowCard("orc");
         var cantea = scn.GetShadowCard("cantea");
-        scn.ShadowMoveCardToHand(flees);
-        scn.ShadowMoveCharToTable(nazgul);
+        scn.MoveCardsToHand(flees);
+        scn.MoveMinionsToTable(nazgul);
 
         var follower0 = scn.GetFreepsCard("follower0");
         var follower1 = scn.GetFreepsCard("follower1");
         var follower2 = scn.GetFreepsCard("follower2");
         var follower3 = scn.GetFreepsCard("follower3");
-        scn.FreepsMoveCardToSupportArea(follower0, follower1, follower2, follower3);
+        scn.MoveCardsToSupportArea(follower0, follower1, follower2, follower3);
 
         scn.StartGame();
 
@@ -115,7 +115,7 @@ public class Card_18_132_Tests
         assertEquals(8, scn.GetTwilight());
         assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
         assertEquals(2, scn.ShadowGetMultipleChoices().size());
-        scn.ShadowChooseMultipleChoiceOption("Discard a follower");
+        scn.ShadowChooseOption("Discard a follower");
 
         assertEquals(Zone.DISCARD, follower2.getZone());
     }
@@ -127,14 +127,14 @@ public class Card_18_132_Tests
 
         var flees = scn.GetShadowCard("flees");
         var nazgul = scn.GetShadowCard("nazgul");
-        scn.ShadowMoveCardToHand(flees);
-        scn.ShadowMoveCharToTable(nazgul);
+        scn.MoveCardsToHand(flees);
+        scn.MoveMinionsToTable(nazgul);
 
         var follower0 = scn.GetFreepsCard("follower0");
         var follower1 = scn.GetFreepsCard("follower1");
         var follower2 = scn.GetFreepsCard("follower2");
         var follower3 = scn.GetFreepsCard("follower3");
-        scn.FreepsMoveCardToSupportArea(follower0, follower1, follower2, follower3);
+        scn.MoveCardsToSupportArea(follower0, follower1, follower2, follower3);
 
         scn.StartGame();
 
@@ -163,8 +163,8 @@ public class Card_18_132_Tests
         var orc = scn.GetShadowCard("orc");
         var cantea = scn.GetShadowCard("cantea");
         var twk = scn.GetShadowCard("twk");
-        scn.ShadowMoveCardToHand(flees);
-        scn.ShadowMoveCharToTable(nazgul);
+        scn.MoveCardsToHand(flees);
+        scn.MoveMinionsToTable(nazgul);
 
         scn.StartGame();
 

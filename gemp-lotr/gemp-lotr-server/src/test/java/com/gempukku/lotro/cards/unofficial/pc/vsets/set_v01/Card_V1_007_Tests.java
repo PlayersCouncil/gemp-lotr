@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 
 public class Card_V1_007_Tests
 {
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("there", "101_7");
                     put("arwen", "1_30");
@@ -24,9 +24,9 @@ public class Card_V1_007_Tests
 
                     put("orc1", "1_191");
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -45,15 +45,15 @@ public class Card_V1_007_Tests
 		 */
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl there = scn.GetFreepsCard("there");
 
 		assertFalse(there.getBlueprint().isUnique());
-		assertTrue(scn.hasKeyword(there, Keyword.TALE)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(there, Keyword.TALE)); // test for keywords as needed
 		assertEquals(1, there.getBlueprint().getTwilightCost());
 		assertEquals(CardType.EVENT, there.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(there, Timeword.SKIRMISH));
+        assertTrue(scn.HasTimeword(there, Timeword.SKIRMISH));
 		assertEquals(Culture.ELVEN, there.getBlueprint().getCulture());
 		assertEquals(Side.FREE_PEOPLE, there.getBlueprint().getSide());
 	}
@@ -61,17 +61,17 @@ public class Card_V1_007_Tests
 	@Test
 	public void IWasThereDoesNotTriggerIfNoSkirmishingElves() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl there = scn.GetFreepsCard("there");
 		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl tale = scn.GetFreepsCard("tale");
 		PhysicalCardImpl saga = scn.GetFreepsCard("saga");
-		scn.FreepsMoveCardToHand(there, arwen, aragorn, tale, saga);
+		scn.MoveCardsToHand(there, arwen, aragorn, tale, saga);
 
 		PhysicalCardImpl orc1 = scn.GetShadowCard("orc1");
-		scn.ShadowMoveCharToTable(orc1);
+		scn.MoveMinionsToTable(orc1);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(arwen);
@@ -90,16 +90,16 @@ public class Card_V1_007_Tests
 	@Test
 	public void IWasThereDoesNotTriggerIfNoElvenTales() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl there = scn.GetFreepsCard("there");
 		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl saga = scn.GetFreepsCard("saga");
-		scn.FreepsMoveCardToHand(there, arwen, aragorn, saga);
+		scn.MoveCardsToHand(there, arwen, aragorn, saga);
 
 		PhysicalCardImpl orc1 = scn.GetShadowCard("orc1");
-		scn.ShadowMoveCharToTable(orc1);
+		scn.MoveMinionsToTable(orc1);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(arwen);
@@ -117,15 +117,15 @@ public class Card_V1_007_Tests
 	@Test
 	public void IWasThereTriggersIfElvenTaleAndElfSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl there = scn.GetFreepsCard("there");
 		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
 		PhysicalCardImpl tale = scn.GetFreepsCard("tale");
-		scn.FreepsMoveCardToHand(there, arwen, tale);
+		scn.MoveCardsToHand(there, arwen, tale);
 
 		PhysicalCardImpl orc1 = scn.GetShadowCard("orc1");
-		scn.ShadowMoveCharToTable(orc1);
+		scn.MoveMinionsToTable(orc1);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(arwen);

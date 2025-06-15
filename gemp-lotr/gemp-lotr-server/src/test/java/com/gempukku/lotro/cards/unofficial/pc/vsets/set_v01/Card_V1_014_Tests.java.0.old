@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_014_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("gandalf", "101_14");
 					put("elrond", "1_40");
@@ -30,9 +30,9 @@ public class Card_V1_014_Tests
 					put("bb", "1_70");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_V1_014_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 
@@ -78,15 +78,15 @@ public class Card_V1_014_Tests
 	@Test
 	public void GandalfExertsAndSpotsTwoElvenAlliesToShuffleACardFromDiscardIntoDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl boats = scn.GetFreepsCard("boats");
 		PhysicalCardImpl bb = scn.GetFreepsCard("bb");
 
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCharToTable("galadriel", "orophin");
-		scn.FreepsMoveCardToDiscard(boats, bb);
+		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionToTable("galadriel", "orophin");
+		scn.MoveCardToDiscard(boats, bb);
 
 		scn.StartGame();
 
@@ -109,15 +109,15 @@ public class Card_V1_014_Tests
 	@Test
 	public void WhileThereAre3ElvenAlliesGandalfIsStrengthPlus2() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl orophin = scn.GetFreepsCard("orophin");
 
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCardToHand(elrond, galadriel, orophin);
+		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCardsToHand(elrond, galadriel, orophin);
 
 		scn.StartGame();
 
@@ -136,15 +136,15 @@ public class Card_V1_014_Tests
 	@Test
 	public void WhileThereAre3WhiteCouncilMembersGandalfIsStrengthPlus2() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl elrondcomp = scn.GetFreepsCard("elrondcomp");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl celeborn = scn.GetFreepsCard("celeborn");
 
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCardToHand(elrondcomp, galadriel, celeborn);
+		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCardsToHand(elrondcomp, galadriel, celeborn);
 
 		scn.StartGame();
 
@@ -163,15 +163,15 @@ public class Card_V1_014_Tests
 	@Test
 	public void WhileThereAreBothAlliesAndWhiteCouncilMembersGandalfIsStrengthPlus4() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl celeborn = scn.GetFreepsCard("celeborn");
 
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCardToHand(elrond, galadriel, celeborn);
+		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCardsToHand(elrond, galadriel, celeborn);
 
 		scn.StartGame();
 

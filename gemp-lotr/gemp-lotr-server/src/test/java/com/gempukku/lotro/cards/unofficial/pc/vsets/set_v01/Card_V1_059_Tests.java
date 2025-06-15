@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_V1_059_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("merry", "1_302");
 					put("legolas", "1_50");
@@ -33,8 +33,8 @@ public class Card_V1_059_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -63,8 +63,8 @@ public class Card_V1_059_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SANCTUARY));
-		assertFalse(scn.hasKeyword(card, Keyword.FOREST));
+		assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
+		assertFalse(scn.HasKeyword(card, Keyword.FOREST));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
@@ -72,13 +72,13 @@ public class Card_V1_059_Tests
 	@Test
 	public void FellowshipActionExertsCompanionOfOneCultureToPumpAnotherUntilEndOfTurn() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var legolas = scn.GetFreepsCard("legolas");
 		var merry = scn.GetFreepsCard("merry");
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.FreepsMoveCharToTable(legolas, merry, boromir);
+		scn.MoveCompanionToTable(legolas, merry, boromir);
 
 		scn.StartGame();
 
@@ -121,11 +121,11 @@ public class Card_V1_059_Tests
 	@Test
 	public void FellowshipActionLimitedTo6PerTurn() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.FreepsMoveCharToTable(boromir, merry);
+		scn.MoveCompanionToTable(boromir, merry);
 
 		scn.StartGame();
 

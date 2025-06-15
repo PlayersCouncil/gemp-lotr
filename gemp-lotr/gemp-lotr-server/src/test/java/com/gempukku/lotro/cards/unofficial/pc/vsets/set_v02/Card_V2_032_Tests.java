@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_V2_032_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("alliance", "102_32");
 					put("uruk", "2_47");
 					put("orc", "1_261");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,8 +54,8 @@ public class Card_V2_032_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SEARCH));
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SEARCH));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -67,8 +67,8 @@ public class Card_V2_032_Tests
 		var alliance = scn.GetShadowCard("alliance");
 		var uruk = scn.GetShadowCard("uruk");
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToHand(alliance, orc);
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveCardsToHand(alliance, orc);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -79,10 +79,10 @@ public class Card_V2_032_Tests
 		assertEquals(7, scn.GetStrength(uruk));
 
 		scn.ShadowPlayCard(orc);
-		assertTrue(scn.hasKeyword(uruk, Keyword.TRACKER));
+		assertTrue(scn.HasKeyword(uruk, Keyword.TRACKER));
 		assertEquals(8, scn.GetStrength(uruk));
 		assertEquals(5, orc.getBlueprint().getStrength());
-		assertTrue(scn.hasKeyword(orc, Keyword.TRACKER));
+		assertTrue(scn.HasKeyword(orc, Keyword.TRACKER));
 		assertEquals(6, scn.GetStrength(orc));
 	}
 
@@ -94,9 +94,9 @@ public class Card_V2_032_Tests
 		var alliance = scn.GetShadowCard("alliance");
 		var uruk = scn.GetShadowCard("uruk");
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToSupportArea(alliance);
-		scn.ShadowMoveCardToHand(orc);
-		scn.ShadowMoveCardToDiscard(uruk);
+		scn.MoveCardsToSupportArea(alliance);
+		scn.MoveCardsToHand(orc);
+		scn.MoveCardsToDiscard(uruk);
 
 		scn.StartGame();
 		scn.SetTwilight(10);

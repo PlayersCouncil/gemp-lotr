@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_02_107_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("sunlight", "52_107");
@@ -22,9 +22,9 @@ public class Card_02_107_ErrataTests
 
 					put("lemenya", "1_232");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -53,7 +53,7 @@ public class Card_02_107_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, sunlight.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, sunlight.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, sunlight.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(sunlight, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(sunlight, Keyword.SUPPORT_AREA));
 		assertEquals(1, sunlight.getBlueprint().getTwilightCost());
 	}
 
@@ -64,7 +64,7 @@ public class Card_02_107_ErrataTests
 
 		var sunlight = scn.GetFreepsCard("sunlight");
 		var bilbo = scn.GetFreepsCard("bilbo");
-		scn.FreepsMoveCardToHand(sunlight, bilbo);
+		scn.MoveCardsToHand(sunlight, bilbo);
 
 		scn.StartGame();
 
@@ -83,10 +83,10 @@ public class Card_02_107_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sunlight = scn.GetFreepsCard("sunlight");
-		scn.FreepsMoveCardToSupportArea(sunlight);
+		scn.MoveCardsToSupportArea(sunlight);
 
 		var lemenya = scn.GetShadowCard("lemenya");
-		scn.ShadowMoveCharToTable(lemenya);
+		scn.MoveMinionsToTable(lemenya);
 
 		scn.StartGame();
 

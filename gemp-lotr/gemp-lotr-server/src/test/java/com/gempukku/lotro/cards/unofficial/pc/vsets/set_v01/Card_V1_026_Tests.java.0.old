@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -18,8 +18,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_026_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("crows", "101_26");
                     put("crows2", "101_26");
@@ -48,9 +48,9 @@ public class Card_V1_026_Tests
                     put("axe8", "1_12");
                     put("ring1", "9_6");
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -73,7 +73,7 @@ public class Card_V1_026_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl crows = scn.GetFreepsCard("crows");
 
@@ -95,7 +95,7 @@ public class Card_V1_026_Tests
 	@Test
 	public void CrowsTwilightDiscountScalesBasedOnItemsOnCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl axe1 = scn.GetFreepsCard("axe1");
@@ -103,8 +103,8 @@ public class Card_V1_026_Tests
 		PhysicalCardImpl axe3 = scn.GetFreepsCard("axe3");
 		PhysicalCardImpl ring1 = scn.GetFreepsCard("ring1");
 
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsMoveCardToHand(axe1, axe2, axe3, ring1);
+		scn.MoveCompanionToTable(gimli);
+		scn.MoveCardsToHand(axe1, axe2, axe3, ring1);
 
 		PhysicalCardImpl crows = scn.GetShadowCard("crows");
 		PhysicalCardImpl crows2 = scn.GetShadowCard("crows2");
@@ -112,7 +112,7 @@ public class Card_V1_026_Tests
 		PhysicalCardImpl crows4 = scn.GetShadowCard("crows4");
 		PhysicalCardImpl crows5 = scn.GetShadowCard("crows5");
 		PhysicalCardImpl crows6 = scn.GetShadowCard("crows6");
-		scn.ShadowMoveCardToHand(crows, crows2, crows3, crows4, crows5, crows6);
+		scn.MoveCardsToHand(crows, crows2, crows3, crows4, crows5, crows6);
 
 		scn.StartGame();
 
@@ -124,19 +124,19 @@ public class Card_V1_026_Tests
 		scn.ShadowPlayCard(crows);
 		scn.ShadowChooseCard(gimli);
 		assertEquals(15, scn.GetTwilight()); //-3 cost, -2 roaming, +0 bonus
-		scn.FreepsAttachCardsTo(gimli, ring1);
+		scn.AttachCardsTo(gimli, ring1);
 		scn.ShadowPlayCard(crows2);
 		scn.ShadowChooseCard(gimli);
 		assertEquals(11, scn.GetTwilight()); //-3 cost, -2 roaming, +1 bonus
-		scn.FreepsAttachCardsTo(gimli, axe1);
+		scn.AttachCardsTo(gimli, axe1);
 		scn.ShadowPlayCard(crows3);
 		scn.ShadowChooseCard(gimli);
 		assertEquals(8, scn.GetTwilight()); //-3 cost, -2 roaming, +2 bonus
-		scn.FreepsAttachCardsTo(gimli, axe2);
+		scn.AttachCardsTo(gimli, axe2);
 		scn.ShadowPlayCard(crows4);
 		scn.ShadowChooseCard(gimli);
 		assertEquals(6, scn.GetTwilight()); //-3 cost, -2 roaming, +3 bonus
-		scn.FreepsAttachCardsTo(gimli, axe3);
+		scn.AttachCardsTo(gimli, axe3);
 		scn.ShadowPlayCard(crows5);
 		scn.ShadowChooseCard(gimli);
 		assertEquals(4, scn.GetTwilight()); //-3 cost, -2 roaming, +3 bonus, capped
@@ -147,14 +147,14 @@ public class Card_V1_026_Tests
 	@Test
 	public void ManeuverActionRequires2FreepsItemsOrSaruman() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl axe1 = scn.GetFreepsCard("axe1");
 		PhysicalCardImpl ring1 = scn.GetFreepsCard("ring1");
 
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsAttachCardsTo(gimli, ring1);
+		scn.MoveCompanionToTable(gimli);
+		scn.AttachCardsTo(gimli, ring1);
 
 		PhysicalCardImpl crows = scn.GetShadowCard("crows");
 		PhysicalCardImpl poss1 = scn.GetShadowCard("poss1");
@@ -162,11 +162,11 @@ public class Card_V1_026_Tests
 		PhysicalCardImpl art1 = scn.GetShadowCard("art1");
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
 
-		scn.ShadowMoveCardToHand(saruman);
-		scn.ShadowMoveCharToTable(crows);
-		scn.ShadowMoveCardsToBottomOfDeck(poss1);
-		scn.ShadowMoveCardToDiscard(poss2);
-		scn.ShadowMoveCardToDiscard(art1);
+		scn.MoveCardsToHand(saruman);
+		scn.MoveMinionToTable(crows);
+		scn.MoveCardsToBottomOfDeck(poss1);
+		scn.MoveCardToDiscard(poss2);
+		scn.MoveCardToDiscard(art1);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -184,7 +184,7 @@ public class Card_V1_026_Tests
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
 
-		scn.FreepsAttachCardsTo(gimli, axe1);
+		scn.AttachCardsTo(gimli, axe1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();
@@ -197,8 +197,8 @@ public class Card_V1_026_Tests
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
 
-		scn.FreepsMoveCardToDiscard(axe1, ring1);
-		scn.ShadowMoveCharToTable(saruman);
+		scn.MoveCardToDiscard(axe1, ring1);
+		scn.MoveMinionToTable(saruman);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();
@@ -210,7 +210,7 @@ public class Card_V1_026_Tests
 	@Test
 	public void ManeuverActionSelfDiscardsToTopDecksItemFromDeckOrDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 
 		PhysicalCardImpl crows = scn.GetShadowCard("crows");
@@ -221,10 +221,10 @@ public class Card_V1_026_Tests
 		PhysicalCardImpl art1 = scn.GetShadowCard("art1");
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
 
-		scn.ShadowMoveCharToTable(crows, crows2, crows3, saruman);
-		scn.ShadowMoveCardsToBottomOfDeck(poss1);
-		scn.ShadowMoveCardToDiscard(poss2);
-		scn.ShadowMoveCardToDiscard(art1);
+		scn.MoveMinionToTable(crows, crows2, crows3, saruman);
+		scn.MoveCardsToBottomOfDeck(poss1);
+		scn.MoveCardToDiscard(poss2);
+		scn.MoveCardToDiscard(art1);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -243,7 +243,7 @@ public class Card_V1_026_Tests
 		// must first decide between deck and discard, and then choose among the revealed copies.
 		scn.ShadowUseCardAction(crows);
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
+		scn.ShadowChooseOption("discard");
 		assertEquals(2, scn.GetShadowCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(poss2);
 		assertEquals(Zone.DISCARD, crows.getZone());
@@ -267,7 +267,7 @@ public class Card_V1_026_Tests
 		// chooses between deck/discard, but then does not have to choose among copies (as there is only 1)
 		scn.ShadowUseCardAction(crows2);
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
+		scn.ShadowChooseOption("discard");
 //		assertEquals(1, scn.GetShadowCardChoiceCount());
 //		scn.ShadowChooseCardBPFromSelection(weather1);
 		assertEquals(Zone.DISCARD, crows2.getZone());
@@ -291,7 +291,7 @@ public class Card_V1_026_Tests
 		// does not need to choose either pile source nor which copy
 		scn.ShadowUseCardAction(crows3);
 		assertFalse(scn.ShadowDecisionAvailable("Choose action to perform"));
-//		scn.ShadowChooseMultipleChoiceOption("draw deck");
+//		scn.ShadowChooseOption("draw deck");
 //		assertEquals(1, scn.GetShadowCardChoiceCount());
 //		scn.ShadowChooseCardBPFromSelection(weather1);
 		assertEquals(Zone.DISCARD, crows3.getZone());

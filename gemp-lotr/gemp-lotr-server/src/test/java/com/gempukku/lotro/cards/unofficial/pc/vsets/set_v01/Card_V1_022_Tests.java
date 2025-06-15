@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,16 +17,16 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_022_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("memorial", "101_22");
 					put("aragorn", "1_89");
 					put("sam", "1_311");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -47,7 +47,7 @@ public class Card_V1_022_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl memorial = scn.GetFreepsCard("memorial");
 
@@ -56,7 +56,7 @@ public class Card_V1_022_Tests
 		assertEquals(Culture.GONDOR, memorial.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, memorial.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, memorial.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(memorial, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(memorial, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, memorial.getBlueprint().getTwilightCost());
 		//assertEquals(, memorial.getBlueprint().getStrength());
 		//assertEquals(, memorial.getBlueprint().getVitality());
@@ -69,11 +69,11 @@ public class Card_V1_022_Tests
 	@Test
 	public void MemorialExertsAragornToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl memorial = scn.GetFreepsCard("memorial");
-		scn.FreepsMoveCardToHand(aragorn, memorial);
+		scn.MoveCardsToHand(aragorn, memorial);
 
 		scn.StartGame();
 
@@ -89,12 +89,12 @@ public class Card_V1_022_Tests
 	@Test
 	public void MemorialSelfDiscardsWhenAragornDies() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl memorial = scn.GetFreepsCard("memorial");
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToSupportArea(memorial);
+		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCardsToSupportArea(memorial);
 
 		scn.StartGame();
 
@@ -113,13 +113,13 @@ public class Card_V1_022_Tests
 	@Test
 	public void FellowshipActionExertsToRemoveBurdensAndExertsOrSelfDiscards() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
 		PhysicalCardImpl memorial = scn.GetFreepsCard("memorial");
-		scn.FreepsMoveCharToTable(aragorn, sam);
-		scn.FreepsMoveCardToSupportArea(memorial);
+		scn.MoveCompanionToTable(aragorn, sam);
+		scn.MoveCardsToSupportArea(memorial);
 
 		scn.StartGame();
 
@@ -141,13 +141,13 @@ public class Card_V1_022_Tests
 		assertEquals("Exert Aragorn", choices[0]);
 		assertEquals("Discard Gilraen's Memorial", choices[1]);
 
-		scn.FreepsChooseMultipleChoiceOption("Exert");
+		scn.FreepsChooseOption("Exert");
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 
 		scn.FreepsUseCardAction(memorial);
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(2, scn.GetWoundsOn(sam));
-		scn.FreepsChooseMultipleChoiceOption("Discard");
+		scn.FreepsChooseOption("Discard");
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(Zone.DISCARD, memorial.getZone());
 	}

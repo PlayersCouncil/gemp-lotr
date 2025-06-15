@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_02_044_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("business", "2_44");
@@ -30,9 +30,9 @@ public class Card_02_044_Tests
 					put("chaff4", "6_22");
 					put("chaff5", "6_23");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -62,7 +62,7 @@ public class Card_02_044_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -73,7 +73,7 @@ public class Card_02_044_Tests
 
 		var business = scn.GetShadowCard("business");
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCardToHand(business, uruk);
+		scn.MoveCardsToHand(business, uruk);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -90,13 +90,13 @@ public class Card_02_044_Tests
 		var scn = GetScenario();
 
 		var business = scn.GetShadowCard("business");
-		scn.ShadowMoveCardToHand(business);
+		scn.MoveCardsToHand(business);
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var curse1 = scn.GetFreepsCard("curse1");
 		var curse2 = scn.GetFreepsCard("curse2");
-		scn.FreepsMoveCardToHand(curse1, curse2);
-		scn.FreepsMoveCardToSupportArea(galadriel);
+		scn.MoveCardsToHand(curse1, curse2);
+		scn.MoveCardsToSupportArea(galadriel);
 
 		scn.StartGame();
 		scn.ShadowDrawCards(8);
@@ -104,7 +104,7 @@ public class Card_02_044_Tests
 		//First check that curse works with No Business in hand
 		scn.FreepsPlayCard(curse1);
 		assertTrue(scn.FreepsDecisionAvailable("Hand"));
-		scn.ShadowMoveCardToSupportArea(business); //slide in No Business between actions
+		scn.MoveCardsToSupportArea(business); //slide in No Business between actions
 		scn.FreepsDismissRevealedCards();
 
 		//Curse's effect should now be blocked
@@ -120,12 +120,12 @@ public class Card_02_044_Tests
 		var scn = GetScenario();
 
 		var business = scn.GetShadowCard("business");
-		scn.ShadowMoveCardToHand(business);
-		scn.ShadowMoveCharToTable("uruk");
+		scn.MoveCardsToHand(business);
+		scn.MoveMinionsToTable("uruk");
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var mirror = scn.GetFreepsCard("mirror");
-		scn.FreepsMoveCardToSupportArea(mirror, galadriel);
+		scn.MoveCardsToSupportArea(mirror, galadriel);
 
 		scn.StartGame();
 		scn.ShadowDrawCards(8);
@@ -139,7 +139,7 @@ public class Card_02_044_Tests
 		scn.FreepsDismissRevealedCards();
 		scn.FreepsChooseAny();
 
-		scn.ShadowMoveCardToSupportArea(business); //slide in No Business between actions
+		scn.MoveCardsToSupportArea(business); //slide in No Business between actions
 		scn.ShadowPassCurrentPhaseAction();
 
 		//Mirror's effect should now be blocked

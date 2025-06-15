@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_154_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 
@@ -23,9 +23,9 @@ public class Card_01_154_ErrataTests
 					put("chaff2", "1_156");
 					put("chaff3", "1_157");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -58,7 +58,7 @@ public class Card_01_154_ErrataTests
 		assertEquals(Culture.ISENGARD, soldier.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, soldier.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, soldier.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(soldier, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(soldier, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(soldier, Keyword.DAMAGE));
 		assertEquals(2, soldier.getBlueprint().getTwilightCost());
 		assertEquals(7, soldier.getBlueprint().getStrength());
@@ -74,7 +74,7 @@ public class Card_01_154_ErrataTests
 		var frodo = scn.GetRingBearer();
 
 		var soldier = scn.GetShadowCard("soldier");
-		scn.ShadowMoveCardToHand(soldier);
+		scn.MoveCardsToHand(soldier);
 
 		scn.StartGame();
 
@@ -98,7 +98,7 @@ public class Card_01_154_ErrataTests
 		var frodo = scn.GetRingBearer();
 
 		var soldier = scn.GetShadowCard("soldier");
-		scn.ShadowMoveCardToHand(soldier);
+		scn.MoveCardsToHand(soldier);
 
 		scn.StartGame();
 

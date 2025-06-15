@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set18;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_18_134_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("anotherway", "12_40");
@@ -36,9 +36,9 @@ public class Card_18_134_ErrataTests
 					put("site8", "11_239");
 					put("site9", "11_239");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing,
-				GenericCardTestHelper.Shadows
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Shadows
 		);
 	}
 
@@ -65,7 +65,7 @@ public class Card_18_134_ErrataTests
 
 		assertFalse(doorway.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, doorway.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(doorway, Keyword.MOUNTAIN));
+		assertTrue(scn.HasKeyword(doorway, Keyword.MOUNTAIN));
 		assertEquals(1, doorway.getBlueprint().getTwilightCost());
 		assertEquals(SitesBlock.SHADOWS, doorway.getBlueprint().getSiteBlock());
 		assertEquals(0, doorway.getBlueprint().getSiteNumber());
@@ -78,8 +78,8 @@ public class Card_18_134_ErrataTests
 
 		var onegoodturn = scn.GetFreepsCard("onegoodturn");
 		var smeagol = scn.GetFreepsCard("smeagol");
-		scn.FreepsMoveCharToTable(smeagol);
-		scn.FreepsMoveCardToHand(onegoodturn);
+		scn.MoveCompanionToTable(smeagol);
+		scn.MoveCardsToHand(onegoodturn);
 
 		var site1 = scn.GetFreepsSite("East Road");
 		var freepsSite3 = scn.GetFreepsSite("Fangorn Glade");
@@ -149,7 +149,7 @@ public class Card_18_134_ErrataTests
 		var scn = GetScenario();
 
 		var anotherway = scn.GetFreepsCard("anotherway");
-		scn.FreepsMoveCardToSupportArea(anotherway);
+		scn.MoveCardsToSupportArea(anotherway);
 
 		var site1 = scn.GetFreepsSite("East Road");
 		var doorway = scn.GetShadowSite("Doorway to Doom");

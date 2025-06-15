@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set04;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_04_337_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("fodder01", "5_1");
@@ -49,8 +49,8 @@ public class Card_04_337_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -80,7 +80,7 @@ public class Card_04_337_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SANCTUARY));
+		assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
@@ -113,10 +113,10 @@ public class Card_04_337_Tests
 		var fodder19 = scn.GetFreepsCard("fodder19");
 		var fodder20 = scn.GetFreepsCard("fodder20");
 
-		scn.FreepsMoveCardToHand(fodder01, fodder02, fodder03, fodder04, fodder05, fodder06, fodder07, fodder08);
+		scn.MoveCardsToHand(fodder01, fodder02, fodder03, fodder04, fodder05, fodder06, fodder07, fodder08);
 
 		scn.StartGame();
-		scn.FreepsMoveCardsToTopOfDeck(fodder20, fodder19, fodder18, fodder17, fodder16, fodder15, fodder14, fodder13, fodder12, fodder11, fodder10, fodder09);
+		scn.MoveCardsToTopOfDeck(fodder20, fodder19, fodder18, fodder17, fodder16, fodder15, fodder14, fodder13, fodder12, fodder11, fodder10, fodder09);
 
 		assertEquals(8, scn.GetFreepsHandCount());
 

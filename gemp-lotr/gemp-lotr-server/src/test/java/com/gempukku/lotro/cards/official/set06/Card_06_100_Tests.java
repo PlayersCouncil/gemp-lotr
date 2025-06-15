@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set06;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_06_100_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("card", "6_100");
 					// put other cards in here as needed for the test case
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,8 +55,8 @@ public class Card_06_100_Tests
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.WRAITH, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.TWILIGHT));
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(card, Keyword.TWILIGHT));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
@@ -71,7 +71,7 @@ public class Card_06_100_Tests
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		scn.MoveCardsToHand(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);

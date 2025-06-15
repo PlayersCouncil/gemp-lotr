@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set11;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_11_071_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("card", "11_71");
 					// put other cards in here as needed for the test case
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -51,9 +51,9 @@ public class Card_11_071_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.TOIL));
+		assertTrue(scn.HasKeyword(card, Keyword.TOIL));
 		assertEquals(2, scn.GetKeywordCount(card, Keyword.TOIL));
-        assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
+        assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 	}
 
@@ -64,7 +64,7 @@ public class Card_11_071_Tests
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		scn.MoveCardsToHand(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);

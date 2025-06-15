@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set05;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_05_001_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("rampager", "5_1");
 					// put other cards in here as needed for the test case
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -67,7 +67,7 @@ public class Card_05_001_Tests
 		var scn = GetScenario();
 
 		var rampager = scn.GetShadowCard("rampager");
-		scn.ShadowMoveCardToHand(rampager);
+		scn.MoveCardsToHand(rampager);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();

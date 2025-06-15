@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set08;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_08_054_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("freebooter", "8_54");
 					put("wargalley", "8_59");
 					put("leaders", "7_112");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_08_054_Tests
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.CORSAIR));
+		assertTrue(scn.HasKeyword(card, Keyword.CORSAIR));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
@@ -70,11 +70,11 @@ public class Card_08_054_Tests
 
 		var freebooter = scn.GetShadowCard("freebooter");
 		var wargalley = scn.GetShadowCard("wargalley");
-		scn.ShadowMoveCardToHand(freebooter);
-		scn.ShadowMoveCardToSupportArea(wargalley);
+		scn.MoveCardsToHand(freebooter);
+		scn.MoveCardsToSupportArea(wargalley);
 
 		var leaders = scn.GetFreepsCard("leaders");
-		scn.FreepsMoveCardToSupportArea(leaders);
+		scn.MoveCardsToSupportArea(leaders);
 
 		scn.StartGame();
 		scn.SetTwilight(10);

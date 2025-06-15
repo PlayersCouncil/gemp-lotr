@@ -1,8 +1,7 @@
 package com.gempukku.lotro.cards.official.set07;
 
-import com.gempukku.lotro.at.AbstractAtTest;
-import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -14,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_07_262_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("battlements", "7_262");
 					put("pillager", "7_275");
 					put("assassin", "1_262");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,7 +53,7 @@ public class Card_07_262_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
+        assertTrue(scn.HasTimeword(card, Timeword.SHADOW));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -68,7 +67,7 @@ public class Card_07_262_Tests
 		var pillager = scn.GetShadowCard("pillager");
 		var assassin = scn.GetShadowCard("assassin");
 		var battlements = scn.GetShadowCard("battlements");
-		scn.ShadowMoveCardToDiscard(assassin, battlements);
+		scn.MoveCardsToDiscard(assassin, battlements);
 
 		scn.StartGame();
 
@@ -78,14 +77,14 @@ public class Card_07_262_Tests
 		scn.ShadowTakeControlOfSite();
 		assertTrue(scn.IsSiteControlled(site1));
 		scn.StackCardsOn(site1, pillager);
-		scn.ShadowMoveCardToHand(battlements);
+		scn.MoveCardsToHand(battlements);
 
 		scn.SkipToSite(4);
 		scn.SetTwilight(20);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertTrue(scn.IsSiteControlled(site1));
-		assertEquals(AbstractAtTest.P2, site1.getCardController());
+		assertTrue(scn.ShadowControls(site1));
 		assertEquals(Zone.STACKED, pillager.getZone());
 		assertEquals(Zone.DISCARD, assassin.getZone());
 		assertEquals(1, scn.GetBurdens());
@@ -94,7 +93,7 @@ public class Card_07_262_Tests
 		scn.ShadowPlayCard(battlements);
 		assertEquals(2, scn.ShadowGetChoiceCount());
 
-		scn.ShadowChooseMultipleChoiceOption("burden");
+		scn.ShadowChooseOption("burden");
 		assertEquals(Zone.STACKED, pillager.getZone());
 		assertEquals(Zone.SHADOW_CHARACTERS, assassin.getZone());
 		assertEquals(0, scn.GetBurdens());
@@ -110,8 +109,8 @@ public class Card_07_262_Tests
 		var pillager = scn.GetShadowCard("pillager");
 		var assassin = scn.GetShadowCard("assassin");
 		var battlements = scn.GetShadowCard("battlements");
-		scn.ShadowMoveCardToDiscard(assassin);
-		scn.ShadowMoveCardToHand(pillager, battlements);
+		scn.MoveCardsToDiscard(assassin);
+		scn.MoveCardsToHand(pillager, battlements);
 
 		scn.StartGame();
 
@@ -144,7 +143,7 @@ public class Card_07_262_Tests
 		var pillager = scn.GetShadowCard("pillager");
 		var assassin = scn.GetShadowCard("assassin");
 		var battlements = scn.GetShadowCard("battlements");
-		scn.ShadowMoveCardToDiscard(assassin, battlements);
+		scn.MoveCardsToDiscard(assassin, battlements);
 
 		scn.StartGame();
 
@@ -154,14 +153,14 @@ public class Card_07_262_Tests
 		scn.ShadowTakeControlOfSite();
 		assertTrue(scn.IsSiteControlled(site1));
 		scn.StackCardsOn(site1, pillager);
-		scn.ShadowMoveCardToHand(battlements);
+		scn.MoveCardsToHand(battlements);
 
 		scn.SkipToSite(4);
 		scn.SetTwilight(20);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertTrue(scn.IsSiteControlled(site1));
-		assertEquals(AbstractAtTest.P2, site1.getCardController());
+		assertTrue(scn.ShadowControls(site1));
 		assertEquals(Zone.STACKED, pillager.getZone());
 		assertEquals(Zone.DISCARD, assassin.getZone());
 		assertEquals(1, scn.GetBurdens());
@@ -170,7 +169,7 @@ public class Card_07_262_Tests
 		scn.ShadowPlayCard(battlements);
 		assertEquals(2, scn.ShadowGetChoiceCount());
 
-		scn.ShadowChooseMultipleChoiceOption("play");
+		scn.ShadowChooseOption("play");
 		assertEquals(Zone.SHADOW_CHARACTERS, pillager.getZone());
 		assertEquals(Zone.DISCARD, assassin.getZone());
 		assertEquals(1, scn.GetBurdens());

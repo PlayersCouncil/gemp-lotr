@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set10;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,16 +17,16 @@ import static org.junit.Assert.assertTrue;
 public class Card_10_011_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<String, String>()
 				{{
 					put("card", "60_11");
 					// put other cards in here as needed for the test case
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.FOTRRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.FOTRRing
 		);
 	}
 
@@ -50,7 +50,7 @@ public class Card_10_011_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl card = scn.GetFreepsCard("card");
 
@@ -72,10 +72,10 @@ public class Card_10_011_ErrataTests
 	//@Test
 	public void GaladrielTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		scn.MoveCardsToHand(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);

@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_V1_013_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("counsel", "101_13");
                     put("gandalf", "1_364");
@@ -24,9 +24,9 @@ public class Card_V1_013_Tests
                     put("galadriel", "1_45");
                     put("orophin", "1_56");
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -45,14 +45,14 @@ public class Card_V1_013_Tests
 		 */
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl counsel = scn.GetFreepsCard("counsel");
 
 		assertEquals(Side.FREE_PEOPLE, counsel.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, counsel.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, counsel.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(counsel, Timeword.FELLOWSHIP)); // test for keywords as needed
+        assertTrue(scn.HasTimeword(counsel, Timeword.FELLOWSHIP)); // test for keywords as needed
 		//assertTrue(scn.HasKeyword(counsel, Keyword.TALE));
 		assertEquals(0, counsel.getBlueprint().getTwilightCost());
 
@@ -61,11 +61,11 @@ public class Card_V1_013_Tests
 	@Test
 	public void CounselRequiresGandalfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl counsel = scn.GetFreepsCard("counsel");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(counsel, gandalf);
+		scn.MoveCardsToHand(counsel, gandalf);
 
 		scn.StartGame();
 
@@ -77,13 +77,13 @@ public class Card_V1_013_Tests
 	@Test
 	public void CounseloftheWiseChoosing4PermitsTakingElrondIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl counsel = scn.GetFreepsCard("counsel");
 		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(counsel);
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCardsToHand(counsel);
+		scn.MoveCompanionToTable(gandalf);
 
 		scn.StartGame();
 
@@ -110,13 +110,13 @@ public class Card_V1_013_Tests
 	@Test
 	public void CanRevealWithoutPaying() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl counsel = scn.GetFreepsCard("counsel");
 		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(counsel);
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCardsToHand(counsel);
+		scn.MoveCompanionToTable(gandalf);
 
 		scn.StartGame();
 

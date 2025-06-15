@@ -1,21 +1,21 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set10;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_10_008_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("cirdan", "60_8");
 					put("event1", "1_37");
@@ -70,15 +70,15 @@ public class Card_10_008_ErrataTests
 	@Test
 	public void CirdanReducesMinionStrengthAndRemovesEventsIfOverwhelming() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl cirdan = scn.GetFreepsCard("cirdan");
-		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
+		var cirdan = scn.GetFreepsCard("cirdan");
+		var nazgul = scn.GetShadowCard("nazgul");
 
-		scn.ShadowMoveCharToTable(cirdan);
-		scn.FreepsMoveCardToDiscard("event1", "event2", "event3", "event4", "event5", "event6", "event7");
+		scn.MoveMinionsToTable(cirdan);
+		scn.MoveCardsToFreepsDiscard("event1", "event2", "event3", "event4", "event5", "event6", "event7");
 
-		scn.ShadowMoveCharToTable(nazgul);
+		scn.MoveMinionsToTable(nazgul);
 
 		scn.StartGame();
 

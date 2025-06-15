@@ -1,9 +1,8 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -14,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_080_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("ottar", "1_80");
@@ -27,9 +26,9 @@ public class Card_01_080_Tests
 					put("chaff5", "1_80");
 					put("chaff6", "1_80");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -76,7 +75,7 @@ public class Card_01_080_Tests
 
 		var ottar = scn.GetFreepsCard("ottar");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(ottar, gandalf);
+		scn.MoveCardsToHand(ottar, gandalf);
 
 		scn.StartGame();
 		assertFalse(scn.FreepsPlayAvailable(ottar));
@@ -96,9 +95,9 @@ public class Card_01_080_Tests
 		var chaff4 = scn.GetFreepsCard("chaff4");
 		var chaff5 = scn.GetFreepsCard("chaff5");
 		var chaff6 = scn.GetFreepsCard("chaff6");
-		scn.FreepsMoveCardToHand(chaff1, chaff2, chaff3);
-		scn.FreepsMoveCharToTable(ottar);
-		scn.FreepsMoveCardsToTopOfDeck(chaff4, chaff5, chaff6);
+		scn.MoveCardsToHand(chaff1, chaff2, chaff3);
+		scn.MoveCompanionToTable(ottar);
+		scn.MoveCardsToTopOfDeck(chaff4, chaff5, chaff6);
 
 		scn.StartGame();
 
@@ -133,9 +132,9 @@ public class Card_01_080_Tests
 		var chaff4 = scn.GetFreepsCard("chaff4");
 		var chaff5 = scn.GetFreepsCard("chaff5");
 		var chaff6 = scn.GetFreepsCard("chaff6");
-		scn.FreepsMoveCardToHand(chaff1, chaff2, chaff3);
-		scn.FreepsMoveCharToTable(ottar);
-		scn.FreepsMoveCardsToTopOfDeck(chaff4, chaff5, chaff6);
+		scn.MoveCardsToHand(chaff1, chaff2, chaff3);
+		scn.MoveCompanionToTable(ottar);
+		scn.MoveCardsToTopOfDeck(chaff4, chaff5, chaff6);
 
 		scn.StartGame();
 
@@ -172,9 +171,9 @@ public class Card_01_080_Tests
 		var chaff4 = scn.GetFreepsCard("chaff4");
 		var chaff5 = scn.GetFreepsCard("chaff5");
 		var chaff6 = scn.GetFreepsCard("chaff6");
-		scn.FreepsMoveCardToHand(chaff1, chaff2, chaff3);
-		scn.FreepsMoveCharToTable(ottar);
-		scn.FreepsMoveCardsToTopOfDeck(chaff4, chaff5, chaff6);
+		scn.MoveCardsToHand(chaff1, chaff2, chaff3);
+		scn.MoveCompanionToTable(ottar);
+		scn.MoveCardsToTopOfDeck(chaff4, chaff5, chaff6);
 
 		scn.StartGame();
 
@@ -209,7 +208,7 @@ public class Card_01_080_Tests
 		var ottar = scn.GetFreepsCard("ottar");
 		var chaff1 = scn.GetFreepsCard("chaff1");
 		var chaff2 = scn.GetFreepsCard("chaff2");
-		scn.FreepsMoveCharToTable(ottar);
+		scn.MoveCompanionToTable(ottar);
 
 		scn.StartGame();
 

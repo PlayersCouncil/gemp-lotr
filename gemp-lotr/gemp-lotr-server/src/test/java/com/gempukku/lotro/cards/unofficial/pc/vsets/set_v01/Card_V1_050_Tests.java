@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -18,8 +18,8 @@ import static org.junit.Assert.*;
 public class Card_V1_050_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("bilbo", "101_50");
                     put("sam", "1_311");
@@ -29,9 +29,9 @@ public class Card_V1_050_Tests
                     put("phial", "3_24");
                     put("greenleaf", "1_50");
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -53,9 +53,9 @@ public class Card_V1_050_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl bilbo = scn.GetFreepsCard("bilbo");
+		var bilbo = scn.GetFreepsCard("bilbo");
 
 		assertTrue(bilbo.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, bilbo.getBlueprint().getSide());
@@ -74,13 +74,13 @@ public class Card_V1_050_Tests
 	@Test
 	public void FellowshipAbilityOnlyWorksAtSanctuary() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl bilbo = scn.GetFreepsCard("bilbo");
-		scn.FreepsMoveCardToSupportArea(bilbo);
+		var bilbo = scn.GetFreepsCard("bilbo");
+		scn.MoveCardsToSupportArea(bilbo);
+		scn.MoveCardsToFreepsDiscard("sam", "sting", "coat");
 
-		scn.FreepsMoveCardToDiscard("sam", "sting", "coat");
-		scn.ShadowMoveCardToDiscard("bilbo", "sam", "sting", "coat");
+		scn.MoveCardsToShadowDiscard("bilbo", "sam", "sting", "coat");
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -90,7 +90,7 @@ public class Card_V1_050_Tests
 		for(int i = 1; i < 8; i++)
 		{
 			PhysicalCardImpl site = scn.GetCurrentSite();
-			if(scn.hasKeyword(site, Keyword.SANCTUARY)) {
+			if(scn.HasKeyword(site, Keyword.SANCTUARY)) {
 				assertTrue(scn.FreepsActionAvailable(bilbo));
 			}
 			else {
@@ -104,17 +104,17 @@ public class Card_V1_050_Tests
 	@Test
 	public void FellowshipAbilityExertsTwiceToTutor2ItemsOnFrodoSignetShireCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl frodo = scn.GetRingBearer();
-		PhysicalCardImpl bilbo = scn.GetFreepsCard("bilbo");
-		PhysicalCardImpl greenleaf = scn.GetFreepsCard("greenleaf");
-		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
-		PhysicalCardImpl coat = scn.GetFreepsCard("coat");
-		PhysicalCardImpl sting = scn.GetFreepsCard("sting");
-		PhysicalCardImpl phial = scn.GetFreepsCard("phial");
-		scn.FreepsMoveCardToSupportArea(bilbo, greenleaf);
-		scn.FreepsMoveCharToTable(sam);
+		var frodo = scn.GetRingBearer();
+		var bilbo = scn.GetFreepsCard("bilbo");
+		var greenleaf = scn.GetFreepsCard("greenleaf");
+		var sam = scn.GetFreepsCard("sam");
+		var coat = scn.GetFreepsCard("coat");
+		var sting = scn.GetFreepsCard("sting");
+		var phial = scn.GetFreepsCard("phial");
+		scn.MoveCardsToSupportArea(bilbo, greenleaf);
+		scn.MoveCompanionToTable(sam);
 
 		//Cheat the sanctuary so we don't have to move and swap
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(1), null, Keyword.SANCTUARY));

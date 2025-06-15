@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -8,13 +8,14 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertAttachedTo;
 import static org.junit.Assert.*;
 
 public class Card_01_068_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("arrows", "51_68");
@@ -24,9 +25,9 @@ public class Card_01_068_ErrataTests
 					put("scout", "1_191");
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -66,15 +67,15 @@ public class Card_01_068_ErrataTests
 		var arrows = scn.GetFreepsCard("arrows");
 		var legolas = scn.GetFreepsCard("legolas");
 		var galadriel = scn.GetFreepsCard("galadriel");
-		scn.FreepsMoveCharToTable(legolas, galadriel);
-		scn.FreepsMoveCardToHand(arrows);
+		scn.MoveCompanionToTable(legolas, galadriel);
+		scn.MoveCardsToHand(arrows);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(arrows);
 
 		assertEquals(Zone.ATTACHED, arrows.getZone());
 		//Should have automatically gone to Legolas and not had galadriel as a valid choice, where Gemp would ask the user to decide
-		assertTrue(scn.IsAttachedTo(arrows, legolas));
+		assertAttachedTo(arrows, legolas);
 	}
 
 	@Test
@@ -84,12 +85,12 @@ public class Card_01_068_ErrataTests
 
 		var arrows = scn.GetFreepsCard("arrows");
 		var legolas = scn.GetFreepsCard("legolas");
-		scn.FreepsMoveCharToTable(legolas);
-		scn.FreepsAttachCardsTo(legolas, arrows);
+		scn.MoveCompanionToTable(legolas);
+		scn.AttachCardsTo(legolas, arrows);
 
 		var scout = scn.GetShadowCard("scout");
-		scn.ShadowMoveCardToHand("legolas", "galadriel", "arrows");
-		scn.ShadowMoveCharToTable("scout", "runner");
+		scn.MoveCardsToShadowHand("legolas", "galadriel", "arrows");
+		scn.MoveMinionsToTable("scout", "runner");
 
 		scn.StartGame();
 
@@ -112,13 +113,13 @@ public class Card_01_068_ErrataTests
 
 		var arrows = scn.GetFreepsCard("arrows");
 		var legolas = scn.GetFreepsCard("legolas");
-		scn.FreepsMoveCharToTable(legolas);
-		scn.FreepsAttachCardsTo(legolas, arrows);
+		scn.MoveCompanionToTable(legolas);
+		scn.AttachCardsTo(legolas, arrows);
 
 		var scout = scn.GetShadowCard("scout");
 		var card1 = scn.GetShadowCard("arrows");
-		scn.ShadowMoveCardToHand("legolas", "galadriel", "arrows");
-		scn.ShadowMoveCharToTable("scout", "runner");
+		scn.MoveCardsToShadowHand("legolas", "galadriel", "arrows");
+		scn.MoveMinionsToTable("scout", "runner");
 
 		scn.StartGame();
 

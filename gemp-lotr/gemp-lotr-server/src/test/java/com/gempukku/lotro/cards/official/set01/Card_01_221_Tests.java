@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_221_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("paleblade", "1_221");
@@ -26,9 +26,9 @@ public class Card_01_221_Tests
 					put("condition3", "2_1");
 					put("condition4", "2_9");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -70,7 +70,7 @@ public class Card_01_221_Tests
 
 		var twk = scn.GetShadowCard("twk");
 		var paleblade = scn.GetShadowCard("paleblade");
-		scn.ShadowMoveCharToTable(twk);
+		scn.MoveMinionsToTable(twk);
 		scn.AttachCardsTo(twk, paleblade);
 
 		var gimli = scn.GetFreepsCard("gimli");
@@ -78,8 +78,8 @@ public class Card_01_221_Tests
 		var condition2 = scn.GetFreepsCard("condition2");
 		var condition3 = scn.GetFreepsCard("condition3");
 		var condition4 = scn.GetFreepsCard("condition4");
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsMoveCardToSupportArea(condition1, condition2, condition3, condition4);
+		scn.MoveCompanionToTable(gimli);
+		scn.MoveCardsToSupportArea(condition1, condition2, condition3, condition4);
 
 		scn.StartGame();
 		scn.SkipToAssignments();

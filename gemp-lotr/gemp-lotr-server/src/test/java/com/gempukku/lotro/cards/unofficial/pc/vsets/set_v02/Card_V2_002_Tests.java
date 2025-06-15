@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Race;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_V2_002_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("raider", "102_2");
@@ -27,9 +27,9 @@ public class Card_V2_002_Tests
 					put("card3", "102_5");
 					put("card4", "102_6");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -74,9 +74,9 @@ public class Card_V2_002_Tests
 		var scn = GetScenario();
 
 		var raider = scn.GetShadowCard("raider");
-		scn.ShadowMoveCardToHand(raider);
+		scn.MoveCardsToHand(raider);
 
-		scn.FreepsMoveCardToHand("card1", "card2", "card3", "card4");
+		scn.FreepsDrawCards(4);
 
 		scn.StartGame();
 		scn.SetTwilight(7);
@@ -96,7 +96,7 @@ public class Card_V2_002_Tests
 		var scn = GetScenario();
 
 		var raider = scn.GetShadowCard("raider");
-		scn.ShadowMoveCardToHand(raider);
+		scn.MoveCardsToHand(raider);
 
 		scn.StartGame();
 		scn.SetTwilight(7);

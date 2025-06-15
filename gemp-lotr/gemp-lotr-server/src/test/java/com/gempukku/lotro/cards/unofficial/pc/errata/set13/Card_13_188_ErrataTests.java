@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set13;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.SitesBlock;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_13_188_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<String, String>()
 				{{
 					put("card", "63_188");
@@ -34,8 +34,8 @@ public class Card_13_188_ErrataTests
 					put("site8", "11_237");
 					put("site9", "11_237");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
 				"open"
 		);
 	}
@@ -56,13 +56,13 @@ public class Card_13_188_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl parapet = scn.GetFreepsSite("Courtyard Parapet");
 
 		assertFalse(parapet.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, parapet.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(parapet, Keyword.DWELLING));
+		assertTrue(scn.HasKeyword(parapet, Keyword.DWELLING));
 		assertEquals(0, parapet.getBlueprint().getTwilightCost());
 		assertEquals(SitesBlock.SHADOWS, parapet.getBlueprint().getSiteBlock());
 		assertEquals(0, parapet.getBlueprint().getSiteNumber());
@@ -71,10 +71,10 @@ public class Card_13_188_ErrataTests
 	//@Test
 	public void CourtyardParapetTest1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		scn.MoveCardsToHand(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);

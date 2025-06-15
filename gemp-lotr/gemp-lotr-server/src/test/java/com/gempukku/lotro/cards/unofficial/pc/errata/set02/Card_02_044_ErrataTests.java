@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_02_044_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("business", "52_44");
@@ -30,9 +30,9 @@ public class Card_02_044_ErrataTests
 					put("chaff4", "6_22");
 					put("chaff5", "6_23");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -61,7 +61,7 @@ public class Card_02_044_ErrataTests
 		assertEquals(Side.SHADOW, business.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, business.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, business.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(business, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(business, Keyword.SUPPORT_AREA));
 		assertEquals(3, business.getBlueprint().getTwilightCost());
 	}
 
@@ -71,7 +71,7 @@ public class Card_02_044_ErrataTests
 		var scn = GetScenario();
 
 		var business = scn.GetShadowCard("business");
-		scn.ShadowMoveCardToHand(business);
+		scn.MoveCardsToHand(business);
 
 		scn.StartGame();
 
@@ -88,8 +88,8 @@ public class Card_02_044_ErrataTests
 
 		var business = scn.GetShadowCard("business");
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCardToHand(business);
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveCardsToHand(business);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 
@@ -105,13 +105,13 @@ public class Card_02_044_ErrataTests
 		var scn = GetScenario();
 
 		var business = scn.GetShadowCard("business");
-		scn.ShadowMoveCardToHand(business);
+		scn.MoveCardsToHand(business);
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var curse1 = scn.GetFreepsCard("curse1");
 		var curse2 = scn.GetFreepsCard("curse2");
-		scn.FreepsMoveCardToHand(curse1, curse2);
-		scn.FreepsMoveCardToSupportArea(galadriel);
+		scn.MoveCardsToHand(curse1, curse2);
+		scn.MoveCardsToSupportArea(galadriel);
 
 		scn.StartGame();
 		scn.ShadowDrawCards(8);
@@ -119,7 +119,7 @@ public class Card_02_044_ErrataTests
 		//First check that curse works with No Business in hand
 		scn.FreepsPlayCard(curse1);
 		assertTrue(scn.FreepsDecisionAvailable("Hand"));
-		scn.ShadowMoveCardToSupportArea(business); //slide in No Business between actions
+		scn.MoveCardsToSupportArea(business); //slide in No Business between actions
 		scn.FreepsDismissRevealedCards();
 
 		//Curse's effect should now be blocked
@@ -135,12 +135,12 @@ public class Card_02_044_ErrataTests
 		var scn = GetScenario();
 
 		var business = scn.GetShadowCard("business");
-		scn.ShadowMoveCardToHand(business);
-		scn.ShadowMoveCharToTable("uruk");
+		scn.MoveCardsToHand(business);
+		scn.MoveMinionsToTable("uruk");
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var mirror = scn.GetFreepsCard("mirror");
-		scn.FreepsMoveCardToSupportArea(mirror, galadriel);
+		scn.MoveCardsToSupportArea(mirror, galadriel);
 
 		scn.StartGame();
 		scn.ShadowDrawCards(8);
@@ -154,7 +154,7 @@ public class Card_02_044_ErrataTests
 		scn.FreepsDismissRevealedCards();
 		scn.FreepsChooseAny();
 
-		scn.ShadowMoveCardToSupportArea(business); //slide in No Business between actions
+		scn.MoveCardsToSupportArea(business); //slide in No Business between actions
 		scn.ShadowPassCurrentPhaseAction();
 
 		//Mirror's effect should now be blocked

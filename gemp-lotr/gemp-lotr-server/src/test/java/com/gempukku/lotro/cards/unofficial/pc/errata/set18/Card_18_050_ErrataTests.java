@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set18;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_18_050_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("stone", "68_50");
@@ -23,9 +23,9 @@ public class Card_18_050_ErrataTests
 					put("morc", "7_193");
 					put("uruk", "4_187");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -44,7 +44,7 @@ public class Card_18_050_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
 
@@ -52,23 +52,23 @@ public class Card_18_050_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, stone.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, stone.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, stone.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(stone, Keyword.SUPPORT_AREA));
-		assertTrue(scn.hasKeyword(stone, Keyword.TALE));
+		assertTrue(scn.HasKeyword(stone, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(stone, Keyword.TALE));
 		assertEquals(3, stone.getBlueprint().getTwilightCost());
 	}
 
 	@Test
 	public void TheFaithfulStoneAddsTokenWhenNonRingwraithMinionPlayedIfManCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.FreepsMoveCardToSupportArea(stone);
-		scn.FreepsMoveCharToTable(boromir);
+		scn.MoveCardsToSupportArea(stone);
+		scn.MoveCompanionToTable(boromir);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCardToHand(uruk);
+		scn.MoveCardsToHand(uruk);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -81,15 +81,15 @@ public class Card_18_050_ErrataTests
 	@Test
 	public void TheFaithfulStoneAddsTokenWhenNonRingwraithMinionPlayedIfShadowManCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
-		scn.FreepsMoveCardToSupportArea(stone);
+		scn.MoveCardsToSupportArea(stone);
 
 		var uruk = scn.GetShadowCard("uruk");
 		var dunlender = scn.GetShadowCard("ravager");
-		scn.ShadowMoveCardToHand(uruk);
-		scn.ShadowMoveCharToTable(dunlender);
+		scn.MoveCardsToHand(uruk);
+		scn.MoveMinionsToTable(dunlender);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -102,13 +102,13 @@ public class Card_18_050_ErrataTests
 	@Test
 	public void TheFaithfulStoneAddsNoTokenIfManCannotBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
-		scn.FreepsMoveCardToSupportArea(stone);
+		scn.MoveCardsToSupportArea(stone);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCardToHand(uruk);
+		scn.MoveCardsToHand(uruk);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -121,13 +121,13 @@ public class Card_18_050_ErrataTests
 	@Test
 	public void TheFaithfulStoneAddsNoTokenWhenRingwraithMinionIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
-		scn.FreepsMoveCardToSupportArea(stone);
+		scn.MoveCardsToSupportArea(stone);
 
 		var morc = scn.GetShadowCard("morc");
-		scn.ShadowMoveCardToHand(morc);
+		scn.MoveCardsToHand(morc);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -141,15 +141,15 @@ public class Card_18_050_ErrataTests
 	@Test
 	public void TheFaithfulStoneManueverActionCannotBeUsedIfLessThan3Tokens() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.FreepsMoveCardToSupportArea(stone);
-		scn.FreepsMoveCharToTable(boromir);
+		scn.MoveCardsToSupportArea(stone);
+		scn.MoveCompanionToTable(boromir);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 		scn.AddTokensToCard(stone, 2);
@@ -161,13 +161,13 @@ public class Card_18_050_ErrataTests
 	@Test
 	public void TheFaithfulStoneManueverActionRemoves3TokensToPreventAssigningTargetMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
-		scn.FreepsMoveCardToSupportArea(stone);
+		scn.MoveCardsToSupportArea(stone);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 		scn.AddTokensToCard(stone, 3);
@@ -196,13 +196,13 @@ public class Card_18_050_ErrataTests
 	@Test
 	public void TheFaithfulStoneManueverActionCanBePreventedByShadowRemoving2Twilight() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
-		scn.FreepsMoveCardToSupportArea(stone);
+		scn.MoveCardsToSupportArea(stone);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 		scn.AddTokensToCard(stone, 3);

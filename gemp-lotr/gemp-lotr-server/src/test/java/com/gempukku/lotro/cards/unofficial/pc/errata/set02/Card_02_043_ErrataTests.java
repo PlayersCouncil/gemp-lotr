@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_02_043_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("aragorn", "1_89");
@@ -27,9 +27,9 @@ public class Card_02_043_ErrataTests
 					put("chaff1", "1_155");
 					put("chaff2", "1_156");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -73,9 +73,9 @@ public class Card_02_043_ErrataTests
 		var uruk = scn.GetShadowCard("uruk");
 		var lurtz = scn.GetShadowCard("lurtz");
 		var captain = scn.GetShadowCard("captain");
-		scn.ShadowMoveCharToTable(uruk, lurtz, captain);
+		scn.MoveMinionsToTable(uruk, lurtz, captain);
 		var sword = scn.GetShadowCard("sword");
-		scn.ShadowMoveCardToHand(sword);
+		scn.MoveCardsToHand(sword);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -96,12 +96,12 @@ public class Card_02_043_ErrataTests
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 
 		var captain = scn.GetShadowCard("captain");
-		scn.ShadowMoveCharToTable(captain);
+		scn.MoveMinionsToTable(captain);
 		var sword = scn.GetShadowCard("sword");
-		scn.ShadowAttachCardsTo(captain, sword);
+		scn.AttachCardsTo(captain, sword);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(aragorn, 1);
@@ -116,7 +116,7 @@ public class Card_02_043_ErrataTests
 		assertTrue(scn.FreepsAnyDecisionsAvailable());
 		assertEquals(3, scn.GetWoundsOn(aragorn));
 		assertEquals(Zone.FREE_CHARACTERS, aragorn.getZone());
-		scn.FreepsChooseMultipleChoiceOption("wound");
+		scn.FreepsChooseOption("wound");
 		// both aragorn and frodo are valid targets, even tho aragorn is exhausted
 		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		scn.FreepsChooseCard(aragorn);
@@ -129,12 +129,12 @@ public class Card_02_043_ErrataTests
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionToTable(aragorn);
 
 		var captain = scn.GetShadowCard("captain");
-		scn.ShadowMoveCharToTable(captain);
+		scn.MoveMinionsToTable(captain);
 		var sword = scn.GetShadowCard("sword");
-		scn.ShadowAttachCardsTo(captain, sword);
+		scn.AttachCardsTo(captain, sword);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -149,7 +149,7 @@ public class Card_02_043_ErrataTests
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(6, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
-		scn.FreepsChooseMultipleChoiceOption("discard");
+		scn.FreepsChooseOption("discard");
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(3, scn.GetFreepsDeckCount());
 		assertEquals(3, scn.GetFreepsDiscardCount());
@@ -161,16 +161,16 @@ public class Card_02_043_ErrataTests
 		var scn = GetScenario();
 
 		var lurtz = scn.GetShadowCard("lurtz");
-		scn.ShadowMoveCharToTable(lurtz);
+		scn.MoveMinionsToTable(lurtz);
 		var sword = scn.GetShadowCard("sword");
-		scn.ShadowMoveCardToHand(sword);
+		scn.MoveCardsToHand(sword);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertTrue(scn.ShadowPlayAvailable(sword));
-		assertTrue(scn.hasKeyword(lurtz, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(lurtz, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(lurtz, Keyword.DAMAGE));
 		scn.ShadowPlayCard(sword);
 		assertEquals(2, scn.GetKeywordCount(lurtz, Keyword.DAMAGE));
@@ -182,16 +182,16 @@ public class Card_02_043_ErrataTests
 		var scn = GetScenario();
 
 		var captain = scn.GetShadowCard("captain");
-		scn.ShadowMoveCharToTable(captain);
+		scn.MoveMinionsToTable(captain);
 		var sword = scn.GetShadowCard("sword");
-		scn.ShadowMoveCardToHand(sword);
+		scn.MoveCardsToHand(sword);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertTrue(scn.ShadowPlayAvailable(sword));
-		assertTrue(scn.hasKeyword(captain, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(captain, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(captain, Keyword.DAMAGE));
 		scn.ShadowPlayCard(sword);
 		assertEquals(1, scn.GetKeywordCount(captain, Keyword.DAMAGE));
