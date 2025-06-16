@@ -915,6 +915,7 @@ var GempLotrHallUI = Class.extend({
 						startTd +
 						systemTd +
 						playersTd +
+						costPrizesTds +
 						"</tr>";
 
 					} else {

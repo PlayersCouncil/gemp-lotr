@@ -54,4 +54,6 @@ public interface TournamentQueue {
     boolean hasConfirmedReadyCheck(String player);
 
     boolean isWC();
+
+    String getDraftCode();
 }

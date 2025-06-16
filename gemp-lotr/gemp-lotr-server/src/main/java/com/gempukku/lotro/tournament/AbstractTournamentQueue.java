@@ -420,4 +420,12 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
     public boolean isWC() {
         return _tournamentInfo._params.wc;
     }
+
+    @Override
+    public String getDraftCode() {
+        if (_tournamentInfo instanceof TableDraftTournamentInfo) {
+            return ((TableDraftTournamentInfo) _tournamentInfo).tableDraftDefinition.getCode();
+        }
+        return null;
+    }
 }

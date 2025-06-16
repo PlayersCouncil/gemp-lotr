@@ -7,6 +7,7 @@ import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.GameHistoryDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
+import com.gempukku.lotro.draft3.TableDraftDefinition;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
@@ -71,16 +72,6 @@ public class TournamentService {
         return Tournament.getPairingMechanism(pairing);
     }
 
-    private void addImmediateRecurringQueue(String queueId, String queueName, String prefix, String formatCode) {
-        TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
-
-        _tournamentQueues.put(queueId, new ImmediateRecurringQueue(this, queueId, queueName,
-                new TournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.Today(),
-                        new TournamentParams(prefix, queueName, formatCode, 1500, 4, Tournament.PairingType.SINGLE_ELIMINATION, Tournament.PrizeType.ON_DEMAND)),
-                        callback, _collectionsManager)
-        );
-    }
-
     private void addRecurringScheduledQueue(String queueId, String queueName, String time, String prefix, String formatCode) {
         TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
 
@@ -88,6 +79,35 @@ public class TournamentService {
                 new TournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.ParseStringDate(time),
                         new TournamentParams(prefix, queueName, formatCode, 0, 4, Tournament.PairingType.SWISS_3, Tournament.PrizeType.DAILY)),
                         _tournamentRepeatPeriod, callback, _collectionsManager));
+    }
+
+    private void addRecurringScheduledTableDraft(String queueId, String queueName, String time,  Duration repeatPeriod, String prefix, String formatCode, int minPlayers) {
+        TournamentQueueCallback callback = tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament);
+
+        TableDraftTournamentParams draftParams = new TableDraftTournamentParams();
+        draftParams.type = Tournament.TournamentType.TABLE_DRAFT;
+
+        draftParams.deckbuildingDuration = 15;
+        draftParams.turnInDuration = 2;
+
+        TableDraftDefinition tableDraft = _tableDraftLibrary.getTableDraftDefinition(formatCode);
+        draftParams.tableDraftFormatCode = formatCode;
+        draftParams.format = tableDraft.getFormat();
+        draftParams.draftTimerType = tableDraft.getRecommendedTimer();
+        draftParams.requiresDeck = false;
+
+        draftParams.tournamentId = prefix;
+        draftParams.name = queueName;
+        draftParams.cost = 0;
+        draftParams.minimumPlayers = minPlayers;
+        draftParams.maximumPlayers = tableDraft.getMaxPlayers();
+        draftParams.playoff = Tournament.PairingType.SWISS_3;
+        draftParams.prizes = Tournament.PrizeType.DAILY;
+
+        _tournamentQueues.put(queueId, new RecurringScheduledQueue(this, queueId, queueName,
+                new TableDraftTournamentInfo(this, _productLibrary, _formatLibrary, DateUtils.ParseStringDate(time),
+                        draftParams, _tableDraftLibrary), repeatPeriod, callback, _collectionsManager)
+        );
     }
 
     public void reloadTournaments(TableHolder tables) {
@@ -107,6 +127,9 @@ public class TournamentService {
             addRecurringScheduledQueue("fotr_daily_us", "Daily Fellowship Block", "2013-01-16 00:30:00", "fotrDailyUS-", "fotr_block");
             addRecurringScheduledQueue("movie_daily_eu", "Daily Movie Block", "2013-01-16 19:30:00", "movieDailyEu-", "movie");
             addRecurringScheduledQueue("movie_daily_us", "Daily Movie Block", "2013-01-17 00:30:00", "movieDailyUs-", "movie");
+
+            addRecurringScheduledTableDraft("weekly_fotr_draft", "Weekly FotR Live Draft", "2025-06-14 17:00:00",
+                    Duration.ofDays(7), "weeklyFotrDraft-", "fotr_power_table_draft", 4);
 
         } catch (DateTimeParseException exp) {
             // Ignore, can't happen
@@ -136,7 +159,7 @@ public class TournamentService {
                     formatLibrary.getFormat(queue.getFormatCode()).getName(), queue.getInfo().Parameters().type.toString(), queue.getTournamentQueueName(),
                     queue.getPrizesDescription(), queue.getPairingDescription(), queue.getStartCondition(),
                     queue.getPlayerCount(), queue.getPlayerList(), queue.isPlayerSignedUp(player.getName()), queue.isJoinable(), queue.isStartable(player.getName()),
-                    queue.getSecondsRemainingForReadyCheck(), queue.hasConfirmedReadyCheck(player.getName()), queue.isWC());
+                    queue.getSecondsRemainingForReadyCheck(), queue.hasConfirmedReadyCheck(player.getName()), queue.isWC(), queue.getDraftCode());
         }
 
         for (var entry : _activeTournaments.entrySet()) {
