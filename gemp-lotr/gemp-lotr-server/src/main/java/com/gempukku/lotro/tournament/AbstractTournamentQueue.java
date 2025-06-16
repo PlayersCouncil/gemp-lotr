@@ -189,6 +189,7 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
         tbr.minimumPlayers = _tournamentInfo._params.minimumPlayers;
         tbr.maximumPlayers = _tournamentInfo._params.maximumPlayers;
         tbr.requiresDeck = _tournamentInfo._params.requiresDeck;
+        tbr.wc = _tournamentInfo._params.wc;
 
         return tbr;
     }
