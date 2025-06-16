@@ -118,7 +118,7 @@ var GempLotrHallUI = Class.extend({
 
 		var hallSettingsStr = $.cookie("hallSettings");
 		if (hallSettingsStr == null)
-			hallSettingsStr = "1|1|0|0|0|0|0|0|0";
+			hallSettingsStr = "1|1|0|0|0|0|0";
 		var hallSettings = hallSettingsStr.split("|");
 
 		this.initTable(hallSettings[0] == "1", "waitingTablesHeader", "waitingTablesContent");
@@ -127,9 +127,7 @@ var GempLotrHallUI = Class.extend({
 		this.initTable(hallSettings[3] == "1", "wcQueuesHeader", "wcQueuesContent");
 		this.initTable(hallSettings[4] == "1", "wcEventsHeader", "wcEventsContent");
 		this.initTable(hallSettings[5] == "1", "tournamentQueuesHeader", "tournamentQueuesContent");
-		this.initTable(hallSettings[6] == "1", "draftQueuesHeader", "draftQueuesContent");
-		this.initTable(hallSettings[7] == "1", "sealedQueuesHeader", "sealedQueuesContent");
-		this.initTable(hallSettings[8] == "1", "activeTournamentsHeader", "activeTournamentsContent");
+		this.initTable(hallSettings[6] == "1", "limitedGamesHeader", "limitedGamesContent");
 		
 		$('#wcQueuesHeader').hide();
 		$('#wcQueuesContent').hide();
@@ -942,12 +940,6 @@ var GempLotrHallUI = Class.extend({
 						if(isWC) {
 							$("table.wc-queues", this.tablesDiv)
 							.append(row);
-						} else if (type.includes("Sealed")) {
-							$("table.sealedQueues", this.tablesDiv)
-							.append(row);
-						} else if (type.includes("Draft")) {
-							$("table.draftQueues", this.tablesDiv)
-							.append(row);
 						} else {
 							$("table.queues", this.tablesDiv)
 							.append(row);
@@ -1184,9 +1176,6 @@ var GempLotrHallUI = Class.extend({
 						if (isWC) {
 							$("table.wc-events", this.tablesDiv)
 							.append(row);
-						} else {
-							$("table.tournaments", this.tablesDiv)
-							.append(row);
 						}
 						// Display running tournaments also as playing tables
 						$("table.playingTables", this.tablesDiv)
@@ -1421,12 +1410,9 @@ var GempLotrHallUI = Class.extend({
 			}
 
 			$(".count", $(".eventHeader.queues")).html("(" + ($("tr", $("table.queues")).length - 1) + ")");
-			$(".count", $(".eventHeader.tournaments")).html("(" + ($("tr", $("table.tournaments")).length - 1) + ")");
 			$(".count", $(".eventHeader.waitingTables")).html("(" + ($("tr", $("table.waitingTables")).length - 1) + ")");
 			$(".count", $(".eventHeader.playingTables")).html("(" + ($("tr", $("table.playingTables")).length - 1) + ")");
 			$(".count", $(".eventHeader.finishedTables")).html("(" + ($("tr", $("table.finishedTables")).length - 1) + ")");
-			$(".count", $(".eventHeader.draftQueues")).html("(" + ($("tr", $("table.draftQueues")).length - 1) + ")");
-			$(".count", $(".eventHeader.sealedQueues")).html("(" + ($("tr", $("table.sealedQueues")).length - 1) + ")");
 
 			$(".count", $(".eventHeader.wc-queues")).html("(" + ($("tr", $("table.wc-queues")).length - 1) + ")");
 			$(".count", $(".eventHeader.wc-events")).html("(" + ($("tr", $("table.wc-events")).length - 1) + ")");
