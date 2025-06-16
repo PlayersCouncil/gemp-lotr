@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set10;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_10_116_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("totgr", "10_116");
@@ -26,9 +26,9 @@ public class Card_10_116_Tests
 					put("frost1", "1_135");
 					put("frost2", "1_135");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.ATARRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.ATARRing
 		);
 	}
 
@@ -59,8 +59,8 @@ public class Card_10_116_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.TALE));
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -71,11 +71,11 @@ public class Card_10_116_Tests
 
 		var sam = scn.GetFreepsCard("sam");
 		var totgr = scn.GetFreepsCard("totgr");
-		scn.FreepsMoveCardToSupportArea(totgr);
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCardsToSupportArea(totgr);
+		scn.MoveCompanionToTable(sam);
 
 		var sauron = scn.GetShadowCard("sauron");
-		scn.ShadowMoveCharToTable(sauron);
+		scn.MoveMinionsToTable(sauron);
 
 		scn.StartGame();
 
@@ -104,13 +104,13 @@ public class Card_10_116_Tests
 
 		var sam = scn.GetFreepsCard("sam");
 		var totgr = scn.GetFreepsCard("totgr");
-		scn.FreepsMoveCardToSupportArea(totgr);
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCardsToSupportArea(totgr);
+		scn.MoveCompanionToTable(sam);
 
 		var sauron = scn.GetShadowCard("sauron");
 		var evil = scn.GetShadowCard("evil");
-		scn.ShadowMoveCharToTable(sauron);
-		scn.ShadowMoveCardToHand(evil);
+		scn.MoveMinionsToTable(sauron);
+		scn.MoveCardsToHand(evil);
 
 		scn.StartGame();
 
@@ -140,16 +140,16 @@ public class Card_10_116_Tests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var ring = scn.GetFreepsRing();
+		var ring = scn.GetRing();
 		var sam = scn.GetFreepsCard("sam");
 		var totgr = scn.GetFreepsCard("totgr");
-		scn.FreepsMoveCardToSupportArea(totgr);
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCardsToSupportArea(totgr);
+		scn.MoveCompanionToTable(sam);
 
 		var sauron = scn.GetShadowCard("sauron");
 		var spies = scn.GetShadowCard("spies");
-		scn.ShadowMoveCharToTable(sauron);
-		scn.ShadowMoveCardToHand(spies);
+		scn.MoveMinionsToTable(sauron);
+		scn.MoveCardsToHand(spies);
 
 		scn.StartGame();
 
@@ -183,19 +183,19 @@ public class Card_10_116_Tests
 
 		var sam = scn.GetFreepsCard("sam");
 		var totgr = scn.GetFreepsCard("totgr");
-		scn.FreepsMoveCardToSupportArea(totgr);
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCardsToSupportArea(totgr);
+		scn.MoveCompanionToTable(sam);
 
 		var sauron = scn.GetShadowCard("sauron");
 		var frost1 = scn.GetShadowCard("frost1");
 		var frost2 = scn.GetShadowCard("frost2");
-		scn.ShadowMoveCharToTable(sauron);
+		scn.MoveMinionsToTable(sauron);
 
 		scn.StartGame();
 
 		scn.FreepsPassCurrentPhaseAction();
 		var site2 = scn.GetCurrentSite();
-		scn.ShadowAttachCardsTo(site2, frost1, frost2);
+		scn.AttachCardsTo(site2, frost1, frost2);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(sam, sauron);

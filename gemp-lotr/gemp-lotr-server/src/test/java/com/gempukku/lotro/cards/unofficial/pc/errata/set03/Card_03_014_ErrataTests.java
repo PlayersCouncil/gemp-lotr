@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class Card_03_014_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("erestor", "53_14");
@@ -27,9 +27,9 @@ public class Card_03_014_ErrataTests
 					put("orc", "1_271");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -75,7 +75,7 @@ public class Card_03_014_ErrataTests
 
 		var erestor = scn.GetFreepsCard("erestor");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCardToHand(arwen, erestor);
+		scn.MoveCardsToHand(arwen, erestor);
 
 		scn.StartGame();
 
@@ -91,11 +91,11 @@ public class Card_03_014_ErrataTests
 
 		var erestor = scn.GetFreepsCard("erestor");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCharToTable(arwen);
-		scn.FreepsMoveCardToSupportArea(erestor);
+		scn.MoveCompanionToTable(arwen);
+		scn.MoveCardsToSupportArea(erestor);
 
 		var enquea = scn.GetShadowCard("enquea");
-		scn.ShadowMoveCharToTable(enquea);
+		scn.MoveMinionsToTable(enquea);
 
 		scn.StartGame();
 		scn.AddBurdens(5);
@@ -122,11 +122,11 @@ public class Card_03_014_ErrataTests
 
 		var erestor = scn.GetFreepsCard("erestor");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCharToTable(arwen);
-		scn.FreepsMoveCardToSupportArea(erestor);
+		scn.MoveCompanionToTable(arwen);
+		scn.MoveCardsToSupportArea(erestor);
 
 		var enquea = scn.GetShadowCard("enquea");
-		scn.ShadowMoveCharToTable(enquea);
+		scn.MoveMinionsToTable(enquea);
 
 		scn.StartGame();
 		scn.AddBurdens(5);
@@ -153,14 +153,14 @@ public class Card_03_014_ErrataTests
 
 		var erestor = scn.GetFreepsCard("erestor");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCharToTable(arwen);
-		scn.FreepsMoveCardToSupportArea(erestor);
+		scn.MoveCompanionToTable(arwen);
+		scn.MoveCardsToSupportArea(erestor);
 
 		var hate = scn.GetShadowCard("hate");
 		var orc = scn.GetShadowCard("orc");
 
-		scn.ShadowMoveCharToTable(orc);
-		scn.ShadowMoveCardToHand(hate);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToHand(hate);
 
 		scn.StartGame();
 
@@ -186,11 +186,11 @@ public class Card_03_014_ErrataTests
 
 		var erestor = scn.GetFreepsCard("erestor");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCharToTable(arwen);
-		scn.FreepsMoveCardToSupportArea(erestor);
+		scn.MoveCompanionToTable(arwen);
+		scn.MoveCardsToSupportArea(erestor);
 
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCharToTable(orc);
+		scn.MoveMinionsToTable(orc);
 
 		scn.StartGame();
 		scn.AddBurdens(5);

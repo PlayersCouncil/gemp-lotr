@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -18,8 +18,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_025_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("flock", "101_25");
                     put("flock2", "101_25");
@@ -50,9 +50,9 @@ public class Card_V1_025_Tests
                     put("filler9", "1_12");
 
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -75,7 +75,7 @@ public class Card_V1_025_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl flock = scn.GetFreepsCard("flock");
 
@@ -97,21 +97,21 @@ public class Card_V1_025_Tests
 	@Test
 	public void FlockTwilightDiscountScalesBasedOnCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 
-		scn.FreepsMoveCharToTable(aragorn, gimli);
-		scn.FreepsMoveCardToHand(arwen, gandalf);
+		scn.MoveCompanionToTable(aragorn, gimli);
+		scn.MoveCardsToHand(arwen, gandalf);
 
 		PhysicalCardImpl flock = scn.GetShadowCard("flock");
 		PhysicalCardImpl flock2 = scn.GetShadowCard("flock2");
 		PhysicalCardImpl flock3 = scn.GetShadowCard("flock3");
 		PhysicalCardImpl flock4 = scn.GetShadowCard("flock4");
-		scn.ShadowMoveCardToHand(flock, flock2, flock3, flock4);
+		scn.MoveCardsToHand(flock, flock2, flock3, flock4);
 
 		scn.StartGame();
 
@@ -128,10 +128,10 @@ public class Card_V1_025_Tests
 		assertEquals(20, scn.GetTwilight()); //base after moving
 		scn.ShadowPlayCard(flock);
 		assertEquals(16, scn.GetTwilight()); //-2 cost, -2 roaming
-		scn.FreepsMoveCharToTable(arwen);
+		scn.MoveCompanionToTable(arwen);
 		scn.ShadowPlayCard(flock);
 		assertEquals(13, scn.GetTwilight()); //-1 cost, -2 roaming
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCompanionToTable(gandalf);
 		scn.ShadowPlayCard(flock);
 		assertEquals(11, scn.GetTwilight()); //-0 cost, -2 roaming
 	}
@@ -139,12 +139,12 @@ public class Card_V1_025_Tests
 	@Test
 	public void ManeuverActionRequires2WoundedCompsOrSaruman() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
 
-		scn.FreepsMoveCharToTable(aragorn, arwen);
+		scn.MoveCompanionToTable(aragorn, arwen);
 
 		PhysicalCardImpl flock = scn.GetShadowCard("flock");
 		PhysicalCardImpl weather1 = scn.GetShadowCard("weather1");
@@ -152,11 +152,11 @@ public class Card_V1_025_Tests
 		PhysicalCardImpl weather3 = scn.GetShadowCard("weather3");
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
 
-		scn.ShadowMoveCardToHand(saruman);
-		scn.ShadowMoveCharToTable(flock);
-		scn.ShadowMoveCardsToBottomOfDeck(weather1);
-		scn.ShadowMoveCardToDiscard(weather2);
-		scn.ShadowMoveCardToDiscard(weather3);
+		scn.MoveCardsToHand(saruman);
+		scn.MoveMinionToTable(flock);
+		scn.MoveCardsToBottomOfDeck(weather1);
+		scn.MoveCardToDiscard(weather2);
+		scn.MoveCardToDiscard(weather3);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -191,7 +191,7 @@ public class Card_V1_025_Tests
 
 		scn.RemoveWoundsFromChar(arwen, 1);
 		scn.RemoveWoundsFromChar(aragorn, 1);
-		scn.ShadowMoveCharToTable(saruman);
+		scn.MoveMinionToTable(saruman);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();
@@ -203,7 +203,7 @@ public class Card_V1_025_Tests
 	@Test
 	public void ManeuverActionSelfDiscardsToTopDecksWeatherFromDeckOrDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 
 		PhysicalCardImpl flock = scn.GetShadowCard("flock");
@@ -214,10 +214,10 @@ public class Card_V1_025_Tests
 		PhysicalCardImpl weather3 = scn.GetShadowCard("weather3");
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
 
-		scn.ShadowMoveCharToTable(flock, flock2, flock3, saruman);
-		scn.ShadowMoveCardsToBottomOfDeck(weather1);
-		scn.ShadowMoveCardToDiscard(weather2);
-		scn.ShadowMoveCardToDiscard(weather3);
+		scn.MoveMinionToTable(flock, flock2, flock3, saruman);
+		scn.MoveCardsToBottomOfDeck(weather1);
+		scn.MoveCardToDiscard(weather2);
+		scn.MoveCardToDiscard(weather3);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -236,7 +236,7 @@ public class Card_V1_025_Tests
 		// must first decide between deck and discard, and then choose among the revealed copies.
 		scn.ShadowUseCardAction(flock);
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
+		scn.ShadowChooseOption("discard");
 		assertEquals(2, scn.GetShadowCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(weather2);
 		assertEquals(Zone.DISCARD, flock.getZone());
@@ -260,7 +260,7 @@ public class Card_V1_025_Tests
 		// chooses between deck/discard, but then does not have to choose among copies (as there is only 1)
 		scn.ShadowUseCardAction(flock2);
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
+		scn.ShadowChooseOption("discard");
 //		assertEquals(1, scn.GetShadowCardChoiceCount());
 //		scn.ShadowChooseCardBPFromSelection(weather1);
 		assertEquals(Zone.DISCARD, flock2.getZone());
@@ -285,7 +285,7 @@ public class Card_V1_025_Tests
 		// does not need to choose either pile source nor which copy
 		scn.ShadowUseCardAction(flock3);
 		assertFalse(scn.ShadowDecisionAvailable("Choose action to perform"));
-//		scn.ShadowChooseMultipleChoiceOption("draw deck");
+//		scn.ShadowChooseOption("draw deck");
 //		assertEquals(1, scn.GetShadowCardChoiceCount());
 //		scn.ShadowChooseCardBPFromSelection(weather1);
 		assertEquals(Zone.DISCARD, flock3.getZone());

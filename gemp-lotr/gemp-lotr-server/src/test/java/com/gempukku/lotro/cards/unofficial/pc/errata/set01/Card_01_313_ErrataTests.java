@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 
 public class Card_01_313_ErrataTests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("sting", "51_313");
                     put("sam", "1_311");
@@ -48,7 +48,7 @@ public class Card_01_313_ErrataTests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var sting = scn.GetFreepsCard("sting");
 
@@ -65,14 +65,14 @@ public class Card_01_313_ErrataTests
     @Test
     public void StingCanOnlyBeBorneByFrodo() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var frodo = scn.GetRingBearer();
         var sam = scn.GetFreepsCard("sam");
         var sting = scn.GetFreepsCard("sting");
 
-        scn.FreepsMoveCharToTable(sam);
-        scn.FreepsMoveCardToHand(sting);
+        scn.MoveCompanionToTable(sam);
+        scn.MoveCardsToHand(sting);
 
         scn.StartGame();
 
@@ -86,7 +86,7 @@ public class Card_01_313_ErrataTests
     @Test
     public void StingAbilityAvailableInBothFellowshipAndRegroup() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var frodo = scn.GetRingBearer();
         var sting = scn.GetFreepsCard("sting");
@@ -104,7 +104,7 @@ public class Card_01_313_ErrataTests
 
     @Test
     public void StingAbilityExertsFrodoAndRevealsFourCards() throws DecisionResultInvalidException, CardNotFoundException {
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var frodo = scn.GetRingBearer();
         var sting = scn.GetFreepsCard("sting");
@@ -116,7 +116,7 @@ public class Card_01_313_ErrataTests
 
         scn.AttachCardsTo(frodo, sting);
 
-        scn.ShadowMoveCardToHand(orc1, orc2, orc3, scimitar1);
+        scn.MoveCardsToHand(orc1, orc2, orc3, scimitar1);
 
         scn.StartGame();
 
@@ -129,7 +129,7 @@ public class Card_01_313_ErrataTests
 
     @Test
     public void StingAbilityRemovesTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var frodo = scn.GetRingBearer();
         var sting = scn.GetFreepsCard("sting");
@@ -138,10 +138,10 @@ public class Card_01_313_ErrataTests
 
         var orc1 = scn.GetShadowCard("orc1");
 
-        scn.FreepsMoveCharToTable(sam, merry);
+        scn.MoveCompanionToTable(sam, merry);
         scn.AttachCardsTo(frodo, sting);
 
-        scn.ShadowMoveCardToHand(orc1);
+        scn.MoveCardsToHand(orc1);
 
         scn.StartGame();
 

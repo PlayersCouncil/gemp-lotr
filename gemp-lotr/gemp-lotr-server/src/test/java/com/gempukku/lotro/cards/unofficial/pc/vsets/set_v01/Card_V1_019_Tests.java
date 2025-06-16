@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V1_019_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("aragorn", "101_19");
 					put("arwen", "1_30");
@@ -26,9 +26,9 @@ public class Card_V1_019_Tests
 
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -94,7 +94,7 @@ public class Card_V1_019_Tests
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var celeborn = scn.GetFreepsCard("celeborn");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCardToHand(aragorn);
+		scn.MoveCardsToHand(aragorn);
 
 		scn.StartGame();
 
@@ -124,12 +124,12 @@ public class Card_V1_019_Tests
 		var defiance = scn.GetFreepsCard("defiance");
 		var arwen = scn.GetFreepsCard("arwen");
 
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToHand(defiance, arwen);
+		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCardsToHand(defiance, arwen);
 
 		var runner = scn.GetShadowCard("runner");
 
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 
@@ -163,12 +163,12 @@ public class Card_V1_019_Tests
 		var defiance = scn.GetFreepsCard("defiance");
 		var arwen = scn.GetFreepsCard("arwen");
 
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToHand(defiance, arwen);
+		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCardsToHand(defiance, arwen);
 
 		var runner = scn.GetShadowCard("runner");
 
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 
@@ -178,7 +178,7 @@ public class Card_V1_019_Tests
 		assertTrue(scn.FreepsActionAvailable(aragorn));
 		assertEquals(Zone.HAND, defiance.getZone());
 		assertEquals(Zone.HAND, arwen.getZone());
-		assertFalse(scn.hasKeyword(aragorn, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
 
 		scn.FreepsUseCardAction(aragorn);
 		assertTrue(scn.FreepsDecisionAvailable("Choose cards from hand to discard"));
@@ -189,7 +189,7 @@ public class Card_V1_019_Tests
 		assertEquals(Zone.HAND, arwen.getZone());
 
 		scn.FreepsChoose("damage");
-		assertTrue(scn.hasKeyword(aragorn, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
 
 	}

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set06;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_06_091_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("blood", "6_91");
@@ -23,9 +23,9 @@ public class Card_06_091_Tests
 
 					put("twk", "8_84");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_06_091_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -68,12 +68,12 @@ public class Card_06_091_Tests
 		var blood = scn.GetFreepsCard("blood");
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var mount = scn.GetFreepsCard("mount");
-		scn.FreepsMoveCharToTable(eowyn);
-		scn.FreepsAttachCardsTo(eowyn, mount);
-		scn.FreepsMoveCardToSupportArea(blood);
+		scn.MoveCompanionToTable(eowyn);
+		scn.AttachCardsTo(eowyn, mount);
+		scn.MoveCardsToSupportArea(blood);
 
 		var twk = scn.GetShadowCard("twk");
-		scn.ShadowMoveCharToTable(twk);
+		scn.MoveMinionsToTable(twk);
 
 		scn.StartGame();
 
@@ -95,7 +95,7 @@ public class Card_06_091_Tests
 		scn.FreepsPassCurrentPhaseAction();
 		assertEquals(1, scn.GetWoundsOn(eowyn));
 		assertEquals(Zone.FREE_CHARACTERS, eowyn.getZone());
-		assertEquals(Phase.REGROUP, scn.getPhase());
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 
 	}
 }

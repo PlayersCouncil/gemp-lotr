@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_311_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("sam", "51_311");
 					put("rosie", "1_309");
@@ -24,9 +24,9 @@ public class Card_01_311_ErrataTests
 
 					put("twk", "1_237");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -73,7 +73,7 @@ public class Card_01_311_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionToTable(sam);
 
 		scn.StartGame();
 
@@ -100,8 +100,8 @@ public class Card_01_311_ErrataTests
 		var sam = scn.GetFreepsCard("sam");
 		var proudfoot = scn.GetFreepsCard("proudfoot");
 		var gaffer = scn.GetFreepsCard("gaffer");
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardToSupportArea(proudfoot, gaffer);
+		scn.MoveCompanionToTable(sam);
+		scn.MoveCardsToSupportArea(proudfoot, gaffer);
 
 		scn.StartGame();
 
@@ -127,8 +127,8 @@ public class Card_01_311_ErrataTests
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
 		var rosie = scn.GetFreepsCard("rosie");
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardToSupportArea(rosie);
+		scn.MoveCompanionToTable(sam);
+		scn.MoveCardsToSupportArea(rosie);
 
 		scn.StartGame();
 
@@ -154,7 +154,7 @@ public class Card_01_311_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionToTable(sam);
 
 		scn.StartGame();
 
@@ -176,10 +176,10 @@ public class Card_01_311_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionToTable(sam);
 
 		var twk = scn.GetShadowCard("twk");
-		scn.ShadowMoveCharToTable(twk);
+		scn.MoveMinionsToTable(twk);
 
 		scn.StartGame();
 
@@ -203,11 +203,11 @@ public class Card_01_311_ErrataTests
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
 		var stealth = scn.GetFreepsCard("stealth");
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardToHand(stealth);
+		scn.MoveCompanionToTable(sam);
+		scn.MoveCardsToHand(stealth);
 
 		var twk = scn.GetShadowCard("twk");
-		scn.ShadowMoveCharToTable(twk);
+		scn.MoveMinionsToTable(twk);
 
 		scn.StartGame();
 

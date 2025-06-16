@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_004_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("horsemen", "102_4");
@@ -28,9 +28,9 @@ public class Card_V2_004_Tests
 					put("card3", "1_5");
 					put("card4", "1_6");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -59,7 +59,7 @@ public class Card_V2_004_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.DUNLAND, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
+		assertTrue(scn.HasTimeword(card, Timeword.SHADOW));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -73,15 +73,15 @@ public class Card_V2_004_Tests
 		var chief = scn.GetShadowCard("chief");
 		var club = scn.GetShadowCard("club");
 		var hides = scn.GetShadowCard("hides");
-		scn.ShadowMoveCardToHand(horsemen);
-		scn.ShadowMoveCardToDiscard(band, chief, club, hides);
+		scn.MoveCardsToHand(horsemen);
+		scn.MoveCardsToDiscard(band, chief, club, hides);
 
 		var card1 = scn.GetFreepsCard("card1");
 		var card2 = scn.GetFreepsCard("card2");
 		var card3 = scn.GetFreepsCard("card3");
 		var card4 = scn.GetFreepsCard("card4");
-		scn.FreepsMoveCardToHand(card1, card2, card3);
-		scn.FreepsMoveCardToDiscard(card4);
+		scn.MoveCardsToHand(card1, card2, card3);
+		scn.MoveCardsToDiscard(card4);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -110,14 +110,14 @@ public class Card_V2_004_Tests
 		var chief = scn.GetShadowCard("chief");
 		var club = scn.GetShadowCard("club");
 		var hides = scn.GetShadowCard("hides");
-		scn.ShadowMoveCardToHand(horsemen);
-		scn.ShadowMoveCardToDiscard(band, chief, club, hides);
+		scn.MoveCardsToHand(horsemen);
+		scn.MoveCardsToDiscard(band, chief, club, hides);
 
 		var card1 = scn.GetFreepsCard("card1");
 		var card2 = scn.GetFreepsCard("card2");
 		var card3 = scn.GetFreepsCard("card3");
 		var card4 = scn.GetFreepsCard("card4");
-		scn.FreepsMoveCardToHand(card1, card2, card3, card4);
+		scn.MoveCardsToHand(card1, card2, card3, card4);
 
 		scn.StartGame();
 		scn.SetTwilight(10);

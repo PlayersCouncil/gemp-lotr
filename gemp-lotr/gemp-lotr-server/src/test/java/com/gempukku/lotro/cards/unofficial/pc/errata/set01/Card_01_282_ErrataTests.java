@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_01_282_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("legacy", "51_282");
@@ -29,9 +29,9 @@ public class Card_01_282_ErrataTests
 					put("tale1", "1_24");
 					put("tale2", "1_24");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -52,7 +52,7 @@ public class Card_01_282_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var legacy = scn.GetFreepsCard("legacy");
 
@@ -67,14 +67,14 @@ public class Card_01_282_ErrataTests
 	@Test
 	public void TheWeightofaLegacyExertsAnOrcToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var legacy = scn.GetShadowCard("legacy");
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToHand(legacy, orc);
+		scn.MoveCardsToHand(legacy, orc);
 
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.FreepsMoveCharToTable(boromir);
+		scn.MoveCompanionToTable(boromir);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -98,15 +98,15 @@ public class Card_01_282_ErrataTests
 	@Test
 	public void TheWeightofaLegacyLimit1PerBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var legacy = scn.GetShadowCard("legacy");
 
 		var boromir = scn.GetFreepsCard("boromir");
 		var tale1 = scn.GetFreepsCard("tale1");
 		var tale2 = scn.GetFreepsCard("tale2");
-		scn.FreepsMoveCardToHand(tale1, tale2);
-		scn.FreepsMoveCharToTable(boromir);
+		scn.MoveCardsToHand(tale1, tale2);
+		scn.MoveCompanionToTable(boromir);
 		scn.AttachCardsTo(boromir, legacy);
 
 		scn.StartGame();

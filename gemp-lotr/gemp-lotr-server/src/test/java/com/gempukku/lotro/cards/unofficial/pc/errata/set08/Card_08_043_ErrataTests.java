@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set08;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_08_043_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("host", "58_43");
 					put("wraith1", "8_41");
 					put("wraith2", "8_41");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_08_043_ErrataTests
 		assertEquals(Culture.GONDOR, host.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, host.getBlueprint().getCardType());
 		assertEquals(Race.WRAITH, host.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(host, Keyword.ENDURING));
+		assertTrue(scn.HasKeyword(host, Keyword.ENDURING));
 		assertEquals(5, host.getBlueprint().getTwilightCost());
 		assertEquals(9, host.getBlueprint().getStrength());
 		assertEquals(3, host.getBlueprint().getVitality());
@@ -72,7 +72,7 @@ public class Card_08_043_ErrataTests
 		var host = scn.GetFreepsCard("host");
 		var wraith1 = scn.GetFreepsCard("wraith1");
 		var wraith2 = scn.GetFreepsCard("wraith2");
-		scn.FreepsMoveCardToHand(host, wraith1, wraith2);
+		scn.MoveCardsToHand(host, wraith1, wraith2);
 
 		scn.StartGame();
 
@@ -99,15 +99,15 @@ public class Card_08_043_ErrataTests
 		var scn = GetScenario();
 
 		var host = scn.GetFreepsCard("host");
-		scn.FreepsMoveCharToTable(host);
+		scn.MoveCompanionToTable(host);
 
 		scn.StartGame();
 
-		assertFalse(scn.hasKeyword(host, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(host, Keyword.DEFENDER));
 		scn.AddWoundsToChar(host, 1);
-		assertFalse(scn.hasKeyword(host, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(host, Keyword.DEFENDER));
 		scn.AddWoundsToChar(host, 1);
-		assertTrue(scn.hasKeyword(host, Keyword.DEFENDER));
+		assertTrue(scn.HasKeyword(host, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(host, Keyword.DEFENDER));
 	}
 }

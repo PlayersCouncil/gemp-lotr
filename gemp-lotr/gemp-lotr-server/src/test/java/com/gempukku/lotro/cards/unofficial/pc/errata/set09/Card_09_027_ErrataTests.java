@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set09;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_09_027_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("sentback", "59_27");
@@ -28,9 +28,9 @@ public class Card_09_027_ErrataTests
 					put("runner1", "1_178");
 					put("runner2", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -60,7 +60,7 @@ public class Card_09_027_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, sentback.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, sentback.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, sentback.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(sentback, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(sentback, Keyword.SUPPORT_AREA));
 		assertEquals(2, sentback.getBlueprint().getTwilightCost());
 	}
 
@@ -72,14 +72,14 @@ public class Card_09_027_ErrataTests
 		var sentback = scn.GetFreepsCard("sentback");
 		var gandalf = scn.GetFreepsCard("gandalf1");
 		var radagast = scn.GetFreepsCard("radagast1");
-		scn.FreepsMoveCardToSupportArea(sentback);
-		scn.FreepsMoveCharToTable(gandalf, radagast);
+		scn.MoveCardsToSupportArea(sentback);
+		scn.MoveCompanionToTable(gandalf, radagast);
 
 		var saruman = scn.GetShadowCard("saruman");
 		var staff = scn.GetShadowCard("staff");
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
-		scn.ShadowMoveCharToTable(saruman, runner1, runner2);
+		scn.MoveMinionsToTable(saruman, runner1, runner2);
 		scn.AttachCardsTo(saruman, staff);
 
 		scn.StartGame();
@@ -120,9 +120,9 @@ public class Card_09_027_ErrataTests
 		var sentback = scn.GetFreepsCard("sentback");
 		var grey = scn.GetFreepsCard("gandalf1");
 		var white = scn.GetFreepsCard("gandalf2");
-		scn.FreepsMoveCardToSupportArea(sentback);
-		scn.FreepsMoveCardToDeadPile(grey);
-		scn.FreepsMoveCardToHand(white);
+		scn.MoveCardsToSupportArea(sentback);
+		scn.MoveCardsToDeadPile(grey);
+		scn.MoveCardsToHand(white);
 
 		scn.StartGame();
 
@@ -142,9 +142,9 @@ public class Card_09_027_ErrataTests
 		var sentback = scn.GetFreepsCard("sentback");
 		var grey = scn.GetFreepsCard("gandalf1");
 		var white = scn.GetFreepsCard("gandalf2");
-		scn.FreepsMoveCardToSupportArea(sentback);
-		scn.FreepsMoveCardToDeadPile(grey);
-		scn.FreepsMoveCardToHand(white);
+		scn.MoveCardsToSupportArea(sentback);
+		scn.MoveCardsToDeadPile(grey);
+		scn.MoveCardsToHand(white);
 
 		scn.StartGame();
 

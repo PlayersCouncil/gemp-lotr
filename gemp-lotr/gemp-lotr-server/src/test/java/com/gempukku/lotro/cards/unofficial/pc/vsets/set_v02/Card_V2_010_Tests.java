@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.PossessionClass;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_V2_010_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("armaments", "102_10");
@@ -29,9 +29,9 @@ public class Card_V2_010_Tests
 
 					put("smith", "3_60");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -77,13 +77,9 @@ public class Card_V2_010_Tests
 
 		var armaments = scn.GetFreepsCard("armaments");
 		var haldir = scn.GetFreepsCard("haldir");
-		var troop = scn.GetFreepsCard("troop");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCharToTable(haldir, arwen);
-		scn.FreepsMoveCardToHand(armaments);
-
-		var smith = scn.GetShadowCard("smith");
-		scn.ShadowMoveCharToTable(smith);
+		scn.MoveCompanionToTable(haldir, arwen);
+		scn.MoveCardsToHand(armaments);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(armaments);
@@ -102,13 +98,13 @@ public class Card_V2_010_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var bow = scn.GetFreepsCard("bow");
 		var sword = scn.GetFreepsCard("sword");
-		scn.FreepsMoveCharToTable(haldir, troop);
+		scn.MoveCompanionToTable(haldir, troop);
 		scn.AttachCardsTo(haldir, sword);
 		scn.AttachCardsTo(troop, bow);
-		scn.FreepsMoveCardToHand(armaments);
+		scn.MoveCardsToHand(armaments);
 
 		var smith = scn.GetShadowCard("smith");
-		scn.ShadowMoveCharToTable(smith);
+		scn.MoveMinionsToTable(smith);
 
 		scn.StartGame();
 
@@ -125,15 +121,15 @@ public class Card_V2_010_Tests
 		var haldir = scn.GetFreepsCard("haldir");
 		var troop = scn.GetFreepsCard("troop");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCharToTable(haldir, troop, arwen);
-		scn.FreepsAttachCardsTo(haldir, armaments);
+		scn.MoveCompanionToTable(haldir, troop, arwen);
+		scn.AttachCardsTo(haldir, armaments);
 
 		scn.AddWoundsToChar(haldir, 1);
 		scn.AddWoundsToChar(troop, 1);
 		scn.AddWoundsToChar(arwen, 1);
 
 		var smith = scn.GetShadowCard("smith");
-		scn.ShadowMoveCharToTable(smith);
+		scn.MoveMinionsToTable(smith);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_01_036_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("feet", "51_36");
@@ -32,9 +32,9 @@ public class Card_01_036_ErrataTests
 					put("chaff3", "1_3");
 					put("chaff4", "1_3");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -62,7 +62,7 @@ public class Card_01_036_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, feet.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, feet.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, feet.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(feet, Timeword.FELLOWSHIP));
+        assertTrue(scn.HasTimeword(feet, Timeword.FELLOWSHIP));
 		assertEquals(2, feet.getBlueprint().getTwilightCost());
 	}
 
@@ -73,9 +73,9 @@ public class Card_01_036_ErrataTests
 
 		var feet = scn.GetFreepsCard("feet");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCardToHand(feet, arwen);
+		scn.MoveCardsToHand(feet, arwen);
 
-		scn.ShadowMoveCardToHand("runner1","runner2","runner3","runner4",
+		scn.MoveCardsToShadowHand("runner1","runner2","runner3","runner4",
 				"chaff1","chaff2","chaff3","chaff4" );
 
 		scn.StartGame();
@@ -96,10 +96,10 @@ public class Card_01_036_ErrataTests
 
 		var feet = scn.GetFreepsCard("feet");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCardToHand(feet);
-		scn.FreepsMoveCharToTable(arwen);
+		scn.MoveCardsToHand(feet);
+		scn.MoveCompanionToTable(arwen);
 
-		scn.ShadowMoveCardToHand("runner1","runner2","runner3","runner4" );
+		scn.MoveCardsToShadowHand("runner1","runner2","runner3","runner4" );
 
 		scn.StartGame();
 
@@ -120,10 +120,10 @@ public class Card_01_036_ErrataTests
 
 		var feet = scn.GetFreepsCard("feet");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCardToHand(feet);
-		scn.FreepsMoveCharToTable(arwen);
+		scn.MoveCardsToHand(feet);
+		scn.MoveCompanionToTable(arwen);
 
-		scn.ShadowMoveCardToHand("chaff1","chaff2","chaff3","chaff4" );
+		scn.MoveCardsToShadowHand("chaff1","chaff2","chaff3","chaff4" );
 
 		scn.StartGame();
 
@@ -142,10 +142,10 @@ public class Card_01_036_ErrataTests
 
 		var feet = scn.GetFreepsCard("feet");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCardToHand(feet);
-		scn.FreepsMoveCharToTable(arwen);
+		scn.MoveCardsToHand(feet);
+		scn.MoveCompanionToTable(arwen);
 
-		scn.ShadowMoveCardToHand("runner1","runner2","runner3","runner4");
+		scn.MoveCardsToShadowHand("runner1","runner2","runner3","runner4");
 
 		scn.StartGame();
 

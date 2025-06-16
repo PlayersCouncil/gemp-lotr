@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,17 +16,17 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_003_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("gimli", "101_3");
 					put("dwaxe", "1_9");
 					put("handaxe1", "2_10");
 					put("ring", "9_9");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -50,12 +50,12 @@ public class Card_V1_003_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 
 		assertTrue(gimli.getBlueprint().isUnique());
-		assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE)); // test for keywords as needed
 		assertEquals(2, gimli.getBlueprint().getTwilightCost());
 		assertEquals(6, gimli.getBlueprint().getStrength());
 		assertEquals(3, gimli.getBlueprint().getVitality());
@@ -70,13 +70,13 @@ public class Card_V1_003_Tests
 	@Test
 	public void GimliHasStrengthBonusWith2Items() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl dwaxe = scn.GetFreepsCard("dwaxe");
 		PhysicalCardImpl handaxe1 = scn.GetFreepsCard("handaxe1");
 		PhysicalCardImpl ring = scn.GetFreepsCard("ring");
-		scn.FreepsMoveCardToHand(gimli, dwaxe, handaxe1, ring);
+		scn.MoveCardsToHand(gimli, dwaxe, handaxe1, ring);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(gimli);
@@ -95,13 +95,13 @@ public class Card_V1_003_Tests
 	@Test
 	public void GimliHasDamageBonusWith3Items() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl dwaxe = scn.GetFreepsCard("dwaxe");
 		PhysicalCardImpl handaxe1 = scn.GetFreepsCard("handaxe1");
 		PhysicalCardImpl ring = scn.GetFreepsCard("ring");
-		scn.FreepsMoveCardToHand(gimli, dwaxe, handaxe1, ring);
+		scn.MoveCardsToHand(gimli, dwaxe, handaxe1, ring);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(gimli);

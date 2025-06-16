@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set13;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_13_079_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("pallando", "13_79");
 					put("throne", "17_39");
 					put("saruman", "4_173");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -52,7 +52,7 @@ public class Card_13_079_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
@@ -64,8 +64,8 @@ public class Card_13_079_Tests
 		var pallando = scn.GetShadowCard("pallando");
 		var throne = scn.GetShadowCard("throne");
 		var saruman = scn.GetShadowCard("saruman");
-		scn.ShadowMoveCardToSupportArea(pallando, throne);
-		scn.ShadowMoveCharToTable(saruman);
+		scn.MoveCardsToSupportArea(pallando, throne);
+		scn.MoveMinionsToTable(saruman);
 
 		scn.StartGame();
 
@@ -75,6 +75,6 @@ public class Card_13_079_Tests
 		scn.ShadowAcceptOptionalTrigger();
 
 		//10 base +3 from throne making Wizards stronger
-		assertEquals(13, scn.getStrength(pallando));
+		assertEquals(13, scn.GetStrength(pallando));
 	}
 }

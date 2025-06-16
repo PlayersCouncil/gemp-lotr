@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set15;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_15_112_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<String, String>()
 				{{
 					put("troll", "15_112");
@@ -24,9 +24,9 @@ public class Card_15_112_Tests
 					put("orc4", "13_118");
 					put("orc5", "13_118");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -78,8 +78,8 @@ public class Card_15_112_Tests
 		var orc3 = scn.GetShadowCard("orc3");
 		var orc4 = scn.GetShadowCard("orc4");
 		var orc5 = scn.GetShadowCard("orc5");
-		scn.ShadowMoveCardToHand(troll);
-		scn.ShadowMoveCharToTable(orc1, orc2, orc3, orc4);
+		scn.MoveCardsToHand(troll);
+		scn.MoveMinionsToTable(orc1, orc2, orc3, orc4);
 
 		scn.StartGame();
 
@@ -102,8 +102,8 @@ public class Card_15_112_Tests
 		var orc3 = scn.GetShadowCard("orc3");
 		var orc4 = scn.GetShadowCard("orc4");
 		var orc5 = scn.GetShadowCard("orc5");
-		scn.ShadowMoveCardToHand(troll);
-		scn.ShadowMoveCharToTable(orc1, orc2, orc3, orc4, orc5);
+		scn.MoveCardsToHand(troll);
+		scn.MoveMinionsToTable(orc1, orc2, orc3, orc4, orc5);
 
 		scn.StartGame();
 
@@ -114,10 +114,10 @@ public class Card_15_112_Tests
 		scn.ShadowPlayCard(troll);
 
 		assertTrue(scn.ShadowDecisionAvailable("choose cards to discard"));
-		assertFalse(scn.hasKeyword(troll, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(troll, Keyword.FIERCE));
 
 		scn.ShadowChooseYes();
-		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
 		assertEquals(Zone.DISCARD, orc1.getZone());
 		assertEquals(Zone.DISCARD, orc2.getZone());
 		assertEquals(Zone.DISCARD, orc3.getZone());
@@ -126,15 +126,15 @@ public class Card_15_112_Tests
 		assertEquals(18, scn.GetTwilight()); //20 initial -2 for roaming, troll was otherwise free
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
 
 		scn.SkipToPhase(Phase.REGROUP);
-		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
 
 		scn.PassCurrentPhaseActions();
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
-		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
 	}
 
 	@Test
@@ -148,8 +148,8 @@ public class Card_15_112_Tests
 		var orc3 = scn.GetShadowCard("orc3");
 		var orc4 = scn.GetShadowCard("orc4");
 		var orc5 = scn.GetShadowCard("orc5");
-		scn.ShadowMoveCharToTable(troll);
-		scn.ShadowMoveCardToDiscard(orc1, orc2, orc3, orc4, orc5);
+		scn.MoveMinionsToTable(troll);
+		scn.MoveCardsToDiscard(orc1, orc2, orc3, orc4, orc5);
 
 		scn.StartGame();
 

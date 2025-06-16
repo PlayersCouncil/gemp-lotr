@@ -416,14 +416,22 @@
 			trigger: {
 				type: winsSkirmish
 				filter: culture(sauron),orc
-				memorize: winner
 			}
-			effect: {
-				type: addKeyword
-				select: memory(winner)
-				keyword: fierce
-				until: start(regroup)
-			}
+			effect: [
+				{
+					type: ChooseActiveCards
+					count: 1
+					select: choose(culture(sauron),orc,InSkirmish)
+					memorize: chosenWinner
+					text: Choose a winning {Sauron} Orc to make fierce
+				}
+				{
+					type: addKeyword
+					select: memory(chosenWinner)
+					keyword: fierce
+					until: start(regroup)
+				}
+			]
 		}
 		gametext: <b>Response:</b> If a [sauron] Orc wins a skirmish, make that Orc <b>fierce</b> until the regroup phase.
 		lore: "Orcs feed on their own success. The greater their exploits in battle, the greater their confidence grows."

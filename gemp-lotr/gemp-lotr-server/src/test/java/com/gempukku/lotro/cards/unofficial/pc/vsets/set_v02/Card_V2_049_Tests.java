@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_049_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("guthwine", "102_49");
@@ -24,9 +24,9 @@ public class Card_V2_049_Tests
 
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -70,8 +70,8 @@ public class Card_V2_049_Tests
 		var guthwine = scn.GetFreepsCard("guthwine");
 		var eomer = scn.GetFreepsCard("eomer");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.FreepsMoveCardToHand(guthwine);
-		scn.FreepsMoveCharToTable(eomer, eowyn);
+		scn.MoveCardsToHand(guthwine);
+		scn.MoveCompanionToTable(eomer, eowyn);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(guthwine);
@@ -91,18 +91,18 @@ public class Card_V2_049_Tests
 
 		var guthwine = scn.GetFreepsCard("guthwine");
 		var eomer = scn.GetFreepsCard("eomer");
-		scn.FreepsMoveCardToHand(guthwine);
-		scn.FreepsMoveCharToTable(eomer);
+		scn.MoveCardsToHand(guthwine);
+		scn.MoveCompanionToTable(eomer);
 
 		scn.StartGame();
 
-		assertFalse(scn.hasKeyword(eomer, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(eomer, Keyword.DAMAGE));
 
 		scn.FreepsPlayCard(guthwine);
 
 		assertEquals(Zone.ATTACHED, guthwine.getZone());
 		assertEquals(eomer, guthwine.getAttachedTo());
-		assertTrue(scn.hasKeyword(eomer, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(eomer, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(eomer, Keyword.DAMAGE));
 	}
 
@@ -113,18 +113,18 @@ public class Card_V2_049_Tests
 
 		var guthwine = scn.GetFreepsCard("guthwine");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.FreepsMoveCardToHand(guthwine);
-		scn.FreepsMoveCharToTable(eowyn);
+		scn.MoveCardsToHand(guthwine);
+		scn.MoveCompanionToTable(eowyn);
 
 		scn.StartGame();
 
-		assertFalse(scn.hasKeyword(eowyn, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(eowyn, Keyword.DAMAGE));
 
 		scn.FreepsPlayCard(guthwine);
 
 		assertEquals(Zone.ATTACHED, guthwine.getZone());
 		assertEquals(eowyn, guthwine.getAttachedTo());
-		assertFalse(scn.hasKeyword(eowyn, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(eowyn, Keyword.DAMAGE));
 	}
 
 	@Test
@@ -135,13 +135,13 @@ public class Card_V2_049_Tests
 		var guthwine = scn.GetFreepsCard("guthwine");
 		var eomer = scn.GetFreepsCard("eomer");
 		var condition = scn.GetFreepsCard("condition");
-		scn.FreepsMoveCharToTable(eomer);
+		scn.MoveCompanionToTable(eomer);
 		scn.AttachCardsTo(eomer, guthwine);
-		scn.FreepsMoveCardToSupportArea(condition);
+		scn.MoveCardsToSupportArea(condition);
 		scn.AddTokensToCard(condition, 1);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 
@@ -164,13 +164,13 @@ public class Card_V2_049_Tests
 		var guthwine = scn.GetFreepsCard("guthwine");
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var condition = scn.GetFreepsCard("condition");
-		scn.FreepsMoveCharToTable(eowyn);
+		scn.MoveCompanionToTable(eowyn);
 		scn.AttachCardsTo(eowyn, guthwine);
-		scn.FreepsMoveCardToSupportArea(condition);
+		scn.MoveCardsToSupportArea(condition);
 		scn.AddTokensToCard(condition, 1);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 

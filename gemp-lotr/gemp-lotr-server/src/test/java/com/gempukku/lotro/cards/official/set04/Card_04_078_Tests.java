@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set04;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Race;
@@ -16,17 +16,17 @@ import static org.junit.Assert.*;
 public class Card_04_078_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("swordsman", "4_78");
 					put("savage", "1_151");
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -71,11 +71,11 @@ public class Card_04_078_Tests
 		var scn = GetScenario();
 
 		var swordsman = scn.GetFreepsCard("swordsman");
-		scn.FreepsMoveCharToTable(swordsman);
+		scn.MoveCompanionToTable(swordsman);
 
 		var savage = scn.GetShadowCard("savage");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(savage, runner);
+		scn.MoveMinionsToTable(savage, runner);
 
 		scn.StartGame();
 

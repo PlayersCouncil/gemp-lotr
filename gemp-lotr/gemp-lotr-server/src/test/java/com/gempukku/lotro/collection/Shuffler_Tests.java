@@ -1,6 +1,6 @@
 package com.gempukku.lotro.collection;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 // Tidings of Erebor
 public class Shuffler_Tests
 {
-    protected GenericCardTestHelper Get60CardScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario Get60CardScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("1", "1_1");
                     put("2", "1_2");
@@ -104,7 +104,7 @@ public class Shuffler_Tests
         if(!Run)
             return;
         //Pre-game setup
-        GenericCardTestHelper scn = Get60CardScenario();
+        VirtualTableScenario scn = Get60CardScenario();
 
         Map<String, Integer> results = new HashMap<>();
 
@@ -142,7 +142,7 @@ public class Shuffler_Tests
                Count = 1;
             }};
 
-            scn.FreepsMoveCardsToTopOfDeck(scn.GetFreepsHand().toArray(new PhysicalCardImpl[8]));
+            scn.MoveCardsToTopOfDeck(scn.GetFreepsHand().toArray(new PhysicalCardImpl[8]));
 
             String combo = String.join("\t", hand);
             if(results.containsKey(combo)) {
@@ -175,7 +175,7 @@ public class Shuffler_Tests
 
         for(int i = 0; i < iterations; ++i)
         {
-            GenericCardTestHelper scn = Get60CardScenario();
+            VirtualTableScenario scn = Get60CardScenario();
             scn.ShuffleFreepsDeck();
             for(int j = 0; j < 8; j++)
             {
@@ -218,7 +218,7 @@ public class Shuffler_Tests
 
         for(int i = 0; i < iterations; ++i)
         {
-            GenericCardTestHelper scn = Get60CardScenario();
+            VirtualTableScenario scn = Get60CardScenario();
             scn.StartGame();
 
             ArrayList<String> hand = new ArrayList<>();

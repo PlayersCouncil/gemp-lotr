@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_03_074_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("raider", "53_74");
@@ -22,9 +22,9 @@ public class Card_03_074_ErrataTests
 
 					put("rosie", "1_309");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -59,8 +59,8 @@ public class Card_03_074_ErrataTests
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.TRACKER));
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(card, Keyword.TRACKER));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
@@ -74,22 +74,22 @@ public class Card_03_074_ErrataTests
 		var scn = GetScenario();
 
 		var rosie = scn.GetFreepsCard("rosie");
-		scn.FreepsMoveCardToHand(rosie);
+		scn.MoveCardsToHand(rosie);
 
 		var raider = scn.GetShadowCard("raider");
-		scn.ShadowMoveCharToTable(raider);
+		scn.MoveMinionsToTable(raider);
 
 		scn.StartGame();
 
 		assertEquals(Zone.HAND,  rosie.getZone());
 		assertEquals(6, scn.GetStrength(raider));
-		assertFalse(scn.hasKeyword(raider, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(raider, Keyword.FIERCE));
 
-		scn.FreepsMoveCardToDeadPile(rosie);
+		scn.MoveCardsToDeadPile(rosie);
 
 		assertEquals(Zone.DEAD,  rosie.getZone());
 		assertEquals(9, scn.GetStrength(raider));
-		assertTrue(scn.hasKeyword(raider, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(raider, Keyword.FIERCE));
 	}
 
 	@Test
@@ -98,10 +98,10 @@ public class Card_03_074_ErrataTests
 		var scn = GetScenario();
 
 		var rosie = scn.GetFreepsCard("rosie");
-		scn.FreepsMoveCardToSupportArea(rosie);
+		scn.MoveCardsToSupportArea(rosie);
 
 		var raider = scn.GetShadowCard("raider");
-		scn.ShadowMoveCharToTable(raider);
+		scn.MoveMinionsToTable(raider);
 
 		scn.StartGame();
 
@@ -123,12 +123,12 @@ public class Card_03_074_ErrataTests
 		var scn = GetScenario();
 
 		var rosie = scn.GetFreepsCard("rosie");
-		scn.FreepsMoveCardToSupportArea(rosie);
+		scn.MoveCardsToSupportArea(rosie);
 
 		var raider = scn.GetShadowCard("raider");
 		var demands = scn.GetShadowCard("demands");
-		scn.ShadowMoveCharToTable(raider);
-		scn.ShadowMoveCardToSupportArea(demands);
+		scn.MoveMinionsToTable(raider);
+		scn.MoveCardsToSupportArea(demands);
 		scn.AddWoundsToChar(raider, 1);
 
 		scn.StartGame();
@@ -151,12 +151,12 @@ public class Card_03_074_ErrataTests
 		var scn = GetScenario();
 
 		var rosie = scn.GetFreepsCard("rosie");
-		scn.FreepsMoveCardToSupportArea(rosie);
+		scn.MoveCardsToSupportArea(rosie);
 
 		var raider = scn.GetShadowCard("raider");
 		var demands = scn.GetShadowCard("demands");
-		scn.ShadowMoveCharToTable(raider);
-		scn.ShadowMoveCardToSupportArea(demands);
+		scn.MoveMinionsToTable(raider);
+		scn.MoveCardsToSupportArea(demands);
 
 		scn.StartGame();
 
@@ -179,18 +179,18 @@ public class Card_03_074_ErrataTests
 		var scn = GetScenario();
 
 //		var card = scn.GetFreepsCard("card");
-//		scn.FreepsMoveCardToHand(card);
-//		scn.FreepsMoveCharToTable(card);
-//		scn.FreepsMoveCardToSupportArea(card);
-//		scn.FreepsMoveCardToDiscard(card);
-//		scn.FreepsMoveCardsToTopOfDeck(card);
+//		scn.MoveCardsToHand(card);
+//		scn.MoveCompanionToTable(card);
+//		scn.MoveCardsToSupportArea(card);
+//		scn.MoveCardToDiscard(card);
+//		scn.MoveCardsToTopOfDeck(card);
 
 		var card = scn.GetShadowCard("card");
-		scn.ShadowMoveCardToHand(card);
-		scn.ShadowMoveCharToTable(card);
-		scn.ShadowMoveCardToSupportArea(card);
-		scn.ShadowMoveCardToDiscard(card);
-		scn.ShadowMoveCardsToTopOfDeck(card);
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);

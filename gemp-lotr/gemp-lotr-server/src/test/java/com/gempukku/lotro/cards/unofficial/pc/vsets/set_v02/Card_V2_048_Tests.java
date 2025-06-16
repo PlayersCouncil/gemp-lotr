@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_048_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("stronghold", "102_48");
@@ -28,9 +28,9 @@ public class Card_V2_048_Tests
 
 					put("bowman", "2_60");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -60,8 +60,8 @@ public class Card_V2_048_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.FORTIFICATION));
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.FORTIFICATION));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -74,7 +74,7 @@ public class Card_V2_048_Tests
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var elite = scn.GetFreepsCard("elite");
 		var rider = scn.GetFreepsCard("rider");
-		scn.FreepsMoveCardToHand(stronghold, eowyn, elite, rider);
+		scn.MoveCardsToHand(stronghold, eowyn, elite, rider);
 
 		scn.StartGame();
 
@@ -95,7 +95,7 @@ public class Card_V2_048_Tests
 		var stronghold = scn.GetFreepsCard("stronghold");
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var guard = scn.GetFreepsCard("guard");
-		scn.FreepsMoveCardToHand(stronghold, eowyn, guard);
+		scn.MoveCardsToHand(stronghold, eowyn, guard);
 
 		scn.StartGame();
 
@@ -113,11 +113,11 @@ public class Card_V2_048_Tests
 
 		var stronghold = scn.GetFreepsCard("stronghold");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.FreepsMoveCharToTable(eowyn);
-		scn.FreepsMoveCardToSupportArea(stronghold);
+		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCardsToSupportArea(stronghold);
 
 		var bowman = scn.GetShadowCard("bowman");
-		scn.ShadowMoveCharToTable(bowman);
+		scn.MoveMinionsToTable(bowman);
 
 		scn.StartGame();
 
@@ -143,13 +143,13 @@ public class Card_V2_048_Tests
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var sword = scn.GetFreepsCard("sword");
 		var helm = scn.GetFreepsCard("helm");
-		scn.FreepsMoveCharToTable(eowyn);
+		scn.MoveCompanionToTable(eowyn);
 		scn.AttachCardsTo(eowyn, sword);
 		scn.AttachCardsTo(eowyn, helm);
-		scn.FreepsMoveCardToSupportArea(stronghold);
+		scn.MoveCardsToSupportArea(stronghold);
 
 		var bowman = scn.GetShadowCard("bowman");
-		scn.ShadowMoveCharToTable(bowman);
+		scn.MoveMinionsToTable(bowman);
 
 		scn.StartGame();
 

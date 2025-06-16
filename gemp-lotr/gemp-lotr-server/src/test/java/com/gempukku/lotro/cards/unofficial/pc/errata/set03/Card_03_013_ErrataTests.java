@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,16 +14,16 @@ import static org.junit.Assert.assertTrue;
 public class Card_03_013_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("elrond", "53_13");
 					// put other cards in here as needed for the test case
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -70,7 +70,7 @@ public class Card_03_013_ErrataTests
 		var scn = GetScenario();
 
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.FreepsMoveCharToTable(elrond);
+		scn.MoveCompanionToTable(elrond);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(elrond, 3);
@@ -92,7 +92,7 @@ public class Card_03_013_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.FreepsMoveCharToTable(elrond);
+		scn.MoveCompanionToTable(elrond);
 
 		scn.StartGame();
 		scn.FreepsDeclineOptionalTrigger();

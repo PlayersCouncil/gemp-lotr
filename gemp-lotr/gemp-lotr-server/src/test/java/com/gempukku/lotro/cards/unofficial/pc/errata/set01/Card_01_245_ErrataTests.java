@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_245_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("measures", "51_245");
@@ -28,9 +28,9 @@ public class Card_01_245_ErrataTests
 					put("chaff4", "1_270");
 					put("chaff5", "1_270");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -59,7 +59,7 @@ public class Card_01_245_ErrataTests
 		assertEquals(Side.SHADOW, measures.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, measures.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, measures.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(measures, Timeword.MANEUVER));
+        assertTrue(scn.HasTimeword(measures, Timeword.MANEUVER));
 		assertEquals(2, measures.getBlueprint().getTwilightCost());
 	}
 
@@ -71,9 +71,9 @@ public class Card_01_245_ErrataTests
 		var measures= scn.GetShadowCard("measures");
 		var orc= scn.GetShadowCard("runner");
 		var target= scn.GetShadowCard("target");
-		scn.ShadowMoveCardToHand(measures);
-		scn.ShadowMoveCharToTable(orc);
-		scn.ShadowMoveCardToDiscard(target);
+		scn.MoveCardsToHand(measures);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToDiscard(target);
 
 		scn.StartGame();
 		scn.AddBurdens(1);
@@ -92,9 +92,9 @@ public class Card_01_245_ErrataTests
 		var measures= scn.GetShadowCard("measures");
 		var orc= scn.GetShadowCard("orc");
 		var target= scn.GetShadowCard("target");
-		scn.ShadowMoveCardToHand(measures);
-		scn.ShadowMoveCharToTable(orc);
-		scn.ShadowMoveCardToDiscard(target);
+		scn.MoveCardsToHand(measures);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToDiscard(target);
 
 		scn.StartGame();
 		scn.RemoveBurdens(1);
@@ -113,9 +113,9 @@ public class Card_01_245_ErrataTests
 		var measures= scn.GetShadowCard("measures");
 		var orc= scn.GetShadowCard("orc");
 		var target= scn.GetShadowCard("target");
-		scn.ShadowMoveCardToHand(measures);
-		scn.ShadowMoveCharToTable(orc);
-		scn.ShadowMoveCardToDiscard(target);
+		scn.MoveCardsToHand(measures);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToDiscard(target);
 
 		scn.StartGame();
 
@@ -143,9 +143,9 @@ public class Card_01_245_ErrataTests
 		var measures= scn.GetShadowCard("measures");
 		var orc= scn.GetShadowCard("orc");
 		var target= scn.GetShadowCard("target");
-		scn.ShadowMoveCardToHand(measures);
-		scn.ShadowMoveCharToTable(orc);
-		scn.ShadowMoveCardToDiscard(target);
+		scn.MoveCardsToHand(measures);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToDiscard(target);
 
 		scn.StartGame();
 
@@ -177,11 +177,11 @@ public class Card_01_245_ErrataTests
 		var measures= scn.GetShadowCard("measures");
 		var orc= scn.GetShadowCard("orc");
 		var target= scn.GetShadowCard("target");
-		scn.ShadowMoveCardToHand(measures);
-		scn.ShadowMoveCharToTable(orc);
-		scn.ShadowMoveCardToDiscard(target);
+		scn.MoveCardsToHand(measures);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToDiscard(target);
 
-		scn.FreepsMoveCardToDiscard("chaff1", "chaff2");
+		scn.MoveCardsToFreepsDiscard("chaff1", "chaff2");
 
 		scn.StartGame();
 

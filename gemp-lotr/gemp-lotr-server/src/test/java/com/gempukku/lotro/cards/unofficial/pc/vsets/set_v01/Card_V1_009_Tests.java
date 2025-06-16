@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V1_009_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("legolas", "101_9");
 					put("lorien", "51_53");
@@ -24,9 +24,9 @@ public class Card_V1_009_Tests
 
 					put("shelob", "10_23");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -60,7 +60,7 @@ public class Card_V1_009_Tests
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.ELF, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(card, Keyword.ARCHER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
@@ -78,11 +78,11 @@ public class Card_V1_009_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gornbow = scn.GetFreepsCard("gornbow");
 
-		scn.FreepsMoveCharToTable(legolas, lorien, aragorn);
-		scn.FreepsAttachCardsTo(aragorn, "gornbow");
-		scn.FreepsAttachCardsTo(lorien, "bow");
+		scn.MoveCompanionToTable(legolas, lorien, aragorn);
+		scn.AttachCardsTo(aragorn, gornbow);
+		scn.AttachCardsTo(lorien, bow);
 
-		scn.ShadowMoveCharToTable("shelob");
+		scn.MoveMinionsToTable("shelob");
 
 		scn.StartGame();
 

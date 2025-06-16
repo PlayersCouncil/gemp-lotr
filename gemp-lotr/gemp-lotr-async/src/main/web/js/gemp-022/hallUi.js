@@ -53,17 +53,17 @@ var GempLotrHallUI = Class.extend({
 
 		this.chat = chat;
 		this.chat.tournamentCallback = function(from, message) {
-		    var thisName = that.userInfo.name
+				var thisName = that.userInfo.name
 			if (from == "TournamentSystem" && that.inTournament) {
 				that.showDialog("Tournament Update", message, 320);
 			} else if (from.startsWith("TournamentSystemTo:")) {
-                // Extract and split the user list
-                let users = from.split(":")[1].split(";");
+								// Extract and split the user list
+								let users = from.split(":")[1].split(";");
 
-                // Check if thisName is in the list
-                if (users.includes(thisName)) {
-				    that.showDialog("Tournament Update", message, 320);
-                }
+								// Check if thisName is in the list
+								if (users.includes(thisName)) {
+						that.showDialog("Tournament Update", message, 320);
+								}
 			}
 		};
 
@@ -144,6 +144,12 @@ var GempLotrHallUI = Class.extend({
 				that.createTableButton.addClass("ui-state-disabled")
 				that.createTableButton.removeClass("ui-state-focus")
 				var format = that.supportedFormatsSelect.val();
+				
+				if(format == null || format === "") {
+					that.showErrorDialog("Table creation error", "You must select a format", false, false);
+					return;
+				}
+				
 				var deck = that.decksSelect.val();
 				var tableDesc = that.tableDescInput.val();
 				var timer = that.timerSelect.val();
@@ -491,57 +497,57 @@ var GempLotrHallUI = Class.extend({
 							})(queue));
 						actionsField.append(but);
 
-                        if (queue.getAttribute("startable") == "true") {
-                            var startBut = $("<button>Start Now</button>");
-                            $(startBut).button().click((
-                                function(queueInfo) {
-                                    return function() {
-                                        var queueId = queueInfo.getAttribute("id");
-                                        that.comm.startQueue(queueId, function (xml) {
-                                            var result = that.processResponse(xml);
-                                        });
-                                    }
-                                })(queue));
-						    actionsField.append(startBut);
-                        }
+												if (queue.getAttribute("startable") == "true") {
+														var startBut = $("<button>Start Now</button>");
+														$(startBut).button().click((
+																function(queueInfo) {
+																		return function() {
+																				var queueId = queueInfo.getAttribute("id");
+																				that.comm.startQueue(queueId, function (xml) {
+																						var result = that.processResponse(xml);
+																				});
+																		}
+																})(queue));
+								actionsField.append(startBut);
+												}
 
-                        if (+queue.getAttribute("readyCheckSecsRemaining") > -1) {
-                            if ($("button:contains('READY CHECK')").length === 0 && queue.getAttribute("confirmedReadyCheck") == "false") {
-                                that.showDialog("Ready Check", "Ready Check started for the <b>" + queue.getAttribute("queue")
-                                 + "</b> tournament.<br><br>To confirm you are present, click the Ready Check button within next "
-                                  + queue.getAttribute("readyCheckSecsRemaining") + " seconds.", 230);
-                            }
-                            var checkBut = $("<button>READY CHECK - " + queue.getAttribute("readyCheckSecsRemaining") + " s</button>");
-                            $(checkBut).button().click((
-                                function(queueInfo) {
-                                    return function() {
-                                        var queueId = queueInfo.getAttribute("id");
-                                        that.comm.confirmReadyCheckQueue(queueId, function (xml) {
-                                            var result = that.processResponse(xml);
-                                        });
-                                    }
-                                })(queue));
-						    actionsField.append(checkBut);
-						    if (queue.getAttribute("confirmedReadyCheck") == "true") {
-                                $(checkBut).prop("disabled", true).text("Waiting for others - " + queue.getAttribute("readyCheckSecsRemaining") + " s");
-						    }
-                        }
+												if (+queue.getAttribute("readyCheckSecsRemaining") > -1) {
+														if ($("button:contains('READY CHECK')").length === 0 && queue.getAttribute("confirmedReadyCheck") == "false") {
+																that.showDialog("Ready Check", "Ready Check started for the <b>" + queue.getAttribute("queue")
+																 + "</b> tournament.<br><br>To confirm you are present, click the Ready Check button within next "
+																	+ queue.getAttribute("readyCheckSecsRemaining") + " seconds.", 230);
+														}
+														var checkBut = $("<button>READY CHECK - " + queue.getAttribute("readyCheckSecsRemaining") + " s</button>");
+														$(checkBut).button().click((
+																function(queueInfo) {
+																		return function() {
+																				var queueId = queueInfo.getAttribute("id");
+																				that.comm.confirmReadyCheckQueue(queueId, function (xml) {
+																						var result = that.processResponse(xml);
+																				});
+																		}
+																})(queue));
+								actionsField.append(checkBut);
+								if (queue.getAttribute("confirmedReadyCheck") == "true") {
+																$(checkBut).prop("disabled", true).text("Waiting for others - " + queue.getAttribute("readyCheckSecsRemaining") + " s");
+								}
+												}
 					}
-                    var type = queue.getAttribute("type");
-                    if(type !== null)
-                        type = type.toLowerCase();
-                    if(type === "sealed") {
-                        type = "Sealed";
-                    }
-                    else if (type === "solodraft") {
-                        type = "Solo Draft";
-                    }
-                    else if (type === "table_solodraft") {
-                        type = "Solo Table Draft";
-                    }
-                    else if (type === "table_draft") {
-                        type = "Table Draft";
-                    }
+										var type = queue.getAttribute("type");
+										if(type !== null)
+												type = type.toLowerCase();
+										if(type === "sealed") {
+												type = "Sealed";
+										}
+										else if (type === "solodraft") {
+												type = "Solo Draft";
+										}
+										else if (type === "table_solodraft") {
+												type = "Solo Table Draft";
+										}
+										else if (type === "table_draft") {
+												type = "Table Draft";
+										}
 
 					var rowstr = "<tr class='queue" + id + "'><td>" + queue.getAttribute("format") + "</td>";
 					var startTd = "<td>" + queue.getAttribute("start") + "</td>";
@@ -556,10 +562,10 @@ var GempLotrHallUI = Class.extend({
 						"</tr>";
 					} else if (type.includes("Sealed") || type.includes("Draft")) {
 						// No prizes and cost displayed for limited games
-					    rowstr += "<td>" + type + "</td>";
+							rowstr += "<td>" + type + "</td>";
 						rowstr += "<td><div";
 						if (type.includes("Table") && queue.hasAttribute("draftCode")) {
-						    rowstr += " class='draftFormatInfo' draftCode='"+ queue.getAttribute("draftCode") + "'";
+								rowstr += " class='draftFormatInfo' draftCode='"+ queue.getAttribute("draftCode") + "'";
 						}
 						rowstr += ">" + queue.getAttribute("queue") + "</div></td>" +
 						startTd +
@@ -581,25 +587,25 @@ var GempLotrHallUI = Class.extend({
 					row.append(actionsField);
 
 					// Row for tournament queue waiting table
-                    var tablesRow = $("<tr class='table" + id + "'></tr>");
-                    tablesRow.append("<td>" + queue.getAttribute("format") + "</td>");
-                    let htmlTd = "<td> ";
-                    if (isWC) {
-                        htmlTd += "WC";
-                    } else {
-                        htmlTd += "Tournament"
-                    }
-                    htmlTd += " - " + type + " - <div style='display:inline'"
-                    if (type.includes("Table") && queue.hasAttribute("draftCode")) {
-                       htmlTd += " class='draftFormatInfo' draftCode='"+ queue.getAttribute("draftCode") + "'";
-                    }
-                    htmlTd += ">" + queue.getAttribute("queue") + "</div></td>";
-                    tablesRow.append(htmlTd);
-                    tablesRow.append("<td>" + queue.getAttribute("start") + "</td>");
-                    tablesRow.append("<td>" + queue.getAttribute("playerList") + "</td>");
-                    var actionsFieldClone = actionsField.clone(true);
-                    tablesRow.append(actionsFieldClone);
-                    if (joined == "true")
+										var tablesRow = $("<tr class='table" + id + "'></tr>");
+										tablesRow.append("<td>" + queue.getAttribute("format") + "</td>");
+										let htmlTd = "<td> ";
+										if (isWC) {
+												htmlTd += "WC";
+										} else {
+												htmlTd += "Tournament"
+										}
+										htmlTd += " - " + type + " - <div style='display:inline'"
+										if (type.includes("Table") && queue.hasAttribute("draftCode")) {
+											 htmlTd += " class='draftFormatInfo' draftCode='"+ queue.getAttribute("draftCode") + "'";
+										}
+										htmlTd += ">" + queue.getAttribute("queue") + "</div></td>";
+										tablesRow.append(htmlTd);
+										tablesRow.append("<td>" + queue.getAttribute("start") + "</td>");
+										tablesRow.append("<td>" + queue.getAttribute("playerList") + "</td>");
+										var actionsFieldClone = actionsField.clone(true);
+										tablesRow.append(actionsFieldClone);
+										if (joined == "true")
 						tablesRow.addClass("played");
 
 					if (action == "add") {
@@ -607,44 +613,44 @@ var GempLotrHallUI = Class.extend({
 							$("table.wc-queues", this.tablesDiv)
 							.append(row);
 						} else if (type.includes("Sealed")) {
-                            $("table.sealedQueues", this.tablesDiv)
-                            .append(row);
-                        } else if (type.includes("Draft")) {
+														$("table.sealedQueues", this.tablesDiv)
+														.append(row);
+												} else if (type.includes("Draft")) {
 							$("table.draftQueues", this.tablesDiv)
 							.append(row);
 						} else {
 							$("table.queues", this.tablesDiv)
 							.append(row);
 						}
-                        // Display queues with waiting players also as waiting tables
-                        if (queue.getAttribute("playerCount") != 0 || isWC) {
-                            $("table.waitingTables", this.tablesDiv)
-                                .append(tablesRow);
-                        }
+												// Display queues with waiting players also as waiting tables
+												if (queue.getAttribute("playerCount") != 0 || isWC) {
+														$("table.waitingTables", this.tablesDiv)
+																.append(tablesRow);
+												}
 					} else if (action == "update") {
 						$(".queue" + id, this.tablesDiv).replaceWith(row);
-                        // Display queues with waiting players also as waiting tables
-                        if (queue.getAttribute("playerCount") != 0) {
-                            var existingRow = $(".table" + id, this.tablesDiv);
-                            if (existingRow.length > 0) {
-                                // If the row exists, replace it
-                                existingRow.replaceWith(tablesRow);
-                            } else {
-                                // If the row does not exist, append it
-                                $("table.waitingTables", this.tablesDiv).append(tablesRow);
-                            }
-                        } else if (queue.getAttribute("playerCount") == 0) {
-                            // Remove tournaments displayed as tables
-                            $(".table" + id, this.tablesDiv).remove();
-                        }
+												// Display queues with waiting players also as waiting tables
+												if (queue.getAttribute("playerCount") != 0) {
+														var existingRow = $(".table" + id, this.tablesDiv);
+														if (existingRow.length > 0) {
+																// If the row exists, replace it
+																existingRow.replaceWith(tablesRow);
+														} else {
+																// If the row does not exist, append it
+																$("table.waitingTables", this.tablesDiv).append(tablesRow);
+														}
+												} else if (queue.getAttribute("playerCount") == 0) {
+														// Remove tournaments displayed as tables
+														$(".table" + id, this.tablesDiv).remove();
+												}
 					}
 
 					this.animateRowUpdate(".queue" + id);
 					
 				} else if (action == "remove") {
-                    $(".queue" + id, this.tablesDiv).remove();
-                    // Remove tournaments displayed as tables
-                    $(".table" + id, this.tablesDiv).remove();
+										$(".queue" + id, this.tablesDiv).remove();
+										// Remove tournaments displayed as tables
+										$(".table" + id, this.tablesDiv).remove();
 					
 				}
 			}
@@ -683,13 +689,13 @@ var GempLotrHallUI = Class.extend({
 									function(tourneyInfo) {
 										var tourneyId = tournament.getAttribute("id");
 
-                                        return function() {
-                                            var win = window.open("/gemp-lotr/soloDraft.html?eventId=" + tourneyId, '_blank');
-                                            if (win) {
-                                                //Browser has allowed it to be opened
-                                            win.focus();
-                                            }
-                                        }
+																				return function() {
+																						var win = window.open("/gemp-lotr/soloDraft.html?eventId=" + tourneyId, '_blank');
+																						if (win) {
+																								//Browser has allowed it to be opened
+																						win.focus();
+																						}
+																				}
 									}
 									)(tournament));
 								actionsField.append(but);
@@ -700,13 +706,13 @@ var GempLotrHallUI = Class.extend({
 									function(tourneyInfo) {
 										var tourneyId = tournament.getAttribute("id");
 
-                                        return function() {
-                                            var win = window.open("/gemp-lotr/tableDraft.html?eventId=" + tourneyId, '_blank');
-                                            if (win) {
-                                                //Browser has allowed it to be opened
-                                            win.focus();
-                                            }
-                                        }
+																				return function() {
+																						var win = window.open("/gemp-lotr/tableDraft.html?eventId=" + tourneyId, '_blank');
+																						if (win) {
+																								//Browser has allowed it to be opened
+																						win.focus();
+																						}
+																				}
 									}
 									)(tournament));
 								actionsField.append(but);
@@ -717,13 +723,13 @@ var GempLotrHallUI = Class.extend({
 									function(tourneyInfo) {
 										var tourneyId = tournament.getAttribute("id");
 
-                                        return function() {
-                                            var win = window.open("/gemp-lotr/tableDraft.html?eventId=" + tourneyId, '_blank');
-                                            if (win) {
-                                                //Browser has allowed it to be opened
-                                            win.focus();
-                                            }
-                                        }
+																				return function() {
+																						var win = window.open("/gemp-lotr/tableDraft.html?eventId=" + tourneyId, '_blank');
+																						if (win) {
+																								//Browser has allowed it to be opened
+																						win.focus();
+																						}
+																				}
 									}
 									)(tournament));
 								actionsField.append(but);
@@ -799,7 +805,7 @@ var GempLotrHallUI = Class.extend({
 						}
 						else if (type === "table_solodraft") {
 							rowstr += "<td>Solo Table Draft</td>";
-					    }
+							}
 						else if (type === "table_draft") {
 							rowstr += "<td>Table Draft</td>";
 						}
@@ -808,44 +814,44 @@ var GempLotrHallUI = Class.extend({
 						}
 					}
 					rowstr += "<td>" + tournament.getAttribute("name") + "</td>" +
-                    "<td>" + tournament.getAttribute("system") + "</td>";
-                    if (tournament.hasAttribute("timeRemaining")) {
-                        rowstr += "<td>" + tournament.getAttribute("stage") + " - " + tournament.getAttribute("timeRemaining") + "</td>";
-                    } else {
-                        rowstr += "<td>" + tournament.getAttribute("stage") + "</td>";
-                    }
-                    rowstr += "<td>" + tournament.getAttribute("round") + "</td>" +
-                    "<td><div class='prizeHint' title='Competing Players' value='" + tournament.getAttribute("playerList") + "<br><br>* = abandoned'>" + tournament.getAttribute("playerCount") + "</div></td></tr>";
+										"<td>" + tournament.getAttribute("system") + "</td>";
+										if (tournament.hasAttribute("timeRemaining")) {
+												rowstr += "<td>" + tournament.getAttribute("stage") + " - " + tournament.getAttribute("timeRemaining") + "</td>";
+										} else {
+												rowstr += "<td>" + tournament.getAttribute("stage") + "</td>";
+										}
+										rowstr += "<td>" + tournament.getAttribute("round") + "</td>" +
+										"<td><div class='prizeHint' title='Competing Players' value='" + tournament.getAttribute("playerList") + "<br><br>* = abandoned'>" + tournament.getAttribute("playerCount") + "</div></td></tr>";
 
 					var row = $(rowstr);
 					row.append(actionsField);
 
 
-                    // Row for tournament playing table
-                    var displayType = type;
-                    if(type === "sealed") {
-                        displayType = "Sealed";
-                    }
-                    else if (type === "solodraft") {
-                        displayType = "Solo Draft";
-                    }
-                    else if (type === "table_solodraft") {
-                        displayType = "Solo Table Draft";
-                    }
-                    else if (type === "table_draft") {
-                        displayType = "Table Draft";
-                    }
-                    var tablesRow = $("<tr class='table" + id + "'></tr>");
-                    tablesRow.append("<td>" + tournament.getAttribute("format") + "</td>");
-                    tablesRow.append("<td> Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
-                    if (tournament.hasAttribute("timeRemaining")) {
-                        tablesRow.append("<td>" + tournament.getAttribute("stage") + " - " + tournament.getAttribute("timeRemaining") + "</td>");
-                    } else {
-                        tablesRow.append("<td>" + tournament.getAttribute("stage") + "</td>");
-                    }
-                    tablesRow.append("<td>" + tournament.getAttribute("playerList") + "</td>");
-                    var actionsFieldClone = actionsField.clone(true);
-                    tablesRow.append(actionsFieldClone);
+										// Row for tournament playing table
+										var displayType = type;
+										if(type === "sealed") {
+												displayType = "Sealed";
+										}
+										else if (type === "solodraft") {
+												displayType = "Solo Draft";
+										}
+										else if (type === "table_solodraft") {
+												displayType = "Solo Table Draft";
+										}
+										else if (type === "table_draft") {
+												displayType = "Table Draft";
+										}
+										var tablesRow = $("<tr class='table" + id + "'></tr>");
+										tablesRow.append("<td>" + tournament.getAttribute("format") + "</td>");
+										tablesRow.append("<td> Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
+										if (tournament.hasAttribute("timeRemaining")) {
+												tablesRow.append("<td>" + tournament.getAttribute("stage") + " - " + tournament.getAttribute("timeRemaining") + "</td>");
+										} else {
+												tablesRow.append("<td>" + tournament.getAttribute("stage") + "</td>");
+										}
+										tablesRow.append("<td>" + tournament.getAttribute("playerList") + "</td>");
+										var actionsFieldClone = actionsField.clone(true);
+										tablesRow.append(actionsFieldClone);
 					if (joined == "true")
 						tablesRow.addClass("played"); // red highlight
 
@@ -857,43 +863,43 @@ var GempLotrHallUI = Class.extend({
 							$("table.tournaments", this.tablesDiv)
 							.append(row);
 						}
-                        // Display running tournaments also as playing tables
-                        $("table.playingTables", this.tablesDiv)
-                            .append(tablesRow)
+												// Display running tournaments also as playing tables
+												$("table.playingTables", this.tablesDiv)
+														.append(tablesRow)
 
-                        if (joined == "true") {
-                            // Open draft window
-                            if ((type === "table_solodraft" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff"))
-                            || (type === "table_draft" && stage === "drafting")) {
-                                var tourneyId = tournament.getAttribute("id");
-                                window.open("/gemp-lotr/tableDraft.html?eventId=" + tourneyId, '_blank');
-                                this.PlaySound("gamestart");
-                            } else if (type === "solodraft" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff")) {
-                                var tourneyId = tournament.getAttribute("id");
-                                window.open("/gemp-lotr/soloDraft.html?eventId=" + tourneyId, '_blank');
-                                this.PlaySound("gamestart");
-                            }
-                        }
+												if (joined == "true") {
+														// Open draft window
+														if ((type === "table_solodraft" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff"))
+														|| (type === "table_draft" && stage === "drafting")) {
+																var tourneyId = tournament.getAttribute("id");
+																window.open("/gemp-lotr/tableDraft.html?eventId=" + tourneyId, '_blank');
+																this.PlaySound("gamestart");
+														} else if (type === "solodraft" && (stage === "deck-building" || stage === "registering decks" || stage === "awaiting kickoff")) {
+																var tourneyId = tournament.getAttribute("id");
+																window.open("/gemp-lotr/soloDraft.html?eventId=" + tourneyId, '_blank');
+																this.PlaySound("gamestart");
+														}
+												}
 
 					} else if (action == "update") {
-                        $(".tournament" + id, this.tablesDiv).replaceWith(row);
+												$(".tournament" + id, this.tablesDiv).replaceWith(row);
 
-                        // Display tournaments also as playing tables
-                        var existingRow = $(".table" + id, this.tablesDiv);
-                        if (existingRow.length > 0) {
-                            // If the row exists, replace it
-                            existingRow.replaceWith(tablesRow);
-                        } else {
-                            // If the row does not exist, append it
-                            $("table.playingTables", this.tablesDiv).append(tablesRow);
-                        }
+												// Display tournaments also as playing tables
+												var existingRow = $(".table" + id, this.tablesDiv);
+												if (existingRow.length > 0) {
+														// If the row exists, replace it
+														existingRow.replaceWith(tablesRow);
+												} else {
+														// If the row does not exist, append it
+														$("table.playingTables", this.tablesDiv).append(tablesRow);
+												}
 					}
 
 					this.animateRowUpdate(".tournament" + id);
 				} else if (action == "remove") {
-                    $(".tournament" + id, this.tablesDiv).remove();
-                    // Remove tournaments displayed as tables
-                    $(".table" + id, this.tablesDiv).remove();
+										$(".tournament" + id, this.tablesDiv).remove();
+										// Remove tournaments displayed as tables
+										$(".table" + id, this.tablesDiv).remove();
 				}
 			}
 			
@@ -1115,13 +1121,15 @@ var GempLotrHallUI = Class.extend({
 
 			if (!this.supportedFormatsInitialized) {
 				var formats = root.getElementsByTagName("format");
+				
+				var defaultItem = "<option value='' disabled selected>Select Format</option>"
+				this.supportedFormatsSelect.append(defaultItem);
+				
 				for (var i = 0; i < formats.length; i++) {
 					var format = formats[i].childNodes[0].nodeValue;
 					var type = formats[i].getAttribute("type");
-
-                    var selected = (format === "Fellowship Block") ? " selected" : "";
-                    var item = "<option value='" + type + "'" + selected + ">" + format + "</option>";
 					
+					var item = "<option value='" + type + "'>" + format + "</option>"
 					this.supportedFormatsSelect.append(item);
 				}
 				this.supportedFormatsInitialized = true;

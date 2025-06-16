@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -18,8 +18,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_029_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("murder", "101_29");
 					put("murder2", "101_29");
@@ -45,9 +45,9 @@ public class Card_V1_029_Tests
 					put("fcond7", "1_21");
 					put("fcond8", "1_95");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -70,7 +70,7 @@ public class Card_V1_029_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl murder = scn.GetFreepsCard("murder");
 
@@ -92,7 +92,7 @@ public class Card_V1_029_Tests
 	@Test
 	public void MurderTwilightDiscountFrom3FreepsConditions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl murder = scn.GetShadowCard("murder");
 		PhysicalCardImpl murder2 = scn.GetShadowCard("murder2");
@@ -100,7 +100,7 @@ public class Card_V1_029_Tests
 		PhysicalCardImpl murder4 = scn.GetShadowCard("murder4");
 		PhysicalCardImpl murder5 = scn.GetShadowCard("murder5");
 		PhysicalCardImpl murder6 = scn.GetShadowCard("murder6");
-		scn.ShadowMoveCardToHand(murder, murder2, murder3, murder4, murder5, murder6);
+		scn.MoveCardsToHand(murder, murder2, murder3, murder4, murder5, murder6);
 
 		//Causes each copy of the unique Murder to auto-self-discard, which allows us to get around the uniqueness issue.
 		scn.ApplyAdHocShadowAutoDiscard("crow");
@@ -114,16 +114,16 @@ public class Card_V1_029_Tests
 		assertEquals(30, scn.GetTwilight()); //base after moving
 		scn.ShadowPlayCard(murder);
 		assertEquals(24, scn.GetTwilight()); //-4 cost, -2 roaming
-		scn.FreepsMoveCardToSupportArea("fcond1");
+		scn.MoveCardsToSupportArea("fcond1");
 		scn.ShadowPlayCard(murder2);
 		assertEquals(18, scn.GetTwilight()); //-4 cost, -2 roaming
-		scn.FreepsMoveCardToSupportArea("fcond2");
+		scn.MoveCardsToSupportArea("fcond2");
 		scn.ShadowPlayCard(murder3);
 		assertEquals(12, scn.GetTwilight()); //-4 cost, -2 roaming
-		scn.FreepsMoveCardToSupportArea("fcond3");
+		scn.MoveCardsToSupportArea("fcond3");
 		scn.ShadowPlayCard(murder3);
 		assertEquals(9, scn.GetTwilight()); //-1 cost, -2 roaming
-		scn.FreepsMoveCardToSupportArea("fcond4");
+		scn.MoveCardsToSupportArea("fcond4");
 		scn.ShadowPlayCard(murder3);
 		assertEquals(6, scn.GetTwilight()); //-1 cost, -2 roaming
 
@@ -132,7 +132,7 @@ public class Card_V1_029_Tests
 	@Test
 	public void ManeuverActionRequires3FreepsConditionsOrSaruman() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl murder = scn.GetShadowCard("murder");
 		PhysicalCardImpl cond1 = scn.GetShadowCard("cond1");
@@ -140,17 +140,17 @@ public class Card_V1_029_Tests
 		PhysicalCardImpl cond3 = scn.GetShadowCard("cond3");
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
 
-		scn.ShadowMoveCardToHand(saruman);
-		scn.ShadowMoveCharToTable(murder);
-		scn.ShadowMoveCardsToBottomOfDeck(cond1);
-		scn.ShadowMoveCardToDiscard(cond2);
-		scn.ShadowMoveCardToDiscard(cond3);
+		scn.MoveCardsToHand(saruman);
+		scn.MoveMinionToTable(murder);
+		scn.MoveCardsToBottomOfDeck(cond1);
+		scn.MoveCardToDiscard(cond2);
+		scn.MoveCardToDiscard(cond3);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
 
 		scn.StartGame();
-		scn.FreepsMoveCardToSupportArea("fcond1");
+		scn.MoveCardsToSupportArea("fcond1");
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();
@@ -163,7 +163,7 @@ public class Card_V1_029_Tests
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
 
-		scn.FreepsMoveCardToSupportArea("fcond2", "fcond3");
+		scn.MoveCardsToSupportArea("fcond2", "fcond3");
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();
@@ -176,8 +176,8 @@ public class Card_V1_029_Tests
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
 
-		scn.FreepsMoveCardToDiscard("fcond1", "fcond2", "fcond3");
-		scn.ShadowMoveCharToTable(saruman);
+		scn.MoveCardToDiscard("fcond1", "fcond2", "fcond3");
+		scn.MoveMinionToTable(saruman);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPassCurrentPhaseAction();
@@ -189,7 +189,7 @@ public class Card_V1_029_Tests
 	@Test
 	public void ManeuverActionSelfDiscardsToTopDecksConditionFromDeckOrDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 
 		PhysicalCardImpl murder = scn.GetShadowCard("murder");
@@ -201,10 +201,10 @@ public class Card_V1_029_Tests
 		PhysicalCardImpl cond3 = scn.GetShadowCard("cond3");
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
 
-		scn.ShadowMoveCharToTable(murder, murder2, murder3, saruman);
-		scn.ShadowMoveCardsToBottomOfDeck(cond1);
-		scn.ShadowMoveCardToDiscard(cond2);
-		scn.ShadowMoveCardToDiscard(cond3);
+		scn.MoveMinionToTable(murder, murder2, murder3, saruman);
+		scn.MoveCardsToBottomOfDeck(cond1);
+		scn.MoveCardToDiscard(cond2);
+		scn.MoveCardToDiscard(cond3);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -223,7 +223,7 @@ public class Card_V1_029_Tests
 		// must first decide between deck and discard, and then choose among the revealed copies.
 		scn.ShadowUseCardAction(murder);
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
+		scn.ShadowChooseOption("discard");
 		assertEquals(2, scn.GetShadowCardChoiceCount());
 		scn.ShadowChooseCardBPFromSelection(cond2);
 		assertEquals(Zone.DISCARD, murder.getZone());
@@ -247,7 +247,7 @@ public class Card_V1_029_Tests
 		// chooses between deck/discard, but then does not have to choose among copies (as there is only 1)
 		scn.ShadowUseCardAction(murder2);
 		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
-		scn.ShadowChooseMultipleChoiceOption("discard");
+		scn.ShadowChooseOption("discard");
 //		assertEquals(1, scn.GetShadowCardChoiceCount());
 //		scn.ShadowChooseCardBPFromSelection(weather1);
 		assertEquals(Zone.DISCARD, murder2.getZone());
@@ -271,7 +271,7 @@ public class Card_V1_029_Tests
 		// does not need to choose either pile source nor which copy
 		scn.ShadowUseCardAction(murder3);
 		assertFalse(scn.ShadowDecisionAvailable("Choose action to perform"));
-//		scn.ShadowChooseMultipleChoiceOption("draw deck");
+//		scn.ShadowChooseOption("draw deck");
 //		assertEquals(1, scn.GetShadowCardChoiceCount());
 //		scn.ShadowChooseCardBPFromSelection(weather1);
 		assertEquals(Zone.DISCARD, murder3.getZone());

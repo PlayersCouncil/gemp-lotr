@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set07;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_07_061_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("hobbitses", "7_61");
 					put("gollum", "9_28");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -51,7 +51,7 @@ public class Card_07_061_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
+        assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -64,8 +64,8 @@ public class Card_07_061_Tests
 
 		var hobbitses = scn.GetShadowCard("hobbitses");
 		var gollum = scn.GetShadowCard("gollum");
-		scn.ShadowMoveCardToDiscard(hobbitses);
-		scn.ShadowMoveCharToTable(gollum);
+		scn.MoveCardsToDiscard(hobbitses);
+		scn.MoveMinionsToTable(gollum);
 
 		scn.StartGame();
 
@@ -74,14 +74,14 @@ public class Card_07_061_Tests
 		scn.FreepsResolveSkirmish(frodo);
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertTrue(scn.getTwilightPool() > 1);
+		assertTrue(scn.GetTwilight() > 1);
 		assertTrue(scn.ShadowHasInitiative());
 		assertEquals(Zone.SHADOW_CHARACTERS, gollum.getZone());
 		assertEquals(Zone.DISCARD, hobbitses.getZone());
 		assertEquals(5, scn.GetStrength(gollum));
 		assertTrue(scn.ShadowActionAvailable(hobbitses));
 
-		scn.ShadowPlayCard(hobbitses);
+		scn.ShadowUseCardAction(hobbitses);
 		assertEquals(7, scn.GetStrength(gollum));
 		assertEquals(Zone.DECK, hobbitses.getZone());
 	}

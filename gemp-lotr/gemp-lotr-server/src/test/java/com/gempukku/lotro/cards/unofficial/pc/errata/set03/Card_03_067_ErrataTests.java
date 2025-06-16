@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -14,17 +14,17 @@ import static org.junit.Assert.*;
 public class Card_03_067_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<String, String>()
 				{{
 					put("palantir", "53_67");
 					put("uruk1", "1_151");
 					put("uruk2", "1_151");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -44,7 +44,7 @@ public class Card_03_067_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl palantir = scn.GetFreepsCard("palantir");
 
@@ -52,7 +52,7 @@ public class Card_03_067_ErrataTests
 		assertEquals(Side.SHADOW, palantir.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, palantir.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, palantir.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(palantir, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(palantir, Keyword.SUPPORT_AREA));
 		assertTrue(palantir.getBlueprint().getPossessionClasses().contains(PossessionClass.PALANTIR));
 		assertEquals(0, palantir.getBlueprint().getTwilightCost());
 	}
@@ -60,14 +60,14 @@ public class Card_03_067_ErrataTests
 	@Test
 	public void PalantirRequires1IsengardMinionToPlayBut2ToActivate() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
-		scn.FreepsMoveCardToHand("palantir", "uruk1", "uruk2");
+		scn.FreepsDrawCards(3);
 
 		PhysicalCardImpl palantir = scn.GetShadowCard("palantir");
 		PhysicalCardImpl uruk1 = scn.GetShadowCard("uruk1");
 		PhysicalCardImpl uruk2 = scn.GetShadowCard("uruk2");
-		scn.ShadowMoveCardToHand(palantir, uruk1, uruk2);
+		scn.MoveCardsToHand(palantir, uruk1, uruk2);
 
 		scn.StartGame();
 
@@ -89,15 +89,15 @@ public class Card_03_067_ErrataTests
 	@Test
 	public void PalantirRemoves2ToRevealCardFromFreepsHandAndPlacesOnDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
-		scn.FreepsMoveCardToHand("palantir", "uruk1", "uruk2");
+		scn.FreepsDrawCards(3);
 
 		PhysicalCardImpl palantir = scn.GetShadowCard("palantir");
 		PhysicalCardImpl uruk1 = scn.GetShadowCard("uruk1");
 		PhysicalCardImpl uruk2 = scn.GetShadowCard("uruk2");
-		scn.ShadowMoveCharToTable(uruk1, uruk2);
-		scn.ShadowMoveCardToSupportArea(palantir);
+		scn.MoveMinionsToTable(uruk1, uruk2);
+		scn.MoveCardsToSupportArea(palantir);
 
 		scn.StartGame();
 

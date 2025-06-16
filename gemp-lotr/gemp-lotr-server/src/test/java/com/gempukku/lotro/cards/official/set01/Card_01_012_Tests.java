@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_012_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("gimli", "1_12");
@@ -23,9 +23,9 @@ public class Card_01_012_Tests
 					put("card2", "1_178");
 					put("card3", "1_179");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -61,7 +61,7 @@ public class Card_01_012_Tests
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.DWARF, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
@@ -78,8 +78,8 @@ public class Card_01_012_Tests
 		var gimli = scn.GetFreepsCard("gimli");
 		var card1 = scn.GetFreepsCard("card1");
 		var card2 = scn.GetFreepsCard("card2");
-		scn.FreepsMoveCardToHand(gimli);
-		scn.FreepsMoveCardToHand(card1);
+		scn.MoveCardsToHand(gimli);
+		scn.MoveCardsToHand(card1);
 
 		scn.StartGame();
 
@@ -97,11 +97,11 @@ public class Card_01_012_Tests
 		var card1 = scn.GetFreepsCard("card1");
 		var card2 = scn.GetFreepsCard("card2");
 		var card3 = scn.GetFreepsCard("card3");
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsMoveCardToHand(card1);
+		scn.MoveCompanionToTable(gimli);
+		scn.MoveCardsToHand(card1);
 
 		scn.StartGame();
-		scn.FreepsMoveCardsToBottomOfDeck(card3);
+		scn.MoveCardsToBottomOfDeck(card3);
 
 		assertTrue(scn.FreepsActionAvailable(gimli));
 		assertEquals(Zone.HAND, card1.getZone());

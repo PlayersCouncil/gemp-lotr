@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -18,8 +18,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_064_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("greenleaf", "1_50");
 					put("moriatroop1", "1_177");
@@ -38,8 +38,8 @@ public class Card_V1_064_Tests
                     put("site8", "1_356");
                     put("site9", "101_64");
                 }},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -59,7 +59,7 @@ public class Card_V1_064_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl site9 = scn.GetFreepsSite(9);
 
@@ -68,7 +68,7 @@ public class Card_V1_064_Tests
 		//assertEquals(Culture., card.getBlueprint().getCulture());
 		assertEquals(CardType.SITE, site9.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(site9, Keyword.FOREST)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(site9, Keyword.FOREST)); // test for keywords as needed
 		assertEquals(9, site9.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());
 		//assertEquals(, card.getBlueprint().getVitality());
@@ -81,13 +81,13 @@ public class Card_V1_064_Tests
 	@Test
 	public void WoundedMinionsAreDamagePlusOnePerWound() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl moriatroop1 = scn.GetShadowCard("moriatroop1");
 		PhysicalCardImpl moriatroop2 = scn.GetShadowCard("moriatroop2");
 		PhysicalCardImpl moriatroop3 = scn.GetShadowCard("moriatroop3");
 		PhysicalCardImpl shelob = scn.GetShadowCard("shelob");
-		scn.ShadowMoveCardToHand(moriatroop1, moriatroop2, moriatroop3, shelob);
+		scn.MoveCardsToHand(moriatroop1, moriatroop2, moriatroop3, shelob);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -136,12 +136,12 @@ public class Card_V1_064_Tests
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
 
-		scn.ShadowMoveCharToTable(moriatroop1, moriatroop2, moriatroop3, shelob);
+		scn.MoveMinionsToTable(moriatroop1, moriatroop2, moriatroop3, shelob);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertFalse(scn.hasKeyword(moriatroop1, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(moriatroop2, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(moriatroop3, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(moriatroop1, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(moriatroop2, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(moriatroop3, Keyword.DAMAGE));
 
 		scn.AddWoundsToChar(moriatroop2, 1);
 		scn.AddWoundsToChar(moriatroop3, 2);
@@ -154,12 +154,12 @@ public class Card_V1_064_Tests
 		assertEquals(2, scn.GetWoundsOn(moriatroop3));
 		assertEquals(7, scn.GetWoundsOn(shelob));
 
-		assertFalse(scn.hasKeyword(moriatroop1, Keyword.DAMAGE));
-		assertTrue(scn.hasKeyword(moriatroop2, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(moriatroop1, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(moriatroop2, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(moriatroop2,  Keyword.DAMAGE));
-		assertTrue(scn.hasKeyword(moriatroop3, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(moriatroop3, Keyword.DAMAGE));
 		assertEquals(2, scn.GetKeywordCount(moriatroop3,  Keyword.DAMAGE));
-		assertTrue(scn.hasKeyword(shelob, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(shelob, Keyword.DAMAGE));
 		assertEquals(7, scn.GetKeywordCount(shelob,  Keyword.DAMAGE));
 
 	}

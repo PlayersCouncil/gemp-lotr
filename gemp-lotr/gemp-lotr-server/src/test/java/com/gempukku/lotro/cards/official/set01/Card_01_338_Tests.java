@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_338_Tests
 {
 
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>()
                 {{
                     put("twk", "1_237");
@@ -37,8 +37,8 @@ public class Card_01_338_Tests
                     put("site8", "1_356");
                     put("site9", "1_360");
                 }},
-                GenericCardTestHelper.FOTRFrodo,
-                GenericCardTestHelper.RulingRing
+                VirtualTableScenario.FOTRFrodo,
+                VirtualTableScenario.RulingRing
         );
     }
 
@@ -66,8 +66,8 @@ public class Card_01_338_Tests
         assertNull(card.getBlueprint().getSubtitle());
         assertFalse(card.getBlueprint().isUnique());
         assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-        assertTrue(scn.hasKeyword(card, Keyword.RIVER));
-        assertTrue(scn.hasKeyword(card, Keyword.SANCTUARY));
+        assertTrue(scn.HasKeyword(card, Keyword.RIVER));
+        assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
         assertEquals(0, card.getBlueprint().getTwilightCost());
         assertEquals(3, card.getBlueprint().getSiteNumber());
     }
@@ -81,7 +81,7 @@ public class Card_01_338_Tests
 
         var twk = scn.GetShadowCard("twk");
         var lemenya = scn.GetShadowCard("lemenya");
-        scn.ShadowMoveCardToHand(twk, lemenya);
+        scn.MoveCardsToHand(twk, lemenya);
 
         scn.StartGame();
         //Start our test on 2 so that moving to 3 is the first thing we do
@@ -115,10 +115,10 @@ public class Card_01_338_Tests
 
         var twk = scn.GetShadowCard("twk");
         var nertea = scn.GetShadowCard("nertea");
-        scn.ShadowMoveCardToHand(nertea);
-        scn.ShadowMoveCardToDiscard(twk);
+        scn.MoveCardsToHand(nertea);
+        scn.MoveCardsToDiscard(twk);
 
-        scn.FreepsMoveCharToTable("guard1", "guard2", "guard3", "guard4");
+        scn.MoveCompanionToTable("guard1", "guard2", "guard3", "guard4");
 
         scn.StartGame();
         //Start our test on 2 so that moving to 3 is the first thing we do

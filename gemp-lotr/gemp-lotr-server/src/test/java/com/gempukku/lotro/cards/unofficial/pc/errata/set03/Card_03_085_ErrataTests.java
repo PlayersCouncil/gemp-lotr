@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_03_085_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("tgat", "53_85");
@@ -24,9 +24,9 @@ public class Card_03_085_ErrataTests
 					put("sam", "1_311");
 					put("bounder", "1_286");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -69,13 +69,13 @@ public class Card_03_085_ErrataTests
 		var tgat = scn.GetShadowCard("tgat");
 		var twigul = scn.GetShadowCard("twigul");
 		var lord = scn.GetShadowCard("lord");
-		scn.ShadowMoveCardToHand(tgat);
-		scn.ShadowMoveCharToTable(twigul, lord);
+		scn.MoveCardsToHand(tgat);
+		scn.MoveMinionsToTable(twigul, lord);
 
 		var sam = scn.GetFreepsCard("sam");
 		var bounder = scn.GetFreepsCard("bounder");
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardToSupportArea(bounder);
+		scn.MoveCompanionToTable(sam);
+		scn.MoveCardsToSupportArea(bounder);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -104,11 +104,11 @@ public class Card_03_085_ErrataTests
 
 		var sam = scn.GetFreepsCard("sam");
 		var bounder = scn.GetFreepsCard("bounder");
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardToHand(bounder);
+		scn.MoveCompanionToTable(sam);
+		scn.MoveCardsToHand(bounder);
 
 		var tgat = scn.GetShadowCard("tgat");
-		scn.ShadowAttachCardsTo(sam, tgat);
+		scn.AttachCardsTo(sam, tgat);
 
 		scn.StartGame();
 
@@ -127,13 +127,13 @@ public class Card_03_085_ErrataTests
 
 		var sam = scn.GetFreepsCard("sam");
 		var bounder = scn.GetFreepsCard("bounder");
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardToHand(bounder);
+		scn.MoveCompanionToTable(sam);
+		scn.MoveCardsToHand(bounder);
 
 		var tgat = scn.GetShadowCard("tgat");
 		var lord = scn.GetShadowCard("lord");
-		scn.ShadowAttachCardsTo(sam, tgat);
-		scn.ShadowMoveCharToTable(lord);
+		scn.AttachCardsTo(sam, tgat);
+		scn.MoveMinionsToTable(lord);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ARCHERY);
@@ -152,11 +152,11 @@ public class Card_03_085_ErrataTests
 
 		var sam = scn.GetFreepsCard("sam");
 		var bounder = scn.GetFreepsCard("bounder");
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardToHand(bounder);
+		scn.MoveCompanionToTable(sam);
+		scn.MoveCardsToHand(bounder);
 
 		var tgat = scn.GetShadowCard("tgat");
-		scn.ShadowAttachCardsTo(sam, tgat);
+		scn.AttachCardsTo(sam, tgat);
 
 		scn.StartGame(false);
 

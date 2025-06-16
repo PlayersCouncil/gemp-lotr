@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,17 +17,17 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_049_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("past", "101_49");
 					put("orc", "1_271");
 					put("runner", "1_178");
 					put("troll", "8_102");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -48,7 +48,7 @@ public class Card_V1_049_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl past = scn.GetFreepsCard("past");
 
@@ -57,7 +57,7 @@ public class Card_V1_049_Tests
 		assertEquals(Culture.SAURON, past.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, past.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, past.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(past, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(past, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, past.getBlueprint().getTwilightCost());
 		//assertEquals(, past.getBlueprint().getStrength());
 		//assertEquals(, past.getBlueprint().getVitality());
@@ -70,59 +70,59 @@ public class Card_V1_049_Tests
 	@Test
 	public void FourBurdensMakesSauronOrcsFierce() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl past = scn.GetShadowCard("past");
 		PhysicalCardImpl orc = scn.GetShadowCard("orc");
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
 		PhysicalCardImpl troll = scn.GetShadowCard("troll");
-		scn.ShadowMoveCardToSupportArea(past);
-		scn.ShadowMoveCharToTable(orc, runner, troll);
+		scn.MoveCardsToSupportArea(past);
+		scn.MoveMinionsToTable(orc, runner, troll);
 
 		scn.StartGame();
 
-		assertFalse(scn.hasKeyword(orc, Keyword.FIERCE));
-		assertFalse(scn.hasKeyword(runner, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(orc, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(runner, Keyword.FIERCE));
 
 		scn.AddBurdens(3); // 4 with the initial starting bid
 
-		assertTrue(scn.hasKeyword(orc, Keyword.FIERCE));
-		assertFalse(scn.hasKeyword(runner, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(orc, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(runner, Keyword.FIERCE));
 	}
 
 	@Test
 	public void SixBurdensMakesSauronOrcsDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl past = scn.GetShadowCard("past");
 		PhysicalCardImpl orc = scn.GetShadowCard("orc");
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
 		PhysicalCardImpl troll = scn.GetShadowCard("troll");
-		scn.ShadowMoveCardToSupportArea(past);
-		scn.ShadowMoveCharToTable(orc, runner, troll);
+		scn.MoveCardsToSupportArea(past);
+		scn.MoveMinionsToTable(orc, runner, troll);
 
 		scn.StartGame();
 
-		assertFalse(scn.hasKeyword(orc, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(runner, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(troll, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(orc, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(runner, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(troll, Keyword.DAMAGE));
 
 		scn.AddBurdens(5); // 6 with the initial starting bid
 
-		assertTrue(scn.hasKeyword(orc, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(orc, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(orc, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(runner, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(troll, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(runner, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(troll, Keyword.DAMAGE));
 	}
 
 	@Test
 	public void SelfDiscardsInRegroup() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl past = scn.GetShadowCard("past");
-		scn.ShadowMoveCardToSupportArea(past);
+		scn.MoveCardsToSupportArea(past);
 
 		scn.StartGame();
 

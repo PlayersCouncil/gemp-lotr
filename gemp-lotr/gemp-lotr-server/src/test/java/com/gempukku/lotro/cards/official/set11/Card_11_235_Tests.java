@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set11;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Zone;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_11_235_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("dontlook", "6_39");
 					put("smeagol", "7_71");
@@ -35,8 +35,8 @@ public class Card_11_235_Tests
 					put("site8", "18_138");
 					put("site9", "18_138");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
 				"open"
 		);
 	}
@@ -65,7 +65,7 @@ public class Card_11_235_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.MARSH));
+		assertTrue(scn.HasKeyword(card, Keyword.MARSH));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 
 	}
@@ -86,7 +86,7 @@ public class Card_11_235_Tests
 		scn.StartGame(site1);
 
 		//For some reason it's drawing cards.  It never seems to do that in any other test.
-		scn.FreepsMoveCardsToBottomOfDeck(dontlook, smeagol, slippery, boat, clever);
+		scn.MoveCardsToBottomOfDeck(dontlook, smeagol, slippery, boat, clever);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 		scn.FreepsDismissRevealedCards();

@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_015_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("gwaihir", "101_15");
                     put("aragorn", "1_89");
@@ -30,9 +30,9 @@ public class Card_V1_015_Tests
                     put("troll", "1_165");
 
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_V1_015_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gwaihir = scn.GetFreepsCard("gwaihir");
 
@@ -78,11 +78,11 @@ public class Card_V1_015_Tests
 	@Test
 	public void GwaihirSpotsGandalfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gwaihir = scn.GetFreepsCard("gwaihir");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(gwaihir, gandalf);
+		scn.MoveCardsToHand(gwaihir, gandalf);
 
 		scn.StartGame();
 
@@ -98,13 +98,13 @@ public class Card_V1_015_Tests
 	@Test
 	public void MovingOptionallyHealsGandalfSignetOnOpponentsSite() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gwaihir = scn.GetFreepsCard("gwaihir");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl pathfinder = scn.GetFreepsCard("pathfinder");
-		scn.FreepsMoveCharToTable(gwaihir, aragorn);
-		scn.FreepsMoveCardToHand(pathfinder);
+		scn.MoveCompanionToTable(gwaihir, aragorn);
+		scn.MoveCardsToHand(pathfinder);
 
 		scn.StartGame();
 
@@ -129,16 +129,16 @@ public class Card_V1_015_Tests
 	@Test
 	public void RegroupActionDiscardsToMakeMoveLimitPlus1AndShadowTakesCards() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gwaihir = scn.GetFreepsCard("gwaihir");
-		scn.FreepsMoveCharToTable(gwaihir);
+		scn.MoveCompanionToTable(gwaihir);
 
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
 		PhysicalCardImpl spear = scn.GetShadowCard("spear");
 		PhysicalCardImpl troll = scn.GetShadowCard("troll");
 
-		scn.ShadowMoveCardToDiscard(runner, spear, troll);
+		scn.MoveCardsToDiscard(runner, spear, troll);
 
 		scn.StartGame();
 

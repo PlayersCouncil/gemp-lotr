@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 public class Card_01_195_ErrataTests
 {
 
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>()
                 {{
                     put("relics", "51_195");
@@ -23,9 +23,9 @@ public class Card_01_195_ErrataTests
                     put("scimitar", "1_180");
 
                 }},
-                GenericCardTestHelper.FellowshipSites,
-                GenericCardTestHelper.FOTRFrodo,
-                GenericCardTestHelper.RulingRing
+                VirtualTableScenario.FellowshipSites,
+                VirtualTableScenario.FOTRFrodo,
+                VirtualTableScenario.RulingRing
         );
     }
 
@@ -47,7 +47,7 @@ public class Card_01_195_ErrataTests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl relics = scn.GetFreepsCard("relics");
 
@@ -56,20 +56,20 @@ public class Card_01_195_ErrataTests
         assertEquals(Culture.MORIA, relics.getBlueprint().getCulture());
         assertEquals(CardType.CONDITION, relics.getBlueprint().getCardType());
         assertEquals(1, relics.getBlueprint().getTwilightCost());
-        assertTrue(scn.hasKeyword(relics, Keyword.SUPPORT_AREA));
+        assertTrue(scn.HasKeyword(relics, Keyword.SUPPORT_AREA));
     }
 
     @Test
     public void ShadowAbilityRemoves2ToPlayMoriaPossessionFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var relics = scn.GetShadowCard("relics");
         var runner = scn.GetShadowCard("runner");
         var scimitar = scn.GetShadowCard("scimitar");
-        scn.ShadowMoveCardToSupportArea(relics);
-        scn.ShadowMoveCharToTable(runner);
-        scn.ShadowMoveCardToDiscard(scimitar);
+        scn.MoveCardsToSupportArea(relics);
+        scn.MoveMinionsToTable(runner);
+        scn.MoveCardsToDiscard(scimitar);
 
         scn.StartGame();
 
@@ -88,13 +88,13 @@ public class Card_01_195_ErrataTests
     @Test
     public void ShadowAbilityNotAvailableIfNoPossessionsInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var relics = scn.GetShadowCard("relics");
         var runner = scn.GetShadowCard("runner");
         var scimitar = scn.GetShadowCard("scimitar");
-        scn.ShadowMoveCardToSupportArea(relics);
-        scn.ShadowMoveCharToTable(runner);
+        scn.MoveCardsToSupportArea(relics);
+        scn.MoveMinionsToTable(runner);
 
         scn.StartGame();
 

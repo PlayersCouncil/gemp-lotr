@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_01_126_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("hunt", "51_126");
 					put("uruk", "1_154");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -50,7 +50,7 @@ public class Card_01_126_ErrataTests
 		assertEquals(Side.SHADOW, hunt.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, hunt.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, hunt.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(hunt, Timeword.MANEUVER));
+        assertTrue(scn.HasTimeword(hunt, Timeword.MANEUVER));
 		assertEquals(2, hunt.getBlueprint().getTwilightCost());
 	}
 
@@ -61,8 +61,8 @@ public class Card_01_126_ErrataTests
 
 		var hunt = scn.GetShadowCard("hunt");
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToHand(hunt);
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToHand(hunt);
 
 		scn.StartGame();
 
@@ -70,8 +70,8 @@ public class Card_01_126_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertTrue(scn.ShadowPlayAvailable(hunt));
-		assertFalse(scn.hasKeyword(uruk, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(uruk, Keyword.FIERCE));
 		scn.ShadowPlayCard(hunt);
-		assertTrue(scn.hasKeyword(uruk, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(uruk, Keyword.FIERCE));
 	}
 }

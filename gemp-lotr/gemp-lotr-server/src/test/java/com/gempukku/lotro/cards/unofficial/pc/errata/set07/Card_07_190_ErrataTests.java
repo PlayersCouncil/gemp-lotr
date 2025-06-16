@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set07;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_07_190_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("destroyer", "57_190");
 					put("destroyer2", "57_190");
 					put("nazgul", "1_229");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -68,7 +68,7 @@ public class Card_07_190_ErrataTests
 		var scn = GetScenario();
 
 		var destroyer = scn.GetShadowCard("destroyer");
-		scn.ShadowMoveCardToHand(destroyer);
+		scn.MoveCardsToHand(destroyer);
 
 		scn.StartGame();
 		scn.SetTwilight(20);
@@ -88,8 +88,8 @@ public class Card_07_190_ErrataTests
 
 		var destroyer = scn.GetShadowCard("destroyer");
 		var nazgul = scn.GetShadowCard("nazgul");
-		scn.ShadowMoveCardToHand(destroyer);
-		scn.ShadowMoveCharToTable(nazgul);
+		scn.MoveCardsToHand(destroyer);
+		scn.MoveMinionsToTable(nazgul);
 
 		scn.StartGame();
 		scn.SetTwilight(20);
@@ -118,8 +118,8 @@ public class Card_07_190_ErrataTests
 
 		var destroyer = scn.GetShadowCard("destroyer");
 		var nazgul = scn.GetShadowCard("nazgul");
-		scn.ShadowMoveCardToHand(destroyer);
-		scn.ShadowMoveCharToTable(nazgul);
+		scn.MoveCardsToHand(destroyer);
+		scn.MoveMinionsToTable(nazgul);
 
 		scn.StartGame();
 		scn.SetTwilight(20);
@@ -149,7 +149,7 @@ public class Card_07_190_ErrataTests
 		var frodo = scn.GetRingBearer();
 
 		var destroyer = scn.GetShadowCard("destroyer");
-		scn.ShadowMoveCharToTable(destroyer);
+		scn.MoveMinionsToTable(destroyer);
 
 		scn.StartGame();
 		scn.AddThreats(2);

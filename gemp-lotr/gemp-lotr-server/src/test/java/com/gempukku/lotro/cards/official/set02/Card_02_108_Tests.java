@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_02_108_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("elbereth", "2_108");
@@ -22,10 +22,10 @@ public class Card_02_108_Tests
 					put("nelya", "1_233");
 					put("goblinarcher", "1_176");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.IsildursBaneRing,
-				GenericCardTestHelper.Fellowship //We need the Ring-bearer's skirmish to be cancelable
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.IsildursBaneRing,
+				VirtualTableScenario.Fellowship //We need the Ring-bearer's skirmish to be cancelable
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_02_108_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.TALE));
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(1, card.getBlueprint().getStrength());
 	}
@@ -63,10 +63,10 @@ public class Card_02_108_Tests
 	@Test
 	public void OElberethGilthonielGoesOnRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var elbereth = scn.GetFreepsCard("elbereth");
-		scn.FreepsMoveCardToHand(elbereth);
+		scn.MoveCardsToHand(elbereth);
 
 		scn.StartGame();
 		assertEquals(Zone.HAND, elbereth.getZone());
@@ -78,14 +78,14 @@ public class Card_02_108_Tests
 	@Test
 	public void SkirmishAbilityCanDiscardToTakeOffRing() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var elbereth = scn.GetFreepsCard("elbereth");
 		scn.AttachCardsTo(frodo, elbereth);
 
 		var goblinarcher = scn.GetShadowCard("goblinarcher");
-		scn.ShadowMoveCharToTable(goblinarcher);
+		scn.MoveMinionsToTable(goblinarcher);
 
 		scn.StartGame();
 
@@ -109,14 +109,14 @@ public class Card_02_108_Tests
 	@Test
 	public void SkirmishAbilityCanCancelRBSkirmishIfSkirmishingNazgul() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var elbereth = scn.GetFreepsCard("elbereth");
 		scn.AttachCardsTo(frodo, elbereth);
 
 		var nelya = scn.GetShadowCard("nelya");
-		scn.ShadowMoveCharToTable(nelya);
+		scn.MoveMinionsToTable(nelya);
 
 		scn.StartGame();
 
@@ -135,14 +135,14 @@ public class Card_02_108_Tests
 	@Test
 	public void SkirmishAbilityCantCancelRBSkirmishIfNotSkirmishingNazgul() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var elbereth = scn.GetFreepsCard("elbereth");
 		scn.AttachCardsTo(frodo, elbereth);
 
 		var goblinarcher = scn.GetShadowCard("goblinarcher");
-		scn.ShadowMoveCharToTable(goblinarcher);
+		scn.MoveMinionsToTable(goblinarcher);
 
 		scn.StartGame();
 
@@ -159,7 +159,7 @@ public class Card_02_108_Tests
 		assertEquals(Zone.ATTACHED, elbereth.getZone());
 
 		scn.FreepsUseCardAction(elbereth);
-		scn.FreepsChooseMultipleChoiceOption("cancel");
+		scn.FreepsChooseOption("cancel");
 		assertTrue(scn.IsCharSkirmishing(frodo));
 		assertEquals(Zone.DISCARD, elbereth.getZone());
 	}

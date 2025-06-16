@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_V2_030_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("pack", "102_30");
@@ -30,9 +30,9 @@ public class Card_V2_030_Tests
 					put("warwarg", "5_64");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -62,7 +62,7 @@ public class Card_V2_030_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -76,8 +76,8 @@ public class Card_V2_030_Tests
 		var orc2 = scn.GetShadowCard("orc2");
 		var orc3 = scn.GetShadowCard("orc3");
 		var warg = scn.GetShadowCard("warg");
-		scn.ShadowMoveCharToTable(orc1, orc2, orc3);
-		scn.ShadowMoveCardToHand(pack);
+		scn.MoveMinionsToTable(orc1, orc2, orc3);
+		scn.MoveCardsToHand(pack);
 		scn.AttachCardsTo(orc1, warg);
 
 		scn.StartGame();
@@ -110,8 +110,8 @@ public class Card_V2_030_Tests
 		var warg = scn.GetShadowCard("warg");
 		var warwarg = scn.GetShadowCard("warwarg");
 		var hound = scn.GetShadowCard("hound");
-		scn.ShadowMoveCharToTable(orc1, orc2, orc3);
-		scn.ShadowMoveCardToHand(pack, warwarg, hound);
+		scn.MoveMinionsToTable(orc1, orc2, orc3);
+		scn.MoveCardsToHand(pack, warwarg, hound);
 		scn.AttachCardsTo(orc1, warg);
 
 		scn.StartGame();

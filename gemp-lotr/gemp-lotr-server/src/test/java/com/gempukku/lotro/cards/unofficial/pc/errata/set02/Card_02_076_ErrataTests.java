@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_02_076_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("sam", "1_311");
@@ -22,9 +22,9 @@ public class Card_02_076_ErrataTests
 					put("toto", "10_68");
 					put("nelya","1_233");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,7 +54,7 @@ public class Card_02_076_ErrataTests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -65,12 +65,12 @@ public class Card_02_076_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionToTable(sam);
 
 		var helpless = scn.GetShadowCard("helpless");
 		var nelya = scn.GetShadowCard("nelya");
-		scn.ShadowAttachCardsTo(sam, helpless);
-		scn.ShadowMoveCharToTable(nelya);
+		scn.AttachCardsTo(sam, helpless);
+		scn.MoveMinionsToTable(nelya);
 
 		scn.StartGame();
 		//The Fellowship burden-removing special ability should be blocked
@@ -92,12 +92,12 @@ public class Card_02_076_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionToTable(sam);
 
 		var helpless = scn.GetShadowCard("helpless");
 		var nelya = scn.GetShadowCard("nelya");
-		scn.ShadowMoveCardToSupportArea(helpless);
-		scn.ShadowMoveCharToTable(nelya);
+		scn.MoveCardsToSupportArea(helpless);
+		scn.MoveMinionsToTable(nelya);
 
 		scn.StartGame();
 		//The Fellowship burden-removing special ability should NOT be blocked
@@ -119,13 +119,13 @@ public class Card_02_076_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionToTable(sam);
 
 		var helpless = scn.GetShadowCard("helpless");
 		var toto = scn.GetShadowCard("toto");
 		var nelya = scn.GetShadowCard("nelya");
-		scn.ShadowMoveCardToSupportArea(helpless);
-		scn.ShadowMoveCharToTable(toto, nelya);
+		scn.MoveCardsToSupportArea(helpless);
+		scn.MoveMinionsToTable(toto, nelya);
 
 		scn.StartGame();
 

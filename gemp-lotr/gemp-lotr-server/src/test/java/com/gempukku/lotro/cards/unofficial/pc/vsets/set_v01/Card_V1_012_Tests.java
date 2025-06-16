@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 
 public class Card_V1_012_Tests
 {
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("three", "101_12");
 					put("narya", "3_34");
@@ -30,9 +30,9 @@ public class Card_V1_012_Tests
 					put("filler", "1_151");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,13 +54,13 @@ public class Card_V1_012_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl three = scn.GetFreepsCard("three");
 
 		assertTrue(three.getBlueprint().isUnique());
-		assertTrue(scn.hasKeyword(three, Keyword.SUPPORT_AREA));
-		assertTrue(scn.hasKeyword(three, Keyword.TALE));
+		assertTrue(scn.HasKeyword(three, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(three, Keyword.TALE));
 		assertEquals(1, three.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, three.getBlueprint().getCardType());
 		assertEquals(Culture.ELVEN, three.getBlueprint().getCulture());
@@ -70,7 +70,7 @@ public class Card_V1_012_Tests
 	@Test
 	public void ThreeRingsSpotsNaryaToMusterUnderDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl three = scn.GetFreepsCard("three");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
@@ -79,7 +79,7 @@ public class Card_V1_012_Tests
 		PhysicalCardImpl vilya = scn.GetFreepsCard("vilya");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl nenya = scn.GetFreepsCard("nenya");
-		scn.FreepsMoveCardToHand(three, gandalf, narya, elrond, vilya);
+		scn.MoveCardsToHand(three, gandalf, narya, elrond, vilya);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(three);
@@ -104,7 +104,7 @@ public class Card_V1_012_Tests
 	@Test
 	public void ThreeRingsSpotsVilyaToMusterUnderDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl three = scn.GetFreepsCard("three");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
@@ -113,7 +113,7 @@ public class Card_V1_012_Tests
 		PhysicalCardImpl vilya = scn.GetFreepsCard("vilya");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl nenya = scn.GetFreepsCard("nenya");
-		scn.FreepsMoveCardToHand(three, gandalf, narya, elrond, vilya);
+		scn.MoveCardsToHand(three, gandalf, narya, elrond, vilya);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(three);
@@ -137,7 +137,7 @@ public class Card_V1_012_Tests
 	@Test
 	public void ThreeRingsSpotsThreeRingsToHeal() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl three = scn.GetFreepsCard("three");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
@@ -146,7 +146,7 @@ public class Card_V1_012_Tests
 		PhysicalCardImpl vilya = scn.GetFreepsCard("vilya");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl nenya = scn.GetFreepsCard("nenya");
-		scn.FreepsMoveCardToHand(three, gandalf, narya, elrond, vilya, galadriel, nenya);
+		scn.MoveCardsToHand(three, gandalf, narya, elrond, vilya, galadriel, nenya);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(three);
@@ -175,7 +175,7 @@ public class Card_V1_012_Tests
 	@Test
 	public void ThreeRingsTriggersBothMusterAndHeal() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl three = scn.GetFreepsCard("three");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
@@ -184,7 +184,7 @@ public class Card_V1_012_Tests
 		PhysicalCardImpl vilya = scn.GetFreepsCard("vilya");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl nenya = scn.GetFreepsCard("nenya");
-		scn.FreepsMoveCardToHand(three, gandalf, narya, elrond, vilya, galadriel, nenya);
+		scn.MoveCardsToHand(three, gandalf, narya, elrond, vilya, galadriel, nenya);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(three);

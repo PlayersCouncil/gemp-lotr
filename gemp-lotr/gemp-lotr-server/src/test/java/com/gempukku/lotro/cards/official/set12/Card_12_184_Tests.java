@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set12;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_12_184_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("beast", "12_184");
@@ -25,9 +25,9 @@ public class Card_12_184_Tests
 					put("fodder2", "1_307");
 					put("fodder3", "1_310");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -71,14 +71,14 @@ public class Card_12_184_Tests
 
 		var twk = scn.GetShadowCard("twk");
 		var beast = scn.GetShadowCard("beast");
-		scn.ShadowMoveCharToTable(twk);
+		scn.MoveMinionsToTable(twk);
 		scn.AttachCardsTo(twk, beast);
 
 		var frodo = scn.GetRingBearer();
 		var fodder1 = scn.GetFreepsCard("fodder1");
 		var fodder2 = scn.GetFreepsCard("fodder2");
 		var fodder3 = scn.GetFreepsCard("fodder3");
-		scn.FreepsMoveCharToTable(fodder1, fodder2, fodder3);
+		scn.MoveCompanionToTable(fodder1, fodder2, fodder3);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);

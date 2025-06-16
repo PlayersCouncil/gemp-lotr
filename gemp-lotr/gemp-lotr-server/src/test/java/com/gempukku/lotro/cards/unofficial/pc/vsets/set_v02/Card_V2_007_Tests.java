@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_007_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("contest", "102_7");
@@ -27,9 +27,9 @@ public class Card_V2_007_Tests
 
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -59,7 +59,7 @@ public class Card_V2_007_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -75,13 +75,13 @@ public class Card_V2_007_Tests
 		var legolas = scn.GetFreepsCard("legolas");
 		var count = scn.GetFreepsCard("count");
 		var notched = scn.GetFreepsCard("notched");
-		scn.FreepsMoveCardToHand(contest);
-		scn.FreepsMoveCharToTable(elf);
-		scn.FreepsMoveCardToSupportArea(notched);
+		scn.MoveCardsToHand(contest);
+		scn.MoveCompanionToTable(elf);
+		scn.MoveCardsToSupportArea(notched);
 		scn.AddTokensToCard(notched, 1);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -107,13 +107,13 @@ public class Card_V2_007_Tests
 		var legolas = scn.GetFreepsCard("legolas");
 		var count = scn.GetFreepsCard("count");
 		var notched = scn.GetFreepsCard("notched");
-		scn.FreepsMoveCardToHand(contest);
-		scn.FreepsMoveCharToTable(dwarf);
-		scn.FreepsMoveCardToSupportArea(count);
+		scn.MoveCardsToHand(contest);
+		scn.MoveCompanionToTable(dwarf);
+		scn.MoveCardsToSupportArea(count);
 		scn.AddTokensToCard(count, 1);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -139,13 +139,13 @@ public class Card_V2_007_Tests
 		var legolas = scn.GetFreepsCard("legolas");
 		var count = scn.GetFreepsCard("count");
 		var notched = scn.GetFreepsCard("notched");
-		scn.FreepsMoveCardToHand(contest);
-		scn.FreepsMoveCardToSupportArea(count, notched);
+		scn.MoveCardsToHand(contest);
+		scn.MoveCardsToSupportArea(count, notched);
 		scn.AddTokensToCard(count, 1);
 		scn.AddTokensToCard(notched, 1);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -165,14 +165,14 @@ public class Card_V2_007_Tests
 		var legolas = scn.GetFreepsCard("legolas");
 		var count = scn.GetFreepsCard("count");
 		var notched = scn.GetFreepsCard("notched");
-		scn.FreepsMoveCardToHand(contest);
-		scn.FreepsMoveCharToTable(gimli, legolas);
-		scn.FreepsMoveCardToSupportArea(count, notched);
+		scn.MoveCardsToHand(contest);
+		scn.MoveCompanionToTable(gimli, legolas);
+		scn.MoveCardsToSupportArea(count, notched);
 		scn.AddTokensToCard(notched, 1);
 		scn.AddTokensToCard(count, 1);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -180,7 +180,7 @@ public class Card_V2_007_Tests
 		assertEquals(1, scn.GetCultureTokensOn(notched));
 		assertTrue(scn.FreepsPlayAvailable(contest));
 		scn.FreepsPlayCard(contest);
-		scn.FreepsChooseMultipleChoiceOption("Spot an"); //[Elven] companion to reinforce a [Dwarven] token
+		scn.FreepsChooseOption("Spot an"); //[Elven] companion to reinforce a [Dwarven] token
 
 		//Reinforced initially and then again by the Legolas/Gimli clause
 		assertEquals(3, scn.GetCultureTokensOn(notched));
@@ -201,14 +201,14 @@ public class Card_V2_007_Tests
 		var legolas = scn.GetFreepsCard("legolas");
 		var count = scn.GetFreepsCard("count");
 		var notched = scn.GetFreepsCard("notched");
-		scn.FreepsMoveCardToHand(contest);
-		scn.FreepsMoveCharToTable(gimli, legolas);
-		scn.FreepsMoveCardToSupportArea(count, notched);
+		scn.MoveCardsToHand(contest);
+		scn.MoveCompanionToTable(gimli, legolas);
+		scn.MoveCardsToSupportArea(count, notched);
 		scn.AddTokensToCard(notched, 1);
 		scn.AddTokensToCard(count, 1);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -216,7 +216,7 @@ public class Card_V2_007_Tests
 		assertEquals(1, scn.GetCultureTokensOn(notched));
 		assertTrue(scn.FreepsPlayAvailable(contest));
 		scn.FreepsPlayCard(contest);
-		scn.FreepsChooseMultipleChoiceOption("Spot a "); //[Dwarven] companion to reinforce an [Elven] token
+		scn.FreepsChooseOption("Spot a "); //[Dwarven] companion to reinforce an [Elven] token
 
 		//Reinforced initially and then again by the Legolas/Gimli clause
 		assertEquals(3, scn.GetCultureTokensOn(count));

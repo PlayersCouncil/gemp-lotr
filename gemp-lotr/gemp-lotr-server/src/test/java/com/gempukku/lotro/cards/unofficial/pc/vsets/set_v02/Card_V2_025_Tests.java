@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_025_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("foreman", "102_25");
@@ -23,9 +23,9 @@ public class Card_V2_025_Tests
 					put("comp2", "1_7");
 					put("comp3", "1_7");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -72,8 +72,8 @@ public class Card_V2_025_Tests
 
 		var foreman = scn.GetShadowCard("foreman");
 		var isenorc = scn.GetShadowCard("isenorc");
-		scn.ShadowMoveCardToDiscard(isenorc);
-		scn.ShadowMoveCardToHand(foreman);
+		scn.MoveCardsToDiscard(isenorc);
+		scn.MoveCardsToHand(foreman);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -105,12 +105,12 @@ public class Card_V2_025_Tests
 
 		var foreman = scn.GetShadowCard("foreman");
 
-		scn.FreepsMoveCharToTable("comp2", "comp3");
+		scn.MoveCompanionToTable("comp2", "comp3");
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
 
-		scn.ShadowMoveCharToTable(foreman);
+		scn.MoveMinionsToTable(foreman);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(0, scn.GetThreats());

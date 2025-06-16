@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_014_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("remember", "102_14");
@@ -26,9 +26,9 @@ public class Card_V2_014_Tests
 
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,7 +57,7 @@ public class Card_V2_014_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -73,23 +73,23 @@ public class Card_V2_014_Tests
 		var vcompanion = scn.GetFreepsCard("vcompanion");
 		var shadowfax = scn.GetFreepsCard("shadowfax");
 		var snowmane = scn.GetFreepsCard("snowmane");
-		scn.FreepsMoveCardToHand(remember);
-		scn.FreepsMoveCharToTable(gandalf, theoden, vcompanion);
+		scn.MoveCardsToHand(remember);
+		scn.MoveCompanionToTable(gandalf, theoden, vcompanion);
 
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertEquals(4, scn.GetStrength(frodo));
-		assertFalse(scn.hasKeyword(frodo, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(frodo, Keyword.VALIANT));
 		assertEquals(7, scn.GetStrength(gandalf));
-		assertFalse(scn.hasKeyword(gandalf, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(gandalf, Keyword.VALIANT));
 		assertEquals(6, scn.GetStrength(theoden));
-		assertFalse(scn.hasKeyword(theoden, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(theoden, Keyword.VALIANT));
 		assertEquals(6, scn.GetStrength(vcompanion));
-		assertTrue(scn.hasKeyword(vcompanion, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(vcompanion, Keyword.VALIANT));
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		assertTrue(scn.FreepsPlayAvailable(remember));
 
@@ -131,12 +131,12 @@ public class Card_V2_014_Tests
 		var vcompanion = scn.GetFreepsCard("vcompanion");
 		var shadowfax = scn.GetFreepsCard("shadowfax");
 		var snowmane = scn.GetFreepsCard("snowmane");
-		scn.FreepsMoveCardToHand(remember);
-		scn.FreepsMoveCharToTable(gandalf, theoden, vcompanion);
+		scn.MoveCardsToHand(remember);
+		scn.MoveCompanionToTable(gandalf, theoden, vcompanion);
 		scn.AttachCardsTo(gandalf, shadowfax);
 		scn.AttachCardsTo(theoden, snowmane);
 
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 
@@ -144,13 +144,13 @@ public class Card_V2_014_Tests
 
 		//Everyone unbound should be mounted and valiant due to Gandalf's game text
 		assertEquals(4, scn.GetStrength(frodo));
-		assertFalse(scn.hasKeyword(frodo, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(frodo, Keyword.VALIANT));
 		assertEquals(7, scn.GetStrength(gandalf));
-		assertTrue(scn.hasKeyword(gandalf, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(gandalf, Keyword.VALIANT));
 		assertEquals(6, scn.GetStrength(theoden));
-		assertTrue(scn.hasKeyword(theoden, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(theoden, Keyword.VALIANT));
 		assertEquals(6, scn.GetStrength(vcompanion));
-		assertTrue(scn.hasKeyword(vcompanion, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(vcompanion, Keyword.VALIANT));
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		assertTrue(scn.FreepsPlayAvailable(remember));
 

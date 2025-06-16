@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_002_Tests
 {
 
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("gimli", "1_13");
                     put("axe", "1_9");
@@ -51,11 +51,11 @@ public class Card_V1_002_Tests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl deep = scn.GetFreepsCard("deep");
 
-        assertTrue(scn.hasKeyword(deep, Keyword.SUPPORT_AREA));
+        assertTrue(scn.HasKeyword(deep, Keyword.SUPPORT_AREA));
         assertEquals(1, deep.getBlueprint().getTwilightCost());
         assertTrue(deep.getBlueprint().isUnique());
     }
@@ -63,25 +63,23 @@ public class Card_V1_002_Tests
     @Test
     public void DiscardingDwarvenCardFromDeckTriggersOptionalStack() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl emhr = scn.GetFreepsCard("emhr");
         PhysicalCardImpl deep = scn.GetFreepsCard("deep");
         PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
         PhysicalCardImpl axe = scn.GetFreepsCard("axe2");
         PhysicalCardImpl strike = scn.GetFreepsCard("strike");
-        scn.FreepsMoveCardToSupportArea(emhr);
-        scn.FreepsMoveCardToSupportArea(deep);
-        scn.FreepsMoveCharToTable(gimli);
-        scn.FreepsMoveCardToDiscard("axe");
-        scn.FreepsMoveCardToDiscard("runner");
-        scn.FreepsMoveCardToDiscard("plunder");
+        scn.MoveCardsToSupportArea(emhr);
+        scn.MoveCardsToSupportArea(deep);
+        scn.MoveCompanionToTable(gimli);
+        scn.MoveCardsToFreepsDiscard("axe", "runner", "plunder");
 
         scn.StartGame();
 
-        scn.FreepsMoveCardsToTopOfDeck(strike);
+        scn.MoveCardsToTopOfDeck(strike);
 
-        scn.FreepsUseCardAction("Discard 1");
+        scn.FreepsChooseAction("Discard 1");
 
         assertTrue(scn.FreepsHasOptionalTriggerAvailable());
         scn.FreepsAcceptOptionalTrigger();
@@ -93,21 +91,19 @@ public class Card_V1_002_Tests
     @Test
     public void ManeuverAbilityExertsToTakeStackedCardIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl emhr = scn.GetFreepsCard("emhr");
         PhysicalCardImpl deep = scn.GetFreepsCard("deep");
         PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
         PhysicalCardImpl strike = scn.GetFreepsCard("strike");
-        scn.FreepsMoveCardToSupportArea(emhr);
-        scn.FreepsMoveCardToHand(deep);
-        scn.FreepsMoveCharToTable(gimli);
-        scn.FreepsMoveCardToDiscard("axe");
-        scn.FreepsMoveCardToDiscard("runner");
-        scn.FreepsMoveCardToDiscard("plunder");
-        scn.FreepsMoveCardsToTopOfDeck(strike);
+        scn.MoveCardsToSupportArea(emhr);
+        scn.MoveCardsToHand(deep);
+        scn.MoveCompanionToTable(gimli);
+        scn.MoveCardsToFreepsDiscard("axe", "runner", "plunder");
+        scn.MoveCardsToTopOfDeck(strike);
 
-        scn.ShadowMoveCharToTable("runner");
+        scn.MoveMinionsToTable("runner");
 
         scn.StartGame();
 

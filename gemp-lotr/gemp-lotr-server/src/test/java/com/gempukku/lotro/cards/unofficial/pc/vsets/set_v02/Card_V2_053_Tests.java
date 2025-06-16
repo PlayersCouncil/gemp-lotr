@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_053_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("red", "102_53");
@@ -37,9 +37,9 @@ public class Card_V2_053_Tests
 					put("uruk2", "5_46");
 					put("uruk3", "5_47");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -68,7 +68,7 @@ public class Card_V2_053_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -85,19 +85,19 @@ public class Card_V2_053_Tests
 		var rohan = scn.GetFreepsCard("rohan");
 		var valor = scn.GetFreepsCard("valor");
 
-		scn.FreepsMoveCharToTable(velf, varagorn, rohan);
-		scn.FreepsMoveCardToHand("albert");
-		scn.FreepsMoveCardToHand(vrohan, valor);
-		scn.FreepsMoveCardToSupportArea(red);
+		scn.MoveCompanionToTable(velf, varagorn, rohan);
+		scn.MoveCardsToHand(scn.GetFreepsCard("albert"));
+		scn.MoveCardsToHand(vrohan, valor);
+		scn.MoveCardsToSupportArea(red);
 
-		scn.ShadowMoveCharToTable("uruk1");
+		scn.MoveMinionsToTable("uruk1");
 
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertFalse(scn.FreepsActionAvailable(red));
-		scn.FreepsMoveCharToTable(vrohan);
+		scn.MoveCompanionToTable(vrohan);
 		scn.FreepsPlayCard(valor);
 		scn.ShadowPassCurrentPhaseAction();
 
@@ -111,7 +111,7 @@ public class Card_V2_053_Tests
 
 		var red = scn.GetFreepsCard("red");
 
-		scn.FreepsMoveCardToSupportArea(red);
+		scn.MoveCardsToSupportArea(red);
 
 		var frodo = scn.GetRingBearer();
 
@@ -120,7 +120,7 @@ public class Card_V2_053_Tests
 		var vrohan = scn.GetFreepsCard("vrohan");
 		var rohan = scn.GetFreepsCard("rohan");
 
-		scn.FreepsMoveCharToTable(velf, varagorn, vrohan, rohan);
+		scn.MoveCompanionToTable(velf, varagorn, vrohan, rohan);
 
 		scn.AddWoundsToChar(velf, 2);
 		scn.AddWoundsToChar(varagorn, 2);
@@ -131,8 +131,8 @@ public class Card_V2_053_Tests
 		var albert = scn.GetFreepsCard("albert");
 		var valor = scn.GetFreepsCard("valor");
 
-		scn.FreepsMoveCharToTable(albert);
-		scn.FreepsMoveCardToHand(valor);
+		scn.MoveCompanionToTable(albert);
+		scn.MoveCardsToHand(valor);
 
 		var freeps1 = scn.GetFreepsCard("freeps1");
 		var freeps2 = scn.GetFreepsCard("freeps2");
@@ -143,13 +143,13 @@ public class Card_V2_053_Tests
 		var shadow2 = scn.GetFreepsCard("uruk2");
 		var shadow3 = scn.GetFreepsCard("uruk3");
 
-		scn.FreepsMoveCardToHand(freeps1, freeps2, freeps3, freeps4, freeps5, shadow1, shadow2, shadow3);
+		scn.MoveCardsToHand(freeps1, freeps2, freeps3, freeps4, freeps5, shadow1, shadow2, shadow3);
 
 		var uruk1 = scn.GetShadowCard("uruk1");
 		var uruk2 = scn.GetShadowCard("uruk2");
 		var uruk3 = scn.GetShadowCard("uruk3");
 
-		scn.ShadowMoveCharToTable(uruk1, uruk2, uruk3);
+		scn.MoveMinionsToTable(uruk1, uruk2, uruk3);
 
 		scn.StartGame();
 
@@ -158,7 +158,7 @@ public class Card_V2_053_Tests
 		assertTrue(scn.FreepsActionAvailable(red));
 		assertTrue(scn.FreepsPlayAvailable(valor));
 		assertTrue(scn.FreepsActionAvailable(albert));
-		scn.FreepsMoveCardToDiscard(valor);
+		scn.MoveCardsToDiscard(valor);
 
 		assertEquals(Zone.HAND,  freeps1.getZone());
 		assertEquals(Zone.HAND,  freeps2.getZone());
@@ -281,7 +281,7 @@ public class Card_V2_053_Tests
 		scn.FreepsChooseCard(velf);
 		assertEquals(0, scn.GetWoundsOn(velf));
 
-		scn.FreepsMoveCardToHand(valor);
+		scn.MoveCardsToHand(valor);
 		scn.ShadowPassCurrentPhaseAction();
 		assertTrue(scn.FreepsDecisionAvailable("maneuver"));
 		assertFalse(scn.FreepsPlayAvailable(valor));

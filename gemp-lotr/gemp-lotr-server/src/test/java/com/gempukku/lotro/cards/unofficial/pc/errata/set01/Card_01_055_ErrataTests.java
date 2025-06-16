@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,8 +15,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_01_055_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("mirror", "51_55");
@@ -26,9 +26,9 @@ public class Card_01_055_ErrataTests
 
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -49,7 +49,7 @@ public class Card_01_055_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl mirror = scn.GetFreepsCard("mirror");
 
@@ -57,21 +57,21 @@ public class Card_01_055_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, mirror.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, mirror.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, mirror.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(mirror, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(mirror, Keyword.SUPPORT_AREA));
 		assertEquals(2, mirror.getBlueprint().getTwilightCost());
 	}
 
 	@Test
 	public void MirrorMakesSite6AlliesStrengthPlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl mirror = scn.GetFreepsCard("mirror");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl allyHome3_1 = scn.GetFreepsCard("allyHome3_1");
 		PhysicalCardImpl allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
-		scn.FreepsMoveCharToTable(galadriel, allyHome3_1, allyHome6_1);
-		scn.FreepsMoveCardToHand(mirror);
+		scn.MoveCompanionToTable(galadriel, allyHome3_1, allyHome6_1);
+		scn.MoveCardsToHand(mirror);
 
 		scn.StartGame();
 
@@ -87,18 +87,18 @@ public class Card_01_055_ErrataTests
 	@Test
 	public void ManeuverAbilityReveals3CardFromShadowHandAndPuts1OnTopDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl mirror = scn.GetFreepsCard("mirror");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-		scn.FreepsMoveCharToTable(galadriel);
-		scn.FreepsMoveCardToSupportArea(mirror);
+		scn.MoveCompanionToTable(galadriel);
+		scn.MoveCardsToSupportArea(mirror);
 
 		PhysicalCardImpl card1 = scn.GetShadowCard("allyHome3_1");
 		PhysicalCardImpl card2 = scn.GetShadowCard("allyHome6_1");
 		PhysicalCardImpl card3 = scn.GetShadowCard("galadriel");
-		scn.ShadowMoveCardToHand(card1, card2, card3);
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveCardsToHand(card1, card2, card3);
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 
@@ -123,19 +123,19 @@ public class Card_01_055_ErrataTests
 	@Test
 	public void ManeuverAbilityReveals3RandomCardsFromShadowHand() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl mirror = scn.GetFreepsCard("mirror");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-		scn.FreepsMoveCharToTable(galadriel);
-		scn.FreepsMoveCardToSupportArea(mirror);
+		scn.MoveCompanionToTable(galadriel);
+		scn.MoveCardsToSupportArea(mirror);
 
 		PhysicalCardImpl card1 = scn.GetShadowCard("allyHome3_1");
 		PhysicalCardImpl card2 = scn.GetShadowCard("allyHome6_1");
 		PhysicalCardImpl card3 = scn.GetShadowCard("galadriel");
 		PhysicalCardImpl card4 = scn.GetShadowCard("mirror");
-		scn.ShadowMoveCardToHand(card1, card2, card3, card4);
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveCardsToHand(card1, card2, card3, card4);
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_334_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("sting", "1_313");
@@ -35,8 +35,8 @@ public class Card_01_334_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -64,7 +64,7 @@ public class Card_01_334_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.FOREST));
+		assertTrue(scn.HasKeyword(card, Keyword.FOREST));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(2, card.getBlueprint().getSiteNumber());
 	}
@@ -78,17 +78,17 @@ public class Card_01_334_Tests
 
 		var sting = scn.GetFreepsCard("sting");
 		var toby = scn.GetFreepsCard("toby");
-		scn.FreepsMoveCardToHand(sting, toby);
+		scn.MoveCardsToHand(sting, toby);
 
 		var filler1 = scn.GetFreepsCard("filler1");
 		var filler2 = scn.GetFreepsCard("filler2");
 		var filler3 = scn.GetFreepsCard("filler3");
-		scn.FreepsMoveCardsToTopOfDeck(filler1, filler2, filler3);
+		scn.MoveCardsToTopOfDeck(filler1, filler2, filler3);
 
 		scn.StartGame();
 		scn.SkipToSite(2);
 		assertEquals(trollshaw, scn.GetCurrentSite());
-		scn.FreepsMoveCardsToTopOfDeck(filler1, filler2, filler3);
+		scn.MoveCardsToTopOfDeck(filler1, filler2, filler3);
 		assertEquals(3, scn.GetFreepsDeckCount());
 
 		//Playing a card attached to a companion should draw

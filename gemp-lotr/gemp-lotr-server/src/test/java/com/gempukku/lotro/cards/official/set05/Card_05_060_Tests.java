@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set05;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_05_060_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("siege", "5_60");
@@ -26,9 +26,9 @@ public class Card_05_060_Tests
 					put("sleep", "1_84");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,8 +57,8 @@ public class Card_05_060_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.MACHINE));
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.MACHINE));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -68,14 +68,14 @@ public class Card_05_060_Tests
 		var scn = GetScenario();
 
 		var sleep = scn.GetFreepsCard("sleep");
-		scn.FreepsMoveCharToTable("gandalf");
-		scn.FreepsMoveCardToHand(sleep);
+		scn.MoveCompanionToTable("gandalf");
+		scn.MoveCardsToHand(sleep);
 
 		var siege = scn.GetShadowCard("siege");
 		var devilry = scn.GetShadowCard("devilry");
 		var ram = scn.GetShadowCard("ram");
 		var ladder = scn.GetShadowCard("ladder");
-		scn.ShadowMoveCardToSupportArea(siege, devilry, ram, ladder);
+		scn.MoveCardsToSupportArea(siege, devilry, ram, ladder);
 
 		scn.StartGame();
 
@@ -84,9 +84,9 @@ public class Card_05_060_Tests
 		assertEquals(Zone.SUPPORT, ram.getZone());
 		assertEquals(Zone.SUPPORT, ladder.getZone());
 
-		assertTrue(scn.hasKeyword(devilry, Keyword.MACHINE));
-		assertTrue(scn.hasKeyword(ram, Keyword.MACHINE));
-		assertTrue(scn.hasKeyword(ladder, Keyword.MACHINE));
+		assertTrue(scn.HasKeyword(devilry, Keyword.MACHINE));
+		assertTrue(scn.HasKeyword(ram, Keyword.MACHINE));
+		assertTrue(scn.HasKeyword(ladder, Keyword.MACHINE));
 
 		scn.FreepsPlayCard(sleep);
 

@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_030_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("saruman", "101_30");
 					put("weather", "1_138");
@@ -26,9 +26,9 @@ public class Card_V1_030_Tests
 					put("legolas", "1_51");
 					// put other cards in here as needed for the test case
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -52,7 +52,7 @@ public class Card_V1_030_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl saruman = scn.GetFreepsCard("saruman");
 
@@ -74,15 +74,15 @@ public class Card_V1_030_Tests
 	@Test
 	public void SarumanCantFightWithoutWeather() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
 		PhysicalCardImpl weather = scn.GetShadowCard("weather");
-		scn.ShadowMoveCharToTable(saruman);
-		scn.ShadowMoveCardToHand(weather);
+		scn.MoveMinionsToTable(saruman);
+		scn.MoveCardsToHand(weather);
 
 		PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
-		scn.ShadowMoveCharToTable(legolas);
+		scn.MoveMinionsToTable(legolas);
 
 		scn.StartGame();
 
@@ -119,13 +119,13 @@ public class Card_V1_030_Tests
 	@Test
 	public void SarumanBoostsIsengardMinionsWithWeather() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
 		PhysicalCardImpl uruk = scn.GetShadowCard("uruk");
 		PhysicalCardImpl weather = scn.GetShadowCard("weather");
-		scn.ShadowMoveCharToTable(saruman, uruk);
-		scn.ShadowMoveCardToHand(weather);
+		scn.MoveMinionsToTable(saruman, uruk);
+		scn.MoveCardsToHand(weather);
 
 		scn.StartGame();
 
@@ -146,16 +146,16 @@ public class Card_V1_030_Tests
 	@Test
 	public void ResponseSelfDiscardsToExertEveryCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
 		PhysicalCardImpl weather = scn.GetShadowCard("weather");
-		scn.ShadowMoveCharToTable(saruman);
-		scn.ShadowMoveCardToHand(weather);
+		scn.MoveMinionsToTable(saruman);
+		scn.MoveCardsToHand(weather);
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
-		scn.ShadowMoveCharToTable(legolas);
+		scn.MoveMinionsToTable(legolas);
 
 		scn.StartGame();
 

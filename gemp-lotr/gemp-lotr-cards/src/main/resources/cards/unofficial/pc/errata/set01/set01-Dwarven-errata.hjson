@@ -155,20 +155,27 @@
 							text: Choose a minion to make strength -1 until regroup
 						}
 						{
-							type: Preventable
-							player: OwnerFromMemory(chosenMinion)
-							text: Would you like to discard the bottom 2 cards of your draw deck to prevent {chosenMinion} being strength -1 until regroup?
-							cost: {
-								type: discardBottomCardsFromDeck
-								deck: OwnerFromMemory(chosenMinion)
-								count: 2
-								forced: false
+							type: If
+							check: {
+								type: HasCardInMemory
+								memory: chosenMinion
 							}
-							effect: {
-								type: ModifyStrength
-								amount: -1
-								select: memory(chosenMinion)
-								until: start(regroup)
+							true: {
+								type: Preventable
+								player: OwnerFromMemory(chosenMinion)
+								text: Would you like to discard the bottom 2 cards of your draw deck to prevent {chosenMinion} being strength -1 until regroup?
+								cost: {
+									type: discardBottomCardsFromDeck
+									deck: OwnerFromMemory(chosenMinion)
+									count: 2
+									forced: false
+								}
+								effect: {
+									type: ModifyStrength
+									amount: -1
+									select: memory(chosenMinion)
+									until: start(regroup)
+								}
 							}
 						}
 					]

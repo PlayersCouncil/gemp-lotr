@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set04;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_04_141_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("card", "4_141");
@@ -23,9 +23,9 @@ public class Card_04_141_Tests
 					put("enquea", "1_231");
 					put("gandalf", "1_364");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,14 +54,14 @@ public class Card_04_141_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+        assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
 	public void MayChooseNotToAddBurden() throws DecisionResultInvalidException, CardNotFoundException {
 		// Arrange
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var card = scn.GetShadowCard("card");
 		var uruk = scn.GetShadowCard("uruk");
@@ -70,11 +70,11 @@ public class Card_04_141_Tests
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var frodo = scn.GetRingBearer();
 
-		scn.ShadowMoveCardToHand(card);
-		scn.ShadowMoveCardToHand(uruk);
-		scn.ShadowMoveCardToHand(cantea);
-		scn.ShadowMoveCardToHand(enquea);
-		scn.FreepsMoveCardToHand(gandalf);
+		scn.MoveCardsToHand(card);
+		scn.MoveCardsToHand(uruk);
+		scn.MoveCardsToHand(cantea);
+		scn.MoveCardsToHand(enquea);
+		scn.MoveCardsToHand(gandalf);
 
 		scn.StartGame();
 

@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,17 +14,17 @@ import static org.junit.Assert.*;
 public class Card_01_087_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("late", "1_87");
 					put("gandalf", "1_72");
 					put("bb", "1_70");
 					put("filler", "1_75");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -53,7 +53,7 @@ public class Card_01_087_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.FELLOWSHIP));
+        assertTrue(scn.HasTimeword(card, Timeword.FELLOWSHIP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -65,8 +65,8 @@ public class Card_01_087_Tests
 		var late = scn.GetFreepsCard("late");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var bb = scn.GetFreepsCard("bb");
-		scn.FreepsMoveCardToHand(late);
-		scn.FreepsMoveCardsToTopOfDeck(gandalf, bb);
+		scn.MoveCardsToHand(late);
+		scn.MoveCardsToTopOfDeck(gandalf, bb);
 
 		scn.StartGame();
 
@@ -93,8 +93,8 @@ public class Card_01_087_Tests
 		var late = scn.GetFreepsCard("late");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var bb = scn.GetFreepsCard("bb");
-		scn.FreepsMoveCardToHand(late);
-		scn.FreepsMoveCardsToTopOfDeck(gandalf, bb);
+		scn.MoveCardsToHand(late);
+		scn.MoveCardsToTopOfDeck(gandalf, bb);
 
 		scn.StartGame();
 
@@ -121,7 +121,7 @@ public class Card_01_087_Tests
 		var late = scn.GetFreepsCard("late");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var bb = scn.GetFreepsCard("bb");
-		scn.FreepsMoveCardToHand(late, gandalf, bb);
+		scn.MoveCardsToHand(late, gandalf, bb);
 
 		scn.StartGame();
 

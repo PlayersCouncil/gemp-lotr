@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_V1_061_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("aragorn", "1_89");
 					put("orophin", "1_56");
@@ -38,8 +38,8 @@ public class Card_V1_061_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -66,8 +66,8 @@ public class Card_V1_061_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.FOREST));
-		assertTrue(scn.hasKeyword(card, Keyword.SANCTUARY));
+		assertTrue(scn.HasKeyword(card, Keyword.FOREST));
+		assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
@@ -79,10 +79,10 @@ public class Card_V1_061_Tests
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.FreepsMoveCharToTable(aragorn, orophin);
+		scn.MoveCompanionToTable(aragorn, orophin);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCardToHand(runner);
+		scn.MoveCardsToHand(runner);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -91,7 +91,7 @@ public class Card_V1_061_Tests
 
 		scn.SkipToSite(5);
 
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(6, scn.GetCurrentSiteNumber());
@@ -123,11 +123,11 @@ public class Card_V1_061_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var uruviel = scn.GetFreepsCard("uruviel");
 		var pathfinder = scn.GetFreepsCard("pathfinder");
-		scn.FreepsMoveCharToTable(aragorn, uruviel);
-		scn.FreepsMoveCardToHand(pathfinder);
+		scn.MoveCompanionToTable(aragorn, uruviel);
+		scn.MoveCardsToHand(pathfinder);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCardToHand(runner);
+		scn.MoveCardsToHand(runner);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -169,9 +169,9 @@ public class Card_V1_061_Tests
 		scn.FreepsChooseToMove();
 		assertEquals(7, (long)scn.GetCurrentSite().getSiteNumber());
 
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
-		assertEquals(GenericCardTestHelper.P1, scn.GetFreepsSite(6).getOwner());
+		assertEquals(VirtualTableScenario.P1, scn.GetFreepsSite(6).getOwner());
 		assertEquals(7, scn.GetCurrentSite().getSiteNumber().intValue());
 
 		scn.SkipToPhase(Phase.MANEUVER);

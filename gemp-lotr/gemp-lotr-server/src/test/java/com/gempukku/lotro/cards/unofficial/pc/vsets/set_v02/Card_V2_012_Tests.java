@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_012_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("friends", "102_12");
@@ -24,9 +24,9 @@ public class Card_V2_012_Tests
 
 					put("uruk", "4_190");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_V2_012_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -68,11 +68,11 @@ public class Card_V2_012_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gimli = scn.GetFreepsCard("gimli");
 		var legolas = scn.GetFreepsCard("legolas");
-		scn.FreepsMoveCardToSupportArea(friends);
-		scn.FreepsMoveCharToTable(aragorn, gimli, legolas);
+		scn.MoveCardsToSupportArea(friends);
+		scn.MoveCompanionToTable(aragorn, gimli, legolas);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -113,11 +113,11 @@ public class Card_V2_012_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gimli = scn.GetFreepsCard("gimli");
 		var legolas = scn.GetFreepsCard("legolas");
-		scn.FreepsMoveCardToSupportArea(friends);
-		scn.FreepsMoveCharToTable(aragorn, gimli, legolas);
+		scn.MoveCardsToSupportArea(friends);
+		scn.MoveCompanionToTable(aragorn, gimli, legolas);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -161,11 +161,11 @@ public class Card_V2_012_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gimli = scn.GetFreepsCard("gimli");
 		var legolas = scn.GetFreepsCard("legolas");
-		scn.FreepsMoveCardToSupportArea(friends);
-		scn.FreepsMoveCharToTable(aragorn, gimli, legolas);
+		scn.MoveCardsToSupportArea(friends);
+		scn.MoveCompanionToTable(aragorn, gimli, legolas);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 		scn.SkipToAssignments();

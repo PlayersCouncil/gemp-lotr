@@ -1,9 +1,8 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -14,12 +13,11 @@ import static org.junit.Assert.*;
 public class Card_01_295_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("farmer", "1_295");
-					put("farmer2", "1_295");
 					put("merry", "4_310");
 					put("pippin", "4_314");
 
@@ -35,17 +33,16 @@ public class Card_01_295_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
-	protected GenericCardTestHelper GetDiscountScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetDiscountScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("farmer", "1_295");
-					put("farmer2", "1_295");
 					put("merry", "4_310");
 					put("pippin", "4_314");
 					put("sam", "1_311");
@@ -61,8 +58,8 @@ public class Card_01_295_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -111,15 +108,15 @@ public class Card_01_295_Tests
 		var freepsFarmer = scn.GetFreepsCard("farmer");
 		var merry = scn.GetFreepsCard("merry");
 		var pippin = scn.GetFreepsCard("pippin");
-		scn.FreepsMoveCardToSupportArea(freepsFarmer);
+		scn.MoveCardsToSupportArea(freepsFarmer);
 		scn.AddWoundsToChar(freepsFarmer, 1); // To ensure the exert ability isn't available
-		scn.FreepsMoveCardsToTopOfDeck(merry, pippin);
+		scn.MoveCardsToTopOfDeck(merry, pippin);
 
 		//Player 2 version of the Farmer will test copying the enemy site
 		var evilFarmer = scn.GetShadowCard("farmer");
 		var evilMerry = scn.GetShadowCard("merry");
 		var evilPippin = scn.GetShadowCard("pippin");
-		scn.ShadowMoveCardToSupportArea(evilFarmer);
+		scn.MoveCardsToSupportArea(evilFarmer);
 		scn.AddWoundsToChar(evilFarmer, 1); // To ensure the exert ability isn't available
 
 		scn.StartGame();
@@ -128,7 +125,7 @@ public class Card_01_295_Tests
 		assertTrue(scn.FreepsActionAvailable("Use Hobbit Farmer"));
 
 		scn.SkipToMovementDecision();
-		scn.ShadowMoveCardsToTopOfDeck(evilMerry, evilPippin);
+		scn.MoveCardsToTopOfDeck(evilMerry, evilPippin);
 		scn.FreepsChooseToStay();
 
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
@@ -147,14 +144,14 @@ public class Card_01_295_Tests
 		//Player 1 version of the Farmer will test copying one's own site
 		var freepsFarmer = scn.GetFreepsCard("farmer");
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCardToSupportArea(freepsFarmer);
-		scn.FreepsMoveCardToHand(sam);
+		scn.MoveCardsToSupportArea(freepsFarmer);
+		scn.MoveCardsToHand(sam);
 
 		//Player 2 version of the Farmer will test copying the enemy site
 		var evilFarmer = scn.GetShadowCard("farmer");
 		var evilSam = scn.GetShadowCard("sam");
-		scn.ShadowMoveCardToSupportArea(evilFarmer);
-		scn.ShadowMoveCardToHand(evilSam);
+		scn.MoveCardsToSupportArea(evilFarmer);
+		scn.MoveCardsToHand(evilSam);
 
 		scn.StartGame();
 
@@ -182,7 +179,8 @@ public class Card_01_295_Tests
 		var scn = GetScenario();
 
 		var opponentSite1 = scn.GetCurrentSite();
-		scn.FreepsMoveCardToSupportArea("farmer");
+		var farmer = scn.GetFreepsCard("farmer");
+		scn.MoveCardsToSupportArea(farmer);
 
 		//Player 2 version of the Farmer will test replacing
 		var evilFarmer = scn.GetShadowCard("farmer");
@@ -190,14 +188,12 @@ public class Card_01_295_Tests
 		var evilPippin = scn.GetShadowCard("pippin");
 		var site1 = scn.GetShadowSite("site1");
 
-		scn.ShadowMoveCardToSupportArea(evilFarmer);
+		scn.MoveCardsToSupportArea(evilFarmer);
 
 		scn.StartGame();
 
-		assertFalse(scn.FreepsDecisionAvailable("Use Hobbit Farmer"));
-
 		scn.SkipToMovementDecision();
-		scn.ShadowMoveCardsToTopOfDeck(evilMerry, evilPippin);
+		scn.MoveCardsToTopOfDeck(evilMerry, evilPippin);
 		scn.FreepsChooseToStay();
 
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
@@ -207,6 +203,7 @@ public class Card_01_295_Tests
 		assertTrue(scn.ShadowActionAvailable(evilFarmer));
 		assertEquals(2, scn.GetVitality(evilFarmer));
 
+		assertFalse(scn.FreepsActionAvailable(farmer));
 		scn.ShadowUseCardAction(evilFarmer);
 
 		assertSame(site1, scn.GetCurrentSite());
@@ -224,7 +221,8 @@ public class Card_01_295_Tests
 		var scn = GetScenario();
 
 		var opponentSite1 = scn.GetCurrentSite();
-		scn.FreepsMoveCardToSupportArea("farmer");
+		var farmer = scn.GetFreepsCard("farmer");
+		scn.MoveCardsToSupportArea(farmer);
 
 		//Player 2 version of the Farmer will test replacing
 		var evilFarmer = scn.GetShadowCard("farmer");
@@ -232,7 +230,7 @@ public class Card_01_295_Tests
 		var evilPippin = scn.GetShadowCard("pippin");
 		var site1 = scn.GetShadowSite("site1");
 
-		scn.ShadowMoveCardToSupportArea(evilFarmer);
+		scn.MoveCardsToSupportArea(evilFarmer);
 
 		scn.StartGame();
 
@@ -242,7 +240,7 @@ public class Card_01_295_Tests
 		scn.SkipToSite(3);
 
 		scn.SkipToMovementDecision();
-		scn.ShadowMoveCardsToTopOfDeck(evilMerry, evilPippin);
+		scn.MoveCardsToTopOfDeck(evilMerry, evilPippin);
 		scn.FreepsChooseToStay();
 		scn.FreepsDeclineReconciliation();
 
@@ -272,8 +270,8 @@ public class Card_01_295_Tests
 		var merry = scn.GetFreepsCard("merry");
 		var pippin = scn.GetFreepsCard("pippin");
 		var site1 = scn.GetCurrentSite();
-		scn.FreepsMoveCardToSupportArea("farmer");
-		scn.FreepsMoveCardToHand(merry, pippin);
+		scn.MoveCardsToSupportArea(farmer);
+		scn.MoveCardsToHand(merry, pippin);
 
 		var opponentSite1 = scn.GetShadowSite("site1");
 
@@ -306,14 +304,15 @@ public class Card_01_295_Tests
 		var scn = GetDiscountScenario();
 
 		var opponentSite1 = scn.GetCurrentSite();
-		scn.FreepsMoveCardToSupportArea("farmer");
+		var farmer = scn.GetFreepsCard("farmer");
+		scn.MoveCardsToSupportArea(farmer);
 
 		//Player 2 version of the Farmer will test replacing
 		var evilFarmer = scn.GetShadowCard("farmer");
 		var evilMerry = scn.GetShadowCard("merry");
 		var site1 = scn.GetShadowSite("site1");
 
-		scn.ShadowMoveCardToSupportArea(evilFarmer);
+		scn.MoveCardsToSupportArea(evilFarmer);
 
 		scn.StartGame();
 
