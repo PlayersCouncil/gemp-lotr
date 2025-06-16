@@ -1434,17 +1434,17 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
-    getLimitedTournamentAvailableFormats:function (callback, errorMap) {
+    getTournamentAvailableFormats:function (callback, errorMap) {
         $.ajax({
             type:"GET",
-            url:this.url + "/tournament/limitedFormats",
+            url:this.url + "/tournament/tournamentFormats",
             cache:false,
             success:this.deliveryCheck(callback),
             error:this.errorCheck(errorMap),
             dataType:"json"
         });
     },
-    createTournament:function (type, maxPlayers, sealedFormatCode, soloDraftFormatCode, tableDraftFormatCode, tableDraftTimer,
+    createTournament:function (type, deckName, maxPlayers, constructedFormatCode, sealedFormatCode, soloDraftFormatCode, tableDraftFormatCode, tableDraftTimer,
                                playoff, deckbuildingDuration, competitive, startable, readyCheck, callback, errorMap) {
         $.ajax({
             type:"POST",
@@ -1452,7 +1452,9 @@ var GempLotrCommunication = Class.extend({
             cache:false,
             data:{
                 type:type,
+                deckName:deckName,
                 maxPlayers:maxPlayers,
+                constructedFormatCode:constructedFormatCode,
                 sealedFormatCode:sealedFormatCode,
                 soloDraftFormatCode:soloDraftFormatCode,
                 tableDraftFormatCode:tableDraftFormatCode,

@@ -5,11 +5,11 @@ import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.DefaultCardCollection;
 import com.gempukku.lotro.packs.ProductLibrary;
 
-public class LimitedTournamentPrizes implements TournamentPrizes {
+public class WinForAwardTournamentPrizes implements TournamentPrizes {
     private final String _registryRepresentation;
     private final ProductLibrary _productLibrary;
 
-    public LimitedTournamentPrizes(String registryRepresentation, ProductLibrary productLibrary) {
+    public WinForAwardTournamentPrizes(String registryRepresentation, ProductLibrary productLibrary) {
         _registryRepresentation = registryRepresentation;
         _productLibrary = productLibrary;
     }

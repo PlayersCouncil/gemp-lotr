@@ -474,10 +474,15 @@ public class HallServer extends AbstractServer {
     }
 
 
-    public boolean addPlayerMadeLimitedQueue(TournamentInfo info, Player player, boolean startableEarly, int readyCheckTimeSecs) throws SQLException, IOException {
+    public boolean addPlayerMadeQueue(TournamentInfo info, Player player, String deckName, boolean startableEarly, int readyCheckTimeSecs) throws SQLException, IOException, HallException {
         _hallDataAccessLock.writeLock().lock();
         try {
-            boolean success = _tournamentService.addPlayerMadeLimitedQueue(info, player, startableEarly, readyCheckTimeSecs);
+            LotroDeck lotroDeck = null;
+            if (info.Parameters().requiresDeck) {
+                lotroDeck = validateUserAndDeck(info.Format, player, deckName, info.Collection);
+            }
+
+            boolean success = _tournamentService.addPlayerMadeQueue(info, player, lotroDeck, startableEarly, readyCheckTimeSecs);
             if (success) {
                 hallChanged();
             }

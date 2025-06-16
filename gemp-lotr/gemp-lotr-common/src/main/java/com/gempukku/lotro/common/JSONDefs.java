@@ -102,6 +102,7 @@ public class JSONDefs {
     }
 
     public static class PlayerMadeTournamentAvailableFormats {
+        public List<ItemStub> constructed;
         public List<ItemStub> sealed;
         public List<ItemStub> soloDrafts;
         public List<LiveDraftInfo> tableDrafts;

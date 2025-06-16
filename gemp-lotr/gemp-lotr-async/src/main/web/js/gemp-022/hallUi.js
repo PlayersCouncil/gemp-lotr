@@ -51,7 +51,7 @@ var GempLotrHallUI = Class.extend({
 					that.userInfo = json;
 				});
 
-		this.comm.getLimitedTournamentAvailableFormats(function(json)
+		this.comm.getTournamentAvailableFormats(function(json)
 				{
                     that.setupTournamentSpawner(json);
 				});
@@ -127,7 +127,7 @@ var GempLotrHallUI = Class.extend({
 		this.initTable(hallSettings[3] == "1", "wcQueuesHeader", "wcQueuesContent");
 		this.initTable(hallSettings[4] == "1", "wcEventsHeader", "wcEventsContent");
 		this.initTable(hallSettings[5] == "1", "tournamentQueuesHeader", "tournamentQueuesContent");
-		this.initTable(hallSettings[6] == "1", "limitedGamesHeader", "limitedGamesContent");
+		this.initTable(hallSettings[6] == "1", "queueSpawnerHeader", "queueSpawnerContent");
 		
 		$('#wcQueuesHeader').hide();
 		$('#wcQueuesContent').hide();
@@ -194,7 +194,7 @@ var GempLotrHallUI = Class.extend({
             }
 
             const validPlayerCount = Number.isInteger(playerCount) && playerCount >= 1 && validMaxPlayers;
-            const validDeckDuration = Number.isInteger(deckDuration) && deckDuration >= 5;
+            const validDeckDuration = (Number.isInteger(deckDuration) && deckDuration >= 5) || gameType === "constructed";
             const draftValid = gameType !== "table_draft" || draftTimer;
             const validPlayerReadyCombo = playerCount > 2 || readyCheck < 0;
 
@@ -229,7 +229,7 @@ var GempLotrHallUI = Class.extend({
                 $advanced.toggle(advancedVisible);
                 if (advancedVisible) {
                     // Scroll to bottom so that the new field can be seen
-                    $("#limitedGameForm").get(0).scrollIntoView({ behavior: "smooth", block: "end" });
+                    $("#queueSpawnerForm").get(0).scrollIntoView({ behavior: "smooth", block: "end" });
                 }
                 $(this).text(advancedVisible ? "Hide advanced settings" : "Show advanced settings");
             });
@@ -237,6 +237,7 @@ var GempLotrHallUI = Class.extend({
 
             const gameType = $(this).val();
             const formatListMap = {
+                constructed: json.constructed,
                 sealed: json.sealed,
                 solodraft: json.soloDrafts,
                 table_draft: json.tableDrafts
@@ -328,6 +329,9 @@ var GempLotrHallUI = Class.extend({
                 .append($("<option>").val("false").text("Games can be spectated"))
                 .append($("<option>").val("true").text("No spectate; hidden names in queue"));
             $competitiveRow.append($competitiveLabel, $competitiveSelect);
+            if (gameType === "constructed") {
+            	$competitiveSelect.val("true");
+            }
 
             // Early start
             const $earlyStartRow = $("<div>").addClass("formRow");
@@ -337,6 +341,10 @@ var GempLotrHallUI = Class.extend({
                 .append($("<option>").val("true").text("Can be started with less players"))
                 .append($("<option>").val("false").text("Starts only with all player slots filled"));
             $earlyStartRow.append($earlyStartLabel, $earlyStartSelect);
+            // Set default to false for constructed games
+            if (gameType === "constructed") {
+            	$earlyStartSelect.val("false");
+            }
 
             // Ready check
             const $readyCheckRow = $("<div>").addClass("formRow");
@@ -357,10 +365,11 @@ var GempLotrHallUI = Class.extend({
                 $("<div>").append($playersRow)
             );
 
-            // Append to form
+            $advanced.append($("<div>").append($pairingRow));
+            if (gameType !== "constructed") {
+            	$advanced.append($("<div>").append($durationRow));
+            }
             $advanced.append(
-                $("<div>").append($pairingRow),
-                $("<div>").append($durationRow),
                 $("<div>").append($competitiveRow),
                 $("<div>").append($earlyStartRow),
                 $("<div>").append($readyCheckRow)
@@ -436,23 +445,28 @@ var GempLotrHallUI = Class.extend({
             validateTournamentForm();
 
             // Scroll to bottom so that the new field can be seen
-            $("#limitedGameForm").get(0).scrollIntoView({ behavior: "smooth", block: "end" });
+            $("#queueSpawnerForm").get(0).scrollIntoView({ behavior: "smooth", block: "end" });
         });
 	},
 
 	createTournament: function() {
 		var that = this;
 
+		const deck = this.decksSelect.val();
+
 		const type = $("#gameTypeSelect").val();
 		// Depending on the type, pick the correct format code from the formatSelect dropdown
 		const formatCode = $("#formatSelect").val();
 
 		// Assign the format codes based on the selected game type
+		let constructedFormatCode = null;
 		let sealedFormatCode = null;
 		let soloDraftFormatCode = null;
 		let tableDraftFormatCode = null;
 
-		if (type === "sealed") {
+		if (type === "constructed") {
+        	constructedFormatCode = formatCode;
+        } else if (type === "sealed") {
 			sealedFormatCode = formatCode;
 		} else if (type === "solodraft") {
 			soloDraftFormatCode = formatCode;
@@ -476,7 +490,9 @@ var GempLotrHallUI = Class.extend({
 		// Call the communication layer with all gathered values
 		this.comm.createTournament(
 			type,
+			deck,
 			maxPlayers,
+			constructedFormatCode,
 			sealedFormatCode,
 			soloDraftFormatCode,
 			tableDraftFormatCode,
@@ -565,7 +581,7 @@ var GempLotrHallUI = Class.extend({
 				that.showErrorDialog("Inactivity error", "You were inactive for too long and have been removed from the Game Hall. If you wish to re-enter, click \"Refresh page\".", true, false);
 			},
 			"400":function() {
-				that.showErrorDialog("Tournament creation error", "Something went wrong, check all tournament parameters.", false, false);
+				that.showErrorDialog("Tournament creation error", "Something went wrong, check all tournament parameters. If creating a constructed tournament, make sure that your selected deck is valid.", false, false);
 			}
 		};
 	},

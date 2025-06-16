@@ -7,7 +7,6 @@ import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.GameHistoryDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
-import com.gempukku.lotro.draft3.TableDraftDefinition;
 import com.gempukku.lotro.draft3.TableDraftDefinitions;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
@@ -99,14 +98,6 @@ public class TournamentService {
 
     public void reloadQueues() {
         _tournamentQueues.clear();
-
-        addImmediateRecurringQueue("fotr_queue", "Fellowship Block", "fotr-", "fotr_block");
-        addImmediateRecurringQueue("pc_fotr_queue", "PC-Fellowship", "pcfotr-", "pc_fotr_block");
-        addImmediateRecurringQueue("ts_queue", "Towers Standard", "ts-", "towers_standard");
-        addImmediateRecurringQueue("movie_queue", "Movie Block", "movie-", "movie");
-        addImmediateRecurringQueue("pc_movie_queue", "PC-Movie", "pcmovie-", "pc_movie");
-        addImmediateRecurringQueue("expanded_queue", "Expanded", "expanded-", "expanded");
-        addImmediateRecurringQueue("pc_expanded_queue", "PC-Expanded", "pcexpanded-", "pc_expanded");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -296,16 +287,20 @@ public class TournamentService {
         return true;
     }
 
-    public boolean addPlayerMadeLimitedQueue(TournamentInfo info, Player player, boolean startableEarly, int readyCheckTimeSecs) throws SQLException, IOException {
+    public boolean addPlayerMadeQueue(TournamentInfo info, Player player, LotroDeck lotroDeck, boolean startableEarly, int readyCheckTimeSecs) throws SQLException, IOException {
         if (_tournamentQueues.containsKey(info._params.tournamentId))
             return false;
 
-        TournamentQueue tournamentQueue = new PlayerMadeLimitedQueue(this, info.Parameters().tournamentId,
+        TournamentQueue tournamentQueue = new PlayerMadeQueue(this, info.Parameters().tournamentId,
                 info.Parameters().name, info, startableEarly, readyCheckTimeSecs,
                 tournament -> _activeTournaments.put(tournament.getTournamentId(), tournament), _collectionsManager);
         _tournamentQueues.put(info._params.tournamentId, tournamentQueue);
 
-        tournamentQueue.joinPlayer(player);
+        if (info._params.requiresDeck) {
+            tournamentQueue.joinPlayer(player, lotroDeck);
+        } else {
+            tournamentQueue.joinPlayer(player);
+        }
 
         return true;
     }

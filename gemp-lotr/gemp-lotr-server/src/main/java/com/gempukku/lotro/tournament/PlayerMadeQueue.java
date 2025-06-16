@@ -5,9 +5,9 @@ import com.gempukku.lotro.collection.CollectionsManager;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class PlayerMadeLimitedQueue extends AbstractTournamentQueue implements TournamentQueue {
-    public PlayerMadeLimitedQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info, boolean startableEarly, int readyCheckTimeSecs,
-                                  TournamentQueueCallback tournamentQueueCallback, CollectionsManager collectionsManager) {
+public class PlayerMadeQueue extends AbstractTournamentQueue implements TournamentQueue {
+    public PlayerMadeQueue(TournamentService tournamentService, String queueId, String queueName, TournamentInfo info, boolean startableEarly, int readyCheckTimeSecs,
+                           TournamentQueueCallback tournamentQueueCallback, CollectionsManager collectionsManager) {
         super(tournamentService, queueId, queueName, info, startableEarly, readyCheckTimeSecs, tournamentQueueCallback, collectionsManager, true);
     }
 

@@ -13,6 +13,7 @@ import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.SortAndFilterCards;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.hall.HallException;
 import com.gempukku.lotro.hall.HallServer;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
@@ -84,8 +85,8 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             getTournamentReport(request, uri.substring(1, uri.indexOf("/report/")), responseWriter);
         } else if (uri.equals("/create") && request.method() == HttpMethod.POST) {
             processPlayerMadeTournament(request, responseWriter);
-        } else if (uri.equals("/limitedFormats") && request.method() == HttpMethod.GET) {
-            getLimitedFormats(request, responseWriter);
+        } else if (uri.equals("/tournamentFormats") && request.method() == HttpMethod.GET) {
+            getTournamentFormats(request, responseWriter);
         } else if (uri.startsWith("/") && request.method() == HttpMethod.GET) {
             getTournamentInfo(request, uri.substring(1), responseWriter);
         } else {
@@ -93,8 +94,9 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         }
     }
 
-    private void getLimitedFormats(HttpRequest request, ResponseWriter responseWriter) {
+    private void getTournamentFormats(HttpRequest request, ResponseWriter responseWriter) {
         JSONDefs.PlayerMadeTournamentAvailableFormats data = new JSONDefs.PlayerMadeTournamentAvailableFormats();
+
         Map<String, String> availableSealedFormats = new HashMap<>();
         availableSealedFormats.put("single_fotr_block_sealed", "Fellowship Block Sealed");
         availableSealedFormats.put("single_ttt_block_sealed", "Towers Block Sealed");
@@ -103,11 +105,16 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         availableSealedFormats.put("single_movie_sealed", "Movie Sealed");
         availableSealedFormats.put("single_wotr_block_sealed", "War of the Ring Block Sealed");
         availableSealedFormats.put("single_th_block_sealed", "Hunters Block Sealed");
+
         Map<String, String> availableSoloDraftFormats = new HashMap<>();
         availableSoloDraftFormats.put("fotr_draft", "Fellowship Block");
         availableSoloDraftFormats.put("ttt_draft", "Towers Block");
         availableSoloDraftFormats.put("hobbit_random_draft", "Hobbit");
         List<String> orderedSoloDrafts = List.of("fotr_draft", "ttt_draft", "hobbit_random_draft");
+
+        data.constructed = _formatLibrary.getHallFormats().values().stream()
+                .map(constructedFormat -> new JSONDefs.ItemStub(constructedFormat.getCode(), constructedFormat.getName()))
+                .collect(Collectors.toList());
         data.sealed = _formatLibrary.GetAllSealedTemplates().values().stream()
                 .filter(sealedEventDefinition -> availableSealedFormats.containsKey(sealedEventDefinition.GetID()))
                 .map(sealed -> new JSONDefs.ItemStub(sealed.GetID(), availableSealedFormats.get(sealed.GetID())))
@@ -128,6 +135,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
 
         String participantId = getFormParameterSafely(postDecoder, "participantId");
         Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        String deckName = getFormParameterSafely(postDecoder, "deckName");
 
         String typeStr = getFormParameterSafely(postDecoder, "type");
         String deckbuildingDurationStr = getFormParameterSafely(postDecoder, "deckbuildingDuration");
@@ -143,6 +151,8 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
 
         String readyCheckStr = getFormParameterSafely(postDecoder, "readyCheck");
         int readyCheck = Throw400IfNullOrNonInteger("readyCheck", readyCheckStr);
+
+        String constructedFormatCodeStr = getFormParameterSafely(postDecoder, "constructedFormatCode");
 
         String sealedFormatCodeStr = getFormParameterSafely(postDecoder, "sealedFormatCode");
 
@@ -168,7 +178,14 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         String competitivePrefix = "Competitive ";
         String prefix = competitive ? competitivePrefix : casualPrefix;
 
-        if(type == Tournament.TournamentType.SEALED) {
+        if (type == Tournament.TournamentType.CONSTRUCTED) {
+            params.type = Tournament.TournamentType.CONSTRUCTED;
+            var format = _formatLibrary.getFormat(constructedFormatCodeStr);
+            Throw400IfValidationFails("constructedFormatCodeStr", constructedFormatCodeStr,format != null);
+            params.format = constructedFormatCodeStr;
+            params.name = prefix + format.getName();
+            params.requiresDeck = true;
+        } else if(type == Tournament.TournamentType.SEALED) {
             var sealedParams = new SealedTournamentParams();
             sealedParams.type = Tournament.TournamentType.SEALED;
 
@@ -181,6 +198,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             sealedParams.sealedFormatCode = sealedFormatCodeStr;
             sealedParams.format = sealedFormat.GetFormat().getCode();
             sealedParams.name = prefix + sealedFormat.GetName().substring(3); // Strip the ordering number for sealed formats
+            sealedParams.requiresDeck = false;
             params = sealedParams;
         }
         else if (type == Tournament.TournamentType.SOLODRAFT) {
@@ -201,6 +219,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
                 case "hobbit_random_draft" -> soloDraftParams.name = prefix + "Hobbit Solo Draft";
                 default -> soloDraftParams.name = prefix + soloDraftFormatCodeStr;
             }
+            soloDraftParams.requiresDeck = false;
             params = soloDraftParams;
         }
         else if (type == Tournament.TournamentType.TABLE_SOLODRAFT) {
@@ -216,6 +235,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             soloTableDraftParams.soloTableDraftFormatCode = soloTableDraftFormatCodeStr;
             soloTableDraftParams.format = tableDraftDefinition.getFormat();
             soloTableDraftParams.name = prefix + tableDraftDefinition.getName();
+            soloTableDraftParams.requiresDeck = false;
             params = soloTableDraftParams;
         }
         else if (type == Tournament.TournamentType.TABLE_DRAFT) {
@@ -234,24 +254,26 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             tableDraftParams.format = tableDraftDefinition.getFormat();
             tableDraftParams.draftTimerType = DraftTimer.getTypeFromString(tableDraftTimer);
             tableDraftParams.name = prefix + tableDraftDefinition.getName();
+            tableDraftParams.requiresDeck = false;
             params = tableDraftParams;
         }
         else {
-            Throw400IfValidationFails("type", typeStr, false, "Only limited games");
+            Throw400IfValidationFails("type", typeStr, false, "Unknown game type");
             return;
         }
 
-        params.requiresDeck = false;
         params.tournamentId =  params.format + System.currentTimeMillis();
         params.cost = 0; // Gold is not being used, they can be free to enter
         params.playoff = Tournament.PairingType.parse(playoff);
         params.tiebreaker = "owr";
-        params.prizes = Tournament.PrizeType.LIMITED; // At 4+ players, get one Event Award for each win or bye
+        params.prizes = Tournament.PrizeType.WIN_GAME_FOR_AWARD; // At 4+ players, get one Event Award for each win or bye
         params.maximumPlayers = maxPlayers;
         params.manualKickoff = false;
 
         TournamentInfo info;
-        if(type == Tournament.TournamentType.SEALED) {
+        if (type == Tournament.TournamentType.CONSTRUCTED) {
+            info = new TournamentInfo(_tournamentService, _productLibrary, _formatLibrary, DateUtils.Today(), params);
+        } else if (type == Tournament.TournamentType.SEALED) {
             info = new SealedTournamentInfo(_tournamentService, _productLibrary, _formatLibrary, DateUtils.Today(), (SealedTournamentParams)params);
         }
         else if (type == Tournament.TournamentType.SOLODRAFT) {
@@ -264,14 +286,17 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
             info = new TableDraftTournamentInfo(_tournamentService, _productLibrary, _formatLibrary, DateUtils.Today(), ((TableDraftTournamentParams) params), _tableDraftLibrary);
         }
         else {
-            Throw400IfValidationFails("type", typeStr, false, "Only limited games");
+            Throw400IfValidationFails("type", typeStr, false, "Unknown game type");
             return;
         }
-
-        if (_hallServer.addPlayerMadeLimitedQueue(info, resourceOwner, startable, readyCheck)) {
-            responseWriter.sendJsonOK();
-        } else {
-            Throw400IfValidationFails("Error", "Error", false, "Error while creating queue or joining");
+        try {
+            if (_hallServer.addPlayerMadeQueue(info, resourceOwner, deckName, startable, readyCheck)) {
+                responseWriter.sendJsonOK();
+            } else {
+                Throw400IfValidationFails("Error", "Error", false, "Error while creating queue or joining");
+            }
+        } catch (HallException badDeck) {
+            Throw400IfValidationFails("deckName", deckName, false, "Select valid deck for the requested format");
         }
     }
 

@@ -850,7 +850,7 @@ table.standings {
 	margin-bottom: 5px;
 }
 
-#limitedGameForm {
+#queueSpawnerForm {
   display: grid;
   margin-left: 20px;
   padding-top: 8px;
@@ -859,12 +859,12 @@ table.standings {
   max-width: 400px;
 }
 
-form#limitedGameForm select {
+form#queueSpawnerForm select {
   width: 100%;
   box-sizing: border-box;
 }
 
-form#limitedGameForm input {
+form#queueSpawnerForm input {
   width: 100%;
   box-sizing: border-box;
 }
