@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
 
 public class Card_01_081_Tests
@@ -17,8 +18,13 @@ public class Card_01_081_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_81");
-					// put other cards in here as needed for the test case
+					put("questions", "1_81");
+					put("gandalf", "1_364");
+
+					put("chaff1", "1_91");
+					put("chaff2", "1_92");
+					put("chaff3", "1_93");
+					put("chaff4", "1_94");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -27,7 +33,7 @@ public class Card_01_081_Tests
 	}
 
 	@Test
-	public void QuestionsThatbrNeedAnsweringStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void QuestionsThatNeedAnsweringStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 1
@@ -43,7 +49,7 @@ public class Card_01_081_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("questions");
 
 		assertEquals("Questions That Need Answering", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +62,34 @@ public class Card_01_081_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void QuestionsThatbrNeedAnsweringTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void QuestionsThatNeedAnsweringTakes2CardsIntoHandAndDiscardsTheRest() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var questions = scn.GetFreepsCard("questions");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCardsToHand(questions);
+		scn.MoveCompanionToTable(gandalf);
+
+		var chaff1 = scn.GetFreepsCard("chaff1");
+		var chaff2 = scn.GetFreepsCard("chaff2");
+		var chaff3 = scn.GetFreepsCard("chaff3");
+		var chaff4 = scn.GetFreepsCard("chaff4");
+		scn.MoveCardsToTopOfDeck(chaff1, chaff2, chaff3, chaff4);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(questions));
+		scn.FreepsPlayCard(questions);
+		scn.FreepsDismissRevealedCards();
+
+		assertInZone(Zone.DECK, chaff1, chaff2, chaff3, chaff4);
+		assertTrue(scn.FreepsHasCardChoicesAvailable(chaff1, chaff2, chaff3,  chaff4));
+
+		scn.FreepsChooseCards(chaff3, chaff4);
+		assertInZone(Zone.HAND, chaff3, chaff4);
+		assertInZone(Zone.DISCARD, chaff1, chaff2);
+
 	}
 }
