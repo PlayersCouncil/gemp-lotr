@@ -981,6 +981,8 @@ var PCCards = {
 	// Watcher in the Water FA
 	'2_131'  : 'https://i.lotrtcgpc.net/promos/LOTR-EN02U073.0_card.jpg',
 	// Pale Crown FA
-	'101_104'  : 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U039.0_card.jpg',
+	'101_104' : 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U039.0_card.jpg',
+	// V2 Saruman FA
+	'102_100': 'https://i.lotrtcgpc.net/promos/LOTR-ENV2U029.0_card.jpg'
 }
 
