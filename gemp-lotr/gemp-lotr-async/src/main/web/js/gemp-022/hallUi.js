@@ -443,56 +443,57 @@ var GempLotrHallUI = Class.extend({
 	},
 
 	createTournament: function() {
-	    const type = $("#gameTypeSelect").val();
-            // Depending on the type, pick the correct format code from the formatSelect dropdown
-            const formatCode = $("#formatSelect").val();
+		var that = this;
 
-            // Assign the format codes based on the selected game type
-            let sealedFormatCode = null;
-            let soloDraftFormatCode = null;
-            let tableDraftFormatCode = null;
+		const type = $("#gameTypeSelect").val();
+		// Depending on the type, pick the correct format code from the formatSelect dropdown
+		const formatCode = $("#formatSelect").val();
 
-            if (type === "sealed") {
-                sealedFormatCode = formatCode;
-            } else if (type === "solodraft") {
-                soloDraftFormatCode = formatCode;
-            } else if (type === "table_draft") {
-                tableDraftFormatCode = formatCode;
-            }
+		// Assign the format codes based on the selected game type
+		let sealedFormatCode = null;
+		let soloDraftFormatCode = null;
+		let tableDraftFormatCode = null;
 
-            // Draft timer only applies to table draft
-            const tableDraftTimer = type === "table_draft" ? $("#draftTimer").val() : null;
+		if (type === "sealed") {
+			sealedFormatCode = formatCode;
+		} else if (type === "solodraft") {
+			soloDraftFormatCode = formatCode;
+		} else if (type === "table_draft") {
+			tableDraftFormatCode = formatCode;
+		}
 
-            const playoff = $("#pairingType").val();
-            const competitive = $("#competitiveSelect").val();
-            const startableEarly = $("#startableEarlySelect").val();
-            const readyCheck = $("#readyCheckSelect").val();
+		// Draft timer only applies to table draft
+		const tableDraftTimer = type === "table_draft" ? $("#draftTimer").val() : null;
+
+		const playoff = $("#pairingType").val();
+		const competitive = $("#competitiveSelect").val();
+		const startableEarly = $("#startableEarlySelect").val();
+		const readyCheck = $("#readyCheckSelect").val();
 
 
-            // Number input
-            const deckbuildingDuration = parseInt($("#deckDuration").val(), 10) || 15;
-            const maxPlayers = parseInt($("#numPlayers").val(), 10) || 4;
+		// Number input
+		const deckbuildingDuration = parseInt($("#deckDuration").val(), 10) || 15;
+		const maxPlayers = parseInt($("#numPlayers").val(), 10) || 4;
 
-            // Call the communication layer with all gathered values
-            this.comm.createTournament(
-                type,
-                maxPlayers,
-                sealedFormatCode,
-                soloDraftFormatCode,
-                tableDraftFormatCode,
-                tableDraftTimer,
-                playoff,
-                deckbuildingDuration,
-                competitive,
-                startableEarly,
-                readyCheck,
-                function(json) {
-                    // Success callback — handle your response here
-                    console.log("Tournament created successfully:", json);
-                    // You can add preview or other logic here as needed
-                },
-                this.hallErrorMap()
-            );
+		// Call the communication layer with all gathered values
+		this.comm.createTournament(
+			type,
+			maxPlayers,
+			sealedFormatCode,
+			soloDraftFormatCode,
+			tableDraftFormatCode,
+			tableDraftTimer,
+			playoff,
+			deckbuildingDuration,
+			competitive,
+			startableEarly,
+			readyCheck,
+			function(json) {
+				// Success callback
+				that.showDialog("Tournament Update", "Tournament queue created successfully");
+			},
+			this.hallErrorMap()
+		);
     },
 	
 	initTable: function(displayed, headerID, tableID) {
@@ -1426,7 +1427,7 @@ var GempLotrHallUI = Class.extend({
 			$(".count", $(".eventHeader.finishedTables")).html("(" + ($("tr", $("table.finishedTables")).length - 1) + ")");
 			$(".count", $(".eventHeader.draftQueues")).html("(" + ($("tr", $("table.draftQueues")).length - 1) + ")");
 			$(".count", $(".eventHeader.sealedQueues")).html("(" + ($("tr", $("table.sealedQueues")).length - 1) + ")");
-			
+
 			$(".count", $(".eventHeader.wc-queues")).html("(" + ($("tr", $("table.wc-queues")).length - 1) + ")");
 			$(".count", $(".eventHeader.wc-events")).html("(" + ($("tr", $("table.wc-events")).length - 1) + ")");
 
