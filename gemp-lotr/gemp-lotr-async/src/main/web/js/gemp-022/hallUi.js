@@ -920,11 +920,12 @@ var GempLotrHallUI = Class.extend({
 					// Row for tournament queue waiting table
 					var tablesRow = $("<tr class='table" + id + "'></tr>");
 					tablesRow.append("<td>" + queue.getAttribute("format") + "</td>");
-					let htmlTd = "<td> ";
+					let htmlTd = "<td>";
 					if (isWC) {
 						htmlTd += "WC";
 					} else {
-						htmlTd += "Tournament"
+						// For system, ignore all after ',' (min players)
+						htmlTd += queue.getAttribute("system").split(',')[0] + " Tournament";
 					}
 					htmlTd += " - " + type + " - <div style='display:inline'"
 					if (type.includes("Table") && queue.hasAttribute("draftCode")) {
