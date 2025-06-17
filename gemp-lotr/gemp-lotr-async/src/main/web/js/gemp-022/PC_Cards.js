@@ -274,7 +274,7 @@ var PCCards = {
 	
 	//August Weekend League Promos
 	// Boromir, Redeemed FA (V1_20)
-	'101_101': 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U020.0_card.jpg',
+	'101_101': 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U020.1_card.jpg',
 	// I See You FA (V1_46)
 	'101_102': 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U046.0_card.jpg',
 	
@@ -980,7 +980,9 @@ var PCCards = {
 	// Watcher in the Water FA
 	'2_131'  : 'https://i.lotrtcgpc.net/promos/LOTR-EN02U073.0_card.jpg',
 	// Pale Crown FA
-	'101_103'  : 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U039.0_card.jpg',
+	'101_104' : 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U039.0_card.jpg',
+	// V2 Saruman FA
+	'102_100': 'https://i.lotrtcgpc.net/promos/LOTR-ENV2U029.0_card.jpg'
 	
 	//V3 Hinder Errata
 	// Blood Runs Chill (8R3) [Errata]

@@ -122,18 +122,27 @@ public class Card_V1_065_Tests
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, foul);
-		scn.ShadowDeclineAssignments();
+		scn.ShadowAssignToMinions(frodo, watcher);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(3, scn.GetBurdens());
 		assertTrue(scn.IsCharSkirmishing(foul));
+
 		assertFalse(scn.IsCharSkirmishing(watcher));
+		assertTrue(scn.IsCharAssignedAgainst(watcher, frodo));
+		//Because Aragorn is the active skirmish, there is no pending assignment for him
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, foul));
+		assertFalse(scn.IsCharAssignedAgainst(aragorn, foul));
 		assertTrue(scn.ShadowActionAvailable(dam));
 
 		scn.ShadowUseCardAction(dam);
 		assertEquals(1, scn.GetBurdens());
-		assertTrue(scn.IsCharSkirmishing(watcher));
+
 		assertFalse(scn.IsCharSkirmishing(foul));
+		assertTrue(scn.IsCharSkirmishing(watcher));
+		assertFalse(scn.IsCharAssignedAgainst(watcher, frodo));
+		assertFalse(scn.IsCharSkirmishingAgainst(aragorn, foul));
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, watcher));
 	}
 }

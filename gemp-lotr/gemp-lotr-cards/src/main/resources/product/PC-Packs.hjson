@@ -60,9 +60,9 @@
 			#Aragorn's Bow, Ranger's Longbow MW
 			1x15_208
 			#Boromir, Redeemed FA (V1_20)
-			1x101_65
+			1x101_101
 			#I See You FA (V1_46)
-			1x101_66
+			1x101_102
 			#Gimli ARB Masterwork
 			1x9_56
 			#Desert Lord FA
@@ -182,7 +182,9 @@
 			// Watcher in the Water FA
 			1x2_131
 			// Pale Crown FA
-			//1x101_103
+			#1x101_104
+			// V2 Saruman FA
+			1x102_100
 		]
 	}
 	
@@ -219,9 +221,9 @@
 			#The Balrog, Demon of Might FA
 			1x19_41
 			#Boromir, Redeemed FA (V1_20)
-			1x101_65
+			1x101_101
 			#I See You FA (V1_46)
-			1x101_66
+			1x101_102
 			#Desert Lord FA
 			1x4_366
 			#Gothmog, Morgul Leader FA
@@ -287,7 +289,9 @@
 			# Watcher in the Water FA
 			1x2_131
 			# Pale Crown FA
-			#1x101_103
+			#1x101_104
+			// V2 Saruman FA
+			1x102_100
 		]
 	}
 	

@@ -154,7 +154,7 @@
 				}
 				effect: {
 					type: wound
-					select: choose(companion,RecentlyInSkirmishAgainst(self))
+					select: choose(character,RecentlyInSkirmishAgainst(self))
 				}
 			}
 		]

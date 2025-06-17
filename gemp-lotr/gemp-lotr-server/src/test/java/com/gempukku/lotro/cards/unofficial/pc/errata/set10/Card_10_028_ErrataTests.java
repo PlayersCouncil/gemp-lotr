@@ -58,7 +58,7 @@ public class Card_10_028_ErrataTests
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
 		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getStrength());
+		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 

@@ -1,10 +1,7 @@
 package com.gempukku.lotro.cards.official.set01;
 
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -20,8 +17,11 @@ public class Card_01_247_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_247");
-					// put other cards in here as needed for the test case
+					put("foe", "1_247");
+					put("soldier", "1_271");
+					put("band", "1_272");
+
+					put("sam", "1_310");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +46,7 @@ public class Card_01_247_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("foe");
 
 		assertEquals("Enheartened Foe", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +58,37 @@ public class Card_01_247_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void EnheartenedFoeTest1() throws DecisionResultInvalidException, CardNotFoundException {
+	@Test
+	public void EnheartenedFoePermitsSelectionOfWinningOrcInDefenderScenarios() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionToTable(sam);
+
+		var foe = scn.GetShadowCard("foe");
+		var soldier = scn.GetShadowCard("soldier");
+		var band = scn.GetShadowCard("band");
+		scn.MoveMinionsToTable(soldier, band);
+		scn.MoveCardsToHand(foe);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsPass();
+		scn.ShadowAssignToMinions(sam, soldier, band);
+		scn.FreepsResolveSkirmish(sam);
+
+		scn.PassCurrentPhaseActions();
+		assertTrue(scn.ShadowPlayAvailable(foe));
+		scn.ShadowPlayCard(foe);
+
+		assertTrue(scn.ShadowHasCardChoicesAvailable(soldier, band));
+		assertFalse(scn.HasKeyword(soldier, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(band, Keyword.FIERCE));
+
+		scn.ShadowChooseCard(band);
+		assertFalse(scn.HasKeyword(soldier, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(band, Keyword.FIERCE));
 	}
 }

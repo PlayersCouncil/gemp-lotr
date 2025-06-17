@@ -35,6 +35,22 @@ public interface Skirmishes extends TestBase, Decisions, GameProcedures {
 		return assigns.stream().anyMatch(x -> x.getFellowshipCharacter() == card || x.getShadowCharacters().contains(card));
 	}
 
+	default boolean IsCharAssignedAgainst(PhysicalCardImpl skirmisher, PhysicalCardImpl opponent) {
+		List<Assignment> assigns = gameState().getAssignments();
+		return assigns.stream().anyMatch(x -> {
+			if(x.getFellowshipCharacter() == skirmisher) {
+				return x.getShadowCharacters().contains(opponent);
+			}
+
+			if(x.getShadowCharacters().contains(skirmisher)) {
+				return x.getFellowshipCharacter() == opponent;
+			}
+
+			return false;
+		});
+
+	}
+
 	default boolean IsCharSkirmishing(PhysicalCardImpl card) {
 		var skirmish = gameState().getSkirmish();
 		if(skirmish == null)
@@ -42,6 +58,22 @@ public interface Skirmishes extends TestBase, Decisions, GameProcedures {
 
 		return skirmish.getFellowshipCharacter() == card ||
 				skirmish.getShadowCharacters().stream().anyMatch(x -> x == card);
+	}
+
+	default boolean IsCharSkirmishingAgainst(PhysicalCardImpl skirmisher, PhysicalCardImpl opponent) {
+		var skirmish = gameState().getSkirmish();
+		if(skirmish == null)
+			return false;
+
+		if(skirmish.getFellowshipCharacter() == skirmisher) {
+			return skirmish.getShadowCharacters().contains(opponent);
+		}
+
+		if(skirmish.getShadowCharacters().contains(skirmisher)) {
+			return skirmish.getFellowshipCharacter() == opponent;
+		}
+
+		return false;
 	}
 
 	default Boolean CanBeAssignedViaAction(PhysicalCardImpl card)
