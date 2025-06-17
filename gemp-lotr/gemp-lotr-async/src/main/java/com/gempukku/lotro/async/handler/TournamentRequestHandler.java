@@ -97,15 +97,6 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
     private void getTournamentFormats(HttpRequest request, ResponseWriter responseWriter) {
         JSONDefs.PlayerMadeTournamentAvailableFormats data = new JSONDefs.PlayerMadeTournamentAvailableFormats();
 
-        Map<String, String> availableSealedFormats = new HashMap<>();
-        availableSealedFormats.put("single_fotr_block_sealed", "Fellowship Block Sealed");
-        availableSealedFormats.put("single_ttt_block_sealed", "Towers Block Sealed");
-        availableSealedFormats.put("single_ts_sealed", "Towers Standard Sealed");
-        availableSealedFormats.put("single_rotk_block_sealed", "King Block Sealed");
-        availableSealedFormats.put("single_movie_sealed", "Movie Sealed");
-        availableSealedFormats.put("single_wotr_block_sealed", "War of the Ring Block Sealed");
-        availableSealedFormats.put("single_th_block_sealed", "Hunters Block Sealed");
-
         Map<String, String> availableSoloDraftFormats = new HashMap<>();
         availableSoloDraftFormats.put("fotr_draft", "Fellowship Block");
         availableSoloDraftFormats.put("ttt_draft", "Towers Block");
@@ -115,9 +106,8 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         data.constructed = _formatLibrary.getHallFormats().values().stream()
                 .map(constructedFormat -> new JSONDefs.ItemStub(constructedFormat.getCode(), constructedFormat.getName()))
                 .collect(Collectors.toList());
-        data.sealed = _formatLibrary.GetAllSealedTemplates().values().stream()
-                .filter(sealedEventDefinition -> availableSealedFormats.containsKey(sealedEventDefinition.GetID()))
-                .map(sealed -> new JSONDefs.ItemStub(sealed.GetID(), availableSealedFormats.get(sealed.GetID())))
+        data.sealed = _formatLibrary.getAllHallSealedTemplates().values().stream()
+                .map(sealed -> new JSONDefs.ItemStub(sealed.GetID(), sealed.GetName().substring(3)))
                 .collect(Collectors.toList());
         data.soloDrafts = orderedSoloDrafts.stream()
                 .filter(code -> _soloDraftDefinitions.getAllSoloDrafts().values().stream().anyMatch(soloDraft -> code.equals(soloDraft.getCode()))).map(code -> new JSONDefs.ItemStub(code, availableSoloDraftFormats.get(code)))

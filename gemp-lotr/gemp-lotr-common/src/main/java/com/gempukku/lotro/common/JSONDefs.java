@@ -20,6 +20,7 @@ public class JSONDefs {
         public String id;
         public String format;
         public List<List<String>> seriesProduct;
+        public boolean hall = false;
     }
 
     public static class ItemStub {
