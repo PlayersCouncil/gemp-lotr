@@ -135,6 +135,9 @@ public class TournamentService {
             // Ignore, can't happen
             System.out.println(exp);
         }
+
+        // Add scheduled queues from DB
+        refreshQueues();
     }
 
     public void cancelAllTournamentQueues() throws SQLException, IOException {
