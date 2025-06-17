@@ -56,4 +56,6 @@ public interface TournamentQueue {
     boolean isWC();
 
     String getDraftCode();
+
+    boolean shouldBeDisplayedAsWaiting();
 }

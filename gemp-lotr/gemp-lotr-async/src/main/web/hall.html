@@ -185,11 +185,12 @@
 						<table class='tables wc-queues'>
 							<tr>
 								<th width='10%'>Format</th>
-								<th width='20%'>Event</th>
+								<th width='8%'>Collection</th>
+								<th width='30%'>Event Name</th>
 								<th width='16%'>Starts</th>
-								<th width='10%'>System</th>
-								<th width='6%'>Players</th>
-								<th width='10%'>Actions</th>
+								<th width='16%'>System</th>
+								<th width='8%'>Cost</th>
+								<th width='12%'>Prizes</th>
 							</tr>
 						</table>
 					</div>
@@ -199,34 +200,47 @@
 						<table class='tables wc-events'>
 							<tr>
 								<th width='10%'>Format</th>
-								<th width='20%'>Event</th>
+								<th width='8%'>Collection</th>
+								<th width='20%'>Event Name</th>
 								<th width='10%'>System</th>
 								<th width='16%'>Stage</th>
 								<th width='6%'>Round</th>
-								<th width='6%'>Players</th>
-								<th width='10%'>Actions</th>
-							</tr>
-						</table>
-					</div>
-					
-					<div id="tournamentQueuesHeader" class='eventHeader queues'>Tournament Queues<span class='count'>(0)</span></div>
-					<div id="tournamentQueuesContent" class='visibilityToggle'>
-						<table class='tables queues'>
-							<tr>
-								<th width='10%'>Format</th>
-								<th width='8%'>Collection</th>
-								<th width='20%'>Queue name</th>
-								<th width='16%'>Starts</th>
-								<th width='10%'>System</th>
-								<th width='6%'>Players</th>
-								<th width='8%'>Cost</th>
-								<th width='12%'>Prizes</th>
-								<th width='10%'>Actions</th>
+								<th width='8%'>Players</th>
 							</tr>
 						</table>
 					</div>
 
-					<div id="queueSpawnerHeader" class='eventHeader limitedGames'>Tournaments & Limited Games</div>
+					<div id="scheduledQueuesHeader" class='eventHeader scheduledQueues'>Scheduled Events<span class='count'>(0)</span></div>
+					<div id="scheduledQueuesContent" class='visibilityToggle'>
+						<table class='tables scheduledQueues'>
+							<tr>
+								<th width='10%'>Format</th>
+								<th width='8%'>Collection</th>
+								<th width='30%'>Event Name</th>
+								<th width='16%'>Starts</th>
+								<th width='16%'>System</th>
+								<th width='8%'>Cost</th>
+								<th width='12%'>Prizes</th>
+							</tr>
+						</table>
+					</div>
+					
+					<div id="recurringQueuesHeader" class='eventHeader recurringQueues'>Recurring Events<span class='count'>(0)</span></div>
+					<div id="recurringQueuesContent" class='visibilityToggle'>
+						<table class='tables recurringQueues'>
+							<tr>
+								<th width='10%'>Format</th>
+								<th width='8%'>Collection</th>
+								<th width='30%'>Event Name</th>
+								<th width='16%'>Next Start</th>
+								<th width='16%'>System</th>
+								<th width='8%'>Cost</th>
+								<th width='12%'>Prizes</th>
+							</tr>
+						</table>
+					</div>
+
+					<div id="queueSpawnerHeader" class='eventHeader limitedGames'>Create Tournaments & Limited Games</div>
 					<div id="queueSpawnerContent" class='visibilityToggle'>
 						<form id="queueSpawnerForm">
 							<!-- Game Type Selection -->

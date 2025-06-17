@@ -43,4 +43,9 @@ public class PlayerMadeQueue extends AbstractTournamentQueue implements Tourname
     public boolean isJoinable() {
         return (getInfo()._params.maximumPlayers < 0 || _players.size() < getInfo()._params.maximumPlayers) && !isReadyCheckTimerRunning();
     }
+
+    @Override
+    public boolean shouldBeDisplayedAsWaiting() {
+        return true; // Always display player made queues in waiting tables section
+    }
 }
