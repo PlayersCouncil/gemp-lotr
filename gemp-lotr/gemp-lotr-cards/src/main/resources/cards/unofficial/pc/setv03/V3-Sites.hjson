@@ -1,0 +1,390 @@
+{
+
+	103_107: {
+		cardInfo: {
+			//id: 103_107.0
+			parent: 103_107
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E107.0_card.jpg
+			collInfo: V3_107
+			rarity: _
+		}
+		title: Desolation of Ash
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: At the start of each phase, the Shadow player may remove (1) to take a Shadow event into hand from their discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_108: {
+		cardInfo: {
+			//id: 103_108.0
+			parent: 103_108
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E108.0_card.jpg
+			collInfo: V3_108
+			rarity: _
+		}
+		title: Gorgoroth Plateau
+		unique: false
+		twilight: 7
+		type: Site
+		site: 8
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: All characters lose all strength bonuses from weapons and gain <b>enduring</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_109: {
+		cardInfo: {
+			//id: 103_109.0
+			parent: 103_109
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E109.0_card.jpg
+			collInfo: V3_109
+			rarity: _
+		}
+		title: Gorgoroth Wastes
+		unique: false
+		twilight: 5
+		type: Site
+		site: 8
+		block: King
+		direction: Left
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: When moving here, for each Free Peoples card attached to companions, the Free Peoples player must discard it or add (2).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_110: {
+		cardInfo: {
+			//id: 103_110.0
+			parent: 103_110
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E110.0_card.jpg
+			collInfo: V3_110
+			rarity: _
+		}
+		title: Muster of Gorgoroth
+		unique: false
+		twilight: 8
+		type: Site
+		site: 8
+		block: King
+		direction: Left
+		keywords: Battleground
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Battleground. Each minion is strength +1 for each threat you can spot.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_111: {
+		cardInfo: {
+			//id: 103_111.0
+			parent: 103_111
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E111.0_card.jpg
+			collInfo: V3_111
+			rarity: _
+		}
+		title: Cracks of Doom
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		keywords: Mountain
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Mountain.  Game text on Free Peoples items and The One Ring does not apply.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_112: {
+		cardInfo: {
+			//id: 103_112.0
+			parent: 103_112
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E112.0_card.jpg
+			collInfo: V3_112
+			rarity: _
+		}
+		title: Doom Causeway
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		keywords: Mountain
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Mountain. Shadow: Remove a burden or a threat to play a minion from your discard pile. If it costs (5) or more, add (1).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_113: {
+		cardInfo: {
+			//id: 103_113.0
+			parent: 103_113
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E113.0_card.jpg
+			collInfo: V3_113
+			rarity: _
+		}
+		title: Lake of Fire
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		keywords: Mountain
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Mountain.  Each time a card is hindered, discard it.  Each time a character is exerted, wound it.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_114: {
+		cardInfo: {
+			//id: 103_114.0
+			parent: 103_114
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E114.0_card.jpg
+			collInfo: V3_114
+			rarity: _
+		}
+		title: Orodruin
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		keywords: [
+			Mountain
+			Battleground
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Mountain. Battleground. At the start of each phase, the Shadow player may hinder a card (except a companion).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_115: {
+		cardInfo: {
+			//id: 103_115.0
+			parent: 103_115
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E115.0_card.jpg
+			collInfo: V3_115
+			rarity: _
+		}
+		title: Pinnacle of Doom
+		unique: false
+		twilight: 9
+		type: Site
+		site: 9
+		block: King
+		direction: Left
+		keywords: Mountain
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Mountain.  Whenever a threat is added, the Free Peoples player must assign all threat wounds.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

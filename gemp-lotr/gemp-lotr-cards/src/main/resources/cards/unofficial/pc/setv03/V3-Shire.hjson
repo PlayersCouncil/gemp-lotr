@@ -1,0 +1,501 @@
+{
+
+	103_96: {
+		cardInfo: {
+			//id: 103_96.0
+			parent: 103_96
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E096.0_card.jpg
+			collInfo: V3_96
+			rarity: _
+		}
+		title: Driven By Her Own Cruel Will
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 5
+		type: Event
+		timewords: Response
+		effects: [
+			{
+				type: responseEvent
+				trigger: {
+					type: StartOfTurn
+				}
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Make a skirmishing Hobbit bearing a hand weapon (except the Ring-bearer) strength +X, where X is the total vitality of all characters in that skirmish.  At the end of that skirmish, hinder a minion involved in that skirmish if you cannot spot more than 4 companions.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_97: {
+		cardInfo: {
+			//id: 103_97.0
+			parent: 103_97
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E097.0_card.jpg
+			collInfo: V3_97
+			rarity: _
+		}
+		title: For Frodo
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Exert a unique [gondor] or [shire] companion (except Frodo) to make that companion strength +1 for each wound and burden on Frodo (limit +3 unless you cannot spot more than 4 companions).  Remove this from the game.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_98: {
+		cardInfo: {
+			//id: 103_98.0
+			parent: 103_98
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E098.0_card.jpg
+			collInfo: V3_98
+			rarity: _
+		}
+		title: For My Old Gaffer
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Add a threat to spot a skirmishing Hobbit (except the Ring-bearer).  Resolve skirmishes between that Hobbit and all minions skirmishing that Hobbit individually.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_99: {
+		cardInfo: {
+			//id: 103_99.0
+			parent: 103_99
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E099.0_card.jpg
+			collInfo: V3_99
+			rarity: _
+		}
+		title: For the Shire
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Event
+		timewords: Assignment
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Spot a Hobbit companion (except the Ring-bearer).<br>In region 1, hinder all other Hobbits.<br>In region 2, make that Hobbit defender +2.<br>In region 3, make that Hobbit strength +1 for each minion you can spot until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_100: {
+		cardInfo: {
+			//id: 103_100.0
+			parent: 103_100
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E100.0_card.jpg
+			collInfo: V3_100
+			rarity: _
+		}
+		title: Frodo
+		subtitle: Bereft of Hope
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		race: Hobbit
+		strength: 2
+		vitality: 4
+		signet: Gandalf
+		resistance: 8
+		canStartWithRing: true
+		keywords: Ring-bound
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Ring-bearer (resistance 8).  Ring-bound.<br>While you cannot spot more than 4 companions, Frodo is strength +1 and resistance +1 for each companion you can spot.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_101: {
+		cardInfo: {
+			//id: 103_101.0
+			parent: 103_101
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E101.0_card.jpg
+			collInfo: V3_101
+			rarity: _
+		}
+		title: Get Up, Mister Frodo
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Restore a [shire] card.  If you cannot spot more than 4 companions, you may reconcile your hand and you may heal 2 [shire] companions.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_102: {
+		cardInfo: {
+			//id: 103_102.0
+			parent: 103_102
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E102.0_card.jpg
+			collInfo: V3_102
+			rarity: _
+		}
+		title: Sam
+		subtitle: Undaunted
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 5
+		keywords: Ring-bound
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Ring-bound.<br>If you cannot spot more than 4 companions at the start of the maneuver phase, choose odd or even.  Hinder all Shadow support cards with a twilight cost matching your choice.<br>Response: If Frodo dies, make Sam the Ring-bearer (resistance 5).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_103: {
+		cardInfo: {
+			//id: 103_103.0
+			parent: 103_103
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E103.0_card.jpg
+			collInfo: V3_103
+			rarity: _
+		}
+		title: Smeagol
+		subtitle: Once Like Us
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Companion
+		strength: 3
+		vitality: 4
+		signet: Frodo
+		resistance: 6
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, add a burden.<br>Assignment: Hinder Smeagol to spot a minion.  Add (2) (and add 2 threats if that minion is twilight cost 5 or more) to hinder that minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_104: {
+		cardInfo: {
+			//id: 103_104.0
+			parent: 103_104
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E104.0_card.jpg
+			collInfo: V3_104
+			rarity: _
+		}
+		title: Sting
+		subtitle: Fear of All Orc-kind
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 1
+		type: Possession
+		vitality: 1
+		itemclass: Hand weapon
+		target: self
+		#target: a Ring-bound Hobbit
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be a Ring-bound Hobbit. <br>Skirmish: If you cannot spot more than 4 companions, add a threat to make bearer strength +1 for each threat and burden you can spot. <br>Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_105: {
+		cardInfo: {
+			//id: 103_105.0
+			parent: 103_105
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E105.0_card.jpg
+			collInfo: V3_105
+			rarity: _
+		}
+		title: The Sooner We’re Rid of It
+		unique: true
+		side: Free Peoples
+		culture: Shire
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, spot 2 Hobbit companions.<br>Skirmish: If you cannot spot more than 4 companions, hinder each Free Peoples card borne by a companion to make that companion strength +1 for each card hindered (+3 if that card is a weapon).  Hinder this condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_106: {
+		cardInfo: {
+			//id: 103_106.0
+			parent: 103_106
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E106.0_card.jpg
+			collInfo: V3_106
+			rarity: _
+		}
+		title: Worth Fighting For
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 2
+		type: Event
+		timewords: Fellowship
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: To play, spot a Hobbit.<br>If you cannot spot more than 4 companions, make the Shadow player exhaust 1 of your characters.  For each exertion made, shuffle a Shadow support card into its owner's draw deck and hinder another Shadow support card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

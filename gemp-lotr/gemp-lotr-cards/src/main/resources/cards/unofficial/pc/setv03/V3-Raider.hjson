@@ -1,0 +1,961 @@
+{
+
+	103_38: {
+		cardInfo: {
+			//id: 103_38.0
+			parent: 103_38
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E038.0_card.jpg
+			collInfo: V3_38
+			rarity: _
+		}
+		title: Bladetusk Charger
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Possession
+		strength: 6
+		vitality: 1
+		itemclass: Mount
+		target: self
+		#target: a Southron
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.<br>At the start of each skirmish involving bearer, add X threats, where X is the vitality of each character skirmishing bearer. <br>Remove 2 threats at the end of each skirmish involving bearer.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_39: {
+		cardInfo: {
+			//id: 103_39.0
+			parent: 103_39
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E039.0_card.jpg
+			collInfo: V3_39
+			rarity: _
+		}
+		title: Bladetusk Matriarch
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 8
+		type: Artifact
+		strength: 4
+		vitality: 2
+		itemclass: Mount
+		target: self
+		#target: a Southron
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.<br>Unmounted minions cannot be assigned<br>to skirmishes.<br>Bearer gains the <b>ambush</b> and strength of<br>all unmounted Southrons.<br>While you can spot 6 Southrons, bearer participates in one additional assignment and skirmish phase after fierce skirmishes.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_40: {
+		cardInfo: {
+			//id: 103_40.0
+			parent: 103_40
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E040.0_card.jpg
+			collInfo: V3_40
+			rarity: _
+		}
+		title: Bladetusk Rearguard
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Artifact
+		strength: 6
+		vitality: 3
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Regroup: Stack a Southron from play here.<br>Maneuver: Spot a mounted Southron and remove (4) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on it. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_41: {
+		cardInfo: {
+			//id: 103_41.0
+			parent: 103_41
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E041.0_card.jpg
+			collInfo: V3_41
+			rarity: _
+		}
+		title: Corsair Slinkthief
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 8
+		vitality: 2
+		site: 4
+		keywords: Corsair
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Corsair.</b><br>Response: If your [raider] card is about to be hindered or discarded by a card effect, exert or hinder this minion to prevent that.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_42: {
+		cardInfo: {
+			//id: 103_42.0
+			parent: 103_42
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E042.0_card.jpg
+			collInfo: V3_42
+			rarity: _
+		}
+		title: Corsair Renegade
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Minion
+		race: Man
+		strength: 11
+		vitality: 3
+		site: 4
+		keywords: Corsair
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Corsair.</b><br>At the start of each skirmish involving this minion, the Free Peoples player may hinder any number of items on a companion in that skirmish.<br>This minion is <b>damage +1</b> for each Free Peoples item on each character in its skrimish.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_43: {
+		cardInfo: {
+			//id: 103_43.0
+			parent: 103_43
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E043.0_card.jpg
+			collInfo: V3_43
+			rarity: _
+		}
+		title: Desert Wind Initiate
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Minion
+		race: Man
+		strength: 6
+		vitality: 2
+		site: 4
+		keywords: [
+			Southron
+			Tracker
+			Ambush 3
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Southron.</b>  Tracker.  Ambush (3). <br>When you play this minion, remove (3) or hinder this minion.<br>Each time you hinder this minion you may hinder another [raider] minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_44: {
+		cardInfo: {
+			//id: 103_44.0
+			parent: 103_44
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E044.0_card.jpg
+			collInfo: V3_44
+			rarity: _
+		}
+		title: Desert Wind Scout
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Minion
+		race: Man
+		strength: 10
+		vitality: 2
+		site: 4
+		keywords: [
+			Southron
+			Tracker
+			Ambush 2
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Southron.</b>  Tracker.  Ambush (2). <br>When you play this minion, remove (3) or hinder this minion.<br>Each time you hinder this minion you may hinder another [raider] minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_45: {
+		cardInfo: {
+			//id: 103_45.0
+			parent: 103_45
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E045.0_card.jpg
+			collInfo: V3_45
+			rarity: _
+		}
+		title: Desert Wind Stalker
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 12
+		vitality: 2
+		site: 4
+		keywords: [
+			Southron
+			Tracker
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Southron.</b>  Tracker. <br>When you play this minion, remove (3) or hinder this minion.<br>Each time you hinder this minion you may hinder another [raider] minion.<br>Southrons gain <b>ambush (1)</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_46: {
+		cardInfo: {
+			//id: 103_46.0
+			parent: 103_46
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E046.0_card.jpg
+			collInfo: V3_46
+			rarity: _
+		}
+		title: Desert Wind Whisper
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 5
+		type: Minion
+		race: Man
+		strength: 15
+		vitality: 3
+		site: 4
+		keywords: [
+			Southron
+			Tracker
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Southron</b>. Tracker.<br>When you play this minion, remove (3) or hinder this minion.<br>Each time you hinder this minion you may hinder another [raider] minion.<br>Each minion with ambush (X) is strength +X.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_47: {
+		cardInfo: {
+			//id: 103_47.0
+			parent: 103_47
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E047.0_card.jpg
+			collInfo: V3_47
+			rarity: _
+		}
+		title: Duty No Less Than Yours
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time a [raider] minion dies, you may exert a [raider] minion to exert an unbound companion. If you can spot another Duty No Less Than Yours, you may discard it to also hinder that companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_48: {
+		cardInfo: {
+			//id: 103_48.0
+			parent: 103_48
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E048.0_card.jpg
+			collInfo: V3_48
+			rarity: _
+		}
+		title: Feinting Retreat
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Choose one: Reinforce 2 [raider] tokens; or hinder any number of [raider] support cards to reinforce the same number of [raider] tokens.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_49: {
+		cardInfo: {
+			//id: 103_49.0
+			parent: 103_49
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E049.0_card.jpg
+			collInfo: V3_49
+			rarity: _
+		}
+		title: Hailing from the Far South
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time you play a unique Southron, you may play a [raider] mount from your discard pile.<br>Each time you play a [raider] mount, you may play a nonunique [raider] minion from your discard pile costing (3) or less.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_50: {
+		cardInfo: {
+			//id: 103_50.0
+			parent: 103_50
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E050.0_card.jpg
+			collInfo: V3_50
+			rarity: _
+		}
+		title: Honor of the Desert Warrior
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Event
+		timewords: Assignment
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Spot 3 unbound companions.  The Free Peoples player then spots 3 Southrons.  All other characters are hindered.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_51: {
+		cardInfo: {
+			//id: 103_51.0
+			parent: 103_51
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E051.0_card.jpg
+			collInfo: V3_51
+			rarity: _
+		}
+		title: Horn of Far Harad
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Possession
+		target: self
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be a mounted Southron.<br>When you play this, hinder all Free Peoples mounts.<br>Skirmish: Remove a threat to make a Southron strength +2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_52: {
+		cardInfo: {
+			//id: 103_52.0
+			parent: 103_52
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E052.0_card.jpg
+			collInfo: V3_52
+			rarity: _
+		}
+		title: The Mouth of Sauron
+		subtitle: Herald of the Dark Lord
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 3
+		site: 5
+		keywords: Lurker
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Lurker.<br>Your Shadow events are twilight cost -1. Response: If a minion is about to take a wound, exert this minion to prevent that wound and hinder a Free Peoples weapon.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_53: {
+		cardInfo: {
+			//id: 103_53.0
+			parent: 103_53
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E053.0_card.jpg
+			collInfo: V3_53
+			rarity: _
+		}
+		title: Raiding Schooner
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Possession
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Maneuver: Hinder a corsair to hinder a Free Peoples support possession.<br>Maneuver: Hinder a corsair and discard another Raiding Schooner to choose a Free Peoples culture.  Hinder all support cards of that culture.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_54: {
+		cardInfo: {
+			//id: 103_54.0
+			parent: 103_54
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E054.0_card.jpg
+			collInfo: V3_54
+			rarity: _
+		}
+		title: Savage Harpoon
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 2
+		type: Possession
+		strength: -3
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Limit 1 per bearer.  Each time the fellowship moves, the Free Peoples player must hinder bearer or a Free Peoples item on bearer.<br>Maneuver: Exert 2 corsairs and remove 2 [raider] tokens from a possession to transfer this from your support area to a companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_55: {
+		cardInfo: {
+			//id: 103_55.0
+			parent: 103_55
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E055.0_card.jpg
+			collInfo: V3_55
+			rarity: _
+		}
+		title: Sandcraft Trap
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 3
+		type: Event
+		timewords: Assignment
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Restore all trackers and minions with ambush.  If you restored any, spot a Southron and make the Free Peoples player assign it to an unbound companion with the lowest strength.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_56: {
+		cardInfo: {
+			//id: 103_56.0
+			parent: 103_56
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E056.0_card.jpg
+			collInfo: V3_56
+			rarity: _
+		}
+		title: Shifting Sands
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time ambush twilight is added, hinder a Free Peoples condition.<br>Each time your mounted Southron is about to take a wound, you may wound an unmounted Southron to prevent that.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_57: {
+		cardInfo: {
+			//id: 103_57.0
+			parent: 103_57
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E057.0_card.jpg
+			collInfo: V3_57
+			rarity: _
+		}
+		title: Strength of Men
+		unique: false
+		side: Shadow
+		culture: Raider
+		twilight: 4
+		type: Event
+		timewords: Response
+		effects: [
+			{
+				type: responseEvent
+				trigger: {
+					type: StartOfTurn
+				}
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: If a [raider] minion wins a skirmish, hinder 2 Free Peoples conditions (or all Free Peoples conditions if you can spot 5 burdens).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_58: {
+		cardInfo: {
+			//id: 103_58.0
+			parent: 103_58
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E058.0_card.jpg
+			collInfo: V3_58
+			rarity: _
+		}
+		title: Ulaire Attea
+		subtitle: Khamul of the East
+		unique: true
+		side: Shadow
+		culture: Raider
+		twilight: 6
+		type: Minion
+		race: Nazgul
+		strength: 12
+		vitality: 3
+		site: 3
+		keywords: [
+			Easterling
+			Fierce
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Easterling.</b>  Fierce.<br>While you can spot 3 burdens, each Easterling is strength +2.<br>While you can spot 5 burdens, each Easterling is <b>damage +1</b>.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

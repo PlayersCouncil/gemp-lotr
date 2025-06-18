@@ -1,0 +1,265 @@
+{
+
+	103_2: {
+		cardInfo: {
+			//id: 103_2.0
+			parent: 103_2
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E002.0_card.jpg
+			collInfo: V3_2
+			rarity: _
+		}
+		title: Mantle of the White Wizard
+		unique: true
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time you play a spell, you may hinder a [Gandalf] artifact to restore a Free Peoples card.<br>Each time the fellowship moves to or from a sanctuary, you may exert Gandalf to heal a companion. 
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_3: {
+		cardInfo: {
+			//id: 103_3.0
+			parent: 103_3
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E003.0_card.jpg
+			collInfo: V3_3
+			rarity: _
+		}
+		title: Shadowfax
+		subtitle: Swiftest of All
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Possession
+		itemclass: Mount
+		target: self
+		#target: title(Gandalf)
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be Gandalf.<br>While you can spot a [gandalf] artifact, minions skirmishing bearer gain no strength or keyword bonuses from Shadow cards they bear.<br>While bearer is unwounded or exhausted, bearer is strength +3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_4: {
+		cardInfo: {
+			//id: 103_4.0
+			parent: 103_4
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E004.0_card.jpg
+			collInfo: V3_4
+			rarity: _
+		}
+		title: Show Them the Meaning of Haste
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: <b>Maneuver</b> <i>or</i> <b>Skirmish</b>: Exert Gandalf thrice (or spot Shadowfax and exert Gandalf once) to reveal a Free Peoples event from your hand.  Play that event 3 times, then remove it from the game.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_5: {
+		cardInfo: {
+			//id: 103_5.0
+			parent: 103_5
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E005.0_card.jpg
+			collInfo: V3_5
+			rarity: _
+		}
+		title: You Cannot Enter Here
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Exert your Wizard to hinder a Shadow card.  Exhaust that Wizard if you chose a minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_6: {
+		cardInfo: {
+			//id: 103_6.0
+			parent: 103_6
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E006.0_card.jpg
+			collInfo: V3_6
+			rarity: _
+		}
+		title: Your Staff is Broken
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 3
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: At the start of each Assignment phase, you may exert Gandalf bearing an artifact to discard a hindered Shadow card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_7: {
+		cardInfo: {
+			//id: 103_7.0
+			parent: 103_7
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E007.0_card.jpg
+			collInfo: V3_7
+			rarity: _
+		}
+		title: Words of Power
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
+		twilight: 4
+		type: Event
+		timewords: Maneuver
+		keywords: Spell
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Spell.<br>Exert your Wizard thrice to reconcile your hand.<br>Shuffle this into your draw deck if you can spot a [gandalf] artifact.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

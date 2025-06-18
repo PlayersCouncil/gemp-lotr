@@ -1,0 +1,869 @@
+{
+
+	103_15: {
+		cardInfo: {
+			//id: 103_15.0
+			parent: 103_15
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E015.0_card.jpg
+			collInfo: V3_15
+			rarity: _
+		}
+		title: Anduril
+		subtitle: Legend Remade
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Artifact
+		strength: 2
+		vitality: 1
+		itemclass: Hand weapon
+		target: self
+		#target: title(Aragorn)
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be Aragorn.  Discard other weapons he bears.  Bearer is <b>damage +1</b>.<br>Response: If an unbound [gondor] companion is about to take a wound, exert Aragorn or add 2 threats to hinder that companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_16: {
+		cardInfo: {
+			//id: 103_16.0
+			parent: 103_16
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E016.0_card.jpg
+			collInfo: V3_16
+			rarity: _
+		}
+		title: Aragorn
+		subtitle: King of Gondor and Arnor
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 5
+		type: Companion
+		race: Man
+		strength: 6
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Aragorn is strength +1 for each culture you can spot.<br>Each time the fellowship moves, you may hinder another unbound Man to remove a threat or a burden.<br>Fellowship: Exert a Man to heal an unbound Man.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_17: {
+		cardInfo: {
+			//id: 103_17.0
+			parent: 103_17
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E017.0_card.jpg
+			collInfo: V3_17
+			rarity: _
+		}
+		title: Dark Ancient Halls
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Possession
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: When you play this, spot a [gondor] Wraith to remove a threat.<br>Response: If an exhausted [gondor] Wraith is about to take a wound, add a threat and hinder this condition to prevent that wound and hinder that Wraith.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_18: {
+		cardInfo: {
+			//id: 103_18.0
+			parent: 103_18
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E018.0_card.jpg
+			collInfo: V3_18
+			rarity: _
+		}
+		title: Domain of the Dead King
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Artifact
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time a Wraith is played, heal a companion.<br>Each time a [gondor] Wraith takes a threat wound, wound a minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_19: {
+		cardInfo: {
+			//id: 103_19.0
+			parent: 103_19
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E019.0_card.jpg
+			collInfo: V3_19
+			rarity: _
+		}
+		title: Ethereal Banner
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		itemclass: Hand weapon
+		target: self
+		#target: a [gondor] Wraith
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be a [gondor] Wraith.<br>Each time bearer wins a skirmish, you may exert a Wraith and a minion it is assigned to skirmish.<br>Response: If bearer overwhelms a minion, discard this possession and remove 2 threats to wound 2 minions.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_20: {
+		cardInfo: {
+			//id: 103_20.0
+			parent: 103_20
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E020.0_card.jpg
+			collInfo: V3_20
+			rarity: _
+		}
+		title: Ethereal March
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, spot 2 Wraiths.<br>The threat limit is +2.<br>While you can spot more threats than companions, each Wraith is strength +1.<br>Each time this condition is hindered or discarded, remove a threat.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_21: {
+		cardInfo: {
+			//id: 103_21.0
+			parent: 103_21
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E021.0_card.jpg
+			collInfo: V3_21
+			rarity: _
+		}
+		title: I Call on You
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Event
+		timewords: Fellowship
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Exert Aragorn (or spot Anduril) and add X threats to play a Wraith from your dead pile, where X is the region number.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_22: {
+		cardInfo: {
+			//id: 103_22.0
+			parent: 103_22
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E022.0_card.jpg
+			collInfo: V3_22
+			rarity: _
+		}
+		title: Inner Gate
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		strength: -3
+		keywords: [
+			Fortification
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Fortification.<br>Maneuver: Exert and hinder 2 knights to transfer this from your support area to a minion.  Hinder that minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_23: {
+		cardInfo: {
+			//id: 103_23.0
+			parent: 103_23
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E023.0_card.jpg
+			collInfo: V3_23
+			rarity: _
+		}
+		title: Great Gate of Minas Tirith
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Condition
+		keywords: [
+			Fortification
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Fortification.  To play, exert a [gondor] companion (or spot 3 knights).<br>Response: After the special ability of a Shadow support card is used, discard a fortification to hinder that card.  Then you may exert X knights to hinder X other copies of that card with the same title.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_24: {
+		cardInfo: {
+			//id: 103_24.0
+			parent: 103_24
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E024.0_card.jpg
+			collInfo: V3_24
+			rarity: _
+		}
+		title: Keep Him Blind to All Else That Moves
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: When you play this, heal each Free Peoples Man. <br>Shadow: The Shadow player may discard this to reconcile their hand.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_25: {
+		cardInfo: {
+			//id: 103_25.0
+			parent: 103_25
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E025.0_card.jpg
+			collInfo: V3_25
+			rarity: _
+		}
+		title: King of the Dead
+		subtitle: Dead Keeper
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 4
+		type: Companion
+		race: Wraith
+		strength: 7
+		vitality: 4
+		resistance: 6
+		keywords: Enduring
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Enduring.  To play, add 2 threats.<br>Each time King of the Dead is killed, heal every Wraith.<br>Assignment: Exert King of the Dead to restore a Wraith and heal it.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_26: {
+		cardInfo: {
+			//id: 103_26.0
+			parent: 103_26
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E026.0_card.jpg
+			collInfo: V3_26
+			rarity: _
+		}
+		title: Pippin
+		subtitle: Trollslayer
+		unique: true
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Gandalf
+		resistance: 6
+		keywords: [
+			Knight
+			Enduring
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Knight. Enduring. To play, spot a [gondor] companion.<br>Skirmish: Exert Pippin twice to make a minion he is skirmishing lose all keywords until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_27: {
+		cardInfo: {
+			//id: 103_27.0
+			parent: 103_27
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E027.0_card.jpg
+			collInfo: V3_27
+			rarity: _
+		}
+		title: Tormented Spectre
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Companion
+		race: Wraith
+		strength: 5
+		vitality: 2
+		resistance: 6
+		keywords: Enduring
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Enduring.<br>To play, spot or add a threat.<br>This companion is strength +1 for each hindered card you can spot.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_28: {
+		cardInfo: {
+			//id: 103_28.0
+			parent: 103_28
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E028.0_card.jpg
+			collInfo: V3_28
+			rarity: _
+		}
+		title: Tormented Warrior
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Wraith
+		strength: 6
+		vitality: 2
+		resistance: 6
+		keywords: Enduring
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Enduring.<br>To play, spot or add a threat.<br>This companion is strength +1 for each companion in the dead pile.<br>This companion is strength +1 for each Wraith in the dead piile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_29: {
+		cardInfo: {
+			//id: 103_29.0
+			parent: 103_29
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E029.0_card.jpg
+			collInfo: V3_29
+			rarity: _
+		}
+		title: Tormented Wraith
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 3
+		type: Companion
+		race: Wraith
+		strength: 4
+		vitality: 3
+		resistance: 6
+		keywords: Enduring
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Enduring.<br>To play, spot or add 2 threats.<br>This companion is strength +X, where X is the twilight cost of each minion skirmishing this companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_30: {
+		cardInfo: {
+			//id: 103_30.0
+			parent: 103_30
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E030.0_card.jpg
+			collInfo: V3_30
+			rarity: _
+		}
+		title: War Beacon
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 1
+		type: Possession
+		target: self
+		keywords: [
+			Beacon
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: <b>Beacon</b>. To play, exert a [gondor] companion.<br>Each time you play a Man, you may hinder this to heal another Man.<br>Fellowship: Add (1) per beacon you can spot to play a beacon from your discard pile. Remove a threat if you can spot a Northern Signal-fire.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_32: {
+		cardInfo: {
+			//id: 103_32.0
+			parent: 103_32
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E032.0_card.jpg
+			collInfo: V3_32
+			rarity: _
+		}
+		title: Northern Signal-fire
+		subtitle: Beacon of Eilenach
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Possession
+		target: self
+		keywords: [
+			Beacon
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).<br>While you can spot a [gondor] companion, valiant companions gain <b>knight</b>.<br>Each time you play a fortification, you may play a mount from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_34: {
+		cardInfo: {
+			//id: 103_34.0
+			parent: 103_34
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E034.0_card.jpg
+			collInfo: V3_34
+			rarity: _
+		}
+		title: Northern Signal-fire
+		subtitle: Beacon of Amon Din
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Possession
+		target: self
+		keywords: [
+			Beacon
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).<br>Skirmish: Exert a ranger to make a minion strength -X and site number +X, where X is the number of mounted companions you can spot.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_37: {
+		cardInfo: {
+			//id: 103_37.0
+			parent: 103_37
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E037.0_card.jpg
+			collInfo: V3_37
+			rarity: _
+		}
+		title: The Way is Shut
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 2
+		type: Event
+		timewords: Response
+		effects: [
+			{
+				type: responseEvent
+				trigger: {
+					type: StartOfTurn
+				}
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: If any number of [gondor] cards are about to be discarded by a Shadow card, spot 3 [gondor] Wraiths to hinder those cards instead. You may add a threat to hinder that Shadow card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

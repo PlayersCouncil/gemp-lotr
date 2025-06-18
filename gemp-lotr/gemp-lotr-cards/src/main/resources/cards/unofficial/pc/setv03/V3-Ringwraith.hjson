@@ -1,0 +1,832 @@
+{
+
+	103_59: {
+		cardInfo: {
+			//id: 103_59.0
+			parent: 103_59
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E059.0_card.jpg
+			collInfo: V3_59
+			rarity: _
+		}
+		title: Cirith Ungol Watcher
+		subtitle: Spirit of Vigilence
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Artifact
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, spot a [ringwraith] card and add a burden.<br>Each time a companion exerts, draw a card (limit once per site).<br>Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add (6) and hinder that companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_60: {
+		cardInfo: {
+			//id: 103_60.0
+			parent: 103_60
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E060.0_card.jpg
+			collInfo: V3_60
+			rarity: _
+		}
+		title: Cover of Darkness
+		subtitle: Omen of Fear
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Condition
+		keywords: [
+			Twilight
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Twilight. To play, hinder 3 copies of Ominous Sky (or 2 copies if you cannot spot another Cover of Darkness).<br>Skirmish: Spot 3 Nazgul and hinder this condition to spot a Nazgul and an unbound companion.  Hinder all other characters.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_61: {
+		cardInfo: {
+			//id: 103_61.0
+			parent: 103_61
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E061.0_card.jpg
+			collInfo: V3_61
+			rarity: _
+		}
+		title: Gollum
+		subtitle: Half a Wraith Himself
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 2
+		type: Minion
+		strength: 5
+		vitality: 4
+		site: 3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time you play a Nazgul, you may exert Gollum to add a threat.<br>Assignment: Remove X threats to assign Gollum to a companion costing X (except the Ring-bearer).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_62: {
+		cardInfo: {
+			//id: 103_62.0
+			parent: 103_62
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E062.0_card.jpg
+			collInfo: V3_62
+			rarity: _
+		}
+		title: Ill Wind
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: The second time you play a Nazgul each Shadow phase, you may hinder a wounded companion (except a companion with the highest strength).   If you can spot The Witch-king, exert that companion first.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_63: {
+		cardInfo: {
+			//id: 103_63.0
+			parent: 103_63
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E063.0_card.jpg
+			collInfo: V3_63
+			rarity: _
+		}
+		title: Morgul Legions
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time you play a [ringwraith] Orc, the Free Peoples player must hinder one of their possessions.<br>Shadow: Spot a Nazgul to play any number of possessions on your [ringwraith] Orcs from your discard pile.  Discard this possession.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_64: {
+		cardInfo: {
+			//id: 103_64.0
+			parent: 103_64
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E064.0_card.jpg
+			collInfo: V3_64
+			rarity: _
+		}
+		title: No Man May Hinder Me
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 3
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Restore all Nazgul. Then you may exert The Witch-king twice to hinder all Free Peoples possessions.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_65: {
+		cardInfo: {
+			//id: 103_65.0
+			parent: 103_65
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E065.0_card.jpg
+			collInfo: V3_65
+			rarity: _
+		}
+		title: This is My Hour
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Event
+		timewords: Response
+		effects: [
+			{
+				type: responseEvent
+				trigger: {
+					type: StartOfTurn
+				}
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: If your Nazgul wins a skirmish, exert it to reconcile your hand.  You may discard a Nazgul from hand to wound a companion it was skirmishing.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_66: {
+		cardInfo: {
+			//id: 103_66.0
+			parent: 103_66
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E066.0_card.jpg
+			collInfo: V3_66
+			rarity: _
+		}
+		title: The Mouth of Sauron
+		subtitle: Bearer of Dread News
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 3
+		keywords: Lurker
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Lurker.<br>Minions cannot take more than 1 wound per phase.<br>Response: If a Free Peoples event is played, exert this minion to cancel that event.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_67: {
+		cardInfo: {
+			//id: 103_67.0
+			parent: 103_67
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E067.0_card.jpg
+			collInfo: V3_67
+			rarity: _
+		}
+		title: Ulaire Attea
+		subtitle: Bestowed with Brutality
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 7
+		type: Minion
+		race: Nazgul
+		strength: 12
+		vitality: 3
+		site: 3
+		keywords: Fierce
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Fierce.<br>Skirmish: If this minion is skirmishing, hinder another Shadow card to make this minion strength +1 (limit +5).  If you then cannot spot another unhindered Shadow card, add a burden.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_68: {
+		cardInfo: {
+			//id: 103_68.0
+			parent: 103_68
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E068.0_card.jpg
+			collInfo: V3_68
+			rarity: _
+		}
+		title: Ulaire Cantea
+		subtitle: Exhalted with Decay
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgul
+		strength: 10
+		vitality: 3
+		site: 3
+		keywords: Fierce
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Fierce.<br>Skirmish: Exert this minion to hinder a possession or condition attached to a character it is skirmishing.  If you can spot another Nazgul, hinder all other copies of that card you can spot.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_69: {
+		cardInfo: {
+			//id: 103_69.0
+			parent: 103_69
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E069.0_card.jpg
+			collInfo: V3_69
+			rarity: _
+		}
+		title: Ulaire Enquea
+		subtitle: Magnified by Suffering
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 7
+		type: Minion
+		race: Nazgul
+		strength: 11
+		vitality: 4
+		site: 3
+		keywords: Fierce
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Fierce.<br>Each time a companion is about to be killed in a skirmish, you may exert this minion and hinder that companion to take a Shadow card into hand from your discard pile.  If you can spot another Nazgul, you may take one from your draw deck instead.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_70: {
+		cardInfo: {
+			//id: 103_70.0
+			parent: 103_70
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E070.0_card.jpg
+			collInfo: V3_70
+			rarity: _
+		}
+		title: Ulaire Lemenya
+		subtitle: Annointed with Terror
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgul
+		strength: 9
+		vitality: 2
+		site: 3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each character skirmishing this minion is strength -1 for each companion you can spot (limit -3 unless you can spot another Nazgul).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_71: {
+		cardInfo: {
+			//id: 103_71.0
+			parent: 103_71
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E071.0_card.jpg
+			collInfo: V3_71
+			rarity: _
+		}
+		title: Ulaire Nelya
+		subtitle: Glorified to Conquer
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 6
+		type: Minion
+		race: Nazgul
+		strength: 10
+		vitality: 3
+		site: 2
+		keywords: Fierce
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Fierce.<br>Skirmish: Exert this minion to make another Nazgul strength +1 for each of your sites on the adventure path.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_72: {
+		cardInfo: {
+			//id: 103_72.0
+			parent: 103_72
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E072.0_card.jpg
+			collInfo: V3_72
+			rarity: _
+		}
+		title: Ulaire Nertea
+		subtitle: Sanctified for Cruelty
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgul
+		strength: 9
+		vitality: 2
+		site: 3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time you play a minion, you may exert it to play a possession on it from your discard pile (or an artifact if you exert this minion as well).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_73: {
+		cardInfo: {
+			//id: 103_73.0
+			parent: 103_73
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E073.0_card.jpg
+			collInfo: V3_73
+			rarity: _
+		}
+		title: Ulaire Otsea
+		subtitle: Consecrated by Pestilence
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 5
+		type: Minion
+		race: Nazgul
+		strength: 9
+		vitality: 3
+		site: 3
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Each time a Nazgul wins a skirmish, you may exert this minion to play a Shadow condition from your discard pile. Add a threat if it is a [ringwraith] condtion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_74: {
+		cardInfo: {
+			//id: 103_74.0
+			parent: 103_74
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E074.0_card.jpg
+			collInfo: V3_74
+			rarity: _
+		}
+		title: Ulaire Toldea
+		subtitle: Blessed to Dominate
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 7
+		type: Minion
+		race: Nazgul
+		strength: 12
+		vitality: 3
+		site: 3
+		keywords: Fierce
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Fierce.<br>Each time this minion is assigned to a stronger companion, you may exhaust this minion to hinder that companion.<br>Each time this minion is assigned to a weaker companion, you may exert that companion to add a threat.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_75: {
+		cardInfo: {
+			//id: 103_75.0
+			parent: 103_75
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E075.0_card.jpg
+			collInfo: V3_75
+			rarity: _
+		}
+		title: Winged Nazgul
+		unique: false
+		side: Shadow
+		culture: Wraith
+		twilight: 4
+		type: Minion
+		race: Nazgul
+		strength: 9
+		vitality: 3
+		site: 4
+		keywords: [
+			Enduring
+			Fierce
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Enduring. Fierce.<br>Assignment: Discard another Winged Nazgul to assign this minion to an unbound companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_76: {
+		cardInfo: {
+			//id: 103_76.0
+			parent: 103_76
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E076.0_card.jpg
+			collInfo: V3_76
+			rarity: _
+		}
+		title: The Witch-king
+		subtitle: Empowered by His Master
+		unique: true
+		side: Shadow
+		culture: Wraith
+		twilight: 10
+		type: Minion
+		race: Nazgul
+		strength: 14
+		vitality: 4
+		site: 3
+		keywords: [
+			Fierce
+			Enduring
+			Damage+1
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Fierce. Enduring. Damage +1.<br>When you play this minion, hinder all Free Peoples cards of one type (except companion). The Free Peoples player may restore any number of their cards; add (1) per card restored this way.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

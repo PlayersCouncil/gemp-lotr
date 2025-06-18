@@ -35,6 +35,7 @@ public enum Keyword implements Filterable {
     // ----------------------------------------- Unloaded keywords -----------------------------------------
     BATTLEGROUND("Battleground", true, false, true, true),
     BESIEGER("Besieger", true, false, false, true),
+    BEACON("Beacon", true, false, false, true),
     CORSAIR("Corsair", true, false, false, true),
     DWELLING("Dwelling", true, false, true, true),
     EASTERLING("Easterling", true, false, false, true),
