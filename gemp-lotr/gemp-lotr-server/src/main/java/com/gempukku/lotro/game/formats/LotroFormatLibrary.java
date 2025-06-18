@@ -241,6 +241,26 @@ public class LotroFormatLibrary {
         }
     }
 
+    public boolean toggleSealedInHall(String code) {
+        try {
+            collectionReady.acquire();
+            boolean tbr = false;
+            if (_hallSealedTemplates.containsKey(code)) {
+                _hallSealedTemplates.remove(code);
+            } else if (_sealedTemplates.containsKey(code)) {
+                _hallSealedTemplates.put(code, _sealedTemplates.get(code));
+                tbr = true;
+            }
+
+            collectionReady.release();
+            return tbr;
+        }
+        catch (InterruptedException exp) {
+            throw new RuntimeException("FormatLibrary.toggleSealedInHall() interrupted: ", exp);
+        }
+
+    }
+
     public SealedEventDefinition GetSealedTemplateByFormatCode(String formatCode) {
         try {
             collectionReady.acquire();

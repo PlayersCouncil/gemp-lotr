@@ -33,6 +33,7 @@ import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,6 +110,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         data.sealed = _formatLibrary.getAllHallSealedTemplates().values().stream()
                 .map(sealed -> new JSONDefs.ItemStub(sealed.GetID(), sealed.GetName().substring(3)))
                 .collect(Collectors.toList());
+        data.sealed.sort(Comparator.comparing(o -> _formatLibrary.GetSealedTemplate(o.code).GetName())); // Sort by sealed format number
         data.soloDrafts = orderedSoloDrafts.stream()
                 .filter(code -> _soloDraftDefinitions.getAllSoloDrafts().values().stream().anyMatch(soloDraft -> code.equals(soloDraft.getCode()))).map(code -> new JSONDefs.ItemStub(code, availableSoloDraftFormats.get(code)))
                 .collect(Collectors.toList());

@@ -1470,5 +1470,18 @@ var GempLotrCommunication = Class.extend({
             error:this.errorCheck(errorMap),
             dataType:"json"
         });
-    }
+    },
+	toggleSealedHallStatus:function (sealedFormatCode, callback, errorMap) {
+		$.ajax({
+			type:"POST",
+			url:this.url + "/admin/toggleSealedHallStatus",
+			cache:false,
+			data:{
+				sealedFormatCode:sealedFormatCode
+			},
+			success:callback,
+			error:this.errorCheck(errorMap),
+			dataType:"html"
+		});
+	}
 });

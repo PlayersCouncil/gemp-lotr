@@ -130,8 +130,28 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             unBanUser(request, responseWriter);
         } else if (uri.equals("/findMultipleAccounts") && request.method() == HttpMethod.POST) {
             findMultipleAccounts(request, responseWriter);
+        } else if (uri.equals("/toggleSealedHallStatus") && request.method() == HttpMethod.POST) {
+            toggleSealedHallStatus(request, responseWriter);
         } else {
             throw new HttpProcessingException(404);
+        }
+    }
+
+    private void toggleSealedHallStatus(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+        var postDecoder = new HttpPostRequestDecoder(request);
+
+        String sealedFormatCodeStr = getFormParameterSafely(postDecoder, "sealedFormatCode");
+
+
+        Throw400IfStringNull("sealedFormatCode", sealedFormatCodeStr);
+        var sealedFormat = _formatLibrary.GetSealedTemplate(sealedFormatCodeStr);
+        Throw400IfValidationFails("sealedFormatCode", sealedFormatCodeStr,sealedFormat != null);
+
+        if (_formatLibrary.toggleSealedInHall(sealedFormatCodeStr)) {
+            responseWriter.writeHtmlResponse("Added format");
+        } else {
+            responseWriter.writeHtmlResponse("Removed format");
         }
     }
 
