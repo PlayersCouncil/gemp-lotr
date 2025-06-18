@@ -168,6 +168,18 @@ public class TriggerConditions {
         return false;
     }
 
+    public static boolean forEachHindered(LotroGame game, EffectResult effectResult, Filterable... filters) {
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_HINDERED)
+            return Filters.and(filters).accepts(game, ((HinderedResult) effectResult).getHinderedCard());
+        return false;
+    }
+
+    public static boolean forEachRestored(LotroGame game, EffectResult effectResult, Filterable... filters) {
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_RESTORED)
+            return Filters.and(filters).accepts(game, ((RestoredResult) effectResult).getRestoredCard());
+        return false;
+    }
+
     public static boolean forEachMortallyWoundedBy(LotroGame game, EffectResult effectResult, Filterable woundedBy, Filterable... filters) {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
             var woundResult = (WoundResult) effectResult;
@@ -360,6 +372,26 @@ public class TriggerConditions {
         if (effect.getType() == Effect.Type.BEFORE_EXERT) {
             PreventableCardEffect woundEffect = (PreventableCardEffect) effect;
             return Filters.acceptsAny(game, woundEffect.getAffectedCardsMinusPrevented(game), filters);
+        }
+        return false;
+    }
+
+    public static boolean isGettingHinderedBy(Effect effect, LotroGame game, Filterable sourceFilter, String playerId, Filterable... filters) {
+        if (effect.getType() == Effect.Type.BEFORE_HINDER) {
+            PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
+            if (effect.getSource() != null && effect.getPerformingPlayer().equals(playerId)
+                    && Filters.accepts(game, effect.getSource(), sourceFilter))
+                return Filters.acceptsAny(game, preventableEffect.getAffectedCardsMinusPrevented(game), filters);
+        }
+        return false;
+    }
+
+    public static boolean isGettingRestoredBy(Effect effect, LotroGame game, Filterable sourceFilter, String playerId, Filterable... filters) {
+        if (effect.getType() == Effect.Type.BEFORE_RESTORE) {
+            PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
+            if (effect.getSource() != null && effect.getPerformingPlayer().equals(playerId)
+                    && Filters.accepts(game, effect.getSource(), sourceFilter))
+                return Filters.acceptsAny(game, preventableEffect.getAffectedCardsMinusPrevented(game), filters);
         }
         return false;
     }

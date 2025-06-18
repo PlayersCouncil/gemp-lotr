@@ -2,7 +2,6 @@ package com.gempukku.lotro.logic.timing.rules;
 
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.AbstractActionProxy;
-import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.actions.DefaultActionsEnvironment;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
@@ -33,7 +32,7 @@ public class RestoreRule {
                             RequiredTriggerAction action = new RequiredTriggerAction(null);
                             action.setText("Reconcile restores hindered cards.");
                             action.appendEffect(
-                                    new RestoreCardsInPlayEffect((PhysicalCard) null,
+                                    new RestoreCardsInPlayEffect(null, null,
                                             //For now, we are only restoring cards owned by the reconciling player; this may
                                             // be re-evaluated in the future depending.
                                             Filters.owner(result.getPlayerId()),

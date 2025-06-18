@@ -33,6 +33,8 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("abouttodrawcard", new AboutToDrawCard());
         triggerCheckers.put("abouttoexert", new AboutToExert());
         triggerCheckers.put("abouttoheal", new AboutToHeal());
+        triggerCheckers.put("abouttohinder", new AboutToHinder());
+        triggerCheckers.put("abouttorestore", new AboutToRestore());
         triggerCheckers.put("abouttotakecontrolofsite", new AboutToTakeControlOfSite());
         triggerCheckers.put("abouttotakewound", new AboutToTakeWound());
         triggerCheckers.put("addsburden", new AddsBurden());
@@ -52,6 +54,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("fpdecidedtostay", new FPDecidedToStay());
         triggerCheckers.put("fpstartedassigning", new FPStartedAssigning());
         triggerCheckers.put("heals", new Heals());
+        triggerCheckers.put("hindered", new Hindered());
         triggerCheckers.put("killed", new Killed());
         triggerCheckers.put("losesinitiative", new LosesInitiative());
         triggerCheckers.put("losesskirmish", new LosesSkirmish());
@@ -62,6 +65,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("removesburden", new RemovesBurden());
         triggerCheckers.put("removesculturetoken", new RemovesCultureToken());
         triggerCheckers.put("replacessite", new ReplacesSite());
+        triggerCheckers.put("restored", new Restored());
         triggerCheckers.put("revealscardfromtopofdrawdeck", new RevealsCardFromTopOfDrawDeck());
         triggerCheckers.put("revealedcardfromhand", new RevealedCardFromHand());
         triggerCheckers.put("siteliberated", new SiteLiberated());

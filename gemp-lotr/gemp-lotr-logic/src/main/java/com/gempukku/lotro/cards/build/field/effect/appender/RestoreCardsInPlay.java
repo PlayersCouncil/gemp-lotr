@@ -1,13 +1,11 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
-import com.gempukku.lotro.cards.build.ActionContext;
-import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
-import com.gempukku.lotro.cards.build.ValueSource;
+import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -29,6 +27,7 @@ public class RestoreCardsInPlay implements EffectAppenderProducer {
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
+        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         if(select == null) {
             throw new InvalidCardDefinitionException("The 'select' field is required on Restore effect.");
@@ -45,8 +44,9 @@ public class RestoreCardsInPlay implements EffectAppenderProducer {
                     @Override
                     protected List<? extends Effect> createEffects(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         List<Effect> result = new LinkedList<>();
+                        var restoringPlayer = playerSource.getPlayer(actionContext);
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
-                        result.add( new RestoreCardsInPlayEffect(actionContext.getSource(), cardsFromMemory.toArray(new PhysicalCard[0])));
+                        result.add( new RestoreCardsInPlayEffect(restoringPlayer, actionContext.getSource(), cardsFromMemory.toArray(new PhysicalCard[0])));
 
                         return result;
                     }

@@ -44,8 +44,9 @@ public class HinderCardsInPlay implements EffectAppenderProducer {
                     @Override
                     protected List<? extends Effect> createEffects(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         List<Effect> result = new LinkedList<>();
+                        var hinderingPlayer = playerSource.getPlayer(actionContext);
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
-                        result.add( new HinderCardsInPlayEffect(actionContext.getSource(), cardsFromMemory.toArray(new PhysicalCard[0])));
+                        result.add( new HinderCardsInPlayEffect(hinderingPlayer, actionContext.getSource(), cardsFromMemory.toArray(new PhysicalCard[0])));
 
                         return result;
                     }

@@ -37,7 +37,7 @@ public class RestoreTests {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
 				RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-				action.appendEffect(new RestoreCardsInPlayEffect(null, aragorn));
+				action.appendEffect(new RestoreCardsInPlayEffect(scn.P1, null, aragorn));
 				action.setText("Restore Aragorn");
 				return Collections.singletonList(action);
 			}
@@ -69,7 +69,7 @@ public class RestoreTests {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
 				RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-				action.appendEffect(new RestoreCardsInPlayEffect(null, aragorn));
+				action.appendEffect(new RestoreCardsInPlayEffect(scn.P1, null, aragorn));
 				action.setText("Restore Aragorn");
 				return Collections.singletonList(action);
 			}
