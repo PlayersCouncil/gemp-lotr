@@ -20,19 +20,46 @@
 		strength: 6
 		vitality: 1
 		itemclass: Mount
-		target: self
-		#target: a Southron
+		target: Southron
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: fierce
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: false
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: bearer,inSkirmish
+				}
+				effect: {
+					type: AddThreats
+					amount: {
+						type: ForEachVitality
+						filter: InSkirmishAgainst(bearer)
+					}
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: skirmishAboutToEnd
+					involving: bearer
+				}
+				effect: {
+					type: RemoveThreats
+					amount: 2
+				}
 			}
 		]
 		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.<br>At the start of each skirmish involving bearer, add X threats, where X is the vitality of each character skirmishing bearer. <br>Remove 2 threats at the end of each skirmish involving bearer.
@@ -67,18 +94,62 @@
 		vitality: 2
 		itemclass: Mount
 		target: self
-		#target: a Southron
+		target: Southron
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: fierce
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: modifier
+				modifier: {
+					type: CantBeAssignedToSkirmish
+					filter: not(mounted),minion
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: ModifyStrength
+					filter: bearer
+					amount: {
+						type: ForEachStrength
+						filter: not(mounted),Southron
+					}
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: AddKeyword
+					filter: bearer
+					keyword: ambush
+					amount: {
+						type: ForEachKeyword
+						filter: not(mounted),Southron
+						keyword: ambush
+					}
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				requires: {
+					type: canSpot
+					filter: Southron
+					count: 6
+				}
+				trigger: {
+					type: afterAllSkirmishes
+				}
+				effect: {
+					type: setupExtraAssignmentAndSkirmishes
+					filter: bearer
+				}
 			}
 		]
 		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.<br>Unmounted minions cannot be assigned<br>to skirmishes.<br>Bearer gains the <b>ambush</b> and strength of<br>all unmounted Southrons.<br>While you can spot 6 Southrons, bearer participates in one additional assignment and skirmish phase after fierce skirmishes.
@@ -109,21 +180,80 @@
 		culture: Raider
 		twilight: 3
 		type: Artifact
-		strength: 6
-		vitality: 3
-		target: self
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
+				type: activated
+				phase: regroup
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: Southron
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: choose(Southron)
+					where: self
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: activated
+				phase: maneuver
+				requires: [
+					{
+						type: CanSpot
+						filter: mounted,Southron
+					}
+					{
+						type: canSpot
+						filter: self,zone(support)
+					}
+				]
+				cost: {
+					type: RemoveTwilight
+					amount: 4
+				}
+				effect: [
+					{
+						type: turnIntoMinion
+						select: self
+						strength: 6
+						vitality: 3
+						keywords: [
+							fierce
+							mounted
+							southron
+						]
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: ModifyStrength
+							filter: self
+							amount: {
+								type: ForEachStacked
+								filter: Southron
+								on: self
+								multiplier: 3
+							}
+						}
+						until: EndOfTurn
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: AddKeyword
+							filter: self
+							keyword: ambush
+							amount: {
+								type: ForEachStacked
+								filter: Southron
+								on: self
+							}
+						}
+						until: EndOfTurn
+					}
+				]
 			}
 		]
 		gametext: Regroup: Stack a Southron from play here.<br>Maneuver: Spot a mounted Southron and remove (4) to make this artifact a <b>fierce</b> mounted Southron minion until the end of the turn that is strength +3 and <b>ambush (1)</b> for each Southron stacked on it. 
@@ -257,15 +387,43 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Remove (3)
+						Hinder {self}
+					]
+					effects: [
+						{
+							type: RemoveTwilight
+							amount: 3
+						}
+						{
+							type: Hinder
+							select: self
+						}
+					]
 				}
 			}
+			
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: trigger
+				optional: true
+				trigger: {
+					type: AboutToHinder
+					filter: self
+					player: you
+				}
+				effect:	{
+					type: Hinder
+					select: choose(another,culture(raider),minion)
+				}
 			}
 		]
 		gametext: <b>Southron.</b>  Tracker.  Ambush (3). <br>When you play this minion, remove (3) or hinder this minion.<br>Each time you hinder this minion you may hinder another [raider] minion.
@@ -307,15 +465,43 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Remove (3)
+						Hinder {self}
+					]
+					effects: [
+						{
+							type: RemoveTwilight
+							amount: 3
+						}
+						{
+							type: Hinder
+							select: self
+						}
+					]
 				}
 			}
+			
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: trigger
+				optional: true
+				trigger: {
+					type: AboutToHinder
+					filter: self
+					player: you
+				}
+				effect:	{
+					type: Hinder
+					select: choose(another,culture(raider),minion)
+				}
 			}
 		]
 		gametext: <b>Southron.</b>  Tracker.  Ambush (2). <br>When you play this minion, remove (3) or hinder this minion.<br>Each time you hinder this minion you may hinder another [raider] minion.
@@ -356,15 +542,53 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Remove (3)
+						Hinder {self}
+					]
+					effects: [
+						{
+							type: RemoveTwilight
+							amount: 3
+						}
+						{
+							type: Hinder
+							select: self
+						}
+					]
 				}
 			}
+			
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: trigger
+				optional: true
+				trigger: {
+					type: AboutToHinder
+					filter: self
+					player: you
+				}
+				effect:	{
+					type: Hinder
+					select: choose(another,culture(raider),minion)
+				}
+			}
+			
+			{
+				type: modifier
+				modifier: {
+					type: AddKeyword
+					filter: southron
+					keyword: ambush
+					amount: 1
+				}
 			}
 		]
 		gametext: <b>Southron.</b>  Tracker. <br>When you play this minion, remove (3) or hinder this minion.<br>Each time you hinder this minion you may hinder another [raider] minion.<br>Southrons gain <b>ambush (1)</b>.
