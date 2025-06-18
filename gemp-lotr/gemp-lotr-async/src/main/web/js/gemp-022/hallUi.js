@@ -272,6 +272,22 @@ var GempLotrHallUI = Class.extend({
                 $select.append($option);
             }
 
+			// Draft info link
+            const $draftInfoRow = $("<div>").addClass("formRow");
+            const $draftInfoLabel = $("<label>").text("Draft Format Info:");
+            const $draftInfoLink = $("<label>").addClass("italic").text("Select format first");
+            if (gameType === "table_draft") {
+                $select.on("change", function () {
+					// Create and append new info row
+					$draftInfoLink
+						.removeClass("italic")
+						.addClass("draftFormatInfo")
+						.attr("draftCode", $("#formatSelect").val())
+						.text($(this).find("option:selected").text());
+            	});
+            }
+            $draftInfoRow.append($draftInfoLabel, $draftInfoLink);
+
             // Number of players
             const $playersRow = $("<div>").addClass("formRow");
             const $playersLabel = $("<label>").attr("for", "numPlayers").text("Number of players:");
@@ -356,10 +372,11 @@ var GempLotrHallUI = Class.extend({
             $readyCheckSelect.val("90");
 
             // Append to form
-            $fields.append(
-                $("<div>").append($formatRow),
-                $("<div>").append($playersRow)
-            );
+            $fields.append($("<div>").append($formatRow));
+            if (gameType === "table_draft") {
+            	$fields.append($("<div>").append($draftInfoRow));
+            }
+            $fields.append($("<div>").append($playersRow));
 
             $advanced.append($("<div>").append($pairingRow));
             if (gameType !== "constructed") {

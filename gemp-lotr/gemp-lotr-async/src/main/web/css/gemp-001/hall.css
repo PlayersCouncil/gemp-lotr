@@ -885,3 +885,7 @@ form#queueSpawnerForm input {
   align-items: center;
   gap: 8px;
 }
+
+.italic {
+   font-style: italic;
+ }
