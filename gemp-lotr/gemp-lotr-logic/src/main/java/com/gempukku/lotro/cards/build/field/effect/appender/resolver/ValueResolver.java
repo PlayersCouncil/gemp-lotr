@@ -502,9 +502,14 @@ public class ValueResolver {
                                         filterableSource.getFilterable(actionContext)).size());
             } else if (type.equalsIgnoreCase("forEachKeyword")) {
                 FieldUtils.validateAllowedFields(object, "filter", "keyword", "over", "limit", "multiplier", "divider");
-                final String filter = FieldUtils.getString(object.get("filter"), "filter");
+                final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
                 final Keyword keyword = FieldUtils.getEnum(Keyword.class, object.get("keyword"), "keyword");
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+                if (filter.equals("any")) {
+                    return new SmartValueSource(environment, object,
+                            actionContext -> (game, cardAffected) -> game.getModifiersQuerying().getKeywordCount(game, cardAffected, keyword));
+
+                }
                 return new SmartValueSource(environment, object,
                         actionContext -> {
                             Filterable filterable = filterableSource.getFilterable(actionContext);
