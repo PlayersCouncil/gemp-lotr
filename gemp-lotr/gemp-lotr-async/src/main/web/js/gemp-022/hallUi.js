@@ -118,15 +118,16 @@ var GempLotrHallUI = Class.extend({
 
 		var hallSettingsStr = $.cookie("hallSettings");
 		if (hallSettingsStr == null)
-			hallSettingsStr = "1|1|0|0|0|0|0";
+			hallSettingsStr = "1|1|0|0|0|0|0|0";
 		var hallSettings = hallSettingsStr.split("|");
 
 		this.initTable(hallSettings[0] == "1", "waitingTablesHeader", "waitingTablesContent");
 		this.initTable(hallSettings[1] == "1", "playingTablesHeader", "playingTablesContent");
 		this.initTable(hallSettings[2] == "1", "finishedTablesHeader", "finishedTablesContent");
-		this.initTable(hallSettings[3] == "1", "wcQueuesHeader", "wcQueuesContent");
-		this.initTable(hallSettings[4] == "1", "wcEventsHeader", "wcEventsContent");
-		this.initTable(hallSettings[5] == "1", "scheduledQueuesHeader", "scheduledQueuesContent");
+		// Those 3 indexes are applied dynamically if there is some data for those sections
+//		this.initTable(hallSettings[3] == "1", "wcQueuesHeader", "wcQueuesContent");
+//		this.initTable(hallSettings[4] == "1", "wcEventsHeader", "wcEventsContent");
+//		this.initTable(hallSettings[5] == "1", "scheduledQueuesHeader", "scheduledQueuesContent");
 		this.initTable(hallSettings[6] == "1", "recurringQueuesHeader", "recurringQueuesContent");
 		this.initTable(hallSettings[7] == "1", "queueSpawnerHeader", "queueSpawnerContent");
 
@@ -167,6 +168,163 @@ var GempLotrHallUI = Class.extend({
 		
 		
 	},
+
+	addWcQueuesSection: function() {
+        if ($("#wcQueuesHeader").length) return;
+
+        const $header = $("<div>")
+            .attr("id", "wcQueuesHeader")
+            .addClass("eventHeader wc-queues")
+            .html(`World Championship Queues<span class='count'>(0)</span>`);
+
+        const $content = $("<div>")
+            .attr("id", "wcQueuesContent")
+            .addClass("visibilityToggle")
+            .append(
+                $("<table>").addClass("tables wc-queues").append(`
+                    <tr>
+                        <th width='10%'>Format</th>
+                        <th width='8%'>Collection</th>
+                        <th width='30%'>Event Name</th>
+                        <th width='16%'>Starts</th>
+                        <th width='16%'>System</th>
+                        <th width='8%'>Cost</th>
+                        <th width='12%'>Prizes</th>
+                    </tr>
+                `)
+            );
+
+        this.insertEventSection($header, $content, "wcQueues");
+    },
+
+    addWcEventsSection: function() {
+        if ($("#wcEventsHeader").length) return;
+
+        const $header = $("<div>")
+            .attr("id", "wcEventsHeader")
+            .addClass("eventHeader wc-events")
+            .html(`World Championship Events<span class='count'>(0)</span>`);
+
+        const $content = $("<div>")
+            .attr("id", "wcEventsContent")
+            .addClass("visibilityToggle")
+            .append(
+                $("<table>").addClass("tables wc-events").append(`
+                    <tr>
+                        <th width='10%'>Format</th>
+                        <th width='8%'>Collection</th>
+                        <th width='20%'>Event Name</th>
+                        <th width='10%'>System</th>
+                        <th width='16%'>Stage</th>
+                        <th width='6%'>Round</th>
+                        <th width='8%'>Players</th>
+                    </tr>
+                `)
+            );
+
+        this.insertEventSection($header, $content, "wcEvents");
+    },
+
+    addScheduledQueuesSection: function() {
+        if ($("#scheduledQueuesHeader").length) return;
+
+        const $header = $("<div>")
+            .attr("id", "scheduledQueuesHeader")
+            .addClass("eventHeader scheduledQueues")
+            .html(`Scheduled Events<span class='count'>(0)</span>`);
+
+        const $content = $("<div>")
+            .attr("id", "scheduledQueuesContent")
+            .addClass("visibilityToggle")
+            .append(
+                $("<table>").addClass("tables scheduledQueues").append(`
+                    <tr>
+                        <th width='10%'>Format</th>
+                        <th width='8%'>Collection</th>
+                        <th width='30%'>Event Name</th>
+                        <th width='16%'>Starts</th>
+                        <th width='16%'>System</th>
+                        <th width='8%'>Cost</th>
+                        <th width='12%'>Prizes</th>
+                    </tr>
+                `)
+            );
+
+        this.insertEventSection($header, $content, "scheduledQueues");
+    },
+
+    insertEventSection: function($header, $content, sectionKey) {
+        const sectionOrder = [
+			"wcQueues",
+			"wcEvents",
+			"scheduledQueues"
+		];
+
+		const sectionIds = {
+			wcQueues: "wcQueuesContent",
+			wcEvents: "wcEventsContent",
+			scheduledQueues: "scheduledQueuesContent"
+		};
+
+		const index = sectionOrder.indexOf(sectionKey);
+		if (index === -1) {
+			console.error("Unknown section key:", sectionKey);
+			return;
+		}
+
+		// Look ahead for any section that should come after this one
+		for (let i = index + 1; i < sectionOrder.length; i++) {
+			const $nextContent = $("#" + sectionIds[sectionOrder[i]]);
+			if ($nextContent.length) {
+				const $nextHeader = $("#" + sectionOrder[i] + "Header");
+				$header.insertBefore($nextHeader);
+				$content.insertBefore($nextHeader);
+				return;
+			}
+		}
+
+		// Fallback insert
+		const $anchor = $("#recurringQueuesHeader");
+		$header.insertBefore($anchor);
+		$content.insertBefore($anchor);
+
+		// Load settings
+		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0";
+		const hallSettings = hallSettingsStr.split("|");
+
+		// Determine which section it is
+		const headerId = $header.attr("id");
+		const contentId = $content.attr("id");
+
+		let settingIndex = null;
+
+		if (headerId === "wcQueuesHeader" && contentId === "wcQueuesContent") {
+			settingIndex = 3;
+		} else if (headerId === "wcEventsHeader" && contentId === "wcEventsContent") {
+			settingIndex = 4;
+		} else if (headerId === "scheduledQueuesHeader" && contentId === "scheduledQueuesContent") {
+			settingIndex = 5;
+		}
+
+		if (settingIndex !== null) {
+			this.initTable(hallSettings[settingIndex] === "1", headerId, contentId);
+		}
+    },
+
+    removeWcQueuesSection: function() {
+        $("#wcQueuesHeader").remove();
+        $("#wcQueuesContent").remove();
+    },
+
+    removeWcEventsSection: function() {
+        $("#wcEventsHeader").remove();
+        $("#wcEventsContent").remove();
+    },
+
+    removeScheduledQueuesSection: function() {
+        $("#scheduledQueuesHeader").remove();
+        $("#scheduledQueuesContent").remove();
+    },
 
 	setupTournamentSpawner: function(json) {
 		var that = this;
@@ -550,15 +708,32 @@ var GempLotrHallUI = Class.extend({
 
 
 	updateHallSettings: function() {
-		var visibilityToggle = $(".visibilityToggle", this.tablesDiv);
-		var getSettingValue =
-			function(index) {
-				return $(visibilityToggle[index]).hasClass("hidden") ? "0" : "1";
-			};
+		const ids = [
+			"waitingTablesContent",
+			"playingTablesContent",
+			"finishedTablesContent",
+			"wcQueuesContent",
+			"wcEventsContent",
+			"scheduledQueuesContent",
+			"recurringQueuesContent",
+			"queueSpawnerContent"
+		];
 
-		var newHallSettings = getSettingValue(0) + "|" + getSettingValue(1) + "|" + getSettingValue(2) + "|" + getSettingValue(3) + "|" + getSettingValue(4)+ "|" + getSettingValue(5) + "|" + getSettingValue(6) + "|" + getSettingValue(7);
+		// Load current cookie (or use default if missing)
+		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0|0";
+		let currentSettings = hallSettingsStr.split("|");
+
+		// Update only if the element exists
+		for (let i = 0; i < ids.length; i++) {
+			const $el = $("#" + ids[i]);
+			if ($el.length) {
+				currentSettings[i] = $el.hasClass("hidden") ? "0" : "1";
+			}
+		}
+
+		const newHallSettings = currentSettings.join("|");
 		console.log("New settings: " + newHallSettings);
-		$.cookie("hallSettings", newHallSettings, { expires:365 });
+		$.cookie("hallSettings", newHallSettings, { expires: 365 });
 	},
 
 	getHall: function() {
@@ -961,12 +1136,14 @@ var GempLotrHallUI = Class.extend({
 
 					if (action == "add") {
 						if(isWC) {
+							that.addWcQueuesSection();
 							$("table.wc-queues", this.tablesDiv)
 							.append(row);
 						} else if (isRecurring) {
 							$("table.recurringQueues", this.tablesDiv)
 							.append(row);
 						} else if (isScheduled) {
+							that.addScheduledQueuesSection();
 							$("table.scheduledQueues", this.tablesDiv)
 							.append(row);
 						}
@@ -1002,18 +1179,12 @@ var GempLotrHallUI = Class.extend({
 				}
 			}
 			
-			if($('.wc-queues tr').length <= 1) {
-				$('#wcQueuesHeader').hide();
-				$('#wcQueuesContent').hide();
-			} else {
-				$('#wcQueuesHeader').show();
+			if ($('.wc-queues tr').length <= 1) {
+				that.removeWcQueuesSection();
 			}
 
-			if($('.scheduledQueues tr').length <= 1) {
-				$('#scheduledQueuesHeader').hide();
-				$('#scheduledQueuesContent').hide();
-			} else {
-				$('#scheduledQueuesHeader').show();
+			if ($('.scheduledQueues tr').length <= 1) {
+				that.removeScheduledQueuesSection();
 			}
 
 			var tournaments = root.getElementsByTagName("tournament");
@@ -1209,6 +1380,7 @@ var GempLotrHallUI = Class.extend({
 					if (action == "add") {
 						// Right now the only tournament section is for WC events
 						if (isWC) {
+							that.addWcEventsSection();
 							$("table.wc-events", this.tablesDiv)
 							.append(row);
 						}
@@ -1254,10 +1426,7 @@ var GempLotrHallUI = Class.extend({
 			}
 			
 			if($('.wc-events tr').length <= 1) {
-				$('#wcEventsHeader').hide();
-				$('#wcEventsContent').hide();
-			} else {
-				$('#wcEventsHeader').show();
+				that.removeWcEventsSection();
 			}
 
 			var tables = root.getElementsByTagName("table");
