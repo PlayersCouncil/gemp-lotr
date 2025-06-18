@@ -153,12 +153,17 @@ public class PlayUtils {
 
     private static boolean checkUniqueness(LotroGame game, PhysicalCard self, boolean ignoreCheckingDeadPile) {
         LotroCardBlueprint blueprint = self.getBlueprint();
-        if (!blueprint.isUnique())
+        final int restrictions = blueprint.getUniqueRestriction();
+        if (restrictions >= 4)
             return true;
 
         final int activeCount = Filters.countActive(game, Filters.name(blueprint.getSanitizedTitle()));
-        return activeCount == 0
-                && (ignoreCheckingDeadPile || (Filters.filter(game, game.getGameState().getDeadPile(self.getOwner()), Filters.name(blueprint.getSanitizedTitle())).size() == 0));
+        int deadCount = 0;
+        if(!ignoreCheckingDeadPile) {
+            deadCount = Filters.filter(game, game.getGameState().getDeadPile(self.getOwner()), Filters.name(blueprint.getSanitizedTitle())).size();
+        }
+
+        return activeCount + deadCount < restrictions;
     }
 
     private static boolean checkRuleOfNine(LotroGame game, PhysicalCard self) {

@@ -58,6 +58,17 @@ public class FieldUtils {
         return (Boolean) value;
     }
 
+    public static int getUniqueness(Object value, String key) throws InvalidCardDefinitionException {
+        if (value == null)
+            throw new InvalidCardDefinitionException("Value of " + key + " is required");
+        if (!(value instanceof Number) && !(value instanceof Boolean))
+            throw new InvalidCardDefinitionException("Value in " + key + " field must be an integer or boolean.");
+        if (value instanceof Boolean) {
+            return (Boolean) value ? 1 : 4;
+        }
+        return ((Number) value).intValue();
+    }
+
     public static boolean getBoolean(Object value, String key, boolean defaultValue) throws InvalidCardDefinitionException {
         if (value == null)
             return defaultValue;

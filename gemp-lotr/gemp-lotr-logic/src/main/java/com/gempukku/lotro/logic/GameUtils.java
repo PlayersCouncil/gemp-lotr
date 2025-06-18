@@ -131,7 +131,17 @@ public class GameUtils {
     }
 
     public static String getCardLink(String blueprintId, LotroCardBlueprint blueprint) {
-        return "<div class='cardHint' value='" + blueprintId + "'>" + (blueprint.isUnique() ? "·" : "") + GameUtils.getFullName(blueprint) + "</div>";
+        return "<div class='cardHint' value='" + blueprintId + "'>" + getUniqueDots(blueprint.getUniqueRestriction())
+                + GameUtils.getFullName(blueprint) + "</div>";
+    }
+
+    public static String getUniqueDots(int dotCount) {
+		return switch (dotCount) {
+			case 1 -> "·";
+			case 2 -> ":";
+			case 3 -> "∴";
+			default -> "";
+		};
     }
 
     public static String getProductLink(String blueprintId) {
@@ -153,7 +163,7 @@ public class GameUtils {
             cultureString = getCultureImage(culture, null);
         }
         return "<div class='cardHint' value='" + blueprintId + "'>" + cultureString
-                + (blueprint.isUnique() ? "·" : "") + " " + GameUtils.getFullName(blueprint) + "</div>";
+                + getUniqueDots(blueprint.getUniqueRestriction()) + " " + GameUtils.getFullName(blueprint) + "</div>";
     }
 
     public static String getCultureImage(String cultureName) {

@@ -37,6 +37,8 @@ public interface LotroCardBlueprint {
 
     boolean isUnique();
 
+    int getUniqueRestriction();
+
     String getTitle();
     String getSanitizedTitle();
     String getFullName();

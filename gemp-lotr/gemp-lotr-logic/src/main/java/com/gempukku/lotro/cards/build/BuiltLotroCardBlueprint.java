@@ -33,7 +33,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private String fullName;
     private String sanitizedFullName;
     private boolean canStartWithRing;
-    private boolean unique;
+    // As of V3, uniqueness can now be any number 1-4, with 1 being "unique" and 4 "nonunique", and
+    // 2-3 meaning that the card is limited to that many copies in play at once
+    private int uniqueCopies = 4;
     private Side side;
     private CardType cardType;
     private Culture culture;
@@ -350,9 +352,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         this.info = info;
     }
 
-    public void setUnique(boolean unique) {
-        this.unique = unique;
-    }
+    public void setUnique(boolean unique) { uniqueCopies = unique ? 1 : 4; }
+    public void setUniqueness(int amount) { uniqueCopies = amount; }
 
     public void setSide(Side side) {
         this.side = side;
@@ -465,8 +466,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public boolean isUnique() {
-        return unique;
+        return uniqueCopies == 1;
     }
+
+    @Override
+    public int getUniqueRestriction() { return uniqueCopies; }
 
     @Override
     public String getTitle() { return title; }

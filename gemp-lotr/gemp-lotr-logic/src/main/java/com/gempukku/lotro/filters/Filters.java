@@ -443,6 +443,13 @@ public class Filters {
     public static final Filter none = (game, physicalCard) -> false;
     public static final Filter unique = (game, physicalCard) -> physicalCard.getBlueprint().isUnique();
 
+    public static final Filter twodot = (game, physicalCard) -> physicalCard.getBlueprint().getUniqueRestriction() == 2;
+    public static final Filter threedot = (game, physicalCard) -> physicalCard.getBlueprint().getUniqueRestriction() == 3;
+
+    public static Filter restricted(int amount) {
+        return (game, physicalCard) -> physicalCard.getBlueprint().getUniqueRestriction() == amount;
+    }
+
     private static Filter signet(final Signet signet) {
         return andInternal(unhindered, (game, physicalCard) -> game.getModifiersQuerying().hasSignet(game, physicalCard, signet));
     }
