@@ -33,7 +33,7 @@ public class Card_V3_058_Tests
 		/**
 		 * Set: V3
 		 * Name: Ulaire Attea, Khamul of the East
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 6

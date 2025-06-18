@@ -33,7 +33,7 @@ public class Card_V3_098_Tests
 		/**
 		 * Set: V3
 		 * Name: For My Old Gaffer
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Shire
 		 * Twilight Cost: 1

@@ -33,7 +33,7 @@ public class Card_V3_109_Tests
 		/**
 		 * Set: V3
 		 * Name: Gorgoroth Wastes
-		 * Unique: False
+		 * Unique: false
 		 * Side: 
 		 * Culture: 
 		 * Shadow Number: 5

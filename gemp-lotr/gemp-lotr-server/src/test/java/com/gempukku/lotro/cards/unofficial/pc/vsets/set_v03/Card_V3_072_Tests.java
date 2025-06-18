@@ -33,7 +33,7 @@ public class Card_V3_072_Tests
 		/**
 		 * Set: V3
 		 * Name: Ulaire Nertea, Sanctified for Cruelty
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 5

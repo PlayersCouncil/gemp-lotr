@@ -33,7 +33,7 @@ public class Card_V3_091_Tests
 		/**
 		 * Set: V3
 		 * Name: Release the Prisoners!
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Sauron
 		 * Twilight Cost: 2

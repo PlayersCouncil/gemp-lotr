@@ -33,7 +33,7 @@ public class Card_V3_103_Tests
 		/**
 		 * Set: V3
 		 * Name: Smeagol, Once Like Us
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Shire
 		 * Twilight Cost: 0

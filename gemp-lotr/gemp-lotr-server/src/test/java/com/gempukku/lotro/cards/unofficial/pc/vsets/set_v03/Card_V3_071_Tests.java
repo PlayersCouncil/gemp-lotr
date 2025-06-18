@@ -33,7 +33,7 @@ public class Card_V3_071_Tests
 		/**
 		 * Set: V3
 		 * Name: Ulaire Nelya, Glorified to Conquer
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 6

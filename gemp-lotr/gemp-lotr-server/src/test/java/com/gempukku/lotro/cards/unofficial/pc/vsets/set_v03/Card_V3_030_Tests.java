@@ -33,7 +33,7 @@ public class Card_V3_030_Tests
 		/**
 		 * Set: V3
 		 * Name: War Beacon
-		 * Unique: False
+		 * Unique: 3
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 1
@@ -50,7 +50,7 @@ public class Card_V3_030_Tests
 
 		assertEquals("War Beacon", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(3, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());

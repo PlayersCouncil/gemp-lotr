@@ -33,7 +33,7 @@ public class Card_V3_026_Tests
 		/**
 		 * Set: V3
 		 * Name: Pippin, Trollslayer
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 2

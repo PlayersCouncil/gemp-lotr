@@ -33,7 +33,7 @@ public class Card_V3_069_Tests
 		/**
 		 * Set: V3
 		 * Name: Ulaire Enquea, Magnified by Suffering
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 7

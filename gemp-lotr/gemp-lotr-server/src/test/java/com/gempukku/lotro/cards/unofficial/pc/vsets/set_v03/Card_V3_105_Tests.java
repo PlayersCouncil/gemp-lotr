@@ -33,7 +33,7 @@ public class Card_V3_105_Tests
 		/**
 		 * Set: V3
 		 * Name: The Sooner We’re Rid of It
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Shire
 		 * Twilight Cost: 3

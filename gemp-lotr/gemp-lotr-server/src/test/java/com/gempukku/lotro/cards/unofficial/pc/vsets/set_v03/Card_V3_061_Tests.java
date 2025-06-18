@@ -33,7 +33,7 @@ public class Card_V3_061_Tests
 		/**
 		 * Set: V3
 		 * Name: Gollum, Half a Wraith Himself
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 2

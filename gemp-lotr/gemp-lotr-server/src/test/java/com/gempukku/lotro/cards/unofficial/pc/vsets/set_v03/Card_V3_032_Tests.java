@@ -33,7 +33,7 @@ public class Card_V3_032_Tests
 		/**
 		 * Set: V3
 		 * Name: Northern Signal-fire, Beacon of Eilenach
-		 * Unique: False
+		 * Unique: 2
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 2
@@ -50,7 +50,7 @@ public class Card_V3_032_Tests
 
 		assertEquals("Northern Signal-fire", card.getBlueprint().getTitle());
 		assertEquals("Beacon of Eilenach", card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());

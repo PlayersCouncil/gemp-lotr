@@ -33,7 +33,7 @@ public class Card_V3_022_Tests
 		/**
 		 * Set: V3
 		 * Name: Inner Gate
-		 * Unique: False
+		 * Unique: 2
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 2
@@ -50,7 +50,7 @@ public class Card_V3_022_Tests
 
 		assertEquals("Inner Gate", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());

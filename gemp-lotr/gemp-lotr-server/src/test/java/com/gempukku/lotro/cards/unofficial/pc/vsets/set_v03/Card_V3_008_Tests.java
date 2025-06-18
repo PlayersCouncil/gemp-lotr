@@ -33,7 +33,7 @@ public class Card_V3_008_Tests
 		/**
 		 * Set: V3
 		 * Name: Fickle Loyalties
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gollum
 		 * Twilight Cost: 1

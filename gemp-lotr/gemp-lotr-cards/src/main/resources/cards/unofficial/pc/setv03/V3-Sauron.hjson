@@ -13,7 +13,7 @@
 		}
 		title: Cirith Ungol Watcher
 		subtitle: Hideous Warden
-		unique: false
+		unique: 2
 		side: Shadow
 		culture: Sauron
 		twilight: 2
@@ -57,7 +57,7 @@
 		}
 		title: Cover of Darkness
 		subtitle: Omen of Horror
-		unique: false
+		unique: 2
 		side: Shadow
 		culture: Sauron
 		twilight: 2
@@ -103,7 +103,7 @@
 		}
 		title: Cover of Darkness
 		subtitle: Omen of Dread
-		unique: false
+		unique: 2
 		side: Shadow
 		culture: Sauron
 		twilight: 2
@@ -149,7 +149,7 @@
 		}
 		title: Cover of Darkness
 		subtitle: Omen of Despair
-		unique: false
+		unique: 2
 		side: Shadow
 		culture: Sauron
 		twilight: 2
@@ -194,7 +194,7 @@
 			rarity: _
 		}
 		title: Endless Night
-		unique: false
+		unique: true
 		side: Shadow
 		culture: Sauron
 		twilight: 4
@@ -286,7 +286,7 @@
 			rarity: _
 		}
 		title: Ominous Sky
-		unique: false
+		unique: 3
 		side: Shadow
 		culture: Sauron
 		twilight: 1

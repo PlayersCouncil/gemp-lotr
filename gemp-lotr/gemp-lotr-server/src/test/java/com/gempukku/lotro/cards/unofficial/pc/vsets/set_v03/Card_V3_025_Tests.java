@@ -33,7 +33,7 @@ public class Card_V3_025_Tests
 		/**
 		 * Set: V3
 		 * Name: King of the Dead, Dead Keeper
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 4

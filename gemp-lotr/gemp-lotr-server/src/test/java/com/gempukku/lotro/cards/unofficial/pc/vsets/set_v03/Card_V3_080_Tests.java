@@ -33,7 +33,7 @@ public class Card_V3_080_Tests
 		/**
 		 * Set: V3
 		 * Name: Take it Down!
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Rohan
 		 * Twilight Cost: 2

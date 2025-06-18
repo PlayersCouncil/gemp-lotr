@@ -33,7 +33,7 @@ public class Card_V3_110_Tests
 		/**
 		 * Set: V3
 		 * Name: Muster of Gorgoroth
-		 * Unique: False
+		 * Unique: false
 		 * Side: 
 		 * Culture: 
 		 * Shadow Number: 8

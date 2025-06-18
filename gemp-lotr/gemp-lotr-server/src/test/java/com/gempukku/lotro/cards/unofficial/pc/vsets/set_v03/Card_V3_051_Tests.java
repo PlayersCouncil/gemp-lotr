@@ -33,7 +33,7 @@ public class Card_V3_051_Tests
 		/**
 		 * Set: V3
 		 * Name: Horn of Far Harad
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 1

@@ -33,7 +33,7 @@ public class Card_V3_027_Tests
 		/**
 		 * Set: V3
 		 * Name: Tormented Spectre
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 2

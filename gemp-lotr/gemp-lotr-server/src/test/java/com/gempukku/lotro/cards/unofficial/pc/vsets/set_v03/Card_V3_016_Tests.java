@@ -33,7 +33,7 @@ public class Card_V3_016_Tests
 		/**
 		 * Set: V3
 		 * Name: Aragorn, King of Gondor and Arnor
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 5

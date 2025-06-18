@@ -33,7 +33,7 @@ public class Card_V3_107_Tests
 		/**
 		 * Set: V3
 		 * Name: Desolation of Ash
-		 * Unique: False
+		 * Unique: false
 		 * Side: 
 		 * Culture: 
 		 * Shadow Number: 8

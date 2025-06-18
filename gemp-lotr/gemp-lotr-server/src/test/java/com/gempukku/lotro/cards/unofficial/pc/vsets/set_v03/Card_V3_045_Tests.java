@@ -33,7 +33,7 @@ public class Card_V3_045_Tests
 		/**
 		 * Set: V3
 		 * Name: Desert Wind Stalker
-		 * Unique: False
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 3
@@ -54,7 +54,7 @@ public class Card_V3_045_Tests
 
 		assertEquals("Desert Wind Stalker", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());

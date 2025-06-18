@@ -33,7 +33,7 @@ public class Card_V3_066_Tests
 		/**
 		 * Set: V3
 		 * Name: The Mouth of Sauron, Bearer of Dread News
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 3

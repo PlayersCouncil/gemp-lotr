@@ -33,7 +33,7 @@ public class Card_V3_009_Tests
 		/**
 		 * Set: V3
 		 * Name: Pass of the Spider
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Gollum
 		 * Twilight Cost: 3

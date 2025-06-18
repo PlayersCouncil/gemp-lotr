@@ -33,7 +33,7 @@ public class Card_V3_077_Tests
 		/**
 		 * Set: V3
 		 * Name: I Am No Man
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Rohan
 		 * Twilight Cost: 2

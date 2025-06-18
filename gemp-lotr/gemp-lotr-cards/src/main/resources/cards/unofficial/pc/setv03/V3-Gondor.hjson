@@ -322,7 +322,7 @@
 			rarity: _
 		}
 		title: Inner Gate
-		unique: false
+		unique: 2
 		side: Free Peoples
 		culture: Gondor
 		twilight: 2
@@ -691,7 +691,7 @@
 			rarity: _
 		}
 		title: War Beacon
-		unique: false
+		unique: 3
 		side: Free Peoples
 		culture: Gondor
 		twilight: 1
@@ -738,7 +738,7 @@
 		}
 		title: Northern Signal-fire
 		subtitle: Beacon of Eilenach
-		unique: false
+		unique: 2
 		side: Free Peoples
 		culture: Gondor
 		twilight: 2
@@ -785,7 +785,7 @@
 		}
 		title: Northern Signal-fire
 		subtitle: Beacon of Amon Din
-		unique: false
+		unique: 2
 		side: Free Peoples
 		culture: Gondor
 		twilight: 2

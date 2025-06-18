@@ -33,7 +33,7 @@ public class Card_V3_092_Tests
 		/**
 		 * Set: V3
 		 * Name: Sauron, Lord of All Middle-earth
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Sauron
 		 * Twilight Cost: 18

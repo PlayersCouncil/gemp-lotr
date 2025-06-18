@@ -33,7 +33,7 @@ public class Card_V3_020_Tests
 		/**
 		 * Set: V3
 		 * Name: Ethereal March
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 2

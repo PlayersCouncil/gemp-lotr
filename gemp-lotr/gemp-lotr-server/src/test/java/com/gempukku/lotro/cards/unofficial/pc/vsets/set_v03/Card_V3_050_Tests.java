@@ -33,7 +33,7 @@ public class Card_V3_050_Tests
 		/**
 		 * Set: V3
 		 * Name: Honor of the Desert Warrior
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 3

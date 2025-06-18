@@ -13,7 +13,7 @@
 		}
 		title: Cirith Ungol Watcher
 		subtitle: Spirit of Vigilence
-		unique: false
+		unique: 2
 		side: Shadow
 		culture: Wraith
 		twilight: 2
@@ -57,7 +57,7 @@
 		}
 		title: Cover of Darkness
 		subtitle: Omen of Fear
-		unique: false
+		unique: 2
 		side: Shadow
 		culture: Wraith
 		twilight: 2
@@ -147,7 +147,7 @@
 			rarity: _
 		}
 		title: Ill Wind
-		unique: false
+		unique: true
 		side: Shadow
 		culture: Wraith
 		twilight: 1
@@ -741,7 +741,7 @@
 			rarity: _
 		}
 		title: Winged Nazgul
-		unique: false
+		unique: 2
 		side: Shadow
 		culture: Wraith
 		twilight: 4

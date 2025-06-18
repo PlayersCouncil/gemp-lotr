@@ -33,7 +33,7 @@ public class Card_V3_041_Tests
 		/**
 		 * Set: V3
 		 * Name: Corsair Slinkthief
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 3

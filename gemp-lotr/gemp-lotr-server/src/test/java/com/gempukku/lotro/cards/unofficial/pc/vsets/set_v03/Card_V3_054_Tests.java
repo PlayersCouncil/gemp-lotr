@@ -33,7 +33,7 @@ public class Card_V3_054_Tests
 		/**
 		 * Set: V3
 		 * Name: Savage Harpoon
-		 * Unique: False
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 2
@@ -50,7 +50,7 @@ public class Card_V3_054_Tests
 
 		assertEquals("Savage Harpoon", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());

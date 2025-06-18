@@ -33,7 +33,7 @@ public class Card_V3_087_Tests
 		/**
 		 * Set: V3
 		 * Name: Endless Night
-		 * Unique: False
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Sauron
 		 * Twilight Cost: 4
@@ -51,7 +51,7 @@ public class Card_V3_087_Tests
 
 		assertEquals("Endless Night", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());

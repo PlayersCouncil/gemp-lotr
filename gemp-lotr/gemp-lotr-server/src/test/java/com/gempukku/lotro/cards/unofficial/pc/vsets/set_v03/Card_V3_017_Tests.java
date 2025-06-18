@@ -33,7 +33,7 @@ public class Card_V3_017_Tests
 		/**
 		 * Set: V3
 		 * Name: Dark Ancient Halls
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 2

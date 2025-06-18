@@ -33,7 +33,7 @@ public class Card_V3_015_Tests
 		/**
 		 * Set: V3
 		 * Name: Anduril, Legend Remade
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 3

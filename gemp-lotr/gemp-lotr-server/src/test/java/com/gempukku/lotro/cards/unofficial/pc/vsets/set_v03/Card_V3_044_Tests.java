@@ -33,7 +33,7 @@ public class Card_V3_044_Tests
 		/**
 		 * Set: V3
 		 * Name: Desert Wind Scout
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 2

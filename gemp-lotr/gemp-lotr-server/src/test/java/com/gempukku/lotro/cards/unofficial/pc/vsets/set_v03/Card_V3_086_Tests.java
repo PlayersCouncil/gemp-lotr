@@ -33,7 +33,7 @@ public class Card_V3_086_Tests
 		/**
 		 * Set: V3
 		 * Name: Cover of Darkness, Omen of Despair
-		 * Unique: False
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Sauron
 		 * Twilight Cost: 2
@@ -49,7 +49,7 @@ public class Card_V3_086_Tests
 
 		assertEquals("Cover of Darkness", card.getBlueprint().getTitle());
 		assertEquals("Omen of Despair", card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());

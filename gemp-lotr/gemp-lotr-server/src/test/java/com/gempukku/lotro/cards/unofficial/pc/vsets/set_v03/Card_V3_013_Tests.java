@@ -33,7 +33,7 @@ public class Card_V3_013_Tests
 		/**
 		 * Set: V3
 		 * Name: Two Minds of It
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gollum
 		 * Twilight Cost: 2

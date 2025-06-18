@@ -33,7 +33,7 @@ public class Card_V3_081_Tests
 		/**
 		 * Set: V3
 		 * Name: Snowmane, Faithful Servant
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Rohan
 		 * Twilight Cost: 1

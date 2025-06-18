@@ -33,7 +33,7 @@ public class Card_V3_068_Tests
 		/**
 		 * Set: V3
 		 * Name: Ulaire Cantea, Exhalted with Decay
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 6

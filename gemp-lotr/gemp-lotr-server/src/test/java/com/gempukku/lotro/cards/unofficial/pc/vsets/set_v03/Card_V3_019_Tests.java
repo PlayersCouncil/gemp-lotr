@@ -33,7 +33,7 @@ public class Card_V3_019_Tests
 		/**
 		 * Set: V3
 		 * Name: Ethereal Banner
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 1

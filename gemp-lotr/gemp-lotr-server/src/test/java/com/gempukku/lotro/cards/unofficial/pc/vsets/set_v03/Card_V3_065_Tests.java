@@ -33,7 +33,7 @@ public class Card_V3_065_Tests
 		/**
 		 * Set: V3
 		 * Name: This is My Hour
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 4

@@ -33,7 +33,7 @@ public class Card_V3_056_Tests
 		/**
 		 * Set: V3
 		 * Name: Shifting Sands
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 1

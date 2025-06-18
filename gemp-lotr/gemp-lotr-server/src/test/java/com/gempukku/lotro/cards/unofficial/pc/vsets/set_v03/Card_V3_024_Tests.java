@@ -33,7 +33,7 @@ public class Card_V3_024_Tests
 		/**
 		 * Set: V3
 		 * Name: Keep Him Blind to All Else That Moves
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 2

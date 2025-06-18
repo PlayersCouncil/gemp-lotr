@@ -33,7 +33,7 @@ public class Card_V3_104_Tests
 		/**
 		 * Set: V3
 		 * Name: Sting, Fear of All Orc-kind
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Shire
 		 * Twilight Cost: 1

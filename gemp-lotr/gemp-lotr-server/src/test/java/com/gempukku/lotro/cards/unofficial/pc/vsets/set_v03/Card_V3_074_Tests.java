@@ -33,7 +33,7 @@ public class Card_V3_074_Tests
 		/**
 		 * Set: V3
 		 * Name: Ulaire Toldea, Blessed to Dominate
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 7

@@ -33,7 +33,7 @@ public class Card_V3_102_Tests
 		/**
 		 * Set: V3
 		 * Name: Sam, Undaunted
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Shire
 		 * Twilight Cost: 2

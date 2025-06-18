@@ -33,7 +33,7 @@ public class Card_V3_004_Tests
 		/**
 		 * Set: V3
 		 * Name: Show Them the Meaning of Haste
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 3

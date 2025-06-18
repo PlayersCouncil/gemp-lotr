@@ -33,7 +33,7 @@ public class Card_V3_113_Tests
 		/**
 		 * Set: V3
 		 * Name: Lake of Fire
-		 * Unique: False
+		 * Unique: false
 		 * Side: 
 		 * Culture: 
 		 * Shadow Number: 9

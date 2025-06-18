@@ -33,7 +33,7 @@ public class Card_V3_038_Tests
 		/**
 		 * Set: V3
 		 * Name: Bladetusk Charger
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 6

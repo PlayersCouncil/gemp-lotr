@@ -33,7 +33,7 @@ public class Card_V3_014_Tests
 		/**
 		 * Set: V3
 		 * Name: Ungoliant's Get
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Gollum
 		 * Twilight Cost: 2

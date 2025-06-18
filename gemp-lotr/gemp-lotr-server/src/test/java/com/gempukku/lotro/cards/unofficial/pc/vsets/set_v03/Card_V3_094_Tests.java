@@ -33,7 +33,7 @@ public class Card_V3_094_Tests
 		/**
 		 * Set: V3
 		 * Name: They Are Not All Accounted For
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Sauron
 		 * Twilight Cost: 1

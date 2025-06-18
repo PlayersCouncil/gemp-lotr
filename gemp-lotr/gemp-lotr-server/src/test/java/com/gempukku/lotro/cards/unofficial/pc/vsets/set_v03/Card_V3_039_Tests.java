@@ -33,7 +33,7 @@ public class Card_V3_039_Tests
 		/**
 		 * Set: V3
 		 * Name: Bladetusk Matriarch
-		 * Unique: False
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 8
@@ -55,7 +55,7 @@ public class Card_V3_039_Tests
 
 		assertEquals("Bladetusk Matriarch", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());

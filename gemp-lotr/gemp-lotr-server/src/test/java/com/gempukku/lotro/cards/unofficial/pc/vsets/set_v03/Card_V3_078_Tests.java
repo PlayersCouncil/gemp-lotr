@@ -33,7 +33,7 @@ public class Card_V3_078_Tests
 		/**
 		 * Set: V3
 		 * Name: Death Take Us All
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Rohan
 		 * Twilight Cost: 3

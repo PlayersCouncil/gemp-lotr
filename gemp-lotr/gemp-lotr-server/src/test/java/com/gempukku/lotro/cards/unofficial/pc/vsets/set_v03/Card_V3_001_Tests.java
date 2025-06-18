@@ -33,7 +33,7 @@ public class Card_V3_001_Tests
 		/**
 		 * Set: V3
 		 * Name: Phial of Galadriel, Bane of Darkness
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Elven
 		 * Twilight Cost: 0

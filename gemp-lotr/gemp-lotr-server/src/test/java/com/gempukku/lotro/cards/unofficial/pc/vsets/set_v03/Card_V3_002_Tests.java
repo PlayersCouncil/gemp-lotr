@@ -33,7 +33,7 @@ public class Card_V3_002_Tests
 		/**
 		 * Set: V3
 		 * Name: Mantle of the White Wizard
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 2

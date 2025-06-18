@@ -33,7 +33,7 @@ public class Card_V3_088_Tests
 		/**
 		 * Set: V3
 		 * Name: The Mouth of Sauron, Emissary of Mordor
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Sauron
 		 * Twilight Cost: 3

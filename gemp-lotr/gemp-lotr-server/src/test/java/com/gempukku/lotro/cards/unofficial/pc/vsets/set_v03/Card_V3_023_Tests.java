@@ -33,7 +33,7 @@ public class Card_V3_023_Tests
 		/**
 		 * Set: V3
 		 * Name: Great Gate of Minas Tirith
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 3

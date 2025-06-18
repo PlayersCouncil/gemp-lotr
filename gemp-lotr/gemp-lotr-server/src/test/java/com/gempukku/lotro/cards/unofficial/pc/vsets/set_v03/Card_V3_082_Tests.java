@@ -33,7 +33,7 @@ public class Card_V3_082_Tests
 		/**
 		 * Set: V3
 		 * Name: Vanguard's Lance
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Rohan
 		 * Twilight Cost: 1

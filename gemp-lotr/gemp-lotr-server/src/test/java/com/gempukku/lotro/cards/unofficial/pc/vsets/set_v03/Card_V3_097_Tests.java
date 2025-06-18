@@ -33,7 +33,7 @@ public class Card_V3_097_Tests
 		/**
 		 * Set: V3
 		 * Name: For Frodo
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Shire
 		 * Twilight Cost: 2

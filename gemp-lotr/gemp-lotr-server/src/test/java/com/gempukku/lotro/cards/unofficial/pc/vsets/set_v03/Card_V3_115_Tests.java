@@ -33,7 +33,7 @@ public class Card_V3_115_Tests
 		/**
 		 * Set: V3
 		 * Name: Pinnacle of Doom
-		 * Unique: False
+		 * Unique: false
 		 * Side: 
 		 * Culture: 
 		 * Shadow Number: 9

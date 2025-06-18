@@ -33,7 +33,7 @@ public class Card_V3_003_Tests
 		/**
 		 * Set: V3
 		 * Name: Shadowfax, Swiftest of All
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 2

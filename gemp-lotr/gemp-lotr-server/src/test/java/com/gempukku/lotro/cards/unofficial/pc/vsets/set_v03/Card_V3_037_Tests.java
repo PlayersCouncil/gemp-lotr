@@ -33,7 +33,7 @@ public class Card_V3_037_Tests
 		/**
 		 * Set: V3
 		 * Name: The Way is Shut
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 2

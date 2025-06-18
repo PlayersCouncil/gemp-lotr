@@ -33,7 +33,7 @@ public class Card_V3_076_Tests
 		/**
 		 * Set: V3
 		 * Name: The Witch-king, Empowered by His Master
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 10

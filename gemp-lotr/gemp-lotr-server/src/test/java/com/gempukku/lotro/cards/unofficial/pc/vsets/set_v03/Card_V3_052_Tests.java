@@ -33,7 +33,7 @@ public class Card_V3_052_Tests
 		/**
 		 * Set: V3
 		 * Name: The Mouth of Sauron, Herald of the Dark Lord
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 3

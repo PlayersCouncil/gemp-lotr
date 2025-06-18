@@ -33,7 +33,7 @@ public class Card_V3_062_Tests
 		/**
 		 * Set: V3
 		 * Name: Ill Wind
-		 * Unique: False
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 1
@@ -48,7 +48,7 @@ public class Card_V3_062_Tests
 
 		assertEquals("Ill Wind", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());

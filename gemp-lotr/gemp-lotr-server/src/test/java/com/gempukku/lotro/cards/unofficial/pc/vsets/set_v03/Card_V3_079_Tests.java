@@ -33,7 +33,7 @@ public class Card_V3_079_Tests
 		/**
 		 * Set: V3
 		 * Name: Merry, Master Holbytla
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Rohan
 		 * Twilight Cost: 2

@@ -33,7 +33,7 @@ public class Card_V3_036_Tests
 		/**
 		 * Set: V3
 		 * Name: Gondor Calls For Aid!
-		 * Unique: False
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Rohan
 		 * Twilight Cost: 3
@@ -50,7 +50,7 @@ public class Card_V3_036_Tests
 
 		assertEquals("Gondor Calls For Aid!", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertTrue(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());

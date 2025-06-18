@@ -33,7 +33,7 @@ public class Card_V3_048_Tests
 		/**
 		 * Set: V3
 		 * Name: Feinting Retreat
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 1

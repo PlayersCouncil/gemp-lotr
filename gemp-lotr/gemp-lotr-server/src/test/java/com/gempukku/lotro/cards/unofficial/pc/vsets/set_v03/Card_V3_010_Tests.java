@@ -33,7 +33,7 @@ public class Card_V3_010_Tests
 		/**
 		 * Set: V3
 		 * Name: Shelob, Terror of Cirith Ungol
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Gollum
 		 * Twilight Cost: 6

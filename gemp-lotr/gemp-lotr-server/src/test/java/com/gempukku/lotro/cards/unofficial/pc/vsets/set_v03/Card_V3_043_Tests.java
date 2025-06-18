@@ -33,7 +33,7 @@ public class Card_V3_043_Tests
 		/**
 		 * Set: V3
 		 * Name: Desert Wind Initiate
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 1

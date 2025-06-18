@@ -33,7 +33,7 @@ public class Card_V3_028_Tests
 		/**
 		 * Set: V3
 		 * Name: Tormented Warrior
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 3

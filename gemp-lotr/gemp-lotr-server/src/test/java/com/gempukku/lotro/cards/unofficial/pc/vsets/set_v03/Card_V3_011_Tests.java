@@ -33,7 +33,7 @@ public class Card_V3_011_Tests
 		/**
 		 * Set: V3
 		 * Name: Sticky Strands of Spider Silk
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Gollum
 		 * Twilight Cost: 2

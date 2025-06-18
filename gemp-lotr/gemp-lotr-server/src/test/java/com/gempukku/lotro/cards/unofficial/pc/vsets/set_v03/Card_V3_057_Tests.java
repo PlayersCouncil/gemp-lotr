@@ -33,7 +33,7 @@ public class Card_V3_057_Tests
 		/**
 		 * Set: V3
 		 * Name: Strength of Men
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 4

@@ -33,7 +33,7 @@ public class Card_V3_090_Tests
 		/**
 		 * Set: V3
 		 * Name: Red Eye Assassin
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Sauron
 		 * Twilight Cost: 5

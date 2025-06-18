@@ -33,7 +33,7 @@ public class Card_V3_067_Tests
 		/**
 		 * Set: V3
 		 * Name: Ulaire Attea, Bestowed with Brutality
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 7

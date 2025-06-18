@@ -33,7 +33,7 @@ public class Card_V3_073_Tests
 		/**
 		 * Set: V3
 		 * Name: Ulaire Otsea, Consecrated by Pestilence
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 5

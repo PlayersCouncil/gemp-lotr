@@ -33,7 +33,7 @@ public class Card_V3_046_Tests
 		/**
 		 * Set: V3
 		 * Name: Desert Wind Whisper
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 5

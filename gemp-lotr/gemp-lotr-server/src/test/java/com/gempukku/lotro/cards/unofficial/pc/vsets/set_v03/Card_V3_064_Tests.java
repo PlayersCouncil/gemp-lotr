@@ -33,7 +33,7 @@ public class Card_V3_064_Tests
 		/**
 		 * Set: V3
 		 * Name: No Man May Hinder Me
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 3

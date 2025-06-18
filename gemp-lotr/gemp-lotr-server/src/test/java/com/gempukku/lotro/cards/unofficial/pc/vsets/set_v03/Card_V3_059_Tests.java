@@ -33,7 +33,7 @@ public class Card_V3_059_Tests
 		/**
 		 * Set: V3
 		 * Name: Cirith Ungol Watcher, Spirit of Vigilence
-		 * Unique: False
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 2
@@ -50,7 +50,7 @@ public class Card_V3_059_Tests
 
 		assertEquals("Cirith Ungol Watcher", card.getBlueprint().getTitle());
 		assertEquals("Spirit of Vigilence", card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());

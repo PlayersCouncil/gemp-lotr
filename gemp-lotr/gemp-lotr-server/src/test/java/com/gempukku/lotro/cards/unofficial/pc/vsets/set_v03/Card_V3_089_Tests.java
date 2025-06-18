@@ -33,7 +33,7 @@ public class Card_V3_089_Tests
 		/**
 		 * Set: V3
 		 * Name: Ominous Sky
-		 * Unique: False
+		 * Unique: 3
 		 * Side: Shadow
 		 * Culture: Sauron
 		 * Twilight Cost: 1
@@ -49,7 +49,7 @@ public class Card_V3_089_Tests
 
 		assertEquals("Ominous Sky", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(3, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());

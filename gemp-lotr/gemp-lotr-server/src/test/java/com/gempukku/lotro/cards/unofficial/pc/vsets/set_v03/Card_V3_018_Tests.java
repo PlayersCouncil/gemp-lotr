@@ -33,7 +33,7 @@ public class Card_V3_018_Tests
 		/**
 		 * Set: V3
 		 * Name: Domain of the Dead King
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 3

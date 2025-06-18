@@ -33,7 +33,7 @@ public class Card_V3_096_Tests
 		/**
 		 * Set: V3
 		 * Name: Driven By Her Own Cruel Will
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Shire
 		 * Twilight Cost: 5

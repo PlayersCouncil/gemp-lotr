@@ -33,7 +33,7 @@ public class Card_V3_006_Tests
 		/**
 		 * Set: V3
 		 * Name: Your Staff is Broken
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 3

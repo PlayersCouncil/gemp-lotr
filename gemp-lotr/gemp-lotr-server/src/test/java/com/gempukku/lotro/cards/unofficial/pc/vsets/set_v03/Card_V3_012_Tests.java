@@ -33,7 +33,7 @@ public class Card_V3_012_Tests
 		/**
 		 * Set: V3
 		 * Name: Two-faced
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Gollum
 		 * Twilight Cost: 2

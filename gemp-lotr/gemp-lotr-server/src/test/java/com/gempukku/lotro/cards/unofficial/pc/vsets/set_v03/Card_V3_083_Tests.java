@@ -33,7 +33,7 @@ public class Card_V3_083_Tests
 		/**
 		 * Set: V3
 		 * Name: Cirith Ungol Watcher, Hideous Warden
-		 * Unique: False
+		 * Unique: 2
 		 * Side: Shadow
 		 * Culture: Sauron
 		 * Twilight Cost: 2
@@ -50,7 +50,7 @@ public class Card_V3_083_Tests
 
 		assertEquals("Cirith Ungol Watcher", card.getBlueprint().getTitle());
 		assertEquals("Hideous Warden", card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());

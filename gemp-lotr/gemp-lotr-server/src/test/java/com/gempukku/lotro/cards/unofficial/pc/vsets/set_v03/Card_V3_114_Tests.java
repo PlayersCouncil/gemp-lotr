@@ -33,7 +33,7 @@ public class Card_V3_114_Tests
 		/**
 		 * Set: V3
 		 * Name: Orodruin
-		 * Unique: False
+		 * Unique: false
 		 * Side: 
 		 * Culture: 
 		 * Shadow Number: 9

@@ -33,7 +33,7 @@ public class Card_V3_005_Tests
 		/**
 		 * Set: V3
 		 * Name: You Cannot Enter Here
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 2

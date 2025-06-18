@@ -33,7 +33,7 @@ public class Card_V3_112_Tests
 		/**
 		 * Set: V3
 		 * Name: Doom Causeway
-		 * Unique: False
+		 * Unique: false
 		 * Side: 
 		 * Culture: 
 		 * Shadow Number: 9

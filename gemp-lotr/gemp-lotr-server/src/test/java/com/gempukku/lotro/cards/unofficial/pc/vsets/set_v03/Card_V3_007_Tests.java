@@ -33,7 +33,7 @@ public class Card_V3_007_Tests
 		/**
 		 * Set: V3
 		 * Name: Words of Power
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gandalf
 		 * Twilight Cost: 4

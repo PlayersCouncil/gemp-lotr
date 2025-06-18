@@ -33,7 +33,7 @@ public class Card_V3_042_Tests
 		/**
 		 * Set: V3
 		 * Name: Corsair Renegade
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 6

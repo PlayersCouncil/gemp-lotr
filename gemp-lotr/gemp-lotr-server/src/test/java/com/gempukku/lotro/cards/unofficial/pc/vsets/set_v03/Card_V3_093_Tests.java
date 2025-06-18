@@ -33,7 +33,7 @@ public class Card_V3_093_Tests
 		/**
 		 * Set: V3
 		 * Name: Sauron's Reach
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Sauron
 		 * Twilight Cost: 2

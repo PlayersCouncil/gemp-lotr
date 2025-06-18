@@ -33,7 +33,7 @@ public class Card_V3_029_Tests
 		/**
 		 * Set: V3
 		 * Name: Tormented Wraith
-		 * Unique: False
+		 * Unique: false
 		 * Side: Free Peoples
 		 * Culture: Gondor
 		 * Twilight Cost: 3

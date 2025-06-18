@@ -33,7 +33,7 @@ public class Card_V3_049_Tests
 		/**
 		 * Set: V3
 		 * Name: Hailing from the Far South
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 2

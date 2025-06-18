@@ -33,7 +33,7 @@ public class Card_V3_055_Tests
 		/**
 		 * Set: V3
 		 * Name: Sandcraft Trap
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Raider
 		 * Twilight Cost: 3

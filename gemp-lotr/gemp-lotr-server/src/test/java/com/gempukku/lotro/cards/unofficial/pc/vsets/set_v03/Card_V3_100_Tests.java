@@ -33,7 +33,7 @@ public class Card_V3_100_Tests
 		/**
 		 * Set: V3
 		 * Name: Frodo, Bereft of Hope
-		 * Unique: True
+		 * Unique: true
 		 * Side: Free Peoples
 		 * Culture: Shire
 		 * Twilight Cost: 0
@@ -63,6 +63,7 @@ public class Card_V3_100_Tests
 		assertEquals(2, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(8, card.getBlueprint().getResistance());
+		assertTrue(card.getBlueprint().canStartWithRing());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 

@@ -33,7 +33,7 @@ public class Card_V3_070_Tests
 		/**
 		 * Set: V3
 		 * Name: Ulaire Lemenya, Annointed with Terror
-		 * Unique: True
+		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
 		 * Twilight Cost: 5

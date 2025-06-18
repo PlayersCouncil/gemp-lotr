@@ -33,7 +33,7 @@ public class Card_V3_095_Tests
 		/**
 		 * Set: V3
 		 * Name: Was He Dear to Thee?
-		 * Unique: False
+		 * Unique: false
 		 * Side: Shadow
 		 * Culture: Sauron
 		 * Twilight Cost: 3
