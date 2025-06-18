@@ -49,7 +49,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -80,7 +80,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -115,7 +115,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -167,7 +167,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -216,7 +216,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -262,7 +262,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -308,7 +308,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -352,7 +352,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -383,7 +383,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -415,7 +415,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -456,7 +456,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -505,7 +505,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -553,7 +553,7 @@ public class HinderTests
                         var name = card.getCardId();
                     }
                 });
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 return Collections.singletonList(action);
             }
         });
@@ -601,7 +601,7 @@ public class HinderTests
                     @Override
                     protected void cardSelected(LotroGame game, PhysicalCard card) { }
                 });
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 return Collections.singletonList(action);
             }
         });
@@ -651,7 +651,7 @@ public class HinderTests
                         var name = card.getCardId();
                     }
                 });
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 return Collections.singletonList(action);
             }
         });
@@ -703,7 +703,7 @@ public class HinderTests
                         var name = card.getCardId();
                     }
                 });
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 return Collections.singletonList(action);
             }
         });
@@ -747,7 +747,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -833,7 +833,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -864,7 +864,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -896,7 +896,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -928,7 +928,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -969,7 +969,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -1010,7 +1010,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -1052,7 +1052,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -1158,7 +1158,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -1197,7 +1197,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, anduril));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, anduril));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -1236,7 +1236,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, anduril, steed));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, anduril, steed));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -1280,7 +1280,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
@@ -1317,7 +1317,7 @@ public class HinderTests
             @Override
             public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
                 RequiredTriggerAction action = new RequiredTriggerAction(frodo);
-                action.appendEffect(new HinderCardsInPlayEffect(null, aragorn));
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, aragorn));
                 action.setText("Hinder Aragorn");
                 return Collections.singletonList(action);
             }
