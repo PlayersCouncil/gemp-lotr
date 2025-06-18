@@ -80,7 +80,7 @@ public class Card_V2_013_Tests
 
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var shadowfax = scn.GetFreepsCard("shadowfax");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.MoveCardsToHand(shadowfax);
 
 		scn.StartGame();
@@ -98,8 +98,8 @@ public class Card_V2_013_Tests
 		var scn = GetScenario();
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCompanionToTable(gandalf);
-		scn.MoveCompanionToTable("valiant1", "valiant2");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCompanionsToTable("valiant1", "valiant2");
 
 		var shotgun = scn.GetShadowCard("shotgun");
 		scn.MoveMinionsToTable(shotgun);
@@ -123,8 +123,8 @@ public class Card_V2_013_Tests
 
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var valiant1 = scn.GetFreepsCard("valiant1");
-		scn.MoveCompanionToTable(gandalf);
-		scn.MoveCompanionToTable("valiant1", "valiant2", "valiant3");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCompanionsToTable("valiant1", "valiant2", "valiant3");
 
 		var shotgun = scn.GetShadowCard("shotgun");
 		scn.MoveMinionsToTable(shotgun);
@@ -159,9 +159,9 @@ public class Card_V2_013_Tests
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var crutch = scn.GetFreepsCard("crutch");
 		var valiant1 = scn.GetFreepsCard("valiant1");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.AttachCardsTo(gandalf, crutch);
-		scn.MoveCompanionToTable("valiant1", "valiant2", "valiant3");
+		scn.MoveCompanionsToTable("valiant1", "valiant2", "valiant3");
 
 		var shotgun = scn.GetShadowCard("shotgun");
 		scn.MoveMinionsToTable(shotgun);
@@ -199,8 +199,8 @@ public class Card_V2_013_Tests
 
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var valiant1 = scn.GetFreepsCard("valiant1");
-		scn.MoveCompanionToTable(gandalf);
-		scn.MoveCompanionToTable("valiant1", "valiant2", "valiant3");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCompanionsToTable("valiant1", "valiant2", "valiant3");
 
 		var grishnakh = scn.GetShadowCard("grishnakh");
 		scn.MoveMinionsToTable(grishnakh);
@@ -237,9 +237,9 @@ public class Card_V2_013_Tests
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var crutch = scn.GetFreepsCard("crutch");
 		var valiant1 = scn.GetFreepsCard("valiant1");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.AttachCardsTo(gandalf, crutch);
-		scn.MoveCompanionToTable("valiant1", "valiant2", "valiant3");
+		scn.MoveCompanionsToTable("valiant1", "valiant2", "valiant3");
 
 		var grishnakh = scn.GetShadowCard("grishnakh");
 		scn.MoveMinionsToTable(grishnakh);
@@ -281,8 +281,8 @@ public class Card_V2_013_Tests
 
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var valiant1 = scn.GetFreepsCard("valiant1");
-		scn.MoveCompanionToTable(gandalf);
-		scn.MoveCompanionToTable("valiant1", "valiant2", "valiant3");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCompanionsToTable("valiant1", "valiant2", "valiant3");
 
 		var marauder = scn.GetShadowCard("marauder");
 		scn.MoveMinionsToTable(marauder);

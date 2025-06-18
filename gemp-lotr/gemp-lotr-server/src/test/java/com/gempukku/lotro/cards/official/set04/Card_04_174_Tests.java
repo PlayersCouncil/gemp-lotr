@@ -116,7 +116,7 @@ public class Card_04_174_Tests
 		scn.AttachCardsTo(saruman, staff);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);

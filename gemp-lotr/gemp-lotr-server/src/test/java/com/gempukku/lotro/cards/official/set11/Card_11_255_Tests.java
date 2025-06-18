@@ -80,7 +80,7 @@ public class Card_11_255_Tests
 		var pippin = scn.GetFreepsCard("pippin");
 		var frodo = scn.GetRingBearer();
 		scn.MoveCardsToDeadPile(gandalf, radagast);
-		scn.MoveCompanionToTable(merry, pippin);
+		scn.MoveCompanionsToTable(merry, pippin);
 
 		scn.StartGame(pinnacle);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());

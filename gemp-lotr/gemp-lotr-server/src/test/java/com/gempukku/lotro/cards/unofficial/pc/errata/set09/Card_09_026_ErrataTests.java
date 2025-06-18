@@ -189,7 +189,7 @@ public class Card_09_026_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var radagast = scn.GetFreepsCard("radagast");
-		scn.MoveCompanionToTable(radagast);
+		scn.MoveCompanionsToTable(radagast);
 
 		var chaff1 = scn.GetShadowCard("chaff1");
 		var chaff2 = scn.GetShadowCard("chaff2");
@@ -224,7 +224,7 @@ public class Card_09_026_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var radagast = scn.GetFreepsCard("radagast");
-		scn.MoveCompanionToTable(radagast);
+		scn.MoveCompanionsToTable(radagast);
 
 		var chaff1 = scn.GetShadowCard("chaff1");
 		var chaff2 = scn.GetShadowCard("chaff2");

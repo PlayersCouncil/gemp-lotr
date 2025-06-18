@@ -71,7 +71,7 @@ public class Card_13_137_Tests
 		var theoden = scn.GetFreepsCard("theoden");
 		var eowyn = scn.GetFreepsCard("eowyn");
 		scn.MoveCardsToHand(eowyn);
-		scn.MoveCompanionToTable(theoden);
+		scn.MoveCompanionsToTable(theoden);
 
 		scn.StartGame();
 
@@ -92,7 +92,7 @@ public class Card_13_137_Tests
 		var theoden = scn.GetFreepsCard("theoden");
 		var eomer = scn.GetFreepsCard("eomer");
 		scn.MoveCardsToHand(eomer);
-		scn.MoveCompanionToTable(theoden);
+		scn.MoveCompanionsToTable(theoden);
 
 		scn.StartGame();
 
@@ -113,7 +113,7 @@ public class Card_13_137_Tests
 		var theoden = scn.GetFreepsCard("theoden");
 		var theodred = scn.GetFreepsCard("theodred");
 		scn.MoveCardsToHand(theodred);
-		scn.MoveCompanionToTable(theoden);
+		scn.MoveCompanionsToTable(theoden);
 
 		scn.StartGame();
 

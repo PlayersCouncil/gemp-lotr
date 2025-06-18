@@ -91,7 +91,7 @@ public class Card_01_009_Tests
 
 		var axe = scn.GetFreepsCard("axe");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 
 		var orc1 = scn.GetShadowCard("orc1");
@@ -126,7 +126,7 @@ public class Card_01_009_Tests
 
 		var axe = scn.GetFreepsCard("axe");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 
 		var orc1 = scn.GetShadowCard("orc1");
@@ -196,7 +196,7 @@ public class Card_01_009_Tests
 		var dcard = scn.GetFreepsCard("dcard");
 		var gimli = scn.GetFreepsCard("gimli");
 		var preparations = scn.GetFreepsCard("preparations");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 		scn.MoveCardsToSupportArea(preparations);
 		scn.StackCardsOn(preparations, dcard);

@@ -102,7 +102,7 @@ public class Card_01_198_ErrataTests
 		var scn = GetScenario();
 
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		//Ensure that Freeps has no cards in hand ever to prevent TTMM
 		scn.MoveCardsToFreepsDiscard("arwen", "ttmm", "runner", "scout", "chaff1", "chaff2",
 				"chaff3", "chaff4", "chaff5", "chaff6", "chaff7", "chaff8");
@@ -158,7 +158,7 @@ public class Card_01_198_ErrataTests
 		var scn = GetScenario();
 
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 		//Ensure that Freeps has no cards in hand ever to prevent TTMM
 		scn.MoveCardsToFreepsDiscard("gimli", "ttmm", "runner", "scout", "chaff1", "chaff2",
 				"chaff3", "chaff4", "chaff5", "chaff6", "chaff7", "chaff8");
@@ -271,7 +271,7 @@ public class Card_01_198_ErrataTests
 		var scn = GetScenario();
 
 		//Ensure that Freeps has no cards in hand ever to prevent TTMM
-		scn.MoveCompanionToTable("arwen", "gimli");
+		scn.MoveCompanionsToTable("arwen", "gimli");
 
 		var ttmm = scn.GetShadowCard("ttmm");
 		scn.MoveCardsToSupportArea(ttmm);

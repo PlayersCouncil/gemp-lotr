@@ -67,7 +67,7 @@ public class Card_18_050_Tests
 		var stone = scn.GetFreepsCard("stone");
 		var boromir = scn.GetFreepsCard("boromir");
 		scn.MoveCardsToSupportArea(stone);
-		scn.MoveCompanionToTable(boromir);
+		scn.MoveCompanionsToTable(boromir);
 
 		var uruk = scn.GetShadowCard("uruk");
 		scn.MoveCardsToHand(uruk);
@@ -150,7 +150,7 @@ public class Card_18_050_Tests
 		var stone = scn.GetFreepsCard("stone");
 		var boromir = scn.GetFreepsCard("boromir");
 		scn.MoveCardsToSupportArea(stone);
-		scn.MoveCompanionToTable(boromir);
+		scn.MoveCompanionsToTable(boromir);
 
 		var uruk = scn.GetShadowCard("uruk");
 		scn.MoveMinionsToTable(uruk);

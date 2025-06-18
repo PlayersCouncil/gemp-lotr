@@ -71,7 +71,7 @@ public class Card_V2_049_Tests
 		var eomer = scn.GetFreepsCard("eomer");
 		var eowyn = scn.GetFreepsCard("eowyn");
 		scn.MoveCardsToHand(guthwine);
-		scn.MoveCompanionToTable(eomer, eowyn);
+		scn.MoveCompanionsToTable(eomer, eowyn);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(guthwine);
@@ -92,7 +92,7 @@ public class Card_V2_049_Tests
 		var guthwine = scn.GetFreepsCard("guthwine");
 		var eomer = scn.GetFreepsCard("eomer");
 		scn.MoveCardsToHand(guthwine);
-		scn.MoveCompanionToTable(eomer);
+		scn.MoveCompanionsToTable(eomer);
 
 		scn.StartGame();
 
@@ -114,7 +114,7 @@ public class Card_V2_049_Tests
 		var guthwine = scn.GetFreepsCard("guthwine");
 		var eowyn = scn.GetFreepsCard("eowyn");
 		scn.MoveCardsToHand(guthwine);
-		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCompanionsToTable(eowyn);
 
 		scn.StartGame();
 
@@ -135,7 +135,7 @@ public class Card_V2_049_Tests
 		var guthwine = scn.GetFreepsCard("guthwine");
 		var eomer = scn.GetFreepsCard("eomer");
 		var condition = scn.GetFreepsCard("condition");
-		scn.MoveCompanionToTable(eomer);
+		scn.MoveCompanionsToTable(eomer);
 		scn.AttachCardsTo(eomer, guthwine);
 		scn.MoveCardsToSupportArea(condition);
 		scn.AddTokensToCard(condition, 1);
@@ -164,7 +164,7 @@ public class Card_V2_049_Tests
 		var guthwine = scn.GetFreepsCard("guthwine");
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var condition = scn.GetFreepsCard("condition");
-		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCompanionsToTable(eowyn);
 		scn.AttachCardsTo(eowyn, guthwine);
 		scn.MoveCardsToSupportArea(condition);
 		scn.AddTokensToCard(condition, 1);

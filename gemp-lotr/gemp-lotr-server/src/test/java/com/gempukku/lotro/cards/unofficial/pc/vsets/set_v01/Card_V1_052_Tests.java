@@ -69,7 +69,7 @@ public class Card_V1_052_Tests
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
-		scn.MoveCompanionToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		var shelob = scn.GetShadowCard("shelob");
 		scn.MoveMinionsToTable(shelob);
@@ -98,7 +98,7 @@ public class Card_V1_052_Tests
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
-		scn.MoveCompanionToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		var shelob = scn.GetShadowCard("shelob");
 		scn.MoveMinionsToTable(shelob);

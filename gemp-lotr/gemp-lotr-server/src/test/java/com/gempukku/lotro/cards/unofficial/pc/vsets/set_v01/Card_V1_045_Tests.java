@@ -80,7 +80,7 @@ public class Card_V1_045_Tests
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl sleep1 = scn.GetFreepsCard("sleep");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.MoveCardsToHand(sleep1);
 
 		scn.StartGame();
@@ -101,7 +101,7 @@ public class Card_V1_045_Tests
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl introspection = scn.GetFreepsCard("introspection");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.MoveCardsToHand(introspection);
 
 		scn.StartGame();
@@ -131,7 +131,7 @@ public class Card_V1_045_Tests
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl introspection = scn.GetFreepsCard("introspection");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.MoveCardsToHand(introspection);
 
 		scn.StartGame();
@@ -161,7 +161,7 @@ public class Card_V1_045_Tests
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl sleep = scn.GetFreepsCard("sleep");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.MoveCardsToHand(sleep);
 
 		scn.StartGame();

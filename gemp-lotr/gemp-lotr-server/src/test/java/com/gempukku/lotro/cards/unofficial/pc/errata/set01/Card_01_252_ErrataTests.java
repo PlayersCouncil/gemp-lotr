@@ -132,7 +132,7 @@ public class Card_01_252_ErrataTests
 		assertEquals(7, scn.GetResistance(frodo)); // 10 base - 1 burden - 2 from Irresistable Shadow
 		scn.AddBurdens(1);
 		assertEquals(4, scn.GetResistance(frodo)); // 10 base - 2 burdens - 4 from Irresistable Shadow
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		assertEquals(8, scn.GetResistance(frodo)); // 10 base - 2 burdens - 0 from Irresistable Shadow
 	}
 }

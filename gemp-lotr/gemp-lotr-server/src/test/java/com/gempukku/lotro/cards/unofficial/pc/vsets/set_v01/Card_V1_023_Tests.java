@@ -102,7 +102,7 @@ public class Card_V1_023_Tests
 		PhysicalCardImpl shireE = scn.GetFreepsCard("shire-event");
 
 		scn.MoveCardsToSupportArea(gone);
-		scn.MoveCompanionToTable(aragorn, gimli, arwen, gandalf, sam);
+		scn.MoveCompanionsToTable(aragorn, gimli, arwen, gandalf, sam);
 		scn.MoveCardsToHand(dwarfE, elfE, gondorE, gandalfE, shireE);
 
 		PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");

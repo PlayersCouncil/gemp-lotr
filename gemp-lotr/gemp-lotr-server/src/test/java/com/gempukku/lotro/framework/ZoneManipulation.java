@@ -47,10 +47,10 @@ public interface ZoneManipulation extends TestBase{
 	}
 
 
-	default void MoveCompanionToTable(String...names) {
-		Arrays.stream(names).forEach(name -> MoveCompanionToTable(GetFreepsCard(name)));
+	default void MoveCompanionsToTable(String...names) {
+		Arrays.stream(names).forEach(name -> MoveCompanionsToTable(GetFreepsCard(name)));
 	}
-	default void MoveCompanionToTable(PhysicalCardImpl...cards) {
+	default void MoveCompanionsToTable(PhysicalCardImpl...cards) {
 		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.FREE_CHARACTERS));
 	}
 	default void MoveMinionsToTable(String...names) {

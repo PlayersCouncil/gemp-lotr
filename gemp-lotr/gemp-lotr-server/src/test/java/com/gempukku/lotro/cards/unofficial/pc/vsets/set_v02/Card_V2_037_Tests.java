@@ -71,7 +71,7 @@ public class Card_V2_037_Tests
 		scn.MoveMinionsToTable(runner, balrog);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.SkipToAssignments();

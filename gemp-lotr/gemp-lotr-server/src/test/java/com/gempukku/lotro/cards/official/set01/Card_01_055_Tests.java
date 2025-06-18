@@ -77,7 +77,7 @@ public class Card_01_055_Tests
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var allyHome3_1 = scn.GetFreepsCard("allyHome3_1");
 		var allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
-		scn.MoveCompanionToTable(galadriel, allyHome3_1, allyHome6_1);
+		scn.MoveCompanionsToTable(galadriel, allyHome3_1, allyHome6_1);
 		scn.MoveCardsToHand(mirror);
 
 		scn.StartGame();
@@ -98,7 +98,7 @@ public class Card_01_055_Tests
 
 		var mirror = scn.GetFreepsCard("mirror");
 		var galadriel = scn.GetFreepsCard("galadriel");
-		scn.MoveCompanionToTable(galadriel);
+		scn.MoveCompanionsToTable(galadriel);
 		scn.MoveCardsToSupportArea(mirror);
 
 		scn.MoveCardsToShadowHand("card1", "card2", "card3", "card4", "card5", "card6");
@@ -117,7 +117,7 @@ public class Card_01_055_Tests
 
 		var mirror = scn.GetFreepsCard("mirror");
 		var galadriel = scn.GetFreepsCard("galadriel");
-		scn.MoveCompanionToTable(galadriel);
+		scn.MoveCompanionsToTable(galadriel);
 		scn.MoveCardsToSupportArea(mirror);
 
 		scn.MoveCardsToShadowHand("card1", "card2", "card3", "card4", "card5", "card6", "mirror");

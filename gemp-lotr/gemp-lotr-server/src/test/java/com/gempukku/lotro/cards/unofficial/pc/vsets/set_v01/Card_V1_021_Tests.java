@@ -77,7 +77,7 @@ public class Card_V1_021_Tests
 		PhysicalCardImpl sons = scn.GetFreepsCard("sons");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
-		scn.MoveCompanionToTable(aragorn, boromir);
+		scn.MoveCompanionsToTable(aragorn, boromir);
 		scn.MoveCardsToSupportArea(sons);
 
 		PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");

@@ -84,7 +84,7 @@ public class Card_01_011_ErrataTests
 		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl farin = scn.GetFreepsCard("farin");
-		scn.MoveCompanionToTable(farin);
+		scn.MoveCompanionsToTable(farin);
 
 		PhysicalCardImpl orc = scn.GetShadowCard("runner");
 		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");

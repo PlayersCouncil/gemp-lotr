@@ -36,7 +36,7 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
 
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         scn.StartGame();
 
@@ -81,7 +81,7 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
         PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
 
         scn.MoveCardsToHand(aragorn);
-        scn.MoveCompanionToTable(arwen);
+        scn.MoveCompanionsToTable(arwen);
 
         scn.StartGame();
 

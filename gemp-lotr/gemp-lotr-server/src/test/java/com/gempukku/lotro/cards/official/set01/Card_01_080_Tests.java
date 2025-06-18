@@ -96,7 +96,7 @@ public class Card_01_080_Tests
 		var chaff5 = scn.GetFreepsCard("chaff5");
 		var chaff6 = scn.GetFreepsCard("chaff6");
 		scn.MoveCardsToHand(chaff1, chaff2, chaff3);
-		scn.MoveCompanionToTable(ottar);
+		scn.MoveCompanionsToTable(ottar);
 		scn.MoveCardsToTopOfDeck(chaff4, chaff5, chaff6);
 
 		scn.StartGame();
@@ -133,7 +133,7 @@ public class Card_01_080_Tests
 		var chaff5 = scn.GetFreepsCard("chaff5");
 		var chaff6 = scn.GetFreepsCard("chaff6");
 		scn.MoveCardsToHand(chaff1, chaff2, chaff3);
-		scn.MoveCompanionToTable(ottar);
+		scn.MoveCompanionsToTable(ottar);
 		scn.MoveCardsToTopOfDeck(chaff4, chaff5, chaff6);
 
 		scn.StartGame();
@@ -172,7 +172,7 @@ public class Card_01_080_Tests
 		var chaff5 = scn.GetFreepsCard("chaff5");
 		var chaff6 = scn.GetFreepsCard("chaff6");
 		scn.MoveCardsToHand(chaff1, chaff2, chaff3);
-		scn.MoveCompanionToTable(ottar);
+		scn.MoveCompanionsToTable(ottar);
 		scn.MoveCardsToTopOfDeck(chaff4, chaff5, chaff6);
 
 		scn.StartGame();
@@ -208,7 +208,7 @@ public class Card_01_080_Tests
 		var ottar = scn.GetFreepsCard("ottar");
 		var chaff1 = scn.GetFreepsCard("chaff1");
 		var chaff2 = scn.GetFreepsCard("chaff2");
-		scn.MoveCompanionToTable(ottar);
+		scn.MoveCompanionsToTable(ottar);
 
 		scn.StartGame();
 

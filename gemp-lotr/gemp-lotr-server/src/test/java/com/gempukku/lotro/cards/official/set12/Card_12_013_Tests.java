@@ -70,7 +70,7 @@ public class Card_12_013_Tests
 		var sharp = scn.GetFreepsCard("sharp");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(sharp);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var savage = scn.GetShadowCard("savage");
 		scn.MoveMinionsToTable(savage);
@@ -98,7 +98,7 @@ public class Card_12_013_Tests
 		var sharp = scn.GetFreepsCard("sharp");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(sharp);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var savage = scn.GetShadowCard("savage");
 		scn.MoveMinionsToTable(savage);
@@ -128,7 +128,7 @@ public class Card_12_013_Tests
 		var book = scn.GetFreepsCard("book");
 		var helm = scn.GetFreepsCard("helm");
 		scn.MoveCardsToHand(sharp);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, book, helm);
 
 		var savage = scn.GetShadowCard("savage");

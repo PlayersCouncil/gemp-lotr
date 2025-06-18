@@ -71,7 +71,7 @@ public class Card_04_078_Tests
 		var scn = GetScenario();
 
 		var swordsman = scn.GetFreepsCard("swordsman");
-		scn.MoveCompanionToTable(swordsman);
+		scn.MoveCompanionsToTable(swordsman);
 
 		var savage = scn.GetShadowCard("savage");
 		var runner = scn.GetShadowCard("runner");

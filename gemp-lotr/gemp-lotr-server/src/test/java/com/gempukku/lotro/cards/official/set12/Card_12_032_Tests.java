@@ -66,7 +66,7 @@ public class Card_12_032_Tests
 
 		var salve = scn.GetFreepsCard("salve");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.AttachCardsTo(aragorn, salve);
 
 		scn.MoveMinionsToTable("marksman");

@@ -79,7 +79,7 @@ public class Card_02_101_ErrataTests
 		var sam = scn.GetFreepsCard("sam");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToSupportArea(notfatty, bilbo);
-		scn.MoveCompanionToTable(sam, aragorn);
+		scn.MoveCompanionsToTable(sam, aragorn);
 
 		var tracker1 = scn.GetShadowCard("tracker1");
 		var tracker2 = scn.GetShadowCard("tracker2");

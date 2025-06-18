@@ -94,7 +94,7 @@ public class Card_V1_048_Tests
 
 		PhysicalCardImpl guard1 = scn.GetFreepsCard("guard1");
 		PhysicalCardImpl guard2 = scn.GetFreepsCard("guard2");
-		scn.MoveCompanionToTable(guard1, guard2);
+		scn.MoveCompanionsToTable(guard1, guard2);
 
 		scn.StartGame();
 

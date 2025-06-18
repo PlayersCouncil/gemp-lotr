@@ -83,7 +83,7 @@ public class Card_V1_013_Tests
 		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		scn.MoveCardsToHand(counsel);
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.StartGame();
 
@@ -116,7 +116,7 @@ public class Card_V1_013_Tests
 		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		scn.MoveCardsToHand(counsel);
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.StartGame();
 

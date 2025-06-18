@@ -97,7 +97,7 @@ public class Card_01_012_Tests
 		var card1 = scn.GetFreepsCard("card1");
 		var card2 = scn.GetFreepsCard("card2");
 		var card3 = scn.GetFreepsCard("card3");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.MoveCardsToHand(card1);
 
 		scn.StartGame();

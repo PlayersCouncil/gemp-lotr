@@ -75,7 +75,7 @@ public class Card_03_069_Tests
 		scn.MoveMinionsToTable(saruman, savage);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 
@@ -107,7 +107,7 @@ public class Card_03_069_Tests
 
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 

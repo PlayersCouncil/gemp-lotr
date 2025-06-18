@@ -75,7 +75,7 @@ public class Card_V1_001_Tests
         PhysicalCardImpl handaxe1 = scn.GetFreepsCard("handaxe1");
         PhysicalCardImpl handaxe2 = scn.GetFreepsCard("handaxe2");
 
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
         scn.MoveCardsToSupportArea(hosp);
         scn.MoveCardsToHand(handaxe1);
         scn.MoveCardsToHand(handaxe2);

@@ -85,7 +85,7 @@ public class Card_01_234_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.MoveCompanionToTable("comp2", "comp3", "comp4");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4");
 
 		PhysicalCardImpl nertea = scn.GetShadowCard("nertea");
 		scn.MoveCardsToHand(nertea);
@@ -103,7 +103,7 @@ public class Card_01_234_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.MoveCompanionToTable("comp2", "comp3", "comp4", "comp5");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4", "comp5");
 
 		var twk = scn.GetShadowCard("twk");
 		var attea = scn.GetShadowCard("attea");
@@ -135,7 +135,7 @@ public class Card_01_234_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.MoveCompanionToTable("comp2", "comp3", "comp4", "comp5", "comp6");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4", "comp5", "comp6");
 
 		var twk = scn.GetShadowCard("twk");
 		var attea = scn.GetShadowCard("attea");
@@ -172,7 +172,7 @@ public class Card_01_234_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.MoveCompanionToTable("comp2", "comp3", "comp4", "comp5", "comp6");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4", "comp5", "comp6");
 
 		var twk = scn.GetShadowCard("twk");
 		var attea = scn.GetShadowCard("attea");
@@ -200,7 +200,7 @@ public class Card_01_234_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.MoveCompanionToTable("comp2", "comp3", "comp4", "comp5", "comp6");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4", "comp5", "comp6");
 
 		var twk = scn.GetShadowCard("twk");
 		var attea = scn.GetShadowCard("attea");
@@ -237,7 +237,7 @@ public class Card_01_234_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.MoveCompanionToTable("comp2", "comp3", "comp4", "comp5", "comp6");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4", "comp5", "comp6");
 
 		var nertea = scn.GetShadowCard("nertea");
 		scn.MoveCardsToShadowHand("twk", "attea");
@@ -258,7 +258,7 @@ public class Card_01_234_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.MoveCompanionToTable("comp2", "comp3", "comp4", "comp5");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4", "comp5");
 
 		var greatriver = scn.GetShadowSite(7);
 

@@ -87,7 +87,7 @@ public class Card_01_040_Tests
         var scn = GetHome3AllyScenario();
         var elrond = scn.GetFreepsCard("elrond");
 
-        scn.MoveCompanionToTable(elrond);
+        scn.MoveCompanionsToTable(elrond);
 
         scn.StartGame();
 
@@ -151,7 +151,7 @@ public class Card_01_040_Tests
         var allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
         var allyHome6_2 = scn.GetFreepsCard("allyHome6_2");
 
-        scn.MoveCompanionToTable(elrond, allyHome3_1, allyHome3_2, allyHome6_1, allyHome6_2);
+        scn.MoveCompanionsToTable(elrond, allyHome3_1, allyHome3_2, allyHome6_1, allyHome6_2);
 
         scn.AddWoundsToChar(elrond, 1);
         scn.AddWoundsToChar(allyHome3_1, 1);

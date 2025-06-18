@@ -62,7 +62,7 @@ public class Card_10_030_Tests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var endgame = scn.GetFreepsCard("endgame");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(endgame);
 
         var troop = scn.GetShadowCard("troop");
@@ -96,7 +96,7 @@ public class Card_10_030_Tests
 
         var aragorn = scn.GetFreepsCard("aragorn");
         var endgame = scn.GetFreepsCard("endgame");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(endgame);
 
         var troop = scn.GetShadowCard("troop");
@@ -125,7 +125,7 @@ public class Card_10_030_Tests
 
         var aragorn = scn.GetFreepsCard("aragorn");
         var endgame = scn.GetFreepsCard("endgame");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(endgame);
 
         var troop = scn.GetShadowCard("troop");
@@ -162,7 +162,7 @@ public class Card_10_030_Tests
 
         var aragorn = scn.GetFreepsCard("aragorn");
         var endgame = scn.GetFreepsCard("endgame");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(endgame);
 
         var troop = scn.GetShadowCard("troop");

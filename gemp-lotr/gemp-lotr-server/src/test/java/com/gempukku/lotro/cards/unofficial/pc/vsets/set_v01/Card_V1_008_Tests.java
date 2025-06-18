@@ -80,7 +80,7 @@ public class Card_V1_008_Tests
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
 
-		scn.MoveCompanionToTable(gimli, gandalf);
+		scn.MoveCompanionsToTable(gimli, gandalf);
 		scn.MoveCardsToHand(lament, guard, elrond);
 
 		scn.StartGame();
@@ -130,7 +130,7 @@ public class Card_V1_008_Tests
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
 
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, lament);
 		scn.MoveCardsToHand(guard);
 
@@ -163,7 +163,7 @@ public class Card_V1_008_Tests
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
 
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.AddWoundsToChar(gimli, 1);
 		scn.AttachCardsTo(gimli, lament);
 		scn.AttachCardsTo(gimli, lastalliance); //can't usually go there but who cares
@@ -204,7 +204,7 @@ public class Card_V1_008_Tests
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl guard = scn.GetFreepsCard("guard");
 
-		scn.MoveCompanionToTable(gimli, gandalf);
+		scn.MoveCompanionsToTable(gimli, gandalf);
 		scn.AddWoundsToChar(gimli, 1);
 		scn.AddWoundsToChar(gandalf, 4);
 		scn.AttachCardsTo(gimli, lament);

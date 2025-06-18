@@ -72,7 +72,7 @@ public class Card_V2_006_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToHand(arwen);
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
 		assertEquals(8, scn.GetStrength(aragorn));
@@ -87,7 +87,7 @@ public class Card_V2_006_Tests
 
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn, arwen);
+		scn.MoveCompanionsToTable(aragorn, arwen);
 
 		scn.StartGame();
 
@@ -115,7 +115,7 @@ public class Card_V2_006_Tests
 
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn, arwen);
+		scn.MoveCompanionsToTable(aragorn, arwen);
 
 		var marksman = scn.GetShadowCard("marksman");
 		scn.MoveMinionsToTable(marksman);

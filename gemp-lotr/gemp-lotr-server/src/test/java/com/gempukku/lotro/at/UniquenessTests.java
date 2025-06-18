@@ -95,7 +95,7 @@ public class UniquenessTests
         var sword1 = scn.GetFreepsCard("sword1");
         var sword2 = scn.GetFreepsCard("sword2");
 
-        scn.MoveCompanionToTable(merry);
+        scn.MoveCompanionsToTable(merry);
         scn.MoveCardsToHand(sword1, sword2);
 
         scn.StartGame();

@@ -70,7 +70,7 @@ public class Card_03_013_ErrataTests
 		var scn = GetScenario();
 
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.MoveCompanionToTable(elrond);
+		scn.MoveCompanionsToTable(elrond);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(elrond, 3);
@@ -92,7 +92,7 @@ public class Card_03_013_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.MoveCompanionToTable(elrond);
+		scn.MoveCompanionsToTable(elrond);
 
 		scn.StartGame();
 		scn.FreepsDeclineOptionalTrigger();

@@ -99,7 +99,7 @@ public class Card_08_043_ErrataTests
 		var scn = GetScenario();
 
 		var host = scn.GetFreepsCard("host");
-		scn.MoveCompanionToTable(host);
+		scn.MoveCompanionsToTable(host);
 
 		scn.StartGame();
 

@@ -69,7 +69,7 @@ public class Card_01_059_ErrataTests
 		var gimli = scn.GetFreepsCard("gimli");
 		var rumil = scn.GetFreepsCard("rumil");
 		var grimir = scn.GetFreepsCard("grimir");
-		scn.MoveCompanionToTable(legolas, gimli);
+		scn.MoveCompanionsToTable(legolas, gimli);
 		scn.MoveCardsToSupportArea(rumil, grimir, sts);
 
 		scn.StartGame();
@@ -115,7 +115,7 @@ public class Card_01_059_ErrataTests
 		var gimli = scn.GetFreepsCard("gimli");
 		var rumil = scn.GetFreepsCard("rumil");
 		var grimir = scn.GetFreepsCard("grimir");
-		scn.MoveCompanionToTable(legolas, gimli);
+		scn.MoveCompanionsToTable(legolas, gimli);
 		scn.MoveCardsToSupportArea(rumil, grimir, sts);
 
 		scn.StartGame();
@@ -161,7 +161,7 @@ public class Card_01_059_ErrataTests
 		var gimli = scn.GetFreepsCard("gimli");
 		var rumil = scn.GetFreepsCard("rumil");
 		var grimir = scn.GetFreepsCard("grimir");
-		scn.MoveCompanionToTable(legolas, gimli);
+		scn.MoveCompanionsToTable(legolas, gimli);
 		scn.MoveCardsToSupportArea(rumil, grimir, sts);
 
 		var runner = scn.GetShadowCard("runner");

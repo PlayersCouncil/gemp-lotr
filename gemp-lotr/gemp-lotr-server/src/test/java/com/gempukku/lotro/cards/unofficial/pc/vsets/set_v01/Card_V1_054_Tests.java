@@ -73,7 +73,7 @@ public class Card_V1_054_Tests
 
 		var sam = scn.GetFreepsCard("sam");
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.MoveCompanionToTable(sam, boromir);
+		scn.MoveCompanionsToTable(sam, boromir);
 
 		var runner = scn.GetShadowCard("runner");
 		scn.MoveMinionsToTable(runner);

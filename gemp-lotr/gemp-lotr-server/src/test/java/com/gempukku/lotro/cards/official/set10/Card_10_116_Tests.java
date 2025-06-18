@@ -72,7 +72,7 @@ public class Card_10_116_Tests
 		var sam = scn.GetFreepsCard("sam");
 		var totgr = scn.GetFreepsCard("totgr");
 		scn.MoveCardsToSupportArea(totgr);
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		var sauron = scn.GetShadowCard("sauron");
 		scn.MoveMinionsToTable(sauron);
@@ -105,7 +105,7 @@ public class Card_10_116_Tests
 		var sam = scn.GetFreepsCard("sam");
 		var totgr = scn.GetFreepsCard("totgr");
 		scn.MoveCardsToSupportArea(totgr);
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		var sauron = scn.GetShadowCard("sauron");
 		var evil = scn.GetShadowCard("evil");
@@ -144,7 +144,7 @@ public class Card_10_116_Tests
 		var sam = scn.GetFreepsCard("sam");
 		var totgr = scn.GetFreepsCard("totgr");
 		scn.MoveCardsToSupportArea(totgr);
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		var sauron = scn.GetShadowCard("sauron");
 		var spies = scn.GetShadowCard("spies");
@@ -184,7 +184,7 @@ public class Card_10_116_Tests
 		var sam = scn.GetFreepsCard("sam");
 		var totgr = scn.GetFreepsCard("totgr");
 		scn.MoveCardsToSupportArea(totgr);
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		var sauron = scn.GetShadowCard("sauron");
 		var frost1 = scn.GetShadowCard("frost1");

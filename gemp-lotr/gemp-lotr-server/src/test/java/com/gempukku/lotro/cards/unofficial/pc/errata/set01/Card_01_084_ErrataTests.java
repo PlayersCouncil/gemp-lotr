@@ -65,7 +65,7 @@ public class Card_01_084_ErrataTests
 
 		var card = scn.GetFreepsCard("card");
 		scn.MoveCardsToHand(card);
-		scn.MoveCompanionToTable(card);
+		scn.MoveCompanionsToTable(card);
 		scn.MoveCardsToSupportArea(card);
 		scn.MoveCardsToDiscard(card);
 		scn.MoveCardsToTopOfDeck(card);

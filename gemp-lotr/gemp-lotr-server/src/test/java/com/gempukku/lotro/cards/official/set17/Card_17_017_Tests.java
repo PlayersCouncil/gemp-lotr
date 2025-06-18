@@ -74,7 +74,7 @@ public class Card_17_017_Tests
 
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var evenstar = scn.GetFreepsCard("evenstar");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.MoveCardsToSupportArea(evenstar);
 
 		var runner = scn.GetShadowCard("runner");
@@ -101,7 +101,7 @@ public class Card_17_017_Tests
 		var scn = GetScenario();
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		var runner = scn.GetShadowCard("runner");
 		scn.MoveMinionsToTable(runner);

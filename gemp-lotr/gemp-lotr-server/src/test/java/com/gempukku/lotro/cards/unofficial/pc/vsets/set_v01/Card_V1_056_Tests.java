@@ -76,7 +76,7 @@ public class Card_V1_056_Tests
 		PhysicalCardImpl merry = scn.GetFreepsCard("merry");
 		PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.MoveCardsToHand(coming, merry, pippin);
 
 		scn.StartGame();

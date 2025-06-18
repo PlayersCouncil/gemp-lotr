@@ -72,7 +72,7 @@ public class Card_V1_002_Tests
         PhysicalCardImpl strike = scn.GetFreepsCard("strike");
         scn.MoveCardsToSupportArea(emhr);
         scn.MoveCardsToSupportArea(deep);
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
         scn.MoveCardsToFreepsDiscard("axe", "runner", "plunder");
 
         scn.StartGame();
@@ -99,7 +99,7 @@ public class Card_V1_002_Tests
         PhysicalCardImpl strike = scn.GetFreepsCard("strike");
         scn.MoveCardsToSupportArea(emhr);
         scn.MoveCardsToHand(deep);
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
         scn.MoveCardsToFreepsDiscard("axe", "runner", "plunder");
         scn.MoveCardsToTopOfDeck(strike);
 

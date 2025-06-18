@@ -73,7 +73,7 @@ public class Card_01_150_ErrataTests
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		var rager = scn.GetShadowCard("rager");
 		scn.MoveMinionsToTable(rager);
@@ -100,7 +100,7 @@ public class Card_01_150_ErrataTests
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		var rager = scn.GetShadowCard("rager");
 		scn.MoveMinionsToTable(rager);

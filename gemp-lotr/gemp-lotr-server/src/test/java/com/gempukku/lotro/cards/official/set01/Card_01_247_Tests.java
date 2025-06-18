@@ -64,7 +64,7 @@ public class Card_01_247_Tests
 		var scn = GetScenario();
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		var foe = scn.GetShadowCard("foe");
 		var soldier = scn.GetShadowCard("soldier");

@@ -43,7 +43,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -74,7 +74,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -153,7 +153,7 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var sam = scn.GetFreepsCard("sam");
-        scn.MoveCompanionToTable(aragorn, sam);
+        scn.MoveCompanionsToTable(aragorn, sam);
         scn.AddWoundsToChar(aragorn, 1);
         scn.AddWoundsToChar(frodo, 2);
         scn.AddWoundsToChar(sam, 2);
@@ -207,7 +207,7 @@ public class HinderTests
         var aragorn = scn.GetFreepsCard("aragorn");
         var gandalf = scn.GetFreepsCard("gandalf");
         var flame = scn.GetFreepsCard("flame");
-        scn.MoveCompanionToTable(aragorn, gandalf);
+        scn.MoveCompanionsToTable(aragorn, gandalf);
         scn.MoveCardsToHand(flame);
 
         scn.MoveMinionsToTable("runner");
@@ -252,8 +252,8 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
-        scn.MoveCompanionToTable("gandalf", "sam", "merry", "gimli");
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCompanionsToTable("gandalf", "sam", "merry", "gimli");
 
         var enquea = scn.GetShadowCard("enquea");
         scn.MoveMinionsToTable(enquea);
@@ -299,7 +299,7 @@ public class HinderTests
         var gimli = scn.GetFreepsCard("gimli");
         var gandalf = scn.GetFreepsCard("gandalf");
         var beacons = scn.GetFreepsCard("beacons");
-        scn.MoveCompanionToTable(aragorn, boromir, gimli, gandalf);
+        scn.MoveCompanionsToTable(aragorn, boromir, gimli, gandalf);
         scn.MoveCardsToHand(beacons);
 
         scn.MoveMinionsToTable("runner");
@@ -345,7 +345,7 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var armor = scn.GetFreepsCard("armor");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(armor);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -377,7 +377,7 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var gandalf = scn.GetFreepsCard("gandalf");
-        scn.MoveCompanionToTable(aragorn, gandalf);
+        scn.MoveCompanionsToTable(aragorn, gandalf);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -408,7 +408,7 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var pathfinder = scn.GetFreepsCard("pathfinder");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(pathfinder);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -444,7 +444,7 @@ public class HinderTests
         var aragorn = scn.GetFreepsCard("aragorn");
         var barricade = scn.GetFreepsCard("barricade");
         var guardian = scn.GetFreepsCard("guardian");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         //These are 4-cost decoys that Grond can target instead
         scn.MoveCardsToSupportArea(barricade, guardian);
 
@@ -493,7 +493,7 @@ public class HinderTests
         var aragorn = scn.GetFreepsCard("aragorn");
         var kingdom = scn.GetFreepsCard("kingdom");
         var stairs = scn.GetFreepsCard("stairs");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         //These are 0-cost decoys that Grond can target instead
         scn.MoveCardsToSupportArea(kingdom, stairs);
 
@@ -537,7 +537,7 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var gandalf = scn.GetFreepsCard("gandalf");
-        scn.MoveCompanionToTable(aragorn, gandalf);
+        scn.MoveCompanionsToTable(aragorn, gandalf);
 
         //This version of the hinder-izing ability requires that the player choose a character with at least 4 strength.
         //After hindering Aragorn, we will attempt to use it again and see whether he is still selectable.
@@ -587,7 +587,7 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var gandalf = scn.GetFreepsCard("gandalf");
-        scn.MoveCompanionToTable(aragorn, gandalf);
+        scn.MoveCompanionsToTable(aragorn, gandalf);
 
         //This version of the hinder-izing ability requires that the player choose a character with at least 4 strength.
         //After hindering Aragorn, we will attempt to use it again and see whether he is still selectable.
@@ -635,7 +635,7 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var gandalf = scn.GetFreepsCard("gandalf");
-        scn.MoveCompanionToTable(aragorn, gandalf);
+        scn.MoveCompanionsToTable(aragorn, gandalf);
 
         //This version of the hinder-izing ability requires that the player choose a character with at least 4 strength.
         //After hindering Aragorn, we will attempt to use it again and see whether he is still selectable.
@@ -687,7 +687,7 @@ public class HinderTests
         var aragorn = scn.GetFreepsCard("aragorn");
         var gandalf = scn.GetFreepsCard("gandalf");
         var gimli = scn.GetFreepsCard("gimli");
-        scn.MoveCompanionToTable(aragorn, gandalf, gimli);
+        scn.MoveCompanionsToTable(aragorn, gandalf, gimli);
 
         //This version of the hinder-izing ability requires that the player choose a character with at least 4 strength.
         //After hindering Aragorn, we will attempt to use it again and see whether he is still selectable.
@@ -738,7 +738,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         var lord = scn.GetShadowCard("lord");
         scn.MoveMinionsToTable(lord);
@@ -825,7 +825,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         scn.MoveMinionsToTable("runner");
 
@@ -858,7 +858,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -890,7 +890,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -922,7 +922,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -960,7 +960,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         var troll = scn.GetShadowCard("troll");
         scn.MoveMinionsToTable(troll);
@@ -1002,7 +1002,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         scn.MoveMinionsToTable("runner");
 
@@ -1044,7 +1044,7 @@ public class HinderTests
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         scn.MoveMinionsToTable("enquea");
 
@@ -1093,8 +1093,8 @@ public class HinderTests
         var gandalf = scn.GetFreepsCard("gandalf");
         var arwen = scn.GetFreepsCard("arwen");
 
-        scn.MoveCompanionToTable("legolas", "gimli", "boromir", "sam", "merry", "pippin");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable("legolas", "gimli", "boromir", "sam", "merry", "pippin");
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(gandalf, arwen);
 
         scn.HinderCard(aragorn);
@@ -1125,7 +1125,7 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var httwc = scn.GetFreepsCard("httwc");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(httwc);
 
         scn.HinderCard(aragorn);
@@ -1149,7 +1149,7 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var deadman = scn.GetFreepsCard("deadman");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(deadman);
 
         scn.AddThreats(1);
@@ -1189,7 +1189,7 @@ public class HinderTests
         var aragorn = scn.GetFreepsCard("aragorn");
         var anduril = scn.GetFreepsCard("anduril");
         var sword = scn.GetFreepsCard("sword");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.AttachCardsTo(aragorn, anduril);
         scn.MoveCardsToHand(sword);
 
@@ -1229,7 +1229,7 @@ public class HinderTests
         var aragorn = scn.GetFreepsCard("aragorn");
         var anduril = scn.GetFreepsCard("anduril");
         var steed = scn.GetFreepsCard("steed");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.AttachCardsTo(aragorn, anduril, steed);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -1273,7 +1273,7 @@ public class HinderTests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var anduril = scn.GetFreepsCard("anduril");
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(anduril);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -1310,7 +1310,7 @@ public class HinderTests
         var anduril = scn.GetFreepsCard("anduril");
         var arwen = scn.GetFreepsCard("arwen");
         //Cheating and putting it on arwen for the transfer effect
-        scn.MoveCompanionToTable(arwen, aragorn);
+        scn.MoveCompanionsToTable(arwen, aragorn);
         scn.AttachCardsTo(arwen, anduril);
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {

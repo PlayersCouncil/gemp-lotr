@@ -71,7 +71,7 @@ public class Card_01_023_ErrataTests
 		var nobody = scn.GetFreepsCard("nobody");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(nobody);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var uruk = scn.GetShadowCard("uruk");
 		var target = scn.GetShadowCard("target");
@@ -95,7 +95,7 @@ public class Card_01_023_ErrataTests
 		var nobody = scn.GetFreepsCard("nobody");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(nobody);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var uruk = scn.GetShadowCard("uruk");
 		var target = scn.GetShadowCard("target");
@@ -127,7 +127,7 @@ public class Card_01_023_ErrataTests
 		var nobody = scn.GetFreepsCard("nobody");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(nobody);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var uruk = scn.GetShadowCard("uruk");
 		var target = scn.GetShadowCard("target");

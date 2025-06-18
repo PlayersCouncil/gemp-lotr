@@ -73,9 +73,9 @@ public class Card_08_003_ErrataTests
 		var gimli = scn.GetFreepsCard("gimli");
 		var ring = scn.GetFreepsCard("ring");
 		scn.MoveCardsToHand(brc);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, ring);
-		scn.MoveCompanionToTable("guard1", "guard2");
+		scn.MoveCompanionsToTable("guard1", "guard2");
 
 		var runner = scn.GetShadowCard("runner");
 		var troll = scn.GetShadowCard("troll");

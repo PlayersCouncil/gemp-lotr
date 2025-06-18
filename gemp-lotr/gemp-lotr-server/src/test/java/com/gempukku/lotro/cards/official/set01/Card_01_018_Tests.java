@@ -70,7 +70,7 @@ public class Card_01_018_Tests
 
         var gimli = scn.GetFreepsCard("gimli");
         var halls = scn.GetFreepsCard("halls");
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
         scn.MoveCardsToHand(halls);
 
         var fcard1 = scn.GetFreepsCard("fcard1");
@@ -130,7 +130,7 @@ public class Card_01_018_Tests
 
         var gimli = scn.GetFreepsCard("gimli");
         var halls = scn.GetFreepsCard("halls");
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
         scn.MoveCardsToHand(halls);
 
         var fcard1 = scn.GetFreepsCard("fcard1");

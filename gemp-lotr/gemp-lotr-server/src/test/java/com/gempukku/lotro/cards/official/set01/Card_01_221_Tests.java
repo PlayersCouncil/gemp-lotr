@@ -78,7 +78,7 @@ public class Card_01_221_Tests
 		var condition2 = scn.GetFreepsCard("condition2");
 		var condition3 = scn.GetFreepsCard("condition3");
 		var condition4 = scn.GetFreepsCard("condition4");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.MoveCardsToSupportArea(condition1, condition2, condition3, condition4);
 
 		scn.StartGame();

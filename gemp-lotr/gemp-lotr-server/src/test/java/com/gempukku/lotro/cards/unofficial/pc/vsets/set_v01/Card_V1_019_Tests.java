@@ -124,7 +124,7 @@ public class Card_V1_019_Tests
 		var defiance = scn.GetFreepsCard("defiance");
 		var arwen = scn.GetFreepsCard("arwen");
 
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToHand(defiance, arwen);
 
 		var runner = scn.GetShadowCard("runner");
@@ -163,7 +163,7 @@ public class Card_V1_019_Tests
 		var defiance = scn.GetFreepsCard("defiance");
 		var arwen = scn.GetFreepsCard("arwen");
 
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToHand(defiance, arwen);
 
 		var runner = scn.GetShadowCard("runner");

@@ -117,7 +117,7 @@ public class Card_V2_052_Tests
 		var frodo = scn.GetRingBearer();
 		var ruin = scn.GetFreepsCard("ruin");
 		scn.MoveCardsToSupportArea(ruin);
-		scn.MoveCompanionToTable("vhaldir");
+		scn.MoveCompanionsToTable("vhaldir");
 
 		var runner = scn.GetShadowCard("runner");
 		scn.MoveMinionsToTable(runner);
@@ -151,7 +151,7 @@ public class Card_V2_052_Tests
 		var frodo = scn.GetRingBearer();
 		var ruin = scn.GetFreepsCard("ruin");
 		scn.MoveCardsToSupportArea(ruin);
-		scn.MoveCompanionToTable("vhaldir", "vgimli");
+		scn.MoveCompanionsToTable("vhaldir", "vgimli");
 
 		var runner = scn.GetShadowCard("runner");
 		scn.MoveMinionsToTable(runner);
@@ -188,7 +188,7 @@ public class Card_V2_052_Tests
 		var arrowslits = scn.GetFreepsCard("arrowslits");
 		var maneuver = scn.GetFreepsCard("maneuver");
 		scn.MoveCardsToSupportArea(ruin);
-		scn.MoveCompanionToTable("vhaldir", "vgimli");
+		scn.MoveCompanionsToTable("vhaldir", "vgimli");
 		scn.MoveCardsToDiscard(arrowslits, maneuver);
 
 		scn.AddTokensToCard(ruin, 2);
@@ -244,7 +244,7 @@ public class Card_V2_052_Tests
 		var arrowslits = scn.GetFreepsCard("arrowslits");
 		var archery = scn.GetFreepsCard("archery");
 		scn.MoveCardsToSupportArea(ruin);
-		scn.MoveCompanionToTable("vhaldir", "vgimli");
+		scn.MoveCompanionsToTable("vhaldir", "vgimli");
 		scn.MoveCardsToSupportArea(scn.GetFreepsCard("possession")); //needed prereq for the archery event
 		scn.MoveCardsToDiscard(arrowslits, archery);
 
@@ -301,7 +301,7 @@ public class Card_V2_052_Tests
 		var arrowslits = scn.GetFreepsCard("arrowslits");
 		var skirmish = scn.GetFreepsCard("skirmish");
 		scn.MoveCardsToSupportArea(ruin);
-		scn.MoveCompanionToTable("vhaldir", "vgimli", "eowyn");
+		scn.MoveCompanionsToTable("vhaldir", "vgimli", "eowyn");
 		scn.MoveCardsToDiscard(arrowslits, skirmish);
 
 		scn.AddTokensToCard(ruin, 2);
@@ -358,7 +358,7 @@ public class Card_V2_052_Tests
 		var arrowslits = scn.GetFreepsCard("arrowslits");
 		var regroup = scn.GetFreepsCard("regroup");
 		scn.MoveCardsToSupportArea(ruin);
-		scn.MoveCompanionToTable("vhaldir", "vgimli", "eowyn");
+		scn.MoveCompanionsToTable("vhaldir", "vgimli", "eowyn");
 		scn.MoveCardsToDiscard(arrowslits, regroup);
 
 		scn.AddTokensToCard(ruin, 2);
@@ -415,7 +415,7 @@ public class Card_V2_052_Tests
 		var arrowslits = scn.GetFreepsCard("arrowslits");
 		scn.MoveCardsToSupportArea(ruin);
 		scn.MoveCardsToDiscard(arrowslits);
-		scn.MoveCompanionToTable("eowyn"); // On a regroup move, reinforces a Rohan token
+		scn.MoveCompanionsToTable("eowyn"); // On a regroup move, reinforces a Rohan token
 
 		scn.StartGame();
 		scn.AddTokensToCard(ruin, 2);

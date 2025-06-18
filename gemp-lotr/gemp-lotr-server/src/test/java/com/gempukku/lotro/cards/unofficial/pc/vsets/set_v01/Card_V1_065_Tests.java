@@ -103,7 +103,7 @@ public class Card_V1_065_Tests
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		var dam = scn.GetShadowCard("dam");
 		var foul = scn.GetShadowCard("foul");

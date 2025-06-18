@@ -75,7 +75,7 @@ public class Card_19_038_ErrataTests
 
         scn.MoveCardsToHand(nertea);
 
-        scn.MoveCompanionToTable(aragorn, boromir, arwen, legolas);
+        scn.MoveCompanionsToTable(aragorn, boromir, arwen, legolas);
 
         scn.StartGame();
 

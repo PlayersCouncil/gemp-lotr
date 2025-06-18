@@ -73,7 +73,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.MoveCompanionToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -97,7 +97,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.MoveCompanionToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -123,7 +123,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.MoveCompanionToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -152,7 +152,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.MoveCompanionToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -176,7 +176,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.MoveCompanionToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);

@@ -101,8 +101,8 @@ public class Card_V2_038_Tests
 		scn.MoveMinionsToTable(balrog, runner);
 
 		//Added to increase threat threshold to 3
-		scn.MoveCompanionToTable("companion1");
-		scn.MoveCompanionToTable("companion2");
+		scn.MoveCompanionsToTable("companion1");
+		scn.MoveCompanionsToTable("companion2");
 
 		//cheating to add fellowship archery
 		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, null, 3));

@@ -74,7 +74,7 @@ public class Card_15_086_Tests
 		scn.AttachCardsTo(gats, scn.GetShadowCard("pavise"));
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);

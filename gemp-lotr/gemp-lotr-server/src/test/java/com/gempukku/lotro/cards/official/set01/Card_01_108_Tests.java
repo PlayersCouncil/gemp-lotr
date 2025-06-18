@@ -64,9 +64,9 @@ public class Card_01_108_Tests
         var boromir = scn.GetFreepsCard("boromir");
         var nostranger = scn.GetFreepsCard("nostranger");
 
-        scn.MoveCompanionToTable(aragorn);
-        scn.MoveCompanionToTable(arwen);
-        scn.MoveCompanionToTable(boromir);
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCompanionsToTable(arwen);
+        scn.MoveCompanionsToTable(boromir);
         scn.MoveCardsToHand(nostranger);
 
         scn.StartGame();
@@ -88,7 +88,7 @@ public class Card_01_108_Tests
         var aragorn = scn.GetFreepsCard("aragorn");
         var nostranger = scn.GetFreepsCard("nostranger");
 
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(nostranger);
 
         scn.StartGame();

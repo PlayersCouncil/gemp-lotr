@@ -94,7 +94,7 @@ public class Card_01_012_ErrataTests
 		PhysicalCardImpl card1 = scn.GetFreepsCard("card1");
 		PhysicalCardImpl card2 = scn.GetFreepsCard("card2");
 		PhysicalCardImpl card3 = scn.GetFreepsCard("card3");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.MoveCardsToHand(card1);
 		
 		scn.StartGame();

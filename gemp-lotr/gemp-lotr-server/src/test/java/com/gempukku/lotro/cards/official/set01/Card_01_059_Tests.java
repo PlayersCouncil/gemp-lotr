@@ -73,7 +73,7 @@ public class Card_01_059_Tests
 		var gimli = scn.GetFreepsCard("gimli");
 		var rumil = scn.GetFreepsCard("rumil");
 		var grimir = scn.GetFreepsCard("grimir");
-		scn.MoveCompanionToTable(legolas, gimli);
+		scn.MoveCompanionsToTable(legolas, gimli);
 		scn.MoveCardsToSupportArea(rumil, grimir, sts);
 
 		scn.MoveMinionsToTable("runner");
@@ -126,7 +126,7 @@ public class Card_01_059_Tests
 		var gimli = scn.GetFreepsCard("gimli");
 		var rumil = scn.GetFreepsCard("rumil");
 		var grimir = scn.GetFreepsCard("grimir");
-		scn.MoveCompanionToTable(legolas, gimli);
+		scn.MoveCompanionsToTable(legolas, gimli);
 		scn.MoveCardsToSupportArea(rumil, grimir, sts);
 
 		scn.MoveMinionsToTable("runner");
@@ -179,7 +179,7 @@ public class Card_01_059_Tests
 		var sts = scn.GetFreepsCard("sts");
 		var legolas = scn.GetFreepsCard("legolas");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionToTable(legolas, gimli);
+		scn.MoveCompanionsToTable(legolas, gimli);
 		scn.MoveCardsToSupportArea(sts);
 
 		var gollum = scn.GetShadowCard("gollum");

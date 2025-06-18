@@ -71,7 +71,7 @@ public class Card_10_068_ErrataTests
 
 		var rider = scn.GetFreepsCard("rider");
 		var mount = scn.GetFreepsCard("mount");
-		scn.MoveCompanionToTable(rider);
+		scn.MoveCompanionsToTable(rider);
 		scn.AttachCardsTo(rider, mount);
 
 		var enquea = scn.GetShadowCard("enquea");

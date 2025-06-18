@@ -121,7 +121,7 @@ public class Card_15_064_ErrataTests
 		VirtualTableScenario scn = GetScenario();
 
 		var madril = scn.GetFreepsCard("madril");
-		scn.MoveCompanionToTable(madril);
+		scn.MoveCompanionsToTable(madril);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");

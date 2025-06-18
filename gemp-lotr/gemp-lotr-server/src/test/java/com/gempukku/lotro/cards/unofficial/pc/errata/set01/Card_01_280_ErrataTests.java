@@ -76,7 +76,7 @@ public class Card_01_280_ErrataTests
 		scn.MoveMinionsToTable(lt);
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.FreepsDrawCards(1);
 
 		scn.StartGame();
@@ -103,7 +103,7 @@ public class Card_01_280_ErrataTests
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(aragorn, sam);
+		scn.MoveCompanionsToTable(aragorn, sam);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -127,7 +127,7 @@ public class Card_01_280_ErrataTests
 		scn.MoveMinionsToTable(lt);
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.FreepsDrawCards(2);
 
 		scn.StartGame();

@@ -118,7 +118,7 @@ public class Card_01_338_Tests
         scn.MoveCardsToHand(nertea);
         scn.MoveCardsToDiscard(twk);
 
-        scn.MoveCompanionToTable("guard1", "guard2", "guard3", "guard4");
+        scn.MoveCompanionsToTable("guard1", "guard2", "guard3", "guard4");
 
         scn.StartGame();
         //Start our test on 2 so that moving to 3 is the first thing we do

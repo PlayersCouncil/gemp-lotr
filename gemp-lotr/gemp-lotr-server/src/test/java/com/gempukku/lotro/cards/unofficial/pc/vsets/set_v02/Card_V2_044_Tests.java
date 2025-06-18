@@ -124,7 +124,7 @@ public class Card_V2_044_Tests
 		var insurance = scn.GetShadowCard("insurance");
 		scn.MoveCardsToHand(insurance);
 
-		scn.MoveCompanionToTable("sam", "merry", "pippin", "gandalf", "aragorn",
+		scn.MoveCompanionsToTable("sam", "merry", "pippin", "gandalf", "aragorn",
 				"legolas", "gimli", "boromir");
 
 		scn.StartGame();

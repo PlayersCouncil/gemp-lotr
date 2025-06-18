@@ -66,7 +66,7 @@ public class Card_V2_045_Tests
 		var hope = scn.GetFreepsCard("hope");
 		var eomer = scn.GetFreepsCard("eomer");
 		scn.MoveCardsToHand(hope);
-		scn.MoveCompanionToTable(eomer);
+		scn.MoveCompanionsToTable(eomer);
 
 		scn.StartGame();
 
@@ -85,7 +85,7 @@ public class Card_V2_045_Tests
 
 		var hope = scn.GetFreepsCard("hope");
 		var eomer = scn.GetFreepsCard("eomer");
-		scn.MoveCompanionToTable(eomer);
+		scn.MoveCompanionsToTable(eomer);
 		scn.AttachCardsTo(eomer, hope);
 
 		scn.StartGame();

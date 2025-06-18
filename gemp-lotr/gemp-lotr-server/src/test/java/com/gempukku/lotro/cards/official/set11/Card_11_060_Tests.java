@@ -74,7 +74,7 @@ public class Card_11_060_Tests
 		var man2 = scn.GetFreepsCard("man2");
 		var man3 = scn.GetFreepsCard("man3");
 		scn.MoveCardsToHand(quality);
-		scn.MoveCompanionToTable(man1, man2, man3);
+		scn.MoveCompanionsToTable(man1, man2, man3);
 
 		var sauron = scn.GetShadowCard("sauron");
 		scn.MoveMinionsToTable(sauron);

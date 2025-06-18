@@ -76,7 +76,7 @@ public class Card_17_024_ErrataTests
 		var shadowfax = scn.GetFreepsCard("shadowfax");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.MoveCardsToHand(shadowfax);
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.StartGame();
 		scn.RemoveBurdens(1);
@@ -107,7 +107,7 @@ public class Card_17_024_ErrataTests
 
 		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.MoveCardsToHand(shadowfax, staff, glamdring2);
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.AttachCardsTo(gandalf, pipe, glamdring);
 
 		scn.StartGame();
@@ -136,7 +136,7 @@ public class Card_17_024_ErrataTests
 
 		var shadowfax = scn.GetFreepsCard("shadowfax");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.AttachCardsTo(gandalf, shadowfax);
 
 		scn.StartGame();

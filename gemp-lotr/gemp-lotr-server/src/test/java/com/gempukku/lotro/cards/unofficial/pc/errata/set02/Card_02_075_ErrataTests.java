@@ -111,7 +111,7 @@ public class Card_02_075_ErrataTests
         PhysicalCardImpl gimli = scn.GetRingBearer();
 
         scn.MoveMinionsToTable(ferny);
-        scn.MoveCompanionToTable(sam);
+        scn.MoveCompanionsToTable(sam);
 
         //Make ferny fierce and strength +5 just to make things easier to test
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("Bill Ferny"), null, Keyword.FIERCE));

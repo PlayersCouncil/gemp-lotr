@@ -87,7 +87,7 @@ public class Card_01_040_ErrataTests
         var scn = GetSimpleDeckScenario();
         var elrond = scn.GetFreepsCard("elrond");
 
-        scn.MoveCompanionToTable(elrond);
+        scn.MoveCompanionsToTable(elrond);
 
         scn.StartGame();
 
@@ -110,10 +110,10 @@ public class Card_01_040_ErrataTests
         //Pre-game setup
         var scn = GetHome3AllyScenario();
         var elrond = scn.GetFreepsCard("elrond");
-        scn.MoveCompanionToTable("allyHome3_1");
-        scn.MoveCompanionToTable("allyHome6_1");
+        scn.MoveCompanionsToTable("allyHome3_1");
+        scn.MoveCompanionsToTable("allyHome6_1");
 
-        scn.MoveCompanionToTable(elrond);
+        scn.MoveCompanionsToTable(elrond);
 
         scn.StartGame();
 
@@ -181,7 +181,7 @@ public class Card_01_040_ErrataTests
         var allyHome3_2 = scn.GetFreepsCard("allyHome3_2");
         var allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
         var allyHome6_2 = scn.GetFreepsCard("allyHome6_2");
-        scn.MoveCompanionToTable(elrond, allyHome3_1, allyHome3_2, allyHome6_1, allyHome6_2);
+        scn.MoveCompanionsToTable(elrond, allyHome3_1, allyHome3_2, allyHome6_1, allyHome6_2);
 
         scn.AddWoundsToChar(elrond, 1);
         scn.AddWoundsToChar(allyHome3_1, 1);

@@ -71,9 +71,9 @@ public class Card_02_032_ErrataTests
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
         PhysicalCardImpl brand = scn.GetFreepsCard("brand");
 
-        scn.MoveCompanionToTable(arwen);
-        scn.MoveCompanionToTable(boromir);
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(arwen);
+        scn.MoveCompanionsToTable(boromir);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(brand);
 
         scn.StartGame();
@@ -99,7 +99,7 @@ public class Card_02_032_ErrataTests
         PhysicalCardImpl brand = scn.GetFreepsCard("brand");
         PhysicalCardImpl brand2 = scn.GetFreepsCard("brand2");
 
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(brand);
         scn.MoveCardsToHand(brand2);
 
@@ -122,7 +122,7 @@ public class Card_02_032_ErrataTests
         PhysicalCardImpl runner = scn.GetShadowCard("runner");
         PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
 
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.MoveCardsToHand(brand);
 
         scn.MoveMinionsToTable(runner);
@@ -169,7 +169,7 @@ public class Card_02_032_ErrataTests
         PhysicalCardImpl brand = scn.GetFreepsCard("brand");
         PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
 
-        scn.MoveCompanionToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
         scn.AttachCardsTo(aragorn, brand);
 
         scn.MoveMinionsToTable(nazgul);

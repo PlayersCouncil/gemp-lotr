@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set10;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -64,7 +63,7 @@ public class Card_10_017_ErrataTests
 
 		var card = scn.GetFreepsCard("card");
 		scn.MoveCardsToHand(card);
-		scn.MoveCompanionToTable(card);
+		scn.MoveCompanionsToTable(card);
 		scn.MoveCardsToSupportArea(card);
 		scn.MoveCardsToDiscard(card);
 		scn.MoveCardsToTopOfDeck(card);

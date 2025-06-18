@@ -103,7 +103,7 @@ public class Card_V2_031_Tests
 		scn.AddTokensToCard(ladder, 1);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 

@@ -71,7 +71,7 @@ public class Card_17_096_Tests
 
 		var frodo = scn.GetRingBearer();
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCompanionsToTable(eowyn);
 
 		var scout = scn.GetShadowCard("scout");
 		scn.MoveMinionsToTable(scout);

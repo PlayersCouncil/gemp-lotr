@@ -78,7 +78,7 @@ public class Card_08_092_Tests
 		var theoden = scn.GetFreepsCard("theoden");
 		var eomer = scn.GetFreepsCard("eomer");
 		var rider = scn.GetFreepsCard("rider");
-		scn.MoveCompanionToTable(theoden);
+		scn.MoveCompanionsToTable(theoden);
 		scn.MoveCardsToTopOfDeck(eomer, rider);
 
 		var bowman = scn.GetShadowCard("bowman");
@@ -116,7 +116,7 @@ public class Card_08_092_Tests
 		var theoden = scn.GetFreepsCard("theoden");
 		var eomer = scn.GetFreepsCard("eomer");
 		var rider = scn.GetFreepsCard("rider");
-		scn.MoveCompanionToTable(theoden);
+		scn.MoveCompanionsToTable(theoden);
 		scn.MoveCardsToDiscard(eomer, rider);
 
 		var bowman = scn.GetShadowCard("bowman");
@@ -153,7 +153,7 @@ public class Card_08_092_Tests
 		var theoden = scn.GetFreepsCard("theoden");
 		var eomer = scn.GetFreepsCard("eomer");
 		var rider = scn.GetFreepsCard("rider");
-		scn.MoveCompanionToTable(theoden);
+		scn.MoveCompanionsToTable(theoden);
 		scn.MoveCardsToTopOfDeck(eomer);
 		scn.MoveCardsToDiscard(rider);
 
@@ -188,7 +188,7 @@ public class Card_08_092_Tests
 		var theoden = scn.GetFreepsCard("theoden");
 		var eomer = scn.GetFreepsCard("eomer");
 		var rider = scn.GetFreepsCard("rider");
-		scn.MoveCompanionToTable(theoden, rider);
+		scn.MoveCompanionsToTable(theoden, rider);
 		scn.MoveCardsToTopOfDeck(eomer);
 
 		var bowman = scn.GetShadowCard("bowman");

@@ -101,7 +101,7 @@ public class Card_V1_057_Tests
 		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl farmer = scn.GetRingBearer();
-		scn.MoveCompanionToTable(farmer);
+		scn.MoveCompanionsToTable(farmer);
 
 		scn.StartGame();
 

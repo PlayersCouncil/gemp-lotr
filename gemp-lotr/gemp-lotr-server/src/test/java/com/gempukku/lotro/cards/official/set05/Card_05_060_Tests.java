@@ -68,7 +68,7 @@ public class Card_05_060_Tests
 		var scn = GetScenario();
 
 		var sleep = scn.GetFreepsCard("sleep");
-		scn.MoveCompanionToTable("gandalf");
+		scn.MoveCompanionsToTable("gandalf");
 		scn.MoveCardsToHand(sleep);
 
 		var siege = scn.GetShadowCard("siege");

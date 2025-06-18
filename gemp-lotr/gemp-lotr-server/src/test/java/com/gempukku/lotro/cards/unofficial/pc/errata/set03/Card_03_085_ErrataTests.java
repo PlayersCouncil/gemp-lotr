@@ -74,7 +74,7 @@ public class Card_03_085_ErrataTests
 
 		var sam = scn.GetFreepsCard("sam");
 		var bounder = scn.GetFreepsCard("bounder");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToSupportArea(bounder);
 
 		scn.StartGame();
@@ -104,7 +104,7 @@ public class Card_03_085_ErrataTests
 
 		var sam = scn.GetFreepsCard("sam");
 		var bounder = scn.GetFreepsCard("bounder");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToHand(bounder);
 
 		var tgat = scn.GetShadowCard("tgat");
@@ -127,7 +127,7 @@ public class Card_03_085_ErrataTests
 
 		var sam = scn.GetFreepsCard("sam");
 		var bounder = scn.GetFreepsCard("bounder");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToHand(bounder);
 
 		var tgat = scn.GetShadowCard("tgat");
@@ -152,7 +152,7 @@ public class Card_03_085_ErrataTests
 
 		var sam = scn.GetFreepsCard("sam");
 		var bounder = scn.GetFreepsCard("bounder");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToHand(bounder);
 
 		var tgat = scn.GetShadowCard("tgat");

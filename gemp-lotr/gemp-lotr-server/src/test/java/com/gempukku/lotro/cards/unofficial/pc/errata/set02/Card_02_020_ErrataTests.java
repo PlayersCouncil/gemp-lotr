@@ -6,7 +6,6 @@ import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -67,7 +66,7 @@ public class Card_02_020_ErrataTests
 
 		var card = scn.GetFreepsCard("card");
 		scn.MoveCardsToHand(card);
-		scn.MoveCompanionToTable(card);
+		scn.MoveCompanionsToTable(card);
 		scn.MoveCardsToSupportArea(card);
 		scn.MoveCardsToDiscard(card);
 		scn.MoveCardsToTopOfDeck(card);

@@ -100,7 +100,7 @@ public class Card_01_031_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var erestor = scn.GetFreepsCard("erestor");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.MoveCompanionToTable(arwen, erestor, orophin);
+		scn.MoveCompanionsToTable(arwen, erestor, orophin);
 		scn.MoveCardsToHand(asfaloth);
 
 		scn.StartGame();
@@ -120,7 +120,7 @@ public class Card_01_031_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var erestor = scn.GetFreepsCard("erestor");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.MoveCompanionToTable(arwen, erestor, orophin);
+		scn.MoveCompanionsToTable(arwen, erestor, orophin);
 		scn.MoveCardsToHand(asfaloth);
 
 		scn.StartGame();
@@ -140,7 +140,7 @@ public class Card_01_031_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var erestor = scn.GetFreepsCard("erestor");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.MoveCompanionToTable(arwen, erestor, orophin);
+		scn.MoveCompanionsToTable(arwen, erestor, orophin);
 		scn.MoveCardsToHand(asfaloth);
 
 		//cheating to ensure site 2 qualifies
@@ -166,7 +166,7 @@ public class Card_01_031_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var erestor = scn.GetFreepsCard("erestor");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.MoveCompanionToTable(arwen, erestor, orophin);
+		scn.MoveCompanionsToTable(arwen, erestor, orophin);
 		scn.MoveCardsToHand(asfaloth);
 
 		//cheating to ensure site 2 qualifies
@@ -196,7 +196,7 @@ public class Card_01_031_Tests
 		var legolas = scn.GetFreepsCard("legolas");
 		var erestor = scn.GetFreepsCard("erestor");
 		var orophin = scn.GetFreepsCard("orophin");
-		scn.MoveCompanionToTable(arwen, legolas, erestor, orophin);
+		scn.MoveCompanionsToTable(arwen, legolas, erestor, orophin);
 		scn.MoveCardsToHand(asfaloth);
 
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));

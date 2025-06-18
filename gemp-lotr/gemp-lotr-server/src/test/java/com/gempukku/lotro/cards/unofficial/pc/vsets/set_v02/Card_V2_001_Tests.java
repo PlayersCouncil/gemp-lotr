@@ -100,7 +100,7 @@ public class Card_V2_001_Tests
 		var driven = scn.GetShadowCard("driven");
 		scn.MoveCardsToSupportArea(driven);
 
-		scn.MoveCompanionToTable("fodder1", "fodder2", "fodder3", "fodder4");
+		scn.MoveCompanionsToTable("fodder1", "fodder2", "fodder3", "fodder4");
 		scn.FreepsDrawCards(4);
 
 		scn.StartGame();

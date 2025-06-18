@@ -105,7 +105,7 @@ public class Card_V2_025_Tests
 
 		var foreman = scn.GetShadowCard("foreman");
 
-		scn.MoveCompanionToTable("comp2", "comp3");
+		scn.MoveCompanionsToTable("comp2", "comp3");
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);

@@ -71,7 +71,7 @@ public class Card_05_031_Tests
 
 		var alcarin = scn.GetFreepsCard("alcarin");
 		var secondlevel = scn.GetFreepsCard("secondlevel");
-		scn.MoveCompanionToTable(alcarin);
+		scn.MoveCompanionsToTable(alcarin);
 		scn.MoveCardsToSupportArea(secondlevel);
 
 		var runner = scn.GetShadowCard("runner");

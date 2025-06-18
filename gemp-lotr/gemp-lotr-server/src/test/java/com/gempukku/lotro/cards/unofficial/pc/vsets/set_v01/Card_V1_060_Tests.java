@@ -96,7 +96,7 @@ public class Card_V1_060_Tests
 		PhysicalCardImpl stealth3 = scn.GetFreepsCard("stealth3");
 
 		scn.MoveCardsToHand(stealth1, stealth2, stealth3);
-		scn.MoveCompanionToTable(sam, merry);
+		scn.MoveCompanionsToTable(sam, merry);
 
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
 		PhysicalCardImpl chieftain = scn.GetShadowCard("chieftain");
@@ -169,7 +169,7 @@ public class Card_V1_060_Tests
 		PhysicalCardImpl stealth2 = scn.GetFreepsCard("stealth2");
 
 		scn.MoveCardsToHand(stealth1, stealth2);
-		scn.MoveCompanionToTable(sam, merry);
+		scn.MoveCompanionsToTable(sam, merry);
 
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
 		PhysicalCardImpl uruk = scn.GetShadowCard("uruk");

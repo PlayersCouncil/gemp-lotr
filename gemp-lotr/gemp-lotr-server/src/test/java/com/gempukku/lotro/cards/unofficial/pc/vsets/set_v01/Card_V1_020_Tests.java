@@ -79,7 +79,7 @@ public class Card_V1_020_Tests
 		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
-		scn.MoveCompanionToTable(boromir);
+		scn.MoveCompanionsToTable(boromir);
 
 		PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
 		PhysicalCardImpl runner2 = scn.GetShadowCard("runner2");
@@ -107,7 +107,7 @@ public class Card_V1_020_Tests
 
 		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
 		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(boromir, sam);
+		scn.MoveCompanionsToTable(boromir, sam);
 
 		PhysicalCardImpl nelya = scn.GetShadowCard("nelya");
 		scn.MoveMinionsToTable(nelya);

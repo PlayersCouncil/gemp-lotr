@@ -93,7 +93,7 @@ public class Card_02_075_Tests
 
 		var frodo = scn.GetRingBearer();
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var ferny = scn.GetShadowCard("ferny");
 		var runner = scn.GetShadowCard("runner");

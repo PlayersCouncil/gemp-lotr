@@ -213,7 +213,7 @@ public class Card_09_001_Tests
 		var gimli = scn.GetFreepsCard("gimli");
 		var gandalf = scn.GetFreepsCard("gandalf");
 
-		scn.MoveCompanionToTable(gandalf, gimli);
+		scn.MoveCompanionsToTable(gandalf, gimli);
 
 		scn.StartGame();
 

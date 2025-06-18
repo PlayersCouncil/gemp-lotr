@@ -154,7 +154,7 @@ public class Card_01_224_Tests
         var frodo = scn.GetRingBearer();
         var onering = scn.GetRing();
         var guard = scn.GetFreepsCard("guard");
-        scn.MoveCompanionToTable(guard);
+        scn.MoveCompanionsToTable(guard);
 
         scn.StartGame();
 

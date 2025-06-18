@@ -30,7 +30,7 @@ public class RestoreTests {
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.HinderCard(aragorn);
 
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -62,7 +62,7 @@ public class RestoreTests {
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.HinderCard(aragorn);
 
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -98,7 +98,7 @@ public class RestoreTests {
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.HinderCard(aragorn);
 
 		//So that there's something to reconcile
@@ -137,7 +137,7 @@ public class RestoreTests {
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var lembas = scn.GetFreepsCard("lembas");
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.HinderCard(aragorn);
 		scn.AttachCardsTo(frodo, lembas);
 

@@ -74,7 +74,7 @@ public class Card_V2_014_Tests
 		var shadowfax = scn.GetFreepsCard("shadowfax");
 		var snowmane = scn.GetFreepsCard("snowmane");
 		scn.MoveCardsToHand(remember);
-		scn.MoveCompanionToTable(gandalf, theoden, vcompanion);
+		scn.MoveCompanionsToTable(gandalf, theoden, vcompanion);
 
 		scn.MoveMinionsToTable("runner");
 
@@ -132,7 +132,7 @@ public class Card_V2_014_Tests
 		var shadowfax = scn.GetFreepsCard("shadowfax");
 		var snowmane = scn.GetFreepsCard("snowmane");
 		scn.MoveCardsToHand(remember);
-		scn.MoveCompanionToTable(gandalf, theoden, vcompanion);
+		scn.MoveCompanionsToTable(gandalf, theoden, vcompanion);
 		scn.AttachCardsTo(gandalf, shadowfax);
 		scn.AttachCardsTo(theoden, snowmane);
 

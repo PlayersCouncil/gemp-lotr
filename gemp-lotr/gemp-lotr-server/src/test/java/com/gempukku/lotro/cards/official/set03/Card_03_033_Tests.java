@@ -82,7 +82,7 @@ public class Card_03_033_Tests
 		var check = scn.GetFreepsCard("check");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.MoveCardsToHand(check);
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.MoveMinionsToTable("runner");
 		scn.MoveCardsToShadowHand("sauron", "check", "gandalf");
@@ -110,7 +110,7 @@ public class Card_03_033_Tests
 		var check = scn.GetFreepsCard("check");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		scn.MoveCardsToHand(check);
-		scn.MoveCompanionToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		var sauron = scn.GetShadowCard("sauron");
 		scn.MoveMinionsToTable("runner");

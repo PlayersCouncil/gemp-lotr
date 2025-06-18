@@ -67,7 +67,7 @@ public class Card_V2_050_Tests
 		var hour = scn.GetFreepsCard("hour");
 		var eowyn = scn.GetFreepsCard("eowyn");
 		scn.MoveCardsToHand(hour);
-		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCompanionsToTable(eowyn);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");

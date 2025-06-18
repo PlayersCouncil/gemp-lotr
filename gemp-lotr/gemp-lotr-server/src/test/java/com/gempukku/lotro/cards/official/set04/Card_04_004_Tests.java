@@ -72,7 +72,7 @@ public class Card_04_004_Tests
 		scn.MoveMinionsToTable(band);
 
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -95,7 +95,7 @@ public class Card_04_004_Tests
 		scn.MoveMinionsToTable(band);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -118,7 +118,7 @@ public class Card_04_004_Tests
 		scn.MoveMinionsToTable(band);
 
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		scn.StartGame();
 

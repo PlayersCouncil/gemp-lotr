@@ -140,7 +140,7 @@ public class Card_01_138_ErrataTests
         scn.MoveMinionsToTable(runner);
 
         scn.MoveCardsToHand(event);
-        scn.MoveCompanionToTable(boromir);
+        scn.MoveCompanionsToTable(boromir);
 
         scn.StartGame();
 

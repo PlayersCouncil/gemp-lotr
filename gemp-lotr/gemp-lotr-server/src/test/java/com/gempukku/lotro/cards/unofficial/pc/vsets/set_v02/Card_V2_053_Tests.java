@@ -85,7 +85,7 @@ public class Card_V2_053_Tests
 		var rohan = scn.GetFreepsCard("rohan");
 		var valor = scn.GetFreepsCard("valor");
 
-		scn.MoveCompanionToTable(velf, varagorn, rohan);
+		scn.MoveCompanionsToTable(velf, varagorn, rohan);
 		scn.MoveCardsToHand(scn.GetFreepsCard("albert"));
 		scn.MoveCardsToHand(vrohan, valor);
 		scn.MoveCardsToSupportArea(red);
@@ -97,7 +97,7 @@ public class Card_V2_053_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertFalse(scn.FreepsActionAvailable(red));
-		scn.MoveCompanionToTable(vrohan);
+		scn.MoveCompanionsToTable(vrohan);
 		scn.FreepsPlayCard(valor);
 		scn.ShadowPassCurrentPhaseAction();
 
@@ -120,7 +120,7 @@ public class Card_V2_053_Tests
 		var vrohan = scn.GetFreepsCard("vrohan");
 		var rohan = scn.GetFreepsCard("rohan");
 
-		scn.MoveCompanionToTable(velf, varagorn, vrohan, rohan);
+		scn.MoveCompanionsToTable(velf, varagorn, vrohan, rohan);
 
 		scn.AddWoundsToChar(velf, 2);
 		scn.AddWoundsToChar(varagorn, 2);
@@ -131,7 +131,7 @@ public class Card_V2_053_Tests
 		var albert = scn.GetFreepsCard("albert");
 		var valor = scn.GetFreepsCard("valor");
 
-		scn.MoveCompanionToTable(albert);
+		scn.MoveCompanionsToTable(albert);
 		scn.MoveCardsToHand(valor);
 
 		var freeps1 = scn.GetFreepsCard("freeps1");

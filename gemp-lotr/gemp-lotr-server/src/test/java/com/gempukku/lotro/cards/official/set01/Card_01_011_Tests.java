@@ -87,7 +87,7 @@ public class Card_01_011_Tests
 		var scn = GetScenario();
 
 		var farin = scn.GetFreepsCard("farin");
-		scn.MoveCompanionToTable(farin);
+		scn.MoveCompanionsToTable(farin);
 
 		var orc = scn.GetShadowCard("runner");
 		var nazgul = scn.GetShadowCard("nazgul");

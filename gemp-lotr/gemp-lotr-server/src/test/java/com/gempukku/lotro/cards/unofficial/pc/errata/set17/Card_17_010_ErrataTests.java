@@ -68,7 +68,7 @@ public class Card_17_010_ErrataTests
 
 		var namarie = scn.GetFreepsCard("namarie");
 		scn.MoveCardsToHand(namarie);
-		scn.MoveCompanionToTable("legolas", "gimli", "aragorn");
+		scn.MoveCompanionsToTable("legolas", "gimli", "aragorn");
 
 		scn.MoveMinionsToTable("mauhur");
 
@@ -88,7 +88,7 @@ public class Card_17_010_ErrataTests
 
 		var namarie = scn.GetFreepsCard("namarie");
 		scn.MoveCardsToHand(namarie);
-		scn.MoveCompanionToTable("legolas");
+		scn.MoveCompanionsToTable("legolas");
 
 		scn.MoveMinionsToTable("mauhur");
 

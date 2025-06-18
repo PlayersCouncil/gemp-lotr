@@ -73,7 +73,7 @@ public class Card_03_004_ErrataTests
 		var elrond = scn.GetFreepsCard("elrond");
 
 		scn.MoveCardsToSupportArea(welcome, elrond, thrarin);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 
 		scn.StartGame();
@@ -104,7 +104,7 @@ public class Card_03_004_ErrataTests
 		var elrond = scn.GetFreepsCard("elrond");
 
 		scn.MoveCardsToSupportArea(welcome, elrond, thrarin);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		scn.AddWoundsToChar(gimli, 2);
 		scn.StartGame();
@@ -134,7 +134,7 @@ public class Card_03_004_ErrataTests
 		var elrond = scn.GetFreepsCard("elrond");
 
 		scn.MoveCardsToSupportArea(welcome, elrond, thrarin);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var cantea = scn.GetShadowCard("cantea");
 		var lemenya = scn.GetShadowCard("lemenya");
@@ -165,7 +165,7 @@ public class Card_03_004_ErrataTests
 		var elrond = scn.GetFreepsCard("elrond");
 
 		scn.MoveCardsToSupportArea(welcome, elrond, thrarin);
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		var cantea = scn.GetShadowCard("cantea");
 		var lemenya = scn.GetShadowCard("lemenya");

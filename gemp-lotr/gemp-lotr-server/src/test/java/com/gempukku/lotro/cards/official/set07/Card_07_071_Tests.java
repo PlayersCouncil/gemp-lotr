@@ -84,7 +84,7 @@ public class Card_07_071_Tests
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
-		scn.MoveCompanionToTable(smeagol);
+		scn.MoveCompanionsToTable(smeagol);
 
 		var balrog = scn.GetShadowCard("balrog");
 		scn.MoveMinionsToTable(balrog);
@@ -102,7 +102,7 @@ public class Card_07_071_Tests
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
-		scn.MoveCompanionToTable(smeagol);
+		scn.MoveCompanionsToTable(smeagol);
 
 		var balrog = scn.GetShadowCard("balrog");
 		scn.MoveMinionsToTable(balrog);

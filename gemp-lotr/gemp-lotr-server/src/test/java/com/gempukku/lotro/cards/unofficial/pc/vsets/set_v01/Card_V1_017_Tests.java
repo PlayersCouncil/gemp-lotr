@@ -100,7 +100,7 @@ public class Card_V1_017_Tests
 		PhysicalCardImpl frodo = scn.GetFreepsCard("frodo");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 
-		scn.MoveCompanionToTable(frodo, gandalf);
+		scn.MoveCompanionsToTable(frodo, gandalf);
 		scn.MoveCardsToHand(twoeyes);
 
 		scn.AddWoundsToChar(frodo, 1);

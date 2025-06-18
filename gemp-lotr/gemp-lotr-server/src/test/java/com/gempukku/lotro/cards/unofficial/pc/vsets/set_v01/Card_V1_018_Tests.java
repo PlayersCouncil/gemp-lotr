@@ -81,7 +81,7 @@ public class Card_V1_018_Tests
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToHand(gandalf, elrond, galadriel);
 		scn.MoveCardsToSupportArea(council);
-		scn.MoveCompanionToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
 		scn.MoveMinionsToTable(saruman);
@@ -113,7 +113,7 @@ public class Card_V1_018_Tests
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToSupportArea(council);
-		scn.MoveCompanionToTable(aragorn, gandalf, elrond, galadriel);
+		scn.MoveCompanionsToTable(aragorn, gandalf, elrond, galadriel);
 
 
 		scn.StartGame();
@@ -135,7 +135,7 @@ public class Card_V1_018_Tests
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToSupportArea(council);
-		scn.MoveCompanionToTable(aragorn, gandalf, elrond, galadriel);
+		scn.MoveCompanionsToTable(aragorn, gandalf, elrond, galadriel);
 
 
 		scn.StartGame();

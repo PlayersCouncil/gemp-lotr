@@ -89,7 +89,7 @@ public class Card_11_243_Tests
 
 		var eomer = scn.GetFreepsCard("eomer");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(eomer, aragorn);
+		scn.MoveCompanionsToTable(eomer, aragorn);
 
 		var pursuer = scn.GetShadowCard("pursuer"); // 5/3
 		var seeker = scn.GetShadowCard("seeker"); // 6/2
@@ -140,7 +140,7 @@ public class Card_11_243_Tests
 
 		var eomer = scn.GetFreepsCard("eomer");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionToTable(eomer, aragorn);
+		scn.MoveCompanionsToTable(eomer, aragorn);
 
 		var pursuer = scn.GetShadowCard("pursuer"); // 5/3
 		var seeker = scn.GetShadowCard("seeker"); // 6/2

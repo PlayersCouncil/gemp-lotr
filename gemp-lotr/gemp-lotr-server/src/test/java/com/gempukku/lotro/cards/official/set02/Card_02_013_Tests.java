@@ -78,7 +78,7 @@ public class Card_02_013_Tests
 
         PhysicalCardImpl tidings = scn.GetFreepsCard("tidings");
         PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        scn.MoveCompanionToTable(gimli);
+        scn.MoveCompanionsToTable(gimli);
         scn.MoveCardsToHand(tidings);
 
         scn.StartGame();

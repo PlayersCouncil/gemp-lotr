@@ -69,7 +69,7 @@ public class Card_01_016_ErrataTests
 		var kingdom = scn.GetFreepsCard("kingdom");
 		var gimli = scn.GetFreepsCard("gimli");
 		var guard = scn.GetFreepsCard("guard");
-		scn.MoveCompanionToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.MoveCardsToHand(kingdom, guard);
 
 		scn.AddWoundsToChar(gimli, 2);

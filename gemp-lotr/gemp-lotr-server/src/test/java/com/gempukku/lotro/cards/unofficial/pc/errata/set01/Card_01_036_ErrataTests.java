@@ -97,7 +97,7 @@ public class Card_01_036_ErrataTests
 		var feet = scn.GetFreepsCard("feet");
 		var arwen = scn.GetFreepsCard("arwen");
 		scn.MoveCardsToHand(feet);
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 
 		scn.MoveCardsToShadowHand("runner1","runner2","runner3","runner4" );
 
@@ -121,7 +121,7 @@ public class Card_01_036_ErrataTests
 		var feet = scn.GetFreepsCard("feet");
 		var arwen = scn.GetFreepsCard("arwen");
 		scn.MoveCardsToHand(feet);
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 
 		scn.MoveCardsToShadowHand("chaff1","chaff2","chaff3","chaff4" );
 
@@ -143,7 +143,7 @@ public class Card_01_036_ErrataTests
 		var feet = scn.GetFreepsCard("feet");
 		var arwen = scn.GetFreepsCard("arwen");
 		scn.MoveCardsToHand(feet);
-		scn.MoveCompanionToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 
 		scn.MoveCardsToShadowHand("runner1","runner2","runner3","runner4");
 

@@ -68,7 +68,7 @@ public class Card_06_091_Tests
 		var blood = scn.GetFreepsCard("blood");
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var mount = scn.GetFreepsCard("mount");
-		scn.MoveCompanionToTable(eowyn);
+		scn.MoveCompanionsToTable(eowyn);
 		scn.AttachCardsTo(eowyn, mount);
 		scn.MoveCardsToSupportArea(blood);
 

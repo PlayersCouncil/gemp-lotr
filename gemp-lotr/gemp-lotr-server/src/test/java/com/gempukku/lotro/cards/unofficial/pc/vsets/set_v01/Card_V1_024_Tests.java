@@ -98,7 +98,7 @@ public class Card_V1_024_Tests
 		PhysicalCardImpl mysword = scn.GetFreepsCard("mysword");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCompanionToTable(aragorn, arwen);
+		scn.MoveCompanionsToTable(aragorn, arwen);
 		scn.AttachCardsTo(arwen, mysword);
 
 		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
