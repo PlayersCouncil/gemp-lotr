@@ -981,6 +981,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         Throw400IfValidationFails("name", name, name.length() <= 45, "Tournament name must be 45 characters or less.");
         boolean wc = ParseBoolean("wc", wcStr, false);
         Throw400IfStringNull("tournamentId", tournamentId);
+        Throw400IfValidationFails("tournamentId", tournamentId, !tournamentId.contains(" "), "Tournament id must not contain spaces.");
         Throw400IfStringNull("format", formatStr);
         Throw400IfStringNull("start", startStr);
 
