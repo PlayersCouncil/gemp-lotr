@@ -17,12 +17,14 @@ public class RequirementFactory {
         requirementProducers.put("not", new NotRequirementProducer());
         requirementProducers.put("or", new OrRequirementProducer());
         requirementProducers.put("isequal", new IsEqual());
+        requirementProducers.put("isnotequal", new IsNotEqual());
         requirementProducers.put("isgreaterthan", new IsGreaterThan());
         requirementProducers.put("isgreaterthanorequal", new IsGreaterThanOrEqual());
         requirementProducers.put("islessthan", new IsLessThan());
         requirementProducers.put("islessthanorequal", new IsLessThanOrEqual());
         requirementProducers.put("canplayfromdiscard", new CanPlayFromDiscard());
         requirementProducers.put("canselfbeplayed", new CanSelfBePlayed());
+        requirementProducers.put("canmove", new CanMove());
         requirementProducers.put("canspot", new CanSpot());
         requirementProducers.put("cantspot", new CantSpot());
         requirementProducers.put("canspotburdens", new CanSpotBurdens());

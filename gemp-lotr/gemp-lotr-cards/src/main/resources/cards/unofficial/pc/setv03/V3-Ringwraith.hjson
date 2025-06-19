@@ -381,15 +381,35 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: ToPlay
+				type: Activated
+				phase: Skirmish
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: self,InSkirmish
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				cost: {
+					type: Hinder
+					select: choose(another,side(Shadow))
+				}
+				effect: [
+					{
+						type: modifyStrength
+						select: self
+						amount: 1
+						limitPerCardThisPhase: 5
+					}
+					{
+						type: If
+						check: {
+							type: CantSpot
+							filter: another,side(Shadow)
+						}
+						true: {
+							type: AddBurdens
+							amount: 1
+						}
+					}
+				]
 			}
 		]
 		gametext: Fierce.<br>Skirmish: If this minion is skirmishing, hinder another Shadow card to make this minion strength +1 (limit +5).  If you then cannot spot another unhindered Shadow card, add a burden.
@@ -428,15 +448,36 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Exert
+					select: self
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: [
+					{
+						type: Hinder
+						select: choose(or(possession,condition),AttachedTo(InSkirmishAgainst(self)))
+						memorize: hinderedCard
+					}
+					{
+						type: If
+						check: [
+							{
+								type: CanSpot
+								filter: another,Nazgul
+							}
+							{
+								type: HasCardInMemory
+								memory: hinderedCard
+							}
+						]
+						true: {
+							type: Hinder
+							select: all(NameFromMemory(hinderedCard))
+						}
+					}
+				]
 			}
 		]
 		gametext: Fierce.<br>Skirmish: Exert this minion to hinder a possession or condition attached to a character it is skirmishing.  If you can spot another Nazgul, hinder all other copies of that card you can spot.
@@ -475,15 +516,58 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Killed
+					filter: companion
+					inSkirmish: true
+					memorize: deadComp
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				cost: [
+					{
+						type: Exert
+						select: self
+					}
+					{
+						type: Hinder
+						select: memory(deadComp)
+					}
+				]
+				effect: {
+					type: If
+					check: {
+						type: CanSpot
+						filter: another,Nazgul
+					}
+					true: {
+						type: choice
+						texts: [
+							Take a Shadow card from your draw deck
+							Take a Shadow card from your discard pile
+						]
+						effects: [
+							{
+								type: PutCardsFromDeckIntoHand
+								select: choose(side(shadow))
+								count: 1
+								reveal: true
+								shuffle: true
+								showAll: true
+							}
+							{
+								type: PutCardsFromDiscardIntoHand
+								select: choose(side(shadow))
+								count: 1
+							}
+						]
+					}
+					false: {
+						type: PutCardsFromDiscardIntoHand
+						select: choose(side(shadow))
+						count: 1
+					}
+				}
 			}
 		]
 		gametext: Fierce.<br>Each time a companion is about to be killed in a skirmish, you may exert this minion and hinder that companion to take a Shadow card into hand from your discard pile.  If you can spot another Nazgul, you may take one from your draw deck instead.
@@ -521,15 +605,25 @@
 		site: 3
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: character,InSkirmishAgainst(self)
+					amount: {
+						type: ForEachYouCanSpot
+						filter: companion
+						multiplier: -1
+						limit: {
+							type: Conditional
+							requires: {
+								type: CanSpot
+								filter: another,Nazgul
+							}
+							true: 100
+							false: 3
+						}
+					}
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: Each character skirmishing this minion is strength -1 for each companion you can spot (limit -3 unless you can spot another Nazgul).
@@ -568,15 +662,45 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Exert
+					select: self
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: [
+					{
+						type: Spot
+						select: choose(Nazgul)
+						memorize: chosenNazgul
+						text: Choose Nazgul to strengthen
+					}
+					{
+						type: If
+						check: {
+							type: MemoryMatches
+							memory: chosenNazgul
+							filter: self
+						}
+						true: {
+							type: ModifyStrength
+							amount: {
+								type: ForEachYouCanSpot
+								filter: your,site,Zone(ADVENTURE PATH)
+							}
+							select: self
+							limitPerCardThisPhase: 3
+						}
+						false: {
+							type: ModifyStrength
+							amount: {
+								type: ForEachYouCanSpot
+								filter: your,site,Zone(ADVENTURE PATH)
+							}
+							select: memory(chosenNazgul)
+						}
+					}
+				]
 			}
 		]
 		gametext: Fierce.<br>Skirmish: Exert this minion to make another Nazgul strength +1 for each of your sites on the adventure path.
@@ -614,15 +738,63 @@
 		site: 3
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: minion
+					player: you
+					memorize: playedMinion
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				requires: {
+					type: HasCardInDiscard
+					filter: side(shadow),item,Playable	
+				}
+				cost: {
+					type: Exert
+					ignoreCostCheckFailure: true
+					select: memory(playedMinion)
+				}
+				effect: [
+					{
+						type: If
+						check: {
+							type: HasCardInDiscard
+							filter: side(shadow),artifact,Playable
+						}
+						true: {
+							type: Choice
+							texts: [
+								Play a possession from discard on {playedMinion}
+								Exert {self} to play an artifact from discard on {playedMinion}
+							]
+							effects: [
+								{
+									type: PlayCardFromDiscard
+									select: choose(side(shadow),possession)
+									on: memory(playedMinion)
+								}
+								{
+									type: CostToEffect
+									cost: {
+										type: Exert
+										select: self
+									}
+									effect: {
+										type: PlayCardFromDiscard
+										select: choose(side(shadow),artifact)
+										on: memory(playedMinion)
+									}
+								}
+							]
+						}
+						false: {
+							type: PlayCardFromDiscard
+							select: choose(side(shadow),possession)
+							on: memory(playedMinion)
+						}
+					}
+				]
 			}
 		]
 		gametext: Each time you play a minion, you may exert it to play a possession on it from your discard pile (or an artifact if you exert this minion as well).
@@ -660,15 +832,33 @@
 		site: 3
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: Nazgul
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					type: PlayCardFromDiscard
+					select: choose(side(shadow),condition)
+					memorize: chosenCondition
+					extraEffects: {
+						type: If
+						check: {
+							type: MemoryMatches
+							memory: chosenCondition
+							filter: ringwraith
+						}
+						true: {
+							type: AddThreats
+							amount: 1
+						}
+					}
+				}
 			}
 		]
 		gametext: Each time a Nazgul wins a skirmish, you may exert this minion to play a Shadow condition from your discard pile. Add a threat if it is a [ringwraith] condtion.
@@ -707,15 +897,79 @@
 		keywords: Fierce
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: trigger
+				optional: true
+				trigger: {
+					type: AssignedAgainst
+					filter: companion
+					against: self
+					memorizeAssigned: comp
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				requires: {
+					type: IsNotEqual
+					firstNumber: {
+						type: ForEachStrength
+						filter: self
+					}
+					secondNumber: {
+						type: ForEachStrength
+						filter: memory(comp)
+					}
+				}
+				effect: [
+					{
+						type: If
+						check: {
+							type: IsLessThan
+							firstNumber: {
+								type: ForEachStrength
+								filter: self
+							}
+							secondNumber: {
+								type: ForEachStrength
+								filter: memory(comp)
+							}
+						}
+						true: {
+							type: CostToEffect
+							cost: {
+								type: Exhaust
+								select: self
+							}
+							effect: {
+								type: Hinder
+								select: memory(comp)
+							}
+						}
+					}
+					
+					{
+						type: If
+						check: {
+							type: IsGreaterThan
+							firstNumber: {
+								type: ForEachStrength
+								filter: self
+							}
+							secondNumber: {
+								type: ForEachStrength
+								filter: memory(comp)
+							}
+						}
+						true: {
+							type: CostToEffect
+							cost: {
+								ignoreCostCheckFailure: true
+								type: Exert
+								select: memory(comp)
+							}
+							effect: {
+								type: AddThreats
+								amount: 1
+							}
+						}
+					}
+				]
 			}
 		]
 		gametext: Fierce.<br>Each time this minion is assigned to a stronger companion, you may exhaust this minion to hinder that companion.<br>Each time this minion is assigned to a weaker companion, you may exert that companion to add a threat.
@@ -756,15 +1010,17 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Activated
+				phase: Assignment
+				cost: {
+					type: Discard
+					select: another(title(Winged Nazgul))
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: {
+					type: AssignFPCharacterToSkirmish
+					minion: self
+					fpCharacter: unbound,companion
+				}
 			}
 		]
 		gametext: Enduring. Fierce.<br>Assignment: Discard another Winged Nazgul to assign this minion to an unbound companion.
@@ -807,15 +1063,36 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: self
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: [
+					{
+						type: ChooseActiveCards
+						select: choose(side(freeps),not(companion))
+						text: Choose a card type to hinder
+						memorize: chosenCard
+					}
+					{
+						type: Hinder
+						select: all(side(freeps),CardTypeFromMemory(chosenCard))
+					}
+					{
+						type: ChooseActiveCards
+						player: freeps
+						count: any
+						select: choose(your,hindered)
+						text: Choose any number of cards to restore (you will pay (1) for each)
+						memorize: restoredCards
+					}
+					{
+						type: Restore
+						select: all(memory(restoredCards))
+					}
+				]
 			}
 		]
 		gametext: Fierce. Enduring. Damage +1.<br>When you play this minion, hinder all Free Peoples cards of one type (except companion). The Free Peoples player may restore any number of their cards; add (1) per card restored this way.

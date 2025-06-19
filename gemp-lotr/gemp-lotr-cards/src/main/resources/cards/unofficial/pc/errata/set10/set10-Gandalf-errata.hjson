@@ -103,8 +103,8 @@
 				}
 			]
 			effect: {
-				type: discard
-				count: 0-3
+				type: hinder
+				count: memory(exertCount)
 				select: choose(minion)
 			}
 		}
