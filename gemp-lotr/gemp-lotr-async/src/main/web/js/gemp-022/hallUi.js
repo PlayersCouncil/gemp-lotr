@@ -1144,7 +1144,7 @@ var GempLotrHallUI = Class.extend({
 					tablesRow.append("<td>" + queue.getAttribute("format") + "</td>");
 					let htmlTd = "<td>";
 					if (isWC) {
-						htmlTd += "WC";
+						htmlTd += "World Championship";
 					} else {
 						// For system, ignore all after ',' (min players)
 						htmlTd += queue.getAttribute("system").split(',')[0] + " Tournament";
@@ -1160,8 +1160,9 @@ var GempLotrHallUI = Class.extend({
 					tablesRow.append(actionsField);
 					if (joined == "true") {
 						tablesRow.addClass("played");
-					} else if (isWC) {
-						tablesRow.addClass("wc-events");
+					}
+					if (isWC) {
+						tablesRow.addClass("bold");
 					}
 
 					if (action == "add") {
@@ -1391,7 +1392,11 @@ var GempLotrHallUI = Class.extend({
 					}
 					var tablesRow = $("<tr class='table" + id + "'></tr>");
 					tablesRow.append("<td>" + tournament.getAttribute("format") + "</td>");
-					tablesRow.append("<td>" + tournament.getAttribute("system") + " Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
+					if (isWC) {
+						tablesRow.append("<td>World Championship - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
+					} else {
+						tablesRow.append("<td>" + tournament.getAttribute("system") + " Tournament - " + displayType + " - " + tournament.getAttribute("name") + "</td>");
+					}
 					if (tournament.hasAttribute("timeRemaining")) {
 						tablesRow.append("<td>" + tournament.getAttribute("stage") + " - " + tournament.getAttribute("timeRemaining") + "</td>");
 					} else if (tournament.getAttribute("stage") === "Playing Games") {
@@ -1399,12 +1404,17 @@ var GempLotrHallUI = Class.extend({
 					} else {
 						tablesRow.append("<td>" + tournament.getAttribute("stage") + "</td>");
 					}
-					tablesRow.append("<td>" + tournament.getAttribute("playerList") + "</td>");
+					if (tournament.getAttribute("playerCount") <= 8) {
+						tablesRow.append("<td>" + tournament.getAttribute("playerList") + "</td>");
+					} else {
+						tablesRow.append("<td><div class='prizeHint' title='Competing Players' value='" + tournament.getAttribute("playerList") + "<br><br>* = abandoned'>" + tournament.getAttribute("playerCount") + "</div></td>");
+					}
 					tablesRow.append(actionsField);
 					if (joined == "true") {
-						tablesRow.addClass("played"); // red highlight
-					} else if (isWC) {
-						tablesRow.addClass("wc-events"); // yellow highlight
+						tablesRow.addClass("played");
+					}
+					if (isWC) {
+						tablesRow.addClass("bold");
 					}
 
 					if (action == "add") {

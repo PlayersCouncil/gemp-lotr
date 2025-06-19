@@ -889,3 +889,7 @@ form#queueSpawnerForm input {
 .italic {
    font-style: italic;
  }
+
+.bold {
+   font-weight: bold;
+ }
