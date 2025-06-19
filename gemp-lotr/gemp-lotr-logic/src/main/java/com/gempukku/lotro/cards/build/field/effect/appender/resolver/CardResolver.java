@@ -4,6 +4,8 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.appender.DelayedAppender;
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.common.InactiveReason;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -21,6 +23,7 @@ import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public class CardResolver {
@@ -373,12 +376,17 @@ public class CardResolver {
     }
 
     public static EffectAppender resolveCards(String type, FilterableSource additionalFilter, ValueSource countSource, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        return resolveCards(type, additionalFilter, additionalFilter, countSource, memory, choicePlayer, choiceText, environment);
+        return resolveCards(type, SpotOverride.NONE, additionalFilter, additionalFilter, countSource, memory, choicePlayer, choiceText, environment);
     }
 
-    public static EffectAppender resolveCards(String type, FilterableSource additionalFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+    public static EffectAppender resolveCards(String type, Map<InactiveReason, Boolean> spotOverrides, FilterableSource additionalFilter, ValueSource countSource, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        return resolveCards(type, spotOverrides, additionalFilter, additionalFilter, countSource, memory, choicePlayer, choiceText, environment);
+    }
+
+    public static EffectAppender resolveCards(String type, Map<InactiveReason, Boolean> spotOverrides, FilterableSource additionalFilter, FilterableSource playabilityFilter,
+            ValueSource countSource, String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext ->
-                Filters.filterActive(actionContext.getGame(), Filters.any);
+                Filters.filterActive(actionContext.getGame(), spotOverrides, Filters.any);
 
         if (type.equals("self")) {
             return resolveSelf(additionalFilter, playabilityFilter, countSource, memory, cardSource);
@@ -433,7 +441,7 @@ public class CardResolver {
             final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
             ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
                 String choicePlayerId = playerSource.getPlayer(actionContext);
-                return new ChooseActiveCardsEffect(actionContext.getSource(), choicePlayerId, GameUtils.substituteText(choiceText, actionContext), min, max, Filters.in(possibleCards)) {
+                return new ChooseActiveCardsEffect(actionContext.getSource(), choicePlayerId, GameUtils.substituteText(choiceText, actionContext), min, max, spotOverrides, Filters.in(possibleCards)) {
                     @Override
                     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
                         actionContext.setCardMemory(memory, cards);
@@ -576,7 +584,8 @@ public class CardResolver {
         };
     }
 
-    private static DelayedAppender resolveAllCards(String type, FilterableSource additionalFilter, String memory, CardGenerationEnvironment environment, Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource) throws InvalidCardDefinitionException {
+    private static DelayedAppender resolveAllCards(String type, FilterableSource additionalFilter, String memory,
+            CardGenerationEnvironment environment, Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource) throws InvalidCardDefinitionException {
         final String filter = type.substring(type.indexOf("(") + 1, type.lastIndexOf(")"));
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         return new DelayedAppender() {

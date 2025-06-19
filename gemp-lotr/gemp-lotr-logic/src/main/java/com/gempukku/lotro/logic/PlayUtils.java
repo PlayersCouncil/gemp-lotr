@@ -157,7 +157,7 @@ public class PlayUtils {
         if (restrictions >= 4)
             return true;
 
-        final int activeCount = Filters.countActive(game, Filters.name(blueprint.getSanitizedTitle()));
+        final int activeCount = Filters.countActive(game, SpotOverride.INCLUDE_HINDERED, Filters.name(blueprint.getSanitizedTitle()));
         int deadCount = 0;
         if(!ignoreCheckingDeadPile) {
             deadCount = Filters.filter(game, game.getGameState().getDeadPile(self.getOwner()), Filters.name(blueprint.getSanitizedTitle())).size();
@@ -174,7 +174,7 @@ public class PlayUtils {
     }
 
     private static int getTotalCompanions(String playerId, LotroGame game) {
-        return Filters.countActive(game, Filters.companionIgnoringHinder)
+        return Filters.countActive(game, SpotOverride.INCLUDE_HINDERED, CardType.COMPANION)
                 + Filters.filter(game, game.getGameState().getDeadPile(playerId), CardType.COMPANION).size();
     }
 

@@ -1,6 +1,7 @@
 package com.gempukku.lotro.logic.effects;
 
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -20,7 +21,7 @@ public class ChooseAndHealCharactersEffect extends ChooseActiveCardsEffect {
     }
 
     public ChooseAndHealCharactersEffect(Action action, String playerId, int minimum, int maximum, int count, Filterable... filters) {
-        super(action.getActionSource(), playerId, "Choose characters to heal", minimum, maximum, filters);
+        super(action.getActionSource(), playerId, "Choose characters to heal", minimum, maximum, SpotOverride.NONE, filters);
         _action = action;
         _playerId = playerId;
         _count = count;

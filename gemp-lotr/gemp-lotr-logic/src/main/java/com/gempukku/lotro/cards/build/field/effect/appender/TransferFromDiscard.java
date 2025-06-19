@@ -8,6 +8,7 @@ import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -35,6 +36,7 @@ public class TransferFromDiscard implements EffectAppenderProducer {
                 CardResolver.resolveCardsInDiscard(select, actionContext -> new ConstantEvaluator(1), "_temp1", "you", "Choose card to transfer", environment));
         result.addEffectAppender(
                 CardResolver.resolveCards(where,
+                        SpotOverride.NONE,
                         actionContext -> (Filter) (game, physicalCard) -> {
                             final Collection<? extends PhysicalCard> transferCard = actionContext.getCardsFromMemory("_temp1");
                             if (transferCard.isEmpty())

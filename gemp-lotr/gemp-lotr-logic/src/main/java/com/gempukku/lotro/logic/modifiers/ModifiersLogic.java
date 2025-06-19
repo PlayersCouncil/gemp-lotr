@@ -134,38 +134,41 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         List<Modifier> modifiers = _modifiers.get(modifierEffect);
         if (modifiers == null)
             return Collections.emptyList();
-        else {
-            LinkedList<Modifier> liveModifiers = new LinkedList<>();
-            for (Modifier modifier : modifiers) {
-                boolean keywordMatches = false;
 
-                if(modifier instanceof KeywordAffectingModifier keyModifier) {
+        //If we are checking that the card has been hindered, we don't want to abort early
+        if(card != null && keyword != Keyword.HINDERED && game.getGameState().isHindered(card))
+            return Collections.emptyList();
+
+        LinkedList<Modifier> liveModifiers = new LinkedList<>();
+        for (Modifier modifier : modifiers) {
+            boolean keywordMatches = false;
+
+            if(modifier instanceof KeywordAffectingModifier keyModifier) {
+                keywordMatches = keyModifier.getKeyword() == null || keyModifier.getKeyword() == keyword;
+            }
+            else if(modifier instanceof DelegateModifier delegateModifier) {
+                if(delegateModifier.delegate instanceof KeywordAffectingModifier keyModifier) {
                     keywordMatches = keyModifier.getKeyword() == null || keyModifier.getKeyword() == keyword;
-                }
-                else if(modifier instanceof DelegateModifier delegateModifier) {
-                    if(delegateModifier.delegate instanceof KeywordAffectingModifier keyModifier) {
-                        keywordMatches = keyModifier.getKeyword() == null || keyModifier.getKeyword() == keyword;
-                    }
-                }
-
-                if (keyword == null || keywordMatches) {
-                    if (!_skipSet.contains(modifier)) {
-                        _skipSet.add(modifier);
-                        Condition condition = modifier.getCondition();
-                        if (condition == null || condition.isFullfilled(game))
-                            if (modifierEffect == ModifierEffect.TEXT_MODIFIER || modifier.getSource() == null ||
-                                    modifier.isNonCardTextModifier() ||
-                                    !hasTextRemoved(game, modifier.getSource())) {
-                                if (card == null || modifier.affectsCard(game, card))
-                                    liveModifiers.add(modifier);
-                            }
-                        _skipSet.remove(modifier);
-                    }
                 }
             }
 
-            return liveModifiers;
+            if (keyword == null || keywordMatches) {
+                if (!_skipSet.contains(modifier)) {
+                    _skipSet.add(modifier);
+                    Condition condition = modifier.getCondition();
+                    if (condition == null || condition.isFullfilled(game))
+                        if (modifierEffect == ModifierEffect.TEXT_MODIFIER || modifier.getSource() == null ||
+                                modifier.isNonCardTextModifier() ||
+                                !hasTextRemoved(game, modifier.getSource())) {
+                            if (card == null || modifier.affectsCard(game, card))
+                                liveModifiers.add(modifier);
+                        }
+                    _skipSet.remove(modifier);
+                }
+            }
         }
+
+        return liveModifiers;
     }
 
     public void signalEndOfPhase(Phase phase) {
@@ -286,8 +289,8 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean hasTextRemoved(LotroGame game, PhysicalCard card) {
-        if(hasKeyword(game, card, Keyword.HINDERED))
-            return true;
+//        if(hasKeyword(game, card, Keyword.HINDERED))
+//            return true;
 
         for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.TEXT_MODIFIER, card)) {
             if (modifier.hasRemovedText(game, card))
@@ -297,8 +300,8 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     private boolean hasAllKeywordsRemoved(LotroGame game, PhysicalCard card) {
-        if(hasKeyword(game, card, Keyword.HINDERED))
-            return true;
+//        if(hasKeyword(game, card, Keyword.HINDERED))
+//            return true;
 
         for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.LOSE_ALL_KEYWORDS_MODIFIER, card)) {
             if (modifier.lostAllKeywords(game, card))
@@ -311,40 +314,37 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean hasKeyword(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
         LoggingThreadLocal.logMethodStart(physicalCard, "hasKeyword " + keyword.getHumanReadable());
         try {
-            //This'll be an infinite loop if this first clause isn't here
-            if(keyword != Keyword.HINDERED) {
-                if (hasKeyword(game, physicalCard, Keyword.HINDERED))
+            if (isCandidateForKeywordRemovalWithTextRemoval(game, physicalCard, keyword) &&
+                    (hasTextRemoved(game, physicalCard) || hasAllKeywordsRemoved(game, physicalCard)))
+                return false;
+
+            for (Modifier modifier : getKeywordModifiersAffectingCard(game, ModifierEffect.REMOVE_KEYWORD_MODIFIER,
+                    keyword, physicalCard)) {
+                if (modifier.isKeywordRemoved(game, physicalCard, keyword))
                     return false;
-
-                if (isCandidateForKeywordRemovalWithTextRemoval(game, physicalCard, keyword) &&
-                        (hasTextRemoved(game, physicalCard) || hasAllKeywordsRemoved(game, physicalCard)))
-                    return false;
-
-                for (Modifier modifier : getKeywordModifiersAffectingCard(game, ModifierEffect.REMOVE_KEYWORD_MODIFIER,
-                        keyword, physicalCard)) {
-                    if (modifier.isKeywordRemoved(game, physicalCard, keyword))
-                        return false;
-                }
-
-                if (physicalCard.getBlueprint().hasKeyword(keyword))
-                    return true;
             }
 
-            for (Modifier modifier : getKeywordModifiersAffectingCard(game, ModifierEffect.GIVE_KEYWORD_MODIFIER, keyword, physicalCard)) {
-                if (appliesKeywordModifier(game, physicalCard, modifier.getSource(), keyword)) {
-                    if (!_skipSet.contains(modifier)) {
-                        _skipSet.add(modifier);
-                        try {
-                            if (modifier.hasKeyword(game, physicalCard, keyword))
-                                return true;
-                        } finally {
-                            _skipSet.remove(modifier);
+            if (physicalCard.getBlueprint().hasKeyword(keyword))
+                return true;
+
+            if(keyword == Keyword.HINDERED || !hasKeyword(game, physicalCard, Keyword.HINDERED)) {
+                for (Modifier modifier : getKeywordModifiersAffectingCard(game, ModifierEffect.GIVE_KEYWORD_MODIFIER, keyword, physicalCard)) {
+                    if (appliesKeywordModifier(game, physicalCard, modifier.getSource(), keyword)) {
+                        if (!_skipSet.contains(modifier)) {
+                            _skipSet.add(modifier);
+                            try {
+                                if (modifier.hasKeyword(game, physicalCard, keyword))
+                                    return true;
+                            } finally {
+                                _skipSet.remove(modifier);
+                            }
+                        } else {
+                            return false;
                         }
-                    } else {
-                        return false;
                     }
                 }
             }
+
             return false;
         } finally {
             LoggingThreadLocal.logMethodEnd();

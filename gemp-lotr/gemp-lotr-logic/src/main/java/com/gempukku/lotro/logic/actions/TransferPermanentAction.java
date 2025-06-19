@@ -1,5 +1,6 @@
 package com.gempukku.lotro.logic.actions;
 
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -29,7 +30,7 @@ public class TransferPermanentAction extends ActivateCardAction {
                     }
                 });
         appendEffect(
-                new ChooseActiveCardsEffect(null, card.getOwner(), "Choose target to attach to", 1, 1, filter) {
+                new ChooseActiveCardsEffect(null, card.getOwner(), "Choose target to attach to", 1, 1, SpotOverride.NONE, filter) {
                     @Override
                     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> target) {
                         if (!target.isEmpty()) {

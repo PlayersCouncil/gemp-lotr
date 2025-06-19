@@ -29,9 +29,6 @@ public class Filters {
 
     public static final Filter unhindered = (game, physicalCard) ->  !game.getModifiersQuerying().hasKeyword(game, physicalCard, Keyword.HINDERED);
     public static final Filter hindered = Filters.keyword(Keyword.HINDERED);
-    public static final Filter companionIgnoringHinder = (game, physicalCard) -> game.getModifiersQuerying().isCardType(game, physicalCard, CardType.COMPANION);
-    public static final Filter itemIgnoringHinder = (game, physicalCard) -> game.getModifiersQuerying().isCardType(game, physicalCard, CardType.POSSESSION)
-                                                                        || game.getModifiersQuerying().isCardType(game, physicalCard, CardType.ARTIFACT);
 
     static {
         for (Culture culture : Culture.values())
@@ -79,17 +76,28 @@ public class Filters {
     }
 
     public static boolean canSpot(LotroGame game, int count, Filterable... filters) {
-        return countSpottable(game, filters) >= count;
+        return countSpottable(game, SpotOverride.NONE, filters) >= count;
+    }
+
+    public static boolean canSpot(LotroGame game, int count, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        return countSpottable(game, spotOverrides, filters) >= count;
     }
 
     public static boolean hasActive(LotroGame game, Filterable... filters) {
-        return findFirstActive(game, filters) != null;
+        return findFirstActive(game, SpotOverride.NONE, filters) != null;
     }
 
-    public static Collection<PhysicalCard> filterActive(LotroGame game, Filterable... filters) {
+    public static boolean hasActive(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        return findFirstActive(game, spotOverrides, filters) != null;
+    }
+
+    public static Collection<PhysicalCard> filterActive(LotroGame game, Filterable... filters) { return filterActive(game, SpotOverride.NONE, filters); }
+
+
+    public static Collection<PhysicalCard> filterActive(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         Filter filter = Filters.and(filters);
         var getCardsMatchingFilter = new GetCardsMatchingFilterVisitor(game, filter);
-        game.getGameState().iterateActiveCards(getCardsMatchingFilter);
+        game.getGameState().iterateActiveCards(getCardsMatchingFilter, spotOverrides);
         return getCardsMatchingFilter.getPhysicalCards();
     }
 
@@ -103,15 +111,18 @@ public class Filters {
         return result;
     }
 
-    public static PhysicalCard findFirstActive(LotroGame game, Filterable... filters) {
+    public static PhysicalCard findFirstActive(LotroGame game, Filterable... filters) { return findFirstActive(game, SpotOverride.NONE, filters); }
+
+    public static PhysicalCard findFirstActive(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         FindFirstActiveCardInPlayVisitor visitor = new FindFirstActiveCardInPlayVisitor(game, Filters.and(filters));
-        game.getGameState().iterateActiveCards(visitor);
+        game.getGameState().iterateActiveCards(visitor, spotOverrides);
         return visitor.getCard();
     }
 
-    public static int countSpottable(LotroGame game, Filterable... filters) {
+    public static int countSpottable(LotroGame game, Filterable... filters) { return countSpottable(game, SpotOverride.NONE, filters); }
+    public static int countSpottable(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         GetCardsMatchingFilterVisitor matchingFilterVisitor = new GetCardsMatchingFilterVisitor(game, Filters.and(filters, Filters.spottable));
-        game.getGameState().iterateActiveCards(matchingFilterVisitor);
+        game.getGameState().iterateActiveCards(matchingFilterVisitor, spotOverrides);
         int result = matchingFilterVisitor.getCounter();
         //TODO: make this less dependent on how the definition is arranged
         if (filters.length == 1)
@@ -119,9 +130,10 @@ public class Filters {
         return result;
     }
 
-    public static int countActive(LotroGame game, Filterable... filters) {
+    public static int countActive(LotroGame game, Filterable... filters) { return countActive(game, SpotOverride.NONE, filters); }
+    public static int countActive(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         GetCardsMatchingFilterVisitor matchingFilterVisitor = new GetCardsMatchingFilterVisitor(game, Filters.and(filters));
-        game.getGameState().iterateActiveCards(matchingFilterVisitor);
+        game.getGameState().iterateActiveCards(matchingFilterVisitor, spotOverrides);
         return matchingFilterVisitor.getCounter();
     }
 
@@ -132,31 +144,31 @@ public class Filters {
     }
 
     public static Filter maxResistance(final int resistance) {
-        return andInternal(unhindered, (game, physicalCard) -> game.getModifiersQuerying().getResistance(game, physicalCard) <= resistance);
+        return (game, physicalCard) -> game.getModifiersQuerying().getResistance(game, physicalCard) <= resistance;
     }
 
     public static Filter minResistance(final int resistance) {
-        return andInternal(unhindered, (game, physicalCard) -> game.getModifiersQuerying().getResistance(game, physicalCard) >= resistance);
+        return (game, physicalCard) -> game.getModifiersQuerying().getResistance(game, physicalCard) >= resistance;
     }
 
     public static Filter minVitality(final int vitality) {
-        return andInternal(unhindered, (game, physicalCard) -> game.getModifiersQuerying().getVitality(game, physicalCard) >= vitality);
+        return (game, physicalCard) -> game.getModifiersQuerying().getVitality(game, physicalCard) >= vitality;
     }
 
     public static Filter maxVitality(final int vitality) {
-        return andInternal(unhindered, (game, physicalCard) -> game.getModifiersQuerying().getVitality(game, physicalCard) <= vitality);
+        return (game, physicalCard) -> game.getModifiersQuerying().getVitality(game, physicalCard) <= vitality;
     }
 
     public static Filter strengthEqual(final Evaluator evaluator) {
-        return andInternal(unhindered, (game, physicalCard) -> game.getModifiersQuerying().getStrength(game, physicalCard) == evaluator.evaluateExpression(game, null));
+        return (game, physicalCard) -> game.getModifiersQuerying().getStrength(game, physicalCard) == evaluator.evaluateExpression(game, null);
     }
 
     public static Filter minStrength(final int strength) {
-        return andInternal(unhindered, (game, physicalCard) -> game.getModifiersQuerying().getStrength(game, physicalCard) >= strength);
+        return (game, physicalCard) -> game.getModifiersQuerying().getStrength(game, physicalCard) >= strength;
     }
 
     public static Filter maxStrength(final int strength) {
-        return andInternal(unhindered, (game, physicalCard) -> game.getModifiersQuerying().getStrength(game, physicalCard) <= strength);
+        return (game, physicalCard) -> game.getModifiersQuerying().getStrength(game, physicalCard) <= strength;
     }
 
     private static Filter possessionClass(final PossessionClass possessionClass) {
@@ -183,15 +195,15 @@ public class Filters {
     }
 
     public static Filter printedTwilightCost(final Evaluator evaluator) {
-        return andInternal(unhindered, (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() == evaluator.evaluateExpression(game, null));
+        return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() == evaluator.evaluateExpression(game, null);
     }
 
     public static Filter maxPrintedTwilightCost(final int printedTwilightCost) {
-        return andInternal(unhindered, (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() <= printedTwilightCost);
+        return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() <= printedTwilightCost;
     }
 
     public static Filter minPrintedTwilightCost(final int printedTwilightCost) {
-        return andInternal(unhindered, (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() >= printedTwilightCost);
+        return (game, physicalCard) -> physicalCard.getBlueprint().getTwilightCost() >= printedTwilightCost;
     }
 
     public static Filter hasToken(final Token token) {
@@ -211,7 +223,7 @@ public class Filters {
         return Filters.and(
                 assignableToSkirmish(assignedBySide, ignoreExistingAssignments, ignoreDefender, allowAllyToSkirmish),
                 (Filter) (game, physicalCard) -> {
-                    for (PhysicalCard card : Filters.filterActive(game, againstFilter)) {
+                    for (PhysicalCard card : Filters.filterActive(game, SpotOverride.NONE, againstFilter)) {
                         if (card.getBlueprint().getSide() != physicalCard.getBlueprint().getSide()
                                 && Filters.assignableToSkirmish(assignedBySide, ignoreExistingAssignments, ignoreDefender, allowAllyToSkirmish).accepts(game, card)) {
                             Map<PhysicalCard, Set<PhysicalCard>> thisAssignment = new HashMap<>();
@@ -451,7 +463,7 @@ public class Filters {
     }
 
     private static Filter signet(final Signet signet) {
-        return andInternal(unhindered, (game, physicalCard) -> game.getModifiersQuerying().hasSignet(game, physicalCard, signet));
+        return (game, physicalCard) -> game.getModifiersQuerying().hasSignet(game, physicalCard, signet);
     }
 
     private static Filter race(final Race race) {
@@ -609,7 +621,7 @@ public class Filters {
     }
 
     private static Filter type(final CardType cardType) {
-        return andInternal(unhindered, (game, physicalCard) -> game.getModifiersQuerying().isCardType(game, physicalCard, cardType));
+        return (game, physicalCard) -> game.getModifiersQuerying().isCardType(game, physicalCard, cardType);
     }
 
     public static Filter attachedTo(final Filterable... filters) {
@@ -631,7 +643,7 @@ public class Filters {
     public static Filter uncontrolledSite = (game, physicalCard) -> physicalCard.getBlueprint().getCardType() == CardType.SITE && physicalCard.getCardController() == null;
 
     private static Filter culture(final Culture culture) {
-        return andInternal(unhindered, (game, physicalCard) -> (physicalCard.getBlueprint().getCulture() == culture));
+        return (game, physicalCard) -> (physicalCard.getBlueprint().getCulture() == culture);
     }
 
     private static Filter keyword(final Keyword keyword) {
