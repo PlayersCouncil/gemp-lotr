@@ -711,15 +711,42 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: trigger
+				optional: true
+				trigger: {
+					type: Killed
+					filter: culture(raider),minion
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: [
+					{
+						type: CostToEffect
+						cost: {
+							type: Exert
+							select: choose(culture(raider), minion)
+						}
+						effect: {
+							type: Exert
+							select: choose(unbound,companion)
+							memorize: exertedCompanion
+						}
+					}
+					{
+						type: Optional
+						text: Would you like to discard another {self} to hinder {exertedCompanion}?
+						requires: {
+							type: CanSpot
+							filter: another,title(Duty No Less Than Yours)
+						}
+						cost: {
+							type: Discard
+							select: choose(another,title(Duty No Less Than Yours))
+						}
+						effect: {
+							type: Hinder
+							select: memory(exertedCompanion)
+						}
+					}
+				]
 			}
 		]
 		gametext: Each time a [raider] minion dies, you may exert a [raider] minion to exert an unbound companion. If you can spot another Duty No Less Than Yours, you may discard it to also hinder that companion.
@@ -797,15 +824,33 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: unique,southron
 				}
+				effect: [
+					{
+						type: PlayCardFromDiscard
+						select: choose(raider,mount)
+					}
+				]
 			}
+			
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: raider,mount
+				}
+				effect: [
+					{
+						type: PlayCardFromDiscard
+						select: choose(not(unique),raider,minion,MaxTwilight(3))
+					}
+				]
 			}
 		]
 		gametext: Each time you play a unique Southron, you may play a [raider] mount from your discard pile.<br>Each time you play a [raider] mount, you may play a nonunique [raider] minion from your discard pile costing (3) or less.
@@ -841,13 +886,23 @@
 			{
 				type: event
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: Spot
+					select: choose(unbound,companion)
+					count: 3
+					memorize: chosenCompanions
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: ChooseActiveCards
+						text: Spot 3 Southrons
+						player: Free Peoples
+						select: choose(southron)
+						count: 3
+						memorize: chosenSouthrons
+					}
+					{
+						type: Hinder
+						select: all(not(or(memory(chosenCompanions), memory(chosenSouthrons))))
 					}
 				]
 			}
@@ -880,18 +935,34 @@
 		culture: Raider
 		twilight: 1
 		type: Possession
-		target: self
+		target: mounted,Southron
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
 				}
+				effect: [
+					{
+						type: Hinder
+						select: all(side(freeps), mount)
+					}
+				]
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: RemoveThreats
+					amount: 1
+				}
+				effect: {
+					type: ModifyStrength
+					amount: 2
+					select: choose(Southron)
+				}
 			}
 		]
 		gametext: Bearer must be a mounted Southron.<br>When you play this, hinder all Free Peoples mounts.<br>Skirmish: Remove a threat to make a Southron strength +2.
@@ -1060,14 +1131,38 @@
 		effects: [
 			{
 				type: event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: Restore
+						select: all(or(tracker,and(minion,ambush)))
+						memorize: restoredMinions
+					}
+					{
+						type: If
+						check: [
+							{
+								type: HasCardInMemory
+								memory: restoredMinions
+							}
+							{
+								type: CanSpot
+								filter: Southron
+							}
+						]
+						true: [
+							{
+								type: ChooseActiveCards
+								select: choose(Southron)
+								memorize: assignedSouthron
+								text: Choose a Southron for your opponent to assign
+							}
+							{
+								type: AssignFPCharacterToSkirmish
+								player: Freeps
+								fpCharacter: choose(unbound,companion,LowestStrength(unbound,companion))
+								minion: choose(memory(assignedSouthron))
+							}
+						]
 					}
 				]
 			}
@@ -1103,15 +1198,42 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
+				type: Trigger
+				optional: false
+				trigger: {
+					type: AddsTwilight
+					filter: any
+					cause: Ambush
+				}
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: side(freeps),condition
 				}
+				effect: [
+					{
+						type: Hinder
+						select: choose(side(freeps),condition)
+					}
+				]
 			}
+			
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: false
+				trigger: {
+					type: AboutToTakeWound
+					filter: your,mounted,southron
+				}
+				cost: {
+					type: Wound
+					select: choose(not(mounted),southron)
+				}
+				effect: [
+					{
+						type: PreventWound 
+						select: choose(your,mounted,southron)
+					}
+				]
 			}
 		]
 		gametext: Each time ambush twilight is added, hinder a Free Peoples condition.<br>Each time your mounted Southron is about to take a wound, you may wound an unmounted Southron to prevent that.
@@ -1147,17 +1269,27 @@
 			{
 				type: responseEvent
 				trigger: {
-					type: StartOfTurn
-				}
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: WinsSkirmish
+					filter: raider,minion
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: If
+						check: {
+							type: CanSpotBurdens
+							amount: 5
+						}
+						true: {
+							type: Hinder
+							select: all(side(freeps),condition)
+						}
+						false: {
+							type: Hinder
+							select: choose(side(freeps),condition)
+							count: 2
+						}
 					}
+					
 				]
 			}
 		]
