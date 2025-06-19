@@ -52,6 +52,8 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("exerted", new Exerted());
         triggerCheckers.put("exertsforspecialability", new ExertsForSpecialAbility());
         triggerCheckers.put("exertstoplay", new ExertsToPlay());
+        triggerCheckers.put("fpdecidedifmoving", new FPDecidedIfMoving());
+        triggerCheckers.put("fpdecidedtomove", new FPDecidedToMove());
         triggerCheckers.put("fpdecidedtostay", new FPDecidedToStay());
         triggerCheckers.put("fpstartedassigning", new FPStartedAssigning());
         triggerCheckers.put("heals", new Heals());
