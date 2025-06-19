@@ -293,10 +293,9 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
 
     @Override
     public String getTableDescription() {
-        if (_soloDraftInfo._params.prizes == PrizeType.NONE && _soloDraftInfo._params.cost == 0) {
-            return "Casual - " + _soloDraftLibrary.getSoloDraft(_soloDraftInfo._soloDraftParams.soloDraftFormatCode).getCode();
-        } else {
-            return "Competitive - " + _soloDraftLibrary.getSoloDraft(_soloDraftInfo._soloDraftParams.soloDraftFormatCode).getCode();
+        if (isWC()) {
+            return DateUtils.Now().getYear() + " World Championship - " + _soloDraftLibrary.getSoloDraft(_soloDraftInfo._soloDraftParams.soloDraftFormatCode).getCode();
         }
+        return "Tournament Game - " + _soloDraftLibrary.getSoloDraft(_soloDraftInfo._soloDraftParams.soloDraftFormatCode).getCode();
     }
 }

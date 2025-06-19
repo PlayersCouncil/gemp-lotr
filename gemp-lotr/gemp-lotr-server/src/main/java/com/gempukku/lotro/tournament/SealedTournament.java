@@ -280,10 +280,9 @@ public class SealedTournament extends BaseTournament implements Tournament {
 
     @Override
     public String getTableDescription() {
-        if (_sealedInfo._params.prizes == PrizeType.NONE && _sealedInfo._params.cost == 0) {
-            return "Casual - " + _sealedInfo.SealedDefinition.GetName();
-        } else {
-            return "Competitive - " + _sealedInfo.SealedDefinition.GetName();
+        if (isWC()) {
+            return DateUtils.Now().getYear() + " World Championship - " + _sealedInfo.SealedDefinition.GetName().substring(3); // Strip number ordering
         }
+        return "Tournament Game - " + _sealedInfo.SealedDefinition.GetName().substring(3); // Strip number ordering
     }
 }

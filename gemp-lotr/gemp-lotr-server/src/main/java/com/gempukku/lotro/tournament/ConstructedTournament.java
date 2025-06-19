@@ -142,6 +142,6 @@ public class ConstructedTournament extends BaseTournament implements Tournament 
         if (isWC()) {
             return DateUtils.Now().getYear() + " World Championship";
         }
-        return null;
+        return "Tournament Game - " + _tournamentInfo.Format.getName();
     }
 }
