@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_V1_005_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("onedwarf", "101_5");
 					put("gimli", "1_13");
@@ -52,13 +52,13 @@ public class Card_V1_005_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl onedwarf = scn.GetFreepsCard("onedwarf");
+		var onedwarf = scn.GetFreepsCard("onedwarf");
 
 		assertEquals(1, onedwarf.getBlueprint().getTwilightCost());
 		assertEquals(CardType.EVENT, onedwarf.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(onedwarf, Timeword.MANEUVER));
+        assertTrue(scn.HasTimeword(onedwarf, Timeword.MANEUVER));
 		assertEquals(Culture.DWARVEN, onedwarf.getBlueprint().getCulture());
 		assertEquals(Side.FREE_PEOPLE, onedwarf.getBlueprint().getSide());
 	}
@@ -66,16 +66,16 @@ public class Card_V1_005_Tests
 	@Test
 	public void OneDwarfHeals() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl onedwarf = scn.GetFreepsCard("onedwarf");
-		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(onedwarf);
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsMoveCharToTable("guard");
+		var onedwarf = scn.GetFreepsCard("onedwarf");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCardsToHand(onedwarf);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCompanionsToTable("guard");
 		scn.AttachCardsTo(gimli, scn.GetFreepsCard("handaxe1"), scn.GetFreepsCard("handaxe2"));
 
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 		scn.AddWoundsToChar(gimli, 2);
@@ -90,16 +90,21 @@ public class Card_V1_005_Tests
 	@Test
 	public void OneDwarfDiscardsVariableNumberOfItemsToWoundMinions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl onedwarf = scn.GetFreepsCard("onedwarf");
-		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(onedwarf);
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsMoveCharToTable("guard");
-		scn.FreepsAttachCardsTo(gimli, "handaxe1", "handaxe2", "armor", "bracers", "ring");
+		var onedwarf = scn.GetFreepsCard("onedwarf");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCardsToHand(onedwarf);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCompanionsToTable("guard");
+		scn.AttachCardsTo(gimli,
+				scn.GetFreepsCard("handaxe1"),
+				scn.GetFreepsCard("handaxe2"),
+				scn.GetFreepsCard("armor"),
+				scn.GetFreepsCard("bracers"),
+				scn.GetFreepsCard("ring"));
 
-		scn.ShadowMoveCharToTable("runner", "runner2", "runner3", "runner4", "runner5", "runner6");
+		scn.MoveMinionsToTable("runner", "runner2", "runner3", "runner4", "runner5", "runner6");
 
 		scn.StartGame();
 		scn.AddWoundsToChar(gimli, 2);
@@ -130,16 +135,21 @@ public class Card_V1_005_Tests
 	@Test
 	public void OneDwarfDiscardsAndWoundsEvenIfDwarfIsFullyHealed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl onedwarf = scn.GetFreepsCard("onedwarf");
-		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(onedwarf);
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsMoveCharToTable("guard");
-		scn.FreepsAttachCardsTo(gimli, "handaxe1", "handaxe2", "armor", "bracers", "ring");
+		var onedwarf = scn.GetFreepsCard("onedwarf");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCardsToHand(onedwarf);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCompanionsToTable("guard");
+		scn.AttachCardsTo(gimli,
+				scn.GetFreepsCard("handaxe1"),
+				scn.GetFreepsCard("handaxe2"),
+				scn.GetFreepsCard("armor"),
+				scn.GetFreepsCard("bracers"),
+				scn.GetFreepsCard("ring"));
 
-		scn.ShadowMoveCharToTable("runner", "runner2", "runner3", "runner4", "runner5", "runner6");
+		scn.MoveMinionsToTable("runner", "runner2", "runner3", "runner4", "runner5", "runner6");
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -168,16 +178,16 @@ public class Card_V1_005_Tests
 	@Test
 	public void OneDwarfCantBePlayedIfNoDwarvesWithTwoItems() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl onedwarf = scn.GetFreepsCard("onedwarf");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(onedwarf);
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsMoveCharToTable("guard");
+		scn.MoveCardsToHand(onedwarf);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCompanionsToTable("guard");
 		scn.AttachCardsTo(gimli, scn.GetFreepsCard("handaxe1"));
 
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);

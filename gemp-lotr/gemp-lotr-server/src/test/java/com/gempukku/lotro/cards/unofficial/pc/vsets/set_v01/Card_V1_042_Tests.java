@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_042_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("walks", "101_42");
 					put("twigul1", "2_82");
@@ -33,9 +33,9 @@ public class Card_V1_042_Tests
 					put("arwen", "1_30");
 					put("gwemegil", "1_47");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,16 +54,16 @@ public class Card_V1_042_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl walks = scn.GetFreepsCard("walks");
+		var walks = scn.GetFreepsCard("walks");
 
 		assertTrue(walks.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, walks.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, walks.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, walks.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, walks.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(walks, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(walks, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(2, walks.getBlueprint().getTwilightCost());
 		//assertEquals(, walks.getBlueprint().getStrength());
 		//assertEquals(, walks.getBlueprint().getVitality());
@@ -76,22 +76,22 @@ public class Card_V1_042_Tests
 	@Test
 	public void EachTwigulSkirmishVictoryShufflesARingwraithCard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl guard1 = scn.GetFreepsCard("guard1");
-		PhysicalCardImpl guard2 = scn.GetFreepsCard("guard2");
-		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCharToTable(guard1, guard2, arwen);
-		scn.FreepsAttachCardsTo(arwen, "gwemegil");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCompanionsToTable(guard1, guard2, arwen);
+		scn.AttachCardsTo(arwen, scn.GetFreepsCard("gwemegil"));
 
-		PhysicalCardImpl walks = scn.GetShadowCard("walks");
-		PhysicalCardImpl twigul1 = scn.GetShadowCard("twigul1");
-		PhysicalCardImpl twigul2 = scn.GetShadowCard("twigul2");
-		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
-		PhysicalCardImpl filler1 = scn.GetShadowCard("filler1");
-		scn.ShadowMoveCardToSupportArea(walks);
-		scn.ShadowMoveCharToTable(twigul1, twigul2, nazgul);
-		scn.ShadowMoveCardToDiscard(filler1);
+		var walks = scn.GetShadowCard("walks");
+		var twigul1 = scn.GetShadowCard("twigul1");
+		var twigul2 = scn.GetShadowCard("twigul2");
+		var nazgul = scn.GetShadowCard("nazgul");
+		var filler1 = scn.GetShadowCard("filler1");
+		scn.MoveCardsToSupportArea(walks);
+		scn.MoveMinionsToTable(twigul1, twigul2, nazgul);
+		scn.MoveCardsToDiscard(filler1);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_03_017_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("galadriel", "3_17");
@@ -38,13 +38,13 @@ public class Card_03_017_Tests
 					put("site2K", "7_337"); //and a King site 2
 					put("siteX", "11_231"); //and a Shadows site
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
-	protected GenericCardTestHelper GetExpandedScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetExpandedScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("galadriel", "3_17");
@@ -64,8 +64,8 @@ public class Card_03_017_Tests
 					put("site2K", "7_337"); //and a King site 2
 					put("siteX", "11_231"); //and a Shadows site
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
 				"expanded"
 		);
 	}
@@ -115,7 +115,7 @@ public class Card_03_017_Tests
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2F");
-		scn.FreepsMoveCharToTable(galadriel);
+		scn.MoveCompanionsToTable(galadriel);
 
 		var shadowSite2 = scn.GetShadowSite("site2");
 
@@ -144,7 +144,7 @@ public class Card_03_017_Tests
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2T");
-		scn.FreepsMoveCharToTable(galadriel);
+		scn.MoveCompanionsToTable(galadriel);
 
 		var shadowSite2 = scn.GetShadowSite("site2");
 
@@ -173,7 +173,7 @@ public class Card_03_017_Tests
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("site2K");
-		scn.FreepsMoveCharToTable(galadriel);
+		scn.MoveCompanionsToTable(galadriel);
 
 		var shadowSite2 = scn.GetShadowSite("site2");
 
@@ -206,7 +206,7 @@ public class Card_03_017_Tests
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var forestSite = scn.GetFreepsSite("siteX");
 		var site1 = scn.GetFreepsSite("site1");
-		scn.FreepsMoveCharToTable(galadriel);
+		scn.MoveCompanionsToTable(galadriel);
 
 		var shadowSite2 = scn.GetShadowSite("siteX");
 
@@ -237,7 +237,7 @@ public class Card_03_017_Tests
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var celeborn = scn.GetFreepsCard("celeborn");
 		var greenleaf = scn.GetFreepsCard("greenleaf");
-		scn.FreepsMoveCharToTable(galadriel, celeborn, greenleaf);
+		scn.MoveCompanionsToTable(galadriel, celeborn, greenleaf);
 
 		scn.AddWoundsToChar(galadriel, 1);
 		scn.AddWoundsToChar(celeborn, 1);

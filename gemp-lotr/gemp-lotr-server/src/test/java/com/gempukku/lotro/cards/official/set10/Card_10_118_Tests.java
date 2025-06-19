@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set10;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_10_118_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("pippin", "1_306");
@@ -34,8 +34,8 @@ public class Card_10_118_Tests
 					put("site8", "10_120");
 					put("site9", "7_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -64,7 +64,7 @@ public class Card_10_118_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.PLAINS));
+		assertTrue(scn.HasKeyword(card, Keyword.PLAINS));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
@@ -79,15 +79,15 @@ public class Card_10_118_Tests
 		var pippin = scn.GetFreepsCard("pippin");
 		var bowmen = scn.GetFreepsCard("bowmen");
 		var knows = scn.GetFreepsCard("knows");
-		scn.FreepsMoveCharToTable(pippin);
-		scn.FreepsMoveCardToSupportArea(bowmen, knows);
+		scn.MoveCompanionsToTable(pippin);
+		scn.MoveCardsToSupportArea(bowmen, knows);
 
 		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
 
 		scn.SkipToSite(3);
-		scn.ShadowMoveCharToTable(savage);
+		scn.MoveMinionsToTable(savage);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(prairie, scn.GetCurrentSite());

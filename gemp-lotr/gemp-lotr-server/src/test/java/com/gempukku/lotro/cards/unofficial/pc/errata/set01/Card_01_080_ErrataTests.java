@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 public class Card_01_080_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("ottar", "51_80");
@@ -24,9 +24,9 @@ public class Card_01_080_ErrataTests
 					put("chaff2", "51_80");
 					put("chaff3", "51_80");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -49,7 +49,7 @@ public class Card_01_080_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl ottar = scn.GetFreepsCard("ottar");
 
@@ -67,11 +67,11 @@ public class Card_01_080_ErrataTests
 	@Test
 	public void OttarRequiresGandalfToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl ottar = scn.GetFreepsCard("ottar");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(ottar, gandalf);
+		scn.MoveCardsToHand(ottar, gandalf);
 
 		scn.StartGame();
 		assertFalse(scn.FreepsPlayAvailable(ottar));
@@ -82,16 +82,16 @@ public class Card_01_080_ErrataTests
 	@Test
 	public void OttarExertsAndDiscardsACardFromHandToDraw() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl ottar = scn.GetFreepsCard("ottar");
 		PhysicalCardImpl chaff1 = scn.GetFreepsCard("chaff1");
 		PhysicalCardImpl chaff2 = scn.GetFreepsCard("chaff2");
-		scn.FreepsMoveCardToHand(chaff1);
-		scn.FreepsMoveCharToTable(ottar);
+		scn.MoveCardsToHand(chaff1);
+		scn.MoveCompanionsToTable(ottar);
 
 		scn.StartGame();
-		scn.FreepsMoveCardsToTopOfDeck(chaff2);
+		scn.MoveCardsToTopOfDeck(chaff2);
 
 		assertEquals(0, scn.GetWoundsOn(ottar));
 		assertEquals(Zone.HAND, chaff1.getZone());
@@ -110,12 +110,12 @@ public class Card_01_080_ErrataTests
 	@Test
 	public void OttarRequiresCardInHandToDraw() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl ottar = scn.GetFreepsCard("ottar");
 		PhysicalCardImpl chaff1 = scn.GetFreepsCard("chaff1");
 		PhysicalCardImpl chaff2 = scn.GetFreepsCard("chaff2");
-		scn.FreepsMoveCharToTable(ottar);
+		scn.MoveCompanionsToTable(ottar);
 
 		scn.StartGame();
 

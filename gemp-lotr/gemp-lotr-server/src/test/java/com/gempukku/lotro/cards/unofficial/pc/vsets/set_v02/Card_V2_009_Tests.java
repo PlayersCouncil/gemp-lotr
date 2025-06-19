@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_009_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("leithio", "102_9");
@@ -25,9 +25,9 @@ public class Card_V2_009_Tests
 
 					put("smith", "3_60");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_V2_009_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.ARCHERY));
+		assertTrue(scn.HasTimeword(card, Timeword.ARCHERY));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -70,11 +70,11 @@ public class Card_V2_009_Tests
 		var troop = scn.GetFreepsCard("troop");
 		var bow1 = scn.GetFreepsCard("bow1");
 		var bow2 = scn.GetFreepsCard("bow2");
-		scn.FreepsMoveCharToTable(haldir);
-		scn.FreepsMoveCardToHand(leithio);
+		scn.MoveCompanionsToTable(haldir);
+		scn.MoveCardsToHand(leithio);
 
 		var smith = scn.GetShadowCard("smith");
-		scn.ShadowMoveCharToTable(smith);
+		scn.MoveMinionsToTable(smith);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ARCHERY);
@@ -92,11 +92,11 @@ public class Card_V2_009_Tests
 		var troop = scn.GetFreepsCard("troop");
 		var bow1 = scn.GetFreepsCard("bow1");
 		var bow2 = scn.GetFreepsCard("bow2");
-		scn.FreepsMoveCharToTable(haldir, troop);
-		scn.FreepsMoveCardToHand(leithio);
+		scn.MoveCompanionsToTable(haldir, troop);
+		scn.MoveCardsToHand(leithio);
 
 		var smith = scn.GetShadowCard("smith");
-		scn.ShadowMoveCharToTable(smith);
+		scn.MoveMinionsToTable(smith);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ARCHERY);
@@ -118,13 +118,13 @@ public class Card_V2_009_Tests
 		var troop = scn.GetFreepsCard("troop");
 		var bow1 = scn.GetFreepsCard("bow1");
 		var bow2 = scn.GetFreepsCard("bow2");
-		scn.FreepsMoveCharToTable(haldir, troop);
-		scn.FreepsMoveCardToHand(leithio);
-		scn.FreepsAttachCardsTo(haldir, bow1);
-		scn.FreepsAttachCardsTo(troop, bow2);
+		scn.MoveCompanionsToTable(haldir, troop);
+		scn.MoveCardsToHand(leithio);
+		scn.AttachCardsTo(haldir, bow1);
+		scn.AttachCardsTo(troop, bow2);
 
 		var smith = scn.GetShadowCard("smith");
-		scn.ShadowMoveCharToTable(smith);
+		scn.MoveMinionsToTable(smith);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ARCHERY);

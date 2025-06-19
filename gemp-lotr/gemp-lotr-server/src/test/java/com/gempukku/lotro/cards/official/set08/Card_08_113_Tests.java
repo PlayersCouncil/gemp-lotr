@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set08;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_08_113_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("sting", "8_113");
 					put("shelob", "8_25");
 					put("sauron", "9_48");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -67,10 +67,10 @@ public class Card_08_113_Tests
 
 		var frodo = scn.GetRingBearer();
 		var sting = scn.GetFreepsCard("sting");
-		scn.FreepsAttachCardsTo(frodo, sting);
+		scn.AttachCardsTo(frodo, sting);
 
 		var shelob = scn.GetShadowCard("shelob");
-		scn.ShadowMoveCharToTable(shelob);
+		scn.MoveMinionsToTable(shelob);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -89,22 +89,23 @@ public class Card_08_113_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		assertEquals(0, scn.GetThreats());
 		assertEquals(Zone.SHADOW_CHARACTERS, shelob.getZone());
-		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsDeclineOptionalTrigger(); //Ring converting burdens
+		scn.FreepsAcceptOptionalTrigger(); //Sting
 		assertEquals(1, scn.GetThreats());
 		assertEquals(Zone.DISCARD, shelob.getZone());
 	}
 
 	@Test
-	public void StingTriggersOnOverwhelm() throws DecisionResultInvalidException, CardNotFoundException {
+	public void Sting_DOESNOT_TriggerOnOverwhelm() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var sting = scn.GetFreepsCard("sting");
-		scn.FreepsAttachCardsTo(frodo, sting);
+		scn.AttachCardsTo(frodo, sting);
 
 		var sauron = scn.GetShadowCard("sauron");
-		scn.ShadowMoveCharToTable(sauron);
+		scn.MoveMinionsToTable(sauron);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -117,12 +118,10 @@ public class Card_08_113_Tests
 		scn.FreepsResolveSkirmish(frodo);
 		scn.PassCurrentPhaseActions();
 
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
 		assertEquals(0, scn.GetThreats());
 		assertEquals(Zone.SHADOW_CHARACTERS, sauron.getZone());
-		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(1, scn.GetThreats());
-		assertEquals(Zone.DISCARD, sauron.getZone());
+
 	}
 }

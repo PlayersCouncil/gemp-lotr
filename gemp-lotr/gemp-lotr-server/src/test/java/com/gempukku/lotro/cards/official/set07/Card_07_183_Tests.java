@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set07;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_07_183_Tests
 {
 
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>()
                 {{
                     put("mind", "7_183");
@@ -31,9 +31,9 @@ public class Card_07_183_Tests
                     put("bounder", "1_286");
 
                 }},
-                GenericCardTestHelper.FellowshipSites,
-                GenericCardTestHelper.FOTRFrodo,
-                GenericCardTestHelper.RulingRing
+                VirtualTableScenario.FellowshipSites,
+                VirtualTableScenario.FOTRFrodo,
+                VirtualTableScenario.RulingRing
         );
     }
 
@@ -63,7 +63,7 @@ public class Card_07_183_Tests
         assertEquals(Side.SHADOW, card.getBlueprint().getSide());
         assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
         assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+        assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
         assertEquals(1, card.getBlueprint().getTwilightCost());
     }
 
@@ -77,18 +77,18 @@ public class Card_07_183_Tests
         var merry = scn.GetFreepsCard("merry");
         var pippin = scn.GetFreepsCard("pippin");
         var greenleaf = scn.GetFreepsCard("greenleaf");
-        scn.FreepsMoveCharToTable(sam, merry, pippin, greenleaf);
+        scn.MoveCompanionsToTable(sam, merry, pippin, greenleaf);
 
         var mind = scn.GetShadowCard("mind");
         var shotgun = scn.GetShadowCard("shotgun");
         var breath1 = scn.GetShadowCard("breath1");
         var breath2 = scn.GetShadowCard("breath2");
         var breath3 = scn.GetShadowCard("breath3");
-        scn.ShadowMoveCharToTable(shotgun);
+        scn.MoveMinionsToTable(shotgun);
         scn.AttachCardsTo(merry, breath1);
         scn.AttachCardsTo(pippin, breath2);
         scn.AttachCardsTo(pippin, breath3);
-        scn.ShadowMoveCardToHand(mind);
+        scn.MoveCardsToHand(mind);
 
         scn.StartGame();
 
@@ -133,18 +133,18 @@ public class Card_07_183_Tests
         var merry = scn.GetFreepsCard("merry");
         var pippin = scn.GetFreepsCard("pippin");
         var greenleaf = scn.GetFreepsCard("greenleaf");
-        scn.FreepsMoveCharToTable(sam, merry, pippin, greenleaf);
+        scn.MoveCompanionsToTable(sam, merry, pippin, greenleaf);
 
         var mind = scn.GetShadowCard("mind");
         var shotgun = scn.GetShadowCard("shotgun");
         var breath1 = scn.GetShadowCard("breath1");
         var breath2 = scn.GetShadowCard("breath2");
         var breath3 = scn.GetShadowCard("breath3");
-        scn.ShadowMoveCharToTable(shotgun);
+        scn.MoveMinionsToTable(shotgun);
         scn.AttachCardsTo(merry, breath1);
         scn.AttachCardsTo(pippin, breath2);
         scn.AttachCardsTo(pippin, breath3);
-        scn.ShadowMoveCardToHand(mind);
+        scn.MoveCardsToHand(mind);
 
         scn.StartGame();
 
@@ -181,12 +181,12 @@ public class Card_07_183_Tests
         var sam = scn.GetFreepsCard("sam");
         var merry = scn.GetFreepsCard("merry");
         var pippin = scn.GetFreepsCard("pippin");
-        scn.FreepsMoveCharToTable(sam, merry, pippin);
+        scn.MoveCompanionsToTable(sam, merry, pippin);
 
         var mind = scn.GetShadowCard("mind");
         var shotgun = scn.GetShadowCard("shotgun");
-        scn.ShadowMoveCharToTable(shotgun);
-        scn.ShadowMoveCardToHand(mind);
+        scn.MoveMinionsToTable(shotgun);
+        scn.MoveCardsToHand(mind);
 
         scn.StartGame();
 
@@ -219,13 +219,13 @@ public class Card_07_183_Tests
         var bounder = scn.GetFreepsCard("bounder");
         var merry = scn.GetFreepsCard("merry");
         var pippin = scn.GetFreepsCard("pippin");
-        scn.FreepsMoveCharToTable(merry, pippin);
-        scn.FreepsMoveCardToSupportArea(bounder);
+        scn.MoveCompanionsToTable(merry, pippin);
+        scn.MoveCardsToSupportArea(bounder);
 
         var mind = scn.GetShadowCard("mind");
         var shotgun = scn.GetShadowCard("shotgun");
-        scn.ShadowMoveCharToTable(shotgun);
-        scn.ShadowMoveCardToHand(mind);
+        scn.MoveMinionsToTable(shotgun);
+        scn.MoveCardsToHand(mind);
 
         scn.StartGame();
 
@@ -256,12 +256,12 @@ public class Card_07_183_Tests
 
         var frodo = scn.GetRingBearer();
         var sam = scn.GetFreepsCard("sam");
-        scn.FreepsMoveCharToTable(sam);
+        scn.MoveCompanionsToTable(sam);
 
         var mind = scn.GetShadowCard("mind");
         var shotgun = scn.GetShadowCard("shotgun");
-        scn.ShadowMoveCharToTable(shotgun);
-        scn.ShadowMoveCardToHand(mind);
+        scn.MoveMinionsToTable(shotgun);
+        scn.MoveCardsToHand(mind);
 
         scn.StartGame();
 
@@ -294,13 +294,13 @@ public class Card_07_183_Tests
 
         var frodo = scn.GetRingBearer();
         var greenleaf = scn.GetFreepsCard("greenleaf");
-        scn.FreepsMoveCharToTable( greenleaf);
+        scn.MoveCompanionsToTable( greenleaf);
 
         var mind = scn.GetShadowCard("mind");
         var charge = scn.GetShadowCard("charge");
         var shotgun = scn.GetShadowCard("shotgun");
-        scn.ShadowMoveCharToTable(shotgun);
-        scn.ShadowMoveCardToHand(mind, charge);
+        scn.MoveMinionsToTable(shotgun);
+        scn.MoveCardsToHand(mind, charge);
 
         scn.StartGame();
         scn.AddWoundsToChar(greenleaf, 2);

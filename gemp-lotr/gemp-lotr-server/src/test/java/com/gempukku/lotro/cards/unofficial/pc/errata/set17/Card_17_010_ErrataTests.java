@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set17;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_17_010_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("namarie", "67_10");
@@ -26,9 +26,9 @@ public class Card_17_010_ErrataTests
 					put("mauhur", "15_164");
 					put("bladetip", "1_209");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,7 +57,7 @@ public class Card_17_010_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, namarie.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, namarie.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, namarie.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(namarie, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(namarie, Keyword.SUPPORT_AREA));
 		assertEquals(2, namarie.getBlueprint().getTwilightCost());
 	}
 
@@ -67,10 +67,10 @@ public class Card_17_010_ErrataTests
 		var scn = GetScenario();
 
 		var namarie = scn.GetFreepsCard("namarie");
-		scn.FreepsMoveCardToHand(namarie);
-		scn.FreepsMoveCharToTable("legolas", "gimli", "aragorn");
+		scn.MoveCardsToHand(namarie);
+		scn.MoveCompanionsToTable("legolas", "gimli", "aragorn");
 
-		scn.ShadowMoveCharToTable("mauhur");
+		scn.MoveMinionsToTable("mauhur");
 
 		scn.StartGame();
 
@@ -87,10 +87,10 @@ public class Card_17_010_ErrataTests
 		var scn = GetScenario();
 
 		var namarie = scn.GetFreepsCard("namarie");
-		scn.FreepsMoveCardToHand(namarie);
-		scn.FreepsMoveCharToTable("legolas");
+		scn.MoveCardsToHand(namarie);
+		scn.MoveCompanionsToTable("legolas");
 
-		scn.ShadowMoveCharToTable("mauhur");
+		scn.MoveMinionsToTable("mauhur");
 
 		scn.StartGame();
 
@@ -109,11 +109,11 @@ public class Card_17_010_ErrataTests
 		var namarie = scn.GetFreepsCard("namarie");
 		var gimli = scn.GetFreepsCard("gimli");
 		var legolas = scn.GetFreepsCard("legolas");
-		scn.FreepsMoveCardToHand(namarie, gimli, legolas);
+		scn.MoveCardsToHand(namarie, gimli, legolas);
 
 		var bladetip = scn.GetShadowCard("bladetip");
-		scn.ShadowMoveCardToSupportArea(bladetip);
-		scn.ShadowMoveCharToTable("mauhur");
+		scn.MoveCardsToSupportArea(bladetip);
+		scn.MoveMinionsToTable("mauhur");
 
 		scn.StartGame();
 
@@ -158,12 +158,12 @@ public class Card_17_010_ErrataTests
 		var namarie = scn.GetFreepsCard("namarie");
 		var gimli = scn.GetFreepsCard("gimli");
 		var legolas = scn.GetFreepsCard("legolas");
-		scn.FreepsMoveCardToHand(gimli, legolas);
-		scn.FreepsMoveCardToSupportArea(namarie);
+		scn.MoveCardsToHand(gimli, legolas);
+		scn.MoveCardsToSupportArea(namarie);
 
 		var bladetip = scn.GetShadowCard("bladetip");
-		scn.ShadowMoveCardToSupportArea(bladetip);
-		scn.ShadowMoveCharToTable("mauhur");
+		scn.MoveCardsToSupportArea(bladetip);
+		scn.MoveMinionsToTable("mauhur");
 
 		scn.StartGame();
 

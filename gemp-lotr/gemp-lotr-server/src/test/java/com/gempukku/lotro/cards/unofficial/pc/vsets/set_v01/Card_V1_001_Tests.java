@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_001_Tests
 {
 
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("gimli", "1_13");
                     put("farin", "1_11");
@@ -29,9 +29,9 @@ public class Card_V1_001_Tests
 
                     put("troop", "1_143");
                 }},
-                GenericCardTestHelper.FellowshipSites,
-                GenericCardTestHelper.FOTRFrodo,
-                GenericCardTestHelper.RulingRing
+                VirtualTableScenario.FellowshipSites,
+                VirtualTableScenario.FOTRFrodo,
+                VirtualTableScenario.RulingRing
         );
     }
 
@@ -53,7 +53,7 @@ public class Card_V1_001_Tests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl hosp = scn.GetFreepsCard("hosp");
 
@@ -61,13 +61,13 @@ public class Card_V1_001_Tests
         assertEquals(1, hosp.getBlueprint().getTwilightCost());
         assertEquals(CardType.CONDITION, hosp.getBlueprint().getCardType());
         assertEquals(Culture.DWARVEN, hosp.getBlueprint().getCulture());
-        assertTrue(scn.hasKeyword(hosp, Keyword.SUPPORT_AREA));
+        assertTrue(scn.HasKeyword(hosp, Keyword.SUPPORT_AREA));
     }
 
     @Test
     public void AbilityOnlyActivatesAtSites4To8() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
         PhysicalCardImpl hosp = scn.GetFreepsCard("hosp");
@@ -75,13 +75,13 @@ public class Card_V1_001_Tests
         PhysicalCardImpl handaxe1 = scn.GetFreepsCard("handaxe1");
         PhysicalCardImpl handaxe2 = scn.GetFreepsCard("handaxe2");
 
-        scn.FreepsMoveCharToTable(gimli);
-        scn.FreepsMoveCardToSupportArea(hosp);
-        scn.FreepsMoveCardToHand(handaxe1);
-        scn.FreepsMoveCardToHand(handaxe2);
+        scn.MoveCompanionsToTable(gimli);
+        scn.MoveCardsToSupportArea(hosp);
+        scn.MoveCardsToHand(handaxe1);
+        scn.MoveCardsToHand(handaxe2);
 
         PhysicalCardImpl troop = scn.GetShadowCard("troop");
-        scn.ShadowMoveCharToTable(troop);
+        scn.MoveMinionsToTable(troop);
 
         //Max out the move limit so we don't have to juggle play back and forth
         scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -119,7 +119,7 @@ public class Card_V1_001_Tests
         scn.SkipToPhase(Phase.MANEUVER);
         assertTrue(scn.FreepsActionAvailable(hosp));
         scn.FreepsUseCardAction(hosp);
-        assertFalse(scn.hasKeyword(gimli, Keyword.DAMAGE));
+        assertFalse(scn.HasKeyword(gimli, Keyword.DAMAGE));
 
         scn.SkipToPhase(Phase.ASSIGNMENT);
         scn.PassCurrentPhaseActions();

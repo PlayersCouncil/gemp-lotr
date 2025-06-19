@@ -21,7 +21,11 @@ public enum Keyword implements Filterable {
     FIERCE("Fierce", true, false, false, true),
     LURKER("Lurker", true, false, false, true),
     MUSTER("Muster", true, false, false, true),
-    SANCTUARY("Sanctuary", true, false, true, true),
+    /**
+     * As per Modern Ruling #1, Sanctuary is not considered a terrain keyword.
+     * https://wiki.lotrtcgpc.net/wiki/Modern_Ruling_1
+      */
+    SANCTUARY("Sanctuary", true, false, false, true),
     RING_BEARER("Ring-Bearer", true, false, true, true),
     UNHASTY("Unhasty", true, false, false, true),
 
@@ -31,6 +35,7 @@ public enum Keyword implements Filterable {
     // ----------------------------------------- Unloaded keywords -----------------------------------------
     BATTLEGROUND("Battleground", true, false, true, true),
     BESIEGER("Besieger", true, false, false, true),
+    BEACON("Beacon", true, false, false, true),
     CORSAIR("Corsair", true, false, false, true),
     DWELLING("Dwelling", true, false, true, true),
     EASTERLING("Easterling", true, false, false, true),
@@ -63,11 +68,11 @@ public enum Keyword implements Filterable {
 
     // Additional Second Edition keywords
     CUNNING("Cunning", true, false, false, true),
-    LOTHLORIEN("Lothlorien", true, false, false, true),
-    RIVENDELL("Rivendell", true, false, false, true),
-    BREE("Bree", true, false, false, true),
-    EDORAS("Edoras", true, false, false, true),
-    SHIRE("Shire", true, false, false, true),
+//    LOTHLORIEN("Lothlorien", true, false, false, true),
+//    RIVENDELL("Rivendell", true, false, false, true),
+//    BREE("Bree", true, false, false, true),
+//    EDORAS("Edoras", true, false, false, true),
+//    SHIRE("Shire", true, false, false, true),
 
 	//Additional Hobbit Draft keywords
     WISE("Wise", true, false, false, true),

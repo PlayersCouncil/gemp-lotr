@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set04;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_04_174_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("staff", "4_174");
@@ -23,9 +23,9 @@ public class Card_04_174_Tests
 
 					put("sam", "1_311");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -69,18 +69,18 @@ public class Card_04_174_Tests
 
 		var saruman = scn.GetShadowCard("saruman");
 		var staff = scn.GetShadowCard("staff");
-		scn.ShadowMoveCharToTable(saruman);
-		scn.ShadowMoveCardToHand(staff);
+		scn.MoveMinionsToTable(saruman);
+		scn.MoveCardsToHand(staff);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertFalse(scn.hasKeyword(saruman, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(saruman, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(saruman, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(saruman, Keyword.FIERCE));
 
 		scn.ShadowPlayCard(staff);
-		assertTrue(scn.hasKeyword(saruman, Keyword.DAMAGE));
-		assertTrue(scn.hasKeyword(saruman, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(saruman, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(saruman, Keyword.FIERCE));
 	}
 
 	@Test
@@ -90,7 +90,7 @@ public class Card_04_174_Tests
 
 		var saruman = scn.GetShadowCard("saruman");
 		var staff = scn.GetShadowCard("staff");
-		scn.ShadowMoveCharToTable(saruman);
+		scn.MoveMinionsToTable(saruman);
 		scn.AttachCardsTo(saruman, staff);
 
 		scn.StartGame();
@@ -112,11 +112,11 @@ public class Card_04_174_Tests
 		var saruman = scn.GetShadowCard("saruman");
 		var staff = scn.GetShadowCard("staff");
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCharToTable(saruman, orc);
+		scn.MoveMinionsToTable(saruman, orc);
 		scn.AttachCardsTo(saruman, staff);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);

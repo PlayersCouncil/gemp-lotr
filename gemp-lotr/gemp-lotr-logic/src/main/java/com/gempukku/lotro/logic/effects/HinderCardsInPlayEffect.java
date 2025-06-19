@@ -10,10 +10,12 @@ import java.util.Collection;
 
 public class HinderCardsInPlayEffect extends AbstractPreventableCardEffect {
     private PhysicalCard _source;
+    private final String _performingPlayer;
     private String _sourceText;
 
-    public HinderCardsInPlayEffect(PhysicalCard source, PhysicalCard... cards) {
+    public HinderCardsInPlayEffect(String performingPlayer, PhysicalCard source, PhysicalCard... cards) {
         super(cards);
+        _performingPlayer = performingPlayer;
         if (source != null) {
             _source = source;
             _sourceText = GameUtils.getCardLink(source);
@@ -31,12 +33,11 @@ public class HinderCardsInPlayEffect extends AbstractPreventableCardEffect {
 
     @Override
     protected Filter getExtraAffectableFilter() {
-        return new Filter() {
-            @Override
-            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                return game.getGameState().canBeHindered(physicalCard);
-            }
-        };
+        return (game, physicalCard) -> game.getGameState().canBeHindered(physicalCard);
+    }
+
+    public String getPerformingPlayer() {
+        return _performingPlayer;
     }
 
     @Override
@@ -59,7 +60,7 @@ public class HinderCardsInPlayEffect extends AbstractPreventableCardEffect {
         game.getGameState().hinder(cards);
 
         for (var card : cards) {
-            game.getActionsEnvironment().emitEffectResult(new HinderedResult(_source, card));
+            game.getActionsEnvironment().emitEffectResult(new HinderedResult(_source, _performingPlayer, card));
         }
     }
 }

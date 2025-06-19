@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_055_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("mirror", "1_55");
@@ -30,9 +30,9 @@ public class Card_01_055_Tests
 					put("card5", "1_183");
 					put("card6", "1_184");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -64,7 +64,7 @@ public class Card_01_055_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -77,8 +77,8 @@ public class Card_01_055_Tests
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var allyHome3_1 = scn.GetFreepsCard("allyHome3_1");
 		var allyHome6_1 = scn.GetFreepsCard("allyHome6_1");
-		scn.FreepsMoveCharToTable(galadriel, allyHome3_1, allyHome6_1);
-		scn.FreepsMoveCardToHand(mirror);
+		scn.MoveCompanionsToTable(galadriel, allyHome3_1, allyHome6_1);
+		scn.MoveCardsToHand(mirror);
 
 		scn.StartGame();
 
@@ -98,11 +98,11 @@ public class Card_01_055_Tests
 
 		var mirror = scn.GetFreepsCard("mirror");
 		var galadriel = scn.GetFreepsCard("galadriel");
-		scn.FreepsMoveCharToTable(galadriel);
-		scn.FreepsMoveCardToSupportArea(mirror);
+		scn.MoveCompanionsToTable(galadriel);
+		scn.MoveCardsToSupportArea(mirror);
 
-		scn.ShadowMoveCardToHand("card1", "card2", "card3", "card4", "card5", "card6");
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveCardsToShadowHand("card1", "card2", "card3", "card4", "card5", "card6");
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 
@@ -117,11 +117,11 @@ public class Card_01_055_Tests
 
 		var mirror = scn.GetFreepsCard("mirror");
 		var galadriel = scn.GetFreepsCard("galadriel");
-		scn.FreepsMoveCharToTable(galadriel);
-		scn.FreepsMoveCardToSupportArea(mirror);
+		scn.MoveCompanionsToTable(galadriel);
+		scn.MoveCardsToSupportArea(mirror);
 
-		scn.ShadowMoveCardToHand("card1", "card2", "card3", "card4", "card5", "card6", "mirror");
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveCardsToShadowHand("card1", "card2", "card3", "card4", "card5", "card6", "mirror");
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set18;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,8 +15,8 @@ import static org.junit.Assert.assertTrue;
 // Wielder of the Flame
 public class Card_18_118_Tests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
 
@@ -55,8 +55,8 @@ public class Card_18_118_Tests
         assertEquals(Culture.URUK_HAI, card.getBlueprint().getCulture());
         assertEquals(CardType.MINION, card.getBlueprint().getCardType());
         assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-        assertTrue(scn.hasKeyword(card, Keyword.ARCHER));
-        assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+        assertTrue(scn.HasKeyword(card, Keyword.ARCHER));
+        assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
         assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
         assertEquals(7, card.getBlueprint().getTwilightCost());
         assertEquals(13, card.getBlueprint().getStrength());
@@ -68,14 +68,14 @@ public class Card_18_118_Tests
     @Test
     public void LurtzAbilityOffersChoiceOfPrevention() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl frodo = scn.GetRingBearer();
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        scn.FreepsMoveCharToTable(aragorn);
+        scn.MoveCompanionsToTable(aragorn);
 
         PhysicalCardImpl lurtz = scn.GetShadowCard("lurtz");
-        scn.ShadowMoveCharToTable(lurtz);
+        scn.MoveMinionsToTable(lurtz);
 
         scn.StartGame();
 

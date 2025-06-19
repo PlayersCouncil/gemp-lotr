@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_V1_044_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("fell", "101_44");
 					put("orc", "1_270");
@@ -26,9 +26,9 @@ public class Card_V1_044_Tests
 
 					put("fcond", "1_100");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -47,7 +47,7 @@ public class Card_V1_044_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl fell = scn.GetFreepsCard("fell");
 
@@ -56,7 +56,7 @@ public class Card_V1_044_Tests
 		assertEquals(Culture.SAURON, fell.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, fell.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, fell.getBlueprint().getRace());
-        assertTrue(scn.hasTimeword(fell, Timeword.REGROUP)); // test for keywords as needed
+        assertTrue(scn.HasTimeword(fell, Timeword.REGROUP)); // test for keywords as needed
 		assertEquals(1, fell.getBlueprint().getTwilightCost());
 		//assertEquals(, fell.getBlueprint().getStrength());
 		//assertEquals(, fell.getBlueprint().getVitality());
@@ -69,12 +69,12 @@ public class Card_V1_044_Tests
 	@Test
 	public void FellDiscardsAnOrcToAddABurden() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl fell = scn.GetShadowCard("fell");
 		PhysicalCardImpl orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCharToTable(orc);
-		scn.ShadowMoveCardToHand(fell);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToHand(fell);
 
 		scn.StartGame();
 
@@ -92,12 +92,12 @@ public class Card_V1_044_Tests
 	@Test
 	public void FellRequiresASauronOrcToPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl fell = scn.GetShadowCard("fell");
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
-		scn.ShadowMoveCardToHand(fell);
+		scn.MoveMinionsToTable(runner);
+		scn.MoveCardsToHand(fell);
 
 		scn.StartGame();
 
@@ -111,17 +111,17 @@ public class Card_V1_044_Tests
 	@Test
 	public void FreepsCanDiscardAFreepsConditionToPrevent() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl fell = scn.GetShadowCard("fell");
 		PhysicalCardImpl orc = scn.GetShadowCard("orc");
 		PhysicalCardImpl scond = scn.GetShadowCard("scond");
-		scn.ShadowMoveCharToTable(orc);
-		scn.ShadowMoveCardToSupportArea(scond);
-		scn.ShadowMoveCardToHand(fell);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToSupportArea(scond);
+		scn.MoveCardsToHand(fell);
 
 		PhysicalCardImpl fcond = scn.GetFreepsCard("fcond");
-		scn.FreepsMoveCardToSupportArea(fcond);
+		scn.MoveCardsToSupportArea(fcond);
 
 		scn.StartGame();
 

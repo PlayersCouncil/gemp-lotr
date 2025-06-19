@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set10;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_10_003_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("more", "10_3");
@@ -22,9 +22,9 @@ public class Card_10_003_Tests
 					put("runner", "1_178");
 					put("savage", "1_151");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -53,7 +53,7 @@ public class Card_10_003_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+        assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -64,12 +64,12 @@ public class Card_10_003_Tests
 
 		var gimli = scn.GetFreepsCard("gimli");
 		var more = scn.GetFreepsCard("more");
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsMoveCardToHand(more);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(more);
 
 		var runner = scn.GetShadowCard("runner");
 		var savage = scn.GetShadowCard("savage");
-		scn.ShadowMoveCharToTable(runner, savage);
+		scn.MoveMinionsToTable(runner, savage);
 
 		scn.StartGame();
 

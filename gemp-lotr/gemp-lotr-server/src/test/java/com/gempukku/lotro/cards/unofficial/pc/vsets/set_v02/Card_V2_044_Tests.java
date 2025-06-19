@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_044_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("insurance", "102_44");
@@ -31,9 +31,9 @@ public class Card_V2_044_Tests
 
 					put("bill", "3_106");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -63,7 +63,7 @@ public class Card_V2_044_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.SHADOW));
+		assertTrue(scn.HasTimeword(card, Timeword.SHADOW));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -74,7 +74,7 @@ public class Card_V2_044_Tests
 
 		var insurance = scn.GetShadowCard("insurance");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCardToHand(insurance, runner);
+		scn.MoveCardsToHand(insurance, runner);
 
 		scn.StartGame();
 		scn.SetTwilight(8);
@@ -102,11 +102,11 @@ public class Card_V2_044_Tests
 
 		var insurance = scn.GetShadowCard("insurance");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCardToHand(insurance);
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveCardsToHand(insurance);
+		scn.MoveMinionsToTable(runner);
 
 		var frodo = scn.GetRingBearer();
-		scn.FreepsAttachCardsTo(frodo, "bill");
+		scn.AttachCardsTo(frodo, scn.GetFreepsCard("bill"));
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -122,9 +122,9 @@ public class Card_V2_044_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		scn.ShadowMoveCardToHand(insurance);
+		scn.MoveCardsToHand(insurance);
 
-		scn.FreepsMoveCharToTable("sam", "merry", "pippin", "gandalf", "aragorn",
+		scn.MoveCompanionsToTable("sam", "merry", "pippin", "gandalf", "aragorn",
 				"legolas", "gimli", "boromir");
 
 		scn.StartGame();
@@ -152,8 +152,8 @@ public class Card_V2_044_Tests
 
 		var insurance = scn.GetShadowCard("insurance");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCardToHand(insurance);
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveCardsToHand(insurance);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SetTwilight(15);
@@ -174,19 +174,19 @@ public class Card_V2_044_Tests
 
 		var insurance = scn.GetShadowCard("insurance");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCardToHand(insurance);
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveCardsToHand(insurance);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.ShadowMoveCardsToTopOfDeck(insurance);
+		scn.MoveCardsToTopOfDeck(insurance);
 
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(18, scn.GetTwilight());
 		assertTrue(scn.ShadowActionAvailable(insurance));
 
-		scn.ShadowPlayCard(insurance);
+		scn.ShadowUseCardAction(insurance);
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose how many threats to add"));
 	}
@@ -197,7 +197,7 @@ public class Card_V2_044_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		scn.ShadowMoveCardToHand(insurance);
+		scn.MoveCardsToHand(insurance);
 
 		scn.StartGame();
 
@@ -221,7 +221,7 @@ public class Card_V2_044_Tests
 		scn.SkipToSite(6);
 
 		scn.SetTwilight(11);
-		scn.ShadowMoveCardToHand(insurance);
+		scn.MoveCardsToHand(insurance);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(7, scn.GetCurrentSiteNumber());
@@ -235,7 +235,7 @@ public class Card_V2_044_Tests
 		var scn = GetScenario();
 
 		var insurance = scn.GetShadowCard("insurance");
-		scn.ShadowMoveCardToHand(insurance);
+		scn.MoveCardsToHand(insurance);
 
 		scn.StartGame();
 
@@ -264,14 +264,14 @@ public class Card_V2_044_Tests
 		var item2 = scn.GetShadowCard("item2");
 		var item3 = scn.GetShadowCard("item3");
 		var item4 = scn.GetShadowCard("item4");
-		scn.ShadowMoveCardsToTopOfDeck(insurance);
+		scn.MoveCardsToTopOfDeck(insurance);
 
 		scn.StartGame();
 
 		scn.SkipToSite(2);
 
 		scn.SetTwilight(17);
-		scn.ShadowMoveCardsToTopOfDeck(insurance);
+		scn.MoveCardsToTopOfDeck(insurance);
 
 		scn.FreepsPassCurrentPhaseAction();
 		assertEquals(18, scn.GetTwilight());
@@ -280,7 +280,7 @@ public class Card_V2_044_Tests
 		// currently in hand.
 		assertTrue(scn.ShadowActionAvailable(insurance));
 
-		scn.ShadowPlayCard(insurance);
+		scn.ShadowUseCardAction(insurance);
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose how many threats to add"));
 		scn.ShadowChoose("0");
@@ -292,7 +292,7 @@ public class Card_V2_044_Tests
 		scn.SkipToSite(4);
 
 		scn.SetTwilight(11);
-		scn.ShadowMoveCardsToTopOfDeck(insurance);
+		scn.MoveCardsToTopOfDeck(insurance);
 
 		scn.FreepsPassCurrentPhaseAction();
 
@@ -305,7 +305,7 @@ public class Card_V2_044_Tests
 		scn.SkipToSite(6);
 
 		scn.SetTwilight(11);
-		scn.ShadowMoveCardsToTopOfDeck(insurance);
+		scn.MoveCardsToTopOfDeck(insurance);
 
 		scn.FreepsPassCurrentPhaseAction();
 

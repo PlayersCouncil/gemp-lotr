@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set10;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 // Wielder of the Flame
 public class Card_10_030_Tests
 {
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("endgame", "10_30");
                     put("aragorn", "1_89");
@@ -50,7 +50,7 @@ public class Card_10_030_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
+        assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -62,11 +62,11 @@ public class Card_10_030_Tests
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         var endgame = scn.GetFreepsCard("endgame");
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(endgame);
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCardsToHand(endgame);
 
         var troop = scn.GetShadowCard("troop");
-        scn.ShadowMoveCharToTable(troop);
+        scn.MoveMinionsToTable(troop);
 
 		scn.StartGame();
 
@@ -96,11 +96,11 @@ public class Card_10_030_Tests
 
         var aragorn = scn.GetFreepsCard("aragorn");
         var endgame = scn.GetFreepsCard("endgame");
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(endgame);
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCardsToHand(endgame);
 
         var troop = scn.GetShadowCard("troop");
-        scn.ShadowMoveCharToTable(troop);
+        scn.MoveMinionsToTable(troop);
 
         scn.StartGame();
 
@@ -125,11 +125,11 @@ public class Card_10_030_Tests
 
         var aragorn = scn.GetFreepsCard("aragorn");
         var endgame = scn.GetFreepsCard("endgame");
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(endgame);
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCardsToHand(endgame);
 
         var troop = scn.GetShadowCard("troop");
-        scn.ShadowMoveCharToTable(troop);
+        scn.MoveMinionsToTable(troop);
 
         scn.StartGame();
 
@@ -150,7 +150,7 @@ public class Card_10_030_Tests
 
         assertTrue(scn.FreepsActionAvailable("Required trigger from"));
         scn.FreepsResolveActionOrder("Required trigger from");
-        scn.FreepsChooseMultipleChoiceOption("Heal");
+        scn.FreepsChooseOption("Heal");
         assertEquals(2, scn.GetWoundsOn(aragorn));
         assertEquals(1, scn.GetWoundsOn(troop));
     }
@@ -162,11 +162,11 @@ public class Card_10_030_Tests
 
         var aragorn = scn.GetFreepsCard("aragorn");
         var endgame = scn.GetFreepsCard("endgame");
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(endgame);
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCardsToHand(endgame);
 
         var troop = scn.GetShadowCard("troop");
-        scn.ShadowMoveCharToTable(troop);
+        scn.MoveMinionsToTable(troop);
 
         scn.StartGame();
 
@@ -187,7 +187,7 @@ public class Card_10_030_Tests
 
         assertTrue(scn.FreepsActionAvailable("Required trigger from"));
         scn.FreepsResolveActionOrder("Required trigger from");
-        scn.FreepsChooseMultipleChoiceOption("damage +1");
+        scn.FreepsChooseOption("damage +1");
         assertEquals(3, scn.GetWoundsOn(aragorn));
         assertEquals(2, scn.GetWoundsOn(troop));
 	}

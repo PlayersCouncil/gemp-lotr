@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -8,13 +8,14 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertAttachedTo;
 import static org.junit.Assert.*;
 
 public class Card_01_068_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("arrows", "1_68");
@@ -24,9 +25,9 @@ public class Card_01_068_Tests
 					put("scout", "1_191");
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +57,7 @@ public class Card_01_068_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.TALE));
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -68,15 +69,15 @@ public class Card_01_068_Tests
 		var arrows = scn.GetFreepsCard("arrows");
 		var legolas = scn.GetFreepsCard("legolas");
 		var galadriel = scn.GetFreepsCard("galadriel");
-		scn.FreepsMoveCharToTable(legolas, galadriel);
-		scn.FreepsMoveCardToHand(arrows);
+		scn.MoveCompanionsToTable(legolas, galadriel);
+		scn.MoveCardsToHand(arrows);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(arrows);
 
 		assertEquals(Zone.ATTACHED, arrows.getZone());
 		//Should have automatically gone to Legolas and not had galadriel as a valid choice, where Gemp would ask the user to decide
-		assertTrue(scn.IsAttachedTo(arrows, legolas));
+		assertAttachedTo(arrows, legolas);
 	}
 
 	@Test
@@ -86,12 +87,11 @@ public class Card_01_068_Tests
 
 		var arrows = scn.GetFreepsCard("arrows");
 		var legolas = scn.GetFreepsCard("legolas");
-		scn.FreepsMoveCharToTable(legolas);
-		scn.FreepsAttachCardsTo(legolas, arrows);
+		scn.MoveCompanionsToTable(legolas);
+		scn.AttachCardsTo(legolas, arrows);
 
-		var scout = scn.GetShadowCard("scout");
-		scn.ShadowMoveCardToHand("legolas", "galadriel", "arrows");
-		scn.ShadowMoveCharToTable("scout", "runner");
+		scn.ShadowDrawCards(3);
+		scn.MoveMinionsToTable("scout", "runner");
 
 		scn.StartGame();
 

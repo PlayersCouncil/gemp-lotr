@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_028_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("machinery", "102_28");
@@ -23,9 +23,9 @@ public class Card_V2_028_Tests
 
 					put("gandalf", "1_72");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_V2_028_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -66,7 +66,7 @@ public class Card_V2_028_Tests
 		var scn = GetScenario();
 
 		var machinery = scn.GetShadowCard("machinery");
-		scn.ShadowMoveCardToHand(machinery);
+		scn.MoveCardsToHand(machinery);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -85,8 +85,8 @@ public class Card_V2_028_Tests
 		var machinery = scn.GetShadowCard("machinery");
 		var saruman = scn.GetShadowCard("saruman");
 
-		scn.ShadowMoveCardToHand(machinery);
-		scn.ShadowMoveCharToTable(saruman);
+		scn.MoveCardsToHand(machinery);
+		scn.MoveMinionsToTable(saruman);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -104,10 +104,10 @@ public class Card_V2_028_Tests
 		var scn = GetScenario();
 
 		var machinery = scn.GetShadowCard("machinery");
-		scn.ShadowMoveCardToHand(machinery);
+		scn.MoveCardsToHand(machinery);
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -126,11 +126,11 @@ public class Card_V2_028_Tests
 
 		var machinery = scn.GetShadowCard("machinery");
 		var isenorc = scn.GetShadowCard("isenorc");
-		scn.ShadowMoveCardToSupportArea(machinery);
-		scn.ShadowMoveCharToTable(isenorc);
+		scn.MoveCardsToSupportArea(machinery);
+		scn.MoveMinionsToTable(isenorc);
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -155,11 +155,11 @@ public class Card_V2_028_Tests
 
 		var machinery = scn.GetShadowCard("machinery");
 		var isenorc = scn.GetShadowCard("isenorc");
-		scn.ShadowMoveCardToSupportArea(machinery);
-		scn.ShadowMoveCharToTable(isenorc);
+		scn.MoveCardsToSupportArea(machinery);
+		scn.MoveMinionsToTable(isenorc);
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.AddTokensToCard(machinery, 2);
 
@@ -188,11 +188,11 @@ public class Card_V2_028_Tests
 
 		var machinery = scn.GetShadowCard("machinery");
 		var isenorc = scn.GetShadowCard("isenorc");
-		scn.ShadowMoveCardToSupportArea(machinery);
-		scn.ShadowMoveCharToTable(isenorc);
+		scn.MoveCardsToSupportArea(machinery);
+		scn.MoveMinionsToTable(isenorc);
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.AddTokensToCard(machinery, 1);
 

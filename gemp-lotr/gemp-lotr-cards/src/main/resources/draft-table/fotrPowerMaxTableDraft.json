@@ -3,6 +3,7 @@
   "code": "fotr_power_table_draft",
   "format": "limited_fotr",
   "max-players": 8,
+  "html-description": "Each player begins with a <strong>Fellowship Power Max Draft Pack</strong>, which includes semi-random Free Peoples and Shadow cards. Players also receive common Frodo, common Ring, Hobbit Sword, common Balrog, Enquea, and Nertea, along with one copy of each site card.<br/>Then, players draft four booster packs in the following order:<ul><li><strong>2x Fellowship of the Ring Power Max Free Peoples booster</strong></li><li><strong>2x Fellowship of the Ring Power Max Shadow booster</strong></li></ul>The <strong>Fellowship of the Ring Power Max booster</strong> consists of cards from the <strong>Fellowship of the Ring</strong>, <strong>Mines of Moria</strong>, and <strong>Realms of the Elf-lords</strong> sets combined into a single draft pool. This means that each booster may contain cards from any of these three sets, depending on the random distribution.<br/>Note that not all cards from these sets are included in the draft. Based on past draft analyses, some common and uncommon cards have been cut, as these cards appeared in less than 5% of decks. Additionally, rare cards with a playrate below 2% have also been excluded from the draft.<br/>After that, the card pool was manually modified by Wertigo, and some cards may have been added or cut based on his evaluation.<br/>The complete card list can be found below.",
   "starting-collection": [
     {
       "size": 7,
@@ -93,7 +94,7 @@
         "2_101", "2_5"  , "2_102", "3_108", "2_6"  , "2_10" , "1_19" , "1_296",
         "1_298", "1_299", "1_76" , "1_303", "3_43" , "1_78" ,
         "2_110", "2_114", "1_311", "2_37" , "1_59" , "1_84" , "1_116", "1_117",
-        "1_68" , "1_26" , "1_317", "2_14" , "2_29" , "1_8"  , "2_21" , "2_26" ,
+        "1_68" , "1_26" , "1_317", "2_14" , "2_29" , "1_8"  , "2_26" ,
         "1_110"
       ]
     },

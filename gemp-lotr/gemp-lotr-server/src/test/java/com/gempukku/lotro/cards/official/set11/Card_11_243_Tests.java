@@ -1,12 +1,11 @@
 package com.gempukku.lotro.cards.official.set11;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
-import com.gempukku.lotro.game.state.actions.DefaultActionsEnvironment;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -17,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_11_243_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("eomer", "4_267");
@@ -38,9 +37,9 @@ public class Card_11_243_Tests
 					put("site8", "12_185");
 					put("site9", "17_146");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing,
-				GenericCardTestHelper.Shadows
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Shadows
 		);
 	}
 
@@ -57,7 +56,8 @@ public class Card_11_243_Tests
 		 * Type: Site
 		 * Subtype: 
 		 * Site Number: *
-		 * Game Text: <b>Plains</b>. Until the regroup phase, each minion skirmishing a [rohan] companion loses <b>fierce</b> and cannot gain fierce.
+		 * Game Text: <b>Plains</b>. Until the regroup phase, each minion skirmishing a [rohan] companion loses
+		 * <b>fierce</b> and cannot gain fierce.
 		*/
 
 		var scn = GetScenario();
@@ -69,27 +69,18 @@ public class Card_11_243_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.PLAINS));
+		assertTrue(scn.HasKeyword(card, Keyword.PLAINS));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HarrowdaleTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(3, scn.GetTwilight());
-	}
+	/**
+	 * As per Legacy Ruling #4, Harrowdale's text is to be interpreted as only working while the fellowship is at that site.
+	 * Thus, if you start at Harrowdale and move away from it, the text does not "follow" the fellowship.
+	 * <a href="https://wiki.lotrtcgpc.net/wiki/Legacy_Ruling_4">Wiki LR#4</a>
+	 */
 
 	@Test
-	public void MovingFromHarrowdaleRemovesFierceAgainstSkirmishingRohirrim() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MovingFromHarrowdale_DOESNOT_RemoveFierceAgainstSkirmishingRohirrim() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 		var harrowdale = scn.GetFreepsSite("Harrowdale");
@@ -98,11 +89,11 @@ public class Card_11_243_Tests
 
 		var eomer = scn.GetFreepsCard("eomer");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(eomer, aragorn);
+		scn.MoveCompanionsToTable(eomer, aragorn);
 
 		var pursuer = scn.GetShadowCard("pursuer"); // 5/3
 		var seeker = scn.GetShadowCard("seeker"); // 6/2
-		scn.ShadowMoveCharToTable(pursuer, seeker);
+		scn.MoveMinionsToTable(pursuer, seeker);
 
 		scn.StartGame(harrowdale);
 
@@ -110,9 +101,8 @@ public class Card_11_243_Tests
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowChooseCardBPFromSelection(shadowSite2);
 
-		assertEquals(1, ((DefaultActionsEnvironment) scn._game.getActionsEnvironment()).getUntilStartOfPhaseActionProxies(Phase.REGROUP).size());
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
-		assertTrue(scn.hasKeyword(seeker, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(seeker, Keyword.FIERCE));
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
@@ -120,56 +110,24 @@ public class Card_11_243_Tests
 				new PhysicalCardImpl[] { aragorn, pursuer }
 		);
 
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
-		assertTrue(scn.hasKeyword(seeker, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(seeker, Keyword.FIERCE));
 
 		scn.FreepsResolveSkirmish(eomer);
-		assertFalse(scn.hasKeyword(seeker, Keyword.FIERCE));
+		//Fierce was not removed because Harrowdale only works while on it
+		assertTrue(scn.HasKeyword(seeker, Keyword.FIERCE));
 		scn.PassCurrentPhaseActions();
 
 		scn.FreepsResolveSkirmish(aragorn);
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
 		scn.PassCurrentPhaseActions();
 
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 		scn.PassCurrentPhaseActions();
 
-		assertFalse(scn.hasKeyword(seeker, Keyword.FIERCE));
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(seeker, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
 		scn.FreepsAssignToMinions(aragorn, pursuer);
-
-		scn.FreepsResolveSkirmish(aragorn);
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
-		scn.PassCurrentPhaseActions();
-
-		//Fierce suppression should have worn off
-		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
-		assertTrue(scn.hasKeyword(seeker, Keyword.FIERCE));
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
-
-		scn.PassCurrentPhaseActions();
-		scn.ShadowDeclineReconciliation();
-		scn.FreepsChooseToMove();
-		scn.ShadowChooseCardBPFromSelection(shadowSite3);
-
-		assertEquals(0, ((DefaultActionsEnvironment) scn._game.getActionsEnvironment()).getUntilStartOfPhaseActionProxies(Phase.REGROUP).size());
-
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(
-				new PhysicalCardImpl[] {   eomer,  pursuer},
-				new PhysicalCardImpl[] { aragorn,  seeker}
-		);
-
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
-		assertTrue(scn.hasKeyword(seeker, Keyword.FIERCE));
-
-		scn.FreepsResolveSkirmish(eomer);
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
-		scn.PassCurrentPhaseActions();
-
-		scn.FreepsResolveSkirmish(aragorn);
-		assertTrue(scn.hasKeyword(seeker, Keyword.FIERCE));
-		scn.PassCurrentPhaseActions();
 	}
 
 	@Test
@@ -182,11 +140,11 @@ public class Card_11_243_Tests
 
 		var eomer = scn.GetFreepsCard("eomer");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(eomer, aragorn);
+		scn.MoveCompanionsToTable(eomer, aragorn);
 
 		var pursuer = scn.GetShadowCard("pursuer"); // 5/3
 		var seeker = scn.GetShadowCard("seeker"); // 6/2
-		scn.ShadowMoveCharToTable(pursuer, seeker);
+		scn.MoveMinionsToTable(pursuer, seeker);
 
 		scn.StartGame(freepsSite1);
 
@@ -194,9 +152,8 @@ public class Card_11_243_Tests
 		scn.FreepsPassCurrentPhaseAction();
 		scn.ShadowChooseCardBPFromSelection(harrowdale);
 
-		assertEquals(1, ((DefaultActionsEnvironment) scn._game.getActionsEnvironment()).getUntilStartOfPhaseActionProxies(Phase.REGROUP).size());
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
-		assertTrue(scn.hasKeyword(seeker, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(seeker, Keyword.FIERCE));
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
@@ -204,39 +161,37 @@ public class Card_11_243_Tests
 				new PhysicalCardImpl[] { aragorn, pursuer }
 		);
 
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
-		assertTrue(scn.hasKeyword(seeker, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(seeker, Keyword.FIERCE));
 
 		scn.FreepsResolveSkirmish(eomer);
-		assertFalse(scn.hasKeyword(seeker, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(seeker, Keyword.FIERCE));
 		scn.PassCurrentPhaseActions();
 
 		scn.FreepsResolveSkirmish(aragorn);
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
 		scn.PassCurrentPhaseActions();
 
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 		scn.PassCurrentPhaseActions();
 
-		assertFalse(scn.hasKeyword(seeker, Keyword.FIERCE));
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(seeker, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
 		scn.FreepsAssignToMinions(aragorn, pursuer);
 
 		scn.FreepsResolveSkirmish(aragorn);
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
 		scn.PassCurrentPhaseActions();
 
 		//Fierce suppression should have worn off
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
-		assertTrue(scn.hasKeyword(seeker, Keyword.FIERCE));
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(seeker, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
 
 		scn.PassCurrentPhaseActions();
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
 		scn.ShadowChooseCardBPFromSelection(shadowSite3);
-
-		assertEquals(0, ((DefaultActionsEnvironment) scn._game.getActionsEnvironment()).getUntilStartOfPhaseActionProxies(Phase.REGROUP).size());
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
@@ -244,15 +199,15 @@ public class Card_11_243_Tests
 				new PhysicalCardImpl[] { aragorn,  seeker}
 		);
 
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
-		assertTrue(scn.hasKeyword(seeker, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(seeker, Keyword.FIERCE));
 
 		scn.FreepsResolveSkirmish(eomer);
-		assertTrue(scn.hasKeyword(pursuer, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(pursuer, Keyword.FIERCE));
 		scn.PassCurrentPhaseActions();
 
 		scn.FreepsResolveSkirmish(aragorn);
-		assertTrue(scn.hasKeyword(seeker, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(seeker, Keyword.FIERCE));
 		scn.PassCurrentPhaseActions();
 	}
 }

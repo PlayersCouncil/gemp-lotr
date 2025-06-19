@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set15;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_15_064_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<String, String>()
 				{{
 					put("madril", "65_64");
@@ -29,9 +29,9 @@ public class Card_15_064_ErrataTests
 					put("runner2", "1_178");
 					put("runner3", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_15_064_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl madril = scn.GetFreepsCard("madril");
 
@@ -64,8 +64,8 @@ public class Card_15_064_ErrataTests
 		assertEquals(Culture.GONDOR, madril.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, madril.getBlueprint().getCardType());
 		assertEquals(Race.MAN, madril.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(madril, Keyword.RANGER));
-		assertTrue(scn.hasKeyword(madril, Keyword.HUNTER));
+		assertTrue(scn.HasKeyword(madril, Keyword.RANGER));
+		assertTrue(scn.HasKeyword(madril, Keyword.HUNTER));
 		assertEquals(1, scn.GetKeywordCount(madril, Keyword.HUNTER));
 		assertEquals(2, madril.getBlueprint().getTwilightCost());
 		assertEquals(5, madril.getBlueprint().getStrength());
@@ -79,13 +79,13 @@ public class Card_15_064_ErrataTests
 	@Test
 	public void MadrilCosts2LessWith2GondorRangers() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var madril = scn.GetFreepsCard("madril");
 		var arwen = scn.GetFreepsCard("arwen");
 		var ranger1 = scn.GetFreepsCard("ranger1");
 		var ranger2 = scn.GetFreepsCard("ranger2");
-		scn.FreepsMoveCardToHand(madril, arwen, ranger1, ranger2);
+		scn.MoveCardsToHand(madril, arwen, ranger1, ranger2);
 
 		scn.StartGame();
 
@@ -93,21 +93,21 @@ public class Card_15_064_ErrataTests
 		scn.FreepsPlayCard(madril);
 		assertEquals(2, scn.GetTwilight());
 
-		scn.FreepsMoveCardToHand(madril);
+		scn.MoveCardsToHand(madril);
 		scn.SetTwilight(0);
 		scn.FreepsPlayCard(arwen);
 		assertEquals(2, scn.GetTwilight());
 		scn.FreepsPlayCard(madril);
 		assertEquals(4, scn.GetTwilight()); // no discount from arwen
 
-		scn.FreepsMoveCardToHand(madril);
+		scn.MoveCardsToHand(madril);
 		scn.SetTwilight(0);
 		scn.FreepsPlayCard(ranger1);
 		assertEquals(2, scn.GetTwilight());
 		scn.FreepsPlayCard(madril);
 		assertEquals(4, scn.GetTwilight()); // no discount from arwen + gondor ranger
 
-		scn.FreepsMoveCardToHand(madril);
+		scn.MoveCardsToHand(madril);
 		scn.SetTwilight(0);
 		scn.FreepsPlayCard(ranger2);
 		assertEquals(2, scn.GetTwilight());
@@ -118,15 +118,15 @@ public class Card_15_064_ErrataTests
 	@Test
 	public void ManeuverAbilityAllowsDistributionOfSiteNumberIncreases() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var madril = scn.GetFreepsCard("madril");
-		scn.FreepsMoveCharToTable(madril);
+		scn.MoveCompanionsToTable(madril);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
 		var runner3 = scn.GetShadowCard("runner3");
-		scn.ShadowMoveCharToTable(runner1, runner2, runner3);
+		scn.MoveMinionsToTable(runner1, runner2, runner3);
 
 		scn.StartGame();
 
@@ -168,15 +168,15 @@ public class Card_15_064_ErrataTests
 	@Test
 	public void ManeuverAbilityDoesNothingWithZeroThreats() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var madril = scn.GetFreepsCard("madril");
-		scn.FreepsMoveCardToHand(madril);
+		scn.MoveCardsToHand(madril);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
 		var runner3 = scn.GetShadowCard("runner3");
-		scn.ShadowMoveCharToTable(runner1, runner2, runner3);
+		scn.MoveMinionsToTable(runner1, runner2, runner3);
 
 		scn.StartGame();
 

@@ -84,8 +84,6 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                                             for (Keyword keyword : keywordsList) {
                                                 addModifier(action, new AddKeywordModifier(card, card, null, keyword), until);
                                             }
-
-                                            addModifier(action, new MayNotBearModifier(card, card, null, Filters.any), until);
                                         }
                                     });
                             Effect cleanupEffect = createCleanupEffect(card, until);
@@ -108,9 +106,9 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                     new AbstractActionProxy() {
                         @Override
                         public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult) {
-                            if (TriggerConditions.endOfTurn(game, effectResult) && card.getZone() == Zone.SHADOW_CHARACTERS) {
-                                return createCleanupTrigger(card);
-                            }
+//                            if (TriggerConditions.endOfTurn(game, effectResult) && card.getZone() == Zone.SHADOW_CHARACTERS) {
+//                                return createReturnToSupportCleanupTrigger(card);
+//                            }
                             return null;
                         }
                     }
@@ -121,7 +119,7 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                         @Override
                         public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult) {
                             if (TriggerConditions.startOfPhase(game, effectResult, until.getPhase()) && card.getZone() == Zone.SHADOW_CHARACTERS) {
-                                return createCleanupTrigger(card);
+                                return createReturnToSupportCleanupTrigger(card);
                             }
                             return null;
                         }
@@ -133,7 +131,7 @@ public class TurnIntoMinion implements EffectAppenderProducer {
                         @Override
                         public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult) {
                             if (TriggerConditions.endOfPhase(game, effectResult, until.getPhase()) && card.getZone() == Zone.SHADOW_CHARACTERS) {
-                                return createCleanupTrigger(card);
+                                return createReturnToSupportCleanupTrigger(card);
                             }
                             return null;
                         }
@@ -142,7 +140,7 @@ public class TurnIntoMinion implements EffectAppenderProducer {
         }
     }
 
-    private static List<RequiredTriggerAction> createCleanupTrigger(PhysicalCard card) {
+    private static List<RequiredTriggerAction> createReturnToSupportCleanupTrigger(PhysicalCard card) {
         RequiredTriggerAction action = new RequiredTriggerAction(card);
         action.appendEffect(
                 new TransferToSupportEffect(card));

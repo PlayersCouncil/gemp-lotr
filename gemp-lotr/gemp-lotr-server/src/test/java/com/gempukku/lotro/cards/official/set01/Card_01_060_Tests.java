@@ -1,8 +1,7 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.at.AbstractAtTest;
-import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -21,8 +20,8 @@ import static org.junit.Assert.*;
 public class Card_01_060_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("silinde", "1_60");
@@ -42,8 +41,8 @@ public class Card_01_060_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -91,8 +90,8 @@ public class Card_01_060_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var elrond = scn.GetFreepsCard("elrond");
 		var pathfinder = scn.GetFreepsCard("pathfinder");
-		scn.FreepsMoveCardToHand(elrond, pathfinder);
-		scn.FreepsMoveCharToTable(silinde, arwen);
+		scn.MoveCardsToHand(elrond, pathfinder);
+		scn.MoveCompanionsToTable(silinde, arwen);
 
 		scn.StartGame();
 
@@ -114,8 +113,8 @@ public class Card_01_060_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var elrond = scn.GetFreepsCard("elrond");
 		var pathfinder = scn.GetFreepsCard("pathfinder");
-		scn.FreepsMoveCardToHand(elrond, pathfinder);
-		scn.FreepsMoveCharToTable(silinde, arwen);
+		scn.MoveCardsToHand(elrond, pathfinder);
+		scn.MoveCompanionsToTable(silinde, arwen);
 
 		scn.StartGame();
 
@@ -132,22 +131,22 @@ public class Card_01_060_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var elrond = scn.GetFreepsCard("elrond");
 		var pathfinder = scn.GetFreepsCard("pathfinder");
-		scn.FreepsMoveCardToHand(elrond, pathfinder);
-		scn.FreepsMoveCharToTable(silinde, arwen);
+		scn.MoveCardsToHand(elrond, pathfinder);
+		scn.MoveCompanionsToTable(silinde, arwen);
 
 		scn.StartGame();
 
 		scn.SkipToSite(2);
 		scn.FreepsPlayCard(pathfinder);
-		scn.FreepsMoveCardToHand(pathfinder); //we cheat and put it back so we can use it later to reset the active decision
+		scn.MoveCardsToHand(pathfinder); //we cheat and put it back so we can use it later to reset the active decision
 		scn.SkipToSite(3);
 
 		//Cheats and adds an ability to Arwen that forces the Shadow player to play their site 3
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(arwen, AbstractAtTest.P1);
-				action.appendEffect(new PlaySiteEffect(action, AbstractAtTest.P2, SitesBlock.FELLOWSHIP, 3));
+				ActivateCardAction action = new ActivateCardAction(arwen, VirtualTableScenario.P1);
+				action.appendEffect(new PlaySiteEffect(action, VirtualTableScenario.P2, SitesBlock.FELLOWSHIP, 3));
 				return Collections.singletonList(action);
 			}
 		});
@@ -169,8 +168,8 @@ public class Card_01_060_Tests
 		var arwen = scn.GetFreepsCard("arwen");
 		var elrond = scn.GetFreepsCard("elrond");
 		var pathfinder = scn.GetFreepsCard("pathfinder");
-		scn.FreepsMoveCardToHand(elrond, pathfinder);
-		scn.FreepsMoveCharToTable(silinde, arwen);
+		scn.MoveCardsToHand(elrond, pathfinder);
+		scn.MoveCompanionsToTable(silinde, arwen);
 
 		scn.StartGame();
 
@@ -180,7 +179,7 @@ public class Card_01_060_Tests
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(arwen, AbstractAtTest.P1);
+				ActivateCardAction action = new ActivateCardAction(arwen, VirtualTableScenario.P1);
 				action.appendEffect(new PlaySiteEffect(action, playerId, SitesBlock.FELLOWSHIP, 3));
 				return Collections.singletonList(action);
 			}

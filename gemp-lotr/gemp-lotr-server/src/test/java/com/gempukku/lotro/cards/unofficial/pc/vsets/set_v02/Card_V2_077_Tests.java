@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_077_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("crutch", "102_77");
@@ -25,9 +25,9 @@ public class Card_V2_077_Tests
 
 					put("shotgun", "1_231");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -74,8 +74,8 @@ public class Card_V2_077_Tests
 		var glamdring2 = scn.GetFreepsCard("glamdring2");
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(crutch, glamdring2);
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCardsToHand(crutch, glamdring2);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.AttachCardsTo(gandalf, glamdring);
 
 		scn.StartGame();
@@ -99,12 +99,12 @@ public class Card_V2_077_Tests
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var crutch = scn.GetFreepsCard("crutch");
 		var betrayal = scn.GetFreepsCard("betrayal");
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsAttachCardsTo(gandalf, crutch);
-		scn.FreepsMoveCardToSupportArea(betrayal);
+		scn.MoveCompanionsToTable(gandalf);
+		scn.AttachCardsTo(gandalf, crutch);
+		scn.MoveCardsToSupportArea(betrayal);
 
 		var shotgun = scn.GetShadowCard("shotgun");
-		scn.ShadowMoveCharToTable(shotgun);
+		scn.MoveMinionsToTable(shotgun);
 
 		scn.StartGame();
 

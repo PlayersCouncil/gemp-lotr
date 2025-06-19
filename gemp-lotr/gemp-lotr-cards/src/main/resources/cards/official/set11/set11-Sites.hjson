@@ -645,43 +645,24 @@
 			{
 				type: Trigger
 				optional: false
-				trigger: [
-					{
-						type: MovesTo
-						filter: self
-					}
-					{
-						type: StartOfPhase
-						phase: Fellowship
-					}
-				]
+				trigger: {
+					type: StartOfSkirmishInvolving
+					filter: culture(rohan),companion
+				}
 				requires: {
-					type: Location
-					filter: self
+					type: canSpot
+					filter: minion,inSkirmishAgainst(culture(rohan),companion)
 				}
 				effect: {
-					type: addTrigger
-					trigger: {
-						type: StartOfSkirmishInvolving
-						filter: culture(rohan),companion
-					}
-					requires: {
-						type: canSpot
+					type: RemoveKeyword
+					count: {
+						type: ForEachYouCanSpot
 						filter: minion,inSkirmishAgainst(culture(rohan),companion)
 					}
-					effect: {
-						type: RemoveKeyword
-						count: {
-							type: ForEachYouCanSpot
-							filter: minion,inSkirmishAgainst(culture(rohan),companion)
-						}
-						select: all(minion,inSkirmishAgainst(culture(rohan),companion))
-						keyword: fierce
-						until: regroup
-					}
+					select: all(minion,inSkirmishAgainst(culture(rohan),companion))
+					keyword: fierce
 					until: regroup
 				}
-				limitPerTurn: 1
 			}
 		]
 		gametext: <b>Plains</b>. Until the regroup phase, each minion skirmishing a [rohan] companion loses <b>fierce</b> and cannot gain fierce.
@@ -1415,6 +1396,7 @@
 				effect: {
 					type: heal
 					select: all(hobbit,companion)
+					count: any
 				}
 			}
 		]

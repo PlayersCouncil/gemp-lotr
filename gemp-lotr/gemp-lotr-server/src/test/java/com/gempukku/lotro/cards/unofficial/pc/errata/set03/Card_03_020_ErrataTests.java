@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_03_020_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("golradir", "53_20");
@@ -27,9 +27,9 @@ public class Card_03_020_ErrataTests
 					put("orc", "1_178");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -77,7 +77,7 @@ public class Card_03_020_ErrataTests
 		var erestor = scn.GetFreepsCard("erestor");
 		var saelbeth = scn.GetFreepsCard("saelbeth");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCardToHand(arwen, golradir);
+		scn.MoveCardsToHand(arwen, golradir);
 
 		scn.StartGame();
 
@@ -95,10 +95,10 @@ public class Card_03_020_ErrataTests
 		var erestor = scn.GetFreepsCard("erestor");
 		var saelbeth = scn.GetFreepsCard("saelbeth");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCharToTable(arwen, golradir);
+		scn.MoveCompanionsToTable(arwen, golradir);
 
 		var nazgul = scn.GetShadowCard("nazgul");
-		scn.ShadowMoveCharToTable(nazgul);
+		scn.MoveMinionsToTable(nazgul);
 
 		scn.StartGame();
 
@@ -123,11 +123,11 @@ public class Card_03_020_ErrataTests
 		var erestor = scn.GetFreepsCard("erestor");
 		var saelbeth = scn.GetFreepsCard("saelbeth");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCharToTable(arwen);
-		scn.FreepsMoveCardToSupportArea(golradir, erestor, saelbeth);
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveCardsToSupportArea(golradir, erestor, saelbeth);
 
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCharToTable(orc);
+		scn.MoveMinionsToTable(orc);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_008_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("haldir", "102_8");
@@ -25,9 +25,9 @@ public class Card_V2_008_Tests
 
 					put("smith", "3_60");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -62,7 +62,7 @@ public class Card_V2_008_Tests
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.ELF, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(card, Keyword.VALIANT));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
@@ -79,24 +79,24 @@ public class Card_V2_008_Tests
 		var veowyn = scn.GetFreepsCard("veowyn");
 		var bow1 = scn.GetFreepsCard("bow1");
 		var bow2 = scn.GetFreepsCard("bow2");
-		scn.FreepsMoveCardToHand(bow1);
-		scn.FreepsMoveCharToTable(haldir, troop, veowyn);
-		scn.FreepsAttachCardsTo(troop, bow2);
+		scn.MoveCardsToHand(bow1);
+		scn.MoveCompanionsToTable(haldir, troop, veowyn);
+		scn.AttachCardsTo(troop, bow2);
 
 		var smith = scn.GetShadowCard("smith");
-		scn.ShadowMoveCharToTable(smith);
+		scn.MoveMinionsToTable(smith);
 
 		scn.StartGame();
 
-		assertEquals(6, scn.getStrength(veowyn));
-		assertEquals(6, scn.getStrength(haldir));
-		assertEquals(8, scn.getStrength(troop));
+		assertEquals(6, scn.GetStrength(veowyn));
+		assertEquals(6, scn.GetStrength(haldir));
+		assertEquals(8, scn.GetStrength(troop));
 
 		scn.FreepsPlayCard(bow1);
 		assertEquals(haldir, bow1.getAttachedTo());
-		assertEquals(6, scn.getStrength(veowyn));
-		assertEquals(7, scn.getStrength(haldir));
-		assertEquals(9, scn.getStrength(troop));
+		assertEquals(6, scn.GetStrength(veowyn));
+		assertEquals(7, scn.GetStrength(haldir));
+		assertEquals(9, scn.GetStrength(troop));
 
 		scn.SkipToPhase(Phase.ARCHERY);
 		assertEquals(0, scn.GetFreepsArcheryTotal());
@@ -110,12 +110,12 @@ public class Card_V2_008_Tests
 		var haldir = scn.GetFreepsCard("haldir");
 		var troop = scn.GetFreepsCard("troop");
 		var bow1 = scn.GetFreepsCard("bow1");
-		scn.FreepsMoveCardToHand(bow1);
-		scn.FreepsMoveCharToTable(haldir, troop);
-		scn.FreepsAttachCardsTo(troop, bow1);
+		scn.MoveCardsToHand(bow1);
+		scn.MoveCompanionsToTable(haldir, troop);
+		scn.AttachCardsTo(troop, bow1);
 
 		var smith = scn.GetShadowCard("smith");
-		scn.ShadowMoveCharToTable(smith);
+		scn.MoveMinionsToTable(smith);
 
 		scn.StartGame();
 
@@ -146,12 +146,12 @@ public class Card_V2_008_Tests
 		var haldir = scn.GetFreepsCard("haldir");
 		var troop = scn.GetFreepsCard("troop");
 		var bow1 = scn.GetFreepsCard("bow1");
-		scn.FreepsMoveCardToHand(bow1);
-		scn.FreepsMoveCharToTable(haldir, troop);
-		scn.FreepsAttachCardsTo(troop, bow1);
+		scn.MoveCardsToHand(bow1);
+		scn.MoveCompanionsToTable(haldir, troop);
+		scn.AttachCardsTo(troop, bow1);
 
 		var smith = scn.GetShadowCard("smith");
-		scn.ShadowMoveCharToTable(smith);
+		scn.MoveMinionsToTable(smith);
 
 		scn.StartGame();
 

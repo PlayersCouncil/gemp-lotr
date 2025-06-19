@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_037_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("evil", "102_37");
@@ -23,9 +23,9 @@ public class Card_V2_037_Tests
 
 					put("sam", "1_311");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_V2_037_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -67,11 +67,11 @@ public class Card_V2_037_Tests
 		var evil = scn.GetShadowCard("evil");
 		var runner = scn.GetShadowCard("runner");
 		var balrog = scn.GetShadowCard("balrog");
-		scn.ShadowMoveCardToSupportArea(evil);
-		scn.ShadowMoveCharToTable(runner, balrog);
+		scn.MoveCardsToSupportArea(evil);
+		scn.MoveMinionsToTable(runner, balrog);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -105,7 +105,7 @@ public class Card_V2_037_Tests
 		var evil = scn.GetShadowCard("evil");
 		var runner = scn.GetShadowCard("runner");
 		var balrog = scn.GetShadowCard("balrog");
-		scn.ShadowMoveCardToSupportArea(evil);
+		scn.MoveCardsToSupportArea(evil);
 		scn.StackCardsOn(evil, runner, balrog);
 
 		scn.StartGame();

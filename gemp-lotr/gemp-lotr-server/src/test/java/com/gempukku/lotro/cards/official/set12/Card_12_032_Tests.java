@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set12;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_12_032_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("salve", "12_32");
@@ -23,9 +23,9 @@ public class Card_12_032_Tests
 					put("marksman", "1_176");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_12_032_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SPELL));
+		assertTrue(scn.HasKeyword(card, Keyword.SPELL));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -66,10 +66,10 @@ public class Card_12_032_Tests
 
 		var salve = scn.GetFreepsCard("salve");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsAttachCardsTo(aragorn, salve);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, salve);
 
-		scn.ShadowMoveCharToTable("marksman");
+		scn.MoveMinionsToTable("marksman");
 
 		scn.StartGame();
 		scn.AddWoundsToChar(aragorn, 3);

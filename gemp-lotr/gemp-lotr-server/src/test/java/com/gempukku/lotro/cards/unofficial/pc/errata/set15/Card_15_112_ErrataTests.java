@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set15;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_15_112_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<String, String>()
 				{{
 					put("troll", "65_112");
@@ -27,9 +27,9 @@ public class Card_15_112_ErrataTests
 					put("orc4", "13_118");
 					put("orc5", "13_118");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -53,7 +53,7 @@ public class Card_15_112_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl troll = scn.GetFreepsCard("troll");
 
@@ -74,7 +74,7 @@ public class Card_15_112_ErrataTests
 	@Test
 	public void OnPlayTrollDoesNothingIfLessThan5OrcMinionsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var troll = scn.GetShadowCard("troll");
 		var orc1 = scn.GetShadowCard("orc1");
@@ -82,8 +82,8 @@ public class Card_15_112_ErrataTests
 		var orc3 = scn.GetShadowCard("orc3");
 		var orc4 = scn.GetShadowCard("orc4");
 		var orc5 = scn.GetShadowCard("orc5");
-		scn.ShadowMoveCardToHand(troll);
-		scn.ShadowMoveCharToTable(orc1, orc2, orc3, orc4);
+		scn.MoveCardsToHand(troll);
+		scn.MoveMinionsToTable(orc1, orc2, orc3, orc4);
 
 		scn.StartGame();
 
@@ -98,7 +98,7 @@ public class Card_15_112_ErrataTests
 	@Test
 	public void OnPlayTrollOptionallDiscards5OrcMinionsForFierceAndStrengthPluse10UntilEndOfTurn() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var troll = scn.GetShadowCard("troll");
 		var orc1 = scn.GetShadowCard("orc1");
@@ -106,8 +106,8 @@ public class Card_15_112_ErrataTests
 		var orc3 = scn.GetShadowCard("orc3");
 		var orc4 = scn.GetShadowCard("orc4");
 		var orc5 = scn.GetShadowCard("orc5");
-		scn.ShadowMoveCardToHand(troll);
-		scn.ShadowMoveCharToTable(orc1, orc2, orc3, orc4, orc5);
+		scn.MoveCardsToHand(troll);
+		scn.MoveMinionsToTable(orc1, orc2, orc3, orc4, orc5);
 
 		scn.StartGame();
 
@@ -119,11 +119,11 @@ public class Card_15_112_ErrataTests
 
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		assertEquals(13, scn.GetStrength(troll));
-		assertFalse(scn.hasKeyword(troll, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(troll, Keyword.FIERCE));
 
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(23, scn.GetStrength(troll));
-		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
 		assertEquals(Zone.DISCARD, orc1.getZone());
 		assertEquals(Zone.DISCARD, orc2.getZone());
 		assertEquals(Zone.DISCARD, orc3.getZone());
@@ -133,23 +133,23 @@ public class Card_15_112_ErrataTests
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		assertEquals(23, scn.GetStrength(troll));
-		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
 
 		scn.SkipToPhase(Phase.REGROUP);
 		assertEquals(23, scn.GetStrength(troll));
-		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
 
 		scn.PassCurrentPhaseActions();
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
 		assertEquals(23, scn.GetStrength(troll));
-		assertTrue(scn.hasKeyword(troll, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
 	}
 
 	@Test
 	public void ShadowAbilityRemoves2AndPlaysExhaustedOrcFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var troll = scn.GetShadowCard("troll");
 		var orc1 = scn.GetShadowCard("orc1");
@@ -157,8 +157,8 @@ public class Card_15_112_ErrataTests
 		var orc3 = scn.GetShadowCard("orc3");
 		var orc4 = scn.GetShadowCard("orc4");
 		var orc5 = scn.GetShadowCard("orc5");
-		scn.ShadowMoveCharToTable(troll);
-		scn.ShadowMoveCardToDiscard(orc1, orc2, orc3, orc4, orc5);
+		scn.MoveMinionsToTable(troll);
+		scn.MoveCardsToDiscard(orc1, orc2, orc3, orc4, orc5);
 
 		scn.StartGame();
 

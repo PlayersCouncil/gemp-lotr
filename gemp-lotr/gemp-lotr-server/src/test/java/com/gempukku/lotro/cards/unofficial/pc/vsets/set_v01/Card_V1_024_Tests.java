@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_024_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("mysword", "101_24");
 					put("aragorn", "1_365");
@@ -26,9 +26,9 @@ public class Card_V1_024_Tests
 
 					put("nazgul", "1_233");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -49,7 +49,7 @@ public class Card_V1_024_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl mysword = scn.GetFreepsCard("mysword");
 
@@ -71,12 +71,12 @@ public class Card_V1_024_Tests
 	@Test
 	public void SpotsAragornToPlayOnGornSignetBesidesAragorn() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl mysword = scn.GetFreepsCard("mysword");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCardToHand(mysword, aragorn, arwen);
+		scn.MoveCardsToHand(mysword, aragorn, arwen);
 
 		scn.StartGame();
 		assertFalse(scn.FreepsPlayAvailable(mysword));
@@ -93,16 +93,16 @@ public class Card_V1_024_Tests
 	@Test
 	public void BearerWinningSkirmishExertsAragornOrSelfDiscards() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl mysword = scn.GetFreepsCard("mysword");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCharToTable(aragorn, arwen);
-		scn.FreepsAttachCardsTo(arwen, mysword);
+		scn.MoveCompanionsToTable(aragorn, arwen);
+		scn.AttachCardsTo(arwen, mysword);
 
 		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
-		scn.ShadowMoveCharToTable(nazgul);
+		scn.MoveMinionsToTable(nazgul);
 
 		scn.StartGame();
 
@@ -124,7 +124,7 @@ public class Card_V1_024_Tests
 		assertEquals("Discard You Have My Sword", choices[1]);
 
 		assertEquals(0, scn.GetWoundsOn(aragorn));
-		scn.FreepsChooseMultipleChoiceOption("Exert");
+		scn.FreepsChooseOption("Exert");
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 
 		//fierce skirmish
@@ -145,7 +145,7 @@ public class Card_V1_024_Tests
 		assertEquals("Exert Aragorn", choices[0]);
 		assertEquals("Discard You Have My Sword", choices[1]);
 
-		scn.FreepsChooseMultipleChoiceOption("Discard");
+		scn.FreepsChooseOption("Discard");
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(Zone.DISCARD, mysword.getZone());
 	}

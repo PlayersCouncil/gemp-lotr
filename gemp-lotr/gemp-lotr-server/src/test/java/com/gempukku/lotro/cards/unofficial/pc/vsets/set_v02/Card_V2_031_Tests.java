@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_V2_031_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("trail", "102_31");
@@ -27,9 +27,9 @@ public class Card_V2_031_Tests
 
 					put("sam", "1_311");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -59,7 +59,7 @@ public class Card_V2_031_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -69,10 +69,10 @@ public class Card_V2_031_Tests
 		var scn = GetScenario();
 
 		var trail = scn.GetShadowCard("trail");
-		scn.ShadowMoveCardToDiscard(trail);
+		scn.MoveCardsToDiscard(trail);
 		//For inscrutible reasons, the site control function only works if there are 0 valid
 		// actions for the shadow player to take.  Thus we can't have any cards in hand.
-		scn.ShadowMoveCardToDiscard("ram", "ladder");
+		scn.MoveCardsToShadowDiscard("ram", "ladder");
 
 		var site1 = scn.GetFreepsSite(1);
 
@@ -83,9 +83,9 @@ public class Card_V2_031_Tests
 		scn.ShadowTakeControlOfSite();
 
 		assertTrue(scn.ShadowControls(site1));
-		assertFalse(scn.hasKeyword(site1, Keyword.BATTLEGROUND));
-		scn.ShadowMoveCardToSupportArea(trail);
-		assertTrue(scn.hasKeyword(site1, Keyword.BATTLEGROUND));
+		assertFalse(scn.HasKeyword(site1, Keyword.BATTLEGROUND));
+		scn.MoveCardsToSupportArea(trail);
+		assertTrue(scn.HasKeyword(site1, Keyword.BATTLEGROUND));
 	}
 
 	@Test
@@ -97,13 +97,13 @@ public class Card_V2_031_Tests
 		var ram = scn.GetShadowCard("ram");
 		var ladder = scn.GetShadowCard("ladder");
 		var savage = scn.GetShadowCard("savage");
-		scn.ShadowMoveCardToSupportArea(trail, ladder, ram);
-		scn.ShadowMoveCharToTable(savage);
+		scn.MoveCardsToSupportArea(trail, ladder, ram);
+		scn.MoveMinionsToTable(savage);
 		scn.AddTokensToCard(ram, 1);
 		scn.AddTokensToCard(ladder, 1);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 

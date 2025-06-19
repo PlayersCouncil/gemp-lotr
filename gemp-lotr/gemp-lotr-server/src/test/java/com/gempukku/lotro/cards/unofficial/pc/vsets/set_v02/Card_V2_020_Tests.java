@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_020_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("fanatic", "102_20");
@@ -23,9 +23,9 @@ public class Card_V2_020_Tests
 
 					put("treebeard", "10_18");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -60,7 +60,7 @@ public class Card_V2_020_Tests
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
@@ -76,19 +76,19 @@ public class Card_V2_020_Tests
 		var fanatic = scn.GetShadowCard("fanatic");
 		var savage = scn.GetShadowCard("savage");
 		var machine = scn.GetShadowCard("machine");
-		scn.ShadowMoveCharToTable(fanatic, savage);
-		scn.ShadowMoveCardToSupportArea(machine);
+		scn.MoveMinionsToTable(fanatic, savage);
+		scn.MoveCardsToSupportArea(machine);
 
 		var frodo = scn.GetRingBearer();
 
 		scn.StartGame();
 
-		scn.addWounds(frodo, 1);
-		scn.addWounds(fanatic, 1);
-		scn.addWounds(savage, 1);
+		scn.AddWoundsToChar(frodo, 1);
+		scn.AddWoundsToChar(fanatic, 1);
+		scn.AddWoundsToChar(savage, 1);
 
 		//not in skirmish, should be base
-		assertEquals(8, scn.getStrength(fanatic));
+		assertEquals(8, scn.GetStrength(fanatic));
 
 		scn.SkipToAssignments();
 		scn.FreepsDeclineAssignments();
@@ -96,7 +96,7 @@ public class Card_V2_020_Tests
 		scn.FreepsResolveSkirmish(frodo);
 
 		//Base strength of 8, +1 strength for the single wound on each of itself, the savage, and frodo
-		assertEquals(11, scn.getStrength(fanatic));
+		assertEquals(11, scn.GetStrength(fanatic));
 	}
 
 	@Test
@@ -106,15 +106,15 @@ public class Card_V2_020_Tests
 
 		var fanatic = scn.GetShadowCard("fanatic");
 		var machine = scn.GetShadowCard("machine");
-		scn.ShadowMoveCharToTable(fanatic);
-		scn.ShadowMoveCardToSupportArea(machine);
+		scn.MoveMinionsToTable(fanatic);
+		scn.MoveCardsToSupportArea(machine);
 
 		var treebeard = scn.GetFreepsCard("treebeard");
-		scn.FreepsMoveCharToTable(treebeard);
+		scn.MoveCompanionsToTable(treebeard);
 
 		scn.StartGame();
 
-		scn.addWounds(fanatic, 2);
+		scn.AddWoundsToChar(fanatic, 2);
 		scn.AddTokensToCard(machine, 2);
 
 		scn.SkipToAssignments();

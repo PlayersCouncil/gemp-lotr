@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_021_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("shot", "102_21");
@@ -26,9 +26,9 @@ public class Card_V2_021_Tests
 					put("merry", "1_302");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,7 +57,7 @@ public class Card_V2_021_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.ASSIGNMENT));
+		assertTrue(scn.HasTimeword(card, Timeword.ASSIGNMENT));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -70,13 +70,13 @@ public class Card_V2_021_Tests
 		var ladder = scn.GetShadowCard("ladder");
 		var fighter = scn.GetShadowCard("fighter");
 		var guard = scn.GetShadowCard("guard");
-		scn.ShadowMoveCardToHand(shot);
-		scn.ShadowMoveCardToSupportArea(ladder);
-		scn.ShadowMoveCharToTable(fighter, guard);
+		scn.MoveCardsToHand(shot);
+		scn.MoveCardsToSupportArea(ladder);
+		scn.MoveMinionsToTable(fighter, guard);
 
 		var frodo = scn.GetRingBearer();
 		var merry = scn.GetFreepsCard("merry");
-		scn.FreepsMoveCharToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 3);
@@ -109,12 +109,12 @@ public class Card_V2_021_Tests
 		var ram = scn.GetShadowCard("ram");
 		var fighter = scn.GetShadowCard("fighter");
 		var guard = scn.GetShadowCard("guard");
-		scn.ShadowMoveCardToHand(shot);
-		scn.ShadowMoveCardToSupportArea(ladder, ram);
-		scn.ShadowMoveCharToTable(fighter, guard);
+		scn.MoveCardsToHand(shot);
+		scn.MoveCardsToSupportArea(ladder, ram);
+		scn.MoveMinionsToTable(fighter, guard);
 
 		var merry = scn.GetFreepsCard("merry");
-		scn.FreepsMoveCharToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 2);
@@ -154,13 +154,13 @@ public class Card_V2_021_Tests
 		var ladder = scn.GetShadowCard("ladder");
 		var fighter = scn.GetShadowCard("fighter");
 		var guard = scn.GetShadowCard("guard");
-		scn.ShadowMoveCardToHand(shot);
-		scn.ShadowMoveCardToSupportArea(ladder);
-		scn.ShadowMoveCharToTable(fighter, guard);
+		scn.MoveCardsToHand(shot);
+		scn.MoveCardsToSupportArea(ladder);
+		scn.MoveMinionsToTable(fighter, guard);
 
 		var frodo = scn.GetRingBearer();
 		var merry = scn.GetFreepsCard("merry");
-		scn.FreepsMoveCharToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 4);
@@ -195,13 +195,13 @@ public class Card_V2_021_Tests
 		var ladder = scn.GetShadowCard("ladder");
 		var fighter = scn.GetShadowCard("fighter");
 		var guard = scn.GetShadowCard("guard");
-		scn.ShadowMoveCardToHand(shot);
-		scn.ShadowMoveCardToSupportArea(ladder);
-		scn.ShadowMoveCharToTable(fighter, guard);
+		scn.MoveCardsToHand(shot);
+		scn.MoveCardsToSupportArea(ladder);
+		scn.MoveMinionsToTable(fighter, guard);
 
 		var frodo = scn.GetRingBearer();
 		var merry = scn.GetFreepsCard("merry");
-		scn.FreepsMoveCharToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 2);
@@ -220,13 +220,13 @@ public class Card_V2_021_Tests
 		var ladder = scn.GetShadowCard("ladder");
 		var fighter = scn.GetShadowCard("fighter");
 		var guard = scn.GetShadowCard("guard");
-		scn.ShadowMoveCardToHand(shot);
-		scn.ShadowMoveCardToSupportArea(ladder);
-		scn.ShadowMoveCharToTable(fighter, guard);
+		scn.MoveCardsToHand(shot);
+		scn.MoveCardsToSupportArea(ladder);
+		scn.MoveMinionsToTable(fighter, guard);
 
 		var frodo = scn.GetRingBearer();
 		var merry = scn.GetFreepsCard("merry");
-		scn.FreepsMoveCharToTable(merry);
+		scn.MoveCompanionsToTable(merry);
 
 		scn.StartGame();
 		scn.AddTokensToCard(ladder, 3);

@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_V1_055_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("yet", "101_55");
 					put("boromir", "1_97");
@@ -27,9 +27,9 @@ public class Card_V1_055_Tests
 
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -48,7 +48,7 @@ public class Card_V1_055_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl yet = scn.GetFreepsCard("yet");
 
@@ -57,7 +57,7 @@ public class Card_V1_055_Tests
 		assertEquals(Culture.SHIRE, yet.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, yet.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, yet.getBlueprint().getRace());
-        assertTrue(scn.hasTimeword(yet, Timeword.SKIRMISH)); // test for keywords as needed
+        assertTrue(scn.HasTimeword(yet, Timeword.SKIRMISH)); // test for keywords as needed
 		assertEquals(1, yet.getBlueprint().getTwilightCost());
 		//assertEquals(, yet.getBlueprint().getStrength());
 		//assertEquals(, yet.getBlueprint().getVitality());
@@ -70,7 +70,7 @@ public class Card_V1_055_Tests
 	@Test
 	public void WeMayYetExertsToPumpBasedOnFrodoSignets() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl yet = scn.GetFreepsCard("yet");
 		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
@@ -78,11 +78,11 @@ public class Card_V1_055_Tests
 		PhysicalCardImpl merry = scn.GetFreepsCard("merry");
 		PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCharToTable(boromir, sam, merry, pippin, gimli);
-		scn.FreepsMoveCardToHand(yet);
+		scn.MoveCompanionsToTable(boromir, sam, merry, pippin, gimli);
+		scn.MoveCardsToHand(yet);
 
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
@@ -103,15 +103,15 @@ public class Card_V1_055_Tests
 	@Test
 	public void WeMayYetRequiresFrodoSignetInSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl yet = scn.GetFreepsCard("yet");
 		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardToHand(yet);
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToHand(yet);
 
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_016_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("kingdom", "1_16");
@@ -25,9 +25,9 @@ public class Card_01_016_Tests
 					put("runner2", "1_178");
 					put("runner3", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,8 +57,8 @@ public class Card_01_016_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertTrue(scn.hasKeyword(card, Keyword.TALE));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -70,8 +70,8 @@ public class Card_01_016_Tests
 		var kingdom = scn.GetFreepsCard("kingdom");
 		var gimli = scn.GetFreepsCard("gimli");
 		var guard = scn.GetFreepsCard("guard");
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsMoveCardToHand(kingdom, guard);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(kingdom, guard);
 
 		scn.AddWoundsToChar(gimli, 2);
 
@@ -92,13 +92,13 @@ public class Card_01_016_Tests
 		var kingdom = scn.GetFreepsCard("kingdom");
 		var gimli = scn.GetFreepsCard("gimli");
 		var guard = scn.GetFreepsCard("guard");
-		scn.FreepsMoveCardToSupportArea(kingdom);
-		scn.FreepsMoveCardToDiscard(gimli, guard);
-		scn.FreepsMoveCardToDiscard("runner1", "runner2");
+		scn.MoveCardsToSupportArea(kingdom);
+		scn.MoveCardsToDiscard(gimli, guard);
+		scn.MoveCardsToFreepsDiscard("runner1", "runner2");
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
-		scn.ShadowMoveCardToHand(runner1, runner2);
+		scn.MoveCardsToHand(runner1, runner2);
 
 		scn.StartGame();
 		scn.SetTwilight(20);

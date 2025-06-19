@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_046_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("end", "102_46");
@@ -28,9 +28,9 @@ public class Card_V2_046_Tests
 
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -59,7 +59,7 @@ public class Card_V2_046_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
+		assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -76,15 +76,15 @@ public class Card_V2_046_Tests
 		var vgimli = scn.GetFreepsCard("vgimli");
 		var veowyn = scn.GetFreepsCard("veowyn");
 		var veomer = scn.GetFreepsCard("veomer");
-		scn.FreepsMoveCardToHand(end);
-		scn.FreepsMoveCardToSupportArea(fortress, none, doom);
-		scn.FreepsMoveCharToTable(vhaldir, vgimli, veowyn, veomer);
+		scn.MoveCardsToHand(end);
+		scn.MoveCardsToSupportArea(fortress, none, doom);
+		scn.MoveCompanionsToTable(vhaldir, vgimli, veowyn, veomer);
 		scn.AddTokensToCard(fortress, 3);
 		scn.AddTokensToCard(none, 3);
 		scn.AddTokensToCard(doom, 3);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -134,14 +134,14 @@ public class Card_V2_046_Tests
 		var fortress = scn.GetFreepsCard("fortress");
 		var none = scn.GetFreepsCard("none");
 		var doom = scn.GetFreepsCard("doom");
-		scn.FreepsMoveCardToHand(end);
-		scn.FreepsMoveCardToSupportArea(fortress, none, doom);
+		scn.MoveCardsToHand(end);
+		scn.MoveCardsToSupportArea(fortress, none, doom);
 		scn.AddTokensToCard(fortress, 1);
 		scn.AddTokensToCard(none, 1);
 		scn.AddTokensToCard(doom, 1);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -167,15 +167,15 @@ public class Card_V2_046_Tests
 		var vhaldir = scn.GetFreepsCard("vhaldir");
 		var vgimli = scn.GetFreepsCard("vgimli");
 		var veowyn = scn.GetFreepsCard("veowyn");
-		scn.FreepsMoveCardToHand(end);
-		scn.FreepsMoveCardToSupportArea(fortress, none, doom);
-		scn.FreepsMoveCharToTable(vhaldir, vgimli, veowyn);
+		scn.MoveCardsToHand(end);
+		scn.MoveCardsToSupportArea(fortress, none, doom);
+		scn.MoveCompanionsToTable(vhaldir, vgimli, veowyn);
 		scn.AddTokensToCard(fortress, 3);
 		scn.AddTokensToCard(none, 3);
 		scn.AddTokensToCard(doom, 3);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 		scn.SkipToAssignments();

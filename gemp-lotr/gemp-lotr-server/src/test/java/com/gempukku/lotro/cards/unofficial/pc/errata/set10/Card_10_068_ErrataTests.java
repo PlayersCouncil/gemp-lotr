@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set10;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_10_068_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("enquea", "60_68");
@@ -23,9 +23,9 @@ public class Card_10_068_ErrataTests
 					put("rider", "4_286");
 					put("mount", "4_287");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,7 +57,7 @@ public class Card_10_068_ErrataTests
 		assertEquals(Culture.WRAITH, enquea.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, enquea.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, enquea.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(enquea, Keyword.ENDURING));
+		assertTrue(scn.HasKeyword(enquea, Keyword.ENDURING));
 		assertEquals(6, enquea.getBlueprint().getTwilightCost());
 		assertEquals(11, enquea.getBlueprint().getStrength());
 		assertEquals(4, enquea.getBlueprint().getVitality());
@@ -71,13 +71,13 @@ public class Card_10_068_ErrataTests
 
 		var rider = scn.GetFreepsCard("rider");
 		var mount = scn.GetFreepsCard("mount");
-		scn.FreepsMoveCharToTable(rider);
-		scn.FreepsAttachCardsTo(rider, mount);
+		scn.MoveCompanionsToTable(rider);
+		scn.AttachCardsTo(rider, mount);
 
 		var enquea = scn.GetShadowCard("enquea");
 		var darkness = scn.GetShadowCard("darkness");
-		scn.ShadowMoveCharToTable(enquea);
-		scn.ShadowMoveCardToHand(darkness);
+		scn.MoveMinionsToTable(enquea);
+		scn.MoveCardsToHand(darkness);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -103,7 +103,7 @@ public class Card_10_068_ErrataTests
 		var frodo = scn.GetRingBearer();
 
 		var enquea = scn.GetShadowCard("enquea");
-		scn.ShadowMoveCharToTable(enquea);
+		scn.MoveMinionsToTable(enquea);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(enquea, 2);

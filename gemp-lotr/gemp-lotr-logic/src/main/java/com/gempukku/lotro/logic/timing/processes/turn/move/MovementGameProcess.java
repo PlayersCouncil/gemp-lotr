@@ -64,7 +64,10 @@ public class MovementGameProcess implements GameProcess {
                                     }
                                 });
 
-                        AddTwilightEffect effect = new AddTwilightEffect(null, siteTwilightCost + companionsAddingTwilightForMoveCount);
+                        AddTwilightEffect effect = new AddTwilightEffect(
+                                null,
+                                AddTwilightEffect.Cause.MOVE,
+                                siteTwilightCost + companionsAddingTwilightForMoveCount);
                         effect.setSourceText("Moving");
                         action.insertEffect(effect);
                     }

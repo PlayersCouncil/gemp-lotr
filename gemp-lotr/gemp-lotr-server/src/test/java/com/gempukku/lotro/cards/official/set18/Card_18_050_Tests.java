@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set18;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_18_050_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("stone", "18_50");
@@ -23,9 +23,9 @@ public class Card_18_050_Tests
 					put("morc", "7_193");
 					put("uruk", "4_187");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,8 +54,8 @@ public class Card_18_050_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
-		assertTrue(scn.hasKeyword(card, Keyword.TALE));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.TALE));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
@@ -66,11 +66,11 @@ public class Card_18_050_Tests
 
 		var stone = scn.GetFreepsCard("stone");
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.FreepsMoveCardToSupportArea(stone);
-		scn.FreepsMoveCharToTable(boromir);
+		scn.MoveCardsToSupportArea(stone);
+		scn.MoveCompanionsToTable(boromir);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCardToHand(uruk);
+		scn.MoveCardsToHand(uruk);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -87,12 +87,12 @@ public class Card_18_050_Tests
 		var scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
-		scn.FreepsMoveCardToSupportArea(stone);
+		scn.MoveCardsToSupportArea(stone);
 
 		var uruk = scn.GetShadowCard("uruk");
 		var dunlender = scn.GetShadowCard("ravager");
-		scn.ShadowMoveCardToHand(uruk);
-		scn.ShadowMoveCharToTable(dunlender);
+		scn.MoveCardsToHand(uruk);
+		scn.MoveMinionsToTable(dunlender);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -109,10 +109,10 @@ public class Card_18_050_Tests
 		var scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
-		scn.FreepsMoveCardToSupportArea(stone);
+		scn.MoveCardsToSupportArea(stone);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCardToHand(uruk);
+		scn.MoveCardsToHand(uruk);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -128,10 +128,10 @@ public class Card_18_050_Tests
 		var scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
-		scn.FreepsMoveCardToSupportArea(stone);
+		scn.MoveCardsToSupportArea(stone);
 
 		var morc = scn.GetShadowCard("morc");
-		scn.ShadowMoveCardToHand(morc);
+		scn.MoveCardsToHand(morc);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -149,11 +149,11 @@ public class Card_18_050_Tests
 
 		var stone = scn.GetFreepsCard("stone");
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.FreepsMoveCardToSupportArea(stone);
-		scn.FreepsMoveCharToTable(boromir);
+		scn.MoveCardsToSupportArea(stone);
+		scn.MoveCompanionsToTable(boromir);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 		scn.AddTokensToCard(stone, 2);
@@ -168,10 +168,10 @@ public class Card_18_050_Tests
 		var scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
-		scn.FreepsMoveCardToSupportArea(stone);
+		scn.MoveCardsToSupportArea(stone);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 		scn.AddTokensToCard(stone, 3);
@@ -203,10 +203,10 @@ public class Card_18_050_Tests
 		var scn = GetScenario();
 
 		var stone = scn.GetFreepsCard("stone");
-		scn.FreepsMoveCardToSupportArea(stone);
+		scn.MoveCardsToSupportArea(stone);
 
 		var uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 		scn.AddTokensToCard(stone, 3);

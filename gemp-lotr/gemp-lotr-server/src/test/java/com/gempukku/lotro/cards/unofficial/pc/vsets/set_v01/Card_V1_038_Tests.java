@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_038_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("harry", "101_38");
 					put("rider", "12_161");
@@ -27,9 +27,9 @@ public class Card_V1_038_Tests
 					put("aragorn", "1_89");
 					put("pippin", "1_307");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -52,7 +52,7 @@ public class Card_V1_038_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl harry = scn.GetFreepsCard("harry");
 
@@ -74,13 +74,13 @@ public class Card_V1_038_Tests
 	@Test
 	public void AllNazgulAreCostMinusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl harry = scn.GetShadowCard("harry");
 		PhysicalCardImpl rider = scn.GetShadowCard("rider");
 		PhysicalCardImpl wk = scn.GetShadowCard("wk");
-		scn.ShadowMoveCharToTable(harry);
-		scn.ShadowMoveCardToHand(rider, wk);
+		scn.MoveMinionsToTable(harry);
+		scn.MoveCardsToHand(rider, wk);
 
 		scn.StartGame();
 
@@ -101,15 +101,15 @@ public class Card_V1_038_Tests
 	@Test
 	public void AssignmentAbilityAssignsHarryToStrength5PlusComp() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl harry = scn.GetShadowCard("harry");
-		scn.ShadowMoveCharToTable(harry);
+		scn.MoveMinionsToTable(harry);
 
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl farin = scn.GetFreepsCard("farin");
 		PhysicalCardImpl pippin = scn.GetFreepsCard("pippin");
-		scn.FreepsMoveCharToTable(aragorn, farin, pippin);
+		scn.MoveCompanionsToTable(aragorn, farin, pippin);
 
 		scn.StartGame();
 

@@ -582,13 +582,19 @@ table.tables tr.privateForPlayer {
 
 .prizeHint {
 	display: inline;
-	color: #6f6fff;
+	color: #6f8cff;
+	cursor: pointer;
+}
+
+.draftFormatInfo {
+	display: inline;
+	color: #6f8cff ;
 	cursor: pointer;
 }
 
 .clickableFormat {
 	cursor: pointer;
-	color: #6f6fff;
+	color: #6f8cff;
 }
 
 .pocket {

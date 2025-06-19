@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set09;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_09_038_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("palantir", "9_38");
 					put("boromir", "3_122");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -52,7 +52,7 @@ public class Card_09_038_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -63,7 +63,7 @@ public class Card_09_038_Tests
 
 		var palantir = scn.GetFreepsCard("palantir");
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.FreepsMoveCardToHand(palantir, boromir);
+		scn.MoveCardsToHand(palantir, boromir);
 
 		scn.StartGame();
 		assertFalse(scn.FreepsPlayAvailable(palantir));
@@ -87,7 +87,7 @@ public class Card_09_038_Tests
 
 		var palantir = scn.GetFreepsCard("palantir");
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.FreepsMoveCardToHand(palantir, boromir);
+		scn.MoveCardsToHand(palantir, boromir);
 
 		scn.StartGame();
 		assertFalse(scn.FreepsPlayAvailable(palantir));
@@ -101,7 +101,7 @@ public class Card_09_038_Tests
 
 		scn.FreepsPlayCard(palantir);
 		assertEquals(2, scn.FreepsGetMultipleChoices().size());
-		scn.FreepsChooseMultipleChoiceOption("3 or more vitality");
+		scn.FreepsChooseOption("3 or more vitality");
 
 		assertEquals(0, scn.GetThreats());
 		assertEquals(Zone.SUPPORT, palantir.getZone());

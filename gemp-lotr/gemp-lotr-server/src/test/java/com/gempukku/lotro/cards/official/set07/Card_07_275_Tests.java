@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set07;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_07_275_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("pillager", "7_275");
 					put("troop", "7_279");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_07_275_Tests
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.BESIEGER));
+		assertTrue(scn.HasKeyword(card, Keyword.BESIEGER));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(10, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
@@ -71,7 +71,7 @@ public class Card_07_275_Tests
 
 		var pillager = scn.GetShadowCard("pillager");
 		var troop = scn.GetShadowCard("troop");
-		scn.ShadowMoveCardToDiscard(pillager, troop);
+		scn.MoveCardsToDiscard(pillager, troop);
 
 		scn.StartGame();
 
@@ -81,9 +81,9 @@ public class Card_07_275_Tests
 		scn.ShadowTakeControlOfSite();
 		assertTrue(scn.IsSiteControlled(site1));
 
-		scn.ShadowMoveCharToTable(troop);
+		scn.MoveMinionsToTable(troop);
 		scn.StackCardsOn(site1, pillager);
 
-		assertTrue(scn.hasKeyword(troop, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(troop, Keyword.FIERCE));
 	}
 }

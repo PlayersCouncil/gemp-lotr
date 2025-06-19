@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_021_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("sons", "101_21");
 					put("aragorn", "1_89");
@@ -28,9 +28,9 @@ public class Card_V1_021_Tests
 					put("runner3", "1_178");
 					put("runner4", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -50,7 +50,7 @@ public class Card_V1_021_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl sons = scn.GetFreepsCard("sons");
 
@@ -59,7 +59,7 @@ public class Card_V1_021_Tests
 		assertEquals(Culture.GONDOR, sons.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, sons.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, sons.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(sons, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(sons, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(2, sons.getBlueprint().getTwilightCost());
 		//assertEquals(, sons.getBlueprint().getStrength());
 		//assertEquals(, sons.getBlueprint().getVitality());
@@ -72,19 +72,19 @@ public class Card_V1_021_Tests
 	@Test
 	public void SonsPumpsAragornAndBoromir() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl sons = scn.GetFreepsCard("sons");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
-		scn.FreepsMoveCharToTable(aragorn, boromir);
-		scn.FreepsMoveCardToSupportArea(sons);
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.MoveCardsToSupportArea(sons);
 
 		PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
 		PhysicalCardImpl runner2 = scn.GetShadowCard("runner2");
 		PhysicalCardImpl runner3 = scn.GetShadowCard("runner3");
 		PhysicalCardImpl runner4 = scn.GetShadowCard("runner4");
-		scn.ShadowMoveCharToTable(runner1, runner2, runner3, runner4);
+		scn.MoveMinionsToTable(runner1, runner2, runner3, runner4);
 
 		scn.StartGame();
 

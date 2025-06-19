@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set10;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_10_001_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("great", "10_1");
@@ -24,9 +24,9 @@ public class Card_10_001_Tests
 					put("assassin", "8_95");
 					put("towers", "7_281");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_10_001_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.RESPONSE));
+        assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
@@ -66,11 +66,11 @@ public class Card_10_001_Tests
 
 		var great = scn.GetFreepsCard("great");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(great);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToHand(great);
+		scn.MoveCompanionsToTable(gimli);
 
 		var troll = scn.GetShadowCard("troll");
-		scn.ShadowMoveCardToHand(troll);
+		scn.MoveCardsToHand(troll);
 
 		scn.StartGame();
 		scn.SetTwilight(15);
@@ -96,11 +96,11 @@ public class Card_10_001_Tests
 
 		var great = scn.GetFreepsCard("great");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(great);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToHand(great);
+		scn.MoveCompanionsToTable(gimli);
 
 		var assassin = scn.GetShadowCard("assassin");
-		scn.ShadowMoveCardToHand(assassin);
+		scn.MoveCardsToHand(assassin);
 
 		scn.StartGame();
 		scn.SetTwilight(15);
@@ -126,13 +126,13 @@ public class Card_10_001_Tests
 
 		var great = scn.GetFreepsCard("great");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(great);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToHand(great);
+		scn.MoveCompanionsToTable(gimli);
 
 		var assassin = scn.GetShadowCard("assassin");
 		var towers = scn.GetShadowCard("towers");
-		scn.ShadowMoveCardToHand(assassin);
-		scn.ShadowMoveCardToSupportArea(towers);
+		scn.MoveCardsToHand(assassin);
+		scn.MoveCardsToSupportArea(towers);
 
 		scn.StartGame();
 		scn.SetTwilight(15);

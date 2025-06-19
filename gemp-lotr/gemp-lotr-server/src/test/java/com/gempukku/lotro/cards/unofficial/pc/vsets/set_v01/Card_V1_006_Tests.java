@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,16 +16,16 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_006_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("bold", "101_6");
 					put("legolas", "1_50");
 					put("gimli", "1_13");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -44,12 +44,12 @@ public class Card_V1_006_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl bold = scn.GetFreepsCard("bold");
 
 		assertTrue(bold.getBlueprint().isUnique());
-		assertTrue(scn.hasKeyword(bold, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(bold, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(0, bold.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, bold.getBlueprint().getCardType());
 		assertEquals(Culture.DWARVEN, bold.getBlueprint().getCulture());
@@ -59,13 +59,13 @@ public class Card_V1_006_Tests
 	@Test
 	public void SoBoldOffersDefenderEachMove() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl bold = scn.GetFreepsCard("bold");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
-		scn.FreepsMoveCardToHand(bold);
-		scn.FreepsMoveCharToTable(gimli, legolas);
+		scn.MoveCardsToHand(bold);
+		scn.MoveCompanionsToTable(gimli, legolas);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(bold);

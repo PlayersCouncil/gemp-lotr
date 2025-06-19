@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 
 public class Card_V1_011_Tests
 {
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("library", "101_11");
 					put("gandalf", "1_364");
@@ -45,9 +45,9 @@ public class Card_V1_011_Tests
 					put("savage9", "1_151");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -68,12 +68,12 @@ public class Card_V1_011_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl library = scn.GetFreepsCard("library");
 
 		assertTrue(library.getBlueprint().isUnique());
-		assertTrue(scn.hasKeyword(library, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(library, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(3, library.getBlueprint().getTwilightCost());
 		assertEquals(CardType.ARTIFACT, library.getBlueprint().getCardType());
 		assertEquals(Culture.ELVEN, library.getBlueprint().getCulture());
@@ -85,7 +85,7 @@ public class Card_V1_011_Tests
 	@Test
 	public void LibraryofRivendellStacksTalesOrArtifactsFromPlayToDrawCard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl library = scn.GetFreepsCard("library");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
@@ -104,9 +104,9 @@ public class Card_V1_011_Tests
 		PhysicalCardImpl gondorart = scn.GetFreepsCard("gondorart");
 		PhysicalCardImpl shireart = scn.GetFreepsCard("shireart");
 
-		scn.FreepsMoveCardToSupportArea(library);
-		scn.FreepsMoveCharToTable(gandalf, aragorn, gimli, galadriel);
-		scn.FreepsMoveCardToHand(dwarftale, elftale, gondortale, shiretale, dwarfart, elfart, gandalfart, gondorart, shireart);
+		scn.MoveCardsToSupportArea(library);
+		scn.MoveCompanionsToTable(gandalf, aragorn, gimli, galadriel);
+		scn.MoveCardsToHand(dwarftale, elftale, gondortale, shiretale, dwarfart, elfart, gandalfart, gondorart, shireart);
 
 		PhysicalCardImpl savage1 = scn.GetShadowCard("savage1");
 		PhysicalCardImpl savage2 = scn.GetShadowCard("savage2");
@@ -114,7 +114,7 @@ public class Card_V1_011_Tests
 		PhysicalCardImpl savage4 = scn.GetShadowCard("savage4");
 		PhysicalCardImpl savage5 = scn.GetShadowCard("savage5");
 		PhysicalCardImpl savage6 = scn.GetShadowCard("savage6");
-		scn.ShadowMoveCharToTable(savage1, savage2, savage3, savage4, savage5, savage6);
+		scn.MoveMinionsToTable(savage1, savage2, savage3, savage4, savage5, savage6);
 
 		scn.StartGame();
 
@@ -175,7 +175,7 @@ public class Card_V1_011_Tests
 	@Test
 	public void LibraryofRivendellStacksTalesOrArtifactsFromHandToDrawCard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl library = scn.GetFreepsCard("library");
 
@@ -190,8 +190,8 @@ public class Card_V1_011_Tests
 		PhysicalCardImpl gondorart = scn.GetFreepsCard("gondorart");
 		PhysicalCardImpl shireart = scn.GetFreepsCard("shireart");
 
-		scn.FreepsMoveCardToSupportArea(library);
-		scn.FreepsMoveCardToHand(dwarftale, elftale, gondortale, shiretale, dwarfart, elfart, gandalfart, gondorart, shireart);
+		scn.MoveCardsToSupportArea(library);
+		scn.MoveCardsToHand(dwarftale, elftale, gondortale, shiretale, dwarfart, elfart, gandalfart, gondorart, shireart);
 
 		scn.StartGame();
 
@@ -241,7 +241,7 @@ public class Card_V1_011_Tests
 	@Test
 	public void RegroupAbilitySelfDiscardsToHaveSeveralEffects() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl library = scn.GetFreepsCard("library");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
@@ -249,9 +249,9 @@ public class Card_V1_011_Tests
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 
-		scn.FreepsMoveCardToSupportArea(library);
+		scn.MoveCardsToSupportArea(library);
 
-		scn.FreepsMoveCharToTable(gandalf, aragorn, gimli, galadriel);
+		scn.MoveCompanionsToTable(gandalf, aragorn, gimli, galadriel);
 
 		PhysicalCardImpl savage1 = scn.GetShadowCard("savage1");
 		PhysicalCardImpl savage2 = scn.GetShadowCard("savage2");
@@ -259,11 +259,16 @@ public class Card_V1_011_Tests
 		PhysicalCardImpl savage4 = scn.GetShadowCard("savage4");
 		PhysicalCardImpl savage5 = scn.GetShadowCard("savage5");
 		PhysicalCardImpl savage6 = scn.GetShadowCard("savage6");
-		scn.ShadowMoveCharToTable(savage1, savage2, savage3, savage4, savage5, savage6);
+		scn.MoveMinionsToTable(savage1, savage2, savage3, savage4, savage5, savage6);
 
 		scn.StartGame();
 
-		scn.FreepsStackCardsOn(library, "dwarfart", "elfart", "gandalfart", "gondorart", "shireart");
+		scn.StackCardsOn(library,
+				scn.GetFreepsCard("dwarfart"),
+				scn.GetFreepsCard("elfart"),
+				scn.GetFreepsCard("gandalfart"),
+				scn.GetFreepsCard("gondorart"),
+				scn.GetFreepsCard("shireart"));
 
 		scn.AddWoundsToChar(gandalf, 3);
 		scn.AddWoundsToChar(aragorn, 3);

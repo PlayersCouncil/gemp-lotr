@@ -1,9 +1,8 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -14,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_001_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("driven", "102_1");
@@ -35,9 +34,9 @@ public class Card_V2_001_Tests
 					put("fodder7", "1_7");
 					put("fodder8", "1_7");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -67,7 +66,7 @@ public class Card_V2_001_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.DUNLAND, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -79,7 +78,7 @@ public class Card_V2_001_Tests
 		var driven = scn.GetShadowCard("driven");
 		var runner = scn.GetShadowCard("runner");
 		var madman = scn.GetShadowCard("madman");
-		scn.ShadowMoveCardToHand(driven, runner, madman);
+		scn.MoveCardsToHand(driven, runner, madman);
 
 		scn.StartGame();
 
@@ -99,16 +98,16 @@ public class Card_V2_001_Tests
 		var scn = GetScenario();
 
 		var driven = scn.GetShadowCard("driven");
-		scn.ShadowMoveCardToSupportArea(driven);
+		scn.MoveCardsToSupportArea(driven);
 
-		scn.FreepsMoveCharToTable("fodder1", "fodder2", "fodder3", "fodder4");
-		scn.FreepsMoveCardToHand("driven", "madman", "freca", "hillman");
+		scn.MoveCompanionsToTable("fodder1", "fodder2", "fodder3", "fodder4");
+		scn.FreepsDrawCards(4);
 
 		scn.StartGame();
 
 		assertEquals(4, scn.GetFreepsHandCount());
 		assertTrue(scn.ShadowHasInitiative());
-		scn.FreepsMoveCardToHand("runner");
+		scn.FreepsDrawCards(1);
 
 		scn.FreepsPassCurrentPhaseAction();
 		assertEquals(5, scn.GetFreepsHandCount());

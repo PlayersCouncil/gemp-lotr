@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_035_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("wall", "102_35");
@@ -31,9 +31,9 @@ public class Card_V2_035_Tests
 					put("lindenroot", "5_19");
 					put("gilgalad", "9_15");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -64,8 +64,8 @@ public class Card_V2_035_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.MACHINE));
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.MACHINE));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -77,16 +77,16 @@ public class Card_V2_035_Tests
 		var wall = scn.GetShadowCard("wall");
 		var uruk = scn.GetShadowCard("uruk");
 		var evil = scn.GetShadowCard("evil");
-		scn.ShadowMoveCardToHand(evil);
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToSupportArea(wall);
+		scn.MoveCardsToHand(evil);
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToSupportArea(wall);
 		scn.AddTokensToCard(wall, 5);
 		scn.AddWoundsToChar(uruk, 2);
 
 		var unheeded = scn.GetFreepsCard("unheeded");
 		var pippin = scn.GetFreepsCard("pippin");
-		scn.FreepsMoveCardToHand(unheeded);
-		scn.FreepsMoveCharToTable(pippin);
+		scn.MoveCardsToHand(unheeded);
+		scn.MoveCompanionsToTable(pippin);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -110,9 +110,9 @@ public class Card_V2_035_Tests
 		var wall = scn.GetShadowCard("wall");
 		var uruk = scn.GetShadowCard("uruk");
 		var evil = scn.GetShadowCard("evil");
-		scn.ShadowMoveCardToHand(evil);
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToSupportArea(wall);
+		scn.MoveCardsToHand(evil);
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToSupportArea(wall);
 		scn.AddTokensToCard(wall, 5);
 		scn.AddWoundsToChar(uruk, 2);
 
@@ -120,8 +120,8 @@ public class Card_V2_035_Tests
 		var orcbane = scn.GetFreepsCard("orcbane");
 		var unheeded = scn.GetFreepsCard("unheeded");
 		var pippin = scn.GetFreepsCard("pippin");
-		scn.FreepsMoveCardToHand(unheeded, sting, orcbane);
-		scn.FreepsMoveCharToTable(pippin);
+		scn.MoveCardsToHand(unheeded, sting, orcbane);
+		scn.MoveCompanionsToTable(pippin);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(sting);
@@ -144,18 +144,18 @@ public class Card_V2_035_Tests
 		var wall = scn.GetShadowCard("wall");
 		var uruk = scn.GetShadowCard("uruk");
 		var evil = scn.GetShadowCard("evil");
-		scn.ShadowMoveCardToHand(evil);
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToSupportArea(wall);
+		scn.MoveCardsToHand(evil);
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToSupportArea(wall);
 		scn.AddTokensToCard(wall, 5);
 		scn.AddWoundsToChar(uruk, 2);
 
 		var greenleaf = scn.GetFreepsCard("greenleaf");
 		var unheeded = scn.GetFreepsCard("unheeded");
 		var pippin = scn.GetFreepsCard("pippin");
-		scn.FreepsMoveCardToHand(unheeded);
-		scn.FreepsMoveCharToTable(pippin);
-		scn.FreepsMoveCharToTable(greenleaf);
+		scn.MoveCardsToHand(unheeded);
+		scn.MoveCompanionsToTable(pippin);
+		scn.MoveCompanionsToTable(greenleaf);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ARCHERY);
@@ -177,18 +177,18 @@ public class Card_V2_035_Tests
 		var wall = scn.GetShadowCard("wall");
 		var uruk = scn.GetShadowCard("uruk");
 		var evil = scn.GetShadowCard("evil");
-		scn.ShadowMoveCardToHand(evil);
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToSupportArea(wall);
+		scn.MoveCardsToHand(evil);
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToSupportArea(wall);
 		scn.AddTokensToCard(wall, 5);
 		scn.AddWoundsToChar(uruk, 3);
 
 		var lindenroot = scn.GetFreepsCard("lindenroot");
 		var unheeded = scn.GetFreepsCard("unheeded");
 		var pippin = scn.GetFreepsCard("pippin");
-		scn.FreepsMoveCardToHand(unheeded);
-		scn.FreepsMoveCharToTable(pippin);
-		scn.FreepsMoveCharToTable(lindenroot);
+		scn.MoveCardsToHand(unheeded);
+		scn.MoveCompanionsToTable(pippin);
+		scn.MoveCompanionsToTable(lindenroot);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ASSIGNMENT);
@@ -213,9 +213,9 @@ public class Card_V2_035_Tests
 		var uruk2 = scn.GetShadowCard("uruk2");
 		var savage = scn.GetShadowCard("savage");
 		var evil = scn.GetShadowCard("evil");
-		scn.ShadowMoveCardToHand(evil);
-		scn.ShadowMoveCharToTable(uruk, uruk2, savage);
-		scn.ShadowMoveCardToSupportArea(wall);
+		scn.MoveCardsToHand(evil);
+		scn.MoveMinionsToTable(uruk, uruk2, savage);
+		scn.MoveCardsToSupportArea(wall);
 		scn.AddTokensToCard(wall, 5);
 		scn.AddWoundsToChar(uruk, 3);
 		scn.AddWoundsToChar(uruk2, 3);
@@ -226,7 +226,7 @@ public class Card_V2_035_Tests
 		// B: lethal damage doesn't bypass shield wall
 		var gilgalad = scn.GetFreepsCard("gilgalad");
 		//not bothering with unheeded since the multi-wound part is what's important
-		scn.FreepsMoveCharToTable(gilgalad);
+		scn.MoveCompanionsToTable(gilgalad);
 
 		scn.StartGame();
 		scn.SkipToAssignments();

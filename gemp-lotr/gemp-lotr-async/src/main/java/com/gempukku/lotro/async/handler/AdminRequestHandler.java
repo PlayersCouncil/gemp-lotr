@@ -982,7 +982,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         int minPlayers = Throw400IfNullOrNonInteger("minPlayers", minPlayersStr);
         boolean manualKickoff = ParseBoolean("manualKickoff", manualKickoffStr, false);
 
-        if(wc) {
+        if (wc) {
             tournamentId = DateUtils.Now().getYear() + "-wc-" + tournamentId;
         }
 
@@ -1070,6 +1070,10 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         params.prizes = Tournament.PrizeType.DAILY;
         params.minimumPlayers = minPlayers;
         params.manualKickoff = manualKickoff;
+
+        if (wc) {
+            params.wc = true;
+        }
 
         TournamentInfo info;
 
@@ -1163,7 +1167,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
         _soloDraftDefinitions.ReloadDraftsFromFile();
 
-        _tableDraftLibrary.reloadDraftsFromFile();
+        _tableDraftLibrary.reloadDraftsFromFile(_cardLibrary, _formatLibrary);
         _tournamentService.reloadQueues();
 
         _chatServer.sendSystemMessageToAllChatRooms("@everyone Card definition reload complete.  If you are mid-game and you notice any oddities, reload the page and please let the mod team know in the game hall ASAP if the problem doesn't go away.");

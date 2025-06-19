@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -18,8 +18,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_060_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("sam", "1_311");
 					put("merry", "1_302");
@@ -43,8 +43,8 @@ public class Card_V1_060_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -64,7 +64,7 @@ public class Card_V1_060_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl site4 = scn.GetFreepsSite(4);
 
@@ -73,7 +73,7 @@ public class Card_V1_060_Tests
 		//assertEquals(Culture., card.getBlueprint().getCulture());
 		assertEquals(CardType.SITE, site4.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(site4, Keyword.UNDERGROUND)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(site4, Keyword.UNDERGROUND)); // test for keywords as needed
 		assertEquals(3, site4.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());
 		//assertEquals(, card.getBlueprint().getVitality());
@@ -86,7 +86,7 @@ public class Card_V1_060_Tests
 	@Test
 	public void UniqueMoriaMinionBlocksSkirmishCancelingInMoriaSkirmishes() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
@@ -95,13 +95,13 @@ public class Card_V1_060_Tests
 		PhysicalCardImpl stealth2 = scn.GetFreepsCard("stealth2");
 		PhysicalCardImpl stealth3 = scn.GetFreepsCard("stealth3");
 
-		scn.FreepsMoveCardToHand(stealth1, stealth2, stealth3);
-		scn.FreepsMoveCharToTable(sam, merry);
+		scn.MoveCardsToHand(stealth1, stealth2, stealth3);
+		scn.MoveCompanionsToTable(sam, merry);
 
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
 		PhysicalCardImpl chieftain = scn.GetShadowCard("chieftain");
 		PhysicalCardImpl uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(runner, chieftain, uruk);
+		scn.MoveMinionsToTable(runner, chieftain, uruk);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -160,7 +160,7 @@ public class Card_V1_060_Tests
 	@Test
 	public void NonUniqueMoriaMinionDoesNotBlocksSkirmishCanceling() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
@@ -168,12 +168,12 @@ public class Card_V1_060_Tests
 		PhysicalCardImpl stealth1 = scn.GetFreepsCard("stealth1");
 		PhysicalCardImpl stealth2 = scn.GetFreepsCard("stealth2");
 
-		scn.FreepsMoveCardToHand(stealth1, stealth2);
-		scn.FreepsMoveCharToTable(sam, merry);
+		scn.MoveCardsToHand(stealth1, stealth2);
+		scn.MoveCompanionsToTable(sam, merry);
 
 		PhysicalCardImpl runner = scn.GetShadowCard("runner");
 		PhysicalCardImpl uruk = scn.GetShadowCard("uruk");
-		scn.ShadowMoveCharToTable(runner, uruk);
+		scn.MoveMinionsToTable(runner, uruk);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));

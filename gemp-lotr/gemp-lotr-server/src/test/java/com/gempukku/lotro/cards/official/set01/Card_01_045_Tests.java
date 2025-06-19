@@ -1,9 +1,8 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -14,8 +13,8 @@ import static org.junit.Assert.assertTrue;
 
 public class Card_01_045_Tests
 {
-    protected GenericCardTestHelper GetSimplePlayScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetSimplePlayScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("galadriel", "1_45");
                     put("elrond", "1_40");
@@ -23,8 +22,8 @@ public class Card_01_045_Tests
         );
     }
 
-    protected GenericCardTestHelper GetHome6AllyScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetHome6AllyScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("galadriel", "1_45");
                     put("allyHome3_1", "1_60");
@@ -76,8 +75,9 @@ public class Card_01_045_Tests
         var scn = GetSimplePlayScenario();
 
         var galadriel = scn.GetFreepsCard("galadriel");
-        scn.FreepsMoveCharToTable(galadriel);
-        scn.FreepsMoveCardToHand("elrond");
+        var elrond = scn.GetFreepsCard("elrond");
+        scn.MoveCompanionsToTable(galadriel);
+        scn.MoveCardsToHand(elrond);
 
         scn.StartGame();
 
@@ -107,7 +107,7 @@ public class Card_01_045_Tests
         var allyHome6_2 = scn.GetFreepsCard("allyHome6_2");
         var allyHome6_3 = scn.GetFreepsCard("allyHome6_3");
 
-        scn.FreepsMoveCharToTable(galadriel, allyHome3_1, allyHome6_3, allyHome6_1, allyHome6_2);
+        scn.MoveCompanionsToTable(galadriel, allyHome3_1, allyHome6_3, allyHome6_1, allyHome6_2);
 
         scn.AddWoundsToChar(galadriel, 1);
         scn.AddWoundsToChar(allyHome3_1, 1);

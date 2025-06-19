@@ -297,9 +297,9 @@ gl_theOneRing,1_2
 #Merry, Friend to Sam MW
 1_377,1_302
 #Faramir, Son of Denethor Promo MW
-0_130,0_16
+0_130,4_117
 #Eowyn, Lady of Rohan Promo MW
-0_131,0_17
+0_131,4_270
 #Legolas, Greenleaf Holiday Promo
 1_378,1_50
 #Arwen, Queen of Elves and Men Holiday Promo
@@ -412,3 +412,9 @@ gl_theOneRing,1_2
 2_130,2_102
 #2024 Yuletide Sam, Resolute Halfling
 7_369,7_327
+#May 2025 WC Circuit: Watcher in the Water
+2_131,2_73
+#2025 WC Circuit: Pale Crown
+101_104,101_39
+#June 2025 WC Circuit: V2 Saruman
+102_100,102_29

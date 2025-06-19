@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 
 public class Card_V1_010_Tests
 {
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("darts", "101_10");
                     put("galadriel", "1_45");
@@ -31,9 +31,9 @@ public class Card_V1_010_Tests
                     put("archer", "1_172");
                     put("runner", "1_178");
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,12 +54,12 @@ public class Card_V1_010_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl darts = scn.GetFreepsCard("darts");
+		var darts = scn.GetFreepsCard("darts");
 
 		assertFalse(darts.getBlueprint().isUnique());
-		assertTrue(scn.hasKeyword(darts, Keyword.TALE)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(darts, Keyword.TALE)); // test for keywords as needed
 		assertEquals(1, darts.getBlueprint().getTwilightCost());
 		assertEquals(CardType.CONDITION, darts.getBlueprint().getCardType());
 		assertEquals(Culture.ELVEN, darts.getBlueprint().getCulture());
@@ -69,13 +69,13 @@ public class Card_V1_010_Tests
 	@Test
 	public void LetFlytheDartsOnlyPlaysOnUniqueElvenCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl darts = scn.GetFreepsCard("darts");
-		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-		PhysicalCardImpl greenleaf = scn.GetFreepsCard("greenleaf");
-		PhysicalCardImpl lorien = scn.GetFreepsCard("lorien");
-		scn.FreepsMoveCardToHand(darts, galadriel, greenleaf, lorien);
+		var darts = scn.GetFreepsCard("darts");
+		var galadriel = scn.GetFreepsCard("galadriel");
+		var greenleaf = scn.GetFreepsCard("greenleaf");
+		var lorien = scn.GetFreepsCard("lorien");
+		scn.MoveCardsToHand(darts, galadriel, greenleaf, lorien);
 
 		scn.StartGame();
 		assertFalse(scn.FreepsActionAvailable("let fly the darts"));
@@ -90,21 +90,21 @@ public class Card_V1_010_Tests
 	@Test
 	public void LetFlytheDartsExertsToMakeArchersLoseArcherAndGainDamage() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl darts = scn.GetFreepsCard("darts");
-		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
-		PhysicalCardImpl greenleaf = scn.GetFreepsCard("greenleaf");
-		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-		PhysicalCardImpl lorien = scn.GetFreepsCard("lorien");
-		scn.FreepsMoveCharToTable(greenleaf, galadriel, aragorn, lorien);
-		scn.FreepsAttachCardsTo(galadriel, "bow1");
-		scn.FreepsAttachCardsTo(lorien, "bow2");
-		scn.FreepsAttachCardsTo(aragorn, "gornbow");
-		scn.FreepsMoveCardToHand(darts);
+		var darts = scn.GetFreepsCard("darts");
+		var galadriel = scn.GetFreepsCard("galadriel");
+		var greenleaf = scn.GetFreepsCard("greenleaf");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var lorien = scn.GetFreepsCard("lorien");
+		scn.MoveCompanionsToTable(greenleaf, galadriel, aragorn, lorien);
+		scn.AttachCardsTo(galadriel, scn.GetFreepsCard("bow1"));
+		scn.AttachCardsTo(lorien, scn.GetFreepsCard("bow2"));
+		scn.AttachCardsTo(aragorn, scn.GetFreepsCard("gornbow"));
+		scn.MoveCardsToHand(darts);
 
 		PhysicalCardImpl archer = scn.GetShadowCard("archer");
-		scn.ShadowMoveCharToTable(archer);
+		scn.MoveMinionsToTable(archer);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(darts);
@@ -113,27 +113,27 @@ public class Card_V1_010_Tests
 		assertEquals(0, scn.GetWoundsOn(greenleaf));
 		//1 each from greenleaf, lorien elf + bow, aragorn + bow (galadriel doesn't count)
 		assertEquals(3, scn.GetFreepsArcheryTotal());
-		assertTrue(scn.hasKeyword(greenleaf, Keyword.ARCHER));
-		assertTrue(scn.hasKeyword(galadriel, Keyword.ARCHER));
-		assertTrue(scn.hasKeyword(aragorn, Keyword.ARCHER));
-		assertTrue(scn.hasKeyword(lorien, Keyword.ARCHER));
-		assertFalse(scn.hasKeyword(greenleaf, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(galadriel, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(aragorn, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(lorien, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(greenleaf, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(galadriel, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(aragorn, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(lorien, Keyword.ARCHER));
+		assertFalse(scn.HasKeyword(greenleaf, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(galadriel, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(lorien, Keyword.DAMAGE));
 
 		assertTrue(scn.FreepsActionAvailable("let fly the darts"));
 		scn.FreepsUseCardAction(darts);
 
 		assertEquals(0, scn.GetFreepsArcheryTotal());
-		assertFalse(scn.hasKeyword(greenleaf, Keyword.ARCHER));
-		assertFalse(scn.hasKeyword(galadriel, Keyword.ARCHER));
-		assertFalse(scn.hasKeyword(aragorn, Keyword.ARCHER));
-		assertFalse(scn.hasKeyword(lorien, Keyword.ARCHER));
-		assertTrue(scn.hasKeyword(greenleaf, Keyword.DAMAGE));
-		assertTrue(scn.hasKeyword(galadriel, Keyword.DAMAGE));
-		assertTrue(scn.hasKeyword(aragorn, Keyword.DAMAGE));
-		assertTrue(scn.hasKeyword(lorien, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(greenleaf, Keyword.ARCHER));
+		assertFalse(scn.HasKeyword(galadriel, Keyword.ARCHER));
+		assertFalse(scn.HasKeyword(aragorn, Keyword.ARCHER));
+		assertFalse(scn.HasKeyword(lorien, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(greenleaf, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(galadriel, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(lorien, Keyword.DAMAGE));
 
 		assertEquals(1, scn.GetWoundsOn(greenleaf));
 
@@ -152,14 +152,14 @@ public class Card_V1_010_Tests
 		assertEquals(2, scn.GetWoundsOn(archer));
 
 		//Regroup
-		assertTrue(scn.hasKeyword(greenleaf, Keyword.ARCHER));
-		assertTrue(scn.hasKeyword(galadriel, Keyword.ARCHER));
-		assertTrue(scn.hasKeyword(aragorn, Keyword.ARCHER));
-		assertTrue(scn.hasKeyword(lorien, Keyword.ARCHER));
-		assertFalse(scn.hasKeyword(greenleaf, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(galadriel, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(aragorn, Keyword.DAMAGE));
-		assertFalse(scn.hasKeyword(lorien, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(greenleaf, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(galadriel, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(aragorn, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(lorien, Keyword.ARCHER));
+		assertFalse(scn.HasKeyword(greenleaf, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(galadriel, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(lorien, Keyword.DAMAGE));
 	}
 
 

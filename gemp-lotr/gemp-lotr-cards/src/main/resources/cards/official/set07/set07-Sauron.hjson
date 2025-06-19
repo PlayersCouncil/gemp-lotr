@@ -751,7 +751,7 @@
 		keywords: Besieger
 		effects: [
 			{
-				type: activated
+				type: ActivatedFromStacked
 				phase: skirmish
 				cost: {
 					type: discardStackedCards

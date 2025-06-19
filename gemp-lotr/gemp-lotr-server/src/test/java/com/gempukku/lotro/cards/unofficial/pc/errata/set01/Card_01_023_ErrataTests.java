@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_023_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("nobody", "51_23");
@@ -29,9 +29,9 @@ public class Card_01_023_ErrataTests
 					put("deck5", "1_130");
 					put("deck6", "1_131");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -59,7 +59,7 @@ public class Card_01_023_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, nobody.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, nobody.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, nobody.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(nobody, Timeword.RESPONSE));
+        assertTrue(scn.HasTimeword(nobody, Timeword.RESPONSE));
 		assertEquals(0, nobody.getBlueprint().getTwilightCost());
 	}
 
@@ -70,13 +70,13 @@ public class Card_01_023_ErrataTests
 
 		var nobody = scn.GetFreepsCard("nobody");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(nobody);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToHand(nobody);
+		scn.MoveCompanionsToTable(gimli);
 
 		var uruk = scn.GetShadowCard("uruk");
 		var target = scn.GetShadowCard("target");
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToSupportArea(target);
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToSupportArea(target);
 
 		scn.StartGame();
 
@@ -94,13 +94,13 @@ public class Card_01_023_ErrataTests
 
 		var nobody = scn.GetFreepsCard("nobody");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(nobody);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToHand(nobody);
+		scn.MoveCompanionsToTable(gimli);
 
 		var uruk = scn.GetShadowCard("uruk");
 		var target = scn.GetShadowCard("target");
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToSupportArea(target);
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToSupportArea(target);
 
 		scn.StartGame();
 
@@ -126,13 +126,13 @@ public class Card_01_023_ErrataTests
 
 		var nobody = scn.GetFreepsCard("nobody");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(nobody);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToHand(nobody);
+		scn.MoveCompanionsToTable(gimli);
 
 		var uruk = scn.GetShadowCard("uruk");
 		var target = scn.GetShadowCard("target");
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToSupportArea(target);
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToSupportArea(target);
 
 		scn.StartGame();
 

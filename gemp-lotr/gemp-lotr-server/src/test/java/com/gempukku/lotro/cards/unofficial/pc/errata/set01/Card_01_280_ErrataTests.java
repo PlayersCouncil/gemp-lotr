@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_01_280_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("lt", "51_280");
@@ -26,9 +26,9 @@ public class Card_01_280_ErrataTests
 					put("sam", "1_311");
 					put("aragorn", "1_89");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -73,11 +73,11 @@ public class Card_01_280_ErrataTests
 		var scn = GetScenario();
 
 		var lt = scn.GetShadowCard("lt");
-		scn.ShadowMoveCharToTable(lt);
+		scn.MoveMinionsToTable(lt);
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToHand("filler1");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.FreepsDrawCards(1);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -99,11 +99,11 @@ public class Card_01_280_ErrataTests
 		var scn = GetScenario();
 
 		var lt = scn.GetShadowCard("lt");
-		scn.ShadowMoveCharToTable(lt);
+		scn.MoveMinionsToTable(lt);
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(aragorn, sam);
+		scn.MoveCompanionsToTable(aragorn, sam);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -124,11 +124,11 @@ public class Card_01_280_ErrataTests
 		var scn = GetScenario();
 
 		var lt = scn.GetShadowCard("lt");
-		scn.ShadowMoveCharToTable(lt);
+		scn.MoveMinionsToTable(lt);
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToHand("filler1", "filler2");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.FreepsDrawCards(2);
 
 		scn.StartGame();
 		scn.SkipToAssignments();

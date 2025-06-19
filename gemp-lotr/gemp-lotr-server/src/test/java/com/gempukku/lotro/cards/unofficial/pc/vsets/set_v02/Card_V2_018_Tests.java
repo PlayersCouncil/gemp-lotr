@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_V2_018_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("menu", "102_18");
 					put("uruk", "2_47");
 					put("orc", "1_261");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -53,7 +53,7 @@ public class Card_V2_018_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -65,8 +65,8 @@ public class Card_V2_018_Tests
 		var menu = scn.GetShadowCard("menu");
 		var uruk = scn.GetShadowCard("uruk");
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToSupportArea(menu);
-		scn.ShadowMoveCharToTable(uruk, orc);
+		scn.MoveCardsToSupportArea(menu);
+		scn.MoveMinionsToTable(uruk, orc);
 
 		var frodo = scn.GetRingBearer();
 
@@ -81,7 +81,7 @@ public class Card_V2_018_Tests
 		assertEquals(7, scn.GetStrength(uruk));
 		assertEquals(Zone.SHADOW_CHARACTERS, orc.getZone());
 		assertTrue(scn.ShadowActionAvailable("Discard"));
-		scn.ShadowUseCardAction("Discard");
+		scn.ShadowChooseAction("Discard");
 
 		assertEquals(9, scn.GetStrength(uruk));
 		assertEquals(Zone.DISCARD, orc.getZone());
@@ -95,8 +95,8 @@ public class Card_V2_018_Tests
 		var menu = scn.GetShadowCard("menu");
 		var uruk = scn.GetShadowCard("uruk");
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToSupportArea(menu);
-		scn.ShadowMoveCharToTable(uruk, orc);
+		scn.MoveCardsToSupportArea(menu);
+		scn.MoveMinionsToTable(uruk, orc);
 
 		var frodo = scn.GetRingBearer();
 
@@ -109,12 +109,12 @@ public class Card_V2_018_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(0, scn.GetWoundsOn(uruk));
-		assertFalse(scn.hasKeyword(orc, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(orc, Keyword.FIERCE));
 		assertTrue(scn.ShadowActionAvailable("Exert"));
-		scn.ShadowUseCardAction("Exert");
+		scn.ShadowChooseAction("Exert");
 
 		assertEquals(1, scn.GetWoundsOn(uruk));
-		assertTrue(scn.hasKeyword(orc, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(orc, Keyword.FIERCE));
 
 		//Have to make sure fierce persists or it won't matter lol
 		scn.PassCurrentPhaseActions();

@@ -1,9 +1,8 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -14,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_011_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("farin", "1_11");
@@ -24,9 +23,9 @@ public class Card_01_011_Tests
 					put("runner", "1_178");
 					put("nazgul", "1_230");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -73,7 +72,7 @@ public class Card_01_011_Tests
 
 		var farin = scn.GetFreepsCard("farin");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(farin, gimli);
+		scn.MoveCardsToHand(farin, gimli);
 
 		scn.StartGame();
 
@@ -88,11 +87,11 @@ public class Card_01_011_Tests
 		var scn = GetScenario();
 
 		var farin = scn.GetFreepsCard("farin");
-		scn.FreepsMoveCharToTable(farin);
+		scn.MoveCompanionsToTable(farin);
 
 		var orc = scn.GetShadowCard("runner");
 		var nazgul = scn.GetShadowCard("nazgul");
-		scn.ShadowMoveCharToTable(orc, nazgul);
+		scn.MoveMinionsToTable(orc, nazgul);
 
 		scn.StartGame();
 

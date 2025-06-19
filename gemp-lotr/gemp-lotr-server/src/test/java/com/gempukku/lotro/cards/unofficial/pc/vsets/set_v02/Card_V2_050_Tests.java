@@ -1,9 +1,8 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -14,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_050_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("hour", "102_50");
@@ -25,9 +24,9 @@ public class Card_V2_050_Tests
 					put("runner2", "1_178");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +55,7 @@ public class Card_V2_050_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.ASSIGNMENT));
+		assertTrue(scn.HasTimeword(card, Timeword.ASSIGNMENT));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -67,12 +66,12 @@ public class Card_V2_050_Tests
 
 		var hour = scn.GetFreepsCard("hour");
 		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.FreepsMoveCardToHand(hour);
-		scn.FreepsMoveCharToTable(eowyn);
+		scn.MoveCardsToHand(hour);
+		scn.MoveCompanionsToTable(eowyn);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
-		scn.ShadowMoveCharToTable(runner1, runner2);
+		scn.MoveMinionsToTable(runner1, runner2);
 
 		scn.StartGame();
 
@@ -81,13 +80,13 @@ public class Card_V2_050_Tests
 		assertTrue(scn.FreepsPlayAvailable(hour));
 		assertEquals(3, scn.GetVitality(eowyn));
 		assertEquals(6, scn.GetStrength(eowyn));
-		assertFalse(scn.hasKeyword(eowyn, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(eowyn, Keyword.DEFENDER));
 
 		scn.FreepsPlayCard(hour);
 
 		assertEquals(2, scn.GetVitality(eowyn));
 		assertEquals(6, scn.GetStrength(eowyn));
-		assertTrue(scn.hasKeyword(eowyn, Keyword.DEFENDER));
+		assertTrue(scn.HasKeyword(eowyn, Keyword.DEFENDER));
 
 		scn.ShadowPassCurrentPhaseAction();
 		scn.FreepsPassCurrentPhaseAction();
@@ -104,6 +103,6 @@ public class Card_V2_050_Tests
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 
 		assertEquals(6, scn.GetStrength(eowyn));
-		assertFalse(scn.hasKeyword(eowyn, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(eowyn, Keyword.DEFENDER));
 	}
 }

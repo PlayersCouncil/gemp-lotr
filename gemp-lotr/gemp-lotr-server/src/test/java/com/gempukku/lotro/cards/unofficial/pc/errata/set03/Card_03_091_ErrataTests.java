@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_03_091_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("cruelty", "53_91");
@@ -26,9 +26,9 @@ public class Card_03_091_ErrataTests
 					put("freeps2", "2_2");
 					put("freeps3", "2_3");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -67,8 +67,8 @@ public class Card_03_091_ErrataTests
 		var cruelty = scn.GetShadowCard("cruelty");
 		var soldier1 = scn.GetShadowCard("soldier1");
 		var soldier2 = scn.GetShadowCard("soldier2");
-		scn.ShadowMoveCardToSupportArea(cruelty);
-		scn.ShadowMoveCharToTable(soldier1, soldier2);
+		scn.MoveCardsToSupportArea(cruelty);
+		scn.MoveMinionsToTable(soldier1, soldier2);
 
 		var sam = scn.GetFreepsCard("sam");
 		var freeps1 = scn.GetFreepsCard("freeps1");
@@ -78,8 +78,8 @@ public class Card_03_091_ErrataTests
 		var shadow2 = scn.GetFreepsCard("soldier1");
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
-		scn.FreepsMoveCharToTable(sam);
-		scn.FreepsMoveCardsToTopOfDeck(freeps1, freeps2);
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToTopOfDeck(freeps1, freeps2);
 
 		scn.StartGame();
 
@@ -108,8 +108,8 @@ public class Card_03_091_ErrataTests
 		var cruelty = scn.GetShadowCard("cruelty");
 		var soldier1 = scn.GetShadowCard("soldier1");
 		var soldier2 = scn.GetShadowCard("soldier2");
-		scn.ShadowMoveCardToSupportArea(cruelty);
-		scn.ShadowMoveCharToTable(soldier1, soldier2);
+		scn.MoveCardsToSupportArea(cruelty);
+		scn.MoveMinionsToTable(soldier1, soldier2);
 
 		var sam = scn.GetFreepsCard("sam");
 		var freeps1 = scn.GetFreepsCard("freeps1");
@@ -119,10 +119,10 @@ public class Card_03_091_ErrataTests
 		var shadow2 = scn.GetFreepsCard("soldier1");
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
-		scn.FreepsMoveCardsToTopOfDeck(shadow1,shadow2);
+		scn.MoveCardsToTopOfDeck(shadow1,shadow2);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
@@ -150,8 +150,8 @@ public class Card_03_091_ErrataTests
 		var cruelty = scn.GetShadowCard("cruelty");
 		var soldier1 = scn.GetShadowCard("soldier1");
 		var soldier2 = scn.GetShadowCard("soldier2");
-		scn.ShadowMoveCardToSupportArea(cruelty);
-		scn.ShadowMoveCharToTable(soldier1, soldier2);
+		scn.MoveCardsToSupportArea(cruelty);
+		scn.MoveMinionsToTable(soldier1, soldier2);
 
 		var sam = scn.GetFreepsCard("sam");
 		var freeps1 = scn.GetFreepsCard("freeps1");
@@ -161,11 +161,11 @@ public class Card_03_091_ErrataTests
 		var shadow2 = scn.GetFreepsCard("soldier1");
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 
-		scn.FreepsMoveCardsToTopOfDeck(freeps1,shadow1);
+		scn.MoveCardsToTopOfDeck(freeps1,shadow1);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
@@ -198,8 +198,8 @@ public class Card_03_091_ErrataTests
 		var cruelty = scn.GetShadowCard("cruelty");
 		var soldier1 = scn.GetShadowCard("soldier1");
 		var soldier2 = scn.GetShadowCard("soldier2");
-		scn.ShadowMoveCardToSupportArea(cruelty);
-		scn.ShadowMoveCharToTable(soldier1, soldier2);
+		scn.MoveCardsToSupportArea(cruelty);
+		scn.MoveMinionsToTable(soldier1, soldier2);
 
 		var sam = scn.GetFreepsCard("sam");
 		var freeps1 = scn.GetFreepsCard("freeps1");
@@ -209,10 +209,10 @@ public class Card_03_091_ErrataTests
 		var shadow2 = scn.GetFreepsCard("soldier1");
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
-		scn.FreepsMoveCardsToTopOfDeck(freeps1,freeps2);
+		scn.MoveCardsToTopOfDeck(freeps1,freeps2);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
@@ -245,8 +245,8 @@ public class Card_03_091_ErrataTests
 		var cruelty = scn.GetShadowCard("cruelty");
 		var soldier1 = scn.GetShadowCard("soldier1");
 		var soldier2 = scn.GetShadowCard("soldier2");
-		scn.ShadowMoveCardToSupportArea(cruelty);
-		scn.ShadowMoveCharToTable(soldier1, soldier2);
+		scn.MoveCardsToSupportArea(cruelty);
+		scn.MoveMinionsToTable(soldier1, soldier2);
 
 		var sam = scn.GetFreepsCard("sam");
 		var freeps1 = scn.GetFreepsCard("freeps1");
@@ -256,11 +256,11 @@ public class Card_03_091_ErrataTests
 		var shadow2 = scn.GetFreepsCard("soldier1");
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 
-		scn.FreepsMoveCardsToTopOfDeck(freeps1,shadow1);
+		scn.MoveCardsToTopOfDeck(freeps1,shadow1);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
@@ -297,8 +297,8 @@ public class Card_03_091_ErrataTests
 		var cruelty = scn.GetShadowCard("cruelty");
 		var soldier1 = scn.GetShadowCard("soldier1");
 		var soldier2 = scn.GetShadowCard("soldier2");
-		scn.ShadowMoveCardToSupportArea(cruelty);
-		scn.ShadowMoveCharToTable(soldier1, soldier2);
+		scn.MoveCardsToSupportArea(cruelty);
+		scn.MoveMinionsToTable(soldier1, soldier2);
 
 		var sam = scn.GetFreepsCard("sam");
 		var freeps1 = scn.GetFreepsCard("freeps1");
@@ -308,11 +308,11 @@ public class Card_03_091_ErrataTests
 		var shadow2 = scn.GetFreepsCard("soldier1");
 		var shadow3 = scn.GetFreepsCard("soldier2");
 
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 
-		scn.FreepsMoveCardsToTopOfDeck(freeps1,freeps2);
+		scn.MoveCardsToTopOfDeck(freeps1,freeps2);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();

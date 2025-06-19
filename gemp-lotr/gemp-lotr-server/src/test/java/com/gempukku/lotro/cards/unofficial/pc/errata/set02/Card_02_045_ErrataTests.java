@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_02_045_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("attention", "52_45");
@@ -27,9 +27,9 @@ public class Card_02_045_ErrataTests
 					put("runner3", "1_178");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.IsildursBaneRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.IsildursBaneRing
 		);
 	}
 
@@ -59,7 +59,7 @@ public class Card_02_045_ErrataTests
 		assertEquals(Side.SHADOW, attention.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, attention.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, attention.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(attention, Timeword.RESPONSE));
+        assertTrue(scn.HasTimeword(attention, Timeword.RESPONSE));
 		assertEquals(1, attention.getBlueprint().getTwilightCost());
 	}
 
@@ -72,8 +72,8 @@ public class Card_02_045_ErrataTests
 
 		var attention = scn.GetShadowCard("attention");
 		var goblinarcher = scn.GetShadowCard("goblinarcher");
-		scn.ShadowMoveCardToHand(attention);
-		scn.ShadowMoveCharToTable(goblinarcher);
+		scn.MoveCardsToHand(attention);
+		scn.MoveMinionsToTable(goblinarcher);
 
 		scn.StartGame();
 
@@ -99,10 +99,10 @@ public class Card_02_045_ErrataTests
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
 		var sauron = scn.GetShadowCard("sauron");
-		scn.ShadowMoveCardToHand(attention);
-		scn.ShadowMoveCharToTable(urukarcher);
-		scn.ShadowMoveCardToDiscard(runner1, goblinarcher);
-		scn.ShadowMoveCardsToTopOfDeck(runner2, sauron);
+		scn.MoveCardsToHand(attention);
+		scn.MoveMinionsToTable(urukarcher);
+		scn.MoveCardsToDiscard(runner1, goblinarcher);
+		scn.MoveCardsToTopOfDeck(runner2, sauron);
 
 		scn.StartGame();
 
@@ -138,10 +138,10 @@ public class Card_02_045_ErrataTests
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
 		var sauron = scn.GetShadowCard("sauron");
-		scn.ShadowMoveCardToHand(attention);
-		scn.ShadowMoveCharToTable(urukarcher);
-		scn.ShadowMoveCardToDiscard(runner1, goblinarcher);
-		scn.ShadowMoveCardsToTopOfDeck(runner2, sauron);
+		scn.MoveCardsToHand(attention);
+		scn.MoveMinionsToTable(urukarcher);
+		scn.MoveCardsToDiscard(runner1, goblinarcher);
+		scn.MoveCardsToTopOfDeck(runner2, sauron);
 
 		scn.StartGame();
 

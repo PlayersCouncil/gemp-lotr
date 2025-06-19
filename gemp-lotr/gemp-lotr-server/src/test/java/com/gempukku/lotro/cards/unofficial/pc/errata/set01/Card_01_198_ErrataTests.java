@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_01_198_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("gimli", "1_13");
@@ -36,9 +36,9 @@ public class Card_01_198_ErrataTests
 					put("chaff7", "1_198");
 					put("chaff8", "1_199");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -68,8 +68,8 @@ public class Card_01_198_ErrataTests
 		assertEquals(Side.SHADOW, ttmm.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, ttmm.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, ttmm.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(ttmm, Keyword.SEARCH));
-		assertTrue(scn.hasKeyword(ttmm, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(ttmm, Keyword.SEARCH));
+		assertTrue(scn.HasKeyword(ttmm, Keyword.SUPPORT_AREA));
 		assertEquals(1, ttmm.getBlueprint().getTwilightCost());
 	}
 
@@ -81,8 +81,8 @@ public class Card_01_198_ErrataTests
 		var runner = scn.GetShadowCard("runner");
 		var scout = scn.GetShadowCard("scout");
 		var ttmm = scn.GetShadowCard("ttmm");
-		scn.ShadowMoveCharToTable(runner);
-		scn.ShadowMoveCardToHand(scout, ttmm);
+		scn.MoveMinionsToTable(runner);
+		scn.MoveCardsToHand(scout, ttmm);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -102,13 +102,13 @@ public class Card_01_198_ErrataTests
 		var scn = GetScenario();
 
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		//Ensure that Freeps has no cards in hand ever to prevent TTMM
-		scn.FreepsMoveCardToDiscard("arwen", "ttmm", "runner", "scout", "chaff1", "chaff2",
+		scn.MoveCardsToFreepsDiscard("arwen", "ttmm", "runner", "scout", "chaff1", "chaff2",
 				"chaff3", "chaff4", "chaff5", "chaff6", "chaff7", "chaff8");
 
 		var ttmm = scn.GetShadowCard("ttmm");
-		scn.ShadowMoveCardToSupportArea(ttmm);
+		scn.MoveCardsToSupportArea(ttmm);
 
 		scn.StartGame();
 
@@ -158,13 +158,13 @@ public class Card_01_198_ErrataTests
 		var scn = GetScenario();
 
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCharToTable(arwen);
+		scn.MoveCompanionsToTable(arwen);
 		//Ensure that Freeps has no cards in hand ever to prevent TTMM
-		scn.FreepsMoveCardToDiscard("gimli", "ttmm", "runner", "scout", "chaff1", "chaff2",
+		scn.MoveCardsToFreepsDiscard("gimli", "ttmm", "runner", "scout", "chaff1", "chaff2",
 				"chaff3", "chaff4", "chaff5", "chaff6", "chaff7", "chaff8");
 
 		var ttmm = scn.GetShadowCard("ttmm");
-		scn.ShadowMoveCardToSupportArea(ttmm);
+		scn.MoveCardsToSupportArea(ttmm);
 
 		scn.StartGame();
 
@@ -214,11 +214,11 @@ public class Card_01_198_ErrataTests
 		var scn = GetScenario();
 
 		//Ensure that Freeps has no cards in hand ever to prevent TTMM
-		scn.FreepsMoveCardToDiscard("arwen", "gimli", "ttmm", "runner", "scout", "chaff1", "chaff2",
+		scn.MoveCardsToFreepsDiscard("arwen", "gimli", "ttmm", "runner", "scout", "chaff1", "chaff2",
 				"chaff3", "chaff4", "chaff5", "chaff6", "chaff7", "chaff8");
 
 		var ttmm = scn.GetShadowCard("ttmm");
-		scn.ShadowMoveCardToSupportArea(ttmm);
+		scn.MoveCardsToSupportArea(ttmm);
 
 		scn.StartGame();
 
@@ -271,10 +271,10 @@ public class Card_01_198_ErrataTests
 		var scn = GetScenario();
 
 		//Ensure that Freeps has no cards in hand ever to prevent TTMM
-		scn.FreepsMoveCharToTable("arwen", "gimli");
+		scn.MoveCompanionsToTable("arwen", "gimli");
 
 		var ttmm = scn.GetShadowCard("ttmm");
-		scn.ShadowMoveCardToSupportArea(ttmm);
+		scn.MoveCardsToSupportArea(ttmm);
 
 		scn.StartGame();
 

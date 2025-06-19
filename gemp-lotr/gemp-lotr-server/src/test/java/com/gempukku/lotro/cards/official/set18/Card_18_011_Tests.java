@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set18;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_18_011_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("ewer", "18_11");
@@ -23,9 +23,9 @@ public class Card_18_011_Tests
 
 					put("savage", "1_151");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.GaladrielRB,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.GaladrielRB,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_18_011_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -67,7 +67,7 @@ public class Card_18_011_Tests
 
 		var galadriel = scn.GetRingBearer();
 		var ewer = scn.GetFreepsCard("ewer");
-		scn.FreepsMoveCardToHand(ewer);
+		scn.MoveCardsToHand(ewer);
 
 		scn.StartGame();
 
@@ -93,11 +93,11 @@ public class Card_18_011_Tests
 		var ewer = scn.GetFreepsCard("ewer");
 		var homestead = scn.GetFreepsCard("homestead");
 		var defiance = scn.GetFreepsCard("defiance");
-		scn.FreepsMoveCardToSupportArea(ewer, homestead);
-		scn.FreepsMoveCardToHand(defiance);
+		scn.MoveCardsToSupportArea(ewer, homestead);
+		scn.MoveCardsToHand(defiance);
 
 		var savage = scn.GetShadowCard("savage");
-		scn.ShadowMoveCharToTable(savage);
+		scn.MoveMinionsToTable(savage);
 
 		scn.StartGame();
 

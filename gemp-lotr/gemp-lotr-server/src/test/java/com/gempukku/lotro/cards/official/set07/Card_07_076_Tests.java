@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set07;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_07_076_Tests
 {
 
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>()
                 {{
                     put("friends", "7_76");
@@ -37,9 +37,9 @@ public class Card_07_076_Tests
                     put("chaff15", "6_35");
                     put("chaff16", "6_36");
                 }},
-                GenericCardTestHelper.FellowshipSites,
-                GenericCardTestHelper.FOTRFrodo,
-                GenericCardTestHelper.RulingRing
+                VirtualTableScenario.FellowshipSites,
+                VirtualTableScenario.FOTRFrodo,
+                VirtualTableScenario.RulingRing
         );
     }
 
@@ -70,7 +70,7 @@ public class Card_07_076_Tests
         assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
         assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
         assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.REGROUP));
+        assertTrue(scn.HasTimeword(card, Timeword.REGROUP));
         assertEquals(0, card.getBlueprint().getTwilightCost());
     }
 
@@ -81,7 +81,7 @@ public class Card_07_076_Tests
 
         var friends = scn.GetFreepsCard("friends");
         var smeagol = scn.GetFreepsCard("smeagol");
-        scn.FreepsMoveCardToHand(friends, smeagol);
+        scn.MoveCardsToHand(friends, smeagol);
 
         scn.StartGame();
         scn.SkipToPhase(Phase.REGROUP);
@@ -97,8 +97,8 @@ public class Card_07_076_Tests
         var site3 = scn.GetFreepsSite(3);
         var friends = scn.GetFreepsCard("friends");
         var smeagol = scn.GetFreepsCard("smeagol");
-        scn.FreepsMoveCardToHand(friends);
-        scn.FreepsMoveCardToDiscard(smeagol);
+        scn.MoveCardsToHand(friends);
+        scn.MoveCardsToDiscard(smeagol);
 
         scn.StartGame();
         scn.SkipToPhase(Phase.REGROUP);
@@ -119,8 +119,8 @@ public class Card_07_076_Tests
 
         var friends = scn.GetFreepsCard("friends");
         var smeagol = scn.GetFreepsCard("smeagol");
-        scn.FreepsMoveCardToHand(friends);
-        scn.FreepsMoveCardToDiscard(smeagol);
+        scn.MoveCardsToHand(friends);
+        scn.MoveCardsToDiscard(smeagol);
 
         scn.StartGame();
         scn.FreepsDrawCards(7);
@@ -148,8 +148,8 @@ public class Card_07_076_Tests
 
         var friends = scn.GetFreepsCard("friends");
         var smeagol = scn.GetFreepsCard("smeagol");
-        scn.FreepsMoveCardToHand(friends);
-        scn.FreepsMoveCardToDiscard(smeagol);
+        scn.MoveCardsToHand(friends);
+        scn.MoveCardsToDiscard(smeagol);
 
         scn.StartGame();
         scn.FreepsDrawCards(7);

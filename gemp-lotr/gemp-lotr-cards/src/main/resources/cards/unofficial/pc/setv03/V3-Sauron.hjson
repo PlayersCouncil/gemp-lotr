@@ -1,0 +1,586 @@
+{
+
+	103_83: {
+		cardInfo: {
+			//id: 103_83.0
+			parent: 103_83
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E083.0_card.jpg
+			collInfo: V3_83
+			rarity: _
+		}
+		title: Cirith Ungol Watcher
+		subtitle: Hideous Warden
+		unique: 2
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Artifact
+		target: self
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, spot a [sauron] card and add a threat.<br>Each time a companion exerts, draw a card (limit once per site).<br>Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add 3 threats and hinder that companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_84: {
+		cardInfo: {
+			//id: 103_84.0
+			parent: 103_84
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E084.0_card.jpg
+			collInfo: V3_84
+			rarity: _
+		}
+		title: Cover of Darkness
+		subtitle: Omen of Horror
+		unique: 2
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Condition
+		keywords: [
+			Twilight
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Twilight. To play, hinder 3 copies of Ominous Sky (or 2 copies if you cannot spot another Cover of Darkness).<br>Each time you play an Orc or Troll, you may exhaust it to make it strength +1 for each twilight condition you can spot until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_85: {
+		cardInfo: {
+			//id: 103_85.0
+			parent: 103_85
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E085.0_card.jpg
+			collInfo: V3_85
+			rarity: _
+		}
+		title: Cover of Darkness
+		subtitle: Omen of Dread
+		unique: 2
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Condition
+		keywords: [
+			Twilight
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Twilight. To play, hinder 3 copies of Ominous Sky (or 2 copies if you cannot spot another Cover of Darkness).<br>Skirmish: Hinder this condition and exert an Orc to make that Orc strength +1 for each burden you can spot.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_86: {
+		cardInfo: {
+			//id: 103_86.0
+			parent: 103_86
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E086.0_card.jpg
+			collInfo: V3_86
+			rarity: _
+		}
+		title: Cover of Darkness
+		subtitle: Omen of Despair
+		unique: 2
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Condition
+		keywords: [
+			Twilight
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Twilight. To play, hinder 3 copies of Ominous Sky (or 2 copies if you cannot spot another Cover of Darkness).<br>Skirmish: Exert a Troll twice and hinder this condition to discard a Free Peoples card borne by a companion that Troll is skirmishing.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_87: {
+		cardInfo: {
+			//id: 103_87.0
+			parent: 103_87
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E087.0_card.jpg
+			collInfo: V3_87
+			rarity: _
+		}
+		title: Endless Night
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 4
+		type: Condition
+		keywords: [
+			Twilight
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Twilight. To play, hinder 2 copies of Cover of Darkness.<br>This cannot be discarded.<br>Orcs are <b>fierce</b>. Trolls are <b>enduring</b>. Nazgul are <b>damage +1</b>. <br>Shadow: Remove X [sauron] tokens from your cards to play Sauron from your hand or discard pile; he is twilight cost -X.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_88: {
+		cardInfo: {
+			//id: 103_88.0
+			parent: 103_88
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E088.0_card.jpg
+			collInfo: V3_88
+			rarity: _
+		}
+		title: The Mouth of Sauron
+		subtitle: Emissary of Mordor
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Minion
+		race: Man
+		strength: 9
+		vitality: 3
+		site: 5
+		keywords: Lurker
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Lurker.<br>Each time a companion loses a skirmish, the Free Peoples player must add a threat or a burden.<br>Skirmish: Exert this minion to make a wounded companion strength -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_89: {
+		cardInfo: {
+			//id: 103_89.0
+			parent: 103_89
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E089.0_card.jpg
+			collInfo: V3_89
+			rarity: _
+		}
+		title: Ominous Sky
+		unique: 3
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: [
+			Twilight
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Twilight. Each time you play an Orc, spot Cover of Darkness to reinforce a Shadow token.<br><b>Shadow</b> <i>or</i> <b>Regroup</b>: Remove (2) or a Shadow token to play a [Sauron] condition from your discard pile. If it is not twilight, hinder this condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_90: {
+		cardInfo: {
+			//id: 103_90.0
+			parent: 103_90
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E090.0_card.jpg
+			collInfo: V3_90
+			rarity: _
+		}
+		title: Red Eye Assassin
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 5
+		type: Minion
+		race: Orc
+		strength: 6
+		vitality: 3
+		site: 4
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: This minion is strength +1 for each hindered card you can spot.<br>Skirmish: Exert this minion to hinder a weapon or condition borne by a companion it is skirmishing.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_91: {
+		cardInfo: {
+			//id: 103_91.0
+			parent: 103_91
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E091.0_card.jpg
+			collInfo: V3_91
+			rarity: _
+		}
+		title: Release the Prisoners!
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Maneuver: Exert a [sauron] minion and remove a companion in the dead pile from the game to exert every companion sharing a culture with that companion.  Discard this condition.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_92: {
+		cardInfo: {
+			//id: 103_92.0
+			parent: 103_92
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E092.0_card.jpg
+			collInfo: V3_92
+			rarity: _
+		}
+		title: Sauron
+		subtitle: Lord of All Middle-earth
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 18
+		type: Minion
+		race: Maia
+		strength: 24
+		vitality: 5
+		site: 6
+		keywords: Fierce
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Fierce.<br>Sauron is twilight cost -1 for each support card you can spot. <br>When you play Sauron, spot 4 other [sauron] cards, discard 3 cards from hand, or hinder him.<br>Each time a companion loses a skirmish to Sauron, kill that companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_93: {
+		cardInfo: {
+			//id: 103_93.0
+			parent: 103_93
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E093.0_card.jpg
+			collInfo: V3_93
+			rarity: _
+		}
+		title: Sauron's Reach
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 2
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Exert 3 [sauron] minions (or spot Sauron) to hinder all Free Peoples support cards.  For each card hindered, hinder a Shadow support card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_94: {
+		cardInfo: {
+			//id: 103_94.0
+			parent: 103_94
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E094.0_card.jpg
+			collInfo: V3_94
+			rarity: _
+		}
+		title: They Are Not All Accounted For
+		unique: true
+		side: Shadow
+		culture: Sauron
+		twilight: 1
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: To play, spot 2 [sauron] or [ringwraith] cards.<br>Each time a Free Peoples card reveals or discards a card from any draw deck, you may exert an unbound companion or ally to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_95: {
+		cardInfo: {
+			//id: 103_95.0
+			parent: 103_95
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E095.0_card.jpg
+			collInfo: V3_95
+			rarity: _
+		}
+		title: Was He Dear to Thee?
+		unique: false
+		side: Shadow
+		culture: Sauron
+		twilight: 3
+		type: Event
+		timewords: Maneuver
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Exert a unique [sauron] or [ringwraith] minion and hinder the Ring-bearer to make each minion strength +1 until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.at;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -11,8 +11,8 @@ import static org.junit.Assert.*;
 
 public class UniquenessTests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("rotn", "1_89");
                     put("kie", "1_365");
@@ -36,12 +36,12 @@ public class UniquenessTests
     @Test
     public void CopiesOfSameUniqueCompanionCannotBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var merry1 = scn.GetFreepsCard("merry1");
         var merry2 = scn.GetFreepsCard("merry2");
 
-        scn.FreepsMoveCardToHand(merry1, merry2);
+        scn.MoveCardsToHand(merry1, merry2);
 
         scn.StartGame();
 
@@ -53,12 +53,12 @@ public class UniquenessTests
     @Test
     public void CopiesOfDifferentUniqueCompanionCannotBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var rotn = scn.GetFreepsCard("rotn");
         var kie = scn.GetFreepsCard("kie");
 
-        scn.FreepsMoveCardToHand(rotn, kie);
+        scn.MoveCardsToHand(rotn, kie);
 
         scn.StartGame();
 
@@ -71,13 +71,13 @@ public class UniquenessTests
     @Test
     public void CopiesOfSameUniquePossessionCannotBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var sting1 = scn.GetFreepsCard("sting1");
         var sting2 = scn.GetFreepsCard("sting2");
 
 
-        scn.FreepsMoveCardToHand(sting1, sting2);
+        scn.MoveCardsToHand(sting1, sting2);
 
         scn.StartGame();
 
@@ -89,33 +89,34 @@ public class UniquenessTests
     @Test
     public void CopiesOfSameNonUniquePossessionCanBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
+        var merry = scn.GetFreepsCard("merry1");
         var sword1 = scn.GetFreepsCard("sword1");
         var sword2 = scn.GetFreepsCard("sword2");
 
-        scn.FreepsMoveCharToTable("merry1");
-        scn.FreepsMoveCardToHand(sword1, sword2);
+        scn.MoveCompanionsToTable(merry);
+        scn.MoveCardsToHand(sword1, sword2);
 
         scn.StartGame();
 
         assertTrue(scn.FreepsPlayAvailable(sword1));
         scn.FreepsPlayCard(sword1);
-        scn.FreepsChooseCard("merry1");
+        scn.FreepsChooseCard(merry);
         assertTrue(scn.FreepsPlayAvailable(sword2));
     }
 
     @Test
     public void CopiesOfSameNonUniqueAlliesCanBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var guest1 = scn.GetFreepsCard("guest1");
         var guest2 = scn.GetFreepsCard("guest2");
         var guest3 = scn.GetFreepsCard("guest3");
         var guest4 = scn.GetFreepsCard("guest4");
 
-        scn.FreepsMoveCardToHand(guest1, guest2, guest3, guest4);
+        scn.MoveCardsToHand(guest1, guest2, guest3, guest4);
 
         scn.StartGame();
 
@@ -134,12 +135,12 @@ public class UniquenessTests
     @Test
     public void CopiesOfDifferentUniqueMinionWithAccentCannotBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         var enqueaaccent = scn.GetShadowCard("enqueaaccent");
         var enqueanoaccent = scn.GetShadowCard("enqueanoaccent");
 
-        scn.ShadowMoveCardToHand(enqueaaccent, enqueanoaccent);
+        scn.MoveCardsToHand(enqueaaccent, enqueanoaccent);
 
         scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_040_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("fire", "102_40");
@@ -23,9 +23,9 @@ public class Card_V2_040_Tests
 
 					put("aragorn", "1_89");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,7 +54,7 @@ public class Card_V2_040_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -66,12 +66,12 @@ public class Card_V2_040_Tests
 		var fire = scn.GetShadowCard("fire");
 		var runner = scn.GetShadowCard("runner");
 		var troll = scn.GetShadowCard("troll");
-		scn.ShadowMoveCardToSupportArea(fire);
-		scn.ShadowMoveCharToTable(runner, troll);
+		scn.MoveCardsToSupportArea(fire);
+		scn.MoveMinionsToTable(runner, troll);
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
 		scn.AddThreats(2);
@@ -104,12 +104,12 @@ public class Card_V2_040_Tests
 		var fire = scn.GetShadowCard("fire");
 		var runner = scn.GetShadowCard("runner");
 		var troll = scn.GetShadowCard("troll");
-		scn.ShadowMoveCardToSupportArea(fire);
-		scn.ShadowMoveCharToTable(runner, troll);
+		scn.MoveCardsToSupportArea(fire);
+		scn.MoveMinionsToTable(runner, troll);
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
 		scn.SkipToAssignments();

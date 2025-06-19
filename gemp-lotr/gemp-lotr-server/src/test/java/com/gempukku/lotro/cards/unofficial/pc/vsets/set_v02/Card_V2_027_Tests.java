@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_V2_027_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("legion", "102_27");
@@ -25,9 +25,9 @@ public class Card_V2_027_Tests
 					put("gimli", "1_13");
 					put("naith", "4_68");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -62,7 +62,7 @@ public class Card_V2_027_Tests
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
 		assertEquals(8, card.getBlueprint().getTwilightCost());
 		assertEquals(17, card.getBlueprint().getStrength());
@@ -76,7 +76,7 @@ public class Card_V2_027_Tests
 		var scn = GetScenario();
 
 		var legion = scn.GetShadowCard("legion");
-		scn.ShadowMoveCardToHand(legion);
+		scn.MoveCardsToHand(legion);
 
 		var site1 = scn.GetFreepsSite(1);
 
@@ -86,17 +86,17 @@ public class Card_V2_027_Tests
 		//cheating to ensure site 1 qualifies
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(1), null, Keyword.BATTLEGROUND));
 
-		scn.ShadowMoveCharToTable(legion);
+		scn.MoveMinionsToTable(legion);
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertTrue(scn.hasKeyword(site1, Keyword.BATTLEGROUND));
-		assertTrue(scn.hasKeyword(legion, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(site1, Keyword.BATTLEGROUND));
+		assertTrue(scn.HasKeyword(legion, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(legion, Keyword.DAMAGE));
 
 		scn.ShadowTakeControlOfSite();
-		assertTrue(scn.hasKeyword(site1, Keyword.BATTLEGROUND));
+		assertTrue(scn.HasKeyword(site1, Keyword.BATTLEGROUND));
 		assertTrue(scn.ShadowControls(site1));
-		assertTrue(scn.hasKeyword(legion, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(legion, Keyword.DAMAGE));
 		assertEquals(2, scn.GetKeywordCount(legion, Keyword.DAMAGE));
 	}
 
@@ -107,11 +107,11 @@ public class Card_V2_027_Tests
 
 		var legion = scn.GetShadowCard("legion");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(legion, runner);
+		scn.MoveMinionsToTable(legion, runner);
 
 		var gimli = scn.GetFreepsCard("gimli");
 		var naith = scn.GetFreepsCard("naith");
-		scn.FreepsMoveCharToTable(gimli, naith);
+		scn.MoveCompanionsToTable(gimli, naith);
 
 		var site2 = scn.GetShadowSite(2);
 
@@ -125,14 +125,14 @@ public class Card_V2_027_Tests
 		scn.ShadowAssignToMinions(naith, runner);
 		scn.FreepsResolveSkirmish(gimli);
 
-		assertTrue(scn.hasKeyword(site2, Keyword.BATTLEGROUND));
+		assertTrue(scn.HasKeyword(site2, Keyword.BATTLEGROUND));
 		assertTrue(scn.IsCharSkirmishing(legion));
 		assertFalse(scn.FreepsActionAvailable(gimli));
 
 		scn.PassCurrentPhaseActions();
 		scn.FreepsResolveSkirmish(naith);
 
-		assertTrue(scn.hasKeyword(site2, Keyword.BATTLEGROUND));
+		assertTrue(scn.HasKeyword(site2, Keyword.BATTLEGROUND));
 		assertFalse(scn.IsCharSkirmishing(legion));
 		assertTrue(scn.FreepsActionAvailable(naith));
 	}

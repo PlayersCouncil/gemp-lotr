@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set10;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_10_016_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("wind", "10_16");
@@ -26,9 +26,9 @@ public class Card_10_016_Tests
 					put("three1", "1_179");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,7 +57,7 @@ public class Card_10_016_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+        assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
@@ -68,14 +68,14 @@ public class Card_10_016_Tests
 
 		var wind = scn.GetFreepsCard("wind");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(wind);
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCardsToHand(wind);
+		scn.MoveCompanionsToTable(gandalf);
 
 		var one1 = scn.GetShadowCard("one1");
 		var two1 = scn.GetShadowCard("two1");
 		var two2 = scn.GetShadowCard("two2");
 		var three1 = scn.GetShadowCard("three1");
-		scn.ShadowMoveCharToTable(one1, two1, two2, three1);
+		scn.MoveMinionsToTable(one1, two1, two2, three1);
 
 		scn.StartGame();
 

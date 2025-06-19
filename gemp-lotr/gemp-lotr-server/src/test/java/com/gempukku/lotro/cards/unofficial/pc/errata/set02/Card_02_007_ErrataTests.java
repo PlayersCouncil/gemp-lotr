@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Race;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_02_007_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("gloin", "52_7");
@@ -29,9 +29,9 @@ public class Card_02_007_ErrataTests
 					put("tale5", "2_9");
 					put("shiretale", "2_108");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -73,28 +73,34 @@ public class Card_02_007_ErrataTests
 		var scn = GetScenario();
 
 		var gloin = scn.GetFreepsCard("gloin");
-		scn.FreepsMoveCharToTable(gloin);
-		scn.FreepsMoveCardToHand("tale1", "tale2", "tale3", "tale4", "tale5", "shiretale");
+		scn.MoveCompanionsToTable(gloin);
+		var tale1 = scn.GetFreepsCard("tale1");
+		var tale2 = scn.GetFreepsCard("tale2");
+		var tale3 = scn.GetFreepsCard("tale3");
+		var tale4 = scn.GetFreepsCard("tale4");
+		var tale5 = scn.GetFreepsCard("tale5");
+		var shiretale = scn.GetFreepsCard("shiretale");
+		scn.MoveCardsToHand(tale1, tale2, tale3, tale4, tale5, shiretale);
 
 		scn.StartGame();
 
 		assertEquals(6, scn.GetStrength(gloin));
 		//No effect from a non-dwarf tale
-		scn.FreepsPlayCard("shiretale");
+		scn.FreepsPlayCard(shiretale);
 		assertEquals(6, scn.GetStrength(gloin));
 
 		// +1 per dwarf tale
-		scn.FreepsPlayCard("tale1");
+		scn.FreepsPlayCard(tale1);
 		assertEquals(7, scn.GetStrength(gloin));
-		scn.FreepsPlayCard("tale2");
+		scn.FreepsPlayCard(tale2);
 		assertEquals(8, scn.GetStrength(gloin));
-		scn.FreepsPlayCard("tale3");
+		scn.FreepsPlayCard(tale3);
 		assertEquals(9, scn.GetStrength(gloin));
-		scn.FreepsPlayCard("tale4");
+		scn.FreepsPlayCard(tale4);
 		assertEquals(10, scn.GetStrength(gloin));
 
 		//Fifth dwarven tale does nothing
-		scn.FreepsPlayCard("tale5");
+		scn.FreepsPlayCard(tale5);
 		assertEquals(10, scn.GetStrength(gloin));
 	}
 }

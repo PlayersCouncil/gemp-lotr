@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_016_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("aragorn", "102_16");
@@ -26,9 +26,9 @@ public class Card_V2_016_Tests
 					put("grima", "5_51");
 					put("twk", "1_237");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -64,7 +64,7 @@ public class Card_V2_016_Tests
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(card, Keyword.VALIANT));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
@@ -79,7 +79,7 @@ public class Card_V2_016_Tests
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var veowyn = scn.GetFreepsCard("veowyn");
-		scn.FreepsMoveCharToTable(aragorn, veowyn);
+		scn.MoveCompanionsToTable(aragorn, veowyn);
 
 		scn.StartGame();
 
@@ -95,7 +95,7 @@ public class Card_V2_016_Tests
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
 
@@ -111,10 +111,10 @@ public class Card_V2_016_Tests
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var veowyn = scn.GetFreepsCard("veowyn");
-		scn.FreepsMoveCharToTable(aragorn, veowyn);
+		scn.MoveCompanionsToTable(aragorn, veowyn);
 
 		var twk = scn.GetShadowCard("twk");
-		scn.ShadowMoveCharToTable(twk);
+		scn.MoveMinionsToTable(twk);
 
 		scn.StartGame();
 
@@ -140,10 +140,10 @@ public class Card_V2_016_Tests
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCharToTable(aragorn, gandalf);
+		scn.MoveCompanionsToTable(aragorn, gandalf);
 
 		var twk = scn.GetShadowCard("twk");
-		scn.ShadowMoveCharToTable(twk);
+		scn.MoveMinionsToTable(twk);
 
 		scn.StartGame();
 

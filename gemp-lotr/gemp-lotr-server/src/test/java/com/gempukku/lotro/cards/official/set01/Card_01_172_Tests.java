@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,16 +14,16 @@ import static org.junit.Assert.*;
 public class Card_01_172_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("archer", "1_172");
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_01_172_Tests
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(card, Keyword.ARCHER));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		assertEquals(4, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
@@ -71,15 +71,15 @@ public class Card_01_172_Tests
 		var archer = scn.GetShadowCard("archer");
 		var runner = scn.GetShadowCard("runner");
 
-		scn.ShadowMoveCharToTable(runner);
-		scn.ShadowMoveCardToHand(archer);
+		scn.MoveMinionsToTable(runner);
+		scn.MoveCardsToHand(archer);
 
 		scn.StartGame();
 		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, 7));
 		scn.SkipToPhase(Phase.ARCHERY);
 
 		assertEquals(7, scn.GetFreepsArcheryTotal());
-		scn.FreepsMoveCharToTable(archer);
+		scn.MoveCompanionsToTable(archer);
 		assertEquals(1, scn.GetFreepsArcheryTotal());
 	}
 
@@ -89,7 +89,7 @@ public class Card_01_172_Tests
 		var scn = GetScenario();
 
 		var archer = scn.GetShadowCard("archer");
-		scn.ShadowMoveCharToTable(archer);
+		scn.MoveMinionsToTable(archer);
 
 		scn.StartGame();
 		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, 7));

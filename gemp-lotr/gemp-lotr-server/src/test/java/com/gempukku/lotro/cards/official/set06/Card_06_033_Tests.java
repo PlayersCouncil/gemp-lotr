@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set06;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Race;
@@ -17,17 +17,17 @@ import static org.junit.Assert.assertTrue;
 public class Card_06_033_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("quickbeam", "6_33");
 					put("merry", "17_107");
 					put("pippin", "17_109");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -74,8 +74,8 @@ public class Card_06_033_Tests
 		var quickbeam = scn.GetFreepsCard("quickbeam");
 		var merry = scn.GetFreepsCard("merry");
 		var pippin = scn.GetFreepsCard("pippin");
-		scn.FreepsMoveCardToHand(quickbeam);
-		scn.FreepsMoveCharToTable(merry, pippin);
+		scn.MoveCardsToHand(quickbeam);
+		scn.MoveCompanionsToTable(merry, pippin);
 
 		scn.StartGame();
 

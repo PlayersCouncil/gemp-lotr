@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set08;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 public class Card_08_119_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("merry", "4_310");
@@ -33,8 +33,8 @@ public class Card_08_119_Tests
 					put("site8", "10_120");
 					put("site9", "7_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -73,7 +73,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.FreepsMoveCharToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -84,7 +84,7 @@ public class Card_08_119_Tests
 		assertEquals(2, scn.FreepsGetChoiceCount());
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 
-		scn.FreepsChooseMultipleChoiceOption("threat");
+		scn.FreepsChooseOption("threat");
 		assertEquals(3, scn.GetThreats());
 		assertFalse(scn.IsSiteControlled(site1));
 	}
@@ -97,7 +97,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.FreepsMoveCharToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -108,7 +108,7 @@ public class Card_08_119_Tests
 		assertEquals(2, scn.FreepsGetChoiceCount());
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 
-		scn.FreepsChooseMultipleChoiceOption("opponent");
+		scn.FreepsChooseOption("opponent");
 		assertTrue(scn.ShadowDecisionAvailable("Would you like to take control of a site?"));
 		scn.ShadowChooseYes();
 		assertEquals(0, scn.GetThreats());
@@ -123,7 +123,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.FreepsMoveCharToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -138,7 +138,7 @@ public class Card_08_119_Tests
 		assertEquals(2, scn.FreepsGetChoiceCount());
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 
-		scn.FreepsChooseMultipleChoiceOption("opponent");
+		scn.FreepsChooseOption("opponent");
 		assertFalse(scn.ShadowDecisionAvailable("Would you like to take control of a site?"));
 
 		assertTrue(scn.FreepsAnyDecisionsAvailable());
@@ -152,7 +152,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.FreepsMoveCharToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -176,7 +176,7 @@ public class Card_08_119_Tests
 		var site1 = scn.GetFreepsSite(1);
 
 		//Threat limit is now 4
-		scn.FreepsMoveCharToTable("sam", "merry", "pippin");
+		scn.MoveCompanionsToTable("sam", "merry", "pippin");
 
 		scn.StartGame();
 		scn.SkipToSite(4);

@@ -1,10 +1,9 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
@@ -18,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_062_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("runner1", "1_178");
                     put("runner2", "1_178");
@@ -38,8 +37,8 @@ public class Card_V1_062_Tests
                     put("site8", "1_356");
                     put("site9", "1_360");
                 }},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -68,7 +67,7 @@ public class Card_V1_062_Tests
 		//assertEquals(Culture., card.getBlueprint().getCulture());
 		assertEquals(CardType.SITE, site7.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(site7, Keyword.RIVER)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(site7, Keyword.RIVER)); // test for keywords as needed
 		assertEquals(6, site7.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());
 		//assertEquals(, card.getBlueprint().getVitality());
@@ -90,7 +89,7 @@ public class Card_V1_062_Tests
 		var runner2 = scn.GetShadowCard("runner2");
 		var savage1 = scn.GetShadowCard("savage1");
 		var savage2 = scn.GetShadowCard("savage2");
-		scn.ShadowMoveCardToHand(runner1, runner2, savage1, savage2);
+		scn.MoveCardsToHand(runner1, runner2, savage1, savage2);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -99,7 +98,7 @@ public class Card_V1_062_Tests
 
 		scn.SkipToSite(6);
 
-		scn.ShadowMoveCharToTable(runner1, runner2, savage1, savage2);
+		scn.MoveMinionsToTable(runner1, runner2, savage1, savage2);
 		scn.AddWoundsToChar(savage1, 1);
 
 		scn.FreepsPassCurrentPhaseAction();

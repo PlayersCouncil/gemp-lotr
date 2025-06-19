@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_006_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("arwen", "102_6");
@@ -22,9 +22,9 @@ public class Card_V2_006_Tests
 
 					put("marksman", "1_176");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -71,13 +71,13 @@ public class Card_V2_006_Tests
 
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCardToHand(arwen);
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCardsToHand(arwen);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		assertEquals(8, scn.getStrength(aragorn));
+		assertEquals(8, scn.GetStrength(aragorn));
 		scn.FreepsPlayCard(arwen);
-		assertEquals(9, scn.getStrength(aragorn));
+		assertEquals(9, scn.GetStrength(aragorn));
 	}
 
 	@Test
@@ -87,25 +87,25 @@ public class Card_V2_006_Tests
 
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn, arwen);
+		scn.MoveCompanionsToTable(aragorn, arwen);
 
 		scn.StartGame();
 
 		assertEquals(3, scn.GetVitality(arwen));
-		assertFalse(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(aragorn, Keyword.DEFENDER));
 		scn.AddWoundsToChar(arwen, 1);
 
 		assertEquals(2, scn.GetVitality(arwen));
-		assertFalse(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(aragorn, Keyword.DEFENDER));
 		scn.AddWoundsToChar(arwen, 1);
 
 		assertEquals(1, scn.GetVitality(arwen));
-		assertTrue(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		assertTrue(scn.HasKeyword(aragorn, Keyword.DEFENDER));
 		scn.AddWoundsToChar(arwen, 1);
 		scn.PassCurrentPhaseActions(); //Death is only processed when there's change in the game process
 
 		assertEquals(Zone.DEAD, arwen.getZone());
-		assertFalse(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(aragorn, Keyword.DEFENDER));
 	}
 
 	@Test
@@ -115,10 +115,10 @@ public class Card_V2_006_Tests
 
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn, arwen);
+		scn.MoveCompanionsToTable(aragorn, arwen);
 
 		var marksman = scn.GetShadowCard("marksman");
-		scn.ShadowMoveCharToTable(marksman);
+		scn.MoveMinionsToTable(marksman);
 
 		scn.StartGame();
 
@@ -134,7 +134,7 @@ public class Card_V2_006_Tests
 		scn.FreepsAcceptOptionalTrigger();
 
 		assertEquals(Zone.DEAD, arwen.getZone());
-		assertFalse(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(aragorn, Keyword.DEFENDER));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 	}

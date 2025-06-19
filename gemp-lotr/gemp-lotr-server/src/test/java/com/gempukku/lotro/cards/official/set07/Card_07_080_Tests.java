@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set07;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_07_080_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("anduril", "7_80");
 					put("aragorn", "1_89");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -64,7 +64,7 @@ public class Card_07_080_Tests
 
 		var anduril = scn.GetFreepsCard("anduril");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCardToHand(anduril, aragorn);
+		scn.MoveCardsToHand(anduril, aragorn);
 
 		scn.StartGame();
 
@@ -84,19 +84,19 @@ public class Card_07_080_Tests
 
 		var anduril = scn.GetFreepsCard("anduril");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsAttachCardsTo(aragorn, anduril);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, anduril);
 
 		scn.StartGame();
 
-		assertEquals(0, scn.getThreats());
-		assertTrue(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.HasKeyword(aragorn, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
 
 		scn.AddThreats(1);
 
-		assertEquals(1, scn.getThreats());
-		assertFalse(scn.hasKeyword(aragorn, Keyword.DEFENDER));
+		assertEquals(1, scn.GetThreats());
+		assertFalse(scn.HasKeyword(aragorn, Keyword.DEFENDER));
 		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
 	}
 }

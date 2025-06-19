@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -15,8 +15,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_03_004_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("welcome", "53_4");
@@ -26,9 +26,9 @@ public class Card_03_004_ErrataTests
 					put("cantea", "1_230");
 					put("lemenya", "1_232");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -58,7 +58,7 @@ public class Card_03_004_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, welcome.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, welcome.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, welcome.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(welcome, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(welcome, Keyword.SUPPORT_AREA));
 		assertEquals(2, welcome.getBlueprint().getTwilightCost());
 	}
 
@@ -72,8 +72,8 @@ public class Card_03_004_ErrataTests
 		var thrarin = scn.GetFreepsCard("thrarin");
 		var elrond = scn.GetFreepsCard("elrond");
 
-		scn.FreepsMoveCardToSupportArea(welcome, elrond, thrarin);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToSupportArea(welcome, elrond, thrarin);
+		scn.MoveCompanionsToTable(gimli);
 
 
 		scn.StartGame();
@@ -103,8 +103,8 @@ public class Card_03_004_ErrataTests
 		var thrarin = scn.GetFreepsCard("thrarin");
 		var elrond = scn.GetFreepsCard("elrond");
 
-		scn.FreepsMoveCardToSupportArea(welcome, elrond, thrarin);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToSupportArea(welcome, elrond, thrarin);
+		scn.MoveCompanionsToTable(gimli);
 
 		scn.AddWoundsToChar(gimli, 2);
 		scn.StartGame();
@@ -133,13 +133,13 @@ public class Card_03_004_ErrataTests
 		var thrarin = scn.GetFreepsCard("thrarin");
 		var elrond = scn.GetFreepsCard("elrond");
 
-		scn.FreepsMoveCardToSupportArea(welcome, elrond, thrarin);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToSupportArea(welcome, elrond, thrarin);
+		scn.MoveCompanionsToTable(gimli);
 
 		var cantea = scn.GetShadowCard("cantea");
 		var lemenya = scn.GetShadowCard("lemenya");
 
-		scn.ShadowMoveCharToTable(cantea, lemenya);
+		scn.MoveMinionsToTable(cantea, lemenya);
 
 		scn.StartGame();
 
@@ -164,13 +164,13 @@ public class Card_03_004_ErrataTests
 		var thrarin = scn.GetFreepsCard("thrarin");
 		var elrond = scn.GetFreepsCard("elrond");
 
-		scn.FreepsMoveCardToSupportArea(welcome, elrond, thrarin);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToSupportArea(welcome, elrond, thrarin);
+		scn.MoveCompanionsToTable(gimli);
 
 		var cantea = scn.GetShadowCard("cantea");
 		var lemenya = scn.GetShadowCard("lemenya");
 
-		scn.ShadowMoveCharToTable(cantea, lemenya);
+		scn.MoveMinionsToTable(cantea, lemenya);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -20,8 +20,8 @@ import static org.junit.Assert.*;
 public class Card_V2_052_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("ruin", "102_52");
@@ -40,9 +40,9 @@ public class Card_V2_052_Tests
 					put("sauron", "9_48");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -72,7 +72,7 @@ public class Card_V2_052_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -83,10 +83,10 @@ public class Card_V2_052_Tests
 
 		var frodo = scn.GetRingBearer();
 		var ruin = scn.GetFreepsCard("ruin");
-		scn.FreepsMoveCardToSupportArea(ruin);
+		scn.MoveCardsToSupportArea(ruin);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		//Cheating and adding an all-phases action on frodo to wound the Goblin Runner directly
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -116,11 +116,11 @@ public class Card_V2_052_Tests
 
 		var frodo = scn.GetRingBearer();
 		var ruin = scn.GetFreepsCard("ruin");
-		scn.FreepsMoveCardToSupportArea(ruin);
-		scn.FreepsMoveCharToTable("vhaldir");
+		scn.MoveCardsToSupportArea(ruin);
+		scn.MoveCompanionsToTable("vhaldir");
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		//Cheating and adding an all-phases action on frodo to wound the Goblin Runner directly
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -150,11 +150,11 @@ public class Card_V2_052_Tests
 
 		var frodo = scn.GetRingBearer();
 		var ruin = scn.GetFreepsCard("ruin");
-		scn.FreepsMoveCardToSupportArea(ruin);
-		scn.FreepsMoveCharToTable("vhaldir", "vgimli");
+		scn.MoveCardsToSupportArea(ruin);
+		scn.MoveCompanionsToTable("vhaldir", "vgimli");
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		//Cheating and adding an all-phases action on frodo to wound the Goblin Runner directly
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -187,16 +187,16 @@ public class Card_V2_052_Tests
 		var ruin = scn.GetFreepsCard("ruin");
 		var arrowslits = scn.GetFreepsCard("arrowslits");
 		var maneuver = scn.GetFreepsCard("maneuver");
-		scn.FreepsMoveCardToSupportArea(ruin);
-		scn.FreepsMoveCharToTable("vhaldir", "vgimli");
-		scn.FreepsMoveCardToDiscard(arrowslits, maneuver);
+		scn.MoveCardsToSupportArea(ruin);
+		scn.MoveCompanionsToTable("vhaldir", "vgimli");
+		scn.MoveCardsToDiscard(arrowslits, maneuver);
 
 		scn.AddTokensToCard(ruin, 2);
 
 		var runner = scn.GetShadowCard("runner");
 		var sauron = scn.GetShadowCard("sauron");
-		scn.ShadowMoveCharToTable(runner);
-		scn.ShadowMoveCardToDiscard(sauron);
+		scn.MoveMinionsToTable(runner);
+		scn.MoveCardsToDiscard(sauron);
 
 		//Cheating and adding an all-phases action on frodo to wound the Goblin Runner directly
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -243,17 +243,17 @@ public class Card_V2_052_Tests
 		var ruin = scn.GetFreepsCard("ruin");
 		var arrowslits = scn.GetFreepsCard("arrowslits");
 		var archery = scn.GetFreepsCard("archery");
-		scn.FreepsMoveCardToSupportArea(ruin);
-		scn.FreepsMoveCharToTable("vhaldir", "vgimli");
-		scn.FreepsMoveCardToSupportArea("possession"); //needed prereq for the archery event
-		scn.FreepsMoveCardToDiscard(arrowslits, archery);
+		scn.MoveCardsToSupportArea(ruin);
+		scn.MoveCompanionsToTable("vhaldir", "vgimli");
+		scn.MoveCardsToSupportArea(scn.GetFreepsCard("possession")); //needed prereq for the archery event
+		scn.MoveCardsToDiscard(arrowslits, archery);
 
 		scn.AddTokensToCard(ruin, 2);
 
 		var runner = scn.GetShadowCard("runner");
 		var sauron = scn.GetShadowCard("sauron");
-		scn.ShadowMoveCharToTable(runner);
-		scn.ShadowMoveCardToDiscard(sauron);
+		scn.MoveMinionsToTable(runner);
+		scn.MoveCardsToDiscard(sauron);
 
 		//Cheating and adding an all-phases action on frodo to wound the Goblin Runner directly
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -300,16 +300,16 @@ public class Card_V2_052_Tests
 		var ruin = scn.GetFreepsCard("ruin");
 		var arrowslits = scn.GetFreepsCard("arrowslits");
 		var skirmish = scn.GetFreepsCard("skirmish");
-		scn.FreepsMoveCardToSupportArea(ruin);
-		scn.FreepsMoveCharToTable("vhaldir", "vgimli", "eowyn");
-		scn.FreepsMoveCardToDiscard(arrowslits, skirmish);
+		scn.MoveCardsToSupportArea(ruin);
+		scn.MoveCompanionsToTable("vhaldir", "vgimli", "eowyn");
+		scn.MoveCardsToDiscard(arrowslits, skirmish);
 
 		scn.AddTokensToCard(ruin, 2);
 
 		var runner = scn.GetShadowCard("runner");
 		var sauron = scn.GetShadowCard("sauron");
-		scn.ShadowMoveCharToTable(runner);
-		scn.ShadowMoveCardToDiscard(sauron);
+		scn.MoveMinionsToTable(runner);
+		scn.MoveCardsToDiscard(sauron);
 
 		//Cheating and adding an all-phases action on frodo to wound the Goblin Runner directly
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -357,16 +357,16 @@ public class Card_V2_052_Tests
 		var ruin = scn.GetFreepsCard("ruin");
 		var arrowslits = scn.GetFreepsCard("arrowslits");
 		var regroup = scn.GetFreepsCard("regroup");
-		scn.FreepsMoveCardToSupportArea(ruin);
-		scn.FreepsMoveCharToTable("vhaldir", "vgimli", "eowyn");
-		scn.FreepsMoveCardToDiscard(arrowslits, regroup);
+		scn.MoveCardsToSupportArea(ruin);
+		scn.MoveCompanionsToTable("vhaldir", "vgimli", "eowyn");
+		scn.MoveCardsToDiscard(arrowslits, regroup);
 
 		scn.AddTokensToCard(ruin, 2);
 
 		var runner = scn.GetShadowCard("runner");
 		var sauron = scn.GetShadowCard("sauron");
-		scn.ShadowMoveCharToTable(runner);
-		scn.ShadowMoveCardToDiscard(sauron);
+		scn.MoveMinionsToTable(runner);
+		scn.MoveCardsToDiscard(sauron);
 
 		//Cheating and adding an all-phases action on frodo to wound the Goblin Runner directly
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
@@ -413,9 +413,9 @@ public class Card_V2_052_Tests
 
 		var ruin = scn.GetFreepsCard("ruin");
 		var arrowslits = scn.GetFreepsCard("arrowslits");
-		scn.FreepsMoveCardToSupportArea(ruin);
-		scn.FreepsMoveCardToDiscard(arrowslits);
-		scn.FreepsMoveCharToTable("eowyn"); // On a regroup move, reinforces a Rohan token
+		scn.MoveCardsToSupportArea(ruin);
+		scn.MoveCardsToDiscard(arrowslits);
+		scn.MoveCompanionsToTable("eowyn"); // On a regroup move, reinforces a Rohan token
 
 		scn.StartGame();
 		scn.AddTokensToCard(ruin, 2);

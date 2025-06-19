@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set09;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_09_046_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("arrow", "9_46");
@@ -25,9 +25,9 @@ public class Card_09_046_Tests
 					put("runner", "1_178");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_09_046_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -69,11 +69,11 @@ public class Card_09_046_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var eomer = scn.GetFreepsCard("eomer");
 		var spear = scn.GetFreepsCard("spear");
-		scn.FreepsMoveCardToSupportArea(arrow);
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToHand(eomer, spear);
+		scn.MoveCardsToSupportArea(arrow);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(eomer, spear);
 
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 
@@ -103,11 +103,11 @@ public class Card_09_046_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var eomer = scn.GetFreepsCard("eomer");
 		var spear = scn.GetFreepsCard("spear");
-		scn.FreepsMoveCardToSupportArea(arrow);
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToHand(eomer, spear);
+		scn.MoveCardsToSupportArea(arrow);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(eomer, spear);
 
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 

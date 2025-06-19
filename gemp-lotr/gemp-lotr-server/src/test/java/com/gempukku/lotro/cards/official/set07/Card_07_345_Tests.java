@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set07;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_07_345_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("fodder01", "5_1");
@@ -39,8 +39,8 @@ public class Card_07_345_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -68,7 +68,7 @@ public class Card_07_345_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.PLAINS));
+		assertTrue(scn.HasKeyword(card, Keyword.PLAINS));
 		assertEquals(6, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
@@ -89,14 +89,14 @@ public class Card_07_345_Tests
 		var fodder07 = scn.GetFreepsCard("fodder07");
 		var fodder08 = scn.GetFreepsCard("fodder08");
 
-		scn.FreepsMoveCardToHand(fodder01, fodder02, fodder03, fodder04, fodder05, fodder06, fodder07, fodder08);
+		scn.MoveCardsToHand(fodder01, fodder02, fodder03, fodder04, fodder05, fodder06, fodder07, fodder08);
 
 		scn.StartGame();
 		assertEquals(8, scn.GetFreepsHandCount());
 
 		scn.SkipToSite(4);
 
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveMinionsToTable("runner");
 
 		scn.FreepsPassCurrentPhaseAction();
 
@@ -120,7 +120,7 @@ public class Card_07_345_Tests
 		assertEquals(Zone.HAND, fodder07.getZone());
 		assertEquals(Zone.HAND, fodder08.getZone());
 
-		scn.FreepsChooseMultipleChoiceOption("Discard");
+		scn.FreepsChooseOption("Discard");
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(Zone.DISCARD, fodder01.getZone());
@@ -149,14 +149,14 @@ public class Card_07_345_Tests
 		var fodder07 = scn.GetFreepsCard("fodder07");
 		var fodder08 = scn.GetFreepsCard("fodder08");
 
-		scn.FreepsMoveCardToHand(fodder01, fodder02, fodder03, fodder04, fodder05, fodder06, fodder07, fodder08);
+		scn.MoveCardsToHand(fodder01, fodder02, fodder03, fodder04, fodder05, fodder06, fodder07, fodder08);
 
 		scn.StartGame();
 		assertEquals(8, scn.GetFreepsHandCount());
 
 		scn.SkipToSite(4);
 
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveMinionsToTable("runner");
 
 		scn.FreepsPassCurrentPhaseAction();
 
@@ -180,7 +180,7 @@ public class Card_07_345_Tests
 		assertEquals(Zone.HAND, fodder07.getZone());
 		assertEquals(Zone.HAND, fodder08.getZone());
 
-		scn.FreepsChooseMultipleChoiceOption("burden");
+		scn.FreepsChooseOption("burden");
 
 		assertEquals(3, scn.GetBurdens());
 		assertEquals(Zone.HAND, fodder01.getZone());

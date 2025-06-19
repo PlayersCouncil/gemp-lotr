@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_018_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("council", "101_18");
 					put("gandalf", "101_14");
@@ -28,9 +28,9 @@ public class Card_V1_018_Tests
 
 					put("saruman", "3_69");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -50,7 +50,7 @@ public class Card_V1_018_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl council = scn.GetFreepsCard("council");
 
@@ -59,7 +59,7 @@ public class Card_V1_018_Tests
 		assertEquals(Culture.GANDALF, council.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, council.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, council.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(council, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(council, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, council.getBlueprint().getTwilightCost());
 		//assertEquals(, council.getBlueprint().getStrength());
 		//assertEquals(, council.getBlueprint().getVitality());
@@ -72,19 +72,19 @@ public class Card_V1_018_Tests
 	@Test
 	public void SpottingGandalfAndTwoAlliesNegatesSarumansFirstSentence() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl council = scn.GetFreepsCard("council");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCardToHand(gandalf, elrond, galadriel);
-		scn.FreepsMoveCardToSupportArea(council);
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCardsToHand(gandalf, elrond, galadriel);
+		scn.MoveCardsToSupportArea(council);
+		scn.MoveCompanionsToTable(aragorn);
 
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
-		scn.ShadowMoveCharToTable(saruman);
+		scn.MoveMinionsToTable(saruman);
 
 		scn.StartGame();
 
@@ -105,15 +105,15 @@ public class Card_V1_018_Tests
 	@Test
 	public void RegroupActionUnavailableWithoutHealthyElvenAllies() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl council = scn.GetFreepsCard("council");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCardToSupportArea(council);
-		scn.FreepsMoveCharToTable(aragorn, gandalf, elrond, galadriel);
+		scn.MoveCardsToSupportArea(council);
+		scn.MoveCompanionsToTable(aragorn, gandalf, elrond, galadriel);
 
 
 		scn.StartGame();
@@ -127,15 +127,15 @@ public class Card_V1_018_Tests
 	@Test
 	public void RegroupActionExertsAlliesToHeal() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl council = scn.GetFreepsCard("council");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
 		PhysicalCardImpl galadriel = scn.GetFreepsCard("galadriel");
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCardToSupportArea(council);
-		scn.FreepsMoveCharToTable(aragorn, gandalf, elrond, galadriel);
+		scn.MoveCardsToSupportArea(council);
+		scn.MoveCompanionsToTable(aragorn, gandalf, elrond, galadriel);
 
 
 		scn.StartGame();

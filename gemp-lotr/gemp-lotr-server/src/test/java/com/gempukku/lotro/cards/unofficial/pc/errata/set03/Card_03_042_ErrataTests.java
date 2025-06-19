@@ -1,21 +1,22 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertAttachedTo;
+import static com.gempukku.lotro.framework.Assertions.assertNotAttachedTo;
 import static org.junit.Assert.*;
 
 public class Card_03_042_ErrataTests
 {
-    protected GenericCardTestHelper GetFOTRScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetFOTRScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("horn", "53_42");
                     put("elrond", "1_40");
@@ -24,14 +25,14 @@ public class Card_03_042_ErrataTests
 
                     put("runner1", "1_178");
                 }},
-                GenericCardTestHelper.FellowshipSites,
-                GenericCardTestHelper.FOTRFrodo,
-                GenericCardTestHelper.RulingRing
+                VirtualTableScenario.FellowshipSites,
+                VirtualTableScenario.FOTRFrodo,
+                VirtualTableScenario.RulingRing
         );
     }
 
-    protected GenericCardTestHelper GetMovieScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetMovieScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("horn", "53_42");
                     put("elrond", "1_40");
@@ -60,7 +61,7 @@ public class Card_03_042_ErrataTests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetFOTRScenario();
+        VirtualTableScenario scn = GetFOTRScenario();
 
         PhysicalCardImpl horn = scn.GetFreepsCard("horn");
 
@@ -71,18 +72,18 @@ public class Card_03_042_ErrataTests
     @Test
     public void CanBeBorneByBoromir() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetFOTRScenario();
+        VirtualTableScenario scn = GetFOTRScenario();
 
         PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
         PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
         PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
         PhysicalCardImpl horn = scn.GetFreepsCard("horn");
 
-        scn.FreepsMoveCharToTable(elrond);
+        scn.MoveCompanionsToTable(elrond);
 
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(horn);
-        scn.FreepsMoveCardToHand(boromir);
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCardsToHand(horn);
+        scn.MoveCardsToHand(boromir);
 
         scn.StartGame();
 
@@ -91,24 +92,24 @@ public class Card_03_042_ErrataTests
         assertTrue(scn.FreepsPlayAvailable(horn));
         scn.FreepsPlayCard(horn);
 
-        Assert.assertTrue(scn.IsAttachedTo(horn, boromir));
+        assertAttachedTo(horn, boromir);
     }
 
     @Test
     public void AbilityExertsAndDiscardsToPermitAllyToSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetFOTRScenario();
+        VirtualTableScenario scn = GetFOTRScenario();
 
         PhysicalCardImpl elrond = scn.GetFreepsCard("elrond");
         PhysicalCardImpl boromir = scn.GetFreepsCard("boromir");
         PhysicalCardImpl horn = scn.GetFreepsCard("horn");
         PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
 
-        scn.FreepsMoveCharToTable(elrond);
-        scn.FreepsMoveCharToTable(boromir);
-        scn.FreepsMoveCardToHand(horn);
+        scn.MoveCompanionsToTable(elrond);
+        scn.MoveCompanionsToTable(boromir);
+        scn.MoveCardsToHand(horn);
 
-        scn.ShadowMoveCharToTable(runner1);
+        scn.MoveMinionsToTable(runner1);
 
         scn.StartGame();
 
@@ -119,7 +120,7 @@ public class Card_03_042_ErrataTests
         scn.FreepsUseCardAction(horn);
 
         //discards
-        assertFalse(scn.IsAttachedTo(horn, boromir));
+        assertNotAttachedTo(horn, boromir);
         assertEquals(1, scn.GetWoundsOn(boromir));
         assertEquals(11, scn.GetStrength(elrond));
 

@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_016_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("myheart", "101_16");
 					put("gandalf", "1_364");
@@ -28,9 +28,9 @@ public class Card_V1_016_Tests
 					put("runner2", "1_178");
 					put("runner3", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -49,7 +49,7 @@ public class Card_V1_016_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl myheart = scn.GetFreepsCard("myheart");
 
@@ -58,7 +58,7 @@ public class Card_V1_016_Tests
 		assertEquals(Culture.GANDALF, myheart.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, myheart.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, myheart.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(myheart, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(myheart, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, myheart.getBlueprint().getTwilightCost());
 		//assertEquals(, myheart.getBlueprint().getStrength());
 		//assertEquals(, myheart.getBlueprint().getVitality());
@@ -71,20 +71,20 @@ public class Card_V1_016_Tests
 	@Test
 	public void MyHeartSpotsGandalfToTrigger() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl myheart = scn.GetFreepsCard("myheart");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl greenleaf = scn.GetFreepsCard("greenleaf");
 
-		scn.FreepsMoveCardToHand(gandalf);
-		scn.FreepsMoveCharToTable(greenleaf);
-		scn.FreepsMoveCardToSupportArea(myheart);
+		scn.MoveCardsToHand(gandalf);
+		scn.MoveCompanionsToTable(greenleaf);
+		scn.MoveCardsToSupportArea(myheart);
 
 		PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
 		PhysicalCardImpl runner2 = scn.GetShadowCard("runner2");
 
-		scn.ShadowMoveCharToTable(runner1, runner2);
+		scn.MoveMinionsToTable(runner1, runner2);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ARCHERY);
@@ -93,7 +93,7 @@ public class Card_V1_016_Tests
 		scn.FreepsChooseCard(runner1);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 		scn.ShadowPassCurrentPhaseAction();
 		scn.FreepsUseCardAction(greenleaf);
 		//scn.FreepsChooseCard(runner2); //Only one choice, so it's made for us
@@ -104,20 +104,20 @@ public class Card_V1_016_Tests
 	@Test
 	public void MyHeartConvertsWoundToHealLimitOncePerTurn() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl myheart = scn.GetFreepsCard("myheart");
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl greenleaf = scn.GetFreepsCard("greenleaf");
 
-		scn.FreepsMoveCardToHand(gandalf);
-		scn.FreepsMoveCharToTable(greenleaf, gandalf);
-		scn.FreepsMoveCardToSupportArea(myheart);
+		scn.MoveCardsToHand(gandalf);
+		scn.MoveCompanionsToTable(greenleaf, gandalf);
+		scn.MoveCardsToSupportArea(myheart);
 
 		PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
 		PhysicalCardImpl runner2 = scn.GetShadowCard("runner2");
 
-		scn.ShadowMoveCharToTable(runner1, runner2);
+		scn.MoveMinionsToTable(runner1, runner2);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.ARCHERY);

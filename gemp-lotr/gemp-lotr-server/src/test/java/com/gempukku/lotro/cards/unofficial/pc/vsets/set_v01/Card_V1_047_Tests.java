@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,15 +16,15 @@ import static org.junit.Assert.*;
 public class Card_V1_047_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("betrayed", "101_47");
                     put("orc", "1_271");
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -43,7 +43,7 @@ public class Card_V1_047_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl betrayed = scn.GetFreepsCard("betrayed");
 
@@ -52,7 +52,7 @@ public class Card_V1_047_Tests
 		assertEquals(Culture.SAURON, betrayed.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, betrayed.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, betrayed.getBlueprint().getRace());
-        assertTrue(scn.hasTimeword(betrayed, Timeword.REGROUP)); // test for keywords as needed
+        assertTrue(scn.HasTimeword(betrayed, Timeword.REGROUP)); // test for keywords as needed
 		assertEquals(1, betrayed.getBlueprint().getTwilightCost());
 		//assertEquals(, betrayed.getBlueprint().getStrength());
 		//assertEquals(, betrayed.getBlueprint().getVitality());
@@ -65,11 +65,11 @@ public class Card_V1_047_Tests
 	@Test
 	public void RequiresASauronOrcAndFiveBurdens() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl betrayed = scn.GetShadowCard("betrayed");
 		PhysicalCardImpl orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToHand(betrayed, orc);
+		scn.MoveCardsToHand(betrayed, orc);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -92,7 +92,7 @@ public class Card_V1_047_Tests
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
 
-		scn.ShadowMoveCharToTable(orc);
+		scn.MoveMinionsToTable(orc);
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPassCurrentPhaseAction();
@@ -103,12 +103,12 @@ public class Card_V1_047_Tests
 	@Test
 	public void DiscardsOrcToMakeMoveLimitMinus1() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl betrayed = scn.GetShadowCard("betrayed");
 		PhysicalCardImpl orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToHand(betrayed);
-		scn.ShadowMoveCharToTable(orc);
+		scn.MoveCardsToHand(betrayed);
+		scn.MoveMinionsToTable(orc);
 
 		scn.StartGame();
 
@@ -122,7 +122,7 @@ public class Card_V1_047_Tests
 
 		scn.ShadowPlayCard(betrayed);
 		assertTrue(scn.ShadowDecisionAvailable("choose"));
-		scn.ShadowChooseMultipleChoiceOption("move limit -1");
+		scn.ShadowChooseOption("move limit -1");
 
 		assertEquals(1, scn.GetMoveLimit());
 		assertEquals(Zone.DISCARD, orc.getZone());
@@ -136,12 +136,12 @@ public class Card_V1_047_Tests
 	@Test
 	public void DiscardsOrcToForceMovementIfAllowed() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl betrayed = scn.GetShadowCard("betrayed");
 		PhysicalCardImpl orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToHand(betrayed);
-		scn.ShadowMoveCharToTable(orc);
+		scn.MoveCardsToHand(betrayed);
+		scn.MoveMinionsToTable(orc);
 
 		scn.StartGame();
 
@@ -155,7 +155,7 @@ public class Card_V1_047_Tests
 
 		scn.ShadowPlayCard(betrayed);
 		assertTrue(scn.ShadowDecisionAvailable("choose"));
-		scn.ShadowChooseMultipleChoiceOption("move again");
+		scn.ShadowChooseOption("move again");
 
 		assertEquals(2, scn.GetMoveLimit());
 		assertEquals(Zone.DISCARD, orc.getZone());

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_003_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("reaver", "102_3");
@@ -24,9 +24,9 @@ public class Card_V2_003_Tests
 					put("card3", "102_6");
 					put("card4", "102_7");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -71,9 +71,9 @@ public class Card_V2_003_Tests
 		var scn = GetScenario();
 
 		var reaver = scn.GetShadowCard("reaver");
-		scn.ShadowMoveCardToHand(reaver);
+		scn.MoveCardsToHand(reaver);
 
-		scn.FreepsMoveCardToHand("card1", "card2", "card3", "card4");
+		scn.FreepsDrawCards(4);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -84,7 +84,7 @@ public class Card_V2_003_Tests
 		scn.ShadowPlayCard(reaver);
 
 		assertEquals(8, scn.GetStrength(reaver));
-		assertFalse(scn.hasKeyword(reaver, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(reaver, Keyword.DAMAGE));
 	}
 
 	@Test
@@ -93,7 +93,7 @@ public class Card_V2_003_Tests
 		var scn = GetScenario();
 
 		var reaver = scn.GetShadowCard("reaver");
-		scn.ShadowMoveCardToHand(reaver);
+		scn.MoveCardsToHand(reaver);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -104,6 +104,6 @@ public class Card_V2_003_Tests
 		scn.ShadowPlayCard(reaver);
 
 		assertEquals(11, scn.GetStrength(reaver));
-		assertTrue(scn.hasKeyword(reaver, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(reaver, Keyword.DAMAGE));
 	}
 }

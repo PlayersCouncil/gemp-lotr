@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,17 +14,17 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_054_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("sam", "101_54");
 					put("boromir", "1_97");
 
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -73,10 +73,10 @@ public class Card_V1_054_Tests
 
 		var sam = scn.GetFreepsCard("sam");
 		var boromir = scn.GetFreepsCard("boromir");
-		scn.FreepsMoveCharToTable(sam, boromir);
+		scn.MoveCompanionsToTable(sam, boromir);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 
 public class Card_02_075_ErrataTests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("ferny", "52_75");
                     put("sam", "1_310");
@@ -26,9 +26,9 @@ public class Card_02_075_ErrataTests
                     put("nazgul2", "12_161");
 
                 }},
-                GenericCardTestHelper.KingSites,
-                GenericCardTestHelper.GimliRB,
-                GenericCardTestHelper.RulingRing
+                VirtualTableScenario.KingSites,
+                VirtualTableScenario.GimliRB,
+                VirtualTableScenario.RulingRing
         );
     }
 
@@ -52,7 +52,7 @@ public class Card_02_075_ErrataTests
          */
 
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl ferny = scn.GetFreepsCard("ferny");
 
@@ -69,13 +69,13 @@ public class Card_02_075_ErrataTests
     @Test
     public void NazgulAreNotRoaming() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl ferny = scn.GetShadowCard("ferny");
         PhysicalCardImpl nazgul1 = scn.GetShadowCard("nazgul1");
         PhysicalCardImpl nazgul2 = scn.GetShadowCard("nazgul2");
 
-        scn.FreepsMoveCardToHand(ferny, nazgul1, nazgul2);
+        scn.MoveCardsToHand(ferny, nazgul1, nazgul2);
 
         scn.StartGame();
 
@@ -90,10 +90,10 @@ public class Card_02_075_ErrataTests
 
         //should be -5 for Black Rider, -2 for roaming
         assertEquals(7, scn.GetTwilight());
-        assertTrue(scn.hasKeyword(nazgul1, Keyword.ROAMING));
+        assertTrue(scn.HasKeyword(nazgul1, Keyword.ROAMING));
 
         scn.ShadowPlayCard(ferny);
-        assertFalse(scn.hasKeyword(nazgul1, Keyword.ROAMING));
+        assertFalse(scn.HasKeyword(nazgul1, Keyword.ROAMING));
         scn.ShadowPlayCard(nazgul2);
 
         //Should have been exactly enough twilight to play ferny + another black rider, if there are no roaming penalties.
@@ -104,14 +104,14 @@ public class Card_02_075_ErrataTests
     @Test
     public void FreepsCannotAssignFernyIfHobbitSpotted() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl ferny = scn.GetShadowCard("ferny");
         PhysicalCardImpl sam = scn.GetFreepsCard("sam");
         PhysicalCardImpl gimli = scn.GetRingBearer();
 
-        scn.ShadowMoveCharToTable(ferny);
-        scn.FreepsMoveCharToTable(sam);
+        scn.MoveMinionsToTable(ferny);
+        scn.MoveCompanionsToTable(sam);
 
         //Make ferny fierce and strength +5 just to make things easier to test
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("Bill Ferny"), null, Keyword.FIERCE));
@@ -126,7 +126,7 @@ public class Card_02_075_ErrataTests
         try {
             scn.FreepsAssignToMinions(gimli, ferny);
         }
-        catch (DecisionResultInvalidException ex) {
+        catch (RuntimeException ex) {
             exc = true;
         }
         assertTrue(exc); // If an exception wasn't thrown, then freeps assigning was permitted even with a hobbit
@@ -144,7 +144,7 @@ public class Card_02_075_ErrataTests
         try {
             scn.FreepsAssignToMinions(gimli, ferny);
         }
-        catch (DecisionResultInvalidException ex) {
+        catch (RuntimeException ex) {
             exc2 = true;
         }
         assertFalse(exc2); // If an exception wasn't thrown, then freeps assigning was permitted with no hobbit to spot
@@ -154,11 +154,11 @@ public class Card_02_075_ErrataTests
     @Test
     public void DiscardFernyIfUnderground() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl ferny = scn.GetShadowCard("ferny");
 
-        scn.ShadowMoveCharToTable(ferny);
+        scn.MoveMinionsToTable(ferny);
 
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.UNDERGROUND));
 

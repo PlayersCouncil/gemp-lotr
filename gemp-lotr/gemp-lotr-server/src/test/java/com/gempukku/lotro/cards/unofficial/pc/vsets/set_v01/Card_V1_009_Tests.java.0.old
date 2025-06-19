@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_009_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("legolas", "101_9");
                     put("lorien", "51_53");
@@ -28,9 +28,9 @@ public class Card_V1_009_Tests
 
                     put("runner", "1_178");
                 }},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,7 +54,7 @@ public class Card_V1_009_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
 
@@ -74,7 +74,7 @@ public class Card_V1_009_Tests
 	@Test
 	public void ArcheryLosesFireToPumpLegolas() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl legolas = scn.GetFreepsCard("legolas");
 		PhysicalCardImpl lorien = scn.GetFreepsCard("lorien");
@@ -82,11 +82,11 @@ public class Card_V1_009_Tests
 		PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
 		PhysicalCardImpl gornbow = scn.GetFreepsCard("gornbow");
 
-		scn.FreepsMoveCharToTable(legolas, lorien, aragorn);
-		scn.FreepsAttachCardsTo(aragorn, "gornbow");
-		scn.FreepsAttachCardsTo(lorien, "bow");
+		scn.MoveCompanionToTable(legolas, lorien, aragorn);
+		scn.AttachCardsTo(aragorn, "gornbow");
+		scn.AttachCardsTo(lorien, "bow");
 
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveMinionToTable("runner");
 
 		scn.StartGame();
 

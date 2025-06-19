@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set03;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_03_033_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("check", "3_33");
@@ -23,9 +23,9 @@ public class Card_03_033_Tests
 					put("runner", "1_178");
 					put("sauron", "9_48");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -54,7 +54,7 @@ public class Card_03_033_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+        assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -64,10 +64,10 @@ public class Card_03_033_Tests
 		var scn = GetScenario();
 
 		var check = scn.GetFreepsCard("check");
-		scn.FreepsMoveCardToHand(check);
+		scn.MoveCardsToHand(check);
 
-		scn.ShadowMoveCharToTable("runner");
-		scn.ShadowMoveCardToHand("sauron", "check", "gandalf");
+		scn.MoveMinionsToTable("runner");
+		scn.MoveCardsToShadowHand("sauron", "check", "gandalf");
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -81,11 +81,11 @@ public class Card_03_033_Tests
 
 		var check = scn.GetFreepsCard("check");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(check);
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCardsToHand(check);
+		scn.MoveCompanionsToTable(gandalf);
 
-		scn.ShadowMoveCharToTable("runner");
-		scn.ShadowMoveCardToHand("sauron", "check", "gandalf");
+		scn.MoveMinionsToTable("runner");
+		scn.MoveCardsToShadowHand("sauron", "check", "gandalf");
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -109,12 +109,12 @@ public class Card_03_033_Tests
 
 		var check = scn.GetFreepsCard("check");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(check);
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCardsToHand(check);
+		scn.MoveCompanionsToTable(gandalf);
 
 		var sauron = scn.GetShadowCard("sauron");
-		scn.ShadowMoveCharToTable("runner");
-		scn.ShadowMoveCardToHand(sauron);
+		scn.MoveMinionsToTable("runner");
+		scn.MoveCardsToHand(sauron);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();

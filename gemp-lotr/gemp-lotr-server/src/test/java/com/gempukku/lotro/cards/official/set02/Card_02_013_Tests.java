@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 
 public class Card_02_013_Tests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("tidings", "2_13");
                     put("gimli", "1_13");
@@ -52,7 +52,7 @@ public class Card_02_013_Tests
         assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
         assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
         assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.REGROUP));
+        assertTrue(scn.HasTimeword(card, Timeword.REGROUP));
         assertEquals(0, card.getBlueprint().getTwilightCost());
     }
 
@@ -63,7 +63,7 @@ public class Card_02_013_Tests
         var scn = GetScenario();
 
         var card = scn.GetFreepsCard("card");
-        scn.FreepsMoveCardToHand(card);
+        scn.MoveCardsToHand(card);
 
         scn.StartGame();
         scn.FreepsPlayCard(card);
@@ -74,12 +74,12 @@ public class Card_02_013_Tests
     @Test
     public void TidingsAbilityCanBePrevented() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
+        VirtualTableScenario scn = GetScenario();
 
         PhysicalCardImpl tidings = scn.GetFreepsCard("tidings");
         PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-        scn.FreepsMoveCharToTable(gimli);
-        scn.FreepsMoveCardToHand(tidings);
+        scn.MoveCompanionsToTable(gimli);
+        scn.MoveCardsToHand(tidings);
 
         scn.StartGame();
         scn.FreepsPassCurrentPhaseAction();

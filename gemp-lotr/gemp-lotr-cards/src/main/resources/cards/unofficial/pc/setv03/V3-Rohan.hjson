@@ -1,0 +1,466 @@
+{
+
+	103_31: {
+		cardInfo: {
+			//id: 103_31.0
+			parent: 103_31
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E031.0_card.jpg
+			collInfo: V3_31
+			rarity: _
+		}
+		title: Northern Signal-fire
+		subtitle: Beacon of Calenhad
+		unique: 2
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		target: self
+		keywords: [
+			Beacon
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).<br>While you can spot a [rohan] and [gondor] companion, your Men are strength +1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_33: {
+		cardInfo: {
+			//id: 103_33.0
+			parent: 103_33
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E033.0_card.jpg
+			collInfo: V3_33
+			rarity: _
+		}
+		title: Northern Signal-fire
+		subtitle: Beacon of Nardol
+		unique: 2
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		target: self
+		keywords: [
+			Beacon
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).<br>While you can spot a mounted [rohan] companion, at the start of each skirmish involving a knight, each minion skirmishing that knight must exert.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_35: {
+		cardInfo: {
+			//id: 103_35.0
+			parent: 103_35
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E035.0_card.jpg
+			collInfo: V3_35
+			rarity: _
+		}
+		title: Northern Signal-fire
+		subtitle: Beacon of Halifirien
+		unique: 2
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Possession
+		target: self
+		keywords: [
+			Beacon
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Beacon. To play, exert a Man and hinder 3 copies of War Beacon (or 2 copies if you cannot spot another Northern Signal-fire).<br>While you can spot a ranger, knight, and valiant companion, your unbound Men cannot take more than 1 wound per phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_36: {
+		cardInfo: {
+			//id: 103_36.0
+			parent: 103_36
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E036.0_card.jpg
+			collInfo: V3_36
+			rarity: _
+		}
+		title: Gondor Calls For Aid!
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Condition
+		keywords: [
+			Beacon
+			Support Area
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Beacon. To play, hinder 2 copies of Northern Signal-fire.<br>This condition cannot be discarded.<br>While you can spot an unbound [gondor] Man and a mounted [Rohan] Man, mounted [Rohan] companions can bear 1 additional hand weapon and minions skirmishing knights lose <b>fierce</b> until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_77: {
+		cardInfo: {
+			//id: 103_77.0
+			parent: 103_77
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E077.0_card.jpg
+			collInfo: V3_77
+			rarity: _
+		}
+		title: I Am No Man
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a minion strength -1 for each hindered Free Peoples card you can spot.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_78: {
+		cardInfo: {
+			//id: 103_78.0
+			parent: 103_78
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E078.0_card.jpg
+			collInfo: V3_78
+			rarity: _
+		}
+		title: Death Take Us All
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 3
+		type: Event
+		timewords: Skirmish
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: The Shadow player may hinder any of their own support cards.<br>Spot a Shadow support card.  Make a [rohan] companion strength +1 for each of the following: that card's twilight cost, cards stacked on that card, culture tokens on that card, copies of that card in play.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_79: {
+		cardInfo: {
+			//id: 103_79.0
+			parent: 103_79
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E079.0_card.jpg
+			collInfo: V3_79
+			rarity: _
+		}
+		title: Merry
+		subtitle: Master Holbytla
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Companion
+		race: Hobbit
+		strength: 3
+		vitality: 4
+		signet: Aragorn
+		resistance: 6
+		keywords: [
+			Valiant
+			Enduring
+		]
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Valiant. Enduring. To play, spot a [rohan] companion.<br>Merry can bear possessions as if he were a [rohan] Man.<br>Each time a [rohan] companion exerts, you may exert Merry to heal that companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_80: {
+		cardInfo: {
+			//id: 103_80.0
+			parent: 103_80
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E080.0_card.jpg
+			collInfo: V3_80
+			rarity: _
+		}
+		title: Take it Down!
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 2
+		type: Event
+		timewords: [
+			Maneuver
+			Skirmish
+		]
+		effects: [
+			{
+				type: event
+				cost: {
+					type: SendMessage
+					text: Placeholder effect for development.
+				}
+				effect: [
+					{
+						type: SendMessage
+						text: Placeholder effect for development.
+					}
+				]
+			}
+		]
+		gametext: Maneuver: If you cannot spot a mounted minion, heal a mounted [rohan] companion.<br>Skirmish: Exert Theoden or Eomer to exert a mounted minion twice.  You may then transfer a mount on that minion to an unmounted minion skirmishing a [rohan] companion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_81: {
+		cardInfo: {
+			//id: 103_81.0
+			parent: 103_81
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E081.0_card.jpg
+			collInfo: V3_81
+			rarity: _
+		}
+		title: Snowmane
+		subtitle: Faithful Servant
+		unique: true
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		vitality: 1
+		itemclass: Mount
+		target: self
+		#target: title(Theoden)
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be Theoden.<br>[Rohan] companions are strength +1 (or +2 if mounted) for each wound on Theoden.<br>At the start of the assignment phase, hinder Snowmane if you can spot a minion of strength 15 or more.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	103_82: {
+		cardInfo: {
+			//id: 103_82.0
+			parent: 103_82
+			variant: ORIGINAL
+			variantPath: promos/pc
+			revision: 0
+			image: sets/V3/LOTR-ENV3E082.0_card.jpg
+			collInfo: V3_82
+			rarity: _
+		}
+		title: Vanguard's Lance
+		unique: false
+		side: Free Peoples
+		culture: Rohan
+		twilight: 1
+		type: Possession
+		strength: 2
+		itemclass: Hand weapon
+		target: self
+		#target: a [Rohan] companion
+		effects: [
+			{
+				type: ToPlay
+				requires: {
+					type: CanSpot
+					filter: any
+				}
+			}
+			{
+				type: DisplayableInformation
+				text: Placeholder effect for development.
+			}
+		]
+		gametext: Bearer must be a [Rohan] companion.<br>While bearer is mounted, bearer is strength +2 and each time bearer wins a skirmish, you must exert them to wound a minion.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+}

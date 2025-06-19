@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set18;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_18_096_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("eomer", "4_267");
@@ -28,9 +28,9 @@ public class Card_18_096_ErrataTests
 
 					put("runner", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -49,7 +49,7 @@ public class Card_18_096_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var horn = scn.GetFreepsCard("horn");
 
@@ -64,11 +64,11 @@ public class Card_18_096_ErrataTests
 	@Test
 	public void HornPlaysOnRohanMan() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var eomer = scn.GetFreepsCard("eomer");
 		var horn = scn.GetFreepsCard("horn");
-		scn.FreepsMoveCardToHand(horn, eomer);
+		scn.MoveCardsToHand(horn, eomer);
 
 		scn.StartGame();
 
@@ -84,13 +84,13 @@ public class Card_18_096_ErrataTests
 	@Test
 	public void HornFellowshipActionPlaysRohanFollowerFromDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var eomer = scn.GetFreepsCard("eomer");
 		var horn = scn.GetFreepsCard("horn");
 		var worker = scn.GetFreepsCard("worker");
-		scn.FreepsMoveCharToTable(eomer);
-		scn.FreepsAttachCardsTo(eomer, horn);
+		scn.MoveCompanionsToTable(eomer);
+		scn.AttachCardsTo(eomer, horn);
 
 		scn.StartGame();
 
@@ -110,17 +110,17 @@ public class Card_18_096_ErrataTests
 	@Test
 	public void HornSkirmishActionGivesPlus5OnErkenbrand() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var erkenbrand = scn.GetFreepsCard("erkenbrand");
 		var horn = scn.GetFreepsCard("horn");
 		var worker = scn.GetFreepsCard("worker");
-		scn.FreepsMoveCharToTable(erkenbrand);
-		scn.FreepsAttachCardsTo(erkenbrand, horn);
-		scn.FreepsMoveCardToSupportArea(worker);
+		scn.MoveCompanionsToTable(erkenbrand);
+		scn.AttachCardsTo(erkenbrand, horn);
+		scn.MoveCardsToSupportArea(worker);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 
@@ -139,17 +139,17 @@ public class Card_18_096_ErrataTests
 	@Test
 	public void HornSkirmishActionGivesPlus4OnOthers() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var eomer = scn.GetFreepsCard("eomer");
 		var horn = scn.GetFreepsCard("horn");
 		var worker = scn.GetFreepsCard("worker");
-		scn.FreepsMoveCharToTable(eomer);
-		scn.FreepsAttachCardsTo(eomer, horn);
-		scn.FreepsMoveCardToSupportArea(worker);
+		scn.MoveCompanionsToTable(eomer);
+		scn.AttachCardsTo(eomer, horn);
+		scn.MoveCardsToSupportArea(worker);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCharToTable(runner);
+		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 

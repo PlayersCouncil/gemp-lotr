@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set15;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_15_193_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("anotherway", "12_40");
@@ -36,9 +36,9 @@ public class Card_15_193_Tests
 					put("site8", "11_239");
 					put("site9", "11_239");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing,
-				GenericCardTestHelper.Shadows
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Shadows
 		);
 	}
 
@@ -66,9 +66,9 @@ public class Card_15_193_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.BATTLEGROUND));
-		assertTrue(scn.hasKeyword(card, Keyword.MOUNTAIN));
-		assertTrue(scn.hasKeyword(card, Keyword.UNDERGROUND));
+		assertTrue(scn.HasKeyword(card, Keyword.BATTLEGROUND));
+		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
+		assertTrue(scn.HasKeyword(card, Keyword.UNDERGROUND));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
@@ -87,9 +87,9 @@ public class Card_15_193_Tests
 		var onegoodturn = scn.GetFreepsCard("onegoodturn");
 		var smeagol = scn.GetFreepsCard("smeagol");
 		var anotherway = scn.GetFreepsCard("anotherway");
-		scn.FreepsMoveCardToSupportArea(anotherway);
-		scn.FreepsMoveCharToTable(smeagol);
-		scn.FreepsMoveCardToHand(onegoodturn);
+		scn.MoveCardsToSupportArea(anotherway);
+		scn.MoveCompanionsToTable(smeagol);
+		scn.MoveCardsToHand(onegoodturn);
 
 		var site1 = scn.GetFreepsSite("East Road");
 		var freepsSite3 = scn.GetFreepsSite("Fangorn Glade");
@@ -142,7 +142,7 @@ public class Card_15_193_Tests
 		var scn = GetScenario();
 
 		var anotherway = scn.GetFreepsCard("anotherway");
-		scn.FreepsMoveCardToSupportArea(anotherway);
+		scn.MoveCardsToSupportArea(anotherway);
 
 		var site1 = scn.GetFreepsSite("East Road");
 		var mountdoom = scn.GetShadowSite("Mount Doom");

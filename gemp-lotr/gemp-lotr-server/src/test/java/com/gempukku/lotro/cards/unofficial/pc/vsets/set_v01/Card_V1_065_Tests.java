@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_V1_065_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("dam", "101_65");
@@ -27,9 +27,9 @@ public class Card_V1_065_Tests
 					put("aragorn", "1_89");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -60,7 +60,7 @@ public class Card_V1_065_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -72,10 +72,10 @@ public class Card_V1_065_Tests
 		var frodo = scn.GetRingBearer();
 
 		var dam = scn.GetShadowCard("dam");
-		scn.ShadowMoveCardToSupportArea(dam);
+		scn.MoveCardsToSupportArea(dam);
 
 		scn.StartGame();
-		assertTrue(scn.hasKeyword(frodo, Keyword.DEFENDER));
+		assertTrue(scn.HasKeyword(frodo, Keyword.DEFENDER));
 	}
 
 	@Test
@@ -86,14 +86,14 @@ public class Card_V1_065_Tests
 		var frodo = scn.GetRingBearer();
 
 		var dam = scn.GetShadowCard("dam");
-		scn.ShadowMoveCardToHand(dam);
+		scn.MoveCardsToHand(dam);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
 
-		assertFalse(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		scn.ShadowPlayCard(dam);
-		assertTrue(scn.hasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 	}
 
 	@Test
@@ -103,13 +103,13 @@ public class Card_V1_065_Tests
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		var dam = scn.GetShadowCard("dam");
 		var foul = scn.GetShadowCard("foul");
 		var watcher = scn.GetShadowCard("watcher");
-		scn.ShadowMoveCardToSupportArea(dam);
-		scn.ShadowMoveCardToHand(foul, watcher);
+		scn.MoveCardsToSupportArea(dam);
+		scn.MoveCardsToHand(foul, watcher);
 
 		scn.StartGame();
 		scn.AddBurdens(2);
@@ -122,18 +122,27 @@ public class Card_V1_065_Tests
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, foul);
-		scn.ShadowDeclineAssignments();
+		scn.ShadowAssignToMinions(frodo, watcher);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPassCurrentPhaseAction();
 
 		assertEquals(3, scn.GetBurdens());
 		assertTrue(scn.IsCharSkirmishing(foul));
+
 		assertFalse(scn.IsCharSkirmishing(watcher));
+		assertTrue(scn.IsCharAssignedAgainst(watcher, frodo));
+		//Because Aragorn is the active skirmish, there is no pending assignment for him
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, foul));
+		assertFalse(scn.IsCharAssignedAgainst(aragorn, foul));
 		assertTrue(scn.ShadowActionAvailable(dam));
 
 		scn.ShadowUseCardAction(dam);
 		assertEquals(1, scn.GetBurdens());
-		assertTrue(scn.IsCharSkirmishing(watcher));
+
 		assertFalse(scn.IsCharSkirmishing(foul));
+		assertTrue(scn.IsCharSkirmishing(watcher));
+		assertFalse(scn.IsCharAssignedAgainst(watcher, frodo));
+		assertFalse(scn.IsCharSkirmishingAgainst(aragorn, foul));
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, watcher));
 	}
 }

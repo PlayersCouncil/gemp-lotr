@@ -1,9 +1,8 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.at.AbstractAtTest;
-import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -22,8 +21,8 @@ import static org.junit.Assert.*;
 public class Card_01_002_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("sword", "1_299");
@@ -38,9 +37,9 @@ public class Card_01_002_Tests
 					//Regroup wounding
 					put("gollum", "9_28");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -63,7 +62,7 @@ public class Card_01_002_Tests
 		var scn = GetScenario();
 
 		//Use this once you have set the deck up properly
-		var card = scn.GetFreepsRing();
+		var card = scn.GetRing();
 
 		assertEquals("The One Ring", card.getBlueprint().getTitle());
 		assertEquals("The Ruling Ring", card.getBlueprint().getSubtitle());
@@ -78,21 +77,21 @@ public class Card_01_002_Tests
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
-		var ring = scn.GetFreepsRing();
+		var ring = scn.GetRing();
 
 		var marksman = scn.GetShadowCard("marksman");
 		var soldier = scn.GetShadowCard("soldier");
 		var picket = scn.GetShadowCard("picket");
 		var snuffler = scn.GetShadowCard("snuffler");
 		var gollum = scn.GetShadowCard("gollum");
-		scn.ShadowMoveCharToTable(marksman, soldier, picket, gollum);
-		scn.ShadowMoveCardToHand(snuffler);
+		scn.MoveMinionsToTable(marksman, soldier, picket, gollum);
+		scn.MoveCardsToHand(snuffler);
 
 		//Cheat and add an ability to Frodo which puts on the One Ring
 		scn.ApplyAdHocAction(new AbstractActionProxy() {
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(frodo, AbstractAtTest.P1);
+				ActivateCardAction action = new ActivateCardAction(frodo, VirtualTableScenario.P1);
 				action.appendEffect(new PutOnTheOneRingEffect());
 				return Collections.singletonList(action);
 			}
@@ -174,15 +173,15 @@ public class Card_01_002_Tests
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
-		var ring = scn.GetFreepsRing();
+		var ring = scn.GetRing();
 
 		var marksman = scn.GetShadowCard("marksman");
 		var soldier = scn.GetShadowCard("soldier");
 		var picket = scn.GetShadowCard("picket");
 		var snuffler = scn.GetShadowCard("snuffler");
 		var gollum = scn.GetShadowCard("gollum");
-		scn.ShadowMoveCharToTable(marksman, soldier, picket, gollum);
-		scn.ShadowMoveCardToHand(snuffler);
+		scn.MoveMinionsToTable(marksman, soldier, picket, gollum);
+		scn.MoveCardsToHand(snuffler);
 
 		scn.StartGame();
 

@@ -395,4 +395,9 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
             readyCheckTask = null;
         }
     }
+
+    @Override
+    public boolean isWC() {
+        return _tournamentInfo._params.wc;
+    }
 }

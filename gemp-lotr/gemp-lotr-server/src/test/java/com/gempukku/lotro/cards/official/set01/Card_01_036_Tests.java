@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_01_036_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("feet", "1_36");
@@ -32,9 +32,9 @@ public class Card_01_036_Tests
 					put("chaff3", "1_3");
 					put("chaff4", "1_3");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -63,7 +63,7 @@ public class Card_01_036_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.FELLOWSHIP));
+        assertTrue(scn.HasTimeword(card, Timeword.FELLOWSHIP));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -74,13 +74,13 @@ public class Card_01_036_Tests
 
 		var feet = scn.GetFreepsCard("feet");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.FreepsMoveCardToHand(feet, arwen);
+		scn.MoveCardsToHand(feet, arwen);
 
 		var chaff1 = scn.GetShadowCard("chaff1");
 		var chaff2 = scn.GetShadowCard("chaff2");
 		var chaff3 = scn.GetShadowCard("chaff3");
 		var chaff4 = scn.GetShadowCard("chaff4");
-		scn.ShadowMoveCardToHand("runner1","runner2","runner3","runner4",
+		scn.MoveCardsToShadowHand("runner1","runner2","runner3","runner4",
 				"chaff1","chaff2","chaff3","chaff4" );
 
 		scn.StartGame();

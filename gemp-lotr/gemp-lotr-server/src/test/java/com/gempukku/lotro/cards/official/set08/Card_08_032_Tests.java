@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set08;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_08_032_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("catapult", "8_32");
@@ -25,9 +25,9 @@ public class Card_08_032_Tests
 					put("shelob", "8_25");
 					put("larder", "8_23");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_08_032_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -66,10 +66,10 @@ public class Card_08_032_Tests
 		var scn = GetScenario();
 
 		var catapult = scn.GetFreepsCard("catapult");
-		scn.FreepsMoveCardToHand("fodder1");
-		scn.FreepsMoveCardToSupportArea(catapult);
+		scn.MoveCardsToFreepsHand("fodder1");
+		scn.MoveCardsToSupportArea(catapult);
 
-		scn.ShadowMoveCharToTable("runner");
+		scn.MoveMinionsToTable("runner");
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -84,18 +84,18 @@ public class Card_08_032_Tests
 		var scn = GetScenario();
 
 		var catapult = scn.GetFreepsCard("catapult");
-		scn.FreepsMoveCardToHand("fodder1", "fodder2");
-		scn.FreepsMoveCardToSupportArea(catapult);
+		scn.MoveCardsToFreepsHand("fodder1", "fodder2");
+		scn.MoveCardsToSupportArea(catapult);
 
 		var runner = scn.GetShadowCard("runner");
 		var shelob = scn.GetShadowCard("shelob");
 		var larder = scn.GetShadowCard("larder");
 		var evilcatapult = scn.GetShadowCard("catapult");
-		scn.ShadowMoveCharToTable(runner, shelob);
-		scn.ShadowMoveCardToSupportArea(larder);
+		scn.MoveMinionsToTable(runner, shelob);
+		scn.MoveCardsToSupportArea(larder);
 
 		scn.StartGame();
-		scn.ShadowMoveCardsToTopOfDeck(evilcatapult);
+		scn.MoveCardsToTopOfDeck(evilcatapult);
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertEquals(2, scn.GetFreepsHandCount());
@@ -126,15 +126,15 @@ public class Card_08_032_Tests
 		var scn = GetScenario();
 
 		var catapult = scn.GetFreepsCard("catapult");
-		scn.FreepsMoveCardToHand("fodder1", "fodder2");
-		scn.FreepsMoveCardToSupportArea(catapult);
+		scn.MoveCardsToFreepsHand("fodder1", "fodder2");
+		scn.MoveCardsToSupportArea(catapult);
 
 		var runner = scn.GetShadowCard("runner");
 		var shelob = scn.GetShadowCard("shelob");
 		var larder = scn.GetShadowCard("larder");
-		scn.ShadowMoveCharToTable(runner, shelob);
-		scn.ShadowMoveCardToSupportArea(larder);
-		scn.ShadowMoveCardToDiscard("catapult", "fodder1", "fodder2");
+		scn.MoveMinionsToTable(runner, shelob);
+		scn.MoveCardsToSupportArea(larder);
+		scn.MoveCardsToShadowDiscard("catapult", "fodder1", "fodder2");
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);

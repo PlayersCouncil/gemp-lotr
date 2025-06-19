@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_047_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("erkenbrand", "102_47");
@@ -25,9 +25,9 @@ public class Card_V2_047_Tests
 					put("veteran", "7_246");
 					put("dwarfguard", "1_7");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -82,8 +82,8 @@ public class Card_V2_047_Tests
 		var guard = scn.GetFreepsCard("guard");
 		var veteran = scn.GetFreepsCard("veteran");
 		var dwarfguard = scn.GetFreepsCard("dwarfguard");
-		scn.FreepsMoveCardToDeadPile(eowyn, elite, rider, guard, veteran, dwarfguard);
-		scn.FreepsMoveCardToHand(erkenbrand);
+		scn.MoveCardsToDeadPile(eowyn, elite, rider, guard, veteran, dwarfguard);
+		scn.MoveCardsToHand(erkenbrand);
 
 		scn.StartGame();
 
@@ -120,8 +120,8 @@ public class Card_V2_047_Tests
 		var guard = scn.GetFreepsCard("guard");
 		var veteran = scn.GetFreepsCard("veteran");
 		var dwarfguard = scn.GetFreepsCard("dwarfguard");
-		scn.FreepsMoveCharToTable(elite, rider, guard, dwarfguard);
-		scn.FreepsMoveCardToHand(erkenbrand);
+		scn.MoveCompanionsToTable(elite, rider, guard, dwarfguard);
+		scn.MoveCardsToHand(erkenbrand);
 
 		scn.StartGame();
 
@@ -130,13 +130,13 @@ public class Card_V2_047_Tests
 		scn.AddWoundsToChar(rider, 1);
 
 		assertEquals(1, scn.GetVitality(frodo));
-		assertFalse(scn.hasKeyword(frodo, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(frodo, Keyword.VALIANT));
 		assertEquals(1, scn.GetVitality(elite));
-		assertFalse(scn.hasKeyword(elite, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(elite, Keyword.VALIANT));
 		assertEquals(2, scn.GetVitality(rider));
-		assertFalse(scn.hasKeyword(rider, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
 		assertEquals(2, scn.GetVitality(dwarfguard));
-		assertFalse(scn.hasKeyword(dwarfguard, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(dwarfguard, Keyword.VALIANT));
 
 		scn.FreepsPlayCard(erkenbrand);
 	}

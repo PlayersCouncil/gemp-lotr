@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_V1_034_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("darkwaters", "101_34");
 					put("tentacle1", "2_58");
@@ -24,9 +24,9 @@ public class Card_V1_034_Tests
 					put("song", "3_5");
 					put("greenleaf", "1_50");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,21 +57,21 @@ public class Card_V1_034_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
 	@Test
 	public void DarkWatersStacksWoundedTentacles() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var darkwaters = scn.GetShadowCard("darkwaters");
 		var tentacle2 = scn.GetShadowCard("tentacle2");
-		scn.ShadowMoveCardToSupportArea(darkwaters);
-		scn.ShadowMoveCardToHand(tentacle2);
+		scn.MoveCardsToSupportArea(darkwaters);
+		scn.MoveCardsToHand(tentacle2);
 
-		scn.FreepsMoveCharToTable("greenleaf");
+		scn.MoveCompanionsToTable("greenleaf");
 
 		scn.StartGame();
 		scn.SetTwilight(4);
@@ -80,13 +80,13 @@ public class Card_V1_034_Tests
 
 		scn.ShadowPlayCard(tentacle2);
 
-		assertEquals(0, scn.getWounds(tentacle2));
+		assertEquals(0, scn.GetWoundsOn(tentacle2));
 		assertEquals(Zone.SHADOW_CHARACTERS, tentacle2.getZone());
 
 		scn.SkipToPhase(Phase.ARCHERY);
 		scn.PassCurrentPhaseActions();
 
-		assertEquals(1, scn.getWounds(tentacle2));
+		assertEquals(1, scn.GetWoundsOn(tentacle2));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 
@@ -97,14 +97,14 @@ public class Card_V1_034_Tests
 	@Test
 	public void DarkWatersStacksTentaclesKilledByWound() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var darkwaters = scn.GetShadowCard("darkwaters");
 		var tentacle1 = scn.GetShadowCard("tentacle1");
-		scn.ShadowMoveCardToSupportArea(darkwaters);
-		scn.ShadowMoveCardToHand(tentacle1);
+		scn.MoveCardsToSupportArea(darkwaters);
+		scn.MoveCardsToHand(tentacle1);
 
-		scn.FreepsMoveCharToTable("greenleaf");
+		scn.MoveCompanionsToTable("greenleaf");
 
 		scn.StartGame();
 		scn.SetTwilight(4);
@@ -129,16 +129,16 @@ public class Card_V1_034_Tests
 	@Test
 	public void DarkWatersCanBurn2AStackedTentaclesToPreventSelfDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var song = scn.GetFreepsCard("song");
-		scn.FreepsMoveCardToSupportArea(song);
+		scn.MoveCardsToSupportArea(song);
 
 		var darkwaters = scn.GetShadowCard("darkwaters");
 		var tentacle1 = scn.GetShadowCard("tentacle1");
 		var tentacle2 = scn.GetShadowCard("tentacle2");
-		scn.ShadowMoveCardToSupportArea(darkwaters);
-		//scn.ShadowMoveCardToHand(tentacle1, tentacle2);
+		scn.MoveCardsToSupportArea(darkwaters);
+		//scn.MoveCardsToHand(tentacle1, tentacle2);
 
 		scn.StartGame();
 		scn.StackCardsOn(darkwaters, tentacle1, tentacle2);

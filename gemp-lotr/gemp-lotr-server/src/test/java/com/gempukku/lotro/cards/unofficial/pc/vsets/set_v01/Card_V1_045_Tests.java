@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_045_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("gaze", "101_45");
 					put("cond", "1_242");
@@ -29,9 +29,9 @@ public class Card_V1_045_Tests
 					put("sleep", "1_84");
 					put("introspection", "12_29");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -50,7 +50,7 @@ public class Card_V1_045_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gaze = scn.GetFreepsCard("gaze");
 
@@ -59,7 +59,7 @@ public class Card_V1_045_Tests
 		assertEquals(Culture.SAURON, gaze.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, gaze.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, gaze.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(gaze, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(gaze, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(1, gaze.getBlueprint().getTwilightCost());
 		//assertEquals(, gaze.getBlueprint().getStrength());
 		//assertEquals(, gaze.getBlueprint().getVitality());
@@ -72,16 +72,16 @@ public class Card_V1_045_Tests
 	@Test
 	public void GazeProtectsNothingWithNoBurdens() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gaze = scn.GetShadowCard("gaze");
 		PhysicalCardImpl cond = scn.GetShadowCard("cond");
-		scn.ShadowMoveCardToSupportArea(gaze, cond);
+		scn.MoveCardsToSupportArea(gaze, cond);
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl sleep1 = scn.GetFreepsCard("sleep");
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCardToHand(sleep1);
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(sleep1);
 
 		scn.StartGame();
 		scn.RemoveBurdens(1); // to compensate for the starting bid burden
@@ -93,16 +93,16 @@ public class Card_V1_045_Tests
 	@Test
 	public void GazeProtectsOtherConditions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gaze = scn.GetShadowCard("gaze");
 		PhysicalCardImpl cond = scn.GetShadowCard("cond");
-		scn.ShadowMoveCardToSupportArea(gaze, cond);
+		scn.MoveCardsToSupportArea(gaze, cond);
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl introspection = scn.GetFreepsCard("introspection");
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCardToHand(introspection);
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(introspection);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(introspection);
@@ -123,16 +123,16 @@ public class Card_V1_045_Tests
 	@Test
 	public void GazeProtectsSelf() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gaze = scn.GetShadowCard("gaze");
 		PhysicalCardImpl cond = scn.GetShadowCard("cond");
-		scn.ShadowMoveCardToSupportArea(gaze, cond);
+		scn.MoveCardsToSupportArea(gaze, cond);
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl introspection = scn.GetFreepsCard("introspection");
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCardToHand(introspection);
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(introspection);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(introspection);
@@ -153,16 +153,16 @@ public class Card_V1_045_Tests
 	@Test
 	public void GazeProtectsAgainstNukeWithEnoughBurdens() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gaze = scn.GetShadowCard("gaze");
 		PhysicalCardImpl cond = scn.GetShadowCard("cond");
-		scn.ShadowMoveCardToSupportArea(gaze, cond);
+		scn.MoveCardsToSupportArea(gaze, cond);
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
 		PhysicalCardImpl sleep = scn.GetFreepsCard("sleep");
-		scn.FreepsMoveCharToTable(gandalf);
-		scn.FreepsMoveCardToHand(sleep);
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(sleep);
 
 		scn.StartGame();
 
@@ -193,13 +193,13 @@ public class Card_V1_045_Tests
 	@Test
 	public void GazeProtectsAgainstSelfDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gaze = scn.GetShadowCard("gaze");
 		PhysicalCardImpl selfdiscard = scn.GetShadowCard("selfdiscard");
 		PhysicalCardImpl orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCharToTable(orc);
-		scn.ShadowMoveCardToSupportArea(gaze,selfdiscard);
+		scn.MoveMinionsToTable(orc);
+		scn.MoveCardsToSupportArea(gaze,selfdiscard);
 
 		scn.StartGame();
 

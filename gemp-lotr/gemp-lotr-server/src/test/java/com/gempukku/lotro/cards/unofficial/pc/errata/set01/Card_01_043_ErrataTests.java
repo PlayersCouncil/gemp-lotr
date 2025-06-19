@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_01_043_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("eyes", "51_43");
@@ -27,9 +27,9 @@ public class Card_01_043_ErrataTests
 					put("card1", "1_41");
 					put("card2", "1_42");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,7 +57,7 @@ public class Card_01_043_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, eyes.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, eyes.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, eyes.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(eyes, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(eyes, Keyword.SUPPORT_AREA));
 		assertEquals(2, eyes.getBlueprint().getTwilightCost());
 	}
 
@@ -66,17 +66,20 @@ public class Card_01_043_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.FreepsMoveCardToHand("eyes", "arwen", "elrond");
+		var eyes = scn.GetFreepsCard("eyes");
+		var arwen = scn.GetFreepsCard("arwen");
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.MoveCardsToHand(eyes, arwen, elrond);
 
 		scn.StartGame();
 
-		scn.FreepsPlayCard("eyes");
+		scn.FreepsPlayCard(eyes);
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(2, scn.GetFreepsDeckCount());
-		scn.FreepsPlayCard("arwen");
+		scn.FreepsPlayCard(arwen);
 		assertEquals(2, scn.GetFreepsHandCount()); //-1 from playing elf, +1 from draw
 		assertEquals(1, scn.GetFreepsDeckCount());
-		scn.FreepsPlayCard("elrond");
+		scn.FreepsPlayCard(elrond);
 		assertEquals(2, scn.GetFreepsHandCount()); //-1 from playing elf, +1 from draw
 		assertEquals(0, scn.GetFreepsDeckCount());
 	}
@@ -86,27 +89,30 @@ public class Card_01_043_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.FreepsMoveCardToHand("eyes", "arwen", "elrond");
+		var eyes = scn.GetFreepsCard("eyes");
+		var arwen = scn.GetFreepsCard("arwen");
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.MoveCardsToHand(eyes, arwen, elrond);
 
-		scn.ShadowMoveCardToHand("card1", "card2");
+		scn.ShadowDrawCards(2);
 
 		scn.StartGame();
 
-		scn.FreepsPlayCard("eyes");
+		scn.FreepsPlayCard(eyes);
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(2, scn.GetFreepsDeckCount());
 		assertEquals(2, scn.GetShadowHandCount());
 		assertEquals(0, scn.GetShadowDiscardCount());
 
-		scn.FreepsPlayCard("arwen");
+		scn.FreepsPlayCard(arwen);
 		scn.ShadowChooseYes();
-		scn.ShadowChooseCard("card1");
+		scn.ShadowChooseAnyCard();
 		assertEquals(1, scn.GetFreepsHandCount()); //draw blocked
 		assertEquals(2, scn.GetFreepsDeckCount());
 		assertEquals(1, scn.GetShadowHandCount());
 		assertEquals(1, scn.GetShadowDiscardCount());
 
-		scn.FreepsPlayCard("elrond");
+		scn.FreepsPlayCard(elrond);
 		scn.ShadowChooseYes();
 		assertEquals(0, scn.GetFreepsHandCount()); //draw blocked
 		assertEquals(2, scn.GetFreepsDeckCount());

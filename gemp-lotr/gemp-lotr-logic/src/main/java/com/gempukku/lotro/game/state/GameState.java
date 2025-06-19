@@ -567,15 +567,20 @@ public class GameState {
         }
     }
 
-    public void replaceInSkirmishMinion(PhysicalCard card, PhysicalCard removeMinion) {
-        removeFromSkirmish(removeMinion);
+    public void replaceInSkirmishMinion(PhysicalCard card, PhysicalCard removedMinion) {
+        //The removed minion is pulled out of the current skirmish
+        removeFromSkirmish(removedMinion);
+        //If the replacing minion is in a pending assignment, then we remove them from it
+        removeFromAssignment(card);
 
         if(_skirmish.getShadowCharacters().contains(card)) {
             removeFromSkirmish(card);
         }
         _skirmish.getShadowCharacters().add(card);
-        for (GameStateListener listener : getAllGameStateListeners())
-            listener.addToSkirmish(card);
+        for (GameStateListener listener : getAllGameStateListeners()) {
+            listener.finishSkirmish();
+            listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+        }
     }
 
     public void removeFromSkirmish(PhysicalCard card) {

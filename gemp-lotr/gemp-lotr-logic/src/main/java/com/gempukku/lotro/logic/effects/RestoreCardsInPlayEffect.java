@@ -11,18 +11,21 @@ import java.util.Collection;
 
 public class RestoreCardsInPlayEffect extends AbstractPreventableCardEffect {
     private PhysicalCard _source;
+    private final String _performingPlayer;
     private String _sourceText;
 
-    public RestoreCardsInPlayEffect(PhysicalCard source, PhysicalCard... cards) {
+    public RestoreCardsInPlayEffect(String performingPlayer, PhysicalCard source, PhysicalCard... cards) {
         super(cards);
+        _performingPlayer = performingPlayer;
         if (source != null) {
             _source = source;
             _sourceText = GameUtils.getCardLink(source);
         }
     }
 
-    public RestoreCardsInPlayEffect(PhysicalCard source, Filterable... filter) {
+    public RestoreCardsInPlayEffect(String performingPlayer, PhysicalCard source, Filterable... filter) {
         super(filter);
+        _performingPlayer = performingPlayer;
         if (source != null) {
             _source = source;
             _sourceText = GameUtils.getCardLink(source);
@@ -40,12 +43,11 @@ public class RestoreCardsInPlayEffect extends AbstractPreventableCardEffect {
 
     @Override
     protected Filter getExtraAffectableFilter() {
-        return new Filter() {
-            @Override
-            public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                return game.getGameState().isHindered(physicalCard);
-            }
-        };
+        return (game, physicalCard) -> game.getGameState().isHindered(physicalCard);
+    }
+
+    public String getPerformingPlayer() {
+        return _performingPlayer;
     }
 
     @Override
@@ -68,7 +70,7 @@ public class RestoreCardsInPlayEffect extends AbstractPreventableCardEffect {
         game.getGameState().restore(cards);
 
         for (var card : cards) {
-            game.getActionsEnvironment().emitEffectResult(new RestoredResult(_source, card));
+            game.getActionsEnvironment().emitEffectResult(new RestoredResult(_source, _performingPlayer, card));
         }
     }
 }

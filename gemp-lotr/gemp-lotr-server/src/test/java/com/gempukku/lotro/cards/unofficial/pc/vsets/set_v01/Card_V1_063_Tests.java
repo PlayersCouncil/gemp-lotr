@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -18,8 +18,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_063_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("guard1", "1_7");
 					put("guard2", "1_7");
@@ -40,8 +40,8 @@ public class Card_V1_063_Tests
 					put("site8", "101_63");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -61,7 +61,7 @@ public class Card_V1_063_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl site8 = scn.GetFreepsSite(8);
 
@@ -70,7 +70,7 @@ public class Card_V1_063_Tests
 		//assertEquals(Culture., card.getBlueprint().getCulture());
 		assertEquals(CardType.SITE, site8.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(site8, Keyword.RIVER)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(site8, Keyword.RIVER)); // test for keywords as needed
 		assertEquals(7, site8.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());
 		//assertEquals(, card.getBlueprint().getVitality());
@@ -83,7 +83,7 @@ public class Card_V1_063_Tests
 	@Test
 	public void ShadowDraws1CardPerCompOver4WhenMovingTo() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl guard1 = scn.GetFreepsCard("guard1");
 		PhysicalCardImpl guard2 = scn.GetFreepsCard("guard2");
@@ -91,7 +91,7 @@ public class Card_V1_063_Tests
 		PhysicalCardImpl guard4 = scn.GetFreepsCard("guard4");
 		PhysicalCardImpl guard5 = scn.GetFreepsCard("guard5");
 		PhysicalCardImpl guard6 = scn.GetFreepsCard("guard6");
-		scn.FreepsMoveCharToTable(guard1, guard2, guard3, guard4, guard5, guard6);
+		scn.MoveCompanionsToTable(guard1, guard2, guard3, guard4, guard5, guard6);
 
 		//Max out the move limit so we don't have to juggle play back and forth
 		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
@@ -133,7 +133,7 @@ public class Card_V1_063_Tests
 		scn.PassCurrentPhaseActions();
 		scn.ShadowDeclineReconciliation();
 
-		scn.ShadowMoveCardsToBottomOfDeck("guard1", "guard2", "guard3", "guard4", "guard5", "guard6");
+		scn.MoveCardsToBottomOfShadowDeck("guard1", "guard2", "guard3", "guard4", "guard5", "guard6");
 		assertEquals(6, scn.GetShadowDeckCount());
 		assertEquals(0, scn.GetShadowHandCount());
 		scn.FreepsChooseToMove();

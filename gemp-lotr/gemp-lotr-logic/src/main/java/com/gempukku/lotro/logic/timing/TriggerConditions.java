@@ -4,10 +4,7 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
-import com.gempukku.lotro.logic.effects.DrawOneCardEffect;
-import com.gempukku.lotro.logic.effects.KillEffect;
-import com.gempukku.lotro.logic.effects.PreventableCardEffect;
-import com.gempukku.lotro.logic.effects.WoundCharactersEffect;
+import com.gempukku.lotro.logic.effects.*;
 import com.gempukku.lotro.logic.timing.results.*;
 
 import java.util.Objects;
@@ -168,6 +165,18 @@ public class TriggerConditions {
         return false;
     }
 
+    public static boolean forEachHindered(LotroGame game, EffectResult effectResult, Filterable... filters) {
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_HINDERED)
+            return Filters.and(filters).accepts(game, ((HinderedResult) effectResult).getHinderedCard());
+        return false;
+    }
+
+    public static boolean forEachRestored(LotroGame game, EffectResult effectResult, Filterable... filters) {
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_RESTORED)
+            return Filters.and(filters).accepts(game, ((RestoredResult) effectResult).getRestoredCard());
+        return false;
+    }
+
     public static boolean forEachMortallyWoundedBy(LotroGame game, EffectResult effectResult, Filterable woundedBy, Filterable... filters) {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
             var woundResult = (WoundResult) effectResult;
@@ -249,6 +258,18 @@ public class TriggerConditions {
         if (effect.getType() == Effect.Type.BEFORE_ADD_TWILIGHT) {
             Preventable addTwilightEffect = (Preventable) effect;
             return !addTwilightEffect.isPrevented(game) && effect.getSource() != null && Filters.and(filters).accepts(game, effect.getSource());
+        }
+        return false;
+    }
+
+    public static boolean addedTwilight(LotroGame game, EffectResult effectResult, AddTwilightEffect.Cause cause, Filterable... sourceFilters) {
+        if (effectResult.getType() == EffectResult.Type.ADD_TWILIGHT) {
+            var twilightResult = (AddTwilightResult) effectResult;
+
+            if(cause != null && twilightResult.getCause() != cause)
+                return false;
+
+            return (Filters.and(sourceFilters).accepts(game, twilightResult.getSource()));
         }
         return false;
     }
@@ -360,6 +381,26 @@ public class TriggerConditions {
         if (effect.getType() == Effect.Type.BEFORE_EXERT) {
             PreventableCardEffect woundEffect = (PreventableCardEffect) effect;
             return Filters.acceptsAny(game, woundEffect.getAffectedCardsMinusPrevented(game), filters);
+        }
+        return false;
+    }
+
+    public static boolean isGettingHinderedBy(Effect effect, LotroGame game, Filterable sourceFilter, String playerId, Filterable... filters) {
+        if (effect.getType() == Effect.Type.BEFORE_HINDER) {
+            PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
+            if (effect.getSource() != null && effect.getPerformingPlayer().equals(playerId)
+                    && Filters.accepts(game, effect.getSource(), sourceFilter))
+                return Filters.acceptsAny(game, preventableEffect.getAffectedCardsMinusPrevented(game), filters);
+        }
+        return false;
+    }
+
+    public static boolean isGettingRestoredBy(Effect effect, LotroGame game, Filterable sourceFilter, String playerId, Filterable... filters) {
+        if (effect.getType() == Effect.Type.BEFORE_RESTORE) {
+            PreventableCardEffect preventableEffect = (PreventableCardEffect) effect;
+            if (effect.getSource() != null && effect.getPerformingPlayer().equals(playerId)
+                    && Filters.accepts(game, effect.getSource(), sourceFilter))
+                return Filters.acceptsAny(game, preventableEffect.getAffectedCardsMinusPrevented(game), filters);
         }
         return false;
     }

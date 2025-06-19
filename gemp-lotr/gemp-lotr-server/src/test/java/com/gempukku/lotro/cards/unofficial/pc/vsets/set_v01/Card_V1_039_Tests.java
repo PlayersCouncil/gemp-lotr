@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 public class Card_V1_039_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("crown", "101_39");
 					put("crown2", "101_39");
@@ -31,9 +31,9 @@ public class Card_V1_039_Tests
 					put("axe", "1_14");
 					// put other cards in here as needed for the test case
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_V1_039_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl crown = scn.GetFreepsCard("crown");
 
@@ -64,7 +64,7 @@ public class Card_V1_039_Tests
 		assertEquals(Culture.WRAITH, crown.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, crown.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, crown.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(crown, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(crown, Keyword.SUPPORT_AREA));
 		assertEquals(PossessionClass.HELM, crown.getBlueprint().getPossessionClasses().stream().findFirst().get()); // test for keywords as needed
 		assertEquals(1, crown.getBlueprint().getTwilightCost());
 		//assertEquals(, crown.getBlueprint().getStrength());
@@ -78,13 +78,13 @@ public class Card_V1_039_Tests
 	@Test
 	public void TwilightBearerCancelsStrengthAndDamageBonuses() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
 		PhysicalCardImpl gwemegil = scn.GetFreepsCard("gwemegil");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl axe = scn.GetFreepsCard("axe");
-		scn.FreepsMoveCharToTable(arwen, gimli);
+		scn.MoveCompanionsToTable(arwen, gimli);
 		scn.AttachCardsTo(arwen, gwemegil);
 		scn.AttachCardsTo(gimli, axe);
 
@@ -92,7 +92,7 @@ public class Card_V1_039_Tests
 		PhysicalCardImpl twigul2 = scn.GetShadowCard("twigul2");
 		PhysicalCardImpl crown = scn.GetShadowCard("crown");
 		PhysicalCardImpl crown2 = scn.GetShadowCard("crown2");
-		scn.ShadowMoveCharToTable(twigul1, twigul2);
+		scn.MoveMinionsToTable(twigul1, twigul2);
 		scn.AttachCardsTo(twigul1, crown);
 		scn.AttachCardsTo(twigul2, crown2);
 
@@ -102,24 +102,24 @@ public class Card_V1_039_Tests
 		scn.PassCurrentPhaseActions();
 
 		assertEquals(8, scn.GetStrength(arwen)); // 6 base, +2 sword
-		assertTrue(scn.hasKeyword(arwen, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(arwen, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(arwen, Keyword.DAMAGE));
 
 		assertEquals(8, scn.GetStrength(gimli)); // 6 base, +2 axe
-		assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{arwen, twigul1}, new PhysicalCardImpl[]{gimli, twigul2});
 
 		scn.FreepsResolveSkirmish(arwen);
 		assertEquals(9, scn.GetStrength(arwen)); // 6 base, +3 from ability, no +2 from sword
-		assertFalse(scn.hasKeyword(arwen, Keyword.DAMAGE)); // damage bonus from sword negated
+		assertFalse(scn.HasKeyword(arwen, Keyword.DAMAGE)); // damage bonus from sword negated
 
 		scn.PassCurrentPhaseActions();
 
 		scn.FreepsResolveSkirmish(gimli);
 		assertEquals(6, scn.GetStrength(gimli)); // 6 base, no +2 from axe
-		assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE)); // damage bonus from base
+		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE)); // damage bonus from base
 		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE)); // damage bonus from axe negated
 
 		scn.FreepsUseCardAction(gimli);
@@ -129,13 +129,13 @@ public class Card_V1_039_Tests
 	@Test
 	public void NonTwilightBearerDoesNotCancelBonuses() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl arwen = scn.GetFreepsCard("arwen");
 		PhysicalCardImpl gwemegil = scn.GetFreepsCard("gwemegil");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl axe = scn.GetFreepsCard("axe");
-		scn.FreepsMoveCharToTable(arwen, gimli);
+		scn.MoveCompanionsToTable(arwen, gimli);
 		scn.AttachCardsTo(arwen, gwemegil);
 		scn.AttachCardsTo(gimli, axe);
 
@@ -143,7 +143,7 @@ public class Card_V1_039_Tests
 		PhysicalCardImpl nazgul2 = scn.GetShadowCard("nazgul2");
 		PhysicalCardImpl crown = scn.GetShadowCard("crown");
 		PhysicalCardImpl crown2 = scn.GetShadowCard("crown2");
-		scn.ShadowMoveCharToTable(nazgul1, nazgul2);
+		scn.MoveMinionsToTable(nazgul1, nazgul2);
 		scn.AttachCardsTo(nazgul1, crown);
 		scn.AttachCardsTo(nazgul2, crown2);
 
@@ -153,25 +153,25 @@ public class Card_V1_039_Tests
 		scn.PassCurrentPhaseActions();
 
 		assertEquals(8, scn.GetStrength(arwen)); // 6 base, +2 sword
-		assertTrue(scn.hasKeyword(arwen, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(arwen, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(arwen, Keyword.DAMAGE));
 
 		assertEquals(8, scn.GetStrength(gimli)); // 6 base, +2 axe
-		assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{arwen, nazgul1}, new PhysicalCardImpl[]{gimli, nazgul2});
 
 		scn.FreepsResolveSkirmish(arwen);
 		assertEquals(11, scn.GetStrength(arwen)); // 6 base, +3 from ability, +2 from sword not negated
-		assertTrue(scn.hasKeyword(arwen, Keyword.DAMAGE)); // damage bonus from sword not negated
+		assertTrue(scn.HasKeyword(arwen, Keyword.DAMAGE)); // damage bonus from sword not negated
 		assertEquals(1, scn.GetKeywordCount(arwen, Keyword.DAMAGE));
 
 		scn.PassCurrentPhaseActions();
 
 		scn.FreepsResolveSkirmish(gimli);
 		assertEquals(8, scn.GetStrength(gimli)); // 6 base, +2 from axe not negated
-		assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE)); // damage bonus from axe not negated
 
 		scn.FreepsUseCardAction(gimli);
@@ -181,7 +181,7 @@ public class Card_V1_039_Tests
 	@Test
 	public void SkirmishAbilityPays1ToTransferToNazgul() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl frodo = scn.GetRingBearer();
 
@@ -189,8 +189,8 @@ public class Card_V1_039_Tests
 		PhysicalCardImpl twigul1 = scn.GetShadowCard("twigul1");
 		PhysicalCardImpl crown = scn.GetShadowCard("crown");
 		PhysicalCardImpl crown2 = scn.GetShadowCard("crown2");
-		scn.ShadowMoveCharToTable(nazgul1, twigul1);
-		scn.ShadowMoveCardToHand(crown, crown2);
+		scn.MoveMinionsToTable(nazgul1, twigul1);
+		scn.MoveCardsToHand(crown, crown2);
 
 		scn.StartGame();
 

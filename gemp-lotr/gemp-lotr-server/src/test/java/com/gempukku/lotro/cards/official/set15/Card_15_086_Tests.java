@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set15;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_15_086_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("gats", "15_86");
@@ -23,9 +23,9 @@ public class Card_15_086_Tests
 
 					put("sam", "1_311");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -70,11 +70,11 @@ public class Card_15_086_Tests
 		var scn = GetScenario();
 
 		var gats = scn.GetShadowCard("gats");
-		scn.ShadowMoveCharToTable(gats);
-		scn.ShadowAttachCardsTo(gats, "pavise");
+		scn.MoveMinionsToTable(gats);
+		scn.AttachCardsTo(gats, scn.GetShadowCard("pavise"));
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);

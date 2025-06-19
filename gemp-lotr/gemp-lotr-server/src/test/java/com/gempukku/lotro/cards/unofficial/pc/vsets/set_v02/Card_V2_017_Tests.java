@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_V2_017_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("die", "102_17");
@@ -24,9 +24,9 @@ public class Card_V2_017_Tests
 
 					put("sauron", "9_48");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -56,7 +56,7 @@ public class Card_V2_017_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		assertTrue(scn.hasTimeword(card, Timeword.MANEUVER));
+		assertTrue(scn.HasTimeword(card, Timeword.MANEUVER));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -70,11 +70,11 @@ public class Card_V2_017_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var theoden = scn.GetFreepsCard("theoden");
 		var vcompanion = scn.GetFreepsCard("vcompanion");
-		scn.FreepsMoveCardToHand(die);
-		scn.FreepsMoveCharToTable(aragorn, theoden, vcompanion);
+		scn.MoveCardsToHand(die);
+		scn.MoveCompanionsToTable(aragorn, theoden, vcompanion);
 
 		var sauron = scn.GetShadowCard("sauron");
-		scn.ShadowMoveCharToTable(sauron);
+		scn.MoveMinionsToTable(sauron);
 
 		scn.StartGame();
 
@@ -84,10 +84,10 @@ public class Card_V2_017_Tests
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(6, scn.GetStrength(theoden));
 		assertEquals(6, scn.GetStrength(vcompanion));
-		assertFalse(scn.hasKeyword(frodo, Keyword.VALIANT));
-		assertFalse(scn.hasKeyword(aragorn, Keyword.VALIANT));
-		assertFalse(scn.hasKeyword(theoden, Keyword.VALIANT));
-		assertTrue(scn.hasKeyword(vcompanion, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(frodo, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(aragorn, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(theoden, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(vcompanion, Keyword.VALIANT));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.FreepsPlayAvailable(die));
 

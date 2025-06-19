@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set12;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 public class Card_12_013_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("sharp", "12_13");
@@ -27,9 +27,9 @@ public class Card_12_013_Tests
 
 					put("savage", "1_151");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -58,7 +58,7 @@ public class Card_12_013_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.SKIRMISH));
+        assertTrue(scn.HasTimeword(card, Timeword.SKIRMISH));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -69,11 +69,11 @@ public class Card_12_013_Tests
 
 		var sharp = scn.GetFreepsCard("sharp");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(sharp);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToHand(sharp);
+		scn.MoveCompanionsToTable(gimli);
 
 		var savage = scn.GetShadowCard("savage");
-		scn.ShadowMoveCharToTable(savage);
+		scn.MoveMinionsToTable(savage);
 
 		scn.StartGame();
 
@@ -82,7 +82,7 @@ public class Card_12_013_Tests
 		scn.FreepsAssignToMinions(gimli, savage);
 		scn.FreepsResolveSkirmish(gimli);
 
-		assertEquals(3, scn.getResistance(gimli));
+		assertEquals(3, scn.GetResistance(gimli));
 		assertEquals(6, scn.GetStrength(gimli));
 
 		scn.FreepsPlayCard(sharp);
@@ -97,11 +97,11 @@ public class Card_12_013_Tests
 
 		var sharp = scn.GetFreepsCard("sharp");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(sharp);
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCardsToHand(sharp);
+		scn.MoveCompanionsToTable(gimli);
 
 		var savage = scn.GetShadowCard("savage");
-		scn.ShadowMoveCharToTable(savage);
+		scn.MoveMinionsToTable(savage);
 
 		scn.StartGame();
 
@@ -110,7 +110,7 @@ public class Card_12_013_Tests
 		scn.FreepsAssignToMinions(gimli, savage);
 		scn.FreepsResolveSkirmish(gimli);
 
-		assertEquals(4, scn.getResistance(gimli));
+		assertEquals(4, scn.GetResistance(gimli));
 		assertEquals(6, scn.GetStrength(gimli));
 
 		scn.FreepsPlayCard(sharp);
@@ -125,12 +125,14 @@ public class Card_12_013_Tests
 
 		var sharp = scn.GetFreepsCard("sharp");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(sharp);
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsAttachCardsTo(gimli, "book", "helm");
+		var book = scn.GetFreepsCard("book");
+		var helm = scn.GetFreepsCard("helm");
+		scn.MoveCardsToHand(sharp);
+		scn.MoveCompanionsToTable(gimli);
+		scn.AttachCardsTo(gimli, book, helm);
 
 		var savage = scn.GetShadowCard("savage");
-		scn.ShadowMoveCharToTable(savage);
+		scn.MoveMinionsToTable(savage);
 
 		scn.StartGame();
 
@@ -139,7 +141,7 @@ public class Card_12_013_Tests
 		scn.FreepsAssignToMinions(gimli, savage);
 		scn.FreepsResolveSkirmish(gimli);
 
-		assertEquals(4, scn.getResistance(gimli));
+		assertEquals(4, scn.GetResistance(gimli));
 		assertEquals(6, scn.GetStrength(gimli));
 
 		scn.FreepsPlayCard(sharp);

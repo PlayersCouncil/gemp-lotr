@@ -1,12 +1,10 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -16,8 +14,8 @@ import static org.junit.Assert.*;
 
 public class Card_01_108_Tests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("aragorn", "1_89");
                     put("arwen", "1_30");
@@ -66,10 +64,10 @@ public class Card_01_108_Tests
         var boromir = scn.GetFreepsCard("boromir");
         var nostranger = scn.GetFreepsCard("nostranger");
 
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCharToTable(arwen);
-        scn.FreepsMoveCharToTable(boromir);
-        scn.FreepsMoveCardToHand(nostranger);
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCompanionsToTable(arwen);
+        scn.MoveCompanionsToTable(boromir);
+        scn.MoveCardsToHand(nostranger);
 
         scn.StartGame();
 
@@ -90,8 +88,8 @@ public class Card_01_108_Tests
         var aragorn = scn.GetFreepsCard("aragorn");
         var nostranger = scn.GetFreepsCard("nostranger");
 
-        scn.FreepsMoveCharToTable(aragorn);
-        scn.FreepsMoveCardToHand(nostranger);
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCardsToHand(nostranger);
 
         scn.StartGame();
 

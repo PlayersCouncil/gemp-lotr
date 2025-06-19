@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V2_029_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("saruman", "102_29");
@@ -25,9 +25,9 @@ public class Card_V2_029_Tests
 					put("gimli", "1_13");
 					put("axe", "1_14");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -74,8 +74,8 @@ public class Card_V2_029_Tests
 		var scn = GetScenario();
 
 		var saruman = scn.GetShadowCard("saruman");
-		scn.ShadowMoveCharToTable(saruman);
-		scn.ShadowMoveCharToTable("worker");
+		scn.MoveMinionsToTable(saruman);
+		scn.MoveMinionsToTable("worker");
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -89,9 +89,9 @@ public class Card_V2_029_Tests
 		var scn = GetScenario();
 
 		var saruman = scn.GetShadowCard("saruman");
-		scn.ShadowMoveCharToTable(saruman);
+		scn.MoveMinionsToTable(saruman);
 
-		scn.FreepsMoveCharToTable("legolas");
+		scn.MoveCompanionsToTable("legolas");
 
 		scn.StartGame();
 		scn.SkipToArcheryWounds();
@@ -106,12 +106,12 @@ public class Card_V2_029_Tests
 
 		var saruman = scn.GetShadowCard("saruman");
 		var worker = scn.GetShadowCard("worker");
-		scn.ShadowMoveCharToTable(saruman, worker);
+		scn.MoveMinionsToTable(saruman, worker);
 
 		var gimli = scn.GetFreepsCard("gimli");
 		var axe = scn.GetFreepsCard("axe");
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsAttachCardsTo(gimli, axe);
+		scn.MoveCompanionsToTable(gimli);
+		scn.AttachCardsTo(gimli, axe);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -132,9 +132,9 @@ public class Card_V2_029_Tests
 
 		var saruman = scn.GetShadowCard("saruman");
 		var worker = scn.GetShadowCard("worker");
-		scn.ShadowMoveCharToTable(saruman, worker);
+		scn.MoveMinionsToTable(saruman, worker);
 
-		scn.FreepsMoveCharToTable("legolas");
+		scn.MoveCompanionsToTable("legolas");
 
 		scn.StartGame();
 		scn.SkipToArcheryWounds();

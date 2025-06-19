@@ -616,7 +616,7 @@
 				modifier: {
 					type: AddKeyword
 					keyword: marsh
-					filter: or(river,and(site,not(or(Battleground,Dwelling,Forest,Mountain,Plains,Sanctuary,River,Underground))))
+					filter: or(river,and(site,not(or(Battleground,Dwelling,Forest,Mountain,Plains,River,Underground))))
 				}
 			}
 			{

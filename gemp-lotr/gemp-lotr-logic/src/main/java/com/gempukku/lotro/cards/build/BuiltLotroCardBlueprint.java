@@ -33,7 +33,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private String fullName;
     private String sanitizedFullName;
     private boolean canStartWithRing;
-    private boolean unique;
+    // As of V3, uniqueness can now be any number 1-4, with 1 being "unique" and 4 "nonunique", and
+    // 2-3 meaning that the card is limited to that many copies in play at once
+    private int uniqueCopies = 4;
     private Side side;
     private CardType cardType;
     private Culture culture;
@@ -350,9 +352,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         this.info = info;
     }
 
-    public void setUnique(boolean unique) {
-        this.unique = unique;
-    }
+    public void setUnique(boolean unique) { uniqueCopies = unique ? 1 : 4; }
+    public void setUniqueness(int amount) { uniqueCopies = amount; }
 
     public void setSide(Side side) {
         this.side = side;
@@ -465,8 +466,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public boolean isUnique() {
-        return unique;
+        return uniqueCopies == 1;
     }
+
+    @Override
+    public int getUniqueRestriction() { return uniqueCopies; }
 
     @Override
     public String getTitle() { return title; }
@@ -1183,7 +1187,6 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     private static Set<String> frodosThatCantStartWithRing = Sets.newHashSet("Frenzied Fighter");
-    private static Set<String> frodosWithNon10Resistance = Sets.newHashSet("Resolute Hobbit", "Frenzied Fighter");
     private static Set<String> samsWithNon5Resistance = Sets.newHashSet("Loyal Friend", "Dropper of Eaves", "Humble Halfling", "Steadfast Friend", "Innocent Traveler");
 
     public void validateConsistency() throws InvalidCardDefinitionException {
@@ -1242,9 +1245,6 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new InvalidCardDefinitionException("Follower requires an aid cost");
         if (title.equals("Frodo") && !canStartWithRing && !frodosThatCantStartWithRing.contains(subtitle)) {
             throw new InvalidCardDefinitionException("Frodo (except some permitted) must be able to start with ring");
-        }
-        if (title.equals("Frodo") && resistance != 10 && !frodosWithNon10Resistance.contains(subtitle)) {
-            throw new InvalidCardDefinitionException("Frodo (except some permitted) needs to have resistance of 10");
         }
         if (title.equals("Sam") && resistance != 5 && !samsWithNon5Resistance.contains(subtitle)) {
             throw new InvalidCardDefinitionException("Sam (except some permitted) needs to have resistance of 5");

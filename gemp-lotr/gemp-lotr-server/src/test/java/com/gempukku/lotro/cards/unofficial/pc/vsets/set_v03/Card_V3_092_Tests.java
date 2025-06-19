@@ -1,0 +1,93 @@
+package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
+
+import com.gempukku.lotro.framework.*;
+import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Test;
+
+import java.util.HashMap;
+
+import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
+
+public class Card_V3_092_Tests
+{
+
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("card", "103_92");
+					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void SauronStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+
+		/**
+		 * Set: V3
+		 * Name: Sauron, Lord of All Middle-earth
+		 * Unique: true
+		 * Side: Shadow
+		 * Culture: Sauron
+		 * Twilight Cost: 18
+		 * Type: Minion
+		 * Subtype: Maia
+		 * Strength: 24
+		 * Vitality: 5
+		 * Site Number: 6
+		 * Game Text: Fierce.
+		* 	Sauron is twilight cost -1 for each support card you can spot. 
+		* 	When you play Sauron, spot 4 other [sauron] cards, discard 3 cards from hand, or hinder him.
+		* 	Each time a companion loses a skirmish to Sauron, kill that companion.
+		*/
+
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+
+		assertEquals("Sauron", card.getBlueprint().getTitle());
+		assertEquals("Lord of All Middle-earth", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAIA, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertEquals(18, card.getBlueprint().getTwilightCost());
+		assertEquals(24, card.getBlueprint().getStrength());
+		assertEquals(5, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getSiteNumber());
+	}
+
+	// Uncomment any @Test markers below once this is ready to be used
+	//@Test
+	public void SauronTest1() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
+
+		//var card = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(card);
+		scn.MoveMinionsToTable(card);
+		scn.MoveCardsToSupportArea(card);
+		scn.MoveCardsToDiscard(card);
+		scn.MoveCardsToTopOfDeck(card);
+
+		scn.StartGame();
+		
+		assertFalse(true);
+	}
+}

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set17;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 // Wielder of the Flame
 public class Card_17_140_Tests
 {
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("appetite", "1_294");
 					put("enquea", "17_140");
@@ -70,7 +70,7 @@ public class Card_17_140_Tests
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
 		assertEquals(6, card.getBlueprint().getTwilightCost());
 		assertEquals(11, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
@@ -84,14 +84,14 @@ public class Card_17_140_Tests
 
 		var frodo = scn.GetRingBearer();
 		var appetite = scn.GetFreepsCard("appetite");
-		scn.FreepsMoveCardToHand(appetite);
+		scn.MoveCardsToHand(appetite);
 
 		var enquea = scn.GetShadowCard("enquea");
 		var rider = scn.GetShadowCard("rider");
 		var dt = scn.GetShadowCard("dt");
-		scn.ShadowMoveCharToTable(enquea);
-		scn.ShadowMoveCardToHand(rider);
-		scn.ShadowMoveCardToHand(dt);
+		scn.MoveMinionsToTable(enquea);
+		scn.MoveCardsToHand(rider);
+		scn.MoveCardsToHand(dt);
 
 		scn.StartGame();
 
@@ -139,13 +139,13 @@ public class Card_17_140_Tests
 		var moria5 = scn.GetFreepsCard("moria5");
 		var moria6 = scn.GetFreepsCard("moria6");
 
-		scn.FreepsMoveCardToSupportArea(moria1);
-		scn.FreepsMoveCardToSupportArea(moria2);
-		scn.FreepsMoveCardToSupportArea(moria3);
-		scn.FreepsMoveCardToSupportArea(moria4);
+		scn.MoveCardsToSupportArea(moria1);
+		scn.MoveCardsToSupportArea(moria2);
+		scn.MoveCardsToSupportArea(moria3);
+		scn.MoveCardsToSupportArea(moria4);
 
 		PhysicalCardImpl enquea = scn.GetShadowCard("enquea");
-		scn.ShadowMoveCharToTable(enquea);
+		scn.MoveMinionsToTable(enquea);
 
 		scn.StartGame();
 
@@ -162,8 +162,8 @@ public class Card_17_140_Tests
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 
 		scn.RemoveWoundsFromChar(enquea, 2);
-		scn.FreepsMoveCardToSupportArea(moria5);
-		scn.FreepsMoveCardToSupportArea(moria6);
+		scn.MoveCardsToSupportArea(moria5);
+		scn.MoveCardsToSupportArea(moria6);
 		scn.FreepsPassCurrentPhaseAction();
 		//There should now be 4 - 1 + 2 = 5 freeps conditions in play.
 
@@ -180,14 +180,14 @@ public class Card_17_140_Tests
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var endgame = scn.GetFreepsCard("endgame");
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToHand(endgame);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(endgame);
 
 		var troop = scn.GetShadowCard("troop");
-		scn.ShadowMoveCharToTable(troop);
+		scn.MoveMinionsToTable(troop);
 
 		var enquea = scn.GetShadowCard("enquea");
-		scn.ShadowMoveCharToTable(enquea);
+		scn.MoveMinionsToTable(enquea);
 
 		scn.StartGame();
 
@@ -208,7 +208,7 @@ public class Card_17_140_Tests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.FreepsResolveActionOrder("Required trigger from");
-		scn.FreepsChooseMultipleChoiceOption("Heal");
+		scn.FreepsChooseOption("Heal");
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 
 		//As a Freeps healing source, we should have the Enquea trigger

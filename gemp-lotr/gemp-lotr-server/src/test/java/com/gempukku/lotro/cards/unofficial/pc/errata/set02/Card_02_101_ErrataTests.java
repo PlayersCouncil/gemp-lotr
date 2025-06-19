@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 public class Card_02_101_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("notfatty", "52_101");
@@ -28,9 +28,9 @@ public class Card_02_101_ErrataTests
 					put("tracker3", "4_190");
 					put("tracker4", "4_190");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -53,7 +53,7 @@ public class Card_02_101_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var notfatty = scn.GetFreepsCard("notfatty");
 
@@ -71,15 +71,15 @@ public class Card_02_101_ErrataTests
 	@Test
 	public void FilibertAbilityCancelsFierceSkirmishWithNonRBHobbitCompanionsAndNoOneElse() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var notfatty = scn.GetFreepsCard("notfatty");
 		var bilbo = scn.GetFreepsCard("bilbo");
 		var sam = scn.GetFreepsCard("sam");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCardToSupportArea(notfatty, bilbo);
-		scn.FreepsMoveCharToTable(sam, aragorn);
+		scn.MoveCardsToSupportArea(notfatty, bilbo);
+		scn.MoveCompanionsToTable(sam, aragorn);
 
 		var tracker1 = scn.GetShadowCard("tracker1");
 		var tracker2 = scn.GetShadowCard("tracker2");
@@ -93,7 +93,7 @@ public class Card_02_101_ErrataTests
 		scn.PassCurrentPhaseActions();
 		scn.FreepsChooseToMove();
 
-		scn.ShadowMoveCharToTable(tracker1, tracker2, tracker3, tracker4);
+		scn.MoveMinionsToTable(tracker1, tracker2, tracker3, tracker4);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{frodo, tracker1}, new PhysicalCardImpl[]{sam, tracker2});
 		scn.ShadowDeclineAssignments();

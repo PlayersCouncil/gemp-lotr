@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertFalse;
 public class Card_V1_058_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("cart", "1_73");
 					put("backstabber", "1_174");
@@ -35,8 +35,8 @@ public class Card_V1_058_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,7 +57,7 @@ public class Card_V1_058_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl site2 = scn.GetFreepsSite(2);
 
@@ -79,10 +79,10 @@ public class Card_V1_058_Tests
 	@Test
 	public void Strength6MinionsGetPlus3StrengthUntilRegroup() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl backstabber = scn.GetShadowCard("backstabber");
-		scn.ShadowMoveCardToHand(backstabber);
+		scn.MoveCardsToHand(backstabber);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -96,10 +96,10 @@ public class Card_V1_058_Tests
 	@Test
 	public void Strength7MinionsGetNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl soldier = scn.GetShadowCard("soldier");
-		scn.ShadowMoveCardToHand(soldier);
+		scn.MoveCardsToHand(soldier);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -113,13 +113,13 @@ public class Card_V1_058_Tests
 	@Test
 	public void GandalfCardNegatesStrengthPump() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl cart = scn.GetFreepsCard("cart");
-		scn.FreepsMoveCardToSupportArea(cart);
+		scn.MoveCardsToSupportArea(cart);
 
 		PhysicalCardImpl backstabber = scn.GetShadowCard("backstabber");
-		scn.ShadowMoveCardToHand(backstabber);
+		scn.MoveCardsToHand(backstabber);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -129,7 +129,7 @@ public class Card_V1_058_Tests
 		scn.ShadowPlayCard(backstabber);
 		assertEquals(5, scn.GetStrength(backstabber));
 
-		scn.FreepsMoveCardToDiscard(cart);
+		scn.MoveCardsToDiscard(cart);
 		// Since the modifier is at time of play, this should have no effect
 		assertEquals(5, scn.GetStrength(backstabber));
 	}

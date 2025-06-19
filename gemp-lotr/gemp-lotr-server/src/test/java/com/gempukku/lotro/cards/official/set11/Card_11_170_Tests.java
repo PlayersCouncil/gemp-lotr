@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set11;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 public class Card_11_170_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("pippin", "11_170");
@@ -37,8 +37,8 @@ public class Card_11_170_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -85,11 +85,11 @@ public class Card_11_170_Tests
 		var pippin = scn.GetFreepsCard("pippin");
 		var gimli = scn.GetFreepsCard("gimli");
 		var legolas = scn.GetFreepsCard("legolas");
-		scn.FreepsMoveCharToTable(pippin, gimli, legolas);
+		scn.MoveCompanionsToTable(pippin, gimli, legolas);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
-		scn.ShadowMoveCharToTable(runner1, runner2);
+		scn.MoveMinionsToTable(runner1, runner2);
 
 		scn.StartGame();
 
@@ -136,11 +136,11 @@ public class Card_11_170_Tests
 
 		var pippin = scn.GetFreepsCard("pippin");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCharToTable(pippin, gimli);
+		scn.MoveCompanionsToTable(pippin, gimli);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
-		scn.ShadowMoveCharToTable(runner1, runner2);
+		scn.MoveMinionsToTable(runner1, runner2);
 
 		scn.StartGame();
 
@@ -169,10 +169,10 @@ public class Card_11_170_Tests
 
 		var pippin = scn.GetFreepsCard("pippin");
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(pippin, sam);
+		scn.MoveCompanionsToTable(pippin, sam);
 
 		var runner1 = scn.GetShadowCard("runner1");
-		scn.ShadowMoveCharToTable(runner1);
+		scn.MoveMinionsToTable(runner1);
 
 		scn.StartGame();
 

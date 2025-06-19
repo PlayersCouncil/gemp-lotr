@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 public class Card_01_011_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("farin", "51_11");
@@ -24,9 +24,9 @@ public class Card_01_011_ErrataTests
 					put("runner", "1_178");
 					put("nazgul", "1_230");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -48,7 +48,7 @@ public class Card_01_011_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl farin = scn.GetFreepsCard("farin");
 
@@ -65,11 +65,11 @@ public class Card_01_011_ErrataTests
 	@Test
 	public void FarinRequiresDwarf() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl farin = scn.GetFreepsCard("farin");
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(farin, gimli);
+		scn.MoveCardsToHand(farin, gimli);
 
 		scn.StartGame();
 
@@ -81,14 +81,14 @@ public class Card_01_011_ErrataTests
 	@Test
 	public void FarinStrengthBonusAgainstOrcs() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl farin = scn.GetFreepsCard("farin");
-		scn.FreepsMoveCharToTable(farin);
+		scn.MoveCompanionsToTable(farin);
 
 		PhysicalCardImpl orc = scn.GetShadowCard("runner");
 		PhysicalCardImpl nazgul = scn.GetShadowCard("nazgul");
-		scn.ShadowMoveCharToTable(orc, nazgul);
+		scn.MoveMinionsToTable(orc, nazgul);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set04;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_04_073_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("dh", "54_73");
@@ -29,9 +29,9 @@ public class Card_04_073_ErrataTests
 					put("event1", "1_215");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -63,7 +63,7 @@ public class Card_04_073_ErrataTests
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
 		assertEquals(Race.ELF, card.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(card, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(card, Keyword.ARCHER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
@@ -76,14 +76,14 @@ public class Card_04_073_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.FreepsMoveCharToTable("dh", "merry");
+		scn.MoveCompanionsToTable("dh", "merry");
 
 		var event0 = scn.GetShadowCard("event0");
 		var event1 = scn.GetShadowCard("event1");
 		var condition0 = scn.GetShadowCard("condition0");
 		var condition1 = scn.GetShadowCard("condition1");
 
-		scn.ShadowMoveCardToHand(event0, event1, condition0, condition1);
+		scn.MoveCardsToHand(event0, event1, condition0, condition1);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -108,14 +108,14 @@ public class Card_04_073_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.FreepsMoveCharToTable("dh", "merry", "pippin");
+		scn.MoveCompanionsToTable("dh", "merry", "pippin");
 
 		var event0 = scn.GetShadowCard("event0");
 		var event1 = scn.GetShadowCard("event1");
 		var condition0 = scn.GetShadowCard("condition0");
 		var condition1 = scn.GetShadowCard("condition1");
 
-		scn.ShadowMoveCardToHand(event0, event1, condition0, condition1);
+		scn.MoveCardsToHand(event0, event1, condition0, condition1);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -139,14 +139,14 @@ public class Card_04_073_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.FreepsMoveCharToTable("dh", "merry", "pippin", "fatty");
+		scn.MoveCompanionsToTable("dh", "merry", "pippin", "fatty");
 
 		var event0 = scn.GetShadowCard("event0");
 		var event1 = scn.GetShadowCard("event1");
 		var condition0 = scn.GetShadowCard("condition0");
 		var condition1 = scn.GetShadowCard("condition1");
 
-		scn.ShadowMoveCardToHand(event0, event1, condition0, condition1);
+		scn.MoveCardsToHand(event0, event1, condition0, condition1);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -170,14 +170,14 @@ public class Card_04_073_ErrataTests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.FreepsMoveCharToTable("dh", "merry");
+		scn.MoveCompanionsToTable("dh", "merry");
 
 		var event0 = scn.GetShadowCard("event0");
 		var event1 = scn.GetShadowCard("event1");
 		var condition0 = scn.GetShadowCard("condition0");
 		var condition1 = scn.GetShadowCard("condition1");
 
-		scn.ShadowMoveCardToHand(event0, event1, condition0, condition1);
+		scn.MoveCardsToHand(event0, event1, condition0, condition1);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();

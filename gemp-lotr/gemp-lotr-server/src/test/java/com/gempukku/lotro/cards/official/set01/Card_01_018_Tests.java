@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 
 public class Card_01_018_Tests
 {
-    protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new GenericCardTestHelper(
+    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
                 new HashMap<>() {{
                     put("halls", "1_18");
                     put("gimli", "1_13");
@@ -59,7 +59,7 @@ public class Card_01_018_Tests
         assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
         assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
         assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.FELLOWSHIP));
+        assertTrue(scn.HasTimeword(card, Timeword.FELLOWSHIP));
         assertEquals(1, card.getBlueprint().getTwilightCost());
     }
 
@@ -70,8 +70,8 @@ public class Card_01_018_Tests
 
         var gimli = scn.GetFreepsCard("gimli");
         var halls = scn.GetFreepsCard("halls");
-        scn.FreepsMoveCharToTable(gimli);
-        scn.FreepsMoveCardToHand(halls);
+        scn.MoveCompanionsToTable(gimli);
+        scn.MoveCardsToHand(halls);
 
         var fcard1 = scn.GetFreepsCard("fcard1");
         var fcard2 = scn.GetFreepsCard("fcard2");
@@ -86,15 +86,15 @@ public class Card_01_018_Tests
         assertTrue(scn.FreepsPlayAvailable(halls));
         assertEquals(0, scn.GetWoundsOn(gimli));
 
-        scn.FreepsMoveCardsToTopOfDeck(fcard3, fcard2, fcard1);
-        scn.ShadowMoveCardsToTopOfDeck(scard3, scard2, scard1);
+        scn.MoveCardsToTopOfDeck(fcard3, fcard2, fcard1);
+        scn.MoveCardsToTopOfDeck(scard3, scard2, scard1);
 
         scn.FreepsPlayCard(halls);
 
         assertEquals(1, scn.GetWoundsOn(gimli));
         assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
         assertEquals(2, scn.FreepsGetMultipleChoices().size());
-        scn.FreepsChooseMultipleChoiceOption("your deck");
+        scn.FreepsChooseOption("your deck");
         List<String> choices = scn.FreepsGetADParamAsList("blueprintId");
         assertTrue(choices.contains(fcard1.getBlueprintId()));
         assertTrue(choices.contains(fcard2.getBlueprintId()));
@@ -130,8 +130,8 @@ public class Card_01_018_Tests
 
         var gimli = scn.GetFreepsCard("gimli");
         var halls = scn.GetFreepsCard("halls");
-        scn.FreepsMoveCharToTable(gimli);
-        scn.FreepsMoveCardToHand(halls);
+        scn.MoveCompanionsToTable(gimli);
+        scn.MoveCardsToHand(halls);
 
         var fcard1 = scn.GetFreepsCard("fcard1");
         var fcard2 = scn.GetFreepsCard("fcard2");
@@ -143,8 +143,8 @@ public class Card_01_018_Tests
 
         scn.StartGame();
 
-        scn.FreepsMoveCardsToTopOfDeck(fcard3, fcard2, fcard1);
-        scn.ShadowMoveCardsToTopOfDeck(scard3, scard2, scard1);
+        scn.MoveCardsToTopOfDeck(fcard3, fcard2, fcard1);
+        scn.MoveCardsToTopOfDeck(scard3, scard2, scard1);
 
         assertTrue(scn.FreepsPlayAvailable(halls));
         assertEquals(0, scn.GetWoundsOn(gimli));
@@ -154,7 +154,7 @@ public class Card_01_018_Tests
         assertEquals(1, scn.GetWoundsOn(gimli));
         assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
         assertEquals(2, scn.FreepsGetMultipleChoices().size());
-        scn.FreepsChooseMultipleChoiceOption("your opponent's deck");
+        scn.FreepsChooseOption("your opponent's deck");
         List<String> choices = scn.FreepsGetADParamAsList("blueprintId");
         assertTrue(choices.contains(scard1.getBlueprintId()));
         assertTrue(choices.contains(scard2.getBlueprintId()));

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_02_026_Tests
 {
 
-	protected GenericCardTestHelper GetFellowshipScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetFellowshipScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("speak", "2_26");
@@ -33,22 +33,22 @@ public class Card_02_026_Tests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
-	protected GenericCardTestHelper GetShadowsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetShadowsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("speak", "2_26");
 					put("gandalf", "1_72");
 				}},
-				GenericCardTestHelper.ShadowsSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing,
-				GenericCardTestHelper.Shadows
+				VirtualTableScenario.ShadowsSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Shadows
 		);
 	}
 
@@ -77,7 +77,7 @@ public class Card_02_026_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(card, Timeword.REGROUP));
+        assertTrue(scn.HasTimeword(card, Timeword.REGROUP));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -88,7 +88,7 @@ public class Card_02_026_Tests
 
 		var speak = scn.GetFreepsCard("speak");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCardToHand(speak, gandalf);
+		scn.MoveCardsToHand(speak, gandalf);
 
 		scn.StartGame();
 
@@ -104,8 +104,8 @@ public class Card_02_026_Tests
 		var scn = GetFellowshipScenario();
 
 		var speak = scn.GetFreepsCard("speak");
-		scn.FreepsMoveCardToHand(speak);
-		scn.FreepsMoveCharToTable("gandalf");
+		scn.MoveCardsToHand(speak);
+		scn.MoveCompanionsToTable("gandalf");
 
 		scn.StartGame();
 
@@ -123,8 +123,8 @@ public class Card_02_026_Tests
 		var scn = GetFellowshipScenario();
 
 		var speak = scn.GetFreepsCard("speak");
-		scn.FreepsMoveCardToHand(speak);
-		scn.FreepsMoveCharToTable("gandalf");
+		scn.MoveCardsToHand(speak);
+		scn.MoveCompanionsToTable("gandalf");
 
 		var site2 = scn.GetFreepsSite(2);
 
@@ -142,8 +142,8 @@ public class Card_02_026_Tests
 		var scn = GetFellowshipScenario();
 
 		var speak = scn.GetFreepsCard("speak");
-		scn.FreepsMoveCardToHand(speak);
-		scn.FreepsMoveCharToTable("gandalf");
+		scn.MoveCardsToHand(speak);
+		scn.MoveCompanionsToTable("gandalf");
 
 		var site3 = scn.GetFreepsSite(3);
 
@@ -164,15 +164,15 @@ public class Card_02_026_Tests
 		var scn = GetFellowshipScenario();
 
 		var speak = scn.GetFreepsCard("speak");
-		scn.FreepsMoveCardToHand(speak);
-		scn.FreepsMoveCharToTable("gandalf");
+		scn.MoveCardsToHand(speak);
+		scn.MoveCompanionsToTable("gandalf");
 
 		var site2 = scn.GetFreepsSite(2);
 		var shadow2 = scn.GetShadowSite(2);
 
 		scn.StartGame();
 
-		scn.ShadowMoveCardToAdventurePath(shadow2);
+		scn.MoveCardToAdventurePath(shadow2);
 
 		assertEquals(Zone.ADVENTURE_DECK, site2.getZone());
 		assertEquals(Zone.ADVENTURE_PATH, shadow2.getZone());
@@ -188,8 +188,8 @@ public class Card_02_026_Tests
 		var scn = GetShadowsScenario();
 
 		var speak = scn.GetFreepsCard("speak");
-		scn.FreepsMoveCardToHand(speak);
-		scn.FreepsMoveCharToTable("gandalf");
+		scn.MoveCardsToHand(speak);
+		scn.MoveCompanionsToTable("gandalf");
 
 		var site1 = scn.GetFreepsSite("site1");
 		var site2 = scn.GetFreepsSite("site2");
@@ -210,8 +210,8 @@ public class Card_02_026_Tests
 		var scn = GetShadowsScenario();
 
 		var speak = scn.GetFreepsCard("speak");
-		scn.FreepsMoveCardToHand(speak);
-		scn.FreepsMoveCharToTable("gandalf");
+		scn.MoveCardsToHand(speak);
+		scn.MoveCompanionsToTable("gandalf");
 
 		var site1 = scn.GetFreepsSite("site1");
 		var site3 = scn.GetFreepsSite("site3");

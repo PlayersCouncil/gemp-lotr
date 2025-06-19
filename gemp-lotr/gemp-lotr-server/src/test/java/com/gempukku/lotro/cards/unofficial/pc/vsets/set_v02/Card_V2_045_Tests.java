@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,16 +13,16 @@ import static org.junit.Assert.*;
 public class Card_V2_045_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("hope", "102_45");
 					put("eomer", "4_267");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -65,17 +65,17 @@ public class Card_V2_045_Tests
 
 		var hope = scn.GetFreepsCard("hope");
 		var eomer = scn.GetFreepsCard("eomer");
-		scn.FreepsMoveCardToHand(hope);
-		scn.FreepsMoveCharToTable(eomer);
+		scn.MoveCardsToHand(hope);
+		scn.MoveCompanionsToTable(eomer);
 
 		scn.StartGame();
 
-		assertFalse(scn.hasKeyword(eomer, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(eomer, Keyword.VALIANT));
 		assertTrue(scn.FreepsPlayAvailable(hope));
 
 		scn.FreepsPlayCard(hope);
 		assertEquals(eomer, hope.getAttachedTo());
-		assertTrue(scn.hasKeyword(eomer, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(eomer, Keyword.VALIANT));
 	}
 
 	@Test
@@ -85,7 +85,7 @@ public class Card_V2_045_Tests
 
 		var hope = scn.GetFreepsCard("hope");
 		var eomer = scn.GetFreepsCard("eomer");
-		scn.FreepsMoveCharToTable(eomer);
+		scn.MoveCompanionsToTable(eomer);
 		scn.AttachCardsTo(eomer, hope);
 
 		scn.StartGame();

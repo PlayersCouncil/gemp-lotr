@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set10;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_10_052_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("underfoot", "60_52");
@@ -32,9 +32,9 @@ public class Card_10_052_ErrataTests
 					put("chaff0", "4_259");
 
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -63,7 +63,7 @@ public class Card_10_052_ErrataTests
 		assertEquals(Side.SHADOW, underfoot.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, underfoot.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, underfoot.getBlueprint().getCardType());;
-		assertTrue(scn.hasKeyword(underfoot, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(underfoot, Keyword.SUPPORT_AREA));
 		assertEquals(1, underfoot.getBlueprint().getTwilightCost());
 	}
 
@@ -74,8 +74,8 @@ public class Card_10_052_ErrataTests
 
 		var underfoot = scn.GetShadowCard("underfoot");
 		var raider = scn.GetShadowCard("raider");
-		scn.ShadowMoveCardToHand(raider);
-		scn.ShadowMoveCardToSupportArea(underfoot);
+		scn.MoveCardsToHand(raider);
+		scn.MoveCardsToSupportArea(underfoot);
 
 		scn.StartGame();
 		scn.SetTwilight(20);
@@ -95,7 +95,7 @@ public class Card_10_052_ErrataTests
 		//limit once per phase
 		assertFalse(scn.ShadowActionAvailable(underfoot));
 
-		scn.ShadowMoveCardToDiscard(raider);
+		scn.MoveCardsToDiscard(raider);
 		assertEquals(Zone.SUPPORT, underfoot.getZone());
 		scn.SkipToPhase(Phase.REGROUP);
 		assertEquals(Zone.DISCARD, underfoot.getZone());
@@ -110,8 +110,8 @@ public class Card_10_052_ErrataTests
 
 		var underfoot = scn.GetShadowCard("underfoot");
 		var raider = scn.GetShadowCard("raider");
-		scn.ShadowMoveCharToTable(raider);
-		scn.ShadowMoveCardToSupportArea(underfoot);
+		scn.MoveMinionsToTable(raider);
+		scn.MoveCardsToSupportArea(underfoot);
 
 		scn.StartGame();
 		scn.SkipToAssignments();

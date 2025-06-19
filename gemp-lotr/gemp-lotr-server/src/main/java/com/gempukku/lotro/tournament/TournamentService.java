@@ -199,10 +199,10 @@ public class TournamentService {
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         try {
-            addRecurringScheduledQueue("fotr_daily_eu", "Daily Gondor Fellowship Block", "2013-01-15 19:30:00", "fotrDailyEu-", "fotr_block");
-            addRecurringScheduledQueue("fotr_daily_us", "Daily Rohan Fellowship Block", "2013-01-16 00:30:00", "fotrDailyUS-", "fotr_block");
-            addRecurringScheduledQueue("movie_daily_eu", "Daily Gondor Movie Block", "2013-01-16 19:30:00", "movieDailyEu-", "movie");
-            addRecurringScheduledQueue("movie_daily_us", "Daily Rohan Movie Block", "2013-01-17 00:30:00", "movieDailyUs-", "movie");
+            addRecurringScheduledQueue("fotr_daily_eu", "Daily Fellowship Block", "2013-01-15 19:30:00", "fotrDailyEu-", "fotr_block");
+            addRecurringScheduledQueue("fotr_daily_us", "Daily Fellowship Block", "2013-01-16 00:30:00", "fotrDailyUS-", "fotr_block");
+            addRecurringScheduledQueue("movie_daily_eu", "Daily Movie Block", "2013-01-16 19:30:00", "movieDailyEu-", "movie");
+            addRecurringScheduledQueue("movie_daily_us", "Daily Movie Block", "2013-01-17 00:30:00", "movieDailyUs-", "movie");
 
         } catch (DateTimeParseException exp) {
             // Ignore, can't happen
@@ -253,7 +253,7 @@ public class TournamentService {
                     formatLibrary.getFormat(queue.getFormatCode()).getName(), queue.getInfo().Parameters().type.toString(), queue.getTournamentQueueName(),
                     queue.getPrizesDescription(), queue.getPairingDescription(), queue.getStartCondition(),
                     queue.getPlayerCount(), queue.getPlayerList(), queue.isPlayerSignedUp(player.getName()), queue.isJoinable(), queue.isStartable(player.getName()),
-                    queue.getSecondsRemainingForReadyCheck(), queue.hasConfirmedReadyCheck(player.getName()));
+                    queue.getSecondsRemainingForReadyCheck(), queue.hasConfirmedReadyCheck(player.getName()), queue.isWC());
         }
 
         for (var entry : _activeTournaments.entrySet()) {
@@ -269,7 +269,7 @@ public class TournamentService {
                     formatLibrary.getFormat(tournament.getFormatCode()).getName(), tournament.getTournamentName(), tournament.getInfo().Parameters().type.toString(), tournament.getPlayOffSystem(),
                     tournament.getTournamentStage().getHumanReadable(),
                     tournament.getCurrentRound(), tournament.getPlayersInCompetitionCount(), tournament.getPlayerList(), tournament.isPlayerInCompetition(player.getName()), tournament.isPlayerAbandoned(player.getName()),
-                    tournament.isJoinable(), secsRemaining);
+                    tournament.isJoinable(), secsRemaining, tournament.isWC());
         }
 
     }

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_029_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("enmity", "51_29");
@@ -24,9 +24,9 @@ public class Card_01_029_ErrataTests
 
 					put("uruk", "1_145");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -55,7 +55,7 @@ public class Card_01_029_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, enmity.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, enmity.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, enmity.getBlueprint().getCardType());
-        assertTrue(scn.hasTimeword(enmity, Timeword.SKIRMISH));
+        assertTrue(scn.HasTimeword(enmity, Timeword.SKIRMISH));
 		assertEquals(0, enmity.getBlueprint().getTwilightCost());
 	}
 
@@ -68,15 +68,15 @@ public class Card_01_029_ErrataTests
 		var arwen = scn.GetFreepsCard("arwen");
 		var gwemegil = scn.GetFreepsCard("gwemegil");
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.FreepsMoveCharToTable(arwen);
-		scn.FreepsMoveCardToSupportArea(elrond);
-		scn.FreepsAttachCardsTo(arwen, gwemegil);
-		scn.FreepsMoveCardToHand(enmity);
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveCardsToSupportArea(elrond);
+		scn.AttachCardsTo(arwen, gwemegil);
+		scn.MoveCardsToHand(enmity);
 
 		var uruk = scn.GetShadowCard("uruk");
 		var card1 = scn.GetShadowCard("arwen");
 		var card2 = scn.GetShadowCard("elrond");
-		scn.ShadowMoveCharToTable(uruk);
+		scn.MoveMinionsToTable(uruk);
 
 		scn.StartGame();
 
@@ -106,16 +106,16 @@ public class Card_01_029_ErrataTests
 		var arwen = scn.GetFreepsCard("arwen");
 		var gwemegil = scn.GetFreepsCard("gwemegil");
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.FreepsMoveCharToTable(arwen);
-		scn.FreepsMoveCardToSupportArea(elrond);
-		scn.FreepsAttachCardsTo(arwen, gwemegil);
-		scn.FreepsMoveCardToHand(enmity);
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveCardsToSupportArea(elrond);
+		scn.AttachCardsTo(arwen, gwemegil);
+		scn.MoveCardsToHand(enmity);
 
 		var uruk = scn.GetShadowCard("uruk");
 		var card1 = scn.GetShadowCard("arwen");
 		var card2 = scn.GetShadowCard("elrond");
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToHand(card1, card2);
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToHand(card1, card2);
 
 		scn.StartGame();
 
@@ -164,16 +164,16 @@ public class Card_01_029_ErrataTests
 		var arwen = scn.GetFreepsCard("arwen");
 		var gwemegil = scn.GetFreepsCard("gwemegil");
 		var elrond = scn.GetFreepsCard("elrond");
-		scn.FreepsMoveCharToTable(arwen);
-		scn.FreepsMoveCardToSupportArea(elrond);
-		scn.FreepsAttachCardsTo(arwen, gwemegil);
-		scn.FreepsMoveCardToHand(enmity);
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveCardsToSupportArea(elrond);
+		scn.AttachCardsTo(arwen, gwemegil);
+		scn.MoveCardsToHand(enmity);
 
 		var uruk = scn.GetShadowCard("uruk");
 		var card1 = scn.GetShadowCard("arwen");
 		var card2 = scn.GetShadowCard("elrond");
-		scn.ShadowMoveCharToTable(uruk);
-		scn.ShadowMoveCardToHand(card1, card2);
+		scn.MoveMinionsToTable(uruk);
+		scn.MoveCardsToHand(card1, card2);
 
 		scn.StartGame();
 

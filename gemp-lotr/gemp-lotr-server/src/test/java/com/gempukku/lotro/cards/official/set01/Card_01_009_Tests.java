@@ -1,7 +1,7 @@
 package com.gempukku.lotro.cards.official.set01;
 
 import com.gempukku.lotro.at.AbstractAtTest;
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -19,8 +19,8 @@ import static org.junit.Assert.*;
 public class Card_01_009_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("axe", "1_9");
@@ -32,9 +32,9 @@ public class Card_01_009_Tests
 					put("orc2", "1_181");
 					put("orc3", "1_184");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -76,7 +76,7 @@ public class Card_01_009_Tests
 
 		var axe = scn.GetFreepsCard("axe");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCardToHand(axe, gimli);
+		scn.MoveCardsToHand(axe, gimli);
 
 		scn.StartGame();
 		assertFalse(scn.FreepsPlayAvailable(axe));
@@ -91,11 +91,11 @@ public class Card_01_009_Tests
 
 		var axe = scn.GetFreepsCard("axe");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 
 		var orc1 = scn.GetShadowCard("orc1");
-		scn.ShadowMoveCharToTable(orc1);
+		scn.MoveMinionsToTable(orc1);
 
 		scn.StartGame();
 
@@ -126,12 +126,12 @@ public class Card_01_009_Tests
 
 		var axe = scn.GetFreepsCard("axe");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 
 		var orc1 = scn.GetShadowCard("orc1");
 		var orc2 = scn.GetShadowCard("orc2");
-		scn.ShadowMoveCharToTable(orc1, orc2);
+		scn.MoveMinionsToTable(orc1, orc2);
 
 		scn.StartGame();
 
@@ -193,17 +193,18 @@ public class Card_01_009_Tests
 		var scn = GetScenario();
 
 		var axe = scn.GetFreepsCard("axe");
+		var dcard = scn.GetFreepsCard("dcard");
 		var gimli = scn.GetFreepsCard("gimli");
 		var preparations = scn.GetFreepsCard("preparations");
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
-		scn.FreepsMoveCardToSupportArea(preparations);
-		scn.FreepsStackCardsOn(preparations, "dcard");
+		scn.MoveCardsToSupportArea(preparations);
+		scn.StackCardsOn(preparations, dcard);
 
 		var orc1 = scn.GetShadowCard("orc1");
 		var orc2 = scn.GetShadowCard("orc2");
 		var orc3 = scn.GetShadowCard("orc3");
-		scn.ShadowMoveCharToTable(orc1, orc2, orc3);
+		scn.MoveMinionsToTable(orc1, orc2, orc3);
 
 		scn.StartGame();
 

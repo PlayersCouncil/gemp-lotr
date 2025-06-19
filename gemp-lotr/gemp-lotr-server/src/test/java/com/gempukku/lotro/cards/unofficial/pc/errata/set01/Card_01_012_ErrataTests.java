@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 public class Card_01_012_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("gimli", "51_12");
@@ -24,9 +24,9 @@ public class Card_01_012_ErrataTests
 					put("card2", "1_178");
 					put("card3", "1_179");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -49,7 +49,7 @@ public class Card_01_012_ErrataTests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 
@@ -58,7 +58,7 @@ public class Card_01_012_ErrataTests
 		assertEquals(Culture.DWARVEN, gimli.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, gimli.getBlueprint().getCardType());
 		assertEquals(Race.DWARF, gimli.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(gimli, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 		assertEquals(2, gimli.getBlueprint().getTwilightCost());
 		assertEquals(6, gimli.getBlueprint().getStrength());
@@ -70,13 +70,13 @@ public class Card_01_012_ErrataTests
 	@Test
 	public void GimliAbilityDoesntWorkWith2Twilight() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl card1 = scn.GetFreepsCard("card1");
 		PhysicalCardImpl card2 = scn.GetFreepsCard("card2");
-		scn.FreepsMoveCardToHand(gimli);
-		scn.FreepsMoveCardToHand(card1);
+		scn.MoveCardsToHand(gimli);
+		scn.MoveCardsToHand(card1);
 
 		scn.StartGame();
 
@@ -88,18 +88,18 @@ public class Card_01_012_ErrataTests
 	@Test
 	public void GimliAbilityAdds2TwilightAndPlacesOnBottom() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
 		PhysicalCardImpl card1 = scn.GetFreepsCard("card1");
 		PhysicalCardImpl card2 = scn.GetFreepsCard("card2");
 		PhysicalCardImpl card3 = scn.GetFreepsCard("card3");
-		scn.FreepsMoveCharToTable(gimli);
-		scn.FreepsMoveCardToHand(card1);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(card1);
 		
 		scn.StartGame();
 
-		scn.FreepsMoveCardsToBottomOfDeck(card3);
+		scn.MoveCardsToBottomOfDeck(card3);
 
 		assertTrue(scn.FreepsActionAvailable(gimli));
 		assertEquals(Zone.HAND, card1.getZone());

@@ -58,7 +58,7 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
     @Override
     public boolean isJoinable() {
         var window = _signupTimeBeforeStart;
-        if (_tournamentInfo.Parameters().tournamentId.toLowerCase().contains("wc")) {
+        if (isWC()) {
             window = _wcSignupTimeBeforeStart;
         }
         return DateUtils.Now().isAfter(_startTime.minus(window)) && (maximumPlayers < 0 || _players.size() < maximumPlayers);

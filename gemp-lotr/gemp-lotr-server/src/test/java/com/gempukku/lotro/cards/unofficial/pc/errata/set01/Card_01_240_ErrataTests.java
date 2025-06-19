@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_240_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("aragorn", "1_89");
@@ -23,9 +23,9 @@ public class Card_01_240_ErrataTests
 					put("card1", "1_241");
 					put("card2", "1_242");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -70,10 +70,10 @@ public class Card_01_240_ErrataTests
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 
 		var band = scn.GetShadowCard("band");
-		scn.ShadowMoveCharToTable(band);
+		scn.MoveMinionsToTable(band);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -98,11 +98,11 @@ public class Card_01_240_ErrataTests
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToHand("band", "card1", "card2");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.FreepsDrawCards(3);
 
 		var band = scn.GetShadowCard("band");
-		scn.ShadowMoveCharToTable(band);
+		scn.MoveMinionsToTable(band);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();
@@ -134,11 +134,11 @@ public class Card_01_240_ErrataTests
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCharToTable(aragorn);
-		scn.FreepsMoveCardToHand("band", "card1", "card2");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.FreepsDrawCards(3);
 
 		var band = scn.GetShadowCard("band");
-		scn.ShadowMoveCharToTable(band);
+		scn.MoveMinionsToTable(band);
 
 		scn.StartGame();
 		scn.FreepsPassCurrentPhaseAction();

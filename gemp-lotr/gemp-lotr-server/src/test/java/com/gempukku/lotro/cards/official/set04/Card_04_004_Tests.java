@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set04;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_04_004_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("band", "4_4");
@@ -22,9 +22,9 @@ public class Card_04_004_Tests
 					put("sam", "1_311");
 					put("gimli", "1_13");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -69,10 +69,10 @@ public class Card_04_004_Tests
 		var scn = GetScenario();
 
 		var band = scn.GetShadowCard("band");
-		scn.ShadowMoveCharToTable(band);
+		scn.MoveMinionsToTable(band);
 
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -80,10 +80,10 @@ public class Card_04_004_Tests
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassCurrentPhaseActions();
 
-		assertFalse(scn.hasKeyword(band, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(band, Keyword.FIERCE));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
-		assertTrue(scn.hasKeyword(band, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(band, Keyword.FIERCE));
 	}
 
 	@Test
@@ -92,10 +92,10 @@ public class Card_04_004_Tests
 		var scn = GetScenario();
 
 		var band = scn.GetShadowCard("band");
-		scn.ShadowMoveCharToTable(band);
+		scn.MoveMinionsToTable(band);
 
 		var sam = scn.GetFreepsCard("sam");
-		scn.FreepsMoveCharToTable(sam);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.SkipToAssignments();
@@ -103,10 +103,10 @@ public class Card_04_004_Tests
 		scn.FreepsResolveSkirmish(sam);
 		scn.PassCurrentPhaseActions();
 
-		assertFalse(scn.hasKeyword(band, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(band, Keyword.FIERCE));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
-		assertTrue(scn.hasKeyword(band, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(band, Keyword.FIERCE));
 	}
 
 	@Test
@@ -115,10 +115,10 @@ public class Card_04_004_Tests
 		var scn = GetScenario();
 
 		var band = scn.GetShadowCard("band");
-		scn.ShadowMoveCharToTable(band);
+		scn.MoveMinionsToTable(band);
 
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.FreepsMoveCharToTable(gimli);
+		scn.MoveCompanionsToTable(gimli);
 
 		scn.StartGame();
 
@@ -129,9 +129,9 @@ public class Card_04_004_Tests
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassCurrentPhaseActions();
 
-		assertFalse(scn.hasKeyword(band, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(band, Keyword.FIERCE));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
-		assertTrue(scn.hasKeyword(band, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(band, Keyword.FIERCE));
 	}
 }

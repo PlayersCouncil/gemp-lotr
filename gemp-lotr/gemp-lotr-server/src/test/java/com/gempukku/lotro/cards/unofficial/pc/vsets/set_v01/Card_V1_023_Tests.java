@@ -1,7 +1,7 @@
 
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Card_V1_023_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("gone", "101_23");
 					put("aragorn", "1_365");
@@ -40,9 +40,9 @@ public class Card_V1_023_Tests
 					put("runner5", "1_178");
 					put("runner6", "1_178");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -62,7 +62,7 @@ public class Card_V1_023_Tests
 		*/
 
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gone = scn.GetFreepsCard("gone");
 
@@ -71,7 +71,7 @@ public class Card_V1_023_Tests
 		assertEquals(Culture.GONDOR, gone.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, gone.getBlueprint().getCardType());
 		//assertEquals(Race.CREATURE, gone.getBlueprint().getRace());
-		assertTrue(scn.hasKeyword(gone, Keyword.SUPPORT_AREA)); // test for keywords as needed
+		assertTrue(scn.HasKeyword(gone, Keyword.SUPPORT_AREA)); // test for keywords as needed
 		assertEquals(2, gone.getBlueprint().getTwilightCost());
 		//assertEquals(, gone.getBlueprint().getStrength());
 		//assertEquals(, gone.getBlueprint().getVitality());
@@ -84,7 +84,7 @@ public class Card_V1_023_Tests
 	@Test
 	public void GornSignetSkirmishEventsAreInterceptedAndUsedToPumpGornSignet() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl gone = scn.GetFreepsCard("gone");
 
@@ -101,9 +101,9 @@ public class Card_V1_023_Tests
 		PhysicalCardImpl gandalfE = scn.GetFreepsCard("gandalf-event");
 		PhysicalCardImpl shireE = scn.GetFreepsCard("shire-event");
 
-		scn.FreepsMoveCardToSupportArea(gone);
-		scn.FreepsMoveCharToTable(aragorn, gimli, arwen, gandalf, sam);
-		scn.FreepsMoveCardToHand(dwarfE, elfE, gondorE, gandalfE, shireE);
+		scn.MoveCardsToSupportArea(gone);
+		scn.MoveCompanionsToTable(aragorn, gimli, arwen, gandalf, sam);
+		scn.MoveCardsToHand(dwarfE, elfE, gondorE, gandalfE, shireE);
 
 		PhysicalCardImpl runner1 = scn.GetShadowCard("runner1");
 		PhysicalCardImpl runner2 = scn.GetShadowCard("runner2");
@@ -112,7 +112,7 @@ public class Card_V1_023_Tests
 		PhysicalCardImpl runner5 = scn.GetShadowCard("runner5");
 		PhysicalCardImpl runner6 = scn.GetShadowCard("runner6");
 
-		scn.ShadowMoveCharToTable(runner1, runner2, runner3, runner4, runner5, runner6);
+		scn.MoveMinionsToTable(runner1, runner2, runner3, runner4, runner5, runner6);
 
 		scn.StartGame();
 

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.official.set13;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -14,8 +14,8 @@ import static org.junit.Assert.*;
 public class Card_13_080_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>() {{
 					put("radagast", "13_80");
 					put("saruman", "12_144");
@@ -51,7 +51,7 @@ public class Card_13_080_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(card, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
@@ -62,7 +62,7 @@ public class Card_13_080_Tests
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("card");
-		scn.FreepsMoveCardToHand(card);
+		scn.MoveCardsToHand(card);
 
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
@@ -75,15 +75,15 @@ public class Card_13_080_Tests
 	@Test
 	public void RadagastDeceivedTurnsIntoAMinionIfSarumanHeals() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
 		PhysicalCardImpl radagast = scn.GetShadowCard("radagast");
 		PhysicalCardImpl saruman = scn.GetShadowCard("saruman");
-		scn.ShadowMoveCharToTable(saruman);
-		scn.ShadowMoveCardToSupportArea(radagast);
+		scn.MoveMinionsToTable(saruman);
+		scn.MoveCardsToSupportArea(radagast);
 
 		PhysicalCardImpl gandalf = scn.GetFreepsCard("gandalf");
-		scn.FreepsMoveCharToTable(gandalf);
+		scn.MoveCompanionsToTable(gandalf);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(saruman, 1);
@@ -92,13 +92,13 @@ public class Card_13_080_Tests
 
 		assertEquals(0, scn.GetVitality(radagast));
 		assertEquals(0, scn.GetStrength(radagast));
-		assertFalse(scn.hasKeyword(radagast, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(radagast, Keyword.FIERCE));
 		assertFalse(scn.IsType(radagast, CardType.MINION));
 		scn.ShadowAcceptOptionalTrigger(); // mithrandir self-wounding and dying, saruman self-healing as a result
 
 		assertEquals(1, scn.GetVitality(radagast));
 		assertEquals(12, scn.GetStrength(radagast));
-		assertTrue(scn.hasKeyword(radagast, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(radagast, Keyword.FIERCE));
 		assertTrue(scn.IsType(radagast, CardType.MINION));
 		assertTrue(scn.IsType(radagast, CardType.CONDITION));
 

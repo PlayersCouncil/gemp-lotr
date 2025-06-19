@@ -1,6 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -13,17 +13,17 @@ import static org.junit.Assert.*;
 public class Card_01_252_ErrataTests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("shadow", "51_252");
 					put("orc", "1_266");
 					put("aragorn", "1_89");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -53,7 +53,7 @@ public class Card_01_252_ErrataTests
 		assertEquals(Side.SHADOW, shadow.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, shadow.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, shadow.getBlueprint().getCardType());
-		assertTrue(scn.hasKeyword(shadow, Keyword.SUPPORT_AREA));
+		assertTrue(scn.HasKeyword(shadow, Keyword.SUPPORT_AREA));
 		assertEquals(0, shadow.getBlueprint().getTwilightCost());
 	}
 
@@ -64,8 +64,8 @@ public class Card_01_252_ErrataTests
 
 		var shadow = scn.GetShadowCard("shadow");
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToHand(shadow);
-		scn.ShadowMoveCharToTable(orc);
+		scn.MoveCardsToHand(shadow);
+		scn.MoveMinionsToTable(orc);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(orc, 1);
@@ -83,8 +83,8 @@ public class Card_01_252_ErrataTests
 
 		var shadow = scn.GetShadowCard("shadow");
 		var orc = scn.GetShadowCard("orc");
-		scn.ShadowMoveCardToHand(shadow);
-		scn.ShadowMoveCharToTable(orc);
+		scn.MoveCardsToHand(shadow);
+		scn.MoveMinionsToTable(orc);
 
 		scn.StartGame();
 
@@ -104,7 +104,7 @@ public class Card_01_252_ErrataTests
 		var frodo = scn.GetRingBearer();
 
 		var shadow = scn.GetShadowCard("shadow");
-		scn.ShadowMoveCardToSupportArea(shadow);
+		scn.MoveCardsToSupportArea(shadow);
 
 		scn.StartGame();
 
@@ -121,10 +121,10 @@ public class Card_01_252_ErrataTests
 
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.FreepsMoveCardToHand(aragorn);
+		scn.MoveCardsToHand(aragorn);
 
 		var shadow = scn.GetShadowCard("shadow");
-		scn.ShadowMoveCardToSupportArea(shadow);
+		scn.MoveCardsToSupportArea(shadow);
 
 		scn.StartGame();
 
@@ -132,7 +132,7 @@ public class Card_01_252_ErrataTests
 		assertEquals(7, scn.GetResistance(frodo)); // 10 base - 1 burden - 2 from Irresistable Shadow
 		scn.AddBurdens(1);
 		assertEquals(4, scn.GetResistance(frodo)); // 10 base - 2 burdens - 4 from Irresistable Shadow
-		scn.FreepsMoveCharToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn);
 		assertEquals(8, scn.GetResistance(frodo)); // 10 base - 2 burdens - 0 from Irresistable Shadow
 	}
 }

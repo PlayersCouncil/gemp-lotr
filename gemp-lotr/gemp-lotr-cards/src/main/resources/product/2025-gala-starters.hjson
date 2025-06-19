@@ -1265,8 +1265,8 @@
 			1x8_88
 			#    Horse of Great Stature
 			1x15_129
-			#    King's Mail
-			1x4_284
+			#    Hobbit Sword
+			1x1_299
 			#    Merry's Sword
 			1x7_242
 			#    Riddermark Javelin
@@ -1499,7 +1499,7 @@
 			#    Gorgoroth Axeman
 			1x7_271
 			#    Grishnakh, Orc Captain
-			2x5_100
+			1x5_100
 			#    Host of Udun
 			1x7_282
 			#    Mordor Assassin
@@ -1521,7 +1521,13 @@
 			#    Wisp of Pale Sheen
 			2x6_108
 			#    Úlairë Enquëa, Lieutenant of Morgul
-			4x1_231
+			2x1_231
+			#    Twilight Enquea
+			2x2_83
+			#    Gorgoroth Stormer
+			1x8_101
+			#    Orc Chaser
+			1x7_298
 			#    Enduring Evil
 			1x1_246
 			#    Eye of Barad-Dûr
@@ -1532,8 +1538,6 @@
 			2x10_97
 			#    Desperate Defense of the Ring
 			2x1_244
-			#    Thin and Stretched
-			1x1_279
 		]
 	}
 	{

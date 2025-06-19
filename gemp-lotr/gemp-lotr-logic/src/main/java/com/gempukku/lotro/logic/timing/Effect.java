@@ -4,7 +4,7 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 
 public interface Effect {
-    public enum Type {
+    enum Type {
         BEFORE_WOUND, BEFORE_EXERT, BEFORE_ADD_BURDENS, BEFORE_DISCARD_FROM_PLAY,
         BEFORE_ADD_TWILIGHT, BEFORE_KILLED, BEFORE_HEALED,
         BEFORE_TAKE_CONTROL_OF_A_SITE,
@@ -12,7 +12,7 @@ public interface Effect {
         BEFORE_THREAT_WOUNDS, BEFORE_TOIL,
         BEFORE_DRAW_CARD,
         BEFORE_MOVE_FROM, BEFORE_MOVE, BEFORE_MOVE_TO,
-        BEFORE_HINDER,BEFORE_RESTORE
+        BEFORE_HINDER, BEFORE_RESTORE
     }
 
     /**
@@ -22,7 +22,7 @@ public interface Effect {
      * @param game
      * @return
      */
-    public String getText(LotroGame game);
+    String getText(LotroGame game);
 
     /**
      * Returns the type of the effect. This should list the type of effect it represents
@@ -30,7 +30,7 @@ public interface Effect {
      *
      * @return
      */
-    public Effect.Type getType();
+    Effect.Type getType();
 
     /**
      * Checks wheather this effect can be played in full. This is required to check
@@ -40,7 +40,7 @@ public interface Effect {
      * @param game
      * @return
      */
-    public boolean isPlayableInFull(LotroGame game);
+    boolean isPlayableInFull(LotroGame game);
 
     /**
      * Plays the effect and emits the results.
@@ -48,7 +48,7 @@ public interface Effect {
      * @param game
      * @return
      */
-    public void playEffect(LotroGame game);
+    void playEffect(LotroGame game);
 
     /**
      * Returns if the effect was carried out (not prevented) in full. This is required
@@ -57,7 +57,7 @@ public interface Effect {
      *
      * @return
      */
-    public boolean wasCarriedOut();
+    boolean wasCarriedOut();
 
     default PhysicalCard getSource() {
         return null;

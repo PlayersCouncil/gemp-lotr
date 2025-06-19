@@ -1,10 +1,8 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
-import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -15,8 +13,8 @@ import static org.junit.Assert.*;
 public class Card_01_234_Tests
 {
 
-	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new GenericCardTestHelper(
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("comp2", "1_53");
@@ -31,9 +29,19 @@ public class Card_01_234_Tests
 					put("attea", "1_229");
 					put("rit", "101_40");
 				}},
-				GenericCardTestHelper.FellowshipSites,
-				GenericCardTestHelper.FOTRFrodo,
-				GenericCardTestHelper.RulingRing
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_327");
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "3_118"); //The Great River
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -78,10 +86,10 @@ public class Card_01_234_Tests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4");
 
 		var nertea = scn.GetShadowCard("nertea");
-		scn.ShadowMoveCardToHand(nertea);
+		scn.MoveCardsToHand(nertea);
 
 		scn.StartGame();
 		scn.SetTwilight(20);
@@ -96,14 +104,14 @@ public class Card_01_234_Tests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4", "comp5");
 
 		var twk = scn.GetShadowCard("twk");
 		var attea = scn.GetShadowCard("attea");
 		var nertea = scn.GetShadowCard("nertea");
-		scn.ShadowMoveCardToDiscard("runner", "rit", "twk", "attea");
-		scn.ShadowMoveCardToDiscard(twk);
-		scn.ShadowMoveCardToHand(nertea);
+		scn.MoveCardsToShadowDiscard("runner", "rit", "twk", "attea");
+		scn.MoveCardsToDiscard(twk);
+		scn.MoveCardsToHand(nertea);
 
 		scn.StartGame();
 		scn.SetTwilight(30);
@@ -128,15 +136,15 @@ public class Card_01_234_Tests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5", "comp6");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4", "comp5", "comp6");
 
 		var twk = scn.GetShadowCard("twk");
 		var attea = scn.GetShadowCard("attea");
 		var nertea = scn.GetShadowCard("nertea");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCardToDiscard("rit", "twk", "attea");
-		scn.ShadowMoveCardToDiscard(twk, runner);
-		scn.ShadowMoveCardToHand(nertea);
+		scn.MoveCardsToShadowDiscard("rit", "twk", "attea");
+		scn.MoveCardsToDiscard(twk, runner);
+		scn.MoveCardsToHand(nertea);
 
 		scn.StartGame();
 		scn.SetTwilight(30);
@@ -167,15 +175,15 @@ public class Card_01_234_Tests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5", "comp6");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4", "comp5", "comp6");
 
 		var twk = scn.GetShadowCard("twk");
 		var attea = scn.GetShadowCard("attea");
 		var nertea = scn.GetShadowCard("nertea");
 		var runner = scn.GetShadowCard("runner");
-		scn.ShadowMoveCardToDiscard("rit", "twk", "attea");
-		scn.ShadowMoveCardToDiscard(twk, runner);
-		scn.ShadowMoveCardToHand(nertea);
+		scn.MoveCardsToShadowDiscard("rit", "twk", "attea");
+		scn.MoveCardsToDiscard(twk, runner);
+		scn.MoveCardsToHand(nertea);
 
 		scn.StartGame();
 		scn.SetTwilight(30);
@@ -193,16 +201,16 @@ public class Card_01_234_Tests
 	@Test
 	public void NerteaStopsPlayingMinionsIfUserDeclinesPartwayThrough() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
-		GenericCardTestHelper scn = GetScenario();
+		VirtualTableScenario scn = GetScenario();
 
-		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5", "comp6");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4", "comp5", "comp6");
 
 		var twk = scn.GetShadowCard("twk");
 		var attea = scn.GetShadowCard("attea");
 		var nertea = scn.GetShadowCard("nertea");
-		scn.ShadowMoveCardToDiscard("runner", "rit", "twk", "attea");
-		scn.ShadowMoveCardToDiscard(twk);
-		scn.ShadowMoveCardToHand(nertea);
+		scn.MoveCardsToShadowDiscard("runner", "rit", "twk", "attea");
+		scn.MoveCardsToDiscard(twk);
+		scn.MoveCardsToHand(nertea);
 
 		scn.StartGame();
 		scn.SetTwilight(30);
@@ -231,11 +239,11 @@ public class Card_01_234_Tests
 		//Pre-game setup
 		var scn = GetScenario();
 
-		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5", "comp6");
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4", "comp5", "comp6");
 
 		var nertea = scn.GetShadowCard("nertea");
-		scn.ShadowMoveCardToHand("rit", "twk", "attea", "runner");
-		scn.ShadowMoveCardToHand(nertea);
+		scn.MoveCardsToShadowHand("rit", "twk", "attea", "runner");
+		scn.MoveCardsToHand(nertea);
 
 		scn.StartGame();
 		scn.SetTwilight(30);
@@ -245,38 +253,32 @@ public class Card_01_234_Tests
 		assertFalse(scn.ShadowDecisionAvailable("play a minion"));
 	}
 
-	//Imported from the at tests
+	// Converted from legacy AT test
 	@Test
-	public void ulaireNerteaCantPlayMinionsOnGreatRiver() throws Exception {
+	public void NerteaCannotPlayFromDiscardAtTheGreatRiver() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
 		var scn = GetScenario();
-		var _game = scn._game;
 
-		for (int i=0; i<4; i++) {
-			final PhysicalCardImpl pippin = scn.createCard(scn.P1, "1_306");
-			_game.getGameState().addCardToZone(_game, pippin, Zone.FREE_CHARACTERS);
-		}
+		scn.MoveCompanionsToTable("comp2", "comp3", "comp4", "comp5");
 
-		scn.skipMulligans();
+		var greatriver = scn.GetShadowSite(7);
 
-		final PhysicalCardImpl greatRiver = scn.createCard(scn.P2, "3_118");
-		greatRiver.setSiteNumber(2);
-		_game.getGameState().addCardToZone(_game, greatRiver, Zone.ADVENTURE_PATH);
+		var twk = scn.GetShadowCard("twk");
+		var attea = scn.GetShadowCard("attea");
+		var nertea = scn.GetShadowCard("nertea");
+		scn.MoveCardsToShadowDiscard("runner", "rit", "twk", "attea");
+		scn.MoveCardsToDiscard(twk);
+		scn.MoveCardsToHand(nertea);
 
-		final PhysicalCardImpl ulaireNertea = scn.createCard(scn.P2, "1_234");
-		_game.getGameState().addCardToZone(_game, ulaireNertea, Zone.HAND);
+		scn.StartGame();
 
-		final PhysicalCardImpl goblinRunner = scn.createCard(scn.P2, "1_178");
-		_game.getGameState().addCardToZone(_game, goblinRunner, Zone.DISCARD);
+		scn.SkipToSite(6);
+		scn.SetTwilight(30);
+		scn.FreepsPassCurrentPhaseAction();
 
-		_game.getGameState().setTwilight(20);
+		assertEquals(greatriver, scn.GetCurrentSite());
 
-		// Fellowship phase
-		scn.playerDecided(scn.P1, "");
-
-		assertEquals(greatRiver, _game.getGameState().getCurrentSite());
-
-		scn.playerDecided(scn.P2, scn.getCardActionId(scn.P2, "Play Úlairë Nertëa"));
-
-		assertFalse(scn._userFeedback.getAwaitingDecision(scn.P2).getDecisionType() == AwaitingDecisionType.MULTIPLE_CHOICE);
+		scn.ShadowPlayCard(nertea);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 	}
 }
