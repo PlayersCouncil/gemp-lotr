@@ -844,7 +844,7 @@
 				}
 				effect: {
 					type: PlayCardFromDiscard
-					select: side(shadow),condition
+					select: choose(side(shadow),condition)
 					memorize: chosenCondition
 					extraEffects: {
 						type: If
@@ -959,6 +959,7 @@
 						true: {
 							type: CostToEffect
 							cost: {
+								ignoreCostCheckFailure: true
 								type: Exert
 								select: memory(comp)
 							}
@@ -1009,15 +1010,17 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Activated
+				phase: Assignment
+				cost: {
+					type: Discard
+					select: another(title(Winged Nazgul))
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: {
+					type: AssignFPCharacterToSkirmish
+					minion: self
+					fpCharacter: unbound,companion
+				}
 			}
 		]
 		gametext: Enduring. Fierce.<br>Assignment: Discard another Winged Nazgul to assign this minion to an unbound companion.
@@ -1060,15 +1063,36 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: self
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: [
+					{
+						type: ChooseActiveCards
+						select: choose(side(freeps),not(companion))
+						text: Choose a card type to hinder
+						memorize: chosenCard
+					}
+					{
+						type: Hinder
+						select: all(side(freeps),CardTypeFromMemory(chosenCard))
+					}
+					{
+						type: ChooseActiveCards
+						player: freeps
+						count: any
+						select: choose(your,hindered)
+						text: Choose any number of cards to restore (you will pay (1) for each)
+						memorize: restoredCards
+					}
+					{
+						type: Restore
+						select: all(memory(restoredCards))
+					}
+				]
 			}
 		]
 		gametext: Fierce. Enduring. Damage +1.<br>When you play this minion, hinder all Free Peoples cards of one type (except companion). The Free Peoples player may restore any number of their cards; add (1) per card restored this way.

@@ -280,6 +280,13 @@ public class FilterFactory {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return (actionContext) -> Filters.stackedOn(filterableSource.getFilterable(actionContext));
                 });
+        parameterFilters.put("cardtypefrommemory", ((parameter, environment) -> actionContext -> {
+            Set<CardType> cardtypes = new HashSet<>();
+            for (PhysicalCard physicalCard : actionContext.getCardsFromMemory(parameter)) {
+                cardtypes.add(physicalCard.getBlueprint().getCardType());
+            }
+            return Filters.or(cardtypes.toArray(new CardType[0]));
+        }));
         parameterFilters.put("culture", (parameter, environment) -> {
             final Culture culture = Culture.findCulture(parameter);
             if (culture == null)
