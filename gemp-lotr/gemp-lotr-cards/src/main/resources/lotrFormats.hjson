@@ -12,7 +12,7 @@
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
 			30, 31, 32, 33
 			51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69
-			100, 101, 102
+			100, 101, 102, 103
 		]
 		errataSets: [
 			51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69
@@ -41,7 +41,7 @@
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 			30, 31, 32, 33
 			50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69
-			100, 101, 102
+			100, 101, 102, 103
 		]
 		blocks: [
 			Promotional|Promotional:0
@@ -51,7 +51,7 @@
 			war_block
 			hunter_block
 			Additional Sets|Reflections:9,Expanded Middle-earth:14,The Wraith Collection:16,Age's End:19
-			Player's Council V-sets|V0 - PC Kitchen Sink:100,V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102
+			Player's Council V-sets|V0 - PC Kitchen Sink:100,V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102, V3 - WIP Playtest:103
 			Player's Council Errata|Promotional Errata:50,The Fellowship of the Ring Errata:51,Mines of Moria Errata:52,Realms of the Elf-lords Errata:53,The Two Towers Errata:54,Battle of Helm's Deep Errata:55,Ents of Fangorn Errata:56,Return of the King Errata:57,Siege of Gondor Errata:58,Reflections Errata:59,Mount Doom Errata:60,Shadows Errata:61,Black Rider Errata:62,Bloodlines Errata:63,Expanded Middle-earth Errata:64,The Hunters Errata:65,The Wraith Collection Errata:66,Rise of Saruman Errata:67,Treachery & Deceit Errata:68,Age's End Errata:69
 			Latest PC Errata|Latest PC Errata:pc_errata
 			hobbit
@@ -129,7 +129,7 @@
 			pc_ttt_block
 			pc_king_block
 			Additional Sets|Promotional:0,Reflections:9
-			Player's Council V-sets|V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102, V2 - WIP Playtest:102
+			Player's Council V-sets|V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102, V3 - WIP Playtest:103
 			Player's Council Errata|The Fellowship of the Ring Errata:51,Mines of Moria Errata:52,Realms of the Elf-lords Errata:53,The Two Towers Errata:54,Battle of Helm's Deep Errata:55,Ents of Fangorn Errata:56,Return of the King Errata:57,Siege of Gondor Errata:58,Reflections Errata:59,Mount Doom Errata:60
 			Latest PC Errata|Latest PC Errata:pc_errata
 		]
@@ -166,7 +166,7 @@
 			"7_49"
 		]
 		sets: [
-			7, 8, 10
+			7, 8, 10, 103
 		]
 		errataSets: [
 			57,58,60
@@ -231,7 +231,7 @@
 		winAtEndOfRegroup: true
 		discardPileIsPublic: true
 		sets: [
-			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 100, 101, 102
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 100, 101, 102, 103
 		]
 		blocks: [
 			Promotional|Promotional:0
@@ -241,7 +241,7 @@
 			war_block
 			hunter_block
 			Additional Sets|Reflections:9,Expanded Middle-earth:14,The Wraith Collection:16,Age's End:19
-			Player's Council V-sets|V0 - PC Kitchen Sink:100,V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102
+			Player's Council V-sets|V0 - PC Kitchen Sink:100,V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102, V3 - WIP Playtest:103
 			Player's Council Errata|Promotional Errata:50,The Fellowship of the Ring Errata:51,Mines of Moria Errata:52,Realms of the Elf-lords Errata:53,The Two Towers Errata:54,Battle of Helm's Deep Errata:55,Ents of Fangorn Errata:56,Return of the King Errata:57,Siege of Gondor Errata:58,Reflections Errata:59,Mount Doom Errata:60,Shadows Errata:61,Black Rider Errata:62,Bloodlines Errata:63,Expanded Middle-earth Errata:64,The Hunters Errata:65,The Wraith Collection Errata:66,Rise of Saruman Errata:67,Treachery & Deceit Errata:68,Age's End Errata:69
 		]
 		errataSets: [
