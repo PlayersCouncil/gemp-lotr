@@ -42,7 +42,7 @@ public class FilterFactory {
 
             // Wraith is a race, but the original Ringwraith is not, so we'll support both "culture(wraith)" and "Ringwraith"
             if(value == Culture.WRAITH) {
-                appendFilter("ringwraith", value);
+                appendFilter("ringwraith", "ringwraith", value);
             }
             else {
                 appendFilter(value);
@@ -777,16 +777,15 @@ public class FilterFactory {
     }
 
     private void appendFilter(Filterable value) {
-        appendFilter(Sanitize(value.toString()), value);
+        appendFilter(Sanitize(value.toString()), Hyphenize(value.toString()), value);
     }
 
-    private void appendFilter(String filterName, Filterable value) {
-        final String optionalFilterName = value.toString().toLowerCase().replace("_", "-");
+    private void appendFilter(String filterName, String hyphenName, Filterable value) {
         if (simpleFilters.containsKey(filterName))
             throw new RuntimeException("Duplicate filter name: " + filterName);
         simpleFilters.put(filterName, (actionContext) -> value);
-        if (!optionalFilterName.equals(filterName))
-            simpleFilters.put(optionalFilterName, (actionContext -> value));
+        if (!hyphenName.equals(filterName))
+            simpleFilters.put(hyphenName, (actionContext -> value));
     }
 
     public FilterableSource generateFilter(String value, CardGenerationEnvironment environment) throws
@@ -878,5 +877,12 @@ public class FilterFactory {
                 .toLowerCase()
                 .replace(" ", "")
                 .replace("_", "");
+    }
+
+    public static String Hyphenize(String input) {
+        return input
+                .toLowerCase()
+                .replace(" ", "-")
+                .replace("_", "-");
     }
 }
