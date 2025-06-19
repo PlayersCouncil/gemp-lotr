@@ -1014,12 +1014,12 @@
 				phase: Assignment
 				cost: {
 					type: Discard
-					select: another(title(Winged Nazgul))
+					select: choose(another, title(Winged Nazgul))
 				}
 				effect: {
 					type: AssignFPCharacterToSkirmish
 					minion: self
-					fpCharacter: unbound,companion
+					fpCharacter: choose(unbound,companion)
 				}
 			}
 		]
