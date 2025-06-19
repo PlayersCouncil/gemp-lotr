@@ -8,6 +8,7 @@ import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.Preventable;
+import com.gempukku.lotro.logic.timing.results.AddTwilightResult;
 
 public class AddTwilightEffect extends AbstractEffect implements Preventable {
     public enum Cause {
@@ -88,6 +89,7 @@ public class AddTwilightEffect extends AbstractEffect implements Preventable {
             int count = getTwilightToAdd(game);
             game.getGameState().sendMessage(_sourceText + " added " + count + " twilight");
             game.getGameState().addTwilight(count);
+            game.getActionsEnvironment().emitEffectResult(new AddTwilightResult(_source, _cause, count));
             return new FullEffectResult(true);
         }
         return new FullEffectResult(false);
