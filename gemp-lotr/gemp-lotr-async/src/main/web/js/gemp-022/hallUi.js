@@ -641,27 +641,28 @@ var GempLotrHallUI = Class.extend({
     },
 	
 	initTable: function(displayed, headerID, tableID) {
-		var header = $("#" + headerID);
+		const header = $("#" + headerID);
+		const content = $("#" + tableID);
+		const that = this;
 
-		var content = $("#" + tableID);
+		// Inject triangle span if not already present
+		if (header.find(".disclosureTriangle").length === 0) {
+			header.prepend("<span class='disclosureTriangle'></span>");
+		}
 
-		var that = this;
-		var toggle = function() {
-			if (content.hasClass("hidden"))
-				content.removeClass("hidden");
-			else
-				content.addClass("hidden");
-			content.toggle("blind", {}, 200);
+		const toggle = function () {
+			content.toggleClass("hidden").toggle("blind", {}, 200);
+			header.toggleClass("expanded");
 			that.updateHallSettings();
 		};
-		
-		header.click(toggle);
+
+		header.off("click").on("click", toggle);
 
 		if (displayed) {
 			content.show();
+			header.addClass("expanded");
 		} else {
-			content.addClass("hidden");
-			content.hide();
+			content.addClass("hidden").hide();
 		}
 	},
 

@@ -288,6 +288,9 @@ table.tables tr.privateForPlayer {
 	padding: 4px;
 	margin: 2px;
 	border-radius: 3px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
 }
 
 .wc-queues {
@@ -889,3 +892,21 @@ form#queueSpawnerForm input {
 .bold {
    font-weight: bold;
  }
+
+.disclosureTriangle {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 4px;
+  margin-right: 4px;
+  vertical-align: middle;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid #fff;
+  transition: transform 0.2s ease;
+}
+
+/* Rotate down when expanded */
+.eventHeader.expanded .disclosureTriangle {
+  transform: rotate(90deg);
+}
