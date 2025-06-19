@@ -902,7 +902,7 @@
 					}
 					{
 						type: Hinder
-						select: all(not(or(memory(chosenCompanions), memory(chosenSouthrons))))
+						select: all(character,not(or(memory(chosenCompanions), memory(chosenSouthrons))))
 					}
 				]
 			}
