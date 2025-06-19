@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
@@ -37,6 +38,7 @@ public class RestoreCardsInPlay implements EffectAppenderProducer {
 
         result.addEffectAppender(
                 CardResolver.resolveCards(select,
+                        SpotOverride.INCLUDE_HINDERED,
                         (actionContext) -> Filters.canBeRestored(actionContext.getSource()),
                         count, memory, player, "Choose cards to hinder", environment));
         result.addEffectAppender(

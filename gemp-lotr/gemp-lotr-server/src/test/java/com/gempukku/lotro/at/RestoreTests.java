@@ -152,7 +152,7 @@ public class RestoreTests {
 
 		assertTrue(scn.FreepsDecisionAvailable("reconcile"));
 		assertTrue(scn.IsHindered(aragorn));
-		scn.FreepsDeclineReconciliation();
+		scn.FreepsDeclineReconciliation(); //Actually declining the "discard a card from hand" part of reconcile
 		assertFalse(scn.IsHindered(aragorn));
 
 		assertTrue(scn.ShadowDecisionAvailable("Regroup"));

@@ -712,12 +712,40 @@ public class GameState {
     public void putCardOnTopOfDeck(PhysicalCard card) {
         addCardToZone(null, card, Zone.DECK, false);
     }
+    public boolean iterateActiveCards(PhysicalCardVisitor visitor) { return iterateActiveCards(visitor, SpotOverride.NONE); }
+    public boolean iterateActiveCards(PhysicalCardVisitor physicalCardVisitor, Map<InactiveReason, Boolean> spotOverrides) {
 
-    public boolean iterateActiveCards(PhysicalCardVisitor physicalCardVisitor) {
+        //These represent all the ways a card might be inactive and thus excluded from iteration.
+        // However, sometimes card effects wish to pierce the veil of inactivity for one reason or another; such cards
+        // need to manually override the default behavior.
+        boolean includeOutOfTurn = false;
+        boolean includeAttachedToInactive = false;
+        boolean includeStacked = false;
+        boolean includeHindered = false;
+
+        // If any spotOverrides were supplied, then apply them
+        if (spotOverrides != null) {
+            if (spotOverrides.get(InactiveReason.OUT_OF_TURN) != null) {
+                includeOutOfTurn = spotOverrides.get(InactiveReason.OUT_OF_TURN);
+            }
+            if (spotOverrides.get(InactiveReason.ATTACHED_TO_INACTIVE) != null) {
+                includeAttachedToInactive = spotOverrides.get(InactiveReason.ATTACHED_TO_INACTIVE);
+            }
+            if (spotOverrides.get(InactiveReason.STACKED) != null) {
+                includeStacked = spotOverrides.get(InactiveReason.STACKED);
+            }
+            if (spotOverrides.get(InactiveReason.HINDERED) != null) {
+                includeHindered = spotOverrides.get(InactiveReason.HINDERED);
+            }
+        }
+
         for (PhysicalCardImpl physicalCard : _inPlay) {
-            if (isCardInPlayActive(physicalCard))
-                if (physicalCardVisitor.visitPhysicalCard(physicalCard))
+            // Check if the card can be spotted as "active" and include it if it can be.
+            if (isCardInPlayActive(physicalCard, includeOutOfTurn, includeAttachedToInactive, includeStacked, includeHindered)) {
+                if (physicalCardVisitor.visitPhysicalCard(physicalCard)) {
                     return true;
+                }
+            }
         }
 
         return false;
@@ -1021,8 +1049,15 @@ public class GameState {
         return !_fierceSkirmishes && !_extraSkirmishes;
     }
 
-    public boolean isCardInPlayActive(PhysicalCard card) {
+    public boolean isCardInPlayActive(PhysicalCard card) { return isCardInPlayActive(card, false, false, false, false); }
+    public boolean isCardInPlayActive(PhysicalCard card, boolean includeOutOfTurn, boolean includeAttachedToInactive,
+            boolean includeStacked, boolean includeHindered) {
         Side side = card.getBlueprint().getSide();
+
+        //Hindered cards do not count as active for most purposes
+        if(!includeHindered && card.isFlipped())
+            return false;
+
         // Either it's not attached or attached to active card
         // AND is a site or fp/ring of current player or shadow of any other player
         if (card.getBlueprint().getCardType() == CardType.SITE)
@@ -1031,17 +1066,23 @@ public class GameState {
         if (card.getBlueprint().getCardType() == CardType.THE_ONE_RING)
             return card.getOwner().equals(_currentPlayerId);
 
-        if (card.getAttachedTo() != null && card.getAttachedTo().getBlueprint().getCardType() != CardType.SITE)
-            return isCardInPlayActive(card.getAttachedTo());
+        if (card.getAttachedTo() != null && card.getAttachedTo().getBlueprint().getCardType() != CardType.SITE) {
+            if(!isCardInPlayActive(card.getAttachedTo(), includeOutOfTurn, includeAttachedToInactive, includeStacked, includeHindered)) {
+                return includeAttachedToInactive;
+            }
+        }
 
-        if(card.getStackedOn() != null && card.getStackedOn().getBlueprint().getCardType() != CardType.SITE)
-            return isCardInPlayActive(card.getStackedOn());
+        if(card.getStackedOn() != null && card.getStackedOn().getBlueprint().getCardType() != CardType.SITE){
+            if(!isCardInPlayActive(card.getStackedOn(), includeOutOfTurn, includeAttachedToInactive, includeStacked, includeHindered)) {
+                return includeStacked;
+            }
+        }
 
         if (card.getOwner().equals(_currentPlayerId) && side == Side.SHADOW)
-            return false;
+            return includeOutOfTurn;
 
         if (!card.getOwner().equals(_currentPlayerId) && side == Side.FREE_PEOPLE)
-            return false;
+            return includeOutOfTurn;
 
         return true;
     }

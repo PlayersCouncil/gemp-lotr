@@ -1,6 +1,8 @@
 package com.gempukku.lotro.logic.effects;
 
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.common.InactiveReason;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -11,23 +13,30 @@ import java.util.*;
 
 public abstract class AbstractPreventableCardEffect extends AbstractEffect implements PreventableCardEffect {
     private final Filter _filter;
+    private final Map<InactiveReason, Boolean> _spotOverrides = new HashMap<>();
     private final Set<PhysicalCard> _preventedTargets = new HashSet<>();
     private int _requiredTargets;
 
-    public AbstractPreventableCardEffect(PhysicalCard... cards) {
+    public AbstractPreventableCardEffect(PhysicalCard... cards) { this(SpotOverride.NONE, cards); }
+
+    public AbstractPreventableCardEffect(Map<InactiveReason, Boolean> spotOverrides, PhysicalCard... cards) {
         List<PhysicalCard> affectedCards = Arrays.asList(cards);
         _requiredTargets = affectedCards.size();
         _filter = Filters.in(affectedCards);
+        _spotOverrides.putAll(spotOverrides);
     }
 
-    public AbstractPreventableCardEffect(Filterable... filter) {
+    public AbstractPreventableCardEffect(Filterable... filter) { this(SpotOverride.NONE, filter); }
+
+    public AbstractPreventableCardEffect(Map<InactiveReason, Boolean> spotOverrides, Filterable... filter) {
+        _spotOverrides.putAll(spotOverrides);
         _filter = Filters.and(filter);
     }
 
     protected abstract Filter getExtraAffectableFilter();
 
     protected final Collection<PhysicalCard> getAffectedCards(LotroGame game) {
-        return Filters.filterActive(game, _filter, getExtraAffectableFilter());
+        return Filters.filterActive(game, _spotOverrides, _filter, getExtraAffectableFilter());
     }
 
     public final Collection<PhysicalCard> getAffectedCardsMinusPrevented(LotroGame game) {

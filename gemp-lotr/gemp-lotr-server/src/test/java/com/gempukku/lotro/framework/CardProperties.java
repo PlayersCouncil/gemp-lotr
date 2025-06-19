@@ -153,7 +153,15 @@ public interface CardProperties extends TestBase {
 	}
 
 	default boolean IsHindered(PhysicalCardImpl card) { return HasKeyword(card, Keyword.HINDERED); }
-	default void HinderCard(PhysicalCardImpl card) {  game().getGameState().hinder(Collections.singletonList(card)); }
-	default void RestoreCard(PhysicalCardImpl card) {  game().getGameState().restore(Collections.singletonList(card)); }
+	default void HinderCard(PhysicalCardImpl...cards) {
+		for(var card : cards) {
+			game().getGameState().hinder(Collections.singletonList(card));
+		}
+	}
+	default void RestoreCard(PhysicalCardImpl...cards) {
+		for(var card: cards) {
+			game().getGameState().restore(Collections.singletonList(card));
+		}
+	}
 
 }

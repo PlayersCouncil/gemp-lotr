@@ -912,17 +912,21 @@ public class HinderTests
     }
 
     @Test
-    public void HinderedCompanionsLoseKeywords() throws DecisionResultInvalidException, CardNotFoundException {
+    public void HinderedCompanionsLoseKeywordsFromModifiers() throws DecisionResultInvalidException, CardNotFoundException {
         //Pre-game setup
         var scn = new VirtualTableScenario(
                 new HashMap<>() {{
-                    put("aragorn", "4_109");
+                    put("aragorn", "1_89");
+
+                    put("runner", "1_178");
                 }}
         );
 
         var frodo = scn.GetRingBearer();
         var aragorn = scn.GetFreepsCard("aragorn");
         scn.MoveCompanionsToTable(aragorn);
+
+        scn.MoveMinionsToTable("runner");
 
         scn.ApplyAdHocAction(new AbstractActionProxy() {
             @Override
@@ -935,7 +939,12 @@ public class HinderTests
         });
         scn.StartGame();
 
+        scn.SkipToPhase(Phase.MANEUVER);
+
+        assertFalse(scn.HasKeyword(aragorn, Keyword.DEFENDER));
+        scn.FreepsUseCardAction(aragorn);
         assertTrue(scn.HasKeyword(aragorn, Keyword.DEFENDER));
+        scn.ShadowPass();
         scn.FreepsUseCardAction(frodo);
 
         assertTrue(scn.IsHindered(aragorn));

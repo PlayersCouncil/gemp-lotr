@@ -1,6 +1,7 @@
 package com.gempukku.lotro.logic.effects;
 
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -15,7 +16,7 @@ public class RestoreCardsInPlayEffect extends AbstractPreventableCardEffect {
     private String _sourceText;
 
     public RestoreCardsInPlayEffect(String performingPlayer, PhysicalCard source, PhysicalCard... cards) {
-        super(cards);
+        super(SpotOverride.INCLUDE_HINDERED, cards);
         _performingPlayer = performingPlayer;
         if (source != null) {
             _source = source;
@@ -24,7 +25,7 @@ public class RestoreCardsInPlayEffect extends AbstractPreventableCardEffect {
     }
 
     public RestoreCardsInPlayEffect(String performingPlayer, PhysicalCard source, Filterable... filter) {
-        super(filter);
+        super(SpotOverride.INCLUDE_HINDERED, filter);
         _performingPlayer = performingPlayer;
         if (source != null) {
             _source = source;
