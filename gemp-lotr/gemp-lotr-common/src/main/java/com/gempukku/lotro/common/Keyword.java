@@ -68,11 +68,11 @@ public enum Keyword implements Filterable {
 
     // Additional Second Edition keywords
     CUNNING("Cunning", true, false, false, true),
-    LOTHLORIEN("Lothlorien", true, false, false, true),
-    RIVENDELL("Rivendell", true, false, false, true),
-    BREE("Bree", true, false, false, true),
-    EDORAS("Edoras", true, false, false, true),
-    SHIRE("Shire", true, false, false, true),
+//    LOTHLORIEN("Lothlorien", true, false, false, true),
+//    RIVENDELL("Rivendell", true, false, false, true),
+//    BREE("Bree", true, false, false, true),
+//    EDORAS("Edoras", true, false, false, true),
+//    SHIRE("Shire", true, false, false, true),
 
 	//Additional Hobbit Draft keywords
     WISE("Wise", true, false, false, true),

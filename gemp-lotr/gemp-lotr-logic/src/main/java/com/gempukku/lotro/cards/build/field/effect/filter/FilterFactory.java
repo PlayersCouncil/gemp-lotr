@@ -31,6 +31,23 @@ public class FilterFactory {
             appendFilter(value);
         for (Race value : Race.values())
             appendFilter(value);
+        for (Culture value : Culture.values()) {
+            // Since there is already a Race of Orc and Uruk-hai, we can't add the Orc/Uruk-hai cultures as standalone filters
+            if(value == Culture.ORC || value == Culture.URUK_HAI)
+                continue;
+
+            // The HDG runs into this same issue with the Spider and Troll cultures
+            if(value == Culture.SPIDER || value == Culture.TROLL)
+                continue;
+
+            // Wraith is a race, but the original Ringwraith is not, so we'll support both "culture(wraith)" and "Ringwraith"
+            if(value == Culture.WRAITH) {
+                appendFilter("ringwraith", value);
+            }
+            else {
+                appendFilter(value);
+            }
+        }
 
         simpleFilters.put("another", (actionContext) -> Filters.not(actionContext.getSource()));
         simpleFilters.put("other", (actionContext) -> Filters.not(actionContext.getSource()));
@@ -760,7 +777,10 @@ public class FilterFactory {
     }
 
     private void appendFilter(Filterable value) {
-        final String filterName = Sanitize(value.toString());
+        appendFilter(Sanitize(value.toString()), value);
+    }
+
+    private void appendFilter(String filterName, Filterable value) {
         final String optionalFilterName = value.toString().toLowerCase().replace("_", "-");
         if (simpleFilters.containsKey(filterName))
             throw new RuntimeException("Duplicate filter name: " + filterName);
