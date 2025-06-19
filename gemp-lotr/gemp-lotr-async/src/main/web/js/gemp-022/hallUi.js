@@ -118,18 +118,14 @@ var GempLotrHallUI = Class.extend({
 
 		var hallSettingsStr = $.cookie("hallSettings");
 		if (hallSettingsStr == null)
-			hallSettingsStr = "1|1|0|0|0|0|0|0";
+			hallSettingsStr = "1|1|0|0|0|0|0";
 		var hallSettings = hallSettingsStr.split("|");
 
 		this.initTable(hallSettings[0] == "1", "waitingTablesHeader", "waitingTablesContent");
 		this.initTable(hallSettings[1] == "1", "playingTablesHeader", "playingTablesContent");
 		this.initTable(hallSettings[2] == "1", "finishedTablesHeader", "finishedTablesContent");
-		// Those 3 indexes are applied dynamically if there is some data for those sections
-//		this.initTable(hallSettings[3] == "1", "wcQueuesHeader", "wcQueuesContent");
-//		this.initTable(hallSettings[4] == "1", "wcEventsHeader", "wcEventsContent");
-//		this.initTable(hallSettings[5] == "1", "scheduledQueuesHeader", "scheduledQueuesContent");
-		this.initTable(hallSettings[6] == "1", "recurringQueuesHeader", "recurringQueuesContent");
-		this.initTable(hallSettings[7] == "1", "queueSpawnerHeader", "queueSpawnerContent");
+		this.initTable(hallSettings[5] == "1", "recurringQueuesHeader", "recurringQueuesContent");
+		this.initTable(hallSettings[6] == "1", "queueSpawnerHeader", "queueSpawnerContent");
 
 		$("#deckbuilder-button").button();
 		$("#bug-button").button();
@@ -197,34 +193,6 @@ var GempLotrHallUI = Class.extend({
         this.insertEventSection($header, $content, "wcQueues");
     },
 
-    addWcEventsSection: function() {
-        if ($("#wcEventsHeader").length) return;
-
-        const $header = $("<div>")
-            .attr("id", "wcEventsHeader")
-            .addClass("eventHeader wc-events")
-            .html(`World Championship Events<span class='count'>(0)</span>`);
-
-        const $content = $("<div>")
-            .attr("id", "wcEventsContent")
-            .addClass("visibilityToggle")
-            .append(
-                $("<table>").addClass("tables wc-events").append(`
-                    <tr>
-                        <th width='10%'>Format</th>
-                        <th width='8%'>Collection</th>
-                        <th width='20%'>Event Name</th>
-                        <th width='10%'>System</th>
-                        <th width='16%'>Stage</th>
-                        <th width='6%'>Round</th>
-                        <th width='8%'>Players</th>
-                    </tr>
-                `)
-            );
-
-        this.insertEventSection($header, $content, "wcEvents");
-    },
-
     addScheduledQueuesSection: function() {
         if ($("#scheduledQueuesHeader").length) return;
 
@@ -256,13 +224,11 @@ var GempLotrHallUI = Class.extend({
     insertEventSection: function($header, $content, sectionKey) {
         const sectionOrder = [
 			"wcQueues",
-			"wcEvents",
 			"scheduledQueues"
 		];
 
 		const sectionIds = {
 			wcQueues: "wcQueuesContent",
-			wcEvents: "wcEventsContent",
 			scheduledQueues: "scheduledQueuesContent"
 		};
 
@@ -300,10 +266,8 @@ var GempLotrHallUI = Class.extend({
 
 		if (headerId === "wcQueuesHeader" && contentId === "wcQueuesContent") {
 			settingIndex = 3;
-		} else if (headerId === "wcEventsHeader" && contentId === "wcEventsContent") {
-			settingIndex = 4;
 		} else if (headerId === "scheduledQueuesHeader" && contentId === "scheduledQueuesContent") {
-			settingIndex = 5;
+			settingIndex = 4;
 		}
 
 		if (settingIndex !== null) {
@@ -314,11 +278,6 @@ var GempLotrHallUI = Class.extend({
     removeWcQueuesSection: function() {
         $("#wcQueuesHeader").remove();
         $("#wcQueuesContent").remove();
-    },
-
-    removeWcEventsSection: function() {
-        $("#wcEventsHeader").remove();
-        $("#wcEventsContent").remove();
     },
 
     removeScheduledQueuesSection: function() {
@@ -713,14 +672,13 @@ var GempLotrHallUI = Class.extend({
 			"playingTablesContent",
 			"finishedTablesContent",
 			"wcQueuesContent",
-			"wcEventsContent",
 			"scheduledQueuesContent",
 			"recurringQueuesContent",
 			"queueSpawnerContent"
 		];
 
 		// Load current cookie (or use default if missing)
-		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0|0";
+		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0";
 		let currentSettings = hallSettingsStr.split("|");
 
 		// Update only if the element exists
@@ -1343,36 +1301,6 @@ var GempLotrHallUI = Class.extend({
 						}
 					}
 
-					// Tournament for for tournament table (not in Playing Tables Section)
-					var rowstr = "";
-					rowstr += "<tr class='tournament" + id + "'><td>" + tournament.getAttribute("format") + "</td>";
-					if(type === "sealed") {
-						rowstr += "<td>Sealed</td>";
-					}
-					else if (type === "solodraft") {
-						rowstr += "<td>Solo Draft</td>";
-
-					}
-					else if (type === "table_solodraft") {
-						rowstr += "<td>Solo Table Draft</td>";
-					}
-					else if (type === "table_draft") {
-						rowstr += "<td>Table Draft</td>";
-					}
-					else {
-						rowstr += "<td>" + tournament.getAttribute("collection") + "</td>";
-					}
-					rowstr += "<td>" + tournament.getAttribute("name") + "</td>" +
-						"<td>" + tournament.getAttribute("system") + "</td>";
-					if (tournament.hasAttribute("timeRemaining")) {
-						rowstr += "<td>" + tournament.getAttribute("stage") + " - " + tournament.getAttribute("timeRemaining") + "</td>";
-					} else {
-						rowstr += "<td>" + tournament.getAttribute("stage") + "</td>";
-					}
-					rowstr += "<td>" + tournament.getAttribute("round") + "</td>" +
-						"<td><div class='prizeHint' title='Competing Players' value='" + tournament.getAttribute("playerList") + "<br><br>* = abandoned'>" + tournament.getAttribute("playerCount") + "</div></td></tr>";
-					var row = $(rowstr);
-
 					// Row for tournament playing table
 					var displayType = type;
 					if(type === "sealed") {
@@ -1418,13 +1346,7 @@ var GempLotrHallUI = Class.extend({
 					}
 
 					if (action == "add") {
-						// Right now the only tournament section is for WC events
-						if (isWC) {
-							that.addWcEventsSection();
-							$("table.wc-events", this.tablesDiv)
-							.append(row);
-						}
-						// Display running tournaments also as playing tables
+						// Display running tournaments as playing tables
 						$("table.playingTables", this.tablesDiv)
 							.append(tablesRow)
 
@@ -1443,9 +1365,6 @@ var GempLotrHallUI = Class.extend({
 						}
 
 					} else if (action == "update") {
-						// Update row in tournaments sections
-						$(".tournament" + id, this.tablesDiv).replaceWith(row);
-
 						// Update row in playing tables section
 						var existingRow = $(".table" + id, this.tablesDiv);
 						if (existingRow.length > 0) {
@@ -1459,14 +1378,8 @@ var GempLotrHallUI = Class.extend({
 
 					this.animateRowUpdate(".tournament" + id);
 				} else if (action == "remove") {
-					// Remove tournament both from playing tables section and tournament sections
-					$(".tournament" + id, this.tablesDiv).remove();
 					$(".table" + id, this.tablesDiv).remove();
 				}
-			}
-			
-			if($('.wc-events tr').length <= 1) {
-				that.removeWcEventsSection();
 			}
 
 			var tables = root.getElementsByTagName("table");
@@ -1661,7 +1574,6 @@ var GempLotrHallUI = Class.extend({
 			$(".count", $(".eventHeader.finishedTables")).html("(" + ($("tr", $("table.finishedTables")).length - 1) + ")");
 
 			$(".count", $(".eventHeader.wc-queues")).html("(" + ($("tr", $("table.wc-queues")).length - 1) + ")");
-			$(".count", $(".eventHeader.wc-events")).html("(" + ($("tr", $("table.wc-events")).length - 1) + ")");
 
 			var games = root.getElementsByTagName("newGame");
 			for (var i=0; i<games.length; i++) {
