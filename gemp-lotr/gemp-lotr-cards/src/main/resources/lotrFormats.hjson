@@ -119,7 +119,7 @@
 		winAtEndOfRegroup: true
 		discardPileIsPublic: true
 		sets: [
-			1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 101, 102
+			1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 101, 102, 103
 		]
 		valid: [
 			"0_56", "0_57", "0_58", "0_59", "0_60"
@@ -129,7 +129,7 @@
 			pc_ttt_block
 			pc_king_block
 			Additional Sets|Promotional:0,Reflections:9
-			Player's Council V-sets|V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102
+			Player's Council V-sets|V1 - Shadow of the Past:101,V2 - King of the Golden Hall:102, V2 - WIP Playtest:102
 			Player's Council Errata|The Fellowship of the Ring Errata:51,Mines of Moria Errata:52,Realms of the Elf-lords Errata:53,The Two Towers Errata:54,Battle of Helm's Deep Errata:55,Ents of Fangorn Errata:56,Return of the King Errata:57,Siege of Gondor Errata:58,Reflections Errata:59,Mount Doom Errata:60
 			Latest PC Errata|Latest PC Errata:pc_errata
 		]
