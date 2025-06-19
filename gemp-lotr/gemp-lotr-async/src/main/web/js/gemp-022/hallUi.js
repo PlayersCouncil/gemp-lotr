@@ -1065,6 +1065,36 @@ var GempLotrHallUI = Class.extend({
 							}
 						}
 					}
+
+					var prizesBut = $("<button>Show Prizes</button>");
+					$(prizesBut).button().click((
+						function(queueInfo) {
+							return function() {
+								var infoDialog = $("<div></div>")
+                                				.dialog({
+                                					autoOpen:false,
+                                					closeOnEscape:true,
+                                					resizable:false,
+                                					title:"Prizes details",
+                                					closeText: ""
+                                				});
+
+								var prizeDescription = $(queueInfo.getAttribute("prizes")).attr("value");
+								if (prizeDescription) {
+									infoDialog.html(prizeDescription);
+								} else {
+									infoDialog.html("<p>No prize information available.</p>");
+								}
+
+								infoDialog.html(prizeDescription);
+
+								infoDialog.dialog({width: 300, height: 150});
+								infoDialog.dialog("open");
+							}
+						})(queue));
+					actionsField.append(prizesBut);
+
+
 					var type = queue.getAttribute("type");
 					if(type !== null)
 						type = type.toLowerCase();

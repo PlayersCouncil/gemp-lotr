@@ -25,6 +25,10 @@ public class WinForAwardTournamentPrizes implements TournamentPrizes {
         int hasBye = playerStanding.byeRound > 0 ? 1 : 0;
         int numberOfWins = playerStanding.playerWins + hasBye;
         prize.addItem("Placement Random Chase Card Selector", numberOfWins, true);
+        // The winner also gets one tengwar card
+        if (playerStanding.standing == 1) {
+            prize.addItem("(S)Tengwar", 1, true);
+        }
 
         if (prize.getAll().iterator().hasNext())
             return prize;
@@ -44,6 +48,10 @@ public class WinForAwardTournamentPrizes implements TournamentPrizes {
     @Override
     public String getPrizeDescription() {
         return """
-            <div class='prizeHint' value='If 4+ players, get one Event Award for each win or bye'>Prize Breakdown</div>""";
+                <div class='prizeHint' value='<ul>
+                    <li>4+ Players required for any prizes</li>
+                    <li>1 Event Award per win or bye</li>
+                    <li>1 Tengwar card for the tournament winner</li>
+                </ul>'>Prize Breakdown</div>""";
     }
 }
