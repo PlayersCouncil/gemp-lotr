@@ -40,6 +40,7 @@ public class TriggerCheckerFactory {
         triggerCheckers.put("addsburden", new AddsBurden());
         triggerCheckers.put("addsculturetoken", new AddsCultureToken());
         triggerCheckers.put("addsthreat", new AddsThreat());
+        triggerCheckers.put("addstwilight", new AddsTwilight());
         triggerCheckers.put("afterallskirmishes", new AfterAllSkirmishes());
         triggerCheckers.put("assignedagainst", new AssignedAgainst());
         triggerCheckers.put("assignedtoskirmish", new AssignedToSkirmish());

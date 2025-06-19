@@ -4,10 +4,7 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
-import com.gempukku.lotro.logic.effects.DrawOneCardEffect;
-import com.gempukku.lotro.logic.effects.KillEffect;
-import com.gempukku.lotro.logic.effects.PreventableCardEffect;
-import com.gempukku.lotro.logic.effects.WoundCharactersEffect;
+import com.gempukku.lotro.logic.effects.*;
 import com.gempukku.lotro.logic.timing.results.*;
 
 import java.util.Objects;
@@ -261,6 +258,18 @@ public class TriggerConditions {
         if (effect.getType() == Effect.Type.BEFORE_ADD_TWILIGHT) {
             Preventable addTwilightEffect = (Preventable) effect;
             return !addTwilightEffect.isPrevented(game) && effect.getSource() != null && Filters.and(filters).accepts(game, effect.getSource());
+        }
+        return false;
+    }
+
+    public static boolean addedTwilight(LotroGame game, EffectResult effectResult, AddTwilightEffect.Cause cause, Filterable... sourceFilters) {
+        if (effectResult.getType() == EffectResult.Type.ADD_TWILIGHT) {
+            var twilightResult = (AddTwilightResult) effectResult;
+
+            if(cause != null && twilightResult.getCause() != cause)
+                return false;
+
+            return (Filters.and(sourceFilters).accepts(game, twilightResult.getSource()));
         }
         return false;
     }
