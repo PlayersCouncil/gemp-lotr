@@ -26,6 +26,7 @@
 		effects: [
 			{
 				type: trigger
+				optional: false
 				trigger: [
 					{
 						type: played
