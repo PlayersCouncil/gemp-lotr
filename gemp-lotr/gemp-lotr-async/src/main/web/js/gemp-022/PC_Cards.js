@@ -982,7 +982,7 @@ var PCCards = {
 	// Pale Crown FA
 	'101_104' : 'https://i.lotrtcgpc.net/promos/LOTR-ENV1U039.0_card.jpg',
 	// V2 Saruman FA
-	'102_100': 'https://i.lotrtcgpc.net/promos/LOTR-ENV2U029.0_card.jpg'
+	'102_100': 'https://i.lotrtcgpc.net/promos/LOTR-ENV2U029.0_card.jpg',
 	
 	// Phial of Galadriel, Bane of Darkness (V3_1)
 	'103_1'  : 'https://i.lotrtcgpc.net/sets/V3/LOTR-ENV3E001.0_card.jpg',
