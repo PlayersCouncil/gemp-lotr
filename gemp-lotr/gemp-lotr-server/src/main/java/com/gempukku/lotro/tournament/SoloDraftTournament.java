@@ -67,6 +67,7 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
                 }
                 if (everyoneSubmitted) {
                     _tournamentInfo.Stage = _soloDraftInfo.PostRegistrationStage();
+                    regeneratePlayerList(); // Generate player list without check marks
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                 }
 
@@ -196,6 +197,7 @@ public class SoloDraftTournament extends BaseTournament implements Tournament {
                         disqualifyUnregisteredPlayers();
 
                         _tournamentInfo.Stage = _soloDraftInfo.PostRegistrationStage();
+                        regeneratePlayerList(); // Generate player list without check marks
                         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                     }
                 }

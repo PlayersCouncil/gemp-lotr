@@ -67,6 +67,7 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
                 }
                 if (everyoneSubmitted) {
                     _tournamentInfo.Stage = soloTableDraftInfo.postRegistrationStage();
+                    regeneratePlayerList(); // Generate player list without check marks
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                 }
 
@@ -168,6 +169,7 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
                         disqualifyUnregisteredPlayers();
 
                         _tournamentInfo.Stage = soloTableDraftInfo.postRegistrationStage();
+                        regeneratePlayerList(); // Generate player list without check marks
                         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                     }
                 }

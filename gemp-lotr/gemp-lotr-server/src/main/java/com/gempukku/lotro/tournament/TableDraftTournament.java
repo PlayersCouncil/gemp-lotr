@@ -75,6 +75,7 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
                 }
                 if (everyoneSubmitted) {
                     _tournamentInfo.Stage = tableDraftInfo.postRegistrationStage();
+                    regeneratePlayerList(); // Generate player list without check marks
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                 }
 
@@ -198,6 +199,7 @@ public class TableDraftTournament extends BaseTournament implements Tournament {
                         disqualifyUnregisteredPlayers();
 
                         _tournamentInfo.Stage = tableDraftInfo.postRegistrationStage();
+                        regeneratePlayerList(); // Generate player list without check marks
                         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                     }
                 }
