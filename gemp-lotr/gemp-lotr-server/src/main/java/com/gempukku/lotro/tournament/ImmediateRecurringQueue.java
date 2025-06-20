@@ -2,6 +2,7 @@ package com.gempukku.lotro.tournament;
 
 import com.gempukku.lotro.collection.CollectionsManager;
 
+// Made obsolete by PlayerMadeQueue -> those queues have no longer support in ui and won't be displayed if empty
 public class ImmediateRecurringQueue extends AbstractTournamentQueue implements TournamentQueue {
     private final int _playerCap;
     private final int maxPlayers;
@@ -42,5 +43,10 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
     @Override
     public boolean isJoinable() {
         return (maxPlayers < 0 || _players.size() < maxPlayers);
+    }
+
+    @Override
+    public boolean shouldBeDisplayedAsWaiting() {
+        return _players.size() > 0;
     }
 }

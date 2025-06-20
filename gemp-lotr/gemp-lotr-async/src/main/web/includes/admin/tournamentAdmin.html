@@ -96,6 +96,18 @@ $(document).ready(
 						resultdiv.html("OK");
 					}, tourneyErrorMap(resultdiv));
 				});
+
+		$("#toggle-sealed-button").button().click(
+			function () {
+				let resultdiv = $("#toggle-sealed-result");
+				resultdiv.html("Processing...");
+
+				hall.comm.toggleSealedHallStatus(
+			   		$("#toggle-sealed-select").val(),
+					function (xml) {
+						resultdiv.html(xml);
+					}, tourneyErrorMap(resultdiv));
+			});
 		
 		$("#preview-sch-tourney-button").button().click(
 			function () {
@@ -254,9 +266,15 @@ $(document).ready(
 							.attr("value", id)
 							.text(prop + " - " + serieCount + " Series");
 						$("#sch-tourney-sealed-format").append(item);
+
+						var item2 = $("<option/>")
+							.attr("value", id)
+							.text(prop);
+						$("#toggle-sealed-select").append(item2);
 					}
 				}
 				sortOptionsByName("#sch-tourney-sealed-format");
+				sortOptionsByName("#toggle-sealed-select");
 
 				for (var prop in drafts) {
 					if (Object.prototype.hasOwnProperty.call(drafts, prop)) {
@@ -450,6 +468,37 @@ function tourneyErrorMap(outputControl, callback=null) {
 				<b>Result:</b>
 			</div>
 			<div id="update-stage-result" class="flex-fill result-box">
+				Ready.
+			</div>
+		</div>
+	</div>
+
+	<br/><br/><hr><br/><br/>
+
+	<div id="toggle-sealed-hall-section" class="league-form">
+		<h1>Toggle Sealed Format Hall Status</h1>
+
+		<div class="flex-horiz">
+			<div class="label-column">Sealed Format: </div>
+			<select id="toggle-sealed-select" class="flex-fill"></select>
+		</div>
+
+		<div>
+			<p>If chosen sealed format is already available in hall, this will disable it. If the format is not available
+			in hall, this will enable it.</p>
+			<p>The changes made using this form are in effect only until server restart or json definitions reload.</p>
+			<p>For permanent change, remove or add "hall: true" field in the sealed format json definition.</p>
+		</div>
+
+		<button id="toggle-sealed-button">
+			Toggle Sealed Format Hall Status
+		</button>
+
+		<div id=toggle-sealed-result-label" class="flex-horiz result-label">
+			<div class="label">
+				<b>Result:</b>
+			</div>
+			<div id="toggle-sealed-result" class="flex-fill result-box">
 				Ready.
 			</div>
 		</div>

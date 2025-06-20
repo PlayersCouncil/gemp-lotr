@@ -492,6 +492,7 @@
 		name: 15 Single Series Fellowship Block Sealed
 		id: single_fotr_block_sealed
 		format: limited_fotr
+		hall: true
 		seriesProduct: [
 			[
 				1x(S)FotR Block Choice - Starter
@@ -509,6 +510,7 @@
 		name: 16 Single Series Towers Block Sealed
 		id: single_ttt_block_sealed
 		format: limited_ttt
+		hall: true
 		seriesProduct: [
 			[
 				1x(S)TTT Block Choice - Starter
@@ -526,6 +528,7 @@
 		name: 17 Single Series Towers Standard Sealed
 		id: single_ts_sealed
 		format: limited_ttt
+		hall: true
 		seriesProduct: [
 			[
 				1x(S)TS Special Choice - Starter
@@ -544,6 +547,7 @@
 		name: 18 Single Series King Block Sealed
 		id: single_rotk_block_sealed
 		format: limited_king
+		hall: true
 		seriesProduct: [
 			[
 				1x(S)RotK Block Choice - Starter
@@ -567,6 +571,7 @@
 		name: 19 Single Series Movie Sealed
 		id: single_movie_sealed
 		format: limited_king
+		hall: true
 		seriesProduct: [
 			[
 				1x(S)Movie Special Choice - Starter
@@ -588,6 +593,7 @@
 		name: 20 Single Series War of the Ring Block Sealed
 		id: single_wotr_block_sealed
 		format: limited_shadows
+		hall: true
 		seriesProduct: [
 			[
 				1x(S)WotR Choice - Starter
@@ -611,6 +617,7 @@
 		name: 21 Single Series Hunters Block Sealed
 		id: single_th_block_sealed
 		format: limited_hunters
+		hall: true
 		seriesProduct: [
 			[
 				1x(S)HU Block Choice - Starter

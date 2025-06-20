@@ -1433,5 +1433,55 @@ var GempLotrCommunication = Class.extend({
             error:this.errorCheck(errorMap),
             dataType:"xml"
         });
-    }
+    },
+    getTournamentAvailableFormats:function (callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/tournament/tournamentFormats",
+            cache:false,
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+    createTournament:function (type, deckName, maxPlayers, constructedFormatCode, sealedFormatCode, soloDraftFormatCode, tableDraftFormatCode, tableDraftTimer,
+                               playoff, deckbuildingDuration, competitive, startable, readyCheck, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/tournament/create",
+            cache:false,
+            data:{
+                type:type,
+                deckName:deckName,
+                maxPlayers:maxPlayers,
+                constructedFormatCode:constructedFormatCode,
+                sealedFormatCode:sealedFormatCode,
+                soloDraftFormatCode:soloDraftFormatCode,
+                tableDraftFormatCode:tableDraftFormatCode,
+                tableDraftTimer:tableDraftTimer,
+                playoff:playoff,
+                deckbuildingDuration:deckbuildingDuration,
+                competitive:competitive,
+                startable:startable,
+                readyCheck:readyCheck,
+                participantId:getUrlParam("participantId")
+            },
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+	toggleSealedHallStatus:function (sealedFormatCode, callback, errorMap) {
+		$.ajax({
+			type:"POST",
+			url:this.url + "/admin/toggleSealedHallStatus",
+			cache:false,
+			data:{
+				sealedFormatCode:sealedFormatCode
+			},
+			success:callback,
+			error:this.errorCheck(errorMap),
+			dataType:"html"
+		});
+	}
 });

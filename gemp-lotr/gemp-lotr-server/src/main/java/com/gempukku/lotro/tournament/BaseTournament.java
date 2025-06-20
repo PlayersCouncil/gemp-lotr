@@ -129,7 +129,7 @@ public abstract class BaseTournament implements Tournament {
         for(var player : _players) {
             if(!_droppedPlayers.contains(player)) {
                 _playerList += player;
-                if (!_tournamentInfo._params.requiresDeck) {
+                if (!_tournamentInfo._params.requiresDeck && (getTournamentStage().equals(Stage.DECK_BUILDING) || getTournamentStage().equals(Stage.DECK_REGISTRATION))) {
                     // limited game, show who already made a deck
                     var registeredDeck = getPlayerDeck(player);
                     if (registeredDeck != null && !StringUtils.isEmpty(registeredDeck.getDeckName())) {

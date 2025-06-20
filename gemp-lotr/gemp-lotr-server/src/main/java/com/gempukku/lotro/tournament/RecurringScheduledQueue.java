@@ -56,6 +56,12 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
     }
 
     @Override
+    public boolean shouldBeDisplayedAsWaiting() {
+        // Display in waiting tables section 1 hour before start
+        return ZonedDateTime.now().isAfter(_nextStart.minus(_signupTimeBeforeStart));
+    }
+
+    @Override
     public boolean process() throws SQLException, IOException {
         if (ZonedDateTime.now().isAfter(_nextStart)) {
             if (_players.size() >= _minimumPlayers) {

@@ -14,11 +14,13 @@ public class SealedEventDefinition {
     private final String _id;
     private final LotroFormat _format;
     private final List<List<CardCollection.Item>> _seriesProduct = new ArrayList<>();
+    private final boolean _hallVisible;
 
-    public SealedEventDefinition(String name, String id, LotroFormat format, List<List<String>> product) {
+    public SealedEventDefinition(String name, String id, LotroFormat format, List<List<String>> product, boolean hallVisible) {
         _name = name;
         _id = id;
         _format = format;
+        _hallVisible = hallVisible;
 
         for(var serie : product) {
             List<CardCollection.Item> items = new ArrayList<>();
@@ -47,6 +49,7 @@ public class SealedEventDefinition {
            seriesProduct = _seriesProduct.stream()
                    .map(x->x.stream().map(CardCollection.Item::toString).collect(Collectors.toList()))
                    .collect(Collectors.toList());
+           hall = _hallVisible;
         }};
     }
 }

@@ -21,6 +21,7 @@ public class LotroFormatLibrary {
     private final Map<String, LotroFormat> _hallFormats = new LinkedHashMap<>();
 
     private final Map<String, SealedEventDefinition> _sealedTemplates = new LinkedHashMap<>();
+    private final Map<String, SealedEventDefinition> _hallSealedTemplates = new LinkedHashMap<>();
 
     private final AdventureLibrary _adventureLibrary;
     private final LotroCardBlueprintLibrary _cardLibrary;
@@ -48,6 +49,7 @@ public class LotroFormatLibrary {
         try {
             collectionReady.acquire();
             _sealedTemplates.clear();
+            _hallSealedTemplates.clear();
             loadSealedTemplates(_sealedPath);
             collectionReady.release();
         } catch (InterruptedException e) {
@@ -88,12 +90,15 @@ public class LotroFormatLibrary {
             for (var def : defs) {
                 if(def == null)
                     continue;
-                var sealed = new SealedEventDefinition(def.name, def.id, _allFormats.get(def.format), def.seriesProduct);
+                var sealed = new SealedEventDefinition(def.name, def.id, _allFormats.get(def.format), def.seriesProduct, def.hall);
 
                 if(_sealedTemplates.containsKey(def.id)) {
                     System.out.println("Overwriting existing sealed definition '" + def.id + "'!");
                 }
                 _sealedTemplates.put(def.id, sealed);
+                if (def.hall) {
+                    _hallSealedTemplates.put(def.id, sealed);
+                }
             }
 
         } catch (IOException e) {
@@ -222,6 +227,38 @@ public class LotroFormatLibrary {
         catch (InterruptedException exp) {
             throw new RuntimeException("FormatLibrary.GetSealedTemplate() interrupted: ", exp);
         }
+    }
+
+    public Map<String, SealedEventDefinition> getAllHallSealedTemplates() {
+        try {
+            collectionReady.acquire();
+            var data = Collections.unmodifiableMap(_hallSealedTemplates);
+            collectionReady.release();
+            return data;
+        }
+        catch (InterruptedException exp) {
+            throw new RuntimeException("FormatLibrary.getAllHallSealedTemplates() interrupted: ", exp);
+        }
+    }
+
+    public boolean toggleSealedInHall(String code) {
+        try {
+            collectionReady.acquire();
+            boolean tbr = false;
+            if (_hallSealedTemplates.containsKey(code)) {
+                _hallSealedTemplates.remove(code);
+            } else if (_sealedTemplates.containsKey(code)) {
+                _hallSealedTemplates.put(code, _sealedTemplates.get(code));
+                tbr = true;
+            }
+
+            collectionReady.release();
+            return tbr;
+        }
+        catch (InterruptedException exp) {
+            throw new RuntimeException("FormatLibrary.toggleSealedInHall() interrupted: ", exp);
+        }
+
     }
 
     public SealedEventDefinition GetSealedTemplateByFormatCode(String formatCode) {

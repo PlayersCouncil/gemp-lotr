@@ -67,6 +67,7 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
                 }
                 if (everyoneSubmitted) {
                     _tournamentInfo.Stage = soloTableDraftInfo.postRegistrationStage();
+                    regeneratePlayerList(); // Generate player list without check marks
                     _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                 }
 
@@ -168,6 +169,7 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
                         disqualifyUnregisteredPlayers();
 
                         _tournamentInfo.Stage = soloTableDraftInfo.postRegistrationStage();
+                        regeneratePlayerList(); // Generate player list without check marks
                         _tournamentService.recordTournamentStage(_tournamentId, getTournamentStage());
                     }
                 }
@@ -268,10 +270,9 @@ public class SoloTableDraftTournament extends BaseTournament implements Tourname
 
     @Override
     public String getTableDescription() {
-        if (soloTableDraftInfo._params.prizes == PrizeType.NONE && soloTableDraftInfo._params.cost == 0) {
-            return "Casual - " + _tableDraftLibrary.getTableDraftDefinition(soloTableDraftInfo.soloTableDraftParams.soloTableDraftFormatCode).getName();
-        } else {
-            return "Competitive - " + _tableDraftLibrary.getTableDraftDefinition(soloTableDraftInfo.soloTableDraftParams.soloTableDraftFormatCode).getName();
+        if (isWC()) {
+            return DateUtils.Now().getYear() + " World Championship - " + _tableDraftLibrary.getTableDraftDefinition(soloTableDraftInfo.soloTableDraftParams.soloTableDraftFormatCode).getName();
         }
+        return "Tournament Game - " + _tableDraftLibrary.getTableDraftDefinition(soloTableDraftInfo.soloTableDraftParams.soloTableDraftFormatCode).getName();
     }
 }
