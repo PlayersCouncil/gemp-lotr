@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ThreatRule {
+    public static String ThreatRuleSource = "Threat Rule";
     private final DefaultActionsEnvironment _actionsEnvironment;
 
     public ThreatRule(DefaultActionsEnvironment actionsEnvironment) {
@@ -53,7 +54,7 @@ public class ThreatRule {
                                         filter = Filters.and(filter, Filters.not(Filters.ringBearer));
 
                                     ChooseAndWoundCharactersEffect woundCharacter = new ChooseAndWoundCharactersEffect(action, game.getGameState().getCurrentPlayerId(), 1, 1, filter);
-                                    woundCharacter.setSourceText("Threat Rule");
+                                    woundCharacter.setSourceText(ThreatRuleSource);
                                     action.appendEffect(woundCharacter);
                                 }
                                 return Collections.singletonList(action);

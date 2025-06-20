@@ -48,6 +48,8 @@ public interface ModifiersQuerying {
     // Movement
     int getMoveLimit(LotroGame game, int baseMoveLimit);
 
+    int getThreatLimit(LotroGame game, int baseThreatLimit);
+
     boolean addsTwilightForCompanionMove(LotroGame game, PhysicalCard companion);
 
     // Twilight cost

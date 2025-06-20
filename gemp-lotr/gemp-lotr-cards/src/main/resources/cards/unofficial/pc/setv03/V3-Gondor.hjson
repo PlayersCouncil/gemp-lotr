@@ -21,19 +21,59 @@
 		strength: 2
 		vitality: 1
 		itemclass: Hand weapon
-		target: self
-		#target: title(Aragorn)
+		target: title(Aragorn)
 		effects: [
 			{
-				type: ToPlay
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+				}
 				requires: {
-					type: CanSpot
-					filter: any
+					type: canSpot
+					filter: another,weapon,attachedTo(bearer)
+				}
+				effect: {
+					type: discard
+					select: all(other,weapon,attachedTo(bearer))
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					keyword: damage+1
+					filter: bearer
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: AboutToTakeWound
+					filter: unbound,gondor,companion
+					memorize: woundedComp
+				}
+				cost: {
+					type: Choice
+					texts: [
+						Exert {bearer}
+						Add 2 threats
+					]
+					effects: [
+						{
+							type: Exert
+							select: bearer
+						}
+						{
+							type: AddThreats
+							amount: 2
+						}
+					]
+				}
+				effect: {
+					type: Hinder
+					select: memory(woundedComp)
+				}
 			}
 		]
 		gametext: Bearer must be Aragorn.  Discard other weapons he bears.  Bearer is <b>damage +1</b>.<br>Response: If an unbound [gondor] companion is about to take a wound, exert Aragorn or add 2 threats to hinder that companion.
@@ -72,15 +112,56 @@
 		resistance: 6
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: {
+						type: ForEachCulture
+						filter: any
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Moves
+				}
+				cost: {
+					type: Hinder
+					select: choose(another,unbound,Man)
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Remove a threat
+						Remove a burden
+					]
+					effects: [
+						{
+							type: RemoveThreats
+							amount: 1
+						}
+						{
+							type: RemoveBurdens
+							amount: 1
+						}
+					]
+				}
+			}
+			{
+				type: Activated
+				phase: Fellowship
+				cost: {
+					type: Exert
+					select: choose(Man)
+					memorize: exertedMan
+				}
+				effect: {
+					type: Heal
+					select: choose(unbound,Man,not(memory(exertedMan)))
+				}
 			}
 		]
 		gametext: Aragorn is strength +1 for each culture you can spot.<br>Each time the fellowship moves, you may hinder another unbound Man to remove a threat or a burden.<br>Fellowship: Exert a Man to heal an unbound Man.
@@ -158,18 +239,58 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: self
+				}
+				cost: {
+					type: Spot
+					filter: gondor, wraith
+				}
+				effect: {
+					type: RemoveThreats
+					amount: 1
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: false
+				trigger: {
+					type: TakesWound
+					filter: gondor, wraith
+					threat: true
+				}
+				effect: {
+					type: Wound
+					select: choose(minion)
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: AboutToTakeWound
+					filter: exhausted,gondor,wraith
+					memorize: woundedWraith
+				}
+				cost: [
+					{
+						type: AddThreats
+						amount: 1
+					}
+					{
+						type: Hinder
+						select: self
+					}
+				]
+				effect: {
+					type: Hinder
+					select: memory(woundedWraith)
+				}
 			}
 		]
-		gametext: Each time a Wraith is played, heal a companion.<br>Each time a [gondor] Wraith takes a threat wound, wound a minion.
+		gametext: When you play this, spot a [gondor] Wraith to remove a threat.\Each time a [gondor] Wraith takes a threat wound, wound a minion.\Response: If an exhausted [gondor] Wraith is about to take a wound, add a threat and hinder this artifact to hinder that Wraith.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -198,19 +319,49 @@
 		twilight: 1
 		type: Possession
 		itemclass: Hand weapon
-		target: self
-		#target: a [gondor] Wraith
+		target: gondor,Wraith
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: WinsSkirmish
+					filter: bearer
 				}
+				effect: [
+					{
+						type: Exert
+						select: choose(your,Wraith)
+						memorize: exertedWraith
+					}
+					{
+						type: Exert
+						select: choose(minion,InSkirmishAgainst(memory(exertedWraith)))
+					}
+				]
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Response
+				trigger: {
+					type: Killed
+					filter: minion,InSkirmishAgainst(bearer)
+					cause: OVERWHELM
+				}
+				cost: [
+					{
+						type: Discard
+						select: self
+					}
+					{
+						type: RemoveThreats
+						amount: 2
+					}
+				]
+				effect: {
+					type: wound
+					select: choose(minion)
+					count: 2
+				}
 			}
 		]
 		gametext: Bearer must be a [gondor] Wraith.<br>Each time bearer wins a skirmish, you may exert a Wraith and a minion it is assigned to skirmish.<br>Response: If bearer overwhelms a minion, discard this possession and remove 2 threats to wound 2 minions.
@@ -247,12 +398,54 @@
 				type: ToPlay
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: Wraith
+					count: 2
+				}
+			}
+			
+			{
+				type: Modifier
+				modifier: {
+					type: ThreatLimit
+					amount: 2
+				}
+			}
+			
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: Wraith
+					amount: 1
+					requires: {
+						type: IsGreaterThan
+						firstNumber: {
+							type: ForEachThreat
+						}
+						secondNumber: {
+							type: ForEachYouCanSpot
+							filter: companion
+						}
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: false
+				trigger: [
+					{
+						type: Discarded
+						filter: self
+					}
+					{
+						type: Hindered
+						filter: self
+					}
+				]
+				effect: {
+					type: RemoveThreats
+					amount: 1
+				}
 			}
 		]
 		gametext: To play, spot 2 Wraiths.<br>The threat limit is +2.<br>While you can spot more threats than companions, each Wraith is strength +1.<br>Each time this condition is hindered or discarded, remove a threat.
@@ -287,14 +480,33 @@
 		effects: [
 			{
 				type: event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
+				cost: [
+					{
+						type: If
+						check: {
+							type: CanSpot
+							filter: title(Anduril)
+						}
+						true: {
+							type: Spot
+							filter: title(Anduril)
+						}
+						false: {
+							type: Exert
+							select: choose(title(Aragorn))
+						}
+					}
+					{
+						type: AddThreats
+						amount: {
+							type: RegionNumber
+						}
+					}
+				]
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: PlayCardFromDeadPile
+						select: choose(Wraith)
 					}
 				]
 			}
@@ -468,15 +680,38 @@
 		keywords: Enduring
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: extraCost
+				cost: {
+					type: addThreats
+					amount: 2
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: KilledTrigger
+				optional: false
+				effect: {
+					type: Heal
+					select: all(Wraith)
+				}
+			}
+			{
+				type: Activated
+				phase: Assignment
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: [
+					{
+						type: Restore
+						select: choose(Wraith)
+						memorize: restoredWraith
+					}
+					{
+						type: Heal
+						select: memory(restoredWraith)
+					}
+				]
 			}
 		]
 		gametext: Enduring.  To play, add 2 threats.<br>Each time King of the Dead is killed, heal every Wraith.<br>Assignment: Exert King of the Dead to restore a Wraith and heal it.
@@ -565,15 +800,32 @@
 		keywords: Enduring
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: extraCost
+				cost: {
+					type: If
+					check: {
+						type: CanSpotThreats
+						amount: 1
+					}
+					true: {
+						type: Spot
+						filter: any
+					}
+					false: {
+						type: addThreats
+						amount: 1
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: {
+						type: ForEachHinderedYouCanSpot
+					}
+				}
 			}
 		]
 		gametext: Enduring.<br>To play, spot or add a threat.<br>This companion is strength +1 for each hindered card you can spot.
@@ -611,15 +863,44 @@
 		keywords: Enduring
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: extraCost
+				cost: {
+					type: If
+					check: {
+						type: CanSpotThreats
+						amount: 1
+					}
+					true: {
+						type: Spot
+						filter: any
+					}
+					false: {
+						type: addThreats
+						amount: 1
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: {
+						type: ForEachInDeadPile
+						filter: companion
+					}
+				}
+			}
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: {
+						type: ForEachInDeadPile
+						filter: Wraith
+					}
+				}
 			}
 		]
 		gametext: Enduring.<br>To play, spot or add a threat.<br>This companion is strength +1 for each companion in the dead pile.<br>This companion is strength +1 for each Wraith in the dead piile.
@@ -644,7 +925,7 @@
 			collInfo: V3_29
 			rarity: _
 		}
-		title: Tormented Wraith
+		title: Tormented Revenant
 		unique: false
 		side: Free Peoples
 		culture: Gondor
@@ -657,15 +938,33 @@
 		keywords: Enduring
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: extraCost
+				cost: {
+					type: If
+					check: {
+						type: CanSpotThreats
+						amount: 2
+					}
+					true: {
+						type: Spot
+						filter: any
+					}
+					false: {
+						type: addThreats
+						amount: 2
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: self
+					amount: {
+						type: ForEachTwilightCost
+						filter: minion,InSkirmishAgainst(self)
+					}
+				}
 			}
 		]
 		gametext: Enduring.<br>To play, spot or add 2 threats.<br>This companion is strength +X, where X is the twilight cost of each minion skirmishing this companion.
@@ -841,16 +1140,37 @@
 			{
 				type: responseEvent
 				trigger: {
-					type: StartOfTurn
+					type: aboutToDiscard
+					opponent: true
+					filter: gondor
+					memorizeSource: discarder
 				}
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: Spot
+					filter: Gondor, Wraith
+					count: 3
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: preventDiscard
+						select: all(gondor)
+						memorize: preventedCards
+					}
+					{
+						type: Hinder
+						select: all(memory(preventedCards))
+					}
+					{
+						type: Optional
+						text: Would you like to add a threat to hinder {discarder}?
+						cost: {
+							type: AddThreats
+							amount: 1
+						}
+						effect: {
+							type: Hinder
+							select: memory(discarder)
+						}
 					}
 				]
 			}

@@ -427,6 +427,14 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public int getThreatLimit(LotroGame game, int baseThreatLimit) {
+        int result = baseThreatLimit;
+        for (Modifier modifier : getModifiers(game, ModifierEffect.THREAT_LIMIT_MODIFIER))
+            result += modifier.getThreatLimitModifier(game);
+        return Math.max(1, result);
+    }
+
+    @Override
     public boolean addsTwilightForCompanionMove(LotroGame game, PhysicalCard companion) {
         for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.MOVE_TWILIGHT_MODIFIER, companion)) {
             if (!modifier.addsTwilightForCompanionMove(game, companion))

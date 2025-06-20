@@ -230,6 +230,11 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
+    public int getThreatLimitModifier(LotroGame game) {
+        return delegate.getThreatLimitModifier(game);
+    }
+
+    @Override
     public int getOverwhelmMultiplier(LotroGame game, PhysicalCard physicalCard) {
         return delegate.getOverwhelmMultiplier(game, physicalCard);
     }

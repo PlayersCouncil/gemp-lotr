@@ -193,8 +193,16 @@ public class TriggerConditions {
     }
 
     public static boolean forEachWounded(LotroGame game, EffectResult effectResult, Filterable... filters) {
-        if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED)
-            return Filters.and(filters).accepts(game, ((WoundResult) effectResult).getWoundedCard());
+        return forEachWounded(game, effectResult, false, filters);
+    }
+
+    public static boolean forEachWounded(LotroGame game, EffectResult effectResult, boolean threat, Filterable... filters) {
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
+            var result = (WoundResult) effectResult;
+            if(threat && !result.isThreat())
+                return false;
+            return Filters.and(filters).accepts(game, result.getWoundedCard());
+        }
         return false;
     }
 
