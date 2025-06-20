@@ -125,6 +125,8 @@ public interface ModifiersQuerying {
 
     List<? extends Action> getExtraPhaseActions(LotroGame game, PhysicalCard target);
 
+    boolean hasExtraPhaseActionsFromOtherPlayer(LotroGame game, PhysicalCard target);
+
     List<? extends Action> getExtraPhaseActionsFromStacked(LotroGame game, PhysicalCard target);
 
     boolean canPayExtraCostsToPlay(LotroGame game, PhysicalCard target);

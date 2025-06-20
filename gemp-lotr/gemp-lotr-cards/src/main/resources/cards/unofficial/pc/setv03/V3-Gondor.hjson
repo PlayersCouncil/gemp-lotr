@@ -546,15 +546,38 @@
 		]
 		effects: [
 			{
-				type: ToPlay
+				type: Activated
+				phase: Maneuver
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: self,zone(SUPPORT)
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				cost: [
+					{
+						type: Exert
+						count: 2
+						select: choose(knight,Hinderable)
+						memorize: exertedKnights
+					}
+					{
+						type: Hinder
+						ignoreCostCheckFailure: true
+						select: memory(exertedKnights)
+					}
+				]
+				effect: [
+					{
+						type: transfer
+						select: self
+						fromSupport: true
+						where: choose(minion)
+						memorizeTarget: chosenMinion
+					}
+					{
+						type: Hinder
+						select: memory(chosenMinion)
+					}
+				]
 			}
 		]
 		gametext: Fortification.<br>Maneuver: Exert and hinder 2 knights to transfer this from your support area to a minion.  Hinder that minion.
@@ -591,15 +614,76 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: ExtraCost
+				cost: {
+					type: If
+					check: {
+						type: CanSpot
+						filter: knight
+						count: 3
+					}
+					true: {
+						type: Spot
+						filter: knight
+					}
+					false: {
+						type: Exert
+						select: choose(gondor,companion)
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Response
+				trigger: {
+					type: UsesSpecialAbility
+					filter: side(Shadow),support
+					memorize: activatedCard
+				}
+				cost: {
+					type: Discard
+					select: choose(fortification)
+				}
+				effect: [
+					{
+						type: Hinder
+						select: memory(activatedCard)
+					}
+					{
+						type: CostToEffect
+						requires: {
+							type: CanSpot
+							filter: NameFromMemory(activatedCard),not(memory(activatedCard))
+						}
+						cost: {
+							type: ChooseActiveCards
+							text: Choose how many knights to exert
+							count: {
+								type: Range
+								from: 0
+								to: {
+									type: Min
+									firstNumber: {
+										type: ForEachYouCanSpot
+										filter: knight,CanExert
+									}
+									secondNumber: {
+										type: ForEachYouCanSpot
+										filter: NameFromMemory(activatedCard),not(memory(activatedCard))
+									}
+								}
+							}
+							memorize: exertedKnights
+						}
+						effect: {
+							type: Hinder
+							select: choose(NameFromMemory(activatedCard),not(memory(activatedCard)))
+							count: {
+								type: ForEachInMemory
+								memory: exertedKnights
+							}
+						}
+					}
+				]
 			}
 		]
 		gametext: Fortification.  To play, exert a [gondor] companion (or spot 3 knights).<br>Response: After the special ability of a Shadow support card is used, discard a fortification to hinder that card.  Then you may exert X knights to hinder X other copies of that card with the same title.
@@ -633,15 +717,33 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Played
+					filter: self
+				}
+				effect: {
+					type: Heal
+					select: all(side(Free Peoples), Man)
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: AddActivated
+					filter: self
+					player: Shadow
+					phase: Shadow
+					cost: {
+						type: Discard
+						select: self
+					}
+					effect: {
+						type: ReconcileHand
+						player: Shadow
+					}
+				}
 			}
 		]
 		gametext: When you play this, heal each Free Peoples Man. <br>Shadow: The Shadow player may discard this to reconcile their hand.
@@ -757,12 +859,33 @@
 				type: ToPlay
 				requires: {
 					type: CanSpot
-					filter: any
+					filter: gondor, companion
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Skirmish
+				cost: {
+					type: Exert
+					select: self
+					times: 2
+				}
+				effect: [
+					{
+						type: ChooseActiveCards
+						text: Choose a minion who will lose all keywords
+						select: choose(minion,InSkirmishAgainst(self))
+						memorize: chosenMinion
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: removeAllKeywords
+							filter: memory(chosenMinion)
+						}
+						until: regroup
+					}
+				]
 			}
 		]
 		gametext: Knight. Enduring. To play, spot a [gondor] companion.<br>Skirmish: Exert Pippin twice to make a minion he is skirmishing lose all keywords until the regroup phase.

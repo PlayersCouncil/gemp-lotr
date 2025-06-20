@@ -198,17 +198,17 @@
 					memorize: removedThreats
 				}
 				effect: {
-						type: CostToEffect
-						cost: {
-							type: RemoveThreats
-							amount: memory(removedThreats)
-						}
-						effect: {
-							type: AssignFPCharacterToSkirmish
-							minion: self
-							fpCharacter: choose(companion, MaxTwilight(memory(removedThreats)), not(ring-bearer))
-						}
+					type: CostToEffect
+					cost: {
+						type: RemoveThreats
+						amount: memory(removedThreats)
 					}
+					effect: {
+						type: AssignFPCharacterToSkirmish
+						minion: self
+						fpCharacter: choose(companion, MaxTwilight(memory(removedThreats)), not(ring-bearer))
+					}
+				}
 			}
 		]
 		gametext: Each time you play a Nazgul, you may exert Gollum to add a threat.<br>Assignment: Remove X threats to assign Gollum to a companion costing X or less (except the Ring-bearer).

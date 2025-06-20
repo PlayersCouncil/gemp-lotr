@@ -27,6 +27,9 @@ public class FilterFactory {
             appendFilter(value);
         for (Keyword value : Keyword.values())
             appendFilter(value);
+
+        appendFilter("support", "support", Keyword.SUPPORT_AREA);
+
         for (PossessionClass value : PossessionClass.values())
             appendFilter(value);
         for (Race value : Race.values())

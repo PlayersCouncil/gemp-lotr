@@ -829,6 +829,17 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public boolean hasExtraPhaseActionsFromOtherPlayer(LotroGame game, PhysicalCard target) {
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.EXTRA_ACTION_MODIFIER, target)) {
+            var extraActionModifier = (AddActionToCardModifier) modifier;
+            if(extraActionModifier.getTargetPlayer() != null && !extraActionModifier.getTargetPlayer().equals(target.getOwner()))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public List<? extends Action> getExtraPhaseActionsFromStacked(LotroGame game, PhysicalCard target) {
         List<Action> activateCardActions = new LinkedList<>();
 
