@@ -20,15 +20,24 @@
 		direction: Left
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: StartOfPhase
+					#Intentionally left blank as we want to trigger in every phase
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				requires: {
+					type: HasCardInDiscard
+					filter: side(Shadow), event
+				}
+				cost: {
+					type: RemoveTwilight
+					amount: 1
+				}
+				effect: {
+					type: PutCardsFromDiscardIntoHand
+					select: choose(side(Shadow), event)
+				}
 			}
 		]
 		gametext: At the start of each phase, the Shadow player may remove (1) to take a Shadow event into hand from their discard pile.
@@ -62,15 +71,20 @@
 		direction: Left
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: cancelStrengthBonus
+					filter: character
+					from: weapon
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: AddKeyword
+					filter: character
+					keyword: enduring
+				}
 			}
 		]
 		gametext: All characters lose all strength bonuses from weapons and gain <b>enduring</b>.
@@ -104,15 +118,47 @@
 		direction: Left
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: MovesTo
+					filter: self
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: [
+					{
+						type: Memorize
+						filter: side(Free Peoples), AttachedTo(companion)
+						memory: originallyAttached
+					}
+					{
+						type: SendMessage
+						text: "{freeps} enters the Gorgoroth Wastes and must choose which attached cards to leave behind."
+					}
+					{
+						type: Discard
+						player: Free Peoples
+						select: choose(side(Free Peoples), AttachedTo(companion))
+						memorize: discardedCards
+					}
+					{
+						type: FilterCardsInMemory
+						memory: originallyAttached
+						filter: zone(ATTACHED)
+						memorizeMatching: undiscardedCards
+					}
+					{
+						type: SendMessage
+						text: "{freeps} pays (2) for each of their remaining cards attached to companions: {undiscardedCards}"
+					}
+					{
+						type: AddTwilight
+						amount: {
+							type: ForEachInMemory
+							memory: undiscardedCards
+							multiplier: 2
+						}
+					}
+				]
 			}
 		]
 		gametext: When moving here, for each Free Peoples card attached to companions, the Free Peoples player must discard it or add (2).
@@ -147,15 +193,14 @@
 		keywords: Battleground
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: minion
+					amount: {
+						type: ForEachThreat
+					}
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
 			}
 		]
 		gametext: Battleground. Each minion is strength +1 for each threat you can spot.
@@ -190,15 +235,17 @@
 		keywords: Mountain
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: DisableGameText
+					filter: side(Free Peoples), item
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: ringTextIsInactive
+				}
 			}
 		]
 		gametext: Mountain.  Game text on Free Peoples items and The One Ring does not apply.
@@ -233,15 +280,48 @@
 		keywords: Mountain
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Activated
+				phase: Shadow
+				cost: {
+					type: Choice
+					texts: [
+						Remove a burden
+						Remove a threat
+					]
+					effects: [
+						{
+							type: RemoveBurdens
+							amount: 1
+						}
+						{
+							type: RemoveThreats
+							amount: 1
+						}
+					]
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: [
+					{
+						type: PlayCardFromDiscard
+						player: Shadow
+						select: choose(minion)
+						memorize: playedMinion
+					}
+					{
+						type: If
+						check: {
+							type: IsGreaterThanOrEqual
+							firstNumber: {
+								type: TwilightCostInMemory
+								memory: playedMinion
+							}
+							secondNumber: 5
+						}
+						true: {
+							type: AddTwilight
+							amount: 1
+						}
+					}
+				]
 			}
 		]
 		gametext: Mountain. Shadow: Remove a burden or a threat to play a minion from your discard pile. If it costs (5) or more, add (1).
@@ -276,15 +356,28 @@
 		keywords: Mountain
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Hindered
+					memorize: hinderedCard
+				}
+				effect: {
+					type: Discard
+					select: memory(hinderedCard)
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Exerted
+					memorize: exertedCard
+				}
+				effect: {
+					type: Wound
+					select: memory(exertedCard)
+				}
 			}
 		]
 		gametext: Mountain.  Each time a card is hindered, discard it.  Each time a character is exerted, wound it.
@@ -322,15 +415,17 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: StartOfPhase
+					#Intentionally left blank as we want to trigger in every phase
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: {
+					type: Hinder
+					player: Shadow
+					select: choose(not(companion))
+				}
 			}
 		]
 		gametext: Mountain. Battleground. At the start of each phase, the Shadow player may hinder a card (except a companion).
@@ -365,15 +460,14 @@
 		keywords: Mountain
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: AddsThreat
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				effect: {
+					type: AssignThreatWounds
+				}
 			}
 		]
 		gametext: Mountain.  Whenever a threat is added, the Free Peoples player must assign all threat wounds.

@@ -16,9 +16,10 @@ public class EffectAppenderFactory {
 
     public EffectAppenderFactory() {
         // Control-flow / Meta effects
-        effectAppenderProducers.put("dowhile", new DoWhile());
         effectAppenderProducers.put("choice", new Choice());
         effectAppenderProducers.put("costtoeffect", new CostToEffect());
+        effectAppenderProducers.put("dowhile", new DoWhile());
+        effectAppenderProducers.put("filtercardsinmemory", new FilterCardsInMemory());
         effectAppenderProducers.put("foreachplayer", new ForEachPlayer());
         effectAppenderProducers.put("if", new IfEffect());
         effectAppenderProducers.put("multiple", new Multiple());
@@ -39,6 +40,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("alteroverwhelmmultiplier", new AlterOverwhelmMultiplier());
         effectAppenderProducers.put("appendcardidstowhileinzone", new AppendCardIdsToWhileInZone());
         effectAppenderProducers.put("assignfpcharactertoskirmish", new AssignFpCharacterToSkirmish());
+        effectAppenderProducers.put("assignthreatwounds", new AssignThreatWounds());
         effectAppenderProducers.put("cancelallassignments", new CancelAllAssignments());
         effectAppenderProducers.put("cancelevent", new CancelEvent());
         effectAppenderProducers.put("cancelskirmish", new CancelSkirmish());
