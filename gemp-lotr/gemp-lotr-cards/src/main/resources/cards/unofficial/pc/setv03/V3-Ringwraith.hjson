@@ -22,15 +22,64 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+				type: ExtraCost
+				cost: [
+					{
+						type: Spot
+						filter: ringwraith
+					}
+					{
+						type: AddBurdens
+						amount: 1
+					}
+				]
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: trigger
+				optional: false
+				trigger: {
+					type: Exerted
+					filter: companion
+				}
+				requires: {
+					type: perPhaseLimit
+					phase: regroup
+					limit: 1
+				}
+				effect: [
+					{
+						type: incrementPerPhaseLimit
+						phase: regroup
+						limit: 1
+					}
+					{
+						type: DrawCards
+						count: 1
+					}
+				]
+			}
+			{
+				type: Response
+				trigger: {
+					type: Exerted
+					filter: companion
+					source: side(freeps)
+					memorize: exertedComp
+				}
+				cost: {
+					type: Discard
+					select: choose(another,title(Cirith Ungol Watcher))
+				}
+				effect: [
+					{
+						type: AddTwilight
+						amount: 6
+					}
+					{
+						type: Hinder
+						select: memory(exertedComp)
+					}
+				]
 			}
 		]
 		gametext: To play, spot a [ringwraith] card and add a burden.<br>Each time a companion exerts, draw a card (limit once per site).<br>Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add (6) and hinder that companion.
@@ -113,18 +162,56 @@
 		site: 3
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					player: you
+					filter: Nazgul
+				}
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					type: AddThreats
+					amount: 1
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Assignment
+				cost: {
+					type: ChooseANumber
+					text: Choose how many threats to remove
+					from: 0
+					to: {
+						type: Min
+						firstNumber: {
+							type: ForEachThreat
+						}
+						secondNumber: {
+							type: ForEachTwilightCost
+							filter: HighestTwilight(companion)
+						}
+					}
+					memorize: removedThreats
+				}
+				effect: {
+						type: CostToEffect
+						cost: {
+							type: RemoveThreats
+							amount: memory(removedThreats)
+						}
+						effect: {
+							type: AssignFPCharacterToSkirmish
+							minion: self
+							fpCharacter: choose(companion, MaxTwilight(memory(removedThreats)), not(ring-bearer))
+						}
+					}
 			}
 		]
-		gametext: Each time you play a Nazgul, you may exert Gollum to add a threat.<br>Assignment: Remove X threats to assign Gollum to a companion costing X (except the Ring-bearer).
+		gametext: Each time you play a Nazgul, you may exert Gollum to add a threat.<br>Assignment: Remove X threats to assign Gollum to a companion costing X or less (except the Ring-bearer).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -155,15 +242,42 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					filter: Nazgul
+					player: you
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				requires: {
+					type: playedCardThisPhase
+					filter: Nazgul
+					min: 2
+					max: 2
+				}
+				effect: [
+					{
+						type: ChooseActiveCards
+						text: Select a wounded companion to hinder
+						select: choose(wounded,companion,not(HighestStrength(wounded,companion)))
+						memorize: chosenComp
+					}
+					{
+						type: If
+						check: {
+							type: CanSpot
+							filter: title(The Witch-king)
+						}
+						true: {
+							type: Exert
+							select: memory(chosenComp)
+						}
+					}
+					{
+						type: Hinder
+						select: memory(chosenComp)
+					}
+				]
 			}
 		]
 		gametext: The second time you play a Nazgul each Shadow phase, you may hinder a wounded companion (except a companion with the highest strength).   If you can spot The Witch-king, exert that companion first.
@@ -197,15 +311,47 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: Played
+					player: you
+					filter: ringwraith,orc
+				}
+				effect: {
+					type: Hinder
+					player: freeps
+					select: choose(side(freeps),possession)
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Activated
+				phase: Shadow
+				cost: {
+					type: Spot
+					filter: Nazgul
+				}
+				effect: [
+					{
+						type: doWhile
+						effect: {
+							type: playCardFromDiscard
+							optional: true
+							select: choose(possession)
+							on: ringwraith,orc
+							memorize: playedCard
+						}
+						check: {
+							type: memoryMatches
+							memory: playedCard
+							filter: possession
+						}
+					}
+					{
+						type: Discard
+						select: self
+					}
+				]
 			}
 		]
 		gametext: Each time you play a [ringwraith] Orc, the Free Peoples player must hinder one of their possessions.<br>Shadow: Spot a Nazgul to play any number of possessions on your [ringwraith] Orcs from your discard pile.  Discard this possession.
@@ -240,15 +386,29 @@
 		effects: [
 			{
 				type: event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: Restore
+						select: all(Nazgul)
 					}
+					{
+						type: Optional
+						text: Would you like to exert The Witch-king twice to hinder all Free Peoples possessions?
+						requires: {
+							type: CanSpot
+							filter: title(The Witch-king),CanExert, MinVitality(3)
+						}
+						cost: {
+							type: Exert
+							select: choose(title(The Witch-king))
+							times: 2
+						}
+						effect: {
+							type: Hinder
+							select: all(side(freeps),possession)
+						}
+					}
+					
 				]
 			}
 		]
@@ -285,16 +445,36 @@
 			{
 				type: responseEvent
 				trigger: {
-					type: StartOfTurn
+					type: WinsSkirmish
+					filter: your, Nazgul
+					memorize: winner
+					memorizeLoser: loser
 				}
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: Exert
+					ignoreCostCheckFailure: true
+					select: memory(winner)
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: ReconcileHand
+					}
+					{
+						type: Optional
+						text: Would you like to discard a Nazgul from hand to wound {loser}?
+						requires: {
+							type: HasCardInHand
+							filter: Nazgul
+						}
+						cost: {
+							type: DiscardFromHand
+							select: choose(Nazgul)
+							forced: false
+						}
+						effect: {
+							type: Wound
+							select: memory(loser)
+						}
 					}
 				]
 			}
@@ -334,15 +514,26 @@
 		keywords: Lurker
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: CantTakeMoreWoundsThan
+					filter: minion
+					amount: 1
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Response
+				trigger: {
+					type: played
+					filter: side(free peoples),event
+				}
+				cost: {
+					type: exert
+					select: choose(self)
+				}
+				effect: {
+					type: cancelEvent
+				}
 			}
 		]
 		gametext: Lurker.<br>Minions cannot take more than 1 wound per phase.<br>Response: If a Free Peoples event is played, exert this minion to cancel that event.

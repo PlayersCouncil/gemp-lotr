@@ -22,15 +22,64 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
-				}
+				type: ExtraCost
+				cost: [
+					{
+						type: Spot
+						filter: sauron
+					}
+					{
+						type: AddThreats
+						amount: 1
+					}
+				]
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: trigger
+				optional: false
+				trigger: {
+					type: Exerted
+					filter: companion
+				}
+				requires: {
+					type: perPhaseLimit
+					phase: regroup
+					limit: 1
+				}
+				effect: [
+					{
+						type: incrementPerPhaseLimit
+						phase: regroup
+						limit: 1
+					}
+					{
+						type: DrawCards
+						count: 1
+					}
+				]
+			}
+			{
+				type: Response
+				trigger: {
+					type: Exerted
+					filter: companion
+					source: side(freeps)
+					memorize: exertedComp
+				}
+				cost: {
+					type: Discard
+					select: choose(another,title(Cirith Ungol Watcher))
+				}
+				effect: [
+					{
+						type: AddThreats
+						amount: 3
+					}
+					{
+						type: Hinder
+						select: memory(exertedComp)
+					}
+				]
 			}
 		]
 		gametext: To play, spot a [sauron] card and add a threat.<br>Each time a companion exerts, draw a card (limit once per site).<br>Response: If a companion is exerted by a Free Peoples card, discard another Cirith Ungol Watcher to add 3 threats and hinder that companion.

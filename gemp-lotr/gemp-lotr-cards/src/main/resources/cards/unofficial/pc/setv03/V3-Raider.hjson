@@ -1332,15 +1332,29 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: modifier
+				modifier: {
+					type: ModifyStrength
+					filter: Easterling
+					amount: 2
+					requires: {
+						type: CanSpotBurdens
+						amount: 3
+					}
 				}
 			}
+			
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: modifier
+				modifier: {
+					type: AddKeyword
+					filter: Easterling
+					keyword: damage+1
+					requires: {
+						type: CanSpotBurdens
+						amount: 5
+					}
+				}
 			}
 		]
 		gametext: <b>Easterling.</b>  Fierce.<br>While you can spot 3 burdens, each Easterling is strength +2.<br>While you can spot 5 burdens, each Easterling is <b>damage +1</b>.
