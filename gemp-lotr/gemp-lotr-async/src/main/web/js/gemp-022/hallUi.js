@@ -239,20 +239,25 @@ var GempLotrHallUI = Class.extend({
 		}
 
 		// Look ahead for any section that should come after this one
+		let inserted = false;
+
 		for (let i = index + 1; i < sectionOrder.length; i++) {
 			const $nextContent = $("#" + sectionIds[sectionOrder[i]]);
 			if ($nextContent.length) {
-				const $nextHeader = $("#" + sectionOrder[i] + "Header");
+			const $nextHeader = $("#" + sectionOrder[i] + "Header");
 				$header.insertBefore($nextHeader);
 				$content.insertBefore($nextHeader);
-				return;
+				inserted = true;
+				break;
 			}
 		}
 
 		// Fallback insert
-		const $anchor = $("#recurringQueuesHeader");
-		$header.insertBefore($anchor);
-		$content.insertBefore($anchor);
+		if (!inserted) {
+			const $anchor = $("#recurringQueuesHeader");
+			$header.insertBefore($anchor);
+			$content.insertBefore($anchor);
+        }
 
 		// Load settings
 		let hallSettingsStr = $.cookie("hallSettings") || "1|1|0|0|0|0|0";
