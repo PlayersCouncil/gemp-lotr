@@ -1196,24 +1196,24 @@ var PCCards = {
 	// '103_105': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E105.0_card.jpg',
 	// // Worth Fighting For (V3_106)
 	// '103_106': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E106.0_card.jpg',
-	// // Desolation of Ash (V3_107)
-	// '103_107': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E107.0_card.jpg',
-	// // Gorgoroth Plateau (V3_108)
-	// '103_108': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E108.0_card.jpg',
-	// // Gorgoroth Wastes (V3_109)
-	// '103_109': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E109.0_card.jpg',
-	// // Muster of Gorgoroth (V3_110)
-	// '103_110': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E110.0_card.jpg',
-	// // Cracks of Doom (V3_111)
-	// '103_111': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E111.0_card.jpg',
-	// // Doom Causeway (V3_112)
-	// '103_112': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E112.0_card.jpg',
-	// // Lake of Fire (V3_113)
-	// '103_113': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E113.0_card.jpg',
-	// // Orodruin (V3_114)
-	// '103_114': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E114.0_card.jpg',
-	// // Pinnacle of Doom (V3_115)
-	// '103_115': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E115.0_card.jpg',
+	// Desolation of Ash (V3_107)
+	'103_107': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E107.0_card.jpg',
+	// Gorgoroth Plateau (V3_108)
+	'103_108': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E108.0_card.jpg',
+	// Gorgoroth Wastes (V3_109)
+	'103_109': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E109.0_card.jpg',
+	// Muster of Gorgoroth (V3_110)
+	'103_110': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E110.0_card.jpg',
+	// Cracks of Doom (V3_111)
+	'103_111': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E111.0_card.jpg',
+	// Doom Causeway (V3_112)
+	'103_112': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E112.0_card.jpg',
+	// Lake of Fire (V3_113)
+	'103_113': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E113.0_card.jpg',
+	// Orodruin (V3_114)
+	'103_114': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E114.0_card.jpg',
+	// Pinnacle of Doom (V3_115)
+	'103_115': 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E115.0_card.jpg',
 	
 	//V3 Hinder Errata
 	// Blood Runs Chill (8R3) [Errata]
