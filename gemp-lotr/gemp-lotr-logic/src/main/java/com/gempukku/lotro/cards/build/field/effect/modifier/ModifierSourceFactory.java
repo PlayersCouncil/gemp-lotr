@@ -85,6 +85,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("sitecontrolcount", new SiteControlCount());
         modifierProducers.put("skipphase", new SkipPhase());
         modifierProducers.put("skirmishesresolvedinorderbyfirstshadowplayer", new AddModifierFlag(ModifierFlag.SKIRMISH_ORDER_BY_FIRST_SHADOW_PLAYER));
+        modifierProducers.put("threatlimit", new ThreatLimit());
         modifierProducers.put("transferforfree", new AddModifierFlag(ModifierFlag.TRANSFERS_FOR_FREE));
         modifierProducers.put("unhastycompanioncanparticipateinskirmishes", new UnhastyCompanionCanParticipateInSkirmishes());
         modifierProducers.put("winsafterreconcile", new AddModifierFlag(ModifierFlag.WIN_CHECK_AFTER_SHADOW_RECONCILE));

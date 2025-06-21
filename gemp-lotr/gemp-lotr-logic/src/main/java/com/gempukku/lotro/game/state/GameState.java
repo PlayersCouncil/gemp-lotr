@@ -412,7 +412,7 @@ public class GameState {
         return _maps.get(playerId);
     }
 
-    private List<PhysicalCardImpl> getZoneCards(String playerId, CardType type, Zone zone) {
+    private List<PhysicalCardImpl> getZoneCards(String playerId, Zone zone) {
         if (zone == Zone.DECK)
             return _decks.get(playerId);
         else if (zone == Zone.ADVENTURE_DECK)
@@ -435,10 +435,13 @@ public class GameState {
             return _inPlay;
     }
 
-
     public void removeCardsFromZone(String playerPerforming, Collection<PhysicalCard> cards) {
+        removeCardsFromZone(playerPerforming, cards, false);
+    }
+
+    public void removeCardsFromZone(String playerPerforming, Collection<PhysicalCard> cards, boolean skipSkirmishReset) {
         for (PhysicalCard card : cards) {
-            List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), card.getBlueprint().getCardType(), card.getZone());
+            List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), card.getZone());
             if (!zoneCards.contains(card))
                 _log.error("Card was not found in the expected zone");
         }
@@ -455,7 +458,7 @@ public class GameState {
             else if (zone == Zone.DISCARD)
                 stopAffectingInDiscard(card);
 
-            List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), card.getBlueprint().getCardType(), zone);
+            var zoneCards = getZoneCards(card.getOwner(), zone);
             zoneCards.remove(card);
 
             if (zone == Zone.ATTACHED)
@@ -464,8 +467,11 @@ public class GameState {
             if (zone == Zone.STACKED)
                 ((PhysicalCardImpl) card).stackOn(null);
 
-            removeFromAssignment(card);
-            removeFromSkirmish(card, false);
+            if (!skipSkirmishReset) {
+                removeFromAssignment(card);
+                removeFromSkirmish(card, false);
+            }
+
 
             removeAllTokens(card);
             //If this is reset, then there is no way for self-discounting effects (which are evaluated while in the void)
@@ -500,7 +506,7 @@ public class GameState {
             assignNewCardId(card);
         }
 
-        List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), card.getBlueprint().getCardType(), zone);
+        List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), zone);
         if (end) {
             zoneCards.add((PhysicalCardImpl) card);
         }
@@ -543,8 +549,13 @@ public class GameState {
     private void assignNewCardId(PhysicalCard card) {
         _allCards.remove(card.getCardId());
         int newCardId = nextCardId();
-        ((PhysicalCardImpl) card).setCardId(newCardId);
-        _allCards.put(newCardId, ((PhysicalCardImpl) card));
+        card.setCardId(newCardId);
+        _allCards.put(newCardId, (PhysicalCardImpl)card);
+    }
+
+    public void reassignCardId(PhysicalCard card, int newCardId) {
+        card.setCardId(newCardId);
+        _allCards.put(newCardId, (PhysicalCardImpl)card);
     }
 
     private void removeAllTokens(PhysicalCard card) {
@@ -556,6 +567,73 @@ public class GameState {
                         listener.removeTokens(card, tokenIntegerEntry.getKey(), tokenIntegerEntry.getValue());
 
             map.clear();
+        }
+    }
+
+    /**
+     * Replaces a character on table with another character.  The calling function should handle discarding the old one.
+     * @param oldCard the old card
+     * @param newCard the new card
+     */
+    public void replaceCharacterOnTable(LotroGame game,  PhysicalCard oldCard, PhysicalCard newCard) {
+        int oldCardId = oldCard.getCardId();
+
+        // Remove new card from zone
+        removeCardsFromZone(null, Collections.singleton(newCard));
+
+        //Skirmish assignments will get bulldozed when we remove the old card from its zone, so we back them up first.
+        var assignment = findAssignment(oldCard);
+        var skirmish = findSkirmish(oldCard);
+        var tokens = new HashMap<>(getTokens(oldCard));
+
+        // Put the card where the old card was
+        newCard.copyCardStats(oldCard);
+        attachCard(game, newCard, oldCard.getAttachedTo());
+
+        // Remove old card from zone
+        removeCardsFromZone(null, Collections.singleton(oldCard), true);
+        addCardToZone(game, oldCard, Zone.VOID);
+        assignNewCardId(oldCard);
+
+        // Give new card the card ID of the replaced card
+        reassignCardId(newCard, oldCardId);
+
+        // Add new card to zone
+        getZoneCards(newCard.getOwner(), newCard.getZone()).add((PhysicalCardImpl) newCard);
+
+        for(var pair : tokens.entrySet()) {
+            addTokens(newCard, pair.getKey(), pair.getValue());
+        }
+
+        if(assignment != null) {
+            replaceCardInAssignment(oldCard, newCard);
+        }
+
+        if(skirmish != null) {
+            _skirmish.replaceCharacterInSkirmish(oldCard, newCard);
+            restartSkirmish(_skirmish);
+        }
+
+
+        var attachedCardList = getAttachedCards(oldCard);
+        var stackedCardList = getStackedCards(oldCard);
+
+        for (GameStateListener listener : getAllGameStateListeners())
+            listener.cardCreated(newCard);
+
+        // Transfer attached cards to the new card
+        for (PhysicalCard attachedCard : attachedCardList) {
+            attachCard(game, attachedCard, newCard);
+        }
+
+        // Transfer stacked cards to the new card
+        for (PhysicalCard stackedCard : stackedCardList) {
+            stackCard(game, stackedCard, newCard);
+        }
+
+        startAffecting(game, newCard);
+        for (PhysicalCard attachedCard : getAttachedCards(newCard)) {
+            reapplyAffectingForCard(game, attachedCard);
         }
     }
 
@@ -662,6 +740,41 @@ public class GameState {
         return _assignments;
     }
 
+    private Skirmish findSkirmish(PhysicalCard card) {
+        if(_skirmish == null)
+            return null;
+
+        if(_skirmish.getFellowshipCharacter() == card)
+            return _skirmish.copySkirmish();
+
+        if(_skirmish.getShadowCharacters().contains(card))
+            return _skirmish.copySkirmish();
+
+        return null;
+    }
+
+    private Assignment replaceCardInAssignment(PhysicalCard oldCard, PhysicalCard newCard) {
+        for(var assignment : new ArrayList<>(_assignments)) {
+            var newAssignment = assignment.replaceCharacter(oldCard, newCard);
+            if(newAssignment != null) {
+                removeAssignment(assignment);
+                refreshAssignment(newAssignment);
+                return newAssignment;
+            }
+        }
+
+        return null;
+    }
+
+
+    private Assignment findAssignment(PhysicalCard card) {
+        var fp = findFreepsAssignment(card);
+        if(fp != null)
+            return fp;
+
+        return findShadowAssignment(card);
+    }
+
     private Assignment findFreepsAssignment(PhysicalCard fp) {
         for (Assignment assignment : _assignments)
             if (assignment.getFellowshipCharacter() == fp)
@@ -669,8 +782,19 @@ public class GameState {
         return null;
     }
 
+    private Assignment findShadowAssignment(PhysicalCard sh) {
+        for (Assignment assignment : _assignments)
+            if (assignment.getShadowCharacters().contains(sh))
+                return assignment;
+        return null;
+    }
+
     public void startSkirmish(PhysicalCard fellowshipCharacter, Set<PhysicalCard> shadowCharacters) {
-        _skirmish = new Skirmish(fellowshipCharacter, new HashSet<>(shadowCharacters));
+        startSkirmish(new Skirmish(fellowshipCharacter, new HashSet<>(shadowCharacters)));
+    }
+
+    private void startSkirmish(Skirmish skirmish) {
+        _skirmish = skirmish;
         for (GameStateListener listener : getAllGameStateListeners())
             listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
     }
@@ -904,25 +1028,23 @@ public class GameState {
     public void hinder(Collection<PhysicalCard> cards) {
         for(var card : cards) {
             card.setFlipped(true);
+            stopAffecting(card);
         }
 
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.cardsFlipped(cards, true);
         }
-        //TODO: check if card should stop affecting?  figure out how to manage that.
-
     }
 
-    public void restore(Collection<PhysicalCard> cards) {
+    public void restore(LotroGame game, Collection<PhysicalCard> cards) {
         for(var card : cards) {
             card.setFlipped(false);
+            startAffecting(game, card);
         }
 
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.cardsFlipped(cards, false);
         }
-        //TODO: check if card should stop affecting?  figure out how to manage that.
-
     }
 
     public boolean isHindered(PhysicalCard card) {

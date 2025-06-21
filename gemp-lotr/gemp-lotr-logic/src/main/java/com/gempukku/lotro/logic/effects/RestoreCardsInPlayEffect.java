@@ -68,7 +68,7 @@ public class RestoreCardsInPlayEffect extends AbstractPreventableCardEffect {
             game.getGameState().sendMessage(_sourceText + " restores " + getAppendedNames(cards));
         }
 
-        game.getGameState().restore(cards);
+        game.getGameState().restore(game, cards);
 
         for (var card : cards) {
             game.getActionsEnvironment().emitEffectResult(new RestoredResult(_source, _performingPlayer, card));

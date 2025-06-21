@@ -17,8 +17,8 @@
 		culture: Raider
 		twilight: 6
 		type: Possession
-		strength: 6
-		vitality: 1
+		strength: 3
+		vitality: 2
 		itemclass: Mount
 		target: Southron
 		effects: [
@@ -90,7 +90,6 @@
 		culture: Raider
 		twilight: 8
 		type: Artifact
-		strength: 4
 		vitality: 2
 		itemclass: Mount
 		target: self
@@ -117,8 +116,9 @@
 					type: ModifyStrength
 					filter: bearer
 					amount: {
-						type: ForEachStrength
+						type: ForEachYouCanSpot
 						filter: not(mounted),Southron
+						multiplier: 4
 					}
 				}
 			}
@@ -129,9 +129,8 @@
 					filter: bearer
 					keyword: ambush
 					amount: {
-						type: ForEachKeyword
+						type: ForEachYouCanSpot
 						filter: not(mounted),Southron
-						keyword: ambush
 					}
 				}
 			}
@@ -152,7 +151,7 @@
 				}
 			}
 		]
-		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.<br>Unmounted minions cannot be assigned<br>to skirmishes.<br>Bearer gains the <b>ambush</b> and strength of<br>all unmounted Southrons.<br>While you can spot 6 Southrons, bearer participates in one additional assignment and skirmish phase after fierce skirmishes.
+		gametext: Bearer must be a Southron.  Bearer is <b>fierce</b>.<br>Unmounted minions cannot be assigned to skirmishes.<br>Bearer is strength +4 and <b>ambush</b> (1) for each unmounted Southron you can spot.<br>While you can spot 6 Southrons, bearer participates in one additional assignment and skirmish phase after fierce skirmishes.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -187,11 +186,11 @@
 				phase: regroup
 				requires: {
 					type: CanSpot
-					filter: Southron
+					filter: Southron,Man,not(item)
 				}
 				effect: {
 					type: StackCardsFromPlay
-					select: choose(Southron)
+					select: choose(Southron,Man,not(item))
 					where: self
 				}
 			}
@@ -879,7 +878,7 @@
 		unique: false
 		side: Shadow
 		culture: Raider
-		twilight: 3
+		twilight: 0
 		type: Event
 		timewords: Assignment
 		effects: [
@@ -1332,15 +1331,29 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: modifier
+				modifier: {
+					type: ModifyStrength
+					filter: Easterling
+					amount: 2
+					requires: {
+						type: CanSpotBurdens
+						amount: 3
+					}
 				}
 			}
+			
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: modifier
+				modifier: {
+					type: AddKeyword
+					filter: Easterling
+					keyword: damage+1
+					requires: {
+						type: CanSpotBurdens
+						amount: 5
+					}
+				}
 			}
 		]
 		gametext: <b>Easterling.</b>  Fierce.<br>While you can spot 3 burdens, each Easterling is strength +2.<br>While you can spot 5 burdens, each Easterling is <b>damage +1</b>.

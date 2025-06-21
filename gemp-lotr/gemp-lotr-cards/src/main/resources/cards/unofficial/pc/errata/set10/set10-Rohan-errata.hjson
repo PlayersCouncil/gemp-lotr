@@ -111,10 +111,10 @@
 					effect: [
 						{
 							type: ChooseActiveCards
-							text: Choose Shadow card to hinder or exert
+							text: Choose Shadow card to hinder or wound
 							count: 1
 							player: Shadow
-							select: choose(side(shadow))
+							select: choose(minion)
 							memorize: chosenCard
 						}
 						{

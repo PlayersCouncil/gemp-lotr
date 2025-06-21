@@ -17,8 +17,6 @@ public class CancelKeywordBonus implements ModifierSourceProducer {
         final String from = FieldUtils.getString(object.get("from"), "from", "any");
 
         Keyword keyword = FieldUtils.getEnum(Keyword.class, object.get("keyword"), "keyword");
-        if (keyword == null)
-            throw new InvalidCardDefinitionException("Keyword is required for \"cancel keyword bonus\"");
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final FilterableSource fromFilterableSource = environment.getFilterFactory().generateFilter(from, environment);

@@ -34,7 +34,7 @@ public class RemoveCardsFromTheGameEffect extends AbstractEffect {
     @Override
     public boolean isPlayableInFull(LotroGame game) {
         for (PhysicalCard physicalCard : _cardsToRemove) {
-            if (!physicalCard.getZone().isInPlay())
+            if (physicalCard.getZone() == Zone.REMOVED)
                 return false;
         }
 
@@ -43,13 +43,9 @@ public class RemoveCardsFromTheGameEffect extends AbstractEffect {
 
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
-        Set<PhysicalCard> removedCards = new HashSet<>();
-        for (PhysicalCard physicalCard : _cardsToRemove)
-            if (physicalCard.getZone().isInPlay())
-                removedCards.add(physicalCard);
+        Set<PhysicalCard> removedCards = new HashSet<>(_cardsToRemove);
 
         Set<PhysicalCard> discardedCards = new HashSet<>();
-
         Set<PhysicalCard> toMoveFromZoneToDiscard = new HashSet<>();
 
         DiscardUtils.cardsToChangeZones(game, removedCards, discardedCards, toMoveFromZoneToDiscard);

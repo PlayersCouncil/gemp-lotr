@@ -27,6 +27,9 @@ public class FilterFactory {
             appendFilter(value);
         for (Keyword value : Keyword.values())
             appendFilter(value);
+
+        appendFilter("support", "support", Keyword.SUPPORT_AREA);
+
         for (PossessionClass value : PossessionClass.values())
             appendFilter(value);
         for (Race value : Race.values())
@@ -293,13 +296,6 @@ public class FilterFactory {
                 throw new InvalidCardDefinitionException("Unable to find culture for: " + parameter);
 
             return (actionContext) -> culture;
-        });
-        parameterFilters.put("timeword", (parameter, environment) -> {
-            final Timeword timeword = Timeword.findTimeword(parameter);
-            if (timeword == null)
-                throw new InvalidCardDefinitionException("Unable to find timeword for: " + parameter);
-
-            return (actionContext) -> timeword;
         });
         parameterFilters.put("culturefrommemory", ((parameter, environment) -> actionContext -> {
             Set<Culture> cultures = new HashSet<>();
@@ -776,6 +772,28 @@ public class FilterFactory {
                         return Filters.maxStrength(strength - 1);
                     };
                 });
+        parameterFilters.put("subtitle",
+                (parameter, environment) -> {
+                    String sub = Names.SanitizeName(Sanitize(parameter));
+                    return (actionContext) -> (Filter)
+                            (game, physicalCard) -> sub != null
+                                    && physicalCard.getBlueprint().getSanitizedSubtitle() != null
+                                    && sub.equals(Sanitize(physicalCard.getBlueprint().getSanitizedSubtitle()));
+                });
+        parameterFilters.put("subtitlefrommemory",
+                (parameter, environment) -> actionContext -> {
+                    Set<String> subtitles = new HashSet<>();
+                    for (PhysicalCard physicalCard : actionContext.getCardsFromMemory(parameter))
+                        subtitles.add(physicalCard.getBlueprint().getSanitizedSubtitle());
+                    return (Filter) (game, physicalCard) -> subtitles.contains(physicalCard.getBlueprint().getSanitizedSubtitle());
+                });
+        parameterFilters.put("timeword", (parameter, environment) -> {
+            final Timeword timeword = Timeword.findTimeword(parameter);
+            if (timeword == null)
+                throw new InvalidCardDefinitionException("Unable to find timeword for: " + parameter);
+
+            return (actionContext) -> timeword;
+        });
         parameterFilters.put("zone",
                 (parameter, environment) -> {
                     final Zone zone = FieldUtils.getEnum(Zone.class, parameter, "parameter");

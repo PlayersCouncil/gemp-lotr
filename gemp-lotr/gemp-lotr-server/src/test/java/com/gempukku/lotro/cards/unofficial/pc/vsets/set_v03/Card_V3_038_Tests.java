@@ -1,7 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.PossessionClass;
+import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -9,7 +12,6 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
-import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_038_Tests
 {
@@ -39,8 +41,8 @@ public class Card_V3_038_Tests
 		 * Twilight Cost: 6
 		 * Type: Possession
 		 * Subtype: Mount
-		 * Strength: 6
-		 * Vitality: 1
+		 * Strength: 3
+		 * Vitality: 2
 		 * Game Text: Bearer must be a Southron.  Bearer is <b>fierce</b>.
 		* 	At the start of each skirmish involving bearer, add X threats, where X is the vitality of each character skirmishing bearer. 
 		* 	Remove 2 threats at the end of each skirmish involving bearer.
@@ -58,8 +60,8 @@ public class Card_V3_038_Tests
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MOUNT));
 		assertEquals(6, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
-		assertEquals(1, card.getBlueprint().getVitality());
+		assertEquals(3, card.getBlueprint().getStrength());
+		assertEquals(2, card.getBlueprint().getVitality());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

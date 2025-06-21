@@ -48,6 +48,8 @@ public interface ModifiersQuerying {
     // Movement
     int getMoveLimit(LotroGame game, int baseMoveLimit);
 
+    int getThreatLimit(LotroGame game, int baseThreatLimit);
+
     boolean addsTwilightForCompanionMove(LotroGame game, PhysicalCard companion);
 
     // Twilight cost
@@ -122,6 +124,8 @@ public interface ModifiersQuerying {
     boolean shouldSkipPhase(LotroGame game, Phase phase, String playerId);
 
     List<? extends Action> getExtraPhaseActions(LotroGame game, PhysicalCard target);
+
+    boolean hasExtraPhaseActionsFromOtherPlayer(LotroGame game, PhysicalCard target);
 
     List<? extends Action> getExtraPhaseActionsFromStacked(LotroGame game, PhysicalCard target);
 

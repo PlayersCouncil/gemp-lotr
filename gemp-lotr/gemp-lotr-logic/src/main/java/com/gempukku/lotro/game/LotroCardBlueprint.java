@@ -41,6 +41,7 @@ public interface LotroCardBlueprint {
 
     String getTitle();
     String getSanitizedTitle();
+    String getSanitizedSubtitle();
     String getFullName();
     String getSanitizedFullName();
 

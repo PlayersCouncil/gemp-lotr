@@ -10,31 +10,28 @@ import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolv
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.RemoveCardsFromTheGameEffect;
-import com.gempukku.lotro.logic.effects.ShuffleDeckEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class RemoveCardsInDeckFromGame implements EffectAppenderProducer {
+public class RemoveCardsInHandFromGame implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "select", "player", "deck", "shuffle", "showAll");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "player", "hand");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
-        final String deck = FieldUtils.getString(effectObject.get("deck"), "deck", "you");
-        boolean shuffle = FieldUtils.getBoolean(effectObject.get("shuffle"), "shuffle");
-        boolean showAll = FieldUtils.getBoolean(effectObject.get("showAll"), "showAll");
+        final String hand = FieldUtils.getString(effectObject.get("hand"), "hand", "you");
 
         PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
         result.addEffectAppender(
-                CardResolver.resolveCardsInDeck(select, null, valueSource, "_temp", player, deck, showAll, "Choose cards from deck to remove from game", environment));
+                CardResolver.resolveCardsInHand(select, valueSource, "_temp", player, hand,  "Choose cards from hand to remove from game", environment));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -44,14 +41,6 @@ public class RemoveCardsInDeckFromGame implements EffectAppenderProducer {
                         return new RemoveCardsFromTheGameEffect(player, actionContext.getSource(), new ArrayList<>(cards));
                     }
                 });
-        if (shuffle)
-            result.addEffectAppender(
-                    new DelayedAppender() {
-                        @Override
-                        protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                            return new ShuffleDeckEffect(actionContext.getPerformingPlayer());
-                        }
-                    });
 
         return result;
 

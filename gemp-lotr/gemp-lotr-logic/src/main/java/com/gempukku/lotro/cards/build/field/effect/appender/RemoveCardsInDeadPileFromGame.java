@@ -9,7 +9,7 @@ import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResol
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
-import com.gempukku.lotro.logic.effects.RemoveCardsFromDeadPileEffect;
+import com.gempukku.lotro.logic.effects.RemoveCardsFromTheGameEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
@@ -37,7 +37,7 @@ public class RemoveCardsInDeadPileFromGame implements EffectAppenderProducer {
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cards = actionContext.getCardsFromMemory("_temp");
                         String player = playerSource.getPlayer(actionContext);
-                        return new RemoveCardsFromDeadPileEffect(player, actionContext.getSource(), new ArrayList<>(cards));
+                        return new RemoveCardsFromTheGameEffect(player, actionContext.getSource(), new ArrayList<>(cards));
                     }
                 });
 
