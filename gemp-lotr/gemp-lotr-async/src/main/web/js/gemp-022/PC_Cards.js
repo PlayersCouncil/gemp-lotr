@@ -1016,8 +1016,8 @@ var PCCards = {
 	'103_15' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E015.0_card.jpg',
 	// // Aragorn, King of Gondor and Arnor (V3_16)
 	// '103_16' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E016.0_card.jpg',
-	// Dark Ancient Halls (V3_17)
-	'103_17' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E017.0_card.jpg',
+	// // Dark Ancient Halls (V3_17)
+	// '103_17' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E017.0_card.jpg',
 	// Domain of the Dead King (V3_18)
 	'103_18' : 'https://i.lotrtcgpc.net/sets/v03/LOTR-ENV3E018.0_card.jpg',
 	// Ethereal Banner (V3_19)
