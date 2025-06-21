@@ -208,13 +208,29 @@
 			{
 				type: event
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: If
+					check: {
+						type: CanSpot
+						filter: title(Eowyn),InSkirmish
+					}
+					true: {
+						type: Spot
+						filter: title(Eowyn)
+					}
+					false: {
+						type: Exert
+						select: choose(valiant,companion,InSkirmish)
+					}
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: ModifyStrength
+						select: choose(minion,InSkirmish)
+						amount: {
+							type: ForEachYouCanSpot
+							hindered: true
+							filter: side(Free Peoples), hindered
+						}
 					}
 				]
 			}
@@ -251,14 +267,47 @@
 		effects: [
 			{
 				type: event
-				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
-				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: Hinder
+						player: Shadow
+						select: choose(side(Shadow), support)
+						count: any
+					}
+					{
+						type: CostToEffect
+						cost: {
+							type: ChooseActiveCards
+							text: Choose a Shadow support card
+							select: choose(side(Shadow), support)
+							memorize: chosenCard
+						}
+						effect: {
+							type: ModifyStrength
+							select: choose(Rohan, companion)
+							amount: {
+								type: Sum
+								source: [
+									{
+										type: TwilightCostInMemory
+										memory: chosenCard
+									}
+									{
+										type: ForEachStacked
+										filter: any
+										on: memory(chosenCard)
+									}
+									{
+										type: ForEachCultureToken
+										filter: memory(chosenCard)
+									}
+									{
+										type: ForEachYouCanSpot
+										filter: NameFromMemory(chosenCard)
+									}
+								]
+							}
+						}
 					}
 				]
 			}
@@ -303,18 +352,48 @@
 		]
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: AddRace
+					filter: self
+					race: Man
+					requires: 
+					{
+						type: Or 
+						requires: [
+							{
+								type: CanSpot
+								count: 3
+								filter: Rohan, companion
+							}
+							{
+								type: CanSpot
+								filter: title(Eowyn)
+							}
+						]
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Exerted
+					filter: another,Rohan,companion
+					memorize: exertedComp
+				}
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					type: Heal
+					select: memory(exertedComp)
+				}
 			}
 		]
-		gametext: Valiant. Enduring. To play, spot a [rohan] companion.<br>Merry can bear possessions as if he were a [rohan] Man.<br>Each time a [rohan] companion exerts, you may exert Merry to heal that companion.
+		gametext: Valiant. Enduring.\While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.\Each time another [rohan] companion exerts, you may exert Merry to heal that companion.
+
 		lore: ""
 		promotext: ""
 		alts: {
@@ -350,13 +429,47 @@
 			{
 				type: event
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: If
+					check: {
+						type: Phase
+						phase: Skirmish
+					}
+					true: {
+						type: Exert
+						select: choose(or(title(Theoden), title(Eomer)))
+					}
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: Exert
+						select: choose(mounted, minion)
+						times: 2
+						memorize: exertedMinion
+					}
+					{
+						type: Memorize
+						filter: mount, attachedTo(memory(exertedMinion))
+						memory: mountToTransfer
+					}
+					{
+						type: Optional
+						text: Would you like to transfer {mountToTransfer} away from {exertedMinion}?
+						requires: [
+							{
+								type: HasCardInMemory
+								memory: mountToTransfer
+							}
+							{
+								type: CanSpot
+								filter: not(memory(exertedMinion)), minion, AssignedToSkirmish(rohan,companion)
+							}
+						]
+						effect: {
+							type: transfer
+							select: memory(mountToTransfer)
+							where: choose(minion, AssignedToSkirmish(rohan,companion))
+							checkTarget: true
+						}
 					}
 				]
 			}
@@ -392,19 +505,39 @@
 		type: Possession
 		vitality: 1
 		itemclass: Mount
-		target: self
-		#target: title(Theoden)
+		target: title(Theoden)
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: Rohan, companion
+					amount: 1
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: mounted, Rohan, companion
+					amount: 1
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: StartOfPhase
+					phase: Assignment
+				}
+				requires: {
+					type: CanSpot
+					filter: minion, MinStrength(15)
+				}
+				effect: {
+					type: Hinder
+					select: self
+				}
 			}
 		]
 		gametext: Bearer must be Theoden.<br>[Rohan] companions are strength +1 (or +2 if mounted) for each wound on Theoden.<br>At the start of the assignment phase, hinder Snowmane if you can spot a minion of strength 15 or more.
@@ -437,19 +570,35 @@
 		type: Possession
 		strength: 2
 		itemclass: Hand weapon
-		target: self
-		#target: a [Rohan] companion
+		target: Rohan, companion
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					filter: bearer
+					amount: 2
+					requires: {
+						type: CanSpot
+						filter: bearer, mounted
+					}
 				}
 			}
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: false
+				trigger: {
+					type: WinsSkirmish
+					filter: bearer
+				}
+				cost: {
+					type: Exert
+					select: bearer
+				}
+				effect: {
+					type: Wound
+					select: choose(minion)
+				}
 			}
 		]
 		gametext: Bearer must be a [Rohan] companion.<br>While bearer is mounted, bearer is strength +2 and each time bearer wins a skirmish, you must exert them to wound a minion.

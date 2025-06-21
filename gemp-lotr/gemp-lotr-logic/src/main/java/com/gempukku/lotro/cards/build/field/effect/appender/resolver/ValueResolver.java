@@ -629,11 +629,13 @@ public class ValueResolver {
                             });
                 }
             } else if (type.equalsIgnoreCase("forEachYouCanSpot")) {
-                FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
+                FieldUtils.validateAllowedFields(object, "filter", "hindered", "over", "limit", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
+                final boolean hindered = FieldUtils.getBoolean(object.get("hindered"), "hindered", false);
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+                final var override = hindered ? SpotOverride.INCLUDE_HINDERED : SpotOverride.NONE;
                 return new SmartValueSource(environment, object,
-                        actionContext -> (game, cardAffected) -> Filters.countSpottable(game, filterableSource.getFilterable(actionContext)));
+                        actionContext -> (game, cardAffected) -> Filters.countSpottable(game, override, filterableSource.getFilterable(actionContext)));
             } else if (type.equalsIgnoreCase("forEachHinderedYouCanSpot")) {
                 FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
