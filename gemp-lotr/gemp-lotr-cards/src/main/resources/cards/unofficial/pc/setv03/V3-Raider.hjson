@@ -187,11 +187,11 @@
 				phase: regroup
 				requires: {
 					type: CanSpot
-					filter: Southron
+					filter: Southron,Man,not(item)
 				}
 				effect: {
 					type: StackCardsFromPlay
-					select: choose(Southron)
+					select: choose(Southron,Man,not(item))
 					where: self
 				}
 			}
