@@ -951,6 +951,52 @@ public class HinderTests
         assertFalse(scn.HasKeyword(aragorn, Keyword.DEFENDER));
     }
 
+    @Test
+    public void HinderedItemGrantsNoModifiersToAttachedCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+
+        //Pre-game setup
+        var scn = new VirtualTableScenario(
+                new HashMap<>() {{
+                    put("aragorn", "1_89");
+                    put("anduril", "7_79");
+                    put("bow", "1_90");
+
+                    put("runner", "1_178");
+                }}
+        );
+
+        var frodo = scn.GetRingBearer();
+        var aragorn = scn.GetFreepsCard("aragorn");
+        var anduril = scn.GetFreepsCard("anduril");
+        var bow = scn.GetFreepsCard("bow");
+        scn.MoveCompanionsToTable(aragorn);
+        scn.MoveCardsToHand(bow);
+        scn.AttachCardsTo(aragorn, anduril);
+
+        scn.MoveMinionsToTable("runner");
+
+        scn.ApplyAdHocAction(new AbstractActionProxy() {
+            @Override
+            public List<? extends Action> getPhaseActions(String playerId, LotroGame game)  {
+                RequiredTriggerAction action = new RequiredTriggerAction(frodo);
+                action.appendEffect(new HinderCardsInPlayEffect(null, null, anduril));
+                action.setText("Hinder Anduril");
+                return Collections.singletonList(action);
+            }
+        });
+        scn.StartGame();
+
+        assertFalse(scn.IsHindered(anduril));
+        assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));
+        //"Aragorn...cannot bear other weapons"
+        assertFalse(scn.FreepsPlayAvailable(bow));
+        scn.FreepsUseCardAction(frodo);
+
+        assertTrue(scn.IsHindered(anduril));
+        assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
+        assertTrue(scn.FreepsPlayAvailable(bow));
+    }
+
     //@Test
     public void HinderedCompanionsDoesNotCountAsHavingOrNotHavingKeyword() throws DecisionResultInvalidException, CardNotFoundException {
         //Remember Your Old Strength
@@ -1344,6 +1390,7 @@ public class HinderTests
     public void BearerCannotBeUsedIfBearerIsHindered() throws DecisionResultInvalidException, CardNotFoundException {
 
     }
+
 
     //@Test
     public void HinderingAnAssignedMinionCancelsThatAssignment() throws DecisionResultInvalidException, CardNotFoundException {

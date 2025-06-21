@@ -160,7 +160,7 @@ public interface CardProperties extends TestBase {
 	}
 	default void RestoreCard(PhysicalCardImpl...cards) {
 		for(var card: cards) {
-			game().getGameState().restore(Collections.singletonList(card));
+			game().getGameState().restore(game(), Collections.singletonList(card));
 		}
 	}
 

@@ -1028,25 +1028,23 @@ public class GameState {
     public void hinder(Collection<PhysicalCard> cards) {
         for(var card : cards) {
             card.setFlipped(true);
+            stopAffecting(card);
         }
 
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.cardsFlipped(cards, true);
         }
-        //TODO: check if card should stop affecting?  figure out how to manage that.
-
     }
 
-    public void restore(Collection<PhysicalCard> cards) {
+    public void restore(LotroGame game, Collection<PhysicalCard> cards) {
         for(var card : cards) {
             card.setFlipped(false);
+            startAffecting(game, card);
         }
 
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.cardsFlipped(cards, false);
         }
-        //TODO: check if card should stop affecting?  figure out how to manage that.
-
     }
 
     public boolean isHindered(PhysicalCard card) {
