@@ -19,7 +19,7 @@ public class CancelKeywordBonusTargetModifier extends AbstractModifier implement
 
     @Override
     public boolean appliesKeywordModifier(LotroGame game, PhysicalCard modifierSource, Keyword keyword) {
-        if (keyword == _keyword
+        if ((_keyword == null || keyword == _keyword)
                 && (_sourceFilter == null || (modifierSource != null && _sourceFilter.accepts(game, modifierSource))))
             return false;
         return true;

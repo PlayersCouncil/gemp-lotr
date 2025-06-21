@@ -20,15 +20,44 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: true
+				trigger: {
+					type: Played
+					player: you
+					filter: spell
+				}
+				cost: {
+					type: Hinder
+					select: choose(Gandalf, artifact)
+				}
+				effect: {
+					type: Restore
+					select: choose(side(Free Peoples))
 				}
 			}
+			
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Trigger
+				optional: true
+				trigger: [
+					{
+						type: MovesFrom
+						filter: sanctuary
+					}
+					{
+						type: MovesTo
+						filter: sanctuary
+					}
+				]
+				cost: {
+					type: Exert
+					select: choose(title(Gandalf))
+				}
+				effect: {
+					type: Heal
+					select: choose(companion,not(title(Gandalf)))
+				}
 			}
 		]
 		gametext: Each time you play a spell, you may hinder a [Gandalf] artifact to restore a Free Peoples card.<br>Each time the fellowship moves to or from a sanctuary, you may exert Gandalf to heal a companion. 
@@ -61,20 +90,47 @@
 		twilight: 2
 		type: Possession
 		itemclass: Mount
-		target: self
-		#target: title(Gandalf)
+		target: title(Gandalf)
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Modifier
+				modifier: {
+					type: CancelStrengthBonus
+					requires: {
+						type: CanSpot
+						filter: Gandalf, artifact
+					}
+					filter: minion, InSkirmishAgainst(bearer)
+					from: side(Shadow), AttachedTo(InSkirmishAgainst(bearer))
 				}
 			}
+			
 			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				type: Modifier
+				modifier: {
+					type: CancelKeywordBonus
+					requires: {
+						type: CanSpot
+						filter: Gandalf, artifact
+					}
+					filter: minion, InSkirmishAgainst(bearer)
+					from: side(Shadow), AttachedTo(InSkirmishAgainst(bearer))
+				}
 			}
+			
+			{
+				type: Modifier
+				modifier: {
+					type: ModifyStrength
+					requires: {
+						type: CanSpot
+						filter: bearer, or(unwounded,exhausted)
+					}
+					filter: bearer
+					amount: 3
+				}
+			}
+			
 		]
 		gametext: Bearer must be Gandalf.<br>While you can spot a [gandalf] artifact, minions skirmishing bearer gain no strength or keyword bonuses from Shadow cards they bear.<br>While bearer is unwounded or exhausted, bearer is strength +3.
 		lore: ""
@@ -104,18 +160,50 @@
 		culture: Gandalf
 		twilight: 3
 		type: Event
-		timewords: Skirmish
+		timewords: [
+			Maneuver
+			Skirmish
+		]
 		effects: [
 			{
 				type: event
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: Exert
+					select: choose(title(Gandalf))
+					times: {
+						type: Conditional
+						requires: {
+							type: CanSpot
+							filter: title(Shadowfax)
+						}
+						true: 1
+						false: 3
+					}
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: RevealCardsFromHand
+						select: choose(side(Free Peoples), event, Playable)
+						memorize: revealedEvent
+					}
+					{
+						type: Repeat
+						times: 3
+						effect: [
+							{
+								type: PlayCardFromHand
+								select: memory(revealedEvent)
+							}
+							{
+								type: PutCardsFromDiscardIntoHand
+								select: memory(revealedEvent)
+								discard: you
+							}
+						]
+					}
+					{
+						type: RemoveCardsInHandFromGame
+						select: memory(revealedEvent)
 					}
 				]
 			}
@@ -153,13 +241,27 @@
 			{
 				type: event
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: Exert
+					select: choose(your, Wizard)
+					memorize: exertedWizard
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: Hinder
+						select: choose(side(Shadow))
+						memorize: hinderedCard
+					}
+					{
+						type: If
+						check: {
+							type: MemoryMatches
+							memory: hinderedCard
+							filter: minion
+						}
+						true: {
+							type: Exhaust
+							select: memory(exertedWizard)
+						}
 					}
 				]
 			}
@@ -195,15 +297,29 @@
 		keywords: Support Area
 		effects: [
 			{
-				type: ToPlay
-				requires: {
-					type: CanSpot
-					filter: any
+				type: Trigger
+				optional: false
+				trigger: {
+					type: StartOfPhase
+					phase: Assignment
 				}
-			}
-			{
-				type: DisplayableInformation
-				text: Placeholder effect for development.
+				cost: {
+					type: Exert
+					select: choose(title(Gandalf), HasAttached(artifact))
+				}
+				effect: [
+					{
+						type: ChooseActiveCards
+						hindered: true
+						select: choose(hindered, side(Shadow))
+						memorize: cardToDiscard
+						text: Choose a hindered Shadow card to discard.
+					}
+					{
+						type: Discard
+						select: memory(cardToDiscard)
+					}
+				]
 			}
 		]
 		gametext: At the start of each Assignment phase, you may exert Gandalf bearing an artifact to discard a hindered Shadow card.
@@ -240,13 +356,28 @@
 			{
 				type: event
 				cost: {
-					type: SendMessage
-					text: Placeholder effect for development.
+					type: Exert
+					select: choose(your, Wizard)
+					times: 3
 				}
 				effect: [
 					{
-						type: SendMessage
-						text: Placeholder effect for development.
+						type: ReconcileHand
+					}
+					{
+						type: If
+						check: {
+							type: CanSpot
+							filter: Gandalf, artifact
+						}
+						true: [
+							{
+								type: PutPlayedEventOnTopOfDrawDeck
+							}
+							{
+								type: ShuffleDeck
+							}
+						]
 					}
 				]
 			}

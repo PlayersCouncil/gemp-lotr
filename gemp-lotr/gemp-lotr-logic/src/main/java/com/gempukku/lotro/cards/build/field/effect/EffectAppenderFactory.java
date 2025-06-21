@@ -151,6 +151,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("removecardsindeadpilefromgame", new RemoveCardsInDeadPileFromGame());
         effectAppenderProducers.put("removecardsindeckfromgame", new RemoveCardsInDeckFromGame());
         effectAppenderProducers.put("removecardsindiscardfromgame", new RemoveCardsInDiscardFromGame());
+        effectAppenderProducers.put("removecardsinhandfromgame", new RemoveCardsInHandFromGame());
         effectAppenderProducers.put("removecharacterfromskirmish", new RemoveCharacterFromSkirmish());
         effectAppenderProducers.put("removeculturetokens", new RemoveCultureTokens());
         effectAppenderProducers.put("removefromthegame", new RemoveFromTheGame());
